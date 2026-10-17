@@ -23,7 +23,12 @@ quarto preview
 quarto render
 ```
 
-To see draft lessons (for review before merging a pull request):
+To see draft lessons (for review before merging a pull request), build
+everything once (web pages, PDFs, slides), then start the preview:
+
+```bash
+quarto render --profile review
+```
 
 ```bash
 quarto preview --profile review

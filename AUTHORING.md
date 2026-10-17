@@ -285,13 +285,14 @@ homework and its solution together.
   (8, 16). computing-systems week 15: the project instead (syllabus).
 - Built from the week's ILOs (`ilos:`), like the lessons: practise exactly
   what the two lessons taught, in the same words. No new content.
-- Size: `game-math` 4–5 tasks, about 60 min; `computing-systems` 3–4 tasks,
-  about 30–40 min. Easy → harder. Marks per task in the heading; total in `marks:`.
+- Size (start of the semester): **1–2 short tasks, about 15 minutes**, in both
+  courses. Short homework that students finish is better than long homework
+  they skip. I may make it longer in later weeks, if the students do it well;
+  then I will change this rule. Marks per task in the heading; total in `marks:`.
 - At least one task in a real game situation (the PLO behind the ILO).
 - Written answers only (semester 1: no programming). Code may be read, never written.
-- **Different numbers for every student:** tasks use *n* = the last digit of the
-  student number. Copying a friend's answer does not work, and no student data
-  is in the repo.
+- **Fixed numbers only** ("3 steps up", "(8, 4)"): no variables like *n* in a
+  task. Classes are small, so copying is not a risk now.
 - **Change the numbers and situations every semester.** Old versions stay in
   the git history, and old answers go around.
 - `due:` is relative ("Week 3, before the first lecture"), so the page works

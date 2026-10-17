@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Move the player with x and y</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+</head>
+<body>
+<main class="sim">
+  <h1>Move the player with x and y</h1>
+  <canvas id="grid" aria-label="Grid with the player"></canvas>
+
+  <div class="controls">
+    <label>x <input id="x" type="range" min="0" max="10" step="1" value="3"></label>
+    <label>y <input id="y" type="range" min="0" max="6" step="1" value="2"></label>
+    <span class="readout">position = (<span id="px">3</span>, <span id="py">2</span>)</span>
+    <button id="challenge" type="button">Challenge</button>
+  </div>
+  <p id="message" class="message">Tap the grid or move the sliders.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const MAX_X = 10, MAX_Y = 6;
+  const canvas = document.getElementById("grid");
+  const ctx = canvas.getContext("2d");
+  const sx = document.getElementById("x");
+  const sy = document.getElementById("y");
+  const px = document.getElementById("px");
+  const py = document.getElementById("py");
+  const msg = document.getElementById("message");
+
+  const state = { x: 3, y: 2, coin: null, score: 0 };
+  let cell = 50, pad = 34, cssW = 0, cssH = 0;
+
+  // Grid point (x, y) -> pixel. y grows UP, like in math and in Unity.
+  const toPx = (x, y) => [pad + x * cell, cssH - pad - y * cell];
+
+  function resize() {
+    cssW = canvas.clientWidth;
+    cell = Math.max(24, (cssW - pad * 2) / MAX_X);
+    cssH = Math.round(cell * MAX_Y + pad * 2);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    canvas.style.height = cssH + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+
+  function line(x1, y1, x2, y2, color, width, dash) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.setLineDash(dash || []);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function text(t, x, y, color, align, size) {
+    ctx.fillStyle = color;
+    ctx.font = `600 ${size || 13}px system-ui, sans-serif`;
+    ctx.textAlign = align || "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(t, x, y);
+  }
+
+  function drawPlayer(cx, cy) {
+    const r = cell * 0.32;
+    ctx.fillStyle = "#1f6f8b";
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.arc(cx - r * 0.35, cy - r * 0.2, r * 0.18, 0, Math.PI * 2);
+    ctx.arc(cx + r * 0.35, cy - r * 0.2, r * 0.18, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawCoin(cx, cy) {
+    const r = cell * 0.22;
+    ctx.fillStyle = "#f2b705";
+    ctx.strokeStyle = "#b8860b";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, cssW, cssH);
+    // grid lines and numbers
+    for (let i = 0; i <= MAX_X; i++) {
+      const [x, y0] = toPx(i, 0);
+      const [, y1] = toPx(i, MAX_Y);
+      line(x, y0, x, y1, "#e3e8ec", 1);
+      text(String(i), x, y0 + 14, "#5f6f7a");
+    }
+    for (let j = 0; j <= MAX_Y; j++) {
+      const [x0, y] = toPx(0, j);
+      const [x1] = toPx(MAX_X, j);
+      line(x0, y, x1, y, "#e3e8ec", 1);
+      text(String(j), x0 - 14, y, "#5f6f7a");
+    }
+    // axes
+    const [ox, oy] = toPx(0, 0);
+    line(ox, oy, toPx(MAX_X, 0)[0], oy, "#c0392b", 2.5);
+    line(ox, oy, ox, toPx(0, MAX_Y)[1], "#27ae60", 2.5);
+    text("x", toPx(MAX_X, 0)[0] + 14, oy, "#c0392b", "center", 15);
+    text("y", ox, toPx(0, MAX_Y)[1] - 14, "#27ae60", "center", 15);
+
+    if (state.coin) {
+      const [cx, cy] = toPx(state.coin.x, state.coin.y);
+      drawCoin(cx, cy);
+    }
+
+    // guides from the player to each axis
+    const [pxX, pxY] = toPx(state.x, state.y);
+    line(pxX, pxY, pxX, oy, "#c0392b", 1.5, [5, 4]);
+    line(pxX, pxY, ox, pxY, "#27ae60", 1.5, [5, 4]);
+    drawPlayer(pxX, pxY);
+    text(`(${state.x}, ${state.y})`, pxX, pxY - cell * 0.55, "#1d2a33", "center", 14);
+  }
+
+  function setPos(x, y) {
+    state.x = Math.min(MAX_X, Math.max(0, x));
+    state.y = Math.min(MAX_Y, Math.max(0, y));
+    sx.value = state.x;
+    sy.value = state.y;
+    px.textContent = state.x;
+    py.textContent = state.y;
+    checkCoin();
+    draw();
+  }
+
+  function newCoin() {
+    let c;
+    do {
+      c = { x: Math.floor(Math.random() * (MAX_X + 1)), y: Math.floor(Math.random() * (MAX_Y + 1)) };
+    } while (c.x === state.x && c.y === state.y);
+    state.coin = c;
+    msg.className = "message";
+    msg.textContent = `Move the player to (${c.x}, ${c.y}) to take the coin.`;
+    draw();
+  }
+
+  function checkCoin() {
+    if (state.coin && state.coin.x === state.x && state.coin.y === state.y) {
+      state.score++;
+      state.coin = null;
+      msg.className = "message good";
+      msg.textContent = `Well done! Coins: ${state.score}. Press Challenge again.`;
+    }
+  }
+
+  canvas.addEventListener("pointerdown", (e) => {
+    const r = canvas.getBoundingClientRect();
+    const gx = Math.round((e.clientX - r.left - pad) / cell);
+    const gy = Math.round((cssH - pad - (e.clientY - r.top)) / cell);
+    setPos(gx, gy);
+  });
+  sx.addEventListener("input", () => setPos(+sx.value, state.y));
+  sy.addEventListener("input", () => setPos(state.x, +sy.value));
+  document.getElementById("challenge").addEventListener("click", newCoin);
+  window.addEventListener("resize", resize);
+  resize();
+})();
+</script>
+</body>
+</html>

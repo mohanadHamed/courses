@@ -1,0 +1,42 @@
+project:
+  type: website
+  output-dir: _site
+  # Only .qmd files become pages. AUTHORING.md, NOTES.md, plan.md, retro/*.md and the
+  # templates stay in the repo but are not published.
+  render:
+    - "*.qmd"
+    - "!shared/"
+  resources:
+    - "shared/sims/*.css"
+    - "shared/sims/*.js"
+    - "shared/sims/*.html"
+    - "courses/*/week-*/sims/*"
+
+website:
+  title: "Mohanad Hamed — Courses"
+  description: "Free lesson materials for the Mobile Game Development and Design diploma, Technical College, Al-Israa University."
+  site-url: "https://mohanadhamed.github.io/courses/"
+  repo-url: "https://github.com/mohanadHamed/courses"
+  search: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: courses/game-math/index.qmd
+        text: Game Math
+      - href: courses/computing-systems/index.qmd
+        text: Computing Systems
+      - href: about.qmd
+        text: About
+  page-footer:
+    left: "Mohanad Hamed · Lecturer, Mobile Game Development and Design — Technical College, Al-Israa University"
+
+# Shared by every page, read by the lesson banner.
+diploma-line: "Mobile Game Development and Design diploma — Technical College, Al-Israa University"
+
+format:
+  html:
+    theme:
+      light: [cosmo, shared/templates/site.scss]
+    lang: en
+    toc: true

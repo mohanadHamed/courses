@@ -1,0 +1,190 @@
+# Authoring rules for all courses
+
+Owner: Mohanad Hamed, Lecturer, Mobile Game Development and Design diploma,
+Technical College, Al-Israa University (Jordan). Never write "Dr." anywhere.
+
+This public repo holds the lesson materials for **all** courses I teach.
+Site: <https://mohanadhamed.github.io/courses/> (Quarto website → GitHub Pages).
+
+## Courses
+
+Program: Mobile Game Development and Design, Intermediate University Degree
+(Diploma), code L6, Technical College. Both courses are year 1, semester 1.
+
+| Slug | Official course name | Code | Credit hours | Per week (as taught) |
+|---|---|---|---|---|
+| `game-math` | Mathematics and Computing for Digital Games | 13411131 | 3 | 2 lectures × **90 min** |
+| `computing-systems` | Fundamentals of Computing Systems and Digital Platforms | 13411133 | 2 | 2 lectures × **60 min** |
+
+**One lecture = one lesson. Every course has 2 lessons per week.**
+16 weeks: week 8 midterm, week 16 final. Use the official course names exactly.
+
+### Mapping the syllabus week to the 2 lessons
+
+- `game-math`: syllabus has First Lecture + Second Lecture + Seminar.
+  Lesson A = First Lecture, Lesson B = Second Lecture. Fold the seminar
+  activity into the lessons as a "Class activity" (there is no separate seminar session).
+- `computing-systems`: syllabus has Lecture + Seminar.
+  Lesson A = Lecture topic, Lesson B = Seminar topic (hands-on, practice).
+- Exam sessions (midterm, final) get no lesson. Revision sessions get a
+  revision lesson. Confirm with me when a syllabus week is unclear.
+
+### Size every lesson for its lecture time
+
+All three outputs (interactive lesson, PDF, slides) cover exactly one lecture.
+
+| | 60-min lesson (`computing-systems`) | 90-min lesson (`game-math`) |
+|---|---|---|
+| Main ideas | 2–3 | 3–5 |
+| "Try it" exercises | 3–4 | 5–7 |
+| Simulators / demos | 0–1 | 1–2 |
+| Class activity | ~10 min | ~15–20 min |
+| Slides | ~8–12 | ~12–18 |
+
+Leave time for my Arabic explanation and questions; do not fill every minute with content.
+Course-specific notes: `courses/<slug>/NOTES.md`. Topic map: `courses/<slug>/plan.md`.
+
+## Source of truth: the Google Drive folder (private, never copy into this repo)
+
+The Google Drive folder **الكلية التقنية** → `02-الأقسام-الأكاديمية/01-قسم-تطوير-ألعاب-الموبايل/`
+is the **source of truth** for the Mobile Game Development diploma:
+study plan, guidance plan, course descriptions, and
+`06-خطط-المواد-ومصفوفات-مخرجات-التعلم/` (English syllabi with weekly topics,
+ILO–PLO matrix). Use the newest version of each file.
+
+- **Before creating any lesson, read the course syllabus and ILO–PLO matrix
+  from Drive** (Google Drive connector). Base the lesson on that week's topics and ILOs.
+- If the Drive and this repo disagree, the Drive wins: update `_metadata.yml`,
+  `plan.md` or these rules, and tell me.
+- Copy only ILO text into `_metadata.yml`; never commit the documents themselves.
+
+## ILOs and PLOs
+
+- ILO codes follow the syllabus: A1, A2 (knowledge), B1, B2 (intellectual),
+  C1, C2 (subject skills), D1 (transferable).
+- Official ILO text (with PLO numbers) lives in `courses/<slug>/_metadata.yml`
+  under `course.ilos`. Lessons list codes only: `ilos: [A1, B1]`.
+  An unknown code is a render error.
+- Program PLOs: 1 game programming and development; 2 creative development,
+  player experience and UI; 3 industry trends, modern technologies and
+  professional development; 4 industry management and quality assurance.
+- **Lessons are built from ILOs.** Pick the ILOs from the syllabus week, then
+  design ideas, examples and "Try it" exercises that build exactly those ILOs.
+- PLOs connect to lessons **through** the ILOs (ILO → PLO in the matrix).
+  Do not target PLOs directly, but do not ignore them: choose examples that
+  serve the PLO behind each ILO (e.g. PLO 1 → real game programming and
+  engine situations; PLO 2 → player experience; PLO 4 → testing and quality).
+
+## Students
+
+- Diploma students, weak English, weak math (Tawjihi ~50–60%).
+- I explain in Arabic in class. All written material is in **very simple English**.
+- Simple and practical, never academic.
+- No programming yet: *Programming Fundamentals (1)* (C#) is in semester 2.
+  In semester-1 courses, code is a short C#/Unity "just read it" example,
+  never a task. The program uses C#, Unity and mobile (Android/iOS).
+
+## Writing rules (always enforce)
+
+- English CEFR A2–B1: short sentences, one idea per sentence, active voice.
+- Simple verbs: use, find, move, show, change — not utilize, determine, obtain.
+- **Picture before formula**: game example → diagram → then math or code.
+- Short graded exercises ("Try it") **after each idea**, easy → harder.
+- Every lesson starts with a bilingual glossary of 5–10 terms.
+- Every lesson lists the course ILOs it covers (`ilos:` codes, from the syllabus week).
+- Each lesson ends with a short "Class activity" sized for the lecture time.
+  In `game-math`, take it from the syllabus seminar of that week.
+- Slides: keywords and visuals only. No long sentences.
+
+## Glossary
+
+- Master list: `shared/glossary.yml` (`key: {en, ar, def}`).
+- Insert with `{{< glossary key1 key2 ... >}}`. A missing key is a render error
+  — add the term to `glossary.yml` first, never inline.
+- Same English term and same Arabic translation for a concept everywhere.
+  Check `glossary.yml` before adding; reuse existing keys.
+
+## Three outputs per lesson
+
+Folder: `courses/<slug>/week-NN/`. Two lessons per week; lesson numbers run
+across the course (week 1 → lessons 01–02, week 2 → 03–04, …).
+Static diagrams go in `week-NN/images/`.
+
+| File | Format | Output |
+|---|---|---|
+| `lesson-NN.qmd` | `lesson-html` + `lesson-typst` | Interactive HTML page + printable PDF |
+| `lesson-NN-slides.qmd` | `lesson-pptx` | Teacher slides (.pptx) |
+
+- Start from `shared/templates/lesson-template.qmd` and `slides-template.qmd`.
+- Formats, styles and filters live in the Quarto extension `_extensions/lesson/`
+  (Quarto requires `_extensions/` at the project root). Change look and
+  behaviour there, once, for every course.
+- The `lesson-html`/`lesson-typst` formats add the course banner (course name,
+  diploma line, week, lesson, ILOs) automatically from metadata. Course name and
+  code come from `courses/<slug>/_metadata.yml`.
+- PDF engine: Typst. Main font Noto Sans; Arabic font Noto Naskh Arabic
+  (installed in CI from `fonts-noto-core`).
+
+## Simulators
+
+- Plain HTML + JavaScript in one file. No libraries from the internet, no paid
+  services, no external APIs. Must work on a phone (touch + small screens).
+- Lesson-specific: `courses/<slug>/week-NN/sims/<name>.html`.
+  Reusable across courses: `shared/sims/<name>.html`.
+- Shared look and auto-resize: link `shared/sims/sim-base.css` and load
+  `shared/sims/sim-base.js` (relative paths).
+- Every simulator needs a static poster image `<name>.png` (keep the `.svg`
+  source next to it). Export: `quarto typst compile` via `shared/sims/export-poster.typ`
+  (see `shared/sims/README.md`).
+- Embed with `{{< sim file="sims/<name>.html" poster="sims/<name>.png" title="..." >}}`.
+  HTML → live iframe + "open full screen" link. PDF → poster + QR code to the
+  live page. PPTX → poster + URL. Never hand-write this per format.
+
+## Site identity
+
+- Title: **Mohanad Hamed — Courses**.
+- Subtitle: *Lecturer, Mobile Game Development and Design — Technical College, Al-Israa University*.
+- Every lesson page shows its course name and the diploma/university line.
+- `about.qmd` ends with one small muted credit line (`.credit-note`). Keep it
+  exactly as it is. Never add a similar line anywhere else.
+- No tool or assistant names anywhere: not in pages, source code, comments,
+  file names or commit messages. The credit line on the About page is the only exception.
+
+## Public repo — never commit
+
+Assignment solutions, exam questions, question banks, grades, student data,
+official internal university documents. Those live elsewhere, privately.
+Lessons not ready for students: `draft: true` (not published).
+
+## Way of working
+
+- Build week by week. Never generate all lessons up front.
+- Phase 1: `plan.md` per course (15-week map → ILOs), approved by me first.
+- Phase 2: **a typical session = one week**: 2 lessons for `game-math` +
+  2 lessons for `computing-systems`, each with all 3 outputs (4 lessons total).
+  Start every session by reading that week in the Drive syllabus.
+- I review every lesson before release. Ask before big structural decisions.
+- After each week I write `courses/<slug>/retro/week-NN.md`. Turn general lessons
+  learned into rules here; course-specific ones into the course `NOTES.md`.
+- Semesters: improve lessons in place, never copy a course. Tag each finished
+  semester (e.g. `git tag 2026-fall`).
+
+## Git
+
+- Commit locally as me: author and committer come from my git config
+  (`Mohanad Hamed <mohanad_subhi@yahoo.com>`). Never pass `--author`, never set
+  another `user.name`/`user.email`.
+- Commit messages describe the change only. No tool names, no co-author
+  trailers, no "generated by" lines.
+- Check with `git log -1 --format='%an <%ae> / %cn <%ce>'` after committing.
+- Commit on `main` unless I ask for a branch. Ask before every push.
+
+## Build
+
+- Local: `quarto preview` (HTML) or `quarto render` (all outputs → `_site/`).
+- CI: `.github/workflows/publish.yml` renders on push to `main` and deploys to Pages.
+- Quarto version is pinned in the workflow; keep local Quarto the same.
+
+## Lessons learned
+
+<!-- Add general rules from weekly retros here, newest first. -->

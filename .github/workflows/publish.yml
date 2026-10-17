@@ -1,0 +1,57 @@
+# Render the whole site (HTML + PDF via Typst + PPTX) and deploy to GitHub Pages.
+# One-time setup: repo Settings → Pages → Source: "GitHub Actions".
+name: Render and publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # Noto Sans (main PDF font) and Noto Naskh Arabic (glossary).
+      - name: Install fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-noto-core
+          fc-list | grep -E "NotoSans-Regular|NotoNaskhArabic-Regular"
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.19
+
+      - name: Render site
+        run: quarto render
+
+      - name: Check outputs
+        run: |
+          find _site -name "*.pdf" -o -name "*.pptx" | sort
+          test -n "$(find _site -name '*.pdf')"
+          test -n "$(find _site -name '*.pptx')"
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

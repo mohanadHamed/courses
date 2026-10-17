@@ -1,0 +1,84 @@
+---
+title: "Math in games: where is everything?"
+subtitle: "Week 1 · Lecture 1"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d game-engine >}}
+
+## Math inside every game
+
+- walk to a coin → **position, vectors** (W1–3)
+- cannon aims → **angles** (W4)
+- grow / spin → **matrices** (W5–7)
+- "health = 0 → game over" → **logic** (W9–10)
+- random prize → **probability** (W11–13)
+
+## Where is everything?
+
+- Computer sees **numbers**, not pictures
+- Each object → **position**
+
+## 2D: the grid
+
+![](sims/grid-position.png)
+
+## Axes and origin
+
+:::: {.columns}
+::: {.column width="45%"}
+- **x** → right
+- **y** ↑ up
+- **origin** = (0, 0)
+- **x first**: (3, 2) ≠ (2, 3)
+:::
+::: {.column width="55%"}
+![](sims/grid-position.png)
+:::
+::::
+
+## Live demo
+
+{{< sim file="sims/grid-position.html" poster="sims/grid-position.png" title="Move the player with x and y" >}}
+
+## 3D: add z
+
+:::: {.columns}
+::: {.column width="40%"}
+- (x, y, z)
+- **z** → forward
+- (4, 3, 2): 4 right, 2 forward, 3 up
+:::
+::: {.column width="60%"}
+![](images/axes-3d.png)
+:::
+::::
+
+## In Unity
+
+- Transform → Position X, Y, Z
+- 2D game → z = 0
+
+```csharp
+transform.position = new Vector3(4, 3, 2);
+```
+
+## Quick check
+
+- Coin position?
+- Jump up 1 from (4, 3, 2) = ?
+- Walk forward 5 = ?
+
+## Class activity
+
+- Pairs · one mobile game
+- Find **3 places** with math
+- Share one example
+
+## Summary
+
+- 2D **(x, y)** · 3D **(x, y, z)**
+- x → · y ↑ · z forward
+- origin (0, 0) / (0, 0, 0)

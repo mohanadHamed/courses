@@ -1,6 +1,6 @@
 -- Page header for lessons and course pages (lesson-html and lesson-typst).
 --
--- Lesson (has `lesson:`):
+-- Lesson (has `lesson:`) or homework (has `homework:`, `due:`, `marks:`):
 --   HTML: hero header (course, title, week/lesson/time chips, PDF and slides
 --         buttons) + "Today you will learn" card with the ILOs.
 --   PDF:  passes theme values to the Typst template (title band) + ILO card.
@@ -49,6 +49,25 @@ local function theme_style(course)
     esc(str(course.accent)), esc(str(course.accent2)))
 end
 
+-- Chips under the title: lesson (week, lesson, time) or homework (week, number, due, marks).
+local function page_chips(meta, course)
+  local chips = {}
+  if meta.week then table.insert(chips, "Week " .. str(meta.week)) end
+  if meta.homework then
+    table.insert(chips, "Homework " .. str(meta.homework))
+    if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
+    if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
+  else
+    if meta.lesson then table.insert(chips, "Lesson " .. str(meta.lesson)) end
+    if course.minutes then table.insert(chips, "⏱ " .. str(course.minutes) .. " min") end
+  end
+  return chips
+end
+
+local function ilo_title(meta)
+  return meta.homework and "This homework practises" or "Today you will learn"
+end
+
 -- HTML --------------------------------------------------------------------
 
 local function html_lesson(doc, course)
@@ -58,16 +77,15 @@ local function html_lesson(doc, course)
 
   local buttons = { string.format(
     '<a class="hero-btn" href="%s.pdf">⬇ Download PDF</a>', esc(stem)) }
-  local slides_public = meta["slides-public"] == true
-  if slides_public and file_exists(pandoc.path.join({ dir, stem .. "-slides.qmd" })) then
+  local slides = meta["slides-public"] == true and not meta.homework
+    and file_exists(pandoc.path.join({ dir, stem .. "-slides.qmd" }))
+  if slides then
     table.insert(buttons, string.format(
       '<a class="hero-btn hero-btn-ghost" href="%s-slides.pptx">▶ Lecture slides</a>', esc(stem)))
   end
 
   local chips = {}
-  if meta.week then table.insert(chips, "Week " .. esc(str(meta.week))) end
-  if meta.lesson then table.insert(chips, "Lesson " .. esc(str(meta.lesson))) end
-  if course.minutes then table.insert(chips, "⏱ " .. esc(str(course.minutes)) .. " min") end
+  for _, c in ipairs(page_chips(meta, course)) do table.insert(chips, esc(c)) end
   local chip_html = {}
   for _, c in ipairs(chips) do
     table.insert(chip_html, '<span class="hero-chip">' .. c .. "</span>")
@@ -92,7 +110,7 @@ local function html_lesson(doc, course)
     desc ~= "" and ('<p class="hero-sub">' .. esc(desc) .. "</p>") or "",
     table.concat(chip_html, ""),
     table.concat(buttons, ""),
-    slides_public and '<p class="hero-note">Slides are a short summary for class. Study from this page or the PDF.</p>' or "")
+    slides and '<p class="hero-note">Slides are a short summary for class. Study from this page or the PDF.</p>' or "")
 
   local blocks = { pandoc.RawBlock("html", hero) }
 
@@ -104,10 +122,10 @@ local function html_lesson(doc, course)
     end
     table.insert(blocks, pandoc.RawBlock("html", string.format([[
 <div class="ilo-card">
-  <div class="ilo-title">🎯 Today you will learn</div>
+  <div class="ilo-title">🎯 %s</div>
   <ul>%s</ul>
   <div class="ilo-foot">Course ILOs · %s</div>
-</div>]], table.concat(items, ""), esc(str(meta["diploma-line"] or "")))))
+</div>]], ilo_title(meta), table.concat(items, ""), esc(str(meta["diploma-line"] or "")))))
   end
   return blocks
 end
@@ -145,9 +163,11 @@ local function typst_lesson(doc, course)
     accent = raw('rgb(' .. typst_string(str(course.accent)) .. ')'),
     accent2 = raw('rgb(' .. typst_string(str(course.accent2)) .. ')'),
     course = raw(typst_string(str(course.title) .. " · " .. str(course.code))),
-    chips = raw("(" .. typst_string("Week " .. str(meta.week or "")) .. ", "
-      .. typst_string("Lesson " .. str(meta.lesson or "")) .. ", "
-      .. typst_string(str(course.minutes or "") .. " min") .. ",)"),
+    chips = raw("(" .. table.concat((function()
+      local out = {}
+      for _, c in ipairs(page_chips(meta, course)) do table.insert(out, typst_string(c)) end
+      return out
+    end)(), ", ") .. ",)"),
     program = raw(typst_string(str(meta["diploma-line"] or ""))),
   }
 
@@ -161,10 +181,10 @@ local function typst_lesson(doc, course)
   end
   return { pandoc.RawBlock("typst", string.format([[
 #block(width: 100%%, fill: accent.lighten(96%%), radius: 8pt, inset: 12pt, stroke: (left: 3pt + accent))[
-  #text(weight: "bold", fill: accent.darken(15%%))[Today you will learn]
+  #text(weight: "bold", fill: accent.darken(15%%))[%s]
   #v(2pt)
 %s]
-]], table.concat(rows, "  #v(2pt)\n"))) }
+]], ilo_title(meta), table.concat(rows, "  #v(2pt)\n"))) }
 end
 
 -- Main --------------------------------------------------------------------
@@ -178,8 +198,8 @@ function Pandoc(doc)
 
   local blocks
   if quarto.doc.is_format("html") then
-    blocks = meta.lesson and html_lesson(doc, course) or html_course(doc, course)
-  elseif quarto.doc.is_format("typst") and meta.lesson then
+    blocks = (meta.lesson or meta.homework) and html_lesson(doc, course) or html_course(doc, course)
+  elseif quarto.doc.is_format("typst") and (meta.lesson or meta.homework) then
     blocks = typst_lesson(doc, course)
   else
     return nil

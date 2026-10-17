@@ -74,8 +74,8 @@ lesson puts in `ilos:` (always a part of the week ILOs).
 ## Notes
 
 - Lesson B follows the syllabus seminar: hands-on and practice, little new theory.
-- Every week has a homework (HW) in the syllabus. Week 15 has the project submission.
-  Homework and project tasks are not in this public repo.
+- Every week has a homework (HW) in the syllabus: `week-NN/homework-NN.qmd`
+  (tasks public, solutions private). Week 15 has the project submission instead.
 - Week 8 has no lessons: midterm exam and midterm discussion.
 - Slides for every lesson are interactive: each "Try it" is a question slide,
   plus "Think" slides before new ideas; answers show on click

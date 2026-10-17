@@ -99,3 +99,5 @@ lesson puts in `ilos:` (always a part of the week ILOs).
   (see "Interactive slides" in AUTHORING.md).
 - Every "Try it" in a lesson is a matching exercise with instant feedback
   (see "Try it: match the answer" in AUTHORING.md).
+- One homework per week (`week-NN/homework-NN.qmd`), not in weeks 8 and 16.
+  Tasks are public; solutions stay private.

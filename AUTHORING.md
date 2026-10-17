@@ -122,8 +122,10 @@ Static diagrams go in `week-NN/images/`.
 |---|---|---|
 | `lesson-NN.qmd` | `lesson-html` + `lesson-typst` | Interactive HTML page + printable PDF |
 | `lesson-NN-slides.qmd` | `lesson-pptx` | Teacher slides (.pptx) |
+| `homework-NN.qmd` (NN = week) | `lesson-html` + `lesson-typst` | Take-home task page + printable PDF |
 
-- Start from `shared/templates/lesson-template.qmd` and `slides-template.qmd`.
+- Start from `shared/templates/lesson-template.qmd`, `slides-template.qmd`
+  and `homework-template.qmd`.
 - Formats, styles and filters live in the Quarto extension `_extensions/lesson/`
   (Quarto requires `_extensions/` at the project root). Change look and
   behaviour there, once, for every course.
@@ -268,18 +270,51 @@ The teacher asks, the students answer aloud, then one click shows the answer.
 - No tool or assistant names anywhere: not in pages, source code, comments,
   file names or commit messages. The credit line on the About page is the only exception.
 
+## Homework (take-home assignments)
+
+Homework **tasks are public**, like the lessons (common practice: MIT
+OpenCourseWare, Stanford and Harvard CS50 publish their problem sets). Students
+can prepare, and the homework is take-home anyway. **Solutions, model answers
+and marking notes stay private** (Drive), never in this repo.
+
+- One homework per week and course: `courses/<slug>/week-NN/homework-NN.qmd`,
+  from `shared/templates/homework-template.qmd`. No homework in exam weeks
+  (8, 16). computing-systems week 15: the project instead (syllabus).
+- Built from the week's ILOs (`ilos:`), like the lessons: practise exactly
+  what the two lessons taught, in the same words. No new content.
+- Size: `game-math` 4–5 tasks, about 60 min; `computing-systems` 3–4 tasks,
+  about 30–40 min. Easy → harder. Marks per task in the heading; total in `marks:`.
+- At least one task in a real game situation (the PLO behind the ILO).
+- Written answers only (semester 1: no programming). Code may be read, never written.
+- **Different numbers for every student:** tasks use *n* = the last digit of the
+  student number. Copying a friend's answer does not work, and no student data
+  is in the repo.
+- **Change the numbers and situations every semester.** Old versions stay in
+  the git history, and old answers go around.
+- `due:` is relative ("Week 3, before the first lecture"), so the page works
+  every semester. Exact dates go on the e-learning platform.
+- Submission: the university e-learning platform (syllabus). The page says how.
+- Release: keep `draft: true` until the week opens; then remove it.
+  Earlier homework stays online.
+- No answers on the page: no `.match` boxes, no "Check your answers".
+- The course page lists released homework (week, title, due, marks).
+- Check every task like a "Try it": self-contained, one clear answer
+  (or a clear marking rule), no changing state, tried before release.
+
 ## Public repo — never commit
 
-Assignment solutions, exam questions, question banks, grades, student data,
-official internal university documents. Those live elsewhere, privately.
-Lessons not ready for students: `draft: true` (not published).
+Assignment solutions and marking notes, exam questions, question banks, grades,
+student data, official internal university documents. Those live elsewhere,
+privately. Homework *tasks* are public (see "Homework").
+Lessons or homework not ready for students: `draft: true` (not published).
 
 ## Way of working
 
 - Build week by week. Never generate all lessons up front.
 - Phase 1: `plan.md` per course (16-week map → ILOs, same weeks as the syllabus), approved by me first.
 - Phase 2: **a typical session = one week**: 2 lessons for `game-math` +
-  2 lessons for `computing-systems`, each with all 3 outputs (4 lessons total).
+  2 lessons for `computing-systems`, each with all 3 outputs (4 lessons total),
+  plus one homework per course.
   Start every session by reading that week in the Drive syllabus.
 - I review every lesson before release. Ask before big structural decisions.
 - After each week I write `courses/<slug>/retro/week-NN.md`. Turn general lessons

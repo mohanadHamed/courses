@@ -81,8 +81,14 @@ ILO–PLO matrix). Use the newest version of each file.
 - I explain in Arabic in class. All written material is in **very simple English**.
 - Simple and practical, never academic.
 - No programming yet: *Programming Fundamentals (1)* (C#) is in semester 2.
-  In semester-1 courses, code is a short C#/Unity "just read it" example,
+  In semester-1 courses, code is a short C# "just read it" example,
   never a task. The program uses C#, Unity and mobile (Android/iOS).
+- **Do not assume students know a game engine.** Unity has its own course in
+  semester 3. Do not teach engine parts (Inspector, Transform, GameObject, …).
+  Connect math to **game programming / game code** in general words, and name
+  Unity only as an example in brackets: "C#, the language of many games
+  (for example, games made with Unity)". Explain every code word you show
+  (e.g. "`Vector3` means three numbers together").
 
 ## Writing rules (always enforce)
 

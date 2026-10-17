@@ -11,7 +11,7 @@ format:
 
 ## New words
 
-{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d game-engine >}}
+{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d >}}
 
 ## 1. Math is inside every game
 
@@ -124,28 +124,27 @@ b) The player walks forward 5. Which number changes? Write the new position.
 a) y changes: (4, 4, 2)  b) z changes: (4, 3, 7)
 :::
 
-## 5. Position in a game engine
+## 5. Position in game code
 
-A **game engine** like Unity shows the position of every object.
-In Unity, each object has a **Transform** with three numbers:
+Games are programs. The code must keep the position of every object.
+It keeps a 3D position as **three numbers together**: x, y and z.
 
-| Position | X | Y | Z |
-|---|---|---|---|
-| Player | 4 | 3 | 2 |
-
-In code, it looks like this. **Just read it today.**
-You will write code like this in *Programming Fundamentals (1)*.
+Here is one line of game code. **Just read it today.**
+It is C#, the language of many games (for example, games made with Unity).
 
 ```csharp
-// put the player at x = 4, y = 3, z = 2
-transform.position = new Vector3(4, 3, 2);
+// the player is at x = 4, y = 3, z = 2
+Vector3 playerPosition = new Vector3(4, 3, 2);
 ```
 
-In a 2D game in Unity, z is usually 0.
+- `Vector3` means "three numbers together".
+- The numbers are in the same order as always: **x, y, z**.
+
+You will write code like this later, in *Programming Fundamentals (1)*.
 
 ::: {.callout-tip title="Try it 5"}
-Read the code: `transform.position = new Vector3(0, 5, 0);`
-Where is the object? Describe it in words.
+Read the code: `Vector3 coinPosition = new Vector3(0, 5, 0);`
+Where is the coin? Describe it in words.
 :::
 
 ::: {.callout-note title="Check your answers" collapse="true"}
@@ -164,4 +163,4 @@ Use the table in part 1 to help you. Tell the class one example.
 - 2D position: **(x, y)**. 3D position: **(x, y, z)**.
 - x → right. y ↑ up. z → forward.
 - The **origin** is (0, 0) in 2D and (0, 0, 0) in 3D.
-- In Unity, every object has a position in its Transform.
+- In game code, a 3D position is three numbers: `new Vector3(x, y, z)`.

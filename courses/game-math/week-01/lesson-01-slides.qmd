@@ -6,7 +6,7 @@ format: lesson-pptx
 
 ## Keywords
 
-{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d game-engine >}}
+{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d >}}
 
 ## Math inside every game
 
@@ -60,13 +60,14 @@ format: lesson-pptx
 
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" >}}
 
-## In Unity
+## In game code
 
-- Transform → Position X, Y, Z
-- 2D game → z = 0
+- Code keeps every position as **numbers**
+- `Vector3` = three numbers: **x, y, z**
+- C# (for example, Unity games) · just read it
 
 ```csharp
-transform.position = new Vector3(4, 3, 2);
+Vector3 playerPosition = new Vector3(4, 3, 2);
 ```
 
 ## Quick check

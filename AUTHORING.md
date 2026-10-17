@@ -122,7 +122,7 @@ Static diagrams go in `week-NN/images/`.
 |---|---|---|
 | `lesson-NN.qmd` | `lesson-html` + `lesson-typst` | Interactive HTML page + printable PDF |
 | `lesson-NN-slides.qmd` | `lesson-pptx` | Teacher slides (.pptx) |
-| `homework-NN.qmd` (NN = week) | `lesson-html` | Take-home task page with a Print button (no PDF) |
+| `homework-NN.qmd` (NN = week) | `lesson-html` | Take-home task page with Print and Download PDF buttons |
 
 - Start from `shared/templates/lesson-template.qmd`, `slides-template.qmd`
   and `homework-template.qmd`.
@@ -301,9 +301,12 @@ homework and its solution together.
 - Release: keep `draft: true` until the week opens; then remove it.
   Earlier homework stays online.
 - No answers on the page: no `.match` boxes, no "Check your answers".
-- **Web page only, printed by the student.** Homework belongs to the week, not
-  to a lesson, so it is not in any lesson PDF and has no PDF of its own
-  (`format: lesson-html`). The page has a "🖨 Print homework" button.
+- **A web page that prints well.** Homework belongs to the week, not to a
+  lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF" and
+  "🖨 Print homework" buttons. The PDF is the printed page itself:
+  `_extensions/lesson/homework_pdf.py` (post-render) prints each homework page
+  with headless Chrome, so the download and the printout are the same one A4
+  page. Only `format: lesson-html`; no Typst version.
 - **Answer space:** after every question, add space to write the answer:
   `{{< answer-space lines=2 >}}` (dotted lines; as many as a good answer needs)
   or `{{< answer-space box=6 >}}` (an empty box, height in cm, for a drawing).

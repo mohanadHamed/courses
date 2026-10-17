@@ -75,14 +75,12 @@ local function html_lesson(doc, course)
   local stem = pandoc.path.split_extension(pandoc.path.filename(quarto.doc.input_file))
   local dir = pandoc.path.directory(quarto.doc.input_file)
 
-  -- Homework is a web page only: it is printed with the button, no PDF.
-  local buttons = {}
+  -- Homework PDF is the printed page itself (homework_pdf.py), so both match.
+  local buttons = { string.format(
+    '<a class="hero-btn" href="%s.pdf"%s>⬇ Download PDF</a>', esc(stem), meta.homework and " download" or "") }
   if meta.homework then
     table.insert(buttons,
-      '<button type="button" class="hero-btn" onclick="window.print()">🖨 Print homework</button>')
-  else
-    table.insert(buttons, string.format(
-      '<a class="hero-btn" href="%s.pdf">⬇ Download PDF</a>', esc(stem)))
+      '<button type="button" class="hero-btn hero-btn-ghost" onclick="window.print()">🖨 Print homework</button>')
   end
   local slides = meta["slides-public"] == true and not meta.homework
     and file_exists(pandoc.path.join({ dir, stem .. "-slides.qmd" }))

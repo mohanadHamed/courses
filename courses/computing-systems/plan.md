@@ -74,6 +74,12 @@ lesson puts in `ilos:` (always a part of the week ILOs).
 ## Notes
 
 - Lesson B follows the syllabus seminar: hands-on and practice, little new theory.
+- No class activities: group work and physical activities are not always
+  possible. Every lesson ends with a ~10-min "Game challenge" that each
+  student does alone (see AUTHORING.md).
+- D1 lessons need care: lesson 18 ("Platform comparison activity") and
+  lesson 30 (student project presentations) follow the syllabus. Agree their
+  format with the instructor before week 9 and week 15.
 - Every week has a homework (HW) in the syllabus: `week-NN/homework-NN.qmd`
   (tasks public, solutions private). Week 15 has the project submission instead.
 - Week 8 has no lessons: midterm exam and midterm discussion.

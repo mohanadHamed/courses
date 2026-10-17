@@ -38,14 +38,14 @@ separate file and must grow too (one slide per "Try it", Think, Example, …).
 | | 60-min lesson (`computing-systems`) | 90-min lesson (`game-math`) |
 |---|---|---|
 | Main ideas (`## 1.`, `## 2.`, …) | 2–3 | 5–7 |
-| "Try it" boxes | 3–5 | 10–12 |
-| Questions in all "Try it" boxes | 12–20 | 40–50 |
+| "Try it" boxes | 4–6 | 10–12 |
+| Questions in all "Try it" boxes | 20–30 | 40–50 |
 | Worked examples (`.callout-note title="Example: …"`) | 0+ | 3+ (one for every rule or formula) |
 | "Watch out!" boxes (common mistakes) | optional | 2+ |
 | Warm-up (lesson B: questions on lesson A) | optional | required |
 | Simulators / demos | 0–1 | 1–2 |
-| End of the lesson | Class activity, ~10 min | Game challenge, ~20 min (no class activity) |
-| Slides (title slide not counted) | ~12–16 | ~28–36 |
+| Game challenge (end of the lesson) | ~10 min, 1–2 "Try it" | ~20 min, 2–3 "Try it" |
+| Slides (title slide not counted) | ~13–18 | ~28–36 |
 
 **Depth, not only more boxes.** A 90-min idea is: game example → picture →
 explanation → worked example (numbered steps) → "Watch out!" if students
@@ -54,16 +54,19 @@ like a 60-min lesson with more topics is wrong: go deeper into the week's
 topics (more cases, negative numbers, the reverse question, 3D), never into
 the next week's topics.
 
-**Game challenge (`game-math`, instead of a class activity).** No groups, no
-paper, no phones, nothing to move in the room: every student works alone on
-the lesson page, and the teacher shows each part on the slides.
+**Game challenge (every course; there are no class activities).** No groups,
+no paper, nothing to move in the room: every student works alone on the
+lesson page, and the teacher shows each part on the slides.
 `## Game challenge: <game name> {.challenge}`, then a short story of one
-made-up mobile game (3–4 sentences), then 2–3 "Try it" boxes that use
-everything from today in that game (easy → harder; the last one "(harder)").
-Lesson A takes its story from the syllabus seminar of the week.
+made-up mobile game (3–4 sentences, or a small fixed table such as a phone's
+specs), then "Try it" boxes that use everything from today in that game
+(easy → harder; the last one "(harder)"): 1–2 boxes in 60 min, 2–3 in 90 min.
+`game-math` lesson A takes its story from the syllabus seminar of the week.
 
 **Time plan (90 min):** new words 5 · warm-up 5 (lesson B) · ideas ~55 ·
 game challenge ~20 · summary and questions 5.
+**Time plan (60 min):** new words 5 · ideas ~35 · game challenge ~10 ·
+summary and questions 5–10.
 Count about 1 minute per "Try it" question in class (students answer, then the click).
 
 `_extensions/lesson/check_size.py` (project pre-render) counts these parts in
@@ -133,9 +136,10 @@ ILO–PLO matrix). Use the newest version of each file.
   Common mistakes go in a `::: {.callout-note title="Watch out!"}` box.
 - Every lesson starts with a bilingual glossary of 5–10 terms.
 - Every lesson lists the course ILOs it covers (`ilos:` codes, from the syllabus week).
-- `computing-systems`: each lesson ends with a short "Class activity" (~10 min).
-  `game-math`: each lesson ends with a "Game challenge" (~20 min, each student
-  alone, no group work); lesson A takes it from the syllabus seminar of that week.
+- Each lesson ends with a "Game challenge" sized for the lecture time
+  (60 min: ~10 min, 90 min: ~20 min), done by each student alone: no group
+  work, no class activities. In `game-math`, lesson A takes it from the
+  syllabus seminar of that week.
 - Slides: keywords and visuals only. No long sentences. Question slides may
   have one short question (see "Interactive slides").
 
@@ -189,8 +193,7 @@ Static diagrams go in `week-NN/images/`.
   `.pptx` the course look: colours from `_metadata.yml`, fonts, background shapes,
   footer, a coloured title slide, a fade between slides, and the click animations.
   Never style slides by hand in PowerPoint; change the script once for all courses.
-- Mark the last two sections: `## Class activity {.activity}` (or, in `game-math`,
-  `## Game challenge: … {.challenge}`) and `## Summary {.summary}`.
+- Mark the last two sections: `## Game challenge: … {.challenge}` and `## Summary {.summary}`.
 
 ## Try it: match the answer
 
@@ -265,7 +268,7 @@ The teacher asks, the students answer aloud, then one click shows the answer.
 - Keep questions short (about 5 lines), so the cards fit under them.
 - A picture can go next to the questions with `:::: {.columns}`;
   the cards still go at the bottom.
-- `game-math` Game challenge: one slide `## Game challenge · <game name>` with
+- Game challenge: one slide `## Game challenge · <game name>` with
   the story in keywords, then one "Try it" slide per challenge box.
 - The "Try it" / "Think" / "Example" / "Watch out" / "Game challenge" title label
   gets the course colour; question slides ("Try it", "Think") also get a big faint "?".
@@ -418,5 +421,5 @@ Lessons or homework not ready for students: `draft: true` (not published).
   number of questions and worked examples, not only by the number of ideas.
   The size table and `check_size.py` now enforce this.
 - 2026-10-17: group work and physical class activities are not always
-  possible. `game-math` lessons end with a "Game challenge" that each student
-  does alone on the page and slides, instead of a class activity.
+  possible. Every lesson (both courses) ends with a "Game challenge" that each
+  student does alone on the page and slides, instead of a class activity.

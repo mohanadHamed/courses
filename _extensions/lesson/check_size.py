@@ -28,11 +28,11 @@ import sys
 SIZES = {
     60: {
         "ideas": (2, 3),
-        "try_its": (3, 5),
-        "questions": (12, 20),
+        "try_its": (4, 6),
+        "questions": (20, 30),
         "examples": (0, None),
         "sims": (0, 1),
-        "slides": (12, 16),
+        "slides": (13, 18),
     },
     90: {
         "ideas": (5, 7),
@@ -45,15 +45,12 @@ SIZES = {
 }
 # Parts every lesson of this lecture time must have (heading text, case does not matter).
 REQUIRED = {
-    60: ["class activity", "summary"],
+    60: ["game challenge", "summary"],
     90: ["game challenge", "summary"],
 }
-# Parts a lesson of this lecture time must not have. game-math: no group work,
-# the "Game challenge" (each student alone) replaces the class activity.
-FORBIDDEN = {
-    60: [],
-    90: ["class activity", "practice round"],
-}
+# Parts no lesson may have: no group work, the "Game challenge" (each student
+# alone) replaces the class activity.
+FORBIDDEN = ["class activity", "practice round"]
 # 90-min lesson B (even lesson number) starts with a warm-up on lesson A.
 WARM_UP_MINUTES = (90,)
 
@@ -140,9 +137,9 @@ def check(project_dir):
         for part in REQUIRED[minutes]:
             if not any(h.startswith(part) for h in n["headings"]):
                 warnings.append("%s: no \"%s\" section" % (rel, part.capitalize()))
-        for part in FORBIDDEN[minutes]:
+        for part in FORBIDDEN:
             if any(h.startswith(part) for h in n["headings"]):
-                warnings.append("%s: a %d-min lesson has no \"%s\" (use a Game challenge)" % (rel, minutes, part.capitalize()))
+                warnings.append("%s: no \"%s\" in lessons (use a Game challenge)" % (rel, part.capitalize()))
         m = re.match(r"lesson-(\d+)\.qmd$", name)
         if minutes in WARM_UP_MINUTES and m and int(m.group(1)) % 2 == 0:
             if not any(h.startswith("warm-up") for h in n["headings"]):

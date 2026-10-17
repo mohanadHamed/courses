@@ -11,7 +11,7 @@ format:
 
 ## New words
 
-{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d >}}
+{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d negative-number >}}
 
 ## 1. Math is inside every game
 
@@ -26,11 +26,14 @@ Behind every one of these, there is math.
 | "If health is 0, game over." | logic | weeks 9–10 |
 | A chest gives a random prize. | probability | weeks 11–13 |
 
+The computer must answer these questions many times every second.
+It does this with math.
+
 Today we start with the first question in every game:
 **where is everything?**
 
 ::: {.callout-tip title="Try it 1"}
-Match each game moment with its math.
+Match each game moment with its math. You can use an answer more than once.
 
 ::: {.match}
 An enemy drops a rare sword only 1 time in 20.
@@ -44,6 +47,12 @@ The door opens only if you have the key.
 
 The tower turns to face the enemy.
 :   angle
+
+The hero grows two times bigger after a power-up.
+:   transformation
+
+A spin wheel gives a random prize.
+:   probability
 :::
 :::
 
@@ -57,19 +66,27 @@ In a flat (**2D**) game, a position is two numbers.
 
 ![A 2D game world. The player is at (3, 2). A coin is at (7, 4).](sims/grid-position.png){width=85%}
 
-- The red line is the **x-axis**. x grows to the **right**.
-- The green line is the **y-axis**. y grows **up**.
+- The red line is the **x-axis**. It goes from left to right. x grows to the **right**.
+- The green line is the **y-axis**. It goes from down to up. y grows **up**.
 - The corner where they meet is the **origin**. There, x = 0 and y = 0.
+
+Each axis is like a ruler. The numbers show the steps from the origin.
 
 ::: {.callout-tip title="Try it 2"}
 Look at the picture above (the grid with the player and the coin).
 
-::: {.match extra="5|0|7"}
+::: {.match extra="0|the origin"}
 What number is at the right end of the x-axis?
 :   10
 
 What number is at the top of the y-axis?
 :   6
+
+Which axis goes from left to right?
+:   the x-axis
+
+Which axis goes from down to up?
+:   the y-axis
 :::
 :::
 
@@ -83,7 +100,22 @@ Each number is a **coordinate**.
 
 The player is at **(3, 2)**: 3 steps right, 2 steps up.
 
+::: {.callout-note title="Example: find the position of the coin"}
+1. Start at the origin, (0, 0).
+2. Count the steps right to the coin: 7. So **x = 7**.
+3. Count the steps up to the coin: 4. So **y = 4**.
+4. Write x first, then y: the coin is at **(7, 4)**.
+:::
+
+::: {.callout-note title="Watch out!"}
 Order is important! (3, 2) and (2, 3) are **different** places.
+Always write **x first**, then y.
+:::
+
+Some points are on an axis:
+
+- y = 0: the point is **on the x-axis**. Example: (6, 0).
+- x = 0: the point is **on the y-axis**. Example: (0, 2).
 
 Now try it. Move the player. Then press **Challenge** and catch the coin.
 
@@ -106,7 +138,81 @@ The player is at (3, 2). It moves 4 steps right. What is the new position?
 :::
 :::
 
-## 4. From 2D to 3D: add z
+::: {.callout-tip title="Try it 4"}
+Write the position. Start at the origin each time.
+
+::: {.match extra="(2, 0)|(4, 0)"}
+3 steps right, 5 steps up
+:   (3, 5)
+
+5 steps right, 3 steps up
+:   (5, 3)
+
+6 steps right, 0 steps up
+:   (6, 0)
+
+0 steps right, 2 steps up
+:   (0, 2)
+
+On the y-axis, 4 steps up
+:   (0, 4)
+:::
+:::
+
+## 4. Moving changes the numbers
+
+When an object moves, its position changes.
+But only **one number** changes for each direction.
+
+| The object moves… | This number changes | It gets… |
+|---|---|---|
+| right | x | bigger (+) |
+| left | x | smaller (−) |
+| up | y | bigger (+) |
+| down | y | smaller (−) |
+
+::: {.callout-note title="Example: move the player"}
+The player is at (3, 2).
+
+1. It moves **2 steps left**. x changes: 3 − 2 = 1. Now it is at **(1, 2)**.
+2. Then it moves **3 steps up**. y changes: 2 + 3 = 5. Now it is at **(1, 5)**.
+:::
+
+What is on the left of the origin? The world does not stop there.
+Left of the origin, x is a **negative number** (it has a minus sign).
+
+The player is at (1, 2). It moves 3 steps left: 1 − 3 = −2.
+Now the player is at **(−2, 2)**.
+
+In many games, the origin is in the middle of the world.
+So negative numbers are normal in game positions.
+
+::: {.callout-note title="Watch out!"}
+Left and down make a number **smaller**. It can go below 0.
+:::
+
+::: {.callout-tip title="Try it 5"}
+The player is at (5, 3). Find the new position.
+
+::: {.match extra="(3, 3)|(5, 6)"}
+It moves 2 steps right.
+:   (7, 3)
+
+It moves 3 steps down.
+:   (5, 0)
+
+It moves 4 steps left.
+:   (1, 3)
+
+It moves 1 step up and 2 steps right.
+:   (7, 4)
+
+It moves 7 steps left.
+:   (−2, 3)
+:::
+:::
+
+## 5. From 2D to 3D: add z
 
 Many mobile games are **3D**. The world has depth.
 So we need a third number: **z**.
@@ -115,66 +221,146 @@ So we need a third number: **z**.
 
 A 3D position is **(x, y, z)**:
 
-- x → right
-- y → up
-- z → forward (into the screen)
+- x → right (left is −)
+- y → up (down is −)
+- z → forward, into the screen (back is −)
 
-To reach (4, 3, 2): walk 4 right, walk 2 forward, then go 3 up.
+::: {.callout-note title="Example: reach (4, 3, 2)"}
+1. Walk **4** steps right. (x = 4)
+2. Walk **2** steps forward. (z = 2)
+3. Go **3** steps up. (y = 3)
+
+The order of the walk does not matter. The order of the **numbers** does: x, y, z.
+:::
 
 Now try it in 3D. Turn the world with your finger. Move the player.
 Then press **Challenge** and catch the coin in the air.
 
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" height="640" >}}
 
-::: {.callout-tip title="Try it 4"}
+::: {.callout-tip title="Try it 6"}
+Which number changes: x, y or z? You can use an answer more than once.
+
+::: {.match}
+The player walks to the right.
+:   x
+
+The player jumps up.
+:   y
+
+The player walks forward, into the screen.
+:   z
+
+The player falls down.
+:   y
+
+The player walks back, out of the screen.
+:   z
+:::
+:::
+
+::: {.callout-tip title="Try it 7"}
 A 3D player is at (4, 3, 2). Find the new position.
 
-::: {.match extra="(5, 3, 2)|(4, 3, 3)|(9, 3, 2)"}
+::: {.match extra="(5, 3, 2)|(4, 3, 4)"}
 The player jumps up 1.
 :   (4, 4, 2)
 
 The player walks forward 5.
 :   (4, 3, 7)
+
+The player walks left 4.
+:   (0, 3, 2)
+
+The player walks back 2.
+:   (4, 3, 0)
 :::
 :::
 
-## 5. Position in game code
+## 6. Position in game code
 
 Games are programs. The code must keep the position of every object.
 It keeps a 3D position as **three numbers together**: x, y and z.
 
-Here is one line of game code. **Just read it today.**
+Here is game code. **Just read it today.**
 It is C#, the language of many games (for example, games made with Unity).
 
 ```csharp
-// the player is at x = 4, y = 3, z = 2
+// a 3D game: the player is at x = 4, y = 3, z = 2
 Vector3 playerPosition = new Vector3(4, 3, 2);
+
+// a 2D game: the coin is at x = 7, y = 4
+Vector2 coinPosition = new Vector2(7, 4);
 ```
 
-- `Vector3` means "three numbers together".
+- `Vector3` means "three numbers together": x, y, z.
+- `Vector2` means "two numbers together": x, y. 2D games use it.
+- `playerPosition` and `coinPosition` are names. We choose the names.
 - The numbers are in the same order as always: **x, y, z**.
 
 You will write code like this later, in *Programming Fundamentals (1)*.
 
-::: {.callout-tip title="Try it 5"}
-Read the code: `Vector3 coinPosition = new Vector3(0, 5, 0);`
+::: {.callout-tip title="Try it 8"}
+Read the code.
 
-::: {.match extra="5 steps right of the origin|5 steps forward from the origin|at the origin"}
-Where is the coin?
+::: {.match extra="4|a 3D position|at the origin"}
+`new Vector3(4, 3, 2)`: which number is z?
+:   2
+
+`new Vector2(7, 4)`: is this a 2D or a 3D position?
+:   a 2D position
+
+`new Vector3(0, 5, 0)`: where is the coin?
 :   5 steps up, straight above the origin
+:::
+:::
+
+## Practice round
+
+Use everything from today. These are a little harder.
+
+::: {.callout-tip title="Try it 9 (harder)"}
+Find the answer.
+
+::: {.match extra="(4, 0)|(5, 7)|(5, 2, 3)"}
+A star is on the x-axis, 2 steps left of the origin. Where is it?
+:   (−2, 0)
+
+The player is at (2, 5). It moves 3 steps right and 2 steps down. Where is it now?
+:   (5, 3)
+
+A bird is at (1, 2, 3). It flies up 4. Where is it now?
+:   (1, 6, 3)
+
+Which point is on the y-axis?
+:   (0, 4)
 :::
 :::
 
 ## Class activity {.activity}
 
-Work in pairs. Open one mobile game on your phone.
-Find **three places** where the game uses math.
-Use the table in part 1 to help you. Tell the class one example.
+**Math hunt: where is the math in a mobile game?** (pairs, about 18 minutes)
+
+1. **Choose** (2 min). Work in pairs. Open one mobile game on one phone.
+2. **Hunt** (8 min). Play a little. Find **five moments** where the game uses math.
+   Copy this table on paper and fill it.
+
+   | Moment in the game | The math | How do you know? |
+   |---|---|---|
+   | The coin is above the player. | position | The coin has its own (x, y). |
+   | | | |
+
+   For "The math", use: position, angle, transformation, logic or probability.
+3. **Think** (3 min). Is your game 2D or 3D? How do you know?
+   Find one object that moves. Which number changes when it moves: x, y or z?
+4. **Share** (5 min). Tell the class your best moment.
+   The teacher writes the math words on the board. Which math is in the most games?
 
 ## Summary {.summary}
 
 - Every game uses math. It starts with **position**.
-- 2D position: **(x, y)**. 3D position: **(x, y, z)**.
-- x → right. y ↑ up. z → forward.
+- 2D position: **(x, y)**. 3D position: **(x, y, z)**. Always x first.
+- x → right. y ↑ up. z → forward. Left, down and back are **negative** (−).
 - The **origin** is (0, 0) in 2D and (0, 0, 0) in 3D.
-- In game code, a 3D position is three numbers: `new Vector3(x, y, z)`.
+- When an object moves, only the number for that direction changes.
+- In game code: `new Vector2(x, y)` (2D) and `new Vector3(x, y, z)` (3D).

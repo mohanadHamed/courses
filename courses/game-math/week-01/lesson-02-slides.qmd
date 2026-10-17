@@ -6,7 +6,21 @@ format: lesson-pptx
 
 ## Keywords
 
-{{< glossary vector component direction magnitude position velocity frame >}}
+{{< glossary vector component direction magnitude position velocity frame opposite-vector zero-vector >}}
+
+## Try it 1 · Warm-up: lesson 1
+
+a) 3 right, 1 up from the origin?
+
+b) (4, 2), then 2 left?
+
+c) In (1, 5, 8), what is z?
+
+::: {.answer}
+a) (3, 1)
+b) (2, 2)
+c) 8
+:::
 
 ## Think · A place or a move?
 
@@ -23,8 +37,9 @@ No. It is a **move**. In math, a move is a **vector**.
 - **Position** = a place → *where?*
 - **Vector** = a move → *which way? how far?*
 - coin **at** (7, 4) · player **moves** 4 right, 2 up
+- jump · bullet · wind · car → **vectors**
 
-## Try it 1 · Position or vector?
+## Try it 2 · Position or vector?
 
 a) The coin is at (7, 4).
 
@@ -34,11 +49,14 @@ c) The enemy goes 2 steps down.
 
 d) The door is at (0, 5).
 
+e) The wind pushes the ball 1 left.
+
 ::: {.answer}
 a) position
 b) vector
 c) vector
 d) position
+e) vector
 :::
 
 ## A vector is an arrow
@@ -51,7 +69,15 @@ d) position
 - **magnitude**: how long it is
 - the same move from **any** start point
 
-## Try it 2 · Same vector?
+## Example · Same vector, two places
+
+::: {.reveal}
+- A: (0, 0) → 2 right → (2, 0)
+- B: (5, 3) → 2 right → (7, 3)
+- different places · **same vector**
+:::
+
+## Try it 3 · Same vector?
 
 a) Same way, same length. Same vector?
 
@@ -78,6 +104,21 @@ c) no: other direction
 :::
 ::::
 
+## Example · Read the arrow
+
+:::: {.columns}
+::: {.column width="45%"}
+::: {.reveal}
+1. right (red): **4** → x = 4
+2. up (green): **2** → y = 2
+3. vector = **(4, 2)**
+:::
+:::
+::: {.column width="55%"}
+![](images/vector-components.png)
+:::
+::::
+
 ## Think · A minus sign?
 
 (4, 2) is 4 right and 2 up.
@@ -87,7 +128,13 @@ c) no: other direction
 3 steps **left**: minus changes the direction.
 :::
 
-## Try it 3 · Write the vector
+## Watch out · Place or move?
+
+- "**at** (4, 2)" → a place
+- "**moves** (4, 2)" → a vector
+- read the words!
+
+## Try it 4 · Write the vector
 
 a) 5 steps right
 
@@ -95,16 +142,33 @@ b) 2 steps down
 
 c) 3 left and 1 up
 
-d) (0, 6) in words?
+d) 6 steps up
 
-e) (−2, −2) in words?
+e) 2 left and 2 down
 
 ::: {.answer}
 a) (5, 0)
 b) (0, −2)
 c) (−3, 1)
-d) 6 up
-e) 2 left, 2 down
+d) (0, 6)
+e) (−2, −2)
+:::
+
+## Try it 5 · Say it in words
+
+a) (0, −4)
+
+b) (−5, 0)
+
+c) (2, −3)
+
+d) (−1, −1)
+
+::: {.answer}
+a) 4 down
+b) 5 left
+c) 2 right, 3 down
+d) 1 left, 1 down
 :::
 
 ## Think · Move the player
@@ -122,11 +186,15 @@ The player is at **(2, 1)**. The vector is **(4, 2)**.
 - x + x · y + y
 - (2, 1) + (4, 2) = **(6, 3)**
 
+::: {.reveal}
+- minus → left / down: (5, 4) + (−2, −3) = **(3, 1)**
+:::
+
 ## Live demo
 
 {{< sim file="sims/vector-move.html" poster="sims/vector-move.png" title="Move the player with a vector" >}}
 
-## Try it 4 · New position?
+## Try it 6 · New position?
 
 a) (1, 1) + (3, 2)
 
@@ -134,10 +202,13 @@ b) (5, 4) + (−2, −3)
 
 c) (6, 3) + (0, 3)
 
+d) (2, 3) + (−2, 0)
+
 ::: {.answer}
 a) (4, 3)
 b) (3, 1)
 c) (6, 6)
+d) (0, 3)
 :::
 
 ## Think · From A to B
@@ -149,10 +220,15 @@ The player is at **(2, 1)**. The coin is at **(7, 4)**.
 - vector = **B − A** (end − start)
 - (7 − 2, 4 − 1) = **(5, 3)**
 - check: (2, 1) + (5, 3) = (7, 4) ✓
-- A − B goes **back**, from B to A
 :::
 
-## Try it 5 · Find the vector
+## Watch out · Order
+
+- B − A: from A **to** B
+- A − B: **back**, from B to A
+- always **end − start**
+
+## Try it 7 · Find the vector
 
 a) from (1, 2) to (4, 6)
 
@@ -160,10 +236,45 @@ b) from (6, 5) to (2, 5)
 
 c) enemy (8, 1) → player (3, 4)
 
+d) from (3, 3) to (3, 0)
+
 ::: {.answer}
 a) (3, 4)
 b) (−4, 0)
 c) (−5, 3)
+d) (0, −3)
+:::
+
+## Think · Go back
+
+The player moves **(3, 2)**.
+**Which vector brings it back?**
+
+::: {.answer}
+**(−3, −2)**: the **opposite vector**. Change every sign.
+:::
+
+## Opposite and zero
+
+- opposite: (3, 2) ↔ (−3, −2) · (0, −5) ↔ (0, 5)
+- vector + opposite = **(0, 0)**
+- **zero vector** (0, 0) = do not move
+
+## Try it 8 · Opposite and zero
+
+a) opposite of (4, 1)?
+
+b) opposite of (0, −5)?
+
+c) (2, 3) + (−2, −3)?
+
+d) goes (−6, 2). Way back?
+
+::: {.answer}
+a) (−4, −1)
+b) (0, 5)
+c) (0, 0)
+d) (6, −2)
 :::
 
 ## Frames and velocity
@@ -171,6 +282,10 @@ c) (−5, 3)
 - **frame** = one picture · 30–60 every second
 - each frame: **position + velocity**
 - 3D vector: (x, y, z) · z = forward
+
+::: {.reveal}
+- (0, 0, 0) → (1, 0, 2) → (2, 0, 4) → (3, 0, 6)
+:::
 
 ## In game code
 
@@ -183,34 +298,49 @@ Vector3 velocity = new Vector3(2, 0, 1);
 position = position + velocity;
 ```
 
-## Try it 6 · Frame by frame
+## Try it 9 · 3D and frames
 
-Start: **(10, 0, 0)**. Velocity: **(2, 0, 1)** in each frame.
+a) (0, 0, 3) in words?
 
-a) Position after 1 frame?
+b) (0, −2, 0) in words?
 
-b) Position after 3 frames?
+c) (10, 0, 0), velocity (2, 0, 1): 1 frame?
 
-::: {.answer}
-a) (12, 0, 1)
-b) (16, 0, 3)
-:::
-
-## Try it 7 · Harder
-
-An enemy is at **(8, 1)**. It moves **(−1, 1)** in each frame.
-**After how many frames is it at (5, 4)?**
+d) Same: 3 frames?
 
 ::: {.answer}
-3 frames: (8, 1) → (7, 2) → (6, 3) → (5, 4)
+a) 3 forward
+b) 2 down
+c) (12, 0, 1)
+d) (16, 0, 3)
 :::
 
-## Class activity
+## Try it 10 · Practice round
 
-- Pairs · grid 10 × 6 · player at (1, 1)
+Enemy **(9, 5)** · player **(3, 2)**
+
+a) enemy → player?
+
+b) player → enemy?
+
+c) ball (4, 4), velocity (1, −2): 2 frames?
+
+d) enemy (8, 1), (−1, 1) each frame: frames to (5, 4)?
+
+::: {.answer}
+a) (−6, −3)
+b) (6, 3)
+c) (6, 0)
+d) 3 frames
+:::
+
+## Class activity · Treasure hunt
+
+- Pairs · grid 10 × 6 · player at (1, 1) · **18 min**
 - Hide **3 treasures**
 - Give only **vectors** → partner finds them
-- Bonus: treasure 1 → treasure 2 (end − start)
+- Check · swap roles
+- Bonus: treasure 1 → 2 (end − start) and the way back
 
 ## Summary
 
@@ -218,4 +348,5 @@ An enemy is at **(8, 1)**. It moves **(−1, 1)** in each frame.
 - arrow: **direction + magnitude**
 - (x, y) · + / −
 - position + vector · **B − A**
+- opposite: change signs · zero (0, 0) = no move
 - each frame: position + velocity

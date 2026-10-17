@@ -6,6 +6,8 @@ ILO text is in `_metadata.yml`.
 
 Per week (as taught): 2 lectures × 90 min → 2 lessons
 (A = First Lecture, B = Second Lecture; the syllabus seminar → class activity).
+Each lesson fills 90 min: see the size table in AUTHORING.md and the
+"Shape of a 90-min lesson" in NOTES.md.
 Week 8: revision + midterm. Week 16: final exam.
 
 ## Course ILOs

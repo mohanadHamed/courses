@@ -1,6 +1,12 @@
 ---
 # Copy to courses/<slug>/week-NN/lesson-NN.qmd. Remove `draft` after review.
-# Size for the lecture: game-math 90 min, computing-systems 60 min (see AUTHORING.md).
+# Size for the lecture: game-math 90 min, computing-systems 60 min.
+# Size table: "Size every lesson for its lecture time" in AUTHORING.md;
+# check_size.py (runs before every render) warns when a lesson is too short.
+#   90 min (game-math): 5–7 ideas, 8–10 Try it, 30–40 questions, 3+ Examples,
+#     2+ Watch out, Warm-up (lesson B), Practice round, activity 15–20 min.
+#   60 min (computing-systems): 2–3 ideas, 3–5 Try it, 12–20 questions,
+#     activity ~10 min. Warm-up, Example, Watch out and Practice round are optional.
 # Every "Try it": go through "Check every Try it" in AUTHORING.md before you commit.
 title: "Lesson title in simple English"
 description: "One short line for the course page."
@@ -17,11 +23,29 @@ format:
 
 {{< glossary term1 term2 term3 term4 term5 >}}
 
+## Warm-up: remember lesson N
+
+<!-- Lesson B (even number) in game-math: 2–3 quick questions on lesson A. Remove in lesson A. -->
+
+Two or three keywords from the last lesson.
+
+::: {.callout-tip title="Try it 1"}
+Remember lesson N.
+
+::: {.match extra="a wrong answer"}
+Quick question on the last lesson?
+:   its answer
+
+Another quick question?
+:   its answer
+:::
+:::
+
 ## 1. Game example
 
 Short sentences. One idea per sentence. Start from a game the students know.
 
-::: {.callout-tip title="Try it 1"}
+::: {.callout-tip title="Try it 2"}
 One short instruction. Each question is matched with its answer
 (the student taps the answer and sees at once if it is right).
 
@@ -34,17 +58,33 @@ Second question?
 :::
 :::
 
-## 2. Picture
+## 2. Picture, then the rule
 
 ![Caption in simple English.](sims/name.png){width=85%}
 
-Explain the picture. Only then show the math.
+Explain the picture. Only then show the rule or formula.
 
-::: {.callout-tip title="Try it 2"}
+::: {.callout-note title="Example: one short title"}
+1. First step, with the numbers.
+2. Second step.
+3. The answer in **bold**. Check it, if you can.
+:::
+
+::: {.callout-note title="Watch out!"}
+One common mistake, and how to avoid it.
+:::
+
+::: {.callout-tip title="Try it 3"}
 Question about the picture. With only 1–2 questions, add wrong answers in `extra`.
 
 ::: {.match extra="wrong answer 1|wrong answer 2"}
 Question about the picture?
+:   the right answer
+
+Same rule, a little harder?
+:   the right answer
+
+The reverse question (answer → question)?
 :   the right answer
 :::
 :::
@@ -53,8 +93,8 @@ Question about the picture?
 
 {{< sim file="sims/name.html" poster="sims/name.png" title="What the student does" >}}
 
-::: {.callout-tip title="Try it 3"}
-Harder question that uses the simulator.
+::: {.callout-tip title="Try it 4"}
+Harder question with a fixed picture (never about what the simulator shows now).
 
 ::: {.match extra="a wrong answer"}
 Harder question?
@@ -69,11 +109,35 @@ Another question?
 
 Formula or code last, after the picture.
 
-## Class activity
+<!-- 90 min: continue to 5–7 ideas, each with its Example and Try it. -->
 
-Short activity for the end of the lecture (game-math: the syllabus seminar of this week).
+## Practice round
 
-## Summary
+<!-- game-math (90 min): one harder, mixed Try it on the whole lesson. -->
+
+Use everything from today. These are a little harder.
+
+::: {.callout-tip title="Try it 5 (harder)"}
+Find the answer.
+
+::: {.match extra="wrong answer 1|wrong answer 2"}
+Question that uses two ideas of today?
+:   the right answer
+
+Question with several steps?
+:   the right answer
+:::
+:::
+
+## Class activity {.activity}
+
+**Activity title** (pairs, about N minutes). game-math: the syllabus seminar of this week.
+
+1. **Step** (N min). What the students do.
+2. **Step** (N min). What the students do.
+3. **Share** (N min). What the class does together.
+
+## Summary {.summary}
 
 - Keyword 1
 - Keyword 2

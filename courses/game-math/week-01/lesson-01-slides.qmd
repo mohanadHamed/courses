@@ -6,7 +6,7 @@ format: lesson-pptx
 
 ## Keywords
 
-{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d >}}
+{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d negative-number >}}
 
 ## Think · Math in your game?
 
@@ -23,18 +23,20 @@ Open your favourite mobile game.
 
 ## Try it 1 · Which math?
 
-Position, angle, probability or logic?
-
-1. An enemy drops a rare sword 1 time in 20.
+1. A rare sword drops 1 time in 20.
 2. The car is 5 steps right of the start.
-3. The door opens only if you have the key.
+3. The door opens only with the key.
 4. The tower turns to face the enemy.
+5. The hero grows two times bigger.
+6. A spin wheel gives a random prize.
 
 ::: {.answer}
 1. probability
 2. position
 3. logic
 4. angle
+5. transformation
+6. probability
 :::
 
 ## Think · How does the computer see?
@@ -54,9 +56,10 @@ Only **numbers**: every object has a **position**.
 
 :::: {.columns}
 ::: {.column width="45%"}
-- **x** → right
-- **y** ↑ up
+- **x-axis**: left → right
+- **y-axis**: down ↑ up
 - **origin** = (0, 0)
+- each axis = a ruler
 :::
 ::: {.column width="55%"}
 ![](sims/grid-position.png)
@@ -71,9 +74,15 @@ a) Last number on the x-axis?
 
 b) Top number on the y-axis?
 
+c) Left → right?
+
+d) Down → up?
+
 ::: {.answer}
 a) 10
 b) 6
+c) the x-axis
+d) the y-axis
 :::
 :::
 ::: {.column width="55%"}
@@ -90,6 +99,27 @@ b) 6
 ::: {.reveal}
 - (3, 2) ≠ (2, 3): **order is important**
 :::
+
+## Example · Where is the coin?
+
+:::: {.columns}
+::: {.column width="45%"}
+::: {.reveal}
+1. start at (0, 0)
+2. right: **7** → x = 7
+3. up: **4** → y = 4
+4. coin = **(7, 4)**
+:::
+:::
+::: {.column width="55%"}
+![](sims/grid-position.png)
+:::
+::::
+
+## Points on an axis
+
+- y = 0 → **on the x-axis** · (6, 0)
+- x = 0 → **on the y-axis** · (0, 2)
 
 ## Live demo
 
@@ -116,6 +146,73 @@ c) (7, 2)
 :::
 ::::
 
+## Try it 4 · Write the position
+
+a) 3 right, 5 up
+
+b) 5 right, 3 up
+
+c) 6 right, 0 up
+
+d) 0 right, 2 up
+
+e) on the y-axis, 4 up
+
+::: {.answer}
+a) (3, 5)
+b) (5, 3)
+c) (6, 0)
+d) (0, 2)
+e) (0, 4)
+:::
+
+## Think · The player moves
+
+The player is at **(3, 2)**. It moves **2 steps left**.
+**Which number changes?**
+
+::: {.answer}
+Only **x**: 3 − 2 = 1 → **(1, 2)**
+:::
+
+## Moving changes one number
+
+- right → **x** bigger · left → **x** smaller
+- up → **y** bigger · down → **y** smaller
+
+::: {.reveal}
+- (3, 2) → 2 left → **(1, 2)** → 3 up → **(1, 5)**
+:::
+
+## Think · Left of the origin?
+
+The player is at **(1, 2)**. It moves **3 steps left**.
+**What is x now?**
+
+::: {.answer}
+1 − 3 = **−2** → (−2, 2): a **negative number**
+:::
+
+## Try it 5 · Move from (5, 3)
+
+a) 2 right
+
+b) 3 down
+
+c) 4 left
+
+d) 1 up, 2 right
+
+e) 7 left
+
+::: {.answer}
+a) (7, 3)
+b) (5, 0)
+c) (1, 3)
+d) (7, 4)
+e) (−2, 3)
+:::
+
 ## Think · A 3D world
 
 A 3D game has **depth**.
@@ -131,7 +228,23 @@ A third number: **z** (forward).
 ::: {.column width="40%"}
 - (x, y, z)
 - **z** → forward
-- (4, 3, 2): 4 right, 2 forward, 3 up
+- back = **−**
+:::
+::: {.column width="60%"}
+![](images/axes-3d.png)
+:::
+::::
+
+## Example · Reach (4, 3, 2)
+
+:::: {.columns}
+::: {.column width="40%"}
+::: {.reveal}
+1. 4 right → x = 4
+2. 2 forward → z = 2
+3. 3 up → y = 3
+- numbers: always **x, y, z**
+:::
 :::
 ::: {.column width="60%"}
 ![](images/axes-3d.png)
@@ -142,50 +255,94 @@ A third number: **z** (forward).
 
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" >}}
 
-## Try it 4 · Move in 3D
+## Try it 6 · x, y or z?
+
+a) walks right
+
+b) jumps up
+
+c) walks forward
+
+d) falls down
+
+e) walks back
+
+::: {.answer}
+a) x
+b) y
+c) z
+d) y
+e) z
+:::
+
+## Try it 7 · Move in 3D
 
 The player is at **(4, 3, 2)**.
 
-a) It jumps up 1. Which number changes? New position?
+a) jumps up 1 · b) forward 5
 
-b) It walks forward 5. Which number changes? New position?
+c) left 4 · d) back 2
 
 ::: {.answer}
-a) y: (4, 4, 2)
-b) z: (4, 3, 7)
+a) (4, 4, 2)
+b) (4, 3, 7)
+c) (0, 3, 2)
+d) (4, 3, 0)
 :::
 
 ## In game code
 
-- Code keeps every position as **numbers**
-- `Vector3` = three numbers: **x, y, z**
+- `Vector3` = x, y, z · `Vector2` = x, y
 - C# (for example, Unity games) · just read it
 
 ```csharp
 Vector3 playerPosition = new Vector3(4, 3, 2);
+Vector2 coinPosition = new Vector2(7, 4);
 ```
 
-## Try it 5 · Read the code
+## Try it 8 · Read the code
 
-```csharp
-Vector3 coinPosition = new Vector3(0, 5, 0);
-```
+a) `new Vector3(4, 3, 2)`: which is z?
 
-**Where is the coin?**
+b) `new Vector2(7, 4)`: 2D or 3D?
+
+c) `new Vector3(0, 5, 0)`: where?
 
 ::: {.answer}
-5 steps up, straight above the origin.
+a) 2
+b) 2D
+c) 5 up, above the origin
 :::
 
-## Class activity
+## Try it 9 · Practice round
 
-- Pairs · one mobile game
-- Find **3 places** with math
-- Share one example
+a) On the x-axis, 2 left of the origin?
+
+b) (2, 5): 3 right, 2 down?
+
+c) Bird (1, 2, 3) flies up 4?
+
+d) On the y-axis: (0, 4) or (4, 0)?
+
+::: {.answer}
+a) (−2, 0)
+b) (5, 3)
+c) (1, 6, 3)
+d) (0, 4)
+:::
+
+## Class activity · Math hunt
+
+- Pairs · one mobile game · **18 min**
+- Find **5 moments** with math
+- position · angle · transformation · logic · probability
+- 2D or 3D? Which number changes?
+- Share your best moment
 
 ## Summary
 
-- 2D **(x, y)** · 3D **(x, y, z)**
-- x → · y ↑ · z forward
+- 2D **(x, y)** · 3D **(x, y, z)** · x first
+- x → · y ↑ · z forward · left/down/back **−**
 - origin (0, 0) / (0, 0, 0)
-- `new Vector3(x, y, z)`
+- a move changes **one** number
+- `new Vector2(x, y)` · `new Vector3(x, y, z)`

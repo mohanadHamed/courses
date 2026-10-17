@@ -274,21 +274,23 @@ main h2 .header-section-number { color: var(--accent); }
 .callout-note .callout-header { background: transparent !important; border: 0; }
 .callout-note .callout-title-container { color: #56665a; font-weight: 700; }
 
-/* ---------- Class activity and summary ---------- */
+/* ---------- Class activity, game challenge and summary ---------- */
 section.activity,
+section.challenge,
 section.summary {
   margin-top: 2.4rem;
   padding: 0.4rem 1.3rem 1rem;
   border-radius: 18px;
 }
-section.activity { background: color-mix(in srgb, var(--accent2) 5%, #fff); border: 1px solid color-mix(in srgb, var(--accent) 12%, #fff); }
+section.activity, section.challenge { background: color-mix(in srgb, var(--accent2) 5%, #fff); border: 1px solid color-mix(in srgb, var(--accent) 12%, #fff); }
 section.summary {
   background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--accent) 4%, #fff) 50%, color-mix(in srgb, var(--accent2) 10%, #fff));
   border: 1px solid color-mix(in srgb, var(--accent) 16%, #fff);
 }
-section.activity h2, section.summary h2 { margin-top: 0.9rem; background: none; }
+section.activity h2, section.challenge h2, section.summary h2 { margin-top: 0.9rem; background: none; }
 section.summary h2, section.summary strong { color: var(--accent-ink); }
 section.activity h2::before { content: "👥 "; }
+section.challenge h2::before { content: "🎮 "; }
 section.summary h2::before { content: "⭐ "; }
 
 /* ---------- Figures, tables, code ---------- */

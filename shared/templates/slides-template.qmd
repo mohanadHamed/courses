@@ -1,9 +1,10 @@
 ---
 # Copy to courses/<slug>/week-NN/lesson-NN-slides.qmd. Remove `draft` after review.
 # Teacher slides: keywords and pictures only. No long sentences.
-# About 26–34 slides for 90 min (game-math), 12–16 for 60 min (computing-systems),
+# About 28–36 slides for 90 min (game-math), 12–16 for 60 min (computing-systems),
 # title slide not counted. check_size.py warns when a deck is too short.
-# One slide for every Try it, Example and Watch out of the lesson, Think slides
+# One slide for every Try it, Example and Watch out of the lesson (and the Game
+# challenge story in game-math), Think slides
 # before new ideas, one Live demo per simulator. See "Interactive slides" in AUTHORING.md.
 title: "Lesson title"
 subtitle: "Week N · Lecture N"
@@ -83,11 +84,18 @@ What happens next?
 <!-- One "Live demo" slide per simulator in the lesson: poster + QR code for students. -->
 {{< sim file="sims/name.html" poster="sims/name.png" title="Simulator title" >}}
 
-## Try it 5 · Practice round
+## Game challenge · Game name
 
-a) Harder question
+<!-- game-math: the story in keywords, then one slide per challenge Try it. -->
 
-b) Harder question
+- the game in 3–4 keywords
+- work **alone** · answer each part
+
+## Try it 5 · First part
+
+a) Question
+
+b) Question
 
 ::: {.answer}
 a) answer
@@ -95,6 +103,8 @@ b) answer
 :::
 
 ## Class activity · Short title
+
+<!-- computing-systems only. game-math has no class activity. -->
 
 - task · **N min**
 

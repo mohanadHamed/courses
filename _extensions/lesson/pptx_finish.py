@@ -8,7 +8,7 @@ Quarto (pandoc) makes plain slides. This project post-render step adds:
 - a title slide in the course colour;
 - answer cards from `::: {.answer}` (one card per item, elastic zoom on click);
 - click-by-click text from `::: {.reveal}` (fade in from the left);
-- coloured "Try it N" / "Think" / "Example" / "Watch out" labels in slide titles
+- coloured "Try it N" / "Think" / "Example" / "Watch out" / "Game challenge" labels in slide titles
   (question slides also get a big faint "?"), and a fade between slides.
 
 Only the Python standard library is used. The script runs on every render
@@ -343,8 +343,8 @@ def style_runs_one(r, size, color, bold):
     rpr.insert(0, frag(solid(color))[0])
 
 
-LABEL = re.compile(r"^(Try it \d+|Try it|Think|Quick check|Your turn|Example|Watch out)\s*([·:—-])?\s*")
-NOT_QUESTION = ("Example", "Watch out")   # coloured label, but no "?"
+LABEL = re.compile(r"^(Try it \d+|Try it|Think|Quick check|Your turn|Example|Watch out|Game challenge)\s*([·:—-])?\s*")
+NOT_QUESTION = ("Example", "Watch out", "Game challenge")   # coloured label, but no "?"
 
 
 def finish_title_label(sptree, pal):

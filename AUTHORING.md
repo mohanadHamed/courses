@@ -306,6 +306,9 @@ homework and its solution together.
   or `{{< answer-space box=6 >}}` (an empty box, height in cm, for a drawing).
   The PDF always shows them. The web page has a "🖨 Print homework" button;
   the lines appear only on paper, with a Name / Student number line at the top.
+- **One A4 page:** the printed web page and the PDF must each fit on one page.
+  "How to submit" is one short line; the layout is tighter for homework.
+  If it does not fit, cut a question or use fewer lines, never a smaller font.
 - The course page lists released homework (week, title, due, marks).
 - Check every task like a "Try it": self-contained, one clear answer
   (or a clear marking rule), no changing state, tried before release.

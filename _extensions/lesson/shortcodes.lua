@@ -266,7 +266,7 @@ local function answer_space(kwargs)
         '// answer-space\n#block(width: 100%%, height: %gcm, breakable: false, radius: 4pt, stroke: (paint: luma(150), thickness: 0.6pt, dash: "dashed"))', box))
     end
     return pandoc.RawBlock("typst", string.format(
-      '// answer-space\n#block(width: 100%%, breakable: false, above: 0.9em, below: 1.2em)[#for _ in range(%d) { v(0.55cm); box(width: 100%%, text(fill: luma(140), repeat[.])) }]', lines))
+      '// answer-space\n#block(width: 100%%, breakable: false, above: 0.4em, below: 0.9em)[#for _ in range(%d) { v(0.5cm); box(width: 100%%, text(fill: luma(140), repeat[.])) }]', lines))
   end
   return pandoc.Null()
 end

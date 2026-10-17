@@ -38,5 +38,8 @@ $endif$
 $if(lessontheme.program)$
   program: $lessontheme.program$,
 $endif$
+$if(lessontheme.compact)$
+  compact: $lessontheme.compact$,
+$endif$
   doc,
 )

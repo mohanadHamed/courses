@@ -178,12 +178,13 @@ local function typst_lesson(doc, course)
       return out
     end)(), ", ") .. ",)"),
     program = raw(typst_string(str(meta["diploma-line"] or ""))),
+    compact = meta.homework and raw("true") or nil,   -- homework: one A4 page
   }
 
   local out = {}
   if meta.homework then
     table.insert(out, pandoc.RawBlock("typst",
-      '#block(width: 100%, above: 0pt, below: 1em)[#grid(columns: (1fr, 1fr), column-gutter: 14pt, '
+      '#block(width: 100%, above: 0pt, below: 0.7em)[#grid(columns: (1fr, 1fr), column-gutter: 14pt, '
       .. '[*Name:* #box(width: 1fr, text(fill: luma(140), repeat[.]))], '
       .. '[*Student number:* #box(width: 1fr, text(fill: luma(140), repeat[.]))])]'))
   end
@@ -196,11 +197,11 @@ local function typst_lesson(doc, course)
       typst_string(i[1]), typst_string(i[2])))
   end
   table.insert(out, pandoc.RawBlock("typst", string.format([[
-#block(width: 100%%, fill: accent.lighten(96%%), radius: 8pt, inset: 12pt, stroke: (left: 3pt + accent))[
+#block(width: 100%%, fill: accent.lighten(96%%), radius: 8pt, inset: %s, stroke: (left: 3pt + accent))[
   #text(weight: "bold", fill: accent.darken(15%%))[%s]
   #v(2pt)
 %s]
-]], ilo_title(meta), table.concat(rows, "  #v(2pt)\n"))))
+]], meta.homework and "(x: 10pt, y: 7pt)" or "12pt", ilo_title(meta), table.concat(rows, "  #v(2pt)\n"))))
   return out
 end
 

@@ -8,18 +8,43 @@ format: lesson-pptx
 
 {{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d >}}
 
-## Math inside every game
+## Think · Math in your game?
 
-- walk to a coin → **position, vectors** (W1–3)
-- cannon aims → **angles** (W4)
-- grow / spin → **matrices** (W5–7)
-- "health = 0 → game over" → **logic** (W9–10)
-- random prize → **probability** (W11–13)
+Open your favourite mobile game.
+**Where is the math?**
 
-## Where is everything?
+::: {.reveal}
+- walk to a coin → **position, vectors** (weeks 1–3)
+- a cannon aims → **angles** (week 4)
+- grow / spin → **matrices** (weeks 5–7)
+- "health = 0 → game over" → **logic** (weeks 9–10)
+- a random prize → **probability** (weeks 11–13)
+:::
 
-- Computer sees **numbers**, not pictures
-- Each object → **position**
+## Try it 1 · Which math?
+
+Position, angle, probability or logic?
+
+1. An enemy drops a rare sword 1 time in 20.
+2. The car is 5 steps right of the start.
+3. The door opens only if you have the key.
+4. The tower turns to face the enemy.
+
+::: {.answer}
+1. probability
+2. position
+3. logic
+4. angle
+:::
+
+## Think · How does the computer see?
+
+You see a player and a coin.
+**What does the computer see?**
+
+::: {.answer}
+Only **numbers**: every object has a **position**.
+:::
 
 ## 2D: the grid
 
@@ -32,16 +57,73 @@ format: lesson-pptx
 - **x** → right
 - **y** ↑ up
 - **origin** = (0, 0)
-- **x first**: (3, 2) ≠ (2, 3)
 :::
 ::: {.column width="55%"}
 ![](sims/grid-position.png)
 :::
 ::::
 
+## Try it 2 · Read the grid
+
+:::: {.columns}
+::: {.column width="45%"}
+a) Last number on the x-axis?
+
+b) Top number on the y-axis?
+
+::: {.answer}
+a) 10
+b) 6
+:::
+:::
+::: {.column width="55%"}
+![](sims/grid-position.png)
+:::
+::::
+
+## Write a position: (x, y)
+
+- **x first**: count right
+- **y second**: count up
+- player = **(3, 2)**
+
+::: {.reveal}
+- (3, 2) ≠ (2, 3): **order is important**
+:::
+
 ## Live demo
 
 {{< sim file="sims/grid-position.html" poster="sims/grid-position.png" title="Move the player with x and y" >}}
+
+## Try it 3 · Where is it?
+
+:::: {.columns}
+::: {.column width="45%"}
+a) The coin: (x, y)?
+
+b) The name of (0, 0)?
+
+c) (3, 2), then 4 steps right?
+
+::: {.answer}
+a) (7, 4)
+b) the origin
+c) (7, 2)
+:::
+:::
+::: {.column width="55%"}
+![](sims/grid-position.png)
+:::
+::::
+
+## Think · A 3D world
+
+A 3D game has **depth**.
+Two numbers are not enough. **What do we add?**
+
+::: {.answer}
+A third number: **z** (forward).
+:::
 
 ## 3D: add z
 
@@ -60,6 +142,19 @@ format: lesson-pptx
 
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" >}}
 
+## Try it 4 · Move in 3D
+
+The player is at **(4, 3, 2)**.
+
+a) It jumps up 1. Which number changes? New position?
+
+b) It walks forward 5. Which number changes? New position?
+
+::: {.answer}
+a) y: (4, 4, 2)
+b) z: (4, 3, 7)
+:::
+
 ## In game code
 
 - Code keeps every position as **numbers**
@@ -70,11 +165,17 @@ format: lesson-pptx
 Vector3 playerPosition = new Vector3(4, 3, 2);
 ```
 
-## Quick check
+## Try it 5 · Read the code
 
-- Coin position?
-- Jump up 1 from (4, 3, 2) = ?
-- Walk forward 5 = ?
+```csharp
+Vector3 coinPosition = new Vector3(0, 5, 0);
+```
+
+**Where is the coin?**
+
+::: {.answer}
+5 steps up, straight above the origin.
+:::
 
 ## Class activity
 
@@ -87,3 +188,4 @@ Vector3 playerPosition = new Vector3(4, 3, 2);
 - 2D **(x, y)** · 3D **(x, y, z)**
 - x → · y ↑ · z forward
 - origin (0, 0) / (0, 0, 0)
+- `new Vector3(x, y, z)`

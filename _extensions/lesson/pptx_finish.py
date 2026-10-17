@@ -8,7 +8,8 @@ Quarto (pandoc) makes plain slides. This project post-render step adds:
 - a title slide in the course colour;
 - answer cards from `::: {.answer}` (one card per item, elastic zoom on click);
 - click-by-click text from `::: {.reveal}` (fade in from the left);
-- coloured "Try it N" / "Think" labels in slide titles, and a fade between slides.
+- coloured "Try it N" / "Think" / "Example" / "Watch out" / "Game challenge" labels in slide titles
+  (question slides also get a big faint "?"), and a fade between slides.
 
 Only the Python standard library is used. The script runs on every render
 (local, preview and CI) and skips files it already finished.
@@ -342,11 +343,12 @@ def style_runs_one(r, size, color, bold):
     rpr.insert(0, frag(solid(color))[0])
 
 
-LABEL = re.compile(r"^(Try it \d+|Try it|Think|Quick check|Your turn)\s*([·:—-])?\s*")
+LABEL = re.compile(r"^(Try it \d+|Try it|Think|Quick check|Your turn|Example|Watch out|Game challenge)\s*([·:—-])?\s*")
+NOT_QUESTION = ("Example", "Watch out", "Game challenge")   # coloured label, but no "?"
 
 
 def finish_title_label(sptree, pal):
-    """Colour 'Try it 3 ·' in the title; return True for a question slide."""
+    """Colour 'Try it 3 ·' (or 'Example ·') in the title; return True for a question slide."""
     title = find_ph(sptree, ("title",))
     if title is None:
         return False
@@ -367,7 +369,7 @@ def finish_title_label(sptree, pal):
     lab = frag('<a:r><a:rPr lang="en-US" dirty="0">%s</a:rPr><a:t>%s  </a:t></a:r>'
                % (solid(pal["accent"]), esc(label)))[0]
     p.insert(list(p).index(runs[0]), lab)
-    return True
+    return label not in NOT_QUESTION
 
 
 def question_mark(sid, pal):

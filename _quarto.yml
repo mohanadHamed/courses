@@ -6,6 +6,9 @@ project:
   render:
     - "*.qmd"
     - "!shared/"
+  # Warn when a lesson is too small or too big for its lecture time (AUTHORING.md).
+  pre-render:
+    - _extensions/lesson/check_size.py
   # Slides: course colours, answer cards and click animations (see the script).
   post-render:
     - _extensions/lesson/pptx_finish.py

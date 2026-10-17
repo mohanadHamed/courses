@@ -182,6 +182,11 @@ The car goes 3 steps right.
 - With only 1–2 questions, or few different answers, add wrong answers:
   `::: {.match extra="2 frames|4 frames"}` (split by `|`).
 - Keep answers short (a word, a number, a short phrase).
+- Answers must be fixed. Never ask about what a simulator shows now: the
+  student can change it at any time (and "Challenge" places things at random).
+  Ask about a fixed picture, and put that picture **inside** the "Try it" box.
+  A simulator can be used only for questions with one fixed answer
+  ("Move the player to (0, 0). What is this point called?").
 - **PDF:** the questions with a blank line, "Choose from:" (A to Z), and the
   answers upside down at the bottom of the box.
 - Open tasks (fill a table, talk with a partner) stay as text in the same box,

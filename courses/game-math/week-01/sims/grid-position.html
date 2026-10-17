@@ -6,7 +6,7 @@
   <title>Simulator: Move the player with x and y</title>
   <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
 </head>
-<body>
+<body class="theme-arcade">
 <main class="sim">
   <h1>Move the player with x and y</h1>
   <canvas id="grid" aria-label="Grid with the player"></canvas>
@@ -71,7 +71,7 @@
 
   function drawPlayer(cx, cy) {
     const r = cell * 0.32;
-    ctx.fillStyle = "#1f6f8b";
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--sim-accent").trim() || "#2F9E44";
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fill();

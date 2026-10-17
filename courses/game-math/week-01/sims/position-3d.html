@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Move the player in 3D</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <script type="importmap">
+    { "imports": { "three": "../../../../shared/sims/vendor/three.module.min.js" } }
+  </script>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Move the player in 3D</h1>
+  <p class="hint">Drag to turn the world. Pinch or scroll to zoom.</p>
+  <div id="view" class="view3d" aria-label="3D world with the player"></div>
+
+  <div class="controls">
+    <label>x <input id="x" type="range" min="0" max="6" step="1" value="4"></label>
+    <label>y <input id="y" type="range" min="0" max="4" step="1" value="3"></label>
+    <label>z <input id="z" type="range" min="0" max="6" step="1" value="2"></label>
+  </div>
+  <div class="controls">
+    <span class="readout">position = (<span id="px">4</span>, <span id="py">3</span>, <span id="pz">2</span>)</span>
+    <button id="challenge" type="button">Challenge</button>
+    <button id="reset" type="button" class="ghost">Reset view</button>
+  </div>
+  <p id="message" class="message">Move the sliders. Watch which way the player goes.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script type="module">
+import { createViewer, AXIS_COLORS } from "../../../../shared/sims/viewer3d.js";
+
+const SIZE = 6, MAX_Y = 4;
+const accent = getComputedStyle(document.body).getPropertyValue("--sim-accent").trim();
+const v = createViewer(document.getElementById("view"));
+v.view([7.5, 6.8, -10], [3, 1.6, 3]);   // front-right: x goes right, z goes back
+v.ground(SIZE);
+v.axes(SIZE, { names: { x: "x (right)", y: "y (up)", z: "z (forward)" } });
+
+const target = [4, 3, 2];          // where the sliders say
+const pos = [4, 3, 2];             // where the player is now (moves smoothly)
+const player = v.ball({ color: accent });
+const tag = v.label("(4, 3, 2)", [4, 3.7, 2], { size: 0.42, onTop: true });
+const shadow = new v.THREE.Mesh(
+  new v.THREE.CircleGeometry(0.3, 32),
+  new v.THREE.MeshBasicMaterial({ color: "#000", transparent: true, opacity: 0.15 }),
+);
+shadow.rotation.x = -Math.PI / 2;
+v.scene.add(shadow);
+
+// Dashed path: origin → walk x → walk z → go up y.
+const pathX = v.line([[0, 0, 0], [4, 0, 0]], AXIS_COLORS.x, { dashed: true });
+const pathZ = v.line([[4, 0, 0], [4, 0, 2]], AXIS_COLORS.z, { dashed: true });
+const pathY = v.line([[4, 0, 2], [4, 3, 2]], AXIS_COLORS.y, { dashed: true });
+function setLine(line, a, b) {
+  line.geometry.setFromPoints([v.v3(a), v.v3(b)]);
+  line.computeLineDistances();
+}
+
+let coin = null, coinAt = null, score = 0;
+const msg = document.getElementById("message");
+const ids = ["x", "y", "z"];
+
+function readSliders() {
+  ids.forEach((k, i) => {
+    target[i] = +document.getElementById(k).value;
+    document.getElementById("p" + k).textContent = target[i];
+  });
+  tag.setText(`(${target[0]}, ${target[1]}, ${target[2]})`);
+}
+ids.forEach((k) => document.getElementById(k).addEventListener("input", readSliders));
+
+document.getElementById("reset").addEventListener("click", () => v.resetView());
+document.getElementById("challenge").addEventListener("click", () => {
+  do {
+    coinAt = [rand(SIZE), rand(MAX_Y), rand(SIZE)];
+  } while (coinAt.every((c, i) => c === target[i]));
+  if (!coin) coin = v.coin();
+  coin.visible = true;
+  v.place(coin, coinAt);
+  msg.className = "message";
+  msg.textContent = `Move the player to (${coinAt.join(", ")}) to take the coin.`;
+});
+const rand = (n) => Math.floor(Math.random() * (n + 1));
+
+v.onFrame((dt, t) => {
+  // Smooth movement toward the slider position.
+  for (let i = 0; i < 3; i++) pos[i] += (target[i] - pos[i]) * Math.min(1, dt * 8);
+  v.place(player, pos);
+  player.position.y += Math.sin(t * 3) * 0.03;
+  v.place(tag, [pos[0], pos[1] + 0.75, pos[2]]);
+  v.place(shadow, [pos[0], 0.01, pos[2]]);
+  setLine(pathX, [0, 0, 0], [pos[0], 0, 0]);
+  setLine(pathZ, [pos[0], 0, 0], [pos[0], 0, pos[2]]);
+  setLine(pathY, [pos[0], 0, pos[2]], pos);
+
+  if (coin && coin.visible) {
+    coin.rotation.z += dt * 2.5;
+    const near = coinAt.every((c, i) => Math.abs(c - pos[i]) < 0.15);
+    if (near && coinAt.every((c, i) => c === target[i])) {
+      coin.visible = false;
+      score++;
+      msg.className = "message good";
+      msg.textContent = `Well done! Coins: ${score}. Press Challenge again.`;
+    }
+  }
+});
+</script>
+</body>
+</html>

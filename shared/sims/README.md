@@ -2,6 +2,8 @@
 
 - `sim-base.css` — shared look. Every simulator links it with a relative path.
 - `sim-base.js` — every simulator loads it. It resizes the lesson iframe to fit.
+- `viewer3d.js` — 3D helper for 3D simulators (uses `vendor/three.module.min.js`).
+- `vendor/` — copied third-party libraries with their licenses. Never load from a CDN.
 - Reusable simulators (used by more than one course) go in this folder.
   Lesson-specific ones go in `courses/<slug>/week-NN/sims/`.
 

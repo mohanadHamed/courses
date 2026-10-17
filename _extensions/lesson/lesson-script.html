@@ -1,0 +1,54 @@
+<div id="read-progress" aria-hidden="true"></div>
+<script>
+(() => {
+  // Reading progress bar at the top of the page.
+  const bar = document.getElementById("read-progress");
+  const onScroll = () => {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+  };
+  document.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  // Resize simulator iframes to the height they report (shared/sims/sim-base.js).
+  window.addEventListener("message", (e) => {
+    const h = e.data && e.data.simHeight;
+    if (typeof h !== "number") return;
+    for (const f of document.querySelectorAll("figure.sim iframe")) {
+      if (f.contentWindow === e.source) f.style.height = Math.ceil(h) + 2 + "px";
+    }
+  });
+
+  // "I did it" buttons under each "Try it" box, with a counter in the hero.
+  // Saved in this browser only; the page works the same without storage.
+  const tries = [...document.querySelectorAll(".callout-tip")];
+  const chip = document.getElementById("lesson-progress");
+  if (!tries.length || !chip) return;
+  const key = "done:" + location.pathname;
+  let done = [];
+  try { done = JSON.parse(localStorage.getItem(key) || "[]"); } catch (_) {}
+  const save = () => { try { localStorage.setItem(key, JSON.stringify(done)); } catch (_) {} };
+  const update = () => {
+    chip.hidden = false;
+    chip.textContent = (done.length === tries.length ? "🏆 " : "✔ ") + done.length + " / " + tries.length + " done";
+  };
+  tries.forEach((box, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "try-done";
+    const paint = () => {
+      const on = done.includes(i);
+      btn.classList.toggle("is-done", on);
+      btn.textContent = on ? "✔ Done" : "I did it";
+    };
+    btn.addEventListener("click", () => {
+      done = done.includes(i) ? done.filter((d) => d !== i) : [...done, i];
+      save(); paint(); update();
+    });
+    (box.querySelector(".callout-body-container") || box).appendChild(btn);
+    paint();
+  });
+  update();
+})();
+</script>

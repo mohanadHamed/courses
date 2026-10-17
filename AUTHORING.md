@@ -125,14 +125,42 @@ Static diagrams go in `week-NN/images/`.
 - PDF engine: Typst. Main font Noto Sans; Arabic font Noto Naskh Arabic
   (installed in CI from `fonts-noto-core`).
 
+## Design
+
+- One design system for all courses; each course has its own colour theme.
+  Light look: near-white backgrounds, the course colour only as accents.
+  Never a blue theme. Readable dark text everywhere.
+- Course colours: `course.accent` / `course.accent2` / `course.theme` in
+  `courses/<slug>/_metadata.yml` (PDF + lesson pages). Keep `.theme-*` colours
+  in `shared/templates/site.scss` and `shared/sims/sim-base.css` the same.
+  game-math: green `#2F9E44` / lime `#A9E34B` (`arcade`);
+  computing-systems: gold `#A86700` / yellow `#FFD43B` (`circuit`).
+- Web: `_extensions/lesson/lesson.css` (hero, word cards, "Try it" cards,
+  summary) + `lesson-script.html` (progress bar, "I did it" buttons).
+  Site theme and fonts: `shared/templates/site.scss`, fonts in `shared/fonts/`.
+- PDF: `_extensions/lesson/typst-template.typ` (title band, header, footer),
+  `typst-show.typ`, `typst-body.typ` (callout style).
+- Mark the last two sections: `## Class activity {.activity}` and `## Summary {.summary}`.
+
+## Slides for students
+
+- `slides-public: true` in `_quarto.yml` shows a "Lecture slides" button on each
+  lesson with a note that slides are a summary, not study material.
+  Set it to `false` to keep slides teacher-only (they are still built).
+
 ## Simulators
 
-- Plain HTML + JavaScript in one file. No libraries from the internet, no paid
-  services, no external APIs. Must work on a phone (touch + small screens).
+- Plain HTML + JavaScript. No paid services, no external APIs, nothing loaded
+  from the internet. Third-party libraries are copied into `shared/sims/vendor/`
+  with their license (three.js r170, MIT). Must work on a phone.
+- 3D: use `shared/sims/viewer3d.js` (Unity axes: x right, y up, z forward;
+  axes, ground grid, labels, arrows for vectors, dashed paths, animation).
+  Example: `courses/game-math/week-01/sims/position-3d.html`.
 - Lesson-specific: `courses/<slug>/week-NN/sims/<name>.html`.
   Reusable across courses: `shared/sims/<name>.html`.
-- Shared look and auto-resize: link `shared/sims/sim-base.css` and load
-  `shared/sims/sim-base.js` (relative paths).
+- Shared look and auto-resize: link `shared/sims/sim-base.css`, load
+  `shared/sims/sim-base.js` (relative paths), and put the course theme class
+  on `<body>` (`theme-arcade` / `theme-circuit`).
 - Every simulator needs a static poster image `<name>.png` (keep the `.svg`
   source next to it). Export: `quarto typst compile` via `shared/sims/export-poster.typ`
   (see `shared/sims/README.md`).

@@ -1,26 +1,102 @@
 /*-- scss:defaults --*/
+$font-family-sans-serif: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$headings-font-weight: 800;
 $font-size-root: 17px;
-$line-height-base: 1.6;
-$primary: #1f6f8b;
+$line-height-base: 1.65;
+$primary: #2F9E44;
+$body-color: #1f2a22;
+$link-color: #2b8a3e;
+$navbar-bg: #ffffff;
+$navbar-fg: #24432c;
+$footer-bg: #fbfdfa;
 
 /*-- scss:rules --*/
-.site-subtitle {
-  font-size: 1.1rem;
-  font-style: italic;
-  color: $text-muted;
+
+/* Fonts are served from this site (shared/fonts), never from the internet. */
+@font-face { font-family: "Nunito"; font-weight: 400; font-style: normal; font-display: swap;
+  src: url("shared/fonts/nunito-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-weight: 400; font-style: italic; font-display: swap;
+  src: url("shared/fonts/nunito-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-weight: 700; font-style: normal; font-display: swap;
+  src: url("shared/fonts/nunito-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-weight: 800; font-style: normal; font-display: swap;
+  src: url("shared/fonts/nunito-latin-800-normal.woff2") format("woff2"); }
+
+/* Course themes. Keep the colours in sync with course.accent / course.accent2
+   in courses/<slug>/_metadata.yml (used by lesson pages and the PDF). */
+.theme-arcade  { --accent: #2F9E44; --accent2: #A9E34B; }
+.theme-circuit { --accent: #A86700; --accent2: #FFD43B; }
+
+.navbar-brand { font-weight: 800; letter-spacing: 0.2px; color: #2b8a3e !important; }
+.navbar { border-bottom: 1px solid #e3efe0; box-shadow: 0 4px 18px -14px rgba(31, 80, 40, 0.5); }
+
+/* ---------- Home page ---------- */
+body:has(.home-hero) #title-block-header { display: none; }
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  padding: 2.4rem 2rem;
+  margin: 0.5rem 0 2rem;
+  color: #1f3d27;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(169, 227, 75, 0.16) 0 16%, transparent 17%),
+    radial-gradient(circle at 76% 88%, rgba(255, 212, 59, 0.16) 0 10%, transparent 11%),
+    linear-gradient(135deg, #ffffff 0%, #f6fbf5 60%, #fbfdf3 100%);
+  border: 1px solid #e3f0e1;
+  box-shadow: 0 18px 40px -26px rgba(47, 158, 68, 0.55);
+}
+.home-hero h1 { color: #1f6b30; font-size: 2.1rem; margin: 0 0 0.4rem; }
+.home-hero p { margin: 0; font-size: 1.08rem; }
+.home-hero .site-subtitle { color: #3c6b47; font-style: italic; margin-bottom: 0.9rem; }
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+  margin: 1rem 0 2rem;
+}
+.course-tile {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 1.4rem 1.4rem 1.2rem;
+  color: color-mix(in srgb, var(--accent) 45%, #000) !important;
+  text-decoration: none !important;
+  background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--accent2) 10%, #fff));
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, #fff);
+  box-shadow: 0 14px 30px -22px var(--accent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.course-tile:hover { transform: translateY(-3px); box-shadow: 0 20px 36px -20px var(--accent); }
+.course-tile .tile-code { font-size: 0.8rem; font-weight: 800; letter-spacing: 1px; color: var(--accent); }
+.course-tile .tile-title { font-size: 1.25rem; font-weight: 800; line-height: 1.25; margin: 0.3rem 0 0.5rem; }
+.course-tile .tile-text { font-size: 0.95rem; opacity: 0.95; }
+.course-tile .tile-go { display: inline-block; margin-top: 0.9rem; padding: 0.3rem 0.9rem; border-radius: 10px; font-weight: 800; color: #fff; background: var(--accent); }
+.course-tile::after {
+  content: "";
+  position: absolute;
+  right: -30px; bottom: -30px;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent2) 14%, transparent);
 }
 
-.course-card {
-  border: 1px solid $border-color;
-  border-radius: 8px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1rem;
+.feature-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
 }
-
-.course-card h3 {
-  margin-top: 0;
+.feature {
+  border-radius: 14px;
+  padding: 1rem;
+  background: #fbfdfa;
+  border: 1px solid #e6f1e4;
 }
+.feature b { display: block; margin-bottom: 0.2rem; }
 
+/* ---------- About page ---------- */
 .credit-note {
   margin-top: 3rem;
   font-size: 0.8rem;

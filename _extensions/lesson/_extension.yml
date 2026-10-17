@@ -10,8 +10,10 @@ contributes:
     html:
       filters:
         - banner.lua
+      theme:
+        light: [cosmo, ../../shared/templates/site.scss]
       css: lesson.css
-      include-after-body: sim-embed.html
+      include-after-body: lesson-script.html
       format-links: false   # banner.lua adds a "Download PDF" link instead
       toc: true
       toc-title: "In this lesson"
@@ -30,5 +32,8 @@ contributes:
       toc: false
       callout-icon: false
       include-before-body: typst-body.typ
+      template-partials:
+        - typst-template.typ
+        - typst-show.typ
     pptx:
       slide-level: 2

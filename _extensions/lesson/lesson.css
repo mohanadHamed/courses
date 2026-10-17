@@ -1,31 +1,272 @@
-/* Lesson pages (lesson-html format). */
+/* Lesson and course pages (lesson-html format).
+   Colours come from --accent / --accent2, set per course by banner.lua. */
 
-.ar {
+:root {
+  --accent: #2F9E44;
+  --accent2: #A9E34B;
+  --ink: #1f2a22;
+  --soft: #fafcf9;
+  --line: #e1eedd;
+  --accent-ink: color-mix(in srgb, var(--accent) 55%, #000);
+}
+
+/* Quarto's own title block is replaced by the hero. */
+body:has(.lesson-hero) #title-block-header { display: none; }
+
+/* ---------- Reading progress bar ---------- */
+#read-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 4px;
+  width: 0;
+  z-index: 2000;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 0.1s linear;
+}
+
+/* ---------- Hero ---------- */
+.lesson-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0.5rem 0 1.4rem;
+  padding: 1.8rem 1.6rem 1.5rem;
+  border-radius: 22px;
+  color: var(--accent-ink);
+  background: linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--accent) 4%, #fff) 55%, color-mix(in srgb, var(--accent2) 10%, #fff) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, #fff);
+  box-shadow: 0 16px 36px -30px var(--accent);
+}
+.lesson-hero a { color: var(--accent-ink); }
+.hero-shapes i {
+  position: absolute;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent2) 14%, transparent);
+}
+.hero-shapes i:nth-child(1) { width: 190px; height: 190px; right: -50px; top: -60px; }
+.hero-shapes i:nth-child(2) { width: 90px; height: 90px; right: 110px; bottom: -35px; }
+.hero-shapes i:nth-child(3) { width: 40px; height: 40px; right: 40px; bottom: 30px; background: color-mix(in srgb, var(--accent) 10%, transparent); }
+/* Arcade theme: a pixel grid. Circuit theme: thin lines. */
+.theme-arcade.lesson-hero::before,
+.theme-circuit.lesson-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+}
+.theme-arcade.lesson-hero::before {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--accent) 45%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 45%, transparent) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: linear-gradient(90deg, transparent 35%, #000 100%);
+}
+.theme-circuit.lesson-hero::before {
+  background-image:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--accent) 50%, transparent) 0 2px, transparent 2px 40px),
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--accent) 35%, transparent) 0 1px, transparent 1px 22px);
+  mask-image: linear-gradient(90deg, transparent 40%, #000 100%);
+}
+.hero-course {
+  position: relative;
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--accent) !important;
+  text-decoration: none;
+}
+.hero-title {
+  position: relative;
+  color: var(--accent-ink);
+  font-size: clamp(1.6rem, 4.5vw, 2.3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0.35rem 0 0.4rem;
+  border: 0;
+}
+.hero-sub { position: relative; margin: 0 0 0.8rem; font-size: 1.05rem; color: #3d4a40; }
+.hero-chips { position: relative; display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.6rem 0 0.9rem; }
+.hero-chip {
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, #fff);
+}
+.hero-progress { background: var(--accent); border-color: var(--accent); color: #fff; }
+.hero-actions { position: relative; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.hero-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  font-weight: 800;
+  text-decoration: none !important;
+  background: var(--accent);
+  color: #fff !important;
+  box-shadow: 0 6px 16px -8px var(--accent);
+  transition: transform 0.12s ease;
+}
+.hero-btn:hover { transform: translateY(-2px); }
+.hero-btn-ghost { background: #fff; color: var(--accent-ink) !important; border: 1.5px solid var(--accent); box-shadow: none; }
+.hero-note { position: relative; margin: 0.7rem 0 0; font-size: 0.82rem; color: #56665a; }
+
+/* ---------- ILO card ---------- */
+.ilo-card {
+  margin: 0 0 1.6rem;
+  padding: 1rem 1.2rem;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--accent) 3%, #fff);
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, #fff);
+}
+.ilo-title { font-weight: 800; color: var(--accent-ink); margin-bottom: 0.3rem; }
+.ilo-card ul { margin: 0; padding-left: 0; list-style: none; }
+.ilo-card li { margin: 0.3rem 0; }
+.ilo-code {
+  display: inline-block;
+  min-width: 2.2rem;
+  margin-right: 0.3rem;
+  padding: 0 0.4rem;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #fff;
+  background: var(--accent);
+}
+.ilo-foot { margin-top: 0.5rem; font-size: 0.78rem; color: #66766a; }
+
+/* ---------- Headings ---------- */
+main h2 {
+  margin-top: 2.6rem;
+  padding-bottom: 0.35rem;
+  font-weight: 800;
+  color: var(--ink);
+  border-bottom: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent2)) left bottom / 64px 4px no-repeat;
+}
+main h2 .header-section-number { color: var(--accent); }
+
+/* ---------- Glossary: word cards ---------- */
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+}
+.word-card {
+  position: relative;
+  padding: 0.8rem 0.9rem 0.75rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 16px -12px rgba(30, 70, 35, 0.28);
+}
+.word-card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 12px; bottom: 12px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(var(--accent), var(--accent2));
+}
+.word-en { font-weight: 800; font-size: 1.05rem; color: var(--accent-ink); }
+.word-ar {
+  display: block;
+  margin: 0.1rem 0 0.25rem;
   font-family: "Noto Naskh Arabic", "Geeza Pro", "Segoe UI", Tahoma, serif;
-  font-size: 1.15em;
-}
-
-.glossary table {
-  width: 100%;
-}
-
-.glossary td:nth-child(2),
-.glossary th:nth-child(2) {
+  font-size: 1.25rem;
   text-align: right;
+  color: var(--ink);
 }
+.word-def { font-size: 0.88rem; color: #56665a; line-height: 1.4; }
 
+/* ---------- "Try it" and answers ---------- */
+.callout.callout-style-default.callout-tip {
+  border: 0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 16%, #fff);
+  overflow: hidden;
+}
+.callout-tip .callout-header {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 6%, #fff), color-mix(in srgb, var(--accent2) 12%, #fff)) !important;
+  border: 0;
+}
+.callout-tip .callout-title-container { color: var(--accent-ink); font-weight: 800; }
+.callout-tip .callout-body-container { padding-top: 0.4rem; }
+.try-done {
+  margin: 0.2rem 0 0.6rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--accent);
+  background: #fff;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.try-done.is-done { background: var(--accent); color: #fff; }
+
+.callout.callout-note.callout-titled {
+  border: 1.5px dashed var(--line);
+  border-left: 1.5px dashed var(--line);
+  border-radius: 14px;
+  background: var(--soft);
+}
+.callout-note .callout-header { background: transparent !important; border: 0; }
+.callout-note .callout-title-container { color: #56665a; font-weight: 700; }
+
+/* ---------- Class activity and summary ---------- */
+section.activity,
+section.summary {
+  margin-top: 2.4rem;
+  padding: 0.4rem 1.3rem 1rem;
+  border-radius: 18px;
+}
+section.activity { background: color-mix(in srgb, var(--accent2) 5%, #fff); border: 1px solid color-mix(in srgb, var(--accent) 12%, #fff); }
+section.summary {
+  background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--accent) 4%, #fff) 50%, color-mix(in srgb, var(--accent2) 10%, #fff));
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, #fff);
+}
+section.activity h2, section.summary h2 { margin-top: 0.9rem; background: none; }
+section.summary h2, section.summary strong { color: var(--accent-ink); }
+section.activity h2::before { content: "👥 "; }
+section.summary h2::before { content: "⭐ "; }
+
+/* ---------- Figures, tables, code ---------- */
+main figure img, main .quarto-figure img {
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+main figcaption { color: #66766a; font-size: 0.9rem; }
+main table:not(.word-grid table) th { background: color-mix(in srgb, var(--accent) 5%, #fff); }
+div.sourceCode { border-radius: 12px; }
+
+/* ---------- Simulators ---------- */
 figure.sim {
-  margin: 1.5rem 0;
+  margin: 1.6rem 0;
+  padding: 0.6rem;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--accent) 3%, #fff);
+  border: 1px solid color-mix(in srgb, var(--accent) 12%, #fff);
 }
-
 figure.sim iframe {
+  display: block;
   width: 100%;
-  border: 1px solid #c9d1d8;
-  border-radius: 8px;
+  border: 0;
+  border-radius: 12px;
   background: #fff;
 }
-
 figure.sim figcaption {
-  margin-top: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin: 0.5rem 0.3rem 0.1rem;
   font-size: 0.9rem;
 }
+figure.sim figcaption .sim-label { font-weight: 800; color: var(--accent-ink); }
+figure.sim figcaption a { font-weight: 700; }

@@ -91,8 +91,27 @@ local function arabic(text)
   return pandoc.Str(text)
 end
 
+-- HTML: one card per word (English, Arabic, meaning).
+local function glossary_cards(args, terms)
+  local cards = {}
+  for _, arg in ipairs(args) do
+    local key = str(arg)
+    local t = terms[key]
+    if not t then
+      error("Glossary term '" .. key .. "' is missing from shared/glossary.yml")
+    end
+    table.insert(cards, string.format(
+      '<div class="word-card"><div class="word-en">%s</div><span class="word-ar" lang="ar" dir="rtl">%s</span><div class="word-def">%s</div></div>',
+      html_attr(str(t.en)), html_attr(str(t.ar)), html_attr(str(t.def or ""))))
+  end
+  return pandoc.RawBlock("html", '<div class="word-grid">' .. table.concat(cards, "") .. "</div>")
+end
+
 local function glossary(args)
   local terms = load_glossary()
+  if quarto.doc.is_format("html") then
+    return glossary_cards(args, terms)
+  end
   -- Slides show keywords only (EN | AR); lessons add the meaning.
   local slides = quarto.doc.is_format("pptx")
   local header = {
@@ -150,7 +169,7 @@ local function sim(kwargs)
     return pandoc.RawBlock("html", string.format([[
 <figure class="sim">
   <iframe src="%s" title="%s" loading="lazy" style="height:%spx"></iframe>
-  <figcaption><strong>Simulator:</strong> %s · <a href="%s" target="_blank" rel="noopener">Open full screen ↗</a></figcaption>
+  <figcaption><span class="sim-label">🎮 %s</span><a href="%s" target="_blank" rel="noopener">Open full screen ↗</a></figcaption>
 </figure>]], html_attr(file), html_attr(title), html_attr(height), html_attr(title), html_attr(file)))
 
   elseif quarto.doc.is_format("typst") then

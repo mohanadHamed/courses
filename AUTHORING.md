@@ -275,7 +275,10 @@ The teacher asks, the students answer aloud, then one click shows the answer.
 Homework **tasks are public**, like the lessons (common practice: MIT
 OpenCourseWare, Stanford and Harvard CS50 publish their problem sets). Students
 can prepare, and the homework is take-home anyway. **Solutions, model answers
-and marking notes stay private** (Drive), never in this repo.
+and marking notes stay private**, never in this repo: they go in the private
+repo `courses-private` (folder `../courses-private`, next to this one), with
+the same paths: `courses/<slug>/week-NN/homework-NN-solutions.md`. Change a
+homework and its solution together.
 
 - One homework per week and course: `courses/<slug>/week-NN/homework-NN.qmd`,
   from `shared/templates/homework-template.qmd`. No homework in exam weeks

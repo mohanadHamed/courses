@@ -39,7 +39,7 @@ All three outputs (interactive lesson, PDF, slides) cover exactly one lecture.
 | "Try it" exercises | 3–4 | 5–7 |
 | Simulators / demos | 0–1 | 1–2 |
 | Class activity | ~10 min | ~15–20 min |
-| Slides | ~8–12 | ~12–18 |
+| Slides (incl. question slides) | ~12–16 | ~18–24 |
 
 Leave time for my Arabic explanation and questions; do not fill every minute with content.
 Course-specific notes: `courses/<slug>/NOTES.md`. Topic map: `courses/<slug>/plan.md`.
@@ -100,7 +100,8 @@ ILO–PLO matrix). Use the newest version of each file.
 - Every lesson lists the course ILOs it covers (`ilos:` codes, from the syllabus week).
 - Each lesson ends with a short "Class activity" sized for the lecture time.
   In `game-math`, take it from the syllabus seminar of that week.
-- Slides: keywords and visuals only. No long sentences.
+- Slides: keywords and visuals only. No long sentences. Question slides may
+  have one short question (see "Interactive slides").
 
 ## Glossary
 
@@ -146,7 +147,34 @@ Static diagrams go in `week-NN/images/`.
   Site theme and fonts: `shared/templates/site.scss`, fonts in `shared/fonts/`.
 - PDF: `_extensions/lesson/typst-template.typ` (title band, header, footer),
   `typst-show.typ`, `typst-body.typ` (callout style).
+- Slides: `_extensions/lesson/pptx_finish.py` (project post-render) gives every
+  `.pptx` the course look: colours from `_metadata.yml`, fonts, background shapes,
+  footer, a coloured title slide, a fade between slides, and the click animations.
+  Never style slides by hand in PowerPoint; change the script once for all courses.
 - Mark the last two sections: `## Class activity {.activity}` and `## Summary {.summary}`.
+
+## Interactive slides
+
+Slides are for a conversation with the class, not a one-way talk.
+The teacher asks, the students answer aloud, then one click shows the answer.
+
+- **Every "Try it" of the lesson is a slide**: `## Try it N · short title`,
+  the questions, then the answers in `::: {.answer}`.
+- **Add "Think" slides** before a new idea: `## Think · short title`, one
+  question ("What do you think…?"), then `::: {.answer}` or `::: {.reveal}`.
+  Use as many as fit the lecture.
+- `::: {.answer}`: each list item or paragraph becomes an answer card at the
+  bottom of the slide. Each card pops in on its own click (elastic zoom).
+  Use the same labels as the questions (`a)`, `1.`) so the cards show them.
+- `::: {.reveal}`: each item fades in from the left on its own click.
+  Use it for "think first, then see" lists. Normal slides show everything at once.
+- Keep questions short (about 5 lines), so the cards fit under them.
+- A picture can go next to the questions with `:::: {.columns}`;
+  the cards still go at the bottom.
+- The "Try it" / "Think" title label gets the course colour and a big faint "?".
+- Filter: `_extensions/lesson/slides.lua`. Look and animations: `pptx_finish.py`.
+- Check a deck in PowerPoint's Slide Show before class: every click must show
+  the next answer.
 
 ## Slides for students
 

@@ -94,3 +94,6 @@ lesson puts in `ilos:` (always a part of the week ILOs).
 - D1 is built only in the group work and presentations of weeks 14–15.
   Pair work in other class activities also practises it.
 - Week 8 seminar ("Midterm discussion") is not a lesson.
+- Slides for every lesson are interactive: each "Try it" is a question slide,
+  plus "Think" slides before new ideas; answers show on click
+  (see "Interactive slides" in AUTHORING.md).

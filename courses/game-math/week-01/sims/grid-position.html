@@ -40,7 +40,8 @@
 
   function resize() {
     cssW = canvas.clientWidth;
-    cell = Math.max(24, (cssW - pad * 2) / MAX_X);
+    pad = cssW < 420 ? 24 : 34;   // smaller margin on a phone, so the grid fits
+    cell = (cssW - pad * 2) / MAX_X;
     cssH = Math.round(cell * MAX_Y + pad * 2);
     const dpr = window.devicePixelRatio || 1;
     canvas.width = Math.round(cssW * dpr);

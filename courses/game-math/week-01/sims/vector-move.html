@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Move the player with a vector</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .vec { color: #e8590c; }
+    .sim .sum { font-size: 1.05rem; font-weight: 700; margin: 0 0 8px; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Move the player with a vector</h1>
+  <p class="sum" id="sum">player (2, 1) + vector <span class="vec">(4, 2)</span> = (6, 3)</p>
+  <canvas id="grid" aria-label="Grid with the player and a vector arrow"></canvas>
+
+  <div class="controls">
+    <label>x <input id="vx" type="range" min="-10" max="10" step="1" value="4"></label>
+    <label>y <input id="vy" type="range" min="-6" max="6" step="1" value="2"></label>
+    <span class="readout vec">vector = (<span id="ox">4</span>, <span id="oy">2</span>)</span>
+  </div>
+  <div class="controls">
+    <button id="move" type="button">Move</button>
+    <button id="challenge" type="button" class="ghost">Challenge</button>
+    <button id="reset" type="button" class="ghost">Reset</button>
+  </div>
+  <p id="message" class="message">Move the sliders, or tap the grid where the arrow should end.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const MAX_X = 10, MAX_Y = 6, VEC = "#e8590c";
+  const canvas = document.getElementById("grid");
+  const ctx = canvas.getContext("2d");
+  const sx = document.getElementById("vx");
+  const sy = document.getElementById("vy");
+  const msg = document.getElementById("message");
+  const sum = document.getElementById("sum");
+  const moveBtn = document.getElementById("move");
+
+  // Player position, vector, optional coin. `anim` slides the player along the arrow.
+  const state = { px: 2, py: 1, vx: 4, vy: 2, coin: null, score: 0, anim: null };
+  let cell = 50, pad = 34, cssW = 0, cssH = 0;
+
+  // Grid point (x, y) -> pixel. y grows UP, like in math and in game code.
+  const toPx = (x, y) => [pad + x * cell, cssH - pad - y * cell];
+  const inside = (x, y) => x >= 0 && x <= MAX_X && y >= 0 && y <= MAX_Y;
+  const fmt = (n) => (n < 0 ? "−" + -n : String(n));   // real minus sign
+  const pair = (a, b) => `(${fmt(a)}, ${fmt(b)})`;
+
+  function resize() {
+    cssW = canvas.clientWidth;
+    pad = cssW < 420 ? 24 : 34;   // smaller margin on a phone, so the grid fits
+    cell = (cssW - pad * 2) / MAX_X;
+    cssH = Math.round(cell * MAX_Y + pad * 2);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    canvas.style.height = cssH + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+
+  function line(x1, y1, x2, y2, color, width, dash) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.setLineDash(dash || []);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function text(t, x, y, color, align, size) {
+    ctx.fillStyle = color;
+    ctx.font = `700 ${size || 13}px system-ui, sans-serif`;
+    ctx.textAlign = align || "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(t, x, y);
+  }
+
+  function arrow(x1, y1, x2, y2) {
+    const len = Math.hypot(x2 - x1, y2 - y1);
+    if (len < 1) return;
+    const ux = (x2 - x1) / len, uy = (y2 - y1) / len, head = Math.min(16, len * 0.5);
+    line(x1, y1, x2 - ux * head * 0.8, y2 - uy * head * 0.8, VEC, 4);
+    ctx.fillStyle = VEC;
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - ux * head - uy * head * 0.55, y2 - uy * head + ux * head * 0.55);
+    ctx.lineTo(x2 - ux * head + uy * head * 0.55, y2 - uy * head - ux * head * 0.55);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function drawPlayer(cx, cy, alpha) {
+    const r = cell * 0.32;
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--sim-accent").trim() || "#2F9E44";
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.arc(cx - r * 0.35, cy - r * 0.2, r * 0.18, 0, Math.PI * 2);
+    ctx.arc(cx + r * 0.35, cy - r * 0.2, r * 0.18, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawCoin(cx, cy) {
+    const r = cell * 0.22;
+    ctx.fillStyle = "#f2b705";
+    ctx.strokeStyle = "#b8860b";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, cssW, cssH);
+    for (let i = 0; i <= MAX_X; i++) {
+      const [x, y0] = toPx(i, 0);
+      line(x, y0, x, toPx(i, MAX_Y)[1], "#e3e8ec", 1);
+      text(String(i), x, y0 + 14, "#5f6f7a");
+    }
+    for (let j = 0; j <= MAX_Y; j++) {
+      const [x0, y] = toPx(0, j);
+      line(x0, y, toPx(MAX_X, j)[0], y, "#e3e8ec", 1);
+      text(String(j), x0 - 14, y, "#5f6f7a");
+    }
+    const [ox, oy] = toPx(0, 0);
+    line(ox, oy, toPx(MAX_X, 0)[0], oy, "#c0392b", 2.5);
+    line(ox, oy, ox, toPx(0, MAX_Y)[1], "#27ae60", 2.5);
+    text("x", toPx(MAX_X, 0)[0] + 14, oy, "#c0392b", "center", 15);
+    text("y", ox, toPx(0, MAX_Y)[1] - 14, "#27ae60", "center", 15);
+
+    if (state.coin) drawCoin(...toPx(state.coin.x, state.coin.y));
+
+    const [ax, ay] = toPx(state.px, state.py);
+    if (state.anim) {
+      const t = state.anim.t;
+      drawPlayer(ax + (state.anim.dx * t) * cell, ay - (state.anim.dy * t) * cell, 1);
+      return;
+    }
+    const tx = state.px + state.vx, ty = state.py + state.vy;
+    const [bx, by] = toPx(tx, ty);
+    // components: x first (red), then y (green)
+    if (state.vx !== 0) {
+      line(ax, ay, bx, ay, "#c0392b", 2, [6, 4]);
+      text(`x = ${fmt(state.vx)}`, (ax + bx) / 2, ay + (state.vy > 0 ? 16 : -16), "#c0392b");
+    }
+    if (state.vy !== 0) {
+      line(bx, ay, bx, by, "#27ae60", 2, [6, 4]);
+      text(`y = ${fmt(state.vy)}`, bx + (state.vx >= 0 ? 10 : -10), (ay + by) / 2, "#27ae60", state.vx >= 0 ? "left" : "right");
+    }
+    if (inside(tx, ty)) drawPlayer(bx, by, 0.3);
+    drawPlayer(ax, ay, 1);
+    arrow(ax, ay, bx, by);
+  }
+
+  // warn: say when the arrow ends outside the world (not right after a move).
+  function update(warn = true) {
+    sx.value = state.vx;
+    sy.value = state.vy;
+    document.getElementById("ox").textContent = fmt(state.vx);
+    document.getElementById("oy").textContent = fmt(state.vy);
+    const tx = state.px + state.vx, ty = state.py + state.vy;
+    sum.innerHTML = `player ${pair(state.px, state.py)} + vector <span class="vec">${pair(state.vx, state.vy)}</span> = ${pair(tx, ty)}`;
+    const ok = inside(tx, ty);
+    moveBtn.disabled = !ok || !!state.anim;
+    moveBtn.style.opacity = moveBtn.disabled ? 0.45 : 1;
+    if (!ok && warn) {
+      msg.className = "message";
+      msg.textContent = `${pair(tx, ty)} is outside the world. Change the vector.`;
+    }
+    draw();
+  }
+
+  function setVector(vx, vy) {
+    state.vx = vx;
+    state.vy = vy;
+    if (!state.coin) {
+      msg.className = "message";
+      msg.textContent = "Press Move to move the player with this vector.";
+    }
+    update();
+  }
+
+  function move() {
+    if (state.anim) return;
+    const dx = state.vx, dy = state.vy;
+    if (!inside(state.px + dx, state.py + dy)) return;
+    state.anim = { t: 0, dx, dy };
+    const start = performance.now();
+    const step = (now) => {
+      state.anim.t = Math.min(1, (now - start) / 600);
+      draw();
+      if (state.anim.t < 1) return requestAnimationFrame(step);
+      state.anim = null;
+      state.px += dx;
+      state.py += dy;
+      // Keep the vector, so Move can repeat it (like velocity in each frame),
+      // unless the next move would leave the world.
+      if (!inside(state.px + dx, state.py + dy)) { state.vx = 0; state.vy = 0; }
+      if (state.coin && state.coin.x === state.px && state.coin.y === state.py) {
+        state.score++;
+        state.coin = null;
+        msg.className = "message good";
+        msg.textContent = `Well done! Coins: ${state.score}. Press Challenge again.`;
+      } else if (state.coin) {
+        msg.className = "message";
+        msg.textContent = `Not yet. Find the vector from ${pair(state.px, state.py)} to the coin ${pair(state.coin.x, state.coin.y)}.`;
+      } else {
+        msg.className = "message";
+        msg.textContent = `The player moved to ${pair(state.px, state.py)}.`;
+      }
+      update(false);
+    };
+    requestAnimationFrame(step);
+    update(false);
+  }
+
+  function newCoin() {
+    let c;
+    do {
+      c = { x: Math.floor(Math.random() * (MAX_X + 1)), y: Math.floor(Math.random() * (MAX_Y + 1)) };
+    } while (c.x === state.px && c.y === state.py);
+    state.coin = c;
+    msg.className = "message";
+    msg.textContent = `The coin is at ${pair(c.x, c.y)}. Find the vector, then press Move. One move only!`;
+    state.vx = 0;
+    state.vy = 0;
+    update();
+  }
+
+  canvas.addEventListener("pointerdown", (e) => {
+    if (state.anim) return;
+    const r = canvas.getBoundingClientRect();
+    const gx = Math.round((e.clientX - r.left - pad) / cell);
+    const gy = Math.round((cssH - pad - (e.clientY - r.top)) / cell);
+    if (!inside(gx, gy)) return;
+    setVector(gx - state.px, gy - state.py);   // end − start
+  });
+  sx.addEventListener("input", () => setVector(+sx.value, state.vy));
+  sy.addEventListener("input", () => setVector(state.vx, +sy.value));
+  moveBtn.addEventListener("click", move);
+  document.getElementById("challenge").addEventListener("click", newCoin);
+  document.getElementById("reset").addEventListener("click", () => {
+    Object.assign(state, { px: 2, py: 1, vx: 4, vy: 2, coin: null });
+    msg.className = "message";
+    msg.textContent = "Move the sliders, or tap the grid where the arrow should end.";
+    update();
+  });
+  window.addEventListener("resize", resize);
+  resize();
+  update();
+})();
+</script>
+</body>
+</html>

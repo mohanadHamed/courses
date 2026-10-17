@@ -210,6 +210,61 @@ main h2 .header-section-number { color: var(--accent); }
 }
 .try-done.is-done { background: var(--accent); color: #fff; }
 
+/* ---------- "Try it" matching (match.lua + lesson-script.html) ---------- */
+.match { margin: 0.4rem 0 0.7rem; }
+.match-list { list-style: none; padding: 0; margin: 0 0 0.7rem; display: grid; gap: 0.45rem; }
+.match-q {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0.3rem 0.55rem;
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid var(--line); border-radius: 12px; background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.match-label { align-self: flex-start; font-weight: 800; color: var(--accent-ink); }
+.match-text { flex: 1 1 12rem; }
+.match-slot {
+  margin-left: auto; min-width: 4.5rem; padding: 0.15rem 0.7rem;
+  border: 1.5px dashed color-mix(in srgb, var(--accent) 40%, #fff); border-radius: 999px;
+  text-align: center; font-weight: 700; color: #8a968c;
+}
+.match-q.is-active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent2) 10%, #fff);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.match-q.is-active .match-slot { border-color: var(--accent); color: var(--accent); animation: match-pulse 1.3s ease-in-out infinite; }
+.match-q.is-right { border-color: #b6dfbd; background: #f2faf3; cursor: default; }
+.match-q.is-right .match-slot {
+  border: 1.5px solid #2b8a3e; background: #2b8a3e; color: #fff;
+  animation: match-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.match-q.is-wrong { animation: match-shake 0.35s; }
+.match-help { margin: 0 0 0.4rem; font-size: 0.85rem; color: #56665a; }
+.match-opts { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.match-opt {
+  padding: 0.4rem 0.95rem;
+  border: 1.5px solid var(--accent); border-radius: 999px; background: #fff;
+  color: var(--accent-ink); font: inherit; font-weight: 700;
+  cursor: pointer; transition: transform 0.12s, background 0.12s, opacity 0.2s;
+}
+.match-opt:hover:not(:disabled) { background: color-mix(in srgb, var(--accent2) 18%, #fff); transform: translateY(-1px); }
+.match-opt:active:not(:disabled) { transform: scale(0.96); }
+.match-opt.is-used { opacity: 0.3; cursor: default; }
+.match-opt.is-wrong { border-color: #c92a2a; color: #c92a2a; animation: match-shake 0.35s; }
+.match-feedback { min-height: 1.4em; margin: 0.5rem 0 0.1rem; font-weight: 800; }
+.match-feedback.good { color: #2b8a3e; }
+.match-feedback.bad { color: #c92a2a; }
+.match-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 0.9rem; }
+.match-score { font-weight: 800; color: var(--accent-ink); }
+.match-reset {
+  padding: 0.3rem 0.9rem; border: 1.5px solid var(--accent); border-radius: 10px;
+  background: #fff; color: var(--accent); font: inherit; font-weight: 800; font-size: 0.9rem; cursor: pointer;
+}
+@keyframes match-pop { 0% { transform: scale(0.4); } 60% { transform: scale(1.15); } 80% { transform: scale(0.95); } 100% { transform: scale(1); } }
+@keyframes match-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-3px); } }
+@keyframes match-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 35%, transparent); } 50% { box-shadow: 0 0 0 5px transparent; } }
+@media (prefers-reduced-motion: reduce) { .match * { animation: none !important; } }
+
 .callout.callout-note.callout-titled {
   border: 1.5px dashed var(--line);
   border-left: 1.5px dashed var(--line);

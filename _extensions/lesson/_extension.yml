@@ -9,6 +9,7 @@ contributes:
         - shortcodes.lua
     html:
       filters:
+        - match.lua
         - banner.lua
       theme:
         light: [cosmo, ../../shared/templates/site.scss]
@@ -21,6 +22,7 @@ contributes:
       code-copy: true
     typst:
       filters:
+        - match.lua
         - banner.lua
       papersize: a4
       margin:
@@ -37,3 +39,5 @@ contributes:
         - typst-show.typ
     pptx:
       slide-level: 2
+      filters:
+        - slides.lua

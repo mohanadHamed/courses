@@ -1,0 +1,222 @@
+---
+title: "Vectors: arrows that move things"
+subtitle: "Week 1 · Lecture 2"
+draft: true
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary vector component direction magnitude position velocity frame >}}
+
+## Think · A place or a move?
+
+The player is at **(2, 1)**. You push the joystick.
+It goes **4 right** and **2 up**.
+**Is "4 right, 2 up" a place?**
+
+::: {.answer}
+No. It is a **move**. In math, a move is a **vector**.
+:::
+
+## Position or vector
+
+- **Position** = a place → *where?*
+- **Vector** = a move → *which way? how far?*
+- coin **at** (7, 4) · player **moves** 4 right, 2 up
+
+## Try it 1 · Position or vector?
+
+a) The coin is at (7, 4).
+
+b) The car goes 3 steps right.
+
+c) The enemy goes 2 steps down.
+
+d) The door is at (0, 5).
+
+::: {.answer}
+a) position
+b) vector
+c) vector
+d) position
+:::
+
+## A vector is an arrow
+
+![](images/vector-components.png)
+
+## Direction and magnitude
+
+- **direction**: where it points
+- **magnitude**: how long it is
+- the same move from **any** start point
+
+## Try it 2 · Same vector?
+
+a) Same way, same length. Same vector?
+
+b) A is long, B is short, same way. Bigger magnitude?
+
+c) Same length. One points right, one left. Same vector?
+
+::: {.answer}
+a) yes
+b) arrow A
+c) no: other direction
+:::
+
+## Components (x, y)
+
+:::: {.columns}
+::: {.column width="45%"}
+- x: right **+** / left **−**
+- y: up **+** / down **−**
+- (4, 2) = 4 right, 2 up
+:::
+::: {.column width="55%"}
+![](images/vector-components.png)
+:::
+::::
+
+## Think · A minus sign?
+
+(4, 2) is 4 right and 2 up.
+**What is (−3, 0)?**
+
+::: {.answer}
+3 steps **left**: minus changes the direction.
+:::
+
+## Try it 3 · Write the vector
+
+a) 5 steps right
+
+b) 2 steps down
+
+c) 3 left and 1 up
+
+d) (0, 6) in words?
+
+e) (−2, −2) in words?
+
+::: {.answer}
+a) (5, 0)
+b) (0, −2)
+c) (−3, 1)
+d) 6 up
+e) 2 left, 2 down
+:::
+
+## Think · Move the player
+
+The player is at **(2, 1)**. The vector is **(4, 2)**.
+**Where does the player end?**
+
+::: {.answer}
+(2 + 4, 1 + 2) = **(6, 3)**: add x to x, y to y.
+:::
+
+## Position + vector
+
+- **new position = position + vector**
+- x + x · y + y
+- (2, 1) + (4, 2) = **(6, 3)**
+
+## Live demo
+
+{{< sim file="sims/vector-move.html" poster="sims/vector-move.png" title="Move the player with a vector" >}}
+
+## Try it 4 · New position?
+
+a) (1, 1) + (3, 2)
+
+b) (5, 4) + (−2, −3)
+
+c) (6, 3) + (0, 3)
+
+::: {.answer}
+a) (4, 3)
+b) (3, 1)
+c) (6, 6)
+:::
+
+## Think · From A to B
+
+The player is at **(2, 1)**. The coin is at **(7, 4)**.
+**Which vector takes the player to the coin?**
+
+::: {.reveal}
+- vector = **B − A** (end − start)
+- (7 − 2, 4 − 1) = **(5, 3)**
+- check: (2, 1) + (5, 3) = (7, 4) ✓
+- A − B goes **back**, from B to A
+:::
+
+## Try it 5 · Find the vector
+
+a) from (1, 2) to (4, 6)
+
+b) from (6, 5) to (2, 5)
+
+c) enemy (8, 1) → player (3, 4)
+
+::: {.answer}
+a) (3, 4)
+b) (−4, 0)
+c) (−5, 3)
+:::
+
+## Frames and velocity
+
+- **frame** = one picture · 30–60 every second
+- each frame: **position + velocity**
+- 3D vector: (x, y, z) · z = forward
+
+## In game code
+
+- `Vector3` = x, y, z · `Vector2` = x, y
+- `=` → "becomes"
+- C# (for example, Unity games) · just read it
+
+```csharp
+Vector3 velocity = new Vector3(2, 0, 1);
+position = position + velocity;
+```
+
+## Try it 6 · Frame by frame
+
+Start: **(10, 0, 0)**. Velocity: **(2, 0, 1)** in each frame.
+
+a) Position after 1 frame?
+
+b) Position after 3 frames?
+
+::: {.answer}
+a) (12, 0, 1)
+b) (16, 0, 3)
+:::
+
+## Try it 7 · Harder
+
+An enemy is at **(8, 1)**. It moves **(−1, 1)** in each frame.
+**After how many frames is it at (5, 4)?**
+
+::: {.answer}
+3 frames: (8, 1) → (7, 2) → (6, 3) → (5, 4)
+:::
+
+## Class activity
+
+- Pairs · grid 10 × 6 · player at (1, 1)
+- Hide **3 treasures**
+- Give only **vectors** → partner finds them
+- Bonus: treasure 1 → treasure 2 (end − start)
+
+## Summary
+
+- position = place · vector = move
+- arrow: **direction + magnitude**
+- (x, y) · + / −
+- position + vector · **B − A**
+- each frame: position + velocity

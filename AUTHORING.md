@@ -39,7 +39,7 @@ All three outputs (interactive lesson, PDF, slides) cover exactly one lecture.
 | "Try it" exercises | 3–4 | 5–7 |
 | Simulators / demos | 0–1 | 1–2 |
 | Class activity | ~10 min | ~15–20 min |
-| Slides | ~8–12 | ~12–18 |
+| Slides (incl. question slides) | ~12–16 | ~18–24 |
 
 Leave time for my Arabic explanation and questions; do not fill every minute with content.
 Course-specific notes: `courses/<slug>/NOTES.md`. Topic map: `courses/<slug>/plan.md`.
@@ -96,11 +96,13 @@ ILO–PLO matrix). Use the newest version of each file.
 - Simple verbs: use, find, move, show, change — not utilize, determine, obtain.
 - **Picture before formula**: game example → diagram → then math or code.
 - Short graded exercises ("Try it") **after each idea**, easy → harder.
+  Every "Try it" is a matching exercise (see "Try it: match the answer").
 - Every lesson starts with a bilingual glossary of 5–10 terms.
 - Every lesson lists the course ILOs it covers (`ilos:` codes, from the syllabus week).
 - Each lesson ends with a short "Class activity" sized for the lecture time.
   In `game-math`, take it from the syllabus seminar of that week.
-- Slides: keywords and visuals only. No long sentences.
+- Slides: keywords and visuals only. No long sentences. Question slides may
+  have one short question (see "Interactive slides").
 
 ## Glossary
 
@@ -120,8 +122,10 @@ Static diagrams go in `week-NN/images/`.
 |---|---|---|
 | `lesson-NN.qmd` | `lesson-html` + `lesson-typst` | Interactive HTML page + printable PDF |
 | `lesson-NN-slides.qmd` | `lesson-pptx` | Teacher slides (.pptx) |
+| `homework-NN.qmd` (NN = week) | `lesson-html` + `lesson-typst` | Take-home task page + printable PDF |
 
-- Start from `shared/templates/lesson-template.qmd` and `slides-template.qmd`.
+- Start from `shared/templates/lesson-template.qmd`, `slides-template.qmd`
+  and `homework-template.qmd`.
 - Formats, styles and filters live in the Quarto extension `_extensions/lesson/`
   (Quarto requires `_extensions/` at the project root). Change look and
   behaviour there, once, for every course.
@@ -146,7 +150,86 @@ Static diagrams go in `week-NN/images/`.
   Site theme and fonts: `shared/templates/site.scss`, fonts in `shared/fonts/`.
 - PDF: `_extensions/lesson/typst-template.typ` (title band, header, footer),
   `typst-show.typ`, `typst-body.typ` (callout style).
+- Slides: `_extensions/lesson/pptx_finish.py` (project post-render) gives every
+  `.pptx` the course look: colours from `_metadata.yml`, fonts, background shapes,
+  footer, a coloured title slide, a fade between slides, and the click animations.
+  Never style slides by hand in PowerPoint; change the script once for all courses.
 - Mark the last two sections: `## Class activity {.activity}` and `## Summary {.summary}`.
+
+## Try it: match the answer
+
+Every "Try it" box in a lesson is interactive. Do not write static answers.
+
+```markdown
+::: {.callout-tip title="Try it 1"}
+Position or vector?
+
+::: {.match}
+The coin is at (7, 4).
+:   position
+
+The car goes 3 steps right.
+:   vector
+:::
+:::
+```
+
+- Each question (the term) is followed by its right answer (`:   answer`).
+- **Web:** the questions get labels a), b), …; every different answer is shown
+  **once** as a button, in a random order. The student taps the answer for the
+  question in colour and sees at once "Right!" or "Not this one. Try again."
+  When all are right, the box shows the score and its "I did it" button is ticked.
+- The same answer may fit several questions (input / output / …); say so in the
+  instruction: "You can use an answer more than once."
+- With only 1–2 questions, or few different answers, add wrong answers:
+  `::: {.match extra="2 frames|4 frames"}` (split by `|`).
+- Keep answers short (a word, a number, a short phrase).
+- Answers must be fixed. Never ask about what a simulator shows now: the
+  student can change it at any time (and "Challenge" places things at random).
+  Ask about a fixed picture, and put that picture **inside** the "Try it" box.
+  A simulator can be used only for questions with one fixed answer
+  ("Move the player to (0, 0). What is this point called?").
+- **Check every "Try it" before you commit:**
+  1. *Self-contained.* The student can answer from the box alone. A picture it
+     needs is inside the box, or directly above it and called "the picture above".
+  2. *No changing state.* Nothing depends on a simulator, the time, or the
+     student's own phone (menus and brands differ).
+  3. *One right answer.* Every question has exactly one right option. Every
+     wrong option (`extra`) is clearly wrong, never "also right sometimes"
+     (e.g. phone vs tablet "on the bus").
+  4. *Same words.* The answer matches what the question asks, and uses the
+     words of the lesson.
+  5. *Tried.* In `quarto preview --profile review`, tap one wrong and then all
+     right answers in each box.
+- **PDF:** the questions with a blank line, "Choose from:" (A to Z), and the
+  answers upside down at the bottom of the box.
+- Open tasks (fill a table, talk with a partner) stay as text in the same box,
+  next to a small matching check.
+- No "Check your answers" boxes for "Try it" any more. Filter: `_extensions/lesson/match.lua`;
+  behaviour in `lesson-script.html`, look in `lesson.css`.
+
+## Interactive slides
+
+Slides are for a conversation with the class, not a one-way talk.
+The teacher asks, the students answer aloud, then one click shows the answer.
+
+- **Every "Try it" of the lesson is a slide**: `## Try it N · short title`,
+  the questions, then the answers in `::: {.answer}`.
+- **Add "Think" slides** before a new idea: `## Think · short title`, one
+  question ("What do you think…?"), then `::: {.answer}` or `::: {.reveal}`.
+  Use as many as fit the lecture.
+- `::: {.answer}`: each list item or paragraph becomes an answer card at the
+  bottom of the slide. Each card pops in on its own click (elastic zoom).
+  Use the same labels as the questions (`a)`, `1.`) so the cards show them.
+- `::: {.reveal}`: each item fades in from the left on its own click.
+  Use it for "think first, then see" lists. Normal slides show everything at once.
+- Keep questions short (about 5 lines), so the cards fit under them.
+- A picture can go next to the questions with `:::: {.columns}`;
+  the cards still go at the bottom.
+- The "Try it" / "Think" title label gets the course colour and a big faint "?".
+- Filter: `_extensions/lesson/slides.lua`. Look and animations: `pptx_finish.py`.
+- Check a deck in PowerPoint's Slide Show before class: every click must show
+  the next answer.
 
 ## Slides for students
 
@@ -187,18 +270,55 @@ Static diagrams go in `week-NN/images/`.
 - No tool or assistant names anywhere: not in pages, source code, comments,
   file names or commit messages. The credit line on the About page is the only exception.
 
+## Homework (take-home assignments)
+
+Homework **tasks are public**, like the lessons (common practice: MIT
+OpenCourseWare, Stanford and Harvard CS50 publish their problem sets). Students
+can prepare, and the homework is take-home anyway. **Solutions, model answers
+and marking notes stay private**, never in this repo: they go in the private
+repo `courses-private` (folder `../courses-private`, next to this one), with
+the same paths: `courses/<slug>/week-NN/homework-NN-solutions.md`. Change a
+homework and its solution together.
+
+- One homework per week and course: `courses/<slug>/week-NN/homework-NN.qmd`,
+  from `shared/templates/homework-template.qmd`. No homework in exam weeks
+  (8, 16). computing-systems week 15: the project instead (syllabus).
+- Built from the week's ILOs (`ilos:`), like the lessons: practise exactly
+  what the two lessons taught, in the same words. No new content.
+- Size (start of the semester): **1–2 short tasks, about 15 minutes**, in both
+  courses. Short homework that students finish is better than long homework
+  they skip. I may make it longer in later weeks, if the students do it well;
+  then I will change this rule. Marks per task in the heading; total in `marks:`.
+- At least one task in a real game situation (the PLO behind the ILO).
+- Written answers only (semester 1: no programming). Code may be read, never written.
+- **Fixed numbers only** ("3 steps up", "(8, 4)"): no variables like *n* in a
+  task. Classes are small, so copying is not a risk now.
+- **Change the numbers and situations every semester.** Old versions stay in
+  the git history, and old answers go around.
+- `due:` is relative ("Week 3, before the first lecture"), so the page works
+  every semester. Exact dates go on the e-learning platform.
+- Submission: the university e-learning platform (syllabus). The page says how.
+- Release: keep `draft: true` until the week opens; then remove it.
+  Earlier homework stays online.
+- No answers on the page: no `.match` boxes, no "Check your answers".
+- The course page lists released homework (week, title, due, marks).
+- Check every task like a "Try it": self-contained, one clear answer
+  (or a clear marking rule), no changing state, tried before release.
+
 ## Public repo — never commit
 
-Assignment solutions, exam questions, question banks, grades, student data,
-official internal university documents. Those live elsewhere, privately.
-Lessons not ready for students: `draft: true` (not published).
+Assignment solutions and marking notes, exam questions, question banks, grades,
+student data, official internal university documents. Those live elsewhere,
+privately. Homework *tasks* are public (see "Homework").
+Lessons or homework not ready for students: `draft: true` (not published).
 
 ## Way of working
 
 - Build week by week. Never generate all lessons up front.
 - Phase 1: `plan.md` per course (16-week map → ILOs, same weeks as the syllabus), approved by me first.
 - Phase 2: **a typical session = one week**: 2 lessons for `game-math` +
-  2 lessons for `computing-systems`, each with all 3 outputs (4 lessons total).
+  2 lessons for `computing-systems`, each with all 3 outputs (4 lessons total),
+  plus one homework per course.
   Start every session by reading that week in the Drive syllabus.
 - I review every lesson before release. Ask before big structural decisions.
 - After each week I write `courses/<slug>/retro/week-NN.md`. Turn general lessons
@@ -213,12 +333,24 @@ Lessons not ready for students: `draft: true` (not published).
   another `user.name`/`user.email`.
 - Commit messages describe the change only. No tool names, no co-author
   trailers, no "generated by" lines.
-- Check with `git log -1 --format='%an <%ae> / %cn <%ce>'` after committing.
-- Commit on `main` unless I ask for a branch. Ask before every push.
+- Every commit is signed with my SSH key (global git config:
+  `gpg.format ssh`, `commit.gpgsign true`), so GitHub shows it as **Verified**.
+  Never pass `--no-gpg-sign`.
+- Check with `git log -1 --format='%an <%ae> / %cn <%ce> / sig %G?'` after
+  committing. `sig G` means a good signature.
+- Never commit or push to `main`. Put every change on a feature branch
+  (for example `week-02-lessons`), commit there, push the branch and open a
+  pull request into `main`. I review and merge the PR myself.
+- PR title and description follow the commit message rules (no tool names,
+  no "generated by" lines).
 
 ## Build
 
 - Local: `quarto preview` (HTML) or `quarto render` (all outputs → `_site/`).
+- Review drafts before merging a PR: check out the PR branch, run
+  `quarto render --profile review` once (the preview alone does not build the
+  PDFs), then `quarto preview --profile review` (`_quarto-review.yml` shows
+  `draft: true` lessons).
 - CI: `.github/workflows/publish.yml` renders on push to `main` and deploys to Pages.
 - Quarto version is pinned in the workflow; keep local Quarto the same.
 

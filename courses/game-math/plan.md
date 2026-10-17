@@ -94,3 +94,10 @@ lesson puts in `ilos:` (always a part of the week ILOs).
 - D1 is built only in the group work and presentations of weeks 14–15.
   Pair work in other class activities also practises it.
 - Week 8 seminar ("Midterm discussion") is not a lesson.
+- Slides for every lesson are interactive: each "Try it" is a question slide,
+  plus "Think" slides before new ideas; answers show on click
+  (see "Interactive slides" in AUTHORING.md).
+- Every "Try it" in a lesson is a matching exercise with instant feedback
+  (see "Try it: match the answer" in AUTHORING.md).
+- One homework per week (`week-NN/homework-NN.qmd`), not in weeks 8 and 16.
+  Tasks are public; solutions stay private.

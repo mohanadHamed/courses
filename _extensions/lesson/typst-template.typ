@@ -15,10 +15,8 @@
   course: none,
   chips: (),
   program: none,
-  compact: false,   // homework: tighter, so it fits on one A4 page
   doc,
 ) = {
-  let gap = if compact { 0.9em } else { 1.6em }
   let title-text = if title != none { title } else { [] }
   set document(title: title)
   set text(lang: lang, region: region, size: fontsize)
@@ -49,13 +47,13 @@
 
   // Headings: accent bar + accent colour.
   show heading: set text(fill: accent.darken(25%), weight: "bold")
-  show heading.where(level: 1): it => block(above: gap, below: 0.6em)[
+  show heading.where(level: 1): it => block(above: 1.6em, below: 0.8em)[
     #box(fill: gradient.linear(accent, accent2), width: 5pt, height: 0.95em, radius: 2pt, baseline: 0.1em)
     #h(6pt)#text(size: 1.35em, it.body)
   ]
-  show heading.where(level: 2): it => block(above: gap, below: if compact { 0.5em } else { 0.8em })[
+  show heading.where(level: 2): it => block(above: 1.6em, below: 0.8em)[
     #box(fill: gradient.linear(accent, accent2), width: 5pt, height: 0.95em, radius: 2pt, baseline: 0.1em)
-    #h(6pt)#text(size: if compact { 1.15em } else { 1.3em }, it.body)
+    #h(6pt)#text(size: 1.3em, it.body)
   ]
   show heading.where(level: 3): it => block(above: 1.2em, below: 0.6em, text(size: 1.1em, it.body))
 
@@ -78,15 +76,15 @@
     clip: true,
     fill: gradient.linear(white, accent.lighten(95%), accent2.lighten(85%), angle: 20deg),
     stroke: 0.6pt + accent.lighten(75%),
-    inset: if compact { (x: 14pt, y: 9pt) } else { (x: 18pt, y: 16pt) },
+    inset: (x: 18pt, y: 16pt),
   )[
     #place(right + top, dx: 40pt, dy: -50pt, circle(radius: 55pt, fill: accent2.transparentize(85%)))
     #place(right + bottom, dx: -60pt, dy: 30pt, circle(radius: 22pt, fill: accent.transparentize(92%)))
     #set text(fill: accent.darken(50%))
     #if course != none { text(size: 9pt, weight: "bold", fill: accent.darken(10%), course) }
     #v(2pt)
-    #text(size: if compact { 17pt } else { 22pt }, weight: "bold", title-text)
-    #if subtitle != none and not compact { v(-4pt); text(size: 11pt, subtitle) }
+    #text(size: 22pt, weight: "bold", title-text)
+    #if subtitle != none { v(-4pt); text(size: 11pt, subtitle) }
     #v(4pt)
     #for c in chips {
       box(fill: white, stroke: 0.6pt + accent.lighten(40%),

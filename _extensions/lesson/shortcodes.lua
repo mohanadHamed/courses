@@ -5,7 +5,7 @@
 --
 --   {{< answer-space lines=3 >}}  /  {{< answer-space box=6 >}}
 --     Homework: dotted lines (or an empty box, cm) to write the answer on.
---     Shown in the PDF and when the web page is printed.
+--     Shown only when the homework page is printed.
 --
 --   {{< sim file="sims/x.html" poster="sims/x.png" title="Move the player" height="480" >}}
 --     HTML: live simulator in an iframe + "open full screen" link. `height` is
@@ -247,7 +247,7 @@ end
 -- Answer space (homework) -------------------------------------------------
 -- {{< answer-space lines=3 >}}   dotted lines to write the answer on
 -- {{< answer-space box=6 >}}     an empty box, 6 cm high (for a drawing)
--- HTML: hidden on screen, shown when the page is printed. PDF: always shown.
+-- Hidden on screen, shown when the homework page is printed (web only).
 
 local function answer_space(kwargs)
   local lines = tonumber(str(kwargs.lines)) or 0
@@ -260,13 +260,6 @@ local function answer_space(kwargs)
     end
     return pandoc.RawBlock("html",
       '<div class="answer-space" aria-hidden="true">' .. string.rep('<div class="answer-line"></div>', lines) .. "</div>")
-  elseif quarto.doc.is_format("typst") then
-    if box > 0 then
-      return pandoc.RawBlock("typst", string.format(
-        '// answer-space\n#block(width: 100%%, height: %gcm, breakable: false, radius: 4pt, stroke: (paint: luma(150), thickness: 0.6pt, dash: "dashed"))', box))
-    end
-    return pandoc.RawBlock("typst", string.format(
-      '// answer-space\n#block(width: 100%%, breakable: false, above: 0.4em, below: 0.9em)[#for _ in range(%d) { v(0.5cm); box(width: 100%%, text(fill: luma(140), repeat[.])) }]', lines))
   end
   return pandoc.Null()
 end

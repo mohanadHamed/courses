@@ -75,11 +75,14 @@ local function html_lesson(doc, course)
   local stem = pandoc.path.split_extension(pandoc.path.filename(quarto.doc.input_file))
   local dir = pandoc.path.directory(quarto.doc.input_file)
 
-  local buttons = { string.format(
-    '<a class="hero-btn" href="%s.pdf">⬇ Download PDF</a>', esc(stem)) }
+  -- Homework is a web page only: it is printed with the button, no PDF.
+  local buttons = {}
   if meta.homework then
     table.insert(buttons,
-      '<button type="button" class="hero-btn hero-btn-ghost" onclick="window.print()">🖨 Print homework</button>')
+      '<button type="button" class="hero-btn" onclick="window.print()">🖨 Print homework</button>')
+  else
+    table.insert(buttons, string.format(
+      '<a class="hero-btn" href="%s.pdf">⬇ Download PDF</a>', esc(stem)))
   end
   local slides = meta["slides-public"] == true and not meta.homework
     and file_exists(pandoc.path.join({ dir, stem .. "-slides.qmd" }))
@@ -178,31 +181,22 @@ local function typst_lesson(doc, course)
       return out
     end)(), ", ") .. ",)"),
     program = raw(typst_string(str(meta["diploma-line"] or ""))),
-    compact = meta.homework and raw("true") or nil,   -- homework: one A4 page
   }
 
-  local out = {}
-  if meta.homework then
-    table.insert(out, pandoc.RawBlock("typst",
-      '#block(width: 100%, above: 0pt, below: 0.7em)[#grid(columns: (1fr, 1fr), column-gutter: 14pt, '
-      .. '[*Name:* #box(width: 1fr, text(fill: luma(140), repeat[.]))], '
-      .. '[*Student number:* #box(width: 1fr, text(fill: luma(140), repeat[.]))])]'))
-  end
   local ilos = lesson_ilos(meta, course)
-  if #ilos == 0 then return out end
+  if #ilos == 0 then return {} end
   local rows = {}
   for _, i in ipairs(ilos) do
     table.insert(rows, string.format(
       '  #box(fill: accent, radius: 3pt, inset: (x: 4pt, y: 2pt))[#text(fill: white, weight: "bold", size: 9pt, %s)] #h(4pt) #%s\n',
       typst_string(i[1]), typst_string(i[2])))
   end
-  table.insert(out, pandoc.RawBlock("typst", string.format([[
-#block(width: 100%%, fill: accent.lighten(96%%), radius: 8pt, inset: %s, stroke: (left: 3pt + accent))[
+  return { pandoc.RawBlock("typst", string.format([[
+#block(width: 100%%, fill: accent.lighten(96%%), radius: 8pt, inset: 12pt, stroke: (left: 3pt + accent))[
   #text(weight: "bold", fill: accent.darken(15%%))[%s]
   #v(2pt)
 %s]
-]], meta.homework and "(x: 10pt, y: 7pt)" or "12pt", ilo_title(meta), table.concat(rows, "  #v(2pt)\n"))))
-  return out
+]], ilo_title(meta), table.concat(rows, "  #v(2pt)\n"))) }
 end
 
 -- Main --------------------------------------------------------------------

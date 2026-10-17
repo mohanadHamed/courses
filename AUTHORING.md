@@ -187,6 +187,18 @@ The car goes 3 steps right.
   Ask about a fixed picture, and put that picture **inside** the "Try it" box.
   A simulator can be used only for questions with one fixed answer
   ("Move the player to (0, 0). What is this point called?").
+- **Check every "Try it" before you commit:**
+  1. *Self-contained.* The student can answer from the box alone. A picture it
+     needs is inside the box, or directly above it and called "the picture above".
+  2. *No changing state.* Nothing depends on a simulator, the time, or the
+     student's own phone (menus and brands differ).
+  3. *One right answer.* Every question has exactly one right option. Every
+     wrong option (`extra`) is clearly wrong, never "also right sometimes"
+     (e.g. phone vs tablet "on the bus").
+  4. *Same words.* The answer matches what the question asks, and uses the
+     words of the lesson.
+  5. *Tried.* In `quarto preview --profile review`, tap one wrong and then all
+     right answers in each box.
 - **PDF:** the questions with a blank line, "Choose from:" (A to Z), and the
   answers upside down at the bottom of the box.
 - Open tasks (fill a table, talk with a partner) stay as text in the same box,

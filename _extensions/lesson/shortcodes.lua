@@ -3,6 +3,10 @@
 --   {{< glossary vector position origin >}}
 --     Bilingual word table from shared/glossary.yml (EN | AR | meaning).
 --
+--   {{< answer-space lines=3 >}}  /  {{< answer-space box=6 >}}
+--     Homework: dotted lines (or an empty box, cm) to write the answer on.
+--     Shown in the PDF and when the web page is printed.
+--
 --   {{< sim file="sims/x.html" poster="sims/x.png" title="Move the player" height="480" >}}
 --     HTML: live simulator in an iframe + "open full screen" link. `height` is
 --           the start height; sims that load sim-base.js resize the iframe.
@@ -240,7 +244,35 @@ local function sim(kwargs)
   end
 end
 
+-- Answer space (homework) -------------------------------------------------
+-- {{< answer-space lines=3 >}}   dotted lines to write the answer on
+-- {{< answer-space box=6 >}}     an empty box, 6 cm high (for a drawing)
+-- HTML: hidden on screen, shown when the page is printed. PDF: always shown.
+
+local function answer_space(kwargs)
+  local lines = tonumber(str(kwargs.lines)) or 0
+  local box = tonumber(str(kwargs.box)) or 0
+  if lines == 0 and box == 0 then lines = 3 end
+  if quarto.doc.is_format("html") then
+    if box > 0 then
+      return pandoc.RawBlock("html", string.format(
+        '<div class="answer-space answer-box" style="height:%gcm" aria-hidden="true"></div>', box))
+    end
+    return pandoc.RawBlock("html",
+      '<div class="answer-space" aria-hidden="true">' .. string.rep('<div class="answer-line"></div>', lines) .. "</div>")
+  elseif quarto.doc.is_format("typst") then
+    if box > 0 then
+      return pandoc.RawBlock("typst", string.format(
+        '// answer-space\n#block(width: 100%%, height: %gcm, breakable: false, radius: 4pt, stroke: (paint: luma(150), thickness: 0.6pt, dash: "dashed"))', box))
+    end
+    return pandoc.RawBlock("typst", string.format(
+      '// answer-space\n#block(width: 100%%, breakable: false, above: 0.9em, below: 1.2em)[#for _ in range(%d) { v(0.55cm); box(width: 100%%, text(fill: luma(140), repeat[.])) }]', lines))
+  end
+  return pandoc.Null()
+end
+
 return {
+  ["answer-space"] = function(_, kwargs) return answer_space(kwargs) end,
   ["glossary"] = function(args) return glossary(args) end,
   ["sim"] = function(_, kwargs) return sim(kwargs) end,
 }

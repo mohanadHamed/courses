@@ -77,6 +77,10 @@ local function html_lesson(doc, course)
 
   local buttons = { string.format(
     '<a class="hero-btn" href="%s.pdf">⬇ Download PDF</a>', esc(stem)) }
+  if meta.homework then
+    table.insert(buttons,
+      '<button type="button" class="hero-btn hero-btn-ghost" onclick="window.print()">🖨 Print homework</button>')
+  end
   local slides = meta["slides-public"] == true and not meta.homework
     and file_exists(pandoc.path.join({ dir, stem .. "-slides.qmd" }))
   if slides then
@@ -113,6 +117,11 @@ local function html_lesson(doc, course)
     slides and '<p class="hero-note">Slides are a short summary for class. Study from this page or the PDF.</p>' or "")
 
   local blocks = { pandoc.RawBlock("html", hero) }
+  if meta.homework then
+    -- Only on paper: a line for the name and the student number.
+    table.insert(blocks, pandoc.RawBlock("html",
+      '<div class="print-only hw-name"><span>Name:</span><i></i><span>Student number:</span><i></i></div>'))
+  end
 
   local ilos = lesson_ilos(meta, course)
   if #ilos > 0 then
@@ -171,20 +180,28 @@ local function typst_lesson(doc, course)
     program = raw(typst_string(str(meta["diploma-line"] or ""))),
   }
 
+  local out = {}
+  if meta.homework then
+    table.insert(out, pandoc.RawBlock("typst",
+      '#block(width: 100%, above: 0pt, below: 1em)[#grid(columns: (1fr, 1fr), column-gutter: 14pt, '
+      .. '[*Name:* #box(width: 1fr, text(fill: luma(140), repeat[.]))], '
+      .. '[*Student number:* #box(width: 1fr, text(fill: luma(140), repeat[.]))])]'))
+  end
   local ilos = lesson_ilos(meta, course)
-  if #ilos == 0 then return {} end
+  if #ilos == 0 then return out end
   local rows = {}
   for _, i in ipairs(ilos) do
     table.insert(rows, string.format(
       '  #box(fill: accent, radius: 3pt, inset: (x: 4pt, y: 2pt))[#text(fill: white, weight: "bold", size: 9pt, %s)] #h(4pt) #%s\n',
       typst_string(i[1]), typst_string(i[2])))
   end
-  return { pandoc.RawBlock("typst", string.format([[
+  table.insert(out, pandoc.RawBlock("typst", string.format([[
 #block(width: 100%%, fill: accent.lighten(96%%), radius: 8pt, inset: 12pt, stroke: (left: 3pt + accent))[
   #text(weight: "bold", fill: accent.darken(15%%))[%s]
   #v(2pt)
 %s]
-]], ilo_title(meta), table.concat(rows, "  #v(2pt)\n"))) }
+]], ilo_title(meta), table.concat(rows, "  #v(2pt)\n"))))
+  return out
 end
 
 -- Main --------------------------------------------------------------------

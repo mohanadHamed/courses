@@ -301,6 +301,11 @@ homework and its solution together.
 - Release: keep `draft: true` until the week opens; then remove it.
   Earlier homework stays online.
 - No answers on the page: no `.match` boxes, no "Check your answers".
+- **Printable:** after every question, add space to write the answer:
+  `{{< answer-space lines=2 >}}` (dotted lines; as many as a good answer needs)
+  or `{{< answer-space box=6 >}}` (an empty box, height in cm, for a drawing).
+  The PDF always shows them. The web page has a "🖨 Print homework" button;
+  the lines appear only on paper, with a Name / Student number line at the top.
 - The course page lists released homework (week, title, due, marks).
 - Check every task like a "Try it": self-contained, one clear answer
   (or a clear marking rule), no changing state, tried before release.

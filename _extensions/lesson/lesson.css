@@ -325,3 +325,37 @@ figure.sim figcaption {
 }
 figure.sim figcaption .sim-label { font-weight: 800; color: var(--accent-ink); }
 figure.sim figcaption a { font-weight: 700; }
+
+/* ---------- Homework: answer space and printing ---------- */
+button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
+.answer-space, .print-only { display: none; }
+
+@media print {
+  @page { size: A4; margin: 1.2cm 1.4cm; }
+  html, body { background: #fff !important; font-size: 10.5pt; }
+  #quarto-header, header#quarto-header, .navbar, #quarto-sidebar, #quarto-margin-sidebar,
+  nav#TOC, #TOC, .nav-footer, footer, #read-progress, .hero-actions, .hero-note,
+  .hero-shapes, .hero-progress, .ilo-foot, .try-done, .quarto-back-to-top { display: none !important; }
+  body, #quarto-content, main.content, .page-columns { display: block !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
+  #title-block-header { display: none !important; }
+  main.content > :first-child { margin-top: 0 !important; }
+  .lesson-hero { margin: 0 0 0.4rem; padding: 0.5rem 0.8rem; box-shadow: none; background: #fff; border: 1px solid #ccc; }
+  .hero-title { font-size: 1.35rem; margin: 0.1rem 0; }
+  .hero-sub { display: none; }
+  .hero-chip { padding: 0.05rem 0.5rem; font-size: 0.75rem; }
+  .ilo-card { box-shadow: none; padding: 0.35rem 0.7rem; margin: 0.3rem 0 0.5rem; font-size: 0.9rem; }
+  p, ol, ul { margin: 0 0 0.25rem !important; }
+  li { margin: 0 !important; }
+  .print-only { display: block; }
+  .hw-name { display: flex; gap: 0.5rem; align-items: baseline; margin: 0.3rem 0 0.6rem; font-weight: 700; }
+  .hw-name i { flex: 1; border-bottom: 1.5px dotted #888; }
+  .answer-space { display: block; margin: 0 0 0.45rem; break-inside: avoid; }
+  p:has(+ .answer-space), ol:has(+ .answer-space), ul:has(+ .answer-space) { break-after: avoid; }   /* question and its lines on one page */
+  .answer-line { height: 0.72cm; border-bottom: 1.5px dotted #888; }
+  .answer-box { border: 1px dashed #999; border-radius: 6px; }
+  h2 { break-after: avoid; margin: 0.6rem 0 0.25rem !important; padding: 0 !important; font-size: 1.1rem !important; }
+  h2::after { display: none !important; }
+  .callout { break-inside: avoid; box-shadow: none !important; }
+  a { color: inherit !important; text-decoration: none !important; }
+}
+

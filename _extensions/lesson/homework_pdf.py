@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""Make the homework PDFs by printing the homework web pages with Chrome.
+
+Homework is a web page with a "Print homework" button (one A4 page, with
+answer lines). The "Download PDF" file must look exactly like that printout,
+so we do not build it with Typst: we print the finished page itself with
+headless Chrome, using the same print styles (lesson.css, @media print).
+
+Project post-render step. Needs Google Chrome or Chromium (preinstalled on
+GitHub's ubuntu-latest runners). Without it, the script warns and skips.
+"""
+
+import glob
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+CANDIDATES = [
+    os.environ.get("CHROME", ""),
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Applications/Chromium.app/Contents/MacOS/Chromium",
+    "google-chrome", "google-chrome-stable", "chromium", "chromium-browser",
+]
+
+
+def find_chrome():
+    for c in CANDIDATES:
+        if not c:
+            continue
+        if os.path.isabs(c) and os.path.exists(c):
+            return c
+        path = shutil.which(c)
+        if path:
+            return path
+    return None
+
+
+def is_real_page(html_path):
+    """Skip unpublished drafts (Quarto leaves a tiny empty page for them)."""
+    try:
+        with open(html_path, encoding="utf-8", errors="ignore") as f:
+            text = f.read()
+    except OSError:
+        return False
+    return 'class="lesson-hero' in text and "answer-space" in text
+
+
+def main():
+    project_dir = os.environ.get("QUARTO_PROJECT_DIR") or os.getcwd()
+    out_dir = os.path.join(project_dir, os.environ.get("QUARTO_PROJECT_OUTPUT_DIR", "_site"))
+    pages = [p for p in sorted(glob.glob(os.path.join(out_dir, "courses", "*", "week-*", "homework-*.html")))
+             if is_real_page(p)]
+    if not pages:
+        return
+    chrome = find_chrome()
+    if not chrome:
+        print("homework_pdf: Chrome not found (set CHROME=...); homework PDFs not made", file=sys.stderr)
+        return
+    profile = tempfile.mkdtemp(prefix="hw-chrome-")
+    made = 0
+    try:
+        for html in pages:
+            pdf = html[:-5] + ".pdf"
+            cmd = [chrome, "--headless=new", "--disable-gpu", "--no-sandbox",
+                   "--user-data-dir=" + profile, "--no-pdf-header-footer",
+                   "--virtual-time-budget=5000", "--print-to-pdf=" + pdf,
+                   "file://" + os.path.abspath(html)]
+            r = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
+            if r.returncode == 0 and os.path.exists(pdf):
+                made += 1
+            else:
+                print("homework_pdf: could not print " + html, file=sys.stderr)
+    finally:
+        shutil.rmtree(profile, ignore_errors=True)
+    print("homework_pdf: made %d homework PDF(s)" % made)
+
+
+if __name__ == "__main__":
+    main()

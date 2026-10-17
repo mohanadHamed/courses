@@ -33,6 +33,11 @@ jobs:
         with:
           version: 1.10.19
 
+      # Homework PDFs are printed from the homework pages with Chrome
+      # (preinstalled on ubuntu-latest).
+      - name: Check Chrome
+        run: google-chrome --version
+
       - name: Render site
         run: quarto render
 
@@ -41,6 +46,7 @@ jobs:
           find _site -name "*.pdf" -o -name "*.pptx" | sort
           test -n "$(find _site -name '*.pdf')"
           test -n "$(find _site -name '*.pptx')"
+          if ls courses/*/week-*/homework-*.qmd >/dev/null 2>&1; then test -n "$(find _site -name 'homework-*.pdf')"; fi
 
       - uses: actions/upload-pages-artifact@v4
         with:

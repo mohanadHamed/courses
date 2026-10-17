@@ -122,7 +122,7 @@ Static diagrams go in `week-NN/images/`.
 |---|---|---|
 | `lesson-NN.qmd` | `lesson-html` + `lesson-typst` | Interactive HTML page + printable PDF |
 | `lesson-NN-slides.qmd` | `lesson-pptx` | Teacher slides (.pptx) |
-| `homework-NN.qmd` (NN = week) | `lesson-html` + `lesson-typst` | Take-home task page + printable PDF |
+| `homework-NN.qmd` (NN = week) | `lesson-html` | Take-home task page with Print and Download PDF buttons |
 
 - Start from `shared/templates/lesson-template.qmd`, `slides-template.qmd`
   and `homework-template.qmd`.
@@ -301,6 +301,19 @@ homework and its solution together.
 - Release: keep `draft: true` until the week opens; then remove it.
   Earlier homework stays online.
 - No answers on the page: no `.match` boxes, no "Check your answers".
+- **A web page that prints well.** Homework belongs to the week, not to a
+  lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF" and
+  "🖨 Print homework" buttons. The PDF is the printed page itself:
+  `_extensions/lesson/homework_pdf.py` (post-render) prints each homework page
+  with headless Chrome, so the download and the printout are the same one A4
+  page. Only `format: lesson-html`; no Typst version.
+- **Answer space:** after every question, add space to write the answer:
+  `{{< answer-space lines=2 >}}` (dotted lines; as many as a good answer needs)
+  or `{{< answer-space box=6 >}}` (an empty box, height in cm, for a drawing).
+  They appear only on paper, with a Name / Student number line at the top.
+- **One A4 page:** the printed page must fit on one page.
+  "How to submit" is one short line; the print layout is tight.
+  If it does not fit, cut a question or use fewer lines, never a smaller font.
 - The course page lists released homework (week, title, due, marks).
 - Check every task like a "Try it": self-contained, one clear answer
   (or a clear marking rule), no changing state, tried before release.

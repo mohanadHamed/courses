@@ -75,8 +75,13 @@ local function html_lesson(doc, course)
   local stem = pandoc.path.split_extension(pandoc.path.filename(quarto.doc.input_file))
   local dir = pandoc.path.directory(quarto.doc.input_file)
 
+  -- Homework PDF is the printed page itself (homework_pdf.py), so both match.
   local buttons = { string.format(
-    '<a class="hero-btn" href="%s.pdf">⬇ Download PDF</a>', esc(stem)) }
+    '<a class="hero-btn" href="%s.pdf"%s>⬇ Download PDF</a>', esc(stem), meta.homework and " download" or "") }
+  if meta.homework then
+    table.insert(buttons,
+      '<button type="button" class="hero-btn hero-btn-ghost" onclick="window.print()">🖨 Print homework</button>')
+  end
   local slides = meta["slides-public"] == true and not meta.homework
     and file_exists(pandoc.path.join({ dir, stem .. "-slides.qmd" }))
   if slides then
@@ -113,6 +118,11 @@ local function html_lesson(doc, course)
     slides and '<p class="hero-note">Slides are a short summary for class. Study from this page or the PDF.</p>' or "")
 
   local blocks = { pandoc.RawBlock("html", hero) }
+  if meta.homework then
+    -- Only on paper: a line for the name and the student number.
+    table.insert(blocks, pandoc.RawBlock("html",
+      '<div class="print-only hw-name"><span>Name:</span><i></i><span>Student number:</span><i></i></div>'))
+  end
 
   local ilos = lesson_ilos(meta, course)
   if #ilos > 0 then

@@ -30,16 +30,21 @@ Today we start with the first question in every game:
 **where is everything?**
 
 ::: {.callout-tip title="Try it 1"}
-Match each game moment with its math: *position*, *angle*, *probability*, *logic*.
+Match each game moment with its math.
 
-a) An enemy drops a rare sword only 1 time in 20.
-b) The car is 5 steps to the right of the start.
-c) The door opens only if you have the key.
-d) The tower turns to face the enemy.
+::: {.match}
+An enemy drops a rare sword only 1 time in 20.
+:   probability
+
+The car is 5 steps to the right of the start.
+:   position
+
+The door opens only if you have the key.
+:   logic
+
+The tower turns to face the enemy.
+:   angle
 :::
-
-::: {.callout-note title="Check your answers" collapse="true"}
-a) probability  b) position  c) logic  d) angle
 :::
 
 ## 2. Every object has a position
@@ -59,12 +64,13 @@ In a flat (**2D**) game, a position is two numbers.
 ::: {.callout-tip title="Try it 2"}
 Look at the picture.
 
-a) What number is at the right end of the x-axis?
-b) What number is at the top of the y-axis?
-:::
+::: {.match extra="5|0|7"}
+What number is at the right end of the x-axis?
+:   10
 
-::: {.callout-note title="Check your answers" collapse="true"}
-a) 10  b) 6
+What number is at the top of the y-axis?
+:   6
+:::
 :::
 
 ## 3. Write a position: (x, y)
@@ -84,13 +90,18 @@ Now try it. Move the player. Then press **Challenge** and catch the coin.
 {{< sim file="sims/grid-position.html" poster="sims/grid-position.png" title="Move the player with x and y" height="500" >}}
 
 ::: {.callout-tip title="Try it 3"}
-a) Where is the coin in the picture? Write (x, y).
-b) Move the player to (0, 0). What is this point called?
-c) The player is at (3, 2). It moves 4 steps right. What is the new position?
-:::
+Use the picture and the simulator.
 
-::: {.callout-note title="Check your answers" collapse="true"}
-a) (7, 4)  b) the origin  c) (7, 2). Only x changes.
+::: {.match extra="(4, 7)|(3, 6)|the axis"}
+Where is the coin in the picture?
+:   (7, 4)
+
+Move the player to (0, 0). What is this point called?
+:   the origin
+
+The player is at (3, 2). It moves 4 steps right. What is the new position?
+:   (7, 2)
+:::
 :::
 
 ## 4. From 2D to 3D: add z
@@ -114,14 +125,15 @@ Then press **Challenge** and catch the coin in the air.
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" height="640" >}}
 
 ::: {.callout-tip title="Try it 4"}
-A 3D player is at (4, 3, 2).
+A 3D player is at (4, 3, 2). Find the new position.
 
-a) The player jumps up 1. Which number changes? Write the new position.
-b) The player walks forward 5. Which number changes? Write the new position.
+::: {.match extra="(5, 3, 2)|(4, 3, 3)|(9, 3, 2)"}
+The player jumps up 1.
+:   (4, 4, 2)
+
+The player walks forward 5.
+:   (4, 3, 7)
 :::
-
-::: {.callout-note title="Check your answers" collapse="true"}
-a) y changes: (4, 4, 2)  b) z changes: (4, 3, 7)
 :::
 
 ## 5. Position in game code
@@ -144,11 +156,11 @@ You will write code like this later, in *Programming Fundamentals (1)*.
 
 ::: {.callout-tip title="Try it 5"}
 Read the code: `Vector3 coinPosition = new Vector3(0, 5, 0);`
-Where is the coin? Describe it in words.
-:::
 
-::: {.callout-note title="Check your answers" collapse="true"}
-At x = 0, y = 5, z = 0: 5 steps up, straight above the origin.
+::: {.match extra="5 steps right of the origin|5 steps forward from the origin|at the origin"}
+Where is the coin?
+:   5 steps up, straight above the origin
+:::
 :::
 
 ## Class activity {.activity}

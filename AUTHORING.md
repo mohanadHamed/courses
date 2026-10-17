@@ -196,7 +196,7 @@ Lessons not ready for students: `draft: true` (not published).
 ## Way of working
 
 - Build week by week. Never generate all lessons up front.
-- Phase 1: `plan.md` per course (15-week map → ILOs), approved by me first.
+- Phase 1: `plan.md` per course (16-week map → ILOs, same weeks as the syllabus), approved by me first.
 - Phase 2: **a typical session = one week**: 2 lessons for `game-math` +
   2 lessons for `computing-systems`, each with all 3 outputs (4 lessons total).
   Start every session by reading that week in the Drive syllabus.

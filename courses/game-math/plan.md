@@ -97,3 +97,5 @@ lesson puts in `ilos:` (always a part of the week ILOs).
 - Slides for every lesson are interactive: each "Try it" is a question slide,
   plus "Think" slides before new ideas; answers show on click
   (see "Interactive slides" in AUTHORING.md).
+- Every "Try it" in a lesson is a matching exercise with instant feedback
+  (see "Try it: match the answer" in AUTHORING.md).

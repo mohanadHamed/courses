@@ -96,6 +96,7 @@ ILO–PLO matrix). Use the newest version of each file.
 - Simple verbs: use, find, move, show, change — not utilize, determine, obtain.
 - **Picture before formula**: game example → diagram → then math or code.
 - Short graded exercises ("Try it") **after each idea**, easy → harder.
+  Every "Try it" is a matching exercise (see "Try it: match the answer").
 - Every lesson starts with a bilingual glossary of 5–10 terms.
 - Every lesson lists the course ILOs it covers (`ilos:` codes, from the syllabus week).
 - Each lesson ends with a short "Class activity" sized for the lecture time.
@@ -152,6 +153,41 @@ Static diagrams go in `week-NN/images/`.
   footer, a coloured title slide, a fade between slides, and the click animations.
   Never style slides by hand in PowerPoint; change the script once for all courses.
 - Mark the last two sections: `## Class activity {.activity}` and `## Summary {.summary}`.
+
+## Try it: match the answer
+
+Every "Try it" box in a lesson is interactive. Do not write static answers.
+
+```markdown
+::: {.callout-tip title="Try it 1"}
+Position or vector?
+
+::: {.match}
+The coin is at (7, 4).
+:   position
+
+The car goes 3 steps right.
+:   vector
+:::
+:::
+```
+
+- Each question (the term) is followed by its right answer (`:   answer`).
+- **Web:** the questions get labels a), b), …; every different answer is shown
+  **once** as a button, in a random order. The student taps the answer for the
+  question in colour and sees at once "Right!" or "Not this one. Try again."
+  When all are right, the box shows the score and its "I did it" button is ticked.
+- The same answer may fit several questions (input / output / …); say so in the
+  instruction: "You can use an answer more than once."
+- With only 1–2 questions, or few different answers, add wrong answers:
+  `::: {.match extra="2 frames|4 frames"}` (split by `|`).
+- Keep answers short (a word, a number, a short phrase).
+- **PDF:** the questions with a blank line, "Choose from:" (A to Z), and the
+  answers upside down at the bottom of the box.
+- Open tasks (fill a table, talk with a partner) stay as text in the same box,
+  next to a small matching check.
+- No "Check your answers" boxes for "Try it" any more. Filter: `_extensions/lesson/match.lua`;
+  behaviour in `lesson-script.html`, look in `lesson.css`.
 
 ## Interactive slides
 

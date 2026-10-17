@@ -20,6 +20,84 @@
     }
   });
 
+  // "Try it" matching (match.lua): the student taps the right answer for the
+  // question in colour and sees at once if it is right. When all questions are
+  // right, the box sends "match:done" (the "I did it" button below listens).
+  for (const box of document.querySelectorAll(".match")) {
+    const qs = [...box.querySelectorAll(".match-q")];
+    const wrap = box.querySelector(".match-opts");
+    const opts = [...wrap.querySelectorAll(".match-opt")];
+    const feedback = box.querySelector(".match-feedback");
+    const score = box.querySelector(".match-score");
+    const reset = box.querySelector(".match-reset");
+    const reuse = box.dataset.reuse === "1";   // the same answer fits more than one question
+    let active = null, firstTry = 0;
+
+    const say = (text, kind) => { feedback.textContent = text; feedback.className = "match-feedback " + (kind || ""); };
+    const select = (q) => { active = q; qs.forEach((x) => x.classList.toggle("is-active", x === q)); };
+    const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+    const shuffle = () => {
+      for (let k = opts.length - 1; k > 0; k--) {
+        const j = Math.floor(Math.random() * (k + 1));
+        [opts[k], opts[j]] = [opts[j], opts[k]];
+      }
+      opts.forEach((o) => wrap.appendChild(o));
+    };
+    const finish = () => {
+      select(null);
+      say("");
+      score.textContent = (firstTry === qs.length ? "🏆 " : "🎉 ") +
+        "All done! " + firstTry + " / " + qs.length + " right at the first try.";
+      reset.hidden = false;
+      box.dispatchEvent(new CustomEvent("match:done", { bubbles: true }));
+    };
+    const start = () => {
+      firstTry = 0;
+      qs.forEach((q) => {
+        q.classList.remove("is-right", "is-wrong");
+        delete q.dataset.miss;
+        q.querySelector(".match-slot").textContent = "?";
+      });
+      opts.forEach((o) => { o.disabled = false; o.classList.remove("is-used", "is-wrong"); });
+      say("");
+      score.textContent = "";
+      reset.hidden = true;
+      shuffle();
+      select(qs[0]);
+    };
+
+    qs.forEach((q) => {
+      q.addEventListener("click", () => { if (!q.classList.contains("is-right")) select(q); });
+      q.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); q.click(); }
+      });
+    });
+    opts.forEach((o) => {
+      o.addEventListener("animationend", () => o.classList.remove("is-wrong"));
+      o.addEventListener("click", () => {
+        const q = active;
+        if (!q) return;
+        if (q.dataset.a === o.dataset.o) {
+          q.classList.remove("is-wrong");
+          q.classList.add("is-right");
+          q.querySelector(".match-slot").innerHTML = "✓ " + o.innerHTML;
+          if (!q.dataset.miss) firstTry++;
+          if (!reuse) { o.disabled = true; o.classList.add("is-used"); }
+          say("✓ Right!", "good");
+          const next = qs.find((x) => !x.classList.contains("is-right"));
+          if (next) select(next); else finish();
+        } else {
+          q.dataset.miss = "1";
+          replay(q, "is-wrong");
+          replay(o, "is-wrong");
+          say("✗ Not this one. Try again.", "bad");
+        }
+      });
+    });
+    reset.addEventListener("click", start);
+    start();
+  }
+
   // "I did it" buttons under each "Try it" box, with a counter in the hero.
   // Saved in this browser only; the page works the same without storage.
   const tries = [...document.querySelectorAll(".callout-tip")];
@@ -45,6 +123,9 @@
     btn.addEventListener("click", () => {
       done = done.includes(i) ? done.filter((d) => d !== i) : [...done, i];
       save(); paint(); update();
+    });
+    box.addEventListener("match:done", () => {
+      if (!done.includes(i)) { done = [...done, i]; save(); paint(); update(); }
     });
     (box.querySelector(".callout-body-container") || box).appendChild(btn);
     paint();

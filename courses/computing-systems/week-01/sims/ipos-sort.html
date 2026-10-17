@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Sort it: input, processing, output or storage?</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .card {
+      margin: 6px 0 14px;
+      padding: 16px 12px;
+      border: 2px solid var(--sim-accent);
+      border-radius: 14px;
+      background: #FFF6DB;
+      text-align: center;
+    }
+    .card .count { color: var(--sim-muted); font-size: 0.9rem; }
+    .card .event { font-size: 1.3rem; font-weight: 800; margin-top: 4px; }
+    .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+    .choices button { padding: 12px 8px; }
+    .choices button.wrong { background: #c92a2a; box-shadow: none; }
+    .choices button.right { background: var(--sim-good); }
+    .bar { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 10px; flex-wrap: wrap; }
+    .bar .score { font-weight: 800; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Sort it: input, processing, output or storage?</h1>
+  <div class="card">
+    <div class="count" id="count">Card 1 of 12</div>
+    <div class="event" id="event"></div>
+  </div>
+  <div class="choices" id="choices"></div>
+  <p id="message" class="message">Tap the right part for this card.</p>
+  <div class="bar">
+    <span class="score" id="score">Score: 0 / 12</span>
+    <button id="next" type="button" class="ghost" hidden>Next card</button>
+  </div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const PARTS = ["Input", "Processing", "Output", "Storage"];
+  const FIRST = { t: "You tap the jump button.", a: "Input", why: "Your touch goes into the phone." };
+  const CARDS = [
+    { t: "You tilt the phone to turn the car.", a: "Input", why: "A sensor sends the tilt into the phone." },
+    { t: "You talk to your team with the microphone.", a: "Input", why: "Your voice goes into the phone." },
+    { t: "The game checks if the ball is in the goal.", a: "Processing", why: "The CPU checks the game rules." },
+    { t: "The game moves the enemies a little.", a: "Processing", why: "The CPU works out the new positions." },
+    { t: "The game adds 10 points to your score.", a: "Processing", why: "The CPU does the math." },
+    { t: "The phone vibrates when you crash.", a: "Output", why: "The vibration comes out to you." },
+    { t: "You hear the music of the game.", a: "Output", why: "The speaker gives the sound out." },
+    { t: "The screen shows “Level complete!”.", a: "Output", why: "The screen gives the picture out." },
+    { t: "The game keeps your level for tomorrow.", a: "Storage", why: "Saved data stays when the phone is off." },
+    { t: "You download a new game to your phone.", a: "Storage", why: "The game is kept in storage." },
+    { t: "Your saved games are still there after you turn the phone off and on.", a: "Storage", why: "Storage keeps data when the power is off." },
+  ];
+
+  const el = (id) => document.getElementById(id);
+  const choices = el("choices"), msg = el("message"), next = el("next");
+  let deck = [], i = 0, score = 0, tried = false, done = false;
+
+  function shuffle(a) {
+    for (let k = a.length - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [a[k], a[j]] = [a[j], a[k]];
+    }
+    return a;
+  }
+
+  function start() {
+    deck = [FIRST, ...shuffle(CARDS.slice())];   // first card matches the poster
+    i = 0; score = 0;
+    show();
+  }
+
+  function show() {
+    const c = deck[i];
+    tried = false; done = false;
+    el("count").textContent = `Card ${i + 1} of ${deck.length}`;
+    el("event").textContent = c.t;
+    el("score").textContent = `Score: ${score} / ${deck.length}`;
+    msg.className = "message";
+    msg.textContent = "Tap the right part for this card.";
+    next.hidden = true;
+    choices.innerHTML = "";
+    for (const p of PARTS) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = p;
+      b.addEventListener("click", () => answer(b, p));
+      choices.appendChild(b);
+    }
+  }
+
+  function answer(btn, part) {
+    if (done) return;
+    const c = deck[i];
+    if (part === c.a) {
+      if (!tried) score++;
+      done = true;
+      btn.classList.add("right");
+      msg.className = "message good";
+      msg.textContent = `Yes, ${c.a.toLowerCase()}! ${c.why}`;
+      if (i + 1 === deck.length) msg.textContent += ` Finished: ${score} / ${deck.length} right at first try.`;
+      el("score").textContent = `Score: ${score} / ${deck.length}`;
+      next.hidden = false;
+      next.textContent = i + 1 < deck.length ? "Next card" : "Play again";
+    } else {
+      tried = true;
+      btn.classList.add("wrong");
+      msg.className = "message";
+      msg.textContent = `Not ${part.toLowerCase()}. Try again.`;
+    }
+  }
+
+  next.addEventListener("click", () => {
+    if (i + 1 < deck.length) { i++; show(); }
+    else start();
+  });
+
+  start();
+})();
+</script>
+</body>
+</html>

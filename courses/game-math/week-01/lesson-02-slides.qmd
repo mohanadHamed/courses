@@ -1,0 +1,104 @@
+---
+title: "Vectors: arrows that move things"
+subtitle: "Week 1 · Lecture 2"
+draft: true
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary vector component direction magnitude position velocity frame >}}
+
+## A place or a move?
+
+- **Position** = a place → *where?*
+- **Vector** = a move → *which way? how far?*
+- coin **at** (7, 4) · player **moves** 4 right, 2 up
+
+## A vector is an arrow
+
+![](images/vector-components.png)
+
+## Direction and magnitude
+
+- **direction**: where it points
+- **magnitude**: how long it is
+- same move from **any** start point
+
+## Components (x, y)
+
+:::: {.columns}
+::: {.column width="45%"}
+- x: right **+** / left **−**
+- y: up **+** / down **−**
+- (4, 2) = 4 right, 2 up
+:::
+::: {.column width="55%"}
+![](images/vector-components.png)
+:::
+::::
+
+## Minus = other way
+
+- (−3, 0) → 3 left
+- (0, −2) → 2 down
+- (−1, 5) → 1 left, 5 up
+
+## Quick check
+
+- 5 right = ?
+- 3 left, 1 up = ?
+- (−2, −2) in words?
+
+## Position + vector
+
+- **new position = position + vector**
+- x + x · y + y
+- (2, 1) + (4, 2) = **(6, 3)**
+
+## Live demo
+
+{{< sim file="sims/vector-move.html" poster="sims/vector-move.png" title="Move the player with a vector" >}}
+
+## From A to B
+
+- vector = **B − A** (end − start)
+- player (2, 1) → coin (7, 4)
+- (7 − 2, 4 − 1) = **(5, 3)**
+- A − B = back from B to A
+
+## Quick check
+
+- (1, 2) → (4, 6) = ?
+- enemy (8, 1) → player (3, 4) = ?
+
+## Frames and velocity
+
+- **frame** = one picture · 30–60 every second
+- each frame: **position + velocity**
+- 3D vector: (x, y, z)
+
+## In game code
+
+- `Vector3` = x, y, z · `Vector2` = x, y
+- `=` → "becomes"
+- C# (for example, Unity games) · just read it
+
+```csharp
+Vector3 velocity = new Vector3(2, 0, 1);
+position = position + velocity;
+```
+
+## Class activity
+
+- Pairs · grid 10 × 6 · player at (1, 1)
+- Hide **3 treasures**
+- Give only **vectors** → partner finds them
+- Bonus: treasure 1 → treasure 2
+
+## Summary
+
+- position = place · vector = move
+- arrow: **direction + magnitude**
+- (x, y) · + / −
+- position + vector · **B − A**

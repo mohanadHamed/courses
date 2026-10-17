@@ -1,0 +1,241 @@
+---
+title: "Vectors: arrows that move things"
+description: "What a vector is. Vector components. Move a player with a vector."
+week: 1
+lesson: 2
+draft: true
+ilos: [A1]
+format:
+  lesson-html: default
+  lesson-typst: default
+---
+
+## New words
+
+{{< glossary vector component direction magnitude position velocity frame >}}
+
+## 1. A place or a move?
+
+In lesson 1, we learned **position**. A position is a place: (x, y).
+
+Now look at this game moment.
+The player is at (2, 1). You push the joystick.
+The player goes **4 steps right** and **2 steps up**.
+
+"4 right, 2 up" is not a place. It is a **move**.
+In math, a move is a **vector**.
+
+| | It answers… | Example |
+|---|---|---|
+| **Position** | Where is it? | The coin is **at** (7, 4). |
+| **Vector** | Which way? How far? | The player **moves** 4 right and 2 up. |
+
+::: {.callout-tip title="Try it 1"}
+Position or vector?
+
+a) The coin is at (7, 4).
+b) The car goes 3 steps right.
+c) The enemy goes 2 steps down.
+d) The door is at (0, 5).
+:::
+
+::: {.callout-note title="Check your answers" collapse="true"}
+a) position  b) vector  c) vector  d) position
+:::
+
+## 2. A vector is an arrow
+
+We draw a vector as an **arrow**.
+
+![The player is at (2, 1). The arrow is the vector (4, 2). It ends at (6, 3).](images/vector-components.png){width=85%}
+
+An arrow tells us two things:
+
+- its **direction**: where it points.
+- its **magnitude** (length): how far it goes.
+
+A vector is only a move. It does not have a place.
+"4 right, 2 up" is the same move from any start point.
+
+::: {.callout-tip title="Try it 2"}
+a) Two arrows point the same way. They have the same length.
+   Are they the same vector?
+b) Arrow A is long. Arrow B is short. They point the same way.
+   Which one has the bigger magnitude?
+c) Two arrows have the same length. One points right, one points left.
+   Are they the same vector?
+:::
+
+::: {.callout-note title="Check your answers" collapse="true"}
+a) Yes. Same direction and same length.
+b) Arrow A.
+c) No. The direction is different.
+:::
+
+## 3. Components: the numbers of a vector
+
+Look at the picture again.
+The red dashed line shows the steps **right**. The green dashed line shows the steps **up**.
+These two numbers are the **components** of the vector.
+
+We write a vector with its components: **(x, y)**.
+
+- **x**: steps right (+) or left (−).
+- **y**: steps up (+) or down (−).
+
+A minus sign changes the direction.
+
+| Vector | In words |
+|---|---|
+| (4, 2) | 4 right, 2 up |
+| (−3, 0) | 3 left |
+| (0, −2) | 2 down |
+| (−1, 5) | 1 left, 5 up |
+
+::: {.callout-tip title="Try it 3"}
+Write the vector.
+
+a) 5 steps right
+b) 2 steps down
+c) 3 steps left and 1 step up
+
+Write in words.
+
+d) (0, 6)
+e) (−2, −2)
+:::
+
+::: {.callout-note title="Check your answers" collapse="true"}
+a) (5, 0)  b) (0, −2)  c) (−3, 1)  d) 6 steps up  e) 2 steps left and 2 steps down
+:::
+
+## 4. Move with a vector: position + vector
+
+To move an object, we **add** the vector to its position.
+Add x to x. Add y to y.
+
+> new position = position + vector
+
+The player is at (2, 1). The vector is (4, 2).
+
+(2, 1) + (4, 2) = (2 + 4, 1 + 2) = **(6, 3)**
+
+Now try it. Change the vector with the sliders. Press **Move**.
+Then press **Challenge**: reach the coin with **one** vector.
+
+{{< sim file="sims/vector-move.html" poster="sims/vector-move.png" title="Move the player with a vector" height="620" >}}
+
+::: {.callout-tip title="Try it 4"}
+Find the new position.
+
+a) The player is at (1, 1). The vector is (3, 2).
+b) The player is at (5, 4). The vector is (−2, −3).
+c) The player is at (6, 3). The vector is (0, 3).
+:::
+
+::: {.callout-note title="Check your answers" collapse="true"}
+a) (4, 3)  b) (3, 1)  c) (6, 6)
+:::
+
+## 5. The vector from A to B: B − A
+
+An enemy wants to walk to the player. Which vector does it need?
+
+To find the vector **from A to B**, take **end − start**:
+
+> vector from A to B = B − A
+
+The player is at A = (2, 1). The coin is at B = (7, 4).
+
+B − A = (7 − 2, 4 − 1) = **(5, 3)**
+
+Check it: (2, 1) + (5, 3) = (7, 4). Yes, the player reaches the coin.
+
+Order is important!
+B − A goes from A **to** B. A − B goes the other way, **back** from B to A.
+
+In the simulator, tap the coin on the grid.
+The simulator finds the vector for you: coin − player.
+
+::: {.callout-tip title="Try it 5"}
+a) Find the vector from (1, 2) to (4, 6).
+b) Find the vector from (6, 5) to (2, 5).
+c) The enemy is at (8, 1). The player is at (3, 4).
+   Find the vector from the enemy to the player.
+:::
+
+::: {.callout-note title="Check your answers" collapse="true"}
+a) (3, 4)  b) (−4, 0)  c) (3 − 8, 4 − 1) = (−5, 3)
+:::
+
+## 6. Vectors in 3D and in game code
+
+In a 3D game, a vector has three components: **(x, y, z)**.
+z is the steps forward (+) or back (−).
+
+A game draws many pictures every second. Each picture is a **frame**.
+Many mobile games draw 30 or 60 frames every second.
+
+In each frame, the game moves the player a little:
+
+> new position = position + velocity
+
+The **velocity** is the vector of the move in one frame.
+
+Here is game code in C#, the language of many games
+(for example, games made with Unity). **Just read it.**
+
+```csharp
+// the move in one frame: 2 right, 0 up, 1 forward
+Vector3 velocity = new Vector3(2, 0, 1);
+
+// in every frame: the new position is the old position + velocity
+position = position + velocity;
+```
+
+- `Vector3` means "three numbers together": x, y, z.
+  A 2D game uses `Vector2`: two numbers, x and y.
+- `velocity` and `position` are names. We choose the names.
+- Read `=` as "becomes". The position **becomes** position + velocity.
+
+::: {.callout-tip title="Try it 6"}
+The player is at (10, 0, 0). The velocity is (2, 0, 1) in each frame.
+
+a) Where is the player after 1 frame?
+b) Where is the player after 3 frames?
+:::
+
+::: {.callout-note title="Check your answers" collapse="true"}
+a) (12, 0, 1)  b) (16, 0, 3). Add (2, 0, 1) three times.
+:::
+
+::: {.callout-tip title="Try it 7 (harder)"}
+An enemy is at (8, 1). In each frame, it moves with the vector (−1, 1).
+After how many frames is the enemy at (5, 4)?
+:::
+
+::: {.callout-note title="Check your answers" collapse="true"}
+3 frames: (8, 1) → (7, 2) → (6, 3) → (5, 4).
+:::
+
+## Class activity {.activity}
+
+**Treasure hunt with vectors** (pairs, about 15 minutes).
+
+1. Each student draws a grid on paper: x from 0 to 10, y from 0 to 6.
+2. Put the player at (1, 1). Hide **3 treasures** on your grid. Do not show your partner.
+3. Tell your partner only **vectors**, one for each treasure. Start every vector from the player:
+   "From the player, go (4, 2)."
+4. Your partner draws each arrow and writes the treasure position.
+5. Check together. Then change roles.
+
+**Bonus:** write the vector from treasure 1 to treasure 2. Use end − start.
+
+## Summary {.summary}
+
+- A **position** is a place. A **vector** is a move.
+- A vector is an arrow: it has a **direction** and a **magnitude** (length).
+- **Components**: (x, y). + is right or up. − is left or down.
+- Move an object: **new position = position + vector**.
+- The vector from A to B: **B − A** (end − start).
+- In game code: `Vector2` (x, y), `Vector3` (x, y, z). Each frame: position + velocity.

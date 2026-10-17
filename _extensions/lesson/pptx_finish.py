@@ -5,7 +5,8 @@ Quarto (pandoc) makes plain slides. This project post-render step adds:
 
 - the course look: colours from courses/<slug>/_metadata.yml (accent, accent2),
   fonts, a soft background, shapes and a footer with the course name;
-- a title slide in the course colour;
+- a title slide in the course colour, with the site URL (`site-url` in
+  _quarto.yml) big on a white label, so students can read it or take a photo;
 - answer cards from `::: {.answer}` (one card per item, elastic zoom on click);
 - click-by-click text from `::: {.reveal}` (fade in from the left);
 - coloured "Try it N" / "Think" / "Example" / "Watch out" / "Game challenge" labels in slide titles
@@ -288,7 +289,26 @@ def style_runs(p, size=None, color=None, bold=None):
             rpr.insert(0, frag(solid(color))[0])
 
 
-def finish_title_slide(root, pal, course, diploma):
+SITE_RID = "rIdSiteUrl"                # relationship id of the site link on the title slide
+
+
+def site_label(site_url):
+    """https://example.github.io/courses/ → example.github.io/courses"""
+    return re.sub(r"^https?://", "", site_url).rstrip("/")
+
+
+def site_url_shapes(site_url, pal):
+    """Big, clear site URL on a white label (title slide), clickable."""
+    label = site_label(site_url)
+    run = ('<a:p><a:pPr algn="ctr"/><a:r><a:rPr lang="en-US" sz="2800" b="1" u="none" dirty="0">%s'
+           '<a:latin typeface="%s"/><a:hlinkClick r:id="%s"/></a:rPr><a:t>%s</a:t></a:r></a:p>'
+           % (solid(pal["dark"]), FONT, SITE_RID, esc(label)))
+    return shape(9109, "site-url", 685800, 3900000, 6400000, 600000, "roundRect", solid("FFFFFF"),
+                 text=run,
+                 body_pr='<a:bodyPr wrap="square" lIns="90000" tIns="0" rIns="90000" bIns="0" anchor="ctr"/>')
+
+
+def finish_title_slide(root, pal, course, diploma, site_url=""):
     csld = root.find(P + "cSld")
     csld.insert(0, frag(
         '<p:bg><p:bgPr><a:gradFill rotWithShape="1"><a:gsLst>'
@@ -310,6 +330,9 @@ def finish_title_slide(root, pal, course, diploma):
               text=text_para(diploma, 900, "FFFFFF"),
               body_pr='<a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr"/>'),
     ]))
+    if site_url:
+        for el in frag(site_url_shapes(site_url, pal)):
+            sptree.append(el)
     title = find_ph(sptree, ("ctrTitle", "title"))
     sub = find_ph(sptree, ("subTitle",))
     if title is not None:
@@ -322,7 +345,7 @@ def finish_title_slide(root, pal, course, diploma):
                 ppr.set("algn", "l")
             style_runs(p, 4000, "FFFFFF", True)
     if sub is not None:
-        set_xfrm(sub, 685800, 2800000, 5800000, 1300000)
+        set_xfrm(sub, 685800, 2760000, 5800000, 820000)
         for p in sub.iter(A + "p"):
             ppr = p.find(A + "pPr")
             if ppr is not None:
@@ -625,12 +648,12 @@ class Timing:
                 % ("".join(self.clicks), "".join(self.builds.values())))
 
 
-def finish_slide(xml, pal, course, diploma, is_title, layout_geo):
+def finish_slide(xml, pal, course, diploma, is_title, layout_geo, site_url=""):
     root = parse(xml)
     csld = root.find(P + "cSld")
     sptree = csld.find(P + "spTree")
     if is_title:
-        finish_title_slide(root, pal, course, diploma)
+        finish_title_slide(root, pal, course, diploma, site_url)
         renumber(sptree)
     else:
         question = finish_title_label(sptree, pal)
@@ -711,6 +734,7 @@ def finish(path, project_dir):
     course = read_course(project_dir, m.group(1))
     pal = palette(course)
     diploma = read_diploma(project_dir)
+    site_url = read_site_url(project_dir)
 
     with zipfile.ZipFile(path) as z:
         files = {n: z.read(n) for n in z.namelist()}
@@ -733,7 +757,10 @@ def finish(path, project_dir):
         lay = re.search(r'Target="\.\./slideLayouts/(slideLayout\d+\.xml)"', rels)
         is_title = bool(lay and lay.group(1) in title_layouts)
         geo = layout_geometry(files.get("ppt/slideLayouts/" + lay.group(1), b"")) if lay else {}
-        files[name] = finish_slide(files[name], pal, course, diploma, is_title, geo)
+        files[name] = finish_slide(files[name], pal, course, diploma, is_title, geo, site_url if is_title else "")
+        if is_title and site_url:
+            rels_name = name.replace("slides/", "slides/_rels/") + ".rels"
+            files[rels_name] = add_site_link(files[rels_name], site_url)
 
     fd, tmp = tempfile.mkstemp(suffix=".pptx", dir=os.path.dirname(os.path.abspath(path)))
     os.close(fd)
@@ -755,6 +782,26 @@ def layout_geometry(xml):
         if ph and box:
             geo[ph.group(1).decode()] = tuple(int(v) for v in box.groups())
     return geo
+
+
+def add_site_link(rels, site_url):
+    """Add the external hyperlink relationship used by the site URL label."""
+    s = rels.decode("utf-8")
+    if SITE_RID not in s:
+        s = s.replace("</Relationships>",
+                      '<Relationship Id="%s" Type="http://schemas.openxmlformats.org/officeDocument/2006/'
+                      'relationships/hyperlink" Target="%s" TargetMode="External"/></Relationships>'
+                      % (SITE_RID, esc(site_url)))
+    return s.encode("utf-8")
+
+
+def read_site_url(project_dir):
+    try:
+        with open(os.path.join(project_dir, "_quarto.yml"), encoding="utf-8") as f:
+            m = re.search(r'^\s+site-url:\s*"([^"]*)"', f.read(), re.M)
+            return m.group(1) if m else ""
+    except OSError:
+        return ""
 
 
 def read_diploma(project_dir):

@@ -192,6 +192,8 @@ Static diagrams go in `week-NN/images/`.
 - Slides: `_extensions/lesson/pptx_finish.py` (project post-render) gives every
   `.pptx` the course look: colours from `_metadata.yml`, fonts, background shapes,
   footer, a coloured title slide, a fade between slides, and the click animations.
+  The title slide shows the site URL (`site-url` in `_quarto.yml`) big and clickable
+  on a white label, so students can read it or take a photo of it.
   Never style slides by hand in PowerPoint; change the script once for all courses.
 - Mark the last two sections: `## Game challenge: … {.challenge}` and `## Summary {.summary}`.
 

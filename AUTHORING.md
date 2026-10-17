@@ -227,6 +227,8 @@ Lessons not ready for students: `draft: true` (not published).
 ## Build
 
 - Local: `quarto preview` (HTML) or `quarto render` (all outputs → `_site/`).
+- Review drafts before merging a PR: check out the PR branch, then
+  `quarto preview --profile review` (`_quarto-review.yml` shows `draft: true` lessons).
 - CI: `.github/workflows/publish.yml` renders on push to `main` and deploys to Pages.
 - Quarto version is pinned in the workflow; keep local Quarto the same.
 

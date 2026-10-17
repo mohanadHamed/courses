@@ -23,4 +23,10 @@ quarto preview
 quarto render
 ```
 
+To see draft lessons (for review before merging a pull request):
+
+```bash
+quarto preview --profile review
+```
+
 Rules for writing lessons are in [AUTHORING.md](AUTHORING.md).

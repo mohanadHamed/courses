@@ -166,7 +166,10 @@ Static diagrams go in `week-NN/images/`.
   (see `shared/sims/README.md`).
 - Embed with `{{< sim file="sims/<name>.html" poster="sims/<name>.png" title="..." >}}`.
   HTML → live iframe + "open full screen" link. PDF → poster + QR code to the
-  live page. PPTX → poster + URL. Never hand-write this per format.
+  live page. PPTX → poster + large QR code ("Scan to try it") so students open
+  the simulator on their phones during the lecture. Never hand-write this per format.
+- **Every slides file must have one "Live demo" slide per simulator in the lesson**,
+  using the same `{{< sim >}}` shortcode, so each interactive part has a QR code in class.
 
 ## Site identity
 

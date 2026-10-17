@@ -7,7 +7,7 @@
 --     HTML: live simulator in an iframe + "open full screen" link. `height` is
 --           the start height; sims that load sim-base.js resize the iframe.
 --     PDF:  poster image + QR code to the live page.
---     PPTX: poster image + link.
+--     PPTX: poster image + QR code to the live page (students scan it in class).
 
 local str = pandoc.utils.stringify
 
@@ -67,6 +67,43 @@ end
 
 local function html_attr(s)
   return (s:gsub("&", "&amp;"):gsub('"', "&quot;"):gsub("<", "&lt;"):gsub(">", "&gt;"))
+end
+
+-- QR images (for slides) ---------------------------------------------------
+-- PowerPoint cannot draw a QR code itself, so we make a PNG with Quarto's
+-- Typst and the same QR package as the PDF. Cached in .quarto/qr/ (not in git).
+
+local function qr_png(url, caption)
+  local dir = pandoc.path.join({ project_dir(), ".quarto", "qr" })
+  pandoc.system.make_directory(dir, true)
+  local base = pandoc.path.join({ dir, pandoc.utils.sha1(url .. "|" .. caption) })
+  local png = base .. ".png"
+  -- Image paths must be relative to the document.
+  local docdir = pandoc.path.directory(quarto.doc.input_file)
+  if not pandoc.path.is_absolute(docdir) then
+    docdir = pandoc.path.join({ pandoc.system.get_working_directory(), docdir })
+  end
+  local abs = png
+  if not pandoc.path.is_absolute(abs) then
+    abs = pandoc.path.join({ pandoc.system.get_working_directory(), abs })
+  end
+  local rel = pandoc.path.make_relative(pandoc.path.normalize(abs), pandoc.path.normalize(docdir), true)
+  local f = io.open(png, "r")
+  if f then
+    f:close()
+    return rel
+  end
+  local typ = base .. ".typ"
+  local out = io.open(typ, "w")
+  out:write('#set page(width: auto, height: auto, margin: 10pt)\n',
+    '#set text(font: "Noto Sans", size: 15pt, weight: "bold", fill: rgb("#24432c"))\n',
+    '#import "@preview/tiaoma:0.3.0": qrcode\n',
+    "#align(center)[#qrcode(", typst_string(url), ", width: 6cm)\n",
+    "#v(4pt)\nScan to try it\n#v(-6pt)\n#text(size: 11pt, weight: \"regular\", ", typst_string(caption), ")]\n")
+  out:close()
+  pandoc.pipe(quarto.config.cli_path(), { "typst", "compile", typ, png, "--ppi", "200" }, "")
+  os.remove(typ)
+  return rel
 end
 
 -- Glossary ----------------------------------------------------------------
@@ -193,13 +230,12 @@ local function sim(kwargs)
 ]], typst_string(poster), typst_string(url), typst_string(title), typst_string(url)))
 
   else
-    -- pptx: poster and link side by side on one slide
+    -- pptx: poster on the left, QR code on the right, so students can scan it in class
     return pandoc.Div({
-      pandoc.Div({ pandoc.Para({ pandoc.Image({}, poster) }) }, { class = "column", width = "60%" }),
+      pandoc.Div({ pandoc.Para({ pandoc.Image({}, poster) }) }, { class = "column", width = "55%" }),
       pandoc.Div({
-        pandoc.Para({ pandoc.Strong(title) }),
-        pandoc.Para({ pandoc.Link(url, url) }),
-      }, { class = "column", width = "40%" }),
+        pandoc.Para({ pandoc.Image({}, qr_png(url, title)) }),
+      }, { class = "column", width = "45%" }),
     }, { class = "columns" })
   end
 end

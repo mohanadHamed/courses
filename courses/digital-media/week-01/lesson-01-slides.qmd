@@ -1,0 +1,249 @@
+---
+title: "Digital Media and Creative Production in Games"
+subtitle: "Week 1 · Lecture"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary digital-media digitization raster-image vector-graphics elemental-tetrad mechanics aesthetics player-experience asset production-pipeline >}}
+
+## Think · What does the player meet first?
+
+You open a new game for the first time.
+**Do you meet its code — or something else?**
+
+::: {.answer}
+Its **media**: images, music, sounds, text, video.
+:::
+
+## 1.1 Digital media
+
+:::: {.columns}
+::: {.column width="42%"}
+- text · images · audio
+- video · animation · interactive
+- encoded as **numbers**
+- several together: **multimedia**
+:::
+::: {.column width="58%"}
+![](images/lantern-keeper.png)
+:::
+::::
+
+## Digitization
+
+:::: {.columns}
+::: {.column width="38%"}
+- **sampling**: how often · **quantization**: how finely
+- CD audio: 44 100 samples/s, 16 bits
+:::
+::: {.column width="62%"}
+![](images/sampling.png)
+:::
+::::
+
+## Example · Why media must be compressed
+
+::: {.reveal}
+1. 1 s CD stereo: 44 100 × 16 × 2 ≈ **176 KB**
+2. 3-minute track ≈ **32 MB**
+3. one full-HD frame ≈ **6.2 MB** · 30 fps ≈ 187 MB/s
+4. → MP3, Ogg, PNG, JPEG, H.264
+:::
+
+## Raster or vector?
+
+:::: {.columns}
+::: {.column width="38%"}
+- raster: pixels — photos, painted art
+- vector: shapes — logos, icons, UI
+:::
+::: {.column width="62%"}
+![](images/raster-vector.png)
+:::
+::::
+
+## Try it 1 · Media as numbers
+
+a) measuring at regular intervals?
+b) rounding to fixed levels?
+c) CD samples per second?
+d) 1 s of CD stereo?
+e) sharp at any size?
+f) several media together?
+
+::: {.answer}
+a) sampling
+b) quantization
+c) 44 100
+d) about 176 KB
+e) vector graphics
+f) multimedia
+:::
+
+## 1.2 Properties of digital media (+ interactivity)
+
+| Property | In games |
+|---|---|
+| numerical | colours, volumes changed by code |
+| modular | levels from reusable assets |
+| automation | procedural levels |
+| variability | adaptive music, translations |
+| transcoding | art for players, files for the engine |
+| **interactivity** | a set of possibilities |
+
+## Example · Adaptive music
+
+::: {.reveal}
+1. explore → melody
+2. enemy near → + percussion
+3. fight → + strings
+4. one composition, many versions: **variability**
+:::
+
+## Try it 2 · Which property?
+
+a) 40 tiles used again and again?
+b) drums added when an enemy is near?
+c) a new dungeon every game?
+d) a sound plays once or 100 times?
+
+::: {.answer}
+a) modularity
+b) variability
+c) automation
+d) interactivity
+:::
+
+## Think · Same rules, different game?
+
+Two games have **exactly the same rules**.
+**Can they feel completely different?**
+
+::: {.answer}
+Yes — their **story, aesthetics and technology** change the experience.
+:::
+
+## 1.3 The elemental tetrad
+
+:::: {.columns}
+::: {.column width="40%"}
+- mechanics · story
+- aesthetics · technology
+- all equal
+- goal: the **player experience**
+:::
+::: {.column width="60%"}
+![](images/tetrad.png)
+:::
+::::
+
+## Example · Lantern Keeper
+
+::: {.reveal}
+1. **mechanics**: float, collect fireflies
+2. **story**: relight the village before sunrise
+3. **aesthetics**: warm light, piano, chimes
+4. **technology**: portrait phone, cheap shader
+5. rock music → the experience breaks
+:::
+
+## Live demo · Juice It
+
+{{< sim file="sims/juice-it.html" poster="sims/juice-it.png" title="Juice It: same mechanics, different media" kind="game" >}}
+
+## Watch out · Aesthetics ≠ graphics
+
+- sound, music, vibration, rhythm
+- everything the **senses** perceive
+
+## Try it 3 · The tetrad of Lantern Keeper
+
+a) tap to float; fireflies grow the light
+b) relight the lanterns before sunrise
+c) warm light, soft piano
+d) cheap shader, 60 fps on old phones
+e) the goal of all four?
+
+::: {.answer}
+a) mechanics
+b) story
+c) aesthetics
+d) technology
+e) the player experience
+:::
+
+## 1.4 The production pipeline
+
+:::: {.columns}
+::: {.column width="38%"}
+- course map: story → storyboard → audio → video → IP
+:::
+::: {.column width="62%"}
+![](images/pipeline.png)
+:::
+::::
+
+## Example · One chime through the pipeline
+
+::: {.reveal}
+1. **pre**: "soft, bright chime, under 0.5 s"
+2. **production**: record a glass bell · 3 variations
+3. **post**: trim, match loudness, export Ogg
+4. **testing**: too loud → back to the mix
+:::
+
+## Try it 4 · Which stage?
+
+a) script and storyboard
+b) recording voices
+c) mixing, exporting
+d) "the sound is too loud"
+e) composing music
+
+::: {.answer}
+a) pre-production
+b) production
+c) post-production
+d) integration and testing
+e) production
+:::
+
+## Game challenge · Lantern Keeper's media plan
+
+:::: {.columns}
+::: {.column width="62%"}
+- 2-minute looping music, 3 layers
+- firefly chime × 3 variations
+- vector logo · 30-second trailer
+- work **alone**
+:::
+::: {.column width="38%"}
+![](images/lantern-keeper.png)
+:::
+::::
+
+## Try it 5 · Planning the media (harder)
+
+a) 2 min uncompressed (176 KB/s)?
+b) 3 music layers = which property?
+c) why 3 chime variations?
+d) logo for icon and banner?
+e) stage for editing the trailer?
+
+::: {.answer}
+a) about 21 MB
+b) variability
+c) so it does not repeat identically
+d) vector
+e) post-production
+:::
+
+## Summary
+
+- digital media = numbers · sampling + quantization
+- compress · raster vs vector
+- modular, variable, automated, interactive
+- tetrad → player experience
+- pre → production → post → testing

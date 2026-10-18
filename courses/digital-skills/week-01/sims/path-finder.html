@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Path Finder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .stage { color: var(--sim-accent); }
+    .sim .hud .score { margin-left: auto; font-variant-numeric: tabular-nums; }
+    .sim .task { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 8px 12px; font-weight: 700; margin-bottom: 8px; }
+    .sim .task code, .sim .opts code { font-family: Menlo, Consolas, monospace; font-size: .86rem; color: #c2410c; word-break: break-all; }
+    .sim .tree { border: 1.5px solid #ffe0c2; border-radius: 12px; padding: 6px 4px; background: #fff; max-height: 330px; overflow: auto; }
+    .sim .node { display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 8px; cursor: pointer; user-select: none; font-size: .95rem; }
+    .sim .node:hover { background: #fff4e6; }
+    .sim .node.here { outline: 2px dashed var(--sim-accent); }
+    .sim .node.good { background: #d3f9d8; } .sim .node.bad { background: #ffe3e3; }
+    .sim .opts { display: grid; gap: 6px; margin-top: 8px; }
+    .sim .opts button { text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 600; }
+    .sim .opts button.good { background: #d3f9d8; border-color: #2b8a3e; } .sim .opts button.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Path Finder</h1>
+  <div class="hud"><span class="stage" id="stage"></span><span class="score" id="score">Score 0</span></div>
+  <div class="task" id="task"></div>
+  <div class="tree" id="tree" role="tree"></div>
+  <div class="opts" id="opts"></div>
+  <div class="controls"><button id="next" type="button" hidden>Next ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const TREE = { name: "Documents", kids: [
+    { name: "Courses", kids: [
+      { name: "Digital-Skills", kids: [
+        { name: "week-01", kids: [{ name: "cv_v01.docx" }, { name: "digcomp-profile.pdf" }] },
+        { name: "week-02", kids: [{ name: "notes.docx" }, { name: "shared-plan.xlsx" }] } ] },
+      { name: "Game-Math", kids: [{ name: "week-01", kids: [{ name: "hw1.pdf" }, { name: "grid.png" }] }] },
+      { name: "Digital-Media", kids: [{ name: "week-01", kids: [{ name: "media-analysis.docx" }, { name: "theme.mp3" }] }] } ] },
+    { name: "Resources", kids: [{ name: "logo.svg" }, { name: "fonts.zip" }] } ] };
+  const ROOT = "/Users/sara/";
+  const all = [];
+  (function walk(n, path) { const p = path ? path + "/" + n.name : n.name; n.path = p; all.push(n); (n.kids || []).forEach((k) => walk(k, p)); })(TREE, "");
+  const files = all.filter((n) => !n.kids);
+  const $ = (id) => document.getElementById(id);
+  let stage = 0, round = 0, score = 0, cur = null, open = new Set(["Documents"]), locked = false;
+  const STAGES = ["Stage 1 · Go to the file", "Stage 2 · Which absolute path?", "Stage 3 · Which relative path?"];
+  const ROUNDS = 4;
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  function relative(fromDir, toPath) {
+    const a = fromDir.split("/"), b = toPath.split("/");
+    let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++;
+    return [...Array(a.length - i).fill(".."), ...b.slice(i)].join("/");
+  }
+  function renderTree(highlight) {
+    const box = $("tree"); box.innerHTML = "";
+    (function draw(n, depth) {
+      const row = document.createElement("div"); row.className = "node"; row.style.paddingLeft = 8 + depth * 18 + "px";
+      const isOpen = open.has(n.path);
+      row.textContent = (n.kids ? (isOpen ? "📂 " : "📁 ") : fileIcon(n.name)) + n.name;
+      if (highlight && n.path === highlight) row.classList.add("here");
+      row.addEventListener("click", () => clickNode(n, row));
+      n.row = row; box.appendChild(row);
+      if (n.kids && isOpen) n.kids.forEach((k) => draw(k, depth + 1));
+    })(TREE, 0);
+  }
+  const fileIcon = (name) => ({ docx: "📄 ", pdf: "📕 ", xlsx: "📊 ", png: "🖼 ", svg: "🖼 ", mp3: "🎵 ", zip: "🗜 " }[name.split(".").pop()] || "📄 ");
+  function clickNode(n, row) {
+    if (locked) return;
+    if (n.kids) { if (open.has(n.path)) open.delete(n.path); else open.add(n.path); renderTree(stage === 0 ? null : cur && cur.show); return; }
+    if (stage !== 0) return;
+    locked = true;
+    if (n.path === cur.target.path) { row.classList.add("good"); score += 10; say("✓ Found it: " + ROOT + n.path, "good"); }
+    else { row.classList.add("bad"); say("✗ That is " + n.name + ". The path was " + ROOT + cur.target.path, "bad"); }
+    done();
+  }
+  function say(t, k) { $("msg").textContent = t; $("msg").className = "message " + (k || ""); }
+  function done() { $("score").textContent = "Score " + score; $("next").hidden = false; }
+  function newRound() {
+    locked = false; $("next").hidden = true; say("");
+    $("stage").textContent = `${STAGES[stage]} · ${round + 1}/${ROUNDS}`;
+    $("opts").innerHTML = "";
+    const target = pick(files);
+    if (stage === 0) {
+      open = new Set(["Documents"]); cur = { target };
+      $("task").innerHTML = `Open the folders and tap this file:<br><code>${ROOT}${target.path}</code>`;
+      renderTree(null);
+    } else if (stage === 1) {
+      const parts = target.path.split("/");
+      open = new Set(all.filter((n) => n.kids && target.path.startsWith(n.path)).map((n) => n.path));
+      cur = { target, show: target.path };
+      $("task").innerHTML = `The dashed file is on a Mac (user <b>sara</b>). Which is its absolute path?`;
+      renderTree(target.path);
+      const right = ROOT + target.path;
+      const wrong = [ROOT + parts.slice(0, -2).concat(parts.slice(-1)).join("/"),
+                     ROOT + [parts[0], ...parts.slice(1, -1).reverse(), parts[parts.length - 1]].join("/"),
+                     parts.slice(1).join("/")];
+      options([right, ...new Set(wrong.filter((w) => w !== right))].slice(0, 4), right);
+    } else {
+      const dirs = all.filter((n) => n.kids && n !== TREE);
+      let from; do { from = pick(dirs); } while (target.path.startsWith(from.path + "/") && Math.random() < 0.5);
+      open = new Set(all.filter((n) => n.kids && (target.path.startsWith(n.path) || from.path.startsWith(n.path))).map((n) => n.path));
+      cur = { target, show: target.path };
+      $("task").innerHTML = `You are in the folder <code>${from.path}</code>. Which relative path leads to the dashed file?`;
+      renderTree(target.path);
+      const right = relative(from.path, target.path);
+      const wrong = [right.replace(/^(\.\.\/)/, ""), "../" + right, target.path, right.split("/").slice(-1)[0]];
+      options([right, ...new Set(wrong.filter((w) => w !== right))].slice(0, 4), right);
+    }
+  }
+  function options(list, right) {
+    shuffle(list).forEach((t) => {
+      const b = document.createElement("button"); b.type = "button"; b.innerHTML = `<code>${t}</code>`;
+      b.addEventListener("click", () => {
+        if (locked) return; locked = true;
+        if (t === right) { b.classList.add("good"); score += 10; say("✓ Right.", "good"); }
+        else { b.classList.add("bad"); say("✗ The right path is " + right, "bad"); [...$("opts").children].forEach((x) => { if (x.textContent === right) x.classList.add("good"); }); }
+        done();
+      });
+      $("opts").appendChild(b);
+    });
+  }
+  $("next").addEventListener("click", () => {
+    round++;
+    if (round >= ROUNDS) { round = 0; stage++; }
+    if (stage >= STAGES.length) { $("task").innerHTML = `🏁 Finished! Score <b>${score}</b> of ${STAGES.length * ROUNDS * 10}.`; $("opts").innerHTML = ""; $("next").hidden = true; $("stage").textContent = "Done"; return; }
+    newRound();
+  });
+  $("restart").addEventListener("click", () => { stage = 0; round = 0; score = 0; $("score").textContent = "Score 0"; newRound(); });
+  newRound();
+})();
+</script>
+</body>
+</html>

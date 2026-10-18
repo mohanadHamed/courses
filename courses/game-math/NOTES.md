@@ -2,34 +2,39 @@
 
 Course-specific rules only. Global rules are in the root `AUTHORING.md`.
 
-## Timing
+## Timing and textbook
 
-- 2 lectures × 90 min (3 credit hours). Lesson A = syllabus First Lecture, Lesson B = Second Lecture; the syllabus seminar becomes the Game challenge of lesson A.
-- Size every lesson (HTML, PDF, slides) for **90 minutes**. See the size table in the root `AUTHORING.md`.
-  `check_size.py` warns at every render when a lesson or its slides are too short.
+- 2 lectures × 90 min (3 credit hours). Lesson A = syllabus First Lecture,
+  Lesson B = Second Lecture; the syllabus seminar becomes the case study and
+  Game challenge of lesson A.
+- Textbook: Dunn and Parberry, *3D Math Primer for Graphics and Game
+  Development*, 2nd ed. (ch. 1 coordinate systems, ch. 2 vectors, …). Follow
+  its order and rigour; never copy it.
 
 ## Shape of a 90-min lesson
 
-| Part | Minutes | In the lesson | Slides |
-|---|---|---|---|
-| New words | 5 | glossary (5–10 terms) | Keywords |
-| Warm-up (lesson B only) | 5 | "Warm-up: remember lesson A" + Try it 1 | Try it 1 · Warm-up |
-| 5–7 ideas | ~55 | each: game example → picture → explanation → Example → Watch out! → Try it | Think → idea → Example → Try it |
-| Game challenge | ~20 | a short story of one mobile game + 2–3 Try it on the whole lesson, each student alone (lesson A: the syllabus seminar) | Game challenge · story, then one slide per Try it |
-| Summary and questions | 5 | Summary | Summary |
+| Part | Minutes | Notes (PDF) | Page | Slides |
+|---|---|---|---|---|
+| Key terms | 5 | glossary 10–14 terms | glossary | Keywords |
+| 5–7 sections | ~60 | definition, figure, 1–2 worked examples, common mistake, code where useful | summary, figure, one Try it (4–6 varied questions), simulator / mini-game | Think → concept (picture) → Example → Try it |
+| Case study / Game challenge | ~20 | case study + illustration | 2 Try it on the whole lesson | story + one slide per Try it |
+| Summary | 5 | exercises + answers | Summary | Summary |
 
 Ways to go deeper into the same topic (never into next week's topic):
-the reverse question (vector → words, words → vector), negative numbers,
-points on an axis, 2D → 3D, "which number changes?", reading short game code,
-several steps in one question (frames).
+the reverse question, negative numbers, precision (floats), different
+screens and conventions (screen space, handedness, Blender ↔ Unity),
+discrete grids, reading short game code, several frames in one question.
+
+Mathematics: LaTeX math (`$…$`) in the notes; plain text with
+`x~s~` subscripts on the page and slides (no MathJax needed).
 
 ## Lessons learned
 
 - Week 1 (2026-10-17): the first lessons had 12 and 21 "Try it" questions and no
-  worked examples: too short for 90 min. Rebuilt with warm-up, Example and
-  Watch out boxes, 45–49 questions, and a Game challenge at the end.
-- Week 1 (2026-10-17): no class activities in this course. Group work and
-  physical activities are not always possible. Every lesson ends with a
-  Game challenge that each student does alone (see AUTHORING.md).
-
-<!-- Add course-specific rules from retro/week-NN.md here, newest first. -->
+  worked examples: too short for 90 min. Rebuilt with 45–49 questions.
+- Week 1 (2026-10-19, after teaching): those 45–49 questions were mostly the
+  same question again (axes, moving points, 2D and 3D coordinates), and the
+  English was too simple. Rebuilt as textbook-style notes with six distinct
+  sections per lesson (game loop, 1D, 2D, screen space, tile grids, 3D;
+  scalars, arrows, components, displacement, motion per frame, 3D vectors),
+  one question set per section, and mini-games (Grid Strike, Vector Dash).

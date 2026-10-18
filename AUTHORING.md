@@ -9,74 +9,125 @@ Site: <https://mohanadhamed.github.io/courses/> (Quarto website → GitHub Pages
 ## Courses
 
 Program: Mobile Game Development and Design, Intermediate University Degree
-(Diploma), code L6, Technical College. Both courses are year 1, semester 1.
+(Diploma), code L6, Technical College. All four courses are year 1, semester 1
+(2026-2027 syllabi).
 
-| Slug | Official course name | Code | Credit hours | Per week (as taught) |
-|---|---|---|---|---|
-| `game-math` | Mathematics and Computing for Digital Games | 13411131 | 3 | 2 lectures × **90 min** |
-| `computing-systems` | Fundamentals of Computing Systems and Digital Platforms | 13411133 | 2 | 2 lectures × **60 min** |
+| Slug | Official course name | Code | Credit hours | Per week (as taught) | Textbook |
+|---|---|---|---|---|---|
+| `game-math` | Mathematics and Computing for Digital Games | 13411131 | 3 | 2 lectures × **90 min** | Dunn & Parberry, *3D Math Primer for Graphics and Game Development*, 2nd ed. |
+| `computing-systems` | Fundamentals of Computing Systems and Digital Platforms | 13411133 | 2 | 2 × **60 min** (lecture + seminar) | Tanenbaum & Austin, *Structured Computer Organization*, 6th ed. |
+| `digital-media` | Digital Media Technologies and Creative Production for Games | 13411134 | 2 | 2 × **60 min** (lecture + seminar) | Schell, *The Art of Game Design*, 3rd ed. |
+| `digital-skills` | Digital Skills | 01101154 | 2 | 2 × **60 min** (lab sessions) | Evans, Martin & Poatsy, *Technology in Action*, 18th ed. (+ DigComp 2.2) |
 
 **One lecture = one lesson. Every course has 2 lessons per week.**
 16 weeks: week 8 midterm, week 16 final. Use the official course names exactly.
+The textbook is in `course.textbook` (`_metadata.yml`). Follow its topics and
+level; never copy its text, figures or exercises.
 
 ### Mapping the syllabus week to the 2 lessons
 
 - `game-math`: syllabus has First Lecture + Second Lecture + Seminar.
   Lesson A = First Lecture, Lesson B = Second Lecture. The seminar topic
-  becomes the "Game challenge" of lesson A (there is no separate seminar session).
-- `computing-systems`: syllabus has Lecture + Seminar.
-  Lesson A = Lecture topic, Lesson B = Seminar topic (hands-on, practice).
+  becomes the case study / Game challenge of lesson A.
+- `computing-systems`, `digital-media`: Lecture + Seminar.
+  Lesson A = Lecture topic, Lesson B = Seminar topic (applied, analysis, practice).
+- `digital-skills`: Lab Session 1 + Lab Session 2 (computer lab). Both lessons
+  have notes like the others, plus "Lab task" boxes on the page.
 - Exam sessions (midterm, final) get no lesson. Revision sessions get a
   revision lesson. Confirm with me when a syllabus week is unclear.
 
+## The lesson model: the notes come first
+
+Students turned out to be stronger than expected: the first lessons were too
+simple and repeated the same idea many times. Every lesson is now built in
+this order.
+
+1. **Lesson notes (PDF)** — `lesson-NN-book.qmd` → `lesson-NN-book.pdf`.
+   The main study text, written like a chapter of the course textbook:
+   formal academic English, precise definitions, numbered sections
+   (`## 1.1 …`), numbered definitions, worked examples and common mistakes,
+   figures, tables, short C# reading examples where useful, a case study,
+   further reading (textbook chapter), exercises and short answers. It may be
+   demanding; do not over-simplify.
+2. **Interactive lesson (HTML)** — `lesson-NN.qmd`, derived from the notes.
+   The same sections (`## 1.1 …`), each with a short, clear summary (plainer
+   English than the notes, but not childish), its figures, its simulator or
+   mini-game, and **one** "Try it" set. Then the Game challenge and a summary.
+3. **Slides (PPTX)** — `lesson-NN-slides.qmd`, derived from the notes: a
+   visual summary for class and for revision.
+
+The PDF links to the web lesson (QR card under the ILOs, added by
+`banner.lua`) and to every simulator and mini-game (QR in the `{{< sim >}}`
+box). The web lesson's main button is "Lesson notes (PDF)".
+
+### No repetition (most important)
+
+- Each concept gets **one** section. Explain it once, give it one set of
+  questions, then move on to a clearly *different* concept
+  (2D coordinates → 3D coordinates → …). Never ask again about something a
+  previous section already practised.
+- **One "Try it" box per section** (the Game challenge may have 1–3). Inside
+  a box, every question tests something different: no lists of near-identical
+  questions. `check_size.py` warns when a section has more than one box.
+- Do not repeat the same picture on consecutive slides, and do not repeat
+  the whole lesson in the summary (5–6 short lines).
+- Go deeper, never wider: new cases, the reverse question, precision,
+  practical consequences — never the next week's topic.
+
+### Rich and visual
+
+- Every section of the notes and of the page has at least one figure,
+  diagram or illustration; every concept slide has a picture.
+- Draw figures as SVG (keep the `.svg`, export a `.png` for PDF and slides:
+  see `shared/sims/README.md`). Illustrated "game screens" of the made-up
+  case-study games are welcome. Never use screenshots of commercial games or
+  copyrighted images.
+- No emoji or special symbols inside SVG figures (the PDF engine cannot draw
+  them); draw icons as shapes.
+
+### Mini-games
+
+When a concept is tied to an event in a game (a tap to jump, a hit, a sound
+that changes with distance, a velocity applied every frame), build a small
+playable **mini-game** for it in `week-NN/sims/`, embed it on the page and
+link it from the notes and the slides:
+`{{< sim file="sims/x.html" poster="sims/x.png" title="…" kind="game" >}}`
+(label "Mini-game", QR text "Scan to play"). Same rules as simulators.
+
 ### Size every lesson for its lecture time
 
-All three outputs (interactive lesson, PDF, slides) cover exactly one lecture.
-The PDF is made from the lesson page, so it grows with it; the slides are a
-separate file and must grow too (one slide per "Try it", Think, Example, …).
-
-| | 60-min lesson (`computing-systems`) | 90-min lesson (`game-math`) |
+| | 60-min lesson | 90-min lesson (`game-math`) |
 |---|---|---|
-| Main ideas (`## 1.`, `## 2.`, …) | 2–3 | 5–7 |
-| "Try it" boxes | 4–6 | 10–12 |
-| Questions in all "Try it" boxes | 20–30 | 40–50 |
-| Worked examples (`.callout-note title="Example: …"`) | 0+ | 3+ (one for every rule or formula) |
-| "Watch out!" boxes (common mistakes) | optional | 2+ |
-| Warm-up (lesson B: questions on lesson A) | optional | required |
-| Simulators / demos | 0–1 | 1–2 |
-| Game challenge (end of the lesson) | ~10 min, 1–2 "Try it" | ~20 min, 2–3 "Try it" |
-| Slides (title slide not counted) | ~13–18 | ~28–36 |
+| Notes: numbered sections (`## 1.1`) | 3–4 | 5–7 |
+| Notes: words (without exercises and answers) | 1 500–3 500 | 2 500–6 000 |
+| Notes: worked examples | 2+ | 4+ |
+| Notes: exercises (with short answers at the end) | 6–10 | 10–16 |
+| Page: "Try it" boxes (one per section + Game challenge) | 4–6 | 6–9 |
+| Page: questions in all "Try it" boxes | 15–28 | 30–45 |
+| Simulators / mini-games | 0–2 | 1–3 |
+| Slides (title slide not counted) | 15–22 | 26–36 |
 
-**Depth, not only more boxes.** A 90-min idea is: game example → picture →
-explanation → worked example (numbered steps) → "Watch out!" if students
-often make a mistake → "Try it" (easy → harder). A 90-min lesson that looks
-like a 60-min lesson with more topics is wrong: go deeper into the week's
-topics (more cases, negative numbers, the reverse question, 3D), never into
-the next week's topics.
+**Time plan (90 min):** key terms 5 · sections ~60 · Game challenge ~20 ·
+summary and questions 5. **Time plan (60 min):** key terms 3 · sections ~40 ·
+Game challenge ~10 · summary 5. Leave time for my Arabic explanation.
 
-**Game challenge (every course; there are no class activities).** No groups,
-no paper, nothing to move in the room: every student works alone on the
-lesson page, and the teacher shows each part on the slides.
-`## Game challenge: <game name> {.challenge}`, then a short story of one
-made-up mobile game (3–4 sentences, or a small fixed table such as a phone's
-specs), then "Try it" boxes that use everything from today in that game
-(easy → harder; the last one "(harder)"): 1–2 boxes in 60 min, 2–3 in 90 min.
-`game-math` lesson A takes its story from the syllabus seminar of the week.
+`_extensions/lesson/check_size.py` (project pre-render) checks these numbers,
+that every section of the notes is on the page, the one-box-per-section rule,
+the required parts (notes: Key terms, Exercises, Answers to the exercises;
+page: Key terms, Game challenge, Summary) and one "Live demo" slide per
+simulator. Fix every warning before you open a PR. Full table:
+`python3 _extensions/lesson/check_size.py --all`. Keep `SIZES` and this table
+the same.
 
-**Time plan (90 min):** new words 5 · warm-up 5 (lesson B) · ideas ~55 ·
-game challenge ~20 · summary and questions 5.
-**Time plan (60 min):** new words 5 · ideas ~35 · game challenge ~10 ·
-summary and questions 5–10.
-Count about 1 minute per "Try it" question in class (students answer, then the click).
+**Game challenge (every course; no class activities).** No groups, no paper:
+every student works alone on the page, and the teacher shows each part on
+the slides. `## Game challenge: <name> {.challenge}`, a short story of one
+made-up game or studio (3–5 sentences with fixed numbers), then "Try it"
+boxes that combine the sections of the day (the last one "(harder)"). The
+notes contain the same story as a "Case study" section.
 
-`_extensions/lesson/check_size.py` (project pre-render) counts these parts in
-every lesson and its slides and prints a warning when a number is outside the
-table. Fix every warning before you open a PR.
-Full table: `python3 _extensions/lesson/check_size.py --all`.
-Keep the numbers in the script (`SIZES`) and this table the same.
-
-Leave time for my Arabic explanation and questions; do not fill every minute with content.
-Course-specific notes: `courses/<slug>/NOTES.md`. Topic map: `courses/<slug>/plan.md`.
+Course-specific notes: `courses/<slug>/NOTES.md`. Week map:
+`courses/<slug>/schedule.yml` (titles, ILOs) and `courses/<slug>/plan.md`.
 
 ## Source of truth: the Google Drive folder (private, never copy into this repo)
 
@@ -89,13 +140,13 @@ ILO–PLO matrix). Use the newest version of each file.
 - **Before creating any lesson, read the course syllabus and ILO–PLO matrix
   from Drive** (Google Drive connector). Base the lesson on that week's topics and ILOs.
 - If the Drive and this repo disagree, the Drive wins: update `_metadata.yml`,
-  `plan.md` or these rules, and tell me.
+  `schedule.yml`, `plan.md` or these rules, and tell me.
 - Copy only ILO text into `_metadata.yml`; never commit the documents themselves.
 
 ## ILOs and PLOs
 
 - ILO codes follow the syllabus: A1, A2 (knowledge), B1, B2 (intellectual),
-  C1, C2 (subject skills), D1 (transferable).
+  C1, C2, C3 (subject skills), D1 (transferable).
 - Official ILO text (with PLO numbers) lives in `courses/<slug>/_metadata.yml`
   under `course.ilos`. Lessons list codes only: `ilos: [A1, B1]`.
   An unknown code is a render error.
@@ -103,76 +154,75 @@ ILO–PLO matrix). Use the newest version of each file.
   player experience and UI; 3 industry trends, modern technologies and
   professional development; 4 industry management and quality assurance.
 - **Lessons are built from ILOs.** Pick the ILOs from the syllabus week, then
-  design ideas, examples and "Try it" exercises that build exactly those ILOs.
-- PLOs connect to lessons **through** the ILOs (ILO → PLO in the matrix).
-  Do not target PLOs directly, but do not ignore them: choose examples that
-  serve the PLO behind each ILO (e.g. PLO 1 → real game programming and
-  engine situations; PLO 2 → player experience; PLO 4 → testing and quality).
+  design sections, examples and exercises that build exactly those ILOs.
+- PLOs connect to lessons **through** the ILOs. Do not target PLOs directly,
+  but choose examples that serve the PLO behind each ILO (PLO 1 → game
+  programming and engines; PLO 2 → player experience; PLO 3 → tools and
+  industry; PLO 4 → testing, quality, production).
 
 ## Students
 
-- Diploma students, weak English, weak math (Tawjihi ~50–60%).
-- I explain in Arabic in class. All written material is in **very simple English**.
-- Simple and practical, never academic.
+- Diploma students, first year. Their level is higher than first assumed:
+  they cope with formal English and real concepts when the text is clear.
+- I explain in Arabic in class; the bilingual glossary supports them.
 - No programming yet: *Programming Fundamentals (1)* (C#) is in semester 2.
-  In semester-1 courses, code is a short C# "just read it" example,
-  never a task. The program uses C#, Unity and mobile (Android/iOS).
-- **Do not assume students know a game engine.** Unity has its own course in
-  semester 3. Do not teach engine parts (Inspector, Transform, GameObject, …).
-  Connect math to **game programming / game code** in general words, and name
-  Unity only as an example in brackets: "C#, the language of many games
-  (for example, games made with Unity)". Explain every code word you show
-  (e.g. "`Vector3` means three numbers together").
+  Code in semester-1 courses is a short C# example to read, never a task,
+  and every code word is explained.
+- Do not teach a game engine's interface (Inspector, GameObject, …): Unity
+  has its own course. Engine conventions (axes, handedness, `Vector3`) are fine
+  as examples.
 
 ## Writing rules (always enforce)
 
-- English CEFR A2–B1: short sentences, one idea per sentence, active voice.
-- Simple verbs: use, find, move, show, change — not utilize, determine, obtain.
-- **Picture before formula**: game example → diagram → then math or code.
-- Short graded exercises ("Try it") **after each idea**, easy → harder.
-  Every "Try it" is a matching exercise (see "Try it: match the answer").
-- Every rule or formula gets a **worked example** first: a
-  `::: {.callout-note title="Example: …"}` box with numbered steps.
-  Common mistakes go in a `::: {.callout-note title="Watch out!"}` box.
-- Every lesson starts with a bilingual glossary of 5–10 terms.
-- Every lesson lists the course ILOs it covers (`ilos:` codes, from the syllabus week).
-- Each lesson ends with a "Game challenge" sized for the lecture time
-  (60 min: ~10 min, 90 min: ~20 min), done by each student alone: no group
-  work, no class activities. In `game-math`, lesson A takes it from the
-  syllabus seminar of that week.
-- Slides: keywords and visuals only. No long sentences. Question slides may
-  have one short question (see "Interactive slides").
+- **Notes:** formal academic English, the register of a textbook. Precise
+  definitions (`::: {.callout-important title="Definition 1.2 — …"}`), worked
+  examples with numbered steps (`::: {.callout-note title="Example 1.3 — …"}`),
+  common mistakes (`::: {.callout-warning title="Common mistake"}`), code
+  (`::: {.callout-caution title="In game code"}`), figures with captions and
+  `@fig-` references, tables with captions, `::: {.lead}` opening paragraph,
+  `::: {.answers}` for the short answers.
+- **Page:** the same content, shorter and plainer (B1–B2): one idea per
+  sentence, but no baby talk. "Watch out!" boxes for common mistakes.
+- **Slides:** keywords and pictures, no long sentences.
+- Picture before formula: game situation → figure → definition → example.
+- Every rule or formula gets a worked example in the notes.
+- Every lesson starts with a bilingual "Key terms" glossary (8–14 terms).
+- Facts must be correct and current (conventions of engines, standards,
+  numbers). When unsure, leave it out.
 
 ## Glossary
 
-- Master list: `shared/glossary.yml` (`key: {en, ar, def}`).
+- Master list: `shared/glossary.yml` (`key: {en, ar, def}`); `def` is one
+  precise textbook sentence.
 - Insert with `{{< glossary key1 key2 ... >}}`. A missing key is a render error
   — add the term to `glossary.yml` first, never inline.
 - Same English term and same Arabic translation for a concept everywhere.
-  Check `glossary.yml` before adding; reuse existing keys.
+  Check `glossary.yml` before adding; reuse existing keys. No `: ` inside a
+  value (YAML).
 
 ## Three outputs per lesson
 
 Folder: `courses/<slug>/week-NN/`. Two lessons per week; lesson numbers run
 across the course (week 1 → lessons 01–02, week 2 → 03–04, …).
-Static diagrams go in `week-NN/images/`.
+Figures in `week-NN/images/`, simulators and mini-games in `week-NN/sims/`.
 
 | File | Format | Output |
 |---|---|---|
-| `lesson-NN.qmd` | `lesson-html` + `lesson-typst` | Interactive HTML page + printable PDF |
-| `lesson-NN-slides.qmd` | `lesson-pptx` | Teacher slides (.pptx) |
+| `lesson-NN-book.qmd` | `lesson-typst` | Lesson notes, PDF (the main text) |
+| `lesson-NN.qmd` | `lesson-html` | Interactive lesson page |
+| `lesson-NN-slides.qmd` | `lesson-pptx` | Slides (.pptx), public summary |
 | `homework-NN.qmd` (NN = week) | `lesson-html` | Take-home task page with Print and Download PDF buttons |
 
-- Start from `shared/templates/lesson-template.qmd`, `slides-template.qmd`
-  and `homework-template.qmd`.
+- Start from `shared/templates/book-template.qmd`, `lesson-template.qmd`,
+  `slides-template.qmd` and `homework-template.qmd`.
 - Formats, styles and filters live in the Quarto extension `_extensions/lesson/`
   (Quarto requires `_extensions/` at the project root). Change look and
   behaviour there, once, for every course.
-- The `lesson-html`/`lesson-typst` formats add the course banner (course name,
-  diploma line, week, lesson, ILOs) automatically from metadata. Course name and
-  code come from `courses/<slug>/_metadata.yml`.
+- The formats add the course banner (course name, diploma line, week, lesson,
+  ILOs) automatically from metadata.
 - PDF engine: Typst. Main font Noto Sans; Arabic font Noto Naskh Arabic
-  (installed in CI from `fonts-noto-core`).
+  (installed in CI from `fonts-noto-core`). Book filter: `book.lua`
+  (`.lead`, `.answers`); callout styles: `typst-body.typ`.
 
 ## Design
 
@@ -180,132 +230,115 @@ Static diagrams go in `week-NN/images/`.
   Light look: near-white backgrounds, the course colour only as accents.
   Never a blue theme. Readable dark text everywhere.
 - Course colours: `course.accent` / `course.accent2` / `course.theme` in
-  `courses/<slug>/_metadata.yml` (PDF + lesson pages). Keep `.theme-*` colours
-  in `shared/templates/site.scss` and `shared/sims/sim-base.css` the same.
+  `courses/<slug>/_metadata.yml`. Keep `.theme-*` colours in
+  `shared/templates/site.scss` and `shared/sims/sim-base.css` the same.
   game-math: green `#2F9E44` / lime `#A9E34B` (`arcade`);
-  computing-systems: gold `#A86700` / yellow `#FFD43B` (`circuit`).
-- Web: `_extensions/lesson/lesson.css` (hero, word cards, "Try it" cards,
-  summary) + `lesson-script.html` (progress bar, "I did it" buttons).
+  computing-systems: gold `#A86700` / yellow `#FFD43B` (`circuit`);
+  digital-media: grape `#9C36B5` / pink `#F783AC` (`studio`);
+  digital-skills: orange `#D9480F` / peach `#FFC078` (`workshop`).
+- Web: `_extensions/lesson/lesson.css` + `lesson-script.html`.
   Site theme and fonts: `shared/templates/site.scss`, fonts in `shared/fonts/`.
-- PDF: `_extensions/lesson/typst-template.typ` (title band, header, footer),
-  `typst-show.typ`, `typst-body.typ` (callout style).
+- PDF: `typst-template.typ` (title band, header, footer, justified text),
+  `typst-show.typ`, `typst-body.typ`.
 - Slides: `_extensions/lesson/pptx_finish.py` (project post-render) gives every
-  `.pptx` the course look: colours from `_metadata.yml`, fonts, background shapes,
-  footer, a coloured title slide, a fade between slides, and the click animations.
-  The title slide shows the site URL (`site-url` in `_quarto.yml`) big and clickable
-  on a white label, so students can read it or take a photo of it.
-  Never style slides by hand in PowerPoint; change the script once for all courses.
-- Mark the last two sections: `## Game challenge: … {.challenge}` and `## Summary {.summary}`.
+  `.pptx` the course look. Never style slides by hand in PowerPoint.
+- Mark the last two sections of the page: `## Game challenge: … {.challenge}`
+  and `## Summary {.summary}`.
 
 ## Try it: match the answer
 
-Every "Try it" box in a lesson is interactive. Do not write static answers.
+Every "Try it" box on the page is interactive. Do not write static answers.
 
 ```markdown
-::: {.callout-tip title="Try it 1"}
-Position or vector?
+::: {.callout-tip title="Try it 1 · Short title"}
+One instruction.
 
-::: {.match}
-The coin is at (7, 4).
-:   position
+::: {.match extra="wrong answer|another wrong answer"}
+First question.
+:   its answer
 
-The car goes 3 steps right.
-:   vector
+Second question.
+:   its answer
 :::
 :::
 ```
 
-- Each question (the term) is followed by its right answer (`:   answer`).
-- **Web:** the questions get labels a), b), …; every different answer is shown
-  **once** as a button, in a random order. The student taps the answer for the
-  question in colour and sees at once "Right!" or "Not this one. Try again."
-  When all are right, the box shows the score and its "I did it" button is ticked.
-- The same answer may fit several questions (input / output / …); say so in the
-  instruction: "You can use an answer more than once."
-- With only 1–2 questions, or few different answers, add wrong answers:
-  `::: {.match extra="2 frames|4 frames"}` (split by `|`).
-- Keep answers short (a word, a number, a short phrase).
-- Answers must be fixed. Never ask about what a simulator shows now: the
-  student can change it at any time (and "Challenge" places things at random).
-  Ask about a fixed picture, and put that picture **inside** the "Try it" box.
-  A simulator can be used only for questions with one fixed answer
-  ("Move the player to (0, 0). What is this point called?").
-- **Check every "Try it" before you commit:**
-  1. *Self-contained.* The student can answer from the box alone. A picture it
-     needs is inside the box, or directly above it and called "the picture above".
-  2. *No changing state.* Nothing depends on a simulator, the time, or the
-     student's own phone (menus and brands differ).
-  3. *One right answer.* Every question has exactly one right option. Every
-     wrong option (`extra`) is clearly wrong, never "also right sometimes"
-     (e.g. phone vs tablet "on the bus").
-  4. *Same words.* The answer matches what the question asks, and uses the
-     words of the lesson.
-  5. *Tried.* In `quarto preview --profile review`, tap one wrong and then all
-     right answers in each box.
-- **PDF:** the questions with a blank line, "Choose from:" (A to Z), and the
-  answers upside down at the bottom of the box.
-- Open tasks (fill a table, talk with a partner) stay as text in the same box,
-  next to a small matching check.
-- No "Check your answers" boxes for "Try it" any more. Filter: `_extensions/lesson/match.lua`;
-  behaviour in `lesson-script.html`, look in `lesson.css`.
+- Each question is followed by its right answer (`:   answer`). The page shows
+  every different answer once as a button, in random order.
+- The same answer may fit several questions; say so: "You can use an answer
+  more than once." With few different answers, add wrong ones in `extra`.
+- Keep answers short. Escape a backslash as `\\`.
+- Answers must be fixed (never about what a simulator shows now).
+- **Check every "Try it" before you commit:** self-contained (the picture or
+  numbers are in the box or the section above), no changing state, exactly one
+  right option per question, the words of the lesson, varied questions (no
+  near-duplicates), tried in `quarto preview --profile review`.
+- Filter: `_extensions/lesson/match.lua`; behaviour in `lesson-script.html`.
 
 ## Interactive slides
 
-Slides are for a conversation with the class, not a one-way talk.
-The teacher asks, the students answer aloud, then one click shows the answer.
+Slides are for a conversation with the class.
 
-- **Every "Try it" of the lesson is a slide**: `## Try it N · short title`,
+- **Every "Try it" of the page is a slide**: `## Try it N · short title`,
   the questions, then the answers in `::: {.answer}`.
-- **Add "Think" slides** before a new idea: `## Think · short title`, one
-  question ("What do you think…?"), then `::: {.answer}` or `::: {.reveal}`.
-  Use as many as fit the lecture.
-- **Every worked example is a slide**: `## Example · short title`, the steps
-  in `::: {.reveal}` (one step per click). **Every "Watch out!" box** is a
-  short slide: `## Watch out · short title`.
-- `::: {.answer}`: each list item or paragraph becomes an answer card at the
-  bottom of the slide. Each card pops in on its own click (elastic zoom).
-  Use the same labels as the questions (`a)`, `1.`) so the cards show them.
-- `::: {.reveal}`: each item fades in from the left on its own click.
-  Use it for "think first, then see" lists. Normal slides show everything at once.
-- Keep questions short (about 5 lines), so the cards fit under them.
-- A picture can go next to the questions with `:::: {.columns}`;
-  the cards still go at the bottom.
-- Game challenge: one slide `## Game challenge · <game name>` with
-  the story in keywords, then one "Try it" slide per challenge box.
-- The "Try it" / "Think" / "Example" / "Watch out" / "Game challenge" title label
-  gets the course colour; question slides ("Try it", "Think") also get a big faint "?".
+- **"Think" slides** before a new idea: one question, then `::: {.answer}`
+  or `::: {.reveal}`.
+- **Every worked example of the notes that is taught in class is a slide**:
+  `## Example · short title`, steps in `::: {.reveal}`. Common mistakes:
+  `## Watch out · short title`.
+- **Pictures:** every concept slide has a figure. A picture together with
+  text must be in columns, or the slide is split in two:
+  `:::: {.columns}` / `::: {.column width="38%"}` text / `::: {.column width="62%"}` picture.
+  A table slide has no other text (put a short note in the title).
+  Never put `.reveal` or `.answer` inside columns.
+- One "Live demo · …" slide per simulator or mini-game (same `{{< sim >}}`
+  shortcode: poster + large QR code).
+- Game challenge: one slide with the story in keywords (and its
+  illustration), then one "Try it" slide per box.
 - Filter: `_extensions/lesson/slides.lua`. Look and animations: `pptx_finish.py`.
-- Check a deck in PowerPoint's Slide Show before class: every click must show
-  the next answer.
+  Check a deck in PowerPoint's Slide Show before class.
 
 ## Slides for students
 
 - `slides-public: true` in `_quarto.yml` shows a "Lecture slides" button on each
-  lesson with a note that slides are a summary, not study material.
-  Set it to `false` to keep slides teacher-only (they are still built).
+  lesson and a "Slides" link on the course page. Slides are a summary, not
+  study material. Set it to `false` to keep slides teacher-only.
 
 ## Simulators
 
 - Plain HTML + JavaScript. No paid services, no external APIs, nothing loaded
   from the internet. Third-party libraries are copied into `shared/sims/vendor/`
-  with their license (three.js r170, MIT). Must work on a phone.
-- 3D: use `shared/sims/viewer3d.js` (Unity axes: x right, y up, z forward;
-  axes, ground grid, labels, arrows for vectors, dashed paths, animation).
-  Example: `courses/game-math/week-01/sims/position-3d.html`.
-- Lesson-specific: `courses/<slug>/week-NN/sims/<name>.html`.
-  Reusable across courses: `shared/sims/<name>.html`.
-- Shared look and auto-resize: link `shared/sims/sim-base.css`, load
-  `shared/sims/sim-base.js` (relative paths), and put the course theme class
-  on `<body>` (`theme-arcade` / `theme-circuit`).
-- Every simulator needs a static poster image `<name>.png` (keep the `.svg`
-  source next to it). Export: `quarto typst compile` via `shared/sims/export-poster.typ`
-  (see `shared/sims/README.md`).
-- Embed with `{{< sim file="sims/<name>.html" poster="sims/<name>.png" title="..." >}}`.
-  HTML → live iframe + "open full screen" link. PDF → poster + QR code to the
-  live page. PPTX → poster + large QR code ("Scan to try it") so students open
-  the simulator on their phones during the lecture. Never hand-write this per format.
-- **Every slides file must have one "Live demo" slide per simulator in the lesson**,
-  using the same `{{< sim >}}` shortcode, so each interactive part has a QR code in class.
+  with their license (three.js r170, MIT). Must work on a phone (pointer
+  events, narrow screens). Sound only with Web Audio, after a tap.
+- 3D: `shared/sims/viewer3d.js`. Lesson-specific: `courses/<slug>/week-NN/sims/<name>.html`.
+  Reusable: `shared/sims/<name>.html`.
+- Link `shared/sims/sim-base.css`, load `shared/sims/sim-base.js` (relative
+  paths), and put the course theme class on `<body>`.
+- Every simulator needs a poster `<name>.png` (keep the `.svg` next to it).
+- Embed with `{{< sim … >}}` (see Mini-games). HTML → live iframe; PDF →
+  poster + QR; PPTX → poster + large QR. Never hand-write this per format.
+- Per-viewer state (a best score, a self-check) may use `localStorage`,
+  always inside `try/catch`.
+
+## Course pages and the schedule
+
+- `courses/<slug>/schedule.yml` lists all 16 weeks with two lessons each
+  (title, ILOs) and the exam weeks. The course page shows it with
+  `{{< schedule >}}`: a lesson whose `lesson-NN.qmd` exists and is not a draft
+  is bright, with links (lesson, PDF, slides); the others are faded
+  ("Coming soon"). Released homework appears in its week.
+- Titles in `schedule.yml` follow the syllabus weekly table. Change a title
+  there, and in the lesson's front matter, together.
+
+## Build number and fresh pages
+
+- `_extensions/lesson/build_stamp.py` (post-render, last) writes
+  `version.json`, adds `?v=<build>` to every local link and file, and puts a
+  small "Build N · date · commit" line at the bottom of every page. In CI the
+  build number is the GitHub Actions run number.
+- Every page checks `version.json` (never cached) when it opens and when the
+  tab becomes visible again; if a newer build is online, it reloads once with
+  the new build in its address. Students therefore never study an old page.
 
 ## Site identity
 
@@ -329,10 +362,11 @@ homework and its solution together.
 
 - One homework per week and course: `courses/<slug>/week-NN/homework-NN.qmd`,
   from `shared/templates/homework-template.qmd`. No homework in exam weeks
-  (8, 16). computing-systems week 15: the project instead (syllabus).
+  (8, 16). computing-systems, digital-media and digital-skills week 15: the
+  project instead (syllabus).
 - Built from the week's ILOs (`ilos:`), like the lessons: practise exactly
   what the two lessons taught, in the same words. No new content.
-- Size (start of the semester): **1–2 short tasks, about 15 minutes**, in both
+- Size (start of the semester): **1–2 short tasks, about 15 minutes**, in all
   courses. Short homework that students finish is better than long homework
   they skip. I may make it longer in later weeks, if the students do it well;
   then I will change this rule. Marks per task in the heading; total in `marks:`.
@@ -375,10 +409,10 @@ Lessons or homework not ready for students: `draft: true` (not published).
 ## Way of working
 
 - Build week by week. Never generate all lessons up front.
-- Phase 1: `plan.md` per course (16-week map → ILOs, same weeks as the syllabus), approved by me first.
-- Phase 2: **a typical session = one week**: 2 lessons for `game-math` +
-  2 lessons for `computing-systems`, each with all 3 outputs (4 lessons total),
-  plus one homework per course.
+- Phase 1: `schedule.yml` + `plan.md` per course (16-week map → ILOs, same weeks as the syllabus), approved by me first.
+- Phase 2: **a typical session = one week**: 2 lessons for each of the four
+  courses, each with all 3 outputs (8 lessons total), plus one homework per
+  course.
   Start every session by reading that week in the Drive syllabus.
 - I review every lesson before release. Ask before big structural decisions.
 - After each week I write `courses/<slug>/retro/week-NN.md`. Turn general lessons
@@ -425,3 +459,12 @@ Lessons or homework not ready for students: `draft: true` (not published).
 - 2026-10-17: group work and physical class activities are not always
   possible. Every lesson (both courses) ends with a "Game challenge" that each
   student does alone on the page and slides, instead of a class activity.
+- 2026-10-19 (after teaching week 1): the lessons were too simple and
+  repeated the same idea (2D/3D coordinates asked again and again), which
+  bored teacher and students. New model: the PDF is a textbook-style chapter
+  written first, the page and the slides are derived from it; one section and
+  one question set per concept; figures and illustrations everywhere,
+  including the slides; mini-games for concepts tied to game events. Rules
+  above ("The lesson model"). The size table changed accordingly.
+- 2026-10-19: a slide with a picture and text outside columns is split into
+  two slides by the PPTX writer. Use columns.

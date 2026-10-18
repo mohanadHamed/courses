@@ -1,154 +1,66 @@
 ---
-# Copy to courses/<slug>/week-NN/lesson-NN.qmd. Remove `draft` after review.
-# Size for the lecture: game-math 90 min, computing-systems 60 min.
-# Size table: "Size every lesson for its lecture time" in AUTHORING.md;
-# check_size.py (runs before every render) warns when a lesson is too short.
-#   90 min (game-math): 5–7 ideas, 10–12 Try it, 40–50 questions, 3+ Examples,
-#     2+ Watch out, Warm-up (lesson B), Game challenge ~20 min (2–3 Try it).
-#   60 min (computing-systems): 2–3 ideas, 4–6 Try it, 20–30 questions,
-#     Game challenge ~10 min (1–2 Try it). Warm-up, Example and Watch out are optional.
-# No class activities, no group work: the Game challenge is done by each student alone.
-# Every "Try it": go through "Check every Try it" in AUTHORING.md before you commit.
-title: "Lesson title in simple English"
-description: "One short line for the course page."
+# Copy to courses/<slug>/week-NN/lesson-NN.qmd. The interactive page, derived
+# from the lesson notes (lesson-NN-book.qmd): the SAME numbered sections, each
+# shorter and plainer, each with its figures and ONE "Try it" set of varied
+# questions. No repeated questions between sections.
+#   60 min: 4–6 Try it, 15–28 questions.  90 min: 6–9 Try it, 30–45 questions.
+title: "Lesson title, as in the notes"
+description: "One short line for the hero."
 week: 1
-lesson: 1          # numbered across the course
+lesson: 1
 draft: true
-ilos: [A1]         # codes from the syllabus week; text comes from course.ilos
-format:
-  lesson-html: default
-  lesson-typst: default
+ilos: [A1]
+format: lesson-html
 ---
 
-## New words
+This page is the interactive version of the lesson notes (PDF). Each section
+summarises one concept and ends with one set of questions. The full
+explanations, worked examples and exercises are in the notes.
 
-{{< glossary term1 term2 term3 term4 term5 >}}
+## Key terms
 
-## Warm-up: remember lesson N
+{{< glossary term1 term2 term3 term4 term5 term6 term7 term8 >}}
 
-<!-- Lesson B (even number) in game-math: 2–3 quick questions on lesson A. Remove in lesson A. -->
+## 1.1 First concept
 
-Two or three keywords from the last lesson.
+A short summary of the section of the notes, in clear English.
 
-::: {.callout-tip title="Try it 1"}
-Remember lesson N.
-
-::: {.match extra="a wrong answer"}
-Quick question on the last lesson?
-:   its answer
-
-Another quick question?
-:   its answer
-:::
-:::
-
-## 1. Game example
-
-Short sentences. One idea per sentence. Start from a game the students know.
-
-::: {.callout-tip title="Try it 2"}
-One short instruction. Each question is matched with its answer
-(the student taps the answer and sees at once if it is right).
-
-::: {.match}
-First question?
-:   its answer
-
-Second question?
-:   its answer
-:::
-:::
-
-## 2. Picture, then the rule
-
-![Caption in simple English.](sims/name.png){width=85%}
-
-Explain the picture. Only then show the rule or formula.
-
-::: {.callout-note title="Example: one short title"}
-1. First step, with the numbers.
-2. Second step.
-3. The answer in **bold**. Check it, if you can.
-:::
+![Caption.](images/name.png){width=80%}
 
 ::: {.callout-note title="Watch out!"}
-One common mistake, and how to avoid it.
+The common mistake from the notes, in one or two sentences.
 :::
 
-::: {.callout-tip title="Try it 3"}
-Question about the picture. With only 1–2 questions, add wrong answers in `extra`.
+::: {.callout-tip title="Try it 1 · Short title"}
+One instruction.
 
-::: {.match extra="wrong answer 1|wrong answer 2"}
-Question about the picture?
-:   the right answer
+::: {.match extra="wrong answer|another wrong answer"}
+A question on this section.
+:   its answer
 
-Same rule, a little harder?
-:   the right answer
-
-The reverse question (answer → question)?
-:   the right answer
+A different kind of question on the same section.
+:   its answer
 :::
 :::
 
-## 3. Try the simulator
+## 1.2 A different concept
 
-{{< sim file="sims/name.html" poster="sims/name.png" title="What the student does" >}}
+{{< sim file="sims/name.html" poster="sims/name.png" title="What it shows" kind="game" >}}
 
-::: {.callout-tip title="Try it 4"}
-Harder question with a fixed picture (never about what the simulator shows now).
-
-::: {.match extra="a wrong answer"}
-Harder question?
-:   the right answer
-
-Another question?
-:   the right answer
+::: {.callout-tip title="Try it 2 · Short title"}
+…
 :::
-:::
-
-## 4. Math or code
-
-Formula or code last, after the picture.
-
-<!-- 90 min: continue to 5–7 ideas, each with its Example and Try it. -->
 
 ## Game challenge: Game name {.challenge}
 
-<!-- Each student works alone on this page; no groups, no paper.
-     60 min: 1–2 Try it (~10 min). 90 min: 2–3 Try it (~20 min).
-     game-math lesson A: the story comes from the syllabus seminar. -->
+Work alone. Use every section of today.
 
-Use everything from today. Work alone, at your own speed.
-Read the story, then answer each part.
+The story of the case study, 3–5 sentences with fixed numbers.
 
-**Game name** is a mobile game. Three or four short sentences about the game:
-what the player does, and the things that today's math is about.
-
-::: {.callout-tip title="Try it 5 · First part of the game"}
-One short instruction.
-
-::: {.match extra="wrong answer 1|wrong answer 2"}
-Question about the game, with fixed numbers?
-:   the right answer
-
-Another question?
-:   the right answer
-:::
-:::
-
-::: {.callout-tip title="Try it 6 · Next part (harder)"}
-Same game, a harder part (two ideas of today, or several steps).
-
-::: {.match extra="wrong answer 1|wrong answer 2"}
-Harder question?
-:   the right answer
-
-Question with several steps?
-:   the right answer
-:::
+::: {.callout-tip title="Try it 3 · First part (harder)"}
+Questions that combine the sections of the day.
 :::
 
 ## Summary {.summary}
 
-- Keyword 1
-- Keyword 2
+- One short line per section.

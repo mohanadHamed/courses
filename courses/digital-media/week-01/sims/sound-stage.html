@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Sound Stage</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .layers { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 10px; }
+    .sim .layers label { gap: 5px; font-size: .9rem; border: 1.5px solid #ecdcf1; border-radius: 10px; padding: 4px 9px; cursor: pointer; user-select: none; }
+    .sim .layers input { accent-color: var(--sim-accent); }
+    .sim .layers label:has(input:checked) { background: color-mix(in srgb, var(--sim-accent2) 22%, #fff); border-color: var(--sim-accent); }
+    .sim .walk { display: flex; gap: 8px; align-items: center; }
+    .sim .walk button { min-width: 64px; font-size: 1.1rem; touch-action: none; }
+    .sim canvas { touch-action: none; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Sound Stage — inside or outside the world?</h1>
+  <p class="hint">Use headphones if you can. Walk the fox past the campfire. Diegetic sounds come from places in the world and change as the fox moves; non-diegetic sound and interface stay the same.</p>
+  <canvas id="c" aria-label="Night scene with a fox and a campfire"></canvas>
+  <div class="controls">
+    <span class="walk"><button id="left" type="button">◀</button><button id="right" type="button">▶</button></span>
+    <button id="start" type="button">Sound on</button>
+    <button id="labels" type="button" class="ghost">Show labels</button>
+  </div>
+  <div class="layers" id="layers">
+    <label><input type="checkbox" data-k="steps" checked> Footsteps</label>
+    <label><input type="checkbox" data-k="fire" checked> Campfire</label>
+    <label><input type="checkbox" data-k="wind" checked> Wind</label>
+    <label><input type="checkbox" data-k="music" checked> Music</label>
+    <label><input type="checkbox" data-k="hud" checked> Health bar (HUD)</label>
+    <label><input type="checkbox" data-k="tag" checked> Name tag</label>
+  </div>
+  <p id="msg" class="message">Press “Sound on”, then walk. Which sounds change when the fox moves?</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const on = { steps: true, fire: true, wind: true, music: true, hud: true, tag: true };
+  let W = 0, H = 0, ground = 0, last = 0, labels = false;
+  let fox = 0.15, dir = 0, facing = 1, stepT = 0, phase = 0;          // fox position 0..1 of the scene width
+  const FIRE = 0.72;
+  let A = null, fireGain, firePan, windGain, musicGain, noiseBuf, musicTimer, beat = 0;
+  const stars = Array.from({ length: 40 }, () => [Math.random(), Math.random() * 0.5, Math.random() * 1.2 + 0.3]);
+
+  function resize() {
+    W = canvas.clientWidth; H = Math.round(Math.min(280, Math.max(200, W * 0.45)));
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ground = H - 42;
+  }
+  // ---- audio
+  function startAudio() {
+    if (A) { A.resume(); return; }
+    try { A = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) { $("msg").textContent = "This browser cannot play Web Audio."; return; }
+    noiseBuf = A.createBuffer(1, A.sampleRate * 2, A.sampleRate);
+    const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    // wind: looping filtered noise (diegetic, everywhere)
+    const wsrc = A.createBufferSource(); wsrc.buffer = noiseBuf; wsrc.loop = true;
+    const wf = A.createBiquadFilter(); wf.type = "lowpass"; wf.frequency.value = 500;
+    windGain = A.createGain(); windGain.gain.value = 0.05;
+    wsrc.connect(wf); wf.connect(windGain); windGain.connect(A.destination); wsrc.start();
+    // fire: gain and pan follow the fox
+    fireGain = A.createGain(); fireGain.gain.value = 0;
+    firePan = A.createStereoPanner ? A.createStereoPanner() : null;
+    if (firePan) { fireGain.connect(firePan); firePan.connect(A.destination); } else fireGain.connect(A.destination);
+    setInterval(crackle, 70);
+    musicGain = A.createGain(); musicGain.gain.value = 0.05; musicGain.connect(A.destination);
+    musicTimer = setInterval(playNote, 420);
+  }
+  function burst(dest, dur, freq, vol) {
+    const src = A.createBufferSource(); src.buffer = noiseBuf;
+    const f = A.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = freq; f.Q.value = 1.2;
+    const g = A.createGain(); g.gain.value = vol;
+    src.connect(f); f.connect(g); g.connect(dest);
+    g.gain.exponentialRampToValueAtTime(0.0001, A.currentTime + dur);
+    src.start(A.currentTime, Math.random()); src.stop(A.currentTime + dur + 0.02);
+  }
+  function crackle() { if (!A || !on.fire) return; if (Math.random() < 0.55) burst(fireGain, 0.03 + Math.random() * 0.05, 1500 + Math.random() * 2500, 0.6 + Math.random()); }
+  const NOTES = [587, 659, 784, 659, 587, 523, 587, 0, 523, 587, 659, 587, 523, 440, 523, 0];
+  function playNote() {
+    if (!A || !on.music) return;
+    const n = NOTES[beat++ % NOTES.length]; if (!n) return;
+    const o = A.createOscillator(), g = A.createGain(); o.type = "sine"; o.frequency.value = n;
+    const v = A.createOscillator(), vg = A.createGain(); v.frequency.value = 5; vg.gain.value = 4; v.connect(vg); vg.connect(o.frequency);
+    g.gain.value = 0.0001; o.connect(g); g.connect(musicGain);
+    g.gain.exponentialRampToValueAtTime(0.9, A.currentTime + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, A.currentTime + 0.4);
+    o.start(); v.start(); o.stop(A.currentTime + 0.42); v.stop(A.currentTime + 0.42);
+  }
+  function step() { if (A && on.steps) burst(A.destination, 0.09, 220 + Math.random() * 80, 0.5); }
+  function updateAudio() {
+    if (!A) return;
+    const dx = FIRE - fox, dist = Math.abs(dx);
+    fireGain.gain.setTargetAtTime(on.fire ? Math.max(0, 0.35 * (1 - dist / 0.6)) ** 1.5 : 0, A.currentTime, 0.05);
+    if (firePan) firePan.pan.setTargetAtTime(Math.max(-1, Math.min(1, dx * 2.5)), A.currentTime, 0.05);
+    windGain.gain.setTargetAtTime(on.wind ? 0.05 : 0, A.currentTime, 0.1);
+    musicGain.gain.setTargetAtTime(on.music ? 0.05 : 0, A.currentTime, 0.1);
+  }
+  // ---- drawing
+  function label(x, y, text, kind) {
+    if (!labels) return;
+    ctx.font = "800 11px Nunito, system-ui, sans-serif"; const w = ctx.measureText(text).width + 12;
+    ctx.fillStyle = kind === "d" ? "#9C36B5" : kind === "s" ? "#f76707" : "#1971c2";
+    ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x - w / 2, y - 12, w, 18, 9) : ctx.rect(x - w / 2, y - 12, w, 18); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.fillText(text, x, y + 1);
+  }
+  function draw(now) {
+    const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#1b2a5c"); g.addColorStop(0.7, "#5a3d7a"); g.addColorStop(1, "#e8835a");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    for (const [x, y, r] of stars) { ctx.fillStyle = "rgba(231,236,255,.8)"; ctx.beginPath(); ctx.arc(x * W, y * H, r, 0, 7); ctx.fill(); }
+    ctx.fillStyle = "#2c1f45"; ctx.beginPath(); ctx.moveTo(0, ground - 30); ctx.bezierCurveTo(W * 0.3, ground - 80, W * 0.6, ground, W, ground - 50); ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+    ctx.fillStyle = "#1c1430"; ctx.fillRect(0, ground, W, H - ground);
+    for (const tx of [0.06, 0.13, 0.93]) { ctx.fillStyle = "#140f24"; ctx.beginPath(); ctx.moveTo(tx * W - 20, ground); ctx.lineTo(tx * W, ground - 100); ctx.lineTo(tx * W + 20, ground); ctx.fill(); }
+    // wind lines
+    if (on.wind) { ctx.strokeStyle = "rgba(220,220,255,.25)"; ctx.lineWidth = 2; for (let k = 0; k < 4; k++) { const x = ((now / 6 + k * 230) % (W + 200)) - 100, y = 40 + k * 28; ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + 30, y - 8, x + 60, y); ctx.stroke(); } }
+    // fire
+    const fx = FIRE * W, flick = Math.sin(now / 70) * 3 + Math.sin(now / 37) * 2;
+    const glow = ctx.createRadialGradient(fx, ground - 14, 4, fx, ground - 14, 80); glow.addColorStop(0, "rgba(255,179,71,.65)"); glow.addColorStop(1, "rgba(255,179,71,0)");
+    ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(fx, ground - 14, 80, 0, 7); ctx.fill();
+    ctx.fillStyle = "#ff922b"; ctx.beginPath(); ctx.moveTo(fx - 14, ground - 2); ctx.lineTo(fx, ground - 36 - flick); ctx.lineTo(fx + 14, ground - 2); ctx.fill();
+    ctx.fillStyle = "#ffe066"; ctx.beginPath(); ctx.moveTo(fx - 7, ground - 2); ctx.lineTo(fx, ground - 20 - flick / 2); ctx.lineTo(fx + 7, ground - 2); ctx.fill();
+    ctx.fillStyle = "#5c3d2e"; ctx.fillRect(fx - 20, ground - 5, 40, 7);
+    label(fx, ground - 56, "campfire · diegetic", "d");
+    // fox
+    const ox = fox * W, bob = dir ? Math.abs(Math.sin(phase)) * 3 : 0, oy = ground - bob;
+    ctx.save(); ctx.translate(ox, oy); ctx.scale(facing, 1);
+    ctx.fillStyle = "#f08c3a";
+    ctx.beginPath(); ctx.ellipse(0, -16, 22, 13, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(20, -30, 11, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(14, -38); ctx.lineTo(17, -50); ctx.lineTo(22, -39); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(22, -39); ctx.lineTo(28, -50); ctx.lineTo(30, -36); ctx.fill();
+    ctx.strokeStyle = "#f08c3a"; ctx.lineWidth = 7; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(-20, -18); ctx.quadraticCurveTo(-46, -30, -32, -8); ctx.stroke();
+    ctx.fillStyle = "#2b1a10"; ctx.beginPath(); ctx.arc(24, -31, 2, 0, 7); ctx.fill();
+    ctx.restore();
+    if (on.steps && dir) label(ox, ground + 22, "footsteps · diegetic", "d");
+    if (on.tag) {
+      ctx.font = "800 12px Nunito, system-ui, sans-serif"; ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.fillText("Ember", ox, oy - 62);
+      label(ox, oy - 84, "name tag · spatial", "s");
+    }
+    if (on.hud) {
+      ctx.fillStyle = "rgba(0,0,0,.35)"; ctx.fillRect(14, 14, 120, 14); ctx.fillStyle = "#ff6b6b"; ctx.fillRect(15, 15, 80, 12);
+      ctx.strokeStyle = "#fff"; ctx.lineWidth = 1; ctx.strokeRect(14, 14, 120, 14);
+      label(74, 44, "health bar · non-diegetic", "n");
+    }
+    if (on.music) { label(W - 92, 22, "flute music · non-diegetic", "n"); }
+    if (on.wind && labels) label(W * 0.42, 70, "wind · diegetic ambience", "d");
+  }
+  function loop(now) {
+    const dt = last ? Math.min((now - last) / 1000, 0.05) : 1 / 60; last = now;
+    if (dir) {
+      fox = Math.max(0.05, Math.min(0.95, fox + dir * dt * 0.22)); facing = dir; phase += dt * 12;
+      stepT -= dt; if (stepT <= 0) { step(); stepT = 0.26; }
+    }
+    updateAudio(); draw(now); requestAnimationFrame(loop);
+  }
+  const hold = (btn, d) => {
+    btn.addEventListener("pointerdown", (e) => { e.preventDefault(); startAudio(); dir = d; });
+    ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => btn.addEventListener(ev, () => { if (dir === d) dir = 0; }));
+  };
+  hold($("left"), -1); hold($("right"), 1);
+  window.addEventListener("keydown", (e) => { if (e.key === "ArrowLeft") { startAudio(); dir = -1; } if (e.key === "ArrowRight") { startAudio(); dir = 1; } });
+  window.addEventListener("keyup", (e) => { if (e.key === "ArrowLeft" || e.key === "ArrowRight") dir = 0; });
+  let dragging = false;
+  canvas.addEventListener("pointerdown", (e) => { startAudio(); dragging = true; move(e); });
+  canvas.addEventListener("pointermove", (e) => { if (dragging) move(e); });
+  ["pointerup", "pointercancel", "pointerleave"].forEach((ev) => canvas.addEventListener(ev, () => { dragging = false; dir = 0; }));
+  function move(e) { const r = canvas.getBoundingClientRect(), x = (e.clientX - r.left) / r.width; dir = Math.abs(x - fox) < 0.02 ? 0 : Math.sign(x - fox); }
+  $("start").addEventListener("click", () => { startAudio(); $("msg").textContent = "Walk towards the fire and away from it. The crackle grows and moves from one ear to the other; the music never changes."; });
+  $("labels").addEventListener("click", () => { labels = !labels; $("labels").textContent = labels ? "Hide labels" : "Show labels"; });
+  document.querySelectorAll("#layers input").forEach((i) => i.addEventListener("change", () => { on[i.dataset.k] = i.checked; }));
+  document.addEventListener("visibilitychange", () => { if (A) { if (document.hidden) A.suspend(); else A.resume(); } });
+  window.addEventListener("resize", resize);
+  resize(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

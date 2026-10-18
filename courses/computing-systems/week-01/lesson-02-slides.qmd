@@ -1,181 +1,196 @@
 ---
-title: "Our devices: how games run on them"
+title: "How Games Run on the Devices We Use"
 subtitle: "Week 1 · Seminar"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary device operating-system specifications storage memory app-store install >}}
+{{< glossary app-package process loading refresh-rate resolution latency bandwidth cloud-gaming thermal-throttling >}}
 
-## Think · Your devices
+## Think · Why is there a loading screen?
 
-**Which device do you play on most? Why?**
+The game is already installed on the phone.
+**Why must we wait before it starts?**
+
+::: {.answer}
+Code and assets must be copied from slow **storage** into fast **memory**.
+:::
+
+## 2.1 From the store to the first frame
+
+:::: {.columns}
+::: {.column width="38%"}
+- package: **AAB/APK** (Android) · **IPA** (iOS)
+- install → storage · launch → **process** in RAM
+:::
+::: {.column width="62%"}
+![](images/launch.png)
+:::
+::::
+
+## Example · Cheap phone, slow loading
+
+1.5 GB of assets.
 
 ::: {.reveal}
-- **phone**: always with you · small screen
-- **tablet**: big touch screen
-- **PC / laptop**: strong · keyboard + mouse
-- **console**: big TV · play with friends · at home
+1. 1500 MB/s → **1 s**
+2. 150 MB/s → **10 s**
+3. same game: 10× slower, only because of storage speed
 :::
 
-## Try it 1 · Which device fits best?
+## Watch out · Storage size is not speed
 
-a) 5 minutes on the bus
+- capacity → how many games fit
+- **speed** → how fast they load
+- **memory** → how much stays loaded
 
-b) A big 3D game with a keyboard and a mouse
+## Try it 1 · Install, launch, load
 
-c) Three friends on one TV
+a) uploaded to Google Play?
+b) iOS package?
+c) installing fills…?
+d) a program in execution?
+e) 1.5 GB at 150 MB/s?
+f) game restarts after a break?
 
 ::: {.answer}
-a) phone
-b) PC or laptop
-c) game console
+a) AAB
+b) IPA
+c) storage
+d) process
+e) 10 s
+f) the OS terminated its process
 :::
 
-## Find your phone's specs
+## 2.2 The frame on real hardware
 
-- Android: Settings → **About phone**
-- iPhone: Settings → General → **About**
-- Storage: Settings → **Storage**
-- ⚠ never share: phone number, IMEI, serial
-
-## Your turn · Fill the table
-
-- model · OS · OS version
-- storage: total / free (GB)
-- RAM (Android only)
-- no phone? work with a friend
-
-## Try it 2 · Model or OS version?
-
-a) Galaxy A55
-
-b) iPhone 15
-
-c) Android 16
-
-d) iOS 26
-
-::: {.answer}
-a) model name
-b) model name
-c) OS version
-d) OS version
+:::: {.columns}
+::: {.column width="38%"}
+- CPU: logic, commands · GPU: pixels
+- parallel → **the slower one sets the frame time**
+- seen = min(frame rate, **refresh rate**) · **resolution** = GPU work · no fan → **throttling**
 :::
-
-## Think · Where is RAM on an iPhone?
-
-You look in **About**. You find the storage.
-**Can you find the RAM?**
-
-::: {.answer}
-No. iPhones do not show the RAM. Many Android phones do.
+::: {.column width="62%"}
+![](images/cpu-gpu-pipeline.png)
 :::
+::::
 
-## Try it 3 · Install or not?
+## Example · What limits the frame rate?
 
-A new game needs **3 GB**. Your phone has **2.5 GB** free.
-
-a) Can you install the game?
-
-b) What can you do?
-
-::: {.answer}
-a) No: 2.5 GB is less than 3 GB.
-b) Free space: delete apps, move photos and videos.
-:::
-
-## Think · From the store to the jump
-
-You tap **Install**. Later you tap the icon and play.
-**What happens inside the phone?**
+120 Hz display · CPU 12 ms · GPU 9 ms.
 
 ::: {.reveal}
-- 1 · app store → download
-- 2 · **storage**: the game is installed
-- 3 · tap the icon → **memory** (RAM)
-- 4 · **CPU** runs the rules · **GPU** draws
-- 5 · **screen** and **speaker**: you play
+1. frame time = slower = **12 ms**
+2. 1000 / 12 ≈ **83 fps**
+3. **CPU-bound**: lower resolution would not help
 :::
 
-## How a game runs
+## Try it 2 · Frames, displays, heat
 
-![](images/game-run-flow.png)
-
-## Try it 4 · Put in order
-
-a) The GPU draws the level.
-
-b) You install the game from the store.
-
-c) The game loads into memory.
-
-d) You tap the game icon.
+a) 120 Hz, 70 fps: images per second?
+b) CPU 12 ms, GPU 9 ms: fps?
+c) the limiting processor?
+d) pixels of 1080 × 2400?
+e) slows down when hot?
 
 ::: {.answer}
-b → d → c → a
+a) 70
+b) about 83 fps
+c) the CPU
+d) about 2.6 million
+e) thermal throttling
 :::
 
-## Think · Same game, different phone
+## 2.3 Where the game is computed
 
-The same game is smooth on one phone and slow on another.
-**Why?**
+![](images/where-game-runs.png)
+
+## Example · Adding up the input lag
 
 ::: {.reveal}
-- little **storage** → no install
-- little **memory** → slow, or it closes
-- weak **GPU** → slow pictures
-- the **OS** controls it all
+1. local: 10 + 17 + 17 ≈ **44 ms**
+2. cloud: + round trip 40 + video 15 ≈ **99 ms**
+3. ~100 ms: fighting game ✗ · card game ✓
 :::
 
-## Game challenge · Sky Farm
+## Live demo · Lag Lab
 
-- Sara · new 3D farming game · needs **4 GB** free
-- her phone: Galaxy A35 · Android 15
-- storage 64 GB · **3 GB free** · RAM 6 GB
-- work **alone** · answer each part
+{{< sim file="sims/lag-lab.html" poster="sims/lag-lab.png" title="Lag Lab: play with input lag" kind="game" >}}
 
-## Try it 5 · Can Sara play?
+## Try it 3 · Near or far?
 
-Needs **4 GB** · free **3 GB** · Android 15
-
-a) OS version?
-
-b) Install now?
-
-c) Deletes a 2 GB game: free now?
-
-d) Install now?
+a) game on a server, phone shows video?
+b) phones run it, server keeps the state?
+c) action → result delay?
+d) data per second?
+e) 44 + 40 + 15?
+f) suffers most from lag?
 
 ::: {.answer}
-a) Android 15
-b) No: 3 GB < 4 GB
-c) 5 GB
-d) Yes: 5 GB > 4 GB
+a) cloud gaming
+b) client–server
+c) latency
+d) bandwidth
+e) about 99 ms
+f) a fighting game
 :::
 
-## Try it 6 · Sky Farm starts
+## 2.4 Device classes for gaming
 
-a) Where did she get the game?
+![](images/devices.png)
 
-b) Where is it when the phone is off?
+## Comparing the classes
 
-c) Tap the icon: it loads to…?
+| | Input | Power | Sessions |
+|---|---|---|---|
+| phone / tablet | touch, sensors | battery, no fan | short |
+| PC | keyboard, mouse | mains, fans | long |
+| console | gamepad | mains, fans | long |
+| cloud | any | server | needs a fast network |
 
-d) Draws the farm? · e) Starts the game, gives memory?
+## Try it 4 · Which device class?
+
+a) gamepad, TV, fixed performance?
+b) keyboard, mouse, widest range?
+c) touch, battery, pocket?
+d) any screen, fast network?
 
 ::: {.answer}
-a) the app store
-b) storage
-c) memory (RAM)
-d) GPU
-e) the operating system
+a) console
+b) PC
+c) smartphone
+d) cloud gaming
+:::
+
+## Game challenge · The class survey
+
+- most: Android phones · cheapest reads 120 MB/s
+- some iPhones, laptops · one console
+- two cloud players · one with a 90 ms round trip
+- one game for all · work **alone**
+
+## Try it 5 · One game, many devices (harder)
+
+a) 600 MB level on the cheapest phone?
+b) cloud lag with 90 ms round trip?
+c) console input?
+d) throttling matters most?
+e) iPhone package?
+
+::: {.answer}
+a) 5 s
+b) 149 ms
+c) gamepad
+d) smartphone
+e) IPA
 :::
 
 ## Summary
 
-- devices: phone · tablet · PC · console
-- specs → Settings → About
-- store → storage → RAM → CPU + GPU → screen
-- different phones → different speed
+- install → storage · launch → process in RAM
+- storage speed → loading time
+- slower of CPU/GPU sets the frame rate
+- phones throttle
+- cloud: + latency, needs bandwidth
+- adapt the game to each device class

@@ -44,6 +44,21 @@ local function lesson_ilos(meta, course)
   return out
 end
 
+-- File names that students download (download_names.py renames the rendered
+-- files to match): math_lecture5.pdf, math_lecture5_slides.pptx,
+-- math_week1_homework.pdf. The prefix is course.file-prefix.
+local function download_names(course, stem)
+  local prefix = course["file-prefix"] and str(course["file-prefix"])
+    or (str(course.slug or "course"):gsub("%-", "_"))
+  local hw = stem:match("^homework%-(%d+)$")
+  local lesson = stem:match("^lesson%-(%d+)$")
+  return {
+    homework = hw and string.format("%s_week%d_homework.pdf", prefix, tonumber(hw)) or (stem .. ".pdf"),
+    notes = lesson and string.format("%s_lecture%d.pdf", prefix, tonumber(lesson)) or (stem .. "-book.pdf"),
+    slides = lesson and string.format("%s_lecture%d_slides.pptx", prefix, tonumber(lesson)) or (stem .. "-slides.pptx"),
+  }
+end
+
 local function theme_style(course)
   return string.format("<style>:root{--accent:%s;--accent2:%s;}</style>",
     esc(str(course.accent)), esc(str(course.accent2)))
@@ -75,14 +90,15 @@ local function html_lesson(doc, course)
   local meta = doc.meta
   local stem = pandoc.path.split_extension(pandoc.path.filename(quarto.doc.input_file))
   local dir = pandoc.path.directory(quarto.doc.input_file)
+  local names = download_names(course, stem)
 
   -- Lesson: the PDF is the lesson notes (lesson-NN-book.qmd), the main study text.
   -- Homework PDF is the printed page itself (homework_pdf.py), so both match.
   local buttons = {}
   if meta.homework then
-    table.insert(buttons, string.format('<a class="hero-btn" href="%s.pdf" download>⬇ Download PDF</a>', esc(stem)))
+    table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download PDF</a>', esc(names.homework)))
   elseif file_exists(pandoc.path.join({ dir, stem .. "-book.qmd" })) then
-    table.insert(buttons, string.format('<a class="hero-btn" href="%s-book.pdf">⬇ Lesson notes (PDF)</a>', esc(stem)))
+    table.insert(buttons, string.format('<a class="hero-btn" href="%s">⬇ Lesson notes (PDF)</a>', esc(names.notes)))
   end
   if meta.homework then
     table.insert(buttons,
@@ -92,7 +108,7 @@ local function html_lesson(doc, course)
     and file_exists(pandoc.path.join({ dir, stem .. "-slides.qmd" }))
   if slides then
     table.insert(buttons, string.format(
-      '<a class="hero-btn hero-btn-ghost" href="%s-slides.pptx">▶ Lecture slides</a>', esc(stem)))
+      '<a class="hero-btn hero-btn-ghost" href="%s">▶ Lecture slides</a>', esc(names.slides)))
   end
 
   local chips = {}

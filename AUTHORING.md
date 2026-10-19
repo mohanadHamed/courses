@@ -42,7 +42,7 @@ Students turned out to be stronger than expected: the first lessons were too
 simple and repeated the same idea many times. Every lesson is now built in
 this order.
 
-1. **Lesson notes (PDF)** — `lesson-NN-book.qmd` → `lesson-NN-book.pdf`.
+1. **Lesson notes (PDF)** — `lesson-NN-book.qmd` → `<prefix>_lectureN.pdf`.
    The main study text, written like a chapter of the course textbook:
    formal academic English, precise definitions, numbered sections
    (`## 1.1 …`), numbered definitions, worked examples and common mistakes,
@@ -234,6 +234,14 @@ Figures in `week-NN/images/`, simulators and mini-games in `week-NN/sims/`.
 | `lesson-NN-slides.qmd` | `lesson-pptx` | Slides (.pptx), public summary |
 | `homework-NN.qmd` (NN = week) | `lesson-html` | Take-home task page with Print and Download PDF buttons |
 
+- **Download names.** Files students download have meaningful, unique
+  names: `math_lecture5.pdf` (notes), `math_lecture5_slides.pptx` (slides),
+  `math_week1_homework.pdf` (homework). N is the lesson or week number
+  without a leading zero; the prefix is `course.file-prefix` in
+  `_metadata.yml` (`math`, `computing_systems`, `digital_media`,
+  `digital_skills`). `download_names.py` (post-render) renames the rendered
+  files; `banner.lua` and `{{< schedule >}}` link the same names. Keep the
+  source names (`lesson-NN-book.qmd`) as they are.
 - Start from `shared/templates/book-template.qmd`, `lesson-template.qmd`,
   `slides-template.qmd` and `homework-template.qmd`.
 - Formats, styles and filters live in the Quarto extension `_extensions/lesson/`

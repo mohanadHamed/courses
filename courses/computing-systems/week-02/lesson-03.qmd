@@ -114,11 +114,12 @@ If 1 ns lasted 1 second, how long would a read from RAM last?
 - RAM holds what the game needs **now**: code, **textures**, 3D models,
   sounds, and the state (positions, health, score).
 - The operating system and other apps use RAM too.
-- Sizes are in **bytes**: 1 KB ≈ 1000 bytes, 1 MB ≈ 1000 KB,
-  1 GB ≈ 1000 MB.
+- Sizes are in **bytes**. Each unit is 1024 times the one before:
+  1 KB = 1024 bytes, 1 MB = 1024 KB, 1 GB = 1024 MB, 1 TB = 1024 GB.
+  Windows counts this way too.
 - A texture is an image on an object. Memory = width × height × 4 bytes.
-- 1024 × 1024 pixels ≈ 1 million pixels → about 4 MB. Compressed (1 byte
-  per pixel) → about 1 MB.
+- 1024 × 1024 bytes = 1 MB. So a texture of 1024 × 1024 pixels needs 4 MB.
+  Compressed (1 byte per pixel), it needs 1 MB.
 
 ![Main memory of a phone during play (example values).](images/game-ram.png){width=92%}
 
@@ -136,21 +137,21 @@ seconds. Write it down again. What does the extra memory hold?
 ::: {.callout-tip title="Try it 3 · Memory sizes"}
 Choose the right answer.
 
-::: {.match extra="16 MB|1 TB|sounds"}
+::: {.match extra="16 MB|2000 MB|sounds"}
 A texture of 1024 × 1024 pixels, 4 bytes per pixel.
-:   about 4 MB
+:   4 MB
 
-The same texture, compressed to 1 byte per pixel.
-:   about 1 MB
+A texture of 1024 × 1024 pixels, compressed to 1 byte per pixel.
+:   1 MB
 
-40 compressed textures of 1024 × 1024.
-:   about 40 MB
+40 compressed textures of 1024 × 1024 (1 byte per pixel).
+:   40 MB
 
 A game is almost out of memory. What should the team compress first?
 :   textures
 
-About 1000 MB.
-:   1 GB
+A game update is 2 GB. How many MB is that?
+:   2048 MB
 :::
 :::
 
@@ -161,8 +162,8 @@ About 1000 MB.
 - **SSD**: flash chips, no moving parts, fast. Phones use flash chips too.
 - A game in storage has three parts: the **app**, the **user data** (progress,
   downloads) and the **cache** (temporary files).
-- A "1 TB" SSD shows about 931 GB in Windows. Nothing is missing: Windows
-  counts 1 GB = 1024 MB.
+- A "1 TB" SSD shows about 931 GB in Windows. Nothing is missing: the maker
+  counts in steps of 1000, and Windows in steps of 1024.
 
 ![Kinds of storage and the parts of a game in storage.](images/storage.png){width=94%}
 
@@ -233,7 +234,7 @@ Message 4: why does the SSD show 931 GB?
 :   Windows counts 1 GB as 1024 MB
 
 Message 5: how much memory do the island's 40 textures need?
-:   about 40 MB
+:   40 MB
 :::
 :::
 

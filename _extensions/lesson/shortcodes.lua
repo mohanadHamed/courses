@@ -14,8 +14,10 @@
 --     PPTX: poster image + QR code to the live page (students scan it in class).
 --     kind="game": a mini-game (a small playable game for one concept); the
 --     label says "Mini-game" instead of "Simulator".
---     layout="qr" (slides): only the QR code, to put in a column next to the
---     story of a Game challenge slide.
+--     layout="qr" (slides): only the QR code, to put in a column.
+--     Slides show a recording of the game being played instead of the poster
+--     when it exists: sims/<name>.gif next to sims/<name>.html, or
+--     recording="sims/other.gif" (made by shared/sims/recordings/).
 --
 --   {{< schedule >}}
 --     Course page: all 16 weeks from courses/<slug>/schedule.yml, two lessons
@@ -252,9 +254,16 @@ local function sim(kwargs)
 ]], typst_string(poster), typst_string(url), game and "play" or "try it", label, typst_string(title), typst_string(url)))
 
   else
-    -- pptx: poster on the left, QR code on the right, so students can scan it in class
+    -- pptx: the recording (or the poster) on the left, QR code on the right,
+    -- so students see the game move and can scan it in class
+    local picture = poster
+    local rec = str(kwargs.recording)
+    if rec == "" then rec = file:gsub("%.html$", ".gif") end
+    local docdir = pandoc.path.directory(quarto.doc.input_file)
+    local fh = io.open(pandoc.path.join({ docdir, rec }), "rb")
+    if fh then fh:close(); picture = rec end
     return pandoc.Div({
-      pandoc.Div({ pandoc.Para({ pandoc.Image({}, poster) }) }, { class = "column", width = "55%" }),
+      pandoc.Div({ pandoc.Para({ pandoc.Image({}, picture) }) }, { class = "column", width = "55%" }),
       pandoc.Div({
         pandoc.Para({ pandoc.Image({}, qr_png(url, title, game and "Scan to play" or "Scan to try it")) }),
       }, { class = "column", width = "45%" }),

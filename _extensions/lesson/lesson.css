@@ -291,6 +291,15 @@ main h2 .header-section-number { color: var(--accent); }
 .callout-note .callout-header { background: transparent !important; border: 0; }
 .callout-note .callout-title-container { color: #56665a; font-weight: 700; }
 
+/* "Do it" / "Lab task": a task the student does now (lesson-script.html adds .do-it). */
+.callout.callout-note.do-it {
+  border: 1.5px solid color-mix(in srgb, var(--accent2) 70%, var(--accent)) !important;
+  border-left: 6px solid var(--accent2) !important;
+  background: color-mix(in srgb, var(--accent2) 9%, #fff);
+}
+.callout-note.do-it .callout-title-container { color: var(--accent-ink); font-weight: 800; }
+.callout-note.do-it .callout-title-container::before { content: "✍️ "; }
+
 /* ---------- Game challenge and summary ---------- */
 section.challenge,
 section.summary {

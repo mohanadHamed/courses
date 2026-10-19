@@ -1,10 +1,13 @@
 ---
 # Copy to courses/<slug>/week-NN/lesson-NN-book.qmd. Lesson notes (PDF): the
-# main study text, written FIRST, like a chapter of the course textbook.
-# Formal academic English. One numbered section per concept; never repeat a
-# concept. Size: see "Size every lesson" in AUTHORING.md (check_size.py).
-#   60 min: 3–4 sections, 1 500–3 500 words, 2+ examples, 6–10 exercises.
-#   90 min: 5–7 sections, 2 500–6 000 words, 4+ examples, 10–16 exercises.
+# main study text, written FIRST, like an applied chapter of a textbook.
+# Applied first: every section goes situation → concept → Do it task.
+# Simple English (B1): short sentences, common words, every technical word
+# explained the first time. Small, round numbers. One numbered section per
+# concept; never repeat a concept. See AUTHORING.md ("Applied first",
+# "Level and language", "Size every lesson"; check_size.py).
+#   60 min: 3–4 sections, at most 3 500 words, 2+ examples, 6–10 exercises.
+#   90 min: 5–7 sections, at most 6 000 words, 4+ examples, 10–16 exercises.
 title: "Lesson title, as in schedule.yml"
 description: "Lesson notes · One sentence that lists the sections."
 week: 1
@@ -15,16 +18,18 @@ format: lesson-typst
 ---
 
 ::: {.lead}
-Opening paragraph: why this topic matters in games, and what the chapter covers.
+Opening paragraph: a real game situation (a problem a developer meets), why
+the topic matters for it, and what the student will do in this lesson.
 :::
 
 ## Key terms
 
 {{< glossary term1 term2 term3 term4 term5 term6 term7 term8 >}}
 
-## 1.1 First concept
+## 1.1 A title that names the problem or the action
 
-Formal explanation. A figure for every section:
+The game situation first, in two or three short sentences. Then the concept,
+explained simply. A figure for every section:
 
 ![Caption as a full sentence.](images/name.png){#fig-name width=80%}
 
@@ -44,6 +49,15 @@ A worked example with numbered steps.
 
 ::: {.callout-warning title="Common mistake"}
 The typical error and why it is wrong.
+:::
+
+::: {.callout-note title="Do it · Short title"}
+A 2–5 minute task the student does alone: on their phone, the lab computer,
+a simulator of the lesson, a free tool or paper. Numbered steps. If Android
+and iPhone (or Windows) differ, say how.
+
+*Your result:* the concrete product (a number, a table, a file, a sketch, a
+decision with one reason).
 :::
 
 ::: {.callout-caution title="In game code"}
@@ -76,8 +90,11 @@ Roles, the product and the presentation, in a few lines.
 
 ## Case study: Game name
 
-The made-up game or studio of the Game challenge, with fixed numbers, and an
-illustration of its screen.
+The made-up game or studio of the Game challenge, with fixed numbers. If it is
+a game, its core is a playable mini-game (AUTHORING.md, "The game of the
+lesson"): poster + QR here.
+
+{{< sim file="sims/game-name.html" poster="sims/game-name.png" title="Game name: what you do" kind="game" >}}
 
 ## Further reading
 

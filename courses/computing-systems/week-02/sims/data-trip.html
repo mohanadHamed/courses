@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Data Trip</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim h2 { font-size: 1rem; font-weight: 800; margin: 14px 0 6px; }
+    .sim .levels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; }
+    .sim .levels button { padding: 7px 4px; font-size: .9rem; }
+    .sim .levels button:disabled { opacity: .45; cursor: default; }
+    .sim table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: .9rem; font-variant-numeric: tabular-nums; }
+    .sim th, .sim td { border-bottom: 1px solid var(--sim-border); padding: 5px 6px; text-align: left; }
+    .sim th { color: var(--sim-muted); font-weight: 800; }
+    .sim td.empty { color: #c9bfb6; }
+    .sim .bar { position: relative; height: 34px; border: 1.5px solid var(--sim-border); border-radius: 10px; overflow: hidden; margin-top: 8px; background: #fffdf7; }
+    .sim .bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--sim-accent2); transition: width .25s; }
+    .sim .bar .fill.over { background: #ffa8a8; }
+    .sim .bar .budget { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--sim-accent); }
+    .sim .bar .budget span { position: absolute; top: 2px; left: 5px; font-size: .75rem; font-weight: 800; color: var(--sim-accent); white-space: nowrap; }
+    @media (max-width: 520px) { .sim .levels { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Data Trip</h1>
+  <p class="hint">The core needs one value. Get it from each level and compare the trips. In the last column, 1 nanosecond lasts 1 second.</p>
+  <canvas id="c" aria-label="A data packet travels from a memory level to the processor core"></canvas>
+  <div class="levels" id="levels"></div>
+  <table>
+    <thead><tr><th>Level</th><th>Real time</th><th>If 1 ns = 1 s</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p id="msg" class="message">Tap a level to get a value from it.</p>
+
+  <h2>100 reads</h2>
+  <p class="hint">The game reads 100 values. A read from the cache takes 1 ns. A read from main memory takes 100 ns. How many values are in the cache?</p>
+  <div class="controls">
+    <label>From the cache <input type="range" id="hits" min="0" max="100" step="1" value="90"> <span class="readout" id="hitsOut">90 of 100</span></label>
+  </div>
+  <div class="bar"><div class="fill" id="fill"></div></div>
+  <p id="frameMsg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const canvas = $("c"), ctx = canvas.getContext("2d");
+  // ns: typical access time; dur: animation seconds (grows with the log of the time)
+  const LEVELS = [
+    { name: "cache", label: "Cache", ns: 1, real: "about 1 ns", human: "1 second", dur: 0.6 },
+    { name: "ram", label: "Main memory", ns: 100, real: "about 100 ns", human: "100 seconds (almost 2 minutes)", dur: 1.2 },
+    { name: "flash", label: "Flash / SSD", ns: 1e5, real: "about 100 µs", human: "100 000 seconds (about 28 hours)", dur: 2.4 },
+    { name: "hdd", label: "Hard disk", ns: 1e7, real: "about 10 ms", human: "10 000 000 seconds (about 116 days)", dur: 3.4 },
+  ];
+  const done = {};
+  let W = 0, H = 0, trip = null, last = 0;
+
+  function xOf(i) { // stations placed on a logarithmic scale of access time
+    const left = 120, right = W - 50;
+    return left + (Math.log10(LEVELS[i].ns) / 7) * (right - left);
+  }
+  function resize() {
+    W = canvas.clientWidth; H = 170;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function fmtNs(ns) {
+    if (ns < 1000) return ns.toFixed(ns < 10 ? 1 : 0) + " ns";
+    if (ns < 1e6) return (ns / 1000).toFixed(1) + " µs";
+    return (ns / 1e6).toFixed(2) + " ms";
+  }
+  function rows() {
+    $("rows").innerHTML = LEVELS.map((l) => done[l.name]
+      ? `<tr><td><b>${l.label}</b></td><td>${l.real}</td><td>${l.human}</td></tr>`
+      : `<tr><td><b>${l.label}</b></td><td class="empty">—</td><td class="empty">—</td></tr>`).join("");
+  }
+  function buttons() {
+    $("levels").innerHTML = LEVELS.map((l, i) => `<button type="button" class="ghost" data-i="${i}">${l.label}</button>`).join("");
+    $("levels").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => fetchFrom(Number(b.dataset.i))));
+  }
+  function fetchFrom(i) {
+    if (trip) return;
+    trip = { i, t: 0 };
+    $("levels").querySelectorAll("button").forEach((b) => (b.disabled = true));
+    $("msg").textContent = `Getting a value from ${LEVELS[i].label.toLowerCase()}…`;
+  }
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function draw() {
+    ctx.fillStyle = "#fffdf7"; ctx.fillRect(0, 0, W, H);
+    const y = 70;
+    // track
+    ctx.strokeStyle = "#eadfcd"; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(80, y); ctx.lineTo(W - 30, y); ctx.stroke();
+    // core
+    ctx.fillStyle = "#A86700"; roundRect(14, y - 32, 66, 64, 10); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.font = "800 13px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("CPU", 47, y - 4); ctx.fillText("core", 47, y + 13);
+    // stations
+    LEVELS.forEach((l, i) => {
+      const x = xOf(i), active = trip && trip.i === i;
+      ctx.fillStyle = active ? "#FFD43B" : done[l.name] ? "#fff3c4" : "#fff";
+      ctx.strokeStyle = "#A86700"; ctx.lineWidth = 2;
+      roundRect(x - 14, y - 14, 28, 28, 6); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#6b4300"; ctx.font = "800 12px Nunito, system-ui, sans-serif";
+      const lines = l.label.split(" ");
+      ctx.fillText(lines[0], x, y + 34);
+      if (lines[1]) ctx.fillText(lines.slice(1).join(" "), x, y + 49);
+      ctx.fillStyle = "#7a6a60"; ctx.font = "600 11px Nunito, system-ui, sans-serif";
+      ctx.fillText(l.real.replace("about ", "~"), x, y - 22);
+    });
+    // packet
+    if (trip) {
+      const l = LEVELS[trip.i], f = Math.min(trip.t / l.dur, 1);
+      const x1 = 82, x2 = xOf(trip.i);
+      const x = f < 0.5 ? x1 + (x2 - x1) * (f * 2) : x2 + (x1 - x2) * ((f - 0.5) * 2);
+      ctx.fillStyle = f < 0.5 ? "#7a6a60" : "#e8590c";
+      ctx.beginPath(); ctx.arc(x, y, 7, 0, 7); ctx.fill();
+      ctx.fillStyle = "#2a211c"; ctx.font = "800 14px Nunito, system-ui, sans-serif"; ctx.textAlign = "left";
+      ctx.fillText(`time: ${fmtNs(l.ns * f)}`, 14, H - 12);
+      ctx.textAlign = "center";
+    } else {
+      ctx.fillStyle = "#7a6a60"; ctx.font = "600 12px Nunito, system-ui, sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("distance on the track: access time (logarithmic scale)", 14, H - 12);
+      ctx.textAlign = "center";
+    }
+  }
+  function loop(now) {
+    const dt = last ? Math.min((now - last) / 1000, 0.05) : 0; last = now;
+    if (trip) {
+      trip.t += dt;
+      const l = LEVELS[trip.i];
+      if (trip.t >= l.dur) {
+        done[l.name] = true; rows();
+        $("msg").textContent = `${l.label}: ${l.real}. If 1 ns lasted 1 second, this trip would take ${l.human}.`;
+        trip = null;
+        $("levels").querySelectorAll("button").forEach((b) => (b.disabled = false));
+      }
+    }
+    draw(); requestAnimationFrame(loop);
+  }
+  function frame() {
+    const hits = Number($("hits").value), misses = 100 - hits;
+    const ns = hits * 1 + misses * 100;               // cache 1 ns, RAM 100 ns
+    const fmt = (n) => n.toLocaleString("en-US").replace(/,/g, " ");
+    $("hitsOut").textContent = hits + " of 100";
+    $("fill").style.width = (100 * ns / 10000) + "%";
+    $("fill").classList.toggle("over", ns > 5000);
+    $("frameMsg").textContent = `${hits} × 1 ns + ${misses} × 100 ns = ${fmt(ns)} ns. (All from the cache: 100 ns. All from RAM: 10 000 ns.)`;
+    $("frameMsg").classList.toggle("good", ns <= 1000);
+  }
+  $("hits").addEventListener("input", frame);
+  window.addEventListener("resize", resize);
+  buttons(); rows(); resize(); frame(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

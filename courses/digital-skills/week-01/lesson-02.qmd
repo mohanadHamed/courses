@@ -1,154 +1,183 @@
 ---
 title: "University Accounts, Cloud Storage and File Management"
-description: "Accounts and single sign-on, files, folders and paths, file types and sizes, naming, cloud storage, synchronization and backup."
+description: "Your account and single sign-on, files, folders and paths, naming and organising files, and cloud storage, synchronization and backup."
 week: 1
 lesson: 2
 ilos: [A1]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF), with the lab
-tasks of today's session. Each section summarises one concept and ends with
-one set of questions.
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a situation at work. Then it explains the idea behind it. It ends
+with a **Lab task** on the lab computer and one set of questions. The full
+explanations, examples and exercises are in the notes.
 
 ## Key terms
 
 {{< glossary account authentication single-sign-on file folder file-path file-extension file-size cloud-storage synchronization backup >}}
 
-## 2.1 Digital identity and the university account
+## 2.1 Your account and single sign-on
 
-An **account** identifies you to a service. **Authentication** proves that you
-own it, with factors you **know** (password), **have** (phone code) or **are**
-(fingerprint). **Single sign-on (SSO)** lets one university sign-in open
-e-mail, the e-learning platform, cloud storage and office apps. It is safer
-and simpler, but a stolen password opens everything — so on shared lab
-computers: sign out, never save passwords, use a private window, lock the
-screen.
+- An **account**: a name, a way to prove who you are, your data.
+- **Authentication**: proving that the account is yours. Three factors: what
+  you **know** (password), **have** (phone), **are** (fingerprint).
+- **Single sign-on (SSO)**: sign in once, many university services open.
+- Risk: a stolen university password opens everything.
+- On lab computers: sign out, do not save passwords, use a private window,
+  lock the screen (Windows key + L).
 
-![Single sign-on with the university account.](images/sso.png){width=84%}
+![Single sign-on.](images/sso.png){width=84%}
+
+::: {.callout-warning title="Watch out!"}
+Closing the browser does not always sign you out. Press **Sign out** first.
+:::
+
+::: {.callout-note title="Lab task · One sign-in, many services"}
+Sign in to your university account. Open the e-mail, the e-learning platform
+and the cloud storage. How many times did you type your password? At the end
+of the lab, sign out and lock the screen.
+:::
 
 ::: {.callout-tip title="Try it 1 · Accounts and sign-in"}
 Choose the right answer.
 
-::: {.match extra="something you see"}
-A password.
-:   something you know
-
-A code sent to your phone.
+::: {.match extra="something you are|incognito is not safe"}
+A code that arrives on your phone. Which factor?
 :   something you have
 
-A fingerprint.
-:   something you are
+Your password. Which factor?
+:   something you know
 
-One sign-in for e-mail, e-learning and cloud storage.
+You sign in once, and e-mail, cloud and e-learning all open.
 :   single sign-on
 
 The main risk of single sign-on.
-:   a stolen password opens every service
+:   a stolen password opens everything
 
-The habit at the end of every lab session.
-:   sign out of every service
+You leave your lab desk for one minute. What do you do?
+:   lock the screen
 :::
 :::
 
 ## 2.2 Files, folders and paths
 
-Storage is a **tree** of **folders** and **files**. A **path** is a file's
-address: `C:\Users\Sara\Documents\…` on Windows, `/Users/sara/Documents/…` on
-a Mac. An **absolute path** starts at the root; a **relative path** starts at
-the current folder, and `..` means the parent folder. The **extension**
-(`.docx`, `.xlsx`, `.png`, `.exe`) tells the type — show extensions, because
-`invoice.pdf.exe` is a program. Sizes: 1 byte = 8 bits; KB, MB, GB, TB.
-Manufacturers count in powers of 1000, many systems in powers of 1024 — so a
-"128 GB" phone shows about 119 GB.
+- A **file**: a named piece of data. A **folder** holds files and folders.
+- Storage is a tree. The **path** is the address of a file in the tree.
+- Windows: `C:\Users\Sara\...` with `\`. Mac and web: `/Users/sara/...` with `/`.
+- Two files can have the same name, but never the same path.
+- The **file extension** (`.docx`, `.png`, `.exe`) says which program opens it.
+- **File size**: 1 KB ≈ 1000 bytes, 1 MB ≈ 1000 KB, 1 GB ≈ 1000 MB.
 
-![A folder tree for course work, with the path of one file.](images/folder-tree.png){width=80%}
+![A folder tree for course work.](images/folder-tree.png){width=86%}
 
-![File types and size units.](images/file-types.png){width=92%}
+{{< sim file="sims/path-finder.html" poster="sims/path-finder.png" title="Path Finder: files, folders and paths" kind="game" height="600" >}}
 
-{{< sim file="sims/path-finder.html" poster="sims/path-finder.png" title="Path Finder: files, folders and paths" kind="game" height="620" >}}
+::: {.callout-warning title="Watch out!"}
+`invoice.pdf.exe` looks like `invoice.pdf` when extensions are hidden. Turn on
+file name extensions.
+:::
+
+::: {.callout-note title="Lab task · Extensions, sizes and paths"}
+In File Explorer, turn on **File name extensions**. In the **Details** view,
+write the extension and size of three files. Right-click one file → **Copy as
+path**, and paste it into a document. Then play three rounds of **Path
+Finder** (stages 1 and 2).
+:::
 
 ::: {.callout-tip title="Try it 2 · Paths, types and sizes"}
 Choose the right answer.
 
-::: {.match extra="slash (/)|a document|128 GB"}
-The separator used in Windows paths.
-:   backslash (\\)
+::: {.match extra="C:/Users/ali/notes.docx|Word"}
+`notes.docx` in `week-02`, in `Digital-Skills`, in `Courses`, in `Documents` of user `ali`, on a Mac.
+:   /Users/ali/Documents/Courses/Digital-Skills/week-02/notes.docx
 
-A path that starts at the root.
-:   absolute path
+Two files are both called `cv.docx`. What is always different?
+:   their paths
 
-The meaning of `..` in a path.
-:   the parent folder
+Which program opens `budget.xlsx`?
+:   Excel
 
-The kind of program that opens `budget.xlsx`.
-:   a spreadsheet
-
-What `photo.jpg.exe` really is.
+A file called `photo.jpg.exe`. What is it really?
 :   a program
 
-A "128 GB" phone counted in powers of 1024.
-:   about 119 GB
-
-The total size of 24 photos of 3.5 MB each.
-:   84 MB
+A short document, a photo, a video: which is usually the biggest?
+:   the video
 :::
 :::
 
 ## 2.3 Naming and organising files
 
-Good names are **descriptive and consistent**, avoid spaces and special
-characters (use `-` or `_`), write dates as **YYYY-MM-DD** so that alphabetical
-order is also time order, and number versions (`v01`, `v02`) instead of
-"final". Folders: shallow, the same structure for every project.
+- Say what it is, in the same pattern.
+- No spaces or special characters: use `-` or `_`.
+- Dates as year-month-day: 2026-10-21.
+- Versions `v01`, `v02`, not `final2`.
+- A short folder tree (four levels or fewer), the same shape for every
+  project.
+
+![A folder tree with good names.](images/folder-tree.png){width=70%}
+
+::: {.callout-note title="Lab task · Build your course folders"}
+In your cloud storage, create `Courses` with one folder per course, and
+`Digital-Skills/week-01`. Upload your DigComp profile into `week-01` and
+rename it, for example `2026-10-21_DS_week01_digcomp-profile_v01.pdf`.
+:::
 
 ::: {.callout-tip title="Try it 3 · Good names"}
-Choose the best answer.
+Choose the better choice.
 
-::: {.match extra="New Document (3).docx|cv final.docx|21-10-2026"}
-The date format that sorts in time order.
-:   YYYY-MM-DD
+::: {.match extra="21-10-2026|final_v2_new"}
+A better name for `final final.pptx` (pitch, 12 November 2026, third version).
+:   2026-11-12_pitch-deck_v03.pptx
 
-What to use instead of "final", "final2", "final3".
-:   version numbers (v01, v02)
+The date format that sorts by date when you sort by name.
+:   2026-10-21
 
 What to use instead of spaces in a file name.
-:   a hyphen or an underscore
+:   - or _
 
-The best name for the Digital Skills week 1 CV, made on 21 October 2026.
-:   2026-10-21_DS_week01_cv_v01.docx
+The way to mark the second version of a file.
+:   v02
+
+How many folder levels a good tree usually has.
+:   four or fewer
 :::
 :::
 
 ## 2.4 Cloud storage, synchronization and backup
 
-**Cloud storage** keeps files on a provider's servers, reachable from any
-device, within a **quota**. **Synchronization** keeps copies identical — so a
-deletion or a mistake is copied everywhere. A **backup** is an independent copy
-for restoring data. Recycle bins and **version history** help for a limited
-time; the **3-2-1 rule** protects important work: 3 copies, 2 kinds of storage,
-1 off-site.
+- **Cloud storage**: your files on a company's servers; open them anywhere.
+  Limits: a **quota**, the Internet, the company's rules.
+- **Synchronization**: the same files everywhere, also your mistakes.
+- **Backup**: a separate copy that a mistake does not reach.
+- Recycle bin and version history help, but they are not a backup.
+- **3-2-1 rule**: 3 copies, 2 kinds of storage, 1 in another place.
 
 ![Synchronization copies mistakes; a backup does not.](images/sync-backup.png){width=90%}
 
+::: {.callout-note title="Lab task · Versions, delete and restore"}
+Rename your file to `v02` and open its **version history**. Then delete it,
+restore it from the **recycle bin**, and check that it is back. How long does
+your recycle bin keep files?
+:::
+
 ::: {.callout-tip title="Try it 4 · Sync or backup?"}
-Choose the right term.
+Choose the right answer.
 
-::: {.match extra="compression"}
-A deletion on one device appears on all your devices.
-:   synchronization
+::: {.match extra="synchronization is a backup|2 copies"}
+You delete a file on the lab computer. What happens on your synchronized phone?
+:   it is deleted too
 
-An independent copy kept to restore lost data.
-:   backup
+A weekly copy of your project on a USB drive at home.
+:   a backup
 
-The rule "3 copies, 2 kinds of storage, 1 off-site".
-:   the 3-2-1 rule
+The cloud feature that keeps deleted files for some time.
+:   the recycle bin
 
-The feature that keeps earlier versions of a file.
+The cloud feature that keeps older versions of a file.
 :   version history
 
-The maximum storage space a user is allowed.
-:   quota
+The 3-2-1 rule: how many copies?
+:   3 copies
 :::
 :::
 
@@ -157,48 +186,36 @@ The maximum storage space a user is allowed.
 Work alone. Use every section of today.
 
 Sara (user `sara` on a Mac) prepares a project for Digital Media. Her folder
-`Documents/Courses/Digital-Media/week-01` contains 3 videos of 450 MB and 60
-photos of 2.5 MB. The e-learning platform accepts at most 1 GB (1 000 MB) per
-submission. The folder is synchronized with her university cloud storage, and
-every Sunday she copies it to a USB drive that she keeps at home.
+`Documents/Courses/Digital-Media/week-01` contains a video `trailer.mp4` and
+a document named `final final (2).docx`, made on 5 November 2026. The folder
+is synchronized with her university cloud storage. Every Sunday she copies it
+to a USB drive that she keeps at home.
 
 ::: {.callout-tip title="Try it 5 · Sara's project (harder)"}
 Choose the right answer.
 
-::: {.match extra="1 050 MB|it fits|the synchronized laptop"}
-The total size of the videos and photos.
-:   1 500 MB
+::: {.match extra="final_v3.docx|the synchronized laptop"}
+A better name for `final final (2).docx`.
+:   2026-11-05_DM_project-notes_v01.docx
 
-Does it fit in one submission?
-:   no, 500 MB too large
+The extension of the trailer. Which program opens it?
+:   a media player
 
-The absolute path of `trailer.mp4` in that folder.
+The path of `trailer.mp4` in that folder.
 :   /Users/sara/Documents/Courses/Digital-Media/week-01/trailer.mp4
 
 She deletes the folder on the lab computer by mistake. Where can she restore it first?
 :   the cloud recycle bin
 
 Her USB copy at home, in the 3-2-1 rule.
-:   the off-site copy
+:   the copy in another place
 :::
-:::
-
-::: {.callout-note title="Lab tasks · Set up your digital workspace"}
-1. Sign in to the lab computer and to your university account.
-2. Open the university cloud storage in the browser.
-3. Create the folders `Courses/Digital-Skills/week-01` and one folder for each
-   of your other courses.
-4. Save your DigComp profile from lesson 1 in `week-01` with a name that
-   follows the rules of §2.3.
-5. Rename the file once (`v02`), then open its version history.
-6. Delete the file, restore it from the recycle bin, and check that it is back.
-7. Sign out of every service and of the browser.
 :::
 
 ## Summary {.summary}
 
 - Account + authentication (know, have, are); SSO: one sign-in, many services.
-- Storage is a tree; a path is an address; absolute vs relative; `..` = parent.
-- Read extensions; 1000 vs 1024 explains "missing" gigabytes.
-- Names: descriptive, no spaces, YYYY-MM-DD, v01.
-- Sync copies mistakes; a backup does not; 3-2-1.
+- Storage is a tree; a path is the full address of a file.
+- Show extensions; sizes grow by about 1000: KB, MB, GB.
+- Names: say what it is, no spaces, year-month-day, v01.
+- Synchronization copies mistakes; a backup does not; 3-2-1.

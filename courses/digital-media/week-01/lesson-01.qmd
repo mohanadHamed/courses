@@ -1,6 +1,6 @@
 ---
 title: "Digital Media and Creative Production in Games"
-description: "Digital media and digitization, properties of digital media, the elemental tetrad, and the production pipeline."
+description: "What digital media are, the game as a composite medium, and the production pipeline."
 week: 1
 lesson: 1
 ilos: [A1]
@@ -8,154 +8,130 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-summarises one concept and ends with one set of questions. The full
-explanations, worked examples and exercises are in the notes.
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
 
 ## Key terms
 
-{{< glossary digital-media digitization raster-image vector-graphics multimedia elemental-tetrad mechanics aesthetics player-experience asset production-pipeline pre-production >}}
+{{< glossary digital-media raster-image vector-graphics multimedia elemental-tetrad mechanics aesthetics player-experience asset production-pipeline pre-production >}}
 
 ## 1.1 What digital media are
 
-**Digital media** are text, images, audio, video, animation and interactive
-content encoded as numbers. Sound and light are continuous; **digitization**
-turns them into numbers by **sampling** (measuring at regular intervals) and
-**quantization** (rounding each measurement to fixed levels). Uncompressed
-media are huge — one second of CD audio is about 176 KB, one full-HD frame
-about 6.2 MB — so games use compressed formats. A **raster** image is a grid
-of pixels; **vector graphics** store shapes and scale without loss.
+- **Digital media** = content stored as numbers.
+- Six types in games: text, images, audio, video, animation, interactive media.
+- Several types together = **multimedia**.
+- Games keep media in small, compressed files (PNG, JPEG, Ogg, MP3, MP4).
+- **Raster image**: a grid of pixels, blocky when enlarged (photos, paintings).
+- **Vector graphics**: shapes, sharp at any size (logos, icons, buttons).
 
-![Digitizing a sound wave: sampling and quantization.](images/sampling.png){width=86%}
+![Raster (left) and vector (right).](images/raster-vector.png){width=80%}
 
-![Raster (pixels) and vector (shapes) versions of one icon.](images/raster-vector.png){width=72%}
+::: {.callout-note title="Do it · Raster or vector?"}
+On a lab computer, draw a circle in **Paint** and zoom to 800 %. Then insert a
+circle shape in **PowerPoint** and zoom in. What do you see at the edges? Which
+tool is raster and which is vector?
+:::
 
 ::: {.callout-tip title="Try it 1 · Media as numbers"}
-Choose the right term or value.
+Choose the right answer. You can use an answer more than once.
 
-::: {.match extra="raster|6.2 MB"}
-Measuring a sound wave at regular intervals.
-:   sampling
+::: {.match extra="text|animation"}
+A cut-scene between two levels.
+:   video
 
-Rounding each measurement to one of a fixed set of levels.
-:   quantization
+The game logo for a tiny icon and a big poster.
+:   vector
 
-The number of samples per second used by audio CDs.
-:   44 100
+A painted forest background with soft light.
+:   raster
 
-The size of one second of uncompressed CD stereo audio.
-:   about 176 KB
+The pause button for phones of many sizes.
+:   vector
 
-The image type that stays sharp at any size.
-:   vector graphics
-
-A work that combines several types of media.
+Several media types together in one work.
 :   multimedia
 :::
 :::
 
-## 1.2 Properties of digital media
+## 1.2 The game as a composite medium
 
-Because they are numbers, digital media are **computable** (code changes
-colours and volumes at runtime), **modular** (levels are assembled from
-reusable assets), open to **automation** (procedural levels), **variable**
-(one work in many versions, such as adaptive music or translations) and
-**transcoded** between computer data and human culture. Above all, game media
-are **interactive**: they must be designed as a set of possibilities — a sound
-may play once or a hundred times.
+- The **elemental tetrad** (Schell): **mechanics** (rules), story,
+  **aesthetics** (look, sound, feel), technology (device, engine, screen).
+- All four together create the **player experience**.
+- Game media live mostly in story and aesthetics; technology limits them.
+- Media succeed when they make the planned experience stronger.
 
-::: {.callout-tip title="Try it 2 · Which property?"}
-Choose the property of digital media that each example shows.
+![The elemental tetrad.](images/tetrad.png){width=62%}
 
-::: {.match extra="numerical representation"}
-A level is built from the same 40 tiles used again and again.
-:   modularity
-
-The music adds drums and strings when an enemy comes near.
-:   variability
-
-A program generates a new dungeon for every game.
-:   automation
-
-The same sound may play once or a hundred times, depending on the player.
-:   interactivity
-:::
+::: {.callout-warning title="Watch out!"}
+Aesthetics are not only graphics: sound, music and vibration are aesthetics
+too.
 :::
 
-## 1.3 The game as a composite medium
+{{< sim file="sims/juice-it.html" poster="sims/juice-it.png" title="Juice It: same mechanics, different media" kind="game" height="560" >}}
 
-Schell's **elemental tetrad** describes a game as **mechanics** (rules and
-actions), **story** (events), **aesthetics** (how it looks, sounds and feels)
-and **technology** (device, engine). No element is more important than the
-others. The goal of all four is the **player experience**; media succeed only
-when they strengthen it.
-
-:::: {.columns}
-::: {.column width="55%"}
-![The elemental tetrad.](images/tetrad.png)
-:::
-::: {.column width="45%"}
-![Lantern Keeper: all four elements create one experience.](images/lantern-keeper.png)
-:::
-::::
-
-{{< sim file="sims/juice-it.html" poster="sims/juice-it.png" title="Juice It: same mechanics, different media" kind="game" height="600" >}}
-
-::: {.callout-note title="Watch out!"}
-Aesthetics are not only graphics. Music, sound, vibration and the rhythm of
-animation are aesthetics too.
+::: {.callout-note title="Do it · Juice It"}
+Play **Juice It** for 30 seconds with all layers off. Then switch the layers
+on one at a time. Choose one word for the experience at the start and one at
+the end. Which layer changed it most?
 :::
 
-::: {.callout-tip title="Try it 3 · The tetrad of Lantern Keeper"}
-Lantern Keeper: a lantern spirit floats through a dark forest to relight a
-village before sunrise. Which element of the tetrad is each sentence about?
+::: {.callout-tip title="Try it 2 · The tetrad of Lantern Keeper"}
+Choose the element of the tetrad. You can use an answer more than once.
 
-::: {.match}
-Tap to float upward; fireflies make the light grow.
+::: {.match extra="player experience"}
+Tap to float up; collect fireflies to grow the light.
 :   mechanics
 
-The spirit must relight the lanterns before sunrise.
+The spirit must light the village lanterns before sunrise.
 :   story
 
-Warm light in a cold blue forest; soft piano music.
+Warm light, soft piano, a gentle chime.
 :   aesthetics
 
-A cheap light shader keeps 60 fps on old phones.
+A simple light effect so old phones keep 60 fps.
 :   technology
 
-What all four elements together are designed to produce.
-:   the player experience
+A rumble of the phone when the spirit is hit.
+:   aesthetics
 :::
 :::
 
-## 1.4 The creative production pipeline
+## 1.3 The creative production pipeline
 
-Media pass through **pre-production** (concept, premise, script, storyboard,
-style guide, schedule), **production** (making the **assets**: art, models,
-music, voices, sound effects, video), **post-production** (editing, mixing,
-colour, compression, export), then integration and testing — which often send
-work back. Every asset has an owner at every stage (intellectual property,
-weeks 13–14).
+- **Pre-production**: plan (idea, script, storyboard, style, time, budget).
+- **Production**: make the **assets** (draw, model, compose, record, film).
+- **Post-production**: finish (edit, mix, correct colours, compress, export).
+- Then test in the game; testing can send work back.
+- Free lab tools: Paint, GIMP, Krita, Blender, Audacity, DaVinci Resolve.
 
-![The production pipeline.](images/pipeline.png){width=94%}
+![The creative production pipeline.](images/pipeline.png){width=94%}
 
-::: {.callout-tip title="Try it 4 · Which stage?"}
+::: {.callout-note title="Do it · Make one small asset"}
+Make a coin icon in three stages: write a one-line plan (pre-production), draw
+it in Paint (production), and save it as `icon_coin_v1.png`
+(post-production).
+:::
+
+::: {.callout-tip title="Try it 3 · Which stage?"}
 Choose the stage of the pipeline. You can use an answer more than once.
 
-::: {.match}
-Writing the script and drawing the storyboard.
+::: {.match extra="testing only"}
+Writing the script of a cut-scene.
 :   pre-production
 
-Recording the voices of the characters.
+Recording the voice of the hero.
 :   production
 
-Mixing the music and exporting compressed files.
+Mixing the music so that voices stay clear.
 :   post-production
 
-A tester reports that a sound is too loud next to the music.
-:   integration and testing
+Drawing the storyboard.
+:   pre-production
 
-Composing the music.
-:   production
+Exporting the trailer as an MP4 file.
+:   post-production
 :::
 :::
 
@@ -163,26 +139,29 @@ Composing the music.
 
 Work alone. Use every section of today.
 
-The *Lantern Keeper* team must plan its media. The game needs a 2-minute
-looping music track, a firefly chime with three variations, a vector logo for
-the store page and a 30-second trailer. The music has three layers that are
-added as danger grows. The team works in the order of the pipeline.
+The *Lantern Keeper* team must plan its media. The game needs a 2-minute music
+loop, a firefly chime with three variations, a logo for the store page, a
+painted forest background and a 30-second trailer. The story: the spirit must
+light the village lanterns before sunrise. The team works in the order of the
+pipeline. First play the game, and switch each element of the tetrad off once.
 
-::: {.callout-tip title="Try it 5 · Planning the media (harder)"}
+{{< sim file="sims/lantern-keeper.html" poster="sims/lantern-keeper.png" title="Lantern Keeper: switch the tetrad on and off" kind="game" height="560" >}}
+
+::: {.callout-tip title="Try it 4 · Planning the media (harder)"}
 Choose the right answer.
 
-::: {.match extra="raster|pre-production"}
-The size of the music if it were stored as uncompressed CD stereo audio (176 KB per second).
-:   about 21 MB
-
-The property of digital media shown by the three music layers.
-:   variability
+::: {.match extra="raster|pre-production|mechanics"}
+"Light the lanterns before sunrise": which element of the tetrad?
+:   story
 
 Why the chime has three variations instead of one.
-:   so it does not repeat identically
+:   so it does not repeat exactly
 
-The image type for the logo, used on a tiny icon and on a large banner.
+The image type for the logo, on a tiny icon and a big banner.
 :   vector
+
+The image type for the painted forest background.
+:   raster
 
 The stage in which the trailer is edited and exported.
 :   post-production
@@ -191,9 +170,7 @@ The stage in which the trailer is edited and exported.
 
 ## Summary {.summary}
 
-- Digital media = content encoded as numbers; digitization = sampling + quantization.
-- Uncompressed media are huge, so games use compressed formats.
-- Raster = pixels; vector = shapes that scale.
-- Digital media are computable, modular, automatable, variable, transcoded — and interactive.
+- Digital media are content stored as numbers; games compress them.
+- Raster = pixels; vector = shapes that stay sharp.
 - Tetrad: mechanics, story, aesthetics, technology → player experience.
-- Pipeline: pre-production → production → post-production → integration and testing.
+- Pipeline: pre-production → production → post-production → testing.

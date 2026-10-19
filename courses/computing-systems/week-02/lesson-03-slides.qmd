@@ -1,0 +1,192 @@
+---
+title: "Computer Components: CPU, Memory and Storage"
+subtitle: "Week 2 · Lecture"
+draft: true
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary cpu-core clock-rate thread memory-hierarchy cache byte texture ssd app-storage >}}
+
+## Think · 8 cores = 8 times faster?
+
+A phone has **8 cores**.
+**Is a game 8 times faster than with 1 core?**
+
+::: {.answer}
+No. The game logic runs on **one main thread**: one core.
+:::
+
+## 3.1 Cores and threads
+
+:::: {.columns}
+::: {.column width="38%"}
+- core = runs one **thread**
+- big fast cores + small battery-saving cores
+- main thread: always one core
+- GHz = speed of **one** core
+- **Do it together:** Task Manager → CPU → Logical processors
+:::
+::: {.column width="62%"}
+![](images/cpu-cores.png)
+:::
+::::
+
+## Example · Splitting one frame
+
+Main thread 10 ms + 6 ms shared work.
+
+::: {.reveal}
+1. 1 core: 10 + 6 = **16 ms**
+2. 2 cores: 10 + 3 = **13 ms**
+3. 6 cores: 10 + 1 = **11 ms**
+4. faster, but not 6 times faster
+:::
+
+## Try it 1 · Cores and threads
+
+Main thread 8 ms + 4 ms shared work.
+
+a) frame time with 4 cores?
+b) best core for music in the background?
+c) 8 cores at 3 GHz: speed of one core?
+
+::: {.answer}
+a) 9 ms
+b) an efficiency core
+c) 3 GHz
+:::
+
+## 3.2 The memory hierarchy
+
+:::: {.columns}
+::: {.column width="38%"}
+- cache → RAM → storage
+- up: fast, small, near the core
+- down: big, slow, cheap
+- **cache hit** 1 ns · **miss** 100 ns
+:::
+::: {.column width="62%"}
+![](images/memory-hierarchy.png)
+:::
+::::
+
+## Live demo · Data Trip
+
+{{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" >}}
+
+## Try it 2 · The memory hierarchy
+
+Cache 1 ns · RAM 100 ns.
+
+a) 100 reads: 90 cache + 10 RAM?
+b) position read 50 times: where after the first read?
+c) best score when the phone is off: where?
+
+::: {.answer}
+a) 90 + 1000 = 1090 ns
+b) in the cache
+c) in storage
+:::
+
+## 3.3 What a game keeps in memory
+
+:::: {.columns}
+::: {.column width="38%"}
+- code · assets · state
+- textures: the biggest part
+- texture = width × height × 4 bytes
+- KB → MB → GB: × 1000 each
+- **Do it together:** Task Manager → Processes → Memory
+:::
+::: {.column width="62%"}
+![](images/game-ram.png)
+:::
+::::
+
+## Example · The memory of one texture
+
+1024 × 1024 pixels, 4 bytes per pixel.
+
+::: {.reveal}
+1. 1024 × 1024 ≈ **1 million** pixels
+2. × 4 bytes ≈ **4 MB**
+3. compressed, 1 byte per pixel ≈ **1 MB**
+4. 40 textures: 160 MB → 40 MB
+:::
+
+## Try it 3 · Memory sizes
+
+a) 1024 × 1024, compressed (1 byte per pixel)?
+b) almost out of memory: compress what first?
+c) about 1000 MB = ?
+
+::: {.answer}
+a) about 1 MB
+b) textures
+c) 1 GB
+:::
+
+## 3.4 Storage
+
+:::: {.columns}
+::: {.column width="38%"}
+- hard disk: spinning disks, moving arm
+- SSD / phone: flash chips, no moving parts
+- app · user data · cache
+- 1 TB → 931 GB in Windows
+- **Do it together:** a game's storage screen on a phone
+:::
+::: {.column width="62%"}
+![](images/storage.png)
+:::
+::::
+
+## Try it 4 · Storage
+
+a) Clear cache: what is lost?
+b) keep the pets: which button is wrong?
+c) 1 TB shows 931 GB: is space missing?
+
+::: {.answer}
+a) nothing important (temporary files)
+b) Clear storage
+c) no, Windows counts with 1024
+:::
+
+## Game challenge · Pocket Pets support desk
+
+:::: {.columns}
+::: {.column width="38%"}
+- island: 40 textures, 1024 × 1024, compressed
+- 1 "only one core busy"
+- 2 "needs 1.6 GB, I have 1.2 GB"
+- 3 "Clear storage: pets gone"
+- 4 "1 TB shows 931 GB"
+- 5 "blurry for a second"
+:::
+::: {.column width="62%"}
+{{< sim file="sims/pocket-pets.html" poster="sims/pocket-pets.png" title="Pocket Pets: answer the support desk" kind="game" layout="qr" >}}
+:::
+::::
+
+## Try it 5 · Answer the players (harder)
+
+a) message 2: how much more space?
+b) message 3: which part was deleted?
+c) message 5: memory of the 40 textures?
+
+::: {.answer}
+a) 0.4 GB
+b) the user data
+c) about 40 MB
+:::
+
+## Summary
+
+- core runs one thread · cores do not add up
+- cache → RAM → storage
+- cache: data used again and again
+- RAM: code, assets, state · texture = w × h × 4 bytes
+- storage: app · user data · cache

@@ -1,6 +1,6 @@
 ---
 title: "University Accounts, Cloud Storage and File Management"
-description: "Lesson notes · Digital identity and single sign-on, files, folders and paths, file types and sizes, naming and organising files, and cloud storage, synchronization and backup."
+description: "Lesson notes · Digital identity and single sign-on, files, folders and paths, naming and organising files, and cloud storage, synchronization and backup."
 week: 1
 lesson: 2
 ilos: [A1]
@@ -8,257 +8,262 @@ format: lesson-typst
 ---
 
 ::: {.lead}
-Every digital task in this course begins with two questions: *who am I to the
-system?* and *where is my work stored?* This lab session answers both. It
-explains how a university account identifies a student to many services at
-once, how files are organised in folders and addressed by paths, how to read
-file types and sizes, how to name and organise work so that it can be found
-months later, and how cloud storage, synchronization and backup protect it.
+On the first day of a new job at a game studio, a junior tester gets an
+account, a cloud folder and a long list of files. After one week, some files
+are lost, two have the name `final.docx`, and one project folder was deleted
+by mistake. Every digital task starts with two questions: *who am I for the
+system?* and *where is my work stored?* In this lab session you answer both:
+you sign in with your university account, build a folder structure for your
+courses, name files well, and learn how cloud storage protects your work, and
+when it does not. Every section ends with a task on the lab computer.
 :::
 
 ## Key terms
 
 {{< glossary account authentication single-sign-on file folder file-path file-extension file-size cloud-storage synchronization backup >}}
 
-## 2.1 Digital identity and the university account
+## 2.1 Your account and single sign-on
 
-An **account** is the record by which a service knows its user: an identifier
-(the username, often an e-mail address), a means of proving identity, and the
-data and permissions attached to it. Together, a person's accounts and the
-information linked to them form their **digital identity**.
+An **account** is how a service knows its user. It has a name (often an
+e-mail address), a way to prove who you are, and your data and permissions.
+All your accounts and the information in them form your **digital identity**.
 
-**Authentication** is the act of proving that one is the owner of an account.
-Systems use three kinds of evidence, called *factors*: something you **know**
-(a password or PIN), something you **have** (a phone that receives a code, a
-security key) and something you **are** (a fingerprint or a face). Using two
-different factors is called two-factor or **multi-factor authentication**
-(MFA); week 3 studies it in detail.
+**Authentication** means proving that you are the owner of an account.
+Systems use three kinds of proof, called *factors*:
 
-A university offers many services: e-mail, the e-learning platform, cloud
-storage, office applications, the library. Instead of one password per
-service, most universities use **single sign-on (SSO)**: the student
-authenticates once with the university account and is then trusted by all
-connected services (@fig-sso).
+- something you **know**: a password or a PIN;
+- something you **have**: a phone that gets a code, a security key;
+- something you **are**: a fingerprint or a face.
 
-![Single sign-on: one authentication with the university account gives access to several connected services.](images/sso.png){#fig-sso width=84%}
+Two different factors together are called **multi-factor authentication
+(MFA)**. Week 3 studies it in detail.
 
-SSO is convenient and safer — one strong password is easier to protect than
-ten weak ones — but it also concentrates risk: whoever steals the university
-password reaches every service. This makes good habits on **shared lab
-computers** essential:
+A university has many services: e-mail, the e-learning platform, cloud
+storage, office apps, the library. Most universities use **single sign-on
+(SSO)**: you sign in once with your university account, and all connected
+services trust you (@fig-sso).
+
+![Single sign-on: one sign-in with the university account opens several services.](images/sso.png){#fig-sso width=84%}
+
+SSO is easy and safe, because one strong password is easier to protect than
+ten weak ones. But it also has a risk: a person who steals your university
+password can open *every* service. So good habits on **shared lab
+computers** are important:
 
 - sign out of every service, and of the browser, at the end of the session;
-- never let the browser remember the password on a shared computer;
-- use a private (incognito) window when you must sign in on someone else's
-  device;
-- lock the screen when you leave the computer, even for a minute.
+- never let the browser save your password on a shared computer;
+- use a private (incognito) window on someone else's device;
+- lock the screen when you leave, even for one minute (Windows key + L).
+
+::: {.callout-warning title="Common mistake"}
+Closing the browser window and thinking you are signed out. On many
+computers, the browser keeps you signed in. Always press **Sign out** first.
+:::
+
+::: {.callout-note title="Lab task · One sign-in, many services"}
+1. Sign in to the lab computer and to your university account in the browser.
+2. Open the e-mail, the e-learning platform and the cloud storage, one after
+   another. Count the times you had to type your password.
+3. At the end of the lab, sign out of the account and close the browser.
+   Lock the screen with Windows key + L when you leave your desk.
+
+*Your result:* the list of services you opened, and how many times you typed
+your password.
+:::
 
 ## 2.2 Files, folders and paths
 
-A **file** is a named sequence of bytes kept in storage: a document, an image,
-a program. A **folder** (or *directory*) groups files and other folders. Since
-folders can contain folders, the storage of a computer forms a **tree**: one
-top-level folder, the *root*, branches into folders, which branch again, down
-to the files at the leaves (@fig-tree).
+A **file** is a named piece of data in storage: a document, a picture, a
+program. A **folder** holds files and other folders. Folders can hold
+folders, so the storage of a computer is a **tree**: one top folder branches
+into folders, which branch again, down to the files (@fig-tree).
 
-![A folder tree for course work. The highlighted path leads from the root to one file.](images/folder-tree.png){#fig-tree width=86%}
+![A folder tree for course work. The highlighted path leads from the top folder to one file.](images/folder-tree.png){#fig-tree width=86%}
 
-The **path** of a file is its address in this tree: the sequence of folders
-from a starting point to the file, separated by a special character. Windows
-separates folders with a backslash and starts from a drive letter; macOS,
-Linux, Android and web addresses use a forward slash.
+The **path** of a file is its address in the tree: the folders from the top
+down to the file. Windows separates the folders with `\` and starts with a
+drive letter. Mac, Android and web addresses use `/`.
 
 | System | Example path |
 |---|---|
 | Windows | `C:\Users\Sara\Documents\Courses\Digital-Skills\week-01\cv.docx` |
-| macOS | `/Users/sara/Documents/Courses/Digital-Skills/week-01/cv.docx` |
+| Mac | `/Users/sara/Documents/Courses/Digital-Skills/week-01/cv.docx` |
 | cloud (in the browser) | `My files > Courses > Digital-Skills > week-01 > cv.docx` |
 
-: The same file addressed on different systems. {#tbl-paths}
+: The same file on different systems. {#tbl-paths}
 
-::: {.callout-important title="Definition 2.1 — Absolute and relative paths"}
-An **absolute path** starts from the root and identifies a file uniquely, for
-example `/Users/sara/Courses/Digital-Skills/week-01/cv.docx`. A **relative
-path** starts from the current folder; from the folder `Digital-Skills`, the
-same file is `week-01/cv.docx`. The name `..` means "the parent folder".
+::: {.callout-important title="Definition 2.1 — Path"}
+The **path** of a file is its full address: the folders from the top of the
+tree down to the file, and then the file name. Two files can have the same
+name, but never the same path.
 :::
 
-### File types and extensions
-
-The part of a file name after the last dot is the **file extension**. It tells
-the operating system which program opens the file.
+The part of a file name after the last dot is the **file extension**. It
+tells the computer which program opens the file (@fig-types).
 
 ![Common file types and the units of file size.](images/file-types.png){#fig-types width=92%}
 
-| Extension | Type | Typical program |
+| Extension | Type | Program |
 |---|---|---|
 | `.docx`, `.pdf`, `.txt` | documents | Word, a PDF reader, a text editor |
-| `.xlsx`, `.csv` | spreadsheets, tables | Excel, any spreadsheet |
+| `.xlsx`, `.csv` | spreadsheets, tables | Excel |
 | `.pptx` | presentations | PowerPoint |
-| `.png`, `.jpg`, `.svg` | images | an image viewer or editor |
-| `.mp3`, `.wav`, `.mp4` | audio, video | a media player |
-| `.zip` | compressed archive | the file manager |
-| `.exe`, `.apk` | programs, apps | the operating system — run only from trusted sources |
+| `.png`, `.jpg`, `.svg` | pictures | a picture viewer or editor |
+| `.mp3`, `.mp4` | sound, video | a media player |
+| `.zip` | a packed archive | the file manager |
+| `.exe`, `.apk` | programs, apps | the system: only from trusted sources |
 
 : Common file extensions. {#tbl-ext}
 
 ::: {.callout-warning title="Common mistake"}
-Trusting the icon instead of the extension. Windows hides known extensions by
-default, so a malicious file named `invoice.pdf.exe` appears as `invoice.pdf`
-with a document-like icon. Showing file extensions in the file manager is one
-of the simplest security settings a student can make.
+Trusting the icon instead of the extension. Windows hides extensions, so a
+dangerous file called `invoice.pdf.exe` looks like `invoice.pdf`, with a
+document icon. Showing file extensions is one of the easiest safety settings.
 :::
 
-### File sizes
+The size of a file is measured in **bytes**: 1 KB ≈ 1000 bytes,
+1 MB ≈ 1000 KB, 1 GB ≈ 1000 MB. A short document is a few KB, a photo a few
+MB, a video often hundreds of MB. The e-learning platform and e-mail limit
+the size of what you can upload.
 
-Storage is measured in **bytes** (B); one byte is 8 bits. Larger units follow:
-kilobyte (KB), megabyte (MB), gigabyte (GB), terabyte (TB). Two conventions
-exist. Storage manufacturers use powers of 1000 (1 GB = 10^9^ bytes), while
-operating systems traditionally count in powers of 1024 (1 GiB = 2^30^ bytes,
-written GiB by standards bodies but often shown as "GB").
+{{< sim file="sims/path-finder.html" poster="sims/path-finder.png" title="Path Finder: files, folders and paths" kind="game" height="600" >}}
 
-::: {.callout-note title="Example 2.1 — Why a 128 GB phone shows less"}
-1. The manufacturer's 128 GB is $128 \times 10^9$ bytes.
-2. The phone counts in units of $2^{30} = 1\,073\,741\,824$ bytes.
-3. $128 \times 10^9 / 1\,073\,741\,824 \approx 119.2$ — the phone reports about
-   **119 GB**, before the operating system and preinstalled apps take their
-   share. No storage is missing; only the unit differs.
-:::
+::: {.callout-note title="Lab task · Extensions, sizes and paths"}
+1. Open **File Explorer**. Turn on file extensions: View → Show → File name
+   extensions (Windows 11), or View → File name extensions (Windows 10).
+2. Open the Documents folder. Switch to the **Details** view. Write the
+   extension and the size of three files.
+3. Right-click one file and choose **Copy as path**. Paste the path into a
+   document.
+4. Play stages 1 and 2 of **Path Finder** (above).
 
-::: {.callout-note title="Example 2.2 — Will the files fit?"}
-A student must upload a portfolio: 24 photos of 3.5 MB each, a 180 MB video
-and a 2 MB CV. The e-learning platform accepts at most 250 MB per submission.
-
-1. Photos: $24 \times 3.5 = 84$ MB.
-2. Total: $84 + 180 + 2 = 266$ MB.
-3. The submission is 16 MB too large. Compressing the photos to 2 MB each
-   saves $24 \times 1.5 = 36$ MB, giving 230 MB, which fits.
+*Your result:* three files with extension and size, one path, and your Path
+Finder score.
 :::
 
 ## 2.3 Naming and organising files
 
-A file that cannot be found is as good as lost. Professionals follow a few
+A file that you cannot find is as good as lost. Professionals follow four
 rules for **file names**:
 
-1. **Be descriptive and consistent**: the name says what the file is, in the
-   same pattern every time.
-2. **Avoid spaces and special characters** (`/ \ : * ? " < > |`), which some
-   systems forbid and web addresses mangle; use hyphens or underscores.
-3. **Write dates as YYYY-MM-DD** (ISO 8601), so that alphabetical order is
-   also chronological order.
-4. **Number versions** (`v01`, `v02`) instead of `final`, `final2`,
+1. **Say what it is**, in the same pattern every time.
+2. **No spaces or special characters** (`/ \ : * ? " < > |`). Use `-` or `_`.
+3. **Write dates as year-month-day** (2026-10-21), so that sorting by name is
+   also sorting by date.
+4. **Number the versions** (`v01`, `v02`), not `final`, `final2`,
    `final-really`.
 
-::: {.callout-note title="Example 2.3 — Improving file names"}
+::: {.callout-note title="Example 2.1 — Better file names"}
 | Poor name | Better name |
 |---|---|
 | `New Document (3).docx` | `2026-10-21_DS_week01_cv_v01.docx` |
 | `final final.pptx` | `2026-11-12_pitch-deck_v03.pptx` |
 | `IMG_4821.jpg` | `2026-10-21_lab-desk-photo.jpg` |
 
-Sorted alphabetically, the better names also appear in date order, and each
-name tells its course, week, content and version.
+Sorted by name, the better names are also in date order, and each name says
+the course, the week, the content and the version.
 :::
 
-Folders deserve the same care. A good structure is shallow (rarely more than
-four levels), mirrors the way the work is organised, and is the same for every
-project. @fig-tree shows a structure for this diploma: one folder per course,
-one per week, plus a folder for shared resources.
+Folders need the same care. A good folder tree is short (not more than four
+levels), follows the way you work, and has the same shape for every project.
+@fig-tree shows a tree for this diploma: one folder for each course, one for
+each week.
 
-The same principles apply to professional work. A small game project, for
-example, is usually organised by *kind of content* rather than by date:
-`docs` for the design document and plans, `art` for images and models,
-`audio` for music and sound effects, `builds` for the versions that are
-tested, and `archive` for material that is no longer used but must be kept.
-Everyone in the team then knows where to look, and a new member can find
-their way on the first day.
+A game studio usually sorts a project by *kind of content*: `docs` for the
+plans, `art` for pictures and models, `audio` for music and sounds, `builds`
+for the versions that testers use, and `archive` for old material. Everyone
+knows where to look, and a new team member finds their way on the first day.
+
+::: {.callout-note title="Lab task · Build your course folders"}
+In your university cloud storage:
+
+1. Create the folder `Courses`, and in it one folder for each of your four
+   courses (for example `Digital-Skills`).
+2. In `Digital-Skills`, create `week-01`.
+3. Upload your DigComp profile from lesson 1 into `week-01`, and rename it
+   with the rules above, for example `2026-10-21_DS_week01_digcomp-profile_v01.pdf`.
+
+*Your result:* the folder tree and the file with a good name.
+:::
 
 ## 2.4 Cloud storage, synchronization and backup
 
-**Cloud storage** keeps files on servers of a provider — for a university
-usually Microsoft OneDrive or Google Drive — reachable from any device after
-signing in. Its main advantages are access from anywhere, easy sharing (week
-2) and protection against the loss of a single device. Its limits are a
-storage **quota**, the need for an Internet connection (unless files are
-marked for offline use) and dependence on the provider's rules.
+**Cloud storage** keeps your files on the servers of a company, usually
+Microsoft OneDrive or Google Drive for a university. You can open them from
+any device after signing in. Advantages: access from everywhere, easy sharing
+(week 2), and no loss when one device breaks. Limits: a storage limit (a
+**quota**), the need for Internet, and the rules of the company.
 
-**Synchronization** keeps the same files identical on several devices and in
-the cloud: a change made on the lab computer appears on the student's phone a
-few seconds later. Synchronization is not the same as **backup**
-(@fig-sync-backup).
+**Synchronization** keeps the same files on several devices and in the cloud:
+a change on the lab computer appears on your phone a few seconds later. But
+synchronization is not the same as **backup** (@fig-sync-backup).
 
-![Synchronization copies every change everywhere — including mistakes. A backup is an independent copy that a mistake does not reach.](images/sync-backup.png){#fig-sync-backup width=90%}
+![Synchronization copies every change everywhere, also mistakes. A backup is a separate copy that a mistake does not reach.](images/sync-backup.png){#fig-sync-backup width=90%}
 
 ::: {.callout-important title="Definition 2.2 — Synchronization and backup"}
-**Synchronization** makes several copies identical: if a file is deleted or
-damaged in one place, the deletion or damage is copied to all places. A
-**backup** is an *independent* copy kept so that data can be restored after
-loss, damage, deletion or attack.
+**Synchronization** makes several copies the same. If you delete or damage a
+file in one place, it is deleted or damaged in all places. A **backup** is a
+*separate* copy that you keep to get your data back after a loss, a mistake or
+an attack.
 :::
 
-Many cloud services soften this difference with a *recycle bin* and a
-*version history*, which keep deleted files and earlier versions for a limited
-time. These features help, but they do not replace a real backup. A widely
-used rule is the **3-2-1 rule**: keep **3** copies of important data, on **2**
-different kinds of storage, with **1** copy in a different place.
+Many cloud services have a **recycle bin** and a **version history**. They
+keep deleted files and older versions for some time. They help, but they are
+not a real backup. A simple rule is the **3-2-1 rule**: keep **3** copies of
+important work, on **2** different kinds of storage, with **1** copy in
+another place.
 
-::: {.callout-note title="Example 2.4 — A deleted project folder"}
-A student keeps a game-design project in a synchronized cloud folder and
-deletes it by mistake on the lab computer.
+::: {.callout-note title="Example 2.2 — A deleted project folder"}
+A student keeps a game project in a synchronized cloud folder and deletes it
+by mistake on the lab computer.
 
 1. Synchronization deletes it on the laptop and the phone within seconds.
-2. The cloud recycle bin still holds it for a limited period (often 30 days
-   or more): it can be restored — if the student notices in time.
-3. Had the student also followed the 3-2-1 rule — for example a weekly copy on
-   a USB drive kept at home — the project would be safe even after the bin was
-   emptied.
+2. The cloud recycle bin still has it for a limited time (often 30 days). The
+   student can restore it, if they notice in time.
+3. With the 3-2-1 rule (for example a weekly copy on a USB drive at home), the
+   project would be safe even after the recycle bin is emptied.
 :::
 
-## Lab session: setting up your digital workspace
+::: {.callout-note title="Lab task · Versions, delete and restore"}
+Use the file from the previous task.
 
-In the lab, each student signs in with the university account, opens the
-university's cloud storage, creates the folder structure of @fig-tree, and
-uploads, renames and restores a test file. The interactive lesson lists the
-steps; the mini-game *Path Finder* practises paths.
+1. Change something in the file (or upload a new copy), and rename it to
+   `v02`. Open its **version history** and find the older version.
+2. Delete the file. Open the **recycle bin** of the cloud storage and restore
+   it. Check that it is back in `week-01`.
 
-{{< sim file="sims/path-finder.html" poster="sims/path-finder.png" title="Path Finder: files, folders and paths" kind="game" height="600" >}}
+*Your result:* one sentence: where did you find the older version, and how
+long does your recycle bin keep files?
+:::
 
 ## Further reading
 
-Evans, Martin and Poatsy, *Technology in Action*, 18th ed., chapters on using
-the Internet and cloud services, and on file management in operating systems.
+Evans, Martin and Poatsy, *Technology in Action*, 18th ed., the chapters on
+using the Internet and cloud services, and on file management.
 
 ## Exercises
 
-1. Name the three kinds of authentication factor and give one example of
-   each.
-2. Explain single sign-on, one advantage and one risk.
-3. List four safe habits for shared lab computers.
-4. Write the absolute path of `notes.docx` in the folder `week-02` of
-   `Digital-Skills`, inside `Courses`, inside `Documents` of user `ali`, on
-   macOS.
-5. From the folder `Courses/Digital-Skills`, write the relative path to
-   `Courses/Game-Math/week-01/hw1.pdf`.
-6. Which program opens each file: `budget.xlsx`, `trailer.mp4`,
+1. Name the three kinds of authentication factor, with one example each.
+2. What is single sign-on? Give one advantage and one risk.
+3. Write four safe habits for shared lab computers.
+4. Write the path of `notes.docx` in the folder `week-02` of `Digital-Skills`,
+   inside `Courses`, inside `Documents` of the user `ali`, on a Mac.
+5. Which program opens each file: `budget.xlsx`, `trailer.mp4`,
    `levels.zip`, `logo.svg`?
-7. Why is `photo.jpg.exe` dangerous, and which setting helps to detect it?
-8. A memory card is sold as 256 GB. About how many GB does a computer that
-   counts in powers of 1024 report?
-9. Rename `My Project FINAL (2).pptx`, created on 3 November 2026 for the
-   Digital Skills pitch, using the rules of §2.3.
-10. Explain why synchronization is not a backup, and state the 3-2-1 rule.
+6. Why is `photo.jpg.exe` dangerous? Which setting helps you see it?
+7. Rename `My Project FINAL (2).pptx`, made on 3 November 2026 for the Digital
+   Skills pitch, with the rules of section 2.3.
+8. Why is synchronization not a backup? What is the 3-2-1 rule?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. Know (password), have (phone with a code), are (fingerprint).
-2. One authentication gives access to all connected services; advantage: one strong password; risk: a stolen password opens everything.
+1. Know (a password), have (a phone with a code), are (a fingerprint).
+2. One sign-in opens all connected services. Advantage: one strong password. Risk: a stolen password opens everything.
 3. Sign out; do not save passwords; use a private window; lock the screen.
 4. `/Users/ali/Documents/Courses/Digital-Skills/week-02/notes.docx`.
-5. `../Game-Math/week-01/hw1.pdf`.
-6. A spreadsheet (Excel); a media player; the file manager (archive); an image viewer or a browser.
-7. It is a program disguised as an image; show file extensions.
-8. $256 \times 10^9 / 2^{30} \approx 238$ GB.
-9. For example `2026-11-03_DS_pitch-deck_v01.pptx`.
-10. Synchronization copies deletions and damage to every copy; a backup is independent. 3 copies, 2 kinds of storage, 1 off-site.
+5. Excel (a spreadsheet); a media player; the file manager (an archive); a picture viewer or a browser.
+6. It is a program that looks like a picture. Turn on "File name extensions".
+7. For example `2026-11-03_DS_pitch-deck_v01.pptx`.
+8. Synchronization copies deletions and damage to every copy; a backup is separate. 3 copies, on 2 kinds of storage, 1 in another place.
 :::

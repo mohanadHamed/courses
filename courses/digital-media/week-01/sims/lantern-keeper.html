@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Lantern Keeper</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .toggles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 0 0 8px; }
+    .sim .toggles button { padding: 7px 4px; font-size: .88rem; }
+    .sim .toggles button.off { background: #fff; color: var(--sim-muted); border: 1.5px dashed #d6c4dd; box-shadow: none; text-decoration: line-through; }
+    .sim .hud { display: flex; gap: 12px; font-weight: 800; font-variant-numeric: tabular-nums; margin-bottom: 6px; flex-wrap: wrap; }
+    .sim canvas { cursor: pointer; }
+    @media (max-width: 520px) { .sim .toggles { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Lantern Keeper</h1>
+  <p class="hint">Tap (or press Space) to make the lantern spirit float up. Collect fireflies to keep your light. Switch one element of the tetrad off at a time: what does the player lose?</p>
+  <div class="toggles" id="toggles">
+    <button type="button" data-k="mechanics">Mechanics</button>
+    <button type="button" data-k="story">Story</button>
+    <button type="button" data-k="aesthetics">Aesthetics</button>
+    <button type="button" data-k="technology">Technology: new phone</button>
+  </div>
+  <div class="hud"><span id="light">Light 100 %</span><span id="lanterns"></span><span id="time"></span></div>
+  <canvas id="c" aria-label="Lantern Keeper: a lantern spirit in a dark forest"></canvas>
+  <p id="msg" class="message">All four elements are on. Tap the game to start.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const on = { mechanics: true, story: true, aesthetics: true, technology: true };   // technology true = new phone
+  const EXPLAIN = {
+    mechanics: ["Mechanics off: taps do nothing and the spirit only drifts. Without rules there is nothing to *do*.", "Mechanics on: tap to float, collect fireflies, keep your light."],
+    story: ["Story off: no village, no lanterns, no sunrise. Same rules, but no reason to play.", "Story on: light the 3 village lanterns before sunrise."],
+    aesthetics: ["Aesthetics off: grey shapes and silence. The game works, but the mood is gone.", "Aesthetics on: warm light in a blue forest, a chime for every firefly."],
+    technology: ["Technology: old phone. Fewer frames per second and fewer effects: the motion is less smooth.", "Technology: new phone. 60 frames per second, all effects."],
+  };
+  let W = 0, H = 0, st, last = 0, acc = 0, audio = null;
+  const DAY = 60;   // seconds until sunrise
+
+  function reset() {
+    st = { started: false, x: 0, y: 0, vy: 0, light: 1, flies: [], lit: 0, lanterns: [], t: 0, over: false, spawn: 0.4 };
+    st.lanterns = [0.3, 0.55, 0.8].map((f) => ({ fx: f, lit: false }));
+  }
+  function resize() {
+    W = canvas.clientWidth; H = Math.round(Math.min(320, Math.max(220, W * 0.55)));
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    st.x = W * 0.18; if (!st.started) st.y = H * 0.5;
+  }
+  function chime(f) {
+    if (!on.aesthetics) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      [f, f * 1.5].forEach((fr, i) => {
+        const o = audio.createOscillator(), g = audio.createGain(); o.type = "sine"; o.frequency.value = fr; g.gain.value = 0.06;
+        o.connect(g); g.connect(audio.destination); const t = audio.currentTime + i * 0.06;
+        g.gain.setValueAtTime(0.06, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5); o.start(t); o.stop(t + 0.5);
+      });
+    } catch (_) {}
+  }
+  function tap(e) {
+    if (e) e.preventDefault();
+    if (st.over) { reset(); resize(); }
+    if (!st.started) { st.started = true; $("msg").textContent = "Collect fireflies. Switch the elements above on and off."; }
+    if (on.mechanics) st.vy = -260;
+    chime(520);
+  }
+
+  function update(dt) {
+    if (!st.started || st.over) return;
+    st.t += dt;
+    if (on.mechanics) {
+      st.vy += 520 * dt; st.y += st.vy * dt;
+      st.light = Math.max(0, st.light - 0.06 * dt);
+    } else {
+      st.y = H * 0.5 + Math.sin(st.t * 1.5) * H * 0.2;    // drifts, no control
+    }
+    st.y = Math.max(16, Math.min(H - 40, st.y));
+    st.spawn -= dt;
+    if (st.spawn <= 0) { st.flies.push({ x: W + 10, y: 30 + Math.random() * (H - 100), p: Math.random() * 6 }); st.spawn = on.technology ? 0.7 : 1.4; }
+    for (const f of st.flies) f.x -= 90 * dt;
+    st.flies = st.flies.filter((f) => {
+      if (on.mechanics && Math.hypot(f.x - st.x, f.y - st.y) < 22) { st.light = Math.min(1, st.light + 0.18); chime(880); return false; }
+      return f.x > -20;
+    });
+    if (on.story) {
+      for (const l of st.lanterns) {
+        const lx = l.fx * W, ly = H - 52;
+        if (!l.lit && on.mechanics && Math.abs(st.x - lx) < 18 && st.y > ly - 34) { l.lit = true; chime(660); }
+        l.fx -= 0.012 * dt; if (l.fx < -0.05) l.fx += 1.1;      // the village scrolls slowly
+      }
+      if (st.t >= DAY) { st.over = true; const n = st.lanterns.filter((l) => l.lit).length; $("msg").textContent = `Sunrise! You lit ${n} of 3 lanterns. Tap to play again.`; }
+    }
+    if (on.mechanics && st.light <= 0) { st.over = true; $("msg").textContent = "Your light went out. Tap to play again."; }
+  }
+
+  function draw(now) {
+    const A = on.aesthetics;
+    // sky: warms up towards sunrise when the story is on
+    const k = on.story ? Math.min(1, st.t / DAY) : 0;
+    if (A) {
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, `rgb(${Math.round(20 + 140 * k)},${Math.round(30 + 60 * k)},${Math.round(70 + 20 * k)})`);
+      g.addColorStop(1, "#0b1d3a"); ctx.fillStyle = g;
+    } else ctx.fillStyle = "#cfcfcf";
+    ctx.fillRect(0, 0, W, H);
+    // trees
+    ctx.fillStyle = A ? "#0f2b2a" : "#9a9a9a";
+    for (let i = 0; i < 9; i++) { const x = ((i * 97 - st.t * 20) % (W + 80) + W + 80) % (W + 80) - 40; ctx.beginPath(); ctx.moveTo(x, H - 30); ctx.lineTo(x + 26, H - 110 - (i % 3) * 20); ctx.lineTo(x + 52, H - 30); ctx.fill(); }
+    ctx.fillStyle = A ? "#14302b" : "#8a8a8a"; ctx.fillRect(0, H - 30, W, 30);
+    // village lanterns (story)
+    if (on.story) for (const l of st.lanterns) {
+      const lx = l.fx * W, ly = H - 52;
+      ctx.fillStyle = A ? "#4a3b2c" : "#777"; ctx.fillRect(lx - 2, ly, 4, 22);
+      if (l.lit && A) { const g = ctx.createRadialGradient(lx, ly, 2, lx, ly, 26); g.addColorStop(0, "rgba(255,200,90,0.9)"); g.addColorStop(1, "rgba(255,200,90,0)"); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(lx, ly, 26, 0, 7); ctx.fill(); }
+      ctx.fillStyle = l.lit ? (A ? "#ffd43b" : "#555") : (A ? "#3a3f55" : "#bbb"); ctx.fillRect(lx - 7, ly - 10, 14, 12);
+    }
+    // fireflies
+    for (const f of st.flies) {
+      const tw = on.technology ? 0.6 + 0.4 * Math.sin(now / 150 + f.p) : 1;
+      if (A && on.technology) { const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, 12); g.addColorStop(0, `rgba(216,245,162,${0.8 * tw})`); g.addColorStop(1, "rgba(216,245,162,0)"); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(f.x, f.y, 12, 0, 7); ctx.fill(); }
+      ctx.fillStyle = A ? "#d8f5a2" : "#666"; ctx.beginPath(); ctx.arc(f.x, f.y, 3, 0, 7); ctx.fill();
+    }
+    // the spirit and its light
+    const r = 14 + 46 * st.light;
+    if (A) { const g = ctx.createRadialGradient(st.x, st.y, 4, st.x, st.y, r); g.addColorStop(0, "rgba(255,214,140,0.85)"); g.addColorStop(1, "rgba(255,214,140,0)"); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(st.x, st.y, r, 0, 7); ctx.fill(); }
+    ctx.fillStyle = A ? "#ffe8a3" : "#444"; ctx.beginPath(); ctx.arc(st.x, st.y, 10, 0, 7); ctx.fill();
+    ctx.fillStyle = A ? "#9C36B5" : "#222"; ctx.beginPath(); ctx.arc(st.x - 3, st.y - 2, 1.8, 0, 7); ctx.arc(st.x + 3, st.y - 2, 1.8, 0, 7); ctx.fill();
+    // story banner
+    ctx.textAlign = "center";
+    if (on.story) { ctx.fillStyle = A ? "rgba(255,255,255,0.85)" : "#333"; ctx.font = "800 13px Nunito, system-ui, sans-serif"; ctx.fillText("Light the 3 village lanterns before sunrise", W / 2, 20); }
+    if (!st.started) { ctx.fillStyle = A ? "#fff" : "#222"; ctx.font = "800 18px Nunito, system-ui, sans-serif"; ctx.fillText("Tap to start", W / 2, H / 2); }
+    // HUD
+    $("light").textContent = on.mechanics ? `Light ${Math.round(st.light * 100)} %` : "Light —";
+    $("lanterns").textContent = on.story ? `Lanterns ${st.lanterns.filter((l) => l.lit).length}/3` : "";
+    $("time").textContent = on.story ? `Sunrise in ${Math.max(0, Math.ceil(DAY - st.t))} s` : "";
+  }
+
+  function loop(now) {
+    const dt = last ? Math.min((now - last) / 1000, 0.05) : 0; last = now;
+    acc += dt;
+    const step = on.technology ? 1 / 60 : 1 / 15;            // the old phone draws fewer frames per second
+    if (acc >= step) { update(acc); draw(now); acc = 0; }
+    requestAnimationFrame(loop);
+  }
+  document.querySelectorAll("#toggles button").forEach((b) => b.addEventListener("click", () => {
+    const k = b.dataset.k; on[k] = !on[k];
+    b.classList.toggle("off", !on[k] && k !== "technology");
+    if (k === "technology") b.textContent = "Technology: " + (on[k] ? "new phone" : "old phone");
+    $("msg").textContent = EXPLAIN[k][on[k] ? 1 : 0].replace(/\*/g, "");
+  }));
+  canvas.addEventListener("pointerdown", tap);
+  window.addEventListener("keydown", (e) => { if (e.code === "Space") tap(e); });
+  window.addEventListener("resize", resize);
+  reset(); resize(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

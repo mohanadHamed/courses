@@ -308,6 +308,22 @@ def site_url_shapes(site_url, pal):
                  body_pr='<a:bodyPr wrap="square" lIns="90000" tIns="0" rIns="90000" bIns="0" anchor="ctr"/>')
 
 
+def title_size(text, width, height):
+    """Largest font size (1/100 pt) at which the lesson title fits its box.
+
+    The box is bottom-anchored, so a title that needs more lines than fit
+    would grow upwards into the course name. Estimate the lines from the
+    text length (bold sans: about 0.55 em per character, 10 % lost at word
+    breaks) and take the largest size whose lines fit the height."""
+    width_pt, height_pt = width / 12700, height / 12700
+    for pt in (40, 36, 32, 28, 24):
+        per_line = max(1, int(width_pt / (0.55 * pt) / 1.1))
+        lines = -(-len(text) // per_line)
+        if lines * 1.2 * pt <= height_pt:
+            return pt * 100
+    return 2400
+
+
 def finish_title_slide(root, pal, course, diploma, site_url=""):
     csld = root.find(P + "cSld")
     csld.insert(0, frag(
@@ -323,9 +339,11 @@ def finish_title_slide(root, pal, course, diploma, site_url=""):
               '<a:ln w="38100">%s</a:ln>' % solid(pal["accent2"], 70000)),
         shape(9104, "deco-dot", 8300000, 2350000, 260000, 260000, "ellipse", solid(pal["accent2"])),
         shape(9105, "deco-bar", 685800, 2620000, 900000, 70000, "roundRect", solid(pal["accent2"])),
-        shape(9106, "course", 685800, 760000, 6400000, 300000, "rect", "<a:noFill/>",
+        # Course name: anchored at the bottom, so a long name wraps upwards
+        # and never runs into the lesson title below it.
+        shape(9106, "course", 685800, 400000, 6400000, 660000, "rect", "<a:noFill/>",
               text=text_para(("%s · %s" % (course["title"], course["code"])).upper(), 1100, pal["accent2"], True, spacing=100),
-              body_pr='<a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr"/>'),
+              body_pr='<a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="b"/>'),
         shape(9107, "diploma", 685800, 4620000, 7600000, 260000, "rect", "<a:noFill/>",
               text=text_para(diploma, 900, "FFFFFF"),
               body_pr='<a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr"/>'),
@@ -339,11 +357,13 @@ def finish_title_slide(root, pal, course, diploma, site_url=""):
         set_xfrm(title, 685800, 1150000, 5800000, 1420000)
         bp = title.find("./%stxBody/%sbodyPr" % (P, A))
         bp.set("anchor", "b")
+        text = "".join(t.text or "" for t in title.iter(A + "t"))
+        size = title_size(text, 5800000, 1420000)
         for p in title.iter(A + "p"):
             ppr = p.find(A + "pPr")
             if ppr is not None:
                 ppr.set("algn", "l")
-            style_runs(p, 4000, "FFFFFF", True)
+            style_runs(p, size, "FFFFFF", True)
     if sub is not None:
         set_xfrm(sub, 685800, 2760000, 5800000, 820000)
         for p in sub.iter(A + "p"):

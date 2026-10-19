@@ -28,3 +28,12 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
 - Week 1 (2026-10-19): course started in week 1 with the new lesson model
   (notes first). Mini-games: Juice It (media layers on fixed mechanics),
   Sound Stage (diegetic and non-diegetic sound and interface).
+- Week 1 (2026-10-19, applied first): simpler level and English; Do it tasks
+  with lab software (Paint vs PowerPoint for raster and vector, a coin icon
+  through the pipeline) and on a game the student plays (inventory,
+  functions, sound off for accessibility). Left out: media size formulas and
+  Manovich's five properties.
+- Week 1 (2026-10-19, level check, about 20 % simpler): digitization, the
+  "what makes game media special" section and the evaluation criteria
+  (ILO B2, a later week) were removed; story as an element of the tetrad is
+  stressed for ILO A1.

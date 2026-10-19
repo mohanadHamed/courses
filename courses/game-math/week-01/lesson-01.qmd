@@ -1,6 +1,6 @@
 ---
 title: "Mathematics in Game Development and Coordinate Systems"
-description: "The game loop, one-, two- and three-dimensional coordinates, screen space and tile grids."
+description: "The game loop, one-, two- and three-dimensional coordinates, and left- and right-handed systems."
 week: 1
 lesson: 1
 ilos: [A1]
@@ -8,233 +8,210 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-summarises one concept and ends with one set of questions. The full
-explanations, all worked examples and the exercises are in the notes.
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
 
 ## Key terms
 
-{{< glossary game-loop frame-rate coordinate-system origin axis coordinate ordered-pair quadrant screen-space world-space tile-grid handedness >}}
+{{< glossary game-loop frame-rate coordinate-system origin axis coordinate ordered-pair quadrant handedness >}}
 
 ## 1.1 Mathematics in game development
 
-A game repeats the **game loop** — read input, update the state, render — once
-per **frame**. The state is only numbers, and the loop has a strict time
-budget: the **frame time** is 1000 / *f* milliseconds at *f* frames per second,
-so 16.7 ms at 60 fps.
+- For a computer, a game is numbers in memory: positions, health, score.
+- The **game loop** repeats: read the input → change the numbers → draw.
+- One pass makes one **frame**.
+- **Frame rate**: frames per second (fps). Phone games: 30 or 60 fps.
+- At 60 fps, the loop runs 60 times every second.
+- Coordinates and vectors (weeks 1–3), trigonometry (4), matrices (5–7),
+  logic (9–10), probability (11–13).
 
 ![The game loop.](images/game-loop.png){width=70%}
 
-Each area of this course answers a question the loop asks in every frame:
-coordinates and vectors (*where is it, where does it go?*), trigonometry
-(*which way does it face?*), matrices (*how is the model placed?*), logic
-(*is the rule true?*) and probability (*what does chance decide?*).
+::: {.callout-note title="Do it · Find the mathematics in a game"}
+Play a game on your phone for two minutes. Write four things it must compute
+with numbers (for example "the position of my car"). Next to each, write the
+mathematics it needs.
+:::
 
-::: {.callout-tip title="Try it 1 · The frame budget"}
-Choose the right value or term. Round times to one decimal place.
+::: {.callout-tip title="Try it 1 · The game loop"}
+Choose the right answer.
 
-::: {.match extra="16.7 ms|read input|probability"}
-The frame time at 30 fps.
-:   33.3 ms
+::: {.match extra="draw first|vectors|60 frames"}
+The loop has read the player's tap. What does it do next?
+:   change the numbers
 
-The frame time at 120 fps.
-:   8.3 ms
+A game runs at 60 fps. How many frames in 10 seconds?
+:   600 frames
 
-The number of frames in 10 seconds at 60 fps.
-:   600
+What does one pass of the game loop make?
+:   one frame
 
-The step of the loop that draws the image.
-:   render
+A turret must turn to aim at a ship. Which mathematics?
+:   trigonometry
 
-The step of the loop that applies the rules and the physics.
-:   update state
-
-The area of mathematics that decides whether a locked door opens.
-:   logic
+A ship drops a rare reward only sometimes. Which mathematics?
+:   probability
 :::
 :::
 
 ## 1.2 One-dimensional coordinates
 
-On a **number line**, a point is one number: its signed distance from the
-**origin**. Moving from *a* to *b* gives a **signed displacement** *b* − *a*
-(the sign is the direction) and a **distance** |*b* − *a*| (never negative).
-Board games use **discrete** positions (integers); physics games use
-**continuous** positions (`float`). A `float` keeps about seven significant
-digits, so far from the origin (around 100 000 units) positions can only
-change in visible steps and objects jitter. Large worlds keep the action near
-the origin with a **floating origin**.
+- A **number line** has an **origin** (0), a unit and a positive direction.
+- A point has one number: its **coordinate**. Left of 0: negative.
+- A runner game needs one number for the position.
+- **Displacement** = end − start. Plus: right (or up). Minus: left (or down).
+- **Distance** = the displacement without the sign. Never negative.
 
-![A runner game: the player goes back from x = 4 to the checkpoint at x = −3.](images/number-line.png){width=90%}
+![A runner game: the player goes back from 4 to the checkpoint at −3.](images/number-line.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+A distance is never negative. −7 is a displacement; its distance is 7.
+:::
+
+::: {.callout-note title="Do it · A runner track on paper"}
+Draw a number line from −5 to 10. Mark the start at 0, a coin at 6 and a trap
+at −2. The player runs to the coin, then falls back to the trap. Write the
+displacement and the distance of each move.
+:::
 
 ::: {.callout-tip title="Try it 2 · Moving along a line"}
-A player at *x* = 6 falls back to a checkpoint at *x* = −2.
+Choose the right answer.
 
-::: {.match extra="−4"}
-The player's signed displacement.
-:   −8
+::: {.match extra="−8|decimal numbers"}
+The player goes from 4 back to the checkpoint at −3. Displacement?
+:   −7
 
-The distance the player travels.
-:   8
+The distance of that move.
+:   7 units
 
-A platform moves from *x* = −5 to *x* = −1. Its displacement.
-:   +4
+The player runs from 0 to a coin at 6. Displacement?
+:   +6
 
-The kind of number line in which a character can stand at *x* = 3.27.
-:   continuous
+A displacement of −5 and one of +5. Their distances?
+:   both 5 units
 
-The kind of number line used for the squares of a board game.
-:   discrete
-
-The technique that moves a large world back towards the origin.
-:   floating origin
+A board game piece can stand only on squares 1, 2, 3… What kind of numbers?
+:   whole numbers
 :::
 :::
 
-## 1.3 The two-dimensional Cartesian coordinate system
+## 1.3 Two-dimensional coordinates
 
-Two perpendicular axes meet at the origin: *x* grows to the right, *y* grows
-upward. A point is an **ordered pair** (*x*, *y*) — the order matters. The
-axes divide the plane into four **quadrants**, identified only by the signs of
-the coordinates; a point with a zero coordinate lies on an axis.
+- Two axes cross at the origin: the **x-axis** (right) and the **y-axis** (up).
+- A point is an **ordered pair** (x, y). The order matters.
+- Four **quadrants**: I (+, +), II (−, +), III (−, −), IV (+, −).
+- A point with a 0 is on an axis, not in a quadrant.
+- Moving right or left changes x; moving up or down changes y.
 
-![The four quadrants and their sign patterns.](images/quadrants.png){width=62%}
+![The four quadrants and their signs.](images/quadrants.png){width=62%}
 
 {{< sim file="sims/grid-strike.html" poster="sims/grid-strike.png" title="Grid Strike: hit the coordinates" kind="game" height="600" >}}
 
-::: {.callout-tip title="Try it 3 · Where is the point?"}
-Give the quadrant or the axis of each point, or the distance asked.
+::: {.callout-note title="Do it · Build the level in GeoGebra"}
+Open geogebra.org/calculator (free, no account). Type `Coin = (4, 3)`,
+`Key = (-3, 2)` and `Exit = (2, -3)`. Add an enemy in quadrant III and a door
+on the y-axis. Then play stage 1 of **Grid Strike**.
+:::
 
-::: {.match extra="quadrant I|positive x-axis"}
-(−5, 3)
+::: {.callout-tip title="Try it 3 · Where is the point?"}
+Choose the right answer. You can use an answer more than once.
+
+::: {.match extra="quadrant I|quadrant IV|on the y-axis"}
+The key at (−3, 2).
 :   quadrant II
 
-(6, −0.5)
-:   quadrant IV
-
-(−2, −7)
+Both numbers of a point are negative. Which quadrant?
 :   quadrant III
 
-(0, −4)
-:   negative y-axis
+A tree at (−5, 0).
+:   on the x-axis
 
-The horizontal distance between (−3, 2) and (4, 2).
-:   7
+A player at (2, 1) moves 3 right and 4 up. New position?
+:   (5, 5)
+
+The point 3 units right of the centre and 2 units down.
+:   (3, −2)
 :::
 :::
 
-## 1.4 Screen space and world space
+## 1.4 Three-dimensional coordinates
 
-The screen counts **pixels from the top-left corner**, and its *y* grows
-**downward**. The world counts units from an origin chosen by the designer,
-with *y* upward. With the camera centred on the world origin, a screen of
-*W* × *H* pixels and a scale of *s* pixels per unit:
+- A third axis, **z**, at a right angle to x and y.
+- A point is an **ordered triple** (x, y, z).
+- In most engines y is up: y is the **height**.
+- On the ground, y = 0.
+- x and z say where the point is on the ground.
 
-- world → screen: *x*~s~ = *W*/2 + *s*·*x*~w~, *y*~s~ = *H*/2 − *s*·*y*~w~
-- screen → world (a touch): *x*~w~ = (*x*~s~ − *W*/2) / *s*, *y*~w~ = (*H*/2 − *y*~s~) / *s*
-
-![The same point in world space and in screen space (*s* = 100).](images/screen-world.png){width=92%}
-
-Phones differ in resolution, so the scale is computed, not fixed: to show a
-play area *w* units wide on every phone, use *s* = *W* / *w*. A taller phone
-then simply shows more of the world above and below.
-
-::: {.callout-note title="Watch out!"}
-The minus sign in *y*~s~ = *H*/2 − *s*·*y*~w~ is what turns *y* around. With a
-plus sign, the world is drawn upside down.
-:::
-
-::: {.callout-tip title="Try it 4 · Convert between the spaces"}
-A portrait phone: *W* = 1080, *H* = 1920, *s* = 100 pixels per unit, camera
-centred on the world origin.
-
-::: {.match extra="(640, 1160)|upward"}
-The pixel at the centre of the screen.
-:   (540, 960)
-
-The pixel where the world point (1, 2) is drawn.
-:   (640, 760)
-
-The pixel where the world point (−3, −1) is drawn.
-:   (240, 1060)
-
-The world point touched at the pixel (740, 1360).
-:   (2, −4)
-
-The direction in which screen *y* grows.
-:   downward
-
-The scale that shows a board 9 units wide on this phone.
-:   120 pixels per unit
-:::
-:::
-
-## 1.5 Discrete coordinates: grids and tile maps
-
-On a grid, a cell is a pair of integers: column *c* and row *r*, from 0.
-Memory is one-dimensional, so a grid with *n* columns is stored row after row
-(**row-major order**):
-
-- index of a cell: *i* = *r* × *n* + *c*
-- cell of an index: *c* = *i* mod *n* (the remainder), *r* = ⌊*i* / *n*⌋ (the whole part)
-
-![An 8-column board: each cell has (c, r) and an index i.](images/tile-index.png){width=80%}
-
-::: {.callout-tip title="Try it 5 · A match-3 board"}
-The board has 8 columns. In the last question, tiles are 2 units wide and row 0
-is the bottom row.
-
-::: {.match extra="column 2, row 3|11"}
-The index of the cell in column 2, row 4.
-:   34
-
-The cell with index 19.
-:   column 3, row 2
-
-The index of the cell directly above index 19.
-:   27
-
-The index of the cell (0, 0).
-:   0
-
-The world position of the centre of tile (1, 0).
-:   (3, 1)
-:::
-:::
-
-## 1.6 The three-dimensional Cartesian coordinate system
-
-A 3D point is an **ordered triple** (*x*, *y*, *z*). In a world with *y* up,
-the ground is the *xz*-plane and *y* is the height. With *x* right and *y* up,
-*z* can point into the screen (**left-handed**, e.g. Unity) or towards the
-viewer (**right-handed**, e.g. Godot). Swapping two axes changes the
-handedness: Blender (right-handed, *z* up) → Unity (left-handed, *y* up) is
-(*x*, *y*, *z*) → (*x*, *z*, *y*).
-
-![Left-handed and right-handed coordinate systems.](images/handedness.png){width=86%}
+![The three axes of a 3D world.](images/axes-3d.png){width=60%}
 
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" height="640" >}}
 
-::: {.callout-tip title="Try it 6 · Positions in 3D"}
-The world has *y* up unless the question says otherwise.
+::: {.callout-note title="Do it · Move a player in 3D"}
+In the 3D viewer, move the player to (1, 2, 4). Which slider changes the
+height? Then catch three coins and write their coordinates.
+:::
 
-::: {.match extra="right-handed|(5, 1, 3)|z"}
-The coordinate that gives the height.
-:   y
+::: {.callout-tip title="Try it 4 · Positions in 3D"}
+In these questions, y is up. Choose the right answer.
 
-The plane of the ground.
-:   the xz-plane
+::: {.match extra="−3 units|(4, 12, 0)"}
+A drone at (4, 12, −3). How high is it?
+:   12 units
 
-Where the point (2, 0, −7) lies.
+A box at (5, 0, 5). Where is it?
 :   on the ground
 
-The handedness of Unity's coordinate system.
+A tower on the ground at x = 4, z = −3. Its position?
+:   (4, 0, −3)
+
+The drone lands straight down. Which number changes?
+:   only y
+
+A at (1, 4, 2), C at (3, 7, −1). Which is higher?
+:   C
+:::
+:::
+
+## 1.5 Left-handed and right-handed systems
+
+- With x right and y up, z can point **into** or **out of** the screen.
+- Hand rule: thumb +x, index finger +y, middle finger +z.
+- Works with the left hand: **left-handed** (+z into the screen).
+- Works with the right hand: **right-handed** (+z towards you).
+- Unity: y up, left-handed. Blender: z up, right-handed.
+
+![Left-handed and right-handed coordinate systems.](images/handedness.png){width=86%}
+
+::: {.callout-warning title="Watch out!"}
+Not all 3D programs use the same axes. Check which axis is up before you read
+a position.
+:::
+
+::: {.callout-note title="Do it · The hand rule"}
+Hold your left hand in front of the screen: thumb right, index finger up.
+Where does your middle finger point? Do the same with your right hand. Which
+hand fits Unity?
+:::
+
+::: {.callout-tip title="Try it 5 · Which hand?"}
+Choose the right answer.
+
+::: {.match extra="down|x"}
+Left hand: thumb right, index finger up. Where does +z point?
+:   into the screen
+
+The handedness of Unity.
 :   left-handed
 
-The Blender point (3, 1, 5) in Unity.
-:   (3, 5, 1)
+The handedness of Blender.
+:   right-handed
 
-What swapping two axes changes.
-:   the handedness
+The up axis in Blender.
+:   z
+
+A Blender model appears lying on its side in Unity. Why?
+:   the up axis is different
 :::
 :::
 
@@ -242,54 +219,42 @@ What swapping two axes changes.
 
 Work alone. Use every section of today.
 
-**Harbor Guard** is a portrait tower-defence game for phones (1080 × 1920
-pixels, 60 fps). The camera is centred on the world origin with a scale of
-120 pixels per unit. The harbour is a grid of 9 columns of tiles. The player
-taps a tile to build a tower; the towers are 3D models made in Blender.
+**Harbor Guard** is a tower-defence game for phones. It runs at 60 fps. The
+origin of the harbour level is in its centre: the dock is at (0, −6), the
+lighthouse at (−4, 5) and the gate at (3, 2). A ship enters at (5, 8) and
+sails to the dock. In the 3D version, a drone flies at (4, 12, −3) with y up,
+and the towers are made in Blender, where z is up.
 
-![A screen of Harbor Guard: the player taps a tile of the harbour grid.](images/harbor-guard.png){width=42%}
+{{< sim file="sims/harbor-guard.html" poster="sims/harbor-guard.png" title="Harbor Guard: build towers at the right coordinates" kind="game" height="720" >}}
 
-::: {.callout-tip title="Try it 7 · Taps and ships"}
-Use *s* = 120 and the screen centre (540, 960).
+::: {.callout-tip title="Try it 6 · The harbour (harder)"}
+Use the numbers of Harbor Guard. Choose the right answer.
 
-::: {.match extra="(2, −2)|(900, 480)"}
-The frame time of the game.
-:   16.7 ms
+::: {.match extra="quadrant I|on the x-axis|60 frames"}
+How many frames does the game make in 5 seconds?
+:   300 frames
 
-The world point touched at the pixel (300, 720).
-:   (−2, 2)
-
-The quadrant of that point.
+The lighthouse at (−4, 5). Quadrant?
 :   quadrant II
 
-The pixel where a ship at the world point (3, −4) is drawn.
-:   (900, 1440)
-:::
-:::
+The dock at (0, −6). Where is it?
+:   on the y-axis
 
-::: {.callout-tip title="Try it 8 · Tiles and towers (harder)"}
-The harbour grid has 9 columns, stored in row-major order.
+The ship sails from y = 8 down to y = −6. Displacement in y?
+:   −14
 
-::: {.match extra="column 0, row 4|(2, 3, 1.5)"}
-The index of the tile in column 4, row 6.
-:   58
+How high is the drone?
+:   12 units
 
-The tile with index 40.
-:   column 4, row 4
-
-A tower at (2, 3, 1.5) in Blender. Its position in Unity.
-:   (2, 1.5, 3)
-
-The height of that tower above the ground.
-:   1.5 units
+In Blender, which number of a tower's position is its height?
+:   the last number
 :::
 :::
 
 ## Summary {.summary}
 
-- The game loop runs once per frame; frame time = 1000 / fps ms.
-- 1D: displacement *b* − *a* has a sign; distance |*b* − *a*| does not.
-- 2D: ordered pair (*x*, *y*); the signs decide the quadrant.
-- Screen space: pixels from the top-left, *y* down; convert with the scale *s*.
-- Grids: *i* = *r* × *n* + *c*; back with mod and whole-number division.
-- 3D: (*x*, *y*, *z*); left- or right-handed; swapping two axes flips it.
+- The game loop: read → change → draw, once per frame.
+- On a line: displacement = end − start; distance has no sign.
+- (x, y): four quadrants, decided by the signs.
+- (x, y, z): with y up, y is the height and the ground is y = 0.
+- Hand rule: Unity is left-handed (y up), Blender right-handed (z up).

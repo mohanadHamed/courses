@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Comet Courier</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .score { margin-left: auto; }
+    .sim .pick { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; margin-top: 10px; }
+    .sim .pick .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .sim .pick button { padding: 6px 12px; }
+    .sim .pick button.on { background: var(--sim-accent); color: #fff; }
+    .sim .val { min-width: 2.2em; text-align: center; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .sum { margin-top: 8px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Comet Courier</h1>
+  <p class="hint">Fly the parcel from the start depot to the target depot. Choose the number of frames and one velocity per frame. The ship adds the velocity once per frame and cannot turn. Do not stop on the comet!</p>
+  <div class="hud">
+    <span id="level">Delivery 1/6</span>
+    <span id="need"></span>
+    <span class="score" id="score">Delivered 0</span>
+  </div>
+  <canvas id="c" aria-label="Star map with two depots and a comet"></canvas>
+  <div class="pick">
+    <span>Frames</span>
+    <div class="row" id="frames"></div>
+    <span>Velocity</span>
+    <div class="row">
+      (<button type="button" class="ghost" data-d="vx-">−</button><span class="val" id="vx">0</span><button type="button" class="ghost" data-d="vx+">+</button>,
+      <button type="button" class="ghost" data-d="vy-">−</button><span class="val" id="vy">0</span><button type="button" class="ghost" data-d="vy+">+</button>)
+    </div>
+  </div>
+  <p class="sum" id="sum"></p>
+  <div class="controls">
+    <button id="go" type="button">Launch</button>
+    <button id="sound" type="button" class="ghost">Sound: on</button>
+  </div>
+  <p id="msg" class="message">Delivery 1 is the map of the lesson: Alpha (1, 2) → Beta (9, 6), comet at (5, 4).</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const GX = 12, GY = 8, LEVELS = 6;
+  const fmt = (n) => (n < 0 ? "−" + -n : String(n));
+  const pair = (p) => `(${fmt(p[0])}, ${fmt(p[1])})`;
+  let W = 0, H = 0, cell = 30, left = 24, top = 14;
+  let lvl = 0, delivered = 0, frames = 1, vx = 0, vy = 0, map = null, fly = null, sound = true, audio = null, stars = [];
+
+  function resize() {
+    W = canvas.clientWidth; cell = Math.min((W - 40) / GX, 46);
+    left = (W - cell * GX) / 2; H = Math.round(cell * GY + top * 2 + 10);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    stars = Array.from({ length: 60 }, () => [Math.random() * W, Math.random() * H, Math.random() * 1.4 + 0.3]);
+  }
+  const px = (x) => left + x * cell, py = (y) => top + (GY - y) * cell;
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.08;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+
+  // A level: start A, target B, comet C on the "easy" path so that one choice is blocked.
+  function makeLevel(i) {
+    if (i === 0) return { A: [1, 2], B: [9, 6], C: [5, 4] };
+    for (let t = 0; t < 500; t++) {
+      const n = [2, 3, 4][Math.floor(Math.random() * 3)];
+      const sx = Math.floor(Math.random() * 5) - 2, sy = Math.floor(Math.random() * 5) - 2;
+      if (!sx && !sy) continue;
+      const A = [Math.floor(Math.random() * (GX + 1)), Math.floor(Math.random() * (GY + 1))];
+      const B = [A[0] + n * sx, A[1] + n * sy];
+      if (B[0] < 0 || B[0] > GX || B[1] < 0 || B[1] > GY) continue;
+      const k = 1 + Math.floor(Math.random() * (n - 1));          // the comet sits on the n-step path
+      return { A, B, C: [A[0] + k * sx, A[1] + k * sy] };
+    }
+    return { A: [2, 1], B: [10, 5], C: [6, 3] };
+  }
+  function newLevel() {
+    map = makeLevel(lvl); fly = null; frames = 1; vx = 0; vy = 0;
+    $("level").textContent = `Delivery ${lvl + 1}/${LEVELS}`;
+    $("need").textContent = `From ${pair(map.A)} to ${pair(map.B)} · comet ${pair(map.C)}`;
+    buildFrames(); update();
+  }
+  function buildFrames() {
+    $("frames").innerHTML = [1, 2, 3, 4].map((n) => `<button type="button" class="ghost ${n === frames ? "on" : ""}" data-n="${n}">${n}</button>`).join("");
+    $("frames").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { if (fly) return; frames = Number(b.dataset.n); buildFrames(); update(); }));
+  }
+  function update() {
+    $("vx").textContent = fmt(vx); $("vy").textContent = fmt(vy);
+    const d = [frames * vx, frames * vy];
+    $("sum").textContent = `${frames} × ${pair([vx, vy])} = ${pair(d)} · needed: ${pair([map.B[0] - map.A[0], map.B[1] - map.A[1]])}`;
+  }
+  document.querySelectorAll("[data-d]").forEach((b) => b.addEventListener("click", () => {
+    if (fly) return;
+    const k = b.dataset.d;
+    if (k === "vx-") vx = Math.max(-8, vx - 1); if (k === "vx+") vx = Math.min(8, vx + 1);
+    if (k === "vy-") vy = Math.max(-8, vy - 1); if (k === "vy+") vy = Math.min(8, vy + 1);
+    update();
+  }));
+
+  $("go").addEventListener("click", () => {
+    if (map.done) { fly = null; lvl = (lvl + 1) % LEVELS; if (lvl === 0) delivered = 0; $("score").textContent = `Delivered ${delivered}`; newLevel(); $("go").textContent = "Launch"; $("msg").className = "message"; $("msg").textContent = "Choose frames and a velocity."; return; }
+    if (fly) return;
+    fly = { path: [map.A.slice()], step: 0, t: performance.now() };
+    for (let i = 1; i <= frames; i++) fly.path.push([map.A[0] + i * vx, map.A[1] + i * vy]);
+    beep(440, 0.1);
+    const f = fly; setTimeout(() => { if (fly === f && !f.ended) { f.ended = true; finish(); } }, frames * 450 + 80);
+  });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+
+  function finish() {
+    const path = fly.path, end = path[path.length - 1];
+    const hit = path.slice(1).findIndex((p) => p[0] === map.C[0] && p[1] === map.C[1]);
+    if (hit >= 0) {
+      $("msg").textContent = `✗ Crash! After ${hit + 1} frame${hit ? "s" : ""} the ship is at ${pair(path[hit + 1])}: the comet. Try another number of frames.`;
+      $("msg").className = "message bad"; beep(160, 0.35, "sawtooth"); fly.crash = path[hit + 1];
+    } else if (end[0] === map.B[0] && end[1] === map.B[1]) {
+      delivered++; map.done = true;
+      $("msg").textContent = `✓ Delivered! ${frames} × ${pair([vx, vy])} = ${pair([frames * vx, frames * vy])} = end − start.`;
+      $("msg").className = "message good"; beep(660, 0.12); setTimeout(() => beep(990, 0.15), 100);
+      $("go").textContent = lvl + 1 < LEVELS ? "Next delivery" : "Play again";
+    } else {
+      $("msg").textContent = `✗ The ship stopped at ${pair(end)}, not at ${pair(map.B)}. Compare n × v with end − start.`;
+      $("msg").className = "message bad"; beep(220, 0.2, "square");
+    }
+    $("score").textContent = `Delivered ${delivered}`;
+    const keep = fly; setTimeout(() => { if (fly === keep) fly = null; }, 1600);
+  }
+
+  function draw(now) {
+    ctx.fillStyle = "#14213d"; ctx.fillRect(0, 0, W, H);
+    for (const [x, y, r] of stars) { ctx.fillStyle = "rgba(255,255,255,0.6)"; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); }
+    ctx.strokeStyle = "rgba(169,227,75,0.16)"; ctx.lineWidth = 1;
+    for (let x = 0; x <= GX; x++) { ctx.beginPath(); ctx.moveTo(px(x), py(0)); ctx.lineTo(px(x), py(GY)); ctx.stroke(); }
+    for (let y = 0; y <= GY; y++) { ctx.beginPath(); ctx.moveTo(px(0), py(y)); ctx.lineTo(px(GX), py(y)); ctx.stroke(); }
+    ctx.fillStyle = "rgba(255,255,255,0.55)"; ctx.font = "600 10px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    for (let x = 0; x <= GX; x += 2) ctx.fillText(String(x), px(x), py(0) + 12);
+    ctx.textAlign = "right"; for (let y = 2; y <= GY; y += 2) ctx.fillText(String(y), px(0) - 4, py(y) + 3);
+    if (!map) return;
+    // comet
+    const [cx, cy] = map.C; const wob = 2 * Math.sin(now / 200);
+    ctx.fillStyle = "rgba(255,169,77,0.35)"; ctx.beginPath(); ctx.moveTo(px(cx), py(cy)); ctx.lineTo(px(cx) + 26, py(cy) - 14 + wob); ctx.lineTo(px(cx) + 22, py(cy) + 4 + wob); ctx.fill();
+    ctx.fillStyle = "#ff922b"; ctx.beginPath(); ctx.arc(px(cx), py(cy), 7, 0, 7); ctx.fill();
+    // depots
+    const depot = (p, name, color) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(px(p[0]), py(p[1]), 9, 0, 7); ctx.fill(); ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = "#fff"; ctx.font = "800 11px Nunito, system-ui, sans-serif"; ctx.textAlign = "center"; ctx.fillText(name, px(p[0]), py(p[1]) - 13); };
+    depot(map.A, "start " + pair(map.A), "#2F9E44"); depot(map.B, "target " + pair(map.B), "#A9E34B");
+    // planned path preview (dots) or flight
+    const path = fly ? fly.path : Array.from({ length: frames + 1 }, (_, i) => [map.A[0] + i * vx, map.A[1] + i * vy]);
+    const shown = fly ? Math.min(path.length - 1, Math.floor((now - fly.t) / 450)) : path.length - 1;
+    ctx.strokeStyle = fly ? "#fff" : "rgba(255,255,255,0.35)"; ctx.setLineDash(fly ? [] : [4, 4]); ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(px(path[0][0]), py(path[0][1]));
+    for (let i = 1; i <= shown; i++) ctx.lineTo(px(path[i][0]), py(path[i][1]));
+    ctx.stroke(); ctx.setLineDash([]);
+    for (let i = 1; i <= shown; i++) { ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(px(path[i][0]), py(path[i][1]), 3.5, 0, 7); ctx.fill(); ctx.font = "700 10px Nunito, system-ui, sans-serif"; ctx.fillText(String(i), px(path[i][0]) + 9, py(path[i][1]) + 4); }
+    if (fly) {
+      const p = path[shown];
+      ctx.fillStyle = "#A9E34B"; ctx.beginPath(); ctx.moveTo(px(p[0]) + 9, py(p[1])); ctx.lineTo(px(p[0]) - 7, py(p[1]) - 6); ctx.lineTo(px(p[0]) - 7, py(p[1]) + 6); ctx.fill();
+      if (fly && fly.crash) { ctx.strokeStyle = "#ff6b6b"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(px(fly.crash[0]), py(fly.crash[1]), 14 + 4 * Math.sin(now / 90), 0, 7); ctx.stroke(); }
+    }
+  }
+  function loop(now) { draw(now); requestAnimationFrame(loop); }
+  window.addEventListener("resize", resize);
+  resize(); newLevel(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

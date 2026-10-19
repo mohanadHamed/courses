@@ -43,12 +43,12 @@ simple and repeated the same idea many times. Every lesson is now built in
 this order.
 
 1. **Lesson notes (PDF)** — `lesson-NN-book.qmd` → `<prefix>_lectureN.pdf`.
-   The main study text, written like a chapter of the course textbook:
-   formal academic English, precise definitions, numbered sections
-   (`## 1.1 …`), numbered definitions, worked examples and common mistakes,
-   figures, tables, short C# reading examples where useful, a case study,
-   further reading (textbook chapter), exercises and short answers. It may be
-   demanding; do not over-simplify.
+   The main study text, written like an applied chapter of a technical
+   textbook: simple, clear English (see "Level and language"), numbered
+   sections (`## 1.1 …`), precise definitions, worked examples and common
+   mistakes, "Do it" tasks (see "Applied first"), figures, tables, short C#
+   reading examples where useful, a case study, further reading (textbook
+   chapter), exercises and short answers. It is never long on theory.
 2. **Interactive lesson (HTML)** — `lesson-NN.qmd`, derived from the notes.
    The same sections (`## 1.1 …`), each with a short, clear summary (plainer
    English than the notes, but not childish), its figures, its simulator or
@@ -59,6 +59,54 @@ this order.
 The PDF links to the web lesson (QR card under the ILOs, added by
 `banner.lua`) and to every simulator and mini-game (QR in the `{{< sim >}}`
 box). The web lesson's main button is "Lesson notes (PDF)".
+
+### Applied first (a diploma, not a bachelor's degree)
+
+The program is an applied diploma (Intermediate University Degree, JNQF;
+the syllabi describe every ILO as Knowledge, Skill or Competency). Graduates
+are expected to *do* things in a game studio, so students learn mainly by
+doing. Theory is taught as far as a task needs it, and every concept ends in
+something the student does. This holds for the notes, the page and the
+slides.
+
+- **The outcomes come first, the tasks serve them.** Every applied task
+  builds the ILO of that week (the course ILOs in the syllabus and the
+  ILO–PLO matrix on Drive) at its Bloom level and descriptor, and serves the
+  PLO behind it. A "describe" ILO (A, level 1–2, K) still ends with the
+  student describing or explaining; the task gives the description a real
+  object (their phone, a spec sheet, a game screen). Never add a skill
+  that belongs to an ILO of a later week (for example setting up an emulator,
+  C1, before week 14 of `computing-systems`), and never drop the knowledge an
+  ILO asks for: the midterm and final still test it.
+- **Situation → concept → task.** Every section opens with a concrete game
+  development situation (a problem a developer meets), gives the concept
+  needed to handle it, and ends with the student handling it. Never open a
+  section with a definition. Prefer section titles that name the problem or
+  the action ("Why the game loads slowly: storage") over abstract ones.
+- **One "Do it" task per section** (notes and page:
+  `::: {.callout-note title="Do it · short title"}`; in `digital-skills` the
+  same box is called "Lab task"). Short (2–5 minutes), done alone, on things
+  every student has: their phone, the lab computer, a browser, a simulator or
+  mini-game of the lesson, a free tool that runs in the lab, or paper. It
+  has a concrete product: a number, a filled table, a file, a sketch, a
+  decision with a reason. It works on Android and iOS, and on Windows lab
+  computers; if a step differs, say how. No programming and no game-engine
+  interface (see "Students").
+- **Theory budget.** About one third of a lesson explains; two thirds apply
+  (game-based worked examples, Do it tasks, Try it, Game challenge).
+  At most one formal definition per section, only for terms the tasks use.
+  History, taxonomies and background that no task or ILO needs are left out
+  or go to "Further reading".
+- **Questions ask students to use the idea.** In every "Try it" set and in
+  the exercises, at least two thirds of the questions put the idea into a
+  game situation: choose, classify, decide, find the error, or (where the
+  ILO needs it) calculate; the rest may check a term or a definition. See
+  "Level and language" for the level of thinking.
+- **Worked examples are game cases with real numbers** (a load time, a frame
+  budget, a sound level, a file name), never abstract ones.
+- **Slides teach by showing.** In class, each section is a short concept and
+  a live demonstration or a Do it task done together on the projector
+  (phone settings, the lab computer, a simulator), not more text.
 
 ### No repetition (most important)
 
@@ -94,12 +142,36 @@ link it from the notes and the slides:
 `{{< sim file="sims/x.html" poster="sims/x.png" title="…" kind="game" >}}`
 (label "Mini-game", QR text "Scan to play"). Same rules as simulators.
 
+### The game of the lesson (playable case study)
+
+When the Case study and the Game challenge of a lesson use a made-up game
+(*Harbor Guard*, *Comet Courier*, *Pocket Pets*, …), build its core as a
+mini-game: only the part that the lesson teaches (placing objects by their
+coordinates, one velocity per frame, sorting player messages by component,
+switching the tetrad on and off), with the numbers of the story in its first
+round. Then:
+
+- **Page:** the Game challenge embeds it after the story and before the Try
+  it boxes (`{{< sim … kind="game" >}}`); it replaces the static illustration.
+- **Notes (PDF):** the Case study embeds the same shortcode (poster + QR,
+  "Scan to play").
+- **Slides:** the Game challenge slide keeps the story in keywords on the
+  left and shows the QR code on the right:
+  `{{< sim … kind="game" layout="qr" >}}` inside the right column.
+- If the lesson's mini-game already *is* that game (Tap Runner), reuse it:
+  the notes and the page point to it, the slide shows its QR code.
+- A story about a studio, a class or a person, not a game, needs no game of
+  its own.
+
+`check_size.py` warns when a game of the page's Game challenge is missing in
+the notes or on the Game challenge slide.
+
 ### Size every lesson for its lecture time
 
 | | 60-min lesson | 90-min lesson (`game-math`) |
 |---|---|---|
 | Notes: numbered sections (`## 1.1`) | 3–4 | 5–7 |
-| Notes: words (without exercises and answers) | 1 500–3 500 | 2 500–6 000 |
+| Notes: words (without exercises and answers), at most | 3 500 | 6 000 |
 | Notes: worked examples | 2+ | 4+ |
 | Notes: exercises (with short answers at the end) | 6–10 | 10–16 |
 | Page: "Try it" boxes (one per section + Game challenge) | 4–6 | 6–9 |
@@ -124,6 +196,7 @@ summary 7.
 
 `_extensions/lesson/check_size.py` (project pre-render) checks these numbers,
 that every section of the notes is on the page, the one-box-per-section rule,
+one "Do it" (or "Lab task") box in every section of the notes and the page,
 the required parts (notes: Key terms, Exercises, Answers to the exercises;
 page: Key terms, Game challenge, Summary) and one "Live demo" slide per
 simulator. Fix every warning before you open a PR. Full table:
@@ -143,9 +216,11 @@ discussions with classmates. Each course's `plan.md` names these lessons.
 **Game challenge (every course; no class activities).** No groups, no paper:
 every student works alone on the page, and the teacher shows one part on
 the slides. `## Game challenge: <name> {.challenge}`, a short story of one
-made-up game or studio (3–5 sentences with fixed numbers), then "Try it"
-boxes that combine the sections of the day (the last one "(harder)"). The
-notes contain the same story as a "Case study" section.
+made-up game or studio (3–5 sentences with fixed numbers), then the game
+itself as a playable mini-game when the story is about a game (see "The game
+of the lesson"), then "Try it" boxes that combine the sections of the day (the
+last one "(harder)"). The notes contain the same story as a "Case study"
+section.
 
 Course-specific notes: `courses/<slug>/NOTES.md`. Week map:
 `courses/<slug>/schedule.yml` (titles, ILOs) and `courses/<slug>/plan.md`.
@@ -183,9 +258,46 @@ ILO–PLO matrix). Use the newest version of each file.
 
 ## Students
 
-- Diploma students, first year. Their level is higher than first assumed:
-  they cope with formal English and real concepts when the text is clear.
+- Diploma students, first year. They cope with real concepts when the
+  text is simple and clear, but English is their second language.
 - I explain in Arabic in class; the bilingual glossary supports them.
+
+### Level and language
+
+The students' starting level is very basic. The level is about 20 %
+simpler than the first applied version of the lessons (October 2026), which
+was already slightly easier than a first-year bachelor's course; the English
+is simple. The ILOs and PLOs stay exactly the same: a lesson is easier in
+*how* it teaches, never in *what* the ILO asks for. (The estimated limit is
+about 30 % simpler: beyond it, syllabus topics, the ILO verb or the practical
+tasks would be lost.)
+
+- **Scope: only what the outcomes need.** A topic goes into a lesson only if
+  the syllabus week names it, an ILO of the week asks for it, or an ILO of a
+  later week builds on it (for example handedness, needed by the cross
+  product in week 3). Everything else is left out, even when it is useful in
+  practice (for example screen ↔ world conversion formulas, the index of a
+  tile grid, Blender ↔ Unity conversion, evaluation criteria before the
+  evaluation ILO). Spend the time in class on the Do it tasks and questions,
+  not on more examples of the same idea: short notes are better than
+  repeated ones.
+- **Match the thinking to the ILO.** For a knowledge ILO (describe, explain;
+  K), questions ask students to recognise, describe, classify or explain a
+  game example. Calculations appear only where the ILO or a later ILO needs
+  them.
+- **Numbers:** small, round numbers (1024 × 1024, 100 reads, 10 ms + 6 ms).
+  One step per calculation, no calculator needed. No conversion that needs
+  a calculator (1024³ and the like) unless an ILO asks for it.
+- **Depth:** one idea at a time; the main idea of a section fits in two
+  sentences. Leave out details that the ILO and the tasks do not need
+  (cache levels, standards, exceptions); one short sentence is enough when
+  a student may meet the detail in practice.
+- **English (notes):** CEFR B1. Short sentences (about 20 words at most,
+  one idea each), common words, active voice ("the CPU reads the value",
+  not "the value is read"), no idioms. Explain every technical word in plain
+  words the first time it appears, then use the same word every time.
+- **English (page and slides):** A2–B1: even shorter sentences and lists.
+- Definitions stay precise, but in the same simple English.
 - No programming yet: *Programming Fundamentals (1)* (C#) is in semester 2.
   Code in semester-1 courses is a short C# example to read, never a task,
   and every code word is explained.
@@ -195,17 +307,19 @@ ILO–PLO matrix). Use the newest version of each file.
 
 ## Writing rules (always enforce)
 
-- **Notes:** formal academic English, the register of a textbook. Precise
+- **Notes:** simple English (B1, see "Level and language"): short
+  paragraphs, direct steps. Precise
   definitions (`::: {.callout-important title="Definition 1.2 — …"}`), worked
   examples with numbered steps (`::: {.callout-note title="Example 1.3 — …"}`),
   common mistakes (`::: {.callout-warning title="Common mistake"}`), code
   (`::: {.callout-caution title="In game code"}`), figures with captions and
   `@fig-` references, tables with captions, `::: {.lead}` opening paragraph,
   `::: {.answers}` for the short answers.
-- **Page:** the same content, shorter and plainer (B1–B2): one idea per
+- **Page:** the same content, shorter and plainer (A2–B1): one idea per
   sentence, but no baby talk. "Watch out!" boxes for common mistakes.
 - **Slides:** keywords and pictures, no long sentences.
-- Picture before formula: game situation → figure → definition → example.
+- Picture before formula: game situation → figure → definition → example →
+  Do it.
 - Every rule or formula gets a worked example in the notes.
 - Every lesson starts with a bilingual "Key terms" glossary (8–14 terms).
 - Facts must be correct and current (conventions of engines, standards,
@@ -507,3 +621,25 @@ Lessons or homework not ready for students: `draft: true` (not published).
   only look good on paper. Team work stays only where the official outcomes
   require it: one team-activity box in the notes (PDF) of one or two lessons
   per course, with an individual alternative (see each course's `plan.md`).
+- 2026-10-19: the week 1 lessons followed a bachelor's model (textbook
+  chapter, formal definitions first, recognition questions). The program is
+  an applied diploma: lessons are now "applied first" (situation → concept →
+  task, one Do it task per section, a theory budget), always within the
+  official ILOs and PLOs. Rules above ("Applied first"). Tried first on one
+  model lesson before it is applied to all courses.
+- 2026-10-19 (model lesson review): the model was right in approach but a
+  little too hard, and its English too formal. The level is now slightly
+  easier (small numbers, fewer details) and the English simple (B1 in the
+  notes, A2–B1 on the page and slides), with the same ILOs and PLOs. Rules
+  above ("Level and language").
+- 2026-10-19: the made-up game of each case study is now playable: a
+  mini-game of its core part in the page's Game challenge, with its QR code
+  in the notes and on the Game challenge slide (rule "The game of the
+  lesson").
+- 2026-10-19 (level check): the students' level is very basic. The most the
+  lessons can be simplified without losing the ILOs and PLOs was estimated at
+  about 30 %; the lessons are now about 20 % simpler, and topics that no
+  syllabus week or ILO asks for are left out (rule "Scope: only what the
+  outcomes need"). The notes no longer have a minimum word count: short
+  notes are better than a second example of the same idea (see "No
+  repetition"); only the maximum stays.

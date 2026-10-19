@@ -1,0 +1,245 @@
+---
+title: "Computer Components: CPU, Memory and Storage"
+description: "Cores and threads, the memory hierarchy and the cache, what a game keeps in memory, and what it keeps in storage."
+week: 2
+lesson: 3
+draft: true
+ilos: [A1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the part of the device
+behind the problem. It ends with a **Do it** task (on the lab computer, your
+phone or the simulator) and one set of questions. The full explanations,
+examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary cpu cpu-core clock-rate thread memory-hierarchy cache memory byte texture storage ssd app-storage >}}
+
+## 3.1 Why eight cores do not make a game eight times faster
+
+- A **core** is a small processor inside the CPU.
+- A core runs one list of instructions at a time: a **thread**.
+- **Performance cores** are big and fast. **Efficiency cores** are small and
+  save battery.
+- The **clock rate** (GHz) tells how fast one core works.
+- A game has one **main thread** for the game logic. It always runs on one
+  core. Only other work (physics, loading, sound) can use more cores.
+- Example: 10 ms main thread + 6 ms physics. With six cores: 10 + 1 = 11 ms.
+  Faster, but not six times faster.
+
+![The operating system puts each thread on a core.](images/cpu-cores.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Cores do not add up: 8 cores at 3 GHz are **not** 24 GHz.
+:::
+
+::: {.callout-note title="Do it · Watch the cores at work"}
+On a lab computer: press Ctrl + Shift + Esc → Task Manager →
+**Performance → CPU**. Right-click the graph → **Change graph to → Logical
+processors**. Open the simulator of section 3.2. Watch for 30 seconds. Write
+down the number of cores. Is one graph very busy, or are all graphs busy?
+:::
+
+::: {.callout-tip title="Try it 1 · Cores and threads"}
+A frame needs 8 ms on the main thread and 4 ms of work that the cores can
+share equally. Choose the right answer.
+
+::: {.match extra="6 ms|a performance core|24 GHz"}
+The frame time with one core.
+:   12 ms
+
+The frame time with four cores.
+:   9 ms
+
+The work that only one core can do.
+:   the game logic on the main thread
+
+The best core for music in the background, with little battery.
+:   an efficiency core
+
+A phone has 8 cores at 3 GHz. How fast is the core of the main thread?
+:   3 GHz
+:::
+:::
+
+## 3.2 Why the processor keeps a small memory next to it
+
+- RAM is slow for the CPU: one value takes about 100 ns.
+- So memory has levels: the **memory hierarchy**.
+- Near the core: the **cache**. Small and very fast (about 1 ns).
+- Then RAM, then storage (SSD, hard disk): bigger and slower.
+- The cache keeps data that the game uses again and again, like the player's
+  position.
+- **Cache hit**: the data is in the cache (fast). **Cache miss**: the core
+  must get it from RAM (slow).
+
+![The memory hierarchy, with typical times.](images/memory-hierarchy.png){width=92%}
+
+{{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" height="600" >}}
+
+::: {.callout-note title="Do it · Fetch the data yourself"}
+In **Data Trip**, get one value from each level. Write the time and the
+human-scale time in a table. Then, in **100 reads**, set the reads from the
+cache to 99, 90 and 50. Write the total time each time. Finish with one
+sentence: what does the cache do?
+:::
+
+::: {.callout-tip title="Try it 2 · The memory hierarchy"}
+A read from the cache takes 1 ns. A read from RAM takes 100 ns. Choose the
+right answer.
+
+::: {.match extra="10 000 ns|in RAM|28 hours"}
+The player's position is read 50 times in one frame. After the first read, where does the core find it?
+:   in the cache
+
+The best score must stay when the phone is off. Where is it kept?
+:   in storage
+
+The game reads 100 values: 90 from the cache and 10 from RAM. Total time?
+:   1090 ns
+
+The game reads 100 values, all from the cache. Total time?
+:   100 ns
+
+If 1 ns lasted 1 second, how long would a read from RAM last?
+:   100 seconds
+:::
+:::
+
+## 3.3 What a game keeps in memory while you play
+
+- RAM holds what the game needs **now**: code, **textures**, 3D models,
+  sounds, and the state (positions, health, score).
+- The operating system and other apps use RAM too.
+- Sizes are in **bytes**: 1 KB ≈ 1000 bytes, 1 MB ≈ 1000 KB,
+  1 GB ≈ 1000 MB.
+- A texture is an image on an object. Memory = width × height × 4 bytes.
+- 1024 × 1024 pixels ≈ 1 million pixels → about 4 MB. Compressed (1 byte
+  per pixel) → about 1 MB.
+
+![Main memory of a phone during play (example values).](images/game-ram.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+A 1 MB PNG file does **not** use 1 MB of memory. The game opens it into
+pixels first.
+:::
+
+::: {.callout-note title="Do it · Watch the memory fill"}
+On a lab computer: Task Manager → **Processes**. Sort by **Memory**. Write
+down the browser's memory. Open five pages with many pictures. Wait ten
+seconds. Write it down again. What does the extra memory hold?
+:::
+
+::: {.callout-tip title="Try it 3 · Memory sizes"}
+Choose the right answer.
+
+::: {.match extra="16 MB|1 TB|sounds"}
+A texture of 1024 × 1024 pixels, 4 bytes per pixel.
+:   about 4 MB
+
+The same texture, compressed to 1 byte per pixel.
+:   about 1 MB
+
+40 compressed textures of 1024 × 1024.
+:   about 40 MB
+
+A game is almost out of memory. What should the team compress first?
+:   textures
+
+About 1000 MB.
+:   1 GB
+:::
+:::
+
+## 3.4 Where the game lives when it is not running
+
+- **Storage** keeps data when the power is off.
+- **Hard disk (HDD)**: spinning disks and a moving arm. Cheap, but slow.
+- **SSD**: flash chips, no moving parts, fast. Phones use flash chips too.
+- A game in storage has three parts: the **app**, the **user data** (progress,
+  downloads) and the **cache** (temporary files).
+- A "1 TB" SSD shows about 931 GB in Windows. Nothing is missing: Windows
+  counts 1 GB = 1024 MB.
+
+![Kinds of storage and the parts of a game in storage.](images/storage.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+**Clear cache** deletes temporary files. **Clear storage** deletes the
+player's data.
+:::
+
+::: {.callout-note title="Do it · A game in your phone's storage"}
+**Android:** Settings → Apps → *(a game)* → Storage. **iPhone:** Settings →
+General → iPhone Storage → *(a game)*. Write down the size of each part.
+Which part would grow with a new level? Do **not** press Clear storage,
+Offload App or Delete App.
+:::
+
+::: {.callout-tip title="Try it 4 · Storage"}
+Choose the right answer.
+
+::: {.match extra="an SSD|Clear cache|yes, 69 GB is lost"}
+A laptop has a moving arm inside that reads the data. What is its storage?
+:   a hard disk
+
+A player presses Clear cache. What do they lose?
+:   nothing important
+
+A player wants free space but wants to keep the pets. Which button is wrong?
+:   Clear storage
+
+A game uses: app 1.1 GB, islands 2.4 GB, cache 0.3 GB. How much is left after Clear cache?
+:   about 3.5 GB
+
+A "1 TB" SSD shows 931 GB in Windows. Is space missing?
+:   no, Windows counts with 1024
+:::
+:::
+
+## Game challenge: the Pocket Pets support desk {.challenge}
+
+Work alone. Use every section of today.
+
+*Pocket Pets* is a made-up mobile game. Version 2.0 adds an island with 40
+textures of 1024 × 1024 pixels, compressed to 1 byte per pixel. The support
+team receives five messages:
+
+1. "My phone has eight cores, but only one is really busy."
+2. "The island download needs 1.6 GB, and my phone has 1.2 GB free."
+3. "I pressed Clear storage, and my pets are gone."
+4. "My new 1 TB laptop SSD shows only 931 GB."
+5. "When I enter the island, the pets look blurry for a second."
+
+{{< sim file="sims/pocket-pets.html" poster="sims/pocket-pets.png" title="Pocket Pets: answer the support desk" kind="game" height="560" >}}
+
+::: {.callout-tip title="Try it 5 · Answer the players (harder)"}
+Choose the answer for each message.
+
+::: {.match extra="160 MB|the cache|1.6 GB"}
+Message 1: what keeps one core very busy?
+:   the game logic on the main thread
+
+Message 2: how much more free space does the player need?
+:   0.4 GB
+
+Message 3: which part of storage was deleted?
+:   the user data
+
+Message 4: why does the SSD show 931 GB?
+:   Windows counts 1 GB as 1024 MB
+
+Message 5: how much memory do the island's 40 textures need?
+:   about 40 MB
+:::
+:::
+
+## Summary {.summary}
+
+- A core runs one thread. The main thread uses one core, so cores do not add up.
+- Memory hierarchy: cache → RAM → storage, from fast and small to slow and big.
+- The cache keeps data that the game uses again and again.
+- RAM holds code, assets and state. A texture needs width × height × 4 bytes.
+- Storage holds the app, the user data and the cache. Clear storage deletes the player's data.

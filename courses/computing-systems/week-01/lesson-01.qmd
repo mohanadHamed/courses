@@ -1,6 +1,6 @@
 ---
 title: "Computing Systems and Digital Platforms in the Games Industry"
-description: "The four jobs of a computing system, how the CPU runs a game, one game for many processors, and digital platforms."
+description: "The four jobs of a computing system, how the CPU runs a game, and digital platforms."
 week: 1
 lesson: 1
 ilos: [A1]
@@ -14,7 +14,7 @@ examples and exercises are in the notes.
 
 ## Key terms
 
-{{< glossary computing-system hardware software cpu memory storage input output instruction-cycle clock-rate isa compiler digital-platform >}}
+{{< glossary computing-system hardware software cpu memory storage input output instruction-cycle clock-rate digital-platform >}}
 
 ## 1.1 What a game needs from a computer
 
@@ -66,9 +66,8 @@ Which part runs the game's instructions?
 - For each one, the CPU repeats the **instruction cycle**: **fetch** (get it
   from memory), **decode** (find out what it asks), **execute** (do it).
 - The **clock rate** sets the speed: 3 GHz = 3 billion ticks per second.
-- All the work for one **frame** must fit into the time of one frame.
-- Example: 3 GHz at 60 frames per second → 3 000 000 000 / 60 = 50 million
-  ticks per frame.
+- The CPU makes a new picture (a **frame**) many times per second, so all the
+  work for one picture must be done very fast.
 
 ![The instruction cycle.](images/instruction-cycle.png){width=62%}
 
@@ -82,63 +81,25 @@ in order. Which part decides that the character jumps?
 ::: {.callout-tip title="Try it 2 · The instruction cycle"}
 Choose the right answer.
 
-::: {.match extra="decode|60 million ticks"}
+::: {.match extra="the RAM|3 million"}
 The CPU gets the next instruction from memory. Which step is this?
 :   fetch
+
+The CPU finds out that the instruction asks for an addition. Which step?
+:   decode
 
 The CPU adds 10 to the score. Which step is this?
 :   execute
 
-A core at 3 GHz, a game at 60 frames per second: ticks per frame?
-:   50 million ticks
-
-A core at 2 GHz, a game at 50 frames per second: ticks per frame?
-:   40 million ticks
-
-How many ticks per second does 3 GHz mean?
+How many clock ticks per second does 3 GHz mean?
 :   3 billion
+
+Which part of the phone decides that the character jumps?
+:   the CPU
 :::
 :::
 
-## 1.3 One game, many processors
-
-- The game is written in C#. The CPU cannot read C#.
-- Each processor family has its own list of machine instructions: the **ISA**.
-- Phones use **ARM**. Most Windows PCs, PlayStation and Xbox use **x86-64**.
-- A **compiler** translates the game into machine instructions.
-- The game engine makes a separate **build** for each kind of device.
-
-![One C# game, two builds.](images/build-targets.png){width=86%}
-
-::: {.callout-note title="Do it · Which ISA?"}
-**Lab computer:** Settings → System → About → *System type* ("x64-based" =
-x86-64, "ARM-based" = ARM). **Phone:** Android: Settings → About phone →
-processor name. iPhone: Apple chip. Snapdragon, MediaTek, Exynos, Tensor and
-Apple A all mean ARM. Can the same build run on both?
-:::
-
-::: {.callout-tip title="Try it 3 · Builds and processors"}
-Choose the right answer.
-
-::: {.match extra="yes, the PC is faster|3|an interpreter"}
-A game for a phone with a Snapdragon processor. Which ISA?
-:   ARM
-
-A Windows lab PC shows "x64-based processor". Which ISA?
-:   x86-64
-
-The program that translates C# into machine instructions.
-:   a compiler
-
-Can the Android build run on the Windows PC?
-:   no, a different ISA
-
-Tap Runner runs on Android, iPhone and Windows. How many different ISAs?
-:   2
-:::
-:::
-
-## 1.4 Digital platforms: where games run and are sold
+## 1.3 Digital platforms: where games run and are sold
 
 - A **digital platform** = devices + operating system + tools + a store with
   rules.
@@ -147,8 +108,10 @@ Tap Runner runs on Android, iPhone and Windows. How many different ISAs?
 - The platform owner makes the rules: what a game may contain, how players
   pay, how much of each sale it keeps.
 - Mobile is about half of all game revenue.
-- Engines are **cross-platform**, but Android has thousands of phone models,
-  so games need testing on many of them.
+- Engines are **cross-platform**: one project, one **build** for each
+  platform. Phones use ARM processors, most PCs x86: a phone build cannot run
+  on a PC.
+- Android has thousands of phone models, so games need testing on many.
 
 ![The four layers of a digital platform.](images/platform-stack.png){width=62%}
 
@@ -157,7 +120,7 @@ Think of three devices at home that run games. Make a table: device,
 platform, operating system, store. Which platform is the most common?
 :::
 
-::: {.callout-tip title="Try it 4 · Platforms"}
+::: {.callout-tip title="Try it 3 · Platforms"}
 Choose the right answer.
 
 ::: {.match extra="Google Play|touch only|the player"}
@@ -185,23 +148,24 @@ Work alone. Use every section of today.
 **Tap Runner** is an endless runner: the character runs by itself, and the
 player taps to jump over blocks. The game shows 60 frames per second and saves
 the best distance. It is released on Android phones, on iPhones and on Windows
-PCs. The test phone has a CPU core at 2.4 GHz.
+PCs, with one build for each. The test phone has a CPU core at 2.4 GHz and
+4 GB of RAM.
 
-::: {.callout-tip title="Try it 5 · Tap Runner on three platforms (harder)"}
+::: {.callout-tip title="Try it 4 · Tap Runner on three platforms (harder)"}
 Choose the right answer.
 
-::: {.match extra="RAM|ARM|2"}
+::: {.match extra="the RAM|2|the display"}
 The input device for jumping in the phone version.
 :   touch screen
 
 Where the best distance is kept when the phone is off.
 :   storage
 
-Ticks per frame for the test phone's core at 60 frames per second.
-:   40 million
+What does "2.4 GHz" tell about the test phone?
+:   the speed of one core
 
-The ISA of the Windows build.
-:   x86-64
+Where is Tap Runner while the player is playing it?
+:   in the 4 GB of RAM
 
 How many builds does the studio need?
 :   3
@@ -213,5 +177,5 @@ How many builds does the studio need?
 - A computing system does four jobs: input, processing, storage, output.
 - CPU runs instructions; RAM holds what is running; storage keeps data without power.
 - The CPU repeats fetch, decode, execute; GHz sets the speed.
-- Phones use ARM, most PCs x86-64: one build for each.
 - A platform = devices + system + tools + store and rules.
+- One project, one build for each platform.

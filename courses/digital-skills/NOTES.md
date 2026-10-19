@@ -33,3 +33,6 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   real job advertisement, single sign-on, extensions and Copy as path,
   course folders, version history and restore). Left out: the 1000 vs 1024
   conversion.
+- Week 1 (2026-10-19, level check, about 20 % simpler): the table of 21
+  competences (now five areas in simple words), the EU-targets figure,
+  relative paths and file-size calculations were removed.

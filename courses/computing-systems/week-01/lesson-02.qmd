@@ -14,7 +14,7 @@ examples and exercises are in the notes.
 
 ## Key terms
 
-{{< glossary app-package install process loading gpu frame-rate refresh-rate resolution thermal-throttling latency bandwidth cloud-gaming >}}
+{{< glossary app-package install process loading gpu frame-rate refresh-rate resolution thermal-throttling latency cloud-gaming >}}
 
 ## 2.1 From the store to the first frame
 
@@ -77,25 +77,25 @@ A game starts again from the title screen after a long break. Why?
 
 ::: {.callout-note title="Do it · Your screen in numbers"}
 On a lab computer: Settings → System → Display. Write the resolution and
-(under Advanced display) the refresh rate. How many pixels is that, about?
-What is the highest frame rate a player can see on it?
+(under Advanced display) the refresh rate. What is the highest frame rate a
+player can see on it?
 :::
 
 ::: {.callout-tip title="Try it 2 · Frames, screens, heat"}
 Choose the right answer.
 
-::: {.match extra="60|the GPU"}
-CPU 20 ms, GPU 10 ms per frame. Time of one frame?
-:   20 ms
+::: {.match extra="the screen|120"}
+Which processor runs the game logic (input, rules, movement)?
+:   the CPU
 
-That game: frames per second?
-:   50
+Which processor colours the pixels of the picture?
+:   the GPU
 
 A 120 Hz screen and a game at 70 fps. New pictures per second?
 :   70
 
-A screen of 1080 × 2400 pixels. About how many pixels?
-:   2.6 million
+The number of pixels, width × height.
+:   resolution
 
 The chip gets hot and the phone slows down. What is it called?
 :   thermal throttling
@@ -110,9 +110,8 @@ The chip gets hot and the phone slows down. What is it called?
 - **Cloud gaming**: the game runs on a server; the phone sends touches and
   shows a video.
 - **Latency**: the delay between an action and the result (ms).
-- **Bandwidth**: data per second (Mbit/s). Cloud gaming needs about 10–20
-  Mbit/s.
-- Example: local lag 44 ms; with cloud gaming 44 + 40 + 15 = 99 ms.
+- Cloud gaming needs a fast Internet connection and adds latency: it suits
+  slow games (cards, puzzles) better than fast ones (fighting, rhythm).
 
 ![Local, client–server and cloud gaming.](images/where-game-runs.png){width=94%}
 
@@ -126,7 +125,7 @@ in each mode. From which mode does the game get hard?
 ::: {.callout-tip title="Try it 3 · Near or far?"}
 Choose the right answer.
 
-::: {.match extra="local|a card game"}
+::: {.match extra="local|a card game|storage"}
 The game runs on a server; the phone only shows the video.
 :   cloud gaming
 
@@ -135,9 +134,6 @@ Each phone runs the game; a server keeps the score of the match.
 
 The delay between a tap and the jump on the screen.
 :   latency
-
-Local lag 44 ms + trip 40 ms + video 15 ms.
-:   99 ms
 
 Which game suffers most from 100 ms of lag?
 :   a fighting game
@@ -185,19 +181,18 @@ Work alone. Use every section of today.
 A first-year class lists the devices it plays on. Most students use Android
 phones of different prices; the cheapest one reads its storage at 120 MB per
 second. A few use iPhones and some use laptops. One student has a console. Two
-play through a cloud gaming service; one of them has a trip of 90 ms to the
-data centre and back. The class wants one game that runs on all of these
-devices.
+play through a cloud gaming service; one of them has a slow connection. The
+class wants one game that runs on all of these devices.
 
 ::: {.callout-tip title="Try it 5 · One game, many devices (harder)"}
 Use the numbers of the survey and of today's sections.
 
-::: {.match extra="1 second|99 ms"}
+::: {.match extra="1 second|a puzzle game"}
 Loading time of a 600 MB level on the cheapest phone.
 :   5 seconds
 
-Input lag of the cloud player with the 90 ms trip.
-:   149 ms
+The cloud player with the slow connection. What gets worse?
+:   the latency (input lag)
 
 The input device of the student with the console.
 :   gamepad
@@ -216,5 +211,5 @@ The package type of the iPhone version.
 - The speed of storage decides the loading time.
 - CPU and GPU work together; the slower one sets the frame rate; the screen limits it too.
 - Phones slow down when hot.
-- Local, client–server, cloud: the cloud adds latency and needs bandwidth.
+- Local, client–server, cloud: the cloud adds latency and needs fast Internet.
 - Each device class needs its own input, layout and performance plan.

@@ -45,3 +45,7 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   notes below 2 500 words; extra game-based worked examples (not theory)
   brought them back. Left out: float precision, screen fitting, basis
   vectors, n-dimensional vectors.
+- Week 1 (2026-10-19, level check, about 20 % simpler): screen space and
+  world space with their conversion formulas, the tile-grid index and the
+  Blender ↔ Unity conversion were removed (no syllabus week or ILO asks for
+  them). Handedness stays, because the cross product (week 3) needs it.

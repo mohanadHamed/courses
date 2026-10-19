@@ -6,7 +6,7 @@ format: lesson-pptx
 
 ## Keywords
 
-{{< glossary app-package process loading gpu refresh-rate resolution latency bandwidth cloud-gaming thermal-throttling >}}
+{{< glossary app-package process loading gpu refresh-rate resolution latency cloud-gaming thermal-throttling >}}
 
 ## Think · Why is there a loading screen?
 
@@ -69,25 +69,15 @@ c) the system closed it to free memory
 :::
 ::::
 
-## Example · What limits the frame rate?
-
-CPU 20 ms · GPU 10 ms · screen 60 Hz.
-
-::: {.reveal}
-1. slower one: **20 ms** per frame
-2. 1000 / 20 = **50 fps**
-3. the CPU is the problem: smaller resolution would not help
-:::
-
 ## Try it 2 · Frames, screens, heat
 
-a) 120 Hz screen, game at 70 fps: new pictures?
-b) 1080 × 2400: about how many pixels?
+a) colours the pixels?
+b) 120 Hz screen, game at 70 fps: new pictures?
 c) hot chip slows down?
 
 ::: {.answer}
-a) 70
-b) 2.6 million
+a) the GPU
+b) 70
 c) thermal throttling
 :::
 
@@ -102,12 +92,12 @@ c) thermal throttling
 ## Try it 3 · Near or far?
 
 a) game on a server, phone shows video?
-b) local 44 ms + trip 40 + video 15?
+b) delay between a tap and the jump?
 c) suffers most from lag?
 
 ::: {.answer}
 a) cloud gaming
-b) 99 ms
+b) latency
 c) a fighting game
 :::
 
@@ -142,18 +132,18 @@ c) cloud gaming
 
 - Android phones · cheapest reads 120 MB per second
 - iPhones, laptops, one console
-- one cloud player: 90 ms trip
+- one cloud player: slow connection
 - one game for all
 
 ## Try it 5 · One game, many devices (harder)
 
 a) 600 MB level on the cheapest phone?
-b) cloud lag with the 90 ms trip?
+b) slow cloud connection: what gets worse?
 c) heat matters most on…?
 
 ::: {.answer}
 a) 5 seconds
-b) 149 ms
+b) the latency
 c) smartphone
 :::
 
@@ -163,5 +153,5 @@ c) smartphone
 - storage speed → loading time
 - slower of CPU and GPU sets the frame rate
 - phones throttle when hot
-- cloud: more latency, needs bandwidth
+- cloud: more latency, needs fast Internet
 - each device class needs its own plan

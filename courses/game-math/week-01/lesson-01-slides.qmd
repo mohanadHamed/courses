@@ -6,7 +6,7 @@ format: lesson-pptx
 
 ## Keywords
 
-{{< glossary game-loop frame-rate coordinate-system origin ordered-pair quadrant screen-space world-space tile-grid handedness >}}
+{{< glossary game-loop frame-rate coordinate-system origin axis ordered-pair quadrant handedness >}}
 
 ## Think · What is a game, to a computer?
 
@@ -14,17 +14,16 @@ You see a hero, enemies and a score.
 **What does the program see?**
 
 ::: {.answer}
-Only **numbers** — positions, health, time — updated every frame.
+Only **numbers**: positions, health, time. They change in every frame.
 :::
 
 ## 1.1 The game loop
 
 :::: {.columns}
 ::: {.column width="38%"}
-- input → update → draw
+- read → change → draw
 - one pass = one **frame**
-- frame time = **1000 / fps** ms
-- 60 fps → 16.7 ms
+- 60 fps = 60 times a second
 - **Do it together:** the maths in a game
 :::
 ::: {.column width="62%"}
@@ -32,26 +31,26 @@ Only **numbers** — positions, health, time — updated every frame.
 :::
 ::::
 
-## Example · Frame budget
+## Example · One tap, one pass
 
-Racing game, 60 fps, 3-minute race.
+The player taps to build a tower.
 
 ::: {.reveal}
-1. 1000 / 60 ≈ **16.7 ms**
-2. 3 × 60 = 180 s · 180 × 60 = **10 800 frames**
-3. at 30 fps: about 33 ms, only 5 400 frames
+1. **read:** where the finger touched
+2. **change:** add a tower · coins 200 → 150
+3. **draw:** the next frame shows it
 :::
 
-## Try it 1 · The frame budget
+## Try it 1 · The game loop
 
-a) frame time at 50 fps?
-b) frames in 10 s at 60 fps?
-c) maths to aim a turret?
+a) after reading the tap?
+b) 60 fps for 10 seconds?
+c) a rare reward only sometimes?
 
 ::: {.answer}
-a) 20 ms
-b) 600
-c) trigonometry
+a) change the numbers
+b) 600 frames
+c) probability
 :::
 
 ## 1.2 One dimension: the number line
@@ -59,9 +58,8 @@ c) trigonometry
 :::: {.columns}
 ::: {.column width="38%"}
 - origin 0 · unit · direction
-- displacement = **end − start** (sign)
-- distance: no sign, never negative
-- discrete (whole) · continuous (any)
+- displacement = **end − start**
+- distance: no sign
 - **Do it together:** a runner track
 :::
 ::: {.column width="62%"}
@@ -69,16 +67,26 @@ c) trigonometry
 :::
 ::::
 
+## Example · Back to the checkpoint
+
+Player at 4 → checkpoint at −3.
+
+::: {.reveal}
+1. end − start = −3 − 4 = **−7**
+2. minus: to the left
+3. distance: **7 units**
+:::
+
 ## Try it 2 · Moving along a line
 
-a) from 4 back to −3: displacement?
-b) the distance of that move?
-c) a piece only on squares 1, 2, 3?
+a) from 0 to a coin at 6?
+b) displacements −5 and +5: distances?
+c) board squares 1, 2, 3: what numbers?
 
 ::: {.answer}
-a) −7
-b) 7
-c) discrete
+a) +6
+b) both 5 units
+c) whole numbers
 :::
 
 ## 1.3 Two dimensions: (x, y)
@@ -98,12 +106,12 @@ c) discrete
 
 ## Example · Reading a level
 
-Key (−3, 2), trap (−4, −2.5), coin (4, 3).
+Coin (4, 3), key (−3, 2), exit (2, −3).
 
 ::: {.reveal}
-1. key: x < 0, y > 0 → **quadrant II**
-2. trap: both negative → **quadrant III**
-3. key → coin: from −3 to 4 = **7** to the right
+1. coin: + + → **quadrant I**
+2. key: − + → **quadrant II**
+3. exit: + − → **quadrant IV**
 :::
 
 ## Live demo · Grid Strike
@@ -112,93 +120,17 @@ Key (−3, 2), trap (−4, −2.5), coin (4, 3).
 
 ## Try it 3 · Where is the point?
 
-a) the trap at (−4, −2.5)?
-b) a tree at (5, 0)?
-c) the exit at (2, −3)?
+a) both numbers negative?
+b) a tree at (−5, 0)?
+c) 3 right of the centre, 2 down?
 
 ::: {.answer}
 a) quadrant III
 b) on the x-axis
-c) quadrant IV
+c) (3, −2)
 :::
 
-## 1.4 Screen space and world space
-
-:::: {.columns}
-::: {.column width="38%"}
-- screen: top left, **y down**
-- x~s~ = W/2 + s · x~w~
-- y~s~ = H/2 **−** s · y~w~
-- touch → world: the other way
-- **Do it together:** Grid Strike, stage 2
-:::
-::: {.column width="62%"}
-![](images/screen-world.png)
-:::
-::::
-
-## Example · World ↔ screen
-
-1080 × 1920, s = 100.
-
-::: {.reveal}
-1. centre (540, 960)
-2. world (2, 3) → (540 + 200, 960 − 300) = **(740, 660)**
-3. touch (340, 1160) → ((340 − 540)/100, (960 − 1160)/100) = **(−2, −2)**
-:::
-
-## Try it 4 · Convert between the spaces
-
-1080 × 1920, s = 100.
-
-a) world (−1, 2) → pixel?
-b) touch (840, 760) → world?
-c) centre of the screen?
-
-::: {.answer}
-a) (440, 760)
-b) (3, 2)
-c) (540, 960)
-:::
-
-## 1.5 Grids: row-major order
-
-:::: {.columns}
-::: {.column width="38%"}
-- cell (c, r), from 0
-- stored row after row
-- **i = r × n + c**
-- i ÷ n → row, remainder → column
-- **Do it together:** a board in a spreadsheet
-:::
-::: {.column width="62%"}
-![](images/tile-index.png)
-:::
-::::
-
-## Example · A match-3 board
-
-8 columns.
-
-::: {.reveal}
-1. (5, 3) → 3 × 8 + 5 = **29**
-2. index 42 → 42 ÷ 8 = 5 r 2 → **column 2, row 5**
-3. one row up → index + 8
-:::
-
-## Try it 5 · A match-3 board
-
-a) 8 columns: column 5, row 3?
-b) 6 columns: column 4, row 2?
-c) 6 columns: where is index 23?
-
-::: {.answer}
-a) 29
-b) 16
-c) column 5, row 3
-:::
-
-## 1.6 Three dimensions: (x, y, z)
+## 1.4 Three dimensions: (x, y, z)
 
 :::: {.columns}
 ::: {.column width="38%"}
@@ -212,77 +144,95 @@ c) column 5, row 3
 :::
 ::::
 
-## Left-handed or right-handed?
+## Example · A drone over the harbour
 
-:::: {.columns}
-::: {.column width="38%"}
-- thumb x · index y · middle z
-- Unity: y up, **left-handed**
-- Blender: z up, **right-handed**
-- Blender → Unity: (x, y, z) → (x, z, y)
-:::
-::: {.column width="62%"}
-![](images/handedness.png)
-:::
-::::
-
-## Example · Blender to Unity
-
-Lamp at (1, 4, 2) in Blender (z up).
+Drone at (4, 12, −3), y up.
 
 ::: {.reveal}
-1. height in Blender = z = 2
-2. swap the last two → **(1, 2, 4)** in Unity
-3. height in Unity = y = 2 ✓
+1. height = middle number = **12**
+2. tower below it: **(4, 0, −3)**
+3. landing: only **y** changes
 :::
 
 ## Live demo · 3D position
 
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" >}}
 
-## Try it 6 · Positions in 3D
+## Try it 4 · Positions in 3D
 
-a) drone at (4, 12, −3): height?
-b) Blender (2, −5, 3) → Unity?
-c) Unity handedness?
+a) a box at (5, 0, 5)?
+b) A (1, 4, 2) or C (3, 7, −1): higher?
+c) tower on the ground at x = 4, z = −3?
 
 ::: {.answer}
-a) 12 units
-b) (2, 3, −5)
-c) left-handed
+a) on the ground
+b) C
+c) (4, 0, −3)
+:::
+
+## 1.5 Left-handed or right-handed?
+
+:::: {.columns}
+::: {.column width="38%"}
+- thumb x · index y · middle z
+- left hand: z **into** the screen
+- right hand: z **towards you**
+- **Do it together:** the hand rule
+:::
+::: {.column width="62%"}
+![](images/handedness.png)
+:::
+::::
+
+## Two tools, two systems
+
+| Software | Up axis | Handedness |
+|---|---|---|
+| Unity | y | left-handed |
+| Blender | z | right-handed |
+
+## Try it 5 · Which hand?
+
+a) Blender's handedness?
+b) Blender's up axis?
+c) left hand: where does +z point?
+
+::: {.answer}
+a) right-handed
+b) z
+c) into the screen
 :::
 
 ## Game challenge · Harbor Guard
 
 :::: {.columns}
 ::: {.column width="55%"}
-- 1080 × 1920 · 60 fps
-- camera at the origin · s = 120
-- harbour grid: 9 columns
-- towers from Blender
+- 60 fps · origin in the centre
+- dock (0, −6) · lighthouse (−4, 5)
+- ship enters at (5, 8)
+- drone (4, 12, −3) · towers from Blender
 :::
 ::: {.column width="45%"}
 ![](images/harbor-guard.png)
 :::
 ::::
 
-## Try it 7 · Taps and tiles (harder)
+## Try it 6 · The harbour (harder)
 
-a) touch (780, 840) → world?
-b) tile in column 4, row 2: index?
-c) Blender (3, 0, 5) → Unity?
+a) frames in 5 seconds?
+b) the dock at (0, −6)?
+c) ship from y = 8 to y = −6: displacement?
 
 ::: {.answer}
-a) (2, 1)
-b) 22
-c) (3, 5, 0)
+a) 300 frames
+b) on the y-axis
+c) −14
 :::
 
 ## Summary
 
-- frame time = 1000 / fps
+- game loop: read → change → draw
 - displacement has a sign, distance does not
 - (x, y): signs → quadrant
-- screen: top left, y down, scale s
-- grid: i = r × n + c
-- 3D: Unity y-up left-handed, Blender z-up right-handed
+- (x, y, z): y up → height
+- Unity left-handed, Blender right-handed

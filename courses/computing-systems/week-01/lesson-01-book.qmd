@@ -1,6 +1,6 @@
 ---
 title: "Computing Systems and Digital Platforms in the Games Industry"
-description: "Lesson notes · The four jobs of a computing system, how the CPU runs a game, one game for many processors, and digital platforms."
+description: "Lesson notes · The four jobs of a computing system, how the CPU runs a game, and digital platforms."
 week: 1
 lesson: 1
 ilos: [A1]
@@ -11,7 +11,7 @@ format: lesson-typst
 A small studio makes a running game called *Tap Runner*. The player taps the
 screen, and the character jumps. The studio wants the game on Android phones,
 on iPhones and on Windows PCs. To do this, the team must know what happens
-inside a device when the player taps, which processor runs the game, and who
+inside a device when the player taps, how the processor runs the game, and who
 sells the game to the players. In this lesson you learn the main parts of a
 computing system and what each part does in a game. You also learn what a
 digital platform is. Every section ends with a short task that you do on
@@ -20,7 +20,7 @@ your phone, on the lab computer or in a mini-game.
 
 ## Key terms
 
-{{< glossary computing-system hardware software cpu memory storage input output instruction-cycle clock-rate isa compiler digital-platform >}}
+{{< glossary computing-system hardware software cpu memory storage input output instruction-cycle clock-rate digital-platform >}}
 
 ## 1.1 What a game needs from a computer
 
@@ -102,17 +102,8 @@ gigahertz (GHz): 3 GHz means 3 billion clock ticks per second.
 ![The instruction cycle. The CPU repeats it billions of times per second.](images/instruction-cycle.png){#fig-cycle width=62%}
 
 A game draws a new picture, a **frame**, many times per second, for example 60
-times. All the work for one frame must fit into the time of one frame.
-
-::: {.callout-note title="Example 1.2 — How much work fits into one frame?"}
-A phone CPU core runs at 3 GHz. The game shows 60 frames per second.
-
-1. Clock ticks per second: 3 GHz = 3 000 000 000 ticks.
-2. Ticks per frame: $3\,000\,000\,000 / 60 = 50\,000\,000$, that is,
-   **50 million ticks**.
-3. In these ticks, the CPU must do everything for one frame: read the input,
-   move the characters, check collisions, play sounds.
-:::
+times. So the CPU must do all the work for one picture in a very short time:
+read the touch, move the characters, check if they hit something.
 
 The mini-game below is a version of *Tap Runner*. It shows which part of the
 computer works at each moment of a frame.
@@ -130,56 +121,12 @@ motion.
 decides that the character jumps?
 :::
 
-## 1.3 One game, many processors
-
-The studio writes *Tap Runner* in C#, a programming language that people can
-read. The CPU cannot read C#. Each processor family understands only its own
-list of machine instructions. This list is called the **instruction set
-architecture (ISA)**.
-
-::: {.callout-important title="Definition 1.3 — Instruction set architecture"}
-The **instruction set architecture (ISA)** is the list of machine instructions
-that a family of processors can run. Almost all phones use the **ARM** ISA.
-Most Windows PCs, the PlayStation and the Xbox use the **x86-64** ISA. Machine
-code for one ISA does not run on the other.
-:::
-
-A program called a **compiler** translates the game into the machine
-instructions of each ISA. The game engine does this for the developer: from
-one C# project, it makes a separate **build** for each kind of device
-(@fig-builds).
-
-![One C# game, translated into two builds: one for ARM, one for x86-64.](images/build-targets.png){#fig-builds width=86%}
-
-::: {.callout-note title="Example 1.3 — Three builds of Tap Runner"}
-The studio releases *Tap Runner* on Android phones, iPhones and Windows PCs.
-
-1. Android phone: ARM build.
-2. iPhone: ARM build (Apple's chips use ARM too).
-3. Windows PC: x86-64 build.
-4. The game code is the same, but the PC needs its own build. The phone file
-   cannot run on the PC, even if the PC is faster.
-:::
-
-::: {.callout-note title="Do it · Which ISA?"}
-1. **Lab computer (Windows):** open Settings → System → About. Read
-   *System type*. "x64-based processor" means x86-64. "ARM-based processor"
-   means ARM.
-2. **Your phone:** Android: Settings → About phone (the processor name may be
-   under "Hardware" or "Processor"). iPhone: every iPhone uses an Apple chip.
-   Names such as Snapdragon, MediaTek, Exynos, Tensor and Apple A all mean
-   ARM.
-
-*Your result:* the ISA of the lab computer and of your phone, and one answer:
-can the same build of a game run on both?
-:::
-
-## 1.4 Digital platforms: where games run and are sold
+## 1.3 Digital platforms: where games run and are sold
 
 For a player, "the platform" is the device in their hands. For a game studio,
 a platform is more: it decides how the game is made, tested and sold.
 
-::: {.callout-important title="Definition 1.4 — Digital platform"}
+::: {.callout-important title="Definition 1.3 — Digital platform"}
 A **digital platform** is a combination of a family of devices, an operating
 system, development tools, and a store with its own rules. Games are built,
 sold and run on it.
@@ -203,17 +150,20 @@ the games market today, with about half of all game revenue. This is why this
 diploma focuses on Android and iOS.
 
 Studios do not write a new game for each platform. They use a
-**cross-platform** game engine that makes one build for each platform. But
+**cross-platform** game engine. From one project, the engine makes a separate
+version of the game, a **build**, for each platform. The processors are
+different too: phones use ARM processors, and most Windows PCs use x86
+processors, so a phone build cannot run on a PC. But
 the differences do not disappear. Android alone runs on thousands of phone
 models with different processors and screens, so a game must be tested on
 many of them.
 
-::: {.callout-note title="Example 1.4 — Bringing a phone game to a console"}
+::: {.callout-note title="Example 1.2 — Bringing a phone game to a console"}
 A studio has a puzzle game on Android and iOS. Now it wants the game on the
 Nintendo Switch. What changes?
 
-1. **Processor:** the Switch uses ARM too, so the engine can make a build for
-   it.
+1. **Processor:** the Switch uses an ARM processor, like a phone, and the
+   engine makes a new build for it.
 2. **Input:** the player also uses buttons and sticks, not only touch.
 3. **Output:** the TV screen is big and wide. The phone layout must change.
 4. **Rules:** the studio needs an agreement with the console maker, and the
@@ -242,8 +192,9 @@ in your table?
 *Tap Runner* is a made-up endless running game. The character runs by itself,
 and the player taps to jump over blocks. The game shows 60 frames per second
 and saves the best distance. The studio releases it on Android phones, on
-iPhones and on Windows PCs. The test phone has a CPU core at 2.4 GHz. The Game
-challenge of the interactive lesson uses these numbers.
+iPhones and on Windows PCs, with one build for each. The test phone has a CPU
+core at 2.4 GHz and 4 GB of RAM. The Game challenge of the interactive lesson
+uses this game.
 
 ## Further reading
 
@@ -260,15 +211,11 @@ zoo".
    games. Which one fills up? Which one fills up when the player keeps five
    games open?
 4. Name the three steps of the instruction cycle.
-5. A laptop CPU core runs at 2 GHz. How many clock ticks are there in one frame
-   at 50 frames per second?
-6. Why can an Android game not run on a Windows PC without a new build? Use the
-   word ISA.
-7. What does a compiler do?
-8. Name the four parts of a digital platform.
-9. Why must an Android game be tested on many phones?
-10. *Tap Runner*: at 60 frames per second, how many clock ticks does the test
-    phone's core have for one frame?
+5. What does "3 GHz" tell you about a processor core?
+6. Name the four parts of a digital platform.
+7. Why does a game need one build for Android phones and another build for
+   Windows PCs?
+8. Why must an Android game be tested on many phones?
 
 ## Answers to the exercises
 
@@ -277,10 +224,8 @@ zoo".
 2. The program is stored in memory like data, so a new game only needs to be loaded into memory.
 3. Installing fills the storage (128 GB). Keeping games open fills the RAM (6 GB).
 4. Fetch, decode, execute.
-5. 2 000 000 000 / 50 = 40 000 000: 40 million ticks.
-6. The phone uses the ARM ISA and the PC uses x86-64. Machine code for one ISA does not run on the other.
-7. It translates a program (for example C#) into the machine instructions of a processor.
-8. A family of devices, an operating system, development tools, and a store with its rules.
-9. Android runs on thousands of phone models with different processors and screens.
-10. 2 400 000 000 / 60 = 40 000 000: 40 million ticks.
+5. How fast one core works: 3 billion clock ticks per second.
+6. A family of devices, an operating system, development tools, and a store with its rules.
+7. The platforms are different (system, store, and the processor: ARM in phones, x86 in most PCs), so the engine makes a separate build for each.
+8. Android runs on thousands of phone models with different processors and screens.
 :::

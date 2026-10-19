@@ -6,7 +6,7 @@ format: lesson-pptx
 
 ## Keywords
 
-{{< glossary computing-system cpu memory storage instruction-cycle clock-rate isa compiler digital-platform >}}
+{{< glossary computing-system cpu memory storage instruction-cycle clock-rate digital-platform >}}
 
 ## Think · What happens when you tap?
 
@@ -59,16 +59,6 @@ c) main memory (RAM)
 :::
 ::::
 
-## Example · Work in one frame
-
-3 GHz core · 60 frames per second.
-
-::: {.reveal}
-1. 3 000 000 000 ticks per second
-2. ÷ 60 = **50 million ticks** per frame
-3. input, movement, collisions, sound: all in these ticks
-:::
-
 ## Live demo · Tap Runner
 
 {{< sim file="sims/one-frame.html" poster="sims/one-frame.png" title="Tap Runner: inside one frame" kind="game" >}}
@@ -77,49 +67,22 @@ c) main memory (RAM)
 
 a) get the next instruction?
 b) add 10 to the score?
-c) 2 GHz at 50 frames per second?
+c) 3 GHz means…?
 
 ::: {.answer}
 a) fetch
 b) execute
-c) 40 million ticks
+c) 3 billion ticks per second
 :::
 
-## 1.3 One game, many processors
-
-:::: {.columns}
-::: {.column width="38%"}
-- CPU cannot read C#
-- **ISA**: the CPU's instructions
-- phones: **ARM** · PCs: **x86-64**
-- **compiler** → one build per ISA
-- **Do it together:** System type of the lab PC
-:::
-::: {.column width="62%"}
-![](images/build-targets.png)
-:::
-::::
-
-## Try it 3 · Builds and processors
-
-a) Snapdragon phone: which ISA?
-b) Android build on a Windows PC?
-c) Android + iPhone + Windows: how many ISAs?
-
-::: {.answer}
-a) ARM
-b) no, a different ISA
-c) 2
-:::
-
-## 1.4 Digital platforms
+## 1.3 Digital platforms
 
 :::: {.columns}
 ::: {.column width="38%"}
 - devices + system + tools + store
 - the owner makes the rules
 - mobile ≈ half of game revenue
-- Android: thousands of models
+- one **build** per platform
 - **Do it together:** platforms at home
 :::
 ::: {.column width="62%"}
@@ -127,7 +90,7 @@ c) 2
 :::
 ::::
 
-## Try it 4 · Platforms
+## Try it 3 · Platforms
 
 a) the store of iOS?
 b) phone game to Switch: new input?
@@ -146,22 +109,22 @@ c) the platform owner
 - endless runner: tap to jump
 - 60 frames per second
 - Android · iPhone · Windows
-- test phone: 2.4 GHz core
+- test phone: 2.4 GHz · 4 GB RAM
 :::
 ::: {.column width="62%"}
 ![](sims/one-frame.png)
 :::
 ::::
 
-## Try it 5 · Tap Runner (harder)
+## Try it 4 · Tap Runner (harder)
 
-a) ticks per frame on the test phone?
-b) ISA of the Windows build?
+a) "2.4 GHz" tells…?
+b) where is the game while playing?
 c) how many builds?
 
 ::: {.answer}
-a) 40 million
-b) x86-64
+a) the speed of one core
+b) in the RAM
 c) 3
 :::
 
@@ -170,5 +133,5 @@ c) 3
 - four jobs: input, processing, storage, output
 - CPU · RAM · storage
 - fetch → decode → execute · GHz
-- ARM and x86-64: one build each
 - platform = devices + system + tools + store
+- one build per platform

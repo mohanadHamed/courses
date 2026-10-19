@@ -31,3 +31,7 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   Manager), on the phone (timing a game start) and in the mini-games. Left
   out: the six-level machine table, translation vs interpretation, Moore's
   law. Lesson 3 (week 2) was the model lesson for this approach.
+- Week 1 (2026-10-19, level check, about 20 % simpler): ticks-per-frame,
+  frame-rate, pixel and input-lag calculations, the ISA and compiler section
+  and bandwidth were removed; one sentence on builds per platform (ARM, x86)
+  stays.

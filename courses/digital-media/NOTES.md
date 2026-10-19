@@ -33,3 +33,7 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   through the pipeline) and on a game the student plays (inventory,
   functions, sound off for accessibility). Left out: media size formulas and
   Manovich's five properties.
+- Week 1 (2026-10-19, level check, about 20 % simpler): digitization, the
+  "what makes game media special" section and the evaluation criteria
+  (ILO B2, a later week) were removed; story as an element of the tetrad is
+  stressed for ILO A1.

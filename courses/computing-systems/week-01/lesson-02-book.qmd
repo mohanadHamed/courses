@@ -21,7 +21,7 @@ mini-game.
 
 ## Key terms
 
-{{< glossary app-package install process loading gpu frame-rate refresh-rate resolution thermal-throttling latency bandwidth cloud-gaming >}}
+{{< glossary app-package install process loading gpu frame-rate refresh-rate resolution thermal-throttling latency cloud-gaming >}}
 
 ## 2.1 From the store to the first frame
 
@@ -97,24 +97,11 @@ frame (@fig-pipeline).
 The **frame rate** is the number of new pictures that the game makes per
 second (frames per second, fps). The **refresh rate** is the number of times
 per second that the screen redraws its picture (60, 90 or 120 Hz). The
-**resolution** is the number of pixels: width × height. The player never sees
-more new pictures than the slower of the two rates allows.
+**resolution** is the number of pixels: width × height. More pixels mean more
+work for the GPU. The player never sees more new pictures than the slower of
+the two rates allows: a game at 70 fps on a 60 Hz screen shows 60 new pictures
+per second.
 :::
-
-::: {.callout-note title="Example 2.2 — What limits the frame rate?"}
-The CPU needs 20 ms for a frame. The GPU needs 10 ms. The screen refreshes at
-60 Hz.
-
-1. The slower processor sets the time: 20 ms per frame.
-2. One second has 1000 ms: $1000 / 20 = 50$ frames per second.
-3. The screen could show 60 new pictures, but the player sees only 50. The
-   CPU is the problem here, so a smaller resolution (less work for the GPU)
-   would not help.
-:::
-
-Resolution decides how much work the GPU has. A phone screen of 1080 × 2400
-pixels has about 2.6 million pixels. At 60 fps, the GPU colours about 156
-million pixels every second.
 
 A phone has no fan. After some minutes of heavy play, the chip gets hot. To
 protect itself, the phone slows the processor down. This is called **thermal
@@ -127,11 +114,8 @@ On a lab computer (Windows): open Settings → System → Display.
 
 1. Write the **display resolution** (for example 1920 × 1080).
 2. Open **Advanced display** and write the **refresh rate**.
-3. Multiply width × height to find the number of pixels (round it, for
-   example "about 2 million").
-
-*Your result:* the resolution, the refresh rate, the number of pixels, and
-the highest frame rate a player can *see* on this screen.
+*Your result:* the resolution, the refresh rate, and the highest frame rate a
+player can *see* on this screen.
 :::
 
 ## 2.3 Where the game is computed
@@ -147,26 +131,23 @@ common ways (@fig-where):
 
 ![Three ways to run a game: local, client–server and cloud gaming.](images/where-game-runs.png){#fig-where width=94%}
 
-::: {.callout-important title="Definition 2.2 — Latency and bandwidth"}
+::: {.callout-important title="Definition 2.2 — Latency"}
 **Latency** is the delay between an action and its result on the screen,
 measured in milliseconds (ms). In games it is also called *input lag*.
-**Bandwidth** is the amount of data that a connection can carry per second,
-measured in megabits per second (Mbit/s).
 :::
 
-Cloud gaming lets a cheap phone play big games. But it needs a lot of
-bandwidth, about 10–20 Mbit/s for a clear video, and it adds latency: every
-touch travels to the data centre, and every frame travels back.
+Cloud gaming lets a cheap phone play big games. But it needs a fast Internet
+connection, and it adds latency: every touch travels to the data centre, and
+every frame travels back.
 
-::: {.callout-note title="Example 2.3 — Adding up the input lag"}
-How long does it take from a tap to the jump on the screen?
+::: {.callout-note title="Example 2.2 — Which games can be streamed?"}
+A cloud gaming service adds about 50 ms of delay to every tap.
 
-1. Local play: touch screen 10 ms + one frame of work 17 ms + display 17 ms =
-   **44 ms**.
-2. Cloud gaming adds the trip to the data centre and back (40 ms) and the
-   video work (15 ms): $44 + 40 + 15 =$ **99 ms**.
-3. About 100 ms of delay is easy to feel in fast games, such as a rhythm game
-   or a fighting game. In a card game or a puzzle game it does not matter.
+1. A fighting game or a rhythm game needs fast reactions: 50 ms more is easy
+   to feel, and the player loses.
+2. A card game or a puzzle game does not need fast reactions: the delay does
+   not matter.
+3. So cloud gaming suits slow games best.
 :::
 
 {{< sim file="sims/lag-lab.html" poster="sims/lag-lab.png" title="Lag Lab: play with input lag" kind="game" height="560" >}}
@@ -225,9 +206,8 @@ A first-year class lists the devices it plays on. Most students use Android
 phones of different prices; the cheapest phone reads its storage at 120 MB per
 second. A few students use iPhones, and some use laptops. One student owns a
 console. Two students play through a cloud gaming service; one of them has a
-trip of 90 ms to the data centre and back. The class wants one game that runs
-on all of these devices. The Game challenge of the interactive lesson uses
-these numbers.
+slow connection. The class wants one game that runs on all of these devices.
+The Game challenge of the interactive lesson uses this survey.
 
 ## Further reading
 
@@ -241,28 +221,25 @@ System Concepts*, 10th ed., Chapter 3 ("Processes").
    words storage and memory.
 2. Write the four steps between the tap on a game's icon and the first frame.
 3. A level needs 900 MB of assets. How long does it load at 300 MB per second?
-   And at 900 MB per second?
 4. A player comes back to a game after a long video, and the game starts again
    from the title screen. Why?
-5. A screen refreshes at 90 Hz, and the game makes 70 fps. How many new
+5. What does the CPU do in a frame, and what does the GPU do?
+6. A screen refreshes at 90 Hz, and the game makes 70 fps. How many new
    pictures does the player see per second?
-6. The CPU needs 10 ms for a frame, and the GPU needs 25 ms. What is the frame
-   rate? Which processor is the problem?
 7. Why must a phone game be tested for twenty minutes, not only for one?
 8. Name the three ways to run a game, and say where the game runs in each.
-9. A cloud player has a trip of 60 ms to the data centre and back. Use the
-   other numbers of Example 2.3. What is the input lag?
+9. Why is cloud gaming better for a card game than for a fighting game?
 
 ## Answers to the exercises
 
 ::: {.answers}
 1. Installing copies the game into storage (no memory used). Launching creates a process and loads the code and assets into memory.
 2. Create a process; load the code into memory; load the first scene's assets; start the game.
-3. 3 seconds; 1 second.
+3. 900 / 300 = 3 seconds.
 4. Memory got full, so the operating system closed the game in the background. It had to load again from storage.
-5. 70 (the game is slower than the screen).
-6. The slower one sets the time: 25 ms, so 1000 / 25 = 40 fps. The GPU is the problem.
+5. The CPU runs the game logic (input, rules, movement); the GPU draws the picture (the colour of every pixel).
+6. 70 (the game is slower than the screen).
 7. The phone gets hot and slows down (thermal throttling). A one-minute test does not show this.
 8. Local: on the device. Client–server: on each device, with shared data on a server. Cloud gaming: on a server in a data centre.
-9. 44 + 60 + 15 = 119 ms.
+9. Cloud gaming adds latency. A card game does not need fast reactions; a fighting game does.
 :::

@@ -97,10 +97,11 @@ slides.
   At most one formal definition per section, only for terms the tasks use.
   History, taxonomies and background that no task or ILO needs are left out
   or go to "Further reading".
-- **Questions ask students to apply.** In every "Try it" set and in the
-  exercises, at least two thirds of the questions ask to calculate, choose
-  for a situation, predict, compare, find the error or decide; the rest may
-  check a term or a definition.
+- **Questions ask students to use the idea.** In every "Try it" set and in
+  the exercises, at least two thirds of the questions put the idea into a
+  game situation: choose, classify, decide, find the error, or (where the
+  ILO needs it) calculate; the rest may check a term or a definition. See
+  "Level and language" for the level of thinking.
 - **Worked examples are game cases with real numbers** (a load time, a frame
   budget, a sound level, a file name), never abstract ones.
 - **Slides teach by showing.** In class, each section is a short concept and
@@ -146,7 +147,7 @@ link it from the notes and the slides:
 | | 60-min lesson | 90-min lesson (`game-math`) |
 |---|---|---|
 | Notes: numbered sections (`## 1.1`) | 3–4 | 5–7 |
-| Notes: words (without exercises and answers) | 1 500–3 500 | 2 500–6 000 |
+| Notes: words (without exercises and answers), at most | 3 500 | 6 000 |
 | Notes: worked examples | 2+ | 4+ |
 | Notes: exercises (with short answers at the end) | 6–10 | 10–16 |
 | Page: "Try it" boxes (one per section + Game challenge) | 4–6 | 6–9 |
@@ -237,13 +238,30 @@ ILO–PLO matrix). Use the newest version of each file.
 
 ### Level and language
 
-The level is slightly easier than a first-year bachelor's course, and the
-English is simple. The ILOs and PLOs stay exactly the same: a lesson is
-easier in *how* it teaches, never in *what* the ILO asks for.
+The students' starting level is very basic. The level is about 20 %
+simpler than the first applied version of the lessons (October 2026), which
+was already slightly easier than a first-year bachelor's course; the English
+is simple. The ILOs and PLOs stay exactly the same: a lesson is easier in
+*how* it teaches, never in *what* the ILO asks for. (The estimated limit is
+about 30 % simpler: beyond it, syllabus topics, the ILO verb or the practical
+tasks would be lost.)
 
+- **Scope: only what the outcomes need.** A topic goes into a lesson only if
+  the syllabus week names it, an ILO of the week asks for it, or an ILO of a
+  later week builds on it (for example handedness, needed by the cross
+  product in week 3). Everything else is left out, even when it is useful in
+  practice (for example screen ↔ world conversion formulas, the index of a
+  tile grid, Blender ↔ Unity conversion, evaluation criteria before the
+  evaluation ILO). Spend the time in class on the Do it tasks and questions,
+  not on more examples of the same idea: short notes are better than
+  repeated ones.
+- **Match the thinking to the ILO.** For a knowledge ILO (describe, explain;
+  K), questions ask students to recognise, describe, classify or explain a
+  game example. Calculations appear only where the ILO or a later ILO needs
+  them.
 - **Numbers:** small, round numbers (1024 × 1024, 100 reads, 10 ms + 6 ms).
-  One or two steps per calculation, no calculator needed. No conversion
-  that needs a calculator (1024³ and the like) unless an ILO asks for it.
+  One step per calculation, no calculator needed. No conversion that needs
+  a calculator (1024³ and the like) unless an ILO asks for it.
 - **Depth:** one idea at a time; the main idea of a section fits in two
   sentences. Leave out details that the ILO and the tasks do not need
   (cache levels, standards, exceptions); one short sentence is enough when
@@ -588,3 +606,10 @@ Lessons or homework not ready for students: `draft: true` (not published).
   easier (small numbers, fewer details) and the English simple (B1 in the
   notes, A2–B1 on the page and slides), with the same ILOs and PLOs. Rules
   above ("Level and language").
+- 2026-10-19 (level check): the students' level is very basic. The most the
+  lessons can be simplified without losing the ILOs and PLOs was estimated at
+  about 30 %; the lessons are now about 20 % simpler, and topics that no
+  syllabus week or ILO asks for are left out (rule "Scope: only what the
+  outcomes need"). The notes no longer have a minimum word count: short
+  notes are better than a second example of the same idea (see "No
+  repetition"); only the maximum stays.

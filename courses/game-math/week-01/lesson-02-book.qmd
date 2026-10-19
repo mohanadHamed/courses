@@ -53,21 +53,6 @@ A game needs both. The speedometer of a racing game shows a scalar, the speed.
 To move the car, the game needs a vector, the velocity: the speed alone does
 not say where the car goes.
 
-::: {.callout-caution title="In game code"}
-In C#, a scalar is usually one `float` number, and a 2D vector is a `Vector2`
-with two numbers. The word after `//` is a comment for the reader; the
-computer ignores it.
-
-```csharp
-float speed = 3f;                          // a scalar: how fast
-Vector2 velocity = new Vector2(3f, 0f);    // a vector: 3 units to the right
-```
-:::
-
-When you read game code, ask for each value: is it one number, or does it also
-have a direction? The answer tells you if it is a scalar or a vector. This
-question helps you read the code of any engine, not only Unity.
-
 ::: {.callout-note title="Example 2.1 — Scalars and vectors in a platform game"}
 Is each value a scalar or a vector?
 
@@ -131,20 +116,7 @@ The sign of a component shows the direction along its axis. A zero component
 means no movement along that axis: $(0, 5)$ points straight up, and $(-2, 0)$
 points straight left.
 
-The reverse question is just as common: we know where an arrow starts and
-what its components are, and we need its head. Then we add: **head = tail +
-components**.
-
-::: {.callout-note title="Example 2.3 — Where does the arrow end?"}
-A level editor draws the vector $(3, -2)$ from the point $(1, 4)$.
-
-1. Head x: $1 + 3 = 4$.
-2. Head y: $4 + (-2) = 2$.
-3. The arrow ends at $(4, 2)$. Check with head minus tail:
-   $(4 - 1,\ 2 - 4) = (3, -2)$. Correct.
-:::
-
-::: {.callout-note title="Example 2.4 — The virtual joystick"}
+::: {.callout-note title="Example 2.3 — The virtual joystick"}
 A mobile game shows a joystick on the screen. In every frame, it gives a
 vector with components between $-1$ and $1$.
 
@@ -205,7 +177,7 @@ the **zero vector** $(0, 0)$.
 
 ![The displacement from the enemy E to the player P, and its opposite.](images/displacement.png){#fig-displacement width=76%}
 
-::: {.callout-note title="Example 2.5 — Enemy and player"}
+::: {.callout-note title="Example 2.4 — Enemy and player"}
 An enemy is at $E = (2, 7)$, and the player is at $P = (6, 4)$
 (@fig-displacement).
 
@@ -216,35 +188,10 @@ An enemy is at $E = (2, 7)$, and the player is at $P = (6, 4)$
    enemy, along $P - E$.
 :::
 
-Games use displacement vectors all the time. An arrow on the screen that
-points to the next goal uses *goal minus player*. A camera that follows the
-player uses *player minus camera*. A homing missile uses *target minus
-missile*.
-
-::: {.callout-note title="Example 2.6 — An arrow that points to the goal"}
-In a treasure-hunt game, the player is at $P = (-3, 2)$ and the treasure at
-$T = (5, -4)$. The game shows an arrow that points from the player to the
-treasure.
-
-1. Vector of the arrow: $T - P = (5 - (-3),\ -4 - 2) = (8, -6)$.
-2. $8 > 0$: the treasure is to the right. $-6 < 0$: it is below the player.
-3. The player walks 4 units to the right and reaches $(1, 2)$. The new arrow is
-   $T - (1, 2) = (4, -6)$: it changes, because the player moved, but the
-   treasure did not.
-:::
-
-When the player reaches the goal, *goal minus player* is the zero vector,
-$(0, 0)$: there is no direction left to show. Games check for this case and
-hide the arrow, or show a "You have arrived" message instead.
-
-::: {.callout-caution title="In game code"}
-Good code shows in its names if a value is a point or a vector: `position` and
-`target` for points, `velocity` and `toPlayer` for vectors.
-
-```csharp
-Vector2 toPlayer = player - enemy;   // a vector: end minus start
-```
-:::
+Games use displacement vectors all the time: an arrow on the screen that
+points to the goal uses *goal minus player*, and a homing missile uses
+*target minus missile*. When the player stands on the goal, the result is the
+zero vector: there is no direction left to show.
 
 ::: {.callout-warning title="Common mistake"}
 Subtracting in the wrong order. "From A to B" is always $B - A$. An enemy that
@@ -289,7 +236,7 @@ along x and $n \times v_y$ along y.
 
 ![Five frames with the velocity v = (2, 1), starting at (1, 1).](images/per-frame.png){#fig-per-frame width=86%}
 
-::: {.callout-note title="Example 2.7 — Where is the ship after 4 frames?"}
+::: {.callout-note title="Example 2.5 — Where is the ship after 4 frames?"}
 A ship starts at $(1, 1)$ with the velocity $(2, 1)$ per frame
 (@fig-per-frame).
 
@@ -298,7 +245,7 @@ A ship starts at $(1, 1)$ with the velocity $(2, 1)$ per frame
 3. Faster: after 4 frames, $(1 + 4 \times 2,\ 1 + 4 \times 1) = (9, 5)$.
 :::
 
-::: {.callout-note title="Example 2.8 — Which velocity? (the reverse question)"}
+::: {.callout-note title="Example 2.6 — Which velocity? (the reverse question)"}
 A missile at $(10, 7)$ must reach a target at $(4, 1)$ in exactly 3 frames.
 Which velocity does it need?
 
@@ -306,29 +253,6 @@ Which velocity does it need?
 2. Three equal steps: each step is one third: $(-6 \div 3,\ -6 \div 3) =
    (-2, -2)$.
 3. Check: $(10, 7) + 3 \times (-2, -2) = (10 - 6,\ 7 - 6) = (4, 1)$. Correct.
-:::
-
-Two more questions come up in almost every game: *when* does the object reach
-a place, and what happens when it must turn back?
-
-::: {.callout-note title="Example 2.9 — When does the ball reach the wall?"}
-A ball is at $(12, 3)$ and moves with the velocity $(-3, 1)$ per frame. A wall
-stands at $x = 0$.
-
-1. Each frame, x becomes 3 smaller: 12, 9, 6, 3, 0.
-2. So x is 0 after $12 \div 3 = 4$ frames.
-3. In 4 frames, y grows by $4 \times 1 = 4$: from 3 to 7.
-4. The ball hits the wall at $(0, 7)$, after 4 frames.
-:::
-
-::: {.callout-note title="Example 2.10 — A platform that moves back and forth"}
-A platform starts at $(2, 5)$. It moves with the velocity $(2, 0)$ for 3 frames.
-Then it turns back with the opposite vector, $(-2, 0)$, for 3 frames.
-
-1. After 3 frames: $(2 + 3 \times 2,\ 5) = (8, 5)$.
-2. After 3 more frames with $(-2, 0)$: $(8 - 6,\ 5) = (2, 5)$.
-3. The platform is back at its start. The opposite vector undoes the
-   movement, and the game can repeat the two parts forever.
 :::
 
 ::: {.callout-caution title="In game code"}
@@ -365,13 +289,9 @@ differently. The **vertical** part, $(0, v_y, 0)$, changes the height. The
 **horizontal** part, $(v_x, 0, v_z)$, moves along the ground. A character that
 walks on flat ground has $v_y = 0$. A jump or a fall changes only $v_y$.
 
-Level designers use this split all the time. A road or a bridge needs only a
-horizontal displacement. A ladder or a lift needs only a vertical one. A ramp
-or a flying drone needs both parts at the same time.
-
 ![A drone flies from A to B. The displacement has a horizontal part and a vertical part.](images/drone-3d.png){#fig-drone width=74%}
 
-::: {.callout-note title="Example 2.11 — A delivery drone"}
+::: {.callout-note title="Example 2.7 — A delivery drone"}
 A drone starts at $A = (2, 0, 1)$ and delivers a parcel at $B = (6, 5, -3)$
 (@fig-drone).
 
@@ -380,17 +300,6 @@ A drone starts at $A = (2, 0, 1)$ and delivers a parcel at $B = (6, 5, -3)$
 3. Horizontal part: $(4, 0, -4)$. Over the ground it moves 4 units along $+x$
    and 4 units along $-z$.
 4. The way back: $A - B = (-4, -5, 4)$.
-:::
-
-::: {.callout-note title="Example 2.12 — Walk, then jump"}
-A character stands at $(3, 0, 2)$ on flat ground (y up). It walks with the
-velocity $(1, 0, 2)$ per frame for 2 frames. Then it jumps with $(0, 3, 0)$ for
-one frame.
-
-1. After 2 frames of walking: $(3 + 2 \times 1,\ 0 + 2 \times 0,\ 2 + 2 \times 2)
-   = (5, 0, 6)$. The height is still 0: walking is horizontal.
-2. After the jump frame: $(5, 0 + 3, 6) = (5, 3, 6)$. Only the height changed:
-   the jump is vertical.
 :::
 
 ::: {.callout-warning title="Common mistake"}
@@ -452,11 +361,9 @@ negative of a vector.
    after 1, 2 and 5 frames?
 10. A platform moves from $(4, 1)$ to $(4, 9)$ in 4 frames with one velocity.
     Find the velocity per frame.
-11. A ball at $(8, 2)$ moves with the velocity $(-2, 1)$. After how many frames
-    is its x-coordinate 0? Where is it then?
-12. A camera moves from $(0, 10, -20)$ to $(4, 6, -12)$. Find the
+11. A camera moves from $(0, 10, -20)$ to $(4, 6, -12)$. Find the
     displacement, its vertical part and its horizontal part.
-13. *Comet Courier*: find the displacement from Alpha to Beta. A ship flies
+12. *Comet Courier*: find the displacement from Alpha to Beta. A ship flies
     from Alpha with the velocity $(2, 1)$ per frame. Does it pass through the
     comet's point? After how many frames?
 
@@ -473,7 +380,6 @@ negative of a vector.
 8. A point is a place; places cannot be added. The difference of two points is the movement between them.
 9. (3, 3), (6, 5), (15, 11).
 10. Total (0, 8); velocity (0, 2).
-11. 8 − 2 × 4 = 0, so after 4 frames; position (0, 6).
-12. (4, −4, 8); vertical (0, −4, 0); horizontal (4, 0, 8).
-13. (8, 4); yes, after 2 frames the ship is at (5, 4).
+11. (4, −4, 8); vertical (0, −4, 0); horizontal (4, 0, 8).
+12. (8, 4); yes, after 2 frames the ship is at (5, 4).
 :::

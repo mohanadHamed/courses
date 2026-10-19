@@ -38,7 +38,7 @@ import sys
 SIZES = {
     60: {
         "book_sections": (3, 4),
-        "words": (1500, 3500),
+        "words": (0, 3500),
         "examples": (2, None),
         "exercises": (6, 10),
         "try_its": (4, 6),
@@ -48,7 +48,7 @@ SIZES = {
     },
     90: {
         "book_sections": (5, 7),
-        "words": (2500, 6000),
+        "words": (0, 6000),
         "examples": (4, None),
         "exercises": (10, 16),
         "try_its": (6, 9),

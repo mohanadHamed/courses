@@ -21,87 +21,64 @@ No — it also needs the **direction**: 5 m/s *towards the east*.
 
 :::: {.columns}
 ::: {.column width="38%"}
-- distance → **displacement** · speed → **velocity** · gravity, knockback, wind: vectors
+- scalar: one number
+- vector: size + direction
+- speed → **velocity**
+- distance → **displacement**
 :::
 ::: {.column width="62%"}
 ![](images/scalar-vector.png)
 :::
 ::::
 
-## Example · Game quantities
-
-::: {.reveal}
-1. score 12 400 → **scalar**
-2. 3 units right per frame → **vector** (velocity)
-3. its size, 3 units per frame → **scalar** (speed)
-4. knockback 4 units away from the enemy → **vector**
-5. cooldown 2.5 s → **scalar**
-:::
-
 ## Try it 1 · Scalar or vector?
 
-a) wind 6 m/s to the west
-b) 350 coins
-c) gravity
-d) dashboard speed
-e) velocity of a bullet
-f) "how far and which way"
-g) "how far" only
+a) 350 coins
+b) gravity
+c) "how far and which way"?
 
 ::: {.answer}
-a) vector
-b) scalar
-c) vector
-d) scalar
-e) vector
-f) displacement
-g) distance
+a) scalar
+b) vector
+c) displacement
 :::
 
 ## 2.2 Arrows
 
 :::: {.columns}
 ::: {.column width="38%"}
-- tail → head · length = **magnitude**
-- **no position**: same length + direction = **equal vectors**
+- tail → head
+- length = **magnitude**
+- **no position**
+- same arrow = **equal vectors**
 :::
 ::: {.column width="62%"}
 ![](images/vector-arrow.png)
 :::
 ::::
 
-## Watch out · Position is not part of a vector
-
-- two enemies, both "2 left per frame"
-- different places, **equal** velocity vectors
-- position belongs to **points**
-
 ## Try it 2 · Reading arrows
 
 a) the pointed end?
-b) the starting point?
-c) the length shows…?
-d) "3 right, 2 up" in two places?
-e) a vector has no…?
+b) "3 right, 2 up" drawn in two places?
+c) a vector has no…?
 
 ::: {.answer}
 a) head
-b) tail
-c) magnitude
-d) equal vectors
-e) a position
+b) equal vectors
+c) a position
 :::
 
 ## 2.3 Components
 
 :::: {.columns}
-::: {.column width="45%"}
-- **v** = (vx, vy) · (vx, vy, vz)
+::: {.column width="38%"}
+- **v** = (vx, vy, vz)
 - **head − tail**
-- sign = direction on the axis
-- code: `Vector2`, `Vector3`, `.x .y .z`
+- sign = direction
+- `Vector2`, `.x .y`
 :::
-::: {.column width="55%"}
+::: {.column width="62%"}
 ![](images/components.png)
 :::
 ::::
@@ -114,19 +91,18 @@ Tail (1, 4), head (5, 1).
 1. vx = 5 − 1 = **4** (right)
 2. vy = 1 − 4 = **−3** (down)
 3. **v = (4, −3)**
-4. from the origin it ends at the point (4, −3)
 :::
 
 ## Vectors as lists · basis vectors
 
 :::: {.columns}
-::: {.column width="50%"}
-- vector = **ordered list of numbers**
-- colour (r, g, b) · joystick (x, y)
-- **i** = (1, 0, 0) · **j** = (0, 1, 0) · **k** = (0, 0, 1)
+::: {.column width="45%"}
+- ordered list of numbers
+- colour, joystick input
+- **i**, **j**, **k**
 - (4, −3) = 4**i** − 3**j**
 :::
-::: {.column width="50%"}
+::: {.column width="55%"}
 ![](images/basis-vectors.png)
 :::
 ::::
@@ -134,29 +110,13 @@ Tail (1, 4), head (5, 1).
 ## Try it 3 · Components
 
 a) arrow (2, −1) → (−3, 4)?
-b) tail (1, 1), **v** = (3, −2): head?
-c) straight left, magnitude 6?
-d) negative y-component means…?
-e) `new Vector2(4f, -3f)`: `.y`?
-f) (−2, 5) with **i**, **j**?
-g) joystick released?
+b) (−2, 5) with **i**, **j**?
+c) joystick released?
 
 ::: {.answer}
 a) (−5, 5)
-b) (4, −1)
-c) (−6, 0)
-d) down
-e) −3
-f) −2**i** + 5**j**
-g) (0, 0)
-:::
-
-## Think · Point or vector?
-
-"(4, −3)" — **where?** or **how far and which way?**
-
-::: {.answer}
-It can be either: a **point** is a location, a **vector** is a change.
+b) −2**i** + 5**j**
+c) (0, 0)
 :::
 
 ## 2.4 Displacement: end minus start
@@ -164,8 +124,9 @@ It can be either: a **point** is a location, a **vector** is a change.
 :::: {.columns}
 ::: {.column width="38%"}
 - from A to B: **B − A**
-- A − B = −(B − A): **negative** vector
-- A − A = **zero vector**
+- A − B: the **negative**
+- A − A: **zero vector**
+- wrong order → walks away
 :::
 ::: {.column width="62%"}
 ![](images/displacement.png)
@@ -182,61 +143,32 @@ E = (2, 7), P = (6, 4).
 3. knockback pushes the player along **P − E**
 :::
 
-## Watch out · Order of subtraction
-
-- "from A to B" = **B − A**
-- E − P instead of P − E → the enemy walks **away**
-
 ## Try it 4 · Enemy and player
 
 E = (8, 1), P = (3, 4).
 
 a) enemy → player?
 b) player → enemy?
-c) point → itself?
-d) point − point = ?
-e) point + vector = ?
-f) point + point = ?
+c) point + point = ?
 
 ::: {.answer}
 a) (−5, 3)
 b) (5, −3)
-c) the zero vector
-d) a vector
-e) a point
-f) meaningless
+c) meaningless
 :::
 
-## 2.5 Point + vector = moved point
-
-| Operation | Result |
-|---|---|
-| point − point | vector |
-| point + vector | point |
-| vector + vector | vector (week 2) |
-| point + point | meaningless |
-
-## Motion frame by frame
+## 2.5 Motion frame by frame
 
 :::: {.columns}
 ::: {.column width="38%"}
+- point + vector = point
 - **p**k+1 = **p**k + **v**
-- after n frames: p0 + n·v (each component)
+- after n frames: p0 + n·v
 :::
 ::: {.column width="62%"}
 ![](images/per-frame.png)
 :::
 ::::
-
-## Example · Ship after 4 frames
-
-p0 = (1, 1), **v** = (2, 1).
-
-::: {.reveal}
-1. frame 1: (3, 2)
-2. frames 2, 3: (5, 3), (7, 4)
-3. directly: (1 + 4·2, 1 + 4·1) = **(9, 5)**
-:::
 
 ## Example · Choosing a velocity
 
@@ -256,30 +188,26 @@ Missile (10, 7) → target (4, 1) in 3 frames.
 
 Start (2, 1), **v** = (3, 2).
 
-a) after 1 frame?
-b) after 4 frames?
-c) (0, 0) → (12, −8) in 4 frames: **v**?
-d) ball (9, 3), **v** = (−3, 0): frames to x = 0?
-e) 0.5 per frame at 60 fps: per second?
+a) after 4 frames?
+b) (0, 0) → (12, −8) in 4 frames: **v**?
+c) 0.5 per frame at 60 fps: per second?
 
 ::: {.answer}
-a) (5, 3)
-b) (14, 9)
-c) (3, −2)
-d) 3
-e) 30
+a) (14, 9)
+b) (3, −2)
+c) 30
 :::
 
 ## 2.6 Vectors in 3D
 
 :::: {.columns}
-::: {.column width="45%"}
-- (vx, vy, vz) · end − start
-- vertical part (0, vy, 0)
-- horizontal part (vx, 0, vz)
+::: {.column width="38%"}
+- (vx, vy, vz)
+- vertical (0, vy, 0)
+- horizontal (vx, 0, vz)
 - jump: only vy
 :::
-::: {.column width="55%"}
+::: {.column width="62%"}
 ![](images/drone-3d.png)
 :::
 ::::
@@ -292,13 +220,7 @@ A = (2, 0, 1), B = (6, 5, −3).
 1. B − A = **(4, 5, −4)**
 2. vertical (0, 5, 0): climbs 5
 3. horizontal (4, 0, −4)
-4. return: (−4, −5, 4)
 :::
-
-## Watch out · Which number is the height?
-
-- y-up (Unity): height = **middle** component
-- z-up (Blender): height = **last** component
 
 ## Try it 6 · A drone in 3D
 
@@ -306,59 +228,38 @@ A = (1, 2, 0) → B = (5, 6, −6), y up.
 
 a) displacement?
 b) vertical part?
-c) horizontal part?
-d) return trip?
-e) a jump changes…?
+c) return trip?
 
 ::: {.answer}
 a) (4, 4, −6)
 b) (0, 4, 0)
-c) (4, 0, −6)
-d) (−4, −4, 6)
-e) y
+c) (−4, −4, 6)
 :::
 
 ## Game challenge · Comet Courier
 
 :::: {.columns}
 ::: {.column width="38%"}
-- one velocity per frame · 3D mode: stations at different heights · work **alone**
+- Alpha (1, 2)
+- Beta (9, 6)
+- comet (5, 4)
+- one velocity per frame
 :::
 ::: {.column width="62%"}
 ![](images/comet-courier.png)
 :::
 ::::
 
-## Try it 7 · Alpha to Beta
+## Try it 7 · Alpha to Beta (harder)
 
 a) Alpha → Beta?
-b) Beta → Alpha?
-c) **v** for Alpha → Beta in 4 frames?
-d) position after 2 frames?
-e) what is there?
+b) **v** for Alpha → Beta in 4 frames?
+c) what is there after 2 frames?
 
 ::: {.answer}
 a) (8, 4)
-b) (−8, −4)
-c) (2, 1)
-d) (5, 4)
-e) the comet
-:::
-
-## Try it 8 · Stations in 3D (harder)
-
-Gamma (2, 3, 4) → Delta (6, 9, −2).
-
-a) displacement?
-b) vertical part?
-c) **v** for 2 frames?
-d) push back = −**v**?
-
-::: {.answer}
-a) (4, 6, −6)
-b) (0, 6, 0)
-c) (2, 3, −3)
-d) (−2, −3, 3)
+b) (2, 1)
+c) the comet
 :::
 
 ## Summary

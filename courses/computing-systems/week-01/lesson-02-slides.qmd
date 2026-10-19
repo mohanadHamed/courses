@@ -21,8 +21,10 @@ Code and assets must be copied from slow **storage** into fast **memory**.
 
 :::: {.columns}
 ::: {.column width="38%"}
-- package: **AAB/APK** (Android) · **IPA** (iOS)
-- install → storage · launch → **process** in RAM
+- AAB/APK · IPA
+- install → storage
+- launch → **process** in RAM
+- low memory → OS closes apps
 :::
 ::: {.column width="62%"}
 ![](images/launch.png)
@@ -39,37 +41,26 @@ Code and assets must be copied from slow **storage** into fast **memory**.
 3. same game: 10× slower, only because of storage speed
 :::
 
-## Watch out · Storage size is not speed
-
-- capacity → how many games fit
-- **speed** → how fast they load
-- **memory** → how much stays loaded
-
 ## Try it 1 · Install, launch, load
 
-a) uploaded to Google Play?
-b) iOS package?
-c) installing fills…?
-d) a program in execution?
-e) 1.5 GB at 150 MB/s?
-f) game restarts after a break?
+a) installing fills…?
+b) a program in execution?
+c) 1.5 GB at 150 MB/s?
 
 ::: {.answer}
-a) AAB
-b) IPA
-c) storage
-d) process
-e) 10 s
-f) the OS terminated its process
+a) storage
+b) process
+c) 10 s
 :::
 
 ## 2.2 The frame on real hardware
 
 :::: {.columns}
 ::: {.column width="38%"}
-- CPU: logic, commands · GPU: pixels
-- parallel → **the slower one sets the frame time**
-- seen = min(frame rate, **refresh rate**) · **resolution** = GPU work · no fan → **throttling**
+- CPU and GPU in parallel
+- slower one sets the pace
+- display caps it (Hz)
+- no fan → **throttling**
 :::
 ::: {.column width="62%"}
 ![](images/cpu-gpu-pipeline.png)
@@ -89,30 +80,18 @@ f) the OS terminated its process
 ## Try it 2 · Frames, displays, heat
 
 a) 120 Hz, 70 fps: images per second?
-b) CPU 12 ms, GPU 9 ms: fps?
-c) the limiting processor?
-d) pixels of 1080 × 2400?
-e) slows down when hot?
+b) the limiting processor in the example?
+c) slows down when hot?
 
 ::: {.answer}
 a) 70
-b) about 83 fps
-c) the CPU
-d) about 2.6 million
-e) thermal throttling
+b) the CPU
+c) thermal throttling
 :::
 
 ## 2.3 Where the game is computed
 
 ![](images/where-game-runs.png)
-
-## Example · Adding up the input lag
-
-::: {.reveal}
-1. local: 10 + 17 + 17 ≈ **44 ms**
-2. cloud: + round trip 40 + video 15 ≈ **99 ms**
-3. ~100 ms: fighting game ✗ · card game ✓
-:::
 
 ## Live demo · Lag Lab
 
@@ -121,69 +100,36 @@ e) thermal throttling
 ## Try it 3 · Near or far?
 
 a) game on a server, phone shows video?
-b) phones run it, server keeps the state?
-c) action → result delay?
-d) data per second?
-e) 44 + 40 + 15?
-f) suffers most from lag?
+b) local 44 ms + round trip 40 + video 15?
+c) suffers most from lag?
 
 ::: {.answer}
 a) cloud gaming
-b) client–server
-c) latency
-d) bandwidth
-e) about 99 ms
-f) a fighting game
+b) about 99 ms
+c) a fighting game
 :::
 
 ## 2.4 Device classes for gaming
 
 ![](images/devices.png)
 
-## Comparing the classes
-
-| | Input | Power | Sessions |
-|---|---|---|---|
-| phone / tablet | touch, sensors | battery, no fan | short |
-| PC | keyboard, mouse | mains, fans | long |
-| console | gamepad | mains, fans | long |
-| cloud | any | server | needs a fast network |
-
-## Try it 4 · Which device class?
-
-a) gamepad, TV, fixed performance?
-b) keyboard, mouse, widest range?
-c) touch, battery, pocket?
-d) any screen, fast network?
-
-::: {.answer}
-a) console
-b) PC
-c) smartphone
-d) cloud gaming
-:::
-
 ## Game challenge · The class survey
 
-- most: Android phones · cheapest reads 120 MB/s
-- some iPhones, laptops · one console
-- two cloud players · one with a 90 ms round trip
-- one game for all · work **alone**
+- Android phones · cheapest reads 120 MB/s
+- iPhones, laptops, one console
+- one cloud player: 90 ms round trip
+- one game for all
 
 ## Try it 5 · One game, many devices (harder)
 
 a) 600 MB level on the cheapest phone?
 b) cloud lag with 90 ms round trip?
-c) console input?
-d) throttling matters most?
-e) iPhone package?
+c) throttling matters most on…?
 
 ::: {.answer}
 a) 5 s
 b) 149 ms
-c) gamepad
-d) smartphone
-e) IPA
+c) smartphone
 :::
 
 ## Summary

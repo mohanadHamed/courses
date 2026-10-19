@@ -105,11 +105,22 @@ link it from the notes and the slides:
 | Page: "Try it" boxes (one per section + Game challenge) | 4–6 | 6–9 |
 | Page: questions in all "Try it" boxes | 15–28 | 30–45 |
 | Simulators / mini-games | 0–2 | 1–3 |
-| Slides (title slide not counted) | 15–22 | 26–36 |
+| Slides (title slide not counted) | 12–16 | 22–28 |
 
-**Time plan (90 min):** key terms 5 · sections ~60 · Game challenge ~20 ·
-summary and questions 5. **Time plan (60 min):** key terms 3 · sections ~40 ·
-Game challenge ~10 · summary 5. Leave time for my Arabic explanation.
+**Class time and home time.** The notes and the interactive page are studied
+at home, without a time limit, so they keep their full size. The **slides**
+are what is taught in the lecture, and they are kept short so that the
+teacher has time to explain the hard concepts in Arabic and answer
+questions: one concept slide per section, the key worked examples, one
+"Try it" slide per section with **2–3** of the page's questions, one Game
+challenge story slide and **one** challenge "Try it" slide. Everything else
+(the other questions, the second challenge box, extra examples, the
+exercises) is for home.
+
+**Time plan (90 min):** key terms 5 · sections ~65 (about 10 per section,
+mostly explanation) · Game challenge ~10 · summary and questions 10.
+**Time plan (60 min):** key terms 3 · sections ~42 · Game challenge ~8 ·
+summary 7.
 
 `_extensions/lesson/check_size.py` (project pre-render) checks these numbers,
 that every section of the notes is on the page, the one-box-per-section rule,
@@ -119,8 +130,16 @@ simulator. Fix every warning before you open a PR. Full table:
 `python3 _extensions/lesson/check_size.py --all`. Keep `SIZES` and this table
 the same.
 
+**Independent study only: no group work anywhere.** No group or pair
+activities, discussions with classmates, team projects or team presentations
+— not in lessons, seminars, homework or projects, and not in the PDF either.
+Every student must be able to learn from the notes and the page alone. When
+a syllabus names a team activity, replace it with individual work (an
+individual analysis, project, report or recorded presentation) and explain in
+`plan.md` how the ILO is still built (D1 is built individually).
+
 **Game challenge (every course; no class activities).** No groups, no paper:
-every student works alone on the page, and the teacher shows each part on
+every student works alone on the page, and the teacher shows one part on
 the slides. `## Game challenge: <name> {.challenge}`, a short story of one
 made-up game or studio (3–5 sentences with fixed numbers), then "Try it"
 boxes that combine the sections of the day (the last one "(harder)"). The
@@ -279,13 +298,14 @@ Second question.
 
 Slides are for a conversation with the class.
 
-- **Every "Try it" of the page is a slide**: `## Try it N · short title`,
-  the questions, then the answers in `::: {.answer}`.
+- **One "Try it" slide per section**: `## Try it N · short title`, **2–3**
+  questions chosen from the page's set, then the answers in `::: {.answer}`.
+  Two short sections may share one slide (`## Try it 3–4 · …`).
 - **"Think" slides** before a new idea: one question, then `::: {.answer}`
   or `::: {.reveal}`.
-- **Every worked example of the notes that is taught in class is a slide**:
-  `## Example · short title`, steps in `::: {.reveal}`. Common mistakes:
-  `## Watch out · short title`.
+- **Key worked examples only** (about one per section in 90 min, fewer in
+  60 min): `## Example · short title`, 3–4 steps in `::: {.reveal}`. Common
+  mistakes go in a bullet of the concept slide, not on their own slide.
 - **Pictures:** every concept slide has a figure. A picture together with
   text must be in columns, or the slide is split in two:
   `:::: {.columns}` / `::: {.column width="38%"}` text / `::: {.column width="62%"}` picture.
@@ -294,7 +314,7 @@ Slides are for a conversation with the class.
 - One "Live demo · …" slide per simulator or mini-game (same `{{< sim >}}`
   shortcode: poster + large QR code).
 - Game challenge: one slide with the story in keywords (and its
-  illustration), then one "Try it" slide per box.
+  illustration), then one "Try it" slide (harder, 2–3 questions).
 - Filter: `_extensions/lesson/slides.lua`. Look and animations: `pptx_finish.py`.
   Check a deck in PowerPoint's Slide Show before class.
 
@@ -366,8 +386,9 @@ homework and its solution together.
   project instead (syllabus).
 - Built from the week's ILOs (`ilos:`), like the lessons: practise exactly
   what the two lessons taught, in the same words. No new content.
-- Size (start of the semester): **1–2 short tasks, about 15 minutes**, in all
-  courses. Short homework that students finish is better than long homework
+- Size: **1–2 short, simple tasks, under 10 minutes**, in all courses. A
+  student who has read the notes or gone through the interactive page must be
+  able to answer at once; no research, no long calculations. Short homework that students finish is better than long homework
   they skip. I may make it longer in later weeks, if the students do it well;
   then I will change this rule. Marks per task in the heading; total in `marks:`.
 - At least one task in a real game situation (the PLO behind the ILO).
@@ -468,3 +489,10 @@ Lessons or homework not ready for students: `draft: true` (not published).
   above ("The lesson model"). The size table changed accordingly.
 - 2026-10-19: a slide with a picture and text outside columns is split into
   two slides by the PPTX writer. Use columns.
+- 2026-10-19: the decks were too long for the lecture once the teacher's
+  Arabic explanation is counted. Slides are now the class part only (12–16
+  for 60 min, 22–28 for 90 min, 2–3 questions per "Try it" slide); the notes
+  and the page keep everything for home study.
+- 2026-10-19: group activities are rarely done (few students, no time) and
+  only look good on paper. No group work anywhere; syllabus team activities
+  become individual work (see each course's `plan.md`).

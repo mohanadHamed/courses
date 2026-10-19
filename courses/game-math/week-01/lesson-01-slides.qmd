@@ -20,13 +20,13 @@ Only **numbers** — positions, health, time — updated every frame.
 ## 1.1 The game loop
 
 :::: {.columns}
-::: {.column width="42%"}
-- read input → update state → render
+::: {.column width="38%"}
+- input → update → render
 - one pass = one **frame**
 - **T = 1000 / f** ms
-- 60 fps → 16.7 ms · 30 fps → 33.3 ms
+- 60 fps → 16.7 ms
 :::
-::: {.column width="58%"}
+::: {.column width="62%"}
 ![](images/game-loop.png)
 :::
 ::::
@@ -37,62 +37,35 @@ Racing game, 60 fps, 3-minute race.
 
 ::: {.reveal}
 1. T = 1000 / 60 ≈ **16.7 ms**
-2. 3 min = 180 s
-3. 180 × 60 = **10 800 updates**
-4. at 30 fps: 33.3 ms, only 5 400 updates
+2. 180 s × 60 = **10 800 updates**
+3. at 30 fps: 33.3 ms, only 5 400 updates
 :::
-
-## The maths behind game tasks
-
-| Task | Tool | Weeks |
-|---|---|---|
-| where it is, where it goes | coordinates, vectors | 1–3 |
-| aim, bob, turn | trigonometry | 4 |
-| move / rotate / resize models | matrices | 5–7 |
-| rules, conditions | logic | 9–10 |
-| loot, random levels | probability | 11–13 |
 
 ## Try it 1 · The frame budget
 
 a) frame time at 30 fps?
-b) frame time at 120 fps?
-c) frames in 10 s at 60 fps?
-d) loop step that draws?
-e) loop step for rules and physics?
-f) maths for "the door opens"?
+b) frames in 10 s at 60 fps?
+c) maths for "the door opens"?
 
 ::: {.answer}
 a) 33.3 ms
-b) 8.3 ms
-c) 600
-d) render
-e) update state
-f) logic
+b) 600
+c) logic
 :::
 
 ## 1.2 One dimension: the number line
 
 :::: {.columns}
 ::: {.column width="38%"}
-- coordinate = signed distance from the origin
-- **displacement** b − a (sign = direction) · **distance** |b − a|
-- discrete (int) vs continuous (float)
-- float ≈ 7 digits → jitter far away → **floating origin**
+- displacement **b − a** (sign)
+- distance **|b − a|**
+- int (discrete) · float (continuous)
+- far from 0 → jitter → **floating origin**
 :::
 ::: {.column width="62%"}
 ![](images/number-line.png)
 :::
 ::::
-
-## Example · Back to the checkpoint
-
-Player at x = 4, checkpoint at x = −3.
-
-::: {.reveal}
-1. displacement −3 − 4 = **−7** (to the left)
-2. distance |−7| = **7 units**
-3. distance is never negative
-:::
 
 ## Try it 2 · Moving along a line
 
@@ -100,39 +73,24 @@ Player at x = 6 → checkpoint at x = −2.
 
 a) displacement?
 b) distance?
-c) platform −5 → −1: displacement?
-d) x = 3.27 allowed: which line?
-e) board-game squares: which line?
-f) moving the world back to the origin?
+c) moving the world back to the origin?
 
 ::: {.answer}
 a) −8
 b) 8
-c) +4
-d) continuous
-e) discrete
-f) floating origin
-:::
-
-## Think · Where is the key?
-
-The key is 3 units **left** of the centre and 2 units **up**.
-**How do we write it?**
-
-::: {.answer}
-(−3, 2) — x first, then y.
+c) floating origin
 :::
 
 ## 1.3 Two dimensions: (x, y)
 
 :::: {.columns}
-::: {.column width="44%"}
+::: {.column width="38%"}
 - x right, y up
 - **ordered pair** (x, y)
-- 4 **quadrants** by sign
-- a zero coordinate → on an axis
+- signs → **quadrant**
+- zero → on an axis
 :::
-::: {.column width="56%"}
+::: {.column width="62%"}
 ![](images/quadrants.png)
 :::
 ::::
@@ -144,8 +102,7 @@ Key (−3, 2), trap (−4, −2.5), coin (4, 3).
 ::: {.reveal}
 1. key: x < 0, y > 0 → **quadrant II**
 2. trap: both negative → **quadrant III**
-3. key → coin: horizontal |4 − (−3)| = **7**
-4. vertical |3 − 2| = **1**
+3. key → coin: |4 − (−3)| = **7**
 :::
 
 ## Live demo · Grid Strike
@@ -155,93 +112,61 @@ Key (−3, 2), trap (−4, −2.5), coin (4, 3).
 ## Try it 3 · Where is the point?
 
 a) (−5, 3)
-b) (6, −0.5)
-c) (−2, −7)
-d) (0, −4)
-e) distance (−3, 2) ↔ (4, 2)?
+b) (0, −4)
+c) distance (−3, 2) ↔ (4, 2)?
 
 ::: {.answer}
 a) quadrant II
-b) quadrant IV
-c) quadrant III
-d) negative y-axis
-e) 7
-:::
-
-## Think · Screen coordinates
-
-The player taps the **top-left corner** of the phone.
-**Which pixel is it? Which way does y grow?**
-
-::: {.answer}
-(0, 0) — and screen y grows **downward**.
+b) negative y-axis
+c) 7
 :::
 
 ## 1.4 Screen space and world space
 
 :::: {.columns}
 ::: {.column width="38%"}
-- world → screen: **xs = W/2 + s·xw**, **ys = H/2 − s·yw**
-- touch → world: **xw = (xs − W/2) / s**, **yw = (H/2 − ys) / s** · many phones: **s = W / w**
+- screen: top-left, **y down**
+- xs = W/2 + s·xw
+- ys = H/2 **−** s·yw
+- many phones: s = W / w
 :::
 ::: {.column width="62%"}
 ![](images/screen-world.png)
 :::
 ::::
 
-## Example · World to screen
+## Example · World ↔ screen
 
-1080 × 1920, s = 100, world point (2, 3).
+1080 × 1920, s = 100.
 
 ::: {.reveal}
 1. centre (540, 960)
-2. xs = 540 + 200 = **740**
-3. ys = 960 − 300 = **660**
-4. (740, 660): above the centre
+2. world (2, 3) → (540 + 200, 960 − 300) = **(740, 660)**
+3. touch (340, 1160) → ((340 − 540)/100, (960 − 1160)/100) = **(−2, −2)**
 :::
-
-## Example · Touch to world
-
-Same phone, touch at (340, 1160).
-
-::: {.reveal}
-1. xw = (340 − 540) / 100 = **−2**
-2. yw = (960 − 1160) / 100 = **−2**
-3. world point (−2, −2), quadrant III
-:::
-
-## Watch out · The minus sign
-
-- ys = H/2 **−** s·yw
-- with **+**: the world is upside down
-- a jump looks like a fall
 
 ## Try it 4 · Convert between the spaces
 
 1080 × 1920, s = 100.
 
-a) centre pixel?
-b) world (1, 2) → pixel?
-c) world (−3, −1) → pixel?
-d) touch (740, 1360) → world?
-e) screen y grows…?
-f) scale for a 9-unit-wide board?
+a) world (1, 2) → pixel?
+b) touch (740, 1360) → world?
+c) scale for a 9-unit-wide board?
 
 ::: {.answer}
-a) (540, 960)
-b) (640, 760)
-c) (240, 1060)
-d) (2, −4)
-e) downward
-f) 120 px per unit
+a) (640, 760)
+b) (2, −4)
+c) 120 px per unit
 :::
 
 ## 1.5 Grids: row-major order
 
 :::: {.columns}
 ::: {.column width="38%"}
-- cell (c, r) → index **i = r·n + c**
-- index → **c = i mod n**, **r = ⌊i / n⌋**
+- cell (c, r), from 0
+- **i = r·n + c**
+- c = i mod n
+- r = ⌊i / n⌋
 :::
 ::: {.column width="62%"}
 ![](images/tile-index.png)
@@ -255,7 +180,7 @@ f) 120 px per unit
 ::: {.reveal}
 1. (5, 3) → 3 × 8 + 5 = **29**
 2. index 42 → 42 ÷ 8 = 5 r 2 → **column 2, row 5**
-3. one row up → index + 8 = **50**
+3. one row up → index + 8
 :::
 
 ## Try it 5 · A match-3 board
@@ -265,47 +190,43 @@ f) 120 px per unit
 a) index of (2, 4)?
 b) cell of index 19?
 c) index above 19?
-d) index of (0, 0)?
-e) tile size 2: centre of tile (1, 0)?
 
 ::: {.answer}
 a) 34
 b) column 3, row 2
 c) 27
-d) 0
-e) (3, 1)
 :::
 
 ## 1.6 Three dimensions: (x, y, z)
 
 :::: {.columns}
-::: {.column width="45%"}
-- **ordered triple** (x, y, z)
-- y up → ground = **xz-plane**
+::: {.column width="38%"}
+- **ordered triple**
+- y up → ground = xz-plane
 - height = y
-- 3 planes → 8 octants
 :::
-::: {.column width="55%"}
+::: {.column width="62%"}
 ![](images/axes-3d.png)
 :::
 ::::
 
 ## Left-handed or right-handed?
 
+:::: {.columns}
+::: {.column width="38%"}
+- Unity: y up, **left**
+- Godot: y up, **right**
+- Blender: z up, **right**
+- swap two axes → flips
+:::
+::: {.column width="62%"}
 ![](images/handedness.png)
-
-## Conventions · swap two axes → handedness flips
-
-| Software | Up | Handedness |
-|---|---|---|
-| Unity | y | left |
-| Godot, Maya | y | right |
-| Unreal | z | left |
-| Blender, 3ds Max | z | right |
+:::
+::::
 
 ## Example · Blender to Unity
 
-Lamp at (1, 4, 2) in Blender (z up, right-handed).
+Lamp at (1, 4, 2) in Blender (z up).
 
 ::: {.reveal}
 1. height in Blender = z = 2
@@ -313,77 +234,46 @@ Lamp at (1, 4, 2) in Blender (z up, right-handed).
 3. height in Unity = y = 2 ✓
 :::
 
-## Watch out · Which way is forward?
-
-- Unity: camera looks along **+z**
-- Godot / OpenGL: camera looks along **−z**
-- check the convention before you copy positions
-
 ## Live demo · 3D position
 
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" >}}
 
 ## Try it 6 · Positions in 3D
 
-a) height coordinate?
-b) ground plane?
-c) (2, 0, −7) is…?
-d) Unity handedness?
-e) Blender (3, 1, 5) → Unity?
-f) swapping two axes changes…?
+a) where is (2, 0, −7)?
+b) Unity handedness?
+c) Blender (3, 1, 5) → Unity?
 
 ::: {.answer}
-a) y
-b) the xz-plane
-c) on the ground
-d) left-handed
-e) (3, 5, 1)
-f) the handedness
+a) on the ground
+b) left-handed
+c) (3, 5, 1)
 :::
 
 ## Game challenge · Harbor Guard
 
 :::: {.columns}
-::: {.column width="60%"}
-- portrait phone 1080 × 1920 · 60 fps
-- camera at the world origin · s = 120 px per unit
+::: {.column width="55%"}
+- 1080 × 1920 · 60 fps
+- camera at the origin · s = 120
 - harbour grid: 9 columns
-- towers: 3D models from Blender
-- work **alone** · every section of today
+- towers from Blender
 :::
-::: {.column width="40%"}
+::: {.column width="45%"}
 ![](images/harbor-guard.png)
 :::
 ::::
 
-## Try it 7 · Taps and ships
+## Try it 7 · Taps and tiles (harder)
 
-a) frame time?
-b) touch (300, 720) → world?
-c) its quadrant?
-d) ship at (3, −4) → pixel?
-
-::: {.answer}
-a) 16.7 ms
-b) (−2, 2)
-c) quadrant II
-d) (900, 1440)
-:::
-
-## Try it 8 · Tiles and towers (harder)
-
-9 columns, row-major.
-
-a) index of (4, 6)?
-b) cell of index 40?
+a) touch (300, 720) → world?
+b) tile index of (4, 6), 9 columns?
 c) Blender (2, 3, 1.5) → Unity?
-d) height of that tower?
 
 ::: {.answer}
-a) 58
-b) column 4, row 4
+a) (−2, 2)
+b) 58
 c) (2, 1.5, 3)
-d) 1.5 units
 :::
 
 ## Summary

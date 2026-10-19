@@ -21,8 +21,10 @@ The program is **data in memory**: load a new program, get a new machine.
 
 :::: {.columns}
 ::: {.column width="38%"}
-- CPU: control unit · ALU · registers
-- RAM (volatile) · storage (permanent) · bus
+- CPU: control, ALU, registers
+- RAM: fast, volatile
+- storage: permanent
+- bus connects them
 :::
 ::: {.column width="62%"}
 ![](images/von-neumann.png)
@@ -32,24 +34,15 @@ The program is **data in memory**: load a new program, get a new machine.
 ## The instruction cycle
 
 :::: {.columns}
-::: {.column width="45%"}
+::: {.column width="38%"}
 - fetch → decode → execute
 - 3 GHz = 3 billion ticks/s
-- 60 fps → **50 million ticks per frame**
+- 60 fps → 50 million ticks per frame
 :::
-::: {.column width="55%"}
+::: {.column width="62%"}
 ![](images/instruction-cycle.png)
 :::
 ::::
-
-## Example · One tap, four functions
-
-::: {.reveal}
-1. **input**: the touch screen reports the finger
-2. **processing**: CPU — on the ground? → jump; collisions
-3. **output**: GPU frame, sound, vibration
-4. **storage**: best score written to flash
-:::
 
 ## Live demo · Tap Runner
 
@@ -57,31 +50,25 @@ The program is **data in memory**: load a new program, get a new machine.
 
 ## Try it 1 · Inside the computer
 
-a) arithmetic and comparisons?
-b) loses data when off?
-c) the three steps?
-d) ticks per frame, 3 GHz, 60 fps?
-e) saving the best score?
-f) instructions + data in one memory?
+a) loses data when off?
+b) the three steps?
+c) ticks per frame, 3 GHz, 60 fps?
 
 ::: {.answer}
-a) the ALU
-b) RAM
-c) fetch, decode, execute
-d) 50 million
-e) storage
-f) the stored-program model
+a) RAM
+b) fetch, decode, execute
+c) 50 million
 :::
 
 ## 1.2 A multilevel machine
 
 :::: {.columns}
-::: {.column width="42%"}
-- each level: a more convenient language
-- built on the level below
-- **translation** (compiler) · **interpretation** (interpreter)
+::: {.column width="38%"}
+- each level: a simpler language below
+- **compiler**: translate first
+- **interpreter**: step by step
 :::
-::: {.column width="58%"}
+::: {.column width="62%"}
 ![](images/levels.png)
 :::
 ::::
@@ -90,104 +77,64 @@ f) the stored-program model
 
 :::: {.columns}
 ::: {.column width="38%"}
-- phones: **ARM** · PC, PS5, Xbox: **x86-64**
+- phones: **ARM**
+- PC, PS5, Xbox: **x86-64**
+- written once, translated per ISA
 :::
 ::: {.column width="62%"}
 ![](images/build-targets.png)
 :::
 ::::
 
-## Example · `score = score + 10;`
-
-::: {.reveal}
-1. level 5: C# line
-2. compiler → load · add 10 · store (ARM)
-3. level 3: the OS protects the game's memory
-4. levels 2–0: fetch, decode, execute in the ALU
-:::
-
 ## Try it 2 · Levels and languages
 
 a) hardware meets software?
-b) files, processes, memory?
-c) converts before it runs?
-d) runs step by step?
-e) ISA of smartphones?
-f) ISA of PCs, PS5, Xbox?
+b) converts before it runs?
+c) ISA of smartphones?
 
 ::: {.answer}
 a) the ISA
-b) operating system machine
-c) compiler
-d) interpreter
-e) ARM
-f) x86-64
+b) compiler
+c) ARM
 :::
 
 ## 1.3 Classes of computers
 
 :::: {.columns}
 ::: {.column width="38%"}
-- differ in **how much** and **at what energy cost** · Moore's law: ×2 every ~2 years
+- embedded · mobile · personal · console · server
+- energy decides
+- Moore's law
 :::
 ::: {.column width="62%"}
 ![](images/computer-classes.png)
 :::
 ::::
 
-## Try it 3 · Which class?
-
-a) buttons in a controller?
-b) online matches?
-c) fixed hardware for games?
-d) battery, no fan, largest?
-e) ×2 every two years?
-
-::: {.answer}
-a) embedded
-b) server
-c) console
-d) mobile
-e) Moore's law
-:::
-
 ## 1.4 Digital platforms
 
 :::: {.columns}
-::: {.column width="45%"}
-- Android · iOS · PC · consoles · cloud
-- mobile ≈ half of game revenue
+::: {.column width="38%"}
+- hardware + OS + SDK + store
+- the owner sets the rules
 - cross-platform engines
 - **fragmentation**
 :::
-::: {.column width="55%"}
+::: {.column width="62%"}
 ![](images/platform-stack.png)
 :::
 ::::
 
-## Example · Mobile game → Nintendo Switch
+## Try it 3–4 · Classes and platforms
 
-::: {.reveal}
-1. ISA: ARM → new native build
-2. input: buttons and sticks, not only touch
-3. output: landscape TV screen → new layout
-4. rules: developer agreement, SDK, **certification**
-:::
-
-## Try it 4 · Platforms
-
-a) hardware + OS + SDK + store?
+a) battery, no fan, largest platform?
 b) Android's main store?
-c) one engine, many platforms?
-d) thousands of Android models?
-e) console approval before release?
+c) thousands of Android models?
 
 ::: {.answer}
-a) digital platform
+a) mobile
 b) Google Play
-c) cross-platform
-d) fragmentation
-e) certification
+c) fragmentation
 :::
 
 ## Game challenge · Tap Runner
@@ -195,24 +142,18 @@ e) certification
 - endless runner · tap to jump · 60 fps
 - saves the best distance
 - Android · iPhone · Windows PC
-- test phone core: 2.4 GHz · work **alone**
+- test phone core: 2.4 GHz
 
 ## Try it 5 · Tap Runner on three platforms (harder)
 
-a) input device on the phone?
-b) best distance when off?
-c) ticks per frame at 2.4 GHz, 60 fps?
-d) ISA of the Windows build?
-e) level that differs iPhone ↔ Windows?
-f) level of the game's rules?
+a) ticks per frame at 2.4 GHz, 60 fps?
+b) ISA of the Windows build?
+c) best distance when the phone is off?
 
 ::: {.answer}
-a) touch screen
-b) storage
-c) 40 million
-d) x86-64
-e) the ISA
-f) problem-oriented language
+a) 40 million
+b) x86-64
+c) storage
 :::
 
 ## Summary

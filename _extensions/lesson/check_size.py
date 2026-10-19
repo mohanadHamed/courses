@@ -42,7 +42,7 @@ SIZES = {
         "try_its": (4, 6),
         "questions": (15, 28),
         "sims": (0, 2),
-        "slides": (15, 22),
+        "slides": (12, 16),
     },
     90: {
         "book_sections": (5, 7),
@@ -52,7 +52,7 @@ SIZES = {
         "try_its": (6, 9),
         "questions": (30, 45),
         "sims": (1, 3),
-        "slides": (26, 36),
+        "slides": (22, 28),
     },
 }
 # Parts every lesson must have (heading text, case does not matter).

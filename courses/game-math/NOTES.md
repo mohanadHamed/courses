@@ -38,3 +38,10 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   sections per lesson (game loop, 1D, 2D, screen space, tile grids, 3D;
   scalars, arrows, components, displacement, motion per frame, 3D vectors),
   one question set per section, and mini-games (Grid Strike, Vector Dash).
+- Week 1 (2026-10-19, applied first): rebuilt again at a slightly easier
+  level in simple English, with a Do it task in every section: GeoGebra
+  (points, vectors), a spreadsheet (board index), paper (number line) and the
+  mini-games (Grid Strike, Vector Dash, the 3D viewer). Simplifying cut the
+  notes below 2 500 words; extra game-based worked examples (not theory)
+  brought them back. Left out: float precision, screen fitting, basis
+  vectors, n-dimensional vectors.

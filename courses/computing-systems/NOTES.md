@@ -26,3 +26,8 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   multilevel machine and ISAs, classes of computers and digital platforms
   (lesson 1), and launching, CPU/GPU frames, latency and cloud gaming
   (lesson 2), with the mini-games Tap Runner and Lag Lab.
+- Week 1 (2026-10-19, applied first): simpler level and English; Do it tasks
+  on the lab PC (Settings → About for the ISA, display settings, Task
+  Manager), on the phone (timing a game start) and in the mini-games. Left
+  out: the six-level machine table, translation vs interpretation, Moore's
+  law. Lesson 3 (week 2) was the model lesson for this approach.

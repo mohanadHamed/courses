@@ -20,12 +20,12 @@
 game-loop:
   en: game loop
   ar: حلقة اللعبة
-  def: The cycle that a game repeats for every frame — read the input, update the state, render the image.
+  def: The steps that a game repeats for every frame — read the input, update the game, draw the picture.
 
 frame-rate:
   en: frame rate (fps)
   ar: معدل الإطارات
-  def: The number of frames a game produces per second; its inverse is the frame time.
+  def: The number of frames a game makes per second (fps); the frame time is 1000 / fps milliseconds.
 
 frame:
   en: frame
@@ -35,7 +35,7 @@ frame:
 coordinate-system:
   en: coordinate system
   ar: نظام الإحداثيات
-  def: A frame of reference (an origin, axes and a unit) in which every point is described by numbers.
+  def: An origin, axes and a unit that together describe every point with numbers.
 
 origin:
   en: origin
@@ -45,7 +45,7 @@ origin:
 axis:
   en: axis (plural axes)
   ar: محور
-  def: A directed number line through the origin along which one coordinate is measured.
+  def: A number line through the origin, with a positive direction, along which one coordinate is measured.
 
 x-axis:
   en: x-axis
@@ -65,7 +65,7 @@ z-axis:
 coordinate:
   en: coordinate
   ar: إحداثي
-  def: The signed distance of a point from the origin, measured along one axis.
+  def: The number that tells how far a point is from the origin along one axis; negative on the negative side.
 
 ordered-pair:
   en: ordered pair / ordered triple
@@ -95,7 +95,7 @@ pixel:
 tile-grid:
   en: tile grid (row-major order)
   ar: شبكة البلاطات (الترتيب حسب الصفوف)
-  def: A world divided into equal cells addressed by integer column and row; row-major order stores the cells row after row.
+  def: A world divided into equal cells, each found by a whole-number column and row; memory stores the cells row after row.
 
 handedness:
   en: handedness (left-/right-handed)
@@ -140,12 +140,12 @@ magnitude:
 direction:
   en: direction
   ar: اتجاه
-  def: The orientation in which a vector points, independent of its length.
+  def: The way a vector points, whatever its length.
 
 component:
   en: component
   ar: مُرَكَّبة
-  def: The signed extent of a vector along one axis; a 2D vector has two components, a 3D vector three.
+  def: How far a vector goes along one axis, with a sign for the direction; a 2D vector has two components, a 3D vector three.
 
 displacement:
   en: displacement vector
@@ -170,7 +170,7 @@ opposite-vector:
 free-vector:
   en: equal vectors
   ar: متجهات متساوية
-  def: Vectors with the same components; they are equal wherever their arrows are drawn.
+  def: A vector has no position — arrows with the same components are the same vector wherever they are drawn.
 
 # -------------------------------------------------------- computing-systems
 
@@ -207,12 +207,12 @@ gpu:
 memory:
   en: main memory (RAM)
   ar: الذاكرة الرئيسية (RAM)
-  def: Fast, volatile memory that holds the programs and data in use; its contents are lost when the power is off.
+  def: Fast memory that holds the programs and data in use now; it loses everything when the power is off.
 
 storage:
   en: storage
   ar: وحدة التخزين
-  def: Non-volatile memory (flash or disk) that keeps programs and files when the power is off.
+  def: Flash memory or a disk that keeps programs and files when the power is off.
 
 input:
   en: input
@@ -247,7 +247,7 @@ isa:
 compiler:
   en: compiler / translation
   ar: المترجم / الترجمة
-  def: A program that converts a whole program into the language of a lower level before it runs.
+  def: A program that translates a whole program (for example C#) into machine instructions before it runs.
 
 interpreter:
   en: interpreter / interpretation
@@ -257,7 +257,7 @@ interpreter:
 digital-platform:
   en: digital platform
   ar: منصة رقمية
-  def: A combination of hardware, operating system, programming interfaces and a distribution channel on which software is built, sold and run.
+  def: A family of devices, an operating system, development tools and a store with rules, on which games are built, sold and run.
 
 cpu-core:
   en: core (processor core)
@@ -327,7 +327,7 @@ app-package:
 process:
   en: process
   ar: عملية
-  def: A program in execution, with its own memory space, managed by the operating system.
+  def: A running program, with its own part of memory, managed by the operating system.
 
 loading:
   en: loading
@@ -387,7 +387,7 @@ app-store:
 install:
   en: installation
   ar: تثبيت
-  def: Copying an app package to the device's storage and registering it with the operating system.
+  def: Copying an app package into the device's storage and adding it to the system's list of apps.
 
 # ------------------------------------------------------------ digital-media
 
@@ -399,7 +399,7 @@ digital-media:
 digitization:
   en: digitization (sampling and quantization)
   ar: الرقمنة (أخذ العينات والتكميم)
-  def: Converting a continuous signal into numbers by measuring it at regular intervals and rounding each value to a fixed set of levels.
+  def: Turning sound or light into numbers by measuring it many times and keeping each measurement as a number.
 
 raster-image:
   en: raster (bitmap) image
@@ -409,7 +409,7 @@ raster-image:
 vector-graphics:
   en: vector graphics
   ar: الرسوميات المتجهية
-  def: Images stored as geometric shapes and paths, which can be scaled to any size without losing quality.
+  def: Images stored as shapes (lines, curves, fills), which stay sharp at any size.
 
 multimedia:
   en: multimedia
@@ -424,12 +424,12 @@ elemental-tetrad:
 mechanics:
   en: mechanics
   ar: الآليات (ميكانيكيات اللعب)
-  def: The rules and procedures of a game — what the player can do and what happens as a result.
+  def: The rules of a game — what the player can do and what happens then.
 
 aesthetics:
   en: aesthetics
   ar: الجماليات
-  def: How a game looks, sounds and feels — the sensory element that the player perceives directly.
+  def: How a game looks, sounds and feels — everything that reaches the player's senses.
 
 player-experience:
   en: player experience
@@ -484,7 +484,7 @@ ambience:
 art-style:
   en: art style
   ar: الأسلوب الفني
-  def: The consistent visual language of a game — its shapes, colours, proportions and rendering.
+  def: The look that all pictures of a game share — the same kind of shapes, colours and proportions.
 
 accessibility:
   en: accessibility
@@ -521,12 +521,12 @@ competence-area:
 proficiency-level:
   en: proficiency level
   ar: مستوى الإتقان
-  def: A step on the DigComp scale from foundation to highly specialised, defined by task complexity and autonomy.
+  def: A step on the DigComp scale, from foundation (with help) to highly specialised (leading others).
 
 labour-market:
   en: labour market
   ar: سوق العمل
-  def: The supply of and demand for workers and skills in an economy.
+  def: The meeting point of the skills that workers offer and the skills that employers need.
 
 lifelong-learning:
   en: lifelong learning (upskilling)
@@ -566,7 +566,7 @@ file-path:
 file-extension:
   en: file extension
   ar: امتداد الملف
-  def: The suffix after the last dot of a file name, such as .docx or .png, that indicates the file type.
+  def: The letters after the last dot of a file name, such as .docx or .png, that show the type of the file.
 
 file-size:
   en: file size (KB, MB, GB)

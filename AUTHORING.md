@@ -43,12 +43,13 @@ simple and repeated the same idea many times. Every lesson is now built in
 this order.
 
 1. **Lesson notes (PDF)** — `lesson-NN-book.qmd` → `<prefix>_lectureN.pdf`.
-   The main study text, written like a chapter of the course textbook:
-   formal academic English, precise definitions, numbered sections
-   (`## 1.1 …`), numbered definitions, worked examples and common mistakes,
-   figures, tables, short C# reading examples where useful, a case study,
-   further reading (textbook chapter), exercises and short answers. It may be
-   demanding; do not over-simplify.
+   The main study text, written like an applied chapter of a technical
+   textbook: clear, professional English, numbered sections (`## 1.1 …`),
+   precise definitions, worked examples and common mistakes, "Do it" tasks
+   (see "Applied first"), figures, tables, short C# reading examples where
+   useful, a case study, further reading (textbook chapter), exercises and
+   short answers. It may be demanding in what it asks students to do; it is
+   never long on theory.
 2. **Interactive lesson (HTML)** — `lesson-NN.qmd`, derived from the notes.
    The same sections (`## 1.1 …`), each with a short, clear summary (plainer
    English than the notes, but not childish), its figures, its simulator or
@@ -59,6 +60,53 @@ this order.
 The PDF links to the web lesson (QR card under the ILOs, added by
 `banner.lua`) and to every simulator and mini-game (QR in the `{{< sim >}}`
 box). The web lesson's main button is "Lesson notes (PDF)".
+
+### Applied first (a diploma, not a bachelor's degree)
+
+The program is an applied diploma (Intermediate University Degree, JNQF;
+the syllabi describe every ILO as Knowledge, Skill or Competency). Graduates
+are expected to *do* things in a game studio, so students learn mainly by
+doing. Theory is taught as far as a task needs it, and every concept ends in
+something the student does. This holds for the notes, the page and the
+slides.
+
+- **The outcomes come first, the tasks serve them.** Every applied task
+  builds the ILO of that week (the course ILOs in the syllabus and the
+  ILO–PLO matrix on Drive) at its Bloom level and descriptor, and serves the
+  PLO behind it. A "describe" ILO (A, level 1–2, K) still ends with the
+  student describing or explaining; the task gives the description a real
+  object (their phone, a spec sheet, a game screen). Never add a skill
+  that belongs to an ILO of a later week (for example setting up an emulator,
+  C1, before week 14 of `computing-systems`), and never drop the knowledge an
+  ILO asks for: the midterm and final still test it.
+- **Situation → concept → task.** Every section opens with a concrete game
+  development situation (a problem a developer meets), gives the concept
+  needed to handle it, and ends with the student handling it. Never open a
+  section with a definition. Prefer section titles that name the problem or
+  the action ("Why the game loads slowly: storage") over abstract ones.
+- **One "Do it" task per section** (notes and page:
+  `::: {.callout-note title="Do it · short title"}`; in `digital-skills` the
+  same box is called "Lab task"). Short (2–5 minutes), done alone, on things
+  every student has: their phone, the lab computer, a browser, a simulator or
+  mini-game of the lesson, a free tool that runs in the lab, or paper. It
+  has a concrete product: a number, a filled table, a file, a sketch, a
+  decision with a reason. It works on Android and iOS, and on Windows lab
+  computers; if a step differs, say how. No programming and no game-engine
+  interface (see "Students").
+- **Theory budget.** About one third of a lesson explains; two thirds apply
+  (game-based worked examples, Do it tasks, Try it, Game challenge).
+  At most one formal definition per section, only for terms the tasks use.
+  History, taxonomies and background that no task or ILO needs are left out
+  or go to "Further reading".
+- **Questions ask students to apply.** In every "Try it" set and in the
+  exercises, at least two thirds of the questions ask to calculate, choose
+  for a situation, predict, compare, find the error or decide; the rest may
+  check a term or a definition.
+- **Worked examples are game cases with real numbers** (a load time, a frame
+  budget, a sound level, a file name), never abstract ones.
+- **Slides teach by showing.** In class, each section is a short concept and
+  a live demonstration or a Do it task done together on the projector
+  (phone settings, the lab computer, a simulator), not more text.
 
 ### No repetition (most important)
 
@@ -195,7 +243,8 @@ ILO–PLO matrix). Use the newest version of each file.
 
 ## Writing rules (always enforce)
 
-- **Notes:** formal academic English, the register of a textbook. Precise
+- **Notes:** clear, professional English, the register of a technical
+  manual or an applied textbook: short paragraphs, direct steps. Precise
   definitions (`::: {.callout-important title="Definition 1.2 — …"}`), worked
   examples with numbered steps (`::: {.callout-note title="Example 1.3 — …"}`),
   common mistakes (`::: {.callout-warning title="Common mistake"}`), code
@@ -205,7 +254,8 @@ ILO–PLO matrix). Use the newest version of each file.
 - **Page:** the same content, shorter and plainer (B1–B2): one idea per
   sentence, but no baby talk. "Watch out!" boxes for common mistakes.
 - **Slides:** keywords and pictures, no long sentences.
-- Picture before formula: game situation → figure → definition → example.
+- Picture before formula: game situation → figure → definition → example →
+  Do it.
 - Every rule or formula gets a worked example in the notes.
 - Every lesson starts with a bilingual "Key terms" glossary (8–14 terms).
 - Facts must be correct and current (conventions of engines, standards,
@@ -507,3 +557,9 @@ Lessons or homework not ready for students: `draft: true` (not published).
   only look good on paper. Team work stays only where the official outcomes
   require it: one team-activity box in the notes (PDF) of one or two lessons
   per course, with an individual alternative (see each course's `plan.md`).
+- 2026-10-19: the week 1 lessons followed a bachelor's model (textbook
+  chapter, formal definitions first, recognition questions). The program is
+  an applied diploma: lessons are now "applied first" (situation → concept →
+  task, one Do it task per section, a theory budget), always within the
+  official ILOs and PLOs. Rules above ("Applied first"). Tried first on one
+  model lesson before it is applied to all courses.

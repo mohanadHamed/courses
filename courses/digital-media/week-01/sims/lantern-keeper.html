@@ -148,8 +148,8 @@
     const dt = last ? Math.min((now - last) / 1000, 0.05) : 0; last = now;
     acc += dt;
     const step = on.technology ? 1 / 60 : 1 / 15;            // the old phone draws fewer frames per second
-    if (acc >= step) { update(acc); draw(now); acc = 0; }
     requestAnimationFrame(loop);
+    if (acc >= step) { try { update(acc); draw(now); } catch (e) { console.error(e); } acc = 0; }
   }
   document.querySelectorAll("#toggles button").forEach((b) => b.addEventListener("click", () => {
     const k = b.dataset.k; on[k] = !on[k];

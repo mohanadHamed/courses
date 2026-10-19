@@ -416,6 +416,19 @@ Second question.
   numbers are in the box or the section above), no changing state, exactly one
   right option per question, the words of the lesson, varied questions (no
   near-duplicates), tried in `quarto preview --profile review`.
+- **Every fact a question needs is on the page.** If a question uses a fact
+  from the notes (an example, a table, a name such as "Alpha" or "the Switch"),
+  the page section shows it too, in a bullet or a figure. When notes or pages
+  are shortened, check the questions again.
+- **No question depends on another one.** Repeat the numbers in each question
+  ("The same enemy E = (2, 7) and player P = (6, 4) …"); the student may answer
+  in any order.
+- **The Game challenge box repeats the key facts** of the story in its first
+  line (names, coordinates, sizes), so the box can be answered without
+  scrolling back. Names in the questions also appear in the game and its
+  poster (Alpha and Beta are labelled on the map).
+- **Every slide question can be answered from the slides** (the concept slide
+  bullets, a table slide or the Game challenge slide).
 - Filter: `_extensions/lesson/match.lua`; behaviour in `lesson-script.html`.
 
 ## Interactive slides
@@ -450,6 +463,12 @@ Slides are for a conversation with the class.
 
 ## Simulators
 
+- **Robust game loops.** `requestAnimationFrame` first, then draw inside
+  `try/catch`, so one failed frame never stops the game. Clamp times computed
+  from the frame time (`Math.max(0, now − start)`): the frame time can be a
+  little *before* the click that started an animation. Never decide a result
+  only while drawing (a hidden tab draws nothing): use a timer as well. Never
+  ignore a click silently: a button that cannot act now says why.
 - Plain HTML + JavaScript. No paid services, no external APIs, nothing loaded
   from the internet. Third-party libraries are copied into `shared/sims/vendor/`
   with their license (three.js r170, MIT). Must work on a phone (pointer
@@ -636,6 +655,10 @@ Lessons or homework not ready for students: `draft: true` (not published).
   mini-game of its core part in the page's Game challenge, with its QR code
   in the notes and on the Game challenge slide (rule "The game of the
   lesson").
+- 2026-10-20 (after release): Comet Courier sometimes did not animate (a
+  negative frame index stopped its draw loop), and some questions used facts
+  that the shortened pages no longer showed (Alpha and Beta, the console
+  example, typical file sizes). Rules added under "Try it" and "Simulators".
 - 2026-10-19 (level check): the students' level is very basic. The most the
   lessons can be simplified without losing the ILOs and PLOs was estimated at
   about 30 %; the lessons are now about 20 % simpler, and topics that no

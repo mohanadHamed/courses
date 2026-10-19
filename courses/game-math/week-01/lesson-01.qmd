@@ -23,8 +23,15 @@ examples and exercises are in the notes.
 - One pass makes one **frame**.
 - **Frame rate**: frames per second (fps). Phone games: 30 or 60 fps.
 - At 60 fps, the loop runs 60 times every second.
-- Coordinates and vectors (weeks 1–3), trigonometry (4), matrices (5–7),
-  logic (9–10), probability (11–13).
+- The mathematics of this course in a game:
+
+| What the game does | Mathematics |
+|---|---|
+| know where every object is; move it | coordinates, vectors |
+| aim a turret; make an object bob up and down | trigonometry |
+| move, turn and resize models | matrices |
+| decide if a door opens or an enemy attacks | logic |
+| loot, critical hits, random levels | probability |
 
 ![The game loop.](images/game-loop.png){width=70%}
 
@@ -60,6 +67,8 @@ A ship drops a rare reward only sometimes. Which mathematics?
 - A **number line** has an **origin** (0), a unit and a positive direction.
 - A point has one number: its **coordinate**. Left of 0: negative.
 - A runner game needs one number for the position.
+- A board game uses **whole numbers** (square 3, never 3.5). A running game
+  can also use **decimal numbers** (3.5).
 - **Displacement** = end − start. Plus: right (or up). Minus: left (or down).
 - **Distance** = the displacement without the sign. Never negative.
 
@@ -180,6 +189,8 @@ A at (1, 4, 2), C at (3, 7, −1). Which is higher?
 - Works with the left hand: **left-handed** (+z into the screen).
 - Works with the right hand: **right-handed** (+z towards you).
 - Unity: y up, left-handed. Blender: z up, right-handed.
+- Different up axes: a model from Blender can appear lying on its side in
+  Unity, so always check which axis is up.
 
 ![Left-handed and right-handed coordinate systems.](images/handedness.png){width=86%}
 
@@ -228,7 +239,9 @@ and the towers are made in Blender, where z is up.
 {{< sim file="sims/harbor-guard.html" poster="sims/harbor-guard.png" title="Harbor Guard: build towers at the right coordinates" kind="game" height="720" >}}
 
 ::: {.callout-tip title="Try it 6 · The harbour (harder)"}
-Use the numbers of Harbor Guard. Choose the right answer.
+Harbor Guard: 60 fps; dock (0, −6), lighthouse (−4, 5); a ship enters at
+(5, 8); drone (4, 12, −3) with y up; towers made in Blender (z up). Choose the
+right answer.
 
 ::: {.match extra="quadrant I|on the x-axis|60 frames"}
 How many frames does the game make in 5 seconds?

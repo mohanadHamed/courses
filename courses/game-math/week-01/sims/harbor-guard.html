@@ -231,13 +231,13 @@
   $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
 
   function loop(now) {
+    requestAnimationFrame(loop);
     if (game && !game.done && !game.locked && game.order) {
       const k = (now - game.t0) / (TIME * 1000);
       $("bar").style.width = Math.max(0, 100 * (1 - k)) + "%";
       if (k >= 1) resolve(null);
     }
-    draw(now);
-    requestAnimationFrame(loop);
+    try { draw(now); } catch (e) { console.error(e); }
   }
   window.addEventListener("resize", resize);
   resize(); requestAnimationFrame(loop);

@@ -167,7 +167,7 @@
     next();
   });
   $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
-  function loop(now) { draw(now); requestAnimationFrame(loop); }
+  function loop(now) { requestAnimationFrame(loop); try { draw(now); } catch (e) { console.error(e); } }
   window.addEventListener("resize", resize);
   resize(); requestAnimationFrame(loop);
 })();

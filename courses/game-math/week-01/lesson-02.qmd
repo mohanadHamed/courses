@@ -8,8 +8,9 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-summarises one concept and ends with one set of questions. The full
-explanations, all worked examples and the exercises are in the notes.
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
 
 ## Key terms
 
@@ -17,216 +18,208 @@ explanations, all worked examples and the exercises are in the notes.
 
 ## 2.1 Scalars and vectors
 
-A **scalar** is a single number: health, time, mass, speed. A **vector** has a
-**magnitude** *and* a **direction**: "5 m/s towards the east". The pairs to
-remember: distance (scalar) and **displacement** (vector); speed (scalar) and
-**velocity** (vector). Gravity, a knockback and the wind are vectors.
+- A **scalar** has only a size: one number (health 75, time 42 s).
+- A **vector** has a size (**magnitude**) and a **direction**.
+- Distance is a scalar; **displacement** is a vector.
+- Speed is a scalar; **velocity** is a vector.
+- To move a car, the game needs the velocity: the speed alone does not say
+  where the car goes.
 
 ![Scalar and vector.](images/scalar-vector.png){width=86%}
 
+::: {.callout-note title="Do it · Scalars and vectors in your game"}
+Play a game for one minute. Write three scalars (for example "coins: 250") and
+three vectors, each with a direction (for example "the ball flies up and to the
+left").
+:::
+
 ::: {.callout-tip title="Try it 1 · Scalar or vector?"}
-You can use an answer more than once.
+Choose the right answer. You can use an answer more than once.
 
-::: {.match}
-A wind of 6 m/s towards the west.
-:   vector
-
-The number of coins, 350.
+::: {.match extra="both|neither"}
+The score, 12 400.
 :   scalar
 
-The gravity of the game world.
+"The player moves 3 units to the right in each frame."
 :   vector
 
-The speed shown on a car's dashboard.
+"The hit pushes the player 4 units away from the enemy."
+:   vector
+
+The waiting time of a skill, 2.5 s.
 :   scalar
 
-The velocity of a bullet.
-:   vector
-
-The quantity "how far and which way".
-:   displacement
-
-The quantity "how far" only.
-:   distance
+The game must move a car. Which does it need: the speed or the velocity?
+:   the velocity
 :::
 :::
 
-## 2.2 The geometric view: arrows
+## 2.2 Arrows and components
 
-A vector is drawn as an **arrow** from its **tail** to its **head**. The
-length is the magnitude; the arrow points in the direction. A vector has **no
-position**: arrows with the same length and direction are **equal vectors**,
-wherever they are drawn.
-
-![An arrow, and three arrows that are the same vector (3, 2).](images/vector-arrow.png){width=88%}
-
-::: {.callout-tip title="Try it 2 · Reading arrows"}
-Choose the right term.
-
-::: {.match extra="different vectors|direction"}
-The pointed end of an arrow.
-:   head
-
-The starting point of an arrow.
-:   tail
-
-What the length of the arrow shows.
-:   magnitude
-
-Two arrows "3 right, 2 up" drawn in different places of the level.
-:   equal vectors
-
-Something that a vector does not have.
-:   a position
-:::
-:::
-
-## 2.3 Components and notation
-
-A program stores a vector as its **components**: the signed change along each
-axis, **v** = (*v*~x~, *v*~y~) or (*v*~x~, *v*~y~, *v*~z~). From a drawing:
-**head minus tail**. A negative component points in the negative direction of
-its axis (left or down). In code: `Vector2`, `Vector3`, read with `.x`, `.y`, `.z`.
-
-Algebraically, a vector is just an **ordered list of numbers**; its length is
-the **dimension**. A colour (*r*, *g*, *b*) and the input of a virtual joystick
-(*x*, *y*), read every frame, are vectors too. The **basis vectors**
-**i** = (1, 0, 0), **j** = (0, 1, 0), **k** = (0, 0, 1) point along the axes,
-and every vector is built from them: (4, −3) = 4**i** − 3**j**.
-
-![(4, −3) = 4**i** − 3**j**.](images/basis-vectors.png){width=52%}
+- A vector is drawn as an **arrow**: length = magnitude, it points in the
+  direction.
+- A vector has **no position**: equal arrows anywhere are the same vector.
+- The game stores the **components**: v = (v~x~, v~y~).
+- Components = **head − tail**.
+- The other way: head = tail + components.
+- A negative component points the negative way: (0, 5) is straight up,
+  (−2, 0) straight left.
+- A joystick gives a vector every frame; let go → (0, 0), the **zero vector**.
 
 ![Components of the arrow from (1, 4) to (5, 1): (4, −3).](images/components.png){width=60%}
 
-::: {.callout-tip title="Try it 3 · Components"}
-Find the components or the point.
+::: {.callout-warning title="Watch out!"}
+Two enemies in different places that both move "2 left per frame" have the
+**same** velocity vector.
+:::
 
-::: {.match extra="(5, −5)|up"}
-The components of the arrow from (2, −1) to (−3, 4).
-:   (−5, 5)
+::: {.callout-note title="Do it · Arrows in GeoGebra"}
+At geogebra.org/calculator, type `u = Vector((1, 4), (5, 1))` and then
+`w = Vector((4, -3))`. Read the components of both. Are they the same vector?
+Why?
+:::
 
-The head of the arrow (3, −2) when its tail is at (1, 1).
-:   (4, −1)
+::: {.callout-tip title="Try it 2 · Arrows and components"}
+Choose the right answer.
 
-The vector that points straight left with magnitude 6.
-:   (−6, 0)
+::: {.match extra="(−4, 3)|straight down"}
+An arrow from (1, 4) to (5, 1). Components?
+:   (4, −3)
 
-What a negative *y*-component means in a *y*-up world.
-:   down
+An arrow from (−2, 3) to (4, −1). Components?
+:   (6, −4)
 
-The value of `.y` in `new Vector2(4f, -3f)`.
-:   −3
+The vector (3, −2) is drawn from (1, 4). Where is its head?
+:   (4, 2)
 
-The vector (−2, 5) written with the basis vectors.
-:   −2**i** + 5**j**
-
-The joystick input when the player lets go of the stick.
+The player lets go of the joystick. Which vector?
 :   (0, 0)
+
+Where does the vector (0, 5) point?
+:   straight up
 :::
 :::
 
-## 2.4 Points and displacement vectors
+## 2.3 Points and displacement vectors
 
-A **point** is a location (*where?*); a **vector** is a change (*how far, which
-way?*). The **displacement** from *A* to *B* is **B − A** — end minus start.
-Reversing the order gives the **negative** vector, with the same magnitude and
-the opposite direction. The displacement from a point to itself is the **zero
-vector** (0, 0).
+- A **point** is a place (where?). A **vector** is a change (how far, which way?).
+- From A to B: **B − A** (end minus start).
+- A − B is the **opposite vector**: same size, other direction.
+- An arrow to the goal uses goal − player; a homing missile uses target − missile.
+- On the goal, goal − player = (0, 0): no arrow to show.
 
-![From the enemy E to the player P: P − E. The negative, E − P, points back.](images/displacement.png){width=66%}
+![From the enemy E to the player P: P − E. The opposite, E − P, points back.](images/displacement.png){width=66%}
 
-::: {.callout-note title="Watch out!"}
-"From *A* to *B*" is always *B* − *A*. An enemy that uses *E* − *P* instead of
-*P* − *E* walks away from the player.
+::: {.callout-warning title="Watch out!"}
+"From A to B" is always B − A. An enemy that uses E − P walks **away** from
+the player.
 :::
 
-::: {.callout-tip title="Try it 4 · Enemy and player"}
-The enemy is at *E* = (8, 1) and the player at *P* = (3, 4).
+::: {.callout-note title="Do it · Chase the player"}
+In GeoGebra, type your own points, for example `E = (-2, 1)` and `P = (3, 4)`.
+Type `Vector(E, P)` and `Vector(P, E)`. Check the first one by hand with
+P − E. Which vector does the enemy need?
+:::
 
-::: {.match extra="(5, 3)"}
-The displacement from the enemy to the player.
-:   (−5, 3)
+::: {.callout-tip title="Try it 3 · Enemy, player, treasure"}
+Choose the right answer.
 
-The displacement from the player to the enemy.
-:   (5, −3)
+::: {.match extra="(−8, 6)|it walks faster"}
+Enemy E = (2, 7), player P = (6, 4). The vector from the enemy to the player?
+:   (4, −3)
 
-The displacement from a point to itself.
+The vector from the player back to the enemy?
+:   (−4, 3)
+
+Player (−3, 2), treasure (5, −4). The arrow to the treasure?
+:   (8, −6)
+
+An enemy uses E − P instead of P − E. What happens?
+:   it walks away from the player
+
+The player stands on the goal. Goal − player?
 :   the zero vector
-
-The result of point − point.
-:   a vector
-
-The result of point + vector.
-:   a point
-
-The result of point + point.
-:   meaningless
 :::
 :::
 
-## 2.5 Moving a point with a vector
+## 2.4 Moving a point with a vector
 
-A point plus a vector is a moved point. A **velocity** is the displacement per
-unit of time — here, per frame. The game loop adds it once per frame:
-**p**~k+1~ = **p**~k~ + **v**. After *n* frames each component has changed by
-*n* times the velocity component: **p**~n~ = (*p*~0x~ + *n·v*~x~, *p*~0y~ + *n·v*~y~).
-The reverse question — which velocity reaches a target in *n* frames? — divides
-the total displacement into *n* equal steps.
+- point − point = vector; point + vector = point; point + point = no meaning.
+- **Velocity**: the displacement in one frame.
+- Every frame: new position = old position + velocity.
+- After n frames: n × v~x~ along x and n × v~y~ along y.
+- Reverse question: velocity = total displacement ÷ number of frames.
+- The opposite velocity brings an object back to its start.
 
 ![Five frames with v = (2, 1) per frame.](images/per-frame.png){width=86%}
 
 {{< sim file="sims/vector-dash.html" poster="sims/vector-dash.png" title="Vector Dash: one velocity, n frames" kind="game" height="640" >}}
 
-::: {.callout-tip title="Try it 5 · Frame by frame"}
-A ship starts at (2, 1) with velocity (3, 2) per frame, unless the question
-says otherwise.
+::: {.callout-note title="Do it · Vector Dash"}
+Play three levels of **Vector Dash**. For one level, write the start, the
+target, the number of frames and your velocity. Check it: total displacement ÷
+frames.
+:::
 
-::: {.match extra="(11, 9)"}
-The ship's position after 1 frame.
-:   (5, 3)
+::: {.callout-tip title="Try it 4 · Frame by frame"}
+Choose the right answer.
 
-The ship's position after 4 frames.
-:   (14, 9)
+::: {.match extra="(8, 4)|after 3 frames|a vector"}
+A ship at (1, 1) with velocity (2, 1). Where after 4 frames?
+:   (9, 5)
 
-The velocity that goes from (0, 0) to (12, −8) in 4 frames.
-:   (3, −2)
+A missile at (10, 7) must reach (4, 1) in 3 frames. Velocity?
+:   (−2, −2)
 
-A ball at (9, 3) with velocity (−3, 0): the frames until *x* = 0.
-:   3
+A ball at (12, 3) with velocity (−3, 1). When is x = 0?
+:   after 4 frames
 
-0.5 units per frame at 60 fps, in units per second.
-:   30
+A platform at (2, 5) moves with (2, 0) for 3 frames. Where is it?
+:   (8, 5)
+
+What is point + point?
+:   no meaning
+
+An object has the velocity (0, 0). What does it do?
+:   it stands still
 :::
 :::
 
-## 2.6 Vectors in three dimensions
+## 2.5 Vectors in three dimensions
 
-A 3D vector has three components; the displacement is again end minus start.
-In a *y*-up world a vector splits into a **vertical** part (0, *v*~y~, 0),
-which changes the height, and a **horizontal** part (*v*~x~, 0, *v*~z~), which
-moves along the ground. Walking on flat ground: *v*~y~ = 0. A jump changes
-only *v*~y~.
+- A 3D vector has three components: (v~x~, v~y~, v~z~).
+- Displacement is still end − start, one component at a time.
+- y up: **vertical** part (0, v~y~, 0) changes the height.
+- **Horizontal** part (v~x~, 0, v~z~) moves along the ground.
+- Walking on flat ground: v~y~ = 0. A jump changes only v~y~.
 
 ![A drone flight split into a horizontal and a vertical part.](images/drone-3d.png){width=70%}
 
-::: {.callout-tip title="Try it 6 · A drone in 3D"}
-A drone flies from *A* = (1, 2, 0) to *B* = (5, 6, −6). The world has *y* up.
+{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" height="640" >}}
 
-::: {.match extra="(4, 4, 0)|z"}
-The displacement from *A* to *B*.
-:   (4, 4, −6)
+::: {.callout-note title="Do it · A 3D move"}
+In the 3D viewer, put the player at (1, 0, 1), then move it to (4, 3, 5).
+Write the displacement, its vertical part and its horizontal part.
+:::
 
-The vertical part of the displacement.
-:   (0, 4, 0)
+::: {.callout-tip title="Try it 5 · A drone in 3D"}
+A drone flies from A = (2, 0, 1) to B = (6, 5, −3). Choose the right answer.
 
-The horizontal part of the displacement.
-:   (4, 0, −6)
+::: {.match extra="(4, 0, 0)|5"}
+The displacement from A to B.
+:   (4, 5, −4)
 
-The displacement of the return trip.
-:   (−4, −4, 6)
+Its vertical part.
+:   (0, 5, 0)
 
-The only component that a vertical jump changes.
-:   y
+Its horizontal part.
+:   (4, 0, −4)
+
+The way back, from B to A.
+:   (−4, −5, 4)
+
+A character walks on flat ground. Its v~y~ is…
+:   0
 :::
 :::
 
@@ -234,57 +227,42 @@ The only component that a vertical jump changes.
 
 Work alone. Use every section of today.
 
-**Comet Courier** is a mobile delivery game in space. The courier ship flies
-between depots on a 2D star map with one velocity per frame. Depot Alpha is at
-(1, 2), depot Beta at (9, 6), and a comet crosses the map at (5, 4). In the 3D
-mode, space stations float at different heights.
-
 ![The star map of Comet Courier.](images/comet-courier.png){width=88%}
 
-::: {.callout-tip title="Try it 7 · Alpha to Beta"}
-Use the 2D star map.
+**Comet Courier** is a delivery game in space. Depot Alpha is at (1, 2),
+depot Beta at (9, 6), and a comet passes through (5, 4). The player chooses
+one velocity before the ship starts; the game adds it once per frame. If the
+ship passes through the comet's point, it is hit. In 3D, station Gamma is at
+(2, 1, 3) and station Delta at (6, 4, 3).
 
-::: {.match extra="(8, −4)|(3, 3)"}
+::: {.callout-tip title="Try it 6 · Alpha to Beta (harder)"}
+Use the numbers of Comet Courier. Choose the right answer.
+
+::: {.match extra="(4, 4)|after 3 frames|(0, 0, 3)"}
 The displacement from Alpha to Beta.
 :   (8, 4)
 
-The displacement from Beta to Alpha.
-:   (−8, −4)
+A ship leaves Alpha with (2, 1). After how many frames is it at Beta?
+:   4 frames
 
-The velocity that flies from Alpha to Beta in exactly 4 frames.
-:   (2, 1)
+Is that ship hit by the comet? When?
+:   yes, after 2 frames
 
-The ship's position after 2 of those frames.
-:   (5, 4)
+The velocity to reach Beta from Alpha in only 2 frames.
+:   (4, 2)
 
-What the ship meets at that position.
-:   the comet
-:::
-:::
-
-::: {.callout-tip title="Try it 8 · Stations in 3D (harder)"}
-Station Gamma is at (2, 3, 4) and station Delta at (6, 9, −2); *y* is up.
-
-::: {.match extra="(4, 6, 6)|(0, 9, 0)"}
 The displacement from Gamma to Delta.
-:   (4, 6, −6)
+:   (4, 3, 0)
 
-Its vertical part.
-:   (0, 6, 0)
-
-The velocity that makes the trip in 2 frames.
-:   (2, 3, −3)
-
-A hit pushes the ship back by the negative of that velocity. The push.
-:   (−2, −3, 3)
+The vertical part of that move.
+:   (0, 3, 0)
 :::
 :::
 
 ## Summary {.summary}
 
-- Scalar: one number. Vector: magnitude and direction.
-- An arrow has a tail and a head, but no position: equal arrows, equal vectors.
-- Components = head − tail; the sign gives the direction on each axis; **v** = *v*~x~**i** + *v*~y~**j**.
-- Displacement from *A* to *B* = *B* − *A*; *A* − *B* is its negative.
-- Point + vector = point; per frame **p**~k+1~ = **p**~k~ + **v**.
-- 3D: three components; vertical part (0, *v*~y~, 0), horizontal part (*v*~x~, 0, *v*~z~).
+- A scalar is one number; a vector has a size and a direction.
+- Components = head − tail; a vector has no position.
+- From A to B: B − A; A − B is the opposite vector.
+- Every frame: position + velocity; velocity = displacement ÷ frames.
+- 3D: three components; vertical part (height) and horizontal part (ground).

@@ -8,12 +8,13 @@ format: lesson-typst
 ---
 
 ::: {.lead}
-Every frame of a video game is the result of a calculation. Before a single
-pixel is drawn, the program must know where each object is, where it is going
-and what it can see. This chapter introduces the role of mathematics in game
-development and builds the first tool that all later chapters rely on: the
-coordinate system, which turns the question "where is it?" into numbers that a
-computer can store and process.
+*Harbor Guard* is a tower-defence game for phones. Ships sail into a harbour,
+and the player taps a tile to build a tower. Before the game can draw one
+picture, it must answer many questions with numbers: Where is each ship?
+Which tile did the finger touch? How high is the tower? In this lesson you
+learn why games need mathematics and how a **coordinate system** turns the
+question "where is it?" into numbers. Every section ends with a short task:
+on paper, in a free tool (GeoGebra or a spreadsheet) or in a mini-game.
 :::
 
 ## Key terms
@@ -22,292 +23,293 @@ computer can store and process.
 
 ## 1.1 Mathematics in game development
 
-A video game is an interactive simulation. Its *state* — the positions of the
-characters, their health, the score, the time left in the level — is a
-collection of numbers held in memory. The program repeatedly reads the
-player's input, updates the state according to the rules of the game, and
-renders an image of the new state on the screen. This repeated cycle is called
-the **game loop**, and one pass through it produces one **frame**.
+For a computer, a game is a set of numbers in memory: the positions of the
+characters, their health, the score, the time left. The game program repeats
+three steps again and again:
 
-![The game loop. One pass through the loop produces one frame; at 60 frames per second the loop runs every 16.7 ms.](images/game-loop.png){#fig-game-loop width=78%}
+1. read the player's input;
+2. update the numbers by the rules of the game;
+3. draw a picture of the new state on the screen.
+
+This repeated cycle is the **game loop**. One pass through the loop makes one
+picture, called a **frame** (@fig-game-loop).
+
+![The game loop. One pass makes one frame. At 60 frames per second, the loop runs every 16.7 ms.](images/game-loop.png){#fig-game-loop width=78%}
 
 ::: {.callout-important title="Definition 1.1 — Frame rate and frame time"}
-The **frame rate** $f$ is the number of frames a game produces per second
-(frames per second, fps). The **frame time** $T$ is the time available for one
-frame: $T = 1/f$ seconds, or $T = 1000/f$ milliseconds.
+The **frame rate** is the number of frames a game makes per second (frames
+per second, fps). The **frame time** is the time for one frame:
+$$\text{frame time} = \frac{1000}{\text{frame rate}} \text{ milliseconds (ms)}.$$
 :::
 
-The frame time is a strict budget. At 60 fps the program has
-$1000/60 \approx 16.7$ ms to read input, update every object and draw the
-scene. If the work takes longer, the frame is late and the player perceives a
-stutter. Much of the mathematics in this course is therefore chosen not only
-because it is correct, but because it is *cheap*: a few additions and
-multiplications per object per frame.
-
-::: {.callout-note title="Example 1.1 — Frame budget"}
-A mobile racing game targets 60 fps. How much time does each frame have, and
-how many times is the state updated during a 3-minute race?
-
-1. Frame time: $T = 1000 / 60 \approx 16.7$ ms.
-2. Duration of the race: $3 \times 60 = 180$ s.
-3. Number of updates: $180 \times 60 = 10\,800$ frames.
-
-If the same game drops to 30 fps on an older phone, each frame has
-$1000/30 \approx 33.3$ ms, and the race has only $5\,400$ updates: motion
-becomes visibly less smooth.
-:::
-
-The table below maps typical tasks of a game program to the areas of
-mathematics studied in this course. Each task is executed many times in every
+The frame time is a strict limit. At 60 fps, the program has about 16.7 ms to
+read the input, update every object and draw the picture. If it needs more
+time, the frame is late and the game stutters. So game mathematics must be
+correct and also fast: a few additions and multiplications per object per
 frame.
 
-| Task in the game program | Mathematical tool | Weeks |
+::: {.callout-note title="Example 1.1 — Frame budget"}
+A racing game runs at 60 fps. A race lasts 3 minutes.
+
+1. Frame time: $1000 / 60 \approx 16.7$ ms.
+2. The race lasts $3 \times 60 = 180$ seconds.
+3. Number of frames: $180 \times 60 = 10\,800$. The game updates the cars
+   10 800 times.
+4. On an old phone at 30 fps, each frame has $1000 / 30 \approx 33.3$ ms, and
+   the race has only 5 400 frames. The cars move less smoothly.
+:::
+
+@tbl-map shows where the mathematics of this course appears in a game.
+
+| What the game does | Mathematics | Weeks |
 |---|---|---|
 | Store where every object is; move it | coordinates, vectors | 1–3 |
 | Aim a turret; make an object bob up and down | trigonometry | 4 |
-| Move, rotate and resize models; place the camera | matrices, transformations | 5–7 |
-| Decide whether a door opens or an enemy attacks | logic, Boolean algebra | 9–10 |
-| Generate loot, critical hits and random levels | probability, random numbers | 11–13 |
+| Move, turn and resize models; place the camera | matrices | 5–7 |
+| Decide if a door opens or an enemy attacks | logic | 9–10 |
+| Make loot, critical hits and random levels | probability | 11–13 |
 
 : Mathematics behind common game tasks. {#tbl-map}
 
-## 1.2 One-dimensional coordinates
+::: {.callout-note title="Do it · Find the mathematics in a game"}
+Play a game on your phone for two minutes.
 
-The simplest coordinate system is the **number line**. A point called the
-**origin** is chosen and labelled 0; a unit of length is chosen; one direction
-is declared positive. Every point on the line is then described by a single
-number, its **coordinate**: the signed distance from the origin, measured in
-units. Points on the positive side have positive coordinates, points on the
-negative side have negative coordinates.
+1. Write four things that the game must compute with numbers, for example
+   "the position of my car" or "the chance of a rare item".
+2. For each one, write the mathematics from @tbl-map that it needs.
 
-![A one-dimensional world: a runner game in which the position along the track is a single number $x$.](images/number-line.png){#fig-number-line width=88%}
-
-Games use two kinds of number line. In a board game or a tile-based game, the
-positions are **discrete**: only whole numbers (integers) are allowed, and a
-piece is always on square 3 or square 4, never between them. In a physics-based
-game, positions are **continuous**: any real number is allowed, and a
-character can stand at $x = 3.27$. Game code stores discrete positions as
-integers (`int`) and continuous positions as floating-point numbers (`float`).
-
-A `float` does not store every real number exactly. It keeps about seven
-significant digits, so the gap between two neighbouring values that it can
-represent grows with the size of the number:
-
-| Coordinate near | Smallest step a `float` can represent |
-|---|---|
-| 1 | about 0.000 000 1 |
-| 1 000 | about 0.000 06 |
-| 100 000 | about 0.008 |
-| 10 000 000 | 1 |
-
-: Precision of 32-bit floating-point coordinates. {#tbl-float}
-
-Close to the origin the steps are far too small to see. Far from it they are
-not: a character at $x = 100\,000$ can only move in steps of about 8 mm, and
-small movements make it visibly *jitter*. For this reason large open-world
-games keep the play area near the origin and, when the player travels far,
-move the whole world back towards it — a technique called a **floating
-origin**. The choice of the origin is therefore not only a matter of
-convenience; it affects the accuracy of every calculation.
-
-::: {.callout-important title="Definition 1.2 — Signed displacement and distance in one dimension"}
-If an object moves from coordinate $a$ to coordinate $b$, its **signed
-displacement** is $b - a$; the sign gives the direction of motion. The
-**distance** between the two points is $|b - a|$, which is never negative.
+*Your result:* a table with four rows: game thing, mathematics.
 :::
 
-::: {.callout-note title="Example 1.2 — A checkpoint behind the player"}
-In the runner game of @fig-number-line the player is at $x = 4$ and the last
-checkpoint is at $x = -3$. The player falls and is sent back to the checkpoint.
+## 1.2 One-dimensional coordinates
 
-1. Signed displacement: $b - a = -3 - 4 = -7$. The minus sign means that the
-   player moves in the negative direction (to the left).
-2. Distance: $|-7| = 7$ units.
+The simplest coordinate system is the **number line**. We choose one point,
+the **origin**, and call it 0. We choose a unit of length and a positive
+direction. Then every point on the line has one number, its **coordinate**:
+how many units it is from the origin. Points on the negative side have
+negative coordinates.
+
+![A one-dimensional world: a runner game. The position along the track is one number, x.](images/number-line.png){#fig-number-line width=88%}
+
+Games use two kinds of number line. In a board game, positions are
+**discrete**: only whole numbers are allowed, and a piece is on square 3 or on
+square 4, never between. In a physics game, positions are **continuous**: a
+character can stand at $x = 3.27$. Game code stores whole numbers as `int` and
+decimal numbers as `float`. (A `float` is less exact for very large numbers.
+This is why big open-world games keep the player near the origin.)
+
+::: {.callout-important title="Definition 1.2 — Displacement and distance on a line"}
+An object moves from coordinate $a$ to coordinate $b$.
+Its **displacement** is $b - a$ (end minus start). The sign shows the
+direction: plus means the positive direction, minus the negative direction.
+The **distance** is the size of the displacement, without the sign. A
+distance is never negative.
+:::
+
+::: {.callout-note title="Example 1.2 — Back to the checkpoint"}
+In the runner game of @fig-number-line, the player is at $x = 4$. The last
+checkpoint is at $x = -3$. The player falls and goes back to the checkpoint.
+
+1. Displacement: end minus start $= -3 - 4 = -7$. The minus sign means that
+   the player moves to the left.
+2. Distance: 7 units.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Distance is not the same as displacement. A displacement of $-7$ and a
-displacement of $+7$ have the same distance, 7 units. A negative *distance*
-is always an error.
+Mixing up displacement and distance. A displacement of $-7$ and a
+displacement of $+7$ have the same distance: 7 units. A negative distance is
+always an error.
 :::
 
-## 1.3 The two-dimensional Cartesian coordinate system
+::: {.callout-note title="Do it · A runner track on paper"}
+1. Draw a number line from $-5$ to $10$.
+2. Mark a coin at 6, a trap at $-2$ and the start at 0.
+3. The player runs from the start to the coin, then falls back to the trap.
+   Write the displacement and the distance of each move.
 
-A two-dimensional (2D) game world needs two numbers per point. The
-**Cartesian coordinate system**, named after René Descartes, uses two number
-lines that cross at right angles at their common origin. The horizontal line
-is the **$x$-axis** and the vertical line is the **$y$-axis**. In the standard
-orientation, $x$ increases to the right and $y$ increases upward.
+*Your result:* the drawing, two displacements and two distances.
+:::
+
+## 1.3 The two-dimensional coordinate system
+
+A two-dimensional (2D) game world needs two numbers for each point. The
+**Cartesian coordinate system** uses two number lines that cross at the
+origin at a right angle. The horizontal line is the **x-axis**. The vertical
+line is the **y-axis**. Usually, $x$ grows to the right and $y$ grows upward.
 
 ::: {.callout-important title="Definition 1.3 — Ordered pair"}
-A point in the plane is described by an **ordered pair** $(x, y)$. The first
-number, the $x$-coordinate, is the signed distance from the $y$-axis; the
-second, the $y$-coordinate, is the signed distance from the $x$-axis. The
+A point in the plane is written as an **ordered pair** $(x, y)$. The first
+number is the $x$-coordinate, the second number is the $y$-coordinate. The
 order matters: $(3, 2)$ and $(2, 3)$ are different points.
 :::
 
-The two axes divide the plane into four **quadrants**, numbered I to IV
-anticlockwise from the upper right (@fig-quadrants). The quadrant of a point
-is decided only by the signs of its coordinates. A point with a zero
-coordinate lies on an axis and belongs to no quadrant: $(5, 0)$ is on the
-positive $x$-axis, $(0, -2)$ is on the negative $y$-axis, and $(0, 0)$ is the
-origin itself.
+The two axes cut the plane into four **quadrants**, numbered I to IV
+anticlockwise, starting at the top right (@fig-quadrants). The signs of the
+coordinates tell the quadrant. A point with a zero coordinate lies on an axis
+and is in no quadrant: $(5, 0)$ is on the $x$-axis, $(0, -2)$ is on the
+$y$-axis.
 
-![The four quadrants and their sign patterns, with four game objects placed in a 2D level.](images/quadrants.png){#fig-quadrants width=58%}
+![The four quadrants and their signs, with four game objects in a 2D level.](images/quadrants.png){#fig-quadrants width=58%}
 
-| Quadrant | Sign of $x$ | Sign of $y$ | Example point |
+| Quadrant | Sign of x | Sign of y | Example |
 |---|---|---|---|
-| I | $+$ | $+$ | $(4, 3)$ |
-| II | $-$ | $+$ | $(-3, 2)$ |
-| III | $-$ | $-$ | $(-4, -2.5)$ |
-| IV | $+$ | $-$ | $(2, -3)$ |
+| I | + | + | (4, 3) |
+| II | − | + | (−3, 2) |
+| III | − | − | (−4, −2.5) |
+| IV | + | − | (2, −3) |
 
-: Sign patterns of the four quadrants. {#tbl-quadrants}
+: Signs of the four quadrants. {#tbl-quadrants}
 
-Level designers often place the origin at a meaningful point, for example at
-the centre of an arena or at the spawn point of the player. Negative
-coordinates are then normal: an enemy at $(-6, 1)$ is simply six units to the
-left of the centre and one unit up.
+Level designers often put the origin at a useful place, for example the centre
+of an arena or the start point of the player. Then negative coordinates are
+normal: an enemy at $(-6, 1)$ is six units left of the centre and one unit up.
 
 ::: {.callout-note title="Example 1.3 — Reading positions in a level"}
 In @fig-quadrants, the coin is at $(4, 3)$, the key at $(-3, 2)$, the trap at
 $(-4, -2.5)$ and the exit at $(2, -3)$.
 
 1. The key has $x < 0$ and $y > 0$: it is in quadrant II.
-2. The trap has both coordinates negative: quadrant III.
-3. The horizontal distance between the key and the coin is
-   $|4 - (-3)| = 7$ units; the vertical distance is $|3 - 2| = 1$ unit.
+2. The trap has two negative coordinates: quadrant III.
+3. From the key to the coin, $x$ changes from $-3$ to 4: that is 7 units to
+   the right. $y$ changes from 2 to 3: 1 unit up.
 :::
 
-To practise the coordinate plane as a game, scan the QR code below. The
-mini-game asks for strikes at given coordinates in all four quadrants; its
-second stage uses screen coordinates, the subject of the next section.
+::: {.callout-note title="Do it · Build the level in GeoGebra"}
+Open the free GeoGebra calculator in a browser (geogebra.org/calculator; no
+account is needed).
 
-{{< sim file="sims/grid-strike.html" poster="sims/grid-strike.png" title="Grid Strike: hit the coordinates" kind="game" height="560" >}}
+1. Type the four points of Example 1.3, one per line, for example
+   `Coin = (4, 3)`.
+2. Check that each point is in the quadrant of Example 1.3.
+3. Add your own enemy in quadrant IV and a door on the y-axis.
+
+*Your result:* the coordinates of your enemy and your door, and the quadrant
+(or axis) of each.
+:::
 
 ## 1.4 Screen space and world space
 
-The coordinates of a game world are not the coordinates of the screen. A
-display is a grid of **pixels**, and graphics systems number them from the
-**top-left corner**: the screen $x$-coordinate grows to the right, but the
-screen $y$-coordinate grows *downward*. This convention comes from the way a
-display is refreshed, line by line from the top. A phone with a resolution of
-$1080 \times 1920$ pixels in portrait orientation has screen coordinates from
-$(0, 0)$ at the top-left to $(1079, 1919)$ at the bottom-right.
+The coordinates of the game world are not the coordinates of the screen. A
+screen is a grid of **pixels**, and pixels are counted from the **top-left
+corner**. Screen $x$ grows to the right, but screen $y$ grows *downward*. A
+phone of $1080 \times 1920$ pixels (portrait) has screen points from $(0, 0)$
+at the top left to $(1079, 1919)$ at the bottom right.
 
 ::: {.callout-important title="Definition 1.4 — World space and screen space"}
-**World space** is the coordinate system of the game world, measured in world
-units (often metres), with $y$ upward and an origin chosen by the designer.
-**Screen space** is the coordinate system of the display, measured in pixels,
-with the origin at the top-left and $y$ downward.
+**World space** is the coordinate system of the game world. It uses world
+units (often metres), $y$ grows upward, and the designer chooses the origin.
+**Screen space** is the coordinate system of the display. It uses pixels,
+the origin is the top-left corner, and $y$ grows downward.
 :::
 
-![The same point in world space (left) and screen space (right). The camera shows the world with its centre at the world origin.](images/screen-world.png){#fig-screen-world width=92%}
+![The same point in world space (left) and in screen space (right). The camera shows the world origin in the centre of the screen.](images/screen-world.png){#fig-screen-world width=92%}
 
-Suppose the camera is centred on the world origin, the screen is $W$ pixels
-wide and $H$ pixels high, and one world unit is drawn as $s$ pixels (the
-*scale*). The centre of the screen is at $(W/2, H/2)$. A world point
-$(x_w, y_w)$ is drawn at the screen point
+Suppose the camera shows the world origin in the centre of the screen, and
+one world unit is drawn as $s$ pixels (the *scale*). For a screen $W$ pixels
+wide and $H$ pixels high, the centre is at $(W/2, H/2)$, and:
 
-$$
-x_s = \frac{W}{2} + s\,x_w, \qquad y_s = \frac{H}{2} - s\,y_w .
-$$
+$$x_s = \frac{W}{2} + s \cdot x_w, \qquad y_s = \frac{H}{2} - s \cdot y_w .$$
 
-The minus sign in the second formula reverses the direction of $y$. The
-inverse formulas answer the opposite question, which every touch game must
-answer: *the player touched pixel $(x_s, y_s)$ — which point of the world was
-touched?*
+The minus sign turns $y$ around, because screen $y$ grows downward. A touch
+game also needs the opposite direction: *the finger touched this pixel —
+which point of the world is it?*
 
-$$
-x_w = \frac{x_s - W/2}{s}, \qquad y_w = \frac{H/2 - y_s}{s} .
-$$
+$$x_w = \frac{x_s - W/2}{s}, \qquad y_w = \frac{H/2 - y_s}{s} .$$
 
 ::: {.callout-note title="Example 1.4 — From the world to the screen"}
-A portrait phone has $W = 1080$, $H = 1920$ and a scale of $s = 100$ pixels
-per unit. Where is the world point $(2, 3)$ drawn?
+A phone has $W = 1080$ and $H = 1920$ pixels, and the scale is $s = 100$ pixels
+per unit. Where is the world point $(2, 3)$ on the screen?
 
 1. Centre of the screen: $(540, 960)$.
 2. $x_s = 540 + 100 \times 2 = 740$.
 3. $y_s = 960 - 100 \times 3 = 660$.
-4. The point is drawn at pixel $(740, 660)$: right of the centre and *above*
-   it, because $660 < 960$.
+4. The point is at pixel $(740, 660)$: right of the centre and *above* it,
+   because 660 is smaller than 960.
 :::
 
 ::: {.callout-note title="Example 1.5 — From a touch to the world"}
-On the same phone the player touches the pixel $(340, 1160)$.
+On the same phone, the player touches the pixel $(340, 1160)$.
 
-1. $x_w = (340 - 540) / 100 = -2$.
-2. $y_w = (960 - 1160) / 100 = -2$.
+1. $x_w = (340 - 540) / 100 = -200 / 100 = -2$.
+2. $y_w = (960 - 1160) / 100 = -200 / 100 = -2$.
 3. The player touched the world point $(-2, -2)$, in quadrant III.
 :::
 
-### Supporting different screens
+::: {.callout-note title="Example 1.6 — Which part of the world can the player see?"}
+On the same phone ($1080 \times 1920$, $s = 100$), which world points are at
+the corners of the screen?
 
-Phones do not share one resolution or one shape. A game therefore does not
-fix the scale $s$; it computes it from the part of the world that must always
-be visible. If every player must see a play area $w$ units wide, the scale is
-$s = W / w$, and the visible height follows from the screen: $H / s$ units.
-
-::: {.callout-note title="Example 1.6 — One game, two phones"}
-A portrait puzzle game must show a board 9 units wide. Phone A has
-$1080 \times 1920$ pixels, phone B $1080 \times 2400$.
-
-1. Both phones are 1080 pixels wide: $s = 1080 / 9 = 120$ pixels per unit.
-2. Visible height on A: $1920 / 120 = 16$ units; on B: $2400 / 120 = 20$ units.
-3. Both players see the whole board; the player with the taller phone simply
-   sees 4 more units of background. Fixing the height instead
-   ($s = H / 16$) would give phone B $s = 150$ and only $1080/150 = 7.2$ units
-   of width: the edges of the board would be cut off.
+1. Top-left pixel $(0, 0)$: $x_w = (0 - 540) / 100 = -5.4$ and
+   $y_w = (960 - 0) / 100 = 9.6$. World point $(-5.4, 9.6)$.
+2. Bottom-right pixel $(1080, 1920)$: $x_w = 5.4$ and $y_w = -9.6$.
+3. So the player sees the world from $x = -5.4$ to $5.4$ and from
+   $y = -9.6$ to $9.6$. A ship at $(7, 2)$ is outside the screen: the game
+   does not need to draw it.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Forgetting that screen $y$ grows downward. A program that uses
-$y_s = H/2 + s\,y_w$ draws the whole world upside down: a character that jumps
-appears to fall.
+Forgetting that screen $y$ grows downward. With a plus instead of the minus
+in the formula for $y_s$, the whole world is drawn upside down: a character
+that jumps seems to fall.
 :::
 
-## 1.5 Discrete coordinates: grids and tile maps
+{{< sim file="sims/grid-strike.html" poster="sims/grid-strike.png" title="Grid Strike: hit the coordinates" kind="game" height="560" >}}
 
-Many mobile games are built on a **grid**: puzzle boards, tile-based maps,
-inventories, the cells of a strategy map. On a grid a position is a pair of
-integers, the **column** $c$ and the **row** $r$, both counted from 0. The
-cell $(c, r)$ is not a point but a small square region of the world.
+::: {.callout-note title="Do it · Grid Strike"}
+Open the **Grid Strike** mini-game above (or scan its QR code). Stage 1 uses
+world coordinates. Stage 2 uses screen coordinates, with $y$ growing downward.
 
-Computer memory, however, is one-dimensional. A grid of `columns` $\times$
-`rows` cells is therefore stored as a single list, row after row; this layout
-is called **row-major order** (@fig-tile-index).
+1. Play both stages.
+2. Write your score in each stage, and one point you missed.
 
-![A board of 8 columns stored in row-major order. Each cell has a pair $(c, r)$ and a single index $i$.](images/tile-index.png){#fig-tile-index width=80%}
+*Your result:* two scores, and one sentence: why is stage 2 harder at first?
+:::
 
-::: {.callout-important title="Definition 1.5 — Index of a cell in row-major order"}
+## 1.5 Grids and tile maps
+
+Many mobile games are built on a **grid**: puzzle boards, tile maps,
+inventories. On a grid, a position is a pair of whole numbers: the **column**
+$c$ and the **row** $r$, both counted from 0.
+
+Computer memory is one long list. So a grid is stored row after row, as one
+list. This is called **row-major order** (@fig-tile-index).
+
+![A board of 8 columns stored row after row. Each cell has a pair (c, r) and one index i.](images/tile-index.png){#fig-tile-index width=80%}
+
+::: {.callout-important title="Definition 1.5 — Index of a cell"}
 On a grid with $n$ columns, the cell in column $c$ and row $r$ has the index
-$$
-i = r\,n + c .
-$$
-Conversely, the cell with index $i$ is in column $c = i \bmod n$ (the
-remainder of $i \div n$) and row $r = \lfloor i / n \rfloor$ (the whole-number
-part of $i \div n$).
+$$i = r \times n + c .$$
+In the other direction: divide the index $i$ by $n$. The whole-number result is
+the row $r$, and the remainder is the column $c$.
 :::
 
 ::: {.callout-note title="Example 1.7 — A match-3 board"}
 A match-3 board has $n = 8$ columns.
 
-1. The gem in column 5, row 3 is stored at index $i = 3 \times 8 + 5 = 29$.
-2. The gem at index 42: $42 \div 8 = 5$ remainder $2$, so it is in row 5,
+1. The gem in column 5, row 3: $i = 3 \times 8 + 5 = 29$.
+2. The gem with index 42: $42 \div 8 = 5$, remainder 2. So it is in row 5,
    column 2.
-3. Its neighbour to the right is in column 3 of the same row, index 43; its
-   neighbour in the row above (row 6) is $42 + 8 = 50$. Moving one row changes
-   the index by $n$.
+3. One cell to the right has index $42 + 1 = 43$. One row up has index
+   $42 + 8 = 50$: moving one row changes the index by $n$.
 :::
 
-The centre of cell $(c, r)$ in world space follows from the size $t$ of one
-tile: $x = (c + 0.5)\,t$ and $y = (r + 0.5)\,t$, if row 0 is the bottom row and
-the grid starts at the world origin.
+To place an object *on* a tile, the game needs the centre of the tile in
+world space. If each tile is $t$ units wide, row 0 is at the bottom and the
+grid starts at the world origin, the centre of tile $(c, r)$ is
+$$x = (c + 0.5) \times t, \qquad y = (r + 0.5) \times t .$$
+
+::: {.callout-note title="Example 1.8 — A tower in the middle of its tile"}
+Tiles are 2 units wide. The player builds a tower on tile $(3, 1)$.
+
+1. $x = (3 + 0.5) \times 2 = 7$.
+2. $y = (1 + 0.5) \times 2 = 3$.
+3. The game places the tower at $(7, 3)$, the centre of the tile, not at its
+   corner $(6, 2)$.
+:::
 
 ::: {.callout-caution title="In game code"}
-A short C# example (C# is the language of many games, for example games made
-with Unity). It converts an index into a column and a row. In C#, `/` between
-two integers keeps only the whole-number part, and `%` gives the remainder.
+A short C# example to read. In C#, `/` between two whole numbers keeps only
+the whole-number part, and `%` gives the remainder.
 
 ```csharp
 int columns = 8;
@@ -317,63 +319,60 @@ int row = index / columns;      // 5
 ```
 :::
 
-## 1.6 The three-dimensional Cartesian coordinate system
+::: {.callout-note title="Do it · A board in a spreadsheet"}
+Open a spreadsheet (Excel or Google Sheets).
 
-A three-dimensional (3D) world adds a third axis, the **$z$-axis**,
-perpendicular to both the $x$- and the $y$-axis. A point is now an **ordered
-triple** $(x, y, z)$. Each pair of axes spans a coordinate plane: the
-$xy$-plane, the $xz$-plane and the $yz$-plane. In a world where $y$ points up,
-the ground is the $xz$-plane, the $y$-coordinate is the height above the
-ground, and every point with $y = 0$ lies on the ground. The three planes
-divide space into eight regions called *octants*, one for each combination of
-signs.
+1. Make a board of 5 columns and 4 rows. Type the index of each cell, row
+   after row: 0, 1, 2, 3, 4 in the first row, 5 to 9 in the second row, and so
+   on.
+2. Choose three cells. For each one, check $i = r \times 5 + c$.
 
-### Left-handed and right-handed systems
-
-Once the $x$-axis (right) and the $y$-axis (up) are fixed, the $z$-axis can
-point in two opposite directions: into the screen or out of it. The two
-choices give two mirror-image coordinate systems that cannot be turned into
-each other by any rotation. They are distinguished by the **hand rule**:
-point the thumb of a hand along $+x$ and the index finger along $+y$; the
-middle finger, bent at a right angle, points along $+z$. If this works with
-the left hand, the system is **left-handed**; if it works with the right hand,
-it is **right-handed** (@fig-handedness).
-
-![Left-handed (left) and right-handed (right) coordinate systems with $x$ to the right and $y$ up.](images/handedness.png){#fig-handedness width=86%}
-
-Different tools use different conventions, and a game developer moves data
-between them every day:
-
-| Software | Up axis | Handedness | $+z$ means |
-|---|---|---|---|
-| Unity | $y$ | left-handed | forward, into the screen |
-| Godot, Maya | $y$ | right-handed | towards the viewer |
-| Unreal Engine | $z$ | left-handed | up |
-| Blender, 3ds Max | $z$ | right-handed | up |
-
-: Coordinate conventions of common game and modelling software. {#tbl-conventions}
-
-::: {.callout-important title="Rule 1.6 — Changing the handedness"}
-Swapping two axes, or reversing one axis, turns a left-handed system into a
-right-handed one and vice versa. In particular, swapping $y$ and $z$ converts
-a right-handed $z$-up system (Blender) into a left-handed $y$-up system
-(Unity): $(x, y, z) \mapsto (x, z, y)$.
+*Your result:* the board, and your three checks.
 :::
 
-::: {.callout-note title="Example 1.8 — Exporting a model from Blender to Unity"}
-A designer places a lamp at $(1, 4, 2)$ in Blender ($z$ up, right-handed).
+## 1.6 The three-dimensional coordinate system
 
-1. In Blender the height of the lamp is its $z$-coordinate: 2 units.
-2. Convert with $(x, y, z) \mapsto (x, z, y)$: the lamp is at $(1, 2, 4)$ in
-   Unity.
-3. Check: in Unity the height is the $y$-coordinate, which is 2, so the lamp
-   is still 2 units above the ground. The 4 units that Blender measured along
-   its $y$-axis are now measured along Unity's forward axis, $z$.
+A three-dimensional (3D) world adds a third axis, the **z-axis**, at a right
+angle to both other axes. A point is now an **ordered triple** $(x, y, z)$. In
+a world where $y$ points up, the ground is flat on the $x$ and $z$ axes, and
+the $y$-coordinate is the height above the ground. Every point with $y = 0$
+is on the ground.
+
+### Left-handed and right-handed
+
+When $x$ points right and $y$ points up, the $z$-axis can point *into* the
+screen or *out of* it. This gives two systems. Use your hand to tell them
+apart: point your thumb along $+x$ and your index finger along $+y$. Bend your
+middle finger: it points along $+z$. If this works with the left hand, the
+system is **left-handed**. If it works with the right hand, it is
+**right-handed** (@fig-handedness).
+
+![Left-handed (left) and right-handed (right) systems, with x to the right and y up.](images/handedness.png){#fig-handedness width=86%}
+
+Game tools do not agree. Two tools that game developers use every day:
+
+| Software | Up axis | Handedness |
+|---|---|---|
+| Unity (game engine) | $y$ | left-handed |
+| Blender (3D modelling) | $z$ | right-handed |
+
+: Coordinate systems of two common tools. {#tbl-conventions}
+
+To move a position from Blender to Unity, swap the last two numbers:
+$(x, y, z)$ in Blender becomes $(x, z, y)$ in Unity.
+
+::: {.callout-note title="Example 1.9 — From Blender to Unity"}
+A designer places a lamp at $(1, 4, 2)$ in Blender ($z$ up).
+
+1. In Blender, the height is the $z$-coordinate: 2 units.
+2. Swap the last two numbers: the lamp is at $(1, 2, 4)$ in Unity.
+3. Check: in Unity the height is the $y$-coordinate, 2. The lamp is still
+   2 units above the ground.
 :::
 
 ::: {.callout-caution title="In game code"}
-In C#, the type `Vector3` holds three `float` numbers — $x$, $y$ and $z$ — and
-is used for 3D positions. The letter `f` marks a `float` value.
+In C#, the type `Vector3` holds three decimal numbers, $x$, $y$ and $z$. The
+letter `f` marks a decimal (`float`) number.
 
 ```csharp
 Vector3 lamp = new Vector3(1f, 2f, 4f);   // x = 1, y = 2 (height), z = 4
@@ -382,87 +381,82 @@ float height = lamp.y;                     // 2
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Assuming that "forward" is always $+z$. In Unity the camera looks along $+z$;
-in a right-handed $y$-up system such as Godot or OpenGL the camera looks along
-$-z$. Reading positions from another tool without checking its convention
-mirrors or rotates the scene.
+Copying positions from another tool without checking its axes. A model from
+Blender put into Unity without the swap stands on its side or appears in the
+wrong place.
 :::
 
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" height="640" >}}
 
-## Case study: where the mathematics is in a mobile game
+::: {.callout-note title="Do it · Move a player in 3D"}
+Open the 3D viewer above (or scan its QR code). Drag to turn the world.
 
-*Harbor Guard* is a portrait tower-defence game for phones
-($1080 \times 1920$ pixels). The harbour is a grid of 9 columns of tiles of
-size 1 unit; the camera shows the world with a scale of 120 pixels per unit,
-centred on the world origin. Ships sail in from the top of the screen; the
-player taps a tile to build a tower. The game runs at 60 fps. In its 3D update
-the towers are models exported from Blender. Each of these sentences hides one
-of the concepts of this chapter: frame time (§1.1), coordinates and quadrants
-(§1.3), the conversion from a touch to the world (§1.4), the index of a tile
-(§1.5) and the change of convention for 3D models (§1.6). The exercises below
-and the Game challenge of the interactive lesson work through it.
+1. Move the player to $(1, 2, 4)$ with the sliders. Which slider changes the
+   height?
+2. Catch three coins. Write the coordinates of each coin.
 
-![A screen of *Harbor Guard*. The tapped tile (red) must be found from the pixel that the finger touched.](images/harbor-guard.png){#fig-harbor width=46%}
+*Your result:* the slider for the height, and three coordinates $(x, y, z)$.
+:::
+
+## Case study: where the mathematics is in Harbor Guard
+
+*Harbor Guard* is a made-up tower-defence game for phones in portrait
+($1080 \times 1920$ pixels). The harbour is a grid of 9 columns of tiles, each
+1 unit wide. The camera shows the world origin in the centre of the screen,
+with a scale of 120 pixels per unit. Ships sail in from the top of the
+screen, and the player taps a tile to build a tower. The game runs at 60 fps.
+In the 3D version, the towers are models made in Blender. Each sentence hides
+one idea of this lesson: frame time (1.1), coordinates and quadrants (1.3),
+from a touch to the world (1.4), the index of a tile (1.5) and moving models
+between tools (1.6). The Game challenge of the interactive lesson works
+through it.
+
+![A screen of Harbor Guard. The game must find the tapped tile (red) from the pixel that the finger touched.](images/harbor-guard.png){#fig-harbor width=46%}
 
 ## Further reading
 
 Dunn and Parberry, *3D Math Primer for Graphics and Game Development*,
-2nd ed., Chapter 1 ("Cartesian Coordinate Systems"): 1D mathematics, 2D and
-3D Cartesian space, and left- and right-handed coordinate spaces.
+2nd ed., Chapter 1 ("Cartesian Coordinate Systems"): 1D mathematics, 2D and 3D
+Cartesian space, and left- and right-handed coordinate spaces.
 
 ## Exercises
 
-1. A game runs at 90 fps on a high-end phone. Find the frame time in
-   milliseconds, to one decimal place.
-2. A physics update must finish in 4 ms of each frame at 60 fps. What fraction
-   of the frame time is this, as a percentage?
-3. On a number line, a platform moves from $x = -2.5$ to $x = 6$. Give its
-   signed displacement and the distance it travels.
-4. A racing game stores positions as `float`. The track is 150 000 units
-   long and starts at the origin. Explain what the player may notice near the
-   end of the track, and suggest a remedy.
-5. State the quadrant, or the axis, of each point: $(-7, 3)$, $(0, -4)$,
-   $(5.5, -0.5)$, $(-1, -1)$, $(8, 0)$.
-6. A point has a negative $x$-coordinate and lies on the $x$-axis. Write a
-   possible point and state its $y$-coordinate.
-7. The player is at $(-3, 4)$ and an enemy at $(5, 4)$. Find the distance
-   between them. Why is the vertical distance not needed?
-8. A landscape tablet has $W = 2048$, $H = 1536$ and $s = 64$. Convert the
-   world point $(-5, 2)$ to screen space.
-9. On the same tablet the player taps the pixel $(1280, 1088)$. Which world
+1. A game runs at 50 fps. What is the frame time in milliseconds?
+2. A game runs at 60 fps for 2 minutes. How many frames is that?
+3. On a number line, a platform moves from $x = -2$ to $x = 6$. Write its
+   displacement and its distance.
+4. In which quadrant, or on which axis, is each point: $(-7, 3)$, $(0, -4)$,
+   $(5, -1)$, $(-1, -1)$, $(8, 0)$?
+5. The player is at $(-3, 4)$ and an enemy at $(5, 4)$. How far apart are
+   they? Why is the vertical difference not needed?
+6. A phone has $W = 1080$, $H = 1920$ and $s = 100$. Where on the screen is the
+   world point $(-1, 2)$?
+7. On the same phone, the player touches the pixel $(840, 760)$. Which world
    point was touched? In which quadrant is it?
-10. A program draws a world point with $y_w = 4$ at a pixel *below* the centre
-   of the screen. Name the error in its formula.
-11. A portrait game must show 9 units across. Find the scale and the visible
-    height on a $1080 \times 2340$ phone.
-12. An inventory has 6 columns. Find the index of the slot in column 4, row 2,
-    and the column and row of index 23.
-13. A tile map has tiles of size 2 units and row 0 at the bottom. Find the
-    world position of the centre of tile $(3, 1)$.
-14. In a $y$-up world, a drone is at $(4, 12, -3)$. How high is it above the
-    ground? Which coordinate must change if it lands vertically?
-15. A model is at $(2, -5, 3)$ in Blender. Give its position in Unity.
-16. *Harbor Guard* (case study): the player taps the pixel $(780, 840)$.
-    Which world point is it, and in which quadrant?
+8. A game draws a point with $y_w = 4$ *below* the centre of the screen. What
+   is wrong in its formula?
+9. An inventory has 6 columns. Find the index of the slot in column 4, row 2.
+10. On the same inventory, in which column and row is index 23?
+11. In a $y$-up world, a drone is at $(4, 12, -3)$. How high is it? Which
+    number changes if it lands straight down?
+12. A model is at $(2, -5, 3)$ in Blender. Where is it in Unity?
+13. *Harbor Guard*: the player taps the pixel $(780, 840)$. Which world point
+    is it, and in which quadrant?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. $1000/90 \approx 11.1$ ms.
-2. $4 / 16.7 \approx 0.24$, about 24 %.
-3. Displacement $6 - (-2.5) = 8.5$; distance 8.5 units.
-4. Near $x = 150\,000$ a `float` can only step by about 0.008–0.016 units, so slow movement jitters; keep the play area near the origin (floating origin).
-5. II; negative $y$-axis; IV; III; positive $x$-axis.
-6. For example $(-4, 0)$; the $y$-coordinate is 0.
-7. $|5 - (-3)| = 8$ units; both have $y = 4$, so the vertical distance is 0.
-8. $x_s = 1024 + 64(-5) = 704$; $y_s = 768 - 64(2) = 640$: $(704, 640)$.
-9. $x_w = (1280 - 1024)/64 = 4$; $y_w = (768 - 1088)/64 = -5$: $(4, -5)$, quadrant IV.
-10. It adds $s\,y_w$ instead of subtracting it: screen $y$ grows downward.
-11. $s = 1080/9 = 120$; visible height $2340/120 = 19.5$ units.
-12. $i = 2 \times 6 + 4 = 16$; $23 = 3 \times 6 + 5$: column 5, row 3.
-13. $x = 3.5 \times 2 = 7$, $y = 1.5 \times 2 = 3$: $(7, 3)$.
-14. 12 units; only $y$ changes (to 0).
-15. $(2, 3, -5)$.
-16. $x_w = (780 - 540)/120 = 2$; $y_w = (960 - 840)/120 = 1$: $(2, 1)$, quadrant I.
+1. 1000 / 50 = 20 ms.
+2. 2 × 60 = 120 seconds; 120 × 60 = 7 200 frames.
+3. Displacement 6 − (−2) = 8; distance 8 units.
+4. II; on the y-axis; IV; III; on the x-axis.
+5. 5 − (−3) = 8 units; both have y = 4, so the vertical difference is 0.
+6. x = 540 + 100 × (−1) = 440; y = 960 − 100 × 2 = 760: pixel (440, 760).
+7. x = (840 − 540) / 100 = 3; y = (960 − 760) / 100 = 2: point (3, 2), quadrant I.
+8. It adds s × y instead of subtracting it; screen y grows downward.
+9. 2 × 6 + 4 = 16.
+10. 23 ÷ 6 = 3, remainder 5: column 5, row 3.
+11. 12 units; only y changes (to 0).
+12. (2, 3, −5).
+13. x = (780 − 540) / 120 = 2; y = (960 − 840) / 120 = 1: point (2, 1), quadrant I.
 :::

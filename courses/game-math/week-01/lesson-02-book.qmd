@@ -1,6 +1,6 @@
 ---
 title: "Vectors: Definition, Components and Basic Operations"
-description: "Lesson notes · Scalars and vectors, the geometric and the algebraic view, displacement between points, motion per frame and vectors in 3D."
+description: "Lesson notes · Scalars and vectors, arrows and components, displacement between points, motion per frame and vectors in 3D."
 week: 1
 lesson: 2
 ilos: [A1]
@@ -8,12 +8,14 @@ format: lesson-typst
 ---
 
 ::: {.lead}
-A coordinate tells a program *where* an object is. Almost everything else a
-game needs to know — where the object is going, how fast, in which direction
-it was hit, where the enemy is relative to the player — is a *change* of
-position. The mathematical object that describes such a change is the vector.
-This chapter defines vectors geometrically and algebraically, separates them
-carefully from points, and uses them to move objects frame by frame.
+*Comet Courier* is a delivery game in space. A courier ship flies between
+depots on a star map. To move the ship, the game must know more than *where*
+the ship is. It must know *where it is going* and *how far it moves in each
+frame*. A coordinate answers "where?". A **vector** answers "how far, and
+which way?". In this lesson you learn what a vector is, how a game stores it
+as numbers, how to find the vector between two points, and how a game moves
+an object with a vector in every frame. Every section ends with a short task:
+in GeoGebra, in a mini-game or on paper.
 :::
 
 ## Key terms
@@ -22,291 +24,315 @@ carefully from points, and uses them to move objects frame by frame.
 
 ## 2.1 Scalars and vectors
 
-Some quantities in a game are described completely by one number: the
-player's health (75), the time left (42 s), the mass of a crate (20 kg), the
-speed shown on a car's dashboard (90 km/h). Such quantities are called
-**scalars**. Other quantities cannot be described by one number, because they
-also have a direction. "The wind blows at 5 m/s" is incomplete; "the wind
-blows at 5 m/s towards the east" is a full description. Quantities that have
-both a size and a direction are called **vectors**.
+Some values in a game need only one number: the player's health (75), the time
+left (42 s), the speed on a car's speedometer (90 km/h). These are
+**scalars**. Other values also need a direction. "The wind blows at 5 m/s" is
+not complete. "The wind blows at 5 m/s to the east" is complete. Values with a
+size *and* a direction are **vectors**.
 
 ::: {.callout-important title="Definition 2.1 — Scalar and vector"}
-A **scalar** is a quantity that has only a size (a single real number). A
-**vector** is a quantity that has a size, called its **magnitude**, and a
-**direction**.
+A **scalar** has only a size: one number. A **vector** has a size, called its
+**magnitude**, and a **direction**.
 :::
 
-![A scalar is one number; a vector also has a direction.](images/scalar-vector.png){#fig-scalar width=86%}
+![A scalar is one number. A vector also has a direction.](images/scalar-vector.png){#fig-scalar width=86%}
 
-Pairs of related quantities illustrate the difference. **Distance** (how far)
-is a scalar; **displacement** (how far *and* which way) is a vector. **Speed**
-(how fast) is a scalar; **velocity** (how fast *and* which way) is a vector.
-Gravity in a game is a vector — usually of magnitude 9.8 m/s² pointing down —
-and so is the force of an explosion that throws a character away from its
-centre.
+Some pairs show the difference well (@tbl-pairs). In each pair, the scalar
+answers "how much?", and the vector also answers "which way?".
 
-::: {.callout-note title="Example 2.1 — Classifying game quantities"}
-Decide whether each value in a platformer is a scalar or a vector.
+| Scalar (size only) | Vector (size and direction) | Game example of the vector |
+|---|---|---|
+| distance: 5 m | displacement: 5 m to the left | the player falls back 5 m to a checkpoint |
+| speed: 3 units per frame | velocity: 3 units per frame to the right | a car drives right |
+| strength of gravity: 9.8 | gravity: 9.8 downward | everything falls down |
+| size of a hit: 4 units | knockback: 4 units away from the enemy | the player is pushed back |
+
+: Scalars and the vectors that belong to them. {#tbl-pairs}
+
+A game needs both. The speedometer of a racing game shows a scalar, the speed.
+To move the car, the game needs a vector, the velocity: the speed alone does
+not say where the car goes.
+
+::: {.callout-caution title="In game code"}
+In C#, a scalar is usually one `float` number, and a 2D vector is a `Vector2`
+with two numbers. The word after `//` is a comment for the reader; the
+computer ignores it.
+
+```csharp
+float speed = 3f;                          // a scalar: how fast
+Vector2 velocity = new Vector2(3f, 0f);    // a vector: 3 units to the right
+```
+:::
+
+When you read game code, ask for each value: is it one number, or does it also
+have a direction? The answer tells you if it is a scalar or a vector. This
+question helps you read the code of any engine, not only Unity.
+
+::: {.callout-note title="Example 2.1 — Scalars and vectors in a platform game"}
+Is each value a scalar or a vector?
 
 1. The score, 12 400: one number — **scalar**.
-2. "The player moves 3 units to the right per frame": size 3 and a
+2. "The player moves 3 units to the right in each frame": a size and a
    direction — **vector** (a velocity).
-3. The magnitude of that movement, 3 units per frame: **scalar** (a speed).
-4. The knockback "4 units away from the enemy": **vector**.
-5. The cooldown of a skill, 2.5 s: **scalar**.
+3. The size of that movement, 3 units per frame: **scalar** (a speed).
+4. "The enemy's hit pushes the player 4 units away": **vector**.
+5. The waiting time of a skill, 2.5 s: **scalar**.
 :::
 
-## 2.2 The geometric view: arrows
+::: {.callout-note title="Do it · Scalars and vectors in your game"}
+Play a game on your phone for one minute.
 
-Geometrically, a vector is drawn as an **arrow** — a directed line segment.
-The length of the arrow represents the magnitude, and the arrow points in the
-direction of the vector. The starting point of the arrow is its **tail** and
-the pointed end is its **head** (@fig-arrow).
+1. Write three scalars from the game (for example "coins: 250").
+2. Write three vectors from the game. Give each one a direction (for example
+   "the ball flies up and to the left").
 
-![A vector drawn as an arrow, and three arrows that represent the same vector.](images/vector-arrow.png){#fig-arrow width=88%}
-
-A vector has a magnitude and a direction, but **no position**. The arrow may be
-drawn anywhere: two arrows with the same length and the same direction
-represent the same vector, even if one is drawn at the origin and the other in
-the corner of the level. In @fig-arrow all three arrows on the right are the
-same vector, "3 to the right and 2 up". This is exactly how movement works in
-a game: "move 3 right and 2 up" means the same thing for the player standing
-at the start and for the player standing at the exit.
-
-::: {.callout-important title="Definition 2.2 — Equal vectors"}
-Two vectors are **equal** if they have the same magnitude and the same
-direction, regardless of where their arrows are drawn.
+*Your result:* a list of three scalars and three vectors.
 :::
 
-::: {.callout-warning title="Common mistake"}
-Treating two arrows as different vectors because they start at different
-points. Position belongs to *points*, not to vectors. Two enemies that both
-move "2 units left per frame" have equal velocity vectors, although they are
-in different places.
+## 2.2 Arrows and components
+
+We draw a vector as an **arrow**. The length of the arrow shows the magnitude,
+and the arrow points in the direction. The start of the arrow is the **tail**,
+and the pointed end is the **head** (@fig-arrow).
+
+![A vector as an arrow (left), and three arrows that are the same vector (right).](images/vector-arrow.png){#fig-arrow width=88%}
+
+A vector has a size and a direction, but **no position**. Two arrows with the
+same length and the same direction are the same vector, wherever we draw them.
+This is how movement works in a game: "move 3 right and 2 up" means the same
+for a player at the start and for a player at the exit.
+
+A computer cannot store an arrow. It stores numbers: how far the arrow goes
+along each axis. These numbers are the **components** of the vector.
+
+::: {.callout-important title="Definition 2.2 — Components"}
+A 2D vector $\mathbf{v}$ is written with its two **components**:
+$\mathbf{v} = (v_x, v_y)$. $v_x$ is the change along the x-axis, and $v_y$ the
+change along the y-axis. If an arrow goes from the tail $(x_1, y_1)$ to the
+head $(x_2, y_2)$, its components are
+$$\mathbf{v} = (x_2 - x_1,\ y_2 - y_1): \quad \textbf{head minus tail}.$$
 :::
 
-## 2.3 Components and notation
-
-A program cannot store an arrow; it stores numbers. If the tail of an arrow is
-placed at the origin, the head lands on a point whose coordinates describe the
-vector completely. These numbers are the **components** of the vector: the
-signed number of units the vector moves along each axis.
-
-::: {.callout-important title="Definition 2.3 — Components"}
-A 2D vector $\mathbf{v}$ with components $v_x$ and $v_y$ is written
-$\mathbf{v} = (v_x, v_y)$; a 3D vector is written $\mathbf{v} = (v_x, v_y, v_z)$.
-The component $v_x$ is the change along the $x$-axis and $v_y$ the change along
-the $y$-axis. If an arrow goes from the tail $(x_1, y_1)$ to the head
-$(x_2, y_2)$, its components are $(x_2 - x_1,\ y_2 - y_1)$: **head minus tail**.
-:::
-
-Vectors are printed in **bold** ($\mathbf{v}$) or written by hand with an
-arrow above the letter ($\vec{v}$). In mathematics books they are often written
-as columns,
-$$
-\mathbf{v} = \begin{bmatrix} 3 \\ -2 \end{bmatrix},
-$$
-which is the same vector as $(3, -2)$; the column form becomes important when
-vectors are multiplied by matrices in week 5.
+We write vectors in **bold** ($\mathbf{v}$). By hand, we draw a small arrow
+above the letter ($\vec{v}$).
 
 ![Reading the components of an arrow: head minus tail.](images/components.png){#fig-components width=70%}
 
 ::: {.callout-note title="Example 2.2 — Components from a drawing"}
-In @fig-components an arrow starts at $(1, 4)$ and ends at $(5, 1)$.
+In @fig-components, an arrow starts at $(1, 4)$ and ends at $(5, 1)$.
 
 1. $v_x = 5 - 1 = 4$: four units to the right.
-2. $v_y = 1 - 4 = -3$: three units *down* — a negative component means the
+2. $v_y = 1 - 4 = -3$: three units *down*. A negative component means the
    negative direction of the axis.
-3. $\mathbf{v} = (4, -3)$. The same vector, drawn from the origin, would end at
-   the point $(4, -3)$.
+3. $\mathbf{v} = (4, -3)$.
 :::
 
-The sign of each component tells the direction along its axis; a zero
-component means no movement along that axis. The vector $(0, 5)$ points
-straight up, $(-2, 0)$ straight left.
+The sign of a component shows the direction along its axis. A zero component
+means no movement along that axis: $(0, 5)$ points straight up, and $(-2, 0)$
+points straight left.
+
+The reverse question is just as common: we know where an arrow starts and
+what its components are, and we need its head. Then we add: **head = tail +
+components**.
+
+::: {.callout-note title="Example 2.3 — Where does the arrow end?"}
+A level editor draws the vector $(3, -2)$ from the point $(1, 4)$.
+
+1. Head x: $1 + 3 = 4$.
+2. Head y: $4 + (-2) = 2$.
+3. The arrow ends at $(4, 2)$. Check with head minus tail:
+   $(4 - 1,\ 2 - 4) = (3, -2)$. Correct.
+:::
+
+::: {.callout-note title="Example 2.4 — The virtual joystick"}
+A mobile game shows a joystick on the screen. In every frame, it gives a
+vector with components between $-1$ and $1$.
+
+1. The player pushes the stick fully to the right: $(1, 0)$.
+2. Halfway up and to the left: about $(-0.5, 0.5)$.
+3. The player lets go: $(0, 0)$, the **zero vector**. The character stands
+   still.
+4. The *direction* of the vector decides where the character walks. Its
+   *magnitude* (how far the stick is pushed) decides if it walks or runs.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that two arrows are different vectors because they start at
+different points. Position belongs to *points*, not to vectors. Two enemies
+that both move "2 units left per frame" have the same velocity vector, even
+in different places.
+:::
 
 ::: {.callout-caution title="In game code"}
-Game code stores vectors in small types such as `Vector2` (two `float`
-components) and `Vector3` (three). The components are read with `.x`, `.y`
-and `.z`.
+Game code keeps vectors in types such as `Vector2` (two decimal numbers). The
+components are read with `.x` and `.y`.
 
 ```csharp
 Vector2 jump = new Vector2(4f, -3f);   // 4 right, 3 down
 float right = jump.x;                   // 4
-float down  = jump.y;                   // -3
 ```
 :::
 
-### The algebraic view: a vector is an ordered list of numbers
+::: {.callout-note title="Do it · Arrows in GeoGebra"}
+Open geogebra.org/calculator.
 
-Once a vector is written as components, nothing forces the list to have two or
-three entries, or the entries to be distances. Algebraically, a vector is
-simply an **ordered list of numbers**; the number of entries is its
-**dimension**. Games use such lists constantly. A colour on screen is a
-3-vector $(r, g, b)$ of red, green and blue intensities — or a 4-vector
-$(r, g, b, a)$ with an opacity $a$. The stats of a character, $(\text{strength},
-\text{agility}, \text{intelligence})$, form a 3-vector. The input of a touch
-joystick is a 2-vector read once per frame.
+1. Type `u = Vector((1, 4), (5, 1))`. GeoGebra draws the arrow of
+   Example 2.2 and shows its components.
+2. Type `w = Vector((4, -3))`. This arrow starts at the origin.
+3. Compare the two arrows. Are they the same vector?
 
-::: {.callout-important title="Definition 2.4 — Vector of dimension n"}
-An $n$-dimensional vector is an ordered list of $n$ real numbers
-$(v_1, v_2, \ldots, v_n)$. Two vectors are equal exactly when they have the same
-dimension and all corresponding components are equal.
+*Your result:* the components of $\mathbf{u}$ and $\mathbf{w}$, and your answer
+with one reason.
 :::
 
-::: {.callout-note title="Example 2.3 — The input of a virtual joystick"}
-A mobile game shows a virtual joystick. Every frame it reports a 2D vector
-whose components lie between $-1$ and $1$: $x$ for left–right and $y$ for
-down–up.
+## 2.3 Points and displacement vectors
 
-1. The player pushes the stick fully to the right: the input is $(1, 0)$.
-2. Pushed halfway up and to the left: about $(-0.5, 0.5)$.
-3. Released: $(0, 0)$, the zero vector — the character stands still.
-4. The *direction* of the input decides where the character walks; its
-   *magnitude* (how far the stick is pushed) decides whether it walks or runs.
-:::
+The same notation, $(4, -3)$, can mean a point or a vector. But they are
+different things. A **point** is a place: it answers *where?* A **vector** is
+a change: it answers *how far, and which way?*
 
-### Basis vectors
+The most common way to get a vector in a game is to compare two points.
 
-Each axis has a vector of length 1 that points along its positive direction.
-These **standard basis vectors** are written
-$$
-\mathbf{i} = (1, 0, 0), \qquad \mathbf{j} = (0, 1, 0), \qquad \mathbf{k} = (0, 0, 1)
-$$
-(in 2D, $\mathbf{i} = (1, 0)$ and $\mathbf{j} = (0, 1)$). Every vector is a sum of
-copies of them: the components say how many copies of each are needed. For
-example, $(4, -3) = 4\mathbf{i} - 3\mathbf{j}$: four steps along $\mathbf{i}$ and
-three steps against $\mathbf{j}$ (@fig-basis). Game engines give the basis vectors names
-such as `Vector3.right`, `Vector3.up` and `Vector3.forward`; in a $y$-up
-left-handed engine these are $\mathbf{i}$, $\mathbf{j}$ and $\mathbf{k}$.
-
-![The vector $(4, -3)$ built from four copies of $\mathbf{i}$ and three copies of $-\mathbf{j}$.](images/basis-vectors.png){#fig-basis width=56%}
-
-::: {.callout-important title="Definition 2.5 — Standard basis"}
-The standard basis vectors $\mathbf{i}$, $\mathbf{j}$, $\mathbf{k}$ have length 1 and
-point along $+x$, $+y$ and $+z$. A vector with components $(v_x, v_y, v_z)$ equals
-$v_x\mathbf{i} + v_y\mathbf{j} + v_z\mathbf{k}$.
-:::
-
-## 2.4 Points and displacement vectors
-
-In everyday speech, "position" and "direction" are easily confused, and the
-same notation $(4, -3)$ is used for both. They are, however, different kinds of
-object. A **point** is a location: it answers *where?* A **vector** is a
-change: it answers *how far and which way?* A point can be thought of as the
-vector that leads from the origin to it, but a vector by itself is not
-anchored anywhere.
-
-The most common way to obtain a vector in a game is to compare two points.
-
-::: {.callout-important title="Definition 2.6 — Displacement vector"}
+::: {.callout-important title="Definition 2.3 — Displacement vector"}
 The **displacement vector** from point $A$ to point $B$ is
-$$
-\mathbf{d} = B - A = (B_x - A_x,\ B_y - A_y).
-$$
-It is the movement that takes an object from $A$ to $B$.
+$$\mathbf{d} = B - A = (B_x - A_x,\ B_y - A_y).$$
+It is the movement that takes an object from $A$ to $B$: **end minus start**.
 :::
 
-The order of the subtraction carries the meaning: $B - A$ points **from $A$
-to $B$** ("end minus start"). Reversing the order gives the opposite
-movement.
+The order matters. $B - A$ goes **from $A$ to $B$**. $A - B$ is the
+**opposite vector**: same size, opposite direction. A point minus itself gives
+the **zero vector** $(0, 0)$.
 
-::: {.callout-important title="Definition 2.7 — Negative vector and zero vector"}
-The **negative** of $\mathbf{v} = (v_x, v_y)$ is $-\mathbf{v} = (-v_x, -v_y)$: it
-has the same magnitude and the opposite direction. In particular
-$A - B = -(B - A)$. The **zero vector** $\mathbf{0} = (0, 0)$ has magnitude 0
-and no direction; it is the displacement from a point to itself.
-:::
+![The displacement from the enemy E to the player P, and its opposite.](images/displacement.png){#fig-displacement width=76%}
 
-![The displacement from the enemy E to the player P, and its negative.](images/displacement.png){#fig-displacement width=76%}
-
-::: {.callout-note title="Example 2.4 — Enemy and player"}
-An enemy stands at $E = (2, 7)$ and the player at $P = (6, 4)$
+::: {.callout-note title="Example 2.5 — Enemy and player"}
+An enemy is at $E = (2, 7)$, and the player is at $P = (6, 4)$
 (@fig-displacement).
 
-1. Displacement from the enemy to the player: $P - E = (6 - 2,\ 4 - 7) = (4, -3)$.
-   The enemy must go 4 right and 3 down to reach the player.
-2. Displacement from the player to the enemy: $E - P = (-4, 3)$, the negative
-   of the first vector.
-3. When the enemy hits the player, a **knockback** pushes the player *away*
-   from the enemy, in the direction of $P - E = (4, -3)$; a pull towards the
-   enemy uses $E - P$.
+1. From the enemy to the player: $P - E = (6 - 2,\ 4 - 7) = (4, -3)$. The
+   enemy must go 4 right and 3 down to reach the player.
+2. From the player to the enemy: $E - P = (-4, 3)$, the opposite vector.
+3. When the enemy hits the player, the game pushes the player *away* from the
+   enemy, along $P - E$.
 :::
 
-Game engines do not enforce this distinction. In C# the same type,
-`Vector3`, holds the position of an object (a point) and its velocity (a
-vector), and the compiler will happily add two positions. Keeping the meaning
-straight is the programmer's job, and good code makes it visible in its names:
-`position`, `spawnPoint` and `target` for points; `velocity`, `offset`,
-`direction` and `toPlayer` for vectors. A line such as
-`Vector3 toPlayer = player - enemy;` documents itself: it is a displacement,
-and its order — end minus start — can be checked at a glance.
+Games use displacement vectors all the time. An arrow on the screen that
+points to the next goal uses *goal minus player*. A camera that follows the
+player uses *player minus camera*. A homing missile uses *target minus
+missile*.
+
+::: {.callout-note title="Example 2.6 — An arrow that points to the goal"}
+In a treasure-hunt game, the player is at $P = (-3, 2)$ and the treasure at
+$T = (5, -4)$. The game shows an arrow that points from the player to the
+treasure.
+
+1. Vector of the arrow: $T - P = (5 - (-3),\ -4 - 2) = (8, -6)$.
+2. $8 > 0$: the treasure is to the right. $-6 < 0$: it is below the player.
+3. The player walks 4 units to the right and reaches $(1, 2)$. The new arrow is
+   $T - (1, 2) = (4, -6)$: it changes, because the player moved, but the
+   treasure did not.
+:::
+
+When the player reaches the goal, *goal minus player* is the zero vector,
+$(0, 0)$: there is no direction left to show. Games check for this case and
+hide the arrow, or show a "You have arrived" message instead.
+
+::: {.callout-caution title="In game code"}
+Good code shows in its names if a value is a point or a vector: `position` and
+`target` for points, `velocity` and `toPlayer` for vectors.
+
+```csharp
+Vector2 toPlayer = player - enemy;   // a vector: end minus start
+```
+:::
 
 ::: {.callout-warning title="Common mistake"}
-Subtracting in the wrong order. "From $A$ to $B$" is always $B - A$. An enemy
-that computes $E - P$ instead of $P - E$ walks *away* from the player.
+Subtracting in the wrong order. "From A to B" is always $B - A$. An enemy that
+uses $E - P$ instead of $P - E$ walks *away* from the player.
 :::
 
-## 2.5 Moving a point with a vector
+::: {.callout-note title="Do it · Chase the player"}
+In GeoGebra:
 
-Adding a vector to a point moves the point: if $P$ is a point and $\mathbf{d}$
-a displacement, then $P' = P + \mathbf{d}$ is the point reached from $P$ by
-that displacement. The three operations between points and vectors are
-summarised below; together they explain why the distinction of §2.4 matters.
+1. Type an enemy point and a player point of your choice, for example
+   `E = (-2, 1)` and `P = (3, 4)`.
+2. Type `Vector(E, P)`. Read the components.
+3. Check by hand: $P - E$. Then type `Vector(P, E)` and compare.
+
+*Your result:* your two points, both vectors, and one sentence: which vector
+does the enemy need to reach the player?
+:::
+
+## 2.4 Moving a point with a vector
+
+A point plus a vector gives a new point: if $P$ is a point and $\mathbf{d}$ a
+displacement, $P + \mathbf{d}$ is the place we reach from $P$. @tbl-ops shows
+what we can do with points and vectors.
 
 | Operation | Result | Meaning |
 |---|---|---|
-| point $-$ point | vector | the displacement between two locations |
-| point $+$ vector | point | a location moved by a displacement |
-| vector $+$ vector | vector | two displacements one after the other (week 2) |
-| point $+$ point | — | meaningless: locations cannot be added |
+| point − point | vector | the movement from one place to another |
+| point + vector | point | a place moved by a movement |
+| vector + vector | vector | two movements, one after the other (week 2) |
+| point + point | — | no meaning: places cannot be added |
 
 : Operations with points and vectors. {#tbl-ops}
 
-### Motion frame by frame
+### Movement frame by frame
 
-A moving object has a **velocity**: the displacement it makes in one unit of
-time. Games often measure this unit in frames. If an object at $\mathbf{p}_0$
-has a constant velocity $\mathbf{v}$ per frame, the game loop updates its
-position once per frame:
-$$
-\mathbf{p}_{1} = \mathbf{p}_0 + \mathbf{v}, \quad
-\mathbf{p}_{2} = \mathbf{p}_1 + \mathbf{v}, \quad \ldots \quad
-\mathbf{p}_{k+1} = \mathbf{p}_k + \mathbf{v}.
-$$
-Adding the same vector $n$ times moves the object by $n$ times each component:
-$$
-\mathbf{p}_n = (p_{0x} + n\,v_x,\ \ p_{0y} + n\,v_y).
-$$
+A moving object has a **velocity**: the displacement it makes in one step of
+time. In many games, this step is one frame. The game loop adds the velocity
+to the position once in every frame:
+$$\text{new position} = \text{old position} + \text{velocity}.$$
+After $n$ frames, the object has moved $n$ times the velocity: $n \times v_x$
+along x and $n \times v_y$ along y.
 
-![Five frames of constant velocity $\mathbf{v} = (2, 1)$ starting at $(1, 1)$.](images/per-frame.png){#fig-per-frame width=86%}
+![Five frames with the velocity v = (2, 1), starting at (1, 1).](images/per-frame.png){#fig-per-frame width=86%}
 
-::: {.callout-note title="Example 2.5 — Where is the ship after 4 frames?"}
-A ship starts at $\mathbf{p}_0 = (1, 1)$ with velocity $\mathbf{v} = (2, 1)$ per
-frame (@fig-per-frame).
+::: {.callout-note title="Example 2.7 — Where is the ship after 4 frames?"}
+A ship starts at $(1, 1)$ with the velocity $(2, 1)$ per frame
+(@fig-per-frame).
 
 1. Frame 1: $(1 + 2,\ 1 + 1) = (3, 2)$.
-2. Frame 2: $(5, 3)$; frame 3: $(7, 4)$.
-3. Directly: $\mathbf{p}_4 = (1 + 4 \times 2,\ 1 + 4 \times 1) = (9, 5)$.
+2. Frame 2: $(5, 3)$. Frame 3: $(7, 4)$.
+3. Faster: after 4 frames, $(1 + 4 \times 2,\ 1 + 4 \times 1) = (9, 5)$.
 :::
 
-::: {.callout-note title="Example 2.6 — Choosing a velocity (the reverse question)"}
-A homing missile at $(10, 7)$ must reach a target at $(4, 1)$ in exactly 3
-frames with a constant velocity. Which velocity is needed?
+::: {.callout-note title="Example 2.8 — Which velocity? (the reverse question)"}
+A missile at $(10, 7)$ must reach a target at $(4, 1)$ in exactly 3 frames.
+Which velocity does it need?
 
 1. Total displacement: $(4, 1) - (10, 7) = (-6, -6)$.
-2. Three equal steps make up the total, so each step is a third of each
-   component: $\mathbf{v} = (-2, -2)$.
-3. Check: $(10, 7) + 3 \times (-2, -2) = (10 - 6,\ 7 - 6) = (4, 1)$. ✓
+2. Three equal steps: each step is one third: $(-6 \div 3,\ -6 \div 3) =
+   (-2, -2)$.
+3. Check: $(10, 7) + 3 \times (-2, -2) = (10 - 6,\ 7 - 6) = (4, 1)$. Correct.
 :::
 
-The frame-based velocity is simple but has a flaw that week 2 repairs: if the
-frame rate drops from 60 to 30 fps, an object moving "2 units per frame"
-travels half as far per second. Real game code therefore stores velocity per
-*second* and multiplies it by the frame time.
+Two more questions come up in almost every game: *when* does the object reach
+a place, and what happens when it must turn back?
+
+::: {.callout-note title="Example 2.9 — When does the ball reach the wall?"}
+A ball is at $(12, 3)$ and moves with the velocity $(-3, 1)$ per frame. A wall
+stands at $x = 0$.
+
+1. Each frame, x becomes 3 smaller: 12, 9, 6, 3, 0.
+2. So x is 0 after $12 \div 3 = 4$ frames.
+3. In 4 frames, y grows by $4 \times 1 = 4$: from 3 to 7.
+4. The ball hits the wall at $(0, 7)$, after 4 frames.
+:::
+
+::: {.callout-note title="Example 2.10 — A platform that moves back and forth"}
+A platform starts at $(2, 5)$. It moves with the velocity $(2, 0)$ for 3 frames.
+Then it turns back with the opposite vector, $(-2, 0)$, for 3 frames.
+
+1. After 3 frames: $(2 + 3 \times 2,\ 5) = (8, 5)$.
+2. After 3 more frames with $(-2, 0)$: $(8 - 6,\ 5) = (2, 5)$.
+3. The platform is back at its start. The opposite vector undoes the
+   movement, and the game can repeat the two parts forever.
+:::
 
 ::: {.callout-caution title="In game code"}
-The update that runs once per frame:
+The line that runs once in every frame:
 
 ```csharp
 Vector2 position = new Vector2(1f, 1f);
@@ -315,114 +341,139 @@ position = position + velocity;           // a point moved by a vector
 ```
 :::
 
-The mini-game below turns this rule into a puzzle: choose the velocity per
-frame that lands a ship exactly on its target after a given number of frames.
-
 {{< sim file="sims/vector-dash.html" poster="sims/vector-dash.png" title="Vector Dash: one velocity, n frames" kind="game" height="620" >}}
 
-## 2.6 Vectors in three dimensions
+::: {.callout-note title="Do it · Vector Dash"}
+Open the **Vector Dash** mini-game above (or scan its QR code). Choose one
+velocity per frame that lands the ship exactly on the target.
 
-Everything in this chapter extends to three dimensions by adding a third
-component. A 3D vector $(v_x, v_y, v_z)$ moves $v_x$ units along $x$, $v_y$
-along $y$ and $v_z$ along $z$; the displacement between two 3D points is again
-end minus start, component by component.
+1. Play three levels.
+2. For one level, write the start, the target, the number of frames and your
+   velocity. Check your velocity with the method of Example 2.6.
 
-In a world with $y$ up, a vector splits naturally into two parts that games
-treat differently: the **vertical** part $(0, v_y, 0)$, which changes the
-height, and the **horizontal** part $(v_x, 0, v_z)$, which moves along the
-ground. A character that walks on flat ground has $v_y = 0$; a jump or a fall
-changes only $v_y$.
+*Your result:* the numbers of one level and your check.
+:::
 
-![A drone flies from $A$ to $B$: the displacement has a horizontal and a vertical part.](images/drone-3d.png){#fig-drone width=74%}
+## 2.5 Vectors in three dimensions
 
-::: {.callout-note title="Example 2.7 — A delivery drone"}
-A drone takes off at $A = (2, 0, 1)$ and delivers a parcel at
-$B = (6, 5, -3)$ (@fig-drone).
+In 3D, a vector has three components: $(v_x, v_y, v_z)$. Everything else stays
+the same. The displacement between two 3D points is still end minus start,
+one component at a time.
+
+In a world where $y$ points up, a 3D vector has two parts that games use
+differently. The **vertical** part, $(0, v_y, 0)$, changes the height. The
+**horizontal** part, $(v_x, 0, v_z)$, moves along the ground. A character that
+walks on flat ground has $v_y = 0$. A jump or a fall changes only $v_y$.
+
+Level designers use this split all the time. A road or a bridge needs only a
+horizontal displacement. A ladder or a lift needs only a vertical one. A ramp
+or a flying drone needs both parts at the same time.
+
+![A drone flies from A to B. The displacement has a horizontal part and a vertical part.](images/drone-3d.png){#fig-drone width=74%}
+
+::: {.callout-note title="Example 2.11 — A delivery drone"}
+A drone starts at $A = (2, 0, 1)$ and delivers a parcel at $B = (6, 5, -3)$
+(@fig-drone).
 
 1. Displacement: $B - A = (6 - 2,\ 5 - 0,\ -3 - 1) = (4, 5, -4)$.
-2. Vertical part: $(0, 5, 0)$ — the drone climbs 5 units.
-3. Horizontal part: $(4, 0, -4)$ — over the ground it moves 4 units along
-   $+x$ and 4 units along $-z$.
-4. Return trip: $A - B = (-4, -5, 4)$.
+2. Vertical part: $(0, 5, 0)$. The drone climbs 5 units.
+3. Horizontal part: $(4, 0, -4)$. Over the ground it moves 4 units along $+x$
+   and 4 units along $-z$.
+4. The way back: $A - B = (-4, -5, 4)$.
+:::
+
+::: {.callout-note title="Example 2.12 — Walk, then jump"}
+A character stands at $(3, 0, 2)$ on flat ground (y up). It walks with the
+velocity $(1, 0, 2)$ per frame for 2 frames. Then it jumps with $(0, 3, 0)$ for
+one frame.
+
+1. After 2 frames of walking: $(3 + 2 \times 1,\ 0 + 2 \times 0,\ 2 + 2 \times 2)
+   = (5, 0, 6)$. The height is still 0: walking is horizontal.
+2. After the jump frame: $(5, 0 + 3, 6) = (5, 3, 6)$. Only the height changed:
+   the jump is vertical.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Mixing the order of the components. In $(4, 5, -4)$ the middle number is the
-height only in a $y$-up world; in a $z$-up tool such as Blender the height is
-the *last* component.
+Mixing up the order of the components. In $(4, 5, -4)$, the middle number is
+the height only in a y-up world, such as Unity. In a z-up tool, such as
+Blender, the height is the *last* number.
+:::
+
+{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" height="640" >}}
+
+::: {.callout-note title="Do it · A 3D move"}
+Open the 3D viewer above (or scan its QR code).
+
+1. Put the player at $(1, 0, 1)$. Then move it to $(4, 3, 5)$.
+2. Write the displacement of this move, its vertical part and its horizontal
+   part.
+
+*Your result:* three vectors.
 :::
 
 ## Case study: Comet Courier
 
-*Comet Courier* is a mobile delivery game set in space. The courier ship
-travels between depots on a 2D star map; each turn of the game lasts one
-frame of movement. Depot Alpha is at $(1, 2)$, depot Beta at $(9, 6)$, and a
-comet passes through $(5, 4)$. In the 3D version, stations float at
-different heights. The exercises below and the Game challenge of the
-interactive lesson use this map.
+*Comet Courier* is a made-up delivery game in space. The courier ship flies
+between depots on a 2D star map, and it moves with one velocity per frame.
+Depot Alpha is at $(1, 2)$, depot Beta at $(9, 6)$, and a comet passes through
+the point $(5, 4)$. The player chooses the velocity of the ship before it
+starts; the game then adds it once per frame, and the ship cannot turn on the
+way. If the ship passes through the comet's point, it is hit. In the 3D
+version, the stations float at different heights: station Gamma is at
+$(2, 1, 3)$ and station Delta at $(6, 4, 3)$. The Game challenge of the
+interactive lesson uses this map and these numbers.
 
-![The star map of *Comet Courier*: depots Alpha and Beta, the comet, and a ship flying with one velocity per frame.](images/comet-courier.png){#fig-courier width=88%}
+![The star map of Comet Courier: depots Alpha and Beta, the comet, and a ship that flies with one velocity per frame.](images/comet-courier.png){#fig-courier width=88%}
 
 ## Further reading
 
 Dunn and Parberry, *3D Math Primer for Graphics and Game Development*,
-2nd ed., Chapter 2 ("Vectors"), sections on the mathematical and geometric
-definitions of a vector, specifying vectors with Cartesian coordinates, the
-relationship between vectors and points, and negating a vector.
+2nd ed., Chapter 2 ("Vectors"): the mathematical and geometric definitions of
+a vector, vectors with Cartesian coordinates, vectors and points, and the
+negative of a vector.
 
 ## Exercises
 
-1. Classify as scalar or vector: (a) the fuel left in a car, 32 L; (b) a wind
-   of 6 m/s from the north; (c) the gravity in a game; (d) the volume of the
-   music.
-2. Two enemies are at $(1, 1)$ and $(8, 3)$. Both move with velocity
-   $(-1, 0)$ per frame. Are their velocity vectors equal? Explain.
+1. Scalar or vector? (a) 32 litres of fuel; (b) a wind of 6 m/s from the
+   north; (c) gravity; (d) the music volume.
+2. Two enemies are at $(1, 1)$ and $(8, 3)$. Both move with the velocity
+   $(-1, 0)$ per frame. Are their velocity vectors equal? Why?
 3. An arrow starts at $(-2, 3)$ and ends at $(4, -1)$. Find its components.
 4. An arrow with components $(3, -5)$ starts at $(2, 2)$. Where is its head?
-5. Write the vector that points straight down with magnitude 4, and its
-   negative.
-6. Write $(-2, 5)$ and $(3, 0, -1)$ using the basis vectors $\mathbf{i}$,
-    $\mathbf{j}$, $\mathbf{k}$.
-7. A virtual joystick reports $(0, -1)$, then $(0, 0)$. Describe what the
-    player is doing in each frame.
-8. The player is at $P = (3, -2)$ and a health pack at $H = (-1, 5)$. Find the
+5. Write the vector that points straight down with magnitude 4. Write its
+   opposite vector.
+6. A joystick gives $(0, -1)$, then $(0, 0)$. What does the player do in each
+   frame?
+7. The player is at $P = (3, -2)$, and a health pack at $H = (-1, 5)$. Find the
    displacement from the player to the pack, and from the pack to the player.
-9. Explain why the sum of two points, such as $(2, 3) + (5, 1)$, has no
-   meaning in a game world, while their difference does.
-10. A cannonball has velocity $(3, 2)$ per frame and starts at $(0, 1)$. Find its
-   position after 1, 2 and 5 frames.
-11. A platform moves from $(4, 1)$ to $(4, 9)$ in 4 frames at a constant
-   velocity. Find the velocity per frame.
-12. A ball at $(8, 2)$ moves with velocity $(-2, 1)$. After how many frames is
-    its $x$-coordinate 0? Where is it then?
-13. A game running at 60 fps moves an object 0.5 units per frame along $x$.
-    How far does it move in one second? How far at 30 fps?
-14. A hit from an enemy at $E = (5, 5)$ knocks the player at $P = (7, 4)$
-    away from the enemy by one displacement $P - E$. Where does the player
-    land?
-15. A 3D camera moves from $(0, 10, -20)$ to $(4, 6, -12)$. Find the
+8. Why does the sum of two points, such as $(2, 3) + (5, 1)$, have no meaning
+   in a game?
+9. A ball starts at $(0, 1)$ with the velocity $(3, 2)$ per frame. Where is it
+   after 1, 2 and 5 frames?
+10. A platform moves from $(4, 1)$ to $(4, 9)$ in 4 frames with one velocity.
+    Find the velocity per frame.
+11. A ball at $(8, 2)$ moves with the velocity $(-2, 1)$. After how many frames
+    is its x-coordinate 0? Where is it then?
+12. A camera moves from $(0, 10, -20)$ to $(4, 6, -12)$. Find the
     displacement, its vertical part and its horizontal part.
-16. *Comet Courier*: find the displacement from Alpha to Beta and decide
-    whether a ship that flies from Alpha with velocity $(2, 1)$ per frame
-    passes through the comet's point. After how many frames?
+13. *Comet Courier*: find the displacement from Alpha to Beta. A ship flies
+    from Alpha with the velocity $(2, 1)$ per frame. Does it pass through the
+    comet's point? After how many frames?
 
 ## Answers to the exercises
 
 ::: {.answers}
 1. (a) scalar; (b) vector; (c) vector; (d) scalar.
-2. Yes: same components $(-1, 0)$; position does not matter.
-3. $(4 - (-2),\ -1 - 3) = (6, -4)$.
-4. $(2 + 3,\ 2 - 5) = (5, -3)$.
-5. $(0, -4)$; its negative is $(0, 4)$.
-6. $-2\mathbf{i} + 5\mathbf{j}$; $3\mathbf{i} - \mathbf{k}$.
-7. Stick pushed fully down (walking down/backwards); then released — standing still (zero vector).
-8. $H - P = (-4, 7)$; $P - H = (4, -7)$.
-9. A point is a location; adding locations is undefined. The difference of two points is the displacement between them.
-10. $(3, 3)$, $(6, 5)$, $(15, 11)$.
-11. Total $(0, 8)$; $\mathbf{v} = (0, 2)$.
-12. $8 - 2n = 0 \Rightarrow n = 4$; position $(0, 6)$.
-13. 30 units per second; 15 units at 30 fps.
-14. $P - E = (2, -1)$; $P' = (9, 3)$.
-15. $(4, -4, 8)$; vertical $(0, -4, 0)$; horizontal $(4, 0, 8)$.
-16. $(8, 4)$; yes: after 2 frames the ship is at $(5, 4)$.
+2. Yes: the same components (−1, 0). Position does not matter for a vector.
+3. (4 − (−2), −1 − 3) = (6, −4).
+4. (2 + 3, 2 − 5) = (5, −3).
+5. (0, −4); its opposite is (0, 4).
+6. First the stick is pushed fully down (the character walks down); then the player lets go (zero vector: the character stands still).
+7. H − P = (−4, 7); P − H = (4, −7).
+8. A point is a place; places cannot be added. The difference of two points is the movement between them.
+9. (3, 3), (6, 5), (15, 11).
+10. Total (0, 8); velocity (0, 2).
+11. 8 − 2 × 4 = 0, so after 4 frames; position (0, 6).
+12. (4, −4, 8); vertical (0, −4, 0); horizontal (4, 0, 8).
+13. (8, 4); yes, after 2 frames the ship is at (5, 4).
 :::

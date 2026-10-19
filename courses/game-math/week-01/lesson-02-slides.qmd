@@ -6,7 +6,7 @@ format: lesson-pptx
 
 ## Keywords
 
-{{< glossary scalar vector magnitude direction component displacement velocity zero-vector opposite-vector free-vector >}}
+{{< glossary scalar vector magnitude direction component displacement velocity zero-vector opposite-vector >}}
 
 ## Think · Is "5 m/s" enough?
 
@@ -14,7 +14,7 @@ The game says: **the wind blows at 5 m/s**.
 **Can the program move the leaves?**
 
 ::: {.answer}
-No — it also needs the **direction**: 5 m/s *towards the east*.
+No. It also needs the **direction**: 5 m/s *to the east*.
 :::
 
 ## 2.1 Scalars and vectors
@@ -25,58 +25,45 @@ No — it also needs the **direction**: 5 m/s *towards the east*.
 - vector: size + direction
 - speed → **velocity**
 - distance → **displacement**
+- **Do it together:** scalars and vectors in a game
 :::
 ::: {.column width="62%"}
 ![](images/scalar-vector.png)
 :::
 ::::
 
+## Example · A platform game
+
+Scalar or vector?
+
+::: {.reveal}
+1. score 12 400 → **scalar**
+2. 3 units right per frame → **vector**
+3. 4 units away from the enemy → **vector**
+4. waiting time 2.5 s → **scalar**
+:::
+
 ## Try it 1 · Scalar or vector?
 
-a) 350 coins
-b) gravity
-c) "how far and which way"?
+a) the waiting time of a skill?
+b) "4 units away from the enemy"?
+c) to move a car: speed or velocity?
 
 ::: {.answer}
 a) scalar
 b) vector
-c) displacement
+c) the velocity
 :::
 
-## 2.2 Arrows
+## 2.2 Arrows and components
 
 :::: {.columns}
 ::: {.column width="38%"}
-- tail → head
-- length = **magnitude**
+- arrow: tail → head
 - **no position**
-- same arrow = **equal vectors**
-:::
-::: {.column width="62%"}
-![](images/vector-arrow.png)
-:::
-::::
-
-## Try it 2 · Reading arrows
-
-a) the pointed end?
-b) "3 right, 2 up" drawn in two places?
-c) a vector has no…?
-
-::: {.answer}
-a) head
-b) equal vectors
-c) a position
-:::
-
-## 2.3 Components
-
-:::: {.columns}
-::: {.column width="38%"}
-- **v** = (vx, vy, vz)
-- **head − tail**
-- sign = direction
-- `Vector2`, `.x .y`
+- **v** = (v~x~, v~y~)
+- components = **head − tail**
+- **Do it together:** arrows in GeoGebra
 :::
 ::: {.column width="62%"}
 ![](images/components.png)
@@ -88,45 +75,42 @@ c) a position
 Tail (1, 4), head (5, 1).
 
 ::: {.reveal}
-1. vx = 5 − 1 = **4** (right)
-2. vy = 1 − 4 = **−3** (down)
+1. v~x~ = 5 − 1 = **4** (right)
+2. v~y~ = 1 − 4 = **−3** (down)
 3. **v = (4, −3)**
 :::
 
-## Vectors as lists · basis vectors
+## Example · The joystick
 
-:::: {.columns}
-::: {.column width="45%"}
-- ordered list of numbers
-- colour, joystick input
-- **i**, **j**, **k**
-- (4, −3) = 4**i** − 3**j**
+A joystick gives a vector every frame.
+
+::: {.reveal}
+1. fully right → **(1, 0)**
+2. halfway up-left → about **(−0.5, 0.5)**
+3. let go → **(0, 0)**: the zero vector
 :::
-::: {.column width="55%"}
-![](images/basis-vectors.png)
-:::
-::::
 
-## Try it 3 · Components
+## Try it 2 · Arrows and components
 
-a) arrow (2, −1) → (−3, 4)?
-b) (−2, 5) with **i**, **j**?
-c) joystick released?
+a) arrow from (−2, 3) to (4, −1)?
+b) (3, −2) drawn from (1, 4): head?
+c) where does (0, 5) point?
 
 ::: {.answer}
-a) (−5, 5)
-b) −2**i** + 5**j**
-c) (0, 0)
+a) (6, −4)
+b) (4, 2)
+c) straight up
 :::
 
-## 2.4 Displacement: end minus start
+## 2.3 Points and displacement
 
 :::: {.columns}
 ::: {.column width="38%"}
 - from A to B: **B − A**
-- A − B: the **negative**
-- A − A: **zero vector**
+- A − B: the **opposite vector**
+- on the goal: **(0, 0)**
 - wrong order → walks away
+- **Do it together:** chase the player in GeoGebra
 :::
 ::: {.column width="62%"}
 ![](images/displacement.png)
@@ -140,72 +124,80 @@ E = (2, 7), P = (6, 4).
 ::: {.reveal}
 1. P − E = (4, −3): enemy → player
 2. E − P = (−4, 3): player → enemy
-3. knockback pushes the player along **P − E**
+3. a hit pushes the player along **P − E**
 :::
 
-## Try it 4 · Enemy and player
+## Example · An arrow to the treasure
 
-E = (8, 1), P = (3, 4).
+Player (−3, 2), treasure (5, −4).
 
-a) enemy → player?
-b) player → enemy?
-c) point + point = ?
+::: {.reveal}
+1. treasure − player = **(8, −6)**
+2. right and down
+3. player moves to (1, 2) → new arrow **(4, −6)**
+:::
+
+## Try it 3 · Enemy, player, treasure
+
+a) from the player back to the enemy (above)?
+b) enemy uses E − P: what happens?
+c) player on the goal: goal − player?
 
 ::: {.answer}
-a) (−5, 3)
-b) (5, −3)
-c) meaningless
+a) (−4, 3)
+b) it walks away
+c) the zero vector
 :::
 
-## 2.5 Motion frame by frame
+## 2.4 Moving a point with a vector
 
 :::: {.columns}
 ::: {.column width="38%"}
 - point + vector = point
-- **p**k+1 = **p**k + **v**
-- after n frames: p0 + n·v
+- every frame: position + **velocity**
+- after n frames: n × each component
+- velocity = displacement ÷ frames
 :::
 ::: {.column width="62%"}
 ![](images/per-frame.png)
 :::
 ::::
 
-## Example · Choosing a velocity
+## Example · Which velocity?
 
 Missile (10, 7) → target (4, 1) in 3 frames.
 
 ::: {.reveal}
 1. total: (4, 1) − (10, 7) = (−6, −6)
 2. 3 equal steps: **v = (−2, −2)**
-3. check: (10, 7) + 3·(−2, −2) = (4, 1) ✓
+3. check: (10, 7) + 3 × (−2, −2) = (4, 1)
 :::
 
 ## Live demo · Vector Dash
 
 {{< sim file="sims/vector-dash.html" poster="sims/vector-dash.png" title="Vector Dash: one velocity, n frames" kind="game" >}}
 
-## Try it 5 · Frame by frame
+## Try it 4 · Frame by frame
 
-Start (2, 1), **v** = (3, 2).
-
-a) after 4 frames?
-b) (0, 0) → (12, −8) in 4 frames: **v**?
-c) 0.5 per frame at 60 fps: per second?
+a) (1, 1) with (2, 1): after 4 frames?
+b) (12, 3) with (−3, 1): when is x = 0?
+c) point + point?
 
 ::: {.answer}
-a) (14, 9)
-b) (3, −2)
-c) 30
+a) (9, 5)
+b) after 4 frames
+c) no meaning
 :::
 
-## 2.6 Vectors in 3D
+## 2.5 Vectors in 3D
 
 :::: {.columns}
 ::: {.column width="38%"}
-- (vx, vy, vz)
-- vertical (0, vy, 0)
-- horizontal (vx, 0, vz)
-- jump: only vy
+- (v~x~, v~y~, v~z~)
+- vertical (0, v~y~, 0): height
+- horizontal (v~x~, 0, v~z~): ground
+- walk: v~y~ = 0 · jump: only v~y~
+- **Do it together:** a 3D move in the viewer
 :::
 ::: {.column width="62%"}
 ![](images/drone-3d.png)
@@ -222,51 +214,54 @@ A = (2, 0, 1), B = (6, 5, −3).
 3. horizontal (4, 0, −4)
 :::
 
-## Try it 6 · A drone in 3D
+## Live demo · 3D position
 
-A = (1, 2, 0) → B = (5, 6, −6), y up.
+{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" >}}
 
-a) displacement?
-b) vertical part?
-c) return trip?
+## Try it 5 · A drone in 3D
+
+A = (2, 0, 1) → B = (6, 5, −3).
+
+a) horizontal part?
+b) the way back?
+c) walking on flat ground: v~y~?
 
 ::: {.answer}
-a) (4, 4, −6)
-b) (0, 4, 0)
-c) (−4, −4, 6)
+a) (4, 0, −4)
+b) (−4, −5, 4)
+c) 0
 :::
 
 ## Game challenge · Comet Courier
 
 :::: {.columns}
 ::: {.column width="38%"}
-- Alpha (1, 2)
-- Beta (9, 6)
+- Alpha (1, 2) · Beta (9, 6)
 - comet (5, 4)
-- one velocity per frame
+- one velocity, chosen at the start
+- 3D: Gamma (2, 1, 3) · Delta (6, 4, 3)
 :::
 ::: {.column width="62%"}
 ![](images/comet-courier.png)
 :::
 ::::
 
-## Try it 7 · Alpha to Beta (harder)
+## Try it 6 · Alpha to Beta (harder)
 
 a) Alpha → Beta?
-b) **v** for Alpha → Beta in 4 frames?
-c) what is there after 2 frames?
+b) leaves Alpha with (2, 1): hit by the comet?
+c) Gamma → Delta: vertical part?
 
 ::: {.answer}
 a) (8, 4)
-b) (2, 1)
-c) the comet
+b) yes, after 2 frames
+c) (0, 3, 0)
 :::
 
 ## Summary
 
-- scalar: one number · vector: magnitude + direction
-- arrows: no position · equal arrows, equal vectors
-- components = head − tail
-- displacement A → B = B − A
-- per frame: p + v
+- scalar: one number · vector: size + direction
+- components = head − tail · no position
+- from A to B: B − A · opposite: A − B
+- every frame: position + velocity
 - 3D: vertical + horizontal parts

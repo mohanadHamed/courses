@@ -21,10 +21,11 @@ Only **numbers** — positions, health, time — updated every frame.
 
 :::: {.columns}
 ::: {.column width="38%"}
-- input → update → render
+- input → update → draw
 - one pass = one **frame**
-- **T = 1000 / f** ms
+- frame time = **1000 / fps** ms
 - 60 fps → 16.7 ms
+- **Do it together:** the maths in a game
 :::
 ::: {.column width="62%"}
 ![](images/game-loop.png)
@@ -36,31 +37,32 @@ Only **numbers** — positions, health, time — updated every frame.
 Racing game, 60 fps, 3-minute race.
 
 ::: {.reveal}
-1. T = 1000 / 60 ≈ **16.7 ms**
-2. 180 s × 60 = **10 800 updates**
-3. at 30 fps: 33.3 ms, only 5 400 updates
+1. 1000 / 60 ≈ **16.7 ms**
+2. 3 × 60 = 180 s · 180 × 60 = **10 800 frames**
+3. at 30 fps: about 33 ms, only 5 400 frames
 :::
 
 ## Try it 1 · The frame budget
 
-a) frame time at 30 fps?
+a) frame time at 50 fps?
 b) frames in 10 s at 60 fps?
-c) maths for "the door opens"?
+c) maths to aim a turret?
 
 ::: {.answer}
-a) 33.3 ms
+a) 20 ms
 b) 600
-c) logic
+c) trigonometry
 :::
 
 ## 1.2 One dimension: the number line
 
 :::: {.columns}
 ::: {.column width="38%"}
-- displacement **b − a** (sign)
-- distance **|b − a|**
-- int (discrete) · float (continuous)
-- far from 0 → jitter → **floating origin**
+- origin 0 · unit · direction
+- displacement = **end − start** (sign)
+- distance: no sign, never negative
+- discrete (whole) · continuous (any)
+- **Do it together:** a runner track
 :::
 ::: {.column width="62%"}
 ![](images/number-line.png)
@@ -69,16 +71,14 @@ c) logic
 
 ## Try it 2 · Moving along a line
 
-Player at x = 6 → checkpoint at x = −2.
-
-a) displacement?
-b) distance?
-c) moving the world back to the origin?
+a) from 4 back to −3: displacement?
+b) the distance of that move?
+c) a piece only on squares 1, 2, 3?
 
 ::: {.answer}
-a) −8
-b) 8
-c) floating origin
+a) −7
+b) 7
+c) discrete
 :::
 
 ## 1.3 Two dimensions: (x, y)
@@ -89,6 +89,7 @@ c) floating origin
 - **ordered pair** (x, y)
 - signs → **quadrant**
 - zero → on an axis
+- **Do it together:** the level in GeoGebra
 :::
 ::: {.column width="62%"}
 ![](images/quadrants.png)
@@ -102,7 +103,7 @@ Key (−3, 2), trap (−4, −2.5), coin (4, 3).
 ::: {.reveal}
 1. key: x < 0, y > 0 → **quadrant II**
 2. trap: both negative → **quadrant III**
-3. key → coin: |4 − (−3)| = **7**
+3. key → coin: from −3 to 4 = **7** to the right
 :::
 
 ## Live demo · Grid Strike
@@ -111,24 +112,25 @@ Key (−3, 2), trap (−4, −2.5), coin (4, 3).
 
 ## Try it 3 · Where is the point?
 
-a) (−5, 3)
-b) (0, −4)
-c) distance (−3, 2) ↔ (4, 2)?
+a) the trap at (−4, −2.5)?
+b) a tree at (5, 0)?
+c) the exit at (2, −3)?
 
 ::: {.answer}
-a) quadrant II
-b) negative y-axis
-c) 7
+a) quadrant III
+b) on the x-axis
+c) quadrant IV
 :::
 
 ## 1.4 Screen space and world space
 
 :::: {.columns}
 ::: {.column width="38%"}
-- screen: top-left, **y down**
-- xs = W/2 + s·xw
-- ys = H/2 **−** s·yw
-- many phones: s = W / w
+- screen: top left, **y down**
+- x~s~ = W/2 + s · x~w~
+- y~s~ = H/2 **−** s · y~w~
+- touch → world: the other way
+- **Do it together:** Grid Strike, stage 2
 :::
 ::: {.column width="62%"}
 ![](images/screen-world.png)
@@ -149,14 +151,14 @@ c) 7
 
 1080 × 1920, s = 100.
 
-a) world (1, 2) → pixel?
-b) touch (740, 1360) → world?
-c) scale for a 9-unit-wide board?
+a) world (−1, 2) → pixel?
+b) touch (840, 760) → world?
+c) centre of the screen?
 
 ::: {.answer}
-a) (640, 760)
-b) (2, −4)
-c) 120 px per unit
+a) (440, 760)
+b) (3, 2)
+c) (540, 960)
 :::
 
 ## 1.5 Grids: row-major order
@@ -164,9 +166,10 @@ c) 120 px per unit
 :::: {.columns}
 ::: {.column width="38%"}
 - cell (c, r), from 0
-- **i = r·n + c**
-- c = i mod n
-- r = ⌊i / n⌋
+- stored row after row
+- **i = r × n + c**
+- i ÷ n → row, remainder → column
+- **Do it together:** a board in a spreadsheet
 :::
 ::: {.column width="62%"}
 ![](images/tile-index.png)
@@ -185,25 +188,24 @@ c) 120 px per unit
 
 ## Try it 5 · A match-3 board
 
-8 columns.
-
-a) index of (2, 4)?
-b) cell of index 19?
-c) index above 19?
+a) 8 columns: column 5, row 3?
+b) 6 columns: column 4, row 2?
+c) 6 columns: where is index 23?
 
 ::: {.answer}
-a) 34
-b) column 3, row 2
-c) 27
+a) 29
+b) 16
+c) column 5, row 3
 :::
 
 ## 1.6 Three dimensions: (x, y, z)
 
 :::: {.columns}
 ::: {.column width="38%"}
-- **ordered triple**
-- y up → ground = xz-plane
-- height = y
+- **ordered triple** (x, y, z)
+- y up → height = y
+- ground: y = 0
+- **Do it together:** move the player in 3D
 :::
 ::: {.column width="62%"}
 ![](images/axes-3d.png)
@@ -214,10 +216,10 @@ c) 27
 
 :::: {.columns}
 ::: {.column width="38%"}
-- Unity: y up, **left**
-- Godot: y up, **right**
-- Blender: z up, **right**
-- swap two axes → flips
+- thumb x · index y · middle z
+- Unity: y up, **left-handed**
+- Blender: z up, **right-handed**
+- Blender → Unity: (x, y, z) → (x, z, y)
 :::
 ::: {.column width="62%"}
 ![](images/handedness.png)
@@ -230,7 +232,7 @@ Lamp at (1, 4, 2) in Blender (z up).
 
 ::: {.reveal}
 1. height in Blender = z = 2
-2. swap y and z → **(1, 2, 4)** in Unity
+2. swap the last two → **(1, 2, 4)** in Unity
 3. height in Unity = y = 2 ✓
 :::
 
@@ -240,14 +242,14 @@ Lamp at (1, 4, 2) in Blender (z up).
 
 ## Try it 6 · Positions in 3D
 
-a) where is (2, 0, −7)?
-b) Unity handedness?
-c) Blender (3, 1, 5) → Unity?
+a) drone at (4, 12, −3): height?
+b) Blender (2, −5, 3) → Unity?
+c) Unity handedness?
 
 ::: {.answer}
-a) on the ground
-b) left-handed
-c) (3, 5, 1)
+a) 12 units
+b) (2, 3, −5)
+c) left-handed
 :::
 
 ## Game challenge · Harbor Guard
@@ -266,14 +268,14 @@ c) (3, 5, 1)
 
 ## Try it 7 · Taps and tiles (harder)
 
-a) touch (300, 720) → world?
-b) tile index of (4, 6), 9 columns?
-c) Blender (2, 3, 1.5) → Unity?
+a) touch (780, 840) → world?
+b) tile in column 4, row 2: index?
+c) Blender (3, 0, 5) → Unity?
 
 ::: {.answer}
-a) (−2, 2)
-b) 58
-c) (2, 1.5, 3)
+a) (2, 1)
+b) 22
+c) (3, 5, 0)
 :::
 
 ## Summary
@@ -281,6 +283,6 @@ c) (2, 1.5, 3)
 - frame time = 1000 / fps
 - displacement has a sign, distance does not
 - (x, y): signs → quadrant
-- screen: top-left, y down, scale s
-- grid: i = r·n + c
-- 3D: handedness; swap two axes → it flips
+- screen: top left, y down, scale s
+- grid: i = r × n + c
+- 3D: Unity y-up left-handed, Blender z-up right-handed

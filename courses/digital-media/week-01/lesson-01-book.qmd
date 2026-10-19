@@ -1,6 +1,6 @@
 ---
 title: "Digital Media and Creative Production in Games"
-description: "Lesson notes · What digital media are, how sound and images become numbers, the game as a composite medium, and the creative production pipeline."
+description: "Lesson notes · What digital media are, what makes game media special, the game as a composite medium, and the creative production pipeline."
 week: 1
 lesson: 1
 ilos: [A1]
@@ -8,13 +8,15 @@ format: lesson-typst
 ---
 
 ::: {.lead}
-A game is built from code, but the player meets it through its media: the
-characters they see, the music they hear, the lines of dialogue they read and
-the cut-scenes they watch. This course is about those media — how they are
-written, designed, recorded, edited and protected. This first chapter defines
-digital media, explains how sound and pictures become numbers, describes the
-game as a medium that combines all other media, and outlines the production
-process that turns an idea into finished game content.
+A small studio is making *Lantern Keeper*, a mobile game about a lantern
+spirit in a dark forest. The rules are ready: tap to float, collect
+fireflies. But the game still feels empty. It needs pictures, music, sounds,
+words and a story. Players meet a game through these **media**. This course is
+about how game media are planned, made and protected. In this first lesson you
+learn what digital media are, why game media are different from the media of
+a film, how all parts of a game work together for the player, and how a team
+makes media step by step. Every section ends with a short task on the lab
+computer, on your phone or in a mini-game.
 :::
 
 ## Key terms
@@ -23,249 +25,269 @@ process that turns an idea into finished game content.
 
 ## 1.1 What digital media are
 
-A **medium** (plural *media*) is a form through which content is communicated:
-writing, pictures, sound, moving images. **Digital media** are media whose
-content is encoded as numbers, so that a computer can store, edit, copy and
-transmit it. The main types of digital media used in games are:
+A **medium** (plural *media*) is a way to share content: writing, pictures,
+sound, moving pictures. **Digital media** are media stored as numbers, so
+that a computer can keep, change, copy and send them. Games use six main
+types:
 
-- **text** — dialogue, item descriptions, menus, subtitles;
-- **images** — characters, backgrounds, icons, textures;
-- **audio** — music, sound effects, voices, ambience;
-- **video** — cut-scenes, trailers, recorded gameplay;
-- **animation** — sequences of images or poses that create motion;
-- **interactive media** — content that responds to the user, of which the
-  game itself is the most complete example.
+- **text**: dialogue, menus, item names, subtitles;
+- **images**: characters, backgrounds, icons;
+- **audio**: music, sound effects, voices;
+- **video**: cut-scenes and trailers;
+- **animation**: pictures or poses in a sequence that make movement;
+- **interactive media**: content that answers the user. The game itself is
+  the best example.
 
-A work that combines several of these types is called **multimedia**.
+A work that combines several types is **multimedia**.
 
-### How sound and pictures become numbers
+Sound and light in the real world change smoothly. A computer must turn them
+into a list of numbers. This is **digitization**. For sound, the computer
+measures the sound wave many times per second (for example 44 100 times). For
+a picture, it measures the colour of many small points, the pixels
+(@fig-sampling). More measurements give better quality, but bigger files.
+This is why games **compress** their media: formats such as MP3, Ogg, PNG,
+JPEG and MP4 make the files much smaller.
 
-Sound and light in the real world are *continuous*: a sound wave varies
-smoothly in time, and a scene varies smoothly in space. A computer can only
-store a finite list of numbers. The conversion, called **digitization**, has
-two steps (@fig-sampling):
+![Digitizing a sound wave: the computer measures the wave at regular times and keeps each measurement as a number.](images/sampling.png){#fig-sampling width=86%}
 
-1. **sampling** — measuring the signal at regular intervals (in time for
-   sound, in space for an image);
-2. **quantization** — rounding each measurement to one of a fixed number of
-   levels.
+Images can be stored in two ways (@fig-raster-vector):
 
-![Digitizing a sound wave: the continuous signal is sampled at regular times, and each sample is rounded to the nearest level.](images/sampling.png){#fig-sampling width=86%}
+- a **raster image** is a grid of pixels. It is good for photos and painted
+  art, but it looks blocky when you make it bigger;
+- **vector graphics** store shapes: lines, curves and colours. The computer
+  draws them again at any size, so they always stay sharp. They are good for
+  logos, icons and buttons.
 
-The number of samples per second is the **sample rate**, measured in hertz;
-the number of bits used for each sample is the **bit depth**. Audio CDs use
-44 100 samples per second and 16 bits per sample. For an image, the samples
-are pixels: the **resolution** gives their number and the colour depth gives
-the bits per pixel. With 8 bits for each of red, green and blue (24 bits per
-pixel), a pixel can take $2^{24} \approx 16.7$ million colours.
+![The same icon as a raster image (left, enlarged: the pixels are visible) and as vector graphics (right, sharp at any size).](images/raster-vector.png){#fig-raster-vector width=80%}
 
-::: {.callout-important title="Definition 1.1 — Size of uncompressed media"}
-Uncompressed audio needs
-$\text{sample rate} \times \text{bit depth} \times \text{channels}$ bits per
-second. An uncompressed image needs
-$\text{width} \times \text{height} \times \text{bits per pixel}$ bits.
+::: {.callout-important title="Definition 1.1 — Digital media"}
+**Digital media** are text, images, audio, video, animation and interactive
+content stored as numbers. A computer can store, edit, copy and send them
+without losing quality.
 :::
 
-::: {.callout-note title="Example 1.1 — Why media must be compressed"}
-1. One second of CD-quality stereo audio:
-   $44\,100 \times 16 \times 2 = 1\,411\,200$ bits $\approx 176$ KB.
-   A 3-minute music track: $176 \times 180 \approx 31.8$ MB.
-2. One uncompressed frame of full-HD video ($1920 \times 1080$, 24 bits):
-   $1920 \times 1080 \times 3$ bytes $\approx 6.2$ MB. At 30 frames per second,
-   one second of video needs about 187 MB.
-3. These sizes are far too large for a mobile game. Formats such as MP3 and
-   Ogg Vorbis for audio, PNG and JPEG for images and H.264 for video
-   **compress** the data, often to a tenth of its size or less; weeks 7 and 11
-   study them.
+::: {.callout-note title="Example 1.1 — Choosing raster or vector"}
+The *Lantern Keeper* team needs three images.
+
+1. The painted forest background, with soft light: **raster** (a painting
+   with many colours).
+2. The game logo, used on a small app icon and on a big poster: **vector**
+   (it must stay sharp at every size).
+3. The pause button: **vector** (phone screens have many sizes).
 :::
 
-Images can also be stored in a completely different way. A **raster** (or
-bitmap) image is a grid of pixels; it is ideal for photographs and painted
-art, but becomes blocky when it is enlarged. A **vector** image stores shapes
-— lines, curves and fills described by coordinates — and is redrawn at any
-size without loss; it suits logos, icons and interface elements
-(@fig-raster-vector).
+::: {.callout-note title="Do it · Raster or vector?"}
+On a lab computer:
 
-![The same icon as a raster image (left, enlarged: the pixels become visible) and as vector graphics (right, sharp at any size).](images/raster-vector.png){#fig-raster-vector width=80%}
+1. Open **Paint**. Draw a circle. Zoom in to 800 %. What do you see at the
+   edge of the circle?
+2. Open **PowerPoint** (or Word). Insert a circle shape. Zoom in as far as
+   you can. What do you see at its edge now?
 
-## 1.2 Properties of digital media
+*Your result:* one sentence for each tool, and which one is raster and which
+one is vector.
+:::
 
-Because they are numbers, digital media behave differently from paint on
-canvas or sound on tape. Following the media theorist Lev Manovich, five
-properties can be distinguished; each has a direct consequence for games.
+## 1.2 What makes game media special
 
-| Property | Meaning | In games |
+Because they are numbers, game media can change while the player plays. A
+film shows the same pictures and sounds every time. A game does not. Three
+features make game media special (@tbl-props).
+
+| Feature | Meaning | In games |
 |---|---|---|
-| numerical representation | the content is numbers, so it can be computed | colours, volumes and positions are changed by code at runtime |
-| modularity | a work is assembled from independent parts | a level is built from reusable sprites, tiles, sounds and models |
-| automation | parts of creation can be done by programs | procedural levels, generated terrain, automatic lip-sync |
-| variability | one work can exist in many versions | music that adapts to danger; skins; translations |
-| transcoding | content moves between the computer's logic and human culture | game data are both art for the player and files for the engine |
+| modularity | a work is built from separate parts | a level is built from reusable tiles, sprites and sounds |
+| variability | one work can exist in many versions | music that changes with danger; skins; translations |
+| interactivity | the content answers the player | a sound plays when the player jumps |
 
-: Properties of digital media and their effect on games (after Manovich). {#tbl-props}
+: Three features of game media. {#tbl-props}
 
-A sixth property is central to this course: **interactivity**. A film is the
-same at every viewing; a game changes its images and sounds in response to the
-player. Game media must therefore be designed not as one fixed sequence but
-as a *set of possibilities*: a sound effect may play once or a hundred times,
-a line of dialogue may be skipped, a piece of music may loop for an hour.
+So game media are not one fixed sequence. They are a *set of possibilities*.
+One sound effect may play once or a hundred times. A player may skip a line of
+dialogue. A piece of music may loop for an hour. The team must plan media for
+all these cases.
 
-::: {.callout-note title="Example 1.2 — Variability in game music"}
-An exploration game uses one piece of music in three layers: a calm melody,
-a percussion layer and a tense string layer.
+![One piece of music in three layers. The game adds a layer when the danger grows.](images/music-layers.png){#fig-layers width=88%}
 
-1. When the player explores, only the melody plays.
-2. When an enemy comes near, the game adds the percussion layer.
-3. During a fight all three layers play. The *same* composition exists in
-   several versions, chosen by the game state — variability in practice.
+::: {.callout-note title="Example 1.2 — Music that follows the danger"}
+An exploration game has one piece of music in three layers: a calm melody,
+drums and tense strings.
+
+1. The player explores: only the melody plays.
+2. An enemy comes near: the game adds the drums.
+3. In a fight: all three layers play (@fig-layers). The *same* music exists
+   in three versions, and the game chooses one by the situation.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that game music is like film music. Film music is written for fixed
+scenes of fixed length. Game music must work for a scene that lasts ten
+seconds or ten minutes, and it must change when the game changes.
+:::
+
+::: {.callout-note title="Do it · Listen for changes"}
+Play a game on your phone for three minutes with the sound on.
+
+1. Write two moments when the music or the sound changed because of
+   something in the game (danger, a win, a new place).
+2. For each moment, write what changed: faster, louder, a new instrument, a
+   new sound.
+
+*Your result:* two moments and the change in each.
 :::
 
 ## 1.3 The game as a composite medium
 
-A game combines every type of digital media with something that no other
-medium has: rules that the player acts upon. Jesse Schell describes a game as
-four basic elements, which he calls the **elemental tetrad** (@fig-tetrad):
+A game combines all types of media with something that no other medium has:
+rules that the player acts on. The designer Jesse Schell describes a game as
+four basic elements, the **elemental tetrad** (@fig-tetrad):
 
-- **mechanics** — the procedures and rules: what the player can do and what
-  happens as a result;
-- **story** — the sequence of events that unfolds in the game, whether
-  written in advance or emerging from play;
-- **aesthetics** — how the game looks, sounds and feels: the element that the
-  player perceives most directly;
-- **technology** — the materials and systems that make the game possible: the
-  device, the engine, the screen and the speakers.
+- **mechanics**: the rules, what the player can do and what happens then;
+- **story**: the events of the game, written in advance or created by play;
+- **aesthetics**: how the game looks, sounds and feels;
+- **technology**: the device, the engine, the screen and the speakers that
+  make the game possible.
 
-![The elemental tetrad (after Schell). The aesthetics are the most visible element and the technology the least visible; all four together produce the player's experience.](images/tetrad.png){#fig-tetrad width=62%}
+![The elemental tetrad (after Schell). The aesthetics are the most visible element, the technology the least visible. All four together create the player's experience.](images/tetrad.png){#fig-tetrad width=62%}
 
-None of the four is more important than the others; each supports and limits
-the rest. Schell's central point is that the designer does not create the
-game for its own sake but to produce an **experience** in the player. The
-media studied in this course — story, image, sound and video — live mainly in
-the elements of story and aesthetics, and they are limited by technology:
-memory, storage, processing power and the size of the screen.
+All four elements are equally important, and each one supports and limits the
+others. The aim is not the game itself but the **experience** of the player.
+The media of this course (story, pictures, sound and video) belong mostly to
+story and aesthetics, and technology limits them: memory, storage and screen
+size.
 
 ::: {.callout-important title="Definition 1.2 — The aim of game media"}
-The media of a game succeed when they strengthen the intended **player
-experience**. A beautiful image or a powerful piece of music that does not
-fit the experience is a failure of design, not a success of art.
+Game media succeed when they make the planned **player experience** stronger.
+A beautiful picture or great music that does not fit the experience is a
+design mistake, not a success.
 :::
 
-::: {.callout-note title="Example 1.3 — The tetrad of a small mobile game"}
-*Lantern Keeper* is a mobile game in which the player guides a small lantern
-spirit through a dark forest.
+::: {.callout-note title="Example 1.3 — The tetrad of Lantern Keeper"}
+In *Lantern Keeper*, the player guides a small lantern spirit through a dark
+forest.
 
-1. **Mechanics**: tap to float upward; the lantern's light shrinks with time
-   and grows when the player collects fireflies.
-2. **Story**: the spirit must relight the lanterns of a village before
+1. **Mechanics**: tap to float up; the light gets smaller over time and grows
+   when the player collects fireflies.
+2. **Story**: the spirit must light the lanterns of a village before
    sunrise.
-3. **Aesthetics**: warm light in a cold blue forest; soft piano music; a gentle
+3. **Aesthetics**: warm light in a cold blue forest, soft piano music, a gentle
    chime for each firefly.
-4. **Technology**: a phone screen in portrait orientation; the engine draws
-   the light with a cheap shader so that old phones keep 60 fps.
-5. The intended experience — lonely but hopeful — is produced by all four
-   together. Replacing the piano with loud rock music would break it, even
-   though the mechanics would not change.
+4. **Technology**: a phone screen in portrait; a simple light effect so that
+   old phones keep 60 frames per second.
+5. The planned experience, *lonely but hopeful*, comes from all four
+   together. Loud rock music would break it, even with the same rules.
 :::
 
-![A screen of *Lantern Keeper*. Light, colour and music carry the intended experience as much as the rules do.](images/lantern-keeper.png){#fig-lantern width=40%}
+![A screen of Lantern Keeper. Light, colour and music carry the experience as much as the rules.](images/lantern-keeper.png){#fig-lantern width=40%}
 
-The mini-game below demonstrates this last point. The mechanics never change
-— tap to jump over obstacles — but the media layers can be switched on one by
-one: sound effects, music, particles, camera shake and a line of story. The
-same rules produce a very different experience.
+::: {.callout-warning title="Common mistake"}
+Thinking that *aesthetics* means *graphics*. Aesthetics are everything the
+player's senses meet: pictures, but also sound, music, vibration and the
+rhythm of animation.
+:::
 
 {{< sim file="sims/juice-it.html" poster="sims/juice-it.png" title="Juice It: same mechanics, different media" kind="game" height="560" >}}
 
-::: {.callout-warning title="Common mistake"}
-Confusing *aesthetics* with *graphics*. In Schell's sense, aesthetics include
-sound, music, the feel of vibration and the rhythm of animation — every part
-of the game that reaches the player's senses.
+::: {.callout-note title="Do it · Juice It"}
+Open the **Juice It** mini-game above (or scan its QR code). The rules never
+change: tap to jump.
+
+1. Play 30 seconds with all media layers off.
+2. Switch the layers on one at a time: sound effects, music, particles, camera
+   shake, story. Play a little after each one.
+3. Choose one word for the experience at the start, and one at the end.
+
+*Your result:* the two words, and the layer that changed the experience most.
 :::
 
 ## 1.4 The creative production pipeline
 
-Game media are not produced in one step. Professional teams follow a
-**production pipeline** of three broad stages (@fig-pipeline):
+A team does not make game media in one step. Professional teams follow a
+**production pipeline** with three main stages (@fig-pipeline):
 
-- **pre-production** — planning: the concept, the story premise, the script,
-  the storyboard, the style guide that fixes colours and shapes, and the
-  schedule and budget;
-- **production** — making the **assets**: drawing sprites and textures,
-  modelling and animating characters, composing music, recording voices and
-  sound effects, capturing and editing video;
-- **post-production** — finishing: editing, mixing and mastering the audio,
-  colour correction, compression and export in the formats the engine needs,
-  followed by integration into the game and testing.
+- **pre-production**: planning. The idea, the story, the script, the
+  storyboard, a style guide with colours and shapes, the time plan and the
+  budget;
+- **production**: making the **assets**. Drawing, modelling, animating,
+  composing music, recording voices and sounds, filming;
+- **post-production**: finishing. Editing, mixing the sound, correcting
+  colours, compressing and exporting the files in the formats the engine
+  needs, then testing them in the game.
 
-![The creative production pipeline. Each stage produces documents or assets that the next stage uses; testing often sends work back to an earlier stage.](images/pipeline.png){#fig-pipeline width=94%}
+![The creative production pipeline. Testing often sends work back to an earlier stage.](images/pipeline.png){#fig-pipeline width=94%}
 
-| Asset type | Typical formats | Example tools |
+| Asset | File formats | Free tools for the lab |
 |---|---|---|
-| images, sprites, textures | PNG, JPEG, PSD, SVG | Krita, GIMP, Photoshop, Figma |
-| 3D models and animation | FBX, glTF, OBJ | Blender, Maya |
-| music and sound effects | WAV (editing), Ogg, MP3 (game) | Audacity, Reaper, FL Studio |
-| video | MP4 (H.264), MOV | DaVinci Resolve, Premiere Pro |
-| script and storyboard | text documents, panels | word processors, storyboard tools |
+| images, sprites, icons | PNG, JPEG, SVG | Paint, GIMP, Krita |
+| 3D models | FBX, glTF | Blender |
+| music and sound effects | WAV (editing), Ogg, MP3 (game) | Audacity |
+| video | MP4 | DaVinci Resolve |
+| script and storyboard | documents, drawings | a word processor, paper |
 
-: Common game assets, formats and tools. {#tbl-assets}
+: Common game assets, formats and free tools. {#tbl-assets}
 
-The pipeline also explains the structure of this course: story and
-screenwriting (weeks 2–4) and storyboards (weeks 5–6) belong to
-pre-production; sound, music and video (weeks 7–12) to production and
-post-production; intellectual property (weeks 13–14) applies to every asset
-at every stage, because every image, sound and text has an owner whose rights
-must be respected.
+This course follows the same order: story and scripts (weeks 2–4) and
+storyboards (weeks 5–6) are pre-production; sound, music and video (weeks
+7–12) are production and post-production. Intellectual property (weeks 13–14)
+matters at every stage, because every picture, sound and text has an owner.
 
-::: {.callout-note title="Example 1.4 — Following one asset through the pipeline"}
+::: {.callout-note title="Example 1.4 — One sound through the pipeline"}
 The "firefly collected" sound of *Lantern Keeper*:
 
-1. **Pre-production**: the sound design document asks for "a soft, bright
-   chime, under 0.5 s, that never becomes annoying".
-2. **Production**: the sound designer records a small glass bell and creates
-   three variations, so that the sound does not repeat identically.
-3. **Post-production**: the recordings are trimmed, their loudness is matched,
-   and they are exported as compressed Ogg files.
-4. **Integration and testing**: the programmer plays a random variation on
-   every pickup; a tester reports that the chime is too loud next to the
-   music, and the sound returns to post-production for a new mix.
+1. **Pre-production**: the plan asks for "a soft, bright chime, shorter than
+   half a second, never annoying".
+2. **Production**: the sound designer records a small glass bell three times,
+   so that the sound does not repeat exactly.
+3. **Post-production**: the recordings are cut, made equally loud and saved
+   as small Ogg files.
+4. **Testing**: a tester says that the chime is too loud next to the music.
+   The sound goes back to post-production for a new mix.
+:::
+
+::: {.callout-note title="Do it · Make one small asset"}
+Make a coin icon for a game, and follow the three stages.
+
+1. **Pre-production**: write a one-line plan, for example "a gold coin with a
+   star, round, easy to see on a dark background".
+2. **Production**: draw it in Paint (or another tool).
+3. **Post-production**: save it as a PNG file with a clear name, for example
+   `icon_coin_v1.png`.
+
+*Your result:* the one-line plan and the PNG file.
 :::
 
 ## Further reading
 
-Schell, *The Art of Game Design: A Book of Lenses*, 3rd ed., chapters on the
-designer, the experience and the game, and on the elements that make up a
-game (the elemental tetrad).
+Schell, *The Art of Game Design: A Book of Lenses*, 3rd ed., the chapters on
+the experience and the game, and on the elements of a game (the elemental
+tetrad).
 
 ## Exercises
 
-1. Name the six types of digital media in games and give one example of each
-   from a game you know.
-2. Explain the two steps of digitization in your own words.
-3. How many bits per second does uncompressed mono audio at 48 000 samples per
-   second and 16 bits per sample need? How many kilobytes for 10 seconds?
-4. How many bytes does an uncompressed $1280 \times 720$ image with 24-bit
-   colour need?
-5. A game logo must appear on a small app icon and on a large poster. Should
-   it be stored as raster or as vector graphics? Explain.
-6. Choose two of Manovich's properties and give a game example for each.
-7. Name the four elements of the elemental tetrad and describe them for
-   *Lantern Keeper*, using your own words.
-8. Explain why "aesthetics" is not the same as "graphics".
-9. Place each task in the stage of the pipeline: writing the script; mixing the
+1. Name the six types of digital media in games. Give one example of each from
+   a game you know.
+2. What is digitization? Use the words *measure* and *numbers*.
+3. A game logo must appear on an app icon and on a big poster. Raster or
+   vector? Why?
+4. Explain variability with one example from a game you know.
+5. Why must game music be planned differently from film music?
+6. Name the four elements of the elemental tetrad and describe each one for a
+   game you know.
+7. Why is aesthetics not the same as graphics?
+8. Put each task in a stage of the pipeline: writing the script; mixing the
    music; recording a voice; drawing the storyboard; exporting a trailer.
-10. Explain why intellectual property concerns every stage of the pipeline.
+9. Why does intellectual property matter at every stage of the pipeline?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. Text (subtitles), images (sprites), audio (music), video (cut-scene), animation (a walk cycle), interactive media (the game itself).
-2. Sampling measures the signal at regular intervals; quantization rounds each measurement to a fixed set of levels.
-3. $48\,000 \times 16 = 768\,000$ bits per second $= 96$ KB per second; 960 KB for 10 s.
-4. $1280 \times 720 \times 3 = 2\,764\,800$ bytes ≈ 2.8 MB.
-5. Vector: it can be drawn sharply at any size.
-6. For example: modularity — levels built from reusable tiles; variability — adaptive music or translated versions.
-7. Mechanics (float, collect fireflies, shrinking light), story (relight the village before sunrise), aesthetics (warm light, piano, chimes), technology (portrait phone, cheap light shader).
-8. Aesthetics include everything the senses perceive — sound, music, vibration, rhythm — not only images.
-9. Pre-production: script, storyboard; production: recording a voice; post-production: mixing the music, exporting a trailer.
-10. Every asset — text, image, sound, video — has an owner; using or changing it at any stage requires the right to do so.
+1. Text (subtitles), images (characters), audio (music), video (cut-scene), animation (a walk), interactive media (the game itself).
+2. The computer measures sound or light many times and keeps each measurement as a number.
+3. Vector: it stays sharp at every size.
+4. For example: the music adds drums when an enemy comes near.
+5. Game scenes have no fixed length and change with the player, so the music must loop and change; film scenes are fixed.
+6. Mechanics (rules), story (events), aesthetics (look, sound, feel), technology (device, engine, screen).
+7. Aesthetics include everything the senses meet: also sound, music, vibration and rhythm.
+8. Pre-production: the script, the storyboard; production: recording a voice; post-production: mixing the music, exporting a trailer.
+9. Every asset (text, picture, sound, video) has an owner. Using or changing it at any stage needs permission.
 :::

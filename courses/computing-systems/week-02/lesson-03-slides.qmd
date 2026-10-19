@@ -1,0 +1,193 @@
+---
+title: "Computer Components: CPU, Memory and Storage"
+subtitle: "Week 2 · Lecture"
+draft: true
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary cpu-core clock-rate thread memory-hierarchy cache byte texture ssd app-storage >}}
+
+## Think · 8 cores = 8 times faster?
+
+A phone has an **octa-core** processor.
+**Does a game run eight times faster than on one core?**
+
+::: {.answer}
+No. The game logic runs on **one main thread**, on one core. Only the
+worker part is shared.
+:::
+
+## 3.1 Cores and threads
+
+:::: {.columns}
+::: {.column width="38%"}
+- core = runs one **thread**
+- performance + efficiency cores
+- main thread: one core
+- GHz = pace of **one** core
+- **Do it together:** Task Manager → CPU → Logical processors
+:::
+::: {.column width="62%"}
+![](images/cpu-cores.png)
+:::
+::::
+
+## Example · Splitting one frame
+
+Main thread 10 ms + 6 ms shared work.
+
+::: {.reveal}
+1. 1 core: 10 + 6 = **16 ms**
+2. 2 cores: 10 + 3 = **13 ms**
+3. 6 cores: 10 + 1 = **11 ms**
+4. only 1.5 times faster, not 6 times
+:::
+
+## Try it 1 · Cores and threads
+
+Main thread 8 ms + 4 ms shared work.
+
+a) frame time with four cores?
+b) best core for background music?
+c) 8 cores at 3 GHz: speed of the main thread's core?
+
+::: {.answer}
+a) 9 ms
+b) an efficiency core
+c) 3 GHz
+:::
+
+## 3.2 The memory hierarchy
+
+:::: {.columns}
+::: {.column width="38%"}
+- registers → cache → RAM → storage
+- up: fast, small, close
+- down: large, slow, cheap
+- **cache hit** ≈ 1 ns · miss ≈ 100 ns
+:::
+::: {.column width="62%"}
+![](images/memory-hierarchy.png)
+:::
+::::
+
+## Live demo · Data Trip
+
+{{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" >}}
+
+## Try it 2 · The memory hierarchy
+
+1 000 000 reads per frame · cache 1 ns · RAM 100 ns.
+
+a) 90 % hits: memory time?
+b) position read 50 times: where after the first read?
+c) best score after power off: kept where?
+
+::: {.answer}
+a) 10.9 ms
+b) in the cache
+c) in storage (flash)
+:::
+
+## 3.3 What a game keeps in memory
+
+:::: {.columns}
+::: {.column width="38%"}
+- code · assets · state
+- textures: the largest share
+- size = width × height × bytes
+- KB, MB (1000) · KiB, MiB (1024)
+- **Do it together:** Task Manager → Processes → Memory
+:::
+::: {.column width="62%"}
+![](images/game-ram.png)
+:::
+::::
+
+## Example · The memory of one texture
+
+2048 × 2048 pixels, 4 bytes per pixel.
+
+::: {.reveal}
+1. 2048 × 2048 = 4 194 304 pixels
+2. × 4 bytes = **16 MiB**
+3. ASTC, 1 byte per pixel: **4 MiB**
+4. 40 textures: 640 MiB → 160 MiB
+:::
+
+## Try it 3 · Memory sizes
+
+a) 1024 × 1024, 4 bytes per pixel?
+b) game near its memory limit: compress what first?
+c) "3.7 GiB": counted in powers of…?
+
+::: {.answer}
+a) 4 MiB
+b) textures
+c) 1024
+:::
+
+## 3.4 Storage
+
+:::: {.columns}
+::: {.column width="38%"}
+- hard disk: platters, moving arm
+- SSD / phone: flash, no moving parts
+- app · user data · cache
+- 1 TB → 931 GB in Windows
+- **Do it together:** a game's storage screen on a phone
+:::
+::: {.column width="62%"}
+![](images/storage.png)
+:::
+::::
+
+## Try it 4 · Storage
+
+a) Clear cache on 300 MB: what is lost?
+b) keep the pets: avoid which button?
+c) "2 TB" SSD in Windows?
+
+::: {.answer}
+a) nothing important (temporary files)
+b) Clear storage
+c) about 1863 GB
+:::
+
+## Game challenge · Pocket Pets support desk
+
+:::: {.columns}
+::: {.column width="38%"}
+- island: 40 textures, 2048 × 2048, ASTC
+- 1 "only one core busy"
+- 2 "needs 1.6 GB, I have 1.2 GB"
+- 3 "Clear storage: pets gone"
+- 4 "1 TB shows 931 GB"
+- 5 "blurry for a second"
+:::
+::: {.column width="62%"}
+![](images/pocket-pets.png)
+:::
+::::
+
+## Try it 5 · Answer the players (harder)
+
+a) message 2: how much more space?
+b) message 3: which part was deleted?
+c) message 5: memory of the 40 textures?
+
+::: {.answer}
+a) 0.4 GB
+b) the user data
+c) 160 MiB
+:::
+
+## Summary
+
+- core runs one thread · cores do not add up
+- registers → cache → RAM → storage
+- cache: data used again and again
+- RAM: code, assets, state · texture = w × h × bytes
+- storage: app · user data · cache

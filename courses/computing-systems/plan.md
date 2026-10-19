@@ -37,7 +37,7 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 | 07 | 14 | Exploring Android and iOS Features | A2, B1 |  |  |
 | 08 | — | *Midterm exam · Midterm discussion — no lesson* | | A1, A2, B1 | 1, 3 |
 | 09 | 17 | Mobile Platforms Compared: Android vs iOS | B1 | B1, D1 | 1, 3 |
-| 09 | 18 | Platform Comparison: An Individual Analysis | B1, D1 |  |  |
+| 09 | 18 | Platform Comparison Activity | B1, D1 |  |  |
 | 10 | 19 | App Stores and Publishing Requirements | C2 | C2 | 3, 4 |
 | 10 | 20 | Reviewing App-Store Guidelines | C2 |  |  |
 | 11 | 21 | Networking Concepts: LAN, the Internet and Protocols | A2 | A2 | 1 |
@@ -49,7 +49,7 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 | 14 | 27 | Setting Up Test Environments: Emulators and Real Devices | C1 | C1 | 1, 3 |
 | 14 | 28 | Hands-on: Running a Sample App on an Emulator | C1 |  |  |
 | 15 | 29 | Platform Performance and Compatibility: Case Studies | B2, C1 | B2, C1, D1 | 1, 3, 4 |
-| 15 | 30 | Individual Project: Performance and Compatibility Report | B2, C1, D1 |  |  |
+| 15 | 30 | Student Presentations (Project) | B2, C1, D1 |  |  |
 | 16 | — | *Final exam — no lesson* | | All | 1, 3, 4 |
 
 ## ILO coverage
@@ -66,7 +66,7 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 
 ## Notes
 
-- **Independent study, no group work.** The syllabus seminar "Platform comparison activity" (week 9) becomes an individual analysis with reliable sources (D1), and the week-15 student presentations become an individual project report on performance and compatibility, with an optional short recorded presentation.
-- D1 (reliable sources, self-learning) is an individual competence by nature: practise it in weeks 9 and 15 with source lists and short source evaluations.
+- **Independent study first.** Pages, slides and homework never require classmates.
+- No ILO of this course asks for team work (D1 is self-learning with reliable sources), so no lesson has a team activity. The week-9 "Platform comparison activity" is an individual comparison with reliable sources; the week-15 presentations are individual project presentations.
 - Week 8: midterm exam and midterm discussion (no lessons). Week 16: final exam.
-- One homework per week; week 15: the project instead (syllabus).
+- One homework per week (1–2 simple tasks, under 10 minutes); week 15: the project instead (syllabus).

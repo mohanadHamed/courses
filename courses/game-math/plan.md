@@ -67,7 +67,8 @@ Per week (as taught): 2 lectures × 90 min → 2 lessons (A = First Lecture, B =
 
 ## Notes
 
-- **Independent study, no group work.** Every activity is done by each student alone: the notes, the interactive page and the homework are enough to study without classmates.
-- **D1 (present solutions and collaborate)** is built individually in weeks 14–15, where the syllabus asks for group problem solving and presentations: each student solves an applied problem set and presents the solution alone (a short written solution report with figures, or a 3-minute recorded explanation), and the teacher gives feedback. This is an adaptation of the syllabus seminar format; agree it with the department if needed.
+- **Independent study first.** The notes, the interactive page and the homework are enough to study alone. Pages, slides and homework never require classmates.
+- **Team activity (D1, collaborate with peers): one lesson only.** The week-14 seminar asks for group problem solving and presentation, so the notes (PDF) of lesson 28 contain one short team activity box (solve a problem in a small team and present the solution), with an individual alternative for a student who works alone. No other lesson has team work.
+- Week 15 seminar (student presentations): each student presents a solution alone.
 - Week 8: revision lesson (15) and midterm exam. Week 16: final exam.
-- One homework per week (`week-NN/homework-NN.qmd`), not in weeks 8 and 16. Tasks are public; solutions stay private.
+- One homework per week (`week-NN/homework-NN.qmd`), not in weeks 8 and 16: 1–2 simple tasks, under 10 minutes. Tasks are public; solutions stay private.

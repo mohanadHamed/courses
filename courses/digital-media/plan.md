@@ -49,8 +49,8 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 | 13 | 26 | Case Study: Intellectual-Property Issues in Game Content | A2, D1 |  |  |
 | 14 | 27 | Using Licensed and Open Assets; Credits and Attribution | A2 | A2, D1 | 2, 4 |
 | 14 | 28 | Auditing the Licenses of a Game's Assets | A2, D1 |  |  |
-| 15 | 29 | Integrated Media Production: Planning a Media Package | B2, C1, C2, C3 | B2, C1, C2, C3, D1 | 2, 3, 4 |
-| 15 | 30 | Individual Project: Presenting a Media Package | B2, D1 |  |  |
+| 15 | 29 | Integrated Media Production: Team Workshop | B2, C1, C2, C3 | B2, C1, C2, C3, D1 | 2, 3, 4 |
+| 15 | 30 | Team Presentation of a Media Package | B2, D1 |  |  |
 | 16 | — | *Final exam — no lesson* | | All | 2, 3, 4 |
 
 ## ILO coverage
@@ -68,8 +68,8 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 
 ## Notes
 
-- **Independent study, no group work.** The syllabus team workshop and team presentation (week 15) become an individual project: each student plans, produces and presents a small media package (storyboard, a sound or music loop, a short promotional clip) for an invented game.
-- **D1 (work within a production team, respect intellectual property)** is built individually: the student works through every role of the production pipeline in order (writer, storyboard artist, sound designer, editor), keeps a production log, and delivers a credits and licences file for every asset used (weeks 13–15).
-- Seminars are analyses or production exercises done alone ("Discussion: analyzing the media of a favorite game" → an individual media analysis).
+- **Independent study first.** Pages, slides and homework never require classmates; seminars are analyses or production exercises a student can do alone.
+- **Team activity (D1, work within a production team): lessons 29–30 only.** The week-15 team workshop and team presentation are described in the notes (PDF) of lessons 29 and 30 as one team activity (roles in a small production team, one media package, one presentation), each with an individual alternative (the student takes every role in turn and keeps a production log). No other lesson has team work.
+- Intellectual property (D1) in weeks 13–14 is practised individually: a credits and licences file for every asset.
 - Week 8: midterm exam and midterm discussion (no lessons). Week 16: final exam.
-- One homework per week; week 15: the project instead (syllabus).
+- One homework per week (1–2 simple tasks, under 10 minutes); week 15: the project instead (syllabus).

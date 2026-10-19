@@ -130,13 +130,15 @@ simulator. Fix every warning before you open a PR. Full table:
 `python3 _extensions/lesson/check_size.py --all`. Keep `SIZES` and this table
 the same.
 
-**Independent study only: no group work anywhere.** No group or pair
-activities, discussions with classmates, team projects or team presentations
-— not in lessons, seminars, homework or projects, and not in the PDF either.
-Every student must be able to learn from the notes and the page alone. When
-a syllabus names a team activity, replace it with individual work (an
-individual analysis, project, report or recorded presentation) and explain in
-`plan.md` how the ILO is still built (D1 is built individually).
+**Independent study first; team work only where the syllabus asks for it.**
+Every student must be able to learn from the notes and the page alone.
+Interactive pages, slides, lab tasks and homework never need classmates.
+A team activity appears **only in the notes (PDF)**, and only in the one or
+two lessons where the syllabus or a course ILO names team work (the D1
+weeks): one short `::: {.callout-note title="Team activity"}` box with roles,
+a product and a presentation, followed by an individual alternative for a
+student who works alone. No other lesson has group or pair work or
+discussions with classmates. Each course's `plan.md` names these lessons.
 
 **Game challenge (every course; no class activities).** No groups, no paper:
 every student works alone on the page, and the teacher shows one part on
@@ -494,5 +496,6 @@ Lessons or homework not ready for students: `draft: true` (not published).
   for 60 min, 22–28 for 90 min, 2–3 questions per "Try it" slide); the notes
   and the page keep everything for home study.
 - 2026-10-19: group activities are rarely done (few students, no time) and
-  only look good on paper. No group work anywhere; syllabus team activities
-  become individual work (see each course's `plan.md`).
+  only look good on paper. Team work stays only where the official outcomes
+  require it: one team-activity box in the notes (PDF) of one or two lessons
+  per course, with an individual alternative (see each course's `plan.md`).

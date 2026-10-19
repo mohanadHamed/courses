@@ -50,8 +50,8 @@ Per week (as taught): 2 lab sessions × 60 min → 2 lessons (both in the comput
 | 13 | 26 | Styling and Publishing a Game Landing Page | C3 |  |  |
 | 14 | 27 | Digital Marketing: SEO, Social Media, Email, E-commerce and Analytics | B2 | B2 | 3, 4 |
 | 14 | 28 | Preparing a Digital Marketing Plan | B2 |  |  |
-| 15 | 29 | Final Project: An Integrated Digital Service | B2, C1, C3 | B2, C1, C3, D1 | 2, 3, 4 |
-| 15 | 30 | Final Project: Presentation and Self-Review | D1 |  |  |
+| 15 | 29 | Team Project: An Integrated Digital Service | B2, C1, C3 | B2, C1, C3, D1 | 2, 3, 4 |
+| 15 | 30 | Team Project Presentations | D1 |  |  |
 | 16 | — | *Final exam — no lesson* | | All | 2, 3, 4 |
 
 ## ILO coverage
@@ -69,9 +69,8 @@ Per week (as taught): 2 lab sessions × 60 min → 2 lessons (both in the comput
 
 ## Notes
 
-- **Independent study, no group work.** The syllabus team project (week 15) becomes an individual final project: an integrated digital service (a landing page for an invented game, its content and a digital-marketing plan), presented by the student and closed with a written self-review.
-- **D1 (teamwork and professional presentation)** is built individually: collaboration skills are practised with the teacher through shared cloud documents (co-editing, comments, version history, week 2) instead of student groups; the presentation is individual.
-- Lab tasks are done by each student on the lab computer; every lab task has written steps on the page.
+- **Independent study first.** Pages, slides, lab tasks and homework never require classmates; collaboration tools (week 2) are practised with the teacher through shared documents.
+- **Team activity (D1, work in a team on a digital project): lessons 29–30 only.** The week-15 team project and presentations are described in the notes (PDF) of lessons 29 and 30 (roles, shared folder, one integrated digital service, one presentation), each with an individual alternative (the student builds the service alone and presents it). No other lesson has team work.
 - Week 8: review lesson (15) and midterm exam. Week 16: final exam.
-- One homework per week; week 15: the project instead (syllabus).
+- One homework per week (1–2 simple tasks, under 10 minutes); week 15: the project instead (syllabus).
 - The diploma's guidance plan lists this course in semester 2; the 2026-2027 syllabus and the timetable put it in semester 1.

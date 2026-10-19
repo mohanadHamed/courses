@@ -15,6 +15,10 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
 - Numbers about hardware and markets change quickly: give orders of
   magnitude ("about half of game revenue", "100 MB/s to over 1 GB/s") and
   check them each semester.
+- File and memory sizes count in steps of **1024**, as Windows does and as
+  Digital Skills does: 1 KB = 1024 bytes, 1 MB = 1024 KB, 1 GB = 1024 MB,
+  1 TB = 1024 GB. Drive makers count in 1000s, so a "1 TB" drive shows about
+  931 GB in Windows.
 
 ## Lessons learned
 
@@ -35,3 +39,7 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   frame-rate, pixel and input-lag calculations, the ISA and compiler section
   and bandwidth were removed; one sentence on builds per platform (ARM, x86)
   stays.
+- Week 2 (2026-10-20, teacher review): lesson 3 now counts sizes in 1024
+  instead of 1000, like Digital Skills, so students of both courses learn one
+  rule. 1024 × 1024 bytes = 1 MB makes the texture example exact (4 MB);
+  the Try it asks 2 GB = 2048 MB.

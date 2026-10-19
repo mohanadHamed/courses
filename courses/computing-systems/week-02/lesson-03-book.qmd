@@ -175,10 +175,13 @@ We measure the size of data in **bytes**.
 
 ::: {.callout-important title="Definition 3.3 — The byte and its multiples"}
 A **byte** is 8 bits. It can hold one number from 0 to 255, for example the
-amount of red in one pixel. Bigger units grow in steps of about 1000:
-1 KB (kilobyte) ≈ 1000 bytes, 1 MB (megabyte) ≈ 1000 KB,
-1 GB (gigabyte) ≈ 1000 MB, 1 TB (terabyte) ≈ 1000 GB.
+amount of red in one pixel. Each bigger unit is 1024 times the unit before
+it: 1 KB (kilobyte) = 1024 bytes, 1 MB (megabyte) = 1024 KB,
+1 GB (gigabyte) = 1024 MB, 1 TB (terabyte) = 1024 GB.
 :::
+
+Windows counts in this way, and this course does too. So
+1 MB = 1024 × 1024 bytes.
 
 A **texture** is an image on the surface of an object in a game, for example
 the fur of a pet. Textures usually take the biggest part of a game's memory.
@@ -189,11 +192,12 @@ $$\text{memory of a texture} = \text{width} \times \text{height} \times 4 \text{
 ::: {.callout-note title="Example 3.4 — The memory of one texture"}
 A texture has 1024 × 1024 pixels.
 
-1. Pixels: $1024 \times 1024 = 1\,048\,576$, about 1 million.
-2. Memory: about 1 million $\times$ 4 bytes = about **4 MB**.
+1. Pixels: $1024 \times 1024$, about 1 million.
+2. Memory: $1024 \times 1024 \times 4$ bytes. $1024 \times 1024$ bytes is
+   1 MB, so the texture needs **4 MB**.
 3. Phones can use *compressed* texture formats, such as ASTC, with about
-   1 byte per pixel. Then the texture needs about **1 MB**.
-4. For 40 textures: about 160 MB without compression, and about 40 MB with
+   1 byte per pixel. Then the texture needs **1 MB**.
+4. For 40 textures: 160 MB without compression, and 40 MB with
    compression.
 :::
 
@@ -246,9 +250,9 @@ time.)
 
 ::: {.callout-note title="Example 3.5 — Pocket Pets in storage"}
 On one phone, *Pocket Pets* uses: app 1.1 GB, downloaded islands 2.4 GB,
-saved progress 2 MB, cache 300 MB.
+saved progress 2 MB, cache 300 MB (about 0.3 GB).
 
-1. Total: $1.1 + 2.4 + 0.3 = 3.8$ GB (the 2 MB of progress is very small).
+1. Total: $1.1 + 2.4 + 0.3$ = about 3.8 GB (the 2 MB of progress is very small).
 2. **Clear cache** frees 300 MB. Nothing important is lost: the game creates
    the files again when it needs them.
 3. **Clear storage** (Android) deletes the user data: the islands and the
@@ -256,8 +260,9 @@ saved progress 2 MB, cache 300 MB.
 :::
 
 A new laptop has a "1 TB" SSD, but Windows shows about 931 GB. No space is
-missing. The maker counts 1 GB = 1000 MB, but Windows counts 1 GB = 1024 MB,
-so the same space gives a smaller number. On a phone, the "missing" space has
+missing. The maker of the drive counts in steps of 1000 (1 TB = 1000 GB), but
+Windows counts in steps of 1024 (1 TB = 1024 GB). So the same space gives a
+smaller number in Windows. On a phone, the "missing" space has
 another reason: the operating system itself uses part of the storage.
 
 ::: {.callout-warning title="Common mistake"}
@@ -314,8 +319,8 @@ solid-state disks).
 4. Put in order from fastest to slowest: RAM, cache, hard disk, flash storage.
 5. The game reads 100 values: 80 from the cache (1 ns each) and 20 from RAM
    (100 ns each). What is the total time?
-6. A texture has 512 × 512 pixels and 4 bytes per pixel. About how much
-   memory does it need?
+6. A texture has 512 × 512 pixels and 4 bytes per pixel. How much memory
+   does it need? (Hint: 512 × 512 × 4 = 1024 × 1024.)
 7. A player says: "The PNG file is 1 MB, so the texture uses 1 MB of memory."
    What is wrong?
 8. What does a player lose with Clear cache? And with Clear storage?
@@ -330,7 +335,7 @@ solid-state disks).
 3. Efficiency cores do light work with little energy, so the battery lasts longer.
 4. Cache, RAM, flash storage, hard disk.
 5. 80 × 1 + 20 × 100 = 80 + 2000 = 2080 ns.
-6. 512 × 512 = 262 144 pixels; × 4 = about 1 MB.
+6. 512 × 512 × 4 bytes = 1024 × 1024 bytes = 1 MB.
 7. The PNG is compressed only for storage. In memory, the texture is opened into pixels: 4 bytes per pixel.
 8. Clear cache: nothing important (temporary files). Clear storage: the user data (progress and downloaded levels).
 9. Storage and memory (RAM). The island's textures are still being copied from storage into RAM, so the game first shows simple, blurry versions.

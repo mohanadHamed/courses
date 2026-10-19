@@ -228,6 +228,10 @@ def check(project_dir):
             n["slides"] = s["slides"]
             for f in sorted(page["sim_files"] - s["sim_files"]):
                 warnings.append("%s: %s is on no slide (\"Live demo\" or Game challenge)" % (rel, f))
+            lesson_dir = os.path.dirname(path)
+            for f in sorted(s["sim_files"]):
+                if not os.path.exists(os.path.join(lesson_dir, re.sub(r"\.html$", ".gif", f))):
+                    warnings.append("%s: %s has no recording for the slides (shared/sims/recordings)" % (rel, f))
             for f in sorted(page["challenge_sims"] - s["challenge_sims"]):
                 warnings.append("%s: the game %s is not on the Game challenge slide" % (rel, f))
         else:

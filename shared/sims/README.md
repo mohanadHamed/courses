@@ -19,3 +19,18 @@
 ```bash
 quarto typst compile --root . --input svg=/courses/game-math/week-01/sims/grid-position.svg shared/sims/export-poster.typ courses/game-math/week-01/sims/grid-position.png --ppi 200
 ```
+
+## Recordings for the slides
+
+The slides show a short GIF of each simulator or mini-game being played, next
+to its QR code (`sims/<name>.gif` next to `sims/<name>.html`).
+
+1. Write `recordings/scenarios/<name>.js`: plain JavaScript that plays the
+   game in the page (`wait(ms)`, `click(selector)`, `tap(element, x, y)`).
+2. Add one line to `recordings/record-all.sh` (page, seconds, output GIF;
+   `window` for 3D scenes).
+3. Start a server for the repository: `python3 -m http.server 4323`.
+4. Run `sh shared/sims/recordings/record-all.sh <name>`.
+
+`record.ts` (Deno, comes with Quarto) drives Google Chrome and takes the
+frames; `make-gif.swift` (macOS) joins them into a looping GIF.

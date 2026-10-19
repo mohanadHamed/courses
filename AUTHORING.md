@@ -416,6 +416,19 @@ Second question.
   numbers are in the box or the section above), no changing state, exactly one
   right option per question, the words of the lesson, varied questions (no
   near-duplicates), tried in `quarto preview --profile review`.
+- **Every fact a question needs is on the page.** If a question uses a fact
+  from the notes (an example, a table, a name such as "Alpha" or "the Switch"),
+  the page section shows it too, in a bullet or a figure. When notes or pages
+  are shortened, check the questions again.
+- **No question depends on another one.** Repeat the numbers in each question
+  ("The same enemy E = (2, 7) and player P = (6, 4) …"); the student may answer
+  in any order.
+- **The Game challenge box repeats the key facts** of the story in its first
+  line (names, coordinates, sizes), so the box can be answered without
+  scrolling back. Names in the questions also appear in the game and its
+  poster (Alpha and Beta are labelled on the map).
+- **Every slide question can be answered from the slides** (the concept slide
+  bullets, a table slide or the Game challenge slide).
 - Filter: `_extensions/lesson/match.lua`; behaviour in `lesson-script.html`.
 
 ## Interactive slides
@@ -436,9 +449,10 @@ Slides are for a conversation with the class.
   A table slide has no other text (put a short note in the title).
   Never put `.reveal` or `.answer` inside columns.
 - One "Live demo · …" slide per simulator or mini-game (same `{{< sim >}}`
-  shortcode: poster + large QR code).
-- Game challenge: one slide with the story in keywords (and its
-  illustration), then one "Try it" slide (harder, 2–3 questions).
+  shortcode: the recording of the game being played + a large QR code).
+- Game challenge: one slide with the game itself (its recording + QR code,
+  `{{< sim … kind="game" >}}`), then one "Try it" slide (harder, 2–3
+  questions) whose first line gives the key facts of the story in keywords.
 - Filter: `_extensions/lesson/slides.lua`. Look and animations: `pptx_finish.py`.
   Check a deck in PowerPoint's Slide Show before class.
 
@@ -450,6 +464,21 @@ Slides are for a conversation with the class.
 
 ## Simulators
 
+- **A recording on every slide with a QR code.** Every simulator and
+  mini-game that appears on a slide has a short GIF of it being played,
+  `sims/<name>.gif` next to `sims/<name>.html`; the slides show it next to the
+  QR code instead of the poster (`recording="sims/x.gif"` chooses another
+  one). Make it with `shared/sims/recordings/`: a scenario that plays the game
+  (`scenarios/<name>.js`), one line in `record-all.sh`, then
+  `sh shared/sims/recordings/record-all.sh <name>`. Keep it 7–11 s and under
+  about 500 KB. `check_size.py` warns when a slide's simulator has no
+  recording. Record again when the simulator changes.
+- **Robust game loops.** `requestAnimationFrame` first, then draw inside
+  `try/catch`, so one failed frame never stops the game. Clamp times computed
+  from the frame time (`Math.max(0, now − start)`): the frame time can be a
+  little *before* the click that started an animation. Never decide a result
+  only while drawing (a hidden tab draws nothing): use a timer as well. Never
+  ignore a click silently: a button that cannot act now says why.
 - Plain HTML + JavaScript. No paid services, no external APIs, nothing loaded
   from the internet. Third-party libraries are copied into `shared/sims/vendor/`
   with their license (three.js r170, MIT). Must work on a phone (pointer
@@ -636,6 +665,13 @@ Lessons or homework not ready for students: `draft: true` (not published).
   mini-game of its core part in the page's Game challenge, with its QR code
   in the notes and on the Game challenge slide (rule "The game of the
   lesson").
+- 2026-10-20: the slides now show a GIF recording of each game or simulator
+  being played next to its QR code, so the whole class sees the
+  demonstration (rule "A recording on every slide with a QR code").
+- 2026-10-20 (after release): Comet Courier sometimes did not animate (a
+  negative frame index stopped its draw loop), and some questions used facts
+  that the shortened pages no longer showed (Alpha and Beta, the console
+  example, typical file sizes). Rules added under "Try it" and "Simulators".
 - 2026-10-19 (level check): the students' level is very basic. The most the
   lessons can be simplified without losing the ILOs and PLOs was estimated at
   about 30 %; the lessons are now about 20 % simpler, and topics that no

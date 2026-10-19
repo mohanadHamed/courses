@@ -104,6 +104,7 @@ export function createViewer(el, opts = {}) {
       ctx.fillStyle = color;
       ctx.textBaseline = "middle";
       ctx.fillText(t, 12, canvas.height / 2 + 2);
+      tex.dispose();          // the canvas size may have changed: upload a new texture
       tex.needsUpdate = true;
       sprite.scale.set(size * (w / canvas.height), size, 1);
     };

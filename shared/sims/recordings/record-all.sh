@@ -30,6 +30,7 @@ juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-medi
 sound-stage|courses/digital-media/week-01/sims/sound-stage.html|8|courses/digital-media/week-01/sims/sound-stage.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
+hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Hiring Desk</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .stage { color: var(--sim-accent); }
+    .sim .hud .score { margin-left: auto; font-variant-numeric: tabular-nums; }
+    .sim .card { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 14px; padding: 12px 14px; min-height: 92px; }
+    .sim .card .who { display: inline-block; font-size: .8rem; font-weight: 800; color: #fff; background: var(--sim-accent); border-radius: 999px; padding: 2px 10px; margin-bottom: 6px; }
+    .sim .card .text { font-size: 1.12rem; font-weight: 800; line-height: 1.35; }
+    .sim .card .ask { font-size: .9rem; color: var(--sim-muted); margin-top: 4px; font-weight: 600; }
+    .sim .timebar { height: 8px; border-radius: 4px; background: #ffe8d6; margin: 8px 0 10px; overflow: hidden; }
+    .sim .timebar div { height: 100%; width: 100%; background: var(--sim-accent2); }
+    .sim .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+    .sim .opts button { text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 700; padding: 9px 12px; line-height: 1.25; }
+    .sim .opts button b { color: var(--sim-accent); margin-right: 4px; }
+    .sim .opts button.good { background: #d3f9d8; border-color: #2b8a3e; }
+    .sim .opts button.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .people { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+    .sim .person { text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; padding: 10px 12px; font-weight: 600; }
+    .sim .person h2 { font-size: 1.05rem; margin: 0 0 6px; }
+    .sim .person table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+    .sim .person td { padding: 2px 0; }
+    .sim .person td + td { text-align: right; font-weight: 800; }
+    .sim .person td.low { color: #c92a2a; }
+    .sim .person.good { background: #d3f9d8; border-color: #2b8a3e; }
+    .sim .person.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+    .sim .done { font-size: 1.1rem; font-weight: 800; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Pixel Harbor · Hiring Desk</h1>
+  <div class="hud"><span class="stage" id="stage"></span><span id="streak"></span><span class="score" id="score">Score 0</span></div>
+  <div class="card" id="card"></div>
+  <div class="timebar" id="timebar"><div id="time"></div></div>
+  <div id="opts"></div>
+  <div class="controls"><button id="next" type="button" hidden>Next ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const AREAS = ["information and data", "communication and collaboration", "digital content creation", "safety", "problem solving"];
+  const GROUPS = ["foundation (1–2)", "intermediate (3–4)", "advanced (5–6)", "highly specialised (7–8)"];
+  const LEVEL = { f: "foundation", i: "intermediate", a: "advanced" };
+  // Stage 1: the first three cards are the story of the lesson, in this order.
+  const STORY = [
+    { who: "Game tester", text: "Write bug reports in a shared tracker.", area: 1 },
+    { who: "Marketing assistant", text: "Make short videos for social media.", area: 2 },
+    { who: "Everyone", text: "Sign in with a code on the phone.", area: 3 } ];
+  const MORE = [
+    { who: "Game tester", text: "Sort the day's bugs in a spreadsheet.", area: 0 },
+    { who: "Marketing assistant", text: "Check if a forum post about a new phone is reliable.", area: 0 },
+    { who: "Marketing assistant", text: "Reply politely to players on social media.", area: 1 },
+    { who: "Game tester", text: "Share the test plan with the team in a cloud folder.", area: 1 },
+    { who: "Marketing assistant", text: "Check the licence of a free sound effect for a trailer.", area: 2 },
+    { who: "Game tester", text: "Record and cut a short video of a bug.", area: 2 },
+    { who: "Everyone", text: "Handle player data responsibly.", area: 3 },
+    { who: "Everyone", text: "Lock the screen before leaving the desk.", area: 3 },
+    { who: "Game tester", text: "Learn a new bug tracker alone.", area: 4 },
+    { who: "Game tester", text: "Find out why the game will not install on one phone.", area: 4 } ];
+  // Stage 2: what candidates say about themselves.
+  const SAYS = [
+    ["I can share a file, but only when a friend explains each step.", "I make a simple chart only with help."],
+    ["I make charts in a spreadsheet alone.", "I edit a short video alone, with no help."],
+    ["I train my colleagues in a new tool.", "I help others choose the right tool for each task."],
+    ["I lead data protection for a whole company and solve new, hard problems.", "I write the safety rules for a big studio and guide other experts."] ];
+  // Stage 3: hire one of two candidates.
+  const HIRE = [
+    { job: "Game tester", needs: "bug reports (communication), bug videos (content creation), bug spreadsheets (information). Level: intermediate or more.",
+      people: [
+        { name: "Omar", rows: [["programming", "a"], ["communication", "f"], ["content creation", "f"], ["information", "f"]] },
+        { name: "Lina", rows: [["programming", "-"], ["communication", "i"], ["content creation", "i"], ["information", "i"]] } ],
+      right: 1, why: "The tester needs communication, content creation and information at intermediate. Programming is not on the list." },
+    { job: "Marketing assistant", needs: "short videos (content creation), replies to players (communication), player data (safety). Level: intermediate or more.",
+      people: [
+        { name: "Sami", rows: [["content creation", "a"], ["communication", "i"], ["safety", "f"]] },
+        { name: "Dana", rows: [["content creation", "i"], ["communication", "i"], ["safety", "i"]] } ],
+      right: 1, why: "Sami is at foundation in safety, but the job handles player data. Dana has every area at intermediate." } ];
+  const STAGES = ["Stage 1 · Sort the job adverts", "Stage 2 · Read the candidates", "Stage 3 · Hire"];
+  const SECONDS = 15;
+  const $ = (id) => document.getElementById(id);
+  const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  let rounds = [], stage = 0, i = 0, score = 0, streak = 0, locked = false, timer = 0, started = 0, last = ["", ""];
+
+  function plan() {
+    rounds = [
+      STORY.concat(shuffle(MORE).slice(0, 5)),
+      shuffle(SAYS.map((list, g) => ({ text: list[Math.floor(Math.random() * list.length)], group: g }))),
+      HIRE ];
+  }
+  function say(t, k) { last = [t, k]; $("msg").textContent = t; $("msg").className = "message " + (k || ""); }
+  function hud() {
+    $("score").textContent = "Score " + score;
+    $("streak").textContent = streak >= 2 ? "Streak ×" + streak : "";
+  }
+  function startTimer() {
+    const bar = $("time");
+    bar.style.transition = "none"; bar.style.width = "100%";
+    $("timebar").hidden = false;
+    started = Date.now();
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      try { bar.style.transition = `width ${SECONDS}s linear`; bar.style.width = "0%"; } catch (e) { /* the timer below still decides */ }
+    }));
+    clearTimeout(timer);
+    timer = setTimeout(() => answer(-1, null), SECONDS * 1000);
+  }
+  function stopTimer() {
+    clearTimeout(timer);
+    const bar = $("time"), w = getComputedStyle(bar).width;
+    bar.style.transition = "none"; bar.style.width = w;
+  }
+  function show() {
+    locked = false; $("next").hidden = true; say("");
+    const list = rounds[stage], r = list[i];
+    $("stage").textContent = `${STAGES[stage]} · ${i + 1}/${list.length}`;
+    const opts = $("opts"); opts.innerHTML = "";
+    if (stage < 2) {
+      opts.className = "opts";
+      $("card").innerHTML = stage === 0
+        ? `<span class="who">${r.who}</span><div class="text">${r.text}</div><div class="ask">Which DigComp area does this task need?</div>`
+        : `<span class="who">Candidate</span><div class="text">“${r.text}”</div><div class="ask">Which proficiency group is this?</div>`;
+      (stage === 0 ? AREAS : GROUPS).forEach((t, k) => {
+        const b = document.createElement("button"); b.type = "button";
+        b.innerHTML = stage === 0 ? `<b>${k + 1}</b>${t}` : t;
+        b.addEventListener("click", () => answer(k, b));
+        opts.appendChild(b);
+      });
+      startTimer();
+    } else {
+      $("timebar").hidden = true;
+      opts.className = "people";
+      $("card").innerHTML = `<span class="who">Job: ${r.job}</span><div class="text">Needs ${r.needs}</div><div class="ask">Tap the candidate you hire.</div>`;
+      r.people.forEach((p, k) => {
+        const b = document.createElement("button"); b.type = "button"; b.className = "person";
+        b.innerHTML = `<h2>${p.name}</h2><table>${p.rows.map(([a, l]) =>
+          `<tr><td>${a}</td><td class="${l === "f" ? "low" : ""}">${LEVEL[l] || "none"}</td></tr>`).join("")}</table>`;
+        b.addEventListener("click", () => answer(k, b));
+        opts.appendChild(b);
+      });
+    }
+  }
+  function answer(k, btn) {
+    if (locked) { if (btn && !last[0].endsWith("Tap Next ▶.")) say(last[0] + " Tap Next ▶.", last[1]); return; }
+    locked = true;
+    if (stage < 2) stopTimer();
+    const r = rounds[stage][i];
+    const right = stage === 0 ? r.area : stage === 1 ? r.group : r.right;
+    const names = stage === 0 ? AREAS : stage === 1 ? GROUPS : r.people.map((p) => p.name);
+    const buttons = [...$("opts").children];
+    if (k === right) {
+      streak++;
+      const bonus = stage < 2 ? Math.max(0, Math.round(5 * (1 - (Date.now() - started) / (SECONDS * 1000)))) : 0;
+      score += 10 + bonus + (streak >= 3 ? 2 : 0);
+      btn.classList.add("good");
+      say("✓ Right" + (stage === 2 ? ". " + r.why : ": " + names[right] + "."), "good");
+    } else {
+      streak = 0;
+      if (btn) btn.classList.add("bad");
+      buttons[right].classList.add("good");
+      say((k === -1 ? "⏱ Time! " : "✗ ") + (stage === 2 ? "Hire " + names[right] + ". " + r.why : "It is " + names[right] + "."), "bad");
+    }
+    hud();
+    $("next").hidden = false;
+  }
+  function finish() {
+    const max = (rounds[0].length + rounds[1].length) * 15 + rounds[2].length * 10;
+    $("stage").textContent = "Done";
+    $("card").innerHTML = `<div class="done">🏁 Pixel Harbor has its new team! Score ${score}</div><div class="ask">Your best possible score is about ${max}. Tap Restart for new cards.</div>`;
+    $("opts").innerHTML = ""; $("timebar").hidden = true; $("next").hidden = true; say("");
+    try { const best = Math.max(score, +localStorage.getItem("hiring-desk-best") || 0); localStorage.setItem("hiring-desk-best", best); say("Your best score in this browser: " + best, "good"); } catch (e) { /* no storage: fine */ }
+  }
+  function intro() {
+    $("stage").textContent = "Ready?";
+    $("card").innerHTML = `<span class="who">Pixel Harbor is hiring</span><div class="text">A game tester and a marketing assistant.</div><div class="ask">Sort 8 tasks into DigComp areas, read 4 candidates, then hire 2 people. You have ${SECONDS} seconds for each card.</div>`;
+    $("opts").innerHTML = ""; $("timebar").hidden = true;
+    $("next").textContent = "Start ▶"; $("next").hidden = false; stage = -1;
+  }
+  $("next").addEventListener("click", () => {
+    $("next").textContent = "Next ▶";
+    if (stage < 0) { stage = 0; i = 0; return show(); }
+    i++;
+    if (i >= rounds[stage].length) { i = 0; stage++; }
+    if (stage >= rounds.length) return finish();
+    show();
+  });
+  $("restart").addEventListener("click", () => { clearTimeout(timer); plan(); stage = 0; i = 0; score = 0; streak = 0; hud(); $("next").textContent = "Next ▶"; show(); });
+  plan(); hud(); intro();
+})();
+</script>
+</body>
+</html>

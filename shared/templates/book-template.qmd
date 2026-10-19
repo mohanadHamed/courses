@@ -1,0 +1,96 @@
+---
+# Copy to courses/<slug>/week-NN/lesson-NN-book.qmd. Lesson notes (PDF): the
+# main study text, written FIRST, like a chapter of the course textbook.
+# Formal academic English. One numbered section per concept; never repeat a
+# concept. Size: see "Size every lesson" in AUTHORING.md (check_size.py).
+#   60 min: 3–4 sections, 1 500–3 500 words, 2+ examples, 6–10 exercises.
+#   90 min: 5–7 sections, 2 500–6 000 words, 4+ examples, 10–16 exercises.
+title: "Lesson title, as in schedule.yml"
+description: "Lesson notes · One sentence that lists the sections."
+week: 1
+lesson: 1          # numbered across the course
+draft: true
+ilos: [A1]         # codes from the syllabus week; text comes from course.ilos
+format: lesson-typst
+---
+
+::: {.lead}
+Opening paragraph: why this topic matters in games, and what the chapter covers.
+:::
+
+## Key terms
+
+{{< glossary term1 term2 term3 term4 term5 term6 term7 term8 >}}
+
+## 1.1 First concept
+
+Formal explanation. A figure for every section:
+
+![Caption as a full sentence.](images/name.png){#fig-name width=80%}
+
+As @fig-name shows, …
+
+::: {.callout-important title="Definition 1.1 — Term"}
+A precise definition.
+:::
+
+::: {.callout-note title="Example 1.1 — Short title"}
+A worked example with numbered steps.
+
+1. First step, with the numbers.
+2. Second step.
+3. The result in **bold**.
+:::
+
+::: {.callout-warning title="Common mistake"}
+The typical error and why it is wrong.
+:::
+
+::: {.callout-caution title="In game code"}
+A short C# example to read (explain every code word).
+
+```csharp
+Vector3 position = new Vector3(1f, 2f, 4f);
+```
+:::
+
+| Column | Column |
+|---|---|
+| value | value |
+
+: Table caption. {#tbl-name}
+
+## 1.2 A different concept
+
+…
+
+{{< sim file="sims/name.html" poster="sims/name.png" title="What it shows" kind="game" >}}
+
+<!-- Only in the 1–2 lessons named in plan.md (D1 weeks):
+::: {.callout-note title="Team activity"}
+Roles, the product and the presentation, in a few lines.
+
+*Working alone:* the individual alternative.
+:::
+-->
+
+## Case study: Game name
+
+The made-up game or studio of the Game challenge, with fixed numbers, and an
+illustration of its screen.
+
+## Further reading
+
+Textbook (course.textbook), chapter and sections that match this lesson.
+
+## Exercises
+
+1. Exercise on §1.1.
+2. Exercise on §1.2.
+
+## Answers to the exercises
+
+::: {.answers}
+1. Short answer.
+2. Short answer.
+:::

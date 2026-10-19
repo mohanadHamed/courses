@@ -1,13 +1,13 @@
 ---
-# Copy to courses/<slug>/week-NN/lesson-NN-slides.qmd. Remove `draft` after review.
-# Teacher slides: keywords and pictures only. No long sentences.
-# About 28–36 slides for 90 min (game-math), 13–18 for 60 min (computing-systems),
-# title slide not counted. check_size.py warns when a deck is too short.
-# One slide for every Try it, Example and Watch out of the lesson and the Game
-# challenge story, Think slides
-# before new ideas, one Live demo per simulator. See "Interactive slides" in AUTHORING.md.
+# Copy to courses/<slug>/week-NN/lesson-NN-slides.qmd. The CLASS part of the
+# lesson: 12–16 slides for 60 min, 22–28 for 90 min (title not counted), so
+# the teacher has time to explain. One Try it slide per section, 2–3 questions;
+# one Game challenge story slide + one Try it slide.
+# Every concept slide has a picture: picture + text ALWAYS in columns (or the
+# slide is split in two). A table slide has no other text. Never put
+# .reveal or .answer inside columns. One "Live demo" slide per simulator.
 title: "Lesson title"
-subtitle: "Week N · Lecture N"
+subtitle: "Week N · Lecture"
 draft: true
 format: lesson-pptx
 ---
@@ -15,19 +15,6 @@ format: lesson-pptx
 ## Keywords
 
 {{< glossary term1 term2 term3 >}}
-
-## Try it 1 · Warm-up: lesson N
-
-<!-- Lesson B in game-math: the warm-up Try it of the lesson. -->
-
-a) Quick question
-
-b) Quick question
-
-::: {.answer}
-a) answer
-b) answer
-:::
 
 ## Think · A question before the idea
 
@@ -37,14 +24,17 @@ One short question. **What do you think?**
 The answer: it pops in when the teacher clicks.
 :::
 
-## Idea
+## 1.1 First concept
 
+:::: {.columns}
+::: {.column width="38%"}
 - keyword
 - keyword
-
-## Picture
-
-![](sims/name.png)
+:::
+::: {.column width="62%"}
+![](images/name.png)
+:::
+::::
 
 ## Example · Short title
 
@@ -59,10 +49,13 @@ The answer: it pops in when the teacher clicks.
 - the mistake
 - the right way
 
-## Try it 2 · Short title
+## Live demo · Name
+
+{{< sim file="sims/name.html" poster="sims/name.png" title="What it shows" kind="game" >}}
+
+## Try it 1 · Short title
 
 a) First question
-
 b) Second question
 
 ::: {.answer}
@@ -70,38 +63,18 @@ a) first answer
 b) second answer
 :::
 
-## Think · Think first, then see
-
-What happens next?
-
-::: {.reveal}
-- step 1 (one click)
-- step 2 (one click)
-:::
-
-## Live demo
-
-<!-- One "Live demo" slide per simulator in the lesson: poster + QR code for students. -->
-{{< sim file="sims/name.html" poster="sims/name.png" title="Simulator title" >}}
-
 ## Game challenge · Game name
 
-<!-- The story in keywords, then one slide per challenge Try it. -->
-
-- the game in 3–4 keywords
-- work **alone** · answer each part
-
-## Try it 5 · First part
-
-a) Question
-
-b) Question
-
-::: {.answer}
-a) answer
-b) answer
+:::: {.columns}
+::: {.column width="50%"}
+- the story in keywords
+- work **alone**
 :::
+::: {.column width="50%"}
+![](images/game-screen.png)
+:::
+::::
 
 ## Summary
 
-- keyword
+- keyword per section

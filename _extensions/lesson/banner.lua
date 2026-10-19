@@ -65,7 +65,8 @@ local function page_chips(meta, course)
 end
 
 local function ilo_title(meta)
-  return meta.homework and "This homework practises" or "Today you will learn"
+  if meta.homework then return "This homework practises" end
+  return "Intended learning outcomes"
 end
 
 -- HTML --------------------------------------------------------------------
@@ -75,9 +76,14 @@ local function html_lesson(doc, course)
   local stem = pandoc.path.split_extension(pandoc.path.filename(quarto.doc.input_file))
   local dir = pandoc.path.directory(quarto.doc.input_file)
 
+  -- Lesson: the PDF is the lesson notes (lesson-NN-book.qmd), the main study text.
   -- Homework PDF is the printed page itself (homework_pdf.py), so both match.
-  local buttons = { string.format(
-    '<a class="hero-btn" href="%s.pdf"%s>⬇ Download PDF</a>', esc(stem), meta.homework and " download" or "") }
+  local buttons = {}
+  if meta.homework then
+    table.insert(buttons, string.format('<a class="hero-btn" href="%s.pdf" download>⬇ Download PDF</a>', esc(stem)))
+  elseif file_exists(pandoc.path.join({ dir, stem .. "-book.qmd" })) then
+    table.insert(buttons, string.format('<a class="hero-btn" href="%s-book.pdf">⬇ Lesson notes (PDF)</a>', esc(stem)))
+  end
   if meta.homework then
     table.insert(buttons,
       '<button type="button" class="hero-btn hero-btn-ghost" onclick="window.print()">🖨 Print homework</button>')
@@ -115,7 +121,7 @@ local function html_lesson(doc, course)
     desc ~= "" and ('<p class="hero-sub">' .. esc(desc) .. "</p>") or "",
     table.concat(chip_html, ""),
     table.concat(buttons, ""),
-    slides and '<p class="hero-note">Slides are a short summary for class. Study from this page or the PDF.</p>' or "")
+    slides and '<p class="hero-note">Study from the lesson notes (PDF). Practise on this page. The slides are a short summary for revision.</p>' or "")
 
   local blocks = { pandoc.RawBlock("html", hero) }
   if meta.homework then
@@ -166,6 +172,46 @@ end
 
 local function raw(s) return pandoc.RawInline("typst", s) end
 
+-- website.site-url from _quarto.yml, with a final "/".
+local function site_url()
+  local root = quarto.project and quarto.project.directory or pandoc.system.get_working_directory()
+  local f = io.open(pandoc.path.join({ root, "_quarto.yml" }), "r")
+  if not f then return "" end
+  local text = f:read("a")
+  f:close()
+  local url = text:match('site%-url:%s*"([^"]+)"') or ""
+  if url ~= "" and not url:match("/$") then url = url .. "/" end
+  return url
+end
+
+-- Lesson notes (lesson-NN-book.qmd): a card with a QR code to the interactive lesson.
+local function web_lesson_card(meta)
+  local input = quarto.doc.input_file
+  local stem = pandoc.path.split_extension(pandoc.path.filename(input))
+  local web = stem:match("^(.-)%-book$")
+  if not web then return nil end
+  local root = quarto.project and quarto.project.directory or pandoc.system.get_working_directory()
+  local rel = pandoc.path.make_relative(pandoc.path.normalize(pandoc.path.directory(input)), pandoc.path.normalize(root))
+  local url = site_url() .. (rel ~= "." and (rel:gsub("\\", "/") .. "/") or "") .. web .. ".html"
+  return pandoc.RawBlock("typst", string.format([[
+#import "@preview/tiaoma:0.3.0": qrcode
+#block(width: 100%%, breakable: false, radius: 8pt, inset: 10pt, stroke: 0.6pt + accent.lighten(55%%))[
+  #grid(columns: (1fr, 2.4cm), column-gutter: 12pt, align: horizon,
+    [
+      #text(weight: "bold", fill: accent.darken(25%%))[Interactive lesson]
+      #v(1pt)
+      #text(size: 9.5pt)[These notes are the main study text of the lecture. The interactive lesson
+      practises the same sections with questions that give instant feedback, and runs the
+      simulators and mini-games marked with a QR code in the text.]
+      #v(1pt)
+      #text(size: 8.5pt, fill: luma(90))[#link(%s)]
+    ],
+    qrcode(%s, width: 2.3cm),
+  )
+]
+]], typst_string(url), typst_string(url)))
+end
+
 local function typst_lesson(doc, course)
   local meta = doc.meta
   -- Values for the title band in typst-template.typ (via typst-show.typ).
@@ -182,7 +228,8 @@ local function typst_lesson(doc, course)
   }
 
   local ilos = lesson_ilos(meta, course)
-  if #ilos == 0 then return {} end
+  local card = web_lesson_card(meta)
+  if #ilos == 0 then return card and { card } or {} end
   local rows = {}
   for _, i in ipairs(ilos) do
     table.insert(rows, string.format(
@@ -194,7 +241,7 @@ local function typst_lesson(doc, course)
   #text(weight: "bold", fill: accent.darken(15%%))[%s]
   #v(2pt)
 %s]
-]], ilo_title(meta), table.concat(rows, "  #v(2pt)\n"))) }
+]], ilo_title(meta), table.concat(rows, "  #v(2pt)\n"))), card }
 end
 
 -- Main --------------------------------------------------------------------

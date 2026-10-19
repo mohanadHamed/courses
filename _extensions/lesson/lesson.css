@@ -45,9 +45,12 @@ body:has(.lesson-hero) #title-block-header { display: none; }
 .hero-shapes i:nth-child(1) { width: 190px; height: 190px; right: -50px; top: -60px; }
 .hero-shapes i:nth-child(2) { width: 90px; height: 90px; right: 110px; bottom: -35px; }
 .hero-shapes i:nth-child(3) { width: 40px; height: 40px; right: 40px; bottom: 30px; background: color-mix(in srgb, var(--accent) 10%, transparent); }
-/* Arcade theme: a pixel grid. Circuit theme: thin lines. */
+/* Arcade theme: a pixel grid. Circuit theme: thin lines.
+   Studio theme: film-strip holes. Workshop theme: dots. */
 .theme-arcade.lesson-hero::before,
-.theme-circuit.lesson-hero::before {
+.theme-circuit.lesson-hero::before,
+.theme-studio.lesson-hero::before,
+.theme-workshop.lesson-hero::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -66,6 +69,20 @@ body:has(.lesson-hero) #title-block-header { display: none; }
     repeating-linear-gradient(90deg, color-mix(in srgb, var(--accent) 50%, transparent) 0 2px, transparent 2px 40px),
     repeating-linear-gradient(0deg, color-mix(in srgb, var(--accent) 35%, transparent) 0 1px, transparent 1px 22px);
   mask-image: linear-gradient(90deg, transparent 40%, #000 100%);
+}
+.theme-studio.lesson-hero::before {
+  background-image:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--accent) 60%, transparent) 0 10px, transparent 10px 22px);
+  background-size: 100% 8px;
+  background-repeat: repeat-x;
+  background-position: 0 10px, 0 calc(100% - 10px);
+  mask-image: linear-gradient(90deg, transparent 30%, #000 100%);
+  opacity: 0.14;
+}
+.theme-workshop.lesson-hero::before {
+  background-image: radial-gradient(color-mix(in srgb, var(--accent) 60%, transparent) 1.5px, transparent 1.6px);
+  background-size: 18px 18px;
+  mask-image: linear-gradient(90deg, transparent 35%, #000 100%);
 }
 .hero-course {
   position: relative;
@@ -359,3 +376,38 @@ button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
   a { color: inherit !important; text-decoration: none !important; }
 }
 
+
+/* ---------- Course schedule ({{< schedule >}}) ---------- */
+.schedule { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.9rem; margin: 1rem 0 2rem; }
+.sw {
+  border-radius: 16px;
+  padding: 0.75rem 0.85rem 0.6rem;
+  background: #fbfbfa;
+  border: 1px solid #ececea;
+}
+.sw.has-ready {
+  background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--accent2) 12%, #fff));
+  border-color: color-mix(in srgb, var(--accent) 35%, #fff);
+  box-shadow: 0 12px 26px -20px var(--accent);
+}
+.sw-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; margin-bottom: 0.35rem; }
+.sw-week { font-size: 0.78rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #8b8f8c; }
+.sw.has-ready .sw-week { color: var(--accent); }
+.sw-hw {
+  font-size: 0.78rem; font-weight: 700; padding: 0.05rem 0.55rem; border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 10%, #fff); color: var(--accent-ink) !important; text-decoration: none;
+}
+.sl { display: grid; grid-template-columns: 2.1rem 1fr; gap: 0 0.5rem; padding: 0.45rem 0; border-top: 1px dashed #e6e6e3; }
+.sl:first-of-type { border-top: 0; }
+.sl-num { grid-row: span 2; font-weight: 800; font-size: 0.95rem; color: #b9bcba; padding-top: 0.05rem; }
+.sl-title { font-weight: 700; line-height: 1.3; }
+.sl.is-soon .sl-title { color: #a6aaa7; font-weight: 600; }
+.sl-soon { font-size: 0.78rem; color: #b0b3b1; font-style: italic; }
+.sl.is-ready .sl-num { color: var(--accent); }
+.sl.is-ready .sl-title { color: var(--accent-ink); }
+.sl-links { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.3rem; }
+.sl-links a { font-size: 0.82rem; font-weight: 800; text-decoration: none; border-radius: 9px; padding: 0.12rem 0.65rem; }
+.sl-go { background: var(--accent); color: #fff !important; box-shadow: 0 6px 14px -8px var(--accent); }
+.sl-file { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, #fff); color: var(--accent-ink) !important; }
+.sl.is-exam .sl-num { color: #9b6b00; }
+.sl.is-exam .sl-title { color: #6d5a2c; font-style: italic; }

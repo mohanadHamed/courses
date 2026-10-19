@@ -1,396 +1,295 @@
 ---
-title: "Math in games: where is everything?"
-description: "Math in game development. Coordinates in 2D and 3D."
+title: "Mathematics in Game Development and Coordinate Systems"
+description: "The game loop, one-, two- and three-dimensional coordinates, screen space and tile grids."
 week: 1
 lesson: 1
 ilos: [A1]
-format:
-  lesson-html: default
-  lesson-typst: default
+format: lesson-html
 ---
 
-## New words
+This page is the interactive version of the lesson notes (PDF). Each section
+summarises one concept and ends with one set of questions. The full
+explanations, all worked examples and the exercises are in the notes.
 
-{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d negative-number >}}
+## Key terms
 
-## 1. Math is inside every game
+{{< glossary game-loop frame-rate coordinate-system origin axis coordinate ordered-pair quadrant screen-space world-space tile-grid handedness >}}
 
-Open any mobile game. You see things move, turn, and appear.
-Behind every one of these, there is math.
+## 1.1 Mathematics in game development
 
-| In the game… | The math | We learn it in… |
-|---|---|---|
-| The player walks to a coin. | position and vectors | weeks 1–3 |
-| A cannon turns to aim. | angles (trigonometry) | week 4 |
-| A character grows or spins. | transformations (matrices) | weeks 5–7 |
-| "If health is 0, game over." | logic | weeks 9–10 |
-| A chest gives a random prize. | probability | weeks 11–13 |
+A game repeats the **game loop** — read input, update the state, render — once
+per **frame**. The state is only numbers, and the loop has a strict time
+budget: the **frame time** is 1000 / *f* milliseconds at *f* frames per second,
+so 16.7 ms at 60 fps.
 
-The computer must answer these questions many times every second.
-It does this with math.
+![The game loop.](images/game-loop.png){width=70%}
 
-Today we start with the first question in every game:
-**where is everything?**
+Each area of this course answers a question the loop asks in every frame:
+coordinates and vectors (*where is it, where does it go?*), trigonometry
+(*which way does it face?*), matrices (*how is the model placed?*), logic
+(*is the rule true?*) and probability (*what does chance decide?*).
 
-::: {.callout-tip title="Try it 1"}
-Match each game moment with its math. You can use an answer more than once.
+::: {.callout-tip title="Try it 1 · The frame budget"}
+Choose the right value or term. Round times to one decimal place.
 
-::: {.match}
-An enemy drops a rare sword only 1 time in 20.
-:   probability
+::: {.match extra="16.7 ms|read input|probability"}
+The frame time at 30 fps.
+:   33.3 ms
 
-The car is 5 steps to the right of the start.
-:   position
+The frame time at 120 fps.
+:   8.3 ms
 
-The door opens only if you have the key.
+The number of frames in 10 seconds at 60 fps.
+:   600
+
+The step of the loop that draws the image.
+:   render
+
+The step of the loop that applies the rules and the physics.
+:   update state
+
+The area of mathematics that decides whether a locked door opens.
 :   logic
-
-The tower turns to face the enemy.
-:   angle
-
-The hero grows two times bigger after a power-up.
-:   transformation
-
-A spin wheel gives a random prize.
-:   probability
 :::
 :::
 
-## 2. Every object has a position
+## 1.2 One-dimensional coordinates
 
-The computer does not see the screen like you.
-It only knows numbers.
+On a **number line**, a point is one number: its signed distance from the
+**origin**. Moving from *a* to *b* gives a **signed displacement** *b* − *a*
+(the sign is the direction) and a **distance** |*b* − *a*| (never negative).
+Board games use **discrete** positions (integers); physics games use
+**continuous** positions (`float`). A `float` keeps about seven significant
+digits, so far from the origin (around 100 000 units) positions can only
+change in visible steps and objects jitter. Large worlds keep the action near
+the origin with a **floating origin**.
 
-So each object has a **position**.
-In a flat (**2D**) game, a position is two numbers.
+![A runner game: the player goes back from x = 4 to the checkpoint at x = −3.](images/number-line.png){width=90%}
 
-![A 2D game world. The player is at (3, 2). A coin is at (7, 4).](sims/grid-position.png){width=85%}
+::: {.callout-tip title="Try it 2 · Moving along a line"}
+A player at *x* = 6 falls back to a checkpoint at *x* = −2.
 
-- The red line is the **x-axis**. It goes from left to right. x grows to the **right**.
-- The green line is the **y-axis**. It goes from down to up. y grows **up**.
-- The corner where they meet is the **origin**. There, x = 0 and y = 0.
+::: {.match extra="−4"}
+The player's signed displacement.
+:   −8
 
-Each axis is like a ruler. The numbers show the steps from the origin.
+The distance the player travels.
+:   8
 
-::: {.callout-tip title="Try it 2"}
-Look at the picture above (the grid with the player and the coin).
+A platform moves from *x* = −5 to *x* = −1. Its displacement.
+:   +4
 
-::: {.match extra="0|the origin"}
-What number is at the right end of the x-axis?
-:   10
+The kind of number line in which a character can stand at *x* = 3.27.
+:   continuous
 
-What number is at the top of the y-axis?
-:   6
+The kind of number line used for the squares of a board game.
+:   discrete
 
-Which axis goes from left to right?
-:   the x-axis
-
-Which axis goes from down to up?
-:   the y-axis
+The technique that moves a large world back towards the origin.
+:   floating origin
 :::
 :::
 
-## 3. Write a position: (x, y)
+## 1.3 The two-dimensional Cartesian coordinate system
 
-We write a 2D position like this: **(x, y)**.
-Each number is a **coordinate**.
+Two perpendicular axes meet at the origin: *x* grows to the right, *y* grows
+upward. A point is an **ordered pair** (*x*, *y*) — the order matters. The
+axes divide the plane into four **quadrants**, identified only by the signs of
+the coordinates; a point with a zero coordinate lies on an axis.
 
-- First number: **x**. Count to the right.
-- Second number: **y**. Count up.
+![The four quadrants and their sign patterns.](images/quadrants.png){width=62%}
 
-The player is at **(3, 2)**: 3 steps right, 2 steps up.
+{{< sim file="sims/grid-strike.html" poster="sims/grid-strike.png" title="Grid Strike: hit the coordinates" kind="game" height="600" >}}
 
-::: {.callout-note title="Example: find the position of the coin"}
-1. Start at the origin, (0, 0).
-2. Count the steps right to the coin: 7. So **x = 7**.
-3. Count the steps up to the coin: 4. So **y = 4**.
-4. Write x first, then y: the coin is at **(7, 4)**.
+::: {.callout-tip title="Try it 3 · Where is the point?"}
+Give the quadrant or the axis of each point, or the distance asked.
+
+::: {.match extra="quadrant I|positive x-axis"}
+(−5, 3)
+:   quadrant II
+
+(6, −0.5)
+:   quadrant IV
+
+(−2, −7)
+:   quadrant III
+
+(0, −4)
+:   negative y-axis
+
+The horizontal distance between (−3, 2) and (4, 2).
+:   7
 :::
+:::
+
+## 1.4 Screen space and world space
+
+The screen counts **pixels from the top-left corner**, and its *y* grows
+**downward**. The world counts units from an origin chosen by the designer,
+with *y* upward. With the camera centred on the world origin, a screen of
+*W* × *H* pixels and a scale of *s* pixels per unit:
+
+- world → screen: *x*~s~ = *W*/2 + *s*·*x*~w~, *y*~s~ = *H*/2 − *s*·*y*~w~
+- screen → world (a touch): *x*~w~ = (*x*~s~ − *W*/2) / *s*, *y*~w~ = (*H*/2 − *y*~s~) / *s*
+
+![The same point in world space and in screen space (*s* = 100).](images/screen-world.png){width=92%}
+
+Phones differ in resolution, so the scale is computed, not fixed: to show a
+play area *w* units wide on every phone, use *s* = *W* / *w*. A taller phone
+then simply shows more of the world above and below.
 
 ::: {.callout-note title="Watch out!"}
-Order is important! (3, 2) and (2, 3) are **different** places.
-Always write **x first**, then y.
+The minus sign in *y*~s~ = *H*/2 − *s*·*y*~w~ is what turns *y* around. With a
+plus sign, the world is drawn upside down.
 :::
 
-Some points are on an axis:
+::: {.callout-tip title="Try it 4 · Convert between the spaces"}
+A portrait phone: *W* = 1080, *H* = 1920, *s* = 100 pixels per unit, camera
+centred on the world origin.
 
-- y = 0: the point is **on the x-axis**. Example: (6, 0).
-- x = 0: the point is **on the y-axis**. Example: (0, 2).
+::: {.match extra="(640, 1160)|upward"}
+The pixel at the centre of the screen.
+:   (540, 960)
 
-Now try it. Move the player. Then press **Challenge** and catch the coin.
+The pixel where the world point (1, 2) is drawn.
+:   (640, 760)
 
-{{< sim file="sims/grid-position.html" poster="sims/grid-position.png" title="Move the player with x and y" height="500" >}}
+The pixel where the world point (−3, −1) is drawn.
+:   (240, 1060)
 
-::: {.callout-tip title="Try it 3"}
-Look at this picture. It does not change (the simulator does).
+The world point touched at the pixel (740, 1360).
+:   (2, −4)
 
-![The player is at (3, 2). Where is the coin?](sims/grid-position.png){width=70%}
+The direction in which screen *y* grows.
+:   downward
 
-::: {.match extra="(4, 7)|(3, 2)|the axis"}
-Where is the coin in this picture?
-:   (7, 4)
-
-In the simulator, move the player to (0, 0). What is this point called?
-:   the origin
-
-The player is at (3, 2). It moves 4 steps right. What is the new position?
-:   (7, 2)
-:::
-:::
-
-::: {.callout-tip title="Try it 4"}
-Write the position. Start at the origin each time.
-
-::: {.match extra="(2, 0)|(4, 0)"}
-3 steps right, 5 steps up
-:   (3, 5)
-
-5 steps right, 3 steps up
-:   (5, 3)
-
-6 steps right, 0 steps up
-:   (6, 0)
-
-0 steps right, 2 steps up
-:   (0, 2)
-
-On the y-axis, 4 steps up
-:   (0, 4)
+The scale that shows a board 9 units wide on this phone.
+:   120 pixels per unit
 :::
 :::
 
-## 4. Moving changes the numbers
+## 1.5 Discrete coordinates: grids and tile maps
 
-When an object moves, its position changes.
-But only **one number** changes for each direction.
+On a grid, a cell is a pair of integers: column *c* and row *r*, from 0.
+Memory is one-dimensional, so a grid with *n* columns is stored row after row
+(**row-major order**):
 
-| The object moves… | This number changes | It gets… |
-|---|---|---|
-| right | x | bigger (+) |
-| left | x | smaller (−) |
-| up | y | bigger (+) |
-| down | y | smaller (−) |
+- index of a cell: *i* = *r* × *n* + *c*
+- cell of an index: *c* = *i* mod *n* (the remainder), *r* = ⌊*i* / *n*⌋ (the whole part)
 
-::: {.callout-note title="Example: move the player"}
-The player is at (3, 2).
+![An 8-column board: each cell has (c, r) and an index i.](images/tile-index.png){width=80%}
 
-1. It moves **2 steps left**. x changes: 3 − 2 = 1. Now it is at **(1, 2)**.
-2. Then it moves **3 steps up**. y changes: 2 + 3 = 5. Now it is at **(1, 5)**.
-:::
+::: {.callout-tip title="Try it 5 · A match-3 board"}
+The board has 8 columns. In the last question, tiles are 2 units wide and row 0
+is the bottom row.
 
-What is on the left of the origin? The world does not stop there.
-Left of the origin, x is a **negative number** (it has a minus sign).
+::: {.match extra="column 2, row 3|11"}
+The index of the cell in column 2, row 4.
+:   34
 
-The player is at (1, 2). It moves 3 steps left: 1 − 3 = −2.
-Now the player is at **(−2, 2)**.
+The cell with index 19.
+:   column 3, row 2
 
-In many games, the origin is in the middle of the world.
-So negative numbers are normal in game positions.
+The index of the cell directly above index 19.
+:   27
 
-::: {.callout-note title="Watch out!"}
-Left and down make a number **smaller**. It can go below 0.
-:::
-
-::: {.callout-tip title="Try it 5"}
-The player is at (5, 3). Find the new position.
-
-::: {.match extra="(3, 3)|(5, 6)"}
-It moves 2 steps right.
-:   (7, 3)
-
-It moves 3 steps down.
-:   (5, 0)
-
-It moves 4 steps left.
-:   (1, 3)
-
-It moves 1 step up and 2 steps right.
-:   (7, 4)
-
-It moves 7 steps left.
-:   (−2, 3)
-:::
-:::
-
-## 5. From 2D to 3D: add z
-
-Many mobile games are **3D**. The world has depth.
-So we need a third number: **z**.
-
-![A 3D position. The player is at (4, 3, 2).](images/axes-3d.png){width=75%}
-
-A 3D position is **(x, y, z)**:
-
-- x → right (left is −)
-- y → up (down is −)
-- z → forward, into the screen (back is −)
-
-::: {.callout-note title="Example: reach (4, 3, 2)"}
-1. Walk **4** steps right. (x = 4)
-2. Walk **2** steps forward. (z = 2)
-3. Go **3** steps up. (y = 3)
-
-The order of the walk does not matter. The order of the **numbers** does: x, y, z.
-:::
-
-Now try it in 3D. Turn the world with your finger. Move the player.
-Then press **Challenge** and catch the coin in the air.
-
-{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" height="640" >}}
-
-::: {.callout-tip title="Try it 6"}
-Which number changes: x, y or z? You can use an answer more than once.
-
-::: {.match}
-The player walks to the right.
-:   x
-
-The player jumps up.
-:   y
-
-The player walks forward, into the screen.
-:   z
-
-The player falls down.
-:   y
-
-The player walks back, out of the screen.
-:   z
-:::
-:::
-
-::: {.callout-tip title="Try it 7"}
-A 3D player is at (4, 3, 2). Find the new position.
-
-::: {.match extra="(5, 3, 2)|(4, 3, 4)"}
-The player jumps up 1.
-:   (4, 4, 2)
-
-The player walks forward 5.
-:   (4, 3, 7)
-
-The player walks left 4.
-:   (0, 3, 2)
-
-The player walks back 2.
-:   (4, 3, 0)
-:::
-:::
-
-## 6. Position in game code
-
-Games are programs. The code must keep the position of every object.
-It keeps a 3D position as **three numbers together**: x, y and z.
-
-Here is game code. **Just read it today.**
-It is C#, the language of many games (for example, games made with Unity).
-
-```csharp
-// a 3D game: the player is at x = 4, y = 3, z = 2
-Vector3 playerPosition = new Vector3(4, 3, 2);
-
-// a 2D game: the coin is at x = 7, y = 4
-Vector2 coinPosition = new Vector2(7, 4);
-```
-
-- `Vector3` means "three numbers together": x, y, z.
-- `Vector2` means "two numbers together": x, y. 2D games use it.
-- `playerPosition` and `coinPosition` are names. We choose the names.
-- The numbers are in the same order as always: **x, y, z**.
-
-You will write code like this later, in *Programming Fundamentals (1)*.
-
-::: {.callout-tip title="Try it 8"}
-Read the code.
-
-::: {.match extra="4|a 3D position|at the origin"}
-`new Vector3(4, 3, 2)`: which number is z?
-:   2
-
-`new Vector2(7, 4)`: is this a 2D or a 3D position?
-:   a 2D position
-
-`new Vector3(0, 5, 0)`: where is the coin?
-:   5 steps up, straight above the origin
-:::
-:::
-
-## Game challenge: Coin Run {.challenge}
-
-Use everything from today. Work alone, at your own speed.
-Read the story, then answer each part.
-
-**Coin Run** is a mobile game. The player runs, jumps and collects coins.
-A cannon shoots at the player. Spikes end the game.
-There is a chest with a random prize. Each coin spins when you take it.
-
-::: {.callout-tip title="Try it 9 · Find the math in Coin Run"}
-Which math does the game use?
-
-::: {.match}
-The coin is at (7, 4).
-:   position
-
-The cannon turns to aim at the player.
-:   angle
-
-If the player touches the spikes, the game is over.
-:   logic
-
-The chest gives a gold coin only 1 time in 10.
-:   probability
-
-The coin spins and grows when you take it.
-:   transformation
-:::
-:::
-
-::: {.callout-tip title="Try it 10 · Play level 1 (2D)"}
-This is level 1. The picture does not change.
-
-![Level 1 of Coin Run. The player is at (3, 2). The coin is at (7, 4).](sims/grid-position.png){width=70%}
-
-::: {.match extra="(2, 3)|4|(5, 0)"}
-Where does the player start?
-:   (3, 2)
-
-The player walks right until x = 7. Where is it now?
-:   (7, 2)
-
-Then it jumps straight up to the coin. How many steps up?
-:   2
-
-A key is on the y-axis, 5 steps up. Where is the key?
-:   (0, 5)
-
-A spider is on the x-axis, 1 step left of the origin. Where is it?
-:   (−1, 0)
-:::
-:::
-
-::: {.callout-tip title="Try it 11 · Play level 2 (3D, harder)"}
-Level 2 is 3D. The player is at (2, 0, 1).
-
-::: {.match extra="(6, 0, 1)|2|6 steps up"}
-The player walks forward 4. Where is it now?
-:   (2, 0, 5)
-
-The player jumps up 3 (from the start). Where is it now?
-:   (2, 3, 1)
-
-The game code is `new Vector3(2, 0, 1)`. Which number is y?
+The index of the cell (0, 0).
 :   0
 
-A door is at (0, 0, 6). Where is it from the origin?
-:   6 steps forward
+The world position of the centre of tile (1, 0).
+:   (3, 1)
+:::
+:::
+
+## 1.6 The three-dimensional Cartesian coordinate system
+
+A 3D point is an **ordered triple** (*x*, *y*, *z*). In a world with *y* up,
+the ground is the *xz*-plane and *y* is the height. With *x* right and *y* up,
+*z* can point into the screen (**left-handed**, e.g. Unity) or towards the
+viewer (**right-handed**, e.g. Godot). Swapping two axes changes the
+handedness: Blender (right-handed, *z* up) → Unity (left-handed, *y* up) is
+(*x*, *y*, *z*) → (*x*, *z*, *y*).
+
+![Left-handed and right-handed coordinate systems.](images/handedness.png){width=86%}
+
+{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" height="640" >}}
+
+::: {.callout-tip title="Try it 6 · Positions in 3D"}
+The world has *y* up unless the question says otherwise.
+
+::: {.match extra="right-handed|(5, 1, 3)|z"}
+The coordinate that gives the height.
+:   y
+
+The plane of the ground.
+:   the xz-plane
+
+Where the point (2, 0, −7) lies.
+:   on the ground
+
+The handedness of Unity's coordinate system.
+:   left-handed
+
+The Blender point (3, 1, 5) in Unity.
+:   (3, 5, 1)
+
+What swapping two axes changes.
+:   the handedness
+:::
+:::
+
+## Game challenge: Harbor Guard {.challenge}
+
+Work alone. Use every section of today.
+
+**Harbor Guard** is a portrait tower-defence game for phones (1080 × 1920
+pixels, 60 fps). The camera is centred on the world origin with a scale of
+120 pixels per unit. The harbour is a grid of 9 columns of tiles. The player
+taps a tile to build a tower; the towers are 3D models made in Blender.
+
+![A screen of Harbor Guard: the player taps a tile of the harbour grid.](images/harbor-guard.png){width=42%}
+
+::: {.callout-tip title="Try it 7 · Taps and ships"}
+Use *s* = 120 and the screen centre (540, 960).
+
+::: {.match extra="(2, −2)|(900, 480)"}
+The frame time of the game.
+:   16.7 ms
+
+The world point touched at the pixel (300, 720).
+:   (−2, 2)
+
+The quadrant of that point.
+:   quadrant II
+
+The pixel where a ship at the world point (3, −4) is drawn.
+:   (900, 1440)
+:::
+:::
+
+::: {.callout-tip title="Try it 8 · Tiles and towers (harder)"}
+The harbour grid has 9 columns, stored in row-major order.
+
+::: {.match extra="column 0, row 4|(2, 3, 1.5)"}
+The index of the tile in column 4, row 6.
+:   58
+
+The tile with index 40.
+:   column 4, row 4
+
+A tower at (2, 3, 1.5) in Blender. Its position in Unity.
+:   (2, 1.5, 3)
+
+The height of that tower above the ground.
+:   1.5 units
 :::
 :::
 
 ## Summary {.summary}
 
-- Every game uses math. It starts with **position**.
-- 2D position: **(x, y)**. 3D position: **(x, y, z)**. Always x first.
-- x → right. y ↑ up. z → forward. Left, down and back are **negative** (−).
-- The **origin** is (0, 0) in 2D and (0, 0, 0) in 3D.
-- When an object moves, only the number for that direction changes.
-- In game code: `new Vector2(x, y)` (2D) and `new Vector3(x, y, z)` (3D).
+- The game loop runs once per frame; frame time = 1000 / fps ms.
+- 1D: displacement *b* − *a* has a sign; distance |*b* − *a*| does not.
+- 2D: ordered pair (*x*, *y*); the signs decide the quadrant.
+- Screen space: pixels from the top-left, *y* down; convert with the scale *s*.
+- Grids: *i* = *r* × *n* + *c*; back with mod and whole-number division.
+- 3D: (*x*, *y*, *z*); left- or right-handed; swapping two axes flips it.

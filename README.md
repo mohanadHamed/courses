@@ -5,11 +5,17 @@ diploma, Technical College, Al-Israa University.
 
 **Site:** <https://mohanadhamed.github.io/courses/>
 
-Each lesson is written once in Quarto and published as:
+Courses: Mathematics and Computing for Digital Games; Fundamentals of
+Computing Systems and Digital Platforms; Digital Media Technologies and
+Creative Production for Games; Digital Skills.
 
-- an interactive web page (with simulators),
-- a printable PDF (Typst; simulators become a picture + QR code),
-- teacher slides (PowerPoint).
+Each lesson has three parts, written in Quarto:
+
+- lesson notes (PDF, Typst): the main study text, like a textbook chapter,
+  with QR codes to the simulators and mini-games;
+- an interactive web page derived from the notes, with questions that check
+  answers at once, simulators and mini-games;
+- slides (PowerPoint): a visual summary for class and revision.
 
 ## Build locally
 

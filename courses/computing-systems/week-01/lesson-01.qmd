@@ -1,211 +1,205 @@
 ---
-title: "What runs your games?"
-description: "Computing systems and digital platforms in the games industry."
+title: "Computing Systems and Digital Platforms in the Games Industry"
+description: "The stored-program computer, the multilevel machine, classes of computers and digital platforms."
 week: 1
 lesson: 1
 ilos: [A1]
-format:
-  lesson-html: default
-  lesson-typst: default
+format: lesson-html
 ---
 
-## New words
+This page is the interactive version of the lesson notes (PDF). Each section
+summarises one concept and ends with one set of questions. The full
+explanations, worked examples and exercises are in the notes.
 
-{{< glossary hardware software input processing output storage cpu gpu platform >}}
+## Key terms
 
-## 1. A game is a computer at work
+{{< glossary computing-system hardware software von-neumann cpu memory storage instruction-cycle abstraction-level isa compiler digital-platform >}}
 
-Open a game on your phone. You tap. The player jumps. You hear a sound.
-Tomorrow, your score is still there.
+## 1.1 What a computing system is
 
-Your phone is a **computing system**. Every computing system does four jobs:
+A **computing system** combines hardware, software and data to perform four
+functions: **input**, **processing**, **storage** and **output**. Almost every
+computer follows the **stored-program (von Neumann) model**: the program is
+kept in memory like data. Its parts are the **CPU** (control unit, **ALU**,
+registers), the **main memory** (RAM: fast, volatile), the **I/O devices**
+including **storage** (flash: permanent), and the **bus** that connects them.
+The CPU repeats the **instruction cycle** — fetch, decode, execute — billions
+of times per second (3 GHz = 3 × 10^9^ ticks per second).
 
-![Input, processing, output and storage in a mobile game.](images/ipo-game.png){width=95%}
+![The stored-program (von Neumann) model.](images/von-neumann.png){width=82%}
 
-| Job | What it means | In a game |
-|---|---|---|
-| **Input** | Data goes **in**. | You tap the jump button. |
-| **Processing** | The device **works** with the data. | The game moves the player up. |
-| **Output** | The device gives data **out** to you. | You see the jump. You hear a sound. |
-| **Storage** | The device **keeps** data for later. | The game saves your score. |
+![The instruction cycle.](images/instruction-cycle.png){width=56%}
 
-A computer, a phone, a tablet and a game console all do these four jobs.
+{{< sim file="sims/one-frame.html" poster="sims/one-frame.png" title="Tap Runner: inside one frame" kind="game" height="600" >}}
 
-Now try it. Sort each card: input, processing, output or storage?
+::: {.callout-tip title="Try it 1 · Inside the computer"}
+Choose the right term or value.
 
-{{< sim file="sims/ipos-sort.html" poster="sims/ipos-sort.png" title="Sort it: input, processing, output or storage?" height="420" >}}
+::: {.match extra="registers|500 million"}
+The part of the CPU that performs arithmetic and comparisons.
+:   the ALU
 
-::: {.callout-tip title="Try it 1"}
-Input, processing, output or storage? You can use an answer more than once.
+The memory that loses its contents when the power is off.
+:   RAM
 
-::: {.match}
-You press the jump button.
-:   input
+The three steps that the CPU repeats for every instruction.
+:   fetch, decode, execute
 
-The phone vibrates when you lose.
-:   output
+The clock ticks available per frame for a 3 GHz core at 60 fps.
+:   50 million
 
-The game checks if the ball is in the goal.
-:   processing
-
-The game keeps your level for tomorrow.
+Saving the best score so that it survives a restart is this function.
 :   storage
 
-The music plays.
-:   output
+The design in which instructions and data share one memory.
+:   the stored-program model
 :::
 :::
 
-## 2. Hardware and software
+## 1.2 The computer as a multilevel machine
 
-A computing system has two sides:
+A processor understands only its machine language. Computers are therefore
+built as a stack of **levels of abstraction**, each with a more convenient
+language implemented by the level below: 0 digital logic, 1 microarchitecture,
+2 **instruction set architecture (ISA)**, 3 operating system machine,
+4 assembly language, 5 problem-oriented languages such as C#. A program moves
+down by **translation** (a **compiler** converts it before it runs) or
+**interpretation** (an **interpreter** executes it step by step). Phones use
+the **ARM** ISA, PCs and the PlayStation and Xbox use **x86-64**: the same C#
+game is translated for each.
 
-- **Hardware**: the parts you can touch. The screen, the battery, the chips.
-- **Software**: the programs. A game is software. Android is software too.
+![The levels a game passes through.](images/levels.png){width=72%}
 
-Software needs hardware to run. Hardware needs software to do something useful.
+![One C# game, translated for ARM and for x86-64.](images/build-targets.png){width=86%}
 
-Here are the main hardware parts. We learn each one in weeks 2–4.
+::: {.callout-tip title="Try it 2 · Levels and languages"}
+Choose the right level, program or ISA.
 
-| Part | Its job | In a game |
-|---|---|---|
-| **CPU** (processor) | Runs the steps of the program. | Game rules, enemies, score |
-| **GPU** (graphics processor) | Draws the pictures. | The 3D world, light, effects |
-| **Memory** (RAM) | Keeps the programs that run now. | The level you play now |
-| **Storage** | Keeps apps and files, also when the power is off. | The installed game, your saves |
-| **Input devices** | Bring data in. | Touch screen, buttons, microphone, sensors |
-| **Output devices** | Give data out. | Screen, speaker, vibration |
+::: {.match extra="digital logic"}
+The level at which hardware and software meet.
+:   the ISA
 
-::: {.callout-tip title="Try it 2"}
-Hardware or software? You can use an answer more than once.
+The level that provides files, processes and memory management.
+:   operating system machine
 
-::: {.match}
-the touch screen
-:   hardware
+The program that converts a whole program before it runs.
+:   compiler
 
-a racing game
-:   software
+The program that carries out another program instruction by instruction.
+:   interpreter
 
-Android
-:   software
+The ISA of almost all smartphones.
+:   ARM
 
-the battery
-:   hardware
-
-the speaker
-:   hardware
+The ISA of desktop PCs and of the PlayStation 5 and Xbox Series.
+:   x86-64
 :::
 :::
 
-::: {.callout-tip title="Try it 3"}
-Which part does this job?
+## 1.3 Classes of computing systems
 
-::: {.match extra="memory (RAM)|speaker"}
-It draws the 3D world of the game.
-:   GPU
+Games run on five classes of computers: **embedded** systems (controllers,
+toys), **mobile** devices (phones, tablets: battery, no fan), **personal
+computers**, **consoles** (fixed hardware tuned for games) and **servers** in
+data centres (online play, cloud gaming). They differ mainly in how much they
+compute and at what energy cost. Performance has grown for decades with
+**Moore's law**: the number of transistors per chip doubling about every two
+years.
 
-It keeps the game when you turn off the phone.
-:   storage
+![Five classes of computers.](images/computer-classes.png){width=94%}
 
-It runs the game rules, for example "if health is 0, game over".
-:   CPU
-:::
-:::
+::: {.callout-tip title="Try it 3 · Which class?"}
+Choose the class of computer, or the law.
 
-## 3. Digital platforms: where games live
+::: {.match extra="personal computer"}
+It reads the buttons inside a game controller.
+:   embedded
 
-A **platform** is the kind of system a game runs on.
-A platform is hardware + its main software + its store.
+It runs the online matches of thousands of players.
+:   server
 
-| Platform | Devices | Where you get games |
-|---|---|---|
-| **Mobile: Android** | Many phone brands, tablets | Google Play |
-| **Mobile: iOS** | iPhone, iPad | App Store |
-| **PC** | Laptops and desktop computers | For example, Steam |
-| **Console** | PlayStation, Xbox, Nintendo Switch | The console's own store |
-| **Cloud gaming** | Any screen with fast Internet | The game runs on a far computer. You get the video. |
-
-One game can come out on many platforms.
-But each platform is different: different hardware, different software, different rules.
-So game developers must build and **test** the game for each platform.
-
-In this diploma, we start with **mobile**: Android and iOS.
-
-::: {.callout-tip title="Try it 4"}
-Which platform?
-
-::: {.match}
-You play on an iPhone.
-:   mobile: iOS
-
-You play on a laptop.
-:   PC
-
-You play on a PlayStation.
+Fixed hardware designed and tuned for games.
 :   console
 
-You play on a Samsung phone.
-:   mobile: Android
+Battery-powered, no fan, the largest gaming platform.
+:   mobile
 
-You play a big game on an old phone. The game runs on a far computer, and you only get the video.
-:   cloud gaming
+Transistor counts double about every two years.
+:   Moore's law
 :::
 :::
 
-## Game challenge: Rocket Race {.challenge}
+## 1.4 Digital platforms in the games industry
 
-Use everything from today. Work alone, at your own speed.
-Read the story, then answer each part.
+A **digital platform** is a hardware family + an operating system + an SDK +
+a distribution channel with its own rules: Android with Google Play, iOS with
+the App Store, Windows with Steam, the consoles with their makers' stores, and
+cloud gaming. The platform owner sets the rules and may **certify** each game
+before release. Studios use **cross-platform** engines, but still face
+**fragmentation**: thousands of Android models with different screens,
+processors and versions.
 
-**Rocket Race** is a mobile racing game. You tap a button to boost your rocket.
-The game draws a fast 3D race track and plays loud sounds.
-It saves your best time. You can play it on Android, iOS and PC.
+![The four layers of a platform.](images/platform-stack.png){width=56%}
 
-::: {.callout-tip title="Try it 5 · One tap in Rocket Race"}
-Input, processing, output or storage? You can use an answer more than once.
+::: {.callout-tip title="Try it 4 · Platforms"}
+Choose the right term.
 
-::: {.match}
-You tap the boost button.
-:   input
+::: {.match extra="App Store"}
+Hardware + operating system + SDK + a store with rules.
+:   digital platform
 
-The game checks if the rocket hits a wall.
-:   processing
+The main store of the Android platform.
+:   Google Play
 
-The rocket flies faster on the screen.
-:   output
+An engine that builds one game for several platforms.
+:   cross-platform
 
-You hear the boost sound.
-:   output
+Thousands of Android models with different screens and system versions.
+:   fragmentation
 
-The game keeps your best time for tomorrow.
+The approval process of a console maker before a game is released.
+:   certification
+:::
+:::
+
+## Game challenge: Tap Runner {.challenge}
+
+Work alone. Use every section of today.
+
+**Tap Runner** is an endless runner: the character runs by itself and the
+player taps to jump over blocks. The game targets 60 fps and saves the best
+distance. It is released on Android phones, on iPhones and on Windows PCs;
+the phone used for testing has a 2.4 GHz CPU core.
+
+::: {.callout-tip title="Try it 5 · Tap Runner on three platforms (harder)"}
+Choose the right answer.
+
+::: {.match extra="RAM|ARM"}
+The input device used to jump in the phone version.
+:   touch screen
+
+Where the best distance is kept while the phone is switched off.
 :   storage
-:::
-:::
 
-::: {.callout-tip title="Try it 6 · Parts and platforms (harder)"}
-Find the answer.
+The clock ticks per frame for the test phone's core at 60 fps.
+:   40 million
 
-::: {.match extra="memory (RAM)|console|hardware"}
-Which part draws the 3D race track?
-:   GPU
+The ISA for which the Windows build is generated.
+:   x86-64
 
-Which part runs the race rules, for example "who wins"?
-:   CPU
+The level that differs between the iPhone build and the Windows build.
+:   the ISA
 
-Is Rocket Race hardware or software?
-:   software
-
-A player plays Rocket Race on an iPad. Which platform?
-:   mobile: iOS
-
-Another player plays it on a laptop. Which platform?
-:   PC
+The level at which the game's rules are written.
+:   problem-oriented language
 :::
 :::
 
 ## Summary {.summary}
 
-- Every computing system does four jobs: **input → processing → output**, and **storage** keeps data.
-- **Hardware** = parts you can touch. **Software** = programs. A game is software.
-- Main parts: **CPU** (rules), **GPU** (pictures), **memory** (now), **storage** (later).
-- A **platform** is where a game runs: Android, iOS, PC, console, cloud.
+- Computing system: hardware + software + data; input, processing, storage, output.
+- Stored-program model: CPU, RAM, I/O and storage on a bus; fetch–decode–execute.
+- Memory (RAM) is fast and volatile; storage is permanent.
+- A computer is a multilevel machine; programs reach the hardware by translation or interpretation; the ISA is the boundary.
+- Five classes: embedded, mobile, personal, console, server.
+- A platform = hardware + OS + SDK + store and rules; engines are cross-platform, devices are fragmented.

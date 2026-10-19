@@ -3,183 +3,542 @@
 # Rules: one key per concept; same English term and same Arabic everywhere.
 #   en:  the English term as students see it
 #   ar:  Arabic translation (with tashkeel only where it helps reading)
-#   def: one short, simple English sentence (A2 level)
+#   def: one precise sentence, as in a textbook glossary
+
+# ---------------------------------------------------------------- game-math
 
 2d:
   en: 2D (two-dimensional)
   ar: ثنائي الأبعاد
-  def: A flat world. We use two numbers for a position (x, y).
+  def: Having two independent directions, so that a position needs two coordinates (x, y).
 
 3d:
   en: 3D (three-dimensional)
   ar: ثلاثي الأبعاد
-  def: A world with depth. We use three numbers for a position (x, y, z).
+  def: Having three independent directions, so that a position needs three coordinates (x, y, z).
 
-axis:
-  en: axis (plural axes)
-  ar: محور
-  def: A number line. We use it to measure position.
+game-loop:
+  en: game loop
+  ar: حلقة اللعبة
+  def: The cycle that a game repeats for every frame — read the input, update the state, render the image.
 
-coordinate:
-  en: coordinate
-  ar: إحداثي
-  def: One number that tells where something is on an axis.
-
-game-engine:
-  en: game engine
-  ar: محرّك الألعاب
-  def: A ready program that helps us build games (for example, Unity).
-
-grid:
-  en: grid
-  ar: شبكة
-  def: Lines that cross and make small squares.
-
-origin:
-  en: origin
-  ar: نقطة الأصل
-  def: The point where all axes meet. All coordinates are 0 there.
-
-position:
-  en: position
-  ar: موقع
-  def: The place of an object in the game world.
-
-x-axis:
-  en: x-axis
-  ar: المحور السيني
-  def: The horizontal line. x grows to the right.
-
-y-axis:
-  en: y-axis
-  ar: المحور الصادي
-  def: The vertical line. y grows up.
-
-z-axis:
-  en: z-axis
-  ar: المحور العيني
-  def: The depth line in 3D. In many games, z goes forward, into the screen.
-
-negative-number:
-  en: negative number
-  ar: عدد سالب
-  def: A number less than 0. It has a minus sign, for example −2.
-
-# --- game-math week 1, lesson 2: vectors ---
-
-vector:
-  en: vector
-  ar: مُتَّجَه
-  def: An arrow with a direction and a length. It shows a move.
-
-component:
-  en: component
-  ar: مُرَكَّبة
-  def: One number of a vector. x is the steps right or left. y is the steps up or down.
-
-direction:
-  en: direction
-  ar: اتجاه
-  def: The way something points or moves. For example, right, left, up or down.
-
-magnitude:
-  en: magnitude (length)
-  ar: مقدار (طول)
-  def: How long a vector is. It shows how far the move goes.
-
-velocity:
-  en: velocity
-  ar: السرعة المتجهة
-  def: A vector that shows how an object moves in each frame (or each second).
+frame-rate:
+  en: frame rate (fps)
+  ar: معدل الإطارات
+  def: The number of frames a game produces per second; its inverse is the frame time.
 
 frame:
   en: frame
   ar: إطار
-  def: One picture of the game. A game draws many frames every second.
+  def: One complete image produced by one pass through the game loop.
 
-opposite-vector:
-  en: opposite vector
-  ar: المتجه المعاكس
-  def: The same move, but the other way. The opposite of (3, 2) is (−3, −2).
+coordinate-system:
+  en: coordinate system
+  ar: نظام الإحداثيات
+  def: A frame of reference (an origin, axes and a unit) in which every point is described by numbers.
+
+origin:
+  en: origin
+  ar: نقطة الأصل
+  def: The reference point of a coordinate system, where every coordinate is zero.
+
+axis:
+  en: axis (plural axes)
+  ar: محور
+  def: A directed number line through the origin along which one coordinate is measured.
+
+x-axis:
+  en: x-axis
+  ar: المحور السيني
+  def: The horizontal axis; in the standard orientation, x increases to the right.
+
+y-axis:
+  en: y-axis
+  ar: المحور الصادي
+  def: The vertical axis; in world space, y usually increases upward.
+
+z-axis:
+  en: z-axis
+  ar: المحور العيني
+  def: The third axis of a 3D system, perpendicular to the x- and y-axes; its direction depends on the handedness.
+
+coordinate:
+  en: coordinate
+  ar: إحداثي
+  def: The signed distance of a point from the origin, measured along one axis.
+
+ordered-pair:
+  en: ordered pair / ordered triple
+  ar: زوج مرتب / ثلاثي مرتب
+  def: A list of coordinates written in a fixed order, (x, y) in 2D or (x, y, z) in 3D.
+
+quadrant:
+  en: quadrant
+  ar: الربع
+  def: One of the four regions into which the two axes divide the plane, identified by the signs of x and y.
+
+screen-space:
+  en: screen space
+  ar: فضاء الشاشة
+  def: The coordinate system of the display, measured in pixels, with the origin at the top-left and y increasing downward.
+
+world-space:
+  en: world space
+  ar: فضاء العالم
+  def: The coordinate system of the game world, measured in world units, with an origin chosen by the designer.
+
+pixel:
+  en: pixel
+  ar: بكسل
+  def: The smallest addressable picture element of a display or a raster image.
+
+tile-grid:
+  en: tile grid (row-major order)
+  ar: شبكة البلاطات (الترتيب حسب الصفوف)
+  def: A world divided into equal cells addressed by integer column and row; row-major order stores the cells row after row.
+
+handedness:
+  en: handedness (left-/right-handed)
+  ar: اتجاهية النظام (يساري / يميني)
+  def: The property of a 3D coordinate system that tells whether +z follows the left-hand or the right-hand rule.
+
+position:
+  en: position
+  ar: موقع
+  def: The location of an object, given by its coordinates relative to an origin.
+
+grid:
+  en: grid
+  ar: شبكة
+  def: A regular pattern of horizontal and vertical lines dividing a region into equal cells.
+
+negative-number:
+  en: negative number
+  ar: عدد سالب
+  def: A number less than zero; as a coordinate it means a position on the negative side of an axis.
+
+game-engine:
+  en: game engine
+  ar: محرّك الألعاب
+  def: A software framework that provides rendering, physics, audio and tools for building games (for example, Unity).
+
+scalar:
+  en: scalar
+  ar: كمية قياسية
+  def: A quantity described completely by a single number, such as speed, mass, health or time.
+
+vector:
+  en: vector
+  ar: مُتَّجَه
+  def: A quantity that has both a magnitude and a direction, written as a list of components.
+
+magnitude:
+  en: magnitude (length)
+  ar: مقدار (طول)
+  def: The size of a vector — the length of its arrow — always zero or positive.
+
+direction:
+  en: direction
+  ar: اتجاه
+  def: The orientation in which a vector points, independent of its length.
+
+component:
+  en: component
+  ar: مُرَكَّبة
+  def: The signed extent of a vector along one axis; a 2D vector has two components, a 3D vector three.
+
+displacement:
+  en: displacement vector
+  ar: متجه الإزاحة
+  def: The vector from one point to another, found by subtracting the start point from the end point.
+
+velocity:
+  en: velocity
+  ar: السرعة المتجهة
+  def: The displacement of an object per unit of time (per second or per frame); a vector.
 
 zero-vector:
   en: zero vector
   ar: المتجه الصفري
-  def: The vector (0, 0). It means "do not move".
+  def: The vector whose components are all zero; it has zero magnitude and no direction.
 
-# --- computing-systems week 1: computing systems and devices ---
+opposite-vector:
+  en: negative (opposite) vector
+  ar: المتجه المعاكس
+  def: The vector −v, with the same magnitude as v and the opposite direction.
+
+free-vector:
+  en: equal vectors
+  ar: متجهات متساوية
+  def: Vectors with the same components; they are equal wherever their arrows are drawn.
+
+# -------------------------------------------------------- computing-systems
+
+computing-system:
+  en: computing system
+  ar: نظام حوسبي
+  def: A combination of hardware, software and data that accepts input, processes and stores data, and produces output.
 
 hardware:
   en: hardware
   ar: المكونات المادية (العتاد)
-  def: The parts of a device that you can touch.
+  def: The physical components of a computing system — processors, memory, storage and devices.
 
 software:
   en: software
   ar: البرمجيات
-  def: The programs on a device. A game is software.
+  def: The programs that tell the hardware what to do, from the operating system to a game.
 
-input:
-  en: input
-  ar: الإدخال
-  def: Data that goes into the device. For example, a touch or a key press.
-
-processing:
-  en: processing
-  ar: المعالجة
-  def: The work the device does with the data.
-
-output:
-  en: output
-  ar: الإخراج
-  def: What the device gives back to you. For example, a picture or a sound.
-
-storage:
-  en: storage
-  ar: وحدة التخزين
-  def: The part that keeps apps and files, also when the device is off.
-
-memory:
-  en: memory (RAM)
-  ar: الذاكرة (RAM)
-  def: Fast memory for the apps that run now. It is empty when the device is off.
+von-neumann:
+  en: stored-program (von Neumann) model
+  ar: نموذج البرنامج المخزَّن (فون نيومان)
+  def: The design in which instructions and data are kept in the same memory and executed by a processor one instruction at a time.
 
 cpu:
   en: CPU (processor)
   ar: وحدة المعالجة المركزية (المعالج)
-  def: The "brain" of the device. It runs the steps of the programs.
+  def: The component that fetches, decodes and executes the instructions of programs.
 
 gpu:
   en: GPU (graphics processor)
   ar: وحدة معالجة الرسوميات
-  def: The part that draws the pictures of the game on the screen.
+  def: A processor with many parallel cores, specialised in computing the pixels of each frame.
+
+memory:
+  en: main memory (RAM)
+  ar: الذاكرة الرئيسية (RAM)
+  def: Fast, volatile memory that holds the programs and data in use; its contents are lost when the power is off.
+
+storage:
+  en: storage
+  ar: وحدة التخزين
+  def: Non-volatile memory (flash or disk) that keeps programs and files when the power is off.
+
+input:
+  en: input
+  ar: الإدخال
+  def: Data that enters the system from the outside, for example a touch, a key press or a sensor reading.
+
+processing:
+  en: processing
+  ar: المعالجة
+  def: The transformation of data by executing instructions.
+
+output:
+  en: output
+  ar: الإخراج
+  def: Data that the system presents to the outside, for example an image, a sound or a vibration.
+
+instruction-cycle:
+  en: instruction cycle (fetch–decode–execute)
+  ar: دورة التعليمة (جلب – فك ترميز – تنفيذ)
+  def: The repeated sequence in which the processor fetches an instruction from memory, decodes it and executes it.
+
+abstraction-level:
+  en: level of abstraction (multilevel machine)
+  ar: مستوى التجريد (الآلة متعددة المستويات)
+  def: One layer in the view of a computer as a stack of machines, each defined by the language it understands.
+
+isa:
+  en: instruction set architecture (ISA)
+  ar: معمارية مجموعة التعليمات
+  def: The set of machine instructions that a processor family can execute, such as ARM or x86-64.
+
+compiler:
+  en: compiler / translation
+  ar: المترجم / الترجمة
+  def: A program that converts a whole program into the language of a lower level before it runs.
+
+interpreter:
+  en: interpreter / interpretation
+  ar: المفسِّر / التفسير
+  def: A program that executes another program by reading and carrying out its instructions one by one.
+
+digital-platform:
+  en: digital platform
+  ar: منصة رقمية
+  def: A combination of hardware, operating system, programming interfaces and a distribution channel on which software is built, sold and run.
+
+cross-platform:
+  en: cross-platform
+  ar: متعدد المنصات
+  def: Able to run on several platforms from one code base, usually through a game engine.
+
+fragmentation:
+  en: fragmentation
+  ar: التجزؤ
+  def: The variety of devices, screen sizes and OS versions within one platform that a developer must support.
 
 platform:
   en: platform
   ar: منصّة
-  def: The kind of system a game runs on. For example, Android phones, iPhones, PC or a game console.
+  def: The system on which a game runs, for example Android, iOS, PC, a console or a cloud service.
 
-device:
-  en: device
-  ar: جهاز
-  def: A machine like a phone, a tablet, a laptop or a game console.
+app-package:
+  en: app package (APK / AAB / IPA)
+  ar: حزمة التطبيق
+  def: The single file that contains an app's code, assets and description, used to distribute and install it.
+
+process:
+  en: process
+  ar: عملية
+  def: A program in execution, with its own memory space, managed by the operating system.
+
+loading:
+  en: loading
+  ar: التحميل
+  def: Copying code and assets from storage into main memory so that the processor can use them.
+
+refresh-rate:
+  en: refresh rate (Hz)
+  ar: معدل التحديث
+  def: How many times per second a display redraws its image; it limits the frame rate that the player can see.
+
+resolution:
+  en: resolution
+  ar: الدقة
+  def: The number of pixels of a display or an image, written as width × height.
+
+latency:
+  en: latency (input lag)
+  ar: زمن الاستجابة (التأخير)
+  def: The delay between an action and its visible result, measured in milliseconds.
+
+bandwidth:
+  en: bandwidth
+  ar: عرض النطاق
+  def: The amount of data a connection can transfer per second, measured in megabits per second.
+
+cloud-gaming:
+  en: cloud gaming (game streaming)
+  ar: الألعاب السحابية
+  def: Running a game on a remote server and streaming its video to the player's device.
+
+thermal-throttling:
+  en: thermal throttling
+  ar: الخنق الحراري
+  def: The automatic reduction of processor speed when a device becomes too hot.
 
 operating-system:
   en: operating system (OS)
   ar: نظام التشغيل
-  def: The main software that runs the device and its apps. For example, Android or iOS.
+  def: The software that manages the hardware and provides services to all other programs.
+
+device:
+  en: device
+  ar: جهاز
+  def: A piece of hardware; in this course, usually a phone, tablet, computer or console.
 
 specifications:
   en: specifications (specs)
   ar: المواصفات
-  def: The list of the parts of a device and how strong they are.
+  def: The published technical values of a device, such as its processor, memory, storage and display.
 
 app-store:
   en: app store
   ar: متجر التطبيقات
-  def: The place where you download apps and games. For example, Google Play or the App Store.
+  def: The distribution channel of a platform, where users find, buy and install apps.
 
 install:
-  en: install
+  en: installation
   ar: تثبيت
-  def: To put an app on a device, so you can use it.
+  def: Copying an app package to the device's storage and registering it with the operating system.
+
+# ------------------------------------------------------------ digital-media
+
+digital-media:
+  en: digital media
+  ar: الوسائط الرقمية
+  def: Content — text, images, sound, video and interaction — encoded as numbers so that computers can store, edit and transmit it.
+
+digitization:
+  en: digitization (sampling and quantization)
+  ar: الرقمنة (أخذ العينات والتكميم)
+  def: Converting a continuous signal into numbers by measuring it at regular intervals and rounding each value to a fixed set of levels.
+
+raster-image:
+  en: raster (bitmap) image
+  ar: صورة نقطية
+  def: An image stored as a grid of pixels, each with its own colour value.
+
+vector-graphics:
+  en: vector graphics
+  ar: الرسوميات المتجهية
+  def: Images stored as geometric shapes and paths, which can be scaled to any size without losing quality.
+
+multimedia:
+  en: multimedia
+  ar: الوسائط المتعددة
+  def: The combination of several media types — text, image, audio, video and animation — in one work.
+
+elemental-tetrad:
+  en: elemental tetrad
+  ar: الرباعية الأساسية للعبة
+  def: Schell's model of a game as four basic elements — mechanics, story, aesthetics and technology.
+
+mechanics:
+  en: mechanics
+  ar: الآليات (ميكانيكيات اللعب)
+  def: The rules and procedures of a game — what the player can do and what happens as a result.
+
+aesthetics:
+  en: aesthetics
+  ar: الجماليات
+  def: How a game looks, sounds and feels — the sensory element that the player perceives directly.
+
+player-experience:
+  en: player experience
+  ar: تجربة اللاعب
+  def: The thoughts and feelings that playing produces in the player; the real goal of all game design.
+
+asset:
+  en: asset
+  ar: أصل رقمي
+  def: Any media file used by a game — a sprite, a 3D model, a sound, a music track, a video or a text file.
+
+production-pipeline:
+  en: production pipeline
+  ar: خط الإنتاج
+  def: The ordered stages — pre-production, production and post-production — through which media are planned, made and finished.
+
+pre-production:
+  en: pre-production
+  ar: مرحلة ما قبل الإنتاج
+  def: The planning stage — concept, story, script, storyboard, style guide and schedule.
+
+post-production:
+  en: post-production
+  ar: مرحلة ما بعد الإنتاج
+  def: The finishing stage — editing, mixing, colour correction, compression and export.
+
+diegetic:
+  en: diegetic / non-diegetic
+  ar: داخل عالم القصة / خارج عالم القصة
+  def: Diegetic elements exist inside the game world and its characters can perceive them; non-diegetic elements exist only for the player.
+
+media-channel:
+  en: media channel
+  ar: قناة وسائطية
+  def: One of the routes by which a game communicates — visual, audio, text, cinematic or interface.
+
+feedback:
+  en: feedback
+  ar: التغذية الراجعة
+  def: A sound, image or effect that tells the player the result of an action.
+
+sound-effect:
+  en: sound effect (SFX)
+  ar: مؤثر صوتي
+  def: A short sound attached to an event in the game, such as a jump, a hit or a click.
+
+ambience:
+  en: ambience
+  ar: الصوت المحيطي
+  def: Background sound that establishes a place, such as wind, traffic or the noise of a crowd.
+
+art-style:
+  en: art style
+  ar: الأسلوب الفني
+  def: The consistent visual language of a game — its shapes, colours, proportions and rendering.
+
+accessibility:
+  en: accessibility
+  ar: إمكانية الوصول
+  def: Design that lets players with different abilities perceive and use the game, for example subtitles or colour-blind modes.
+
+# ------------------------------------------------------------ digital-skills
+
+digital-skills:
+  en: digital skills
+  ar: المهارات الرقمية
+  def: The abilities needed to use digital devices, applications and networks to find, create, communicate and manage information.
+
+digital-literacy:
+  en: digital literacy
+  ar: الثقافة الرقمية
+  def: The ability to find, evaluate, create and communicate information with digital technology, critically and safely.
+
+digital-competence:
+  en: digital competence
+  ar: الكفاءة الرقمية
+  def: The confident, critical and responsible use of digital technology — a combination of knowledge, skills and attitudes.
+
+digcomp:
+  en: DigComp (Digital Competence Framework)
+  ar: الإطار الأوروبي للكفاءة الرقمية
+  def: The European reference framework that describes digital competence in 5 areas, 21 competences and 8 proficiency levels.
+
+competence-area:
+  en: competence area
+  ar: مجال الكفاءة
+  def: One of the five groups of DigComp competences, such as digital content creation or safety.
+
+proficiency-level:
+  en: proficiency level
+  ar: مستوى الإتقان
+  def: A step on the DigComp scale from foundation to highly specialised, defined by task complexity and autonomy.
+
+labour-market:
+  en: labour market
+  ar: سوق العمل
+  def: The supply of and demand for workers and skills in an economy.
+
+lifelong-learning:
+  en: lifelong learning (upskilling)
+  ar: التعلم مدى الحياة (رفع المهارات)
+  def: Continuous learning after formal education, to keep skills up to date as technology changes.
+
+account:
+  en: account / digital identity
+  ar: الحساب / الهوية الرقمية
+  def: The record that identifies a user to a service, together with the data and permissions linked to it.
+
+authentication:
+  en: authentication
+  ar: المصادقة (التحقق من الهوية)
+  def: Proving that a user is who they claim to be, for example with a password and a second factor.
+
+single-sign-on:
+  en: single sign-on (SSO)
+  ar: تسجيل الدخول الموحد
+  def: One authentication that gives access to several connected services, such as university e-mail and e-learning.
+
+file:
+  en: file
+  ar: ملف
+  def: A named sequence of bytes kept in storage, such as a document, an image or a program.
+
+folder:
+  en: folder (directory)
+  ar: مجلد
+  def: A container that groups files and other folders into a tree.
+
+file-path:
+  en: file path
+  ar: مسار الملف
+  def: The address of a file in the folder tree, written as the sequence of folders from a starting point to the file.
+
+file-extension:
+  en: file extension
+  ar: امتداد الملف
+  def: The suffix after the last dot of a file name, such as .docx or .png, that indicates the file type.
+
+file-size:
+  en: file size (KB, MB, GB)
+  ar: حجم الملف
+  def: The amount of storage a file occupies, measured in bytes and their multiples.
+
+cloud-storage:
+  en: cloud storage
+  ar: التخزين السحابي
+  def: Storage provided by a remote service over the Internet, reachable from any signed-in device.
+
+synchronization:
+  en: synchronization (sync)
+  ar: المزامنة
+  def: Keeping the same files identical on several devices and in the cloud, so that a change in one place appears everywhere.
+
+backup:
+  en: backup
+  ar: النسخ الاحتياطي
+  def: An independent copy of data kept so that it can be restored after loss, damage or deletion.

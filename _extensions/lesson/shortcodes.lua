@@ -7,11 +7,19 @@
 --     Homework: dotted lines (or an empty box, cm) to write the answer on.
 --     Shown only when the homework page is printed.
 --
---   {{< sim file="sims/x.html" poster="sims/x.png" title="Move the player" height="480" >}}
+--   {{< sim file="sims/x.html" poster="sims/x.png" title="Move the player" height="480" kind="game" >}}
 --     HTML: live simulator in an iframe + "open full screen" link. `height` is
 --           the start height; sims that load sim-base.js resize the iframe.
 --     PDF:  poster image + QR code to the live page.
 --     PPTX: poster image + QR code to the live page (students scan it in class).
+--     kind="game": a mini-game (a small playable game for one concept); the
+--     label says "Mini-game" instead of "Simulator".
+--
+--   {{< schedule >}}
+--     Course page: all 16 weeks from courses/<slug>/schedule.yml, two lessons
+--     a week. A ready lesson (its .qmd exists, no `draft: true`) is bright and
+--     links its page, PDF and slides; the others are faded ("coming soon").
+--     The review profile shows drafts as ready.
 
 local str = pandoc.utils.stringify
 
@@ -77,10 +85,11 @@ end
 -- PowerPoint cannot draw a QR code itself, so we make a PNG with Quarto's
 -- Typst and the same QR package as the PDF. Cached in .quarto/qr/ (not in git).
 
-local function qr_png(url, caption)
+local function qr_png(url, caption, call)
+  call = call or "Scan to try it"
   local dir = pandoc.path.join({ project_dir(), ".quarto", "qr" })
   pandoc.system.make_directory(dir, true)
-  local base = pandoc.path.join({ dir, pandoc.utils.sha1(url .. "|" .. caption) })
+  local base = pandoc.path.join({ dir, pandoc.utils.sha1(url .. "|" .. caption .. "|" .. call) })
   local png = base .. ".png"
   -- Image paths must be relative to the document.
   local docdir = pandoc.path.directory(quarto.doc.input_file)
@@ -103,7 +112,7 @@ local function qr_png(url, caption)
     '#set text(font: "Noto Sans", size: 15pt, weight: "bold", fill: rgb("#24432c"))\n',
     '#import "@preview/tiaoma:0.3.0": qrcode\n',
     "#align(center)[#qrcode(", typst_string(url), ", width: 6cm)\n",
-    "#v(4pt)\nScan to try it\n#v(-6pt)\n#text(size: 11pt, weight: \"regular\", ", typst_string(caption), ")]\n")
+    "#v(4pt)\n", call, "\n#v(-6pt)\n#text(size: 11pt, weight: \"regular\", ", typst_string(caption), ")]\n")
   out:close()
   pandoc.pipe(quarto.config.cli_path(), { "typst", "compile", typ, png, "--ppi", "200" }, "")
   os.remove(typ)
@@ -200,7 +209,9 @@ local function sim(kwargs)
   if file == "" or poster == "" then
     error("sim shortcode needs file= and poster=")
   end
-  if title == "" then title = "Simulator" end
+  local game = str(kwargs.kind) == "game"
+  local label = game and "Mini-game" or "Simulator"
+  if title == "" then title = label end
   if height == "" then height = "480" end
 
   local rel = doc_rel_dir()
@@ -210,8 +221,8 @@ local function sim(kwargs)
     return pandoc.RawBlock("html", string.format([[
 <figure class="sim">
   <iframe src="%s" title="%s" loading="lazy" style="height:%spx"></iframe>
-  <figcaption><span class="sim-label">🎮 %s</span><a href="%s" target="_blank" rel="noopener">Open full screen ↗</a></figcaption>
-</figure>]], html_attr(file), html_attr(title), html_attr(height), html_attr(title), html_attr(file)))
+  <figcaption><span class="sim-label">%s %s: %s</span><a href="%s" target="_blank" rel="noopener">Open full screen ↗</a></figcaption>
+</figure>]], html_attr(file), html_attr(title), html_attr(height), game and "🕹" or "🎮", label, html_attr(title), html_attr(file)))
 
   elseif quarto.doc.is_format("typst") then
     return pandoc.RawBlock("typst", string.format([[
@@ -221,24 +232,24 @@ local function sim(kwargs)
     columns: (1fr, 3.6cm),
     column-gutter: 12pt,
     align: horizon,
-    image(%s, width: 100%%),
+    align(center, image(%s, width: 80%%)),
     align(center)[
       #qrcode(%s, width: 3.2cm)
       #v(2pt)
-      #text(size: 8pt)[Scan to try it]
+      #text(size: 8pt)[Scan to %s]
     ],
   )
   #v(4pt)
-  #text(size: 9pt)[*Simulator:* #%s — scan the QR code or open #link(%s)]
+  #text(size: 9pt)[*%s:* #%s — scan the QR code or open #link(%s)]
 ]
-]], typst_string(poster), typst_string(url), typst_string(title), typst_string(url)))
+]], typst_string(poster), typst_string(url), game and "play" or "try it", label, typst_string(title), typst_string(url)))
 
   else
     -- pptx: poster on the left, QR code on the right, so students can scan it in class
     return pandoc.Div({
       pandoc.Div({ pandoc.Para({ pandoc.Image({}, poster) }) }, { class = "column", width = "55%" }),
       pandoc.Div({
-        pandoc.Para({ pandoc.Image({}, qr_png(url, title)) }),
+        pandoc.Para({ pandoc.Image({}, qr_png(url, title, game and "Scan to play" or "Scan to try it")) }),
       }, { class = "column", width = "45%" }),
     }, { class = "columns" })
   end
@@ -264,7 +275,109 @@ local function answer_space(kwargs)
   return pandoc.Null()
 end
 
+-- Course schedule (course page) ---------------------------------------------
+
+local function read_text(path)
+  local f = io.open(path, "r")
+  if not f then return nil end
+  local text = f:read("a")
+  f:close()
+  return text
+end
+
+-- Front matter of a .qmd as pandoc meta (nil if the file is missing).
+local function front_matter(path)
+  local text = read_text(path)
+  if not text then return nil end
+  local fm = text:match("^%-%-%-\n(.-)\n%-%-%-")
+  if not fm then return {} end
+  return pandoc.read("---\n" .. fm .. "\n---\n", "markdown").meta
+end
+
+local function review_profile()
+  local prof = quarto.project and quarto.project.profile
+  if type(prof) == "table" then
+    for _, p in ipairs(prof) do if str(p) == "review" then return true end end
+  end
+  return (os.getenv("QUARTO_PROFILE") or ""):find("review") ~= nil
+end
+
+-- A page is ready when its file exists and it is not a draft (drafts count in review).
+local function ready(meta)
+  if not meta then return false end
+  if meta.draft == true or str(meta.draft or "") == "true" then
+    return review_profile()
+  end
+  return true
+end
+
+local function file_exists(path)
+  local f = io.open(path, "r")
+  if f then f:close() return true end
+  return false
+end
+
+local function schedule()
+  if not quarto.doc.is_format("html") then return pandoc.Null() end
+  local dir = pandoc.path.directory(quarto.doc.input_file)
+  local data = read_yaml(pandoc.path.join({ dir, "schedule.yml" }))
+  local config = read_yaml(pandoc.path.join({ project_dir(), "_quarto.yml" }))
+  local slides_public = config["slides-public"] == true
+  local out = { '<div class="schedule">' }
+  local ready_count = 0
+  for _, w in ipairs(data.weeks or {}) do
+    local week = tonumber(str(w.week))
+    local wdir = string.format("week-%02d", week)
+    local rows = {}
+    for _, l in ipairs(w.lessons or {}) do
+      local n = tonumber(str(l.n))
+      local stem = string.format("lesson-%02d", n)
+      local base = pandoc.path.join({ dir, wdir, stem })
+      local ok = ready(front_matter(base .. ".qmd"))
+      local links = ""
+      if ok then
+        ready_count = ready_count + 1
+        local href = wdir .. "/" .. stem
+        local parts = { string.format('<a class="sl-go" href="%s.html">Open lesson →</a>', href) }
+        if file_exists(base .. "-book.qmd") then
+          table.insert(parts, string.format('<a class="sl-file" href="%s-book.pdf">PDF</a>', href))
+        end
+        if slides_public and file_exists(base .. "-slides.qmd") then
+          table.insert(parts, string.format('<a class="sl-file" href="%s-slides.pptx">Slides</a>', href))
+        end
+        links = '<span class="sl-links">' .. table.concat(parts, "") .. "</span>"
+      else
+        links = '<span class="sl-soon">Coming soon</span>'
+      end
+      table.insert(rows, string.format(
+        '<div class="sl %s"><span class="sl-num">%02d</span><span class="sl-title">%s</span>%s</div>',
+        ok and "is-ready" or "is-soon", n, html_attr(str(l.title)), links))
+    end
+    if w.exam then
+      table.insert(rows, string.format('<div class="sl is-exam"><span class="sl-num">✎</span><span class="sl-title">%s</span></div>',
+        html_attr(str(w.exam))))
+    end
+    local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", week) }))
+    local hw_html = ""
+    if ready(hw) then
+      local bits = {}
+      if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
+      if hw.due then table.insert(bits, "due " .. str(hw.due)) end
+      hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
+        wdir, week, week, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
+    end
+    local any_ready = false
+    for _, r in ipairs(rows) do if r:find("is%-ready") then any_ready = true end end
+    table.insert(out, string.format(
+      '<section class="sw %s"><header class="sw-head"><span class="sw-week">Week %d</span>%s</header>%s</section>',
+      any_ready and "has-ready" or "", week, hw_html, table.concat(rows, "")))
+  end
+  table.insert(out, "</div>")
+  return pandoc.RawBlock("html", table.concat(out, "\n"))
+end
+
 return {
+  ["schedule"] = function() return schedule() end,
   ["answer-space"] = function(_, kwargs) return answer_space(kwargs) end,
   ["glossary"] = function(args) return glossary(args) end,
   ["sim"] = function(_, kwargs) return sim(kwargs) end,

@@ -1,176 +1,166 @@
 ---
-title: "What runs your games?"
+title: "Computing Systems and Digital Platforms in the Games Industry"
 subtitle: "Week 1 · Lecture"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary hardware software input processing output storage cpu gpu platform >}}
+{{< glossary computing-system von-neumann cpu memory storage instruction-cycle abstraction-level isa compiler digital-platform >}}
 
-## Think · Your phone at work
+## Think · One phone, thousands of games
 
-You tap. The player jumps. You hear a sound.
-**What does the phone do?**
-
-::: {.reveal}
-- takes your touch **in**
-- **works** with it
-- gives a picture and a sound **out**
-- **keeps** your score for tomorrow
-:::
-
-## Input · Processing · Output · Storage
-
-![](images/ipo-game.png)
-
-## Think · Press "jump"
-
-You press the **jump** button.
-Input, processing, output or storage?
+The same phone runs a racing game, then a puzzle game.
+**How is that possible without new hardware?**
 
 ::: {.answer}
-**Input**: your touch goes into the phone.
+The program is **data in memory**: load a new program, get a new machine.
 :::
 
-## Try it 1 · Which job?
+## 1.1 The stored-program model
 
-- a) You press the jump button.
-- b) The phone vibrates when you lose.
-- c) The game checks if the ball is in the goal.
-- d) The game keeps your level for tomorrow.
-- e) The music plays.
+:::: {.columns}
+::: {.column width="38%"}
+- CPU: control, ALU, registers
+- RAM: fast, volatile
+- storage: permanent
+- bus connects them
+:::
+::: {.column width="62%"}
+![](images/von-neumann.png)
+:::
+::::
+
+## The instruction cycle
+
+:::: {.columns}
+::: {.column width="38%"}
+- fetch → decode → execute
+- 3 GHz = 3 billion ticks/s
+- 60 fps → 50 million ticks per frame
+:::
+::: {.column width="62%"}
+![](images/instruction-cycle.png)
+:::
+::::
+
+## Live demo · Tap Runner
+
+{{< sim file="sims/one-frame.html" poster="sims/one-frame.png" title="Tap Runner: inside one frame" kind="game" >}}
+
+## Try it 1 · Inside the computer
+
+a) loses data when off?
+b) the three steps?
+c) ticks per frame, 3 GHz, 60 fps?
 
 ::: {.answer}
-- a) input
-- b) output
-- c) processing
-- d) storage
-- e) output
+a) RAM
+b) fetch, decode, execute
+c) 50 million
 :::
 
-## Live demo
+## 1.2 A multilevel machine
 
-{{< sim file="sims/ipos-sort.html" poster="sims/ipos-sort.png" title="Sort it: input, processing, output or storage?" >}}
+:::: {.columns}
+::: {.column width="38%"}
+- each level: a simpler language below
+- **compiler**: translate first
+- **interpreter**: step by step
+:::
+::: {.column width="62%"}
+![](images/levels.png)
+:::
+::::
 
-## Hardware and software
+## The ISA: where hardware meets software
 
-- **hardware**: parts you can touch
-- **software**: programs · a game · Android
-- they need each other
+:::: {.columns}
+::: {.column width="38%"}
+- phones: **ARM**
+- PC, PS5, Xbox: **x86-64**
+- written once, translated per ISA
+:::
+::: {.column width="62%"}
+![](images/build-targets.png)
+:::
+::::
 
-## Try it 2 · Hardware or software?
+## Try it 2 · Levels and languages
 
-- a) the touch screen
-- b) a racing game
-- c) Android
-- d) the battery
-- e) the speaker
+a) hardware meets software?
+b) converts before it runs?
+c) ISA of smartphones?
 
 ::: {.answer}
-- a) hardware
-- b) software
-- c) software
-- d) hardware
-- e) hardware
+a) the ISA
+b) compiler
+c) ARM
 :::
 
-## Main parts
+## 1.3 Classes of computers
 
-- **CPU** → game rules
-- **GPU** → pictures
-- **memory (RAM)** → the game now
-- **storage** → the game later
-- **input** / **output** devices
+:::: {.columns}
+::: {.column width="38%"}
+- embedded · mobile · personal · console · server
+- energy decides
+- Moore's law
+:::
+::: {.column width="62%"}
+![](images/computer-classes.png)
+:::
+::::
 
-## Try it 3 · Which part?
+## 1.4 Digital platforms
 
-- a) It draws the 3D world.
-- b) It keeps the game when the phone is off.
-- c) It runs the rule "if health is 0, game over".
+:::: {.columns}
+::: {.column width="38%"}
+- hardware + OS + SDK + store
+- the owner sets the rules
+- cross-platform engines
+- **fragmentation**
+:::
+::: {.column width="62%"}
+![](images/platform-stack.png)
+:::
+::::
+
+## Try it 3–4 · Classes and platforms
+
+a) battery, no fan, largest platform?
+b) Android's main store?
+c) thousands of Android models?
 
 ::: {.answer}
-- a) GPU
-- b) storage
-- c) CPU
+a) mobile
+b) Google Play
+c) fragmentation
 :::
 
-## Platforms
+## Game challenge · Tap Runner
 
-- **mobile**: Android · iOS
-- **PC** · **console**
-- **cloud gaming**: the game runs far away, you get the video
+- endless runner · tap to jump · 60 fps
+- saves the best distance
+- Android · iPhone · Windows PC
+- test phone core: 2.4 GHz
 
-## Try it 4 · Which platform?
+## Try it 5 · Tap Runner on three platforms (harder)
 
-- a) You play on an iPhone.
-- b) You play on a laptop.
-- c) You play on a PlayStation.
-- d) You play on a Samsung phone.
-
-::: {.answer}
-- a) mobile: iOS
-- b) PC
-- c) console
-- d) mobile: Android
-:::
-
-## Think · One game, many platforms
-
-Why must game developers **test** the game on every platform?
+a) ticks per frame at 2.4 GHz, 60 fps?
+b) ISA of the Windows build?
+c) best distance when the phone is off?
 
 ::: {.answer}
-Each platform has different hardware, software and rules.
-:::
-
-## Game challenge · Rocket Race
-
-- mobile racing game · tap to boost
-- fast 3D track · loud sounds · best time saved
-- Android · iOS · PC
-- work **alone** · answer each part
-
-## Try it 5 · One tap in Rocket Race
-
-a) You tap the boost button.
-
-b) The game checks: wall hit?
-
-c) The rocket flies faster on screen.
-
-d) You hear the boost sound.
-
-e) The game keeps your best time.
-
-::: {.answer}
-a) input
-b) processing
-c) output
-d) output
-e) storage
-:::
-
-## Try it 6 · Parts and platforms
-
-a) Draws the 3D track?
-
-b) Runs the race rules?
-
-c) Rocket Race: hardware or software?
-
-d) Played on an iPad? · e) On a laptop?
-
-::: {.answer}
-a) GPU
-b) CPU
-c) software
-d) mobile: iOS
-e) PC
+a) 40 million
+b) x86-64
+c) storage
 :::
 
 ## Summary
 
-- input → processing → output + storage
-- hardware · software
-- CPU · GPU · RAM · storage
-- platform = where a game runs
+- input · processing · storage · output
+- stored program · fetch–decode–execute
+- RAM volatile · storage permanent
+- levels of abstraction · the ISA
+- five classes of computers
+- platform = hardware + OS + SDK + store

@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Vector Dash</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .goal { font-size: 1.08rem; }
+    .sim .hud .goal b { color: #e8590c; }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin-top: 10px; }
+    .sim .comp { display: flex; align-items: center; gap: 6px; font-weight: 800; }
+    .sim .comp button { padding: 4px 12px; font-size: 1.1rem; }
+    .sim .comp output { min-width: 2.2em; text-align: center; font-size: 1.25rem; color: #e8590c; font-variant-numeric: tabular-nums; }
+    .sim .eq { font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 8px; min-height: 1.4em; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Vector Dash</h1>
+  <p class="hint">Choose one velocity per frame. The ship adds it once per frame. Land exactly on the target after the given number of frames.</p>
+  <div class="hud">
+    <span class="lvl" id="lvl">Level 1</span>
+    <span class="goal" id="goal"></span>
+    <span class="stars" id="stars">★ 0</span>
+  </div>
+  <canvas id="c" aria-label="Star map with the ship, the target and the planned path"></canvas>
+  <div class="pad">
+    <span class="comp">v<sub>x</sub> <button type="button" class="ghost" data-c="x" data-d="-1">−</button><output id="vx">0</output><button type="button" class="ghost" data-c="x" data-d="1">+</button></span>
+    <span class="comp">v<sub>y</sub> <button type="button" class="ghost" data-c="y" data-d="-1">−</button><output id="vy">0</output><button type="button" class="ghost" data-c="y" data-d="1">+</button></span>
+    <button id="go" type="button">Launch ▶</button>
+    <button id="sound" type="button" class="ghost">Sound: on</button>
+  </div>
+  <p class="eq" id="eq"></p>
+  <p id="msg" class="message">Level 1 is easy. From level 4 the components are negative.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const COLS = 12, ROWS = 8, VMAX = 4;
+  // [start, target, frames]; after the last level, random levels follow.
+  const LEVELS = [
+    [[1, 1], [7, 1], 3],
+    [[1, 2], [5, 8], 2],
+    [[2, 1], [10, 5], 4],
+    [[10, 7], [4, 1], 3],
+    [[2, 6], [11, 3], 3],
+    [[9, 1], [1, 7], 2],
+    [[11, 4], [2, 1], 3],
+  ];
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => (n < 0 ? "−" + -n : String(n));
+  const pair = (a, b) => `(${fmt(a)}, ${fmt(b)})`;
+  let W = 0, H = 0, u = 40, gx = 30, gy = 14;
+  let level = 0, stars = 0, tries = 0, v = [0, 0], cur = null, anim = null, sound = true, audio = null;
+  const stars0 = Array.from({ length: 40 }, () => [Math.random(), Math.random(), Math.random() * 1.4 + 0.4]);
+
+  function makeLevel(i) {
+    if (i < LEVELS.length) { const [s, t, n] = LEVELS[i]; return { s, t, n }; }
+    for (;;) {   // random level with an exact integer velocity
+      const n = 2 + Math.floor(Math.random() * 3);
+      const vx = Math.floor(Math.random() * 7) - 3, vy = Math.floor(Math.random() * 7) - 3;
+      if (!vx && !vy) continue;
+      const sx = Math.floor(Math.random() * (COLS + 1)), sy = Math.floor(Math.random() * (ROWS + 1));
+      const tx = sx + n * vx, ty = sy + n * vy;
+      if (tx < 0 || tx > COLS || ty < 0 || ty > ROWS) continue;
+      return { s: [sx, sy], t: [tx, ty], n };
+    }
+  }
+  function startLevel() {
+    cur = makeLevel(level); tries = 0; v = [0, 0]; anim = null;
+    $("lvl").textContent = level < LEVELS.length ? `Level ${level + 1} / ${LEVELS.length}` : `Bonus level ${level - LEVELS.length + 1}`;
+    $("goal").innerHTML = `From <b>${pair(...cur.s)}</b> to <b>${pair(...cur.t)}</b> in <b>${cur.n}</b> frames`;
+    $("msg").textContent = "Set the velocity, then launch."; $("msg").className = "message";
+    $("go").textContent = "Launch ▶";
+    show();
+  }
+  function show() {
+    $("vx").textContent = fmt(v[0]); $("vy").textContent = fmt(v[1]);
+    $("eq").textContent = `p${cur.n} = p0 + ${cur.n} × v = ${pair(...cur.s)} + ${cur.n} × ${pair(...v)}`;
+    draw();
+  }
+  function resize() {
+    W = canvas.clientWidth; gx = W < 420 ? 22 : 30;
+    u = Math.min((W - gx * 2) / COLS, 50);
+    H = Math.round(u * ROWS + gy * 2 + 16);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+  const X = (x) => (W - u * COLS) / 2 + x * u, Y = (y) => gy + (ROWS - y) * u;
+
+  function ship(x, y, ang, scale = 1) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(scale, scale);
+    ctx.fillStyle = "#2F9E44"; ctx.strokeStyle = "#fff"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(14, 0); ctx.lineTo(-10, -9); ctx.lineTo(-5, 0); ctx.lineTo(-10, 9); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.restore();
+  }
+  function draw(now = performance.now()) {
+    if (!cur) return;
+    ctx.fillStyle = "#0f1a24"; ctx.fillRect(0, 0, W, H);
+    for (const [a, b, r] of stars0) { ctx.fillStyle = "rgba(255,255,255,.5)"; ctx.beginPath(); ctx.arc(a * W, b * H, r, 0, 7); ctx.fill(); }
+    ctx.strokeStyle = "rgba(255,255,255,.08)"; ctx.lineWidth = 1;
+    for (let i = 0; i <= COLS; i++) { ctx.beginPath(); ctx.moveTo(X(i), Y(0)); ctx.lineTo(X(i), Y(ROWS)); ctx.stroke(); }
+    for (let j = 0; j <= ROWS; j++) { ctx.beginPath(); ctx.moveTo(X(0), Y(j)); ctx.lineTo(X(COLS), Y(j)); ctx.stroke(); }
+    ctx.fillStyle = "rgba(255,255,255,.55)"; ctx.font = "600 10px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    for (let i = 0; i <= COLS; i += 2) ctx.fillText(String(i), X(i), Y(0) + 13);
+    ctx.textAlign = "right";
+    for (let j = 0; j <= ROWS; j += 2) ctx.fillText(String(j), X(0) - 4, Y(j) + 3);
+    // target planet
+    const [tx, ty] = cur.t;
+    ctx.fillStyle = "#f59f00"; ctx.beginPath(); ctx.arc(X(tx), Y(ty), 11, 0, 7); ctx.fill();
+    ctx.strokeStyle = "rgba(245,159,0,.5)"; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(X(tx), Y(ty), 18, 6, -0.4, 0, 7); ctx.stroke();
+    // planned path (ghost dots for each frame)
+    const [sx, sy] = cur.s;
+    if (!anim) {
+      for (let k = 1; k <= cur.n; k++) {
+        const px = sx + k * v[0], py = sy + k * v[1];
+        ctx.strokeStyle = "rgba(169,227,75,.55)"; ctx.setLineDash([3, 4]); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(X(px), Y(py), 6, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      }
+    }
+    // trail + ship
+    let p = [sx, sy], k = 0;
+    if (anim) {
+      const t = Math.min((now - anim.t0) / 420, cur.n);
+      k = Math.floor(t); const f = t - k;
+      for (let i = 0; i <= Math.min(k, cur.n); i++) {
+        ctx.fillStyle = "#A9E34B"; ctx.beginPath(); ctx.arc(X(sx + i * v[0]), Y(sy + i * v[1]), 3.5, 0, 7); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.75)"; ctx.textAlign = "left"; ctx.fillText("p" + i, X(sx + i * v[0]) + 6, Y(sy + i * v[1]) - 6);
+      }
+      const kk = Math.min(k, cur.n - 1), ff = k >= cur.n ? 1 : f;
+      p = [sx + (kk + ff) * v[0], sy + (kk + ff) * v[1]];
+      if (t >= cur.n && !anim.done) { anim.done = true; finish(); }
+    }
+    const ang = v[0] || v[1] ? Math.atan2(-v[1], v[0]) : 0;
+    ship(X(p[0]), Y(p[1]), ang);
+    // velocity arrow from the start
+    if (!anim && (v[0] || v[1])) {
+      ctx.strokeStyle = "#e8590c"; ctx.fillStyle = "#e8590c"; ctx.lineWidth = 3;
+      const x1 = X(sx), y1 = Y(sy), x2 = X(sx + v[0]), y2 = Y(sy + v[1]);
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      const a = Math.atan2(y2 - y1, x2 - x1);
+      ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - 10 * Math.cos(a - 0.4), y2 - 10 * Math.sin(a - 0.4)); ctx.lineTo(x2 - 10 * Math.cos(a + 0.4), y2 - 10 * Math.sin(a + 0.4)); ctx.fill();
+    }
+  }
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function finish() {
+    const end = [cur.s[0] + cur.n * v[0], cur.s[1] + cur.n * v[1]];
+    tries++;
+    if (end[0] === cur.t[0] && end[1] === cur.t[1]) {
+      const got = tries === 1 ? 3 : tries === 2 ? 2 : 1;
+      stars += got; $("stars").textContent = "★ " + stars;
+      $("msg").textContent = `✓ Docked at ${pair(...end)}! ${"★".repeat(got)}  v = ${pair(...v)}: total displacement ${pair(cur.t[0] - cur.s[0], cur.t[1] - cur.s[1])} in ${cur.n} equal steps.`;
+      $("msg").className = "message good";
+      $("go").textContent = "Next level ▶";
+      [660, 880, 1320].forEach((f, i) => setTimeout(() => beep(f, 0.14), i * 110));
+    } else {
+      $("msg").textContent = `✗ The ship ended at ${pair(...end)}, not ${pair(...cur.t)}. Change v and try again.`;
+      $("msg").className = "message bad";
+      $("go").textContent = "Try again ▶";
+      beep(200, 0.3, "sawtooth");
+    }
+  }
+  document.querySelectorAll("[data-c]").forEach((b) => b.addEventListener("click", () => {
+    if (anim && !anim.done) return;
+    if (anim) { anim = null; $("go").textContent = "Launch ▶"; }
+    const i = b.dataset.c === "x" ? 0 : 1;
+    v[i] = Math.max(-VMAX, Math.min(VMAX, v[i] + Number(b.dataset.d)));
+    show();
+  }));
+  $("go").addEventListener("click", () => {
+    if (anim && anim.done) {
+      const won = cur.s[0] + cur.n * v[0] === cur.t[0] && cur.s[1] + cur.n * v[1] === cur.t[1];
+      if (won) { level++; startLevel(); return; }
+      anim = null; show(); return;
+    }
+    if (anim) return;
+    if (!v[0] && !v[1]) { $("msg").textContent = "The zero vector does not move the ship. Set v first."; $("msg").className = "message bad"; return; }
+    anim = { t0: performance.now(), done: false };
+    beep(440, 0.1);
+  });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  function loop(now) { draw(now); requestAnimationFrame(loop); }
+  window.addEventListener("resize", resize);
+  startLevel(); resize(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

@@ -1,394 +1,286 @@
 ---
-title: "Math in games: where is everything?"
+title: "Mathematics in Game Development and Coordinate Systems"
 subtitle: "Week 1 · Lecture 1"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary position coordinate axis x-axis y-axis z-axis origin 2d 3d negative-number >}}
+{{< glossary game-loop frame-rate coordinate-system origin ordered-pair quadrant screen-space world-space tile-grid handedness >}}
 
-## Think · Math in your game?
+## Think · What is a game, to a computer?
 
-Open your favourite mobile game.
-**Where is the math?**
+You see a hero, enemies and a score.
+**What does the program see?**
+
+::: {.answer}
+Only **numbers** — positions, health, time — updated every frame.
+:::
+
+## 1.1 The game loop
+
+:::: {.columns}
+::: {.column width="38%"}
+- input → update → render
+- one pass = one **frame**
+- **T = 1000 / f** ms
+- 60 fps → 16.7 ms
+:::
+::: {.column width="62%"}
+![](images/game-loop.png)
+:::
+::::
+
+## Example · Frame budget
+
+Racing game, 60 fps, 3-minute race.
 
 ::: {.reveal}
-- walk to a coin → **position, vectors** (weeks 1–3)
-- a cannon aims → **angles** (week 4)
-- grow / spin → **matrices** (weeks 5–7)
-- "health = 0 → game over" → **logic** (weeks 9–10)
-- a random prize → **probability** (weeks 11–13)
+1. T = 1000 / 60 ≈ **16.7 ms**
+2. 180 s × 60 = **10 800 updates**
+3. at 30 fps: 33.3 ms, only 5 400 updates
 :::
 
-## Try it 1 · Which math?
+## Try it 1 · The frame budget
 
-1. A rare sword drops 1 time in 20.
-2. The car is 5 steps right of the start.
-3. The door opens only with the key.
-4. The tower turns to face the enemy.
-5. The hero grows two times bigger.
-6. A spin wheel gives a random prize.
+a) frame time at 30 fps?
+b) frames in 10 s at 60 fps?
+c) maths for "the door opens"?
 
 ::: {.answer}
-1. probability
-2. position
-3. logic
-4. angle
-5. transformation
-6. probability
-:::
-
-## Think · How does the computer see?
-
-You see a player and a coin.
-**What does the computer see?**
-
-::: {.answer}
-Only **numbers**: every object has a **position**.
-:::
-
-## 2D: the grid
-
-![](sims/grid-position.png)
-
-## Axes and origin
-
-:::: {.columns}
-::: {.column width="45%"}
-- **x-axis**: left → right
-- **y-axis**: down ↑ up
-- **origin** = (0, 0)
-- each axis = a ruler
-:::
-::: {.column width="55%"}
-![](sims/grid-position.png)
-:::
-::::
-
-## Try it 2 · Read the grid
-
-:::: {.columns}
-::: {.column width="45%"}
-a) Last number on the x-axis?
-
-b) Top number on the y-axis?
-
-c) Left → right?
-
-d) Down → up?
-
-::: {.answer}
-a) 10
-b) 6
-c) the x-axis
-d) the y-axis
-:::
-:::
-::: {.column width="55%"}
-![](sims/grid-position.png)
-:::
-::::
-
-## Write a position: (x, y)
-
-- **x first**: count right
-- **y second**: count up
-- player = **(3, 2)**
-
-::: {.reveal}
-- (3, 2) ≠ (2, 3): **order is important**
-:::
-
-## Example · Where is the coin?
-
-:::: {.columns}
-::: {.column width="45%"}
-::: {.reveal}
-1. start at (0, 0)
-2. right: **7** → x = 7
-3. up: **4** → y = 4
-4. coin = **(7, 4)**
-:::
-:::
-::: {.column width="55%"}
-![](sims/grid-position.png)
-:::
-::::
-
-## Points on an axis
-
-- y = 0 → **on the x-axis** · (6, 0)
-- x = 0 → **on the y-axis** · (0, 2)
-
-## Live demo
-
-{{< sim file="sims/grid-position.html" poster="sims/grid-position.png" title="Move the player with x and y" >}}
-
-## Try it 3 · Where is it?
-
-:::: {.columns}
-::: {.column width="45%"}
-a) The coin: (x, y)?
-
-b) The name of (0, 0)?
-
-c) (3, 2), then 4 steps right?
-
-::: {.answer}
-a) (7, 4)
-b) the origin
-c) (7, 2)
-:::
-:::
-::: {.column width="55%"}
-![](sims/grid-position.png)
-:::
-::::
-
-## Try it 4 · Write the position
-
-a) 3 right, 5 up
-
-b) 5 right, 3 up
-
-c) 6 right, 0 up
-
-d) 0 right, 2 up
-
-e) on the y-axis, 4 up
-
-::: {.answer}
-a) (3, 5)
-b) (5, 3)
-c) (6, 0)
-d) (0, 2)
-e) (0, 4)
-:::
-
-## Think · The player moves
-
-The player is at **(3, 2)**. It moves **2 steps left**.
-**Which number changes?**
-
-::: {.answer}
-Only **x**: 3 − 2 = 1 → **(1, 2)**
-:::
-
-## Moving changes one number
-
-- right → **x** bigger · left → **x** smaller
-- up → **y** bigger · down → **y** smaller
-
-::: {.reveal}
-- (3, 2) → 2 left → **(1, 2)** → 3 up → **(1, 5)**
-:::
-
-## Think · Left of the origin?
-
-The player is at **(1, 2)**. It moves **3 steps left**.
-**What is x now?**
-
-::: {.answer}
-1 − 3 = **−2** → (−2, 2): a **negative number**
-:::
-
-## Try it 5 · Move from (5, 3)
-
-a) 2 right
-
-b) 3 down
-
-c) 4 left
-
-d) 1 up, 2 right
-
-e) 7 left
-
-::: {.answer}
-a) (7, 3)
-b) (5, 0)
-c) (1, 3)
-d) (7, 4)
-e) (−2, 3)
-:::
-
-## Think · A 3D world
-
-A 3D game has **depth**.
-Two numbers are not enough. **What do we add?**
-
-::: {.answer}
-A third number: **z** (forward).
-:::
-
-## 3D: add z
-
-:::: {.columns}
-::: {.column width="40%"}
-- (x, y, z)
-- **z** → forward
-- back = **−**
-:::
-::: {.column width="60%"}
-![](images/axes-3d.png)
-:::
-::::
-
-## Example · Reach (4, 3, 2)
-
-:::: {.columns}
-::: {.column width="40%"}
-::: {.reveal}
-1. 4 right → x = 4
-2. 2 forward → z = 2
-3. 3 up → y = 3
-- numbers: always **x, y, z**
-:::
-:::
-::: {.column width="60%"}
-![](images/axes-3d.png)
-:::
-::::
-
-## Live demo: 3D
-
-{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" >}}
-
-## Try it 6 · x, y or z?
-
-a) walks right
-
-b) jumps up
-
-c) walks forward
-
-d) falls down
-
-e) walks back
-
-::: {.answer}
-a) x
-b) y
-c) z
-d) y
-e) z
-:::
-
-## Try it 7 · Move in 3D
-
-The player is at **(4, 3, 2)**.
-
-a) jumps up 1 · b) forward 5
-
-c) left 4 · d) back 2
-
-::: {.answer}
-a) (4, 4, 2)
-b) (4, 3, 7)
-c) (0, 3, 2)
-d) (4, 3, 0)
-:::
-
-## In game code
-
-- `Vector3` = x, y, z · `Vector2` = x, y
-- C# (for example, Unity games) · just read it
-
-```csharp
-Vector3 playerPosition = new Vector3(4, 3, 2);
-Vector2 coinPosition = new Vector2(7, 4);
-```
-
-## Try it 8 · Read the code
-
-a) `new Vector3(4, 3, 2)`: which is z?
-
-b) `new Vector2(7, 4)`: 2D or 3D?
-
-c) `new Vector3(0, 5, 0)`: where?
-
-::: {.answer}
-a) 2
-b) 2D
-c) 5 up, above the origin
-:::
-
-## Game challenge · Coin Run
-
-- mobile game · run, jump, collect coins
-- a cannon aims · spikes end the game
-- a random prize chest · coins spin
-- work **alone** · answer each part
-
-## Try it 9 · Find the math
-
-a) The coin is at (7, 4).
-
-b) The cannon turns to aim.
-
-c) Spikes → game over.
-
-d) Gold coin 1 time in 10.
-
-e) The coin spins and grows.
-
-::: {.answer}
-a) position
-b) angle
+a) 33.3 ms
+b) 600
 c) logic
-d) probability
-e) transformation
 :::
 
-## Try it 10 · Level 1 (2D)
+## 1.2 One dimension: the number line
 
 :::: {.columns}
-::: {.column width="45%"}
-a) Start?
-
-b) Right until x = 7?
-
-c) Steps up to the coin?
-
-d) Key: y-axis, 5 up?
-
-e) Spider: x-axis, 1 left?
-
-::: {.answer}
-a) (3, 2)
-b) (7, 2)
-c) 2
-d) (0, 5)
-e) (−1, 0)
+::: {.column width="38%"}
+- displacement **b − a** (sign)
+- distance **|b − a|**
+- int (discrete) · float (continuous)
+- far from 0 → jitter → **floating origin**
 :::
-:::
-::: {.column width="55%"}
-![](sims/grid-position.png)
+::: {.column width="62%"}
+![](images/number-line.png)
 :::
 ::::
 
-## Try it 11 · Level 2 (3D)
+## Try it 2 · Moving along a line
 
-The player is at **(2, 0, 1)**.
+Player at x = 6 → checkpoint at x = −2.
 
-a) forward 4? · b) up 3?
-
-c) `new Vector3(2, 0, 1)`: which is y?
-
-d) Door at (0, 0, 6): where?
+a) displacement?
+b) distance?
+c) moving the world back to the origin?
 
 ::: {.answer}
-a) (2, 0, 5)
-b) (2, 3, 1)
-c) 0
-d) 6 steps forward
+a) −8
+b) 8
+c) floating origin
+:::
+
+## 1.3 Two dimensions: (x, y)
+
+:::: {.columns}
+::: {.column width="38%"}
+- x right, y up
+- **ordered pair** (x, y)
+- signs → **quadrant**
+- zero → on an axis
+:::
+::: {.column width="62%"}
+![](images/quadrants.png)
+:::
+::::
+
+## Example · Reading a level
+
+Key (−3, 2), trap (−4, −2.5), coin (4, 3).
+
+::: {.reveal}
+1. key: x < 0, y > 0 → **quadrant II**
+2. trap: both negative → **quadrant III**
+3. key → coin: |4 − (−3)| = **7**
+:::
+
+## Live demo · Grid Strike
+
+{{< sim file="sims/grid-strike.html" poster="sims/grid-strike.png" title="Grid Strike: hit the coordinates" kind="game" >}}
+
+## Try it 3 · Where is the point?
+
+a) (−5, 3)
+b) (0, −4)
+c) distance (−3, 2) ↔ (4, 2)?
+
+::: {.answer}
+a) quadrant II
+b) negative y-axis
+c) 7
+:::
+
+## 1.4 Screen space and world space
+
+:::: {.columns}
+::: {.column width="38%"}
+- screen: top-left, **y down**
+- xs = W/2 + s·xw
+- ys = H/2 **−** s·yw
+- many phones: s = W / w
+:::
+::: {.column width="62%"}
+![](images/screen-world.png)
+:::
+::::
+
+## Example · World ↔ screen
+
+1080 × 1920, s = 100.
+
+::: {.reveal}
+1. centre (540, 960)
+2. world (2, 3) → (540 + 200, 960 − 300) = **(740, 660)**
+3. touch (340, 1160) → ((340 − 540)/100, (960 − 1160)/100) = **(−2, −2)**
+:::
+
+## Try it 4 · Convert between the spaces
+
+1080 × 1920, s = 100.
+
+a) world (1, 2) → pixel?
+b) touch (740, 1360) → world?
+c) scale for a 9-unit-wide board?
+
+::: {.answer}
+a) (640, 760)
+b) (2, −4)
+c) 120 px per unit
+:::
+
+## 1.5 Grids: row-major order
+
+:::: {.columns}
+::: {.column width="38%"}
+- cell (c, r), from 0
+- **i = r·n + c**
+- c = i mod n
+- r = ⌊i / n⌋
+:::
+::: {.column width="62%"}
+![](images/tile-index.png)
+:::
+::::
+
+## Example · A match-3 board
+
+8 columns.
+
+::: {.reveal}
+1. (5, 3) → 3 × 8 + 5 = **29**
+2. index 42 → 42 ÷ 8 = 5 r 2 → **column 2, row 5**
+3. one row up → index + 8
+:::
+
+## Try it 5 · A match-3 board
+
+8 columns.
+
+a) index of (2, 4)?
+b) cell of index 19?
+c) index above 19?
+
+::: {.answer}
+a) 34
+b) column 3, row 2
+c) 27
+:::
+
+## 1.6 Three dimensions: (x, y, z)
+
+:::: {.columns}
+::: {.column width="38%"}
+- **ordered triple**
+- y up → ground = xz-plane
+- height = y
+:::
+::: {.column width="62%"}
+![](images/axes-3d.png)
+:::
+::::
+
+## Left-handed or right-handed?
+
+:::: {.columns}
+::: {.column width="38%"}
+- Unity: y up, **left**
+- Godot: y up, **right**
+- Blender: z up, **right**
+- swap two axes → flips
+:::
+::: {.column width="62%"}
+![](images/handedness.png)
+:::
+::::
+
+## Example · Blender to Unity
+
+Lamp at (1, 4, 2) in Blender (z up).
+
+::: {.reveal}
+1. height in Blender = z = 2
+2. swap y and z → **(1, 2, 4)** in Unity
+3. height in Unity = y = 2 ✓
+:::
+
+## Live demo · 3D position
+
+{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" >}}
+
+## Try it 6 · Positions in 3D
+
+a) where is (2, 0, −7)?
+b) Unity handedness?
+c) Blender (3, 1, 5) → Unity?
+
+::: {.answer}
+a) on the ground
+b) left-handed
+c) (3, 5, 1)
+:::
+
+## Game challenge · Harbor Guard
+
+:::: {.columns}
+::: {.column width="55%"}
+- 1080 × 1920 · 60 fps
+- camera at the origin · s = 120
+- harbour grid: 9 columns
+- towers from Blender
+:::
+::: {.column width="45%"}
+![](images/harbor-guard.png)
+:::
+::::
+
+## Try it 7 · Taps and tiles (harder)
+
+a) touch (300, 720) → world?
+b) tile index of (4, 6), 9 columns?
+c) Blender (2, 3, 1.5) → Unity?
+
+::: {.answer}
+a) (−2, 2)
+b) 58
+c) (2, 1.5, 3)
 :::
 
 ## Summary
 
-- 2D **(x, y)** · 3D **(x, y, z)** · x first
-- x → · y ↑ · z forward · left/down/back **−**
-- origin (0, 0) / (0, 0, 0)
-- a move changes **one** number
-- `new Vector2(x, y)` · `new Vector3(x, y, z)`
+- frame time = 1000 / fps
+- displacement has a sign, distance does not
+- (x, y): signs → quadrant
+- screen: top-left, y down, scale s
+- grid: i = r·n + c
+- 3D: handedness; swap two axes → it flips

@@ -21,7 +21,7 @@
   set document(title: title)
   set text(lang: lang, region: region, size: fontsize)
   set text(font: font) if font != none
-  set par(justify: false, leading: linestretch * 0.7em)
+  set par(justify: true, leading: linestretch * 0.68em, spacing: 1.05em)
   show raw: set text(font: codefont) if codefont != none
 
   set page(
@@ -45,16 +45,15 @@
     },
   )
 
-  // Headings: accent bar + accent colour.
-  show heading: set text(fill: accent.darken(25%), weight: "bold")
+  // Headings: accent bar + accent colour, never hyphenated.
+  show heading: set text(fill: accent.darken(25%), weight: "bold", hyphenate: false)
+  show heading: set par(justify: false)
   show heading.where(level: 1): it => block(above: 1.6em, below: 0.8em)[
     #box(fill: gradient.linear(accent, accent2), width: 5pt, height: 0.95em, radius: 2pt, baseline: 0.1em)
     #h(6pt)#text(size: 1.35em, it.body)
   ]
-  show heading.where(level: 2): it => block(above: 1.6em, below: 0.8em)[
-    #box(fill: gradient.linear(accent, accent2), width: 5pt, height: 0.95em, radius: 2pt, baseline: 0.1em)
-    #h(6pt)#text(size: 1.3em, it.body)
-  ]
+  // Level 2 (### in the notes): a subsection inside a numbered section.
+  show heading.where(level: 2): it => block(above: 1.3em, below: 0.6em, text(size: 1.12em, it.body))
   show heading.where(level: 3): it => block(above: 1.2em, below: 0.6em, text(size: 1.1em, it.body))
 
   // Tables: soft accent header row.
@@ -64,6 +63,8 @@
     fill: (x, y) => if y == 0 { accent.lighten(94%) },
   )
   show table.cell.where(y: 0): set text(weight: "bold", fill: accent.darken(30%))
+  show table: set par(justify: false)
+  show table: set text(hyphenate: false)
 
   // Code and figures.
   show raw.where(block: true): it => block(width: 100%, fill: luma(246), radius: 6pt, inset: 10pt, it)
@@ -83,7 +84,7 @@
     #set text(fill: accent.darken(50%))
     #if course != none { text(size: 9pt, weight: "bold", fill: accent.darken(10%), course) }
     #v(2pt)
-    #text(size: 22pt, weight: "bold", title-text)
+    #text(size: 22pt, weight: "bold", hyphenate: false, title-text)
     #if subtitle != none { v(-4pt); text(size: 11pt, subtitle) }
     #v(4pt)
     #for c in chips {

@@ -23,6 +23,9 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   this site. Self-assessments stay in the student's browser.
 - In the guidance plan of the diploma the course is in semester 2; the
   2026-2027 syllabus and the timetable put it in semester 1.
+- File sizes count in steps of **1024**, as Windows on the lab computers
+  does: 1 KB = 1024 bytes, 1 MB = 1024 KB, 1 GB = 1024 MB. One-step
+  conversions (2 GB = 2048 MB) are fine; 1024 is not hard for the students.
 
 ## Lessons learned
 
@@ -36,3 +39,9 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
 - Week 1 (2026-10-19, level check, about 20 % simpler): the table of 21
   competences (now five areas in simple words), the EU-targets figure,
   relative paths and file-size calculations were removed.
+- Week 1 (2026-10-20, teacher review): the slides of lesson 1 felt
+  theoretical. The Game challenge is now a mini-game, Hiring Desk (sort the
+  tasks of Pixel Harbor's job adverts into DigComp areas, read the
+  candidates' levels, hire), played on the projector and on the phones.
+  File sizes in lesson 2 now count in 1024 instead of 1000, with one worked
+  example (2 GB = 2048 MB) and one exercise.

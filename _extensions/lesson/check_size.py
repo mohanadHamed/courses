@@ -19,7 +19,11 @@ lesson-NN.qmd        (interactive lesson, HTML)
   - applied first: one "Do it" (or "Lab task") box in every section of the
     notes and of the page
 lesson-NN-slides.qmd (slides)
-  - slides (## headings, title slide not counted), one "Live demo" per sim
+  - slides (## headings, title slide not counted); every simulator of the page
+    is on a slide ("Live demo", or the Game challenge slide for the game of
+    the lesson)
+The game of the lesson: a mini-game in the page's Game challenge must also be
+in the notes (Case study, poster + QR) and on the Game challenge slide.
 
 It prints a warning when a number is outside the range for that lecture time.
 It never stops the render. Run it by hand for the full table:
@@ -100,6 +104,13 @@ def read(path):
 
 
 SECTION_RE = re.compile(r"^## (\d+\.\d+)\b", re.M)
+SIM_FILE_RE = re.compile(r'\{\{< *sim [^>]*file="([^"]+)"')
+
+
+def section(body, title_start):
+    """The text of the first ## section whose heading starts with title_start."""
+    m = re.search(r"^## " + re.escape(title_start) + r".*?$(.*?)(?=^## |\Z)", body, re.M | re.S | re.I)
+    return m.group(1) if m else ""
 DO_IT_RE = re.compile(r'^:::+ *\{\.callout-note title="(Do it|Lab task)', re.M)
 
 
@@ -155,6 +166,8 @@ def count_page(body):
         "try_its": len(re.findall(r'^:::+ *\{\.callout-tip title="Try it', body, re.M)),
         "questions": len(re.findall(r"^:   \S", body, re.M)),
         "sims": len(re.findall(r"\{\{< *sim ", body)),
+        "sim_files": set(SIM_FILE_RE.findall(body)),
+        "challenge_sims": set(SIM_FILE_RE.findall(section(body, "Game challenge"))),
         "do_its": do_its_per_section(body),
         "headings": headings(body),
     }
@@ -164,7 +177,8 @@ def count_slides(body):
     titles = re.findall(r"^## (.+)$", body, re.M)
     return {
         "slides": len(titles),
-        "demos": sum(1 for t in titles if t.lower().startswith("live demo")),
+        "sim_files": set(SIM_FILE_RE.findall(body)),
+        "challenge_sims": set(SIM_FILE_RE.findall(section(body, "Game challenge"))),
     }
 
 
@@ -189,6 +203,9 @@ def check(project_dir):
             for part in BOOK_REQUIRED:
                 if not any(h.startswith(part) for h in book["headings"]):
                     warnings.append("%s: no \"%s\" section in the notes" % (rel, part.capitalize()))
+            book_sims = set(SIM_FILE_RE.findall(read(book_path)))
+            for f in sorted(page["challenge_sims"] - book_sims):
+                warnings.append("%s: the game %s is not in the notes (Case study)" % (rel, f))
             for sec, k in book["do_its"].items():
                 if k == 0:
                     warnings.append("%s: section %s of the notes has no Do it task" % (rel, sec))
@@ -209,8 +226,10 @@ def check(project_dir):
         if os.path.exists(slides_path):
             s = count_slides(read(slides_path))
             n["slides"] = s["slides"]
-            if s["demos"] < n["sims"]:
-                warnings.append("%s: %d simulators but %d \"Live demo\" slides" % (rel, n["sims"], s["demos"]))
+            for f in sorted(page["sim_files"] - s["sim_files"]):
+                warnings.append("%s: %s is on no slide (\"Live demo\" or Game challenge)" % (rel, f))
+            for f in sorted(page["challenge_sims"] - s["challenge_sims"]):
+                warnings.append("%s: the game %s is not on the Game challenge slide" % (rel, f))
         else:
             warnings.append("%s: no slides file (%s)" % (rel, os.path.basename(slides_path)))
 

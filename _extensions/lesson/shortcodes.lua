@@ -14,6 +14,8 @@
 --     PPTX: poster image + QR code to the live page (students scan it in class).
 --     kind="game": a mini-game (a small playable game for one concept); the
 --     label says "Mini-game" instead of "Simulator".
+--     layout="qr" (slides): only the QR code, to put in a column next to the
+--     story of a Game challenge slide.
 --
 --   {{< schedule >}}
 --     Course page: all 16 weeks from courses/<slug>/schedule.yml, two lessons
@@ -216,6 +218,11 @@ local function sim(kwargs)
 
   local rel = doc_rel_dir()
   local url = site_url() .. (rel ~= "" and (rel .. "/") or "") .. file
+  local qr_only = str(kwargs.layout) == "qr"
+
+  if qr_only and not quarto.doc.is_format("html") and not quarto.doc.is_format("typst") then
+    return pandoc.Para({ pandoc.Image({}, qr_png(url, title, game and "Scan to play" or "Scan to try it")) })
+  end
 
   if quarto.doc.is_format("html") then
     return pandoc.RawBlock("html", string.format([[

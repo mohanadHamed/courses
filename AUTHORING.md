@@ -142,6 +142,30 @@ link it from the notes and the slides:
 `{{< sim file="sims/x.html" poster="sims/x.png" title="…" kind="game" >}}`
 (label "Mini-game", QR text "Scan to play"). Same rules as simulators.
 
+### The game of the lesson (playable case study)
+
+When the Case study and the Game challenge of a lesson use a made-up game
+(*Harbor Guard*, *Comet Courier*, *Pocket Pets*, …), build its core as a
+mini-game: only the part that the lesson teaches (placing objects by their
+coordinates, one velocity per frame, sorting player messages by component,
+switching the tetrad on and off), with the numbers of the story in its first
+round. Then:
+
+- **Page:** the Game challenge embeds it after the story and before the Try
+  it boxes (`{{< sim … kind="game" >}}`); it replaces the static illustration.
+- **Notes (PDF):** the Case study embeds the same shortcode (poster + QR,
+  "Scan to play").
+- **Slides:** the Game challenge slide keeps the story in keywords on the
+  left and shows the QR code on the right:
+  `{{< sim … kind="game" layout="qr" >}}` inside the right column.
+- If the lesson's mini-game already *is* that game (Tap Runner), reuse it:
+  the notes and the page point to it, the slide shows its QR code.
+- A story about a studio, a class or a person, not a game, needs no game of
+  its own.
+
+`check_size.py` warns when a game of the page's Game challenge is missing in
+the notes or on the Game challenge slide.
+
 ### Size every lesson for its lecture time
 
 | | 60-min lesson | 90-min lesson (`game-math`) |
@@ -192,9 +216,11 @@ discussions with classmates. Each course's `plan.md` names these lessons.
 **Game challenge (every course; no class activities).** No groups, no paper:
 every student works alone on the page, and the teacher shows one part on
 the slides. `## Game challenge: <name> {.challenge}`, a short story of one
-made-up game or studio (3–5 sentences with fixed numbers), then "Try it"
-boxes that combine the sections of the day (the last one "(harder)"). The
-notes contain the same story as a "Case study" section.
+made-up game or studio (3–5 sentences with fixed numbers), then the game
+itself as a playable mini-game when the story is about a game (see "The game
+of the lesson"), then "Try it" boxes that combine the sections of the day (the
+last one "(harder)"). The notes contain the same story as a "Case study"
+section.
 
 Course-specific notes: `courses/<slug>/NOTES.md`. Week map:
 `courses/<slug>/schedule.yml` (titles, ILOs) and `courses/<slug>/plan.md`.
@@ -606,6 +632,10 @@ Lessons or homework not ready for students: `draft: true` (not published).
   easier (small numbers, fewer details) and the English simple (B1 in the
   notes, A2–B1 on the page and slides), with the same ILOs and PLOs. Rules
   above ("Level and language").
+- 2026-10-19: the made-up game of each case study is now playable: a
+  mini-game of its core part in the page's Game challenge, with its QR code
+  in the notes and on the Game challenge slide (rule "The game of the
+  lesson").
 - 2026-10-19 (level check): the students' level is very basic. The most the
   lessons can be simplified without losing the ILOs and PLOs was estimated at
   about 30 %; the lessons are now about 20 % simpler, and topics that no

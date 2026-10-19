@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Pocket Pets support desk</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .score { margin-left: auto; }
+    .sim .desk { display: grid; grid-template-columns: 1fr 150px; gap: 12px; align-items: start; }
+    .sim .card { border: 1.5px solid #eadfcd; border-radius: 14px; padding: 12px 14px; background: #fffdf7; min-height: 120px; }
+    .sim .card .from { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--sim-accent); margin-bottom: 6px; }
+    .sim .card .from i { width: 30px; height: 30px; border-radius: 50%; display: inline-block; background: var(--sim-accent2); }
+    .sim .card .text { font-size: 1.05rem; font-weight: 700; }
+    .sim .card.in { animation: pop .35s ease-out; }
+    @keyframes pop { from { transform: translateY(8px); opacity: .3; } to { transform: none; opacity: 1; } }
+    .sim .parts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+    .sim .parts button { padding: 12px 6px; font-size: 1rem; }
+    .sim .parts button small { display: block; font-weight: 600; font-size: .72rem; opacity: .85; }
+    .sim .phone { border: 3px solid #2a2f2c; border-radius: 20px; padding: 10px 8px; background: #fff; }
+    .sim .chip { border: 1.5px solid #eadfcd; border-radius: 8px; padding: 6px; margin-bottom: 6px; text-align: center; font-weight: 800; font-size: .85rem; transition: background .2s, border-color .2s; }
+    .sim .chip.lit { background: var(--sim-accent2); border-color: var(--sim-accent); }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 520px) { .sim .desk { grid-template-columns: 1fr; } .sim .phone { display: none; } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Pocket Pets · support desk</h1>
+  <p class="hint">Players write to the support team. Read each message and send it to the right part of the phone: the processor (CPU), the memory (RAM) or the storage.</p>
+  <div class="hud">
+    <span id="round">Message 0/10</span>
+    <span class="score" id="score">Score 0</span>
+  </div>
+  <div class="desk">
+    <div>
+      <div class="card" id="card"><div class="from"><i></i><span>Support inbox</span></div><div class="text">Press Start to open the inbox.</div></div>
+      <div class="parts" id="parts">
+        <button type="button" data-p="cpu" disabled>CPU<small>runs the game</small></button>
+        <button type="button" data-p="ram" disabled>RAM<small>holds what runs now</small></button>
+        <button type="button" data-p="storage" disabled>Storage<small>keeps it when off</small></button>
+      </div>
+    </div>
+    <div class="phone" aria-hidden="true">
+      <div class="chip" id="chip-cpu">CPU · 8 cores</div>
+      <div class="chip" id="chip-ram">RAM · 4 GB</div>
+      <div class="chip" id="chip-storage">Storage · 64 GB</div>
+    </div>
+  </div>
+  <div class="controls"><button id="start" type="button">Start</button></div>
+  <p id="msg" class="message">10 messages from players of Pocket Pets.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const MESSAGES = [
+    { who: "Lina", text: "My phone has eight cores, but only one is really busy when I play.", p: "cpu", why: "The game logic runs on one main thread, on one core of the CPU." },
+    { who: "Omar", text: "The new island download needs 1.6 GB, and my phone has only 1.2 GB free.", p: "storage", why: "Downloads are kept in storage. He must free 0.4 GB of storage." },
+    { who: "Sara", text: "I pressed Clear storage in the settings, and my pets are gone!", p: "storage", why: "Clear storage deletes the user data in storage, including the saved progress." },
+    { who: "Yusuf", text: "When I enter the island, the pets look blurry for a second.", p: "ram", why: "The textures are still being copied from storage into RAM, so the game shows simple versions first." },
+    { who: "Huda", text: "I switch to a video, come back, and the game starts again from the title screen.", p: "ram", why: "The RAM was full, so the system closed the game in the background." },
+    { who: "Ali", text: "My pets are still there after I switched the phone off and on.", p: "storage", why: "Storage keeps the saved progress when the power is off." },
+    { who: "Rana", text: "On my old 1.8 GHz phone the game feels slower than on my new 3 GHz phone.", p: "cpu", why: "The clock rate (GHz) tells how fast one core of the CPU works." },
+    { who: "Karim", text: "With 4 GB the island stutters, but with 8 GB it runs smoothly.", p: "ram", why: "More RAM means more textures and models can stay loaded at once." },
+    { who: "Noor", text: "After I pressed Clear cache, the game is fine and my pets are still there.", p: "storage", why: "Clear cache deletes only temporary files in storage; the user data stays." },
+    { who: "Tamer", text: "The pets move in jumps when 50 of them run around together.", p: "cpu", why: "The CPU must update every pet in every frame; with many pets the frame takes too long." },
+  ];
+  const NAMES = { cpu: "the CPU", ram: "the RAM", storage: "the storage" };
+  let game = null, best = 0;
+  try { best = Number(localStorage.getItem("pocket-pets-best")) || 0; } catch (_) {}
+  const btns = [...document.querySelectorAll("#parts button")];
+
+  function light(p) { ["cpu", "ram", "storage"].forEach((k) => $("chip-" + k).classList.toggle("lit", k === p)); }
+  function show() {
+    const m = game.list[game.i];
+    $("round").textContent = `Message ${game.i + 1}/${game.list.length}`;
+    const card = $("card"); card.classList.remove("in"); void card.offsetWidth; card.classList.add("in");
+    card.innerHTML = `<div class="from"><i></i><span>${m.who} writes:</span></div><div class="text">“${m.text}”</div>`;
+    btns.forEach((b) => (b.disabled = false)); light(null);
+  }
+  btns.forEach((b) => b.addEventListener("click", () => {
+    if (!game || game.done) return;
+    const m = game.list[game.i], ok = b.dataset.p === m.p;
+    btns.forEach((x) => (x.disabled = true)); light(m.p);
+    if (ok) { game.score += 10; $("msg").textContent = `✓ Right: ${NAMES[m.p]}. ${m.why}`; $("msg").className = "message good"; }
+    else { $("msg").textContent = `✗ Not ${NAMES[b.dataset.p]}: it is ${NAMES[m.p]}. ${m.why}`; $("msg").className = "message bad"; }
+    $("score").textContent = `Score ${game.score}`;
+    const g = game;
+    setTimeout(() => {
+      if (g !== game) return;          // a restart happened meanwhile
+      game.i++;
+      if (game.i >= game.list.length) {
+        game.done = true; light(null);
+        if (game.score > best) { best = game.score; try { localStorage.setItem("pocket-pets-best", String(best)); } catch (_) {} }
+        $("card").innerHTML = `<div class="from"><i></i><span>Inbox empty</span></div><div class="text">You answered ${game.score / 10} of ${game.list.length} players correctly. Best: ${best / 10}.</div>`;
+        $("start").textContent = "Play again"; return;
+      }
+      show();
+    }, ok ? 1500 : 2600);
+  }));
+  $("start").addEventListener("click", () => {
+    game = { list: MESSAGES.slice().sort(() => Math.random() - 0.5), i: 0, score: 0, done: false };
+    $("score").textContent = "Score 0"; $("start").textContent = "Restart";
+    $("msg").textContent = "Which part of the phone is the message about?"; $("msg").className = "message";
+    show();
+  });
+})();
+</script>
+</body>
+</html>

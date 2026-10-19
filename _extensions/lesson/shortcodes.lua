@@ -317,9 +317,18 @@ local function file_exists(path)
   return false
 end
 
-local function schedule()
+-- Prefix of the downloaded file names (math_lecture5.pdf): course.file-prefix,
+-- the same names as banner.lua and download_names.py.
+local function file_prefix(meta)
+  local course = meta and meta.course or {}
+  if course["file-prefix"] then return str(course["file-prefix"]) end
+  return (str(course.slug or "course"):gsub("%-", "_"))
+end
+
+local function schedule(meta)
   if not quarto.doc.is_format("html") then return pandoc.Null() end
   local dir = pandoc.path.directory(quarto.doc.input_file)
+  local prefix = file_prefix(meta)
   local data = read_yaml(pandoc.path.join({ dir, "schedule.yml" }))
   local config = read_yaml(pandoc.path.join({ project_dir(), "_quarto.yml" }))
   local slides_public = config["slides-public"] == true
@@ -340,10 +349,10 @@ local function schedule()
         local href = wdir .. "/" .. stem
         local parts = { string.format('<a class="sl-go" href="%s.html">Open lesson →</a>', href) }
         if file_exists(base .. "-book.qmd") then
-          table.insert(parts, string.format('<a class="sl-file" href="%s-book.pdf">PDF</a>', href))
+          table.insert(parts, string.format('<a class="sl-file" href="%s/%s_lecture%d.pdf">PDF</a>', wdir, prefix, n))
         end
         if slides_public and file_exists(base .. "-slides.qmd") then
-          table.insert(parts, string.format('<a class="sl-file" href="%s-slides.pptx">Slides</a>', href))
+          table.insert(parts, string.format('<a class="sl-file" href="%s/%s_lecture%d_slides.pptx">Slides</a>', wdir, prefix, n))
         end
         links = '<span class="sl-links">' .. table.concat(parts, "") .. "</span>"
       else
@@ -377,7 +386,7 @@ local function schedule()
 end
 
 return {
-  ["schedule"] = function() return schedule() end,
+  ["schedule"] = function(_, _, meta) return schedule(meta) end,
   ["answer-space"] = function(_, kwargs) return answer_space(kwargs) end,
   ["glossary"] = function(args) return glossary(args) end,
   ["sim"] = function(_, kwargs) return sim(kwargs) end,

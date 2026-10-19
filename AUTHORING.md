@@ -44,12 +44,11 @@ this order.
 
 1. **Lesson notes (PDF)** — `lesson-NN-book.qmd` → `<prefix>_lectureN.pdf`.
    The main study text, written like an applied chapter of a technical
-   textbook: clear, professional English, numbered sections (`## 1.1 …`),
-   precise definitions, worked examples and common mistakes, "Do it" tasks
-   (see "Applied first"), figures, tables, short C# reading examples where
-   useful, a case study, further reading (textbook chapter), exercises and
-   short answers. It may be demanding in what it asks students to do; it is
-   never long on theory.
+   textbook: simple, clear English (see "Level and language"), numbered
+   sections (`## 1.1 …`), precise definitions, worked examples and common
+   mistakes, "Do it" tasks (see "Applied first"), figures, tables, short C#
+   reading examples where useful, a case study, further reading (textbook
+   chapter), exercises and short answers. It is never long on theory.
 2. **Interactive lesson (HTML)** — `lesson-NN.qmd`, derived from the notes.
    The same sections (`## 1.1 …`), each with a short, clear summary (plainer
    English than the notes, but not childish), its figures, its simulator or
@@ -231,9 +230,29 @@ ILO–PLO matrix). Use the newest version of each file.
 
 ## Students
 
-- Diploma students, first year. Their level is higher than first assumed:
-  they cope with formal English and real concepts when the text is clear.
+- Diploma students, first year. They cope with real concepts when the
+  text is simple and clear, but English is their second language.
 - I explain in Arabic in class; the bilingual glossary supports them.
+
+### Level and language
+
+The level is slightly easier than a first-year bachelor's course, and the
+English is simple. The ILOs and PLOs stay exactly the same: a lesson is
+easier in *how* it teaches, never in *what* the ILO asks for.
+
+- **Numbers:** small, round numbers (1024 × 1024, 100 reads, 10 ms + 6 ms).
+  One or two steps per calculation, no calculator needed. No conversion
+  that needs a calculator (1024³ and the like) unless an ILO asks for it.
+- **Depth:** one idea at a time; the main idea of a section fits in two
+  sentences. Leave out details that the ILO and the tasks do not need
+  (cache levels, standards, exceptions); one short sentence is enough when
+  a student may meet the detail in practice.
+- **English (notes):** CEFR B1. Short sentences (about 20 words at most,
+  one idea each), common words, active voice ("the CPU reads the value",
+  not "the value is read"), no idioms. Explain every technical word in plain
+  words the first time it appears, then use the same word every time.
+- **English (page and slides):** A2–B1: even shorter sentences and lists.
+- Definitions stay precise, but in the same simple English.
 - No programming yet: *Programming Fundamentals (1)* (C#) is in semester 2.
   Code in semester-1 courses is a short C# example to read, never a task,
   and every code word is explained.
@@ -243,15 +262,15 @@ ILO–PLO matrix). Use the newest version of each file.
 
 ## Writing rules (always enforce)
 
-- **Notes:** clear, professional English, the register of a technical
-  manual or an applied textbook: short paragraphs, direct steps. Precise
+- **Notes:** simple English (B1, see "Level and language"): short
+  paragraphs, direct steps. Precise
   definitions (`::: {.callout-important title="Definition 1.2 — …"}`), worked
   examples with numbered steps (`::: {.callout-note title="Example 1.3 — …"}`),
   common mistakes (`::: {.callout-warning title="Common mistake"}`), code
   (`::: {.callout-caution title="In game code"}`), figures with captions and
   `@fig-` references, tables with captions, `::: {.lead}` opening paragraph,
   `::: {.answers}` for the short answers.
-- **Page:** the same content, shorter and plainer (B1–B2): one idea per
+- **Page:** the same content, shorter and plainer (A2–B1): one idea per
   sentence, but no baby talk. "Watch out!" boxes for common mistakes.
 - **Slides:** keywords and pictures, no long sentences.
 - Picture before formula: game situation → figure → definition → example →
@@ -563,3 +582,8 @@ Lessons or homework not ready for students: `draft: true` (not published).
   task, one Do it task per section, a theory budget), always within the
   official ILOs and PLOs. Rules above ("Applied first"). Tried first on one
   model lesson before it is applied to all courses.
+- 2026-10-19 (model lesson review): the model was right in approach but a
+  little too hard, and its English too formal. The level is now slightly
+  easier (small numbers, fewer details) and the English simple (B1 in the
+  notes, A2–B1 on the page and slides), with the same ILOs and PLOs. Rules
+  above ("Level and language").

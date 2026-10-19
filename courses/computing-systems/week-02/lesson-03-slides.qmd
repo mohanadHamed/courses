@@ -11,12 +11,11 @@ format: lesson-pptx
 
 ## Think · 8 cores = 8 times faster?
 
-A phone has an **octa-core** processor.
-**Does a game run eight times faster than on one core?**
+A phone has **8 cores**.
+**Is a game 8 times faster than with 1 core?**
 
 ::: {.answer}
-No. The game logic runs on **one main thread**, on one core. Only the
-worker part is shared.
+No. The game logic runs on **one main thread**: one core.
 :::
 
 ## 3.1 Cores and threads
@@ -24,9 +23,9 @@ worker part is shared.
 :::: {.columns}
 ::: {.column width="38%"}
 - core = runs one **thread**
-- performance + efficiency cores
-- main thread: one core
-- GHz = pace of **one** core
+- big fast cores + small battery-saving cores
+- main thread: always one core
+- GHz = speed of **one** core
 - **Do it together:** Task Manager → CPU → Logical processors
 :::
 ::: {.column width="62%"}
@@ -42,16 +41,16 @@ Main thread 10 ms + 6 ms shared work.
 1. 1 core: 10 + 6 = **16 ms**
 2. 2 cores: 10 + 3 = **13 ms**
 3. 6 cores: 10 + 1 = **11 ms**
-4. only 1.5 times faster, not 6 times
+4. faster, but not 6 times faster
 :::
 
 ## Try it 1 · Cores and threads
 
 Main thread 8 ms + 4 ms shared work.
 
-a) frame time with four cores?
-b) best core for background music?
-c) 8 cores at 3 GHz: speed of the main thread's core?
+a) frame time with 4 cores?
+b) best core for music in the background?
+c) 8 cores at 3 GHz: speed of one core?
 
 ::: {.answer}
 a) 9 ms
@@ -63,10 +62,10 @@ c) 3 GHz
 
 :::: {.columns}
 ::: {.column width="38%"}
-- registers → cache → RAM → storage
-- up: fast, small, close
-- down: large, slow, cheap
-- **cache hit** ≈ 1 ns · miss ≈ 100 ns
+- cache → RAM → storage
+- up: fast, small, near the core
+- down: big, slow, cheap
+- **cache hit** 1 ns · **miss** 100 ns
 :::
 ::: {.column width="62%"}
 ![](images/memory-hierarchy.png)
@@ -79,16 +78,16 @@ c) 3 GHz
 
 ## Try it 2 · The memory hierarchy
 
-1 000 000 reads per frame · cache 1 ns · RAM 100 ns.
+Cache 1 ns · RAM 100 ns.
 
-a) 90 % hits: memory time?
+a) 100 reads: 90 cache + 10 RAM?
 b) position read 50 times: where after the first read?
-c) best score after power off: kept where?
+c) best score when the phone is off: where?
 
 ::: {.answer}
-a) 10.9 ms
+a) 90 + 1000 = 1090 ns
 b) in the cache
-c) in storage (flash)
+c) in storage
 :::
 
 ## 3.3 What a game keeps in memory
@@ -96,9 +95,9 @@ c) in storage (flash)
 :::: {.columns}
 ::: {.column width="38%"}
 - code · assets · state
-- textures: the largest share
-- size = width × height × bytes
-- KB, MB (1000) · KiB, MiB (1024)
+- textures: the biggest part
+- texture = width × height × 4 bytes
+- KB → MB → GB: × 1000 each
 - **Do it together:** Task Manager → Processes → Memory
 :::
 ::: {.column width="62%"}
@@ -108,33 +107,33 @@ c) in storage (flash)
 
 ## Example · The memory of one texture
 
-2048 × 2048 pixels, 4 bytes per pixel.
+1024 × 1024 pixels, 4 bytes per pixel.
 
 ::: {.reveal}
-1. 2048 × 2048 = 4 194 304 pixels
-2. × 4 bytes = **16 MiB**
-3. ASTC, 1 byte per pixel: **4 MiB**
-4. 40 textures: 640 MiB → 160 MiB
+1. 1024 × 1024 ≈ **1 million** pixels
+2. × 4 bytes ≈ **4 MB**
+3. compressed, 1 byte per pixel ≈ **1 MB**
+4. 40 textures: 160 MB → 40 MB
 :::
 
 ## Try it 3 · Memory sizes
 
-a) 1024 × 1024, 4 bytes per pixel?
-b) game near its memory limit: compress what first?
-c) "3.7 GiB": counted in powers of…?
+a) 1024 × 1024, compressed (1 byte per pixel)?
+b) almost out of memory: compress what first?
+c) about 1000 MB = ?
 
 ::: {.answer}
-a) 4 MiB
+a) about 1 MB
 b) textures
-c) 1024
+c) 1 GB
 :::
 
 ## 3.4 Storage
 
 :::: {.columns}
 ::: {.column width="38%"}
-- hard disk: platters, moving arm
-- SSD / phone: flash, no moving parts
+- hard disk: spinning disks, moving arm
+- SSD / phone: flash chips, no moving parts
 - app · user data · cache
 - 1 TB → 931 GB in Windows
 - **Do it together:** a game's storage screen on a phone
@@ -146,21 +145,21 @@ c) 1024
 
 ## Try it 4 · Storage
 
-a) Clear cache on 300 MB: what is lost?
-b) keep the pets: avoid which button?
-c) "2 TB" SSD in Windows?
+a) Clear cache: what is lost?
+b) keep the pets: which button is wrong?
+c) 1 TB shows 931 GB: is space missing?
 
 ::: {.answer}
 a) nothing important (temporary files)
 b) Clear storage
-c) about 1863 GB
+c) no, Windows counts with 1024
 :::
 
 ## Game challenge · Pocket Pets support desk
 
 :::: {.columns}
 ::: {.column width="38%"}
-- island: 40 textures, 2048 × 2048, ASTC
+- island: 40 textures, 1024 × 1024, compressed
 - 1 "only one core busy"
 - 2 "needs 1.6 GB, I have 1.2 GB"
 - 3 "Clear storage: pets gone"
@@ -181,13 +180,13 @@ c) message 5: memory of the 40 textures?
 ::: {.answer}
 a) 0.4 GB
 b) the user data
-c) 160 MiB
+c) about 40 MB
 :::
 
 ## Summary
 
 - core runs one thread · cores do not add up
-- registers → cache → RAM → storage
+- cache → RAM → storage
 - cache: data used again and again
-- RAM: code, assets, state · texture = w × h × bytes
+- RAM: code, assets, state · texture = w × h × 4 bytes
 - storage: app · user data · cache

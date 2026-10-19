@@ -25,21 +25,21 @@
 <body class="theme-circuit">
 <main class="sim">
   <h1>Data Trip</h1>
-  <p class="hint">The core needs one value. Fetch it from each level of the memory hierarchy and compare the trips. In the table, one nanosecond is stretched to one second.</p>
+  <p class="hint">The core needs one value. Get it from each level and compare the trips. In the last column, 1 nanosecond lasts 1 second.</p>
   <canvas id="c" aria-label="A data packet travels from a memory level to the processor core"></canvas>
   <div class="levels" id="levels"></div>
   <table>
     <thead><tr><th>Level</th><th>Real time</th><th>If 1 ns = 1 s</th></tr></thead>
     <tbody id="rows"></tbody>
   </table>
-  <p id="msg" class="message">Tap a level to fetch a value from it.</p>
+  <p id="msg" class="message">Tap a level to get a value from it.</p>
 
-  <h2>One frame</h2>
-  <p class="hint">The code of one frame reads memory 1 000 000 times. A read from the cache takes 1 ns; a read from main memory takes 100 ns.</p>
+  <h2>100 reads</h2>
+  <p class="hint">The game reads 100 values. A read from the cache takes 1 ns. A read from main memory takes 100 ns. How many values are in the cache?</p>
   <div class="controls">
-    <label>Cache hits <input type="range" id="hits" min="50" max="100" step="1" value="99"> <span class="readout" id="hitsOut">99 %</span></label>
+    <label>From the cache <input type="range" id="hits" min="0" max="100" step="1" value="90"> <span class="readout" id="hitsOut">90 of 100</span></label>
   </div>
-  <div class="bar"><div class="fill" id="fill"></div><div class="budget" id="budget"><span>16.7 ms frame</span></div></div>
+  <div class="bar"><div class="fill" id="fill"></div></div>
   <p id="frameMsg" class="message"></p>
 </main>
 
@@ -86,7 +86,7 @@
     if (trip) return;
     trip = { i, t: 0 };
     $("levels").querySelectorAll("button").forEach((b) => (b.disabled = true));
-    $("msg").textContent = `Fetching from ${LEVELS[i].label.toLowerCase()}…`;
+    $("msg").textContent = `Getting a value from ${LEVELS[i].label.toLowerCase()}…`;
   }
   function roundRect(x, y, w, h, r) {
     ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
@@ -145,16 +145,14 @@
     draw(); requestAnimationFrame(loop);
   }
   function frame() {
-    const h = Number($("hits").value) / 100;
-    const ms = (1e6 * (h * 1 + (1 - h) * 100)) / 1e6;  // ns → ms
-    $("hitsOut").textContent = Math.round(h * 100) + " %";
-    const max = Math.max(55, ms);
-    $("fill").style.width = (100 * ms / max) + "%";
-    $("fill").classList.toggle("over", ms > 16.7);
-    $("budget").style.left = (100 * 16.7 / max) + "%";
-    $("frameMsg").textContent = `Memory time of the frame: ${ms.toFixed(1)} ms. ` +
-      (ms > 16.7 ? "Longer than a whole frame at 60 fps!" : `That is ${Math.round(100 * ms / 16.7)} % of a 16.7 ms frame.`);
-    $("frameMsg").classList.toggle("good", ms <= 16.7);
+    const hits = Number($("hits").value), misses = 100 - hits;
+    const ns = hits * 1 + misses * 100;               // cache 1 ns, RAM 100 ns
+    const fmt = (n) => n.toLocaleString("en-US").replace(/,/g, " ");
+    $("hitsOut").textContent = hits + " of 100";
+    $("fill").style.width = (100 * ns / 10000) + "%";
+    $("fill").classList.toggle("over", ns > 5000);
+    $("frameMsg").textContent = `${hits} × 1 ns + ${misses} × 100 ns = ${fmt(ns)} ns. (All from the cache: 100 ns. All from RAM: 10 000 ns.)`;
+    $("frameMsg").classList.toggle("good", ns <= 1000);
   }
   $("hits").addEventListener("input", frame);
   window.addEventListener("resize", resize);

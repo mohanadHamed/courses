@@ -171,6 +171,7 @@ summary 7.
 
 `_extensions/lesson/check_size.py` (project pre-render) checks these numbers,
 that every section of the notes is on the page, the one-box-per-section rule,
+one "Do it" (or "Lab task") box in every section of the notes and the page,
 the required parts (notes: Key terms, Exercises, Answers to the exercises;
 page: Key terms, Game challenge, Summary) and one "Live demo" slide per
 simulator. Fix every warning before you open a PR. Full table:

@@ -11,6 +11,12 @@
   document.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
+  // "Do it" and "Lab task" boxes (callout-note with that title) get their own look.
+  for (const c of document.querySelectorAll(".callout-note")) {
+    const t = c.querySelector(".callout-title-container");
+    if (t && /^\s*(Do it|Lab task)\b/.test(t.textContent)) c.classList.add("do-it");
+  }
+
   // Resize simulator iframes to the height they report (shared/sims/sim-base.js).
   window.addEventListener("message", (e) => {
     const h = e.data && e.data.simHeight;

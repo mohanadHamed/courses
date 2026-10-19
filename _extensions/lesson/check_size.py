@@ -16,6 +16,8 @@ lesson-NN.qmd        (interactive lesson, HTML)
   - simulators and mini-games ({{< sim >}})
   - repetition: at most one "Try it" box in a section (one question set per
     concept), and every section of the notes is also on the page
+  - applied first: one "Do it" (or "Lab task") box in every section of the
+    notes and of the page
 lesson-NN-slides.qmd (slides)
   - slides (## headings, title slide not counted), one "Live demo" per sim
 
@@ -98,6 +100,17 @@ def read(path):
 
 
 SECTION_RE = re.compile(r"^## (\d+\.\d+)\b", re.M)
+DO_IT_RE = re.compile(r'^:::+ *\{\.callout-note title="(Do it|Lab task)', re.M)
+
+
+def do_its_per_section(body):
+    """Number of "Do it" / "Lab task" boxes in each numbered section."""
+    out = {}
+    for part in re.split(r"^(?=## )", body, flags=re.M):
+        m = SECTION_RE.match(part)
+        if m:
+            out[m.group(1)] = len(DO_IT_RE.findall(part))
+    return out
 
 
 def headings(body):
@@ -124,6 +137,7 @@ def count_book(body):
         "words": count_words(main),
         "examples": len(re.findall(r'^:::+ *\{\.callout-\w+ title="Example', body, re.M)),
         "exercises": ex,
+        "do_its": do_its_per_section(body),
         "headings": headings(body),
     }
 
@@ -141,6 +155,7 @@ def count_page(body):
         "try_its": len(re.findall(r'^:::+ *\{\.callout-tip title="Try it', body, re.M)),
         "questions": len(re.findall(r"^:   \S", body, re.M)),
         "sims": len(re.findall(r"\{\{< *sim ", body)),
+        "do_its": do_its_per_section(body),
         "headings": headings(body),
     }
 
@@ -174,12 +189,18 @@ def check(project_dir):
             for part in BOOK_REQUIRED:
                 if not any(h.startswith(part) for h in book["headings"]):
                     warnings.append("%s: no \"%s\" section in the notes" % (rel, part.capitalize()))
+            for sec, k in book["do_its"].items():
+                if k == 0:
+                    warnings.append("%s: section %s of the notes has no Do it task" % (rel, sec))
             missing = [s for s in book["sections"] if s not in page["sections"]]
             if missing:
                 warnings.append("%s: sections %s of the notes are not on the page" % (rel, ", ".join(missing)))
         else:
             warnings.append("%s: no lesson notes (%s)" % (rel, os.path.basename(book_path)))
 
+        for sec, k in page["do_its"].items():
+            if k == 0:
+                warnings.append("%s: section %s of the page has no Do it task" % (rel, sec))
         for sec, k in page["per_section"].items():
             if k > 1:
                 warnings.append("%s: section %s has %d Try it boxes; use one question set per concept" % (rel, sec, k))

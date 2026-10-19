@@ -1,6 +1,6 @@
 ---
 title: "How Games Run on the Devices We Use"
-description: "From the app package to the first frame, CPU, GPU and display in each frame, local vs cloud, and device classes."
+description: "From the store to the first frame, CPU, GPU and screen in every frame, local or cloud, and device classes."
 week: 1
 lesson: 2
 ilos: [A1]
@@ -8,141 +8,172 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-summarises one concept and ends with one set of questions. The full
-explanations, worked examples and exercises are in the notes.
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
 
 ## Key terms
 
-{{< glossary app-package install process loading frame-rate refresh-rate resolution latency bandwidth cloud-gaming thermal-throttling >}}
+{{< glossary app-package install process loading gpu frame-rate refresh-rate resolution thermal-throttling latency bandwidth cloud-gaming >}}
 
 ## 2.1 From the store to the first frame
 
-A game arrives as an **app package** (Android: AAB uploaded to Google Play,
-APK on the device; iOS: IPA). **Installation** copies it to storage — no memory
-is used yet. Launching creates a **process**, **loads** code and assets from
-storage into RAM, starts the engine and the game loop. Loading screens exist
-because storage (≈ 0.1–1.5 GB/s) is far slower than RAM. When memory runs
-short, the OS terminates background processes — the game restarts from the
-title screen.
+- A game comes as one file: an **app package** (Android: APK, iPhone: IPA).
+- **Installing** copies it into storage. No memory is used yet.
+- **Launching** creates a **process** and **loads** code and assets from
+  storage into memory.
+- Storage is slow (about 100–1000 MB per second), so there is a loading
+  screen.
+- Example: 1500 MB at 150 MB per second = 10 seconds.
+- When memory is full, the system closes games in the background. The game
+  then starts again from the title screen.
 
 ![Launching a game.](images/launch.png){width=88%}
 
+::: {.callout-warning title="Watch out!"}
+More storage does not mean faster loading. The **speed** of storage decides
+the loading time.
+:::
+
+::: {.callout-note title="Do it · Time a game start"}
+Close a game fully and time its start until the menu. Then go home, wait ten
+seconds, and open it again from the recent apps. Time it again. Why is the
+second start faster? Use the words *storage* and *memory*.
+:::
+
 ::: {.callout-tip title="Try it 1 · Install, launch, load"}
-Choose the right term or value.
+Choose the right answer.
 
-::: {.match extra="APK|1 s"}
-The package format that a developer uploads to Google Play.
-:   AAB
-
-The package format of iOS apps.
-:   IPA
-
-What installation fills: storage or memory?
+::: {.match extra="memory|1 second"}
+A player installs a game. What does it fill?
 :   storage
 
-A program in execution, with its own protected memory.
-:   process
+A running program with its own part of memory.
+:   a process
 
-The loading time of 1.5 GB of assets at 150 MB/s.
-:   10 s
+1500 MB of assets at 150 MB per second. Loading time?
+:   10 seconds
 
-Why a game restarts after a long break in other apps.
-:   the OS terminated its process
+900 MB of assets at 300 MB per second. Loading time?
+:   3 seconds
+
+A game starts again from the title screen after a long break. Why?
+:   the system closed it to free memory
 :::
 :::
 
 ## 2.2 The frame on real hardware
 
-The **CPU** runs the game logic and prepares drawing commands; the **GPU**
-computes the pixels. They work in parallel on consecutive frames, so the
-slower one sets the frame time. The player sees at most
-min(**frame rate**, **refresh rate**) new images per second. Higher
-**resolution** means more pixels for the GPU. Phones have no fan: under
-sustained load they slow down (**thermal throttling**).
+- The **CPU** runs the game logic. The **GPU** draws the pixels.
+- They work at the same time on two frames. The slower one sets the pace.
+- **Frame rate**: new pictures per second from the game (fps).
+- **Refresh rate**: pictures per second on the screen (Hz).
+- The player sees only as many new pictures as the slower of the two.
+- **Resolution**: width × height pixels. More pixels = more work for the GPU.
+- No fan in a phone: after some minutes it slows down (**thermal
+  throttling**).
 
-![CPU and GPU work in parallel on consecutive frames.](images/cpu-gpu-pipeline.png){width=94%}
+![CPU and GPU work at the same time.](images/cpu-gpu-pipeline.png){width=94%}
 
-::: {.callout-tip title="Try it 2 · Frames, displays, heat"}
-Choose the right value or term.
+::: {.callout-note title="Do it · Your screen in numbers"}
+On a lab computer: Settings → System → Display. Write the resolution and
+(under Advanced display) the refresh rate. How many pixels is that, about?
+What is the highest frame rate a player can see on it?
+:::
 
-::: {.match extra="120|the GPU"}
-A 120 Hz display and a game at 70 fps: new images per second.
+::: {.callout-tip title="Try it 2 · Frames, screens, heat"}
+Choose the right answer.
+
+::: {.match extra="60|the GPU"}
+CPU 20 ms, GPU 10 ms per frame. Time of one frame?
+:   20 ms
+
+That game: frames per second?
+:   50
+
+A 120 Hz screen and a game at 70 fps. New pictures per second?
 :   70
 
-CPU 12 ms and GPU 9 ms per frame: the frame rate.
-:   about 83 fps
+A screen of 1080 × 2400 pixels. About how many pixels?
+:   2.6 million
 
-The processor that limits that game.
-:   the CPU
-
-The number of pixels of a 1080 × 2400 screen.
-:   about 2.6 million
-
-The chip slows down because it is too hot.
+The chip gets hot and the phone slows down. What is it called?
 :   thermal throttling
 :::
 :::
 
 ## 2.3 Where the game is computed
 
-**Local**: everything on the device. **Online (client–server)**: each device
-runs the game; a server keeps the shared state of the match. **Cloud
-gaming**: the game runs on a server; the device sends inputs and plays a video
-stream. Cloud gaming needs **bandwidth** (≈ 10–20 Mbit/s for 1080p60) and adds
-**latency**: about 44 ms locally becomes about 99 ms with a 40 ms round trip.
+- **Local**: everything on the device.
+- **Online (client–server)**: each device runs the game; a server keeps the
+  shared data of the match.
+- **Cloud gaming**: the game runs on a server; the phone sends touches and
+  shows a video.
+- **Latency**: the delay between an action and the result (ms).
+- **Bandwidth**: data per second (Mbit/s). Cloud gaming needs about 10–20
+  Mbit/s.
+- Example: local lag 44 ms; with cloud gaming 44 + 40 + 15 = 99 ms.
 
 ![Local, client–server and cloud gaming.](images/where-game-runs.png){width=94%}
 
 {{< sim file="sims/lag-lab.html" poster="sims/lag-lab.png" title="Lag Lab: play with input lag" kind="game" height="560" >}}
 
+::: {.callout-note title="Do it · Feel the lag"}
+In **Lag Lab**, play 10 blocks in each mode. Write the percentage you cleared
+in each mode. From which mode does the game get hard?
+:::
+
 ::: {.callout-tip title="Try it 3 · Near or far?"}
-Choose the right arrangement or term.
+Choose the right answer.
 
 ::: {.match extra="local|a card game"}
-The game runs entirely on a server; the phone only shows the video.
+The game runs on a server; the phone only shows the video.
 :   cloud gaming
 
-Each phone runs the game; a server keeps the shared match state.
+Each phone runs the game; a server keeps the score of the match.
 :   client–server
 
-The delay between an action and its visible result.
+The delay between a tap and the jump on the screen.
 :   latency
 
-The amount of data a connection carries per second.
-:   bandwidth
+Local lag 44 ms + trip 40 ms + video 15 ms.
+:   99 ms
 
-Local lag 44 ms + round trip 40 ms + video coding 15 ms.
-:   about 99 ms
-
-The kind of game that suffers most from 100 ms of lag.
+Which game suffers most from 100 ms of lag?
 :   a fighting game
 :::
 :::
 
 ## 2.4 Device classes for gaming
 
+- **Smartphone, tablet**: touch, battery, no fan, short sessions.
+- **PC or laptop**: keyboard, mouse or gamepad, long sessions at a desk.
+- **Console**: gamepad, TV, long sessions at home.
+- **Cloud gaming**: any screen, but a fast network.
+- A game for one class must change for another: input, screen, play time,
+  power.
+
 ![The five device classes.](images/devices.png){width=92%}
 
-Smartphones and tablets: touch and sensors, battery, no fan, short sessions.
-PCs: keyboard, mouse or gamepad, the widest range of performance. Consoles:
-gamepad, TV, fixed high performance. Cloud gaming: any screen, but a fast
-network. A game designed for one class must be adapted — input, screen,
-session length and power — before it works on another.
+::: {.callout-note title="Do it · The right device for a game"}
+Choose a game you know. Write its input, the screen it needs and the length of
+one session. Which device class fits it best? Give one reason.
+:::
 
 ::: {.callout-tip title="Try it 4 · Which device class?"}
 Choose the device class.
 
 ::: {.match extra="embedded system"}
-Gamepad, TV, fixed high performance.
+Gamepad, TV, long sessions at home.
 :   console
 
-Keyboard and mouse, the widest range of performance.
+Keyboard and mouse, long sessions at a desk.
 :   PC
 
-Touch, battery, no fan, five-minute sessions in a pocket.
+Touch, battery, no fan, five-minute sessions on the bus.
 :   smartphone
 
-Any screen, as long as the network is fast.
+Any screen, if the network is fast.
 :   cloud gaming
 :::
 :::
@@ -152,37 +183,38 @@ Any screen, as long as the network is fast.
 Work alone. Use every section of today.
 
 A first-year class lists the devices it plays on. Most students use Android
-phones of different prices; the cheapest one reads its storage at 120 MB/s. A
-few use iPhones and some use laptops. One student has a console. Two play
-through a cloud gaming service; one of them has a round trip of 90 ms to the
-data centre. The class wants one game that runs on all of these devices.
+phones of different prices; the cheapest one reads its storage at 120 MB per
+second. A few use iPhones and some use laptops. One student has a console. Two
+play through a cloud gaming service; one of them has a trip of 90 ms to the
+data centre and back. The class wants one game that runs on all of these
+devices.
 
 ::: {.callout-tip title="Try it 5 · One game, many devices (harder)"}
 Use the numbers of the survey and of today's sections.
 
-::: {.match extra="0.2 s|99 ms"}
-The loading time of a 600 MB level on the cheapest phone.
-:   5 s
+::: {.match extra="1 second|99 ms"}
+Loading time of a 600 MB level on the cheapest phone.
+:   5 seconds
 
-The input lag of the cloud player with the 90 ms round trip.
+Input lag of the cloud player with the 90 ms trip.
 :   149 ms
 
 The input device of the student with the console.
 :   gamepad
 
-The device class where thermal throttling matters most in a 30-minute session.
+The device class where heat matters most in a 30-minute session.
 :   smartphone
 
-The package format of the iPhone version.
+The package type of the iPhone version.
 :   IPA
 :::
 :::
 
 ## Summary {.summary}
 
-- Install = copy to storage; launch = create a process and load into RAM.
-- Storage speed decides loading time; memory decides what stays loaded.
-- CPU and GPU work in parallel; the slower sets the frame rate; the display caps it.
-- Phones throttle under sustained load.
-- Local, client–server, cloud: cloud adds latency and needs bandwidth.
+- Install = copy to storage. Launch = create a process and load into memory.
+- The speed of storage decides the loading time.
+- CPU and GPU work together; the slower one sets the frame rate; the screen limits it too.
+- Phones slow down when hot.
+- Local, client–server, cloud: the cloud adds latency and needs bandwidth.
 - Each device class needs its own input, layout and performance plan.

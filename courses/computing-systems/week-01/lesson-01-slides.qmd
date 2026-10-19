@@ -6,161 +6,169 @@ format: lesson-pptx
 
 ## Keywords
 
-{{< glossary computing-system von-neumann cpu memory storage instruction-cycle abstraction-level isa compiler digital-platform >}}
+{{< glossary computing-system cpu memory storage instruction-cycle clock-rate isa compiler digital-platform >}}
 
-## Think · One phone, thousands of games
+## Think · What happens when you tap?
 
-The same phone runs a racing game, then a puzzle game.
-**How is that possible without new hardware?**
+You tap the screen and the character jumps.
+**Which parts of the phone work?**
 
 ::: {.answer}
-The program is **data in memory**: load a new program, get a new machine.
+Touch screen (input) → **CPU** (processing) → display and speaker (output) →
+storage (the best score).
 :::
 
-## 1.1 The stored-program model
+## 1.1 Four jobs, four parts
 
 :::: {.columns}
 ::: {.column width="38%"}
-- CPU: control, ALU, registers
-- RAM: fast, volatile
-- storage: permanent
-- bus connects them
+- input · processing · storage · output
+- **CPU** runs instructions
+- **RAM**: fast, forgets at power off
+- **storage**: keeps data
+- **Do it together:** four jobs in a game
 :::
 ::: {.column width="62%"}
 ![](images/von-neumann.png)
 :::
 ::::
 
-## The instruction cycle
+## Try it 1 · Four jobs and four parts
+
+a) tilt the phone to turn the car?
+b) best lap time after a restart?
+c) forgets its data at power off?
+
+::: {.answer}
+a) input
+b) storage
+c) main memory (RAM)
+:::
+
+## 1.2 How the CPU runs a game
 
 :::: {.columns}
 ::: {.column width="38%"}
-- fetch → decode → execute
-- 3 GHz = 3 billion ticks/s
-- 60 fps → 50 million ticks per frame
+- **fetch** → **decode** → **execute**
+- billions of times per second
+- 3 GHz = 3 billion ticks per second
+- one frame = one short time
 :::
 ::: {.column width="62%"}
 ![](images/instruction-cycle.png)
 :::
 ::::
 
+## Example · Work in one frame
+
+3 GHz core · 60 frames per second.
+
+::: {.reveal}
+1. 3 000 000 000 ticks per second
+2. ÷ 60 = **50 million ticks** per frame
+3. input, movement, collisions, sound: all in these ticks
+:::
+
 ## Live demo · Tap Runner
 
 {{< sim file="sims/one-frame.html" poster="sims/one-frame.png" title="Tap Runner: inside one frame" kind="game" >}}
 
-## Try it 1 · Inside the computer
+## Try it 2 · The instruction cycle
 
-a) loses data when off?
-b) the three steps?
-c) ticks per frame, 3 GHz, 60 fps?
+a) get the next instruction?
+b) add 10 to the score?
+c) 2 GHz at 50 frames per second?
 
 ::: {.answer}
-a) RAM
-b) fetch, decode, execute
-c) 50 million
+a) fetch
+b) execute
+c) 40 million ticks
 :::
 
-## 1.2 A multilevel machine
+## 1.3 One game, many processors
 
 :::: {.columns}
 ::: {.column width="38%"}
-- each level: a simpler language below
-- **compiler**: translate first
-- **interpreter**: step by step
-:::
-::: {.column width="62%"}
-![](images/levels.png)
-:::
-::::
-
-## The ISA: where hardware meets software
-
-:::: {.columns}
-::: {.column width="38%"}
-- phones: **ARM**
-- PC, PS5, Xbox: **x86-64**
-- written once, translated per ISA
+- CPU cannot read C#
+- **ISA**: the CPU's instructions
+- phones: **ARM** · PCs: **x86-64**
+- **compiler** → one build per ISA
+- **Do it together:** System type of the lab PC
 :::
 ::: {.column width="62%"}
 ![](images/build-targets.png)
 :::
 ::::
 
-## Try it 2 · Levels and languages
+## Try it 3 · Builds and processors
 
-a) hardware meets software?
-b) converts before it runs?
-c) ISA of smartphones?
+a) Snapdragon phone: which ISA?
+b) Android build on a Windows PC?
+c) Android + iPhone + Windows: how many ISAs?
 
 ::: {.answer}
-a) the ISA
-b) compiler
-c) ARM
+a) ARM
+b) no, a different ISA
+c) 2
 :::
-
-## 1.3 Classes of computers
-
-:::: {.columns}
-::: {.column width="38%"}
-- embedded · mobile · personal · console · server
-- energy decides
-- Moore's law
-:::
-::: {.column width="62%"}
-![](images/computer-classes.png)
-:::
-::::
 
 ## 1.4 Digital platforms
 
 :::: {.columns}
 ::: {.column width="38%"}
-- hardware + OS + SDK + store
-- the owner sets the rules
-- cross-platform engines
-- **fragmentation**
+- devices + system + tools + store
+- the owner makes the rules
+- mobile ≈ half of game revenue
+- Android: thousands of models
+- **Do it together:** platforms at home
 :::
 ::: {.column width="62%"}
 ![](images/platform-stack.png)
 :::
 ::::
 
-## Try it 3–4 · Classes and platforms
+## Try it 4 · Platforms
 
-a) battery, no fan, largest platform?
-b) Android's main store?
-c) thousands of Android models?
+a) the store of iOS?
+b) phone game to Switch: new input?
+c) who decides what a game may contain?
 
 ::: {.answer}
-a) mobile
-b) Google Play
-c) fragmentation
+a) App Store
+b) buttons and sticks
+c) the platform owner
 :::
 
 ## Game challenge · Tap Runner
 
-- endless runner · tap to jump · 60 fps
-- saves the best distance
-- Android · iPhone · Windows PC
-- test phone core: 2.4 GHz
+:::: {.columns}
+::: {.column width="38%"}
+- endless runner: tap to jump
+- 60 frames per second
+- Android · iPhone · Windows
+- test phone: 2.4 GHz core
+:::
+::: {.column width="62%"}
+![](sims/one-frame.png)
+:::
+::::
 
-## Try it 5 · Tap Runner on three platforms (harder)
+## Try it 5 · Tap Runner (harder)
 
-a) ticks per frame at 2.4 GHz, 60 fps?
+a) ticks per frame on the test phone?
 b) ISA of the Windows build?
-c) best distance when the phone is off?
+c) how many builds?
 
 ::: {.answer}
 a) 40 million
 b) x86-64
-c) storage
+c) 3
 :::
 
 ## Summary
 
-- input · processing · storage · output
-- stored program · fetch–decode–execute
-- RAM volatile · storage permanent
-- levels of abstraction · the ISA
-- five classes of computers
-- platform = hardware + OS + SDK + store
+- four jobs: input, processing, storage, output
+- CPU · RAM · storage
+- fetch → decode → execute · GHz
+- ARM and x86-64: one build each
+- platform = devices + system + tools + store

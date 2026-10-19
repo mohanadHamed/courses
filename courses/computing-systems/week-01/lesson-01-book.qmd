@@ -1,6 +1,6 @@
 ---
 title: "Computing Systems and Digital Platforms in the Games Industry"
-description: "Lesson notes · The stored-program computer, the computer as a multilevel machine, classes of computing systems and the platforms on which games are built and sold."
+description: "Lesson notes · The four jobs of a computing system, how the CPU runs a game, one game for many processors, and digital platforms."
 week: 1
 lesson: 1
 ilos: [A1]
@@ -8,297 +8,279 @@ format: lesson-typst
 ---
 
 ::: {.lead}
-A mobile game is a program, but it never runs alone. It runs on a processor
-that understands only a few hundred simple instructions, under an operating
-system that shares the hardware among many programs, inside a platform whose
-owner decides how games are built, tested and sold. This chapter defines what
-a computing system is, explains how a computer can be understood as a stack of
-simpler machines, surveys the families of computers that games run on, and
-introduces the idea of a digital platform.
+A small studio makes a running game called *Tap Runner*. The player taps the
+screen, and the character jumps. The studio wants the game on Android phones,
+on iPhones and on Windows PCs. To do this, the team must know what happens
+inside a device when the player taps, which processor runs the game, and who
+sells the game to the players. In this lesson you learn the main parts of a
+computing system and what each part does in a game. You also learn what a
+digital platform is. Every section ends with a short task that you do on
+your phone, on the lab computer or in a mini-game.
 :::
 
 ## Key terms
 
-{{< glossary computing-system hardware software von-neumann cpu memory storage instruction-cycle abstraction-level isa compiler digital-platform >}}
+{{< glossary computing-system hardware software cpu memory storage input output instruction-cycle clock-rate isa compiler digital-platform >}}
 
-## 1.1 What a computing system is
+## 1.1 What a game needs from a computer
 
-A **computing system** is a combination of **hardware** (the physical
-components), **software** (the programs that control them) and **data**,
-organised to perform four functions: it accepts **input** from the outside,
-**processes** it by executing instructions, **stores** data for later use, and
-produces **output**. The same four functions describe a pocket calculator, a
-smartphone and the servers of an online game; what differs is their scale.
+A phone, a laptop and a game console look very different. Inside, they work in
+the same way. Each one is a **computing system**.
 
-### The stored-program computer
-
-Almost every computer in use today follows the design described by John von
-Neumann and his colleagues in 1945: the **stored-program** or **von Neumann**
-model (@fig-von-neumann). Its key idea is that the *program itself is data*:
-the instructions are kept in the same memory as the values they work on, so a
-new program can be loaded simply by writing new contents into memory. This is
-why one phone can run thousands of different games.
-
-![The stored-program (von Neumann) model. The CPU, the main memory and the input/output devices exchange data over a shared bus.](images/von-neumann.png){#fig-von-neumann width=82%}
-
-The model has four parts:
-
-- the **central processing unit (CPU)**, which contains a *control unit* that
-  directs the work, an *arithmetic logic unit (ALU)* that performs arithmetic
-  and comparisons, and a few very fast storage cells called *registers*;
-- the **main memory (RAM)**, which holds the instructions and data of the
-  programs that are running; it is fast but *volatile* — it loses its contents
-  when the power is off;
-- the **input/output (I/O) devices**, including **storage** (flash memory or
-  disks), which keeps programs and files permanently;
-- the **bus**, a set of shared connections that carries addresses, data and
-  control signals between the parts.
-
-::: {.callout-important title="Definition 1.1 — The instruction cycle"}
-The CPU executes a program by repeating the **instruction cycle**:
-
-1. **fetch** the next instruction from main memory;
-2. **decode** it — determine which operation it asks for and on which data;
-3. **execute** it — perform the operation, for example an addition in the ALU,
-   and store the result;
-
-then move on to the next instruction. The rate of this cycle is set by a
-clock; a clock rate of 3 GHz means three billion clock ticks per second.
+::: {.callout-important title="Definition 1.1 — Computing system"}
+A **computing system** is a combination of **hardware** (the physical parts),
+**software** (the programs) and **data**. It does four jobs: it takes
+**input**, it **processes** the input, it **stores** data, and it gives
+**output**.
 :::
 
-![The instruction cycle, repeated billions of times per second.](images/instruction-cycle.png){#fig-cycle width=62%}
+Four main parts do these jobs (@fig-von-neumann):
 
-::: {.callout-note title="Example 1.1 — One tap, four functions"}
-A player taps the screen to make a character jump.
+- the **CPU** (processor) runs the instructions of the programs;
+- the **main memory (RAM)** holds the programs and data that are running now.
+  It is fast, but it loses everything when the power is off;
+- **storage** (flash memory or a disk) keeps apps and files when the power is
+  off;
+- **input and output devices**: the touch screen, the speaker, the display,
+  the buttons.
 
-1. **Input**: the touch screen detects the finger and reports its position
-   to the system.
-2. **Processing**: the CPU executes the game's instructions: *is the
-   character on the ground? then set its upward velocity*; it also checks
-   collisions with the platform above.
-3. **Output**: the graphics processor draws the new frame; the speaker plays
-   the jump sound; the motor may vibrate.
-4. **Storage**: when the level ends, the new best score is written to flash
-   storage, so that it survives when the phone is switched off.
-:::
+The parts send data to each other over shared connections called the **bus**.
 
-::: {.callout-note title="Example 1.2 — How much work fits into one frame?"}
-A phone CPU core runs at 3 GHz, and the game targets 60 frames per second.
+![The main parts of a computer. The CPU, the main memory and the input/output devices exchange data over the bus.](images/von-neumann.png){#fig-von-neumann width=86%}
 
-1. Time per frame: $1/60$ s $\approx 16.7$ ms.
-2. Clock ticks per frame: $3 \times 10^{9} \times \frac{1}{60} = 5 \times 10^{7}$,
-   that is, 50 million ticks.
-3. A modern core completes several instructions per tick, so one frame allows
-   roughly a hundred million simple instructions per core. This budget is
-   shared by game logic, physics, sound and the operating system.
+One important idea makes all of this work: the program is stored in memory,
+in the same way as data. To run a different game, the device only loads a
+different program into memory. This is why one phone can run thousands of
+different games.
+
+::: {.callout-note title="Example 1.1 — One tap, four jobs"}
+In *Tap Runner*, the player taps the screen to jump.
+
+1. **Input:** the touch screen finds the finger and sends its position.
+2. **Processing:** the CPU runs the game's instructions: *is the character on
+   the ground? Then start the jump.*
+3. **Output:** the new picture appears on the display, and the speaker plays
+   the jump sound.
+4. **Storage:** at the end of the run, the best distance is saved in storage,
+   so it is still there tomorrow.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Confusing **memory** with **storage**. "A phone with 8 GB of memory and
-256 GB of storage" has 8 GB of fast, volatile RAM for running programs and
-256 GB of slower, permanent flash storage for installed apps and files.
-Installing more games fills the storage; running more games at once fills
-the memory.
+"Memory and storage are the same." They are not. A phone with 8 GB of memory
+and 256 GB of storage has 8 GB of fast RAM for the apps that are running, and
+256 GB of storage for installed apps and files. Installing many games fills
+the storage. Running many games at the same time fills the memory.
 :::
 
-## 1.2 The computer as a multilevel machine
+::: {.callout-note title="Do it · Four jobs in your game"}
+Choose a game on your phone and play it for one minute.
 
-A CPU understands only its own **machine language**: a small set of primitive
-instructions such as *load a value from memory*, *add two registers* or *jump
-to another instruction if a value is zero*. Writing a game in such
-instructions would be impossibly slow. Computer scientists solve this problem
-by building a series of **levels of abstraction** on top of the hardware. Each
-level defines a language — a set of instructions — that is more convenient
-than the one below it, and each level is implemented using the level below.
-Tanenbaum calls this view of a computer a **multilevel machine**
-(@fig-levels).
+1. Draw a table with four rows: input, processing, output, storage.
+2. In each row, write one thing that happened in your game. For example:
+   "Input: I swiped left."
 
-![The computer as a multilevel machine, with the levels that a game passes through added at the top.](images/levels.png){#fig-levels width=76%}
-
-| Level | Name | What it provides |
-|---|---|---|
-| 5 | problem-oriented language | languages such as C#, C++ and Java |
-| 4 | assembly language | a readable form of machine instructions |
-| 3 | operating system machine | files, processes, memory management, devices |
-| 2 | instruction set architecture (ISA) | the machine language of the processor |
-| 1 | microarchitecture | the internal data paths, registers and ALU |
-| 0 | digital logic | gates built from transistors |
-
-: The six levels of a typical computer (after Tanenbaum). {#tbl-levels}
-
-A program at a higher level is carried down to the hardware in one of two
-ways. In **translation**, a program called a **compiler** (or an
-*assembler*, for assembly language) converts the whole program into the
-language of a lower level before it runs. In **interpretation**, a program
-called an **interpreter** reads the higher-level program and carries out each
-instruction as it goes. Translation gives faster programs; interpretation is
-more flexible. Most modern systems combine the two.
-
-::: {.callout-important title="Definition 1.2 — Instruction set architecture"}
-The **instruction set architecture (ISA)** is the level at which hardware and
-software meet: the complete list of machine instructions that a family of
-processors can execute. Almost all smartphones use the **ARM** ISA; almost
-all desktop PCs and current game consoles use **x86-64**. A program compiled
-for one ISA does not run directly on another.
+*Your result:* the table with four game events.
 :::
 
-The levels explain how one game can reach very different devices. A Unity
-game is written in C#. The C# compiler translates it into an intermediate
-language (CIL) that belongs to no real processor. For each platform the code
-is then translated again into the machine language of that platform's ISA:
-ARM for Android and iOS, x86-64 for a Windows PC. The game is written once;
-the lower levels are generated for each machine (@fig-builds).
+## 1.2 How the CPU runs a game
 
-![One C# game, translated for two instruction set architectures.](images/build-targets.png){#fig-builds width=86%}
+A game is a long list of very simple **instructions**, such as *add two
+numbers* or *compare two numbers*. The CPU runs them one after another, very
+fast. For each instruction, it repeats the same three steps (@fig-cycle).
 
-::: {.callout-note title="Example 1.3 — One line of game code, level by level"}
-The line `score = score + 10;` in a C# game is executed as follows.
+::: {.callout-important title="Definition 1.2 — The instruction cycle"}
+The CPU runs a program by repeating the **instruction cycle**:
 
-1. **Level 5**: the programmer writes the line in C#.
-2. Translation: the compiler produces CIL, and then ARM instructions for a
-   phone — roughly *load* the score from memory into a register, *add* 10,
-   *store* the register back to memory.
-3. **Level 3**: the operating system has given the game's process the memory
-   in which `score` lives, and protects it from other apps.
-4. **Levels 2–0**: the processor fetches, decodes and executes the three ARM
-   instructions; the ALU's logic gates perform the addition.
+1. **fetch:** get the next instruction from memory;
+2. **decode:** find out what the instruction asks for;
+3. **execute:** do it, for example add two numbers, and keep the result.
+
+A clock sets the speed of this cycle. The **clock rate** is measured in
+gigahertz (GHz): 3 GHz means 3 billion clock ticks per second.
 :::
 
-## 1.3 Classes of computing systems
+![The instruction cycle. The CPU repeats it billions of times per second.](images/instruction-cycle.png){#fig-cycle width=62%}
 
-Computers range from chips that cost less than a dollar to data centres that
-cost billions. In games they appear in five broad classes (@fig-classes),
-compared in @tbl-classes.
+A game draws a new picture, a **frame**, many times per second, for example 60
+times. All the work for one frame must fit into the time of one frame.
 
-![Five classes of computing systems used in games.](images/computer-classes.png){#fig-classes width=94%}
+::: {.callout-note title="Example 1.2 — How much work fits into one frame?"}
+A phone CPU core runs at 3 GHz. The game shows 60 frames per second.
 
-| Class | Examples | Typical ISA | Power | Role in games |
-|---|---|---|---|---|
-| embedded | game controllers, smart toys, VR trackers | ARM (small cores) | milliwatts | read buttons and sensors |
-| mobile | smartphones, tablets, handhelds | ARM | a few watts, battery | the largest gaming platform |
-| personal | laptops, desktop PCs | x86-64 (some ARM) | 50–500 W | high-end and competitive games, development |
-| console | PlayStation, Xbox, Nintendo Switch | x86-64 / ARM | 15–200 W | fixed hardware tuned for games |
-| server | data centres, cloud | x86-64, ARM | kilowatts per rack | online play, accounts, cloud gaming |
+1. Clock ticks per second: 3 GHz = 3 000 000 000 ticks.
+2. Ticks per frame: $3\,000\,000\,000 / 60 = 50\,000\,000$, that is,
+   **50 million ticks**.
+3. In these ticks, the CPU must do everything for one frame: read the input,
+   move the characters, check collisions, play sounds.
+:::
 
-: Classes of computing systems used in the games industry. {#tbl-classes}
+The mini-game below is a version of *Tap Runner*. It shows which part of the
+computer works at each moment of a frame.
 
-Two observations follow. First, the classes differ less in *what* they can
-compute than in *how much* and *at what energy cost*: a phone must deliver its
-performance from a battery and without a fan, so mobile games must be designed
-for strict limits of power and heat. Second, the performance of all classes
-has grown exponentially for decades. In 1965 Gordon Moore observed that the
-number of transistors on a chip doubled at a regular interval, later stated as
-about every two years. This trend, known as **Moore's law**, explains why a
-phone today outperforms the game consoles of fifteen years ago, although the
-growth has slowed as transistors approach physical limits.
+{{< sim file="sims/one-frame.html" poster="sims/one-frame.png" title="Tap Runner: inside one frame" kind="game" height="560" >}}
 
-## 1.4 Digital platforms in the games industry
+::: {.callout-note title="Do it · Watch one frame"}
+Open the **Tap Runner** mini-game above (or scan its QR code). Turn on slow
+motion.
 
-To a player, "the platform" is the device in their hands. To the games
-industry, a platform is more than hardware.
+1. Tap to jump, and watch the parts that light up.
+2. Write the parts in the order in which they work during your jump.
 
-::: {.callout-important title="Definition 1.3 — Digital platform"}
-A **digital platform** is the combination of a hardware family, an operating
-system, a set of programming interfaces and development tools (an *SDK*), and
-a distribution channel with its own rules, on which software is built, sold
-and run.
+*Your result:* the list of parts in order, and one sentence: which part
+decides that the character jumps?
+:::
+
+## 1.3 One game, many processors
+
+The studio writes *Tap Runner* in C#, a programming language that people can
+read. The CPU cannot read C#. Each processor family understands only its own
+list of machine instructions. This list is called the **instruction set
+architecture (ISA)**.
+
+::: {.callout-important title="Definition 1.3 — Instruction set architecture"}
+The **instruction set architecture (ISA)** is the list of machine instructions
+that a family of processors can run. Almost all phones use the **ARM** ISA.
+Most Windows PCs, the PlayStation and the Xbox use the **x86-64** ISA. Machine
+code for one ISA does not run on the other.
+:::
+
+A program called a **compiler** translates the game into the machine
+instructions of each ISA. The game engine does this for the developer: from
+one C# project, it makes a separate **build** for each kind of device
+(@fig-builds).
+
+![One C# game, translated into two builds: one for ARM, one for x86-64.](images/build-targets.png){#fig-builds width=86%}
+
+::: {.callout-note title="Example 1.3 — Three builds of Tap Runner"}
+The studio releases *Tap Runner* on Android phones, iPhones and Windows PCs.
+
+1. Android phone: ARM build.
+2. iPhone: ARM build (Apple's chips use ARM too).
+3. Windows PC: x86-64 build.
+4. The game code is the same, but the PC needs its own build. The phone file
+   cannot run on the PC, even if the PC is faster.
+:::
+
+::: {.callout-note title="Do it · Which ISA?"}
+1. **Lab computer (Windows):** open Settings → System → About. Read
+   *System type*. "x64-based processor" means x86-64. "ARM-based processor"
+   means ARM.
+2. **Your phone:** Android: Settings → About phone (the processor name may be
+   under "Hardware" or "Processor"). iPhone: every iPhone uses an Apple chip.
+   Names such as Snapdragon, MediaTek, Exynos, Tensor and Apple A all mean
+   ARM.
+
+*Your result:* the ISA of the lab computer and of your phone, and one answer:
+can the same build of a game run on both?
+:::
+
+## 1.4 Digital platforms: where games run and are sold
+
+For a player, "the platform" is the device in their hands. For a game studio,
+a platform is more: it decides how the game is made, tested and sold.
+
+::: {.callout-important title="Definition 1.4 — Digital platform"}
+A **digital platform** is a combination of a family of devices, an operating
+system, development tools, and a store with its own rules. Games are built,
+sold and run on it.
 :::
 
 ![The four layers of a digital platform.](images/platform-stack.png){#fig-stack width=62%}
 
-| Platform | Hardware | Operating system | Store |
+| Platform | Devices | Operating system | Store |
 |---|---|---|---|
-| Android | phones and tablets of many manufacturers | Android | Google Play (and others) |
-| iOS / iPadOS | iPhone, iPad | iOS, iPadOS | App Store |
-| PC | Windows computers of many manufacturers | Windows | Steam, Epic Games Store, … |
-| Consoles | PlayStation, Xbox, Nintendo Switch | system software of the console maker | the console maker's store |
-| Cloud gaming | servers in data centres; any screen | runs on the server | subscription services |
+| Android | phones and tablets of many makers | Android | Google Play (and others) |
+| iOS | iPhone, iPad | iOS, iPadOS | App Store |
+| PC | Windows computers of many makers | Windows | Steam, Epic Games Store, … |
+| Consoles | PlayStation, Xbox, Nintendo Switch | the console maker's system | the console maker's store |
 
-: Major game platforms. {#tbl-platforms}
+: Main game platforms. {#tbl-platforms}
 
-The owner of a platform controls access to its players. It decides which
-programming interfaces games may use, which content is allowed, how payments
-work and what share of each sale it keeps; it may require every game to pass a
-certification process before release. Mobile is today the largest segment of
-the games market, earning roughly half of global game revenue, which is why
-this diploma concentrates on Android and iOS.
+The owner of a platform makes the rules. It decides what a game may contain,
+how players pay, and how much of each sale it keeps. Some platforms check
+every game before it can appear in the store. Mobile is the biggest part of
+the games market today, with about half of all game revenue. This is why this
+diploma focuses on Android and iOS.
 
-Because every platform is different, studios rarely write a separate game for
-each. They use a **cross-platform** game engine, which hides the differences
-behind one set of tools and generates a separate build per platform. The
-differences do not disappear, however. Even within one platform the developer
-faces **fragmentation**: Android alone runs on thousands of device models with
-different processors, screen sizes and system versions. The consequences for
-testing and publishing occupy weeks 10, 14 and 15 of this course.
+Studios do not write a new game for each platform. They use a
+**cross-platform** game engine that makes one build for each platform. But
+the differences do not disappear. Android alone runs on thousands of phone
+models with different processors and screens, so a game must be tested on
+many of them.
 
-::: {.callout-note title="Example 1.4 — Porting a mobile game to a console"}
-A studio has released a puzzle game on Android and iOS and decides to bring it
-to the Nintendo Switch. Using the levels and the platform definition, list what
-changes.
+::: {.callout-note title="Example 1.4 — Bringing a phone game to a console"}
+A studio has a puzzle game on Android and iOS. Now it wants the game on the
+Nintendo Switch. What changes?
 
-1. **ISA**: the Switch also uses ARM, so the engine can generate native code
-   for it; for an x86-64 console a different build would be needed.
-2. **Input**: touch is available only in handheld mode; the game must also
-   work with buttons and analog sticks.
-3. **Output**: the TV screen is larger and landscape; the interface designed
-   for a portrait phone must be re-laid out.
-4. **Platform rules**: the studio needs a developer agreement and the console
-   SDK, and the game must pass the console maker's certification before it can
-   appear in the store.
+1. **Processor:** the Switch uses ARM too, so the engine can make a build for
+   it.
+2. **Input:** the player also uses buttons and sticks, not only touch.
+3. **Output:** the TV screen is big and wide. The phone layout must change.
+4. **Rules:** the studio needs an agreement with the console maker, and the
+   game must pass the console maker's check before release.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"The platform is just the phone." A platform also includes the operating
+system, the tools and the store. The same phone hardware with a different
+store or system would be a different platform for a studio.
+:::
+
+::: {.callout-note title="Do it · Platforms at home"}
+Think of three devices in your home that can run games (yours or your
+family's), for example a phone, a laptop and a console.
+
+1. Draw a table with four columns: device, platform, operating system, store.
+2. Fill one row for each device.
+
+*Your result:* the table, and one sentence: which platform is the most common
+in your table?
 :::
 
 ## Case study: Tap Runner
 
-*Tap Runner* is a small endless-runner game: the character runs
-automatically, and the player taps to jump over obstacles. The game is
-released on Android, iOS and Windows PC and saves the best distance. The
-mini-game below is a version of Tap Runner that shows, for every tap, which
-part of the computing system is at work.
-
-{{< sim file="sims/one-frame.html" poster="sims/one-frame.png" title="Tap Runner: inside one frame" kind="game" height="560" >}}
+*Tap Runner* is a made-up endless running game. The character runs by itself,
+and the player taps to jump over blocks. The game shows 60 frames per second
+and saves the best distance. The studio releases it on Android phones, on
+iPhones and on Windows PCs. The test phone has a CPU core at 2.4 GHz. The Game
+challenge of the interactive lesson uses these numbers.
 
 ## Further reading
 
 Tanenbaum and Austin, *Structured Computer Organization*, 6th ed., Chapter 1
-("Introduction"): structured computer organization, languages, levels and
-virtual machines, milestones in computer architecture, and the "computer zoo".
+("Introduction"): languages, levels and virtual machines, and the "computer
+zoo".
 
 ## Exercises
 
-1. Name the four functions of a computing system and give an example of each
-   in a racing game.
-2. Explain the key idea of the stored-program model and why it matters for a
-   device that runs many different games.
-3. A laptop CPU core runs at 2.4 GHz. How many clock ticks are available per
-   frame at 120 fps?
-4. A phone has 6 GB of RAM and 128 GB of storage. A player installs ten large
-   games. Which of the two fills up? Which one fills up when the player keeps
-   five games open at once?
-5. Distinguish translation from interpretation, and name the program that
-   performs each.
-6. Why can an Android game not be copied unchanged to a Windows PC, even if
-   both computers are equally powerful? Use the term ISA.
-7. Arrange in order from the lowest level to the highest: operating system
-   machine, digital logic, problem-oriented language, ISA, microarchitecture,
-   assembly language.
-8. Give two reasons why a game for phones must be designed differently from a
-   game for a desktop PC, even when the phone is fast.
-9. Using the definition of a digital platform, explain why the App Store is
-   part of the iOS platform.
-10. *Tap Runner* (case study): for one jump, state which part of the
-    stored-program model is involved at each of the four functions.
+1. Name the four jobs of a computing system. Give an example of each in a
+   racing game.
+2. Why can one phone run thousands of different games?
+3. A phone has 6 GB of RAM and 128 GB of storage. A player installs ten big
+   games. Which one fills up? Which one fills up when the player keeps five
+   games open?
+4. Name the three steps of the instruction cycle.
+5. A laptop CPU core runs at 2 GHz. How many clock ticks are there in one frame
+   at 50 frames per second?
+6. Why can an Android game not run on a Windows PC without a new build? Use the
+   word ISA.
+7. What does a compiler do?
+8. Name the four parts of a digital platform.
+9. Why must an Android game be tested on many phones?
+10. *Tap Runner*: at 60 frames per second, how many clock ticks does the test
+    phone's core have for one frame?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. Input: steering on the touch screen; processing: computing the car's movement and collisions; output: the frame and the engine sound; storage: saving the best lap.
-2. Instructions are stored in memory like data, so a new program is run by loading new contents into memory.
-3. $2.4 \times 10^9 / 120 = 2 \times 10^7$: 20 million ticks.
-4. Installing fills the storage (128 GB); keeping games open fills the RAM (6 GB).
-5. Translation converts the whole program before it runs (compiler, assembler); interpretation executes it instruction by instruction (interpreter).
-6. The phone uses the ARM ISA and the PC x86-64; machine code for one ISA does not run on the other, so the game must be rebuilt.
-7. Digital logic, microarchitecture, ISA, operating system machine, assembly language, problem-oriented language.
-8. A battery-powered phone has a strict power and heat limit (no fan); it uses touch input and a small screen; it runs on many different device models.
-9. A platform includes its distribution channel and rules; on iOS the App Store is the channel through which games are sold and installed, under Apple's rules.
-10. Input device (touch screen) → CPU executes the jump logic using RAM → output devices (GPU and display, speaker) → storage device saves the best distance.
+1. Input: steering with the touch screen; processing: computing the car's movement; output: the picture and the engine sound; storage: saving the best lap time.
+2. The program is stored in memory like data, so a new game only needs to be loaded into memory.
+3. Installing fills the storage (128 GB). Keeping games open fills the RAM (6 GB).
+4. Fetch, decode, execute.
+5. 2 000 000 000 / 50 = 40 000 000: 40 million ticks.
+6. The phone uses the ARM ISA and the PC uses x86-64. Machine code for one ISA does not run on the other.
+7. It translates a program (for example C#) into the machine instructions of a processor.
+8. A family of devices, an operating system, development tools, and a store with its rules.
+9. Android runs on thousands of phone models with different processors and screens.
+10. 2 400 000 000 / 60 = 40 000 000: 40 million ticks.
 :::

@@ -1,13 +1,13 @@
 -- Page header for lessons and course pages (lesson-html and lesson-typst).
 --
 -- Lesson (has `lesson:`) or homework (has `homework:`, `due:`, `marks:`):
---   HTML: hero header (course, title, week/lesson/time chips, PDF and slides
+--   HTML: hero header (course, title, lecture/time chips, PDF and slides
 --         buttons) + "Today you will learn" card with the ILOs.
 --   PDF:  passes theme values to the Typst template (title band) + ILO card.
 -- Course page (no `lesson:`): HTML hero with course name, code and tagline.
 --
 -- Data: `course` (courses/<slug>/_metadata.yml), `diploma-line` and
--- `slides-public` (_quarto.yml), `week`, `lesson`, `ilos` (ILO codes such as
+-- `slides-public` (_quarto.yml), `lesson`, `homework`, `ilos` (ILO codes such as
 -- [A1, B1]) and `description` (front matter).
 
 local str = pandoc.utils.stringify
@@ -46,14 +46,14 @@ end
 
 -- File names that students download (download_names.py renames the rendered
 -- files to match): math_lecture5.pdf, math_lecture5_slides.pptx,
--- math_week1_homework.pdf. The prefix is course.file-prefix.
+-- math_homework1.pdf. The prefix is course.file-prefix.
 local function download_names(course, stem)
   local prefix = course["file-prefix"] and str(course["file-prefix"])
     or (str(course.slug or "course"):gsub("%-", "_"))
   local hw = stem:match("^homework%-(%d+)$")
   local lesson = stem:match("^lesson%-(%d+)$")
   return {
-    homework = hw and string.format("%s_week%d_homework.pdf", prefix, tonumber(hw)) or (stem .. ".pdf"),
+    homework = hw and string.format("%s_homework%d.pdf", prefix, tonumber(hw)) or (stem .. ".pdf"),
     notes = lesson and string.format("%s_lecture%d.pdf", prefix, tonumber(lesson)) or (stem .. "-book.pdf"),
     slides = lesson and string.format("%s_lecture%d_slides.pptx", prefix, tonumber(lesson)) or (stem .. "-slides.pptx"),
   }
@@ -64,16 +64,18 @@ local function theme_style(course)
     esc(str(course.accent)), esc(str(course.accent2)))
 end
 
--- Chips under the title: lesson (week, lesson, time) or homework (week, number, due, marks).
+-- Chips under the title: lecture (number, time) or homework (number, the two
+-- lectures it follows, due, marks). Never a week: courses count lectures.
 local function page_chips(meta, course)
   local chips = {}
-  if meta.week then table.insert(chips, "Week " .. str(meta.week)) end
   if meta.homework then
+    local k = tonumber(str(meta.homework))
     table.insert(chips, "Homework " .. str(meta.homework))
+    if k then table.insert(chips, string.format("After lectures %d–%d", 2 * k - 1, 2 * k)) end
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
     if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
   else
-    if meta.lesson then table.insert(chips, "Lesson " .. str(meta.lesson)) end
+    if meta.lesson then table.insert(chips, "Lecture " .. str(meta.lesson)) end
     if course.minutes then table.insert(chips, "⏱ " .. str(course.minutes) .. " min") end
   end
   return chips
@@ -164,7 +166,7 @@ end
 
 local function html_course(doc, course)
   local meta = doc.meta
-  local chips = { "Course " .. esc(str(course.code)), "2 lessons a week" }
+  local chips = { "Course " .. esc(str(course.code)), "Homework after every 2 lectures" }
   if course.minutes then table.insert(chips, "⏱ " .. esc(str(course.minutes)) .. " min each") end
   local chip_html = {}
   for _, c in ipairs(chips) do

@@ -1,7 +1,7 @@
 # Digital Media Technologies and Creative Production for Games (13411134) — 16-week plan
 
 Status: draft for approval, 2026-10-19. Source: official syllabus (2026-2027, Drive) and the ILO–PLO matrix v4.
-The weekly map below is a copy of `schedule.yml` (titles and ILOs from the syllabus); if they differ, `schedule.yml` wins.
+The weekly map below follows the syllabus weeks; the site shows only the lecture numbers (no weeks, no exams; AUTHORING.md, "Lectures, not weeks"). If they differ, `schedule.yml` wins.
 
 Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each lesson has notes (PDF), an interactive page and slides (see AUTHORING.md).
 
@@ -20,7 +20,7 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 
 ## Weekly map
 
-| Week | Lesson | Title | Lesson ILOs | Week ILOs | PLOs |
+| Week | Lecture | Title | Lesson ILOs | Week ILOs | PLOs |
 |---|---|---|---|---|---|
 | 01 | 01 | Digital Media and Creative Production in Games | A1 | A1 | 2 |
 | 01 | 02 | Analyzing the Media of a Game | A1 |  |  |
@@ -37,20 +37,20 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 | 07 | 13 | Digital Audio Basics: Sound, Formats and Recording | C2 | C2 | 2 |
 | 07 | 14 | Recording and Editing a Sound Sample | C2 |  |  |
 | 08 | — | *Midterm exam · Midterm discussion — no lesson* | | A1, B1, C1 | 2 |
-| 09 | 17 | Music and Sound-Effects Production for Games | C2 | C2 | 2 |
-| 09 | 18 | Producing a Short Music or Sound-Effect Loop | C2 |  |  |
-| 10 | 19 | Audio Design: Mixing, Implementation and Quality Evaluation | B2, C2 | B2, C2 | 2, 4 |
-| 10 | 20 | Mixing and Critique Session | B2, C2 |  |  |
-| 11 | 21 | Digital Video Basics: Formats, Resolution and Codecs | C3 | C3 | 2, 3 |
-| 11 | 22 | Video-Editing Tool Tour | C3 |  |  |
-| 12 | 23 | Video Processing: Editing, Transitions, Effects and Export | C3 | C3 | 2, 3 |
-| 12 | 24 | Editing a Promotional Clip | C3 |  |  |
-| 13 | 25 | Intellectual Property: Copyright, Licensing and Fair Use | A2 | A2, D1 | 2, 4 |
-| 13 | 26 | Case Study: Intellectual-Property Issues in Game Content | A2, D1 |  |  |
-| 14 | 27 | Using Licensed and Open Assets; Credits and Attribution | A2 | A2, D1 | 2, 4 |
-| 14 | 28 | Auditing the Licenses of a Game's Assets | A2, D1 |  |  |
-| 15 | 29 | Integrated Media Production: Team Workshop | B2, C1, C2, C3 | B2, C1, C2, C3, D1 | 2, 3, 4 |
-| 15 | 30 | Team Presentation of a Media Package | B2, D1 |  |  |
+| 09 | 15 | Music and Sound-Effects Production for Games | C2 | C2 | 2 |
+| 09 | 16 | Producing a Short Music or Sound-Effect Loop | C2 |  |  |
+| 10 | 17 | Audio Design: Mixing, Implementation and Quality Evaluation | B2, C2 | B2, C2 | 2, 4 |
+| 10 | 18 | Mixing and Critique Session | B2, C2 |  |  |
+| 11 | 19 | Digital Video Basics: Formats, Resolution and Codecs | C3 | C3 | 2, 3 |
+| 11 | 20 | Video-Editing Tool Tour | C3 |  |  |
+| 12 | 21 | Video Processing: Editing, Transitions, Effects and Export | C3 | C3 | 2, 3 |
+| 12 | 22 | Editing a Promotional Clip | C3 |  |  |
+| 13 | 23 | Intellectual Property: Copyright, Licensing and Fair Use | A2 | A2, D1 | 2, 4 |
+| 13 | 24 | Case Study: Intellectual-Property Issues in Game Content | A2, D1 |  |  |
+| 14 | 25 | Using Licensed and Open Assets; Credits and Attribution | A2 | A2, D1 | 2, 4 |
+| 14 | 26 | Auditing the Licenses of a Game's Assets | A2, D1 |  |  |
+| 15 | 27 | Integrated Media Production: Team Workshop | B2, C1, C2, C3 | B2, C1, C2, C3, D1 | 2, 3, 4 |
+| 15 | 28 | Team Presentation of a Media Package | B2, D1 |  |  |
 | 16 | — | *Final exam — no lesson* | | All | 2, 3, 4 |
 
 ## ILO coverage
@@ -58,18 +58,18 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 | ILO | Lessons |
 |---|---|
 | A1 | L01, L02, L03, L04, L05, L06, L07, L08 |
-| A2 | L25, L26, L27, L28 |
+| A2 | L23, L24, L25, L26 |
 | B1 | L04, L06, L08 |
-| B2 | L19, L20, L29, L30 |
-| C1 | L09, L10, L11, L12, L29 |
-| C2 | L13, L14, L17, L18, L19, L20, L29 |
-| C3 | L21, L22, L23, L24, L29 |
-| D1 | L26, L28, L30 |
+| B2 | L17, L18, L27, L28 |
+| C1 | L09, L10, L11, L12, L27 |
+| C2 | L13, L14, L15, L16, L17, L18, L27 |
+| C3 | L19, L20, L21, L22, L27 |
+| D1 | L24, L26, L28 |
 
 ## Notes
 
 - **Independent study first.** Pages, slides and homework never require classmates; seminars are analyses or production exercises a student can do alone.
-- **Team activity (D1, work within a production team): lessons 29–30 only.** The week-15 team workshop and team presentation are described in the notes (PDF) of lessons 29 and 30 as one team activity (roles in a small production team, one media package, one presentation), each with an individual alternative (the student takes every role in turn and keeps a production log). No other lesson has team work.
+- **Team activity (D1, work within a production team): lessons 27–28 only.** The week-15 team workshop and team presentation are described in the notes (PDF) of lessons 29 and 30 as one team activity (roles in a small production team, one media package, one presentation), each with an individual alternative (the student takes every role in turn and keeps a production log). No other lesson has team work.
 - Intellectual property (D1) in weeks 13–14 is practised individually: a credits and licences file for every asset.
 - Week 8: midterm exam and midterm discussion (no lessons). Week 16: final exam.
 - One homework per week (1–2 simple tasks, under 10 minutes); week 15: the project instead (syllabus).

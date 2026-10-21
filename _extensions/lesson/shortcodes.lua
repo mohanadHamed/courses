@@ -23,8 +23,8 @@
 --     recording="sims/other.gif" (made by shared/sims/recordings/).
 --
 --   {{< schedule >}}
---     Course page: all 16 weeks from courses/<slug>/schedule.yml, two lessons
---     a week. A ready lesson (its .qmd exists, no `draft: true`) is bright and
+--     Course page: every lecture from courses/<slug>/schedule.yml, in pairs,
+--     each pair with its homework. A ready lecture (its .qmd exists, no `draft: true`) is bright and
 --     links its page, PDF and slides; the others are faded ("coming soon").
 --     The review profile shows drafts as ready.
 
@@ -352,6 +352,12 @@ local function file_prefix(meta)
   return (str(course.slug or "course"):gsub("%-", "_"))
 end
 
+-- Folder of lecture n (or homework k = pair k): week-01 for lectures 1-2,
+-- week-02 for 3-4, ... The name is internal and never shown.
+local function pair_dir(pair)
+  return string.format("week-%02d", pair)
+end
+
 local function schedule(meta)
   if not quarto.doc.is_format("html") then return pandoc.Null() end
   local dir = pandoc.path.directory(quarto.doc.input_file)
@@ -359,22 +365,24 @@ local function schedule(meta)
   local data = read_yaml(pandoc.path.join({ dir, "schedule.yml" }))
   local config = read_yaml(pandoc.path.join({ project_dir(), "_quarto.yml" }))
   local slides_public = config["slides-public"] == true
+  local lectures = data.lectures or {}
   local out = { '<div class="schedule">' }
-  local ready_count = 0
-  for _, w in ipairs(data.weeks or {}) do
-    local week = tonumber(str(w.week))
-    local wdir = string.format("week-%02d", week)
-    local rows = {}
-    for _, l in ipairs(w.lessons or {}) do
+  -- Two lectures, then their homework: one section per pair.
+  for first = 1, #lectures, 2 do
+    local pair = (first + 1) // 2
+    local wdir = pair_dir(pair)
+    local rows, nums = {}, {}
+    for idx = first, math.min(first + 1, #lectures) do
+      local l = lectures[idx]
       local n = tonumber(str(l.n))
+      table.insert(nums, n)
       local stem = string.format("lesson-%02d", n)
       local base = pandoc.path.join({ dir, wdir, stem })
       local ok = ready(front_matter(base .. ".qmd"))
-      local links = ""
+      local links
       if ok then
-        ready_count = ready_count + 1
         local href = wdir .. "/" .. stem
-        local parts = { string.format('<a class="sl-go" href="%s.html">Open lesson →</a>', href) }
+        local parts = { string.format('<a class="sl-go" href="%s.html">Open lecture →</a>', href) }
         if file_exists(base .. "-book.qmd") then
           table.insert(parts, string.format('<a class="sl-file" href="%s/%s_lecture%d.pdf">PDF</a>', wdir, prefix, n))
         end
@@ -389,24 +397,22 @@ local function schedule(meta)
         '<div class="sl %s"><span class="sl-num">%02d</span><span class="sl-title">%s</span>%s</div>',
         ok and "is-ready" or "is-soon", n, html_attr(str(l.title)), links))
     end
-    if w.exam then
-      table.insert(rows, string.format('<div class="sl is-exam"><span class="sl-num">✎</span><span class="sl-title">%s</span></div>',
-        html_attr(str(w.exam))))
-    end
-    local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", week) }))
+    local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", pair) }))
     local hw_html = ""
     if ready(hw) then
       local bits = {}
       if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
       if hw.due then table.insert(bits, "due " .. str(hw.due)) end
       hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
-        wdir, week, week, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
+        wdir, pair, pair, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
     end
     local any_ready = false
     for _, r in ipairs(rows) do if r:find("is%-ready") then any_ready = true end end
+    local label = #nums > 1 and string.format("Lectures %d–%d", nums[1], nums[#nums])
+      or string.format("Lecture %d", nums[1])
     table.insert(out, string.format(
-      '<section class="sw %s"><header class="sw-head"><span class="sw-week">Week %d</span>%s</header>%s</section>',
-      any_ready and "has-ready" or "", week, hw_html, table.concat(rows, "")))
+      '<section class="sw %s"><header class="sw-head"><span class="sw-week">%s</span>%s</header>%s</section>',
+      any_ready and "has-ready" or "", label, hw_html, table.concat(rows, "")))
   end
   table.insert(out, "</div>")
   return pandoc.RawBlock("html", table.concat(out, "\n"))

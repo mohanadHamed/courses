@@ -375,7 +375,7 @@ def finish_title_slide(root, pal, course, diploma, site_url=""):
                 ppr.set("algn", "l")
             style_runs(p, 2000, "FFFFFF")
             runs = p.findall(A + "r")
-            if runs:   # first line (Week · Lecture) in the light accent colour
+            if runs:   # first line (Lecture N) in the light accent colour
                 style_runs_one(runs[0], 2200, pal["accent2"], True)
 
 

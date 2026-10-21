@@ -26,6 +26,29 @@ English) and uses general examples, never the games industry. Its
 
 **One lecture = one lesson. Every course has 2 lessons per week.**
 16 weeks: week 8 midterm, week 16 final. Use the official course names exactly.
+
+### Lectures, not weeks (what students see)
+
+The syllabus plans by week, but the site never shows a week. Absences and
+delays move each course differently (one course may reach week 5 while
+another is in week 3), so everything students and the teacher see counts
+**lectures**: "Which lecture did we reach?"
+
+- Lectures are numbered 1, 2, 3 … in teaching order, with no gap for exams.
+  The course page lists them in pairs ("Lectures 1–2"), each pair followed
+  by its homework.
+- **Homework k follows lectures 2k−1 and 2k** and is due "before lecture
+  2k+1". There is no homework after a revision lecture or the project.
+- **Exams are not on the site.** The university sets the midterm and the
+  final exam in its own week; the site does not tie them to a lecture. A
+  revision lecture is an ordinary lecture ("Revision of Lectures 1–14").
+- Pages, PDFs, slides and download names say "Lecture N" and "Homework k",
+  never "Week N"; slide subtitles are "Lecture N" (or "Lecture N ·
+  Seminar", "Lecture N · Lab session").
+- The folders keep the name `week-PP` (PP = the pair: lectures 1–2 and
+  homework 1 in `week-01`, lectures 3–4 and homework 2 in `week-02`). The
+  name is internal: it keeps the links and QR codes of printed notes
+  working, and it is never shown.
 The textbook is in `course.textbook` (`_metadata.yml`). Follow its topics and
 level; never copy its text, figures or exercises.
 
@@ -38,8 +61,9 @@ level; never copy its text, figures or exercises.
   Lesson A = Lecture topic, Lesson B = Seminar topic (applied, analysis, practice).
 - `digital-skills`: Lab Session 1 + Lab Session 2 (computer lab). Both lessons
   have notes like the others, plus "Lab task" boxes on the page.
-- Exam sessions (midterm, final) get no lesson. Revision sessions get a
-  revision lesson. Confirm with me when a syllabus week is unclear.
+- Exam sessions (midterm, final) get no lesson and no number. Revision
+  sessions get a revision lesson. Confirm with me when a syllabus week is
+  unclear.
 
 ## The lesson model: the notes come first
 
@@ -345,20 +369,21 @@ tasks would be lost.)
 
 ## Three outputs per lesson
 
-Folder: `courses/<slug>/week-NN/`. Two lessons per week; lesson numbers run
-across the course (week 1 → lessons 01–02, week 2 → 03–04, …).
-Figures in `week-NN/images/`, simulators and mini-games in `week-NN/sims/`.
+Folder: `courses/<slug>/week-PP/`, one folder for each pair of lectures
+(see "Lectures, not weeks"): lectures 1–2 in `week-01`, 3–4 in `week-02`, ….
+NN in the file names is the lecture number. Figures in `week-PP/images/`,
+simulators and mini-games in `week-PP/sims/`.
 
 | File | Format | Output |
 |---|---|---|
 | `lesson-NN-book.qmd` | `lesson-typst` | Lesson notes, PDF (the main text) |
 | `lesson-NN.qmd` | `lesson-html` | Interactive lesson page |
 | `lesson-NN-slides.qmd` | `lesson-pptx` | Slides (.pptx), public summary |
-| `homework-NN.qmd` (NN = week) | `lesson-html` | Take-home task page with Print and Download PDF buttons |
+| `homework-KK.qmd` (KK = pair) | `lesson-html` | Take-home task page with Print and Download PDF buttons |
 
 - **Download names.** Files students download have meaningful, unique
   names: `math_lecture5.pdf` (notes), `math_lecture5_slides.pptx` (slides),
-  `math_week1_homework.pdf` (homework). N is the lesson or week number
+  `math_homework1.pdf` (homework). N is the lecture or homework number
   without a leading zero; the prefix is `course.file-prefix` in
   `_metadata.yml` (`math`, `computing_systems`, `digital_media`,
   `digital_skills`). `download_names.py` (post-render) renames the rendered
@@ -369,8 +394,8 @@ Figures in `week-NN/images/`, simulators and mini-games in `week-NN/sims/`.
 - Formats, styles and filters live in the Quarto extension `_extensions/lesson/`
   (Quarto requires `_extensions/` at the project root). Change look and
   behaviour there, once, for every course.
-- The formats add the course banner (course name, diploma line, week, lesson,
-  ILOs) automatically from metadata.
+- The formats add the course banner (course name, diploma line, lecture
+  number, ILOs) automatically from metadata.
 - PDF engine: Typst. Main font Noto Sans; Arabic font Noto Naskh Arabic
   (installed in CI from `fonts-noto-core`). Book filter: `book.lua`
   (`.lead`, `.answers`); callout styles: `typst-body.typ`.
@@ -559,11 +584,12 @@ what the class does with it. Short is good; unclear is not.
 
 ## Course pages and the schedule
 
-- `courses/<slug>/schedule.yml` lists all 16 weeks with two lessons each
-  (title, ILOs) and the exam weeks. The course page shows it with
-  `{{< schedule >}}`: a lesson whose `lesson-NN.qmd` exists and is not a draft
-  is bright, with links (lesson, PDF, slides); the others are faded
-  ("Coming soon"). Released homework appears in its week.
+- `courses/<slug>/schedule.yml` lists every lecture in teaching order
+  (number, title, ILOs); no weeks and no exams. The course page shows it with
+  `{{< schedule >}}` in pairs, each with its homework: a lecture whose
+  `lesson-NN.qmd` exists and is not a draft is bright, with links (lecture,
+  PDF, slides); the others are faded ("Coming soon"). Released homework
+  appears after its two lectures.
 - Titles in `schedule.yml` follow the syllabus weekly table. Change a title
   there, and in the lesson's front matter, together.
 
@@ -594,19 +620,20 @@ OpenCourseWare, Stanford and Harvard CS50 publish their problem sets). Students
 can prepare, and the homework is take-home anyway. **Solutions, model answers
 and marking notes stay private**, never in this repo: they go in the private
 repo `courses-private` (folder `../courses-private`, next to this one), with
-the same paths: `courses/<slug>/week-NN/homework-NN-solutions.md`. Change a
+the same paths: `courses/<slug>/week-KK/homework-KK-solutions.md`. Change a
 homework and its solution together.
 
-- One homework per week and course: `courses/<slug>/week-NN/homework-NN.qmd`,
-  from `shared/templates/homework-template.qmd`. No homework in exam weeks
-  (8, 16). computing-systems, digital-media and digital-skills week 15: the
-  project instead (syllabus).
-- Built from the week's ILOs (`ilos:`), like the lessons: practise exactly
-  what the two lessons taught, in the same words. No new content.
+- One homework after every two lectures: homework k follows lectures 2k−1
+  and 2k (`courses/<slug>/week-KK/homework-KK.qmd`), from
+  `shared/templates/homework-template.qmd`. None after a revision lecture;
+  computing-systems, digital-media and digital-skills: the project instead
+  of the last homework (syllabus).
+- Built from the ILOs of its two lectures (`ilos:`): practise exactly what
+  the two lessons taught, in the same words. No new content.
 - Size: **1–2 short, simple tasks, under 10 minutes**, in all courses. A
   student who has read the notes or gone through the interactive page must be
   able to answer at once; no research, no long calculations. Short homework that students finish is better than long homework
-  they skip. I may make it longer in later weeks, if the students do it well;
+  they skip. I may make it longer later in the course, if the students do it well;
   then I will change this rule. Marks per task in the heading; total in `marks:`.
 - At least one task in a real game situation (the PLO behind the ILO).
 - Written answers only (semester 1: no programming). Code may be read, never written.
@@ -614,14 +641,15 @@ homework and its solution together.
   task. Classes are small, so copying is not a risk now.
 - **Change the numbers and situations every semester.** Old versions stay in
   the git history, and old answers go around.
-- `due:` is relative ("Week 3, before the first lecture"), so the page works
-  every semester. Exact dates go on the e-learning platform.
+- `due:` names a lecture ("before lecture 3"), never a week or a date, so
+  the page works every semester and after any delay. Exact dates go on the
+  e-learning platform.
 - Submission: the university e-learning platform (syllabus). The page says how.
-- Release: keep `draft: true` until the week opens; then remove it.
+- Release: keep `draft: true` until its second lecture is taught; then remove it.
   Earlier homework stays online.
 - No answers on the page: no `.match` boxes, no "Check your answers".
-- **A web page that prints well.** Homework belongs to the week, not to a
-  lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF" and
+- **A web page that prints well.** Homework belongs to two lectures, not to
+  one lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF" and
   "🖨 Print homework" buttons. The PDF is the printed page itself:
   `_extensions/lesson/homework_pdf.py` (post-render) prints each homework page
   with headless Chrome, so the download and the printout are the same one A4
@@ -633,7 +661,7 @@ homework and its solution together.
 - **One A4 page:** the printed page must fit on one page.
   "How to submit" is one short line; the print layout is tight.
   If it does not fit, cut a question or use fewer lines, never a smaller font.
-- The course page lists released homework (week, title, due, marks).
+- The course page lists released homework after its two lectures (number, due, marks).
 - Check every task like a "Try it": self-contained, one clear answer
   (or a clear marking rule), no changing state, tried before release.
 
@@ -646,12 +674,12 @@ Lessons or homework not ready for students: `draft: true` (not published).
 
 ## Way of working
 
-- Build week by week. Never generate all lessons up front.
+- Build two lectures at a time. Never generate all lessons up front.
 - Phase 1: `schedule.yml` + `plan.md` per course (16-week map → ILOs, same weeks as the syllabus), approved by me first.
-- Phase 2: **a typical session = one week**: 2 lessons for each of the four
-  courses, each with all 3 outputs (8 lessons total), plus one homework per
-  course.
-  Start every session by reading that week in the Drive syllabus.
+- Phase 2: **a typical session = the next two lectures of each course**
+  (the syllabus week that holds them), each with all 3 outputs, plus one
+  homework per course. Start every session by reading that week in the
+  Drive syllabus.
 - I review every lesson before release. Ask before big structural decisions.
 - After each week I write `courses/<slug>/retro/week-NN.md`. Turn general lessons
   learned into rules here; course-specific ones into the course `NOTES.md`.
@@ -736,6 +764,11 @@ Lessons or homework not ready for students: `draft: true` (not published).
   negative frame index stopped its draw loop), and some questions used facts
   that the shortened pages no longer showed (Alpha and Beta, the console
   example, typical file sizes). Rules added under "Try it" and "Simulators".
+- 2026-10-21: the site counts lectures, not weeks. Absences and delays move
+  the courses differently, so a week number confused students and teacher.
+  Lectures are numbered without gaps, homework follows every two lectures
+  (due "before lecture 2k+1"), and exams are not on the site. Rules above
+  ("Lectures, not weeks").
 - 2026-10-21 (teacher review of the slides): some slides were keyword
   fragments that hid a question (the Game challenge story of computing
   systems lesson 2 looked like questions whose answers were on the next

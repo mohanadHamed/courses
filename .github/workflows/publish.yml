@@ -47,7 +47,7 @@ jobs:
           test -n "$(find _site -name '*.pdf')"
           test -n "$(find _site -name '*.pptx')"
           test -z "$(find _site -name 'lesson-*-book.pdf' -o -name 'lesson-*-slides.pptx')"
-          if ls courses/*/week-*/homework-*.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_homework.pdf')"; fi
+          if ls courses/*/week-*/homework-*.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_homework[0-9]*.pdf')"; fi
 
       - uses: actions/upload-pages-artifact@v4
         with:

@@ -19,6 +19,11 @@ Program: Mobile Game Development and Design, Intermediate University Degree
 | `digital-media` | Digital Media Technologies and Creative Production for Games | 13411134 | 2 | 2 × **60 min** (lecture + seminar) | Schell, *The Art of Game Design*, 3rd ed. |
 | `digital-skills` | Digital Skills | 01101154 | 2 | 2 × **60 min** (lab sessions) | Evans, Martin & Poatsy, *Technology in Action*, 18th ed. (+ DigComp 2.2) |
 
+`digital-skills` is taught to the diploma students of the whole college,
+most of them not in technology: it is simpler than the other courses (A2
+English) and uses general examples, never the games industry. Its
+`NOTES.md` has the details and overrides "Level and language" below.
+
 **One lecture = one lesson. Every course has 2 lessons per week.**
 16 weeks: week 8 midterm, week 16 final. Use the official course names exactly.
 The textbook is in `course.textbook` (`_metadata.yml`). Follow its topics and

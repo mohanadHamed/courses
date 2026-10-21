@@ -40,24 +40,21 @@
       { name: "Digital-Skills", kids: [
         { name: "week-01", kids: [{ name: "cv_v01.docx" }, { name: "digcomp-profile.pdf" }] },
         { name: "week-02", kids: [{ name: "notes.docx" }, { name: "shared-plan.xlsx" }] } ] },
-      { name: "Game-Math", kids: [{ name: "week-01", kids: [{ name: "hw1.pdf" }, { name: "grid.png" }] }] },
-      { name: "Digital-Media", kids: [{ name: "week-01", kids: [{ name: "media-analysis.docx" }, { name: "theme.mp3" }] }] } ] },
-    { name: "Resources", kids: [{ name: "logo.svg" }, { name: "fonts.zip" }] } ] };
-  const ROOT = "/Users/sara/";
+      { name: "English", kids: [{ name: "week-01", kids: [{ name: "essay.docx" }, { name: "new-words.pdf" }] }] },
+      { name: "Arabic", kids: [{ name: "week-01", kids: [{ name: "summary.docx" }, { name: "poem.mp3" }] }] } ] },
+    { name: "Personal", kids: [{ name: "family-photo.jpg" }, { name: "bills.zip" }] } ] };
+  // The lab computers run Windows: paths start at C:\Users\Sara and use \.
+  const ROOT = "C:\\Users\\Sara\\";
+  const win = (p) => p.split("/").join("\\");
   const all = [];
   (function walk(n, path) { const p = path ? path + "/" + n.name : n.name; n.path = p; all.push(n); (n.kids || []).forEach((k) => walk(k, p)); })(TREE, "");
   const files = all.filter((n) => !n.kids);
   const $ = (id) => document.getElementById(id);
   let stage = 0, round = 0, score = 0, cur = null, open = new Set(["Documents"]), locked = false;
-  const STAGES = ["Stage 1 · Go to the file", "Stage 2 · Which absolute path?", "Stage 3 · Which relative path?"];
+  const STAGES = ["Stage 1 · Go to the file", "Stage 2 · Which path?"];
   const ROUNDS = 4;
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
   const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
-  function relative(fromDir, toPath) {
-    const a = fromDir.split("/"), b = toPath.split("/");
-    let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++;
-    return [...Array(a.length - i).fill(".."), ...b.slice(i)].join("/");
-  }
   function renderTree(highlight) {
     const box = $("tree"); box.innerHTML = "";
     (function draw(n, depth) {
@@ -70,14 +67,14 @@
       if (n.kids && isOpen) n.kids.forEach((k) => draw(k, depth + 1));
     })(TREE, 0);
   }
-  const fileIcon = (name) => ({ docx: "📄 ", pdf: "📕 ", xlsx: "📊 ", png: "🖼 ", svg: "🖼 ", mp3: "🎵 ", zip: "🗜 " }[name.split(".").pop()] || "📄 ");
+  const fileIcon = (name) => ({ docx: "📄 ", pdf: "📕 ", xlsx: "📊 ", png: "🖼 ", jpg: "🖼 ", svg: "🖼 ", mp3: "🎵 ", zip: "🗜 " }[name.split(".").pop()] || "📄 ");
   function clickNode(n, row) {
     if (locked) return;
     if (n.kids) { if (open.has(n.path)) open.delete(n.path); else open.add(n.path); renderTree(stage === 0 ? null : cur && cur.show); return; }
     if (stage !== 0) return;
     locked = true;
-    if (n.path === cur.target.path) { row.classList.add("good"); score += 10; say("✓ Found it: " + ROOT + n.path, "good"); }
-    else { row.classList.add("bad"); say("✗ That is " + n.name + ". The path was " + ROOT + cur.target.path, "bad"); }
+    if (n.path === cur.target.path) { row.classList.add("good"); score += 10; say("✓ Found it: " + ROOT + win(n.path), "good"); }
+    else { row.classList.add("bad"); say("✗ That is " + n.name + ". The path was " + ROOT + win(cur.target.path), "bad"); }
     done();
   }
   function say(t, k) { $("msg").textContent = t; $("msg").className = "message " + (k || ""); }
@@ -89,28 +86,18 @@
     const target = pick(files);
     if (stage === 0) {
       open = new Set(["Documents"]); cur = { target };
-      $("task").innerHTML = `Open the folders and tap this file:<br><code>${ROOT}${target.path}</code>`;
+      $("task").innerHTML = `Open the folders and tap this file:<br><code>${ROOT}${win(target.path)}</code>`;
       renderTree(null);
-    } else if (stage === 1) {
+    } else {
       const parts = target.path.split("/");
       open = new Set(all.filter((n) => n.kids && target.path.startsWith(n.path)).map((n) => n.path));
       cur = { target, show: target.path };
-      $("task").innerHTML = `The dashed file is on a Mac (user <b>sara</b>). Which is its absolute path?`;
+      $("task").innerHTML = `The dashed file is on the lab computer (user <b>Sara</b>). Which is its full path?`;
       renderTree(target.path);
-      const right = ROOT + target.path;
-      const wrong = [ROOT + parts.slice(0, -2).concat(parts.slice(-1)).join("/"),
-                     ROOT + [parts[0], ...parts.slice(1, -1).reverse(), parts[parts.length - 1]].join("/"),
-                     parts.slice(1).join("/")];
-      options([right, ...new Set(wrong.filter((w) => w !== right))].slice(0, 4), right);
-    } else {
-      const dirs = all.filter((n) => n.kids && n !== TREE);
-      let from; do { from = pick(dirs); } while (target.path.startsWith(from.path + "/") && Math.random() < 0.5);
-      open = new Set(all.filter((n) => n.kids && (target.path.startsWith(n.path) || from.path.startsWith(n.path))).map((n) => n.path));
-      cur = { target, show: target.path };
-      $("task").innerHTML = `You are in the folder <code>${from.path}</code>. Which relative path leads to the dashed file?`;
-      renderTree(target.path);
-      const right = relative(from.path, target.path);
-      const wrong = [right.replace(/^(\.\.\/)/, ""), "../" + right, target.path, right.split("/").slice(-1)[0]];
+      const right = ROOT + win(target.path);
+      const wrong = [ROOT + win(parts.slice(0, -2).concat(parts.slice(-1)).join("/")),
+                     ROOT + win([parts[0], ...parts.slice(1, -1).reverse(), parts[parts.length - 1]].join("/")),
+                     win(parts.slice(1).join("/"))];
       options([right, ...new Set(wrong.filter((w) => w !== right))].slice(0, 4), right);
     }
   }

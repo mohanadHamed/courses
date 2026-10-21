@@ -1,6 +1,6 @@
 // Hiring Desk: sort the three tasks of the story into DigComp areas, then hire.
 await wait(900); click("#next");
-const AREA = { "bug reports": 1, "short videos": 2, "code on the phone": 3 };
+const AREA = { "e-mails of customers": 1, "short videos": 2, "code on the phone": 3 };
 for (let n = 0; n < 3; n++) {
   await wait(1000);
   const text = document.querySelector("#card .text").textContent;

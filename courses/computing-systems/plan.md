@@ -1,7 +1,7 @@
 # Fundamentals of Computing Systems and Digital Platforms (13411133) — 16-week plan
 
 Status: draft for approval, 2026-10-19. Source: official syllabus (2026-2027, Drive) and the ILO–PLO matrix v4.
-The weekly map below is a copy of `schedule.yml` (titles and ILOs from the syllabus); if they differ, `schedule.yml` wins.
+The weekly map below follows the syllabus weeks; the site shows only the lecture numbers (no weeks, no exams; AUTHORING.md, "Lectures, not weeks"). If they differ, `schedule.yml` wins.
 
 Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each lesson has notes (PDF), an interactive page and slides (see AUTHORING.md).
 
@@ -19,7 +19,7 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 
 ## Weekly map
 
-| Week | Lesson | Title | Lesson ILOs | Week ILOs | PLOs |
+| Week | Lecture | Title | Lesson ILOs | Week ILOs | PLOs |
 |---|---|---|---|---|---|
 | 01 | 01 | Computing Systems and Digital Platforms in the Games Industry | A1 | A1 | 1 |
 | 01 | 02 | How Games Run on the Devices We Use | A1 |  |  |
@@ -36,20 +36,20 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 | 07 | 13 | Mobile Operating Systems: Android and iOS Architecture | A2 | A2, B1 | 1, 3 |
 | 07 | 14 | Exploring Android and iOS Features | A2, B1 |  |  |
 | 08 | — | *Midterm exam · Midterm discussion — no lesson* | | A1, A2, B1 | 1, 3 |
-| 09 | 17 | Mobile Platforms Compared: Android vs iOS | B1 | B1, D1 | 1, 3 |
-| 09 | 18 | Platform Comparison Activity | B1, D1 |  |  |
-| 10 | 19 | App Stores and Publishing Requirements | C2 | C2 | 3, 4 |
-| 10 | 20 | Reviewing App-Store Guidelines | C2 |  |  |
-| 11 | 21 | Networking Concepts: LAN, the Internet and Protocols | A2 | A2 | 1 |
-| 11 | 22 | Networking Tools Demonstration | A2 |  |  |
-| 12 | 23 | Cloud Computing: Models and Services | A2 | A2, C2 | 1, 3, 4 |
-| 12 | 24 | Cloud Services for Games: Storage and Hosting | A2, C2 |  |  |
-| 13 | 25 | Gaming Platforms: Consoles, PC, Mobile and Cloud Gaming | B1 | B1, B2 | 1, 3, 4 |
-| 13 | 26 | Case Study: Comparing Gaming Platforms | B1, B2 |  |  |
-| 14 | 27 | Setting Up Test Environments: Emulators and Real Devices | C1 | C1 | 1, 3 |
-| 14 | 28 | Hands-on: Running a Sample App on an Emulator | C1 |  |  |
-| 15 | 29 | Platform Performance and Compatibility: Case Studies | B2, C1 | B2, C1, D1 | 1, 3, 4 |
-| 15 | 30 | Student Presentations (Project) | B2, C1, D1 |  |  |
+| 09 | 15 | Mobile Platforms Compared: Android vs iOS | B1 | B1, D1 | 1, 3 |
+| 09 | 16 | Platform Comparison Activity | B1, D1 |  |  |
+| 10 | 17 | App Stores and Publishing Requirements | C2 | C2 | 3, 4 |
+| 10 | 18 | Reviewing App-Store Guidelines | C2 |  |  |
+| 11 | 19 | Networking Concepts: LAN, the Internet and Protocols | A2 | A2 | 1 |
+| 11 | 20 | Networking Tools Demonstration | A2 |  |  |
+| 12 | 21 | Cloud Computing: Models and Services | A2 | A2, C2 | 1, 3, 4 |
+| 12 | 22 | Cloud Services for Games: Storage and Hosting | A2, C2 |  |  |
+| 13 | 23 | Gaming Platforms: Consoles, PC, Mobile and Cloud Gaming | B1 | B1, B2 | 1, 3, 4 |
+| 13 | 24 | Case Study: Comparing Gaming Platforms | B1, B2 |  |  |
+| 14 | 25 | Setting Up Test Environments: Emulators and Real Devices | C1 | C1 | 1, 3 |
+| 14 | 26 | Hands-on: Running a Sample App on an Emulator | C1 |  |  |
+| 15 | 27 | Platform Performance and Compatibility: Case Studies | B2, C1 | B2, C1, D1 | 1, 3, 4 |
+| 15 | 28 | Student Presentations (Project) | B2, C1, D1 |  |  |
 | 16 | — | *Final exam — no lesson* | | All | 1, 3, 4 |
 
 ## ILO coverage
@@ -57,12 +57,12 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 | ILO | Lessons |
 |---|---|
 | A1 | L01, L02, L03, L04, L05, L06, L07, L08 |
-| A2 | L09, L10, L11, L12, L13, L14, L21, L22, L23, L24 |
-| B1 | L14, L17, L18, L25, L26 |
-| B2 | L06, L08, L26, L29, L30 |
-| C1 | L12, L27, L28, L29, L30 |
-| C2 | L19, L20, L24 |
-| D1 | L18, L30 |
+| A2 | L09, L10, L11, L12, L13, L14, L19, L20, L21, L22 |
+| B1 | L14, L15, L16, L23, L24 |
+| B2 | L06, L08, L24, L27, L28 |
+| C1 | L12, L25, L26, L27, L28 |
+| C2 | L17, L18, L22 |
+| D1 | L16, L28 |
 
 ## Notes
 

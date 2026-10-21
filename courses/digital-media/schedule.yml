@@ -1,98 +1,40 @@
-# 16-week schedule (titles from the official syllabus weekly table).
-# The course page lists every lesson from this file. A lesson is ready (bright,
-# with links) when week-NN/lesson-NN.qmd exists and has no `draft: true`;
-# otherwise it is shown faded as "coming soon".
-# Lessons are numbered across the course (week 1 → 01–02, week 2 → 03–04, ...).
-weeks:
-  - week: 1
-    ilos: [A1]
-    plos: [2]
-    lessons:
-      - {n: 1, title: "Digital Media and Creative Production in Games", ilos: [A1]}
-      - {n: 2, title: "Analyzing the Media of a Game", ilos: [A1]}
-  - week: 2
-    ilos: [A1, B1]
-    plos: [2]
-    lessons:
-      - {n: 3, title: "Story Fundamentals: Character, Setting, Conflict and Structure", ilos: [A1]}
-      - {n: 4, title: "Analyzing the Story Structure of a Mobile Game", ilos: [A1, B1]}
-  - week: 3
-    ilos: [A1, B1]
-    plos: [2]
-    lessons:
-      - {n: 5, title: "Narrative in Games: Linear, Branching and Environmental Storytelling", ilos: [A1]}
-      - {n: 6, title: "Drafting a Story Premise", ilos: [A1, B1]}
-  - week: 4
-    ilos: [A1, B1]
-    plos: [2]
-    lessons:
-      - {n: 7, title: "Screenwriting: Format, Scenes and Dialogue", ilos: [A1]}
-      - {n: 8, title: "Writing a Scene and Its Dialogue", ilos: [A1, B1]}
-  - week: 5
-    ilos: [C1]
-    plos: [2]
-    lessons:
-      - {n: 9, title: "Storyboarding: Shots, Composition and Flow", ilos: [C1]}
-      - {n: 10, title: "Drawing a Storyboard from a Scene", ilos: [C1]}
-  - week: 6
-    ilos: [C1]
-    plos: [2]
-    lessons:
-      - {n: 11, title: "Storyboards for Gameplay and Cutscenes; Storyboard Tools", ilos: [C1]}
-      - {n: 12, title: "Storyboard Workshop", ilos: [C1]}
-  - week: 7
-    ilos: [C2]
-    plos: [2]
-    lessons:
-      - {n: 13, title: "Digital Audio Basics: Sound, Formats and Recording", ilos: [C2]}
-      - {n: 14, title: "Recording and Editing a Sound Sample", ilos: [C2]}
-  - week: 8
-    ilos: [A1, B1, C1]
-    plos: [2]
-    exam: "Midterm exam · Midterm discussion"
-  - week: 9
-    ilos: [C2]
-    plos: [2]
-    lessons:
-      - {n: 17, title: "Music and Sound-Effects Production for Games", ilos: [C2]}
-      - {n: 18, title: "Producing a Short Music or Sound-Effect Loop", ilos: [C2]}
-  - week: 10
-    ilos: [B2, C2]
-    plos: [2, 4]
-    lessons:
-      - {n: 19, title: "Audio Design: Mixing, Implementation and Quality Evaluation", ilos: [B2, C2]}
-      - {n: 20, title: "Mixing and Critique Session", ilos: [B2, C2]}
-  - week: 11
-    ilos: [C3]
-    plos: [2, 3]
-    lessons:
-      - {n: 21, title: "Digital Video Basics: Formats, Resolution and Codecs", ilos: [C3]}
-      - {n: 22, title: "Video-Editing Tool Tour", ilos: [C3]}
-  - week: 12
-    ilos: [C3]
-    plos: [2, 3]
-    lessons:
-      - {n: 23, title: "Video Processing: Editing, Transitions, Effects and Export", ilos: [C3]}
-      - {n: 24, title: "Editing a Promotional Clip", ilos: [C3]}
-  - week: 13
-    ilos: [A2, D1]
-    plos: [2, 4]
-    lessons:
-      - {n: 25, title: "Intellectual Property: Copyright, Licensing and Fair Use", ilos: [A2]}
-      - {n: 26, title: "Case Study: Intellectual-Property Issues in Game Content", ilos: [A2, D1]}
-  - week: 14
-    ilos: [A2, D1]
-    plos: [2, 4]
-    lessons:
-      - {n: 27, title: "Using Licensed and Open Assets; Credits and Attribution", ilos: [A2]}
-      - {n: 28, title: "Auditing the Licenses of a Game's Assets", ilos: [A2, D1]}
-  - week: 15
-    ilos: [B2, C1, C2, C3, D1]
-    plos: [2, 3, 4]
-    lessons:
-      - {n: 29, title: "Integrated Media Production: Team Workshop", ilos: [B2, C1, C2, C3]}
-      - {n: 30, title: "Team Presentation of a Media Package", ilos: [B2, D1]}
-  - week: 16
-    ilos: [All]
-    plos: [2, 3, 4]
-    exam: "Final exam"
+# The lectures of the course in teaching order (titles from the official
+# syllabus). Students and the teacher count lectures, not weeks: a missed or
+# late week moves every course differently, so the site never shows weeks.
+# Exams are not listed: the university sets them.
+#
+# Files: lecture n is lesson-NN.qmd (NN = n) in the folder week-PP, where
+# PP = (n + 1) / 2 rounded down: lectures 1-2 are in week-01, 3-4 in week-02,
+# and so on. The folder name is internal (it keeps old links and QR codes
+# working) and is never shown. Homework k (homework-0k.qmd, in week-0k)
+# follows lectures 2k-1 and 2k. A lecture is ready (bright, with links) when
+# its lesson-NN.qmd exists and has no `draft: true`; otherwise it is faded.
+lectures:
+  - {n: 1, title: "Digital Media and Creative Production in Games", ilos: [A1]}
+  - {n: 2, title: "Analyzing the Media of a Game", ilos: [A1]}
+  - {n: 3, title: "Story Fundamentals: Character, Setting, Conflict and Structure", ilos: [A1]}
+  - {n: 4, title: "Analyzing the Story Structure of a Mobile Game", ilos: [A1, B1]}
+  - {n: 5, title: "Narrative in Games: Linear, Branching and Environmental Storytelling", ilos: [A1]}
+  - {n: 6, title: "Drafting a Story Premise", ilos: [A1, B1]}
+  - {n: 7, title: "Screenwriting: Format, Scenes and Dialogue", ilos: [A1]}
+  - {n: 8, title: "Writing a Scene and Its Dialogue", ilos: [A1, B1]}
+  - {n: 9, title: "Storyboarding: Shots, Composition and Flow", ilos: [C1]}
+  - {n: 10, title: "Drawing a Storyboard from a Scene", ilos: [C1]}
+  - {n: 11, title: "Storyboards for Gameplay and Cutscenes; Storyboard Tools", ilos: [C1]}
+  - {n: 12, title: "Storyboard Workshop", ilos: [C1]}
+  - {n: 13, title: "Digital Audio Basics: Sound, Formats and Recording", ilos: [C2]}
+  - {n: 14, title: "Recording and Editing a Sound Sample", ilos: [C2]}
+  - {n: 15, title: "Music and Sound-Effects Production for Games", ilos: [C2]}
+  - {n: 16, title: "Producing a Short Music or Sound-Effect Loop", ilos: [C2]}
+  - {n: 17, title: "Audio Design: Mixing, Implementation and Quality Evaluation", ilos: [B2, C2]}
+  - {n: 18, title: "Mixing and Critique Session", ilos: [B2, C2]}
+  - {n: 19, title: "Digital Video Basics: Formats, Resolution and Codecs", ilos: [C3]}
+  - {n: 20, title: "Video-Editing Tool Tour", ilos: [C3]}
+  - {n: 21, title: "Video Processing: Editing, Transitions, Effects and Export", ilos: [C3]}
+  - {n: 22, title: "Editing a Promotional Clip", ilos: [C3]}
+  - {n: 23, title: "Intellectual Property: Copyright, Licensing and Fair Use", ilos: [A2]}
+  - {n: 24, title: "Case Study: Intellectual-Property Issues in Game Content", ilos: [A2, D1]}
+  - {n: 25, title: "Using Licensed and Open Assets; Credits and Attribution", ilos: [A2]}
+  - {n: 26, title: "Auditing the Licenses of a Game's Assets", ilos: [A2, D1]}
+  - {n: 27, title: "Integrated Media Production: Team Workshop", ilos: [B2, C1, C2, C3]}
+  - {n: 28, title: "Team Presentation of a Media Package", ilos: [B2, D1]}

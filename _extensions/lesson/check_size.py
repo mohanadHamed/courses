@@ -22,6 +22,10 @@ lesson-NN-slides.qmd (slides)
   - slides (## headings, title slide not counted); every simulator of the page
     is on a slide ("Live demo", or the Game challenge slide for the game of
     the lesson)
+  - clear slides (AUTHORING.md, "Slides explain themselves"): every question
+    is a full question (a question word and "?"), its answer is on the same
+    slide, an Example states its question, every simulator slide has a
+    `task`, no fragments of one to three words, no group work ("Do it together")
 The game of the lesson: a mini-game in the page's Game challenge must also be
 in the notes (Case study, poster + QR) and on the Game challenge slide.
 
@@ -48,7 +52,7 @@ SIZES = {
         "try_its": (4, 6),
         "questions": (15, 28),
         "sims": (0, 2),
-        "slides": (12, 16),
+        "slides": (10, 16),
     },
     90: {
         "book_sections": (5, 7),
@@ -58,7 +62,7 @@ SIZES = {
         "try_its": (6, 9),
         "questions": (30, 45),
         "sims": (1, 3),
-        "slides": (22, 28),
+        "slides": (20, 28),
     },
 }
 # Parts every lesson must have (heading text, case does not matter).
@@ -182,6 +186,78 @@ def count_slides(body):
     }
 
 
+QUESTION_WORDS = {"what", "which", "who", "whose", "where", "when", "why", "how", "is", "are",
+                  "was", "were", "do", "does", "did", "can", "could", "should", "would", "will",
+                  "has", "have", "had", "must", "may"}
+
+
+def plain(text):
+    """Slide text without Markdown marks."""
+    text = re.sub(r"\{\{<.*?>\}\}", " ", text)
+    text = re.sub(r"[*_`]|~([^~]*)~", lambda m: m.group(1) or "", text)
+    return text.strip()
+
+
+def is_question(line):
+    """A full question: ends with "?", and its last sentence has a question word."""
+    line = plain(line)
+    if not line.endswith("?") or re.search(r"(…|\.\.\.)\s*\?$", line):
+        return False
+    last = re.split(r"(?<=[.!;])\s+", line)[-1]
+    for part in (last, last.split(":")[-1]):
+        if any(w in QUESTION_WORDS for w in re.findall(r"[A-Za-z']+", part.lower())[:3]):
+            return True
+    return False
+
+
+# Group work on a slide ("Do it together", "discuss with a classmate").
+GROUP_RE = re.compile(r"\b(do|try|work|discuss|play|answer) (it |this )?together\b|classmate|\bin (pairs|groups)\b"
+                      r"|\b(your (group|partner)|a partner)\b", re.I)
+
+
+def check_slides(body):
+    """Warnings for slides that do not explain themselves (one string each)."""
+    out = []
+    for part in re.split(r"^(?=## )", body, flags=re.M):
+        m = re.match(r"## (.+)", part)
+        if not m:
+            continue
+        title = m.group(1).strip()
+        name = '"%s"' % title
+        text = part[m.end():]
+        outside = re.sub(r"^:::+ *\{\.(answer|reveal)\}.*?^:::+ *$", "", text, flags=re.M | re.S)
+        has_answer = re.search(r"^:::+ *\{\.(answer|reveal)\}", text, re.M) is not None
+        if len(plain(title).replace(" · ", "  ")) > 44:
+            out.append("slide %s: the title is too long for one line (44 characters at most)" % name)
+        if GROUP_RE.search(part):
+            out.append("slide %s: group work (each student works alone; write only \"Do it:\")" % name)
+        if re.search(r"(…|\.\.\.)\s*\??\s*$", outside, re.M):
+            out.append("slide %s: an unfinished sentence (…)" % name)
+        if title.startswith("Think"):
+            out.append("slide %s: no Think slides (a question with no visible answer)" % name)
+        if title.startswith("Try it"):
+            if not has_answer:
+                out.append("slide %s: the answer is not on the slide (::: {.answer})" % name)
+            items = re.findall(r"^[a-h]\) (.+)$", outside, re.M)
+            for q in items:
+                if not is_question(q):
+                    out.append('slide %s: not a full question: "%s"' % (name, plain(q)[:60]))
+            if not items and not any(is_question(l) for l in outside.splitlines()):
+                out.append("slide %s: no full question (a question word and \"?\")" % name)
+        if title.startswith("Example") and "?" not in outside:
+            out.append("slide %s: say what the example asks (a question before the steps)" % name)
+        for sim in re.findall(r"\{\{< *sim [^>]*>\}\}", text):
+            if 'layout="qr"' not in sim and "task=" not in sim:
+                out.append('slide %s: the simulator has no task="…" (what to show, what to ask)' % name)
+        if title.startswith("Keywords"):
+            continue
+        for b in re.findall(r"^\s*- (.+)$", outside, re.M):
+            t = plain(b)
+            if " · " in t or len(re.findall(r"[A-Za-z0-9]+", t)) < 4:
+                out.append('slide %s: a fragment, write a short sentence: "%s"' % (name, t[:60]))
+    return out
+
+
 def check(project_dir):
     rows, warnings = [], []
     pattern = os.path.join(project_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].qmd")
@@ -234,6 +310,8 @@ def check(project_dir):
                     warnings.append("%s: %s has no recording for the slides (shared/sims/recordings)" % (rel, f))
             for f in sorted(page["challenge_sims"] - s["challenge_sims"]):
                 warnings.append("%s: the game %s is not on the Game challenge slide" % (rel, f))
+            for w in check_slides(read(slides_path)):
+                warnings.append("%s: %s" % (os.path.relpath(slides_path, project_dir), w))
         else:
             warnings.append("%s: no slides file (%s)" % (rel, os.path.basename(slides_path)))
 

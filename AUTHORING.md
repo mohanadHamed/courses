@@ -105,8 +105,9 @@ slides.
 - **Worked examples are game cases with real numbers** (a load time, a frame
   budget, a sound level, a file name), never abstract ones.
 - **Slides teach by showing.** In class, each section is a short concept and
-  a live demonstration or a Do it task done together on the projector
-  (phone settings, the lab computer, a simulator), not more text.
+  a live demonstration on the projector (phone settings, the lab computer, a
+  simulator); then each student does the Do it task alone, on their own
+  phone or lab computer. Never "do it together": no group or class activity.
 
 ### No repetition (most important)
 
@@ -155,9 +156,10 @@ round. Then:
   it boxes (`{{< sim … kind="game" >}}`); it replaces the static illustration.
 - **Notes (PDF):** the Case study embeds the same shortcode (poster + QR,
   "Scan to play").
-- **Slides:** the Game challenge slide keeps the story in keywords on the
-  left and shows the QR code on the right:
-  `{{< sim … kind="game" layout="qr" >}}` inside the right column.
+- **Slides:** the Game challenge slide shows the game, its recording and
+  QR code, with a `task` line that tells the story in one sentence and what
+  to do (`{{< sim … kind="game" task="…" >}}`). The Try it slide after it
+  starts with the facts of the story in full sentences.
 - If the lesson's mini-game already *is* that game (Tap Runner), reuse it:
   the notes and the page point to it, the slide shows its QR code.
 - A story about a studio, a class or a person, not a game, needs no game of
@@ -177,7 +179,7 @@ the notes or on the Game challenge slide.
 | Page: "Try it" boxes (one per section + Game challenge) | 4–6 | 6–9 |
 | Page: questions in all "Try it" boxes | 15–28 | 30–45 |
 | Simulators / mini-games | 0–2 | 1–3 |
-| Slides (title slide not counted) | 12–16 | 22–28 |
+| Slides (title slide not counted) | 10–16 | 20–28 |
 
 **Class time and home time.** The notes and the interactive page are studied
 at home, without a time limit, so they keep their full size. The **slides**
@@ -317,7 +319,8 @@ tasks would be lost.)
   `::: {.answers}` for the short answers.
 - **Page:** the same content, shorter and plainer (A2–B1): one idea per
   sentence, but no baby talk. "Watch out!" boxes for common mistakes.
-- **Slides:** keywords and pictures, no long sentences.
+- **Slides:** short, complete sentences and pictures; no paragraphs. See
+  "Slides explain themselves".
 - Picture before formula: game situation → figure → definition → example →
   Do it.
 - Every rule or formula gets a worked example in the notes.
@@ -428,31 +431,87 @@ Second question.
   scrolling back. Names in the questions also appear in the game and its
   poster (Alpha and Beta are labelled on the map).
 - **Every slide question can be answered from the slides** (the concept slide
-  bullets, a table slide or the Game challenge slide).
+  bullets, a table slide, the Game challenge slide or the facts at the top of
+  the Try it slide).
 - Filter: `_extensions/lesson/match.lua`; behaviour in `lesson-script.html`.
 
 ## Interactive slides
 
 Slides are for a conversation with the class.
 
+### Slides explain themselves (most important for slides)
+
+A teacher who did not prepare the lesson, or a student who missed it, must
+understand every slide from the slide alone: what it says, what it asks and
+what the class does with it. Short is good; unclear is not.
+
+- **Sentences, not fragments.** Every bullet is a short, complete sentence
+  with a verb ("Installing copies the game into storage."), not a fragment
+  ("install → storage", "APK · IPA", "CPU: logic"). A formula, a menu path
+  (Settings → About) or a file name may stand inside a sentence.
+- **A question looks like a question.** It is a complete question with a
+  question word (What, Which, Why, How, Where, Who, When, Is, Does, Can …)
+  and a "?": "Which part of the phone fills up when you install a game?",
+  never "installing fills…?" or "a painted forest background". Give the
+  numbers and the situation inside the question, even if it gets longer.
+- **The answer is on the same slide**, hidden until the teacher clicks
+  (`::: {.answer}` cards or `::: {.reveal}` steps). A slide never asks a
+  question that a later slide answers.
+- **A statement never hides a question.** A slide that tells a story or
+  gives facts says so ("The story: …", "The facts: …"), and a slide that asks
+  something asks it in a full question. If the questions about a story come
+  on the next slide, that slide repeats the facts it needs.
+- **Every slide says what to do.** A Do it bullet is a full instruction for
+  one student, labelled only "Do it:" (never "together"; each student works
+  alone without being told so), for example "**Do it:** Open Task Manager
+  (Ctrl + Shift + Esc). How many logical processors does the CPU have?". Every Live demo and Game
+  challenge slide has a `task` in its `{{< sim >}}` shortcode: what the
+  teacher shows and what the class is asked ("Show: jump with +0 ms, then
+  with +220 ms. Ask: why does the jump feel late?").
+- **Examples state their question** before the steps ("How long does the
+  level load on each phone?"); each step is a short sentence that ends with
+  the result.
+- **Summary lines are sentences** (5–6), one per main idea.
+- **Titles fit on one line** (44 characters at most, with the "Try it N"
+  label); a second line runs into the text below.
+- **Nothing overlaps.** Longer sentences need care: at most four sentences
+  and the Do it bullet on a concept slide, 2–3 questions on a Try it slide
+  (the answer cards take the lower part of the slide), 3–4 steps in an
+  Example. Look at every slide, with all answers shown, before a PR.
+- `check_size.py` warns about fragments of one to three words, bullets with
+  " · " between keywords, questions without a question word or "?", "…",
+  Try it slides without an answer on the slide, Examples without a
+  question, simulator slides without a `task`, and group work ("Do it
+  together", "with a classmate").
+
+### Slide types
+
 - **One "Try it" slide per section**: `## Try it N · short title`, **2–3**
   questions chosen from the page's set, then the answers in `::: {.answer}`.
   Two short sections may share one slide (`## Try it 3–4 · …`).
-- **"Think" slides** before a new idea: one question, then `::: {.answer}`
-  or `::: {.reveal}`.
+- **No "Think" slides** (a question before the idea): in class, a question
+  without a visible answer leaves the class waiting for one. Every question
+  is on a Try it slide or in an Example, with its answer.
 - **Key worked examples only** (about one per section in 90 min, fewer in
   60 min): `## Example · short title`, 3–4 steps in `::: {.reveal}`. Common
   mistakes go in a bullet of the concept slide, not on their own slide.
 - **Pictures:** every concept slide has a figure. A picture together with
   text must be in columns, or the slide is split in two:
-  `:::: {.columns}` / `::: {.column width="38%"}` text / `::: {.column width="62%"}` picture.
+  `:::: {.columns}` / `::: {.column width="50%"}` text / `::: {.column width="50%"}` picture.
+  Text in a column with a picture is lost: keep them in separate columns.
+  At most four sentences and the Do it bullet; `pptx_finish.py` makes long
+  text smaller, but a smaller font is not a reason to write more.
   A table slide has no other text (put a short note in the title).
   Never put `.reveal` or `.answer` inside columns.
 - One "Live demo · …" slide per simulator or mini-game (same `{{< sim >}}`
-  shortcode: the recording of the game being played + a large QR code).
+  shortcode with a `task`: the task line above the recording of the game
+  being played, and a large QR code).
 - Game challenge: one slide with the game itself (its recording + QR code,
-  `{{< sim … kind="game" >}}`), then one "Try it" slide (harder, 2–3
-  questions) whose first line gives the key facts of the story in keywords.
+  `{{< sim … kind="game" task="…" >}}`; the task gives the story in one
+  sentence and says what to do), then one "Try it" slide (harder, 2–3
+  questions) whose first lines give the key facts of the story in full
+  sentences. A story without a game gets one story slide in full sentences
+  (columns: text and a picture) that ends with the task.
 - Filter: `_extensions/lesson/slides.lua`. Look and animations: `pptx_finish.py`.
   Check a deck in PowerPoint's Slide Show before class.
 
@@ -672,6 +731,17 @@ Lessons or homework not ready for students: `draft: true` (not published).
   negative frame index stopped its draw loop), and some questions used facts
   that the shortened pages no longer showed (Alpha and Beta, the console
   example, typical file sizes). Rules added under "Try it" and "Simulators".
+- 2026-10-21 (teacher review of the slides): some slides were keyword
+  fragments that hid a question (the Game challenge story of computing
+  systems lesson 2 looked like questions whose answers were on the next
+  slide), and the "Do it together" bullets suggested group work. All slides
+  were rewritten: complete sentences, complete questions with a question
+  word and "?", the answer on the same slide, a `task` line on every
+  simulator slide, Do it tasks for each student alone. The "Think" slides
+  were removed (a question with no visible answer), and the slides stay
+  short, so the lecture takes no longer: at most four short sentences on a
+  concept slide. Rules above ("Slides explain themselves"); `check_size.py`
+  checks them.
 - 2026-10-19 (level check): the students' level is very basic. The most the
   lessons can be simplified without losing the ILOs and PLOs was estimated at
   about 30 %; the lessons are now about 20 % simpler, and topics that no

@@ -9,51 +9,43 @@ format: lesson-pptx
 
 {{< glossary cpu-core clock-rate thread memory-hierarchy cache byte texture ssd app-storage >}}
 
-## Think · 8 cores = 8 times faster?
-
-A phone has **8 cores**.
-**Is a game 8 times faster than with 1 core?**
-
-::: {.answer}
-No. The game logic runs on **one main thread**: one core.
-:::
-
 ## 3.1 Cores and threads
 
 :::: {.columns}
-::: {.column width="38%"}
-- core = runs one **thread**
-- big fast cores + small battery-saving cores
-- main thread: always one core
-- GHz = speed of **one** core
-- **Do it together:** Task Manager → CPU → Logical processors
+::: {.column width="50%"}
+- A **core** is a small processor inside the CPU. It runs one **thread** at a time.
+- Big cores are fast; small cores save battery.
+- The game logic runs on one main thread, so it always uses one core.
+- GHz tells the speed of **one** core. Cores do not add up.
+- **Do it:** Open Task Manager → Performance → CPU. How many logical processors do you see?
 :::
-::: {.column width="62%"}
+::: {.column width="50%"}
 ![](images/cpu-cores.png)
 :::
 ::::
 
 ## Example · Splitting one frame
 
-Main thread 10 ms + 6 ms shared work.
+One frame needs 10 ms on the main thread and 6 ms of work that the cores share.
+**How long is the frame with 1, 2 and 6 cores?**
 
 ::: {.reveal}
-1. 1 core: 10 + 6 = **16 ms**
-2. 2 cores: 10 + 3 = **13 ms**
-3. 6 cores: 10 + 1 = **11 ms**
-4. faster, but not 6 times faster
+1. 1 core: 10 + 6 = **16 ms**.
+2. 2 cores share the 6 ms: 10 + 3 = **13 ms**.
+3. 6 cores share the 6 ms: 10 + 1 = **11 ms**.
+4. The frame is faster, but not 6 times faster.
 :::
 
 ## Try it 1 · Cores and threads
 
-Main thread 8 ms + 4 ms shared work.
+A frame needs 8 ms on the main thread and 4 ms of work that the cores share equally.
 
-a) frame time with 4 cores?
-b) best core for music in the background?
-c) 8 cores at 3 GHz: speed of one core?
+a) How long is the frame with four cores?
+b) Which core is best for music in the background, with little battery?
+c) A phone has 8 cores at 3 GHz. How fast is the core of the main thread?
 
 ::: {.answer}
-a) 9 ms
+a) 9 ms (8 + 1)
 b) an efficiency core
 c) 3 GHz
 :::
@@ -61,28 +53,28 @@ c) 3 GHz
 ## 3.2 The memory hierarchy
 
 :::: {.columns}
-::: {.column width="38%"}
-- cache → RAM → storage
-- up: fast, small, near the core
-- down: big, slow, cheap
-- **cache hit** 1 ns · **miss** 100 ns
+::: {.column width="50%"}
+- Memory has levels: cache, then RAM, then storage.
+- The levels near the core are small and fast.
+- The levels far from the core are big, slow and cheap.
+- A read from the cache takes 1 ns; a read from RAM takes 100 ns.
 :::
-::: {.column width="62%"}
+::: {.column width="50%"}
 ![](images/memory-hierarchy.png)
 :::
 ::::
 
 ## Live demo · Data Trip
 
-{{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" >}}
+{{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" task="**Show:** get one value from the cache, then one from RAM. **Ask:** how many times slower is RAM?" >}}
 
 ## Try it 2 · The memory hierarchy
 
-Cache 1 ns · RAM 100 ns.
+A read from the cache takes 1 ns. A read from RAM takes 100 ns.
 
-a) 100 reads: 90 cache + 10 RAM?
-b) position read 50 times: where after the first read?
-c) best score when the phone is off: where?
+a) The game reads 100 values: 90 from the cache and 10 from RAM. What is the total time?
+b) The player's position is read 50 times in one frame. Where does the core find it after the first read?
+c) Where is the best score kept when the phone is off?
 
 ::: {.answer}
 a) 90 + 1000 = 1090 ns
@@ -93,79 +85,79 @@ c) in storage
 ## 3.3 What a game keeps in memory
 
 :::: {.columns}
-::: {.column width="38%"}
-- code · assets · state
-- textures: the biggest part
-- texture = width × height × 4 bytes
-- KB → MB → GB → TB: × 1024 each
-- **Do it together:** Task Manager → Processes → Memory
+::: {.column width="50%"}
+- RAM holds the code, the assets and the state of the game.
+- Textures are the biggest part of the memory.
+- A texture needs width × height × 4 bytes.
+- Each unit is 1024 times the one before: KB, MB, GB, TB.
+- **Do it:** In Task Manager → Processes, sort by Memory. Which app uses the most?
 :::
-::: {.column width="62%"}
+::: {.column width="50%"}
 ![](images/game-ram.png)
 :::
 ::::
 
 ## Example · The memory of one texture
 
-1024 × 1024 pixels, 4 bytes per pixel.
+A texture has 1024 × 1024 pixels and 4 bytes per pixel.
+**How much memory does it need, before and after compression?**
 
 ::: {.reveal}
-1. 1024 × 1024 bytes = **1 MB**
-2. × 4 bytes per pixel = **4 MB**
-3. compressed, 1 byte per pixel = **1 MB**
-4. 40 textures: 160 MB → 40 MB
+1. 1024 × 1024 bytes = **1 MB**.
+2. With 4 bytes per pixel: 4 × 1 MB = **4 MB**.
+3. Compressed to 1 byte per pixel, it needs **1 MB**.
+4. So 40 textures need 160 MB, or only 40 MB when compressed.
 :::
 
 ## Try it 3 · Memory sizes
 
-a) 1024 × 1024, compressed (1 byte per pixel)?
-b) almost out of memory: compress what first?
-c) game update of 2 GB = ? MB
+a) How much memory does a 1024 × 1024 texture need when it is compressed to 1 byte per pixel?
+b) A game is almost out of memory. What should the team compress first?
+c) A game update is 2 GB. How many MB is that?
 
 ::: {.answer}
 a) 1 MB
-b) textures
-c) 2048 MB
+b) the textures
+c) 2048 MB (2 × 1024)
 :::
 
 ## 3.4 Storage
 
 :::: {.columns}
-::: {.column width="38%"}
-- hard disk: spinning disks, moving arm
-- SSD / phone: flash chips, no moving parts
-- app · user data · cache
-- 1 TB → 931 GB in Windows: maker × 1000, Windows × 1024
-- **Do it together:** a game's storage screen on a phone
+::: {.column width="50%"}
+- A hard disk has spinning disks and a moving arm. It is cheap but slow.
+- An SSD and a phone use flash chips with no moving parts.
+- A game in storage has three parts: the app, the user data and the cache.
+- **Do it:** Open a game's storage screen on your phone. How big is each part?
 :::
-::: {.column width="62%"}
+::: {.column width="50%"}
 ![](images/storage.png)
 :::
 ::::
 
 ## Try it 4 · Storage
 
-a) Clear cache: what is lost?
-b) keep the pets: which button is wrong?
-c) 1 TB shows 931 GB: is space missing?
+a) A player presses Clear cache. What do they lose?
+b) A player wants free space but wants to keep the pets. Which button must they not press?
+c) A "1 TB" SSD shows 931 GB in Windows. Is space missing?
 
 ::: {.answer}
-a) nothing important (temporary files)
+a) nothing important (only temporary files)
 b) Clear storage
-c) no, Windows counts with 1024
+c) No. The maker counts in 1000, Windows in 1024.
 :::
 
 ## Game challenge · Pocket Pets support desk
 
-{{< sim file="sims/pocket-pets.html" poster="sims/pocket-pets.png" title="Pocket Pets: answer the support desk" kind="game" >}}
+{{< sim file="sims/pocket-pets.html" poster="sims/pocket-pets.png" title="Pocket Pets: answer the support desk" kind="game" task="**The story:** players of Pocket Pets 2.0 send five messages to support. **Play:** answer each message." >}}
 
 ## Try it 5 · Answer the players (harder)
 
-island: 40 textures, 1024 × 1024, compressed · message 2 "needs 1.6 GB, I have 1.2 GB" · message 3 "Clear storage: pets gone" · message 5 "blurry for a second"
+The facts: the new island has 40 textures of 1024 × 1024, at 1 byte per pixel.
 
-a) message 2: how much more space?
-b) message 3: which part was deleted?
-c) message 5: memory of the 40 textures?
+a) The island needs 1.6 GB, and a phone has 1.2 GB free. How much more space is needed?
+b) A player pressed Clear storage, and the pets are gone. Which part was deleted?
+c) How much memory do the 40 textures of the island need?
 
 ::: {.answer}
 a) 0.4 GB
@@ -175,8 +167,8 @@ c) 40 MB
 
 ## Summary
 
-- core runs one thread · cores do not add up
-- cache → RAM → storage
-- cache: data used again and again
-- RAM: code, assets, state · texture = w × h × 4 bytes
-- storage: app · user data · cache
+- A core runs one thread, so 8 cores do not make a game 8 times faster.
+- Memory has levels: cache, RAM and storage, from fast to slow.
+- The cache keeps the data that the game uses again and again.
+- RAM holds code, assets and state; a texture needs width × height × 4 bytes.
+- Storage holds the app, the user data and the cache.

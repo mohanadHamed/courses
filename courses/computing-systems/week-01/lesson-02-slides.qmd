@@ -8,72 +8,64 @@ format: lesson-pptx
 
 {{< glossary app-package process loading gpu refresh-rate resolution latency cloud-gaming thermal-throttling >}}
 
-## Think · Why is there a loading screen?
-
-The game is already installed on the phone.
-**Why must we wait before it starts?**
-
-::: {.answer}
-The game must be copied from slow **storage** into fast **memory**.
-:::
-
 ## 2.1 From the store to the first frame
 
 :::: {.columns}
-::: {.column width="38%"}
-- APK · IPA
-- install → storage
-- launch → **process** in memory
-- memory full → system closes games
-- **Do it together:** time a game start
+::: {.column width="50%"}
+- A game comes as one file: an **APK** on Android, an **IPA** on iPhone.
+- Installing copies the game into **storage**.
+- Launching loads it into **memory**. The running game is a **process**.
+- When memory is full, the system closes games in the background.
+- **Do it:** Time a game start on your phone, from the icon to the menu.
 :::
-::: {.column width="62%"}
+::: {.column width="50%"}
 ![](images/launch.png)
 :::
 ::::
 
 ## Example · Cheap phone, slow loading
 
-1500 MB of assets.
+A level has 1500 MB of assets. A fast phone reads 1500 MB per second; a cheap
+phone reads 150 MB per second. **How long does the level load on each phone?**
 
 ::: {.reveal}
-1. 1500 MB per second → **1 second**
-2. 150 MB per second → **10 seconds**
-3. same game: 10 times slower, only because of storage speed
+1. Fast phone: 1500 MB ÷ 1500 MB per second = **1 second**.
+2. Cheap phone: 1500 MB ÷ 150 MB per second = **10 seconds**.
+3. The game is the same. Only the slower storage makes it 10 times slower.
 :::
 
 ## Try it 1 · Install, launch, load
 
-a) installing fills…?
-b) 900 MB at 300 MB per second?
-c) starts again after a break: why?
+a) A player installs a game. Which part of the phone does it fill?
+b) A level has 900 MB of assets. The phone reads 300 MB per second. How many seconds does the level take to load?
+c) A game starts again from the title screen after a long break. Why?
 
 ::: {.answer}
 a) storage
-b) 3 seconds
-c) the system closed it to free memory
+b) 3 seconds (900 ÷ 300)
+c) The system closed it to free memory.
 :::
 
 ## 2.2 The frame on real hardware
 
 :::: {.columns}
-::: {.column width="38%"}
-- CPU: logic · GPU: pixels
-- the slower one sets the pace
-- screen limits it (Hz)
-- no fan → **throttling**
-- **Do it together:** resolution and Hz of the lab screen
+::: {.column width="50%"}
+- The **CPU** runs the game logic. The **GPU** draws the pixels.
+- The slower of the two sets the frame rate (fps).
+- The screen shows at most its **refresh rate** (Hz) in new pictures.
+- A phone has no fan. When it gets hot, it slows down (**throttling**).
+- **Do it:** On the lab computer, find the resolution and refresh rate of the screen.
 :::
-::: {.column width="62%"}
+::: {.column width="50%"}
 ![](images/cpu-gpu-pipeline.png)
 :::
 ::::
 
 ## Try it 2 · Frames, screens, heat
 
-a) colours the pixels?
-b) 120 Hz screen, game at 70 fps: new pictures?
-c) hot chip slows down?
+a) Which processor colours the pixels of the picture?
+b) The screen shows 120 Hz and the game makes 70 fps. How many new pictures does the player see per second?
+c) The chip gets hot and the phone slows down. What is this called?
 
 ::: {.answer}
 a) the GPU
@@ -83,20 +75,30 @@ c) thermal throttling
 
 ## 2.3 Where the game is computed
 
+:::: {.columns}
+::: {.column width="50%"}
+- **Local:** the whole game runs on the device.
+- **Client–server:** each device runs the game; a server keeps the shared data.
+- **Cloud gaming:** a server runs the game; the phone shows a video.
+- **Latency** is the delay between an action and its result. The cloud adds latency.
+:::
+::: {.column width="50%"}
 ![](images/where-game-runs.png)
+:::
+::::
 
 ## Live demo · Lag Lab
 
-{{< sim file="sims/lag-lab.html" poster="sims/lag-lab.png" title="Lag Lab: play with input lag" kind="game" >}}
+{{< sim file="sims/lag-lab.html" poster="sims/lag-lab.png" title="Lag Lab: play with input lag" kind="game" task="**Show:** jump with Local (+0 ms), then with Cloud, poor network (+220 ms). **Ask:** why is the second jump late?" >}}
 
 ## Try it 3 · Near or far?
 
-a) game on a server, phone shows video?
-b) delay between a tap and the jump?
-c) suffers most from lag?
+a) The game runs on a server, and the phone only shows the video. Where is the game computed?
+b) What do we call the delay between a tap and the jump on the screen?
+c) Which game suffers most from 100 ms of lag: a card game or a fighting game?
 
 ::: {.answer}
-a) cloud gaming
+a) in the cloud (cloud gaming)
 b) latency
 c) a fighting game
 :::
@@ -104,23 +106,23 @@ c) a fighting game
 ## 2.4 Device classes for gaming
 
 :::: {.columns}
-::: {.column width="38%"}
-- phone, tablet: touch, battery
-- PC: keyboard, long sessions
-- console: gamepad, TV
-- cloud: any screen, fast network
-- **Do it together:** the right device for a game
+::: {.column width="50%"}
+- **Phone, tablet:** touch, battery, short sessions.
+- **PC:** keyboard and mouse, long sessions at a desk.
+- **Console:** gamepad and TV, long sessions at home.
+- **Cloud:** any screen, but it needs a fast network.
+- **Do it:** Choose a game you know. Which device class fits it best, and why?
 :::
-::: {.column width="62%"}
+::: {.column width="50%"}
 ![](images/devices.png)
 :::
 ::::
 
 ## Try it 4 · Which device class?
 
-a) gamepad, TV, long sessions?
-b) touch, battery, five minutes on the bus?
-c) any screen, fast network?
+a) A player uses a gamepad and a TV for long sessions at home. Which device class is it?
+b) A player has five minutes on the bus, with touch and a battery. Which device class fits?
+c) Which device class works on any screen, but only with a fast network?
 
 ::: {.answer}
 a) console
@@ -130,28 +132,38 @@ c) cloud gaming
 
 ## Game challenge · The class survey
 
-- Android phones · cheapest reads 120 MB per second
-- iPhones, laptops, one console
-- one cloud player: slow connection
-- one game for all
+:::: {.columns}
+::: {.column width="50%"}
+- **The story:** a first-year class lists the devices it plays on.
+- Most students use Android phones. The cheapest phone reads 120 MB per second.
+- Some use iPhones or laptops. One student has a console.
+- One cloud player has a slow connection.
+- **Your task:** plan one game for all these devices. Answer the questions on the next slide.
+:::
+::: {.column width="50%"}
+![](images/devices.png)
+:::
+::::
 
 ## Try it 5 · One game, many devices (harder)
 
-a) 600 MB level on the cheapest phone?
-b) slow cloud connection: what gets worse?
-c) heat matters most on…?
+The facts: the cheapest Android phone reads 120 MB per second. One cloud player has a slow connection.
+
+a) How many seconds does a 600 MB level take to load on the cheapest phone?
+b) What gets worse for the cloud player with the slow connection?
+c) In which device class does heat matter most in a 30-minute session?
 
 ::: {.answer}
-a) 5 seconds
-b) the latency
+a) 5 seconds (600 ÷ 120)
+b) the latency (input lag)
 c) smartphone
 :::
 
 ## Summary
 
-- install → storage · launch → process in memory
-- storage speed → loading time
-- slower of CPU and GPU sets the frame rate
-- phones throttle when hot
-- cloud: more latency, needs fast Internet
-- each device class needs its own plan
+- Installing copies a game into storage; launching loads it into memory.
+- The speed of storage decides the loading time.
+- The slower of the CPU and the GPU sets the frame rate.
+- A phone slows down when it gets hot (thermal throttling).
+- Cloud gaming adds latency and needs a fast Internet connection.
+- Each device class needs its own input, screen and play time.

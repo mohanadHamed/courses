@@ -35,7 +35,7 @@
 </head>
 <body class="theme-workshop">
 <main class="sim">
-  <h1>Pixel Harbor · Hiring Desk</h1>
+  <h1>Sunrise Company · Hiring Desk</h1>
   <div class="hud"><span class="stage" id="stage"></span><span id="streak"></span><span class="score" id="score">Score 0</span></div>
   <div class="card" id="card"></div>
   <div class="timebar" id="timebar"><div id="time"></div></div>
@@ -51,38 +51,38 @@
   const LEVEL = { f: "foundation", i: "intermediate", a: "advanced" };
   // Stage 1: the first three cards are the story of the lesson, in this order.
   const STORY = [
-    { who: "Game tester", text: "Write bug reports in a shared tracker.", area: 1 },
-    { who: "Marketing assistant", text: "Make short videos for social media.", area: 2 },
+    { who: "Office assistant", text: "Answer the e-mails of customers.", area: 1 },
+    { who: "Sales assistant", text: "Make short videos about new products.", area: 2 },
     { who: "Everyone", text: "Sign in with a code on the phone.", area: 3 } ];
   const MORE = [
-    { who: "Game tester", text: "Sort the day's bugs in a spreadsheet.", area: 0 },
-    { who: "Marketing assistant", text: "Check if a forum post about a new phone is reliable.", area: 0 },
-    { who: "Marketing assistant", text: "Reply politely to players on social media.", area: 1 },
-    { who: "Game tester", text: "Share the test plan with the team in a cloud folder.", area: 1 },
-    { who: "Marketing assistant", text: "Check the licence of a free sound effect for a trailer.", area: 2 },
-    { who: "Game tester", text: "Record and cut a short video of a bug.", area: 2 },
-    { who: "Everyone", text: "Handle player data responsibly.", area: 3 },
-    { who: "Everyone", text: "Lock the screen before leaving the desk.", area: 3 },
-    { who: "Game tester", text: "Learn a new bug tracker alone.", area: 4 },
-    { who: "Game tester", text: "Find out why the game will not install on one phone.", area: 4 } ];
+    { who: "Office assistant", text: "Keep the list of orders in a spreadsheet.", area: 0 },
+    { who: "Sales assistant", text: "Check if a price on a website is true and new.", area: 0 },
+    { who: "Sales assistant", text: "Reply politely to customers on social media.", area: 1 },
+    { who: "Office assistant", text: "Share a file with the team in a cloud folder.", area: 1 },
+    { who: "Sales assistant", text: "Use only photos that you are allowed to use.", area: 2 },
+    { who: "Office assistant", text: "Write a letter in a word processor.", area: 2 },
+    { who: "Everyone", text: "Keep the personal data of customers private.", area: 3 },
+    { who: "Everyone", text: "Lock the screen before you leave the desk.", area: 3 },
+    { who: "Office assistant", text: "Learn a new app alone, with an online video.", area: 4 },
+    { who: "Office assistant", text: "Find out why the printer does not print.", area: 4 } ];
   // Stage 2: what candidates say about themselves.
   const SAYS = [
-    ["I can share a file, but only when a friend explains each step.", "I make a simple chart only with help."],
-    ["I make charts in a spreadsheet alone.", "I edit a short video alone, with no help."],
-    ["I train my colleagues in a new tool.", "I help others choose the right tool for each task."],
-    ["I lead data protection for a whole company and solve new, hard problems.", "I write the safety rules for a big studio and guide other experts."] ];
+    ["I can send a file, but only when a friend helps me.", "I make a simple chart only with help."],
+    ["I make charts in a spreadsheet alone.", "I make a short video alone, with no help."],
+    ["I teach other workers a new app.", "I help my friends choose the right app for a task."],
+    ["I lead the data safety of a big company.", "I write the safety rules for a big company and lead other experts."] ];
   // Stage 3: hire one of two candidates.
   const HIRE = [
-    { job: "Game tester", needs: "bug reports (communication), bug videos (content creation), bug spreadsheets (information). Level: intermediate or more.",
+    { job: "Office assistant", needs: "e-mails to customers (communication), letters (content creation), spreadsheets of orders (information). Level: intermediate or more.",
       people: [
         { name: "Omar", rows: [["programming", "a"], ["communication", "f"], ["content creation", "f"], ["information", "f"]] },
         { name: "Lina", rows: [["programming", "-"], ["communication", "i"], ["content creation", "i"], ["information", "i"]] } ],
-      right: 1, why: "The tester needs communication, content creation and information at intermediate. Programming is not on the list." },
-    { job: "Marketing assistant", needs: "short videos (content creation), replies to players (communication), player data (safety). Level: intermediate or more.",
+      right: 1, why: "The office assistant needs communication, content creation and information at intermediate. Programming is not on the list." },
+    { job: "Sales assistant", needs: "short videos (content creation), replies to customers (communication), customer data (safety). Level: intermediate or more.",
       people: [
         { name: "Sami", rows: [["content creation", "a"], ["communication", "i"], ["safety", "f"]] },
         { name: "Dana", rows: [["content creation", "i"], ["communication", "i"], ["safety", "i"]] } ],
-      right: 1, why: "Sami is at foundation in safety, but the job handles player data. Dana has every area at intermediate." } ];
+      right: 1, why: "Sami is at foundation in safety, but the job uses customer data. Dana has every area at intermediate." } ];
   const STAGES = ["Stage 1 · Sort the job adverts", "Stage 2 · Read the candidates", "Stage 3 · Hire"];
   const SECONDS = 15;
   const $ = (id) => document.getElementById(id);
@@ -172,13 +172,13 @@
   function finish() {
     const max = (rounds[0].length + rounds[1].length) * 15 + rounds[2].length * 10;
     $("stage").textContent = "Done";
-    $("card").innerHTML = `<div class="done">🏁 Pixel Harbor has its new team! Score ${score}</div><div class="ask">Your best possible score is about ${max}. Tap Restart for new cards.</div>`;
+    $("card").innerHTML = `<div class="done">🏁 Sunrise Company has its new team! Score ${score}</div><div class="ask">Your best possible score is about ${max}. Tap Restart for new cards.</div>`;
     $("opts").innerHTML = ""; $("timebar").hidden = true; $("next").hidden = true; say("");
     try { const best = Math.max(score, +localStorage.getItem("hiring-desk-best") || 0); localStorage.setItem("hiring-desk-best", best); say("Your best score in this browser: " + best, "good"); } catch (e) { /* no storage: fine */ }
   }
   function intro() {
     $("stage").textContent = "Ready?";
-    $("card").innerHTML = `<span class="who">Pixel Harbor is hiring</span><div class="text">A game tester and a marketing assistant.</div><div class="ask">Sort 8 tasks into DigComp areas, read 4 candidates, then hire 2 people. You have ${SECONDS} seconds for each card.</div>`;
+    $("card").innerHTML = `<span class="who">Sunrise Company is hiring</span><div class="text">An office assistant and a sales assistant.</div><div class="ask">Sort 8 tasks into DigComp areas, read 4 candidates, then hire 2 people. You have ${SECONDS} seconds for each card.</div>`;
     $("opts").innerHTML = ""; $("timebar").hidden = true;
     $("next").textContent = "Start ▶"; $("next").hidden = false; stage = -1;
   }

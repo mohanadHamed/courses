@@ -861,7 +861,7 @@ def finish(path, project_dir):
         return False
     course = read_course(project_dir, m.group(1))
     pal = palette(course)
-    diploma = read_diploma(project_dir)
+    diploma = read_diploma(project_dir, m.group(1))
     site_url = read_site_url(project_dir)
 
     with zipfile.ZipFile(path) as z:
@@ -932,7 +932,15 @@ def read_site_url(project_dir):
         return ""
 
 
-def read_diploma(project_dir):
+def read_diploma(project_dir, slug=""):
+    """The diploma line: courses/<slug>/_metadata.yml first, else _quarto.yml."""
+    try:
+        with open(os.path.join(project_dir, "courses", slug, "_metadata.yml"), encoding="utf-8") as f:
+            m = re.search(r'^diploma-line:\s*"([^"]*)"', f.read(), re.M)
+            if m:
+                return m.group(1)
+    except OSError:
+        pass
     try:
         with open(os.path.join(project_dir, "_quarto.yml"), encoding="utf-8") as f:
             m = re.search(r'^diploma-line:\s*"([^"]*)"', f.read(), re.M)

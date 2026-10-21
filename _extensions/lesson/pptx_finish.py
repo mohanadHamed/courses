@@ -9,8 +9,11 @@ Quarto (pandoc) makes plain slides. This project post-render step adds:
   _quarto.yml) big on a white label, so students can read it or take a photo;
 - answer cards from `::: {.answer}` (one card per item, elastic zoom on click);
 - click-by-click text from `::: {.reveal}` (fade in from the left);
-- coloured "Try it N" / "Think" / "Example" / "Watch out" / "Game challenge" labels in slide titles
-  (question slides also get a big faint "?"), and a fade between slides.
+- coloured "Try it N" / "Think" / "Example" / "Watch out" / "Game challenge" labels in slide titles,
+  and a fade between slides;
+- text that fits its box: long text is made smaller (PowerPoint autofit
+  values), and on a "Comparison" slide (the `task` line of a simulator above
+  its recording and QR code) the line gets the room it needs.
 
 Only the Python standard library is used. The script runs on every render
 (local, preview and CI) and skips files it already finished.
@@ -386,7 +389,7 @@ def style_runs_one(r, size, color, bold):
     rpr.insert(0, frag(solid(color))[0])
 
 
-LABEL = re.compile(r"^(Try it \d+|Try it|Think|Quick check|Your turn|Example|Watch out|Game challenge)\s*([·:—-])?\s*")
+LABEL = re.compile(r"^(Try it \d+(?:[–-]\d+)?|Try it|Think|Quick check|Your turn|Example|Watch out|Game challenge)\s*([·:—-])?\s*")
 NOT_QUESTION = ("Example", "Watch out", "Game challenge")   # coloured label, but no "?"
 
 
@@ -415,32 +418,48 @@ def finish_title_label(sptree, pal):
     return label not in NOT_QUESTION
 
 
-def question_mark(sid, pal):
-    """Big faint question mark, bottom right, behind the content."""
-    return shape(sid, "deco-question", 7500000, 1250000, 1300000, 2000000, "rect", "<a:noFill/>",
-                 text='<a:p><a:pPr algn="r"/><a:r><a:rPr lang="en-US" sz="14000" b="1" dirty="0">%s'
-                      '<a:latin typeface="%s"/></a:rPr><a:t>?</a:t></a:r></a:p>' % (solid(pal["accent2"], 30000), FONT),
-                 body_pr='<a:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="b"/>')
+def wrapped_lines(text, per_line):
+    """Number of lines when the words of `text` wrap at `per_line` characters."""
+    lines, used = 1, 0
+    for word in text.split():
+        if used and used + 1 + len(word) > per_line:
+            lines, used = lines + 1, len(word)
+        else:
+            used += (1 if used else 0) + len(word)
+    return lines
 
 
-def fit_text(body, height, width=SLIDE_W - 2 * MARGIN_X):
-    """Shrink the body text (PowerPoint autofit values) when it would not fit."""
+def fit_text(body, height, width=SLIDE_W - 2 * MARGIN_X, pt=24):
+    """Make the body text smaller when it would not fit its box.
+
+    Try the sizes from `pt` down to 16 pt and keep the largest that fits
+    (a smaller font also puts more words on each line)."""
     txb = body.find(P + "txBody")
-    need = 0.0
-    line_w = width / EMU - 0.4
-    for p in txb.findall(A + "p"):
-        t = para_text(p)
-        lines = max(1, math.ceil(len(t) * 0.136 / line_w))   # 24 pt, about 0.136 in per character
-        need += lines * 0.40 + 0.125
-    have = height / EMU
-    if need <= have:
+    texts = [para_text(p) for p in txb.findall(A + "p")]
+    texts = [t for t in texts if t.strip()]
+    have = height / EMU * 0.9          # a margin: fonts differ between viewers
+    line_w = width / EMU - 0.45        # insets and the bullet or label
+
+    def need(size):
+        k = size / 24
+        per_line = line_w / (0.15 * k)  # characters per line (24 pt: about 0.15 in each)
+        lines = sum(wrapped_lines(t, per_line) for t in texts)
+        return lines * 0.40 * k + 0.125 * len(texts)
+
+    if need(pt) <= have:
         return
-    scale = max(0.55, have / need)
+    size = next((s for s in range(pt - 1, 16, -1) if need(s) <= have), 16)
+    scale = size / pt
+    # Real font sizes, not only autofit values: every viewer (PowerPoint,
+    # Keynote, a phone) then shows the same smaller text.
+    for p in txb.findall(A + "p"):
+        for rpr in list(p.iter(A + "rPr")) + list(p.iter(A + "endParaRPr")):
+            old = int(rpr.get("sz", pt * 100))
+            rpr.set("sz", str(max(1600, int(old * scale / 100) * 100)))
     bp = txb.find(A + "bodyPr")
     for old in list(bp):
         bp.remove(old)
-    bp.append(frag('<a:normAutofit fontScale="%d" lnSpcReduction="%d"/>'
-                   % (int(scale * 40) * 2500, 10000 if scale < 0.9 else 0))[0])
+    bp.append(frag('<a:normAutofit/>')[0])
 
 
 def card_layout(items):
@@ -450,21 +469,30 @@ def card_layout(items):
     char_w = 0.118 * EMU             # 18 pt text, average character
     pad = 0.55 * EMU
     longest = max(len(t) for t in items) * char_w + pad
-    cols = 1
-    for c in (5, 4, 3, 2):
-        if len(items) >= c and longest <= (width - (c - 1) * gap) / c:
-            cols = c
-            break
-    if len(items) == 1:
-        cols = 1
+
+    def rows_for(c):
+        """Row heights with c columns; None when a card would need over 2 lines."""
+        col_w = (width - (c - 1) * gap) / c
+        heights = []
+        per_line = (col_w - pad) / char_w
+        for r in range(math.ceil(len(items) / c)):
+            row = items[r * c:(r + 1) * c]
+            if c > 1 and max(len(w) for t in row for w in t.split()) > per_line:
+                return None            # a long file name cannot wrap
+            lines = max(wrapped_lines(t, per_line) for t in row)
+            if lines > 2 and c > 1:
+                return None
+            heights.append(int((0.30 * lines + 0.22) * EMU))
+        return heights
+
+    # The lowest block of cards leaves the most room for the questions;
+    # with the same height, more columns.
+    options = [(sum(h) + gap * (len(h) - 1), -c, c, h)
+               for c in range(1, min(5, len(items)) + 1) for h in [rows_for(c)] if h]
+    _, _, cols, heights = min(options)
     col_w = (width - (cols - 1) * gap) / cols
     boxes = []
-    rows = math.ceil(len(items) / cols)
-    heights = []
-    for r in range(rows):
-        row = items[r * cols:(r + 1) * cols]
-        lines = max(max(1, math.ceil((len(t) * char_w) / (col_w - pad))) for t in row)
-        heights.append(int((0.30 * lines + 0.22) * EMU))
+    rows = len(heights)
     top = ZONE_BOTTOM - sum(heights) - gap * (rows - 1)
     y = top
     for r in range(rows):
@@ -544,6 +572,35 @@ def card_para(p, label, pal):
     return ET.tostring(p, encoding="unicode")
 
 
+def fixed_labels(txb, pal):
+    """Numbered lists (a), 1.): the label as text and a tab, with a hanging
+    indent, so the first line starts exactly where the next lines start in
+    every viewer (automatic numbers are placed differently by each one)."""
+    paras = txb.findall(A + "p")
+    for p, label in zip(paras, card_labels(paras)):
+        if not label:
+            continue
+        ppr = p.find(A + "pPr")
+        p.remove(ppr)
+        p.insert(0, frag('<a:pPr marL="457200" indent="-457200"><a:buNone/>'
+                         '<a:tabLst><a:tab pos="457200" algn="l"/></a:tabLst></a:pPr>')[0])
+        p.insert(1, frag('<a:r><a:rPr lang="en-US" b="1" dirty="0">%s</a:rPr><a:t>%s\t</a:t></a:r>'
+                         % (solid(pal["accent"]), esc(label)))[0])
+
+
+NUMBER_COMMA = re.compile(r"(?<=\d),\s(?=[−-]?\d)")
+DIGIT_HYPHEN = re.compile(r"(?<=\d)-(?=\d)")
+
+
+def keep_numbers_together(sptree):
+    """(2, −3) and (4, 12, −3) never break after a comma (a no-break space),
+    and 2026-10-21 or 3-2-1 never break at a hyphen (no-break hyphens)."""
+    for t in sptree.iter(A + "t"):
+        if t.text and ("," in t.text or "-" in t.text):
+            t.text = NUMBER_COMMA.sub(",\u00a0", t.text)
+            t.text = DIGIT_HYPHEN.sub("\u2011", t.text)
+
+
 def finish_code(sptree):
     """Code: Consolas; code blocks a bit smaller, so a line of code fits."""
     for p in sptree.iter(A + "p"):
@@ -585,7 +642,7 @@ def make_room(sptree, bodies, layout_geo, bottom):
         if y + h > bottom:
             h = max(500000, bottom - y)
             set_xfrm(body, x, y, w, h)
-            fit_text(body, h, w)
+        fit_text(body, h, w, 24 if w > SLIDE_W / 2 else 21)
     for pic in sptree.findall(P + "pic"):
         x, y, w, h = geometry(pic, layout_geo)
         if y + h > bottom and bottom - y > 300000:
@@ -593,6 +650,47 @@ def make_room(sptree, bodies, layout_geo, bottom):
             nw, nh = int(w * k), int(h * k)
             xfrm = pic.find(".//%sxfrm" % A)
             xfrm.find(A + "off").set("x", str(x + (w - nw) // 2))
+            xfrm.find(A + "ext").set("cx", str(nw))
+            xfrm.find(A + "ext").set("cy", str(nh))
+
+
+def placeholder_idx(sp):
+    ph = sp.find("./%snvSpPr/%snvPr/%sph" % (P, P, P))
+    return (ph.get("type", "obj"), ph.get("idx", "1")) if ph is not None else (None, None)
+
+
+def comparison_heads(sptree, layout_geo):
+    """The text line above each column of a "Comparison" slide."""
+    if "4" not in layout_geo:
+        return []
+    return [sp for sp in sptree.findall(P + "sp") if placeholder_idx(sp) in (("body", "1"), ("body", "3"))]
+
+
+def finish_comparison(sptree, heads, layout_geo):
+    """Give each line above a column the height it needs; the picture goes below it."""
+    bottom = sum(layout_geo["2"][1::2]) if "2" in layout_geo else ZONE_BOTTOM
+    pics = sptree.findall(P + "pic")
+    for head in heads:
+        x, y, w, _ = layout_geo[placeholder_idx(head)[1]]
+        text = " ".join(para_text(p) for p in head.iter(A + "p"))
+        for p in head.iter(A + "p"):
+            style_runs(p, 1800)
+        lines = wrapped_lines(text, (w / EMU - 0.25) / 0.13)   # 18 pt bold: about 0.13 in per character
+        h = int((lines * 0.31 + 0.15) * EMU)
+        set_xfrm(head, x, y, w, h)
+        bp = head.find("./%stxBody/%sbodyPr" % (P, A))
+        if bp is not None:
+            bp.set("anchor", "t")      # grow downwards, never into the title
+        top = y + h + 60000
+        for pic in pics:
+            px, py, pw, ph = geometry(pic, layout_geo)
+            if not (x <= px + pw / 2 <= x + w) or bottom - top < 300000:
+                continue
+            k = min(1.0, w / pw, (bottom - top) / ph)
+            nw, nh = int(pw * k), int(ph * k)
+            xfrm = pic.find(".//%sxfrm" % A)
+            xfrm.find(A + "off").set("x", str(x + (w - nw) // 2))
+            xfrm.find(A + "off").set("y", str(top))
             xfrm.find(A + "ext").set("cx", str(nw))
             xfrm.find(A + "ext").set("cy", str(nh))
 
@@ -676,8 +774,9 @@ def finish_slide(xml, pal, course, diploma, is_title, layout_geo, site_url=""):
         finish_title_slide(root, pal, course, diploma, site_url)
         renumber(sptree)
     else:
-        question = finish_title_label(sptree, pal)
+        finish_title_label(sptree, pal)
         finish_code(sptree)
+        keep_numbers_together(sptree)
         bodies = body_placeholders(sptree)
         steps = []          # (body, "reveal", paragraph) or (body, "answer", [paragraphs])
         for body in bodies:
@@ -704,14 +803,23 @@ def finish_slide(xml, pal, course, diploma, is_title, layout_geo, site_url=""):
             if not txb.findall(A + "p"):
                 txb.append(frag("<a:p><a:endParaRPr/></a:p>")[0])
 
+        for body in bodies:
+            fixed_labels(body.find(P + "txBody"), pal)
+
+        heads = comparison_heads(sptree, layout_geo)
+        if heads:
+            finish_comparison(sptree, heads, layout_geo)
         answers = [p for _, kind, g in steps if kind == "answer" for p in g]
-        if question:
-            insert_back(sptree, question_mark(9201, pal))
         boxes, labels = [], []
         if answers:
             labels = card_labels(answers)
             boxes, top = card_layout([(l or "✓") + "  " + para_text(p) for p, l in zip(answers, labels)])
-            make_room(sptree, bodies, layout_geo, top - 140000)
+            make_room(sptree, [b for b in bodies if b not in heads], layout_geo, top - 140000)
+        else:
+            for body in bodies:
+                if body not in heads:
+                    x, y, w, h = geometry(body, layout_geo)
+                    fit_text(body, h, w, 24 if w > SLIDE_W / 2 else 21)
         for i, (p, box) in enumerate(zip(answers, boxes), start=1):
             sptree.append(frag(card(9300 + i, i, box, card_para(p, labels[i - 1], pal), pal))[0])
         renumber(sptree)

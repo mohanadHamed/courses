@@ -15,6 +15,9 @@
 --     kind="game": a mini-game (a small playable game for one concept); the
 --     label says "Mini-game" instead of "Simulator".
 --     layout="qr" (slides): only the QR code, to put in a column.
+--     task="Show … Ask: why …?" (slides): one or two sentences that tell the
+--     teacher what to show and what to ask; shown above the recording, so the
+--     slide explains itself. Every Live demo and Game challenge slide has one.
 --     Slides show a recording of the game being played instead of the poster
 --     when it exists: sims/<name>.gif next to sims/<name>.html, or
 --     recording="sims/other.gif" (made by shared/sims/recordings/).
@@ -262,11 +265,19 @@ local function sim(kwargs)
     local docdir = pandoc.path.directory(quarto.doc.input_file)
     local fh = io.open(pandoc.path.join({ docdir, rec }), "rb")
     if fh then fh:close(); picture = rec end
+    local left = { pandoc.Para({ pandoc.Image({}, picture) }) }
+    local right = { pandoc.Para({ pandoc.Image({}, qr_png(url, title, game and "Scan to play" or "Scan to try it")) }) }
+    -- With a task, text comes before each picture: the writer then uses the
+    -- "Comparison" layout (a line of text above each picture).
+    local task = str(kwargs.task)
+    if task ~= "" then
+      table.insert(left, 1, pandoc.Para(pandoc.read(task, "markdown").blocks[1].content))
+      table.insert(right, 1, pandoc.Para({ pandoc.Str(game and "Scan the QR code to play on your phone."
+        or "Scan the QR code to try it on your phone.") }))
+    end
     return pandoc.Div({
-      pandoc.Div({ pandoc.Para({ pandoc.Image({}, picture) }) }, { class = "column", width = "55%" }),
-      pandoc.Div({
-        pandoc.Para({ pandoc.Image({}, qr_png(url, title, game and "Scan to play" or "Scan to try it")) }),
-      }, { class = "column", width = "45%" }),
+      pandoc.Div(left, { class = "column", width = "55%" }),
+      pandoc.Div(right, { class = "column", width = "45%" }),
     }, { class = "columns" })
   end
 end

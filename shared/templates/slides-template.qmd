@@ -1,14 +1,18 @@
 ---
 # Copy to courses/<slug>/week-NN/lesson-NN-slides.qmd. The CLASS part of the
-# lesson: 12–16 slides for 60 min, 22–28 for 90 min (title not counted), so
+# lesson: 10–16 slides for 60 min, 20–28 for 90 min (title not counted), so
 # the teacher has time to explain. One Try it slide per section, 2–3 questions;
-# one Game challenge story slide + one Try it slide.
+# one Game challenge slide + one Try it slide.
+# SLIDES EXPLAIN THEMSELVES (AUTHORING.md): a teacher who did not prepare must
+# understand every slide. Short, complete sentences (no keyword fragments);
+# every question is a full question with a question word and "?"; its answer
+# is on the same slide (.answer or .reveal); every simulator has a task="…".
+# No Think slides. Keep it short: at most four short sentences per slide.
 # Every concept slide has a picture: picture + text ALWAYS in columns (or the
-# slide is split in two). A table slide has no other text. Never put
-# .reveal or .answer inside columns. One "Live demo" slide per simulator.
-# Teach by showing: each concept slide ends with a "Do it together" bullet
-# (the section's Do it task, done live on the projector). Keywords, no long
-# sentences, simple English.
+# slide is split in two), never text and a picture in the same column.
+# A table slide has no other text. Never put .reveal or .answer inside
+# columns. One "Live demo" slide per simulator. Do it tasks: each student
+# alone, never "together". Simple English (A2–B1).
 title: "Lesson title"
 subtitle: "Week N · Lecture"
 draft: true
@@ -19,48 +23,40 @@ format: lesson-pptx
 
 {{< glossary term1 term2 term3 >}}
 
-## Think · A question before the idea
-
-One short question. **What do you think?**
-
-::: {.answer}
-The answer: it pops in when the teacher clicks.
-:::
-
 ## 1.1 First concept
 
 :::: {.columns}
-::: {.column width="38%"}
-- keyword
-- keyword
-- **Do it together:** the task, in a few words
+::: {.column width="50%"}
+- A short sentence with the first idea.
+- A short sentence with the second idea.
+- A short sentence with the third idea.
+- **Do it:** One instruction for each student. What do you write down?
 :::
-::: {.column width="62%"}
+::: {.column width="50%"}
 ![](images/name.png)
 :::
 ::::
 
 ## Example · Short title
 
+The situation with its numbers. **The question that the example answers?**
+
 ::: {.reveal}
-1. first step (one click)
-2. second step (one click)
-3. **the answer**
+1. First step, as a short sentence (one click).
+2. Second step, as a short sentence (one click).
+3. The result: **the answer**.
 :::
-
-## Watch out · Short title
-
-- the mistake
-- the right way
 
 ## Live demo · Name
 
-{{< sim file="sims/name.html" poster="sims/name.png" title="What it shows" kind="game" >}}
+{{< sim file="sims/name.html" poster="sims/name.png" title="What it shows" kind="game" task="**Show:** what the teacher does. **Ask:** a full question?" >}}
 
 ## Try it 1 · Short title
 
-a) First question
-b) Second question
+One line: what the students choose from (for example: input, processing, storage or output).
+
+a) Which … ? (a full question with the numbers it needs)
+b) Why … ?
 
 ::: {.answer}
 a) first answer
@@ -69,14 +65,14 @@ b) second answer
 
 ## Game challenge · Game name
 
-{{< sim file="sims/game-name.html" poster="sims/game-name.png" title="Game name: what you do" kind="game" >}}
+{{< sim file="sims/game-name.html" poster="sims/game-name.png" title="Game name: what you do" kind="game" task="The story in one sentence. **Play:** what each student does on the phone." >}}
 
 ## Try it N · Short title (harder)
 
-The story in keywords · its key numbers · work alone
+The facts of the story in one or two full sentences (names, numbers).
 
-a) First question
-b) Second question
+a) Which … ?
+b) How many … ?
 
 ::: {.answer}
 a) …
@@ -85,4 +81,4 @@ b) …
 
 ## Summary
 
-- keyword per section
+- One short sentence per section.

@@ -49,3 +49,7 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   world space with their conversion formulas, the tile-grid index and the
   Blender ↔ Unity conversion were removed (no syllabus week or ILO asks for
   them). Handedness stays, because the cross product (week 3) needs it.
+- Week 1 (2026-10-21, teacher review): the hand rule no longer names single
+  fingers (the middle finger is not a polite gesture to ask for in class).
+  It is the curl rule: the fingers point along +x and bend towards +y; the
+  thumb shows +z. Use this wording in every lesson.

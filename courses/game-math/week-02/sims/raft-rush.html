@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Raft Rush</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .goal b { color: #1c7ed6; }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin-top: 10px; }
+    .sim .comp { display: flex; align-items: center; gap: 6px; font-weight: 800; }
+    .sim .comp button { padding: 4px 12px; font-size: 1.1rem; }
+    .sim .comp output { min-width: 2.2em; text-align: center; font-size: 1.25rem; color: #7048e8; font-variant-numeric: tabular-nums; }
+    .sim .eq { font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 8px; line-height: 1.5; }
+    .sim .eq .too { color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Raft Rush</h1>
+  <p class="hint">Choose one paddle vector (magnitude at most 5). In every frame the raft moves by paddle + current. Land exactly on the dock after the given number of frames.</p>
+  <div class="hud">
+    <span class="lvl" id="lvl">Round 1</span>
+    <span class="goal" id="goal"></span>
+    <span class="stars" id="stars">★ 0</span>
+  </div>
+  <canvas id="c" aria-label="A river with the raft, the current, the jetty and the dock"></canvas>
+  <div class="pad">
+    <span class="comp">paddle x <button type="button" class="ghost" data-c="0" data-d="-1">−</button><output id="px">0</output><button type="button" class="ghost" data-c="0" data-d="1">+</button></span>
+    <span class="comp">paddle y <button type="button" class="ghost" data-c="1" data-d="-1">−</button><output id="py">0</output><button type="button" class="ghost" data-c="1" data-d="1">+</button></span>
+    <button id="go" type="button">Launch ▶</button>
+    <button id="sound" type="button" class="ghost">Sound: on</button>
+  </div>
+  <div class="eq" id="eq"></div>
+  <p id="msg" class="message">Round 1 is the story of the lesson.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const COLS = 12, ROWS = 8, PMAX = 5, STEP_MS = 520;
+  // jetty, dock, current, frames
+  const ROUNDS = [
+    { s: [4, 0], t: [4, 8], c: [3, 0], n: 2 },
+    { s: [2, 0], t: [8, 8], c: [2, 0], n: 2 },
+    { s: [8, 0], t: [8, 8], c: [-2, 0], n: 2 },
+    { s: [1, 0], t: [9, 8], c: [1, 0], n: 4 },
+    { s: [9, 0], t: [5, 8], c: [1, 0], n: 2 },
+  ];
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => { const r = Math.round(n * 100) / 100; return (r < 0 ? "−" : "") + Math.abs(r); };
+  const pair = (a, b) => `(${fmt(a)}, ${fmt(b)})`;
+  const sq = (n) => (n < 0 ? `(${fmt(n)})²` : `${fmt(n)}²`);
+  let W = 0, H = 0, u = 40, top = 30, round = 0, stars = 0, tries = 0, p = [0, 0], cur = ROUNDS[0], anim = null, sound = true, audio = null, done = false;
+
+  function startRound() {
+    if (round >= ROUNDS.length) {
+      done = true; anim = null; p = [0, 0];
+      $("lvl").textContent = "All rounds done"; $("goal").textContent = "";
+      $("msg").textContent = `🎉 All ${ROUNDS.length} crossings! ★ ${stars} of ${ROUNDS.length * 3}. Press “Play again” to start over.`;
+      $("msg").className = "message good"; $("go").textContent = "Play again ▶"; show(); return;
+    }
+    done = false; cur = ROUNDS[round]; tries = 0; p = [0, 0]; anim = null;
+    $("lvl").textContent = `Round ${round + 1} / ${ROUNDS.length}`;
+    $("goal").innerHTML = `Jetty <b>${pair(...cur.s)}</b> → dock <b>${pair(...cur.t)}</b> in <b>${cur.n}</b> frames · current <b>${pair(...cur.c)}</b>`;
+    $("msg").textContent = round === 0 ? "Round 1 is the story of the lesson. Set the paddle, then launch." : "Set the paddle, then launch."; $("msg").className = "message";
+    $("go").textContent = "Launch ▶";
+    show();
+  }
+  const real = () => [p[0] + cur.c[0], p[1] + cur.c[1]];
+  function show() {
+    $("px").textContent = fmt(p[0]); $("py").textContent = fmt(p[1]);
+    const m = Math.hypot(p[0], p[1]), r = real();
+    $("eq").innerHTML = done ? "" :
+      `|paddle| = √(${sq(p[0])} + ${sq(p[1])}) ≈ <span class="${m > PMAX + 1e-9 ? "too" : ""}">${fmt(m)}</span> (at most ${PMAX})<br>` +
+      `real move = paddle + current = ${pair(...p)} + ${pair(...cur.c)} = ${pair(...r)}, speed ≈ ${fmt(Math.hypot(...r))}<br>` +
+      `after ${cur.n} frames: ${pair(...cur.s)} + ${cur.n} × ${pair(...r)} = ${pair(cur.s[0] + cur.n * r[0], cur.s[1] + cur.n * r[1])}`;
+  }
+  function resize() {
+    W = canvas.clientWidth; u = Math.min((W - 40) / COLS, 46);
+    H = Math.round(u * ROWS + top * 2 + 6);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  const X = (x) => (W - u * COLS) / 2 + x * u, Y = (y) => top + (ROWS - y) * u;
+  function arrow(x1, y1, x2, y2, color, w) {
+    const L = Math.hypot(x2 - x1, y2 - y1); if (L < 2) return;
+    const a = Math.atan2(y2 - y1, x2 - x1), hl = Math.min(12, L * 0.4);
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = w; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2 - Math.cos(a) * hl * 0.6, y2 - Math.sin(a) * hl * 0.6); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - hl * Math.cos(a - 0.42), y2 - hl * Math.sin(a - 0.42)); ctx.lineTo(x2 - hl * Math.cos(a + 0.42), y2 - hl * Math.sin(a + 0.42)); ctx.closePath(); ctx.fill();
+  }
+  function raft(x, y) {
+    ctx.save(); ctx.translate(x, y);
+    ctx.fillStyle = "#b08968"; ctx.strokeStyle = "#7f5539"; ctx.lineWidth = 1.5;
+    for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(i * 5 - 2.5, -11, 5, 22, 2) : ctx.rect(i * 5 - 2.5, -11, 5, 22); ctx.fill(); ctx.stroke(); }
+    ctx.fillStyle = "#e8590c"; ctx.beginPath(); ctx.arc(0, 0, 4.5, 0, 7); ctx.fill();
+    ctx.restore();
+  }
+  function draw(now) {
+    ctx.fillStyle = "#d8f5a2"; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#4dabf7"; ctx.fillRect(0, Y(ROWS), W, ROWS * u);
+    // grid
+    ctx.strokeStyle = "rgba(255,255,255,.28)"; ctx.lineWidth = 1;
+    for (let i = 0; i <= COLS; i++) { ctx.beginPath(); ctx.moveTo(X(i), Y(0)); ctx.lineTo(X(i), Y(ROWS)); ctx.stroke(); }
+    for (let j = 0; j <= ROWS; j++) { ctx.beginPath(); ctx.moveTo(X(0), Y(j)); ctx.lineTo(X(COLS), Y(j)); ctx.stroke(); }
+    ctx.fillStyle = "#2a211c"; ctx.font = "600 10px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    for (let i = 0; i <= COLS; i += 2) ctx.fillText(String(i), X(i), Y(0) + 13);
+    ctx.textAlign = "right";
+    for (let j = 0; j <= ROWS; j += 2) ctx.fillText(String(j), X(0) - 4, Y(j) + 3);
+    // flowing current marks
+    if (!done) {
+      const dir = Math.sign(cur.c[0]) || 1, sp = Math.abs(cur.c[0]);
+      const off = ((now / 1000) * sp * u * 0.6) % (2 * u);
+      ctx.strokeStyle = "rgba(255,255,255,.55)"; ctx.lineWidth = 2;
+      for (let j = 1; j < ROWS; j += 2) for (let x = -2 * u; x < W + 2 * u; x += 2 * u) {
+        const xx = x + dir * off; ctx.beginPath(); ctx.moveTo(xx, Y(j)); ctx.lineTo(xx + dir * u * 0.5, Y(j)); ctx.stroke();
+      }
+      ctx.fillStyle = "#fff"; ctx.font = "800 12px Nunito, system-ui, sans-serif"; ctx.textAlign = "left";
+      ctx.fillText(`current ${pair(...cur.c)} per frame`, X(0) + 6, Y(ROWS) + 16);
+      // jetty and dock
+      ctx.fillStyle = "#7f5539";
+      ctx.fillRect(X(cur.s[0]) - 14, Y(0) - 2, 28, 12); ctx.fillRect(X(cur.t[0]) - 14, Y(ROWS) - 10, 28, 12);
+      ctx.fillStyle = "#2a211c"; ctx.textAlign = "center"; ctx.font = "800 11px Nunito, system-ui, sans-serif";
+      ctx.fillText("jetty " + pair(...cur.s), X(cur.s[0]), Y(0) + 24 > H - 2 ? H - 2 : Y(0) + 24);
+      ctx.fillText("dock " + pair(...cur.t), X(cur.t[0]), Y(ROWS) - 14);
+      const r = real();
+      let pos = [cur.s[0], cur.s[1]];
+      if (!anim) {
+        for (let k = 1; k <= cur.n; k++) {
+          ctx.strokeStyle = "rgba(255,255,255,.9)"; ctx.setLineDash([3, 4]); ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.arc(X(cur.s[0] + k * r[0]), Y(cur.s[1] + k * r[1]), 6, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+        }
+        // paddle (purple), current (blue) head to tail, real (orange)
+        const sx = X(cur.s[0]), sy = Y(cur.s[1]);
+        arrow(sx, sy, X(cur.s[0] + p[0]), Y(cur.s[1] + p[1]), "#7048e8", 3);
+        arrow(X(cur.s[0] + p[0]), Y(cur.s[1] + p[1]), X(cur.s[0] + r[0]), Y(cur.s[1] + r[1]), "#1864ab", 3);
+        arrow(sx, sy, X(cur.s[0] + r[0]), Y(cur.s[1] + r[1]), "#e8590c", 4);
+      } else {
+        const t = Math.max(0, Math.min((now - anim.t0) / STEP_MS, cur.n));
+        pos = [cur.s[0] + t * r[0], cur.s[1] + t * r[1]];
+        ctx.strokeStyle = "rgba(232,89,12,.8)"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(X(cur.s[0]), Y(cur.s[1])); ctx.lineTo(X(pos[0]), Y(pos[1])); ctx.stroke();
+      }
+      raft(X(pos[0]), Y(pos[1]));
+    }
+  }
+  function loop(now) {
+    requestAnimationFrame(loop);
+    try { draw(now); } catch (e) { /* keep the loop alive */ }
+  }
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function finish() {
+    const r = real(), end = [cur.s[0] + cur.n * r[0], cur.s[1] + cur.n * r[1]];
+    anim.done = true; tries++;
+    if (end[0] === cur.t[0] && end[1] === cur.t[1]) {
+      const got = tries === 1 ? 3 : tries === 2 ? 2 : 1;
+      stars += got; $("stars").textContent = "★ " + stars;
+      $("msg").textContent = `✓ Docked! ${"★".repeat(got)} Paddle ${pair(...p)} + current ${pair(...cur.c)} = ${pair(...r)} per frame.`;
+      $("msg").className = "message good"; $("go").textContent = "Next round ▶";
+      [660, 880, 1320].forEach((f, i) => setTimeout(() => beep(f, 0.14), i * 110));
+    } else {
+      $("msg").textContent = `✗ The raft ended at ${pair(...end)}, not ${pair(...cur.t)}. Which real move do you need per frame? Paddle = that move − current.`;
+      $("msg").className = "message bad"; $("go").textContent = "Try again ▶";
+      beep(200, 0.3, "sawtooth");
+    }
+  }
+  document.querySelectorAll("[data-c]").forEach((b) => b.addEventListener("click", () => {
+    if (done) return;
+    if (anim && !anim.done) { $("msg").textContent = "Wait: the raft is still moving."; return; }
+    if (anim) { anim = null; $("go").textContent = "Launch ▶"; }
+    const i = Number(b.dataset.c);
+    p[i] = Math.max(-PMAX, Math.min(PMAX, p[i] + Number(b.dataset.d)));
+    show();
+  }));
+  $("go").addEventListener("click", () => {
+    if (done) { round = 0; stars = 0; $("stars").textContent = "★ 0"; startRound(); return; }
+    if (anim && anim.done) {
+      const r = real();
+      if (cur.s[0] + cur.n * r[0] === cur.t[0] && cur.s[1] + cur.n * r[1] === cur.t[1]) { round++; startRound(); return; }
+      anim = null; $("go").textContent = "Launch ▶"; show(); return;
+    }
+    if (anim) { $("msg").textContent = "Wait: the raft is still moving."; return; }
+    const m = Math.hypot(p[0], p[1]);
+    if (m > PMAX + 1e-9) { $("msg").textContent = `The paddle is too strong: |paddle| ≈ ${fmt(m)}, but the player can paddle at most ${PMAX}.`; $("msg").className = "message bad"; beep(200, 0.2, "sawtooth"); return; }
+    if (!p[0] && !p[1]) { $("msg").textContent = "The paddle is (0, 0): the raft only drifts. Set the paddle first."; $("msg").className = "message bad"; return; }
+    anim = { t0: performance.now(), done: false };
+    $("msg").textContent = "Paddling…"; $("msg").className = "message";
+    beep(440, 0.1);
+    setTimeout(finish, STEP_MS * cur.n + 80);   // decide with a timer, not in draw()
+  });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  window.addEventListener("resize", resize);
+  resize(); startRound(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

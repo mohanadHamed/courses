@@ -2,7 +2,6 @@
 title: "Computer Components: CPU, Memory and Storage"
 description: "Lesson notes · Cores and threads, the memory hierarchy and the cache, what a game keeps in memory, and what a game keeps in storage."
 lesson: 3
-draft: true
 ilos: [A1]
 format: lesson-typst
 ---
@@ -101,9 +100,7 @@ levels. This is called the **memory hierarchy** (@fig-hierarchy).
 The **memory hierarchy** puts the memories of a computer in levels. Near the
 core, memory is small and very fast. Far from the core, memory is big and
 slow. The **cache** is a small, very fast memory next to the cores. It keeps
-copies of data that the core used a short time ago. If the core finds the data
-in the cache, this is a **cache hit**. If it must get the data from RAM, this
-is a **cache miss**.
+copies of data that the core used a short time ago.
 :::
 
 | Level | Typical size | Time to read one value | Keeps data without power? |
@@ -127,19 +124,8 @@ Imagine that one nanosecond lasts one second.
 2. A read from RAM (100 ns) takes **100 seconds**: you walk to the next room.
 3. A read from flash storage (100 000 ns) takes **100 000 seconds**, about
    **28 hours**: you travel to another city.
-4. A read from a hard disk (10 000 000 ns) takes about **116 days**.
-:::
-
-::: {.callout-note title="Example 3.3 — The cache saves time"}
-The game reads 100 values. A read from the cache takes 1 ns. A read from RAM
-takes 100 ns.
-
-1. 90 values are in the cache and 10 are not:
-   $90 \times 1 + 10 \times 100 = 90 + 1000 = 1090$ ns.
-2. 99 values are in the cache and 1 is not:
-   $99 \times 1 + 1 \times 100 = 99 + 100 = 199$ ns.
-3. The second case is more than five times faster. The only difference is how
-   often the data was already in the cache.
+4. So the CPU wants the data it needs most in the cache, as close as
+   possible.
 :::
 
 {{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" height="600" >}}
@@ -147,13 +133,11 @@ takes 100 ns.
 ::: {.callout-note title="Do it · Fetch the data yourself"}
 Open the **Data Trip** simulator above (or scan its QR code).
 
-1. Fetch one value from each level. Write the time and the human-scale time
-   in a table with four rows.
-2. In **100 reads**, set the reads from the cache to 99, 90 and 50. Write
-   the total time each time.
+1. Fetch one value from the cache, from RAM and from flash storage.
+2. Write the time and the human-scale time of each level in a table.
 
-*Your result:* the table, the three times, and one sentence in your own words:
-what does the cache do?
+*Your result:* the table, and one sentence in your own words: what does the
+cache do?
 :::
 
 ## 3.3 What a game keeps in memory while you play
@@ -194,8 +178,8 @@ A texture has 1024 × 1024 pixels.
 1. Pixels: $1024 \times 1024$, about 1 million.
 2. Memory: $1024 \times 1024 \times 4$ bytes. $1024 \times 1024$ bytes is
    1 MB, so the texture needs **4 MB**.
-3. Phones can use *compressed* texture formats, such as ASTC, with about
-   1 byte per pixel. Then the texture needs **1 MB**.
+3. Phones can use *compressed* texture formats, with about 1 byte per
+   pixel. Then the texture needs **1 MB**.
 4. For 40 textures: 160 MB without compression, and 40 MB with
    compression.
 :::
@@ -316,8 +300,8 @@ solid-state disks).
    cores?
 3. Why does a phone have efficiency cores?
 4. Put in order from fastest to slowest: RAM, cache, hard disk, flash storage.
-5. The game reads 100 values: 80 from the cache (1 ns each) and 20 from RAM
-   (100 ns each). What is the total time?
+5. The player's position is read many times in every frame. Why is the game
+   faster when the position is in the cache?
 6. A texture has 512 × 512 pixels and 4 bytes per pixel. How much memory
    does it need? (Hint: 512 × 512 × 4 = 1024 × 1024.)
 7. A player says: "The PNG file is 1 MB, so the texture uses 1 MB of memory."
@@ -333,7 +317,7 @@ solid-state disks).
 2. One core: 12 + 8 = 20 ms. Four cores: 12 + 2 = 14 ms.
 3. Efficiency cores do light work with little energy, so the battery lasts longer.
 4. Cache, RAM, flash storage, hard disk.
-5. 80 × 1 + 20 × 100 = 80 + 2000 = 2080 ns.
+5. The cache is next to the core and very fast (about 1 ns). After the first read, the core finds the position there and does not wait for RAM (about 100 ns).
 6. 512 × 512 × 4 bytes = 1024 × 1024 bytes = 1 MB.
 7. The PNG is compressed only for storage. In memory, the texture is opened into pixels: 4 bytes per pixel.
 8. Clear cache: nothing important (temporary files). Clear storage: the user data (progress and downloaded levels).

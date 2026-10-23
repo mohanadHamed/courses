@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Story Sorter</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .stage { display: grid; grid-template-columns: 1fr 120px; gap: 12px; align-items: stretch; }
+    .sim .card { background: #fff; border: 2px solid #e5dbff; border-radius: 16px; padding: 18px 16px; font-size: 1.15rem; font-weight: 800; min-height: 120px; display: flex; align-items: center; justify-content: center; text-align: center; box-shadow: 0 10px 22px -18px var(--sim-accent); }
+    .sim .card.good { border-color: #2b8a3e; background: #ebfbee; }
+    .sim .card.bad { border-color: #e03131; background: #fff5f5; }
+    .sim .sky { position: relative; background: linear-gradient(#d0ebff, #f3f0ff); border-radius: 16px; overflow: hidden; }
+    .sim .sky svg { position: absolute; left: 50%; width: 54px; transform: translateX(-50%); transition: bottom .5s; }
+    .sim .sky .hill { position: absolute; left: 0; right: 0; bottom: 0; height: 22px; background: #8ce99a; }
+    .sim .choices { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .sim .choices button { flex: 1 1 140px; }
+    .sim .message.bad { color: #c92a2a; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    @media (max-width: 420px) { .sim .stage { grid-template-columns: 1fr 70px; } }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Story Sorter</h1>
+  <p class="hint">Skyward Kite: Lina, a young kite maker, must bring back the wind that the sky pirate Captain Gale locked in a jar. Sort each piece of the story. Every right answer lifts Lina's kite.</p>
+  <div class="hud"><span class="lvl" id="lvl">Round 1 · building blocks</span><span id="count"></span><span class="stars" id="stars">★ 0</span></div>
+  <div class="stage">
+    <div class="card" id="card" aria-live="polite"></div>
+    <div class="sky" aria-hidden="true">
+      <svg id="kite" viewBox="0 0 54 90"><path d="M27 2 L46 26 L27 54 L8 26 Z" fill="#F783AC" stroke="#fff" stroke-width="2"/><path d="M27 2 V54 M8 26 H46" stroke="#fff" stroke-width="1.5"/><path d="M27 54 q-8 10 0 18 q8 8 0 16" stroke="#495057" stroke-width="1.5" fill="none"/></svg>
+      <div class="hill"></div>
+    </div>
+  </div>
+  <div class="choices" id="choices"></div>
+  <p id="msg" class="message">Choose the right box for the card.</p>
+  <div class="pad"><button id="next" type="button" hidden>Next ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const ROUNDS = [
+    { title: "Round 1 · building blocks", choices: ["character", "setting", "conflict and stakes"], cards: [
+      ["Lina, a young kite maker", "character", "Lina is the protagonist: the story follows her goal."],
+      ["A village on windy hills", "setting", "It answers “where?”"],
+      ["Lina wants the wind back, but Gale keeps it in a jar.", "conflict and stakes", "“X wants Y, but Z”: the whole conflict in one sentence."],
+      ["Captain Gale, a sky pirate", "character", "Gale is the antagonist: he works against Lina's goal."],
+      ["One year after the wind stopped", "setting", "It answers “when?”"],
+      ["Without wind, the village will have no bread by winter.", "conflict and stakes", "These are the stakes: what is lost if Lina fails."],
+      ["Kites carry messages between villages.", "setting", "A rule of the world. It becomes the main mechanic."],
+      ["Gale's crows attack Lina's kite.", "conflict and stakes", "Conflict with another character."],
+    ] },
+    { title: "Round 2 · three acts", choices: ["act 1", "act 2", "act 3"], cards: [
+      ["Lina mends kites in the silent village.", "act 1", "The normal world: the setup."],
+      ["A last kite falls from the sky with a map to the tower.", "act 1", "The inciting incident ends act 1 and starts the conflict."],
+      ["Lina flies through the forest of crows.", "act 2", "An obstacle on the journey: the confrontation."],
+      ["Storm clouds tear Lina's kite, and she must climb on foot.", "act 2", "A bigger obstacle: the tension rises."],
+      ["On top of the tower, Lina breaks the jar while Gale tries to stop her.", "act 3", "The climax: the highest tension."],
+      ["The wind returns, and the village holds its kite festival.", "act 3", "The resolution: the new situation."],
+    ] },
+  ];
+  const TOTAL = ROUNDS.reduce((n, r) => n + r.cards.length, 0);
+  let r = 0, i = 0, stars = 0, done = 0, missed = false, locked = false, sound = true, audio = null;
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  const lift = () => { $("kite").style.bottom = `${18 + (done / TOTAL) * 62}%`; };
+  function show() {
+    $("card").className = "card";
+    if (r >= ROUNDS.length) {
+      $("lvl").textContent = "The wind is back!"; $("count").textContent = "";
+      $("card").textContent = `You sorted the whole story. Score: ★ ${stars} of ${TOTAL}.`;
+      $("choices").innerHTML = ""; $("msg").textContent = "Press “Play again” to start over."; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; lift(); return;
+    }
+    const R = ROUNDS[r];
+    $("lvl").textContent = R.title; $("count").textContent = `${i + 1} / ${R.cards.length}`;
+    $("card").textContent = R.cards[i][0];
+    $("choices").innerHTML = R.choices.map((c) => `<button type="button" class="ghost" data-c="${c}">${c}</button>`).join("");
+    $("choices").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => choose(b.dataset.c)));
+    $("msg").textContent = r === 1 && i === 0 ? "Round 2: in which act does each event happen?" : "Choose the right box for the card."; $("msg").className = "message";
+    $("next").hidden = true; missed = false; locked = false; lift();
+  }
+  function choose(c) {
+    if (locked) { $("msg").textContent = "Right already. Press Next."; return; }
+    const [, want, why] = ROUNDS[r].cards[i];
+    if (c === want) {
+      locked = true; done++; if (!missed) { stars++; $("stars").textContent = "★ " + stars; }
+      $("card").className = "card good"; $("msg").textContent = `✓ ${want}. ${why}`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Next ▶"; beep(880, 0.12); lift();
+    } else {
+      missed = true; $("card").className = "card bad";
+      $("msg").textContent = `✗ Not “${c}”. Think again: who, where and when, or what stands in the way?`;
+      if (r === 1) $("msg").textContent = `✗ Not ${c}. Act 1 sets up, act 2 brings obstacles, act 3 has the climax and the end.`;
+      $("msg").className = "message bad"; beep(200, 0.25, "sawtooth");
+    }
+  }
+  $("next").addEventListener("click", () => {
+    if (r >= ROUNDS.length) { r = 0; i = 0; stars = 0; done = 0; $("stars").textContent = "★ 0"; show(); return; }
+    i++; if (i >= ROUNDS[r].cards.length) { r++; i = 0; }
+    show();
+  });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  show();
+})();
+</script>
+</body>
+</html>

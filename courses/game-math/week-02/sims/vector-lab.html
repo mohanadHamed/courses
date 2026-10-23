@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Vector Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin-top: 10px; }
+    .sim .comp { display: flex; align-items: center; gap: 6px; font-weight: 800; }
+    .sim .comp button { padding: 4px 12px; font-size: 1.1rem; }
+    .sim .comp output { min-width: 2.2em; text-align: center; font-size: 1.2rem; color: #e8590c; font-variant-numeric: tabular-nums; }
+    .sim .read { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 6px 16px; margin-top: 10px; font-variant-numeric: tabular-nums; }
+    .sim .read div { background: #f8f9fa; border-radius: 10px; padding: 6px 10px; font-weight: 700; }
+    .sim .read b { display: block; font-size: 0.78rem; color: var(--sim-muted); font-weight: 700; }
+    .sim .read .kv { color: #7048e8; } .sim .read .uv { color: #2F9E44; } .sim .read .v { color: #e8590c; }
+    .sim label.chk { gap: 6px; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Vector Lab</h1>
+  <p class="hint">Drag the head of the orange arrow (or use − and +). Move the slider k to scale it. Switch on the unit vector to see only the direction.</p>
+  <canvas id="c" aria-label="Grid with the vector v, the scaled vector k v and the unit vector"></canvas>
+  <div class="pad">
+    <span class="comp">v<sub>x</sub> <button type="button" class="ghost" data-c="0" data-d="-1">−</button><output id="vx">2</output><button type="button" class="ghost" data-c="0" data-d="1">+</button></span>
+    <span class="comp">v<sub>y</sub> <button type="button" class="ghost" data-c="1" data-d="-1">−</button><output id="vy">1</output><button type="button" class="ghost" data-c="1" data-d="1">+</button></span>
+    <label>k <input id="k" type="range" min="-2" max="3" step="0.5" value="1"><output id="kout" class="readout">1</output></label>
+    <label class="chk"><input id="unit" type="checkbox"> Show unit vector</label>
+  </div>
+  <div class="read">
+    <div class="v"><b>the vector</b><span id="rv"></span></div>
+    <div class="v"><b>magnitude (length)</b><span id="rm"></span></div>
+    <div class="kv"><b>scaled vector</b><span id="rk"></span></div>
+    <div class="uv"><b>unit vector</b><span id="ru"></span></div>
+  </div>
+  <p id="msg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const MAXC = 12;
+  let v = [2, 1], k = 1, showUnit = false, W = 0, H = 0, half = 6, u = 30, cx = 0, cy = 0, dragging = false;
+  const f = (n, d = 2) => { const r = Math.round(n * 10 ** d) / 10 ** d; const s = String(Math.abs(r)); return (r < 0 ? "−" : "") + s; };
+  const pair = (a, b, d = 2) => `(${f(a, d)}, ${f(b, d)})`;
+  const sq = (n) => (n < 0 ? `(${f(n)})²` : `${f(n)}²`);
+
+  function fit() {
+    const m = Math.max(Math.abs(v[0]), Math.abs(v[1]), Math.abs(k * v[0]), Math.abs(k * v[1]));
+    half = Math.max(6, Math.ceil(m) + 1);
+  }
+  function resize() {
+    W = canvas.clientWidth; H = Math.round(Math.min(W * 0.72, 460));
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+  const X = (x) => cx + x * u, Y = (y) => cy - y * u;
+  function arrow(x1, y1, x2, y2, color, w) {
+    const ax = X(x1), ay = Y(y1), bx = X(x2), by = Y(y2), L = Math.hypot(bx - ax, by - ay);
+    if (L < 1) return;
+    const hl = Math.min(14, L * 0.45), a = Math.atan2(by - ay, bx - ax);
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = w; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx - Math.cos(a) * hl * 0.6, by - Math.sin(a) * hl * 0.6); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx - hl * Math.cos(a - 0.42), by - hl * Math.sin(a - 0.42)); ctx.lineTo(bx - hl * Math.cos(a + 0.42), by - hl * Math.sin(a + 0.42)); ctx.closePath(); ctx.fill();
+  }
+  function draw() {
+    try {
+      u = Math.min(W, H) / (2 * half + 1); cx = W / 2; cy = H / 2;
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+      const nx = Math.floor(W / 2 / u), ny = Math.floor(H / 2 / u);
+      const step = half > 9 ? 2 : 1;
+      ctx.lineWidth = 1;
+      for (let i = -nx; i <= nx; i++) { ctx.strokeStyle = i === 0 ? "#adb5bd" : "#edf0ee"; ctx.beginPath(); ctx.moveTo(X(i), 0); ctx.lineTo(X(i), H); ctx.stroke(); }
+      for (let j = -ny; j <= ny; j++) { ctx.strokeStyle = j === 0 ? "#adb5bd" : "#edf0ee"; ctx.beginPath(); ctx.moveTo(0, Y(j)); ctx.lineTo(W, Y(j)); ctx.stroke(); }
+      ctx.fillStyle = "#868e96"; ctx.font = "600 10px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+      for (let i = -nx; i <= nx; i += step) if (i) ctx.fillText(f(i), X(i), Y(0) + 12);
+      ctx.textAlign = "right";
+      for (let j = -ny; j <= ny; j += step) if (j) ctx.fillText(f(j), X(0) - 4, Y(j) + 3);
+      // components (right triangle)
+      if (v[0] && v[1]) {
+        ctx.setLineDash([5, 4]); ctx.strokeStyle = "#e8590c"; ctx.globalAlpha = 0.5; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(v[0]), Y(0)); ctx.lineTo(X(v[0]), Y(v[1])); ctx.stroke();
+        ctx.setLineDash([]); ctx.globalAlpha = 1;
+      }
+      if (k !== 1 && k !== 0) arrow(0, 0, k * v[0], k * v[1], "#7048e8", 5);
+      arrow(0, 0, v[0], v[1], "#e8590c", k === 1 ? 5 : 3);
+      const m = Math.hypot(v[0], v[1]);
+      if (showUnit && m > 0) {
+        ctx.setLineDash([4, 3]); ctx.strokeStyle = "#2F9E44"; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(X(0), Y(0), u, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+        arrow(0, 0, v[0] / m, v[1] / m, "#2F9E44", 4);
+      }
+      // drag handle
+      ctx.fillStyle = "#e8590c"; ctx.strokeStyle = "#fff"; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(X(v[0]), Y(v[1]), 8, 0, 7); ctx.fill(); ctx.stroke();
+      ctx.font = "800 13px Nunito, system-ui, sans-serif"; ctx.textAlign = "left"; ctx.fillStyle = "#e8590c";
+      ctx.fillText("v", X(v[0]) + 10, Y(v[1]) - 8);
+      if (k !== 1 && k !== 0) { ctx.fillStyle = "#7048e8"; ctx.fillText(f(k, 1) + "v", X(k * v[0]) + 10, Y(k * v[1]) + 16); }
+    } catch (e) { /* one failed frame never stops the simulator */ }
+  }
+  function show() {
+    $("vx").textContent = f(v[0]); $("vy").textContent = f(v[1]); $("kout").textContent = f(k, 1);
+    const s2 = v[0] * v[0] + v[1] * v[1], m = Math.sqrt(s2);
+    $("rv").textContent = "v = " + pair(v[0], v[1]);
+    $("rm").textContent = `|v| = √(${sq(v[0])} + ${sq(v[1])}) = √${s2} ≈ ${f(m)}`;
+    $("rk").textContent = `${f(k, 1)} × ${pair(v[0], v[1])} = ${pair(k * v[0], k * v[1])}`;
+    $("ru").textContent = m > 0 ? (showUnit ? `v ÷ ${f(m)} ≈ ${pair(v[0] / m, v[1] / m)}` : "switch on “Show unit vector”") : "none: (0, 0) has no direction";
+    let msg = "";
+    if (!m) msg = "This is the zero vector. It has no direction, so it has no unit vector.";
+    else if (k < 0) msg = "A negative k turns the arrow around.";
+    else if (k === 0) msg = "k = 0 gives the zero vector.";
+    else if (k > 0 && k < 1) msg = "0 < k < 1 makes the arrow shorter, in the same direction.";
+    else if (k > 1) msg = "k > 1 makes the arrow longer, in the same direction.";
+    $("msg").textContent = msg;
+    draw();
+  }
+  function setV(x, y) {
+    v = [Math.max(-MAXC, Math.min(MAXC, x)), Math.max(-MAXC, Math.min(MAXC, y))];
+    show();
+  }
+  function toGrid(e) {
+    const r = canvas.getBoundingClientRect();
+    return [Math.round((e.clientX - r.left - cx) / u), Math.round((cy - (e.clientY - r.top)) / u)];
+  }
+  canvas.addEventListener("pointerdown", (e) => { dragging = true; canvas.setPointerCapture(e.pointerId); const [x, y] = toGrid(e); setV(x, y); });
+  canvas.addEventListener("pointermove", (e) => { if (!dragging) return; const [x, y] = toGrid(e); if (x !== v[0] || y !== v[1]) setV(x, y); });
+  const end = () => { if (!dragging) return; dragging = false; fit(); show(); };
+  canvas.addEventListener("pointerup", end); canvas.addEventListener("pointercancel", end);
+  document.querySelectorAll("[data-c]").forEach((b) => b.addEventListener("click", () => {
+    const i = Number(b.dataset.c), nv = v.slice(); nv[i] += Number(b.dataset.d); setV(nv[0], nv[1]); fit(); show();
+  }));
+  $("k").addEventListener("input", () => { k = Number($("k").value); fit(); show(); });
+  $("unit").addEventListener("change", () => { showUnit = $("unit").checked; show(); });
+  window.addEventListener("resize", resize);
+  fit(); show(); resize();
+})();
+</script>
+</body>
+</html>

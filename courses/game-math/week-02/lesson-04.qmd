@@ -1,0 +1,293 @@
+---
+title: "The Dot Product and the Angle Between Vectors"
+description: "The dot product, in front or behind, perpendicular vectors, the angle between two vectors and the vision cone of a guard."
+lesson: 4
+ilos: [A1, B1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary dot-product perpendicular angle-between-vectors forward-vector field-of-view unit-vector normalization magnitude vector component >}}
+
+## 4.1 One number from two vectors: the dot product
+
+- Does the wind help a boat, or slow it down? The game needs one number.
+- The **dot product** multiplies the matching components and adds them:
+  a · b = a~x~ b~x~ + a~y~ b~y~.
+- In 3D, add a~z~ b~z~ too.
+- The result is a **number** (a scalar), not a vector.
+- The order does not matter: a · b = b · a.
+
+![(1, 0) · (3, 1) = 1 × 3 + 0 × 1 = 3.](images/dot-steps.png){width=80%}
+
+::: {.callout-warning title="Watch out!"}
+The products (3 and 0) are only a middle step. The dot product is their sum:
+**3**, not (3, 0).
+:::
+
+::: {.callout-note title="Do it · The dot product in GeoGebra"}
+At geogebra.org/calculator, type `u = Vector((2, 3))`, `v = Vector((4, -1))`
+and then `u * v`. Calculate (2, 3) · (4, −1) by hand. Do the two numbers
+agree?
+:::
+
+::: {.callout-tip title="Try it 1 · Compute it"}
+Choose the right answer.
+
+::: {.match extra="(3, 0)|(8, −3)|−1"}
+The boat moves (1, 0). The wind is (3, 1). The dot product?
+:   3
+
+(2, 3) · (4, −1)
+:   5
+
+(1, 2, 3) · (4, 0, −1)
+:   1
+
+(−2, 5) · (3, 1)
+:   −1
+
+What kind of result does a dot product give?
+:   one number
+:::
+:::
+
+## 4.2 In front or behind? The sign of the dot product
+
+- A guard's **forward vector** f shows where it looks.
+- The vector from the guard to the cat: d = C − D.
+- f · d **positive**: the angle is less than 90°. The cat is in front.
+- f · d **zero**: exactly 90°. The cat is exactly to the side.
+- f · d **negative**: more than 90°. The cat is behind.
+- The same test with the velocity: positive = moving towards the goal.
+
+![The sign of f · d: in front, to the side, behind.](images/dot-sign.png){width=84%}
+
+{{< sim file="sims/dot-lab.html" poster="sims/dot-lab.png" title="Dot Lab: two vectors, one number" height="640" >}}
+
+::: {.callout-note title="Do it · Dot Lab"}
+In **Dot Lab**, drag the orange arrow until the dot product is positive,
+then zero, then negative. Write the two vectors and the dot product each
+time. Where is the orange arrow when the result is zero?
+:::
+
+::: {.callout-tip title="Try it 2 · In front or behind?"}
+A guard dog at D = (2, 2) faces f = (1, 0). Choose the right answer.
+
+::: {.match extra="far away|above the dog"}
+A cat at (5, 3). Where is it?
+:   in front
+
+A cat at (0, 4). Where is it?
+:   behind
+
+A cat at (2, 6). Where is it?
+:   exactly to the side
+
+The dot product of two vectors is negative. The angle between them is…
+:   more than 90°
+
+A player at (1, 1) moves (−1, 2). The treasure is at (4, 5). Is the player moving towards it?
+:   yes, the dot product is 5
+:::
+:::
+
+## 4.3 At a right angle: perpendicular vectors
+
+- A side-step must go at a right angle (90°) to the forward vector.
+- Two vectors are **perpendicular** when their dot product is **0**.
+- Turn a 2D vector left: (x, y) → (−y, x).
+- Turn it right: (x, y) → (y, −x).
+- Example: (3, 4) → left (−4, 3), right (4, −3). Check:
+  (3, 4) · (−4, 3) = −12 + 12 = 0.
+
+![(3, 4) and the two vectors at a right angle to it.](images/perpendicular.png){width=58%}
+
+::: {.callout-warning title="Watch out!"}
+Only swapping is wrong: (3, 4) · (4, 3) = 24, not 0. You must also change
+one sign.
+:::
+
+::: {.callout-note title="Do it · Right angles on paper"}
+On squared paper, draw (2, 5), (−5, 2) and (5, −2) from the same point.
+Check both right angles with the dot product and with the corner of a sheet
+of paper.
+:::
+
+::: {.callout-tip title="Try it 3 · Right angles"}
+Choose the right answer.
+
+::: {.match extra="(4, 3)|(−3, −4)|1"}
+A character faces (3, 4). The side-step to the left?
+:   (−4, 3)
+
+A character faces (3, 4). The side-step to the right?
+:   (4, −3)
+
+Are (4, 6) and (−3, 2) perpendicular?
+:   yes, the dot product is 0
+
+Are the road (2, 1) and the bridge (−1, 3) perpendicular?
+:   no, the dot product is 1
+
+The dot product of two perpendicular vectors.
+:   0
+:::
+:::
+
+## 4.4 How big is the angle?
+
+- The dot product grows with the lengths. So first **normalize** both
+  vectors.
+- For two unit vectors, â · b̂ is a number from −1 to 1. It depends only on
+  the angle.
+- For any vectors: a · b ÷ (|a| × |b|).
+- This number is the **cosine** of the angle (lecture 7). For now, use the
+  table:
+
+| â · b̂ | 1 | 0.87 | 0.71 | 0.5 | 0 | −0.5 | −0.71 | −1 |
+|---|---|---|---|---|---|---|---|---|
+| angle | 0° | 30° | 45° | 60° | 90° | 120° | 135° | 180° |
+
+![b̂ at four angles to â, with the value of â · b̂.](images/dot-angles.png){width=82%}
+
+::: {.callout-warning title="Watch out!"}
+(3, 0) · (2, 0) = 6, but the angle is 0°. Divide first: 6 ÷ (3 × 2) = 1, so
+0°.
+:::
+
+::: {.callout-note title="Do it · Find the angle in Dot Lab"}
+In **Dot Lab**, switch on **Unit vectors**. Make the angle 0°, 60°, 90° and
+180°. Write â · b̂ each time and compare with the table.
+:::
+
+::: {.callout-tip title="Try it 4 · The angle"}
+Use the table above and √2 ≈ 1.41. Choose the right answer.
+
+::: {.match extra="6°|0.5°|30°"}
+Two unit vectors have the dot product 0.5. The angle?
+:   60°
+
+Two unit vectors have the dot product −1. The angle?
+:   180°
+
+A turret faces (1, 0). A drone flies in the direction (1, 1). The angle?
+:   45°
+
+The angle between (2, 0) and (0, 7).
+:   90°
+
+A guard faces (1, 0). The cat is in the direction (3, 4), so â · b̂ = 0.6. The angle?
+:   between 45° and 60°
+:::
+:::
+
+## 4.5 Can the guard see me? The vision cone
+
+- A guard sees only a cone in front of it: its **field of view**.
+- Example: 60° to each side of f, and 5 units deep.
+- 60° gives the value 0.5 in the table. A smaller angle gives a bigger
+  value.
+- Seen when **both** are true: f̂ · d̂ ≥ 0.5 **and** |d| ≤ 5.
+
+![The vision cone of a guard dog.](images/vision-cone.png){width=80%}
+
+::: {.callout-warning title="Watch out!"}
+A cat 50 units straight ahead has f̂ · d̂ = 1, but the dog does not see it.
+Always check the distance too.
+:::
+
+::: {.callout-note title="Do it · Draw a vision cone"}
+On squared paper, mark a guard at (4, 4) facing (1, 0), and the points
+(8, 7), (7, 8), (4, 9) and (1, 0). For each point, find d, |d| and f̂ · d̂.
+Which points are seen (60° to each side, 5 units deep)?
+:::
+
+::: {.callout-tip title="Try it 5 · Seen or not?"}
+A dog at (6, 4) faces f = (1, 0). It sees 60° to each side and 5 units deep.
+Choose the right answer. You can use an answer more than once.
+
+::: {.match extra="behind, but seen"}
+A cat at (10, 7): d = (4, 3), f̂ · d̂ = 0.8.
+:   seen
+
+A cat at (6, 9): d = (0, 5), f̂ · d̂ = 0.
+:   not seen: too far to the side
+
+A cat at (2, 1): d = (−4, −3), f̂ · d̂ = −0.8.
+:   not seen: behind
+
+A cat at (16, 4): d = (10, 0), f̂ · d̂ = 1.
+:   not seen: too far away
+
+A cat at (9, 0): d = (3, −4), f̂ · d̂ = 0.6.
+:   seen
+:::
+:::
+
+## Game challenge: Shadow Cat {.challenge}
+
+Work alone. Use every section of today.
+
+**Shadow Cat** is a stealth game. A guard dog is at D = (6, 4) and looks
+right: f = (1, 0). It sees a point at most 60° to the side (f̂ · d̂ ≥ 0.5)
+and at most 5 units away. Bush A is at (10, 7), bush B at (9, 8) and bush C
+at (6, 9). The fish is at (2, 1). The cat can hide only where the dog cannot
+see it. Later the dog turns and looks up: f = (0, 1).
+
+{{< sim file="sims/shadow-cat.html" poster="sims/shadow-cat.png" title="Shadow Cat: find the bush the dog cannot see" kind="game" height="680" >}}
+
+::: {.callout-tip title="Try it 6 · The dog looks right"}
+Shadow Cat: dog D = (6, 4), f = (1, 0), 60° to each side, 5 units deep.
+Bushes A (10, 7), B (9, 8), C (6, 9). Choose the right answer.
+
+::: {.match extra="(3, 4)|A|0.6"}
+The vector from the dog to bush A.
+:   (4, 3)
+
+f · d for bush B, with d = (3, 4).
+:   3
+
+Which bush is safe for the cat?
+:   C
+
+The cat goes for the fish at (2, 1). Is it in front of the dog?
+:   no, behind
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · The dog turns (harder)"}
+Shadow Cat: dog D = (6, 4), now f = (0, 1). Bushes A (10, 7), B (9, 8),
+C (6, 9). Fish (2, 1). Choose the right answer.
+
+::: {.match extra="(0, −1)|−0.8|0"}
+The value f̂ · d̂ for bush C, with d̂ = (0, 1).
+:   1
+
+The value f̂ · d̂ for bush A, with d̂ = (0.8, 0.6).
+:   0.6
+
+Is any bush safe now?
+:   no, all three are seen
+
+The value f̂ · d̂ for the fish, with d̂ = (−0.8, −0.6).
+:   −0.6
+
+Which vector is perpendicular to the new f = (0, 1)?
+:   (−1, 0)
+:::
+:::
+
+## Summary {.summary}
+
+- The dot product a · b = a~x~ b~x~ + a~y~ b~y~ is one number.
+- Positive: less than 90° (in front). Zero: 90°. Negative: more than 90° (behind).
+- Perpendicular vectors have the dot product 0; turn (x, y) to (−y, x).
+- For unit vectors, â · b̂ gives the angle (table: 0.5 → 60°, 0 → 90°).
+- Vision cone: f̂ · d̂ ≥ 0.5 and |d| ≤ 5.

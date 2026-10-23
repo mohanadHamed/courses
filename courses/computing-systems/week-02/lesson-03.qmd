@@ -2,7 +2,6 @@
 title: "Computer Components: CPU, Memory and Storage"
 description: "Cores and threads, the memory hierarchy and the cache, what a game keeps in memory, and what it keeps in storage."
 lesson: 3
-draft: true
 ilos: [A1]
 format: lesson-html
 ---
@@ -72,36 +71,33 @@ A phone has 8 cores at 3 GHz. How fast is the core of the main thread?
 - Then RAM, then storage (SSD, hard disk): bigger and slower.
 - The cache keeps data that the game uses again and again, like the player's
   position.
-- **Cache hit**: the data is in the cache (fast). **Cache miss**: the core
-  must get it from RAM (slow).
 
 ![The memory hierarchy, with typical times.](images/memory-hierarchy.png){width=92%}
 
 {{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" height="600" >}}
 
 ::: {.callout-note title="Do it · Fetch the data yourself"}
-In **Data Trip**, get one value from each level. Write the time and the
-human-scale time in a table. Then, in **100 reads**, set the reads from the
-cache to 99, 90 and 50. Write the total time each time. Finish with one
-sentence: what does the cache do?
+In **Data Trip**, get one value from the cache, from RAM and from flash
+storage. Write the time and the human-scale time of each level in a table.
+Finish with one sentence: what does the cache do?
 :::
 
 ::: {.callout-tip title="Try it 2 · The memory hierarchy"}
 A read from the cache takes 1 ns. A read from RAM takes 100 ns. Choose the
 right answer.
 
-::: {.match extra="10 000 ns|in RAM|28 hours"}
+::: {.match extra="a hard disk|28 hours|1 second"}
 The player's position is read 50 times in one frame. After the first read, where does the core find it?
 :   in the cache
 
 The best score must stay when the phone is off. Where is it kept?
 :   in storage
 
-The game reads 100 values: 90 from the cache and 10 from RAM. Total time?
-:   1090 ns
+A read takes about 100 ns. Which level is it?
+:   RAM
 
-The game reads 100 values, all from the cache. Total time?
-:   100 ns
+What does the cache keep?
+:   copies of data used a short time ago
 
 If 1 ns lasted 1 second, how long would a read from RAM last?
 :   100 seconds

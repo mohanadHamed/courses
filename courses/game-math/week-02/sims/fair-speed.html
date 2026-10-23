@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Fair Speed</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-top: 10px; }
+    .sim .pad .on { background: var(--sim-accent); color: #fff; }
+    .sim table { border-collapse: collapse; margin-top: 10px; font-variant-numeric: tabular-nums; width: 100%; max-width: 520px; }
+    .sim th, .sim td { border-bottom: 1px solid #eef0ee; padding: 4px 8px; text-align: left; font-size: 0.92rem; }
+    .sim th { color: var(--sim-muted); font-weight: 700; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Fair Speed</h1>
+  <p class="hint">Eight runners start in the middle. Each one has an input direction from the arrow keys: right is (1, 0), right + up is (1, 1). The game multiplies the input by the speed 4 and adds it for 10 frames. A gem waits on the ring, 40 units away. Can every runner reach its gem?</p>
+  <canvas id="c" aria-label="Eight runners race from the centre to gems on a ring"></canvas>
+  <div class="pad">
+    <button id="norm" type="button" class="ghost">Normalize: off</button>
+    <button id="go" type="button">Race ▶</button>
+    <button id="sound" type="button" class="ghost">Sound: on</button>
+  </div>
+  <table aria-live="polite">
+    <thead><tr><th>Runner</th><th>Input</th><th>Velocity per frame</th><th>Distance after 10 frames</th></tr></thead>
+    <tbody>
+      <tr><td>right</td><td>(1, 0)</td><td id="v1">—</td><td id="d1">—</td></tr>
+      <tr><td>right + up (diagonal)</td><td>(1, 1)</td><td id="v2">—</td><td id="d2">—</td></tr>
+    </tbody>
+  </table>
+  <p id="msg" class="message">Press Race. Then switch Normalize on and race again.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const SPEED = 4, FRAMES = 10, RING = SPEED * FRAMES, MAXR = 60, STEP_MS = 160;
+  const DIRS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+  let W = 0, H = 0, sc = 1, normalize = false, race = null, sound = true, audio = null, results = null;
+  const f = (n) => { const r = Math.round(n * 10) / 10; return (r < 0 ? "−" : "") + Math.abs(r); };
+  const f2 = (n) => { const r = Math.round(n * 100) / 100; return (r < 0 ? "−" : "") + Math.abs(r); };
+
+  function velocity(d) {
+    const m = Math.hypot(d[0], d[1]);
+    return normalize ? [SPEED * d[0] / m, SPEED * d[1] / m] : [SPEED * d[0], SPEED * d[1]];
+  }
+  function resize() {
+    W = canvas.clientWidth; H = Math.round(Math.min(W * 0.8, 440));
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    sc = (Math.min(W, H) / 2 - 14) / MAXR;
+  }
+  const X = (x) => W / 2 + x * sc, Y = (y) => H / 2 - y * sc;
+  function gem(x, y, got) {
+    ctx.save(); ctx.translate(X(x), Y(y)); ctx.rotate(Math.PI / 4);
+    ctx.fillStyle = got ? "#2F9E44" : "#7048e8"; ctx.strokeStyle = "#fff"; ctx.lineWidth = 2;
+    ctx.fillRect(-6, -6, 12, 12); ctx.strokeRect(-6, -6, 12, 12); ctx.restore();
+  }
+  function draw(now) {
+    ctx.fillStyle = "#f4fbf0"; ctx.fillRect(0, 0, W, H);
+    // tiles
+    ctx.strokeStyle = "rgba(47,158,68,.08)"; ctx.lineWidth = 1;
+    for (let g = -MAXR; g <= MAXR; g += 10) {
+      ctx.beginPath(); ctx.moveTo(X(g), 0); ctx.lineTo(X(g), H); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, Y(g)); ctx.lineTo(W, Y(g)); ctx.stroke();
+    }
+    ctx.setLineDash([6, 5]); ctx.strokeStyle = "#7048e8"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(X(0), Y(0), RING * sc, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = "#7048e8"; ctx.font = "700 11px Nunito, system-ui, sans-serif"; ctx.textAlign = "left";
+    ctx.fillText("ring: 40 units", X(RING * 0.71) + 8, Y(-RING * 0.71) + 14);
+    const t = race ? Math.max(0, Math.min((now - race.t0) / STEP_MS, FRAMES)) : 0;
+    DIRS.forEach((d, i) => {
+      const m = Math.hypot(d[0], d[1]), gx = RING * d[0] / m, gy = RING * d[1] / m;
+      const got = results && race && t >= FRAMES && results.hit[i];
+      gem(gx, gy, got);
+      const v = race ? race.v[i] : [0, 0];
+      const px = v[0] * t, py = v[1] * t;
+      ctx.strokeStyle = d[0] && d[1] ? "rgba(232,89,12,.55)" : "rgba(28,126,214,.55)"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(px), Y(py)); ctx.stroke();
+      ctx.fillStyle = d[0] && d[1] ? "#e8590c" : "#1c7ed6"; ctx.strokeStyle = "#fff"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(X(px), Y(py), 7, 0, 7); ctx.fill(); ctx.stroke();
+    });
+    ctx.fillStyle = "#2a211c"; ctx.font = "800 12px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(race ? `frame ${Math.floor(t)} / ${FRAMES}` : "start", X(0), Y(0) - 14);
+  }
+  function loop(now) {
+    requestAnimationFrame(loop);
+    try { draw(now); } catch (e) { /* keep the loop alive */ }
+  }
+  function beep(fq, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = fq; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function finish() {
+    const v1 = race.v[0], v2 = race.v[1];
+    $("v1").textContent = `(${f2(v1[0])}, ${f2(v1[1])})`; $("d1").textContent = f(Math.hypot(v1[0], v1[1]) * FRAMES) + " units";
+    $("v2").textContent = `(${f2(v2[0])}, ${f2(v2[1])})`; $("d2").textContent = f(Math.hypot(v2[0], v2[1]) * FRAMES) + " units";
+    const n = results.hit.filter(Boolean).length;
+    if (n === 8) {
+      $("msg").textContent = "✓ 8 of 8 gems! Every runner moved 40 units: velocity = 4 × unit direction, the same speed in every direction.";
+      $("msg").className = "message good"; [660, 880, 1320].forEach((q, i) => setTimeout(() => beep(q, 0.14), i * 110));
+    } else {
+      $("msg").textContent = `✗ ${n} of 8 gems. The diagonal runners ran about 56.6 units and missed the ring: |(1, 1)| ≈ 1.41, so 4 × (1, 1) is too fast. Switch Normalize on.`;
+      $("msg").className = "message bad"; beep(200, 0.3, "sawtooth");
+    }
+    $("go").textContent = "Race again ▶";
+  }
+  $("go").addEventListener("click", () => {
+    if (race && !race.done) { $("msg").textContent = "Wait: the runners are still running."; return; }
+    const v = DIRS.map(velocity);
+    results = { hit: v.map((vv) => Math.abs(Math.hypot(vv[0], vv[1]) * FRAMES - RING) < 1) };
+    race = { t0: performance.now(), v, done: false };
+    $("msg").textContent = "Running…"; $("msg").className = "message";
+    beep(440, 0.1);
+    setTimeout(() => { race.done = true; finish(); }, STEP_MS * FRAMES + 60);   // decide with a timer, not in draw()
+  });
+  $("norm").addEventListener("click", () => {
+    if (race && !race.done) { $("msg").textContent = "Wait until the race ends, then switch."; return; }
+    normalize = !normalize;
+    $("norm").textContent = "Normalize: " + (normalize ? "on" : "off");
+    $("norm").classList.toggle("on", normalize);
+    race = null; results = null;
+    $("msg").textContent = normalize ? "Normalize is on: velocity = 4 × input ÷ |input|. Press Race." : "Normalize is off: velocity = 4 × input. Press Race.";
+    $("msg").className = "message";
+  });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  window.addEventListener("resize", resize);
+  resize(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

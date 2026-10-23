@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Dot Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin-top: 10px; }
+    .sim label.chk { gap: 6px; }
+    .sim .read { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 6px 16px; margin-top: 10px; font-variant-numeric: tabular-nums; }
+    .sim .read div { background: #f8f9fa; border-radius: 10px; padding: 6px 10px; font-weight: 700; }
+    .sim .read b { display: block; font-size: 0.78rem; color: var(--sim-muted); font-weight: 700; }
+    .sim .sign { font-size: 1.05rem; font-weight: 800; margin-top: 8px; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Dot Lab</h1>
+  <p class="hint">The green arrow is the guard's forward vector f. The orange arrow d points to the cat. Drag the heads of the arrows. Switch on unit vectors to read the angle.</p>
+  <canvas id="c" aria-label="Two arrows from the same point and their dot product"></canvas>
+  <div class="pad">
+    <label class="chk"><input id="unit" type="checkbox"> Unit vectors</label>
+    <button id="reset" type="button" class="ghost">Reset</button>
+  </div>
+  <div class="read">
+    <div><b>the two vectors</b><span id="rv"></span></div>
+    <div><b>dot product</b><span id="rd"></span></div>
+    <div><b>angle between them</b><span id="ra"></span></div>
+  </div>
+  <p class="sign" id="sign"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const HALF = 6;
+  let a = [3, 0], b = [2, 2], unit = false, angA = 0, angB = 60, W = 0, H = 0, u = 30, cx = 0, cy = 0, drag = null;
+  const f = (n, d = 2) => { const r = Math.round(n * 10 ** d) / 10 ** d; return (r < 0 ? "−" : "") + Math.abs(r); };
+  const pair = (v, d = 2) => `(${f(v[0], d)}, ${f(v[1], d)})`;
+  const rad = (g) => (g * Math.PI) / 180;
+  const vecs = () => unit ? [[Math.cos(rad(angA)), Math.sin(rad(angA))], [Math.cos(rad(angB)), Math.sin(rad(angB))]] : [a, b];
+
+  function resize() {
+    W = canvas.clientWidth; H = Math.round(Math.min(W * 0.72, 440));
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+  const scale = () => unit ? (Math.min(W, H) / 2 - 30) : u;
+  const X = (x) => cx + x * scale(), Y = (y) => cy - y * scale();
+  function arrow(v, color, w, label) {
+    const ax = X(0), ay = Y(0), bx = X(v[0]), by = Y(v[1]), L = Math.hypot(bx - ax, by - ay);
+    if (L < 1) return;
+    const hl = Math.min(14, L * 0.45), t = Math.atan2(by - ay, bx - ax);
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = w; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx - Math.cos(t) * hl * 0.6, by - Math.sin(t) * hl * 0.6); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx - hl * Math.cos(t - 0.42), by - hl * Math.sin(t - 0.42)); ctx.lineTo(bx - hl * Math.cos(t + 0.42), by - hl * Math.sin(t + 0.42)); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(bx, by, 8, 0, 7); ctx.globalAlpha = 0.25; ctx.fill(); ctx.globalAlpha = 1;
+    ctx.font = "800 14px Nunito, system-ui, sans-serif"; ctx.textAlign = "left"; ctx.fillText(label, bx + 10, by - 8);
+  }
+  function draw() {
+    try {
+      u = Math.min(W, H) / (2 * HALF + 1); cx = W / 2; cy = H / 2;
+      const [p, q] = vecs(), dot = p[0] * q[0] + p[1] * q[1];
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+      // shade the half plane "in front of f"
+      const t = Math.atan2(p[1], p[0]), R = Math.hypot(W, H);
+      ctx.fillStyle = "rgba(47,158,68,.06)"; ctx.beginPath(); ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, R, -t - Math.PI / 2, -t + Math.PI / 2); ctx.closePath(); ctx.fill();
+      if (!unit) {
+        const nx = Math.floor(W / 2 / u), ny = Math.floor(H / 2 / u);
+        ctx.lineWidth = 1;
+        for (let i = -nx; i <= nx; i++) { ctx.strokeStyle = i === 0 ? "#adb5bd" : "#edf0ee"; ctx.beginPath(); ctx.moveTo(X(i), 0); ctx.lineTo(X(i), H); ctx.stroke(); }
+        for (let j = -ny; j <= ny; j++) { ctx.strokeStyle = j === 0 ? "#adb5bd" : "#edf0ee"; ctx.beginPath(); ctx.moveTo(0, Y(j)); ctx.lineTo(W, Y(j)); ctx.stroke(); }
+        ctx.fillStyle = "#868e96"; ctx.font = "600 10px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+        for (let i = -nx; i <= nx; i++) if (i) ctx.fillText(f(i), X(i), Y(0) + 12);
+      } else {
+        ctx.strokeStyle = "#dee2e6"; ctx.setLineDash([5, 4]); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(cx, cy, scale(), 0, 7); ctx.stroke(); ctx.setLineDash([]);
+        ctx.strokeStyle = "#adb5bd"; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+      }
+      // the line "exactly to the side"
+      ctx.strokeStyle = "rgba(245,159,0,.7)"; ctx.setLineDash([6, 5]); ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(cx - Math.sin(-t) * R * 0 + Math.cos(t + Math.PI / 2) * R, cy - Math.sin(t + Math.PI / 2) * R);
+      ctx.lineTo(cx - Math.cos(t + Math.PI / 2) * R, cy + Math.sin(t + Math.PI / 2) * R); ctx.stroke(); ctx.setLineDash([]);
+      // angle arc
+      const m1 = Math.hypot(...p), m2 = Math.hypot(...q);
+      if (m1 && m2) {
+        const t1 = Math.atan2(p[1], p[0]), t2 = Math.atan2(q[1], q[0]);
+        let dt = t2 - t1; while (dt > Math.PI) dt -= 2 * Math.PI; while (dt < -Math.PI) dt += 2 * Math.PI;
+        ctx.strokeStyle = "#7048e8"; ctx.lineWidth = 2; ctx.beginPath();
+        ctx.arc(cx, cy, 26, -t1, -(t1 + dt), dt > 0); ctx.stroke();
+      }
+      arrow(p, "#2F9E44", 5, unit ? "f̂" : "f");
+      arrow(q, "#e8590c", 4, unit ? "d̂" : "d");
+      ctx.fillStyle = "#2F9E44"; ctx.font = "700 11px Nunito, system-ui, sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("in front (shaded)", 8, 16);
+      ctx.fillStyle = "#e67700"; ctx.fillText("dashed line: exactly to the side", 8, 30);
+    } catch (e) { /* keep the simulator alive */ }
+  }
+  function show() {
+    const [p, q] = vecs(), dot = p[0] * q[0] + p[1] * q[1], m1 = Math.hypot(...p), m2 = Math.hypot(...q);
+    const d = unit ? 2 : 0;
+    $("rv").textContent = (unit ? "f̂ = " : "f = ") + pair(p, d) + (unit ? ",  d̂ = " : ",  d = ") + pair(q, d);
+    const g = (n) => (n < -1e-9 ? `(${f(n, d)})` : f(n, d));
+    $("rd").textContent = `${g(p[0])} × ${g(q[0])} + ${g(p[1])} × ${g(q[1])} = ${f(dot, 2)}`;
+    if (m1 && m2) {
+      const c = Math.max(-1, Math.min(1, dot / (m1 * m2)));
+      $("ra").textContent = unit ? `${Math.round((Math.acos(c) * 180) / Math.PI)}°` : `${Math.round((Math.acos(c) * 180) / Math.PI)}°  (switch on unit vectors to read it from the dot product)`;
+    } else $("ra").textContent = "—";
+    const s = Math.abs(dot) < 1e-9 ? 0 : Math.sign(dot);
+    $("sign").textContent = !m1 || !m2 ? "One vector is the zero vector: it has no direction." :
+      s > 0 ? "Positive: less than 90° — the cat is in front." : s < 0 ? "Negative: more than 90° — the cat is behind." : "Zero: exactly 90° — the cat is exactly to the side (perpendicular).";
+    $("sign").style.color = s > 0 ? "#2b8a3e" : s < 0 ? "#c92a2a" : "#e67700";
+    draw();
+  }
+  function pick(e) {
+    const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    const [p, q] = vecs();
+    const dp = Math.hypot(x - X(p[0]), y - Y(p[1])), dq = Math.hypot(x - X(q[0]), y - Y(q[1]));
+    return dq <= dp ? "b" : "a";
+  }
+  function move(e) {
+    const r = canvas.getBoundingClientRect(), x = e.clientX - r.left - cx, y = cy - (e.clientY - r.top);
+    if (unit) {
+      const g = Math.round(((Math.atan2(y, x) * 180) / Math.PI) / 15) * 15;
+      if (drag === "a") angA = g; else angB = g;
+    } else {
+      const v = [Math.max(-HALF, Math.min(HALF, Math.round(x / u))), Math.max(-HALF, Math.min(HALF, Math.round(y / u)))];
+      if (drag === "a") a = v; else b = v;
+    }
+    show();
+  }
+  canvas.addEventListener("pointerdown", (e) => { drag = pick(e); canvas.setPointerCapture(e.pointerId); move(e); });
+  canvas.addEventListener("pointermove", (e) => { if (drag) move(e); });
+  canvas.addEventListener("pointerup", () => { drag = null; });
+  canvas.addEventListener("pointercancel", () => { drag = null; });
+  $("unit").addEventListener("change", () => {
+    unit = $("unit").checked;
+    if (unit) { angA = Math.round(((Math.atan2(a[1], a[0]) * 180) / Math.PI) / 15) * 15; angB = Math.round(((Math.atan2(b[1], b[0]) * 180) / Math.PI) / 15) * 15; }
+    show();
+  });
+  $("reset").addEventListener("click", () => { a = [3, 0]; b = [2, 2]; angA = 0; angB = 60; show(); });
+  window.addEventListener("resize", resize);
+  show(); resize();
+})();
+</script>
+</body>
+</html>

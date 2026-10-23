@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: App Launcher</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .score { margin-left: auto; color: var(--sim-accent); font-variant-numeric: tabular-nums; }
+    .sim .job { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 10px 12px; font-weight: 800; margin-bottom: 10px; min-height: 3em; }
+    .sim .job small { display: block; font-weight: 600; color: var(--sim-muted); }
+    .sim .apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+    .sim .app { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 12px; background: #fff; border: 1.5px solid #eee3d9; cursor: pointer; font-weight: 700; font-size: .85rem; color: inherit; box-shadow: none; }
+    .sim .app:hover { background: #fff4e6; }
+    .sim .app b { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; color: #fff; font-size: 1.2rem; }
+    .sim .app.good { background: #d3f9d8; border-color: #2b8a3e; }
+    .sim .app.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .window { margin-top: 10px; border: 1.5px solid #d9d4cf; border-radius: 12px; overflow: hidden; background: #fff; }
+    .sim .window .bar { background: #f3efeb; padding: 4px 10px; font-weight: 800; font-size: .85rem; display: flex; gap: 6px; align-items: center; }
+    .sim .window .bar i { width: 10px; height: 10px; border-radius: 50%; background: #e0d6cd; display: inline-block; }
+    .sim .window .body { padding: 10px; display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: center; }
+    @media (max-width: 520px) { .sim .window .body { grid-template-columns: 1fr; } }
+    .sim .window svg { width: 150px; height: 96px; }
+    .sim .window p { margin: 0; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>App Launcher: which app for the job?</h1>
+  <div class="hud"><span id="round"></span><span class="score" id="score">0 on the first try</span></div>
+  <div class="job" id="job"></div>
+  <div class="apps" id="apps"></div>
+  <div class="window" id="win" hidden><div class="bar"><i></i><i></i><i></i><span id="winTitle"></span></div><div class="body"><div id="winPic"></div><p id="winText"></p></div></div>
+  <div class="controls"><button id="next" type="button" hidden>Next job ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // Each app: its type, a colour, a tiny picture of its window, and what it is for.
+  const APPS = {
+    Word: { type: "word processor", c: "#2f6fb5", pic: "page", text: "Word is a <b>word processor</b>: pages of text, like letters, reports and CVs. Google Docs does the same job." },
+    Excel: { type: "spreadsheet", c: "#2b8a3e", pic: "grid", text: "Excel is a <b>spreadsheet</b>: a grid of cells that calculates, sorts and makes charts. Google Sheets does the same job." },
+    PowerPoint: { type: "presentation app", c: "#d9480f", pic: "slide", text: "PowerPoint is a <b>presentation app</b>: slides with short text and pictures for a talk. Google Slides does the same job." },
+    Outlook: { type: "e-mail and calendar", c: "#1c7ed6", pic: "mail", text: "Outlook is for <b>e-mail and the calendar</b>: messages, files to send, meeting times. Gmail and Google Calendar do the same job." },
+    OneDrive: { type: "cloud storage", c: "#4c6ef5", pic: "cloud", text: "OneDrive is <b>cloud storage</b>: your files on the Internet, on every device. Google Drive does the same job." },
+    Teams: { type: "chat and online meetings", c: "#7048e8", pic: "call", text: "Teams is for <b>chat and online meetings</b>: talk and see people who are not in the room. Google Meet and Zoom do the same job." },
+    Copilot: { type: "AI assistant", c: "#0b7285", pic: "chat", text: "Copilot is an <b>AI assistant</b>: you ask in normal words, it writes, sums up and translates. ChatGPT and Gemini do the same job. You check its answer." },
+  };
+  const JOBS = [
+    ["Write a letter to a customer and print it.", "Word"],
+    ["Add up the prices of this month and make a chart.", "Excel"],
+    ["Show the new products to the team with slides.", "PowerPoint"],
+    ["Send a file to the manager and set a meeting for Tuesday.", "Outlook"],
+    ["Keep your work safe and open it later on your phone.", "OneDrive"],
+    ["Talk to a colleague who works at home, with video.", "Teams"],
+    ["Get a short summary of a long text in normal words.", "Copilot"],
+    ["Make a list of 30 visitors and sort it by name.", "Excel"],
+  ];
+  const PICS = {
+    page: '<rect x="35" y="4" width="80" height="88" rx="4" fill="#fff" stroke="#2f6fb5" stroke-width="2"/><g stroke="#9bb8d9" stroke-width="4"><line x1="45" y1="20" x2="105" y2="20"/><line x1="45" y1="32" x2="100" y2="32"/><line x1="45" y1="44" x2="105" y2="44"/><line x1="45" y1="56" x2="90" y2="56"/><line x1="45" y1="68" x2="102" y2="68"/></g>',
+    grid: '<rect x="10" y="8" width="130" height="80" fill="#fff" stroke="#2b8a3e" stroke-width="2"/><g stroke="#b2dcbc" stroke-width="1.5"><line x1="10" y1="24" x2="140" y2="24"/><line x1="10" y1="40" x2="140" y2="40"/><line x1="10" y1="56" x2="140" y2="56"/><line x1="10" y1="72" x2="140" y2="72"/><line x1="43" y1="8" x2="43" y2="88"/><line x1="76" y1="8" x2="76" y2="88"/><line x1="109" y1="8" x2="109" y2="88"/></g><rect x="112" y="58" width="6" height="12" fill="#2b8a3e"/><rect x="121" y="50" width="6" height="20" fill="#2b8a3e"/><rect x="130" y="44" width="6" height="26" fill="#2b8a3e"/>',
+    slide: '<rect x="10" y="10" width="130" height="76" rx="4" fill="#fff" stroke="#d9480f" stroke-width="2"/><rect x="22" y="20" width="70" height="8" fill="#d9480f"/><g stroke="#f4b393" stroke-width="4"><line x1="22" y1="42" x2="75" y2="42"/><line x1="22" y1="54" x2="70" y2="54"/></g><circle cx="110" cy="56" r="16" fill="#ffc078"/>',
+    mail: '<rect x="20" y="20" width="110" height="64" rx="4" fill="#fff" stroke="#1c7ed6" stroke-width="2"/><polyline points="20,22 75,58 130,22" fill="none" stroke="#1c7ed6" stroke-width="2"/>',
+    cloud: '<path d="M40 76 a20 20 0 0 1 4-39 a28 28 0 0 1 52-6 a22 22 0 0 1 14 45 z" fill="#e7ecff" stroke="#4c6ef5" stroke-width="2"/><rect x="62" y="48" width="20" height="18" fill="#fff" stroke="#4c6ef5"/>',
+    call: '<rect x="10" y="12" width="62" height="72" rx="6" fill="#efe9ff" stroke="#7048e8" stroke-width="2"/><rect x="78" y="12" width="62" height="72" rx="6" fill="#efe9ff" stroke="#7048e8" stroke-width="2"/><circle cx="41" cy="40" r="12" fill="#b197fc"/><circle cx="109" cy="40" r="12" fill="#b197fc"/><rect x="25" y="56" width="32" height="18" rx="9" fill="#b197fc"/><rect x="93" y="56" width="32" height="18" rx="9" fill="#b197fc"/>',
+    chat: '<rect x="12" y="10" width="90" height="26" rx="10" fill="#e3fafc" stroke="#0b7285"/><rect x="48" y="44" width="90" height="40" rx="10" fill="#0b7285"/><g stroke="#fff" stroke-width="3"><line x1="58" y1="56" x2="126" y2="56"/><line x1="58" y1="68" x2="112" y2="68"/></g><g stroke="#0b7285" stroke-width="3"><line x1="22" y1="23" x2="88" y2="23"/></g>',
+  };
+  const $ = (id) => document.getElementById(id);
+  let order, k, first, score, locked;
+  const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function drawApps() {
+    $("apps").innerHTML = "";
+    Object.keys(APPS).forEach((name) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "app"; b.dataset.app = name;
+      b.innerHTML = '<b style="background:' + APPS[name].c + '">' + name[0] + "</b>" + name;
+      b.addEventListener("click", () => pick(name, b));
+      $("apps").appendChild(b);
+    });
+  }
+  function show() {
+    const [text] = order[k];
+    $("round").textContent = "Job " + (k + 1) + " of " + order.length;
+    $("job").innerHTML = text + "<small>Tap the app that does this job.</small>";
+    first = true; locked = false; $("win").hidden = true; $("next").hidden = true;
+    drawApps(); say("");
+  }
+  function pick(name, btn) {
+    if (locked) { say("You found it. Press <b>Next job</b>.", ""); return; }
+    const right = order[k][1];
+    if (name !== right) {
+      btn.classList.add("bad"); first = false;
+      say("Not " + name + ": it is a " + APPS[name].type + ". Try again.", "bad");
+      return;
+    }
+    btn.classList.add("good"); locked = true;
+    if (first) score++;
+    $("score").textContent = score + " on the first try";
+    $("winTitle").textContent = name + " · " + APPS[name].type;
+    $("winPic").innerHTML = '<svg viewBox="0 0 150 96" aria-hidden="true">' + PICS[APPS[name].pic] + "</svg>";
+    $("winText").innerHTML = APPS[name].text;
+    $("win").hidden = false;
+    if (k + 1 < order.length) { $("next").hidden = false; say("Right!", "good"); }
+    else say("Done! " + score + " of " + order.length + " jobs on the first try.", "good");
+  }
+  function start() { order = shuffle(JOBS); k = 0; score = 0; $("score").textContent = "0 on the first try"; show(); }
+  $("next").addEventListener("click", () => { if (k + 1 < order.length) { k++; show(); } });
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

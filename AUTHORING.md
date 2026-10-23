@@ -17,12 +17,15 @@ Program: Mobile Game Development and Design, Intermediate University Degree
 | `game-math` | Mathematics and Computing for Digital Games | 13411131 | 3 | 2 lectures × **90 min** | Dunn & Parberry, *3D Math Primer for Graphics and Game Development*, 2nd ed. |
 | `computing-systems` | Fundamentals of Computing Systems and Digital Platforms | 13411133 | 2 | 2 × **60 min** (lecture + seminar) | Tanenbaum & Austin, *Structured Computer Organization*, 6th ed. |
 | `digital-media` | Digital Media Technologies and Creative Production for Games | 13411134 | 2 | 2 × **60 min** (lecture + seminar) | Schell, *The Art of Game Design*, 3rd ed. |
-| `digital-skills` | Digital Skills | 01101154 | 2 | 2 × **60 min** (lab sessions) | Evans, Martin & Poatsy, *Technology in Action*, 18th ed. (+ DigComp 2.2) |
+| `digital-skills` | Digital Skills | 01101154 | 2 | **blended**: 1 × **60 min** lab lecture + 1 online activity | Evans, Martin & Poatsy, *Technology in Action*, 18th ed. (+ Microsoft Office and AI references) |
 
 `digital-skills` is taught to the diploma students of the whole college,
 most of them not in technology: it is simpler than the other courses (A2
 English) and uses general examples, never the games industry. Its
 `NOTES.md` has the details and overrides "Level and language" below.
+Since 2026-10-23 it teaches Microsoft Office and AI tools (syllabus v2) and
+is **blended**: each week one face-to-face lecture (a full lesson) and one
+online activity (see "Blended courses: the online activity" below).
 
 **One lecture = one lesson. Every course has 2 lessons per week.**
 16 weeks: week 8 midterm, week 16 final. Use the official course names exactly.
@@ -59,8 +62,8 @@ level; never copy its text, figures or exercises.
   becomes the case study / Game challenge of lesson A.
 - `computing-systems`, `digital-media`: Lecture + Seminar.
   Lesson A = Lecture topic, Lesson B = Seminar topic (applied, analysis, practice).
-- `digital-skills`: Lab Session 1 + Lab Session 2 (computer lab). Both lessons
-  have notes like the others, plus "Lab task" boxes on the page.
+- `digital-skills` (blended): Lecture 1 (face-to-face, computer lab) is a
+  full lesson with "Lab task" boxes; Lecture 2 is an online activity.
 - Exam sessions (midterm, final) get no lesson and no number. Revision
   sessions get a revision lesson. Confirm with me when a syllabus week is
   unclear.
@@ -207,7 +210,7 @@ the notes or on the Game challenge slide.
 | Notes: exercises (with short answers at the end) | 6–10 | 10–16 |
 | Page: "Try it" boxes (one per section + Game challenge) | 4–6 | 6–9 |
 | Page: questions in all "Try it" boxes | 15–28 | 30–45 |
-| Simulators / mini-games | 0–2 | 1–3 |
+| Simulators / mini-games | 0–4 | 1–3 |
 | Slides (title slide not counted) | 10–16 | 20–28 |
 
 **Class time and home time.** The notes and the interactive page are studied
@@ -233,6 +236,30 @@ page: Key terms, Game challenge, Summary) and one "Live demo" slide per
 simulator. Fix every warning before you open a PR. Full table:
 `python3 _extensions/lesson/check_size.py --all`. Keep `SIZES` and this table
 the same.
+
+### Blended courses: the online activity
+
+A blended course (`course.blended: true`; now `digital-skills`) has one
+face-to-face lecture and one online lecture each week. The face-to-face
+lecture (odd number) is a full lesson with all three outputs. The online
+lecture (even number, `online: true` in `schedule.yml`) is **one page**,
+`lesson-NN.qmd` with `online: true`, `due:` and `marks:` in the front matter
+(template: `shared/templates/online-template.qmd`):
+
+- "Before you start" (what you need, about how long, what you submit);
+- 2–3 short **Steps** marked `{.study}`: a plain explanation, a figure, a
+  simulator to try at once, one "Try it" self-check each (a video, if the
+  teacher has one, is linked on the e-learning platform);
+- **Tasks to submit** (`{.tasks}`): 2–4 practical tasks with marks and a
+  concrete product (a named file, a screenshot, a short answer), with
+  `{{< answer-space >}}` for the printed copy; then "How to submit".
+
+The page has "Download tasks (PDF)" and "Print tasks" buttons; on paper only
+the tasks are printed (`homework_pdf.py` prints it as
+`<prefix>_lectureN_tasks.pdf`). The online activity **replaces the
+homework** of that course. Its model answers stay private in
+`courses-private` (`week-PP/lesson-NN-solutions.md`). `check_size.py` checks
+its parts and that it has at least two simulators.
 
 **Independent study first; team work only where the syllabus asks for it.**
 Every student must be able to learn from the notes and the page alone.
@@ -623,7 +650,8 @@ repo `courses-private` (folder `../courses-private`, next to this one), with
 the same paths: `courses/<slug>/week-KK/homework-KK-solutions.md`. Change a
 homework and its solution together.
 
-- One homework after every two lectures: homework k follows lectures 2k−1
+- One homework after every two lectures (not in a blended course: there the
+  online activity takes its place): homework k follows lectures 2k−1
   and 2k (`courses/<slug>/week-KK/homework-KK.qmd`), from
   `shared/templates/homework-template.qmd`. None after a revision lecture;
   computing-systems, digital-media and digital-skills: the project instead
@@ -787,3 +815,8 @@ Lessons or homework not ready for students: `draft: true` (not published).
   outcomes need"). The notes no longer have a minimum word count: short
   notes are better than a second example of the same idea (see "No
   repetition"); only the maximum stays.
+- 2026-10-23: Digital Skills became a blended course built on the
+  university description *Smart Digital Skills* (Office and AI, at least a
+  quarter AI). New page type: the online activity (rules above, "Blended
+  courses"), which replaces the homework there. The teacher asked for as
+  many simulators as possible, so a 60-min lesson may now have up to four.

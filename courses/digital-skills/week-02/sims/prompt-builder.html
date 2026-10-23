@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Prompt Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .goal { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 8px 12px; font-weight: 700; margin-bottom: 8px; }
+    .sim .blocks { display: grid; gap: 6px; }
+    .sim .blk { display: grid; grid-template-columns: 5.5em 1fr; gap: 8px; align-items: center; text-align: left; background: #fff; color: inherit; border: 1.5px solid #e3dcd5; box-shadow: none; font-weight: 700; font-size: .9rem; }
+    .sim .blk span { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; padding: 2px 6px; border-radius: 6px; text-align: center; color: #fff; }
+    .sim .blk.on { background: #fff0e0; border-color: var(--sim-accent); }
+    .sim .k-task span { background: #d9480f; } .sim .k-context span { background: #1c7ed6; } .sim .k-format span { background: #2b8a3e; } .sim .k-extra span { background: #868e96; }
+    .sim .prompt { margin-top: 10px; border: 1.5px dashed #d9d4cf; border-radius: 12px; padding: 8px 12px; min-height: 2.6em; background: #fbfaf8; }
+    .sim .prompt b { color: var(--sim-muted); font-size: .8rem; display: block; }
+    .sim .meter { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .sim .meter span { border-radius: 8px; padding: 2px 10px; font-weight: 800; font-size: .85rem; background: #f1f3f5; color: #868e96; }
+    .sim .meter span.ok { background: #d3f9d8; color: #2b8a3e; }
+    .sim .reply { margin-top: 10px; border: 1.5px solid #e3dcd5; border-radius: 14px; border-bottom-left-radius: 4px; background: #fff; padding: 10px 12px; }
+    .sim .reply .who { display: block; font-size: .75rem; font-weight: 800; color: #0b7285; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Prompt Builder: task, context and format</h1>
+  <div class="goal">Your goal: a message to your teacher, Ms Rana. You will miss Thursday's class because of a doctor's appointment.</div>
+  <div class="blocks" id="blocks"></div>
+  <div class="prompt"><b>Your prompt</b><span id="prompt"></span></div>
+  <div class="meter" id="meter"></div>
+  <div class="controls"><button id="send" type="button">Send ▶</button><button id="restart" type="button" class="ghost">Clear</button></div>
+  <div class="reply" id="reply" hidden><span class="who">AI assistant (prepared answer)</span><span id="answer"></span></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const BLOCKS = [
+    ["task", "Task", "Write a short message to my teacher."],
+    ["context", "Context", "I will miss Thursday's class because of a doctor's appointment. My teacher is Ms Rana."],
+    ["format", "Format", "Write 3 polite sentences, with a greeting and a thank-you."],
+    ["extra", "Extra", "Do it quickly!!!"],
+    ["id", "Extra", "My student ID is 2026123456."],
+  ];
+  // Prepared answers for each mix of task (T), context (C) and format (F).
+  const ANSWERS = {
+    "": "Hello! What would you like me to do?",
+    "C": "Thank you for the information. What would you like me to do with it: a message, a reminder or a calendar note?",
+    "F": "What should the 3 polite sentences be about?",
+    "CF": "Do you want a message, an e-mail or a note? Tell me what to write.",
+    "T": "Dear teacher, I am writing to you about the class. Please let me know if you have any questions. Best regards.",
+    "TF": "Dear teacher, I am sorry, but I cannot come to class. I hope this is not a problem. Thank you very much.",
+    "TC": "Dear Ms Rana, I hope you are well. I am writing to tell you that I will not be able to attend the class on Thursday. The reason is that I have an appointment with the doctor at the same time. I understand that this class is important, and I am sorry to miss it. I will make sure to study the material that you share and to catch up with my classmates. Please let me know if there is anything that I should do. Thank you very much, and best regards.",
+    "TCF": "Dear Ms Rana, I will miss Thursday's class because I have a doctor's appointment. I will study the lesson notes at home. Thank you for your understanding.",
+  };
+  const NOTES = {
+    "": "The AI does not know what you want. Start with the task.",
+    "C": "The facts are there, but no task: the AI asks what to do.",
+    "F": "A format without a task or facts: the AI cannot help.",
+    "CF": "No task: the AI does not know what kind of text to write.",
+    "T": "Only a task: the answer is general. It does not say Thursday or why. Add the context.",
+    "TF": "Polite and short, but no facts: which class, and why? Add the context.",
+    "TC": "The facts are right, but the answer is far too long. Add the format.",
+    "TCF": "Task + context + format: a clear, short, correct message. Read it and send it in your own name.",
+  };
+  const $ = (id) => document.getElementById(id);
+  let on;
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function code() { return (on.has("task") ? "T" : "") + (on.has("context") ? "C" : "") + (on.has("format") ? "F" : ""); }
+  function draw() {
+    $("blocks").innerHTML = "";
+    BLOCKS.forEach(([k, label, text]) => {
+      const b = document.createElement("button"); b.type = "button";
+      b.className = "blk k-" + (k === "id" ? "extra" : k) + (on.has(k) ? " on" : "");
+      b.innerHTML = "<span>" + label + "</span>" + text;
+      b.addEventListener("click", () => { if (on.has(k)) on.delete(k); else on.add(k); draw(); $("reply").hidden = true; say(""); });
+      $("blocks").appendChild(b);
+    });
+    const parts = BLOCKS.filter(([k]) => on.has(k)).map(([, , t]) => t);
+    $("prompt").textContent = parts.length ? parts.join(" ") : "(empty: tap the blocks to add them)";
+    $("meter").innerHTML = [["task", "Task"], ["context", "Context"], ["format", "Format"]]
+      .map(([k, l]) => '<span class="' + (on.has(k) ? "ok" : "") + '">' + (on.has(k) ? "✓ " : "○ ") + l + "</span>").join("");
+  }
+  function send() {
+    if (on.has("id")) { $("reply").hidden = true; say("Stop: your student ID is personal data, and the AI does not need it. Remove that block.", "bad"); return; }
+    const c = code();
+    $("answer").textContent = ANSWERS[c];
+    $("reply").hidden = false;
+    say((on.has("extra") ? "“Do it quickly!!!” adds nothing: the answer is the same. " : "") + NOTES[c], c === "TCF" ? "good" : "");
+  }
+  $("send").addEventListener("click", send);
+  $("restart").addEventListener("click", () => { on = new Set(); draw(); $("reply").hidden = true; say("Tap the blocks to build a prompt. Then press Send."); });
+  on = new Set(); draw(); say("Tap the blocks to build a prompt. Then press Send.");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Newsletter Check</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .stars { margin-left: auto; color: var(--sim-accent); }
+    .sim .cols { display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; }
+    @media (max-width: 600px) { .sim .cols { grid-template-columns: 1fr; } }
+    .sim .records { border: 1.5px solid #b2f2bb; background: #ebfbee; border-radius: 12px; padding: 8px 12px; font-size: .9rem; }
+    .sim .records h2, .sim .draft h2 { font-size: .9rem; margin: 0 0 6px; }
+    .sim .records ul { margin: 0; padding-left: 18px; }
+    .sim .draft { border: 1.5px solid #d9d4cf; border-radius: 12px; background: #fff; padding: 8px 10px; }
+    .sim .s { border-radius: 10px; padding: 6px 8px; margin: 4px 0; border: 1.5px solid transparent; }
+    .sim .s .t { font-weight: 700; }
+    .sim .s .b { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .sim .s .b button { padding: 3px 10px; font-size: .82rem; }
+    .sim .s.ok { background: #ebfbee; border-color: #b2f2bb; }
+    .sim .s.fixed { background: #e7f5ff; border-color: #a5d8ff; }
+    .sim .s.del .t { text-decoration: line-through; color: #868e96; }
+    .sim .fixes { display: grid; gap: 4px; margin-top: 4px; }
+    .sim .fixes button { text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 700; font-size: .85rem; }
+    .sim .fixes button.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Newsletter Check</h1>
+  <div class="hud"><span id="left"></span><span class="stars" id="stars"></span></div>
+  <div class="cols">
+    <div class="records">
+      <h2>Company records · October 2026</h2>
+      <ul>
+        <li>Sales: September 3 500 JD, October 4 200 JD.</li>
+        <li>New product: green tea cups.</li>
+        <li>New staff: Lina and Sami.</li>
+        <li>Shop hours: 9 a.m. to 6 p.m., Saturday to Thursday. Closed on Friday.</li>
+        <li>Awards: none.</li>
+      </ul>
+    </div>
+    <div class="draft">
+      <h2>The AI draft of the newsletter</h2>
+      <div id="draft"></div>
+    </div>
+  </div>
+  <div class="controls"><button id="publish" type="button">Publish the newsletter</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // [sentence, fixes (first one is right) or null when the sentence is OK, why]
+  const DRAFT = [
+    ["October was a great month for Sunrise Company.", null, "An opinion that fits the records: sales went up."],
+    ["Sales grew from 3 500 JD to 4 200 JD, a rise of 1 200 JD.",
+     ["…, a rise of 700 JD.", "…, a rise of 1 700 JD.", "…, a rise of 4 200 JD."], "Wrong number: 4 200 − 3 500 = 700 JD."],
+    ["We welcome two new team members, Lina and Sami.", null, "It matches the records."],
+    ["Sunrise Company won the Best Shop in Amman award in 2025.",
+     ["Delete this sentence.", "Change 2025 to 2024.", "Change Amman to Jordan."], "Invented fact: the records show no award."],
+    ["Our new green tea cups are now in the shop.", null, "It matches the records."],
+    ["The shop is open every day from 9 a.m. to 6 p.m.",
+     ["The shop is open from 9 a.m. to 6 p.m., Saturday to Thursday.", "The shop is open every day from 8 a.m. to 6 p.m.", "The shop is open every day."], "Wrong: the shop is closed on Friday."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let state, slips, published;
+  const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function left() { return state.filter((s) => !s.done).length; }
+  function hud() { $("left").textContent = left() ? left() + " sentences to check" : "All sentences checked"; }
+  function draw() {
+    $("draft").innerHTML = "";
+    DRAFT.forEach(([text, fixes, why], i) => {
+      const st = state[i];
+      const d = document.createElement("div");
+      d.className = "s" + (st.done ? (fixes ? (st.text === null ? " fixed del" : " fixed") : " ok") : "");
+      const t = document.createElement("div"); t.className = "t"; t.textContent = st.text === null ? text : st.text; d.appendChild(t);
+      if (!st.done && !published) {
+        const b = document.createElement("div"); b.className = "b";
+        const ok = document.createElement("button"); ok.type = "button"; ok.className = "ghost"; ok.textContent = "✓ OK";
+        const fx = document.createElement("button"); fx.type = "button"; fx.textContent = "✎ Fix";
+        ok.addEventListener("click", () => decide(i, false));
+        fx.addEventListener("click", () => decide(i, true));
+        b.append(ok, fx); d.appendChild(b);
+        if (st.open) {
+          const box = document.createElement("div"); box.className = "fixes";
+          st.order.forEach((f) => {
+            const fb = document.createElement("button"); fb.type = "button"; fb.textContent = f;
+            fb.addEventListener("click", () => fix(i, f, fb));
+            box.appendChild(fb);
+          });
+          d.appendChild(box);
+        }
+      }
+      $("draft").appendChild(d);
+    });
+    hud();
+  }
+  function decide(i, wantsFix) {
+    const [, fixes, why] = DRAFT[i];
+    if (!wantsFix) {
+      if (fixes) { slips++; say("Look again: compare it with the records.", "bad"); return; }
+      state[i].done = true; say("✓ " + why, "good"); draw(); return;
+    }
+    if (!fixes) { slips++; say("This sentence is right: it matches the records. Press ✓ OK.", "bad"); return; }
+    state[i].open = true; say("Choose the right fix."); draw();
+  }
+  function fix(i, f, btn) {
+    const [, fixes, why] = DRAFT[i];
+    if (f !== fixes[0]) { slips++; btn.classList.add("bad"); say("That fix is still wrong. Check the records.", "bad"); return; }
+    state[i].done = true; state[i].open = false;
+    state[i].text = f.startsWith("Delete") ? null : f.replace("…", DRAFT[i][0].split(",")[0]);
+    say("✓ " + why, "good"); draw();
+  }
+  function publish() {
+    if (published) { say("It is published. Press <b>Restart</b> to play again."); return; }
+    if (left()) { say("Check every sentence first: " + left() + " left.", "bad"); return; }
+    published = true; draw();
+    const stars = slips === 0 ? 3 : slips <= 2 ? 2 : 1;
+    $("stars").textContent = "★".repeat(stars) + "☆".repeat(3 - stars);
+    say("Published! You fixed 3 mistakes of the AI draft (a wrong number, an invented award, wrong opening days)" +
+      (slips ? " with " + slips + " slip" + (slips > 1 ? "s" : "") + "." : " with no slips."), "good");
+  }
+  function start() {
+    state = DRAFT.map(([, fixes]) => ({ done: false, open: false, text: undefined, order: fixes ? shuffle(fixes) : [] }));
+    state.forEach((s, i) => { s.text = DRAFT[i][0]; });
+    slips = 0; published = false; $("stars").textContent = "☆☆☆";
+    draw(); say("An AI wrote this newsletter. Check each sentence against the records: OK or Fix?");
+  }
+  $("publish").addEventListener("click", publish);
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

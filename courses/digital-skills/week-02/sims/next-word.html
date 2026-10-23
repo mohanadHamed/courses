@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Next Word</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .fact { border: 1.5px solid #b2f2bb; background: #ebfbee; border-radius: 12px; padding: 8px 12px; font-weight: 700; margin-bottom: 8px; }
+    .sim .fact b { color: #2b8a3e; }
+    .sim .sentence { border: 1.5px solid #d9d4cf; border-radius: 12px; background: #fbfaf8; padding: 12px; min-height: 3.2em; font-size: 1.25rem; font-weight: 800; line-height: 1.6; }
+    .sim .sentence span { padding: 1px 4px; border-radius: 6px; }
+    .sim .sentence span.new { background: #fff3bf; }
+    .sim .sentence span.wrong { background: #ffe3e3; color: #c92a2a; text-decoration: underline wavy #c92a2a; }
+    .sim .sentence span.right { background: #d3f9d8; }
+    .sim .cands { display: grid; gap: 6px; margin-top: 10px; }
+    .sim .cand { display: grid; grid-template-columns: 7em 1fr 3.2em; align-items: center; gap: 8px; text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 800; }
+    .sim .cand i { display: block; height: 12px; border-radius: 6px; background: var(--sim-accent2); }
+    .sim .cand.pick { background: #fff0e0; border-color: var(--sim-accent); }
+    .sim .cand small { text-align: right; color: var(--sim-muted); }
+    .sim .runs { margin-top: 10px; font-size: .9rem; display: grid; gap: 3px; }
+    .sim .runs div { background: #f8f9fa; border-radius: 8px; padding: 3px 8px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Next Word: how an AI writes a sentence</h1>
+  <div class="fact">The real fact (from the shop's records): the shop opens at <b>9 a.m.</b>, <b>Saturday to Thursday</b>. It is closed on Friday.</div>
+  <div class="sentence" id="sentence"></div>
+  <p class="hint" style="margin:8px 0 0">The AI does not read the records. It only knows which word often comes next.</p>
+  <div class="cands" id="cands"></div>
+  <div class="controls">
+    <button id="auto" type="button">Let the AI choose ▶</button>
+    <button id="again" type="button" class="ghost">Ask again</button>
+  </div>
+  <p id="msg" class="message"></p>
+  <div class="runs" id="runs"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // How likely each next word is after the words so far (made-up, simple numbers).
+  const NEXT = {
+    "": [["at", 70], ["every", 20], ["on", 10]],
+    "at": [["8", 45], ["9", 40], ["10", 15]],
+    "on": [["Monday", 60], ["time", 40]],
+    "every": [["morning.", 65], ["day.", 35]],
+    "num": [["a.m.", 85], ["o'clock", 15]],
+    "time": [["every", 60], [".", 40]],
+    "a.m.": [["every", 60], ["on", 25], [".", 15]],
+    "o'clock": [["every", 60], [".", 40]],
+  };
+  const START = ["The", "shop", "opens"];
+  const $ = (id) => document.getElementById(id);
+  let words, busy, timers = [], runs = [];
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function key() {
+    const added = words.slice(START.length);
+    if (!added.length) return "";
+    const last = added[added.length - 1];
+    if (/^\d+$/.test(last)) return "num";
+    if (/\.$/.test(last) && last !== "a.m.") return null;          // the sentence has ended
+    if (last === "Monday") return null;                           // "… on Monday" ends the sentence
+    return NEXT[last] ? last : null;
+  }
+  function draw(newest) {
+    $("sentence").innerHTML = words.map((w, i) => '<span class="' + (i === newest ? "new" : "") + '">' + w + "</span>").join(" ");
+    const k = key();
+    $("cands").innerHTML = "";
+    if (k === null) { finish(); return; }
+    NEXT[k].forEach(([w, p]) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "cand";
+      b.innerHTML = "<span>" + w + "</span><i style=\"width:" + p + "%\"></i><small>" + p + "%</small>";
+      b.addEventListener("click", () => { if (!busy) add(w); });
+      $("cands").appendChild(b);
+    });
+  }
+  function add(w) { words.push(w); draw(words.length - 1); }
+  // Weighted random choice, like an AI that picks a likely word (not always the most likely one).
+  function pickWeighted(list) { let r = Math.random() * 100; for (const [w, p] of list) { r -= p; if (r <= 0) return w; } return list[0][0]; }
+  function auto() {
+    if (busy) return;
+    if (key() === null) restart();
+    busy = true; say("The AI picks one likely word after another…");
+    const step = () => {
+      const k = key();
+      if (k === null) { busy = false; return; }
+      const w = pickWeighted(NEXT[k]);
+      [...$("cands").children].forEach((b) => { if (b.firstChild.textContent === w) b.classList.add("pick"); });
+      timers.push(setTimeout(() => { add(w); timers.push(setTimeout(step, 450)); }, 450));
+    };
+    step();
+  }
+  function finish() {
+    if (words[words.length - 1] === ".") words.splice(-2, 2, words[words.length - 2] + ".");
+    else if (!/\.$/.test(words[words.length - 1]) || words[words.length - 1] === "a.m.") words[words.length - 1] += words[words.length - 1] === "a.m." ? "" : ".";
+    const added = words.slice(START.length);
+    const text = words.join(" ").replace(/ \.$/, ".");
+    const wrong = [];
+    added.forEach((w, i) => {
+      const idx = START.length + i;
+      if (/^\d+$/.test(w) && w !== "9") wrong.push(idx);
+      if (w === "day." || w === "morning.") wrong.push(idx);      // the shop is closed on Friday
+    });
+    $("sentence").innerHTML = words.map((w, i) => '<span class="' + (wrong.includes(i) ? "wrong" : "") + '">' + w + "</span>").join(" ");
+    if (wrong.length) say("The sentence sounds right, but it is <b>wrong</b>. Every word was likely, but the AI did not check the fact. Check AI text against a real source.", "bad");
+    else say("This time the sentence is right, but only by chance: the AI picked likely words. Press <b>Ask again</b>: the next answer can be different.", "good");
+    runs.unshift((wrong.length ? "✗ " : "✓ ") + text);
+    runs = runs.slice(0, 4);
+    $("runs").innerHTML = "<b>Your answers so far:</b>" + runs.map((r) => "<div>" + r + "</div>").join("");
+    busy = false;
+  }
+  function restart() { timers.forEach(clearTimeout); timers = []; busy = false; words = START.slice(); say("Tap a word, or let the AI choose."); draw(-1); }
+  $("auto").addEventListener("click", auto);
+  $("again").addEventListener("click", () => { restart(); auto(); });
+  restart();
+})();
+</script>
+</body>
+</html>

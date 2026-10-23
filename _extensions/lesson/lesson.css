@@ -383,6 +383,10 @@ button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
   h2::after { display: none !important; }
   .callout { break-inside: avoid; box-shadow: none !important; }
   a { color: inherit !important; text-decoration: none !important; }
+  /* Online activity: on paper only the tasks (the study steps, simulators
+     and self-checks stay on the screen). */
+  section.study, .online-print-hide, iframe { display: none !important; }
+  section.tasks h3 { break-after: avoid; margin: 0.45rem 0 0.15rem !important; font-size: 1rem !important; }
 }
 
 
@@ -418,5 +422,12 @@ button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
 .sl-links a { font-size: 0.82rem; font-weight: 800; text-decoration: none; border-radius: 9px; padding: 0.12rem 0.65rem; }
 .sl-go { background: var(--accent); color: #fff !important; box-shadow: 0 6px 14px -8px var(--accent); }
 .sl-file { border: 1.5px solid color-mix(in srgb, var(--accent) 55%, #fff); color: var(--accent-ink) !important; }
+.sl-tag {
+  display: inline-block; font-size: 0.7rem; font-weight: 800; vertical-align: 0.1em;
+  padding: 0 0.45rem; border-radius: 7px; white-space: nowrap;
+  background: color-mix(in srgb, var(--accent2) 30%, #fff); color: var(--accent-ink);
+}
+.sl.is-soon .sl-tag { background: #f1f1ef; color: #a6aaa7; }
+.sl-due { font-size: 0.78rem; font-weight: 700; color: #6b6f6c; align-self: center; }
 .sl.is-exam .sl-num { color: #9b6b00; }
 .sl.is-exam .sl-title { color: #6d5a2c; font-style: italic; }

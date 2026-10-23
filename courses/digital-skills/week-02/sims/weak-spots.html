@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Weak Spots</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .score { margin-left: auto; color: var(--sim-accent); font-variant-numeric: tabular-nums; }
+    .sim .q { font-size: .85rem; font-weight: 800; color: var(--sim-muted); margin-bottom: 4px; }
+    .sim .answer { border: 1.5px solid #e3dcd5; border-radius: 14px; border-bottom-left-radius: 4px; background: #fff; padding: 10px 12px; margin-bottom: 4px; }
+    .sim .answer .who { display: block; font-size: .75rem; font-weight: 800; color: #0b7285; }
+    .sim .ctx { font-size: .85rem; color: var(--sim-muted); margin: 4px 0 10px; }
+    .sim .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    @media (max-width: 520px) { .sim .opts { grid-template-columns: 1fr; } }
+    .sim .opts button { text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 700; }
+    .sim .opts button b { display: block; }
+    .sim .opts button small { font-weight: 600; color: var(--sim-muted); }
+    .sim .opts button.good { background: #d3f9d8; border-color: #2b8a3e; }
+    .sim .opts button.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Weak Spots: what is wrong with this AI answer?</h1>
+  <div class="hud"><span id="round"></span><span class="score" id="score">0 right</span></div>
+  <div class="q" id="q"></div>
+  <div class="answer"><span class="who">AI assistant</span><span id="ans"></span></div>
+  <div class="ctx" id="ctx"></div>
+  <div class="opts" id="opts"></div>
+  <div class="controls"><button id="next" type="button" hidden>Next answer ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const KINDS = [
+    ["Invented fact", "a fact or a source that is not real"],
+    ["Old information", "it may be out of date"],
+    ["Wrong number", "a calculation that is wrong"],
+    ["Bias", "an unfair idea about a group of people"],
+    ["Missing context", "it does not know your situation"],
+    ["OK after reading", "a good draft or idea"],
+  ];
+  // [question, AI answer, what you know, right kind, why]
+  const ITEMS = [
+    ["Which book explains Excel charts?", "Read “Easy Excel Charts” by Sami Haddad (2019), page 45.", "You search for the book. No library or shop has it.", 0,
+     "The book does not exist. AI can invent books, names and sources. This is called a hallucination."],
+    ["What is the newest version of the class app?", "The newest version is 3.0, from 2021.", "It is now 2026, and the app store shows version 6.2.", 1,
+     "The AI learned from data up to a date. It may not know newer facts."],
+    ["How much are 12 pens at 0.25 JD each?", "12 pens cost 3.50 JD.", "12 × 0.25 = 3.00 JD.", 2,
+     "AI can make mistakes in sums. Check numbers with a calculator or a spreadsheet."],
+    ["Write a job advert for a nurse.", "We need a nurse. She must be kind and patient…", "Men and women both work as nurses.", 3,
+     "AI repeats unfair ideas from its data, here that every nurse is a woman. Write “the nurse” or “they”."],
+    ["Write an e-mail to my teacher about the homework.", "Dear teacher, here is my homework about the history of Rome…", "Your homework is about Excel charts, and you did not say so.", 4,
+     "The AI does not know your situation. Give the facts in your prompt (the context)."],
+    ["Give me 3 tips for a polite e-mail.", "1. Write a clear subject. 2. Start with a greeting. 3. Say thank you at the end.", "These are normal, useful tips.", 5,
+     "A good job for AI. Read it, and use your own words."],
+    ["Did Sunrise Company win an award?", "Yes, it won Best Shop in Amman in 2024.", "The company records show no award.", 0,
+     "Invented again. The answer sounds sure, but the AI does not know a small company."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let order, k, score, done, first;
+  const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function show() {
+    const [q, a, ctx] = order[k];
+    $("round").textContent = "Answer " + (k + 1) + " of " + order.length;
+    $("q").textContent = "Prompt: " + q;
+    $("ans").textContent = a;
+    $("ctx").textContent = "What you know: " + ctx;
+    done = false; first = true; $("next").hidden = true; say("What is the weak spot? Choose one.");
+    $("opts").innerHTML = "";
+    KINDS.forEach(([t, d], i) => {
+      const b = document.createElement("button"); b.type = "button";
+      b.innerHTML = "<b>" + t + "</b><small>" + d + "</small>";
+      b.addEventListener("click", () => choose(i, b));
+      $("opts").appendChild(b);
+    });
+  }
+  function choose(i, b) {
+    if (done) { say("Press <b>Next answer</b>."); return; }
+    const [, , , right, why] = order[k];
+    if (i !== right) { b.classList.add("bad"); first = false; say("Not " + KINDS[i][0].toLowerCase() + ". Read “What you know” again.", "bad"); return; }
+    b.classList.add("good"); done = true;
+    if (first) score++;
+    $("score").textContent = score + " right";
+    if (k + 1 < order.length) { $("next").hidden = false; say("✓ " + why, "good"); }
+    else say("✓ " + why + " Done: " + score + " of " + order.length + " on the first try.", "good");
+  }
+  function start() { order = shuffle(ITEMS); k = 0; score = 0; $("score").textContent = "0 right"; show(); }
+  $("next").addEventListener("click", () => { if (k + 1 < order.length) { k++; show(); } });
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

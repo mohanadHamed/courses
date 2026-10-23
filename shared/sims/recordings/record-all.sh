@@ -31,6 +31,14 @@ sound-stage|courses/digital-media/week-01/sims/sound-stage.html|8|courses/digita
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif
+time-saver|courses/digital-skills/week-01/sims/time-saver.html|10|courses/digital-skills/week-01/sims/time-saver.gif
+app-launcher|courses/digital-skills/week-01/sims/app-launcher.html|10|courses/digital-skills/week-01/sims/app-launcher.gif
+ai-chat|courses/digital-skills/week-01/sims/ai-chat.html|10|courses/digital-skills/week-01/sims/ai-chat.gif
+office-day|courses/digital-skills/week-01/sims/office-day.html|9|courses/digital-skills/week-01/sims/office-day.gif
+next-word|courses/digital-skills/week-02/sims/next-word.html|10|courses/digital-skills/week-02/sims/next-word.gif
+weak-spots|courses/digital-skills/week-02/sims/weak-spots.html|10|courses/digital-skills/week-02/sims/weak-spots.gif
+right-tool|courses/digital-skills/week-02/sims/right-tool.html|10|courses/digital-skills/week-02/sims/right-tool.gif
+newsletter|courses/digital-skills/week-02/sims/newsletter.html|10|courses/digital-skills/week-02/sims/newsletter.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

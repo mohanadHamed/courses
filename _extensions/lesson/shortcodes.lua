@@ -27,6 +27,10 @@
 --     each pair with its homework. A ready lecture (its .qmd exists, no `draft: true`) is bright and
 --     links its page, PDF and slides; the others are faded ("coming soon").
 --     The review profile shows drafts as ready.
+--     Blended course: a lecture with `online: true` (schedule.yml or its
+--     front matter) is an online activity: it is tagged "Online", links its
+--     page and its tasks PDF (<prefix>_lectureN_tasks.pdf), and shows its due
+--     lecture and marks.
 
 local str = pandoc.utils.stringify
 
@@ -378,9 +382,25 @@ local function schedule(meta)
       table.insert(nums, n)
       local stem = string.format("lesson-%02d", n)
       local base = pandoc.path.join({ dir, wdir, stem })
-      local ok = ready(front_matter(base .. ".qmd"))
+      local fm = front_matter(base .. ".qmd")
+      local ok = ready(fm)
+      local online = l.online == true or str(l.online or "") == "true"
+        or (fm and (fm.online == true or str(fm.online or "") == "true"))
       local links
-      if ok then
+      if ok and online then
+        local href = wdir .. "/" .. stem
+        local bits = {}
+        if fm.marks then table.insert(bits, str(fm.marks) .. " marks") end
+        if fm.due then table.insert(bits, "due " .. str(fm.due)) end
+        local parts = {
+          string.format('<a class="sl-go" href="%s.html">Open activity →</a>', href),
+          string.format('<a class="sl-file" href="%s/%s_lecture%d_tasks.pdf">Tasks PDF</a>', wdir, prefix, n),
+        }
+        if #bits > 0 then
+          table.insert(parts, '<span class="sl-due">' .. html_attr(table.concat(bits, " · ")) .. "</span>")
+        end
+        links = '<span class="sl-links">' .. table.concat(parts, "") .. "</span>"
+      elseif ok then
         local href = wdir .. "/" .. stem
         local parts = { string.format('<a class="sl-go" href="%s.html">Open lecture →</a>', href) }
         if file_exists(base .. "-book.qmd") then
@@ -394,8 +414,9 @@ local function schedule(meta)
         links = '<span class="sl-soon">Coming soon</span>'
       end
       table.insert(rows, string.format(
-        '<div class="sl %s"><span class="sl-num">%02d</span><span class="sl-title">%s</span>%s</div>',
-        ok and "is-ready" or "is-soon", n, html_attr(str(l.title)), links))
+        '<div class="sl %s%s"><span class="sl-num">%02d</span><span class="sl-title">%s%s</span>%s</div>',
+        ok and "is-ready" or "is-soon", online and " is-online" or "", n, html_attr(str(l.title)),
+        online and ' <span class="sl-tag">💻 Online</span>' or "", links))
     end
     local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", pair) }))
     local hw_html = ""

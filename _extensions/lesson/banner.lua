@@ -1,6 +1,8 @@
 -- Page header for lessons and course pages (lesson-html and lesson-typst).
 --
--- Lesson (has `lesson:`) or homework (has `homework:`, `due:`, `marks:`):
+-- Lesson (has `lesson:`), online activity (`lesson:` and `online: true`, with
+-- `due:` and `marks:`; blended courses) or homework (has `homework:`, `due:`,
+-- `marks:`):
 --   HTML: hero header (course, title, lecture/time chips, PDF and slides
 --         buttons) + "Today you will learn" card with the ILOs.
 --   PDF:  passes theme values to the Typst template (title band) + ILO card.
@@ -46,7 +48,8 @@ end
 
 -- File names that students download (download_names.py renames the rendered
 -- files to match): math_lecture5.pdf, math_lecture5_slides.pptx,
--- math_homework1.pdf. The prefix is course.file-prefix.
+-- math_homework1.pdf, digital_skills_lecture2_tasks.pdf (the printed online
+-- activity). The prefix is course.file-prefix.
 local function download_names(course, stem)
   local prefix = course["file-prefix"] and str(course["file-prefix"])
     or (str(course.slug or "course"):gsub("%-", "_"))
@@ -56,7 +59,19 @@ local function download_names(course, stem)
     homework = hw and string.format("%s_homework%d.pdf", prefix, tonumber(hw)) or (stem .. ".pdf"),
     notes = lesson and string.format("%s_lecture%d.pdf", prefix, tonumber(lesson)) or (stem .. "-book.pdf"),
     slides = lesson and string.format("%s_lecture%d_slides.pptx", prefix, tonumber(lesson)) or (stem .. "-slides.pptx"),
+    tasks = lesson and string.format("%s_lecture%d_tasks.pdf", prefix, tonumber(lesson)) or (stem .. ".pdf"),
   }
+end
+
+-- An online activity of a blended course: one page with digital content and
+-- tasks to submit, printed like a homework (homework_pdf.py).
+local function is_online(meta)
+  return meta.lesson and (meta.online == true or str(meta.online or "") == "true")
+end
+
+-- Pages that print as tasks with answer space: homework and online activities.
+local function is_printed(meta)
+  return meta.homework or is_online(meta)
 end
 
 local function theme_style(course)
@@ -74,8 +89,14 @@ local function page_chips(meta, course)
     if k then table.insert(chips, string.format("After lectures %d–%d", 2 * k - 1, 2 * k)) end
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
     if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
+  elseif is_online(meta) then
+    table.insert(chips, "Lecture " .. str(meta.lesson))
+    table.insert(chips, "💻 Online activity")
+    if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
+    if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
   else
     if meta.lesson then table.insert(chips, "Lecture " .. str(meta.lesson)) end
+    if course.blended then table.insert(chips, "🏫 Face-to-face") end
     if course.minutes then table.insert(chips, "⏱ " .. str(course.minutes) .. " min") end
   end
   return chips
@@ -83,6 +104,7 @@ end
 
 local function ilo_title(meta)
   if meta.homework then return "This homework practises" end
+  if is_online(meta) then return "This online activity practises" end
   return "Intended learning outcomes"
 end
 
@@ -97,16 +119,22 @@ local function html_lesson(doc, course)
   -- Lesson: the PDF is the lesson notes (lesson-NN-book.qmd), the main study text.
   -- Homework PDF is the printed page itself (homework_pdf.py), so both match.
   local buttons = {}
+  local online = is_online(meta)
   if meta.homework then
     table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download PDF</a>', esc(names.homework)))
+  elseif online then
+    table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download tasks (PDF)</a>', esc(names.tasks)))
   elseif file_exists(pandoc.path.join({ dir, stem .. "-book.qmd" })) then
     table.insert(buttons, string.format('<a class="hero-btn" href="%s">⬇ Lesson notes (PDF)</a>', esc(names.notes)))
   end
   if meta.homework then
     table.insert(buttons,
       '<button type="button" class="hero-btn hero-btn-ghost" onclick="window.print()">🖨 Print homework</button>')
+  elseif online then
+    table.insert(buttons,
+      '<button type="button" class="hero-btn hero-btn-ghost" onclick="window.print()">🖨 Print tasks</button>')
   end
-  local slides = meta["slides-public"] == true and not meta.homework
+  local slides = meta["slides-public"] == true and not is_printed(meta)
     and file_exists(pandoc.path.join({ dir, stem .. "-slides.qmd" }))
   if slides then
     table.insert(buttons, string.format(
@@ -124,7 +152,7 @@ local function html_lesson(doc, course)
   local desc = meta.description and str(meta.description) or ""
   local hero = string.format([[
 %s
-<header class="lesson-hero theme-%s">
+<header class="lesson-hero theme-%s%s">
   <div class="hero-shapes" aria-hidden="true"><i></i><i></i><i></i></div>
   <a class="hero-course" href="../index.html">%s · %s</a>
   <h1 class="hero-title">%s</h1>
@@ -133,16 +161,17 @@ local function html_lesson(doc, course)
   <div class="hero-actions">%s</div>
   %s
 </header>]],
-    theme_style(course), esc(str(course.theme or "arcade")),
+    theme_style(course), esc(str(course.theme or "arcade")), online and " online-activity" or "",
     esc(str(course.title)), esc(str(course.code)),
     esc(str(meta.title)),
     desc ~= "" and ('<p class="hero-sub">' .. esc(desc) .. "</p>") or "",
     table.concat(chip_html, ""),
     table.concat(buttons, ""),
-    slides and '<p class="hero-note">Study from the lesson notes (PDF). Practise on this page. The slides are a short summary for revision.</p>' or "")
+    slides and '<p class="hero-note">Study from the lesson notes (PDF). Practise on this page. The slides are a short summary for revision.</p>'
+      or (online and '<p class="hero-note">Work through the steps on this page, then do the tasks and submit them on the university e-learning platform.</p>' or ""))
 
   local blocks = { pandoc.RawBlock("html", hero) }
-  if meta.homework then
+  if is_printed(meta) then
     -- Only on paper: a line for the name and the student number.
     table.insert(blocks, pandoc.RawBlock("html",
       '<div class="print-only hw-name"><span>Name:</span><i></i><span>Student number:</span><i></i></div>'))
@@ -166,8 +195,15 @@ end
 
 local function html_course(doc, course)
   local meta = doc.meta
-  local chips = { "Course " .. esc(str(course.code)), "Homework after every 2 lectures" }
-  if course.minutes then table.insert(chips, "⏱ " .. esc(str(course.minutes)) .. " min each") end
+  local chips = { "Course " .. esc(str(course.code)) }
+  if course.blended then
+    table.insert(chips, "Blended: 1 lab lecture + 1 online activity each week")
+  else
+    table.insert(chips, "Homework after every 2 lectures")
+  end
+  if course.minutes then
+    table.insert(chips, "⏱ " .. esc(str(course.minutes)) .. (course.blended and " min lab lecture" or " min each"))
+  end
   local chip_html = {}
   for _, c in ipairs(chips) do
     table.insert(chip_html, '<span class="hero-chip">' .. c .. "</span>")

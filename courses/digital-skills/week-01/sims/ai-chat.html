@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: AI Chat practice</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 6px; }
+    .sim .hud .score { margin-left: auto; color: var(--sim-accent); font-variant-numeric: tabular-nums; }
+    .sim .chat { border: 1.5px solid #d9d4cf; border-radius: 14px; background: #fbfaf8; padding: 10px; min-height: 190px; display: flex; flex-direction: column; gap: 8px; }
+    .sim .msg { max-width: 86%; padding: 8px 12px; border-radius: 14px; line-height: 1.35; }
+    .sim .msg.you { align-self: flex-end; background: var(--sim-accent); color: #fff; border-bottom-right-radius: 4px; }
+    .sim .msg.ai { align-self: flex-start; background: #fff; border: 1.5px solid #e3dcd5; border-bottom-left-radius: 4px; }
+    .sim .msg.ai .who { display: block; font-size: .75rem; font-weight: 800; color: #0b7285; }
+    .sim .msg.wait { color: var(--sim-muted); font-style: italic; }
+    .sim .msg ul { margin: 4px 0 0 18px; padding: 0; }
+    .sim .ask { margin-top: 10px; font-weight: 800; }
+    .sim .opts { display: grid; gap: 6px; margin-top: 6px; }
+    .sim .opts button { text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 700; }
+    .sim .opts button.good { background: #d3f9d8; border-color: #2b8a3e; }
+    .sim .opts button.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .prompts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .sim .prompts button { background: #fff; color: var(--sim-accent); border: 1.5px solid var(--sim-accent); box-shadow: none; font-weight: 700; font-size: .85rem; padding: 5px 10px; }
+    .sim .prompts button.used { opacity: .45; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>AI Chat: is this a good job for an AI assistant?</h1>
+  <p class="note">Practice chat with prepared answers. Nothing is sent to the Internet.</p>
+  <div class="hud"><span id="round"></span><span class="score" id="score">0 right</span></div>
+  <div class="chat" id="chat" aria-live="polite"></div>
+  <div class="ask" id="ask"></div>
+  <div class="opts" id="opts"></div>
+  <div class="controls"><button id="next" type="button" hidden>Next prompt ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const CHOICES = [
+    "Yes: read the answer, then use it",
+    "AI can help, but check the facts and numbers",
+    "No: do not type personal data into an AI tool",
+  ];
+  // [prompt, right choice, answer of the assistant (HTML), explanation]
+  const ROUNDS = [
+    ["Sum up this long e-mail from a customer in 3 short points.", 0,
+     "Here are the main points:<ul><li>The order came 5 days late.</li><li>One cup was broken.</li><li>The customer wants a new cup, not money.</li></ul>",
+     "Summing up a text is a good job for AI. Still read the e-mail yourself before you act."],
+    ["Write a polite reply: the new cup will arrive on Monday.", 0,
+     "Dear customer, thank you for your message, and we are sorry about the broken cup. A new cup will arrive on Monday. Best regards, Sunrise Company",
+     "A first draft is a good job for AI. Read it and change what is not right before you send it."],
+    ["When did Sunrise Company open its first shop?", 1,
+     "Sunrise Company opened its first shop in 2009 in Amman.",
+     "The AI does not know a small company. It wrote a date that sounds sure, but it may be invented. Check facts in a real source."],
+    ["Fill in this bank form for me. My ID number is 9981234567 and my card is 4000 1234 5678 9010.", 2,
+     "(Do not send this prompt.)",
+     "An ID number and a card number are personal data. Never type them into an AI tool. Fill in the form yourself."],
+    ["Translate into Arabic: Our shop opens at 9 a.m.", 0,
+     "<span dir=\"rtl\" lang=\"ar\">يفتح متجرنا الساعة التاسعة صباحًا.</span>",
+     "Translating a short sentence is a good job for AI. Read the translation before you use it."],
+    ["How much is 15% of 240?", 1,
+     "15% of 240 is 32.",
+     "Wrong: 15% of 240 is 36 (240 × 0.15). AI can make mistakes with numbers. Check them with a calculator or a spreadsheet."],
+    ["Give me 5 ideas for a poster about saving water.", 0,
+     "1. Turn off the tap while you brush your teeth. 2. Fix a dripping tap. 3. Take short showers. 4. Water plants in the evening. 5. Use a cup, not running water.",
+     "Ideas are a good job for AI. You choose the best ones and make the poster your own."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let order, k, score, answered, timers = [];
+  const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function bubble(cls, html) { const d = document.createElement("div"); d.className = "msg " + cls; d.innerHTML = html; $("chat").appendChild(d); return d; }
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+  function show() {
+    clearTimers();
+    const [prompt] = order[k];
+    $("round").textContent = "Prompt " + (k + 1) + " of " + order.length;
+    $("chat").innerHTML = "";
+    bubble("you", prompt);
+    $("ask").textContent = "Before you press Send: is this a good job for an AI assistant?";
+    answered = false; $("next").hidden = true; say("");
+    $("opts").innerHTML = "";
+    CHOICES.forEach((c, i) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = c;
+      b.addEventListener("click", () => choose(i, b));
+      $("opts").appendChild(b);
+    });
+  }
+  function choose(i, btn) {
+    if (answered) { say("Press <b>Next prompt</b>."); return; }
+    answered = true;
+    const [, right, answer, why] = order[k];
+    const ok = i === right;
+    if (ok) score++;
+    $("score").textContent = score + " right";
+    btn.classList.add(ok ? "good" : "bad");
+    if (!ok) $("opts").children[right].classList.add("good");
+    if (right === 2) {
+      bubble("ai wait", "Not sent: this prompt has personal data.");
+    } else {
+      const w = bubble("ai wait", "The assistant is writing…");
+      // A timer shows the answer, so it appears even when the tab is hidden.
+      timers.push(setTimeout(() => { w.className = "msg ai"; w.innerHTML = '<span class="who">AI assistant</span>' + answer; }, 700));
+    }
+    say((ok ? "Right. " : "Not quite. ") + why, ok ? "good" : "bad");
+    if (k + 1 < order.length) $("next").hidden = false;
+    else timers.push(setTimeout(() => say("Done: " + score + " of " + order.length + " right. " + why, "good"), 50));
+  }
+  function start() { order = shuffle(ROUNDS); k = 0; score = 0; $("score").textContent = "0 right"; show(); }
+  $("next").addEventListener("click", () => { if (k + 1 < order.length) { k++; show(); } });
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """Make the homework PDFs by printing the homework web pages with Chrome.
 
+The online activities of a blended course (lesson-NN.html with `online: true`)
+print the same way: on paper only their tasks (lesson.css hides the study
+steps), saved as lesson-NN.pdf and renamed <prefix>_lectureN_tasks.pdf by
+download_names.py.
+
 Homework is a web page with a "Print homework" button (one A4 page, with
 answer lines). The "Download PDF" file must look exactly like that printout,
 so we do not build it with Typst: we print the finished page itself with
@@ -37,14 +42,22 @@ def find_chrome():
     return None
 
 
-def is_real_page(html_path):
-    """Skip unpublished drafts (Quarto leaves a tiny empty page for them)."""
+def read_page(html_path):
     try:
         with open(html_path, encoding="utf-8", errors="ignore") as f:
-            text = f.read()
+            return f.read()
     except OSError:
-        return False
+        return ""
+
+
+def is_real_page(html_path):
+    """Skip unpublished drafts (Quarto leaves a tiny empty page for them)."""
+    text = read_page(html_path)
     return 'class="lesson-hero' in text and "answer-space" in text
+
+
+def is_online_activity(html_path):
+    return "online-activity" in read_page(html_path) and is_real_page(html_path)
 
 
 def main():
@@ -52,6 +65,8 @@ def main():
     out_dir = os.path.join(project_dir, os.environ.get("QUARTO_PROJECT_OUTPUT_DIR", "_site"))
     pages = [p for p in sorted(glob.glob(os.path.join(out_dir, "courses", "*", "week-*", "homework-*.html")))
              if is_real_page(p)]
+    pages += [p for p in sorted(glob.glob(os.path.join(out_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].html")))
+              if is_online_activity(p)]
     if not pages:
         return
     chrome = find_chrome()
@@ -74,7 +89,7 @@ def main():
                 print("homework_pdf: could not print " + html, file=sys.stderr)
     finally:
         shutil.rmtree(profile, ignore_errors=True)
-    print("homework_pdf: made %d homework PDF(s)" % made)
+    print("homework_pdf: made %d homework and online-activity PDF(s)" % made)
 
 
 if __name__ == "__main__":

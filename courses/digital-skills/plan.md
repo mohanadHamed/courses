@@ -1,76 +1,114 @@
 # Digital Skills (01101154) — 16-week plan
 
-Status: draft for approval, 2026-10-19. Source: official syllabus (2026-2027, Drive) and the ILO–PLO matrix v4.
-The weekly map below follows the syllabus weeks; the site shows only the lecture numbers (no weeks, no exams; AUTHORING.md, "Lectures, not weeks"). If they differ, `schedule.yml` wins.
+Status: draft for approval, 2026-10-23. Source: course syllabus v2 (Drive,
+`Syllabus-01101154-Digital-Skills-v2`), built on the university course
+description *Smart Digital Skills* (Microsoft Office and AI tools), and the
+ILO–PLO matrix v5. The course keeps its name, number and 2 credit hours.
+The weekly map below follows the syllabus weeks; the site shows only the
+lecture numbers (no weeks, no exams; AUTHORING.md, "Lectures, not weeks").
+If they differ, `schedule.yml` wins.
 
-Per week (as taught): 2 lab sessions × 60 min → 2 lessons (both in the computer lab). Each lesson has notes (PDF), an interactive page and slides (see AUTHORING.md).
+## Blended: one face-to-face lecture and one online activity per week
+
+- **Lecture 2k−1, face-to-face** (60 min, computer lab): a full lesson with
+  notes (PDF), an interactive page and slides, built like the other courses.
+- **Lecture 2k, online activity** (asynchronous, about 60 min of work): one
+  page on the site, linked from the e-learning platform. It has short digital
+  content (figures and simulators; the teacher may add a video on the
+  platform), practice questions with instant feedback, then **tasks to
+  submit** on the platform (files, screenshots, short answers), due before
+  the next face-to-face lecture. It can be printed and downloaded as a PDF.
+- The online activity replaces the homework: this course has no separate
+  homework. Week 15: the project instead.
+- Practical and interactive: every lesson and every activity has simulators
+  of the real tools (folders and files, Word, Excel, PowerPoint, an AI chat),
+  so students try each idea at once, also at home on a phone.
+- AI tools: the main topic of 11 of the 30 lectures (weeks 2, 5, 10, 11, 12
+  and lecture 14) and used in 6 more (weeks 13–15): more than a third of the
+  course, as the teacher asked (at least a quarter).
 
 ## Course ILOs
 
-| Code | ILO (official text, with PLOs) |
-|---|---|
-| A1 | Explain the concept of digital skills, their categories, and their importance in the labour market. (PLO 3) |
-| A2 | Describe the use of digital devices and cloud services and the rules of safe, responsible online behaviour (digital citizenship and basic cybersecurity). (PLO 3) |
-| B1 | Analyze data with spreadsheets (formulas, functions, charts and PivotTables) to support decision-making. (PLO 3, 4) |
-| B2 | Evaluate digital marketing channels and tools for promoting a digital product or service. (PLO 3, 4) |
-| C1 | Create digital content (documents, presentations and graphics) using productivity tools. (PLO 2, 3) |
-| C2 | Organize and manage data in a simple relational database (tables, queries, forms and reports). (PLO 1, 3) |
-| C3 | Design and publish a simple website for a digital service (e.g., a landing page for a game). (PLO 2, 3) |
-| D1 | Work in a team on a digital project and present its outcomes professionally and ethically. (PLO 4) |
+| Code | ILO (with PLOs) | Bloom | K/S/C |
+|---|---|---|---|
+| A1 | Explain the main computer applications used to enhance daily productivity, including artificial intelligence tools. (PLO 3) | 2 | K |
+| A2 | Explain basic concepts and terminology related to Microsoft Office applications. (PLO 3) | 2 | K |
+| A3 | Describe the main features and uses of Microsoft Word, Excel and PowerPoint. (PLO 3) | 2 | K |
+| B1 | Evaluate AI-generated text, data and images for accuracy, bias and suitability before using them in a document, worksheet or presentation. (PLO 3, 4) | 5 | K, C |
+| C1 | Explain how Microsoft Word is used to create and format documents. (PLO 3) | 2 | K, S |
+| C2 | Explain how Microsoft Excel is used to organize and present data. (PLO 3, 4) | 2 | K, S |
+| C3 | Identify the basic features of Microsoft PowerPoint used to create presentations. (PLO 2, 3) | 1 | K |
+| C4 | Use generative AI tools to draft, edit and improve Word documents, Excel worksheets and PowerPoint presentations. (PLO 2, 3) | 3 | S |
+| D1 | Use digital and AI tools safely, responsibly and ethically: protect personal data, respect copyright and academic integrity, and state when AI was used. (PLO 3, 4) | 3 | S, C |
+
+A1, A2, A3, C1, C2 and C3 are the six outcomes of the university description
+(same text and Bloom level). B1, C4 and D1 add the use of AI.
 
 ## Weekly map
 
-| Week | Lecture | Title | Lesson ILOs | Week ILOs | PLOs |
+| Week | Lecture | Mode | Title | ILOs | PLOs |
 |---|---|---|---|---|---|
-| 01 | 01 | Digital Skills: Concept, Categories and the Labour Market | A1 | A1 | 3 |
-| 01 | 02 | University Accounts, Cloud Storage and File Management | A1 |  |  |
-| 02 | 03 | Digital Devices, Operating Systems and Productivity Applications | A1, A2 | A1, A2 | 3 |
-| 02 | 04 | Cloud Collaboration: Sharing, Co-editing and Version History | A2 |  |  |
-| 03 | 05 | Safe and Responsible Digital Use: Passwords, MFA, Phishing and Privacy | A2 | A2 | 3 |
-| 03 | 06 | Securing Accounts and Devices; Spotting Phishing Messages | A2 |  |  |
-| 04 | 07 | Digital Content Creation (1): Professional Documents | C1 | C1 | 2, 3 |
-| 04 | 08 | Creating a CV and a Short Game-Design Brief | C1 |  |  |
-| 05 | 09 | Digital Content Creation (2): Presentations and Basic Graphics | C1 | C1 | 2, 3 |
-| 05 | 10 | Designing a Pitch Presentation and a Social-Media Post | C1 |  |  |
-| 06 | 11 | Spreadsheets (1): Data Entry, Formulas, Cell References and Functions | B1 | B1 | 3, 4 |
-| 06 | 12 | Building a Budget and Score-Tracking Sheet | B1 |  |  |
-| 07 | 13 | Spreadsheets (2): Sorting, Filtering, Conditional Formatting and Charts | B1 | B1 | 3, 4 |
-| 07 | 14 | Analyzing a Player Dataset with Charts | B1 |  |  |
-| 08 | 15 | Review of Lectures 1–14 | A1, A2, B1, C1 | A1, A2, B1, C1 | 3, 4 |
-| 08 | — | *Midterm exam — no lesson* | |  |  |
-| 09 | 16 | Data Analysis: PivotTables, Summaries and Dashboards | B1 | B1 | 3, 4 |
-| 09 | 17 | Building a Simple Dashboard | B1 |  |  |
-| 10 | 18 | Databases (1): Tables, Fields, Primary Keys and Relationships | C2 | C2 | 1, 3 |
-| 10 | 19 | Designing a Player-Records Database | C2 |  |  |
-| 11 | 20 | Databases (2): Queries, Forms and Reports | C2 | C2 | 1, 3 |
-| 11 | 21 | Writing Queries and Generating Reports | C2 |  |  |
-| 12 | 22 | Creating a Digital Service: Website Planning and HTML Basics | C3 | C3 | 2, 3 |
-| 12 | 23 | Building the Page Structure with HTML | C3 |  |  |
-| 13 | 24 | Website Design: CSS, Layout, Responsive Design and Publishing | C3 | C3 | 2, 3 |
-| 13 | 25 | Styling and Publishing a Game Landing Page | C3 |  |  |
-| 14 | 26 | Digital Marketing: SEO, Social Media, Email, E-commerce and Analytics | B2 | B2 | 3, 4 |
-| 14 | 27 | Preparing a Digital Marketing Plan | B2 |  |  |
-| 15 | 28 | Team Project: An Integrated Digital Service | B2, C1, C3 | B2, C1, C3, D1 | 2, 3, 4 |
-| 15 | 29 | Team Project Presentations | D1 |  |  |
-| 16 | — | *Final exam — no lesson* | | All | 2, 3, 4 |
+| 01 | 01 | lab | Digital Skills and the Apps That Make Us Productive | A1 | 3 |
+| 01 | 02 | online | Your University Account, Cloud Storage and Files | A1 | 3 |
+| 02 | 03 | lab | Generative AI Tools: What They Do Well and Where They Fail | A1, C4 | 2, 3 |
+| 02 | 04 | online | Writing Clear Prompts and Improving the Answer | C4 | 2, 3 |
+| 03 | 05 | lab | Microsoft Office: Concepts, Terms and Common Features | A2, A3 | 3 |
+| 03 | 06 | online | Office on the Computer, the Web and the Phone | A3 | 3 |
+| 04 | 07 | lab | Word (1): Formatting, Styles, Lists, Tables and Pictures | C1 | 3 |
+| 04 | 08 | online | Word (2): Page Layout, Headers and a Table of Contents | C1 | 3 |
+| 05 | 09 | lab | AI with Word: Draft, Summarize, Rewrite and Translate | C1, C4, B1 | 2, 3, 4 |
+| 05 | 10 | online | A Formal Letter and a CV with AI Help | C4, B1 | 2, 3, 4 |
+| 06 | 11 | lab | Excel (1): Cells, Formulas, References and Basic Functions | C2 | 3, 4 |
+| 06 | 12 | online | A Monthly Budget Sheet | C2 | 3, 4 |
+| 07 | 13 | lab | Excel (2): Sorting, Filtering, Conditional Formatting and Charts | C2 | 3, 4 |
+| 07 | 14 | online | AI with Excel: Formulas, Clean Data and the Right Chart | C2, C4, B1 | 2, 3, 4 |
+| 08 | 15 | lab | Review of Lectures 1–14 | A1–A3, B1, C1, C2, C4 | 2, 3, 4 |
+| 08 | 16 | online | Review Activity: Practice Questions (midterm: university schedule) | same | 2, 3, 4 |
+| 09 | 17 | lab | PowerPoint (1): Slides, Layouts, Themes, Pictures and Designer | C3 | 2, 3 |
+| 09 | 18 | online | PowerPoint (2): Transitions, Speaker Notes and a Five-Slide Talk | C3 | 2, 3 |
+| 10 | 19 | lab | AI with PowerPoint: Outline, Slides and Pictures | C3, C4, B1 | 2, 3, 4 |
+| 10 | 20 | online | A Short Presentation with AI Help | C4, B1 | 2, 3, 4 |
+| 11 | 21 | lab | Checking AI Output: Wrong Facts, Made-up Sources and Bias | B1 | 3, 4 |
+| 11 | 22 | online | Fact-Checking an AI-Written Document | B1 | 3, 4 |
+| 12 | 23 | lab | Responsible AI: Personal Data, Copyright and Honesty | D1 | 3, 4 |
+| 12 | 24 | online | Safe Prompts and an AI-Use Statement | D1 | 3, 4 |
+| 13 | 25 | lab | Excel (3): Summarizing Data with AI Help | C2, C4, B1 | 3, 4 |
+| 13 | 26 | online | Analyzing a Small Dataset and Charting It | C2, C4 | 3, 4 |
+| 14 | 27 | lab | Working Across Office Apps with AI | A1, A3, C4 | 2, 3 |
+| 14 | 28 | online | Course Project (1): Plan, Data Sheet and First Draft | C4 | 2, 3 |
+| 15 | 29 | lab | Course Project Presentations | C3, C4, B1 | 2, 3, 4 |
+| 15 | 30 | online | Course Project (2): Final Report, Data Sheet and Presentation | B1, C1–C4, D1 | 2, 3, 4 |
+| 16 | — | — | *Final exam — no lesson* | All | 2, 3, 4 |
 
 ## ILO coverage
 
-| ILO | Lessons |
+| ILO | Lectures |
 |---|---|
-| A1 | L01, L02, L03, L15 |
-| A2 | L03, L04, L05, L06, L15 |
-| B1 | L11, L12, L13, L14, L15, L16, L17 |
-| B2 | L26, L27, L28 |
-| C1 | L07, L08, L09, L10, L15, L28 |
-| C2 | L18, L19, L20, L21 |
-| C3 | L22, L23, L24, L25, L28 |
-| D1 | L29 |
+| A1 | L01, L02, L03, L15–16, L27 |
+| A2 | L05, L15–16 |
+| A3 | L05, L06, L15–16, L27 |
+| B1 | L09, L10, L14, L15–16, L19, L20, L21, L22, L25, L29, L30 |
+| C1 | L07, L08, L09, L15–16, L30 |
+| C2 | L11–L14, L15–16, L25, L26, L30 |
+| C3 | L17–L19, L29, L30 |
+| C4 | L03, L04, L09, L10, L14, L15–16, L19, L20, L25–L30 |
+| D1 | L23, L24, L30 |
 
 ## Notes
 
-- **Independent study first.** Pages, slides, lab tasks and homework never require classmates; collaboration tools (week 2) are practised with the teacher through shared documents.
-- **Team activity (D1, work in a team on a digital project): lessons 28–29 only.** The week-15 team project and presentations are described in the notes (PDF) of lessons 29 and 30 (roles, shared folder, one integrated digital service, one presentation), each with an individual alternative (the student builds the service alone and presents it). No other lesson has team work.
-- Week 8: review lesson (15) and midterm exam. Week 16: final exam.
-- One homework per week (1–2 simple tasks, under 10 minutes); week 15: the project instead (syllabus).
-- The diploma's guidance plan lists this course in semester 2; the 2026-2027 syllabus and the timetable put it in semester 1.
+- **AI tools in the lab and at home.** Lessons name the idea and two or
+  three common free tools (Microsoft Copilot with the university account,
+  ChatGPT, Gemini), never one product only. No task needs a paid plan.
+  Copilot inside Word, Excel or PowerPoint is shown only as "if your account
+  has it"; the tasks also work by copying from an AI chat into the app.
+- **Devices at home.** Online tasks work on a computer, with Microsoft 365 on
+  the web, or with the free Word, Excel and PowerPoint apps on a phone.
+- **Personal data.** Tasks never ask students to type real personal data into
+  an AI tool or into a page of this site; CVs and letters use made-up or
+  safe details (lesson 23 teaches why).
+- **No team work.** The syllabus has no team ILO; the project is individual.
+- Week 8: review lecture (15) and online review activity (16); the midterm
+  is set by the university. Week 16: final exam.
+- Overlap: the diploma also has *AI Applications* (01101153). This course
+  uses AI only as a tool for documents, data and presentations; it does not
+  teach how AI works beyond what a user needs.

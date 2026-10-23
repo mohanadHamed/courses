@@ -29,6 +29,12 @@ lesson-NN-slides.qmd (slides)
 The game of the lesson: a mini-game in the page's Game challenge must also be
 in the notes (Case study, poster + QR) and on the Game challenge slide.
 
+An online activity (blended course: lesson-NN.qmd with `online: true`) has no
+notes and no slides. It is checked for its own parts (AUTHORING.md, "Blended
+courses"): "Before you start", Steps marked {.study} with one "Try it" each,
+"Tasks to submit" ({.tasks}) with marks and answer space, "How to submit",
+`due:` and `marks:`, and at least ONLINE_MIN_SIMS simulators.
+
 It prints a warning when a number is outside the range for that lecture time.
 It never stops the render. Run it by hand for the full table:
 
@@ -51,7 +57,7 @@ SIZES = {
         "exercises": (6, 10),
         "try_its": (4, 6),
         "questions": (15, 28),
-        "sims": (0, 2),
+        "sims": (0, 4),
         "slides": (10, 16),
     },
     90: {
@@ -65,6 +71,10 @@ SIZES = {
         "slides": (20, 28),
     },
 }
+# Online activity (blended course): at least this many simulators, and
+# (min, max) tasks to submit.
+ONLINE_MIN_SIMS = 2
+ONLINE_TASKS = (2, 4)
 # Parts every lesson must have (heading text, case does not matter).
 BOOK_REQUIRED = ["key terms", "exercises", "answers to the exercises"]
 PAGE_REQUIRED = ["key terms", "game challenge", "summary"]
@@ -258,6 +268,56 @@ def check_slides(body):
     return out
 
 
+def front_matter(path):
+    with open(path, encoding="utf-8") as f:
+        text = f.read()
+    if text.startswith("---"):
+        end = text.find("\n---", 3)
+        if end != -1:
+            return text[3:end]
+    return ""
+
+
+def is_online(path):
+    return re.search(r"^online:\s*true\b", front_matter(path), re.M) is not None
+
+
+def check_online(path, rel):
+    """Warnings for an online activity (one string each)."""
+    out = []
+    fm = front_matter(path)
+    body = read(path)
+    for key in ("due", "marks"):
+        if not re.search(r"^%s:" % key, fm, re.M):
+            out.append("%s: online activity without `%s:` in the front matter" % (rel, key))
+    heads = headings(body)
+    for part in ("before you start", "tasks to submit", "how to submit"):
+        if not any(h.startswith(part) for h in heads):
+            out.append("%s: online activity without a \"%s\" section" % (rel, part.capitalize()))
+    steps = [p for p in re.split(r"^(?=## )", body, flags=re.M) if re.match(r"## Step \d", p)]
+    if not steps:
+        out.append("%s: online activity without Steps (## Step 1 · … {.study})" % rel)
+    for p in steps:
+        title = p.splitlines()[0][3:]
+        if "{.study}" not in title:
+            out.append('%s: "%s" is not marked {.study} (it would be printed)' % (rel, title))
+        k = len(re.findall(r'^:::+ *\{\.callout-tip title="Try it', p, re.M))
+        if k != 1:
+            out.append('%s: "%s" has %d Try it boxes; give each step one self-check' % (rel, title, k))
+    tasks = section(body, "Tasks to submit")
+    n_tasks = len(re.findall(r"^### Task \d", tasks, re.M))
+    if not (ONLINE_TASKS[0] <= n_tasks <= ONLINE_TASKS[1]):
+        out.append("%s: %d tasks to submit, an online activity needs %d–%d (### Task 1 · …)" % ((rel, n_tasks) + ONLINE_TASKS))
+    if "answer-space" not in tasks:
+        out.append("%s: the tasks have no {{< answer-space >}} for the printed copy" % rel)
+    if ".match" in tasks:
+        out.append("%s: the tasks to submit show answers (.match); keep self-checks in the Steps" % rel)
+    sims = len(re.findall(r"\{\{< *sim ", body))
+    if sims < ONLINE_MIN_SIMS:
+        out.append("%s: %d simulators, an online activity needs %d or more" % (rel, sims, ONLINE_MIN_SIMS))
+    return out
+
+
 def check(project_dir):
     rows, warnings = [], []
     pattern = os.path.join(project_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].qmd")
@@ -266,6 +326,9 @@ def check(project_dir):
         minutes = course_minutes(project_dir, slug)
         rel = os.path.relpath(path, project_dir)
         if minutes not in SIZES:
+            continue
+        if is_online(path):
+            warnings.extend(check_online(path, rel))
             continue
         n = {}
         page = count_page(read(path))

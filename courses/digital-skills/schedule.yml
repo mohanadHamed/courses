@@ -1,41 +1,47 @@
-# The lectures of the course in teaching order (titles from the official
-# syllabus). Students and the teacher count lectures, not weeks: a missed or
-# late week moves every course differently, so the site never shows weeks.
-# Exams are not listed: the university sets them.
+# The lectures of the course in teaching order (titles from the course
+# syllabus v2, 2026-10-23). Students and the teacher count lectures, not
+# weeks: a missed or late week moves every course differently, so the site
+# never shows weeks. Exams are not listed: the university sets them.
+#
+# Blended course: each pair is one week. The odd lecture is face-to-face in
+# the computer lab (a full lesson: notes, page, slides). The even lecture is
+# an online activity (`online: true`): digital content with simulators and
+# tasks that the students submit on the e-learning platform. It replaces the
+# homework of the other courses.
 #
 # Files: lecture n is lesson-NN.qmd (NN = n) in the folder week-PP, where
 # PP = (n + 1) / 2 rounded down: lectures 1-2 are in week-01, 3-4 in week-02,
 # and so on. The folder name is internal (it keeps old links and QR codes
-# working) and is never shown. Homework k (homework-0k.qmd, in week-0k)
-# follows lectures 2k-1 and 2k. A lecture is ready (bright, with links) when
+# working) and is never shown. A lecture is ready (bright, with links) when
 # its lesson-NN.qmd exists and has no `draft: true`; otherwise it is faded.
 lectures:
-  - {n: 1, title: "Digital Skills: Concept, Categories and the Labour Market", ilos: [A1]}
-  - {n: 2, title: "University Accounts, Cloud Storage and File Management", ilos: [A1]}
-  - {n: 3, title: "Digital Devices, Operating Systems and Productivity Applications", ilos: [A1, A2]}
-  - {n: 4, title: "Cloud Collaboration: Sharing, Co-editing and Version History", ilos: [A2]}
-  - {n: 5, title: "Safe and Responsible Digital Use: Passwords, MFA, Phishing and Privacy", ilos: [A2]}
-  - {n: 6, title: "Securing Accounts and Devices; Spotting Phishing Messages", ilos: [A2]}
-  - {n: 7, title: "Digital Content Creation (1): Professional Documents", ilos: [C1]}
-  - {n: 8, title: "Creating a CV and a Short Game-Design Brief", ilos: [C1]}
-  - {n: 9, title: "Digital Content Creation (2): Presentations and Basic Graphics", ilos: [C1]}
-  - {n: 10, title: "Designing a Pitch Presentation and a Social-Media Post", ilos: [C1]}
-  - {n: 11, title: "Spreadsheets (1): Data Entry, Formulas, Cell References and Functions", ilos: [B1]}
-  - {n: 12, title: "Building a Budget and Score-Tracking Sheet", ilos: [B1]}
-  - {n: 13, title: "Spreadsheets (2): Sorting, Filtering, Conditional Formatting and Charts", ilos: [B1]}
-  - {n: 14, title: "Analyzing a Player Dataset with Charts", ilos: [B1]}
-  - {n: 15, title: "Review of Lectures 1–14", ilos: [A1, A2, B1, C1]}
-  - {n: 16, title: "Data Analysis: PivotTables, Summaries and Dashboards", ilos: [B1]}
-  - {n: 17, title: "Building a Simple Dashboard", ilos: [B1]}
-  - {n: 18, title: "Databases (1): Tables, Fields, Primary Keys and Relationships", ilos: [C2]}
-  - {n: 19, title: "Designing a Player-Records Database", ilos: [C2]}
-  - {n: 20, title: "Databases (2): Queries, Forms and Reports", ilos: [C2]}
-  - {n: 21, title: "Writing Queries and Generating Reports", ilos: [C2]}
-  - {n: 22, title: "Creating a Digital Service: Website Planning and HTML Basics", ilos: [C3]}
-  - {n: 23, title: "Building the Page Structure with HTML", ilos: [C3]}
-  - {n: 24, title: "Website Design: CSS, Layout, Responsive Design and Publishing", ilos: [C3]}
-  - {n: 25, title: "Styling and Publishing a Game Landing Page", ilos: [C3]}
-  - {n: 26, title: "Digital Marketing: SEO, Social Media, Email, E-commerce and Analytics", ilos: [B2]}
-  - {n: 27, title: "Preparing a Digital Marketing Plan", ilos: [B2]}
-  - {n: 28, title: "Team Project: An Integrated Digital Service", ilos: [B2, C1, C3]}
-  - {n: 29, title: "Team Project Presentations", ilos: [D1]}
+  - {n: 1, title: "Digital Skills and the Apps That Make Us Productive", ilos: [A1]}
+  - {n: 2, title: "Your University Account, Cloud Storage and Files", ilos: [A1], online: true}
+  - {n: 3, title: "Generative AI Tools: What They Do Well and Where They Fail", ilos: [A1, C4]}
+  - {n: 4, title: "Writing Clear Prompts and Improving the Answer", ilos: [C4], online: true}
+  - {n: 5, title: "Microsoft Office: Concepts, Terms and Common Features", ilos: [A2, A3]}
+  - {n: 6, title: "Office on the Computer, the Web and the Phone", ilos: [A3], online: true}
+  - {n: 7, title: "Word (1): Formatting, Styles, Lists, Tables and Pictures", ilos: [C1]}
+  - {n: 8, title: "Word (2): Page Layout, Headers and a Table of Contents", ilos: [C1], online: true}
+  - {n: 9, title: "AI with Word: Draft, Summarize, Rewrite and Translate", ilos: [C1, C4, B1]}
+  - {n: 10, title: "A Formal Letter and a CV with AI Help", ilos: [C4, B1], online: true}
+  - {n: 11, title: "Excel (1): Cells, Formulas, References and Basic Functions", ilos: [C2]}
+  - {n: 12, title: "A Monthly Budget Sheet", ilos: [C2], online: true}
+  - {n: 13, title: "Excel (2): Sorting, Filtering, Conditional Formatting and Charts", ilos: [C2]}
+  - {n: 14, title: "AI with Excel: Formulas, Clean Data and the Right Chart", ilos: [C2, C4, B1], online: true}
+  - {n: 15, title: "Review of Lectures 1–14", ilos: [A1, A2, A3, B1, C1, C2, C4]}
+  - {n: 16, title: "Review Activity: Practice Questions", ilos: [A1, A2, A3, B1, C1, C2, C4], online: true}
+  - {n: 17, title: "PowerPoint (1): Slides, Layouts, Themes, Pictures and Designer", ilos: [C3]}
+  - {n: 18, title: "PowerPoint (2): Transitions, Speaker Notes and a Five-Slide Talk", ilos: [C3], online: true}
+  - {n: 19, title: "AI with PowerPoint: Outline, Slides and Pictures", ilos: [C3, C4, B1]}
+  - {n: 20, title: "A Short Presentation with AI Help", ilos: [C4, B1], online: true}
+  - {n: 21, title: "Checking AI Output: Wrong Facts, Made-up Sources and Bias", ilos: [B1]}
+  - {n: 22, title: "Fact-Checking an AI-Written Document", ilos: [B1], online: true}
+  - {n: 23, title: "Responsible AI: Personal Data, Copyright and Honesty", ilos: [D1]}
+  - {n: 24, title: "Safe Prompts and an AI-Use Statement", ilos: [D1], online: true}
+  - {n: 25, title: "Excel (3): Summarizing Data with AI Help", ilos: [C2, C4, B1]}
+  - {n: 26, title: "Analyzing a Small Dataset and Charting It", ilos: [C2, C4], online: true}
+  - {n: 27, title: "Working Across Office Apps with AI", ilos: [A1, A3, C4]}
+  - {n: 28, title: "Course Project (1): Plan, Data Sheet and First Draft", ilos: [C4], online: true}
+  - {n: 29, title: "Course Project Presentations", ilos: [C3, C4, B1]}
+  - {n: 30, title: "Course Project (2): Final Report, Data Sheet and Presentation", ilos: [B1, C1, C2, C3, C4, D1], online: true}

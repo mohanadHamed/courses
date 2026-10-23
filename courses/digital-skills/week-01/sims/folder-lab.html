@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Folder Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+    .sim .tabs button { background: #fff; color: var(--sim-accent); border: 1.5px solid var(--sim-accent); box-shadow: none; padding: 5px 12px; }
+    .sim .tabs button.on { background: var(--sim-accent); color: #fff; }
+    .sim .task { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 8px 12px; font-weight: 700; margin-bottom: 8px; }
+    .sim code { font-family: Menlo, Consolas, monospace; font-size: .86rem; color: #c2410c; word-break: break-all; }
+    .sim .win { border: 1.5px solid #d9d4cf; border-radius: 12px; overflow: hidden; background: #fff; }
+    .sim .toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 6px 8px; background: #f3efeb; }
+    .sim .toolbar button { padding: 4px 10px; font-size: .85rem; }
+    .sim .addr { flex: 1 1 220px; font-family: Menlo, Consolas, monospace; font-size: .8rem; background: #fff; border: 1px solid #d9d4cf; border-radius: 6px; padding: 4px 8px; word-break: break-all; }
+    .sim .items { min-height: 150px; padding: 6px; display: grid; gap: 2px; }
+    .sim .item { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 8px; cursor: pointer; user-select: none; }
+    .sim .item:hover { background: #fff4e6; }
+    .sim .item.sel { background: #ffe8cc; }
+    .sim .item .ic { width: 22px; text-align: center; }
+    .sim .empty { color: var(--sim-muted); font-style: italic; padding: 8px; }
+    .sim input[type="text"] { font: inherit; padding: 5px 8px; border: 1.5px solid #ffc078; border-radius: 8px; min-width: 0; flex: 1 1 200px; }
+    .sim .rules { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 3px; font-size: .9rem; }
+    .sim .rules li::before { content: "○ "; font-weight: 800; color: #adb5bd; }
+    .sim .rules li.ok::before { content: "✓ "; color: #2b8a3e; }
+    .sim .rules li.no::before { content: "✗ "; color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Folder Lab: folders and good file names</h1>
+  <div class="tabs"><button id="tab1" type="button" class="on">1 · Make folders</button><button id="tab2" type="button">2 · Rename files</button></div>
+
+  <section id="part1">
+    <div class="task">Make this path: <code>Documents\Courses\Digital-Skills\lecture-02</code>. Open a folder with a tap. Use <b>New folder</b> to make one.</div>
+    <div class="win">
+      <div class="toolbar"><button id="up" type="button" class="ghost">⬆ Up</button><button id="newf" type="button">＋ New folder</button><span class="addr" id="addr"></span></div>
+      <div class="controls" id="nameRow" hidden style="margin:6px 8px"><input id="fname" type="text" autocomplete="off" placeholder="Folder name"><button id="make" type="button">Make</button></div>
+      <div class="items" id="items"></div>
+    </div>
+  </section>
+
+  <section id="part2" hidden>
+    <div class="task" id="fileTask"></div>
+    <div class="controls" style="margin-top:0"><input id="newName" type="text" autocomplete="off" spellcheck="false"><button id="rename" type="button">Rename</button></div>
+    <ul class="rules" id="rules"></ul>
+  </section>
+
+  <div class="controls"><button id="next" type="button" hidden>Next ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const ROOT = "C:\\Users\\Sara\\";
+  const TARGET = ["Documents", "Courses", "Digital-Skills", "lecture-02"];
+  // Part 2: poor names, what each file is, its date and version, and its extension.
+  const FILES = [
+    { old: "New Document (3).docx", what: "Sara's CV", date: "2026-10-26", v: "v01", ext: "docx", word: "cv" },
+    { old: "final final.pptx", what: "her English talk, third version", date: "2026-11-12", v: "v03", ext: "pptx", word: "english-talk" },
+    { old: "IMG_4821.jpg", what: "a photo of the family dinner", date: "2026-10-21", v: null, ext: "jpg", word: "family-dinner" },
+  ];
+  const $ = (id) => document.getElementById(id);
+  let tree, here, sel, part, fk, done2;
+
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function node(name, kids) { return { name, kids: kids || [] }; }
+  function at(path) { let n = tree; for (const p of path.slice(1)) n = n.kids.find((k) => k.name === p); return n; }
+  function hasTarget() { let n = tree; for (const p of TARGET.slice(1)) { n = n.kids.find((k) => k.name.toLowerCase() === p.toLowerCase()); if (!n) return false; } return true; }
+
+  function draw() {
+    $("addr").textContent = ROOT + here.join("\\");
+    const n = at(here);
+    $("items").innerHTML = "";
+    if (!n.kids.length) { $("items").innerHTML = '<div class="empty">This folder is empty.</div>'; return; }
+    n.kids.slice().sort((a, b) => (b.file ? 0 : 1) - (a.file ? 0 : 1) || a.name.localeCompare(b.name)).forEach((k) => {
+      const d = document.createElement("div"); d.className = "item" + (sel === k ? " sel" : "");
+      d.innerHTML = '<span class="ic">' + (k.file ? "📄" : "📁") + "</span>" + k.name;
+      d.addEventListener("click", () => {
+        if (k.file) { sel = k; draw(); say(k.name + " is a file, not a folder."); return; }
+        here = here.concat(k.name); sel = null; draw(); check1();
+      });
+      $("items").appendChild(d);
+    });
+  }
+  function check1() {
+    if (hasTarget()) {
+      say("✓ Done: " + ROOT + TARGET.join("\\") + ". Now open part 2: rename the files.", "good");
+      $("next").hidden = false;
+    } else say("You are in " + here[here.length - 1] + ".");
+  }
+  function badFolderName(name) {
+    if (!name) return "Type a name first.";
+    if (/[\\/:*?"<>|]/.test(name)) return "A folder name cannot have \\ / : * ? \" < > |.";
+    if (/\s/.test(name)) return "Use - instead of spaces: " + name.replace(/\s+/g, "-");
+    if (at(here).kids.some((k) => k.name.toLowerCase() === name.toLowerCase())) return "This folder already has " + name + ".";
+    return "";
+  }
+  $("newf").addEventListener("click", () => { $("nameRow").hidden = false; $("fname").value = ""; $("fname").focus(); });
+  function make() {
+    const name = $("fname").value.trim(), err = badFolderName(name);
+    if (err) { say(err, "bad"); return; }
+    at(here).kids.push(node(name)); $("nameRow").hidden = true; draw();
+    say("New folder " + name + " is in " + here[here.length - 1] + ". Tap it to open it.", "good");
+  }
+  $("make").addEventListener("click", make);
+  $("fname").addEventListener("keydown", (e) => { if (e.key === "Enter") make(); });
+  $("up").addEventListener("click", () => {
+    if (here.length === 1) { say("Documents is the top folder here."); return; }
+    here = here.slice(0, -1); sel = null; draw(); check1();
+  });
+
+  // Part 2: the four rules of good file names.
+  function rules(name, f) {
+    const base = name.replace(/\.[^.]*$/, ""), ext = (name.match(/\.([^.]+)$/) || [])[1] || "";
+    return [
+      ["Starts with the date as year-month-day (" + f.date + ")", base.startsWith(f.date)],
+      ["Says what it is (for example " + f.word + ")", f.word.split("-").some((w) => base.toLowerCase().includes(w))],
+      ["No spaces (use - or _)", !/\s/.test(name) && name.length > 0],
+      [f.v ? "Has the version " + f.v : "No version needed for a photo", f.v ? base.endsWith(f.v) : !/final/i.test(base)],
+      ["Keeps the extension ." + f.ext, ext.toLowerCase() === f.ext],
+    ];
+  }
+  function showFile() {
+    const f = FILES[fk];
+    $("fileTask").innerHTML = "File " + (fk + 1) + " of 3: <code>" + f.old + "</code> is " + f.what + ", made on " + f.date + ". Give it a good name.";
+    $("newName").value = f.old; done2 = false; drawRules();
+  }
+  function drawRules() {
+    const r = rules($("newName").value.trim(), FILES[fk]);
+    $("rules").innerHTML = r.map(([t, ok]) => '<li class="' + (ok ? "ok" : "") + '">' + t + "</li>").join("");
+  }
+  $("newName").addEventListener("input", drawRules);
+  function rename() {
+    if (done2) { say("Press <b>Next</b>."); return; }
+    const r = rules($("newName").value.trim(), FILES[fk]);
+    $("rules").innerHTML = r.map(([t, ok]) => '<li class="' + (ok ? "ok" : "no") + '">' + t + "</li>").join("");
+    if (r.every((x) => x[1])) {
+      done2 = true;
+      const ex = FILES[fk].date + "_" + FILES[fk].word + (FILES[fk].v ? "_" + FILES[fk].v : "") + "." + FILES[fk].ext;
+      const other = $("newName").value.trim() === ex ? "" : " Another good name: <code>" + ex + "</code>";
+      $("next").hidden = fk + 1 >= FILES.length;
+      say((fk + 1 >= FILES.length ? "✓ All three files have good names." : "✓ Good name.") + other, "good");
+    } else say("Not yet: fix the rules with ✗.", "bad");
+  }
+  $("rename").addEventListener("click", rename);
+  $("newName").addEventListener("keydown", (e) => { if (e.key === "Enter") rename(); });
+
+  function setPart(p) {
+    part = p; $("part1").hidden = p !== 1; $("part2").hidden = p !== 2;
+    $("tab1").classList.toggle("on", p === 1); $("tab2").classList.toggle("on", p === 2);
+    $("next").hidden = true; say("");
+    if (p === 1) { draw(); check1(); } else { fk = 0; showFile(); }
+  }
+  $("tab1").addEventListener("click", () => setPart(1));
+  $("tab2").addEventListener("click", () => setPart(2));
+  $("next").addEventListener("click", () => {
+    if (part === 1) setPart(2);
+    else if (fk + 1 < FILES.length) { fk++; $("next").hidden = true; say(""); showFile(); }
+  });
+  function start() {
+    tree = node("Documents", [node("Personal", [{ name: "bills.pdf", file: true }]), { name: "notes.docx", file: true }]);
+    here = ["Documents"]; sel = null; setPart(1);
+    say("Make the folders. Start in Documents.");
+  }
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

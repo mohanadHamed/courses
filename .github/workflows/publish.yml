@@ -33,8 +33,8 @@ jobs:
         with:
           version: 1.10.19
 
-      # Homework PDFs are printed from the homework pages with Chrome
-      # (preinstalled on ubuntu-latest).
+      # Homework and online-activity PDFs are printed from their pages with
+      # Chrome (preinstalled on ubuntu-latest).
       - name: Check Chrome
         run: google-chrome --version
 
@@ -48,6 +48,7 @@ jobs:
           test -n "$(find _site -name '*.pptx')"
           test -z "$(find _site -name 'lesson-*-book.pdf' -o -name 'lesson-*-slides.pptx')"
           if ls courses/*/week-*/homework-*.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_homework[0-9]*.pdf')"; fi
+          if grep -lqs '^online: true' courses/*/week-*/lesson-*.qmd; then test -n "$(find _site -name '*_lecture[0-9]*_tasks.pdf')"; fi
 
       - uses: actions/upload-pages-artifact@v4
         with:

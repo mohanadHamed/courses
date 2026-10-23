@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Time Saver</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .story { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 8px 12px; font-weight: 700; margin-bottom: 10px; }
+    .sim .lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 560px) { .sim .lanes { grid-template-columns: 1fr; } }
+    .sim .lane { border: 1.5px solid #ffe0c2; border-radius: 14px; padding: 10px 12px; background: #fff; }
+    .sim .lane h2 { font-size: 1rem; margin: 0 0 6px; }
+    .sim .lane.off { opacity: .45; pointer-events: none; }
+    .sim .prices { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 8px; }
+    .sim .prices span { background: #fff4e6; border-radius: 8px; padding: 3px 9px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim input[type="text"] { font: inherit; font-weight: 800; width: 7em; padding: 6px 8px; border: 1.5px solid #ffc078; border-radius: 8px; }
+    .sim .grid { border-collapse: collapse; font-variant-numeric: tabular-nums; margin: 4px 0 8px; }
+    .sim .grid td, .sim .grid th { border: 1px solid #d9d4cf; padding: 2px 8px; min-width: 2.2em; text-align: right; }
+    .sim .grid th { background: #f3efeb; color: #6b5d55; font-weight: 700; text-align: center; }
+    .sim .grid td.sel { outline: 2px solid var(--sim-accent); outline-offset: -2px; }
+    .sim .grid td.edit { cursor: pointer; background: #fffdf9; }
+    .sim .grid td.total { font-weight: 800; background: #e6fcf5; }
+    .sim .fx { font-family: Menlo, Consolas, monospace; font-size: .85rem; color: #555; margin: 2px 0 4px; min-height: 1.2em; }
+    .sim .clock { font-size: 1.6rem; font-weight: 800; color: var(--sim-accent); font-variant-numeric: tabular-nums; }
+    .sim .bars { margin-top: 10px; display: grid; gap: 6px; }
+    .sim .bar { display: grid; grid-template-columns: 7.5em 1fr 4em; align-items: center; gap: 8px; font-weight: 700; }
+    .sim .bar i { display: block; height: 16px; border-radius: 8px; background: var(--sim-accent); width: 0; transition: width .6s; }
+    .sim .bar.app i { background: #2b8a3e; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Time Saver: by hand or with an app?</h1>
+  <div class="story">Mona works in the shop of Sunrise Company. She needs the total of 8 prices (in JD).</div>
+  <div class="lanes">
+    <section class="lane" id="hand">
+      <h2>1 · By hand</h2>
+      <div class="prices" id="prices"></div>
+      <div class="controls" style="margin-top:0">
+        <button id="start" type="button">Start the clock</button>
+        <span class="clock" id="clockHand">0.0 s</span>
+      </div>
+      <div class="controls">
+        <label>Total: <input id="answer" type="text" inputmode="numeric" autocomplete="off" disabled></label>
+        <button id="check" type="button" disabled>Check</button>
+      </div>
+    </section>
+    <section class="lane off" id="app">
+      <h2>2 · With a spreadsheet</h2>
+      <div class="fx" id="fx"></div>
+      <table class="grid" id="grid" aria-label="A small spreadsheet"></table>
+      <div class="controls" style="margin-top:0">
+        <button id="sum" type="button">Σ AutoSum</button>
+        <span class="clock" id="clockApp">0.0 s</span>
+      </div>
+    </section>
+  </div>
+  <div class="bars" id="bars" hidden>
+    <div class="bar"><span>By hand</span><i id="barHand"></i><span id="tHand"></span></div>
+    <div class="bar app"><span>With the app</span><i id="barApp"></i><span id="tApp"></span></div>
+  </div>
+  <div class="controls"><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const START = [12, 25, 8, 40, 15, 30, 5, 20];   // total 155
+  const $ = (id) => document.getElementById(id);
+  let prices, tHand0 = 0, tHand = 0, tApp0 = 0, tApp = 0, stage = "idle", sumOn = false, sel = -1, timer = null;
+  const total = () => prices.reduce((a, b) => a + b, 0);
+  const fmt = (ms) => (Math.max(0, ms) / 1000).toFixed(1) + " s";
+  function say(t, k) { $("msg").textContent = t; $("msg").className = "message " + (k || ""); }
+
+  function drawPrices() { $("prices").innerHTML = prices.map((p) => "<span>" + p + "</span>").join(""); }
+  function drawGrid() {
+    let h = "<tr><th></th><th>A</th></tr>";
+    prices.forEach((p, i) => {
+      h += '<tr><th>' + (i + 1) + '</th><td class="edit' + (sel === i ? " sel" : "") + '" data-i="' + i + '">' + p + "</td></tr>";
+    });
+    h += '<tr><th>9</th><td class="' + (sumOn ? "total" : "") + (sel === 8 ? " sel" : "") + '">' + (sumOn ? total() : "") + "</td></tr>";
+    $("grid").innerHTML = h;
+    $("grid").querySelectorAll("td.edit").forEach((td) => td.addEventListener("click", () => editCell(+td.dataset.i)));
+  }
+  function tick() {
+    // Clock: a timer, not the drawing, decides the time (a hidden tab still counts).
+    if (stage === "hand") $("clockHand").textContent = fmt(performance.now() - tHand0);
+  }
+
+  function reset() {
+    prices = START.slice(); stage = "idle"; sumOn = false; sel = -1; tHand = tApp = 0;
+    drawPrices(); drawGrid();
+    $("answer").value = ""; $("answer").disabled = true; $("check").disabled = true; $("start").disabled = false;
+    $("clockHand").textContent = "0.0 s"; $("clockApp").textContent = "0.0 s"; $("fx").textContent = "";
+    $("app").classList.add("off"); $("hand").classList.remove("off"); $("bars").hidden = true;
+    say("Press Start, add the 8 prices in your head or on paper, and type the total.");
+  }
+  $("start").addEventListener("click", () => {
+    stage = "hand"; tHand0 = performance.now(); $("start").disabled = true;
+    $("answer").disabled = false; $("check").disabled = false; $("answer").focus();
+    say("The clock is running. Add the prices and type the total.");
+  });
+  function checkHand() {
+    if (stage !== "hand") { say("Press Start first.", "bad"); return; }
+    const v = parseInt($("answer").value.replace(/[^0-9]/g, ""), 10);
+    if (v !== total()) { say("Not " + (isNaN(v) ? "empty" : v) + ". Add again: the clock is still running.", "bad"); return; }
+    tHand = Math.max(0, performance.now() - tHand0); stage = "app";
+    $("clockHand").textContent = fmt(tHand);
+    $("hand").classList.add("off"); $("app").classList.remove("off");
+    tApp0 = performance.now(); sel = 8; drawGrid();
+    say("Right: " + total() + " JD. Now do the same in the spreadsheet: cell A9 is ready. Press Σ AutoSum.", "good");
+  }
+  $("check").addEventListener("click", checkHand);
+  $("answer").addEventListener("keydown", (e) => { if (e.key === "Enter") checkHand(); });
+  $("sum").addEventListener("click", () => {
+    if (stage !== "app") { say(stage === "done" ? "The total is already there. Change a price to see it update." : "First add the prices by hand (part 1).", "bad"); return; }
+    tApp = Math.max(0, performance.now() - tApp0); sumOn = true; stage = "done";
+    $("fx").textContent = "A9:  =SUM(A1:A8)";
+    $("clockApp").textContent = fmt(tApp); drawGrid();
+    $("bars").hidden = false;
+    const max = Math.max(tHand, tApp, 1);
+    $("barHand").style.width = (100 * tHand / max) + "%"; $("barApp").style.width = Math.max(2, 100 * tApp / max) + "%";
+    $("tHand").textContent = fmt(tHand); $("tApp").textContent = fmt(tApp);
+    const saved = tHand > tApp ? "The app saved you " + fmt(tHand - tApp) + "." : "You were very fast! With 300 prices, the app wins.";
+    say(saved + " Now tap the price 8 in A3 and change it: the total updates by itself.", "good");
+  });
+  function editCell(i) {
+    if (stage !== "done") { say("Press Σ AutoSum first.", "bad"); return; }
+    const old = prices[i];
+    prices[i] = old === 8 ? 18 : old + 10;
+    sel = i; drawGrid(); drawPrices();
+    say("A" + (i + 1) + " is now " + prices[i] + " (was " + old + "). The new total is " + total() + " JD at once. By hand, you would add all 8 prices again.", "good");
+  }
+  $("restart").addEventListener("click", reset);
+  timer = setInterval(tick, 100);
+  reset();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Sync Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .task { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 8px 12px; font-weight: 700; margin-bottom: 8px; }
+    .sim .task .n { font-size: .8rem; color: var(--sim-accent); text-transform: uppercase; letter-spacing: .5px; display: block; }
+    .sim .devs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .sim .devs2 { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin-top: 8px; }
+    @media (max-width: 560px) { .sim .devs { grid-template-columns: 1fr 1fr; } .sim .devs2 { grid-template-columns: 1fr; } }
+    .sim .dev { border: 1.5px solid #e3dcd5; border-radius: 12px; padding: 6px 8px; background: #fff; min-height: 96px; }
+    .sim .dev h2 { font-size: .85rem; margin: 0 0 4px; display: flex; justify-content: space-between; }
+    .sim .dev h2 small { font-weight: 700; color: #1c7ed6; }
+    .sim .dev.cloud { background: #f3f6ff; border-color: #bac8ff; }
+    .sim .dev.usb { background: #f4fce3; border-color: #c0eb75; }
+    .sim .dev.syncing { box-shadow: 0 0 0 3px #a5d8ff; }
+    .sim .f { font-size: .82rem; padding: 2px 6px; border-radius: 6px; margin: 2px 0; background: #f8f9fa; font-family: Menlo, Consolas, monospace; word-break: break-all; }
+    .sim .f.new { background: #fff3bf; }
+    .sim .bin { margin-top: 4px; font-size: .78rem; color: #5c7cfa; font-weight: 700; }
+    .sim .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .sim .actions button { font-size: .85rem; padding: 6px 10px; }
+    .sim .q { margin-top: 10px; font-weight: 800; }
+    .sim .opts { display: grid; gap: 6px; margin-top: 6px; }
+    .sim .opts button { text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 700; }
+    .sim .opts button.good { background: #d3f9d8; border-color: #2b8a3e; } .sim .opts button.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Sync Lab: sync, recycle bin and backup</h1>
+  <div class="task" id="task"></div>
+  <div class="devs">
+    <div class="dev" id="d-pc"><h2>Lab computer <small>synced</small></h2><div></div></div>
+    <div class="dev" id="d-laptop"><h2>Laptop <small>synced</small></h2><div></div></div>
+    <div class="dev" id="d-phone"><h2>Phone <small>synced</small></h2><div></div></div>
+  </div>
+  <div class="devs2">
+    <div class="dev cloud" id="d-cloud"><h2>Cloud storage</h2><div></div><div class="bin" id="bin"></div></div>
+    <div class="dev usb" id="d-usb"><h2>USB stick at home <small style="color:#5c940d">backup</small></h2><div></div></div>
+  </div>
+  <div class="actions">
+    <button id="aEdit" type="button">✏️ Edit the report (lab computer)</button>
+    <button id="aDel" type="button">🗑 Delete photo.jpg (lab computer)</button>
+    <button id="aRestore" type="button" class="ghost">↩ Restore from the recycle bin</button>
+    <button id="aEmpty" type="button" class="ghost">Empty the recycle bin</button>
+    <button id="aUsb" type="button" class="ghost">Copy back from the USB stick</button>
+  </div>
+  <div class="q" id="q"></div>
+  <div class="opts" id="opts"></div>
+  <div class="controls"><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const SYNCED = ["pc", "laptop", "phone", "cloud"];
+  const MISSIONS = [
+    { text: "Edit the report on the lab computer. Watch the other places.", act: "aEdit",
+      q: "Where did the report change?", opts: ["Only on the lab computer", "On the laptop, the phone and in the cloud", "Everywhere, also on the USB stick"], right: 1,
+      why: "Sync copies every change to all synced places. The USB stick is not synced: it still has the copy from Sunday." },
+    { text: "Delete photo.jpg on the lab computer.", act: "aDel",
+      q: "Is the photo still on the phone?", opts: ["Yes, the phone keeps it", "No, sync deleted it on every device"], right: 1,
+      why: "Sync also copies your mistakes: a deletion reaches every device. The cloud keeps it in the recycle bin for some days." },
+    { text: "Get the photo back from the recycle bin of the cloud storage.", act: "aRestore",
+      q: "Where is the photo now?", opts: ["Only in the cloud", "Back on every synced device"], right: 1,
+      why: "The recycle bin helps for some days. After that, or when it is emptied, the file is gone from the cloud." },
+    { text: "Delete the photo again, then empty the recycle bin.", act: "aEmpty",
+      q: "Where is a copy of the photo now?", opts: ["In the recycle bin", "Only on the USB stick at home", "Nowhere"], right: 1,
+      why: "Only the backup has it: a separate copy that sync does not touch." },
+    { text: "Copy the photo back from the USB stick.", act: "aUsb", q: null,
+      why: "Saved by the backup. Sync is not a backup. The 3-2-1 rule: 3 copies, on 2 kinds of storage, 1 copy in another place." },
+  ];
+  const $ = (id) => document.getElementById(id);
+  let files, usb, bin, m, waitingQ, busy, timers = [];
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function draw(changed) {
+    ["pc", "laptop", "phone", "cloud"].forEach((d) => {
+      const box = $("d-" + d).querySelector("div");
+      box.innerHTML = files[d].map((f) => '<div class="f' + (changed && changed.includes(f) ? " new" : "") + '">' + f + "</div>").join("") || '<div class="f" style="background:none;color:#adb5bd">(empty)</div>';
+    });
+    $("d-usb").querySelector("div").innerHTML = usb.map((f) => '<div class="f">' + f + "</div>").join("");
+    $("bin").textContent = "Recycle bin: " + (bin.length ? bin.join(", ") : "empty");
+  }
+  // Change the lab computer now, the other synced places a moment later (a timer, so it works in a hidden tab too).
+  function change(fn, changed) {
+    busy = true;
+    fn(files.pc); draw(changed);
+    ["laptop", "phone", "cloud"].forEach((d) => $("d-" + d).classList.add("syncing"));
+    timers.push(setTimeout(() => {
+      ["laptop", "phone", "cloud"].forEach((d) => { fn(files[d]); $("d-" + d).classList.remove("syncing"); });
+      busy = false; draw(changed); afterAction();
+    }, 900));
+  }
+  const ACTIONS = {
+    aEdit: () => {
+      if (!files.pc.includes("report_v01.docx")) return "The report is already edited.";
+      change((l) => { const i = l.indexOf("report_v01.docx"); if (i >= 0) l[i] = "report_v02.docx"; }, ["report_v02.docx"]);
+    },
+    aDel: () => {
+      if (!files.pc.includes("photo.jpg")) return "photo.jpg is not on the lab computer.";
+      if (!bin.includes("photo.jpg")) bin.push("photo.jpg");
+      change((l) => { const i = l.indexOf("photo.jpg"); if (i >= 0) l.splice(i, 1); });
+    },
+    aRestore: () => {
+      if (!bin.length) return "The recycle bin is empty.";
+      bin = []; change((l) => { if (!l.includes("photo.jpg")) l.push("photo.jpg"); }, ["photo.jpg"]);
+    },
+    aEmpty: () => {
+      if (files.pc.includes("photo.jpg")) return "First delete photo.jpg on the lab computer.";
+      if (!bin.length) return "The recycle bin is already empty.";
+      bin = []; draw(); afterAction();
+    },
+    aUsb: () => {
+      if (files.pc.includes("photo.jpg")) return "The photo is already on the lab computer.";
+      change((l) => { if (!l.includes("photo.jpg")) l.push("photo.jpg"); }, ["photo.jpg"]);
+    },
+  };
+  Object.keys(ACTIONS).forEach((id) => $(id).addEventListener("click", () => {
+    if (busy) { say("Wait: sync is copying the change."); return; }
+    if (waitingQ) { say("First answer the question below.", "bad"); return; }
+    const want = MISSIONS[m] && MISSIONS[m].act;
+    // Mission 4 needs a delete first: allow it.
+    if (id !== want && !(m === 3 && id === "aDel")) { say("Now: " + MISSIONS[m].text, "bad"); return; }
+    const err = ACTIONS[id](); if (err) say(err, "bad");
+  }));
+  function afterAction() {
+    const mi = MISSIONS[m];
+    if (m === 3 && files.pc.includes("photo.jpg")) return;
+    if (m === 3 && bin.length) { say("Now empty the recycle bin."); return; }
+    if (!mi.q) { say("✓ " + mi.why, "good"); m++; showTask(); return; }
+    waitingQ = true; $("q").textContent = mi.q; $("opts").innerHTML = "";
+    mi.opts.forEach((o, i) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = o;
+      b.addEventListener("click", () => answer(i, b)); $("opts").appendChild(b);
+    });
+    say("");
+  }
+  function answer(i, b) {
+    if (!waitingQ) return;
+    const mi = MISSIONS[m];
+    if (i !== mi.right) { b.classList.add("bad"); say("Look at the five places again.", "bad"); return; }
+    b.classList.add("good"); waitingQ = false;
+    say("✓ " + mi.why, "good");
+    timers.push(setTimeout(() => { $("q").textContent = ""; $("opts").innerHTML = ""; m++; showTask(); }, 1600));
+  }
+  function showTask() {
+    if (m >= MISSIONS.length) { $("task").innerHTML = '<span class="n">Done</span>You know the difference between sync and backup.'; return; }
+    $("task").innerHTML = '<span class="n">Mission ' + (m + 1) + " of " + MISSIONS.length + "</span>" + MISSIONS[m].text;
+  }
+  function start() {
+    timers.forEach(clearTimeout); timers = [];
+    const base = ["report_v01.docx", "photo.jpg", "notes.docx"];
+    files = {}; SYNCED.forEach((d) => (files[d] = base.slice()));
+    usb = base.slice(); bin = []; m = 0; waitingQ = false; busy = false;
+    ["laptop", "phone", "cloud"].forEach((d) => $("d-" + d).classList.remove("syncing"));
+    $("q").textContent = ""; $("opts").innerHTML = "";
+    draw(); showTask(); say("The lab computer, the laptop, the phone and the cloud are synced. The USB stick has a copy from Sunday.");
+  }
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

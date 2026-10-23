@@ -7,6 +7,7 @@ course has the same names. After the render, this step renames them in _site:
     lesson-05-book.pdf    -> math_lecture5.pdf
     lesson-05-slides.pptx -> math_lecture5_slides.pptx
     homework-03.pdf       -> math_homework3.pdf
+    lesson-02.pdf         -> digital_skills_lecture2_tasks.pdf (online activity)
 
 The prefix is `course.file-prefix` in courses/<slug>/_metadata.yml (else the
 slug with "_" for "-"). banner.lua and the schedule shortcode link the same
@@ -24,6 +25,7 @@ RULES = [
     (re.compile(r"^lesson-(\d+)-book\.pdf$"), "{prefix}_lecture{n}.pdf"),
     (re.compile(r"^lesson-(\d+)-slides\.pptx$"), "{prefix}_lecture{n}_slides.pptx"),
     (re.compile(r"^homework-(\d+)\.pdf$"), "{prefix}_homework{n}.pdf"),
+    (re.compile(r"^lesson-(\d+)\.pdf$"), "{prefix}_lecture{n}_tasks.pdf"),
 ]
 
 

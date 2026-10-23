@@ -26,23 +26,75 @@ management, medical sterilization, facility assessment). So this course is
   and answered in one line.
 - **Lab tasks** use only the lab computer, a browser and the student's own
   phone, with steps written as a numbered list.
-- The official ILOs and the syllabus titles stay as they are (some name a
-  game, for example "a landing page for a game"); the lessons may use a
-  general product or service instead, as the ILO allows ("a digital
-  service"). Ask the teacher before a syllabus title is changed.
+- The ILOs and the lecture titles follow the course syllabus v2 (Drive,
+  2026-10-23): Microsoft Office and AI tools, built on the university course
+  description *Smart Digital Skills*. Ask the teacher before a syllabus title
+  is changed.
 
-## Timing and textbook
+## Timing and textbook: a blended course
 
-- 2 lab sessions × 60 min in the computer lab (2 credit hours, practical).
-  Both lessons have notes; the page adds "Lab task" boxes (open tasks done on
-  the lab computer) next to the "Try it" checks.
+- 2 credit hours, **blended**: each week one face-to-face lecture (60 min,
+  computer lab) and one online activity (asynchronous, about 60 min of work,
+  on the university e-learning platform). `course.blended: true` in
+  `_metadata.yml`; the online lectures have `online: true` in
+  `schedule.yml`.
+- **Face-to-face lecture (odd number):** a full lesson like the other
+  courses: notes (PDF), interactive page, slides; size for **60 minutes**
+  (3–4 sections), a Lab task in every section, a ~10-min Game challenge set
+  in an ordinary workplace or a student's study work.
+- **Online activity (even number):** `lesson-NN.qmd` with `online: true`,
+  `due:` ("before lecture 2k+1") and `marks:`; no notes and no slides. Start
+  from `shared/templates/online-template.qmd`. It has:
+  1. "Before you start": what you need, about how long, what you submit;
+  2. two or three short **Steps** (`{.study}`): plain explanation, a figure,
+     a simulator to try at once, one "Try it" self-check (instant feedback);
+     where the teacher has a video, the e-learning platform links it;
+  3. **Tasks to submit** (`{.tasks}`): 2–4 tasks with marks, each with a
+     concrete product (a file with a given name, a screenshot, a short
+     answer) and answer space for the printed copy;
+  4. **How to submit**: one short line (the e-learning platform, file names).
+  The Steps are hidden on paper: "Print tasks" and "Download tasks (PDF)"
+  give only the tasks (`homework_pdf.py` prints the page).
+- The online activity **replaces the homework**: no `homework-KK.qmd` in
+  this course. Model answers and marking notes go to `courses-private`
+  (`courses/digital-skills/week-PP/lesson-NN-solutions.md`).
 - Textbook: Evans, Martin and Poatsy, *Technology in Action*, Global Edition,
-  18th ed. Framework: European Commission, *DigComp 2.2* (2022): 5 areas,
-  21 competences, 8 proficiency levels. References: Chaffey and
-  Ellis-Chadwick, *Digital Marketing*; Duckett, *HTML and CSS*.
-- Size for **60 minutes** (3–4 sections). Every lesson ends with a ~10-min
-  Game challenge (a short story and, where it helps, a mini-game) set in an
-  ordinary workplace or a student's study work.
+  18th ed. References: Lambert and Frye, *Microsoft Office Step by Step
+  (Office 2021 and Microsoft 365)*, 2022; Microsoft 365 Training
+  (support.microsoft.com/training); UNESCO, *Guidance for Generative AI in
+  Education and Research*, 2023; *DigComp 2.2*, 2022.
+
+## Practical first: many simulators
+
+The teacher wants every lesson and every online activity to be practical and
+interactive: students try each idea at once on something that works like the
+real tool.
+
+- **2–4 simulators or mini-games** in every face-to-face lesson, and **at
+  least 2** in every online activity. Prefer simulators of the real tools:
+  a folder window, a Word page with a ribbon, an Excel grid that computes, a
+  slide editor, an AI chat with fixed answers. Draw them as simple generic
+  interfaces (no Microsoft logos, no screenshots).
+- **The AI chat simulator gives fixed, prepared answers** (no AI service, no
+  Internet): the student picks a prompt and sees what a typical assistant
+  answers, including typical mistakes to find.
+- Simulators check the student's work and say what is right or wrong
+  (a path, a file name, a formula, a prompt with task, context and format).
+- Everything works on a phone: many students do the online activity at home
+  on a phone.
+
+## AI tools
+
+- Name the idea and two or three common free tools (Microsoft Copilot with
+  the university account, ChatGPT, Gemini), never one product only. No task
+  needs a paid plan. Copilot inside Word, Excel or PowerPoint is "if your
+  account has it"; the tasks also work by copying from an AI chat.
+- Never ask students to type real personal data (ID numbers, phone numbers,
+  addresses, grades) into an AI tool: use made-up details.
+- Every task done with AI ends with checking the output and, from lecture
+  23 on, an AI-use statement.
+- AI is a tool for documents, data and presentations here; how AI works is
+  the subject of *AI Applications* (01101153). Keep to what a user needs.
 
 ## Lab sessions
 
@@ -85,3 +137,12 @@ management, medical sterilization, facility assessment). So this course is
   and the figures use plain words ("I check if information is true"), and
   the diploma line of this course is "All diploma programmes" (an override
   of `diploma-line` in `_metadata.yml`).
+- 2026-10-23 (new plan): the course was rebuilt on the university course
+  description *Smart Digital Skills* (Office and AI), keeping its name,
+  number and 2 credit hours. Databases, websites and digital marketing were
+  dropped; AI tools take more than a third of the lectures. The course is
+  blended: one face-to-face lesson and one online activity per week (no
+  separate homework), with many simulators of the real tools in both.
+  Lecture 1 is now about the apps that make us productive (AI assistants
+  included) and lecture 2 (accounts, files, cloud) became the first online
+  activity.

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Monday at Sunrise Company</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .clock { font-size: 1.5rem; color: var(--sim-accent); font-variant-numeric: tabular-nums; }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .day { height: 12px; border-radius: 6px; background: #f1ebe5; overflow: hidden; margin-bottom: 10px; position: relative; }
+    .sim .day i { display: block; height: 100%; width: 0; background: var(--sim-accent); transition: width .5s; }
+    .sim .card { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
+    .sim .card .t { font-weight: 800; }
+    .sim .card .n { font-size: .8rem; font-weight: 800; color: var(--sim-accent); text-transform: uppercase; letter-spacing: .5px; }
+    .sim .step { font-weight: 800; margin: 8px 0 4px; }
+    .sim .apps, .sim .ai { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sim .apps button, .sim .ai button { background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 700; padding: 6px 12px; }
+    .sim .apps button.on, .sim .ai button.on { background: #fff0e0; border-color: var(--sim-accent); }
+    .sim .apps button:disabled, .sim .ai button:disabled { opacity: .5; cursor: default; }
+    .sim .log { margin-top: 10px; display: grid; gap: 4px; font-size: .88rem; }
+    .sim .log div { padding: 4px 8px; border-radius: 8px; background: #f8f9fa; }
+    .sim .log .good { background: #ebfbee; } .sim .log .bad { background: #fff0f0; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Monday at Sunrise Company</h1>
+  <div class="hud"><span>🕘 <span class="clock" id="clock">9:00</span></span><span id="jobn"></span><span class="stars" id="stars"></span></div>
+  <div class="day" title="9:00 to 11:00"><i id="dayBar"></i></div>
+  <div class="card" id="card"></div>
+  <div class="step">1 · Which app?</div>
+  <div class="apps" id="apps"></div>
+  <div class="step">2 · Should an AI assistant help?</div>
+  <div class="ai" id="ai"></div>
+  <div class="controls"><button id="go" type="button">Do the job ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+  <div class="log" id="log"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // The story of the lesson: Mona has 6 jobs from 9:00 to 11:00 (120 minutes).
+  // [job, app, can AI help?, minutes (right app), minutes with AI, what happens
+  //  with AI, personal data (AI is a safety mistake)]
+  const JOBS = [
+    ["Reply to 3 e-mails from customers.", "Outlook", true, 20, 10, "The AI wrote first drafts; Mona read and fixed them."],
+    ["Add up the 30 sales of the week.", "Excel", false, 10, 20, "The AI gave a wrong total. Mona had to add again in Excel."],
+    ["Make 5 slides about new products for the team meeting.", "PowerPoint", true, 30, 20, "The AI made an outline; Mona chose the pictures and checked the prices."],
+    ["Write a one-page report for the manager.", "Word", true, 40, 25, "The AI wrote a first draft; Mona checked every fact and number."],
+    ["Clean the customer list (names and phone numbers).", "Excel", false, 15, 15, "Safety mistake: the phone numbers of customers went to an AI tool.", true],
+    ["Share the report with the manager.", "OneDrive", false, 5, 10, "The AI could not share the file. Mona did it herself."],
+  ];
+  const APPS = ["Word", "Excel", "PowerPoint", "Outlook", "OneDrive"];
+  const WRONG_APP = 20;   // extra minutes with the wrong app
+  const $ = (id) => document.getElementById(id);
+  let k, minutes, app, ai, safety, done;
+  const clock = (m) => { const t = 9 * 60 + m; return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0"); };
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function log(t, c) { const d = document.createElement("div"); d.className = c; d.textContent = t; $("log").prepend(d); }
+  function hud() {
+    $("clock").textContent = clock(minutes);
+    $("dayBar").style.width = Math.min(100, 100 * minutes / 120) + "%";
+    $("jobn").textContent = done ? "All jobs done" : "Job " + (k + 1) + " of " + JOBS.length;
+  }
+  function buttons(box, list, onPick) {
+    $(box).innerHTML = "";
+    list.forEach((name) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = name;
+      b.addEventListener("click", () => { if (done) return; [...$(box).children].forEach((x) => x.classList.remove("on")); b.classList.add("on"); onPick(name); });
+      $(box).appendChild(b);
+    });
+  }
+  function show() {
+    app = null; ai = null;
+    $("card").innerHTML = '<div class="n">Job ' + (k + 1) + '</div><div class="t">' + JOBS[k][0] + "</div>";
+    buttons("apps", APPS, (n) => { app = n; });
+    buttons("ai", ["Yes, AI helps", "No, I do it myself"], (n) => { ai = n.startsWith("Yes"); });
+    hud(); say("Choose the app and decide about AI. Then press <b>Do the job</b>.");
+  }
+  function doJob() {
+    if (done) { say("The day is over. Press <b>Restart</b> to play again."); return; }
+    if (!app || ai === null) { say("Choose " + (!app ? "an app" : "Yes or No for the AI") + " first.", "bad"); return; }
+    const [job, right, aiOK, t, tAI, aiNote, personal] = JOBS[k];
+    let m = ai ? tAI : t, notes = [], good = true;
+    if (app !== right) { m += WRONG_APP; notes.push(app + " is not the right app (+" + WRONG_APP + " min); " + right + " is."); good = false; }
+    if (ai) {
+      notes.push(aiNote);
+      if (!aiOK) good = false;
+      if (personal) safety++;
+    } else if (aiOK) {
+      notes.push("An AI draft could save " + (t - tAI) + " min here.");
+    }
+    minutes += m;
+    log(clock(minutes) + " · " + job + " " + m + " min. " + notes.join(" "), good ? "good" : "bad");
+    if (k + 1 < JOBS.length) { k++; show(); say(notes.join(" ") || "Good choice.", good ? "good" : "bad"); }
+    else finish();
+  }
+  function finish() {
+    done = true; hud();
+    [...document.querySelectorAll(".apps button, .ai button")].forEach((b) => (b.disabled = true));
+    let stars = 0;
+    if (minutes <= 120) stars++;
+    if (minutes <= 85) stars++;
+    if (safety === 0) stars++;
+    $("stars").textContent = "★".repeat(stars) + "☆".repeat(3 - stars);
+    say("Mona finished at " + clock(minutes) + (minutes <= 120 ? ", before 11:00." : ", after 11:00.") +
+      (safety ? " But customer data went to an AI tool." : " No personal data went to an AI tool.") +
+      " Best day: 10:25 (right apps, AI only for e-mails, slides and the report).", stars === 3 ? "good" : "");
+  }
+  function start() {
+    k = 0; minutes = 0; safety = 0; done = false;
+    $("log").innerHTML = ""; $("stars").textContent = "☆☆☆"; show();
+  }
+  $("go").addEventListener("click", doJob);
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

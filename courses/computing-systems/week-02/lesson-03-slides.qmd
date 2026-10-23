@@ -1,7 +1,6 @@
 ---
 title: "Computer Components: CPU, Memory and Storage"
 subtitle: "Lecture 3"
-draft: true
 format: lesson-pptx
 ---
 
@@ -58,6 +57,7 @@ c) 3 GHz
 - The levels near the core are small and fast.
 - The levels far from the core are big, slow and cheap.
 - A read from the cache takes 1 ns; a read from RAM takes 100 ns.
+- **Do it:** In Data Trip, fetch one value from each level. Which level is the fastest?
 :::
 ::: {.column width="50%"}
 ![](images/memory-hierarchy.png)
@@ -72,12 +72,12 @@ c) 3 GHz
 
 A read from the cache takes 1 ns. A read from RAM takes 100 ns.
 
-a) The game reads 100 values: 90 from the cache and 10 from RAM. What is the total time?
+a) A read takes about 100 ns. Which level of the hierarchy is it?
 b) The player's position is read 50 times in one frame. Where does the core find it after the first read?
 c) Where is the best score kept when the phone is off?
 
 ::: {.answer}
-a) 90 + 1000 = 1090 ns
+a) RAM
 b) in the cache
 c) in storage
 :::

@@ -673,8 +673,8 @@ homework and its solution together.
   the page works every semester and after any delay. Exact dates go on the
   e-learning platform.
 - Submission: the university e-learning platform (syllabus). The page says how.
-- Release: keep `draft: true` until its second lecture is taught; then remove it.
-  Earlier homework stays online.
+- Release: homework is published together with its two lectures, when the
+  PR is merged (see "Release: no drafts"). Earlier homework stays online.
 - No answers on the page: no `.match` boxes, no "Check your answers".
 - **A web page that prints well.** Homework belongs to two lectures, not to
   one lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF" and
@@ -698,7 +698,8 @@ homework and its solution together.
 Assignment solutions and marking notes, exam questions, question banks, grades,
 student data, official internal university documents. Those live elsewhere,
 privately. Homework *tasks* are public (see "Homework").
-Lessons or homework not ready for students: `draft: true` (not published).
+Nothing unfinished goes to `main`: the PR review is the check (see "Release:
+no drafts").
 
 ## Way of working
 
@@ -708,7 +709,17 @@ Lessons or homework not ready for students: `draft: true` (not published).
   (the syllabus week that holds them), each with all 3 outputs, plus one
   homework per course. Start every session by reading that week in the
   Drive syllabus.
-- I review every lesson before release. Ask before big structural decisions.
+- I review every lesson in its PR before I merge it; merging is the release.
+  Ask before big structural decisions.
+
+### Release: no drafts
+
+New lectures, online activities and homework are written **without**
+`draft: true` and are published when I merge their PR. The course page then
+shows them at once (homework after its two lectures), so students can study
+ahead. Use `draft: true` only when I ask for it for one file; the templates
+do not add it. The draft mechanism still works (a draft lecture is faded,
+"Coming soon", and `--profile review` shows it).
 - After each week I write `courses/<slug>/retro/week-NN.md`. Turn general lessons
   learned into rules here; course-specific ones into the course `NOTES.md`.
 - Semesters: improve lessons in place, never copy a course. Tag each finished
@@ -735,10 +746,10 @@ Lessons or homework not ready for students: `draft: true` (not published).
 ## Build
 
 - Local: `quarto preview` (HTML) or `quarto render` (all outputs → `_site/`).
-- Review drafts before merging a PR: check out the PR branch, run
-  `quarto render --profile review` once (the preview alone does not build the
-  PDFs), then `quarto preview --profile review` (`_quarto-review.yml` shows
-  `draft: true` lessons).
+- Review a PR before merging it: check out the PR branch, run
+  `quarto render` once (the preview alone does not build the PDFs), then
+  `quarto preview`. Add `--profile review` to both only if a file has
+  `draft: true` (`_quarto-review.yml` shows drafts).
 - CI: `.github/workflows/publish.yml` renders on push to `main` and deploys to Pages.
 - Quarto version is pinned in the workflow; keep local Quarto the same.
 
@@ -820,3 +831,6 @@ Lessons or homework not ready for students: `draft: true` (not published).
   quarter AI). New page type: the online activity (rules above, "Blended
   courses"), which replaces the homework there. The teacher asked for as
   many simulators as possible, so a 60-min lesson may now have up to four.
+- 2026-10-23: no drafts. Lectures and homework are published when their PR is
+  merged; the PR review is the check before release. Homework no longer waits
+  until its second lecture is taught (rule "Release: no drafts").

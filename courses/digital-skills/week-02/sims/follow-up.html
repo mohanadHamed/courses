@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Follow-up Chat</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .goal { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 8px 12px; font-weight: 700; margin-bottom: 8px; }
+    .sim .checks { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .sim .checks span { border-radius: 8px; padding: 2px 10px; font-weight: 800; font-size: .85rem; background: #f1f3f5; color: #868e96; }
+    .sim .checks span.ok { background: #d3f9d8; color: #2b8a3e; }
+    .sim .chat { border: 1.5px solid #d9d4cf; border-radius: 14px; background: #fbfaf8; padding: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 360px; overflow: auto; }
+    .sim .msg { max-width: 88%; padding: 8px 12px; border-radius: 14px; line-height: 1.35; }
+    .sim .msg.you { align-self: flex-end; background: var(--sim-accent); color: #fff; border-bottom-right-radius: 4px; }
+    .sim .msg.ai { align-self: flex-start; background: #fff; border: 1.5px solid #e3dcd5; border-bottom-left-radius: 4px; }
+    .sim .msg.ai .who { display: block; font-size: .75rem; font-weight: 800; color: #0b7285; }
+    .sim .msg ul, .sim .msg ol { margin: 4px 0 0 18px; padding: 0; }
+    .sim .ups { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .sim .ups button { background: #fff; color: var(--sim-accent); border: 1.5px solid var(--sim-accent); box-shadow: none; font-weight: 700; font-size: .85rem; padding: 5px 10px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Follow-up Chat: make the answer better</h1>
+  <div class="goal">Your goal: <b>3 tips</b> to save money, <b>for university students</b>, as a <b>list</b>, each tip <b>short</b> (under 10 words), in <b>English</b>.</div>
+  <div class="checks" id="checks"></div>
+  <div class="chat" id="chat"></div>
+  <div class="ups" id="ups"></div>
+  <div class="controls"><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const TIPS = {
+    general: {
+      short: ["Make a budget for each month.", "Buy only what you need.", "Save a little money every week."],
+      long: ["Make a budget for each month: write down your income, then plan how much you can spend on food, transport and other things.",
+             "Buy only what you need: before you pay, ask yourself if you really need the item, or if you only want it now.",
+             "Save a little money every week, even a small amount, and keep it in a separate place so that you do not spend it."],
+      ar: ["ضع ميزانية لكل شهر.", "اشترِ ما تحتاجه فقط.", "ادّخر مبلغًا صغيرًا كل أسبوع."],
+    },
+    students: {
+      short: ["Cook at home, not at restaurants.", "Use your student discount.", "Buy used books, not new ones."],
+      long: ["Cook at home with friends instead of eating at restaurants: it costs much less, and it is often healthier.",
+             "Use your student discount: many shops, buses and apps give lower prices when you show your student card.",
+             "Buy used books from older students, or borrow them from the library, instead of buying new books every semester."],
+      ar: ["اطبخ في البيت بدل المطاعم.", "استخدم خصم الطلاب.", "اشترِ كتبًا مستعملة لا جديدة."],
+    },
+  };
+  // Each follow-up prompt changes one thing in the answer.
+  const UPS = [
+    ["Write it for university students.", { who: "students" }],
+    ["Make it a list of 3 tips.", { form: "list" }],
+    ["Make each tip short, under 10 words.", { len: "short" }],
+    ["Add more details.", { len: "long" }],
+    ["Translate it into Arabic.", { lang: "ar" }],
+    ["Write it in English again.", { lang: "en" }],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let st, count;
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function render() {
+    const set = TIPS[st.who];
+    const tips = st.lang === "ar" ? set.ar : set[st.len];
+    const dir = st.lang === "ar" ? ' dir="rtl" lang="ar"' : "";
+    if (st.form === "list") return "<ol" + dir + ">" + tips.map((t) => "<li>" + t + "</li>").join("") + "</ol>";
+    const intro = st.lang === "ar" ? "" : st.who === "students" ? "Students can save money in many ways. " : "There are many ways to save money. ";
+    return "<span" + dir + ">" + intro + tips.join(" ") + "</span>";
+  }
+  function goals() {
+    return [["3 tips", true], ["for students", st.who === "students"], ["a list", st.form === "list"],
+      ["short", st.len === "short"], ["English", st.lang === "en"]];
+  }
+  function drawChecks() {
+    $("checks").innerHTML = goals().map(([l, ok]) => '<span class="' + (ok ? "ok" : "") + '">' + (ok ? "✓ " : "○ ") + l + "</span>").join("");
+  }
+  function bubble(cls, html) {
+    const d = document.createElement("div"); d.className = "msg " + cls; d.innerHTML = html;
+    $("chat").appendChild(d); $("chat").scrollTop = $("chat").scrollHeight;
+  }
+  function ask(text, change) {
+    if (goals().every((g) => g[1])) { say("The goal is reached. Press <b>Restart</b> to try with fewer follow-ups."); return; }
+    count++;
+    bubble("you", text);
+    Object.assign(st, change);
+    bubble("ai", '<span class="who">AI assistant</span>' + render());
+    drawChecks();
+    const done = goals().every((g) => g[1]);
+    if (done) say("✓ Goal reached with " + count + " follow-up prompt" + (count > 1 ? "s" : "") + ". The best is 3: students, list, short.", "good");
+    else if (change.lang === "ar") say("Now it is in Arabic, but the goal asks for English.", "bad");
+    else if (change.len === "long") say("More details make it longer: the goal asks for short tips.", "bad");
+    else say("Better. What is still missing? Look at the grey goals.");
+  }
+  function start() {
+    st = { who: "general", form: "paragraph", len: "long", lang: "en" }; count = 0;
+    $("chat").innerHTML = "";
+    bubble("you", "Give me tips to save money.");
+    bubble("ai", '<span class="who">AI assistant</span>' + render());
+    drawChecks();
+    $("ups").innerHTML = "";
+    UPS.forEach(([t, change]) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = t;
+      b.addEventListener("click", () => ask(t, change));
+      $("ups").appendChild(b);
+    });
+    say("The first answer is long and general. Choose follow-up prompts to reach the goal.");
+  }
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

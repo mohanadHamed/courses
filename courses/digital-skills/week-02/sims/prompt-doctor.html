@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Prompt Doctor</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .score { margin-left: auto; color: var(--sim-accent); font-variant-numeric: tabular-nums; }
+    .sim .weak { border: 1.5px solid var(--sim-accent); background: var(--sim-accent); color: #fff; border-radius: 14px; border-bottom-right-radius: 4px; padding: 10px 12px; font-weight: 700; margin-left: 12%; }
+    .sim .step { font-weight: 800; margin: 10px 0 4px; }
+    .sim .opts { display: grid; gap: 6px; }
+    .sim .opts.row { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 520px) { .sim .opts.row { grid-template-columns: 1fr 1fr; } }
+    .sim .opts button { text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 700; }
+    .sim .opts.row button { text-align: center; }
+    .sim .opts button.good { background: #d3f9d8; border-color: #2b8a3e; }
+    .sim .opts button.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Prompt Doctor: what is missing?</h1>
+  <div class="hud"><span id="round"></span><span class="score" id="score">0 right</span></div>
+  <div class="weak" id="weak"></div>
+  <div class="step">1 · Which part is missing?</div>
+  <div class="opts row" id="parts"></div>
+  <div class="step" id="step2" hidden>2 · Which prompt is better?</div>
+  <div class="opts" id="fixes"></div>
+  <div class="controls"><button id="next" type="button" hidden>Next prompt ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const PARTS = ["Task", "Context", "Format", "Nothing"];
+  // [weak prompt, missing part, [better prompt, worse prompt] or null, why]
+  const ITEMS = [
+    ["Write an invitation for our class trip to Petra on 14 November at 8 a.m.", 2,
+     ["Write an invitation for our class trip to Petra on 14 November at 8 a.m. Write 3 friendly sentences for our class group chat.",
+      "Write an invitation for our class trip to Petra on 14 November at 8 a.m. Write it very, very well."],
+     "It has the task and the facts, but not how the answer must look: how long, and for whom."],
+    ["Shop sales: 3 500 JD in September, 4 200 JD in October. Use one short paragraph.", 0,
+     ["Write a short report for my manager about the change in sales. Shop sales: 3 500 JD in September, 4 200 JD in October. Use one short paragraph.",
+      "Shop sales: 3 500 JD in September, 4 200 JD in October. Use one short paragraph. Please!!!"],
+     "It has facts and a format, but it does not say what to do with them."],
+    ["Write a polite e-mail of 4 sentences.", 1,
+     ["Write a polite e-mail of 4 sentences to the library. Ask if I can keep the book “Easy Accounting” for one more week.",
+      "Write a polite e-mail of 4 sentences. My phone number is 0791234567."],
+     "The AI does not know who the e-mail is for or what it is about. A phone number is personal data and adds nothing."],
+    ["Sum up this text about healthy food in 3 bullet points for my classmates.", 3, null,
+     "Task (sum up), context (a text about healthy food, for classmates) and format (3 bullet points): this prompt is clear."],
+    ["Make 5 slides for my talk.", 1,
+     ["Make an outline of 5 slides for my 5-minute talk about saving water, for first-year students.",
+      "Make 5 slides for my talk. Make them nice."],
+     "The AI does not know the topic or the audience of the talk."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let order, k, score, stage, first;
+  const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function show() {
+    const [weak] = order[k];
+    $("round").textContent = "Prompt " + (k + 1) + " of " + order.length;
+    $("weak").textContent = weak;
+    stage = 1; first = true; $("step2").hidden = true; $("fixes").innerHTML = ""; $("next").hidden = true;
+    $("parts").innerHTML = "";
+    PARTS.forEach((p, i) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = p;
+      b.addEventListener("click", () => part(i, b)); $("parts").appendChild(b);
+    });
+    say("A clear prompt has a task, a context and a format. Which one is missing here?");
+  }
+  function part(i, b) {
+    if (stage !== 1) return;
+    const [, missing, fixes, why] = order[k];
+    if (i !== missing) { b.classList.add("bad"); first = false; say("Look again: the prompt has that part.", "bad"); return; }
+    b.classList.add("good");
+    if (!fixes) { done(why); return; }
+    stage = 2; $("step2").hidden = false; say(why, "good");
+    shuffle(fixes.map((f, j) => [f, j === 0])).forEach(([f, good]) => {
+      const fb = document.createElement("button"); fb.type = "button"; fb.textContent = f;
+      fb.addEventListener("click", () => {
+        if (stage !== 2) return;
+        if (!good) { fb.classList.add("bad"); first = false; say("This one does not add the missing part.", "bad"); return; }
+        fb.classList.add("good"); done("✓ This prompt adds the missing " + PARTS[missing].toLowerCase() + ".");
+      });
+      $("fixes").appendChild(fb);
+    });
+  }
+  function done(t) {
+    stage = 3; if (first) score++;
+    $("score").textContent = score + " right";
+    if (k + 1 < order.length) { $("next").hidden = false; say(t, "good"); }
+    else say(t + " Done: " + score + " of " + order.length + " without a mistake.", "good");
+  }
+  function start() { order = shuffle(ITEMS); k = 0; score = 0; $("score").textContent = "0 right"; show(); }
+  $("next").addEventListener("click", () => { if (k + 1 < order.length) { k++; show(); } });
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

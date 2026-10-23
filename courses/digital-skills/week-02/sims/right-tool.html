@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Right Tool</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .score { margin-left: auto; color: var(--sim-accent); font-variant-numeric: tabular-nums; }
+    .sim .job { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 10px 12px; font-weight: 800; margin-bottom: 10px; min-height: 2.6em; }
+    .sim .tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    @media (max-width: 520px) { .sim .tools { grid-template-columns: 1fr; } }
+    .sim .tool { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; background: #fff; color: inherit; border: 1.5px solid #eee3d9; box-shadow: none; border-radius: 14px; }
+    .sim .tool svg { width: 64px; height: 44px; }
+    .sim .tool b { font-size: .95rem; }
+    .sim .tool small { font-weight: 600; color: var(--sim-muted); font-size: .8rem; }
+    .sim .tool.good { background: #d3f9d8; border-color: #2b8a3e; }
+    .sim .tool.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Right Tool: AI, search or spreadsheet?</h1>
+  <div class="hud"><span id="round"></span><span class="score" id="score">0 on the first try</span></div>
+  <div class="job" id="job"></div>
+  <div class="tools" id="tools"></div>
+  <div class="controls"><button id="next" type="button" hidden>Next job ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const TOOLS = [
+    ["AI assistant", "drafts, summaries, ideas",
+     '<rect x="2" y="4" width="40" height="14" rx="6" fill="#e3fafc" stroke="#0b7285"/><rect x="20" y="22" width="42" height="18" rx="6" fill="#0b7285"/>'],
+    ["Search engine", "real, current facts from the source",
+     '<circle cx="26" cy="20" r="13" fill="none" stroke="#1c7ed6" stroke-width="4"/><line x1="36" y1="30" x2="50" y2="42" stroke="#1c7ed6" stroke-width="5" stroke-linecap="round"/>'],
+    ["Spreadsheet", "exact sums and averages",
+     '<rect x="6" y="4" width="52" height="36" fill="#fff" stroke="#2b8a3e" stroke-width="2"/><line x1="6" y1="16" x2="58" y2="16" stroke="#b2dcbc"/><line x1="6" y1="28" x2="58" y2="28" stroke="#b2dcbc"/><line x1="24" y1="4" x2="24" y2="40" stroke="#b2dcbc"/><line x1="41" y1="4" x2="41" y2="40" stroke="#b2dcbc"/>'],
+  ];
+  // [job, right tool, why]
+  const JOBS = [
+    ["Find the opening hours of the university library this week.", 1, "Current facts come from the real source: the university website."],
+    ["Add up 40 prices exactly.", 2, "A spreadsheet adds exactly. AI can make mistakes in sums."],
+    ["Write a first draft of a thank-you message to a customer.", 0, "A first draft is a good job for AI. You read and change it."],
+    ["Find today's price of the dollar in Jordanian dinars.", 1, "Today's price changes every day. AI may know only old prices."],
+    ["Give 5 ideas for a class trip.", 0, "Ideas are a good job for AI. You choose the best ones."],
+    ["Find the average of 30 test marks.", 2, "A spreadsheet calculates the average exactly (AVERAGE)."],
+    ["Sum up a 3-page article in 5 lines.", 0, "A summary is a good job for AI. Read the article, too."],
+    ["Find the last day to apply for a scholarship.", 1, "Dates and rules come from the official website. AI may invent them."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let order, k, first, score, done;
+  const shuffle = (a) => a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function show() {
+    $("round").textContent = "Job " + (k + 1) + " of " + order.length;
+    $("job").textContent = order[k][0];
+    first = true; done = false; $("next").hidden = true; say("Which tool is best for this job?");
+    $("tools").innerHTML = "";
+    TOOLS.forEach(([name, use, svg], i) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "tool";
+      b.innerHTML = '<svg viewBox="0 0 64 44" aria-hidden="true">' + svg + "</svg><b>" + name + "</b><small>" + use + "</small>";
+      b.addEventListener("click", () => pick(i, b));
+      $("tools").appendChild(b);
+    });
+  }
+  function pick(i, b) {
+    if (done) { say("Press <b>Next job</b>."); return; }
+    const [, right, why] = order[k];
+    if (i !== right) { b.classList.add("bad"); first = false; say("Not the best tool here. Try again.", "bad"); return; }
+    b.classList.add("good"); done = true;
+    if (first) score++;
+    $("score").textContent = score + " on the first try";
+    if (k + 1 < order.length) { $("next").hidden = false; say("✓ " + why, "good"); }
+    else say("✓ " + why + " Done: " + score + " of " + order.length + " on the first try.", "good");
+  }
+  function start() { order = shuffle(JOBS); k = 0; score = 0; $("score").textContent = "0 on the first try"; show(); }
+  $("next").addEventListener("click", () => { if (k + 1 < order.length) { k++; show(); } });
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

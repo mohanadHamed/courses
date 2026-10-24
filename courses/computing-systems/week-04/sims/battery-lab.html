@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Battery Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .opts { display: grid; grid-template-columns: 120px 1fr; gap: 8px 10px; align-items: center; }
+    .sim .opts b { font-size: 0.95rem; }
+    .sim .group { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sim .group button { padding: 6px 14px; }
+    .sim .bar { display: flex; height: 30px; border-radius: 8px; overflow: hidden; margin-top: 14px; background: #e9ecef; font-size: 0.78rem; font-weight: 800; color: #fff; }
+    .sim .bar span { display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden; }
+    .sim .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .sim .card { border: 1px solid #e9ecef; border-radius: 10px; padding: 6px 10px; }
+    .sim .card small { display: block; color: var(--sim-muted); font-weight: 700; font-size: 0.78rem; }
+    .sim .card b { font-size: 1.1rem; font-variant-numeric: tabular-nums; color: var(--sim-accent); }
+    .sim .card.hot b { color: #c92a2a; }
+    .sim .note { color: var(--sim-muted); font-size: 0.82rem; margin-top: 8px; }
+    @media (max-width: 480px) { .sim .opts { grid-template-columns: 1fr; } .sim .cards { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Battery Lab</h1>
+  <p class="hint">Choose the settings of a mobile game. The bar shows the current that the phone draws (in mA). The play time is about the battery capacity ÷ the current.</p>
+  <div class="opts" id="opts"></div>
+  <div class="bar" id="bar"></div>
+  <div class="cards">
+    <div class="card"><small>current</small><b id="cur">1000 mA</b></div>
+    <div class="card"><small id="capl">play time (5000 mAh)</small><b id="time">5 h</b></div>
+    <div class="card" id="heatc"><small>after 20 minutes</small><b id="heat">warm, 60 fps</b></div>
+  </div>
+  <p id="msg" class="message"></p>
+  <p class="note">A made-up model with round numbers, for the lesson. Real phones differ, but the effects go the same way.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const OPTIONS = [
+    ["fps", "Frame rate", [["30", 30], ["60", 60], ["120", 120]], 60],
+    ["bright", "Brightness", [["low", 0], ["high", 1]], 1],
+    ["gfx", "Graphics", [["low", 0], ["high", 1]], 0],
+    ["gps", "GPS", [["off", 0], ["on", 1]], 0],
+    ["cap", "Battery", [["4000 mAh", 4000], ["5000 mAh", 5000]], 5000],
+  ];
+  const $ = (id) => document.getElementById(id);
+  const st = {};
+  OPTIONS.forEach(([k, label, vals, def]) => {
+    st[k] = def;
+    const l = document.createElement("b"); l.textContent = label; $("opts").appendChild(l);
+    const g = document.createElement("div"); g.className = "group";
+    vals.forEach(([t, v]) => {
+      const b = document.createElement("button"); b.type = "button"; b.dataset.k = k; b.dataset.v = v; b.textContent = t;
+      b.addEventListener("click", () => { st[k] = v; update(); }); g.appendChild(b);
+    });
+    $("opts").appendChild(g);
+  });
+  function update() {
+    document.querySelectorAll(".group button").forEach((b) => b.classList.toggle("ghost", Number(b.dataset.v) !== st[b.dataset.k]));
+    const screen = st.bright ? 400 : 200;
+    const soc = { 30: 300, 60: 500, 120: 800 }[st.fps] + (st.gfx ? 200 : 0);
+    const gps = st.gps ? 150 : 0, other = 100, total = screen + soc + gps + other;
+    const parts = [["screen", screen, "#f08c00"], ["SoC (CPU + GPU)", soc, "#A86700"], ["GPS", gps, "#0b7285"], ["other", other, "#868e96"]];
+    $("bar").innerHTML = parts.filter((p) => p[1]).map(([n, v, c]) => `<span style="width:${v / 18}%;background:${c}" title="${n} ${v} mA">${v < 200 ? v : n + " " + v}</span>`).join("");
+    $("cur").textContent = total + " mA";
+    $("capl").textContent = `play time (${st.cap} mAh)`;
+    const h = st.cap / total;
+    $("time").textContent = (Math.round(h * 10) / 10) + " h";
+    let heat, hot = false;
+    if (soc >= 1000) { heat = `hot after 10 min: ${Math.round(st.fps * 0.75)} fps`; hot = true; }
+    else if (soc >= 700) { heat = `hot after 20 min: ${Math.round(st.fps * 0.75)} fps`; hot = true; }
+    else heat = `${soc >= 500 ? "warm" : "cool"}, steady ${st.fps} fps`;
+    $("heat").textContent = heat; $("heatc").classList.toggle("hot", hot);
+    $("msg").textContent = `${st.cap} mAh ÷ ${total} mA ≈ ${Math.round(h * 10) / 10} hours.` +
+      (hot ? " The SoC works so hard that it gets hot: thermal throttling slows it down, and the frame rate drops." : " The SoC stays cool enough to keep its frame rate.");
+    $("msg").className = "message " + (hot ? "" : "good");
+  }
+  update();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: List and Table Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim h2 { font-size: 1rem; margin: 12px 0 6px; }
+    .sim .lists { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .sim .box { background: #fff; border: 1px solid #ced4da; border-radius: 6px; padding: 10px 12px; font-family: Calibri, Carlito, Arial, sans-serif; }
+    .sim .box b { color: var(--sim-accent); }
+    .sim .box ul, .sim .box ol { margin: 6px 0; padding-left: 22px; }
+    .sim .box .plain { margin: 6px 0; }
+    .sim .box .btns { display: flex; gap: 6px; margin-top: 6px; }
+    .sim .box .btns button { padding: 5px 10px; font-size: 0.85rem; }
+    .sim .grid { display: inline-grid; grid-template-columns: repeat(6, 24px); gap: 3px; touch-action: none; }
+    .sim .grid span { width: 24px; height: 20px; border: 1px solid #ced4da; border-radius: 3px; background: #fff; cursor: pointer; }
+    .sim .grid span.on { background: #ffc078; border-color: var(--sim-accent); }
+    .sim .data { font-size: 0.85rem; color: #495057; margin-left: 12px; }
+    .sim .tblwrap { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
+    .sim table { border-collapse: collapse; margin-top: 8px; font-family: Calibri, Carlito, Arial, sans-serif; }
+    .sim td { border: 1px solid #dee2e6; padding: 4px 10px; min-width: 40px; height: 22px; }
+    .sim tr.head td { background: var(--sim-accent); color: #fff; font-weight: 800; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; font-weight: 700; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 520px) { .sim .lists { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>List and Table Lab</h1>
+  <p class="hint">Part 1: give each list <b>bullets</b> (no order) or <b>numbering</b> (steps in order). Part 2: insert a table with the right number of rows and columns for the bus plan, then switch on the <b>header row</b>.</p>
+  <h2>Part 1 · Home › Paragraph › Bullets or Numbering</h2>
+  <div class="lists" id="lists"></div>
+  <h2>Part 2 · Insert › Table</h2>
+  <div class="tblwrap">
+    <div><div class="grid" id="grid" aria-label="Choose the size of the table"></div><div class="row" id="size">Tap a box: 0 × 0</div></div>
+    <div class="data"><b>The bus plan:</b><br>Time – Activity<br>9:00 – The bus leaves the office<br>10:00 – Breakfast in the park<br>13:00 – Lunch<br>16:00 – The bus comes back</div>
+  </div>
+  <div id="table"></div>
+  <div class="row"><label><input type="checkbox" id="header"> Table Design › Header Row</label></div>
+  <p id="msg" class="message">Start with Part 1: tap Bullets or Numbering under each list.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const LISTS = [
+    { t: "How to print a file", items: ["Open the file.", "Press Ctrl + P.", "Choose the printer.", "Click Print."], right: "num", why: "These are steps: the order matters." },
+    { t: "What to bring on the trip", items: ["water", "a hat", "a pen and paper"], right: "bul", why: "These are things in no special order." },
+  ];
+  const DATA = [["Time", "Activity"], ["9:00", "The bus leaves the office"], ["10:00", "Breakfast in the park"], ["13:00", "Lunch"], ["16:00", "The bus comes back"]];
+  const $ = (id) => document.getElementById(id);
+  const kind = [null, null]; let rows = 0, cols = 0;
+  const say = (t, c = "") => { $("msg").textContent = t; $("msg").className = "message " + c; };
+
+  function lists() {
+    $("lists").innerHTML = "";
+    LISTS.forEach((l, i) => {
+      const box = document.createElement("div"); box.className = "box";
+      const body = kind[i] === "num" ? `<ol>${l.items.map((x) => `<li>${x}</li>`).join("")}</ol>` : kind[i] === "bul" ? `<ul>${l.items.map((x) => `<li>${x}</li>`).join("")}</ul>` : l.items.map((x) => `<div class="plain">${x}</div>`).join("");
+      box.innerHTML = `<b>${l.t}</b>${body}<div class="btns"><button type="button" class="${kind[i] === "bul" ? "" : "ghost"}" data-l="${i}" data-k="bul">• Bullets</button><button type="button" class="${kind[i] === "num" ? "" : "ghost"}" data-l="${i}" data-k="num">1. Numbering</button></div>`;
+      $("lists").appendChild(box);
+    });
+    document.querySelectorAll("#lists button").forEach((b) => b.addEventListener("click", () => {
+      const i = Number(b.dataset.l), k = b.dataset.k; kind[i] = k; lists();
+      const l = LISTS[i];
+      if (k === l.right) say(`✓ ${l.why}` + (kind.every((x, j) => x === LISTS[j].right) ? " Part 1 is done. Now Part 2." : ""), "good");
+      else say(`✗ Look again: ${l.right === "num" ? "these are steps in an order" : "these things have no order"}.`, "bad");
+    }));
+  }
+  function grid() {
+    $("grid").innerHTML = "";
+    for (let r = 1; r <= 8; r++) for (let c = 1; c <= 6; c++) {
+      const s = document.createElement("span"); s.dataset.r = r; s.dataset.c = c; s.className = r <= rows && c <= cols ? "on" : "";
+      s.addEventListener("click", () => pick(r, c)); $("grid").appendChild(s);
+    }
+    $("size").textContent = rows ? `Table: ${rows} rows × ${cols} columns` : "Tap a box: 0 × 0";
+  }
+  function pick(r, c) {
+    rows = r; cols = c; grid(); table();
+    if (r === 5 && c === 2) say("✓ 5 rows × 2 columns: one row for the names of the columns and one for each time. Now switch on the header row.", "good");
+    else if (c !== 2) say(`✗ ${c} columns. The plan has two kinds of information: the time and the activity. So 2 columns.`, "bad");
+    else say(`✗ ${r} rows. Count: one row for "Time – Activity" and four times. So 5 rows.`, "bad");
+  }
+  function table() {
+    if (!rows) { $("table").innerHTML = ""; return; }
+    let h = "<table>";
+    for (let r = 0; r < rows; r++) {
+      h += `<tr class="${r === 0 && $("header").checked ? "head" : ""}">`;
+      for (let c = 0; c < cols; c++) h += `<td>${DATA[r] && DATA[r][c] !== undefined ? DATA[r][c] : ""}</td>`;
+      h += "</tr>";
+    }
+    $("table").innerHTML = h + "</table>";
+  }
+  $("header").addEventListener("change", () => {
+    table();
+    if (!rows) { say("Insert the table first.", "bad"); return; }
+    if ($("header").checked) say(rows === 5 && cols === 2 && kind.every((x, j) => x === LISTS[j].right) ? "🎉 All done: the right lists, the right table and a header row that names the columns." : "The first row now looks different: it names the columns.", "good");
+  });
+  lists(); grid();
+})();
+</script>
+</body>
+</html>

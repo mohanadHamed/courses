@@ -1,0 +1,309 @@
+---
+title: "Applied Trigonometry: Angles, Rotation and Oscillating Motion"
+description: "The angle to a target with atan2, turning the short way, moving in a circle, bobbing up and down with sine, and a searchlight that sweeps."
+lesson: 8
+ilos: [A2, B1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary atan2 angle tangent unit-circle angular-speed oscillation amplitude period sine cosine radian >}}
+
+## 8.1 Which angle is the target at?
+
+- A turret at (0, 0) must face a drone at d = (4, 4). Which angle?
+- tan θ = d~y~ ÷ d~x~ = 1, so 45°. But (−4, −4) also gives 1: the
+  division loses the signs.
+- **atan2(y, x)** uses the signs of both parts. It gives the angle from
+  −180° to 180°, right in every quadrant.
+- (4, 4): 45°. (−4, 4): 135°. (−4, −4): −135°. (0, −3): −90°.
+  (3, 5.2): tan ≈ 1.73, so 60°.
+- In Unity: `Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg` (y first).
+
+![Same slope, different angle.](images/atan2.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+The order is (y, x). With (x, y), a drone at (4, 0) comes out at 90°
+instead of 0°.
+:::
+
+{{< sim file="sims/turn-lab.html" poster="sims/turn-lab.png" title="Turn Lab: the angle to a target and the short turn" height="760" >}}
+
+::: {.callout-note title="Do it · Angles in Turn Lab"}
+In **Turn Lab**, tap the targets (5, 0), (0, 4), (−3, 3) and (−3, −3).
+Write the vector d and the angle from atan2 each time. Which quadrant is
+each target in?
+:::
+
+::: {.callout-tip title="Try it 1 · The angle to a target"}
+The turret is at (0, 0). Choose the right answer.
+
+::: {.match extra="−45°|0°"}
+A drone at (5, 5). Its angle?
+:   45°
+
+A drone at (−4, 4). Its angle?
+:   135°
+
+A drone at (−4, −4). Its angle?
+:   −135°
+
+A drone at (0, −3). Its angle?
+:   −90°
+
+Why is tan alone not enough?
+:   it loses the signs of x and y
+:::
+:::
+
+## 8.2 Turning the short way
+
+- Facing 350°, target 10°: 10° − 350° = −340°, almost a full turn. The
+  short way is **+20°**.
+- Step 1: difference = target − facing.
+- Step 2: more than 180° → subtract 360°; less than −180° → add 360°.
+- \+ means turn left (anticlockwise); − means turn right (clockwise).
+- Time = size of the turn ÷ turning speed. At 90° per second: 90° takes
+  1 s, 135° takes 1.5 s.
+- In Unity: `Mathf.DeltaAngle(350, 10)` gives 20.
+
+![Turn the short way.](images/shortest-turn.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Without step 2, an enemy spins almost a full circle for a target just behind
+its shoulder.
+:::
+
+::: {.callout-note title="Do it · The short turn in Turn Lab"}
+In **Turn Lab**, choose **Facing 350°**, tap (6, 1) and press **Turn**. Then
+choose **Facing 170°** and tap (−6, −1). Write each short turn (left or
+right, how many degrees) and its time.
+:::
+
+::: {.callout-tip title="Try it 2 · Short turns"}
+The turret turns at 90° per second. Choose the right answer.
+
+::: {.match extra="−340°|3 s"}
+Facing 30°, target 120°. The short turn?
+:   +90° (left)
+
+Facing 350°, target 10°. The short turn?
+:   +20° (left)
+
+Facing 10°, target 340°. The short turn?
+:   −30° (right)
+
+Facing 170°, target −170°. The short turn?
+:   +20° (left)
+
+Facing 0°, target −135°. How long does the turn take?
+:   1.5 s
+:::
+:::
+
+## 8.3 Moving in a circle
+
+- An orb circles a hero; a moon circles a planet.
+- Position: **P(t) = C + r (cos θ, sin θ)**, with the centre C and the
+  radius r.
+- The angle grows at the **angular speed** ω: θ = ω × t.
+- **Period**: one full turn takes T = 360° ÷ ω.
+- C = (5, 5), r = 2, 90° per second: t = 0 (7, 5); 1 s (5, 7); 2 s (3, 5);
+  3 s (5, 3); period 4 s.
+- Moon: centre (0, 0), r = 4, 30° per second: after 1 s at (3.5, 2);
+  period 12 s.
+
+![The orb circles C = (5, 5).](images/orbit.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Multiply (cos θ, sin θ) by the radius, then add the centre.
+:::
+
+{{< sim file="sims/wave-lab.html" poster="sims/wave-lab.png" title="Wave Lab: circle, bob and sweep" height="760" >}}
+
+::: {.callout-note title="Do it · An orbit in Wave Lab"}
+In **Wave Lab**, choose **Orbit**, the amplitude 2 (the radius) and the
+period 4 s. Step to 0, 1, 2 and 3 s and write the positions. Then set the
+period to 8 s: what is the angular speed?
+:::
+
+::: {.callout-tip title="Try it 3 · Orbits"}
+Choose the right answer.
+
+::: {.match extra="(7, 5)|(5, 5)"}
+C = (5, 5), r = 2, 90° per second. Where is the orb at 1 s?
+:   (5, 7)
+
+The same orb at 2 s?
+:   (3, 5)
+
+An orb turns at 90° per second. Its period?
+:   4 s
+
+A moon turns at 30° per second. Its period?
+:   12 s
+
+Centre (0, 0), r = 4, angle 90°. The position?
+:   (0, 4)
+:::
+:::
+
+## 8.4 Bobbing up and down: oscillating motion
+
+- A coin bobs; a lift goes up and down. This is an **oscillation**: back
+  and forth around a middle, again and again.
+- **y(t) = c + A sin(360° × t ÷ T)**: middle c, **amplitude** A,
+  **period** T.
+- At a quarter of T: the top, c + A. At three quarters: the bottom,
+  c − A. At 0, half and full T: the middle.
+- Lift y = 2 + 3 sin(360° × t ÷ 4): 0 s → 2; 1 s → **5**; 2 s → 2;
+  3 s → **−1**.
+- Coin: middle 2, A = 0.5, T = 2 s: 0.5 s → 2.5; 1.5 s → 1.5.
+
+![The lift: middle 2, amplitude 3, period 4 s.](images/sine-wave.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+The amplitude is half of the whole movement: with A = 3, the lift moves
+6 units from bottom to top.
+:::
+
+::: {.callout-note title="Do it · The lift in Wave Lab"}
+In **Wave Lab**, choose **Bob**, the amplitude 3 and the period 4 s. Step to
+0, 1, 2, 3 and 4 s and write the heights. Then set the period to 8 s: when
+is the lift at the top?
+:::
+
+::: {.callout-tip title="Try it 4 · Bobbing"}
+y = 2 + 3 sin(360° × t ÷ 4). Choose the right answer. You can use an answer
+more than once.
+
+::: {.match extra="3|8 s"}
+The height at 1 s.
+:   5
+
+The height at 3 s.
+:   −1
+
+The height at 2 s.
+:   2
+
+The period.
+:   4 s
+
+How many units does the lift move from bottom to top?
+:   6
+:::
+:::
+
+## 8.5 Sweeping back and forth: an angle that oscillates
+
+- A searchlight sweeps a yard. Now the **angle** oscillates:
+  angle(t) = 45° × sin(360° × t ÷ 4).
+- The beam points along (cos angle, sin angle), as in lecture 7.
+- 0 s: 0°, beam (1, 0). 1 s: 45°, beam (0.71, 0.71). 3 s: −45°, beam
+  (0.71, −0.71).
+- It covers 90° in all: the amplitude 45° to each side.
+- A rocking boat: tilt = 10° × sin(360° × t ÷ 4); largest tilt 10° at 1 s.
+
+![A searchlight sweeps from −45° to 45°.](images/searchlight.png){width=88%}
+
+::: {.callout-warning title="Watch out!"}
+Here the angle swings, not the position. Turn the angle into the direction
+(cos, sin).
+:::
+
+::: {.callout-note title="Do it · Sweep in Wave Lab"}
+In **Wave Lab**, choose **Sweep**, the amplitude 45° and the period 4 s. Step
+to 0, 1, 2 and 3 s and write the angle and the beam direction. A player
+sneaks across the yard at −45° from the tower: when is the beam farthest
+away?
+:::
+
+::: {.callout-tip title="Try it 5 · The searchlight"}
+angle = 45° × sin(360° × t ÷ 4). Choose the right answer.
+
+::: {.match extra="(1, 0) at 1 s|180°"}
+The angle at 1 s.
+:   45°
+
+The angle at 3 s.
+:   −45°
+
+The beam direction at 1 s.
+:   (0.71, 0.71)
+
+How many degrees does the light cover in all?
+:   90°
+
+The angle at 2 s.
+:   0°
+:::
+:::
+
+## Game challenge: Sky Lift {.challenge}
+
+Work alone. Use every section of today.
+
+**Sky Lift** is a platform game. A hero waits on a cliff at the height 5.
+Beside it, a lift floats up and down: y = 2 + 3 sin(360° × t ÷ 4), with the
+middle 2, the amplitude 3 and the period 4 s. The clock starts with the lift
+at the middle, going up. A second ledge is lower, at the height −1. The hero
+can step on only when the lift is level with a ledge.
+
+{{< sim file="sims/sky-lift.html" poster="sims/sky-lift.png" title="Sky Lift: when is the lift level with the ledge?" kind="game" height="760" >}}
+
+::: {.callout-tip title="Try it 6 · The lift"}
+Sky Lift: y = 2 + 3 sin(360° × t ÷ 4). Cliff at 5, low ledge at −1.
+Choose the right answer.
+
+::: {.match extra="2 s|0 s"}
+When is the lift level with the cliff for the first time?
+:   1 s
+
+When is the lift level with the low ledge for the first time?
+:   3 s
+
+Where is the lift at 2 s?
+:   at the middle, 2
+
+The highest point of the lift.
+:   5
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · A second lift (harder)"}
+Sky Lift. Lift 1: y = 2 + 3 sin(360° × t ÷ 4), cliff at 5. Lift 2 is a
+cabin on a wheel: centre (0, 3), radius 2, 90° per second, starting at 0°
+(right). Choose the right answer.
+
+::: {.match extra="3 s|(2, 3)"}
+After the first time at 1 s, when is lift 1 at the cliff again?
+:   5 s
+
+When is the wheel cabin at the top, (0, 5)?
+:   1 s
+
+Where is the wheel cabin at 2 s?
+:   (−2, 3)
+
+The period of the wheel.
+:   4 s
+
+A new lift has the period 8 s. When is it at the top for the first time?
+:   2 s
+:::
+:::
+
+## Summary {.summary}
+
+- atan2(y, x) gives the angle to a target in every quadrant.
+- Turn the short way: target − facing, then bring it into −180° to 180°.
+- Circle: P = C + r (cos θ, sin θ), with θ = ω t; the period is 360° ÷ ω.
+- Bobbing: y = c + A sin(360° × t ÷ T); top at T ÷ 4, bottom at 3T ÷ 4.
+- A sweeping light: the angle oscillates, and the beam is (cos, sin) of it.

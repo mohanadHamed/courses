@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Dialogue Doctor</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .sit { background: #f8f0fc; border: 1.5px solid var(--sim-accent); border-radius: 10px; padding: 8px 12px; font-weight: 800; }
+    .sim .opt { display: block; width: 100%; text-align: left; margin-top: 8px; background: #fff; color: #2a211c; border: 1.5px solid #dee2e6; box-shadow: none; font-weight: 700; border-radius: 12px; padding: 10px 12px; }
+    .sim .opt.good { border: 2.5px solid #2b8a3e; background: #ebfbee; } .sim .opt.bad { border: 2.5px solid #c92a2a; background: #fff5f5; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; font-weight: 800; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Dialogue Doctor</h1>
+  <p class="hint">Each pair shows two lines for the same moment of <i>Rooftop Rescue</i>. Tap the line that works better in the game. Then read why.</p>
+  <div class="row"><span id="lvl">Pair 1 of 6</span><span id="stars" style="margin-left:auto">★ 0</span></div>
+  <div class="sit" id="sit"></div>
+  <div id="opts"></div>
+  <p id="msg" class="message"></p>
+  <div class="row"><button id="next" type="button" hidden>Next pair ▶</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const PAIRS = [
+    ["Nour sees that the water is rising.", "\"Oh no, the water is rising, and this makes me feel very worried.\"", "\"It's still rising. Row!\"", 1, "Short, and it pushes the action. The worry shows in what Nour does."],
+    ["Salma tells Nour about the old boat.", "\"As you know, Nour, your grandfather built this boat.\"", "\"Your grandfather built this boat. He would be proud of you.\"", 1, "No \"as you know\": nobody tells another person what both already know."],
+    ["A bark that plays every time a car floats into view.", "\"Watch out, there is an obstacle in front of the boat that you should avoid.\"", "\"Car ahead!\"", 1, "A bark repeats many times in play: it must be short and clear."],
+    ["Salma is afraid, but she is proud.", "\"I'm scared.\"", "\"I'm fine. Just… hold my hand.\"", 1, "Subtext: she says she is fine, but the hand shows her fear."],
+    ["Captain Tarek speaks on the rescue radio.", "\"Hey, um, where are you guys right now?\"", "\"Boat three, report your position. Over.\"", 1, "Tarek's voice is formal, with numbers and \"Over\": he must sound different from Nour."],
+    ["The player must learn the next goal.", "\"Go to the hill. The bridge is gone, so take Market Street.\"", "\"Well, there are many ways, and some are better than others.\"", 0, "Game dialogue must give the player the goal: where to go, and why."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, stars = 0, tries = 0, done = false;
+  function show() {
+    if (i >= PAIRS.length) {
+      $("lvl").textContent = "All pairs done"; $("sit").textContent = "Good dialogue in a game is short, shows feelings, gives each character a voice and tells the player the goal.";
+      $("opts").innerHTML = ""; $("msg").textContent = `🎉 ★ ${stars} of ${PAIRS.length * 2}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; return;
+    }
+    const [sit, a, b] = PAIRS[i]; tries = 0; done = false;
+    $("lvl").textContent = `Pair ${i + 1} of ${PAIRS.length}`; $("sit").textContent = sit;
+    $("opts").innerHTML = "";
+    [a, b].forEach((t, k) => {
+      const o = document.createElement("button"); o.type = "button"; o.className = "opt"; o.dataset.k = k; o.textContent = (k ? "B  " : "A  ") + t;
+      o.addEventListener("click", () => pick(k, o)); $("opts").appendChild(o);
+    });
+    $("msg").textContent = ""; $("next").hidden = true;
+  }
+  function pick(k, o) {
+    if (done) { $("msg").textContent = "Press Next pair."; return; }
+    tries++;
+    const right = PAIRS[i][3];
+    if (k === right) {
+      done = true; o.classList.add("good"); const got = tries === 1 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+      $("msg").textContent = `✓ ${k ? "B" : "A"}. ${PAIRS[i][4]}`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = i < PAIRS.length - 1 ? "Next pair ▶" : "Finish ▶";
+    } else {
+      o.classList.add("bad"); $("msg").textContent = "✗ Read both lines aloud. Which one is shorter, shows more, or helps the player? Try again."; $("msg").className = "message bad";
+    }
+  }
+  $("next").addEventListener("click", () => { if (i >= PAIRS.length) { i = 0; stars = 0; $("stars").textContent = "★ 0"; } else i++; show(); });
+  show();
+})();
+</script>
+</body>
+</html>

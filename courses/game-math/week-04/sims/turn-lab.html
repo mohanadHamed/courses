@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Turn Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .sim .card { border: 1px solid #e9ecef; border-radius: 10px; padding: 6px 10px; }
+    .sim .card small { display: block; color: var(--sim-muted); font-weight: 700; font-size: 0.78rem; }
+    .sim .card b { font-size: 1.1rem; font-variant-numeric: tabular-nums; color: var(--sim-accent); }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; margin-top: 10px; font-weight: 700; }
+    .sim .row button { padding: 6px 10px; }
+    @media (max-width: 480px) { .sim .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Turn Lab</h1>
+  <p class="hint">Tap the field to put the target on a grid point. The turret finds the angle of the target with atan2(y, x), then turns the short way at 90° per second.</p>
+  <canvas id="c" aria-label="A grid with a turret in the middle; tap to place the target"></canvas>
+  <div class="cards">
+    <div class="card"><small>target d</small><b id="d">(−4, 4)</b></div>
+    <div class="card"><small>atan2(y, x)</small><b id="ang">135°</b></div>
+    <div class="card"><small>short turn</small><b id="turn">+45° (left)</b></div>
+    <div class="card"><small>time at 90°/s</small><b id="time">0.5 s</b></div>
+  </div>
+  <div class="row">Facing: <span id="faces"></span></div>
+  <div class="row"><button id="go" type="button">Turn ▶</button></div>
+  <p id="msg" class="message">Facing 90°. The target is at 135°: turn 45° to the left.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const N = 6, SPEED = 90;   // grid from −6 to 6; degrees per second
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const num = (v) => (v < 0 ? "−" : "") + Math.abs(v);
+  const deg = (v) => { const r = Math.round(v); return (r < 0 ? "−" : "") + Math.abs(r) + "°"; };
+  let W = 0, H = 0, u = 20, facing = 90, target = [-4, 4], anim = null;
+
+  const angleOf = () => Math.atan2(target[1], target[0]) * 180 / Math.PI;
+  const wrap = (a) => { a = ((a % 360) + 360) % 360; return a; };
+  const delta = () => { let d = angleOf() - facing; while (d > 180) d -= 360; while (d <= -180) d += 360; return d; };
+
+  function update() {
+    const a = angleOf(), d = delta();
+    $("d").textContent = `(${num(target[0])}, ${num(target[1])})`;
+    $("ang").textContent = deg(a);
+    $("turn").textContent = Math.abs(d) < 0.5 ? "0° (on target)" : `${d > 0 ? "+" : "−"}${Math.abs(Math.round(d))}° (${d > 0 ? "left" : "right"})`;
+    $("time").textContent = (Math.round(Math.abs(d) / SPEED * 100) / 100) + " s";
+    document.querySelectorAll("#faces button").forEach((b) => b.classList.toggle("ghost", Number(b.dataset.f) !== facing));
+  }
+  function say(t, cls = "") { $("msg").textContent = t; $("msg").className = "message " + cls; }
+  function resize() {
+    W = canvas.clientWidth; u = Math.min((W - 30) / (2 * N), 28);
+    H = Math.round(u * 2 * N + 24);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  const X = (x) => W / 2 + x * u, Y = (y) => H / 2 - y * u;
+  function current(now) {
+    if (!anim) return facing;
+    const k = Math.max(0, Math.min((now - anim.t0) / anim.ms, 1));
+    return anim.from + anim.d * k;
+  }
+  function draw(now) {
+    ctx.fillStyle = "#f8faf8"; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = "#e4e8e5"; ctx.lineWidth = 1;
+    for (let i = -N; i <= N; i++) { ctx.beginPath(); ctx.moveTo(X(i), Y(-N)); ctx.lineTo(X(i), Y(N)); ctx.stroke(); ctx.beginPath(); ctx.moveTo(X(-N), Y(i)); ctx.lineTo(X(N), Y(i)); ctx.stroke(); }
+    ctx.strokeStyle = "#adb5bd"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(X(-N), Y(0)); ctx.lineTo(X(N), Y(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(X(0), Y(-N)); ctx.lineTo(X(0), Y(N)); ctx.stroke();
+    ctx.fillStyle = "#6b726e"; ctx.font = "700 10px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    [-6, -4, -2, 2, 4, 6].forEach((v) => { const t = num(v); ctx.fillText(t, X(v), Y(0) + 13); ctx.fillText(t, X(0) - 10, Y(v) + 4); });
+    // line to the target
+    ctx.strokeStyle = "rgba(47,158,68,0.8)"; ctx.setLineDash([5, 5]); ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(target[0]), Y(target[1])); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = "#c92a2a"; ctx.beginPath(); ctx.arc(X(target[0]), Y(target[1]), 9, 0, 7); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(X(target[0]), Y(target[1]), 4, 0, 7); ctx.fill();
+    // the planned turn
+    const f = current(now), r = Math.PI / 180;
+    if (!anim) {
+      const d = delta();
+      ctx.strokeStyle = "#e8590c"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(X(0), Y(0), 2.2 * u, -facing * r, -(facing + d) * r, d > 0); ctx.stroke();
+    }
+    // the turret
+    ctx.fillStyle = "#495057"; ctx.beginPath(); ctx.arc(X(0), Y(0), 14, 0, 7); ctx.fill();
+    ctx.strokeStyle = "#2a2f2c"; ctx.lineWidth = 6; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(0) + Math.cos(f * r) * 3.2 * u, Y(0) - Math.sin(f * r) * 3.2 * u); ctx.stroke();
+    ctx.fillStyle = "#2a2f2c"; ctx.font = "800 12px Nunito, system-ui, sans-serif";
+    ctx.fillText(deg(wrap(f) > 180 ? wrap(f) - 360 : wrap(f)), X(0), Y(0) + 32);
+  }
+  canvas.addEventListener("pointerdown", (e) => {
+    if (anim) { say("Wait: the turret is still turning."); return; }
+    const rc = canvas.getBoundingClientRect();
+    const x = Math.round((e.clientX - rc.left - W / 2) / u), y = Math.round((H / 2 - (e.clientY - rc.top)) / u);
+    if (x === 0 && y === 0) { say("The target cannot be on the turret. Tap another point."); return; }
+    target = [Math.max(-N, Math.min(N, x)), Math.max(-N, Math.min(N, y))];
+    update();
+    const d = delta();
+    say(`atan2(${num(target[1])}, ${num(target[0])}) = ${deg(angleOf())}. From ${deg(facing)}, the short turn is ${d >= 0 ? "+" : "−"}${Math.abs(Math.round(d))}°.`);
+  });
+  [0, 90, 170, 350].forEach((a) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.dataset.f = a; b.textContent = a + "°";
+    b.addEventListener("click", () => { if (anim) { say("Wait: the turret is still turning."); return; } facing = a; update(); say(`Facing ${a}°. Tap a target.`); });
+    $("faces").appendChild(b);
+  });
+  $("go").addEventListener("click", () => {
+    if (anim) { say("Wait: the turret is still turning."); return; }
+    const d = delta();
+    if (Math.abs(d) < 0.5) { say("The turret already faces the target."); return; }
+    const ms = Math.abs(d) / SPEED * 1000;
+    anim = { from: facing, d, t0: performance.now(), ms };
+    say(`Turning ${d > 0 ? "left" : "right"} by ${Math.abs(Math.round(d))}°…`);
+    setTimeout(() => {   // finish with a timer, not in draw()
+      facing = Math.round(anim.from + anim.d); anim = null;
+      const a = wrap(facing); facing = a > 180 ? a - 360 : a;
+      if (![0, 90, 170, 350].includes(facing)) document.querySelectorAll("#faces button").forEach((b) => b.classList.add("ghost"));
+      update(); say(`✓ On target after ${Math.round(ms / 10) / 100} s. Tap a new target.`, "good");
+    }, ms + 60);
+  });
+  function loop(now) { requestAnimationFrame(loop); try { draw(now); } catch (e) { /* keep the loop alive */ } }
+  window.addEventListener("resize", resize);
+  resize(); update(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

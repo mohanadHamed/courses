@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Voice Match</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .line { background: #f8f0fc; border: 1.5px solid var(--sim-accent); border-radius: 12px; padding: 14px; font-weight: 800; font-size: 1.05rem; text-align: center; min-height: 64px; }
+    .sim .who { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .sim .who button { background: #fff; color: var(--c); border: 2px solid var(--c); box-shadow: none; }
+    .sim .who button.good { background: #ebfbee; border-color: #2b8a3e; color: #2b8a3e; } .sim .who button.bad { background: #fff5f5; border-color: #c92a2a; color: #c92a2a; }
+    .sim .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; font-size: 0.8rem; }
+    .sim .cards div { border: 1px solid #e9ecef; border-radius: 10px; padding: 6px 8px; }
+    .sim .cards b { display: block; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; font-weight: 800; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 480px) { .sim .who, .sim .cards { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Voice Match</h1>
+  <p class="hint">The names are covered. Who says each line in <i>Rooftop Rescue</i>? Listen for the voice: the words, the length of the sentences, the tone.</p>
+  <div class="cards">
+    <div><b style="color:#9C36B5">Nour (17)</b>short, direct, practical</div>
+    <div><b style="color:#1c7ed6">Grandma Salma (78)</b>slow, old sayings, "my child"</div>
+    <div><b style="color:#e8590c">Captain Tarek (radio)</b>formal, numbers, "Over."</div>
+  </div>
+  <div class="row"><span id="lvl">Line 1 of 9</span><span id="stars" style="margin-left:auto">★ 0</span></div>
+  <div class="line" id="line"></div>
+  <div class="who" id="who"></div>
+  <p id="msg" class="message"></p>
+  <div class="row"><button id="next" type="button" hidden>Next line ▶</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const WHO = [["nour", "Nour", "#9C36B5"], ["salma", "Grandma Salma", "#1c7ed6"], ["tarek", "Captain Tarek", "#e8590c"]];
+  const LINES = [
+    ["My child, the river was here before us, and it will be here after us.", "salma", "an old saying and \"my child\": slow and wise."],
+    ["Two more roofs. Then the hill.", "nour", "short and practical: the next step, nothing more."],
+    ["Rescue boat three, report your position. Over.", "tarek", "formal, a number and \"Over\": a radio voice."],
+    ["Hold the rope. Don't look down.", "nour", "two short orders: Nour acts."],
+    ["In my day, we built our houses on stone, not on sand.", "salma", "\"in my day\": she remembers the past."],
+    ["Copy that. The hill can take twelve more people. Over.", "tarek", "a number and radio words: \"Copy that\", \"Over\"."],
+    ["Leave the photos. We'll come back for them.", "nour", "short, practical, and kind under the hurry."],
+    ["The water on Market Street is up to the windows. Over.", "tarek", "a report with a place: the voice of the rescue team."],
+    ["Come, sit with me a while, child. The water is patient.", "salma", "slow, gentle, a little stubborn: she does not hurry."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, stars = 0, tries = 0, done = false;
+  function show() {
+    if (i >= LINES.length) {
+      $("lvl").textContent = "All lines done"; $("line").textContent = "Each character has a voice. A reader can tell who speaks, even without the names.";
+      $("who").innerHTML = ""; $("msg").textContent = `🎉 ★ ${stars} of ${LINES.length * 2}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; return;
+    }
+    tries = 0; done = false; $("lvl").textContent = `Line ${i + 1} of ${LINES.length}`; $("line").textContent = `"${LINES[i][0]}"`;
+    $("who").innerHTML = "";
+    WHO.forEach(([k, n, c]) => {
+      const b = document.createElement("button"); b.type = "button"; b.dataset.w = k; b.textContent = n; b.style.setProperty("--c", c);
+      b.addEventListener("click", () => pick(k, b)); $("who").appendChild(b);
+    });
+    $("msg").textContent = ""; $("next").hidden = true;
+  }
+  function pick(k, b) {
+    if (done) { $("msg").textContent = "Press Next line."; return; }
+    tries++;
+    if (k === LINES[i][1]) {
+      done = true; b.classList.add("good"); const got = tries === 1 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+      $("msg").textContent = `✓ ${WHO.find((w) => w[0] === k)[1]}: ${LINES[i][2]}`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = i < LINES.length - 1 ? "Next line ▶" : "Finish ▶";
+    } else { b.classList.add("bad"); $("msg").textContent = "✗ Not this voice. Look at the cards above: which words and which length fit? Try again."; $("msg").className = "message bad"; }
+  }
+  $("next").addEventListener("click", () => { if (i >= LINES.length) { i = 0; stars = 0; $("stars").textContent = "★ 0"; } else i++; show(); });
+  show();
+})();
+</script>
+</body>
+</html>

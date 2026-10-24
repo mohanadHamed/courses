@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Marble Peak</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .acc { color: #1c7ed6; }
+    .sim .under { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-top: 10px; }
+    .sim #pad { width: 120px; height: 120px; border-radius: 50%; border: 2px solid #dee2e6; background: #f8f9fa; touch-action: none; }
+    .sim .side { display: flex; flex-direction: column; gap: 8px; }
+    .sim .small { color: var(--sim-muted); font-size: 0.82rem; font-weight: 700; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Marble Peak</h1>
+  <p class="hint">Roll the marble: collect the 3 blue gems, then reach the dark goal. On a phone, press <b>Use the sensors</b> and tilt the phone: the game reads the <b>accelerometer</b>. On a computer, drag in the round pad (the side you drag to goes down) or use the arrow keys.</p>
+  <div class="hud">
+    <span class="lvl" id="lvl">Level 1 / 3</span>
+    <span id="gems">Gems 0 / 3</span>
+    <span class="acc" id="acc">accelerometer x 0, y 0</span>
+  </div>
+  <canvas id="c" aria-label="A wooden board with walls, three gems, a goal and a marble"></canvas>
+  <div class="under">
+    <canvas id="pad" aria-label="Drag pad: the side you drag to goes down"></canvas>
+    <div class="side">
+      <button id="sensors" type="button">Use the sensors</button>
+      <button id="restart" type="button" class="ghost">Restart level</button>
+      <span class="small" id="src">Input: drag pad or arrow keys</span>
+    </div>
+  </div>
+  <p id="msg" class="message">Level 1 is the test level of Byte Bay. Tilt to start.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const GX = 20, GY = 11, BR = 0.45, G = 9.8, RAD = Math.PI / 180;
+  const LEVELS = [
+    { start: [2, 2], walls: [[6, 0, 1, 7], [13, 4, 1, 7]], gems: [[4, 8], [9.5, 2], [16, 8]], goal: [18, 2] },
+    { start: [2, 9], walls: [[5, 3, 1, 8], [10, 0, 1, 7], [15, 4, 1, 7]], gems: [[7.5, 2], [12.5, 9], [17.5, 2]], goal: [18, 9] },
+    { start: [2, 5.5], walls: [[5, 0, 1, 4], [5, 7, 1, 4], [10, 3, 1, 5], [15, 0, 1, 4], [15, 7, 1, 4]], gems: [[7.5, 1.5], [12.5, 9.5], [17.5, 5.5]], goal: [18.5, 9.5] },
+  ];
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const pad = document.getElementById("pad"), pctx = pad.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const fmt = (v) => { const r = Math.round(v * 10) / 10; return (r < 0 ? "−" : "") + Math.abs(r === 0 ? 0 : r); };
+  const flip = typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function" ? -1 : 1;
+  let W = 0, H = 0, u = 30, lvl = 0, L = LEVELS[0], ball, got, done = false, over = false, t0 = performance.now();
+  let acc = { x: 0, y: 0 }, real = false, gotEvent = false, padTilt = [0, 0], keyTilt = [0, 0], drag = false;
+
+  function startLevel() {
+    L = LEVELS[lvl]; ball = { x: L.start[0], y: L.start[1], vx: 0, vy: 0 }; got = L.gems.map(() => false); done = false; t0 = performance.now();
+    $("lvl").textContent = `Level ${lvl + 1} / ${LEVELS.length}`; $("gems").textContent = "Gems 0 / 3";
+    $("msg").textContent = lvl === 0 ? "Level 1 is the test level of Byte Bay. Collect the gems, then the goal opens." : "Collect the 3 gems, then roll into the goal.";
+    $("msg").className = "message";
+  }
+  // tilt in degrees: [to the right, towards the bottom]
+  function tilt() {
+    if (real) return [Math.asin(Math.max(-1, Math.min(1, -acc.x / G))) / RAD, Math.asin(Math.max(-1, Math.min(1, acc.y / G))) / RAD];
+    return [padTilt[0] || keyTilt[0], padTilt[1] || keyTilt[1]];
+  }
+  function update(dt) {
+    const [tx, ty] = tilt();
+    if (!real) acc = { x: -G * Math.sin(tx * RAD), y: G * Math.sin(ty * RAD) };
+    $("acc").textContent = `accelerometer x ${fmt(acc.x)}, y ${fmt(acc.y)}`;
+    if (done || over) return;
+    const ax = -acc.x * 1.6, ay = acc.y * 1.6;   // grid units per second²
+    ball.vx = (ball.vx + ax * dt) * 0.985; ball.vy = (ball.vy + ay * dt) * 0.985;
+    ball.x += ball.vx * dt; ball.y += ball.vy * dt;
+    // the frame of the board
+    if (ball.x < BR) { ball.x = BR; ball.vx *= -0.3; } if (ball.x > GX - BR) { ball.x = GX - BR; ball.vx *= -0.3; }
+    if (ball.y < BR) { ball.y = BR; ball.vy *= -0.3; } if (ball.y > GY - BR) { ball.y = GY - BR; ball.vy *= -0.3; }
+    // walls: push the marble out along the smaller overlap
+    for (const [x, y, w, h] of L.walls) {
+      const x0 = x - BR, x1 = x + w + BR, y0 = y - BR, y1 = y + h + BR;
+      if (ball.x > x0 && ball.x < x1 && ball.y > y0 && ball.y < y1) {
+        const dl = ball.x - x0, dr = x1 - ball.x, dtp = ball.y - y0, db = y1 - ball.y, m = Math.min(dl, dr, dtp, db);
+        if (m === dl) { ball.x = x0; ball.vx *= -0.3; } else if (m === dr) { ball.x = x1; ball.vx *= -0.3; }
+        else if (m === dtp) { ball.y = y0; ball.vy *= -0.3; } else { ball.y = y1; ball.vy *= -0.3; }
+      }
+    }
+    L.gems.forEach((g, i) => { if (!got[i] && Math.hypot(ball.x - g[0], ball.y - g[1]) < 0.8) { got[i] = true; chime(880); } });
+    const n = got.filter(Boolean).length; $("gems").textContent = `Gems ${n} / 3`;
+    if (n === 3 && Math.hypot(ball.x - L.goal[0], ball.y - L.goal[1]) < 0.7) finish();
+  }
+  let audio = null;
+  function chime(f) { try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); const o = audio.createOscillator(), g = audio.createGain(); o.frequency.value = f; g.gain.value = 0.06; o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.25); o.start(); o.stop(audio.currentTime + 0.25); } catch (_) {} }
+  function finish() {
+    done = true; const s = Math.round((performance.now() - t0) / 100) / 10;
+    chime(660); setTimeout(() => chime(990), 120);
+    if (lvl < LEVELS.length - 1) {
+      $("msg").textContent = `✓ Level ${lvl + 1} done in ${s} s. The next level starts in a moment…`; $("msg").className = "message good";
+      setTimeout(() => { lvl++; startLevel(); }, 1800);
+    } else {
+      over = true; $("msg").textContent = `🎉 All three levels done! The accelerometer steered the marble all the way. Press Restart level to play again.`; $("msg").className = "message good";
+    }
+  }
+  function resize() {
+    W = canvas.clientWidth; u = W / GX; H = Math.round(u * GY);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    pad.width = 120 * dpr; pad.height = 120 * dpr; pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function draw(now) {
+    ctx.fillStyle = "#f4e9d8"; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#8d6e63";
+    for (const [x, y, w, h] of L.walls) ctx.fillRect(x * u, y * u, w * u, h * u);
+    const n = got.filter(Boolean).length;
+    // goal
+    ctx.fillStyle = n === 3 ? "#343a40" : "#adb5bd"; ctx.beginPath(); ctx.arc(L.goal[0] * u, L.goal[1] * u, 0.7 * u, 0, 7); ctx.fill();
+    if (n === 3) { ctx.strokeStyle = `rgba(255,212,59,${0.5 + 0.4 * Math.sin(now / 200)})`; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(L.goal[0] * u, L.goal[1] * u, 0.9 * u, 0, 7); ctx.stroke(); }
+    // gems
+    L.gems.forEach((g, i) => {
+      if (got[i]) return; const x = g[0] * u, y = g[1] * u, s = 0.35 * u;
+      ctx.fillStyle = "#4dabf7"; ctx.beginPath(); ctx.moveTo(x, y - s); ctx.lineTo(x + s * 0.8, y); ctx.lineTo(x, y + s); ctx.lineTo(x - s * 0.8, y); ctx.closePath(); ctx.fill();
+    });
+    // marble
+    ctx.fillStyle = "#A86700"; ctx.beginPath(); ctx.arc(ball.x * u, ball.y * u, BR * u, 0, 7); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.beginPath(); ctx.arc(ball.x * u - BR * u * 0.35, ball.y * u - BR * u * 0.35, BR * u * 0.28, 0, 7); ctx.fill();
+    // the pad
+    pctx.clearRect(0, 0, 120, 120);
+    const [tx, ty] = tilt();
+    pctx.fillStyle = "#adb5bd"; pctx.beginPath(); pctx.arc(60, 60, 4, 0, 7); pctx.fill();
+    pctx.fillStyle = "#A86700"; pctx.beginPath(); pctx.arc(60 + tx / 45 * 45, 60 + ty / 45 * 45, 10, 0, 7); pctx.fill();
+  }
+  function padSet(e) {
+    const r = pad.getBoundingClientRect();
+    const dx = (e.clientX - r.left - 60) / 50, dy = (e.clientY - r.top - 60) / 50;
+    padTilt = [Math.max(-1, Math.min(1, dx)) * 30, Math.max(-1, Math.min(1, dy)) * 30];
+  }
+  pad.addEventListener("pointerdown", (e) => { if (real) { $("msg").textContent = "The sensors are on: tilt the phone."; return; } drag = true; pad.setPointerCapture(e.pointerId); padSet(e); });
+  pad.addEventListener("pointermove", (e) => { if (drag) padSet(e); });
+  pad.addEventListener("pointerup", () => { drag = false; padTilt = [0, 0]; });
+  pad.addEventListener("pointercancel", () => { drag = false; padTilt = [0, 0]; });
+  const KEYS = { ArrowLeft: [0, -20], ArrowRight: [0, 20], ArrowUp: [1, -20], ArrowDown: [1, 20] };
+  window.addEventListener("keydown", (e) => { const k = KEYS[e.code]; if (k) { keyTilt[k[0]] = k[1]; e.preventDefault(); } });
+  window.addEventListener("keyup", (e) => { const k = KEYS[e.code]; if (k) keyTilt[k[0]] = 0; });
+  function onMotion(e) { const a = e.accelerationIncludingGravity; if (!a || a.x === null) return; gotEvent = true; acc = { x: flip * a.x, y: flip * a.y }; }
+  $("sensors").addEventListener("click", async () => {
+    if (real) { real = false; window.removeEventListener("devicemotion", onMotion); $("sensors").textContent = "Use the sensors"; $("src").textContent = "Input: drag pad or arrow keys"; return; }
+    if (typeof DeviceMotionEvent === "undefined") { $("msg").textContent = "This browser has no motion sensors. Use the pad or the arrow keys."; return; }
+    try {
+      if (typeof DeviceMotionEvent.requestPermission === "function" && (await DeviceMotionEvent.requestPermission()) !== "granted") {
+        $("msg").textContent = "Motion access was not allowed. Use the pad, or open the game full screen and allow it."; return;
+      }
+    } catch (_) { $("msg").textContent = "Motion access was not possible here. Open the game full screen and try again."; return; }
+    gotEvent = false; real = true; window.addEventListener("devicemotion", onMotion);
+    $("sensors").textContent = "Use the pad"; $("src").textContent = "Input: the accelerometer of the phone";
+    setTimeout(() => { if (real && !gotEvent) { real = false; window.removeEventListener("devicemotion", onMotion); $("sensors").textContent = "Use the sensors"; $("src").textContent = "Input: drag pad or arrow keys"; $("msg").textContent = "No motion data came from this device. Use the pad or the arrow keys."; } }, 1500);
+  });
+  $("restart").addEventListener("click", () => { if (over) { lvl = 0; over = false; } startLevel(); });
+  let last = 0;
+  function loop(now) {
+    requestAnimationFrame(loop);
+    const dt = last ? Math.min((now - last) / 1000, 0.04) : 0; last = now;
+    try { update(dt); draw(now); } catch (e) { /* keep the loop alive */ }
+  }
+  window.addEventListener("resize", resize);
+  resize(); startLevel(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

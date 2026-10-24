@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Phone Picker</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; }
+    .sim .hud .lvl { color: var(--sim-accent); } .sim .hud .stars { margin-left: auto; }
+    .sim .brief { background: #fff3bf; border: 1.5px solid var(--sim-accent); border-radius: 10px; padding: 8px 12px; font-weight: 700; }
+    .sim .phones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .sim .phone { text-align: left; background: #fff; color: #2a211c; border: 2px solid #dee2e6; box-shadow: none; padding: 8px 10px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; line-height: 1.35; }
+    .sim .phone h2 { margin: 0 0 4px; font-size: 1rem; color: var(--sim-accent); }
+    .sim .phone .k { color: var(--sim-muted); }
+    .sim .phone.on { border-color: var(--sim-accent); background: #fff9db; }
+    .sim .phone.good { border-color: #2b8a3e; background: #ebfbee; } .sim .phone.bad { border-color: #c92a2a; }
+    .sim .step { font-weight: 800; margin-top: 10px; }
+    .sim .lines { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .sim .lines button { padding: 6px 10px; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 560px) { .sim .phones { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Phone Picker</h1>
+  <p class="hint">Byte Bay tests its games on three phones. Read the brief, tap the phone that answers it, then the line of the sheet that decides.</p>
+  <div class="hud"><span class="lvl" id="lvl">Round 1</span><span class="stars" id="stars">★ 0</span></div>
+  <div class="brief" id="brief"></div>
+  <div class="phones" id="phones"></div>
+  <p class="step" id="step">1 · Tap a phone.</p>
+  <div class="lines" id="lines"></div>
+  <p id="msg" class="message">Round 1 is the story of the lesson.</p>
+  <div class="row"><button id="next" type="button" hidden>Next round ▶</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const PHONES = {
+    P5: { chip: "8 cores, up to 2.2 GHz, basic GPU", ram: "4 GB", storage: "64 GB (20 GB free)", display: "60 Hz, touch 120 Hz", battery: "5000 mAh", sensors: "accelerometer, GPS (no gyroscope)", bench: "500 → 450 after 20 min" },
+    P6: { chip: "8 cores, up to 2.8 GHz, mid-range GPU", ram: "8 GB", storage: "256 GB (90 GB free)", display: "120 Hz, touch 240 Hz", battery: "5000 mAh", sensors: "accelerometer, gyroscope, compass, GPS", bench: "1000 → 800 after 20 min" },
+    P7: { chip: "8 cores, up to 3.3 GHz, top GPU", ram: "12 GB", storage: "512 GB (300 GB free)", display: "120 Hz, touch 480 Hz", battery: "4500 mAh", sensors: "accelerometer, gyroscope, compass, GPS", bench: "1400 → 840 after 20 min" },
+  };
+  const NAMES = { chip: "Chipset", ram: "RAM", storage: "Storage", display: "Display and touch", battery: "Battery", sensors: "Sensors", bench: "Benchmark score" };
+  const ROUNDS = [
+    { brief: "Beat Lane, a rhythm game: every tap must count at once. On which phone do taps reach the game latest?", phone: "P5", line: "display", lines: ["display", "ram", "battery", "storage"],
+      why: "P5 checks for touches only 120 times per second and shows 60 frames: a tap can wait twice as long as on P6." },
+    { brief: "Pocket Zoo AR, an AR pet game, follows the phone with the gyroscope. Which phone cannot run it?", phone: "P5", line: "sensors", lines: ["sensors", "chip", "display", "battery"],
+      why: "P5 has no gyroscope. This is a compatibility problem: the store does not offer the game for it." },
+    { brief: "Storm Realm, a big 3D world, needs 8 GB of RAM and 12 GB of free storage. Which phone does not meet the RAM line?", phone: "P5", line: "ram", lines: ["ram", "storage", "battery", "display"],
+      why: "P5 has only 4 GB of RAM. Its 20 GB of free storage would be enough." },
+    { brief: "A ranked match lasts 30 minutes. Which phone is still the fastest after 20 minutes of play?", phone: "P7", line: "bench", lines: ["bench", "chip", "ram", "battery"],
+      why: "P7 drops from 1400 to 840, P6 from 1000 to 800. P7 loses more, but it stays a little faster." },
+    { brief: "City Quest, a walking map game, draws 900 mA on every phone. Which phone runs out of battery first?", phone: "P7", line: "battery", lines: ["battery", "sensors", "chip", "storage"],
+      why: "4500 mAh ÷ 900 mA = 5 hours on P7; 5000 mAh ÷ 900 mA is more than 5.5 hours on P5 and P6." },
+  ];
+  const $ = (id) => document.getElementById(id);
+  let round = 0, stars = 0, tries = 0, cur, chosen = null, solved = false, over = false;
+
+  function cards(highlight) {
+    $("phones").innerHTML = "";
+    Object.entries(PHONES).forEach(([n, p]) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "phone" + (chosen === n ? (highlight || " on") : ""); b.dataset.p = n;
+      b.innerHTML = `<h2>Phone ${n}</h2>` + Object.keys(NAMES).map((k) => `<div><span class="k">${NAMES[k]}:</span> ${p[k]}</div>`).join("");
+      b.addEventListener("click", () => pickPhone(n)); $("phones").appendChild(b);
+    });
+  }
+  function start() {
+    if (round >= ROUNDS.length) {
+      over = true; $("lvl").textContent = "All rounds done"; $("brief").textContent = "Byte Bay knows its test phones now.";
+      $("phones").innerHTML = ""; $("lines").innerHTML = ""; $("step").textContent = "";
+      $("msg").textContent = `🎉 Done! ★ ${stars} of ${ROUNDS.length * 3}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; return;
+    }
+    over = false; cur = ROUNDS[round]; tries = 0; chosen = null; solved = false;
+    $("lvl").textContent = `Round ${round + 1} / ${ROUNDS.length}`; $("brief").textContent = cur.brief;
+    $("step").textContent = "1 · Tap a phone."; $("lines").innerHTML = ""; $("next").hidden = true;
+    $("msg").textContent = round === 0 ? "Round 1 is the story of the lesson." : ""; $("msg").className = "message";
+    cards();
+  }
+  function pickPhone(n) {
+    if (over || solved) { $("msg").textContent = solved ? "This round is done. Press Next round." : "Press Play again."; return; }
+    tries++;
+    if (n !== cur.phone) { chosen = n; cards(" bad"); $("msg").textContent = `✗ Not ${n}. Compare the same line on the three sheets. Try again.`; $("msg").className = "message bad"; return; }
+    chosen = n; cards(" good");
+    $("msg").textContent = `✓ ${n}. Now: which line decides?`; $("msg").className = "message good";
+    $("step").textContent = "2 · Which line of the sheet decides?";
+    $("lines").innerHTML = "";
+    [...cur.lines].sort().forEach((k) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.dataset.l = k; b.textContent = NAMES[k];
+      b.addEventListener("click", () => pickLine(k)); $("lines").appendChild(b);
+    });
+  }
+  function pickLine(k) {
+    if (solved) { $("msg").textContent = "This round is done. Press Next round."; return; }
+    tries++;
+    if (k !== cur.line) { $("msg").textContent = `✗ The ${NAMES[k]} line does not decide this. Try again.`; $("msg").className = "message bad"; return; }
+    solved = true;
+    const got = tries <= 2 ? 3 : tries <= 4 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+    $("msg").textContent = `✓ ${"★".repeat(got)} ${cur.why}`; $("msg").className = "message good";
+    $("next").hidden = false; $("next").textContent = round < ROUNDS.length - 1 ? "Next round ▶" : "Finish ▶";
+  }
+  $("next").addEventListener("click", () => { if (over) { round = 0; stars = 0; $("stars").textContent = "★ 0"; } else round++; start(); });
+  start();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Contents Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .ribbon { display: flex; flex-wrap: wrap; gap: 6px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 8px; }
+    .sim .ribbon button { padding: 6px 10px; font-size: 0.85rem; background: #fff; color: #2a211c; border: 1px solid #ced4da; box-shadow: none; }
+    .sim .ribbon button.main { background: var(--sim-accent); color: #fff; border-color: var(--sim-accent); }
+    .sim .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px; margin-top: 10px; }
+    .sim .box { background: #fff; border: 1px solid #ced4da; box-shadow: 3px 3px 0 #e9ecef; padding: 10px 14px; font-family: Calibri, Carlito, Arial, sans-serif; font-size: 14px; }
+    .sim .box h3 { margin: 0 0 6px; font-size: 1rem; color: #1c5fb4; }
+    .sim .toc div { display: flex; justify-content: space-between; border-bottom: 1px dotted #ced4da; padding: 3px 0; }
+    .sim .toc div.l2 { padding-left: 16px; font-weight: 400; }
+    .sim .toc.old { background: #fff5f5; }
+    .sim .doc p { margin: 0 0 4px; padding: 2px 6px; border: 2px solid transparent; border-radius: 4px; cursor: pointer; display: flex; justify-content: space-between; gap: 6px; }
+    .sim .doc p.sel { border-color: var(--sim-accent); }
+    .sim .doc p small { font-size: 0.68rem; background: #fff4e6; color: var(--sim-accent); border-radius: 8px; padding: 1px 6px; font-weight: 800; white-space: nowrap; align-self: center; }
+    .sim .doc .pb { border-top: 1px dashed #ffa94d; font-size: 0.7rem; color: var(--sim-accent); margin: 4px 0; text-align: center; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 520px) { .sim .wrap { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Contents Builder</h1>
+  <p class="hint">Word makes the table of contents from the <b>heading styles</b>. 1) Give each heading Heading 1 or Heading 2. 2) <b>References › Table of Contents</b>. 3) Change a heading, then press <b>Update Table</b>.</p>
+  <div class="ribbon" id="ribbon"></div>
+  <div class="wrap">
+    <div class="box"><h3>Contents</h3><div class="toc" id="toc"><span style="color:#868e96">Not inserted yet.</span></div></div>
+    <div class="box doc" id="doc"></div>
+  </div>
+  <p id="msg" class="message">Step 1: tap "Introduction", then Heading 1.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  // [text, the right style, page]
+  let lines, sel, toc, stale;
+  function reset() {
+    lines = [
+      { t: "Introduction", want: "Heading 1", s: "Normal", page: 2 },
+      { t: "We asked 20 students about their phones.", want: "Normal", s: "Normal", page: 2 },
+      { t: "Our survey", want: "Heading 1", s: "Normal", page: 2 },
+      { t: "The questions", want: "Heading 2", s: "Normal", page: 3 },
+      { t: "The answers", want: "Heading 2", s: "Normal", page: 3 },
+      { t: "Conclusion", want: "Heading 1", s: "Normal", page: 4 },
+      { t: "Most students use their phone for three hours a day.", want: "Normal", s: "Normal", page: 4 },
+    ];
+    sel = 0; toc = null; stale = false; paint();
+  }
+  const say = (t, c = "") => { $("msg").textContent = t; $("msg").className = "message " + c; };
+  function build() { return lines.filter((l) => l.s !== "Normal").map((l) => ({ t: l.t, lv: l.s, page: l.page })); }
+  function paint() {
+    $("doc").innerHTML = "";
+    let pg = 0;
+    lines.forEach((l, i) => {
+      if (l.page !== pg) { const b = document.createElement("div"); b.className = "pb"; b.textContent = `page ${l.page}`; $("doc").appendChild(b); pg = l.page; }
+      const p = document.createElement("p"); p.className = i === sel ? "sel" : "";
+      p.style.cssText = l.s === "Heading 1" ? "color:#1c5fb4;font-weight:800;font-size:16px" : l.s === "Heading 2" ? "color:#1c5fb4;font-weight:700;font-size:14px;margin-left:10px" : "";
+      p.innerHTML = `<span>${l.t}</span><small>${l.s}</small>`;
+      p.addEventListener("click", () => { sel = i; say(`Selected: "${l.t}".`); paint(); });
+      $("doc").appendChild(p);
+    });
+    if (toc) {
+      $("toc").className = "toc" + (stale ? " old" : "");
+      $("toc").innerHTML = toc.length ? toc.map((e) => `<div class="${e.lv === "Heading 2" ? "l2" : ""}"><span>${e.t}</span><span>${e.page}</span></div>`).join("") : "<span>No headings found: give the headings a heading style.</span>";
+    }
+  }
+  [["Heading 1"], ["Heading 2"], ["Normal"], ["Insert contents", "ins"], ["Change a heading", "chg"], ["Update Table", "upd"]].forEach(([label, act]) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = label; if (act === "ins" || act === "upd") b.className = "main";
+    b.addEventListener("click", () => {
+      if (!act) {
+        if (sel === null) { say("First tap a line of the document."); return; }
+        const l = lines[sel]; l.s = label;
+        say(l.s === l.want ? `"${l.t}" is now ${label}.` : `"${l.t}" is now ${label}. ${l.want === "Normal" ? "But it is a sentence, not a heading." : l.want === "Heading 2" ? "It is a smaller heading under \"Our survey\"." : "It is a main heading."}`, l.s === l.want ? "" : "bad");
+        if (toc) stale = true;
+        sel = sel + 1 < lines.length ? sel + 1 : null; paint(); return;
+      }
+      if (act === "ins") {
+        toc = build(); stale = false; paint();
+        const ok = lines.every((l) => l.s === l.want);
+        say(ok ? "✓ The contents list every heading with its page. Now press Change a heading." : `The contents show only the lines with a heading style (${toc.length} of 5). Fix the styles, then press Update Table.`, ok ? "good" : "bad");
+        return;
+      }
+      if (act === "chg") {
+        const l = lines[2]; if (l.t === "Our class survey") { say("The heading is already changed. Press Update Table."); return; }
+        l.t = "Our class survey"; lines.slice(3).forEach((x) => (x.page += 1)); stale = !!toc; paint();
+        say(toc ? "\"Our survey\" is now \"Our class survey\", and a new page moved the later headings. The contents are old now (red): press Update Table." : "The heading changed. Insert the contents first.", toc ? "bad" : "");
+        return;
+      }
+      if (!toc) { say("Insert the contents first."); return; }
+      toc = build(); stale = false; paint();
+      const ok = lines.every((l) => l.s === l.want);
+      say(ok && lines[2].t === "Our class survey" ? "🎉 Updated: the new heading and the new page numbers are in the contents. Word does not update the contents by itself while you write: press Update Table after changes." : "Updated.", "good");
+    });
+    $("ribbon").appendChild(b);
+  });
+  reset();
+})();
+</script>
+</body>
+</html>

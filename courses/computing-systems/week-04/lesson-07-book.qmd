@@ -1,0 +1,310 @@
+---
+title: "Smartphone Architecture: SoC, Sensors, Touch Screen and Battery"
+description: "Lesson notes · The system on a chip, the sensors that feel the player, how the touch screen finds a finger, and the battery and heat of a phone during a game."
+lesson: 7
+ilos: [A1]
+format: lesson-typst
+---
+
+::: {.lead}
+*Byte Bay* is making *Marble Peak*, a game for phones. The player tilts the
+phone, and a marble rolls down a mountain path. Before the team writes any
+code, it asks: what is inside a phone, and what can the game use? A phone
+has one main chip that does almost all the work, small **sensors** that
+feel how the player moves it, a screen that feels fingers, and a battery
+that runs out. In lecture 4 you read the spec sheet of a phone; in lecture 5
+you met input and output devices. In this lesson you look inside the phone
+and describe each part and its job in a game. Every section ends with a
+short task.
+:::
+
+## Key terms
+
+{{< glossary soc chipset npu modem sensor accelerometer gyroscope gps capacitive-touch-screen touch-sampling-rate battery-capacity thermal-throttling >}}
+
+## 7.1 Why a phone has one main chip: the SoC
+
+In lecture 4 you opened a PC: a CPU, a graphics card and memory sticks, each
+on its own. Open a phone, and you find almost everything on one small chip.
+A phone has no room for a graphics card, no fan, and only a small battery.
+So the makers put the main parts together on one chip. It is smaller, it
+uses less energy, and the parts are close together, so data moves fast.
+
+::: {.callout-important title="Definition 7.1 — System on a chip (SoC)"}
+A **system on a chip (SoC)** is one chip that holds the main parts of a
+computer: the CPU cores, the GPU, an AI engine (NPU), the modem and the
+memory controller. On a spec sheet it is the **Chipset** line.
+:::
+
+![The parts of an SoC. The RAM sits next to it and is shared by the CPU and the GPU.](images/soc-map.png){#fig-soc width=96%}
+
+| Part of the SoC | Its job | In a game |
+|---|---|---|
+| CPU cores | run the program | the rules, the physics, the enemies |
+| GPU | draws the pictures | every frame of the game |
+| NPU (AI engine) | AI calculations | finding a hand or a face in AR |
+| modem | mobile data (4G, 5G) | online matches, the leaderboard |
+| image processor | camera pictures | AR and photo modes |
+| memory controller | moves data to and from the RAM | textures from the RAM to the GPU |
+
+: The parts of an SoC and their jobs (@fig-soc). {#tbl-soc}
+
+The RAM is a separate chip next to the SoC (often on top of it). The CPU and
+the GPU **share** it: a phone has no separate video memory (lecture 5). A
+phone with 8 GB of RAM uses the same 8 GB for the game's code and for its
+textures. Common SoC families are Qualcomm Snapdragon, MediaTek Dimensity
+and Helio, Samsung Exynos, Google Tensor and Apple's A-series.
+
+::: {.callout-note title="Example 7.1 — One frame of Marble Peak"}
+1. The CPU cores read the tilt and move the marble (physics).
+2. The GPU draws the mountain, the marble and the light.
+3. Both use the same RAM: the code of the game and the textures are there.
+4. At the end of a level, the modem sends the time to the online leaderboard.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Judging a phone by its number of cores. Two phones can both have "8 cores",
+but one SoC has a much stronger GPU. For games, the GPU part of the SoC often
+matters more than the number of CPU cores.
+:::
+
+{{< sim file="sims/soc-explorer.html" poster="sims/soc-explorer.png" title="SoC Explorer: the parts of a phone's main chip" height="640" >}}
+
+::: {.callout-note title="Do it · The SoC of your phone"}
+Find the name of the SoC in your phone.
+
+- **Android:** open **Settings → About phone**. Some phones show
+  **Processor** or **Chipset**. If yours does not, search the model name on
+  the maker's website and look for "chipset" or "processor".
+- **iPhone:** open **Settings → General → About** and read the **Model
+  Name**. Apple's website lists the chip of each model (for example "A15
+  Bionic").
+
+*Your result:* the model of your phone, the name of its SoC and the company
+that made the SoC.
+:::
+
+## 7.2 How the phone feels the player: sensors
+
+In *Marble Peak* the player does not touch the screen to steer: the player
+tilts the phone. Which part of the phone feels the tilt? A phone is full of
+small **sensors** (@fig-sensors).
+
+::: {.callout-important title="Definition 7.2 — Sensor"}
+A **sensor** is a small part that measures something in the world, such as
+movement, light or position, and turns it into numbers. Sensors are input
+devices (lecture 5).
+:::
+
+![The main sensors of a phone and what games do with them.](images/sensors.png){#fig-sensors width=96%}
+
+The two sensors that games use most measure different things:
+
+- The **accelerometer** measures acceleration, and it always feels gravity.
+  When the phone lies flat, gravity pulls straight "into" the screen: about
+  9.8 m/s² on the z-axis and 0 on x and y. When you tilt the phone, part of
+  gravity moves to x or y. So the accelerometer shows the **tilt** and a
+  **shake**.
+- The **gyroscope** measures how fast the phone **turns**, in degrees per
+  second. When the phone stays still, it reads 0, even when the phone is
+  tilted.
+
+The **GPS** finds the position of the phone on Earth, and the **compass**
+(magnetometer) finds north. The camera and the microphone are sensors too.
+
+::: {.callout-note title="Example 7.2 — Which sensor for which game?"}
+1. A racing game where you steer by tilting: the **accelerometer**.
+2. A shooter where you aim by turning the phone: the **gyroscope**.
+3. "Shake the phone to roll the dice": the **accelerometer**.
+4. An AR pet that stays on your table while you walk around it: the
+   **camera**, the **gyroscope** and the **accelerometer** together.
+5. A treasure hunt on the streets of your city: the **GPS**.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"The gyroscope measures the tilt." A tilted phone that lies still on a book
+gives a gyroscope value of 0: it does not turn. The tilt comes from the
+accelerometer. Also, not every phone has every sensor: many cheap phones
+have no gyroscope. A game that needs one cannot run there (a compatibility
+problem, lecture 6), so it must offer another control.
+:::
+
+{{< sim file="sims/tilt-lab.html" poster="sims/tilt-lab.png" title="Tilt Lab: the accelerometer and the gyroscope" height="560" >}}
+
+::: {.callout-note title="Do it · Your phone's sensors in Tilt Lab"}
+Open **Tilt Lab** on your phone (scan its QR code) and press **Use the
+sensors**. (If your phone gives no values, use the drag pad.)
+
+1. Lay the phone flat on the table. Write x, y and z.
+2. Tilt the phone to the left and hold it still. Write x and the gyroscope.
+3. Turn the phone quickly. What does the gyroscope show now?
+
+*Your result:* three readings, and one sentence on the difference between
+the two sensors.
+:::
+
+## 7.3 How the screen feels a finger
+
+Two testers write to Byte Bay. One says: "With gloves, the game does not
+react." The other says: "On my old phone, my taps feel a little late." Both
+are about the touch screen.
+
+Most phones have a **capacitive touch screen**: under the glass there is a
+grid of very thin wires (@fig-touch). The finger carries a tiny electric
+charge, so it changes the charge where it touches the grid. A small
+controller finds this place and sends its position to the game. It finds
+several fingers at once (multi-touch, lecture 5).
+
+::: {.callout-important title="Definition 7.3 — Touch sampling rate"}
+The **touch sampling rate** is how many times per second the screen checks
+for touches, in hertz (Hz). At 120 Hz it checks about every 8 ms; at
+240 Hz about every 4 ms.
+:::
+
+![A grid of wires finds the finger. A screen that checks more often finds a tap sooner.](images/touch-grid.png){#fig-touch width=96%}
+
+Do not mix up the touch sampling rate with the **refresh rate** (lecture 2):
+the refresh rate is how often the *picture* changes; the touch sampling
+rate is how often the screen *reads* the fingers. Many phones check touches
+twice as often as they draw: 60 Hz picture with 120 Hz touch, or 120 Hz
+picture with 240 Hz touch.
+
+::: {.callout-note title="Example 7.3 — The two testers"}
+1. Gloves: cloth does not carry the charge of the finger, so the grid feels
+   nothing. Special touch gloves have conductive threads in the fingertips.
+   A wet screen can also confuse the grid.
+2. Late taps: the old phone checks touches at 120 Hz, the new one at 240 Hz.
+   A tap can wait up to about 8 ms on the old phone and 4 ms on the new one.
+   In a rhythm game, the player can feel such small delays.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that a 120 Hz screen reads touches 120 times per second. The
+refresh rate (picture) and the touch sampling rate (fingers) are two
+different numbers. The spec sheet lists them on two lines, if it gives the
+touch sampling rate at all.
+:::
+
+::: {.callout-note title="Do it · Test your touch screen"}
+Open a drawing app or the notes app on your phone.
+
+1. Draw with a fingertip, then with a fingernail, then with the back of a
+   pencil, then through a paper tissue. Which ones work?
+2. Look for the refresh rate setting. Android: **Settings → Display**, then
+   **Motion smoothness** (Samsung) or **Smooth display** or **Refresh rate**
+   (other phones). iPhone: there is no setting; Pro models change their
+   refresh rate up to 120 Hz by themselves.
+
+*Your result:* a table of four objects (works or not) and the refresh rate
+of your phone.
+:::
+
+## 7.4 How long can the player play? Battery and heat
+
+A tester plays *Marble Peak* on a bus. After 20 minutes, the frame rate
+falls from 60 to 45 fps, and the phone feels hot. After about 5 hours, the
+battery is empty. Why?
+
+::: {.callout-important title="Definition 7.4 — Battery capacity"}
+The **battery capacity** is the amount of charge in the battery, in
+milliampere-hours (mAh). A game draws a **current**, in milliamperes (mA).
+The play time is about
+$$\text{play time (hours)} = \text{capacity (mAh)} \div \text{current (mA)}.$$
+:::
+
+![5000 mAh at 1000 mA last about 5 hours. When the SoC gets hot, it slows down.](images/battery.png){#fig-battery width=96%}
+
+Three things use most of the power in a game (@fig-battery): the **screen**
+(more for high brightness and a high refresh rate), the **SoC** (more for a
+high frame rate and high graphics), and the **radios** (mobile data, GPS).
+The SoC also turns this power into heat. A phone has no fan, so when it gets
+too hot, the SoC slows itself down to protect itself: **thermal throttling**
+(lecture 2). The frame rate drops.
+
+::: {.callout-note title="Example 7.4 — Play time"}
+1. The test phone has 5000 mAh. *Marble Peak* draws 1000 mA:
+   5000 ÷ 1000 = **5 hours**.
+2. With the screen at low brightness, the game draws only 800 mA:
+   5000 ÷ 800 ≈ **6 hours**.
+3. A phone with 4000 mAh, at the same 800 mA: 4000 ÷ 800 = **5 hours**.
+:::
+
+::: {.callout-note title="Example 7.5 — Hot after 20 minutes"}
+1. At 60 fps the SoC works hard. After 20 minutes it is hot.
+2. It slows down (thermal throttling), and the game falls to 45 fps.
+3. Byte Bay adds a setting "30 fps (battery saver)": less work for the SoC,
+   less heat, longer play.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"A bigger mAh number makes the phone faster." The capacity only says how
+much charge the battery holds. It says nothing about the speed of the SoC.
+:::
+
+{{< sim file="sims/battery-lab.html" poster="sims/battery-lab.png" title="Battery Lab: play time and heat" height="600" >}}
+
+::: {.callout-note title="Do it · Battery use on your phone"}
+1. On your phone, open the battery page. Android: **Settings → Battery →
+   Battery usage**. iPhone: **Settings → Battery**. Which three apps used
+   the most battery today?
+2. In **Battery Lab**, find settings that give at least 6 hours with 5000
+   mAh and keep the phone cool.
+
+*Your result:* the three apps with their percentages, and your settings in
+Battery Lab with their play time.
+:::
+
+## Case study: Marble Peak
+
+*Byte Bay* tests *Marble Peak* on its test phone T1. The spec sheet of T1
+says: chipset with 8 CPU cores (up to 3.0 GHz), a GPU and an NPU; 8 GB of
+RAM; a 120 Hz screen with a touch sampling rate of 240 Hz; a 5000 mAh
+battery; sensors: accelerometer, gyroscope, compass and GPS. The game reads
+the **accelerometer** to roll the marble. At 60 fps with a bright screen, it
+draws 1000 mA, so the battery lasts about 5 hours. After 20 minutes the SoC
+is hot, and the game falls to 45 fps. The Game challenge of the interactive
+lesson uses these facts. In the mini-game below you roll the marble yourself:
+with your phone's accelerometer, or with the pad.
+
+{{< sim file="sims/marble-peak.html" poster="sims/marble-peak.png" title="Marble Peak: tilt to roll the marble" kind="game" height="720" >}}
+
+## Further reading
+
+Tanenbaum and Austin, *Structured Computer Organization*, 6th ed., Chapter 1
+(the computer zoo: embedded and mobile computers) and Chapter 3 on chips.
+The Android Developers documentation, "Sensors overview"; Apple Developer
+documentation, "Core Motion".
+
+## Exercises
+
+1. What is an SoC? Name four of its parts.
+2. Which part of the SoC draws the frames of a game? Which part sends the
+   score to an online leaderboard?
+3. Why does a phone have no separate video memory?
+4. Which sensor does each game use: (a) steer by tilting; (b) aim by turning
+   the phone; (c) a treasure hunt in the city?
+5. A tilted phone lies still on a book. What does the gyroscope show? Why?
+6. Why does a touch screen not react to a finger in a normal glove?
+7. A phone has a 60 Hz screen and a touch sampling rate of 120 Hz. What does
+   each number mean?
+8. A phone has 4500 mAh. A game draws 900 mA. About how long can the player
+   play?
+9. Why does the frame rate of a game fall after 20 minutes on some phones?
+   What can the game do?
+10. *Marble Peak*: which sensor rolls the marble, and how long does the
+    battery of T1 last at 1000 mA?
+
+## Answers to the exercises
+
+::: {.answers}
+1. One chip with the main parts of a computer; for example CPU cores, GPU, NPU, modem (also the image processor and the memory controller).
+2. The GPU; the modem.
+3. The CPU and the GPU are on the same chip and share the RAM next to it.
+4. (a) the accelerometer; (b) the gyroscope; (c) the GPS.
+5. 0: the gyroscope measures turning, and the phone does not turn. The tilt shows in the accelerometer.
+6. The cloth does not carry the charge of the finger, so the grid under the glass feels nothing.
+7. The picture changes 60 times per second; the screen checks for touches 120 times per second.
+8. 4500 ÷ 900 = 5 hours.
+9. The SoC gets hot and slows down (thermal throttling). The game can offer a lower frame rate (30 fps) or lower graphics.
+10. The accelerometer; 5000 ÷ 1000 = 5 hours.
+:::

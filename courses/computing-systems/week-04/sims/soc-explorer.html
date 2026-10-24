@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: SoC Explorer</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .chip { background: #fff3bf; border: 2.5px solid var(--sim-accent); border-radius: 16px; padding: 12px; }
+    .sim .chip h2 { margin: 0 0 8px; font-size: 0.95rem; color: var(--sim-accent); text-align: center; }
+    .sim .parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .sim .part { background: #fff; border: 2px solid var(--c); color: #2a211c; border-radius: 12px; padding: 10px; text-align: left; box-shadow: none; min-height: 72px; }
+    .sim .part b { display: block; color: var(--c); font-size: 0.98rem; }
+    .sim .part span { font-size: 0.82rem; font-weight: 600; }
+    .sim .part.on { background: color-mix(in srgb, var(--c) 12%, #fff); outline: 3px solid var(--c); }
+    .sim .part.good { outline: 3px solid #2b8a3e; } .sim .part.bad { outline: 3px solid #c92a2a; }
+    .sim .ram { margin-top: 10px; border: 2px dashed var(--sim-accent); border-radius: 12px; padding: 8px 12px; font-weight: 700; font-size: 0.9rem; background: #fff; }
+    .sim .info { margin-top: 10px; border: 1px solid #e9ecef; border-radius: 12px; padding: 10px 12px; min-height: 64px; }
+    .sim .info b { color: var(--sim-accent); }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+    .sim .q { font-weight: 800; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 520px) { .sim .parts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>SoC Explorer</h1>
+  <p class="hint">A phone has one main chip: the system on a chip (SoC). Tap a part to see what it does in a game. Then press <b>Quiz</b> and find the part for each job.</p>
+  <div class="row"><button id="explore" type="button">Explore</button><button id="quiz" type="button" class="ghost">Quiz</button><span id="score"></span></div>
+  <p class="q" id="q" hidden></p>
+  <div class="chip"><h2>system on a chip (SoC)</h2><div class="parts" id="parts"></div></div>
+  <div class="ram">RAM (outside the SoC, next to it): shared by the CPU and the GPU. A phone has no separate video memory.</div>
+  <div class="info" id="info">Tap a part of the chip.</div>
+  <p id="msg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const PARTS = [
+    { k: "cpu", n: "CPU cores", s: "game logic, physics", c: "#1c7ed6", d: "The CPU cores run the code of the game: the rules, the physics, the enemies. A phone often has big fast cores and small cores that save battery (lecture 3)." },
+    { k: "gpu", n: "GPU", s: "draws every frame", c: "#2b8a3e", d: "The GPU draws every frame: the pictures, the light and the effects. In a phone it uses the same RAM as the CPU." },
+    { k: "npu", n: "NPU (AI engine)", s: "faces, speech, AI", c: "#7048e8", d: "The NPU is made for the calculations of AI: it finds faces in the camera, understands speech, or makes photos better. An AR game can use it to find the floor or a hand." },
+    { k: "modem", n: "modem", s: "mobile data, online play", c: "#0b7285", d: "The modem sends and receives data over the mobile network (4G, 5G): online matches, downloads, the leaderboard." },
+    { k: "isp", n: "image processor", s: "camera pictures", c: "#e8590c", d: "The image processor turns the light from the camera into a picture. AR games and photo modes use it." },
+    { k: "mem", n: "memory controller", s: "talks to the RAM", c: "#6b726e", d: "The memory controller moves data between the SoC and the RAM, for the CPU and the GPU alike." },
+  ];
+  const QUIZ = [
+    ["Which part draws the frames of a racing game?", "gpu"],
+    ["Which part moves the enemies and checks the rules of the game?", "cpu"],
+    ["Which part sends the player's score to the online leaderboard over 4G?", "modem"],
+    ["Which part helps an AR game recognise the player's hand?", "npu"],
+    ["Which part turns the camera picture into an image for an AR game?", "isp"],
+    ["Which part moves the textures from the RAM to the GPU?", "mem"],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let mode = "explore", qi = 0, right = 0, firstTry = true;
+
+  PARTS.forEach((p) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "part"; b.dataset.k = p.k;
+    b.style.setProperty("--c", p.c); b.innerHTML = `<b>${p.n}</b><span>${p.s}</span>`;
+    b.addEventListener("click", () => tap(p)); $("parts").appendChild(b);
+  });
+  const mark = (k, cls) => document.querySelectorAll(".part").forEach((b) => { b.classList.remove("on", "good", "bad"); if (b.dataset.k === k) b.classList.add(cls); });
+
+  function tap(p) {
+    if (mode === "explore") { mark(p.k, "on"); $("info").innerHTML = `<b>${p.n}:</b> ${p.d}`; return; }
+    if (qi >= QUIZ.length) { $("msg").textContent = "The quiz is done. Press Quiz to play again."; return; }
+    if (p.k === QUIZ[qi][1]) {
+      mark(p.k, "good"); if (firstTry) right++;
+      $("info").innerHTML = `<b>${p.n}:</b> ${p.d}`;
+      $("msg").textContent = "✓ Right!"; $("msg").className = "message good";
+      qi++; firstTry = true;
+      setTimeout(ask, 1100);
+    } else {
+      mark(p.k, "bad"); firstTry = false;
+      $("msg").textContent = `✗ Not the ${p.n}: it ${p.s.split(",")[0]}. Try again.`; $("msg").className = "message bad";
+    }
+  }
+  function ask() {
+    if (mode !== "quiz") return;
+    $("score").textContent = `${right} / ${QUIZ.length} at the first try`;
+    if (qi >= QUIZ.length) {
+      $("q").textContent = `🎉 Quiz done: ${right} of ${QUIZ.length} right at the first try.`; mark("", "on"); return;
+    }
+    $("q").textContent = `Question ${qi + 1} / ${QUIZ.length}: ${QUIZ[qi][0]}`;
+    $("msg").textContent = ""; mark("", "on");
+  }
+  $("explore").addEventListener("click", () => {
+    mode = "explore"; $("q").hidden = true; $("score").textContent = ""; $("explore").className = ""; $("quiz").className = "ghost";
+    $("msg").textContent = ""; $("info").textContent = "Tap a part of the chip."; mark("", "on");
+  });
+  $("quiz").addEventListener("click", () => {
+    mode = "quiz"; qi = 0; right = 0; firstTry = true; $("q").hidden = false; $("quiz").className = ""; $("explore").className = "ghost";
+    $("info").textContent = "Tap the part that does the job."; ask();
+  });
+})();
+</script>
+</body>
+</html>

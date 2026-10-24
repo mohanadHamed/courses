@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Rooftop Rescue</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; }
+    .sim .hud .lvl { color: var(--sim-accent); } .sim .hud .heard { margin-left: auto; }
+    .sim table { border-collapse: collapse; width: 100%; margin-top: 10px; font-size: 0.82rem; }
+    .sim th, .sim td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #f1e6f5; }
+    .sim th { background: var(--sim-accent); color: #fff; }
+    .sim td:first-child { font-family: Menlo, Consolas, monospace; color: var(--sim-accent); font-weight: 700; }
+    .sim tr.now td { background: #fff3bf; } .sim tr.played td { color: #495057; }
+    .sim tr.played td:last-child::after { content: " ✓"; color: #2b8a3e; font-weight: 800; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+    .sim .choice { display: none; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .sim .choice.on { display: flex; }
+    .sim .page { margin-top: 10px; border: 1px solid #dee2e6; border-radius: 6px; padding: 12px 16px; font-family: Menlo, Consolas, monospace; font-size: 0.8rem; line-height: 1.45; }
+    .sim .page p { margin: 0 0 8px; } .sim .page .c { margin-left: 38%; } .sim .page .p { margin-left: 31%; } .sim .page .d { margin: 0 15% 8px 22%; } .sim .page .t { text-align: right; }
+    .sim .wrap { overflow-x: auto; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Rooftop Rescue</h1>
+  <p class="hint">Tap <b>Row</b> (or press Space) to row Nour's boat down the flooded street to Grandma Salma's roof. Each line of the scene plays when its <b>trigger</b> happens: watch the line table below. At the roof, choose Nour's answer.</p>
+  <div class="hud"><span class="lvl" id="lvl">Scene: the street</span><span class="heard" id="heard">Lines heard: 0 / 6</span></div>
+  <canvas id="c" aria-label="A flooded street with Nour's rowing boat"></canvas>
+  <div class="row"><button id="row" type="button">Row</button><button id="script" type="button" class="ghost">Show the opening script</button><button id="again" type="button" class="ghost">Play again</button></div>
+  <div class="choice" id="choice"></div>
+  <p id="msg" class="message">The opening: Nour jumps into the boat at the jetty.</p>
+  <div class="wrap"><table><thead><tr><th>line ID</th><th>character</th><th>line</th><th>trigger</th></tr></thead><tbody id="rows"></tbody></table></div>
+  <div class="page" id="page" hidden>
+    <p>EXT. FLOODED STREET – DUSK</p>
+    <p>Brown water fills the street up to the windows. A small rowing boat knocks against a broken jetty.</p>
+    <p>NOUR (17) jumps into the boat and grabs the oars.</p>
+    <p class="c">NOUR</p><p class="p">(to herself)</p><p class="d">Hold on, everyone. I'm coming.</p>
+    <p>Far away, a torch blinks on a rooftop.</p>
+    <p class="t">CUT TO:</p>
+  </div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const LINES = [
+    ["NOUR_01", "Nour", "Hold on, everyone. I'm coming.", "the scene starts", 0],
+    ["NOUR_02", "Nour", "Car ahead! Around it.", "a floating car is in view", 28],
+    ["FAM_01", "Family", "Over here! Please!", "the rooftop is in view", 55],
+    ["NOUR_03", "Nour", "I see you! Stay there.", "after FAM_01", 58],
+    ["NOUR_04", "Nour", "Faster. The water's still rising.", "the water rises", 76],
+    ["SALMA_01", "Salma", "I won't leave without my cat.", "the boat reaches the roof", 100],
+  ];
+  const END = 100, CAR = 40, ROOF = 104;
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  let W = 0, H = 0, p = 0, v = 0, played = [], bubble = null, lastT = 0, arrived = false, finished = false, water = 0, audio = null, t0 = performance.now();
+
+  function rows() {
+    $("rows").innerHTML = LINES.map((l, i) => `<tr class="${bubble && bubble.i === i ? "now" : played.includes(i) ? "played" : ""}"><td>${l[0]}</td><td>${l[1]}</td><td>${l[2]}</td><td>${l[3]}</td></tr>`).join("");
+    $("heard").textContent = `Lines heard: ${played.length} / ${LINES.length}`;
+  }
+  function blip(f) { try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); const o = audio.createOscillator(), g = audio.createGain(); o.type = "triangle"; o.frequency.value = f; g.gain.value = 0.05; o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.2); o.start(); o.stop(audio.currentTime + 0.2); } catch (_) {} }
+  function play(i) {
+    if (played.includes(i)) return;
+    played.push(i); lastT = performance.now(); bubble = { i, t: lastT }; blip(i === 2 ? 700 : 520);
+    $("msg").textContent = `${LINES[i][0]} plays now: its trigger is "${LINES[i][3]}".`;
+    if (i === 4) water = 1;
+    rows();
+  }
+  function arrive() {
+    arrived = true; $("lvl").textContent = "Scene: Salma's roof";
+    $("choice").className = "choice on"; $("choice").innerHTML = "";
+    [["a", "Then bring the cat. Hurry."], ["b", "There's no time for a cat!"]].forEach(([k, t]) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.dataset.c = k; b.textContent = `NOUR_05${k}: "${t}"`;
+      b.addEventListener("click", () => choose(k)); $("choice").appendChild(b);
+    });
+    $("msg").textContent = "SALMA_01 plays. Choose Nour's answer: this line is a branch (lecture 5).";
+  }
+  function choose(k) {
+    if (finished) { $("msg").textContent = "The scene is over. Press Play again."; return; }
+    if (k === "b") { $("msg").textContent = "SALMA_02b: \"Then I stay.\" — Salma sits down again. This branch leads nowhere: try the other answer."; $("msg").className = "message"; return; }
+    finished = true; $("choice").className = "choice";
+    $("msg").textContent = "SALMA_02a: \"Thank you, child. But my house…\" The street scene ends: CUT TO: EXT. ROOFTOP – NIGHT (the next scene, in lecture 8). 🎉 Every line played on its trigger.";
+    $("msg").className = "message good"; blip(880); setTimeout(() => blip(1100), 120);
+  }
+  function rowOnce() {
+    if (finished) { $("msg").textContent = "The scene is over. Press Play again."; return; }
+    if (arrived) { $("msg").textContent = "The boat is at the roof. Choose Nour's answer."; return; }
+    v = Math.min(v + 7, 26);
+  }
+  function update(dt) {
+    if (!played.length && performance.now() - t0 > 600) play(0);
+    if (arrived) return;
+    // the boat waits for the next line
+    p = Math.min(played.length < 5 ? LINES[played.length][4] + 4 : END, p + v * dt); v *= Math.pow(0.35, dt);
+    const i = played.length;   // the lines play in their order, each when its trigger happens
+    if (i > 0 && i < LINES.length && p >= LINES[i][4] && performance.now() - lastT > (i === 3 ? 1400 : 300)) play(i);
+    if (p >= END && played.length === LINES.length) arrive();
+    if (bubble && performance.now() - bubble.t > 2600 && !arrived) { bubble = null; rows(); }
+  }
+  function resize() {
+    W = canvas.clientWidth; H = Math.round(Math.max(200, Math.min(280, W * 0.42)));
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function draw(now) {
+    const k = W / 40;                         // pixels per metre of street
+    const camX = p * k - W * 0.28;
+    const sky = ctx.createLinearGradient(0, 0, 0, H); sky.addColorStop(0, "#5f3dc4"); sky.addColorStop(1, "#f783ac");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+    const level = H * (0.62 - 0.04 * water);
+    // houses along the street
+    for (let x = -10; x < 120; x += 9) {
+      const sx = x * k - camX * 0.9, hh = H * (0.32 + ((x * 7) % 5) * 0.03);
+      if (sx < -k * 8 || sx > W + k) continue;
+      ctx.fillStyle = "#adb5bd"; ctx.fillRect(sx, level - hh, k * 6, hh + 10);
+      ctx.fillStyle = "#e9ecef"; ctx.fillRect(sx + k * 1, level - hh + 10, k * 1.4, k * 1.4); ctx.fillRect(sx + k * 3.6, level - hh + 10, k * 1.4, k * 1.4);
+    }
+    // Salma's roof
+    const rx = ROOF * k - camX;
+    ctx.fillStyle = "#868e96"; ctx.fillRect(rx, level - H * 0.3, k * 9, H * 0.3 + 10);
+    ctx.fillStyle = "#495057"; ctx.fillRect(rx - 4, level - H * 0.3 - 6, k * 9 + 8, 8);
+    ctx.fillStyle = "#e8590c"; ctx.beginPath(); ctx.arc(rx + k * 2, level - H * 0.3 - 18, 7, 0, 7); ctx.fill(); ctx.fillRect(rx + k * 2 - 6, level - H * 0.3 - 12, 12, 8);
+    ctx.fillStyle = "#1c7ed6"; ctx.beginPath(); ctx.arc(rx + k * 4, level - H * 0.3 - 16, 6, 0, 7); ctx.fill(); ctx.fillRect(rx + k * 4 - 5, level - H * 0.3 - 11, 10, 6);
+    if (Math.sin(now / 200) > 0) { ctx.fillStyle = "#ffd43b"; ctx.beginPath(); ctx.arc(rx + k * 4 + 10, level - H * 0.3 - 26, 4, 0, 7); ctx.fill(); }
+    // water
+    ctx.fillStyle = "rgba(77,171,247,0.85)"; ctx.fillRect(0, level, W, H - level);
+    ctx.strokeStyle = "rgba(255,255,255,0.5)"; ctx.lineWidth = 2;
+    for (let x = 0; x < W; x += 30) { const y = level + 8 + Math.sin((x + now / 8) / 20) * 2; ctx.beginPath(); ctx.arc(x - (camX % 30), y, 8, Math.PI * 1.1, Math.PI * 1.9); ctx.stroke(); }
+    // the floating car
+    const cx = CAR * k - camX;
+    if (cx > -80 && cx < W + 80) {
+      ctx.fillStyle = "#c92a2a"; ctx.fillRect(cx, level - 12 + Math.sin(now / 400) * 2, k * 3, 16);
+      ctx.fillStyle = "#ffc9c9"; ctx.fillRect(cx + k * 0.6, level - 22 + Math.sin(now / 400) * 2, k * 1.6, 10);
+    }
+    // the boat and Nour
+    const bx = W * 0.28, by = level - 2 + Math.sin(now / 300) * 2;
+    ctx.fillStyle = "#8d6e63"; ctx.beginPath(); ctx.moveTo(bx - 34, by - 8); ctx.lineTo(bx + 34, by - 8); ctx.lineTo(bx + 24, by + 8); ctx.lineTo(bx - 24, by + 8); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#9C36B5"; ctx.beginPath(); ctx.arc(bx, by - 26, 8, 0, 7); ctx.fill(); ctx.fillRect(bx - 7, by - 19, 14, 11);
+    // the speech bubble
+    if (bubble) {
+      const l = LINES[bubble.i], text = `${l[1].toUpperCase()}: ${l[2]}`;
+      ctx.font = "800 13px Nunito, system-ui, sans-serif"; const tw = Math.min(ctx.measureText(text).width + 20, W - 20);
+      const x = Math.max(10, Math.min(W - tw - 10, bubble.i === 2 || bubble.i === 5 ? W - tw - 10 : bx - 20)), y = 16;
+      ctx.fillStyle = "#fff"; ctx.strokeStyle = "#9C36B5"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, tw, 30, 12) : ctx.rect(x, y, tw, 30); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#2a211c"; ctx.textAlign = "left"; ctx.fillText(text, x + 10, y + 20, tw - 20);
+    }
+    // distance bar
+    ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.fillRect(10, H - 12, W - 20, 5);
+    ctx.fillStyle = "#9C36B5"; ctx.fillRect(10, H - 12, (W - 20) * p / END, 5);
+  }
+  $("row").addEventListener("click", rowOnce);
+  window.addEventListener("keydown", (e) => { if (e.code === "Space") { e.preventDefault(); rowOnce(); } });
+  $("script").addEventListener("click", () => { const h = $("page").hidden; $("page").hidden = !h; $("script").textContent = h ? "Hide the script" : "Show the opening script"; });
+  $("again").addEventListener("click", () => { p = 0; v = 0; played = []; bubble = null; arrived = false; finished = false; water = 0; t0 = performance.now(); $("choice").className = "choice"; $("lvl").textContent = "Scene: the street"; $("msg").textContent = "The opening: Nour jumps into the boat at the jetty."; $("msg").className = "message"; rows(); });
+  let last = 0;
+  function loop(now) { requestAnimationFrame(loop); const dt = last ? Math.min((now - last) / 1000, 0.05) : 0; last = now; try { update(dt); draw(now); } catch (e) { /* keep the loop alive */ } }
+  window.addEventListener("resize", resize);
+  resize(); rows(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

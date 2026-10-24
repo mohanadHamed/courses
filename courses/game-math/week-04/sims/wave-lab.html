@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Wave Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .sim .card { border: 1px solid #e9ecef; border-radius: 10px; padding: 6px 10px; }
+    .sim .card small { display: block; color: var(--sim-muted); font-weight: 700; font-size: 0.78rem; }
+    .sim .card b { font-size: 1.05rem; font-variant-numeric: tabular-nums; color: var(--sim-accent); }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 10px; font-weight: 700; }
+    .sim .row button { padding: 6px 10px; }
+    .sim .formula { margin-top: 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    @media (max-width: 480px) { .sim .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Wave Lab</h1>
+  <p class="hint">A point goes around a circle at a steady speed. Its height draws a sine wave over time. Choose a mode, the amplitude and the period, then play or step the time.</p>
+  <div class="row">Mode: <span id="modes"></span></div>
+  <canvas id="c" aria-label="A circle on the left and a graph over time on the right"></canvas>
+  <p class="formula" id="formula"></p>
+  <div class="cards">
+    <div class="card"><small>time t</small><b id="t">0 s</b></div>
+    <div class="card"><small>angle 360° × t ÷ T</small><b id="ang">0°</b></div>
+    <div class="card"><small id="k1">height y</small><b id="v1">2</b></div>
+    <div class="card"><small id="k2">sin of the angle</small><b id="v2">0</b></div>
+  </div>
+  <div class="controls">
+    <label>Amplitude <input type="range" id="A" min="1" max="4" step="1" value="3"><span class="readout" id="Ar">3</span></label>
+    <label>Period <input type="range" id="T" min="2" max="8" step="1" value="4"><span class="readout" id="Tr">4 s</span></label>
+  </div>
+  <div class="row"><button id="play" type="button">▶ Play</button> Step to: <span id="steps"></span></div>
+  <p id="msg" class="message">Mode Bob: a lift with the middle height 2.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const MID = 2, TMAX = 8;
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const fmt = (v) => { const r = Math.round(v * 100) / 100; return (r < 0 ? "−" : "") + Math.abs(r === 0 ? 0 : r); };
+  let W = 0, H = 0, mode = "bob", A = 3, T = 4, t = 0, playing = false, last = 0;
+  const RAD = Math.PI / 180;
+  const amp = () => mode === "sweep" ? A * 15 : A;   // in the sweep mode, the amplitude is an angle: 15° per step
+
+  function info() {
+    const ang = 360 * t / T, s = Math.sin(ang * RAD), c = Math.cos(ang * RAD);
+    if (mode === "bob") return { ang, s, f: `y = ${MID} + ${A} × sin(360° × t ÷ ${T})`, k1: "height y", v1: fmt(MID + A * s), k2: "sin of the angle", v2: fmt(s) };
+    if (mode === "orbit") return { ang, s, f: `position = (0, ${MID}) + ${A} × (cos θ, sin θ),  θ = 360° × t ÷ ${T}`, k1: "position", v1: `(${fmt(A * c)}, ${fmt(MID + A * s)})`, k2: "angular speed", v2: fmt(360 / T) + "°/s" };
+    const a = A * 15 * s;
+    return { ang, s, f: `beam angle = ${A * 15}° × sin(360° × t ÷ ${T})`, k1: "beam angle", v1: fmt(a) + "°", k2: "beam (cos, sin)", v2: `(${fmt(Math.cos(a * RAD))}, ${fmt(Math.sin(a * RAD))})` };
+  }
+  function readouts() {
+    const i = info();
+    $("formula").textContent = i.f;
+    $("t").textContent = fmt(t) + " s"; $("ang").textContent = fmt(i.ang % 360) + "°";
+    $("k1").textContent = i.k1; $("v1").textContent = i.v1; $("k2").textContent = i.k2; $("v2").textContent = i.v2;
+  }
+  function update() {
+    readouts();
+    $("Ar").textContent = mode === "sweep" ? A * 15 + "°" : String(A); $("Tr").textContent = T + " s";
+    document.querySelectorAll("#modes button").forEach((b) => b.classList.toggle("ghost", b.dataset.m !== mode));
+    $("steps").innerHTML = "";
+    [0, 0.25, 0.5, 0.75, 1].forEach((q) => {
+      const v = q * T, b = document.createElement("button"); b.type = "button"; b.className = Math.abs(v - t) < 1e-6 ? "" : "ghost";
+      b.textContent = fmt(v) + " s"; b.addEventListener("click", () => { playing = false; $("play").textContent = "▶ Play"; t = v; update(); });
+      $("steps").appendChild(b);
+    });
+  }
+  function resize() {
+    W = canvas.clientWidth; H = Math.round(Math.max(220, Math.min(300, W * 0.45)));
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function draw() {
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, W, H);
+    const narrow = W < 460;
+    const cw = narrow ? W * 0.42 : W * 0.34;          // left panel: the circle
+    const cy = H / 2, cx = cw / 2, R = Math.min(cw * 0.4, H * 0.36), unit = R / 4;
+    const ang = 360 * t / T, s = Math.sin(ang * RAD), c = Math.cos(ang * RAD);
+    // circle of the motion (radius = amplitude)
+    const r = mode === "sweep" ? R : A * unit;
+    ctx.strokeStyle = "#e4e8e5"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(8, cy); ctx.lineTo(cw - 8, cy); ctx.stroke();
+    if (mode === "sweep") {
+      const a = A * 15 * s, a0 = A * 15;
+      ctx.fillStyle = "rgba(250,176,5,0.18)"; ctx.beginPath(); ctx.moveTo(cx - R * 0.6, cy); ctx.arc(cx - R * 0.6, cy, R * 1.5, -a0 * RAD, a0 * RAD); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = "#fab005"; ctx.lineWidth = 4; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(cx - R * 0.6, cy); ctx.lineTo(cx - R * 0.6 + Math.cos(a * RAD) * R * 1.5, cy - Math.sin(a * RAD) * R * 1.5); ctx.stroke();
+      ctx.fillStyle = "#495057"; ctx.fillRect(cx - R * 0.6 - 12, cy - 14, 18, 28);
+    } else {
+      ctx.strokeStyle = "#2F9E44"; ctx.lineWidth = 2; ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle = "#2F9E44"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + c * r, cy - s * r); ctx.stroke();
+      ctx.fillStyle = "#e8590c"; ctx.beginPath(); ctx.arc(cx + c * r, cy - s * r, 8, 0, 7); ctx.fill();
+      ctx.fillStyle = "#2F9E44"; ctx.beginPath(); ctx.arc(cx, cy, 4, 0, 7); ctx.fill();
+      if (mode === "bob") { // the lift itself, at the same height
+        ctx.fillStyle = "#2F9E44"; ctx.fillRect(cw - 34, cy - s * r - 5, 26, 10);
+        ctx.strokeStyle = "rgba(232,89,12,0.6)"; ctx.setLineDash([3, 4]); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(cx + c * r, cy - s * r); ctx.lineTo(cw - 34, cy - s * r); ctx.stroke(); ctx.setLineDash([]);
+      }
+    }
+    ctx.fillStyle = "#6b726e"; ctx.font = "700 11px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(mode === "sweep" ? "tower and beam" : mode === "orbit" ? "the orbit" : "circle → lift", cx, H - 8);
+    // right panel: the graph over time
+    const gx = cw + 26, gw = W - gx - 12, X = (tt) => gx + tt / TMAX * gw;
+    const Y = (v) => cy - v / (mode === "sweep" ? 60 : 4) * (H / 2 - 22);
+    ctx.strokeStyle = "#e4e8e5"; ctx.lineWidth = 1;
+    for (let k = 0; k <= TMAX; k++) { ctx.beginPath(); ctx.moveTo(X(k), 14); ctx.lineTo(X(k), H - 20); ctx.stroke(); }
+    ctx.strokeStyle = "#adb5bd"; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(gx, cy); ctx.lineTo(gx + gw, cy); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = "#6b726e"; ctx.font = "600 10px Nunito, system-ui, sans-serif";
+    for (let k = 0; k <= TMAX; k += 2) ctx.fillText(k + " s", X(k), H - 6);
+    ctx.textAlign = "right";
+    ctx.fillText(mode === "sweep" ? "0°" : mode === "orbit" ? "y " + MID : "middle " + MID, gx - 4, cy + 4);
+    const a0 = amp();
+    ctx.fillText(mode === "sweep" ? "+" + a0 + "°" : String(MID + A), gx - 4, Y(a0) + 4);
+    ctx.fillText(mode === "sweep" ? "−" + a0 + "°" : String(MID - A).replace("-", "−"), gx - 4, Y(-a0) + 4);
+    ctx.strokeStyle = "#2F9E44"; ctx.lineWidth = 3; ctx.beginPath();
+    for (let i = 0; i <= 160; i++) { const tt = i / 160 * TMAX, v = a0 * Math.sin(360 * tt / T * RAD); i ? ctx.lineTo(X(tt), Y(v)) : ctx.moveTo(X(tt), Y(v)); }
+    ctx.stroke();
+    const v = a0 * s;
+    ctx.fillStyle = "#e8590c"; ctx.beginPath(); ctx.arc(X(t), Y(v), 6, 0, 7); ctx.fill();
+    if (mode !== "sweep") { ctx.strokeStyle = "rgba(232,89,12,0.5)"; ctx.setLineDash([3, 4]); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(cx + c * r, cy - s * r); ctx.lineTo(X(t), Y(v)); ctx.stroke(); ctx.setLineDash([]); }
+  }
+  function loop(now) {
+    requestAnimationFrame(loop);
+    const dt = last ? Math.min((now - last) / 1000, 0.1) : 0; last = now;
+    if (playing) { t += dt; if (t >= TMAX) t = 0; readouts(); }
+    try { draw(); } catch (e) { /* keep the loop alive */ }
+  }
+  [["bob", "Bob (up and down)"], ["orbit", "Orbit (circle)"], ["sweep", "Sweep (angle)"]].forEach(([m, label]) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.dataset.m = m; b.textContent = label;
+    b.addEventListener("click", () => {
+      mode = m; t = 0; update();
+      $("msg").textContent = m === "bob" ? "Mode Bob: a lift with the middle height 2. The amplitude is how far it goes up from the middle."
+        : m === "orbit" ? "Mode Orbit: a point circles the centre (0, 2). The amplitude is the radius; one turn takes one period."
+        : "Mode Sweep: a searchlight. The amplitude is the largest angle, 15° per step of the slider.";
+    });
+    $("modes").appendChild(b);
+  });
+  $("A").addEventListener("input", (e) => { A = Number(e.target.value); update(); });
+  $("T").addEventListener("input", (e) => { T = Number(e.target.value); t = Math.min(t, TMAX); update(); });
+  $("play").addEventListener("click", () => {
+    playing = !playing; $("play").textContent = playing ? "⏸ Pause" : "▶ Play";
+    if (!playing) t = Math.round(t * 4) / 4;   // stop on a quarter second, so the values are easy to read
+    update();
+  });
+  window.addEventListener("resize", resize);
+  resize(); update(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Format Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .ribbon { display: flex; flex-wrap: wrap; gap: 10px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 8px; }
+    .sim .grp { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+    .sim .grp .btns { display: flex; flex-wrap: wrap; gap: 4px; }
+    .sim .grp small { color: var(--sim-muted); font-weight: 700; font-size: 0.72rem; }
+    .sim .ribbon button { padding: 5px 9px; font-size: 0.85rem; background: #fff; color: #2a211c; border: 1px solid #ced4da; box-shadow: none; }
+    .sim .ribbon button.on { background: var(--sim-accent); color: #fff; border-color: var(--sim-accent); }
+    .sim .wrap { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 10px; margin-top: 10px; }
+    .sim .page { background: #fff; border: 1px solid #ced4da; box-shadow: 3px 3px 0 #e9ecef; padding: 18px 20px; min-height: 230px; font-family: Calibri, Carlito, Arial, sans-serif; }
+    .sim .page p { margin: 0 0 8px; padding: 2px 4px; border: 2px solid transparent; border-radius: 4px; cursor: pointer; }
+    .sim .page p.sel { border-color: var(--sim-accent); }
+    .sim .model { border: 1px solid #e9ecef; border-radius: 10px; padding: 8px 12px; font-size: 0.85rem; }
+    .sim .model b { color: var(--sim-accent); }
+    .sim .model li.ok { color: #2b8a3e; } .sim .model li.ok::marker { content: "✓ "; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 560px) { .sim .wrap { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Format Lab</h1>
+  <p class="hint">Tap a paragraph on the page to select it. Then use the buttons: <b>Home › Font</b> changes the letters, <b>Home › Paragraph</b> changes the whole paragraph. Make the page look like the model.</p>
+  <div class="ribbon" id="ribbon"></div>
+  <div class="wrap">
+    <div class="page" id="page"></div>
+    <div class="model"><b>The model</b><ul id="jobs"></ul></div>
+  </div>
+  <div class="row"><button id="check" type="button">Check</button><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message">Tap the first line, "Library opening hours".</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const TEXT = ["Library opening hours", "The library opens at 8:00 and closes at 16:00. On Friday it is closed.", "Please return your books on time."];
+  const fresh = () => TEXT.map(() => ({ size: 11, bold: false, italic: false, under: false, color: "#2a211c", align: "left", spacing: 1 }));
+  const JOBS = [
+    ["Title: size 20", (p) => p[0].size === 20],
+    ["Title: bold and centred", (p) => p[0].bold && p[0].align === "center"],
+    ["Title: an orange colour", (p) => p[0].color !== "#2a211c"],
+    ["Text: line spacing 1.15", (p) => p[1].spacing === 1.15 && p[2].spacing === 1.15],
+    ["Last line: bold, nothing else bold in the text", (p) => p[2].bold && !p[1].bold && !p[1].italic && !p[2].italic],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let paras = fresh(), sel = null;
+  const GROUPS = [
+    ["Home › Font", [["B", "bold"], ["I", "italic"], ["U", "under"], ["11", "size", 11], ["14", "size", 14], ["20", "size", 20], ["orange", "color", "#D9480F"], ["black", "color", "#2a211c"]]],
+    ["Home › Paragraph", [["left", "align", "left"], ["centre", "align", "center"], ["right", "align", "right"], ["justify", "align", "justify"], ["1.0", "spacing", 1], ["1.15", "spacing", 1.15], ["1.5", "spacing", 1.5]]],
+  ];
+  GROUPS.forEach(([name, btns]) => {
+    const g = document.createElement("div"); g.className = "grp";
+    const row = document.createElement("div"); row.className = "btns";
+    btns.forEach(([label, key, val]) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = label; b.dataset.key = key; if (val !== undefined) b.dataset.val = val;
+      b.addEventListener("click", () => {
+        if (sel === null) { $("msg").textContent = "First tap a paragraph on the page."; $("msg").className = "message bad"; return; }
+        const p = paras[sel];
+        if (val === undefined) p[key] = !p[key]; else p[key] = typeof val === "number" ? val : (isNaN(Number(val)) ? val : Number(val));
+        $("msg").textContent = `${label}: ${key === "align" || key === "spacing" ? "the whole paragraph changed" : "the letters changed"}.`; $("msg").className = "message";
+        paint();
+      });
+      row.appendChild(b);
+    });
+    g.appendChild(row); const sm = document.createElement("small"); sm.textContent = name; g.appendChild(sm);
+    $("ribbon").appendChild(g);
+  });
+  function paint() {
+    $("page").innerHTML = "";
+    paras.forEach((p, i) => {
+      const el = document.createElement("p"); el.textContent = TEXT[i]; el.className = i === sel ? "sel" : "";
+      Object.assign(el.style, { fontSize: (p.size * 1.25) + "px", fontWeight: p.bold ? "800" : "400", fontStyle: p.italic ? "italic" : "normal",
+        textDecoration: p.under ? "underline" : "none", color: p.color, textAlign: p.align, lineHeight: String(p.spacing * 1.25) });
+      el.addEventListener("click", () => { sel = i; $("msg").textContent = "Selected. Now choose a button."; $("msg").className = "message"; paint(); });
+      $("page").appendChild(el);
+    });
+    document.querySelectorAll(".ribbon button").forEach((b) => {
+      if (sel === null) { b.classList.remove("on"); return; }
+      const p = paras[sel], k = b.dataset.key, v = b.dataset.val;
+      b.classList.toggle("on", v === undefined ? !!p[k] : String(p[k]) === v);
+    });
+    $("jobs").innerHTML = JOBS.map(([t]) => `<li>${t}</li>`).join("");
+  }
+  $("check").addEventListener("click", () => {
+    const res = JOBS.map(([, f]) => f(paras)); const n = res.filter(Boolean).length;
+    [...$("jobs").children].forEach((li, i) => li.classList.toggle("ok", res[i]));
+    $("msg").textContent = n === JOBS.length ? "✓ The page looks like the model. All 5 jobs done!" : `${n} of ${JOBS.length} jobs done. The green ones are right; work on the others.`;
+    $("msg").className = "message " + (n === JOBS.length ? "good" : "bad");
+  });
+  $("reset").addEventListener("click", () => { paras = fresh(); sel = null; $("msg").textContent = "Tap the first line, \"Library opening hours\"."; $("msg").className = "message"; paint(); });
+  paint();
+})();
+</script>
+</body>
+</html>

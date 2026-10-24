@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Script Formatter</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .lines { display: grid; gap: 6px; }
+    .sim .ln { display: flex; justify-content: space-between; gap: 8px; align-items: center; text-align: left; background: #fff; color: #2a211c; border: 1.5px solid #e9ecef; box-shadow: none; padding: 8px 10px; border-radius: 10px; font-family: Menlo, Consolas, monospace; font-weight: 600; font-size: 0.85rem; }
+    .sim .ln.sel { border: 2.5px solid var(--sim-accent); }
+    .sim .ln.good { border-color: #2b8a3e; } .sim .ln.bad { border-color: #c92a2a; background: #fff5f5; }
+    .sim .tag { font-family: Nunito, system-ui, sans-serif; font-size: 0.75rem; color: #fff; border-radius: 10px; padding: 2px 8px; white-space: nowrap; }
+    .sim .kinds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+    .sim .kinds button { padding: 7px 4px; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+    .sim .page { margin-top: 10px; border: 1px solid #dee2e6; border-radius: 6px; padding: 14px 18px; font-family: Menlo, Consolas, monospace; font-size: 0.82rem; line-height: 1.45; background: #fff; }
+    .sim .page p { margin: 0 0 10px; }
+    .sim .page .c { margin: 0 0 0 38%; } .sim .page .p { margin: 0 0 0 31%; } .sim .page .d { margin: 0 15% 10px 22%; } .sim .page .t { text-align: right; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 480px) { .sim .kinds { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Script Formatter</h1>
+  <p class="hint">These are the lines of the opening scene of <i>Rooftop Rescue</i>, without their format. Tap a line, then tap what it is. When every line is tagged, press <b>Format the page</b>.</p>
+  <div class="lines" id="lines"></div>
+  <div class="kinds" id="kinds"></div>
+  <div class="row"><button id="format" type="button">Format the page</button><button id="again" type="button" class="ghost">Start again</button><span id="count"></span></div>
+  <p id="msg" class="message">Tap the first line.</p>
+  <div class="page" id="page" hidden></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const KINDS = { heading: ["scene heading", "#9C36B5"], action: ["action", "#1c7ed6"], character: ["character", "#e8590c"], paren: ["parenthetical", "#0b7285"], dialogue: ["dialogue", "#2b8a3e"], transition: ["transition", "#6b726e"] };
+  const WHY = { heading: "INT. or EXT., the place and the time: it starts a scene.", action: "what we see and hear, in the present tense.",
+    character: "the name of the speaker, in capitals, above the line.", paren: "how the line is said, short, in brackets.",
+    dialogue: "the words the character says, under the name.", transition: "how we go to the next scene, at the right." };
+  const LINES = [
+    ["EXT. FLOODED STREET – DUSK", "heading"],
+    ["Brown water fills the street up to the windows. A small rowing boat knocks against a broken jetty.", "action"],
+    ["NOUR (17) jumps into the boat and grabs the oars.", "action"],
+    ["NOUR", "character"],
+    ["(to herself)", "paren"],
+    ["Hold on, everyone. I'm coming.", "dialogue"],
+    ["Far away, a torch blinks on a rooftop.", "action"],
+    ["CUT TO:", "transition"],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let tags = [], sel = 0;
+
+  function paint() {
+    $("lines").innerHTML = "";
+    LINES.forEach(([t], i) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "ln" + (i === sel ? " sel" : "");
+      const k = tags[i]; b.innerHTML = `<span>${t}</span>` + (k ? `<span class="tag" style="background:${KINDS[k][1]}">${KINDS[k][0]}</span>` : "");
+      b.addEventListener("click", () => { sel = i; $("msg").textContent = "Now tap what this line is."; $("msg").className = "message"; paint(); });
+      $("lines").appendChild(b);
+    });
+    $("count").textContent = `${tags.filter(Boolean).length} of ${LINES.length} tagged`;
+  }
+  Object.entries(KINDS).forEach(([k, [n]]) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.dataset.k = k; b.textContent = n;
+    b.addEventListener("click", () => {
+      if (sel === null) { $("msg").textContent = "First tap a line."; return; }
+      tags[sel] = k;
+      const next = LINES.findIndex((_, i) => !tags[i]);
+      sel = next === -1 ? null : next;
+      $("msg").textContent = next === -1 ? "Every line is tagged. Press Format the page." : "Tagged. Next line.";
+      $("msg").className = "message"; $("page").hidden = true; paint();
+    });
+    $("kinds").appendChild(b);
+  });
+  $("format").addEventListener("click", () => {
+    if (tags.filter(Boolean).length < LINES.length) { $("msg").textContent = "Tag every line first."; $("msg").className = "message bad"; return; }
+    let wrong = 0;
+    [...$("lines").children].forEach((b, i) => { const ok = tags[i] === LINES[i][1]; if (!ok) wrong++; b.classList.add(ok ? "good" : "bad"); });
+    if (wrong) {
+      const i = LINES.findIndex((l, j) => tags[j] !== l[1]);
+      $("msg").textContent = `✗ ${wrong} line${wrong > 1 ? "s are" : " is"} not right. Look at "${LINES[i][0].slice(0, 30)}…": it is the ${KINDS[LINES[i][1]][0]} — ${WHY[LINES[i][1]]} Tap it and fix it.`;
+      $("msg").className = "message bad"; return;
+    }
+    $("msg").textContent = "✓ Every line is right. This is how the page looks:"; $("msg").className = "message good";
+    const cls = { heading: "", action: "", character: "c", paren: "p", dialogue: "d", transition: "t" };
+    $("page").innerHTML = LINES.map(([t, k]) => `<p class="${cls[k]}">${t}</p>`).join("");
+    $("page").hidden = false;
+  });
+  $("again").addEventListener("click", () => { tags = []; sel = 0; $("page").hidden = true; $("msg").textContent = "Tap the first line."; $("msg").className = "message"; paint(); });
+  paint();
+})();
+</script>
+</body>
+</html>

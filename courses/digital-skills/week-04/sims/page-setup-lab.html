@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Page Setup Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .ribbon { display: flex; flex-wrap: wrap; gap: 10px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 8px; }
+    .sim .grp { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .sim .grp .btns { display: flex; gap: 4px; flex-wrap: wrap; }
+    .sim .grp small { color: var(--sim-muted); font-weight: 700; font-size: 0.72rem; }
+    .sim .ribbon button { padding: 5px 10px; font-size: 0.85rem; background: #fff; color: #2a211c; border: 1px solid #ced4da; box-shadow: none; }
+    .sim .ribbon button.on { background: var(--sim-accent); color: #fff; border-color: var(--sim-accent); }
+    .sim .pages { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 12px; }
+    .sim .pg { background: #fff; border: 1px solid #ced4da; box-shadow: 3px 3px 0 #e9ecef; position: relative; font-family: Calibri, Carlito, Arial, sans-serif; overflow: hidden; }
+    .sim .area { position: absolute; border: 1px dashed #ffa94d; }
+    .sim .area p { margin: 0 0 4px; font-size: 10px; }
+    .sim .area h3 { margin: 0 0 4px; font-size: 13px; color: #1c5fb4; }
+    .sim .t { display: grid; grid-template-columns: repeat(6, 1fr); font-size: 8px; }
+    .sim .t div { border: 1px solid #dee2e6; padding: 2px; height: 14px; white-space: nowrap; overflow: hidden; }
+    .sim .t div.h { background: var(--sim-accent); color: #fff; font-weight: 800; }
+    .sim .t.over div { border-color: #fa5252; }
+    .sim .cover { text-align: center; margin-top: 30%; font-size: 15px; font-weight: 800; }
+    .sim .facts { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; font-weight: 700; font-size: 0.9rem; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Page Setup Lab</h1>
+  <p class="hint">A class report has a cover and a wide table of six columns (20 cm). Use <b>Layout › Page Setup</b>: the orientation and the margins decide how wide the text area is. Then put a <b>page break</b> after the cover.</p>
+  <div class="ribbon" id="ribbon"></div>
+  <div class="pages" id="pages"></div>
+  <div class="facts" id="facts"></div>
+  <p id="msg" class="message">The page is A4 portrait with Normal margins. Does the table fit?</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const MARGINS = { Narrow: 1.27, Normal: 2.54, Wide: 5.08 }, TABLE = 20, SCALE = 9;   // cm; pixels per cm
+  const $ = (id) => document.getElementById(id);
+  let st = { orient: "Portrait", margin: "Normal", brk: false };
+  const groups = [["Layout › Orientation", "orient", ["Portrait", "Landscape"]], ["Layout › Margins", "margin", ["Narrow", "Normal", "Wide"]], ["Insert › Pages", "brk", ["Page break"]]];
+  groups.forEach(([name, key, vals]) => {
+    const g = document.createElement("div"); g.className = "grp"; const row = document.createElement("div"); row.className = "btns";
+    vals.forEach((v) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = v; b.dataset.k = key; b.dataset.v = v;
+      b.addEventListener("click", () => { if (key === "brk") st.brk = !st.brk; else st[key] = v; paint(); });
+      row.appendChild(b);
+    });
+    g.appendChild(row); const s = document.createElement("small"); s.textContent = name; g.appendChild(s); $("ribbon").appendChild(g);
+  });
+  function page(w, h, m, inner) {
+    const d = document.createElement("div"); d.className = "pg"; d.style.width = w * SCALE + "px"; d.style.height = h * SCALE + "px";
+    const a = document.createElement("div"); a.className = "area";
+    Object.assign(a.style, { left: m * SCALE + "px", top: Math.min(m, 2.54) * SCALE + "px", width: (w - 2 * m) * SCALE + "px", height: (h - 2 * Math.min(m, 2.54)) * SCALE + "px" });
+    a.innerHTML = inner; d.appendChild(a); return d;
+  }
+  function paint() {
+    document.querySelectorAll(".ribbon button").forEach((b) => b.classList.toggle("on", b.dataset.k === "brk" ? st.brk : st[b.dataset.k] === b.dataset.v));
+    const land = st.orient === "Landscape", w = land ? 29.7 : 21, h = land ? 21 : 29.7, m = MARGINS[st.margin];
+    const textW = Math.round((w - 2 * m) * 10) / 10, fits = textW >= TABLE;
+    const tbl = `<div class="t ${fits ? "" : "over"}" style="width:${TABLE * SCALE}px">${["Name", "Age", "City", "Phone use", "Hours", "Games"].map((x) => `<div class="h">${x}</div>`).join("")}${Array.from({ length: 18 }, (_, i) => `<div>${["Sara", "16", "Amman", "daily", "3", "yes"][i % 6]}</div>`).join("")}</div>`;
+    const intro = `<h3>1 Introduction</h3><p>We asked 20 students about their phones.</p>${tbl}`;
+    $("pages").innerHTML = "";
+    if (st.brk) {
+      $("pages").appendChild(page(w, h, m, `<div class="cover">Class report<br><span style="font-size:11px;font-weight:400">Our phones</span></div>`));
+      $("pages").appendChild(page(w, h, m, intro));
+    } else {
+      $("pages").appendChild(page(w, h, m, `<div style="text-align:center;font-weight:800;font-size:15px;margin:6px 0 10px">Class report</div>${intro}`));
+    }
+    $("facts").innerHTML = `<span>Page: A4, ${w} × ${h} cm</span><span>Margins: ${m} cm each side</span><span>Text area: ${textW} cm wide</span><span style="color:${fits ? "#2b8a3e" : "#c92a2a"}">Table: ${TABLE} cm → ${fits ? "fits" : "does not fit"}</span>`;
+    if (fits && st.brk) { $("msg").textContent = `✓ The table fits (${textW} cm ≥ 20 cm), and the cover is alone on page 1. In Word: Layout › Orientation › Landscape, and Ctrl + Enter after the cover.`; $("msg").className = "message good"; }
+    else if (fits) { $("msg").textContent = `The table fits now: the text area is ${textW} cm wide. Now put a page break after the cover, so that the report starts on page 2.`; $("msg").className = "message"; }
+    else { $("msg").textContent = `The text area is only ${textW} cm wide, but the table needs 20 cm. Try another orientation or other margins.`; $("msg").className = "message bad"; }
+  }
+  paint();
+})();
+</script>
+</body>
+</html>

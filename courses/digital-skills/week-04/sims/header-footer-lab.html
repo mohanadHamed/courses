@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Header and Footer Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .ribbon { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 8px; font-weight: 700; font-size: 0.88rem; }
+    .sim .ribbon input[type="text"] { font: inherit; font-weight: 600; padding: 5px 8px; border: 1px solid #ced4da; border-radius: 8px; min-width: 0; flex: 1 1 180px; }
+    .sim .ribbon select { font: inherit; padding: 4px; border-radius: 8px; }
+    .sim .pages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .sim .pg { background: #fff; border: 1px solid #ced4da; box-shadow: 3px 3px 0 #e9ecef; aspect-ratio: 21 / 29.7; display: flex; flex-direction: column; font-family: Calibri, Carlito, Arial, sans-serif; font-size: 0.72rem; }
+    .sim .hd, .sim .ft { min-height: 22px; padding: 4px 6px; color: var(--sim-accent); font-weight: 700; }
+    .sim .hd { border-bottom: 1px dashed #ffd8a8; } .sim .ft { border-top: 1px dashed #ffd8a8; text-align: center; }
+    .sim .hd.on, .sim .ft.on { background: #fff4e6; }
+    .sim .bd { flex: 1; padding: 6px; }
+    .sim .bd i { display: block; height: 5px; background: #dee2e6; border-radius: 2px; margin: 6px 0; }
+    .sim .cover { text-align: center; margin-top: 40%; font-weight: 800; font-size: 0.9rem; }
+    .sim .msgs { margin-top: 8px; font-size: 0.88rem; }
+    .sim .msgs li.ok { color: #2b8a3e; font-weight: 800; } .sim .msgs li.ok::marker { content: "✓ "; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Header and Footer Lab</h1>
+  <p class="hint">In Word: <b>Insert › Header</b>, <b>Insert › Page Number</b>, and <b>Different First Page</b> (in the Header &amp; Footer tab). Type the header once: it appears on every page. The page number counts by itself.</p>
+  <div class="ribbon">
+    <span>Header:</span><input type="text" id="head" placeholder="type the header text">
+    <span>Page number:</span><select id="num"><option value="none">none</option><option value="bottom">bottom, centre</option><option value="top">top, right</option></select>
+    <label><input type="checkbox" id="first"> Different First Page</label>
+  </div>
+  <div class="pages" id="pages"></div>
+  <ul class="msgs" id="goals"></ul>
+  <p id="msg" class="message">Type "Digital Skills · Class report" as the header.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const GOALS = [
+    ["a header on pages 2 and 3", (s) => s.head.length >= 3],
+    ["page numbers at the bottom of pages 2 and 3", (s) => s.num === "bottom"],
+    ["no header and no number on the cover", (s) => s.first],
+  ];
+  function state() { return { head: $("head").value.trim(), num: $("num").value, first: $("first").checked }; }
+  function paint() {
+    const s = state();
+    $("pages").innerHTML = "";
+    for (let p = 1; p <= 3; p++) {
+      const skip = p === 1 && s.first;
+      const top = !skip ? (s.head + (s.num === "top" ? `<span style="float:right">${p}</span>` : "")) : "";
+      const bottom = !skip && s.num === "bottom" ? `Page ${p}` : "";
+      const body = p === 1 ? `<div class="cover">Class report<br><span style="font-weight:400">Our phones</span></div>` : "<i></i>".repeat(9);
+      $("pages").innerHTML += `<div class="pg"><div class="hd ${top ? "on" : ""}">${top}</div><div class="bd">${body}</div><div class="ft ${bottom ? "on" : ""}">${bottom}</div></div>`;
+    }
+    const res = GOALS.map(([, f]) => f(s));
+    $("goals").innerHTML = GOALS.map(([t], i) => `<li class="${res[i] ? "ok" : ""}">${t}</li>`).join("");
+    const n = res.filter(Boolean).length;
+    $("msg").textContent = n === 3 ? "✓ All three: the header and the numbers repeat on every page, but not on the cover." :
+      !res[0] ? "Type the header text: it appears on every page at once." : !res[1] ? "Choose a page number at the bottom, centre." : "The cover shows the header and a number. Tick Different First Page.";
+    $("msg").className = "message " + (n === 3 ? "good" : "");
+  }
+  ["head", "num", "first"].forEach((id) => $(id).addEventListener(id === "head" ? "input" : "change", paint));
+  paint();
+})();
+</script>
+</body>
+</html>

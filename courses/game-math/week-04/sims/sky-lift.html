@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Sky Lift</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .formula { margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .formula b { color: #e8590c; }
+    .sim .pad { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 420px) { .sim .pad { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Sky Lift</h1>
+  <p class="hint">The hero waits on a ledge. A lift moves by a rule with sin (or around a wheel). At which time is the lift level with the ledge? Choose the time; the clock starts at 0 s and the hero jumps at your time.</p>
+  <div class="hud">
+    <span class="lvl" id="lvl">Round 1</span>
+    <span id="clock">t = 0 s</span>
+    <span class="stars" id="stars">★ 0</span>
+  </div>
+  <p class="formula" id="formula"></p>
+  <canvas id="c" aria-label="A ledge on the right and a lift that moves up and down"></canvas>
+  <div class="pad" id="choices"></div>
+  <p id="msg" class="message">Round 1 is the story of the lesson.</p>
+  <div class="row"><button id="next" type="button" hidden>Next round ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // kind "bob": y = c + A sin(360° t / T). kind "wheel": a cabin on a wheel (centre height c, radius A), 90° per second from 0°.
+  const ROUNDS = [
+    { kind: "bob", c: 2, A: 3, T: 4, ledge: 5, times: [0, 1, 2, 3], answer: 1, note: "the cliff at height 5" },
+    { kind: "bob", c: 2, A: 3, T: 4, ledge: -1, times: [0, 1, 2, 3], answer: 3, note: "the low ledge at height −1" },
+    { kind: "bob", c: 3, A: 2, T: 8, ledge: 5, times: [0, 2, 4, 6], answer: 2, note: "the ledge at height 5" },
+    { kind: "wheel", c: 3, A: 2, T: 4, ledge: 5, times: [0, 1, 2, 3], answer: 1, note: "the ledge at the top of the wheel, height 5" },
+    { kind: "bob", c: 1, A: 2, T: 6, ledge: 3, times: [0, 1.5, 3, 4.5], answer: 1.5, note: "the ledge at height 3" },
+  ];
+  const RAD = Math.PI / 180, PLAY = 900;   // ms of animation for each second of game time
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const fmt = (v) => { const r = Math.round(v * 100) / 100; return (r < 0 ? "−" : "") + Math.abs(r === 0 ? 0 : r); };
+  let W = 0, H = 0, U = 30, base = 0, round = 0, stars = 0, tries = 0, cur = ROUNDS[0], solved = false, run = null, sound = true, audio = null, over = false, idle0 = performance.now();
+
+  function lift(t) {   // [x offset in units, height]
+    const a = 360 * t / cur.T;
+    if (cur.kind === "wheel") return [cur.A * Math.cos(a * RAD), cur.c + cur.A * Math.sin(a * RAD)];
+    return [0, cur.c + cur.A * Math.sin(a * RAD)];
+  }
+  function rule() {
+    return cur.kind === "wheel"
+      ? `Cabin: centre height <b>${cur.c}</b>, radius <b>${cur.A}</b>, <b>90° per second</b>, starts at 0° (right). Ledge: <b>${fmt(cur.ledge)}</b>.`
+      : `y = <b>${cur.c}</b> + <b>${cur.A}</b> × sin(360° × t ÷ <b>${cur.T}</b>). Ledge: <b>${fmt(cur.ledge)}</b>.`;
+  }
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function startRound() {
+    if (round >= ROUNDS.length) {
+      over = true; $("lvl").textContent = "All rounds done"; $("formula").innerHTML = ""; $("choices").innerHTML = "";
+      $("msg").textContent = `🎉 The hero reached every ledge! ★ ${stars} of ${ROUNDS.length * 3}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; return;
+    }
+    over = false; cur = ROUNDS[round]; tries = 0; solved = false; run = null; idle0 = performance.now();
+    $("lvl").textContent = `Round ${round + 1} / ${ROUNDS.length}`;
+    $("formula").innerHTML = rule();
+    $("choices").innerHTML = "";
+    cur.times.forEach((tt) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.dataset.t = tt; b.textContent = `Jump at ${fmt(tt)} s`;
+      b.addEventListener("click", () => choose(tt)); $("choices").appendChild(b);
+    });
+    $("next").hidden = true;
+    $("msg").textContent = round === 0 ? "Round 1 is the story of the lesson. When is the lift level with " + cur.note + "?" : "When is the lift level with " + cur.note + "?";
+    $("msg").className = "message";
+  }
+  function choose(tt) {
+    if (over) { $("msg").textContent = "All rounds are done. Press Play again."; return; }
+    if (run && !run.done) { $("msg").textContent = "Wait: the clock is still running."; return; }
+    if (solved) { $("msg").textContent = "This round is done. Press Next round."; return; }
+    tries++;
+    run = { tt, t0: performance.now(), done: false };
+    beep(440, 0.15);
+    setTimeout(() => {   // decide with a timer, not in draw()
+      run.done = true;
+      const y = lift(tt)[1], ok = tt === cur.answer;
+      if (ok) {
+        solved = true;
+        const got = tries === 1 ? 3 : tries === 2 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+        $("msg").textContent = `✓ At t = ${fmt(tt)} s the lift is at ${fmt(y)}: level with the ledge. ${"★".repeat(got)}`;
+        $("msg").className = "message good"; $("next").hidden = false;
+        $("next").textContent = round < ROUNDS.length - 1 ? "Next round ▶" : "Finish ▶";
+        [660, 880, 1320].forEach((f, i) => setTimeout(() => beep(f, 0.13), i * 110));
+      } else {
+        $("msg").textContent = `✗ At t = ${fmt(tt)} s the lift is at ${fmt(y)}, not at ${fmt(cur.ledge)}. Work out the angle 360° × t ÷ ${cur.T} for each time. Try again.`;
+        $("msg").className = "message bad"; beep(200, 0.3, "sawtooth");
+      }
+    }, tt * PLAY + 650);
+  }
+  function resize() {
+    W = canvas.clientWidth; U = Math.min(W / 14, 34);
+    H = Math.round(U * 9.2); base = H - U * 1.6;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  const Y = (y) => base - (y + 1) * U;
+  function draw(now) {
+    const sky = ctx.createLinearGradient(0, 0, 0, H); sky.addColorStop(0, "#d0ebff"); sky.addColorStop(1, "#f1f8ff");
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+    // height scale
+    ctx.fillStyle = "#6b726e"; ctx.font = "700 11px Nunito, system-ui, sans-serif"; ctx.textAlign = "right";
+    ctx.strokeStyle = "rgba(0,0,0,0.08)"; ctx.lineWidth = 1;
+    for (let v = -1; v <= 6; v++) { ctx.fillText(fmt(v), 24, Y(v) + 4); ctx.beginPath(); ctx.moveTo(30, Y(v)); ctx.lineTo(W, Y(v)); ctx.stroke(); }
+    if (over) return;
+    // the clock: running during a jump, otherwise the lift keeps moving slowly
+    let t;
+    if (run) t = run.done ? run.tt : Math.max(0, Math.min((now - run.t0) / PLAY, run.tt));
+    else t = ((now - idle0) / 1000) % cur.T;
+    $("clock").textContent = run ? `t = ${fmt(t)} s` : "watch the lift";
+    const lx = W * 0.42;
+    // the ledge on the right
+    const ledgeX = W * 0.62;
+    ctx.fillStyle = "#8d6e63"; ctx.fillRect(ledgeX, Y(cur.ledge), W - ledgeX, H - Y(cur.ledge));
+    ctx.fillStyle = "#66bb6a"; ctx.fillRect(ledgeX, Y(cur.ledge) - 6, W - ledgeX, 8);
+    // the path of the lift
+    ctx.strokeStyle = "rgba(47,158,68,0.5)"; ctx.setLineDash([4, 5]); ctx.lineWidth = 1.5;
+    if (cur.kind === "wheel") { ctx.beginPath(); ctx.arc(lx, Y(cur.c), cur.A * U, 0, 7); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = "#495057"; ctx.beginPath(); ctx.arc(lx, Y(cur.c), 6, 0, 7); ctx.fill(); }
+    else { ctx.beginPath(); ctx.moveTo(lx, Y(cur.c + cur.A)); ctx.lineTo(lx, Y(cur.c - cur.A)); ctx.stroke(); }
+    ctx.setLineDash([]);
+    const [dx, ly] = lift(t), px = lx + dx * U, py = Y(ly);
+    if (cur.kind === "wheel") { ctx.strokeStyle = "#495057"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(lx, Y(cur.c)); ctx.lineTo(px, py); ctx.stroke(); }
+    ctx.fillStyle = "#2F9E44"; ctx.fillRect(px - U * 1.3, py - 5, U * 2.6, 10);
+    ctx.fillStyle = "#2F9E44"; ctx.font = "800 12px Nunito, system-ui, sans-serif"; ctx.textAlign = "center"; ctx.fillText("y = " + fmt(ly), px, py + 22);
+    // the hero: on the ledge, then on the lift (or falling)
+    let hx = ledgeX + U * 1.2, hy = Y(cur.ledge) - 6;
+    if (run && run.done) {
+      const ok = run.tt === cur.answer;
+      const k = Math.max(0, Math.min((now - run.t0 - run.tt * PLAY) / 500, 1));
+      hx = hx + (px - hx) * k;
+      hy = ok ? hy + (py - 5 - hy) * k : hy + k * k * (H - hy);
+    }
+    ctx.fillStyle = "#e8590c"; ctx.beginPath(); ctx.arc(hx, hy - 20, 8, 0, 7); ctx.fill();
+    ctx.fillRect(hx - 7, hy - 13, 14, 13);
+    ctx.fillStyle = "#2a2f2c"; ctx.textAlign = "left"; ctx.font = "800 12px Nunito, system-ui, sans-serif";
+    ctx.fillText("ledge " + fmt(cur.ledge), ledgeX + 6, Y(cur.ledge) + 20);
+  }
+  function loop(now) { requestAnimationFrame(loop); try { draw(now); } catch (e) { /* keep the loop alive */ } }
+  $("next").addEventListener("click", () => { if (over) { round = 0; stars = 0; $("stars").textContent = "★ 0"; } else round++; startRound(); });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  window.addEventListener("resize", resize);
+  resize(); startRound(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

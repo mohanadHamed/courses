@@ -1,0 +1,162 @@
+---
+title: "Smartphone Architecture: SoC, Sensors, Touch Screen and Battery"
+subtitle: "Lecture 7"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary soc sensor accelerometer gyroscope capacitive-touch-screen touch-sampling-rate battery-capacity thermal-throttling >}}
+
+## 7.1 One main chip: the SoC
+
+:::: {.columns}
+::: {.column width="50%"}
+- A phone puts its main parts on one chip, the system on a chip (SoC).
+- The SoC holds the CPU cores, the GPU, the NPU, the modem and more.
+- The CPU and the GPU share the RAM, so a phone has no separate video memory.
+- **Do it:** Find the model of your phone in Settings. Which SoC does it have?
+:::
+::: {.column width="50%"}
+![](images/soc-map.png)
+:::
+::::
+
+## Live demo · SoC Explorer
+
+{{< sim file="sims/soc-explorer.html" poster="sims/soc-explorer.png" title="SoC Explorer: the parts of a phone's main chip" task="**Show:** tap each part of the chip, then start the Quiz. **Ask:** which part draws the frames, and which part sends the score online?" >}}
+
+## Try it 1 · Inside the SoC
+
+a) Which part of the SoC draws every frame of a racing game?
+b) Which part sends the score to the online leaderboard over 4G?
+c) Where does the GPU of a phone keep its textures?
+
+::: {.answer}
+a) the GPU
+b) the modem
+c) in the RAM that it shares with the CPU
+:::
+
+## 7.2 Sensors feel the player
+
+:::: {.columns}
+::: {.column width="50%"}
+- The accelerometer feels gravity, so it shows how the phone is tilted or shaken.
+- The gyroscope shows how fast the phone turns, and it reads 0 when the phone is still.
+- The GPS finds the position, and the compass finds north.
+- **Do it:** Open Tilt Lab on your phone and lay the phone flat. What does the accelerometer show on z?
+:::
+::: {.column width="50%"}
+![](images/sensors.png)
+:::
+::::
+
+## Live demo · Tilt Lab
+
+{{< sim file="sims/tilt-lab.html" poster="sims/tilt-lab.png" title="Tilt Lab: the accelerometer and the gyroscope" task="**Show:** tilt the pad and hold it still, then move it fast. **Ask:** why does the gyroscope go back to 0 while the tilt stays?" >}}
+
+## Try it 2 · Which sensor?
+
+a) Which sensor does a racing game use when the player steers by tilting the phone?
+b) Which sensor does a shooter use when the player aims by turning the phone?
+c) A tilted phone lies still on a book. Which sensor reads 0?
+
+::: {.answer}
+a) the accelerometer
+b) the gyroscope
+c) the gyroscope
+:::
+
+## 7.3 How the screen feels a finger
+
+:::: {.columns}
+::: {.column width="50%"}
+- A capacitive touch screen has a grid of thin wires under the glass.
+- The finger changes the charge where it touches, so cloth gloves do not work.
+- The touch sampling rate says how often the screen checks for touches, for example 240 times per second.
+- **Do it:** Draw on your phone with a fingertip, a fingernail and a pencil. Which ones work?
+:::
+::: {.column width="50%"}
+![](images/touch-grid.png)
+:::
+::::
+
+## Try it 3 · The touch screen
+
+a) Why does a normal glove not work on a touch screen?
+b) At 240 Hz, how often does the screen check for touches?
+c) A sheet says "60 Hz" and "touch 120 Hz". What does each number tell?
+
+::: {.answer}
+a) Cloth does not carry the charge of the finger.
+b) about every 4 ms
+c) The picture changes 60 times per second; touches are checked 120 times per second.
+:::
+
+## 7.4 Battery and heat
+
+:::: {.columns}
+::: {.column width="50%"}
+- The battery capacity is in mAh, and a game draws a current in mA.
+- The play time is about the capacity divided by the current.
+- A hot SoC slows down by itself, and the frame rate drops: thermal throttling.
+- **Do it:** Open the battery page in Settings. Which three apps used the most battery today?
+:::
+::: {.column width="50%"}
+![](images/battery.png)
+:::
+::::
+
+## Example · Play time
+
+The test phone has a 5000 mAh battery.
+**How long can the player play at 1000 mA, and at 800 mA?**
+
+::: {.reveal}
+1. At 1000 mA the play time is 5000 ÷ 1000 = **5 hours**.
+2. At 800 mA, with a darker screen, it is 5000 ÷ 800, about **6 hours**.
+3. A battery saver mode at 30 fps also keeps the phone cooler.
+:::
+
+## Live demo · Battery Lab
+
+{{< sim file="sims/battery-lab.html" poster="sims/battery-lab.png" title="Battery Lab: play time and heat" task="**Show:** switch from 60 fps to 120 fps and high graphics, then to 30 fps. **Ask:** which setting changes the play time most, and when does the phone get hot?" >}}
+
+## Try it 4 · Battery and heat
+
+a) A phone has 4500 mAh, and a game draws 900 mA. About how long can the player play?
+b) The SoC is hot after 20 minutes. What happens to the game?
+c) Does a bigger mAh number make a phone faster?
+
+::: {.answer}
+a) about 5 hours
+b) The SoC slows down, and the frame rate drops (thermal throttling).
+c) No: the battery only holds more charge.
+:::
+
+## Game challenge · Marble Peak
+
+{{< sim file="sims/marble-peak.html" poster="sims/marble-peak.png" title="Marble Peak: tilt to roll the marble" kind="game" task="**The story:** Byte Bay tests Marble Peak, a tilt game, on its phone T1 with a 5000 mAh battery. **Play:** tilt your phone (or use the pad) to collect the gems and reach the goal." >}}
+
+## Try it 5 · Problems in the test (harder)
+
+The facts: Marble Peak reads the accelerometer. On T1 (5000 mAh) it draws 1000 mA, and it falls to 45 fps after 20 minutes.
+
+a) Why does the game fall to 45 fps after 20 minutes?
+b) A tester's phone has no gyroscope. Can the tester play Marble Peak?
+c) In battery saver mode the game draws 800 mA. How long does T1 last?
+
+::: {.answer}
+a) The hot SoC slows down (thermal throttling).
+b) Yes: the game uses the accelerometer.
+c) about 6 hours (5000 ÷ 800)
+:::
+
+## Summary
+
+- The SoC holds the CPU cores, the GPU, the NPU and the modem, and it shares the RAM.
+- The accelerometer shows the tilt, and the gyroscope shows the turning.
+- A capacitive touch screen finds the charge of a finger.
+- The play time is about the battery capacity divided by the current.
+- A hot SoC slows down, so a lower frame rate saves power and heat.

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Style Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .ribbon { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 10px; padding: 8px; }
+    .sim .ribbon small { color: var(--sim-muted); font-weight: 700; margin-right: 4px; }
+    .sim .ribbon button { padding: 6px 10px; background: #fff; color: #2a211c; border: 1px solid #ced4da; box-shadow: none; }
+    .sim .ribbon button.on { background: var(--sim-accent); color: #fff; border-color: var(--sim-accent); }
+    .sim .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr); gap: 10px; margin-top: 10px; }
+    .sim .nav { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 8px 10px; font-size: 0.85rem; }
+    .sim .nav b { color: var(--sim-muted); font-size: 0.78rem; }
+    .sim .nav div { margin: 4px 0; cursor: pointer; color: #1c5fb4; font-weight: 700; }
+    .sim .nav div.h2 { margin-left: 14px; color: #2a211c; font-weight: 600; }
+    .sim .page { background: #fff; border: 1px solid #ced4da; box-shadow: 3px 3px 0 #e9ecef; padding: 14px 18px; font-family: Calibri, Carlito, Arial, sans-serif; }
+    .sim .page p { margin: 0 0 6px; padding: 2px 4px; border: 2px solid transparent; border-radius: 4px; cursor: pointer; }
+    .sim .page p.sel { border-color: var(--sim-accent); }
+    .sim .page p.flash { background: #fff3bf; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 520px) { .sim .wrap { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Style Lab</h1>
+  <p class="hint">Tap a line, then a style in <b>Home › Styles</b>. Headings with Heading 1 or Heading 2 appear in the <b>Navigation Pane</b>. Then change the look of Heading 1 once, and watch every Heading 1 change.</p>
+  <div class="ribbon"><small>Home › Styles</small><span id="styles"></span></div>
+  <div class="wrap">
+    <div class="nav"><b>Navigation Pane</b><div id="nav"></div></div>
+    <div class="page" id="page"></div>
+  </div>
+  <div class="row"><button id="check" type="button">Check</button><button id="look" type="button" class="ghost">Change the look of Heading 1</button><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message">All lines are Normal now. Tap "Our class trip".</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const LINES = [
+    ["Our class trip", "Title"], ["The plan", "Heading 1"], ["We leave at 9:00 and come back at 16:00.", "Normal"],
+    ["Morning", "Heading 2"], ["We visit the science museum.", "Normal"], ["Afternoon", "Heading 2"],
+    ["We have lunch in the park.", "Normal"], ["What to bring", "Heading 1"], ["Water, a hat and a pen.", "Normal"],
+  ];
+  const LOOK = { Normal: [15, 400, "#2a211c"], Title: [26, 400, "#2a211c"], "Heading 1": [19, 700, "#1c5fb4"], "Heading 2": [16, 700, "#1c5fb4"] };
+  const H1LOOKS = ["#1c5fb4", "#D9480F", "#2b8a3e"];
+  const $ = (id) => document.getElementById(id);
+  let st = LINES.map(() => "Normal"), sel = null, h1 = 0;
+
+  Object.keys(LOOK).forEach((s) => {
+    const b = document.createElement("button"); b.type = "button"; b.dataset.s = s; b.textContent = s;
+    b.addEventListener("click", () => {
+      if (sel === null) { $("msg").textContent = "First tap a line."; $("msg").className = "message bad"; return; }
+      st[sel] = s; $("msg").textContent = `"${LINES[sel][0]}" is now ${s}.` + (s.startsWith("Heading") ? " It appears in the Navigation Pane." : ""); $("msg").className = "message";
+      sel = sel + 1 < LINES.length ? sel + 1 : null; paint();
+    });
+    $("styles").appendChild(b);
+  });
+  function paint(flash) {
+    $("page").innerHTML = ""; $("nav").innerHTML = "";
+    LINES.forEach(([t], i) => {
+      const s = st[i], [size, w, col] = LOOK[s];
+      const p = document.createElement("p"); p.textContent = t; p.className = (i === sel ? "sel" : "") + (flash && s === "Heading 1" ? " flash" : "");
+      p.style.fontSize = size + "px"; p.style.fontWeight = w; p.style.color = s === "Heading 1" ? H1LOOKS[h1] : col;
+      p.addEventListener("click", () => { sel = i; $("msg").textContent = `Selected: "${t}". Choose a style.`; $("msg").className = "message"; paint(); });
+      $("page").appendChild(p);
+      if (s.startsWith("Heading")) {
+        const n = document.createElement("div"); n.className = s === "Heading 2" ? "h2" : ""; n.textContent = t;
+        n.addEventListener("click", () => { sel = i; $("msg").textContent = `The Navigation Pane jumped to "${t}".`; $("msg").className = "message"; paint(); });
+        $("nav").appendChild(n);
+      }
+    });
+    if (!$("nav").children.length) $("nav").innerHTML = "<div style='color:#868e96;font-weight:600'>No headings yet.</div>";
+    document.querySelectorAll("#styles button").forEach((b) => b.classList.toggle("on", sel !== null && st[sel] === b.dataset.s));
+  }
+  $("look").addEventListener("click", () => {
+    if (!st.includes("Heading 1")) { $("msg").textContent = "No line has Heading 1 yet. Give the main headings Heading 1 first."; $("msg").className = "message bad"; return; }
+    h1 = (h1 + 1) % H1LOOKS.length; paint(true);
+    $("msg").textContent = "One change to the style Heading 1, and every Heading 1 in the document changed. That is why we use styles."; $("msg").className = "message good";
+  });
+  $("check").addEventListener("click", () => {
+    const wrong = LINES.map((l, i) => (st[i] === l[1] ? null : i)).filter((i) => i !== null);
+    if (!wrong.length) { $("msg").textContent = "✓ Every line has the right style. The Navigation Pane shows the map of the document."; $("msg").className = "message good"; return; }
+    const i = wrong[0];
+    $("msg").textContent = `${LINES.length - wrong.length} of ${LINES.length} right. Look at "${LINES[i][0]}": ` +
+      (LINES[i][1] === "Title" ? "it is the name of the whole document." : LINES[i][1] === "Heading 1" ? "it is a main heading." : LINES[i][1] === "Heading 2" ? "it is a smaller heading under \"The plan\"." : "it is normal text, not a heading.");
+    $("msg").className = "message bad";
+  });
+  $("reset").addEventListener("click", () => { st = LINES.map(() => "Normal"); sel = null; h1 = 0; $("msg").textContent = "All lines are Normal now. Tap \"Our class trip\"."; $("msg").className = "message"; paint(); });
+  paint();
+})();
+</script>
+</body>
+</html>

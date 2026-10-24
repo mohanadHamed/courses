@@ -28,6 +28,11 @@ turret-turn|courses/game-math/week-03/sims/turret-turn.html|9|courses/game-math/
 normal-lab|courses/game-math/week-03/sims/normal-lab.html|10|courses/game-math/week-03/sims/normal-lab.gif|window
 projection-lab|courses/game-math/week-03/sims/projection-lab.html|9|courses/game-math/week-03/sims/projection-lab.gif
 asteroid-beam|courses/game-math/week-03/sims/asteroid-beam.html|8|courses/game-math/week-03/sims/asteroid-beam.gif
+unit-circle-lab|courses/game-math/week-04/sims/unit-circle-lab.html|9|courses/game-math/week-04/sims/unit-circle-lab.gif
+drone-drop|courses/game-math/week-04/sims/drone-drop.html|8|courses/game-math/week-04/sims/drone-drop.gif
+turn-lab|courses/game-math/week-04/sims/turn-lab.html|9|courses/game-math/week-04/sims/turn-lab.gif
+wave-lab|courses/game-math/week-04/sims/wave-lab.html|9|courses/game-math/week-04/sims/wave-lab.gif
+sky-lift|courses/game-math/week-04/sims/sky-lift.html|8|courses/game-math/week-04/sims/sky-lift.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif
@@ -40,6 +45,12 @@ paint-race|courses/computing-systems/week-03/sims/paint-race.html|7|courses/comp
 settings-tuner|courses/computing-systems/week-03/sims/settings-tuner.html|8|courses/computing-systems/week-03/sims/settings-tuner.gif
 spec-check|courses/computing-systems/week-03/sims/spec-check.html|8|courses/computing-systems/week-03/sims/spec-check.gif
 spec-match|courses/computing-systems/week-03/sims/spec-match.html|8|courses/computing-systems/week-03/sims/spec-match.gif
+soc-explorer|courses/computing-systems/week-04/sims/soc-explorer.html|9|courses/computing-systems/week-04/sims/soc-explorer.gif
+tilt-lab|courses/computing-systems/week-04/sims/tilt-lab.html|9|courses/computing-systems/week-04/sims/tilt-lab.gif
+battery-lab|courses/computing-systems/week-04/sims/battery-lab.html|9|courses/computing-systems/week-04/sims/battery-lab.gif
+marble-peak|courses/computing-systems/week-04/sims/marble-peak.html|9|courses/computing-systems/week-04/sims/marble-peak.gif
+sheet-filter|courses/computing-systems/week-04/sims/sheet-filter.html|10|courses/computing-systems/week-04/sims/sheet-filter.gif
+phone-picker|courses/computing-systems/week-04/sims/phone-picker.html|9|courses/computing-systems/week-04/sims/phone-picker.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
 ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif
@@ -51,6 +62,11 @@ branch-builder|courses/digital-media/week-03/sims/branch-builder.html|8|courses/
 silent-station|courses/digital-media/week-03/sims/silent-station.html|10|courses/digital-media/week-03/sims/silent-station.gif
 premise-doctor|courses/digital-media/week-03/sims/premise-doctor.html|7|courses/digital-media/week-03/sims/premise-doctor.gif
 pitch-room|courses/digital-media/week-03/sims/pitch-room.html|8|courses/digital-media/week-03/sims/pitch-room.gif
+script-formatter|courses/digital-media/week-04/sims/script-formatter.html|9|courses/digital-media/week-04/sims/script-formatter.gif
+dialogue-doctor|courses/digital-media/week-04/sims/dialogue-doctor.html|9|courses/digital-media/week-04/sims/dialogue-doctor.gif
+rooftop-rescue|courses/digital-media/week-04/sims/rooftop-rescue.html|11|courses/digital-media/week-04/sims/rooftop-rescue.gif
+voice-match|courses/digital-media/week-04/sims/voice-match.html|8|courses/digital-media/week-04/sims/voice-match.gif
+scene-cutter|courses/digital-media/week-04/sims/scene-cutter.html|10|courses/digital-media/week-04/sims/scene-cutter.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif
@@ -69,6 +85,13 @@ help-desk|courses/digital-skills/week-03/sims/help-desk.html|9|courses/digital-s
 pdf-export|courses/digital-skills/week-03/sims/pdf-export.html|10|courses/digital-skills/week-03/sims/pdf-export.gif
 paste-lab|courses/digital-skills/week-03/sims/paste-lab.html|9|courses/digital-skills/week-03/sims/paste-lab.gif
 share-settings|courses/digital-skills/week-03/sims/share-settings.html|9|courses/digital-skills/week-03/sims/share-settings.gif
+format-lab|courses/digital-skills/week-04/sims/format-lab.html|9|courses/digital-skills/week-04/sims/format-lab.gif
+style-lab|courses/digital-skills/week-04/sims/style-lab.html|9|courses/digital-skills/week-04/sims/style-lab.gif
+list-table-lab|courses/digital-skills/week-04/sims/list-table-lab.html|8|courses/digital-skills/week-04/sims/list-table-lab.gif
+notice-maker|courses/digital-skills/week-04/sims/notice-maker.html|10|courses/digital-skills/week-04/sims/notice-maker.gif
+page-setup-lab|courses/digital-skills/week-04/sims/page-setup-lab.html|9|courses/digital-skills/week-04/sims/page-setup-lab.gif
+header-footer-lab|courses/digital-skills/week-04/sims/header-footer-lab.html|8|courses/digital-skills/week-04/sims/header-footer-lab.gif
+toc-builder|courses/digital-skills/week-04/sims/toc-builder.html|9|courses/digital-skills/week-04/sims/toc-builder.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

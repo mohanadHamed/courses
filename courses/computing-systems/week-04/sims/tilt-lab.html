@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tilt Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .wrap { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 12px; align-items: start; }
+    .sim .cards { display: grid; gap: 8px; }
+    .sim .card { border: 1px solid #e9ecef; border-radius: 10px; padding: 6px 10px; }
+    .sim .card small { display: block; color: var(--sim-muted); font-weight: 700; font-size: 0.78rem; }
+    .sim .card b { font-size: 1.15rem; font-variant-numeric: tabular-nums; color: #1c7ed6; }
+    .sim .card.gyro b { color: #2b8a3e; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-top: 10px; font-weight: 700; }
+    @media (max-width: 520px) { .sim .wrap { grid-template-columns: 1fr; } .sim .cards { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Tilt Lab</h1>
+  <p class="hint">On a phone, press <b>Use the sensors</b> and tilt the phone. On a computer, drag in the pad: the side you drag to goes down. The <b>accelerometer</b> feels gravity, so it shows the tilt. The <b>gyroscope</b> shows how fast the phone turns.</p>
+  <div class="wrap">
+    <canvas id="c" aria-label="A round pad with a ball that rolls to the lower side"></canvas>
+    <div class="cards">
+      <div class="card"><small>accelerometer x (m/s²)</small><b id="ax">0</b></div>
+      <div class="card"><small>accelerometer y (m/s²)</small><b id="ay">0</b></div>
+      <div class="card"><small>accelerometer z (m/s²)</small><b id="az">9.8</b></div>
+      <div class="card gyro"><small>gyroscope: turning (°/s)</small><b id="gy">0</b></div>
+    </div>
+  </div>
+  <div class="row"><button id="sensors" type="button">Use the sensors</button><span id="src">Source: drag pad</span></div>
+  <p id="msg" class="message">Flat on a table: x = 0, y = 0, z = 9.8 (gravity). Drag the pad to tilt.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const G = 9.8, MAX = 45, RAD = Math.PI / 180;
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const fmt = (v) => { const r = Math.round(v * 10) / 10; return (r < 0 ? "−" : "") + Math.abs(r === 0 ? 0 : r); };
+  let W = 0, H = 0, R = 100, real = false, drag = false, gotEvent = false;
+  let tx = 0, ty = 0, lastTx = 0, lastTy = 0, lastT = performance.now(), gyro = 0;   // tilt to the right / towards the bottom, in degrees
+  let acc = { x: 0, y: 0, z: G }, ball = { x: 0, y: 0, vx: 0, vy: 0 };
+  const flip = typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function" ? -1 : 1;   // iPhone reports the other sign
+
+  function fromTilt() {   // the values an accelerometer gives for this tilt (the right side or the bottom down)
+    acc = { x: -G * Math.sin(tx * RAD), y: G * Math.sin(ty * RAD), z: G * Math.cos(tx * RAD) * Math.cos(ty * RAD) };
+  }
+  function show() {
+    $("ax").textContent = fmt(acc.x); $("ay").textContent = fmt(acc.y); $("az").textContent = fmt(acc.z); $("gy").textContent = fmt(gyro);
+  }
+  function resize() {
+    W = canvas.clientWidth; H = Math.round(Math.min(W, 320)); R = H / 2 - 12;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2, cy = H / 2;
+    ctx.fillStyle = "#f8f9fa"; ctx.strokeStyle = "#dee2e6"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.fill(); ctx.stroke();
+    // the low side glows
+    const lx = -acc.x, ly = acc.y, len = Math.hypot(lx, ly);
+    if (len > 0.5) {
+      const a = Math.atan2(ly, lx);
+      ctx.strokeStyle = "rgba(168,103,0,0.5)"; ctx.lineWidth = 8;
+      ctx.beginPath(); ctx.arc(cx, cy, R - 4, a - 0.5, a + 0.5); ctx.stroke();
+      ctx.fillStyle = "#A86700"; ctx.font = "800 12px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+      ctx.fillText("low side", cx + Math.cos(a) * (R - 26), cy + Math.sin(a) * (R - 26) + 4);
+    }
+    ctx.fillStyle = "#adb5bd"; ctx.beginPath(); ctx.arc(cx, cy, 5, 0, 7); ctx.fill();
+    ctx.fillStyle = "#A86700"; ctx.beginPath(); ctx.arc(cx + ball.x * (R - 20), cy + ball.y * (R - 20), 16, 0, 7); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.beginPath(); ctx.arc(cx + ball.x * (R - 20) - 5, cy + ball.y * (R - 20) - 5, 4, 0, 7); ctx.fill();
+  }
+  function step(dt) {
+    const sx = -acc.x / G, sy = acc.y / G;   // where the ball wants to go
+    ball.vx += sx * dt * 4; ball.vy += sy * dt * 4; ball.vx *= 0.98; ball.vy *= 0.98;
+    ball.x += ball.vx * dt * 3; ball.y += ball.vy * dt * 3;
+    const d = Math.hypot(ball.x, ball.y); if (d > 1) { ball.x /= d; ball.y /= d; ball.vx *= -0.3; ball.vy *= -0.3; }
+    if (!real) {   // the gyroscope of the pad: how fast the tilt changes, 0 when it stays
+      const now = performance.now(), t = Math.max(0.016, (now - lastT) / 1000);
+      const rate = Math.hypot(tx - lastTx, ty - lastTy) / t;
+      gyro = gyro * 0.8 + rate * 0.2; if (gyro < 0.5) gyro = 0;
+      lastTx = tx; lastTy = ty; lastT = now;
+    }
+  }
+  function setFrom(e) {
+    const r = canvas.getBoundingClientRect();
+    const dx = (e.clientX - r.left - W / 2) / R, dy = (e.clientY - r.top - H / 2) / R;
+    tx = Math.max(-1, Math.min(1, dx)) * MAX; ty = Math.max(-1, Math.min(1, dy)) * MAX;
+    fromTilt();
+    $("msg").textContent = Math.abs(tx) < 3 && Math.abs(ty) < 3 ? "Almost flat: gravity is all in z (9.8)." :
+      `Tilted: part of gravity now shows in x and y, and z gets smaller. When you hold the pad still, the gyroscope goes back to 0.`;
+  }
+  canvas.addEventListener("pointerdown", (e) => { if (real) { $("msg").textContent = "The real sensors are on: tilt the phone itself."; return; } drag = true; canvas.setPointerCapture(e.pointerId); setFrom(e); });
+  canvas.addEventListener("pointermove", (e) => { if (drag) setFrom(e); });
+  canvas.addEventListener("pointerup", () => { drag = false; });
+  canvas.addEventListener("pointercancel", () => { drag = false; });
+
+  function onMotion(e) {
+    const a = e.accelerationIncludingGravity;
+    if (!a || a.x === null) return;
+    gotEvent = true;
+    acc = { x: flip * a.x, y: flip * a.y, z: flip * a.z };
+    const rr = e.rotationRate; if (rr && rr.alpha !== null) gyro = Math.hypot(rr.alpha || 0, rr.beta || 0, rr.gamma || 0);
+  }
+  $("sensors").addEventListener("click", async () => {
+    if (real) {
+      real = false; window.removeEventListener("devicemotion", onMotion); $("sensors").textContent = "Use the sensors";
+      $("src").textContent = "Source: drag pad"; tx = ty = 0; fromTilt(); $("msg").textContent = "Back to the drag pad."; return;
+    }
+    if (typeof DeviceMotionEvent === "undefined") { $("msg").textContent = "This browser has no motion sensors. Use the drag pad."; return; }
+    try {
+      if (typeof DeviceMotionEvent.requestPermission === "function") {
+        const p = await DeviceMotionEvent.requestPermission();
+        if (p !== "granted") { $("msg").textContent = "Motion access was not allowed. Use the drag pad, or open the simulator full screen and allow it."; return; }
+      }
+    } catch (_) { $("msg").textContent = "Motion access was not possible here. Open the simulator full screen and try again."; return; }
+    gotEvent = false; real = true; window.addEventListener("devicemotion", onMotion);
+    $("sensors").textContent = "Use the drag pad"; $("src").textContent = "Source: the phone's sensors";
+    $("msg").textContent = "Tilt the phone slowly. Then turn it quickly and watch the gyroscope.";
+    setTimeout(() => {
+      if (real && !gotEvent) {
+        real = false; window.removeEventListener("devicemotion", onMotion); $("sensors").textContent = "Use the sensors"; $("src").textContent = "Source: drag pad";
+        $("msg").textContent = "No motion data came: this device (or this page) gives no sensor values. Use the drag pad, or open the simulator full screen on a phone.";
+      }
+    }, 1500);
+  });
+  let last = 0;
+  function loop(now) {
+    requestAnimationFrame(loop);
+    const dt = last ? Math.min((now - last) / 1000, 0.05) : 0; last = now;
+    try { step(dt); show(); draw(); } catch (e) { /* keep the loop alive */ }
+  }
+  window.addEventListener("resize", resize);
+  resize(); fromTilt(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

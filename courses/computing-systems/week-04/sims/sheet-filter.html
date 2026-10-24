@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Sheet Filter</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .games { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .sim .games button { padding: 6px 12px; }
+    .sim .brief { background: #fff3bf; border-radius: 10px; padding: 8px 12px; font-weight: 700; margin-bottom: 8px; }
+    .sim .sheet { display: grid; gap: 5px; }
+    .sim .line { display: grid; grid-template-columns: 130px 1fr; gap: 8px; text-align: left; background: #fff; color: #2a211c; border: 1.5px solid #e9ecef; box-shadow: none; padding: 6px 10px; font-weight: 600; border-radius: 8px; }
+    .sim .line b { color: #2a211c; }
+    .sim .line.on { background: #fff3bf; border-color: var(--sim-accent); }
+    .sim .line.good { border-color: #2b8a3e; background: #ebfbee; }
+    .sim .line.bad { border-color: #c92a2a; background: #fff5f5; }
+    .sim .line.miss { border-color: #f08c00; border-style: dashed; }
+    .sim .line .why { grid-column: 1 / -1; font-size: 0.82rem; color: #495057; display: none; }
+    .sim .line.shown .why { display: block; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 480px) { .sim .line { grid-template-columns: 1fr; gap: 0; } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Sheet Filter</h1>
+  <p class="hint">This is the full specification sheet of phone P6. Choose a game. Then tap the <b>three lines</b> that matter most for that game, and press <b>Check</b>.</p>
+  <div class="games" id="games"></div>
+  <div class="brief" id="brief"></div>
+  <div class="sheet" id="sheet"></div>
+  <div class="row"><button id="check" type="button">Check</button><button id="clear" type="button" class="ghost">Clear</button><span id="score"></span></div>
+  <p id="msg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const SHEET = [
+    ["display", "Display", "6.5 inches, 2400 × 1080, 120 Hz"],
+    ["touch", "Touch sampling", "240 Hz"],
+    ["chip", "Chipset", "8 cores, up to 2.8 GHz, mid-range GPU"],
+    ["ram", "RAM", "8 GB"],
+    ["storage", "Storage", "256 GB (90 GB free)"],
+    ["battery", "Battery", "5000 mAh, 45 W charging"],
+    ["os", "OS", "Android 14"],
+    ["net", "Network", "5G, Wi-Fi 6"],
+    ["sensors", "Sensors", "accelerometer, gyroscope, compass, GPS"],
+    ["camera", "Main camera", "64 MP"],
+    ["weight", "Weight", "190 g"],
+    ["colours", "Colours", "black, green, silver"],
+  ];
+  const GAMES = {
+    rhythm: { name: "Rhythm game", brief: "Beat Lane: the player taps notes to the music. Every tap must count at once, and the game must stay at 60 fps.",
+      right: ["display", "touch", "chip"],
+      why: { display: "120 Hz shows the notes smoothly.", touch: "240 Hz finds every tap after at most about 4 ms.", chip: "the CPU and GPU keep a steady frame rate." } },
+    ar: { name: "AR pet game", brief: "Pocket Zoo AR: a pet walks on your real table, seen through the camera. The player walks around the pet.",
+      right: ["sensors", "camera", "chip"],
+      why: { sensors: "the gyroscope and the accelerometer follow how the phone moves.", camera: "the game shows the camera picture.", chip: "AR needs a strong SoC (the NPU and the GPU)." } },
+    world: { name: "Big 3D world", brief: "Storm Realm: a large 3D world with detailed textures. The download is 12 GB.",
+      right: ["chip", "ram", "storage"],
+      why: { chip: "the GPU draws the big 3D scenes.", ram: "the textures and the world must fit in RAM.", storage: "12 GB must fit in the free storage." } },
+    walk: { name: "Walking map game", brief: "City Quest: the player walks through the city for an hour, and the map shows the next quest on the street.",
+      right: ["sensors", "battery", "net"],
+      why: { sensors: "GPS finds the player on the map.", battery: "an hour outside with GPS and data uses much power.", net: "the map and the quests come over the mobile network." } },
+  };
+  const OFF = { weight: "the weight does not change how a game runs.", colours: "the colour does not change how a game runs.", camera: "the camera matters only for AR or photo games.",
+    os: "the OS version decides if the game installs at all, but it is not what makes this game run well.", default: "it matters less for this game than the three right lines." };
+  const $ = (id) => document.getElementById(id);
+  let game = "rhythm", picked = new Set(), checked = false;
+
+  Object.entries(GAMES).forEach(([k, g]) => {
+    const b = document.createElement("button"); b.type = "button"; b.dataset.g = k; b.textContent = g.name;
+    b.addEventListener("click", () => { game = k; reset(); }); $("games").appendChild(b);
+  });
+  SHEET.forEach(([k, n, v]) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "line"; b.dataset.k = k;
+    b.innerHTML = `<b>${n}</b><span>${v}</span><span class="why"></span>`;
+    b.addEventListener("click", () => {
+      if (checked) { $("msg").textContent = "Press Clear to try again, or choose another game."; return; }
+      if (picked.has(k)) picked.delete(k); else if (picked.size < 3) picked.add(k); else { $("msg").textContent = "Three lines are chosen. Tap one again to remove it."; return; }
+      $("msg").textContent = ""; paint();
+    });
+    $("sheet").appendChild(b);
+  });
+  function paint() {
+    document.querySelectorAll(".line").forEach((b) => { b.className = "line" + (picked.has(b.dataset.k) ? " on" : ""); b.querySelector(".why").textContent = ""; });
+    document.querySelectorAll("#games button").forEach((b) => b.classList.toggle("ghost", b.dataset.g !== game));
+    $("brief").textContent = GAMES[game].brief;
+  }
+  function reset() { picked = new Set(); checked = false; $("msg").textContent = ""; $("score").textContent = ""; paint(); }
+  $("clear").addEventListener("click", reset);
+  $("check").addEventListener("click", () => {
+    if (picked.size < 3) { $("msg").textContent = `Choose three lines first (${picked.size} chosen).`; $("msg").className = "message bad"; return; }
+    checked = true;
+    const g = GAMES[game]; let ok = 0;
+    document.querySelectorAll(".line").forEach((b) => {
+      const k = b.dataset.k, isRight = g.right.includes(k), chosen = picked.has(k), why = b.querySelector(".why");
+      if (chosen && isRight) { b.className = "line good shown"; why.textContent = "✓ " + g.why[k]; ok++; }
+      else if (chosen) { b.className = "line bad shown"; why.textContent = "✗ " + (OFF[k] || OFF.default); }
+      else if (isRight) { b.className = "line miss shown"; why.textContent = "Missing: " + g.why[k]; }
+    });
+    $("score").textContent = `${ok} / 3`;
+    $("msg").textContent = ok === 3 ? "✓ All three right. Try another game: other lines matter there." : "Read the notes on the lines, then press Clear and try again.";
+    $("msg").className = "message " + (ok === 3 ? "good" : "bad");
+  });
+  reset();
+})();
+</script>
+</body>
+</html>

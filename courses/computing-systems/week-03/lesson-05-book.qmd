@@ -1,0 +1,292 @@
+---
+title: "Input/Output Devices, the GPU and Graphics Hardware"
+description: "Lesson notes · Input devices and the numbers they send, output devices, why games need a GPU, and video memory and graphics settings."
+lesson: 5
+ilos: [A1]
+format: lesson-typst
+---
+
+::: {.lead}
+The studio *Byte Bay* is making *Neon Drift*, a racing game for PCs and
+phones. The testers send new reports. "On the phone, the car turns too
+sharply." "The laptop shows only 40 frames per second." "The game stutters
+on high textures." Each report points to hardware that you have not met yet.
+The player steers with an **input device** and sees and hears the race
+through **output devices**. Between them, a special processor draws every
+frame: the **GPU**, with its own memory. In lecture 3 you met the CPU, the
+memory and the storage. In this lesson you describe the devices around them
+and the graphics hardware. Every section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary input-device output-device analog-input haptic-feedback gpu parallel-processing video-memory integrated-gpu graphics-card graphics-settings resolution >}}
+
+## 5.1 How the player's action gets into the game
+
+A tester of *Neon Drift* says: "With the keyboard, the car always turns
+fully. With the gamepad, I can turn a little." Why do two devices give a
+different feeling? Each **input device** turns an action of the player into
+numbers. The game reads these numbers in every frame. Different devices
+send different kinds of numbers.
+
+::: {.callout-important title="Definition 5.1 — Input device"}
+An **input device** turns an action of the user (a touch, a key press, a
+movement, a sound) into data that the computer can read.
+:::
+
+| Input device | The player's action | The numbers the game reads |
+|---|---|---|
+| touch screen | touch, swipe, pinch | the position of each finger (several at once) |
+| keyboard | press a key | which keys are down: on or off |
+| mouse | move, click | how far it moved; the buttons on or off |
+| gamepad | press buttons, push sticks and triggers | buttons on or off; sticks and triggers as values |
+| microphone | speak, blow | the sound level |
+| camera | move in front of it | images |
+
+: Common input devices of games (@fig-io). {#tbl-input}
+
+A key or a button is **digital**: it is only on (1) or off (0). A stick or a
+trigger is **analog**: it gives any value in a range. A stick gives $-1$
+(full left) to $1$ (full right), so the car can turn a little or a lot
+(@fig-analog). A touch screen sends the position of every finger. Most phones
+can follow several fingers at the same time (multi-touch).
+
+![Input devices send their numbers into the game. Output devices bring the result back to the player.](images/io-devices.png){#fig-io width=94%}
+
+![A key gives 0 or 1. A stick gives any value from −1 to 1.](images/analog-digital.png){#fig-analog width=94%}
+
+::: {.callout-note title="Example 5.1 — Why the keyboard car turns fully"}
+In *Neon Drift*, the game turns the car by 40° per second times the input
+value.
+
+1. Keyboard: the right arrow is down, so the value is 1. The car turns
+   $40 \times 1 = 40°$ per second.
+2. Gamepad: the stick is pushed half way right, so the value is 0.5. The car
+   turns $40 \times 0.5 = 20°$ per second.
+3. The keyboard cannot send 0.5. A keyboard player turns in short taps
+   instead.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that every button is analog. On most gamepads, the face buttons
+(A, B) are digital. Only the sticks and the triggers are analog.
+:::
+
+{{< sim file="sims/input-lab.html" poster="sims/input-lab.png" title="Input Lab: what does the game read?" height="720" >}}
+
+::: {.callout-note title="Do it · Input Lab"}
+Open the **Input Lab** simulator above (or scan its QR code) on your phone.
+
+1. Put one finger on the yellow pad, then two, three… How many fingers does
+   your phone follow at once?
+2. Drag the on-screen stick half way to the right. Read "stick x". Press A
+   and read "button A".
+
+*Your result:* the number of fingers, the stick value, the button value, and
+which control is analog.
+:::
+
+## 5.2 How the game talks back: output devices
+
+The race must reach the player's eyes, ears and hands. **Output devices** do
+this. The display shows the picture. Speakers or headphones play the sound.
+A small **vibration motor** in a phone or a gamepad shakes when the car
+crashes: this is **haptic feedback**.
+
+::: {.callout-important title="Definition 5.2 — Output device"}
+An **output device** turns data from the computer into something the user
+can see, hear or feel: an image, a sound or a vibration.
+:::
+
+Some devices are input and output at the same time (@fig-io). A touch screen
+reads fingers and shows the picture. A gamepad has buttons and a vibration
+motor. A headset has headphones and a microphone. A device connects to the
+computer by a cable (USB, HDMI for a display) or without one (Bluetooth).
+The resolution and the refresh rate of the display were in lecture 2.
+
+::: {.callout-note title="Example 5.2 — The devices of a racing setup"}
+A tester plays *Neon Drift* on a PC with a gamepad, a headset and a monitor.
+
+1. Input only: the keyboard and the mouse on the desk.
+2. Output only: the monitor.
+3. Both: the gamepad (sticks in, vibration out) and the headset (microphone
+   in, sound out).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Calling the monitor an input device because it is "connected". The cable
+only carries the picture *out* to the player. A normal monitor has no
+touch, so it sends nothing into the game.
+:::
+
+::: {.callout-note title="Do it · The devices around you"}
+On the lab computer, open **Settings → Bluetooth & devices**. On your phone,
+look at **Settings → Bluetooth** and at the sound and vibration settings
+(Android: **Sound and vibration**; iPhone: **Sounds & Haptics**).
+
+1. List every input and output device of the lab computer and of your phone
+   (do not forget the built-in ones: screen, speaker, microphone, cameras).
+2. Mark each one "input", "output" or "both".
+
+*Your result:* a table with two columns (lab computer, phone).
+:::
+
+## 5.3 Why games need a GPU
+
+To draw one frame, the game must compute the colour of every pixel. A
+1920 × 1080 screen has about 2 million pixels. At 60 frames per second, that
+is about 120 million colours every second. A CPU has a few strong cores
+(4 to 16). Each core can run long, different steps, such as the game rules.
+But it is too slow for millions of small, similar jobs.
+
+The **GPU** has a different design. It has thousands of small cores
+(@fig-cores). Each core is simpler and slower, but they all work at the same
+time on different pixels. This is **parallel processing**.
+
+::: {.callout-important title="Definition 5.3 — Parallel processing"}
+**Parallel processing** means doing many small pieces of work at the same
+time on many cores, instead of one after another.
+:::
+
+![A CPU has a few strong cores. A GPU has thousands of small cores.](images/cpu-gpu-cores.png){#fig-cores width=94%}
+
+::: {.callout-note title="Example 5.3 — The paint race"}
+A tiny frame has 16 × 9 = 144 pixels.
+
+1. A CPU with 4 strong cores paints 4 pixels at a time, each in 0.08 s:
+   $144 \div 4 = 36$ steps, and $36 \times 0.08 = 2.88$ s.
+2. A GPU with 144 small cores paints all pixels at once, each in 0.32 s:
+   0.32 s.
+3. Each GPU core is 4 times slower, but the whole frame is 9 times faster.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"The GPU is a faster CPU." It is not. A GPU core is slower than a CPU core.
+The GPU wins only when the work splits into many similar pieces, like
+pixels. The game rules still run on the CPU.
+:::
+
+{{< sim file="sims/paint-race.html" poster="sims/paint-race.png" title="Paint Race: CPU or GPU?" height="560" >}}
+
+::: {.callout-note title="Do it · Paint Race"}
+Open the **Paint Race** simulator above (or scan its QR code).
+
+1. Press **Start the race**. Write the two times.
+2. Explain in one sentence why the GPU wins, although each of its cores is
+   slower.
+
+*Your result:* two times and your sentence.
+:::
+
+## 5.4 Video memory and graphics settings
+
+A tester reports: "On high textures, the laptop stutters." The GPU keeps the
+textures of the game and the frames it draws in **video memory** (VRAM).
+There are two designs (@fig-vram):
+
+- An **integrated GPU** is part of the processor chip, as in most laptops
+  and all phones. It has no memory of its own. It takes part of the main RAM
+  (for example 2 GB).
+- A **graphics card** has its own GPU and its own fast video memory (for
+  example 8 GB). Gaming desktops have one.
+
+If the textures do not fit into the video memory, the GPU must keep moving
+them in and out. The game stutters.
+
+::: {.callout-important title="Definition 5.4 — Video memory"}
+**Video memory** (VRAM) is the memory that the GPU uses for textures and
+frames. A graphics card has its own. An integrated GPU shares the main RAM.
+:::
+
+![Integrated GPU: CPU and GPU share the RAM. Graphics card: the GPU has its own VRAM.](images/gpu-memory.png){#fig-vram width=94%}
+
+The **graphics settings** of a game change the work of the GPU (@tbl-settings).
+
+| Setting | What it changes | Effect on the GPU |
+|---|---|---|
+| resolution | the number of pixels in each frame | 1080p has about twice the pixels of 720p: about half the frame rate |
+| texture quality | the size of the textures | higher textures need more video memory |
+| shadows and effects | extra work for every pixel | the frame rate drops |
+
+: Three common graphics settings. {#tbl-settings}
+
+::: {.callout-note title="Example 5.4 — Settings for Laptop L1"}
+*Neon Drift* runs at 120 fps on Laptop L1 at 720p with shadows off. L1 has an
+integrated GPU with 2 GB of video memory.
+
+1. 1080p doubles the pixels: about $120 \div 2 = 60$ fps. That is still
+   enough.
+2. Shadows on make each frame 1.5 times the work: $60 \div 1.5 = 40$ fps.
+   Too slow.
+3. High textures need 4 GB, but L1 has 2 GB: the game stutters. Medium
+   textures (2 GB) fit.
+:::
+
+::: {.callout-note title="Do it · The GPU of the lab computer"}
+On a lab computer, open **Task Manager** (Ctrl + Shift + Esc) **→ Performance
+→ GPU 0**.
+
+1. Write the name of the GPU.
+2. Write the **Dedicated GPU memory** and the **Shared GPU memory**.
+3. Is it an integrated GPU or a graphics card? Give your reason.
+
+*Your result:* three lines.
+:::
+
+## Case study: tuning Neon Drift
+
+*Neon Drift* must run at 60 fps or more on three test devices of *Byte Bay*.
+In this made-up game, the frame rate follows two simple rules: 1080p halves
+the frame rate of 720p, and shadows divide it by 1.5. The textures need 1 GB
+(Low), 2 GB (Medium) or 4 GB (High) of video memory.
+
+- **Laptop L1:** GPU inside the processor, 2 GB of video memory; 120 fps at
+  720p with shadows off.
+- **Phone P1:** GPU inside the chipset, 2 GB of video memory; 90 fps at
+  720p with shadows off.
+- **Desktop D1:** graphics card with 8 GB of VRAM; 300 fps at 720p with
+  shadows off.
+
+The tester must choose settings that reach 60 fps and fit into the video
+memory of each device. The Game challenge of the interactive lesson uses
+these numbers. In the mini-game below you tune the three devices.
+
+{{< sim file="sims/settings-tuner.html" poster="sims/settings-tuner.png" title="Settings Tuner: Neon Drift on three devices" kind="game" height="760" >}}
+
+## Further reading
+
+Tanenbaum and Austin, *Structured Computer Organization*, 6th ed., Chapter 2,
+the sections on input/output devices (keyboards, mice, displays) and on
+graphics processors.
+
+## Exercises
+
+1. Name two input devices and two output devices of a phone.
+2. Name a device that is input and output at the same time. Explain why.
+3. What is the difference between a digital and an analog input? Give one
+   example of each.
+4. A stick is pushed fully to the left. Which value does the game read?
+5. What is haptic feedback? Give one example in a game.
+6. Why does a GPU have thousands of small cores instead of a few strong ones?
+7. Where does an integrated GPU keep its textures?
+8. A game needs 3 GB of video memory for high textures. A laptop has an
+   integrated GPU with 2 GB. What happens? What can the player do?
+9. *Neon Drift* runs at 90 fps at 720p on Phone P1. About how many fps does it
+   reach at 1080p? Is it enough?
+10. Which device of *Byte Bay* can use high textures (4 GB)? Why?
+
+## Answers to the exercises
+
+::: {.answers}
+1. Input: touch screen, microphone, camera. Output: display, speaker, vibration motor.
+2. For example a touch screen: it reads touches (input) and shows the picture (output). Or a gamepad with vibration, or a headset.
+3. Digital: only on or off (a key, the A button). Analog: a range of values (a stick, a trigger).
+4. −1.
+5. Output that the player feels as a touch, for example the gamepad shakes when the car crashes.
+6. Each pixel needs a small, similar job, and there are millions of pixels. Many small cores do them at the same time (parallel processing).
+7. In the main RAM, which it shares with the CPU.
+8. The textures do not fit, so the game stutters. The player can choose lower textures.
+9. About 90 ÷ 2 = 45 fps. No, it is less than 60.
+10. Desktop D1: its graphics card has 8 GB of VRAM. L1 and P1 have only 2 GB.
+:::

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Paste Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .task { font-weight: 800; background: #fff4e6; border: 1.5px dashed #FFC078; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
+    .sim .cols { display: grid; grid-template-columns: 1fr 1.3fr; gap: 10px; }
+    @media (max-width: 600px) { .sim .cols { grid-template-columns: 1fr; } }
+    .sim .win { border: 1.5px solid #ced4da; border-radius: 10px; overflow: hidden; }
+    .sim .title { color: #fff; font-weight: 800; font-size: 0.82rem; padding: 5px 10px; }
+    .sim .xl .title { background: #217346; } .sim .wd .title { background: #2b579a; }
+    .sim .body { padding: 10px; background: #fff; min-height: 150px; }
+    .sim table.src { border-collapse: collapse; font-size: 0.85rem; }
+    .sim table.src td { border: 1px solid #c3e6cb; padding: 3px 10px; }
+    .sim table.src tr:first-child td { background: #217346; color: #fff; font-weight: 800; }
+    .sim table.src.sel { outline: 3px dashed #217346; outline-offset: 2px; }
+    .sim table.dst { border-collapse: collapse; font-size: 0.85rem; margin-top: 6px; }
+    .sim table.dst td { border: 1px solid #adb5bd; padding: 3px 10px; font-family: Georgia, serif; }
+    .sim table.dst.keep td { border-color: #c3e6cb; font-family: inherit; } .sim table.dst.keep tr:first-child td { background: #217346; color: #fff; font-weight: 800; }
+    .sim table.dst.dest tr:first-child td { font-weight: 800; background: #e7f5ff; }
+    .sim .pic { display: inline-block; margin-top: 6px; border: 2px dashed #1971c2; padding: 4px; cursor: not-allowed; }
+    .sim pre.txt { margin-top: 6px; font-family: inherit; font-size: 0.85rem; background: #f8f9fa; padding: 6px; }
+    .sim .opts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .sim .opts button { padding: 4px 10px; font-size: 0.82rem; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; align-items: center; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Paste Lab: from Excel to Word</h1>
+  <p class="hint">Copy the price table in Excel. Paste it into the Word report. Then choose a Paste Option and look at the result.</p>
+  <div class="task" id="task"></div>
+  <div class="cols">
+    <div class="win xl"><div class="title">prices.xlsx – Excel</div><div class="body">
+      <table class="src" id="src"><tr><td>Item</td><td>Price (JD)</td></tr><tr><td>Pen</td><td>0.25</td></tr><tr><td>Notebook</td><td>1.50</td></tr><tr><td>Folder</td><td>0.75</td></tr></table>
+      <div class="pad"><button type="button" id="copy">Copy (Ctrl + C)</button></div>
+    </div></div>
+    <div class="win wd"><div class="title">shop-report.docx – Word</div><div class="body">
+      <div style="font-family: Georgia, serif"><b>Shop report, November</b><br>Our new prices are:</div>
+      <div id="out"></div>
+      <div class="pad"><button type="button" id="paste" class="ghost">Paste (Ctrl + V)</button></div>
+      <div class="opts" id="opts" hidden>
+        <button type="button" class="ghost" data-o="keep">1 Keep Source Formatting</button>
+        <button type="button" class="ghost" data-o="dest">2 Use Destination Styles</button>
+        <button type="button" class="ghost" data-o="pic">3 Picture</button>
+        <button type="button" class="ghost" data-o="text">4 Keep Text Only</button>
+      </div>
+    </div></div>
+  </div>
+  <p id="msg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const TASKS = [
+    ["The table must look like the other tables of the Word report, and you must still change the prices.", "dest"],
+    ["The table must look exactly as in Excel, with the green heading.", "keep"],
+    ["Nobody may change the prices in the report by mistake.", "pic"],
+    ["You want only the words and numbers, without table lines.", "text"],
+  ];
+  const ROWS = [["Item", "Price (JD)"], ["Pen", "0.25"], ["Notebook", "1.50"], ["Folder", "0.75"]];
+  const $ = (id) => document.getElementById(id);
+  let copied = false, task = 0, choice = null;
+  const table = (cls) => `<table class="dst ${cls}">${ROWS.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</table>`;
+  function show() { $("task").textContent = `Task ${task + 1} of ${TASKS.length}: ${TASKS[task][0]}`; }
+  function render(o) {
+    if (o === "keep") $("out").innerHTML = table("keep");
+    else if (o === "dest") $("out").innerHTML = table("dest");
+    else if (o === "pic") $("out").innerHTML = `<div class="pic" id="pic" title="A picture">${table("keep")}</div>`;
+    else $("out").innerHTML = `<pre class="txt">${ROWS.map((r) => r.join("    ")).join("\n")}</pre>`;
+    const pic = document.getElementById("pic");
+    if (pic) pic.addEventListener("click", () => { $("msg").textContent = "This is a picture: you cannot click into a cell or change a price."; $("msg").className = "message"; });
+  }
+  $("copy").addEventListener("click", () => { copied = true; $("src").classList.add("sel"); $("msg").textContent = "The table is on the clipboard. Now paste it in Word."; $("msg").className = "message good"; });
+  $("paste").addEventListener("click", () => {
+    if (!copied) { $("msg").textContent = "The clipboard is empty. Copy the table in Excel first."; $("msg").className = "message bad"; return; }
+    render("keep"); $("opts").hidden = false;
+    $("msg").textContent = "Pasted with the Excel look (the default). Click the Paste Options button that fits the task."; $("msg").className = "message";
+  });
+  document.querySelectorAll("#opts button").forEach((b) => b.addEventListener("click", () => {
+    const o = b.dataset.o; render(o);
+    if (o === TASKS[task][1]) {
+      $("msg").textContent = `✓ Right for this task.`; $("msg").className = "message good";
+      if (task < TASKS.length - 1) { task++; setTimeout(show, 900); } else $("task").textContent = "All four tasks done. Try the options again and compare.";
+    } else {
+      const why = { keep: "This keeps the Excel look (green heading).", dest: "This uses the look of the Word report, and the table stays editable.", pic: "This makes a picture: nobody can change the numbers.", text: "This keeps only the text, without table lines." }[o];
+      $("msg").textContent = `✗ Not for this task. ${why}`; $("msg").className = "message bad";
+    }
+  }));
+  show();
+})();
+</script>
+</body>
+</html>

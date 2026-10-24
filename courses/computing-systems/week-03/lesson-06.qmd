@@ -1,0 +1,224 @@
+---
+title: "Comparing Device Specifications for Gaming"
+description: "Minimum and recommended requirements, comparing a device line by line, compatibility and performance problems, and the bottleneck."
+lesson: 6
+ilos: [A1, B2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game studio. Then it explains how to compare the
+specifications. It ends with a **Do it** task (in a simulator, on the lab
+computer or on your phone) and one set of questions. The full explanations,
+examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary system-requirements specifications compatibility bottleneck graphics-settings video-memory storage-capacity operating-system >}}
+
+## 6.1 What does the game need? System requirements
+
+- A store page lists the **system requirements** of a game.
+- **Minimum:** the game runs, but at low settings.
+- **Recommended:** the game runs well at normal settings.
+- *Neon Drift* for PC: minimum Windows 10 (64-bit), 4 cores at 2.5 GHz,
+  8 GB RAM, 2 GB video memory, 20 GB free. Recommended: Windows 11, 6 cores
+  at 3.5 GHz, 16 GB RAM, a graphics card with 6 GB, 20 GB free on an SSD.
+- Phones: Google Play shows **Requires Android**; the App Store shows
+  **Compatibility** (for example "Requires iOS 15.0 or later") and the size.
+
+![The system requirements of Neon Drift for PC.](images/requirements.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Minimum is not "good enough". At the minimum, the game runs at low settings.
+:::
+
+::: {.callout-note title="Do it · Find the requirements of a game"}
+On your phone, open the store page of a game that you play. **Android:**
+**About this game → Requires Android**. **iPhone:** **Information → Size**
+and **Compatibility**. Write the OS version it requires and its size.
+:::
+
+::: {.callout-tip title="Try it 1 · Requirements"}
+Use the requirements of Neon Drift above. Choose the right answer.
+
+::: {.match extra="32 GB|Windows 8.1"}
+How much RAM does Neon Drift need at the minimum?
+:   8 GB
+
+How much RAM does Neon Drift recommend?
+:   16 GB
+
+A PC meets only the minimum. How does the game run?
+:   at low settings
+
+Where does Google Play show the Android version that a game needs?
+:   Requires Android
+
+Which storage does the recommended column want?
+:   20 GB free on an SSD
+:::
+:::
+
+## 6.2 Does it run here? Comparing line by line
+
+- Compare each line of the requirements with the same line of the spec
+  sheet: below minimum, minimum or recommended.
+- **The weakest line decides** the level of the whole device.
+- **Laptop L1:** Windows 11; 8 cores, 4.4 GHz; 16 GB; GPU inside the
+  processor, 2 GB; 120 GB free, SSD. Every line is recommended except
+  graphics (minimum). So L1 reaches the **minimum**.
+- **Old PC O1:** Windows 10; 4 cores, 3.0 GHz; **4 GB RAM**; graphics card,
+  2 GB; 60 GB free, HDD. Memory is below the minimum, so O1 is **below
+  minimum**.
+
+![Laptop L1 against the requirements.](images/compare-lines.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+A fast processor does not help when the GPU is weak. The device is only as
+good as its weakest line.
+:::
+
+{{< sim file="sims/spec-check.html" poster="sims/spec-check.png" title="Spec Check: does Neon Drift run here?" height="700" >}}
+
+::: {.callout-note title="Do it · Spec Check with the lab computer"}
+In **Spec Check**, choose **My lab computer** and enter its values (from
+your spec sheet of lecture 4, or Settings → System → About and Task Manager
+→ Performance). Write the level of the lab computer and its weakest line.
+:::
+
+::: {.callout-tip title="Try it 2 · The weakest line"}
+Use the requirements of Neon Drift and the devices above. Choose the right
+answer.
+
+::: {.match extra="the processor"}
+Which level does Laptop L1 reach?
+:   minimum
+
+Which line holds Laptop L1 back?
+:   graphics
+
+Which level does Old PC O1 reach?
+:   below minimum
+
+Which line holds Old PC O1 back?
+:   memory
+
+A laptop has 12 GB of RAM. Which level does its memory line reach?
+:   minimum
+:::
+:::
+
+## 6.3 What holds the game back?
+
+- **Compatibility problem:** the game cannot install or start. The OS is
+  too old, or the free storage is too small. More power does not help.
+- **Performance problem:** the game runs, but slowly. The weakest part is
+  the **bottleneck**.
+- What helps: weak **GPU** → lower the resolution, shadows and effects.
+  Little **video memory** → lower the textures. Little **RAM** → close
+  other apps, lower the textures. **HDD** → slow loading: an SSD helps.
+- *Neon Drift Mobile*: minimum Android 10, 4 cores, 4 GB RAM, 4 GB free;
+  recommended Android 12, 8 cores, 6 GB RAM.
+- Phone P3 (**Android 9**): a compatibility problem. Phone P4 (**4 GB
+  RAM**): it runs at lower settings; the RAM is the bottleneck.
+
+![Compatibility problem and performance problem.](images/two-problems.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+A fast chip does not fix a compatibility problem. Android 9 cannot install a
+game that needs Android 10.
+:::
+
+::: {.callout-note title="Do it · Can your phone run it?"}
+Compare the OS version and the free storage of your phone (lecture 4) with
+the requirements of your game (section 6.1). Is there a compatibility
+problem? If the game runs slowly, which part is the bottleneck, and which
+setting would you lower?
+:::
+
+::: {.callout-tip title="Try it 3 · Which problem?"}
+Choose the right answer. You can use an answer more than once.
+
+::: {.match extra="buy more RAM"}
+A phone has Android 9. The game needs Android 10. Which kind of problem is it?
+:   a compatibility problem
+
+The game runs, but at 25 fps. Which kind of problem is it?
+:   a performance problem
+
+The GPU is the bottleneck. What helps first?
+:   lower the resolution and the shadows
+
+The game stutters with high textures. What helps?
+:   lower the texture quality
+
+The phone has 3 GB free. The game needs 4 GB. Which kind of problem is it?
+:   a compatibility problem
+:::
+:::
+
+## Game challenge: test devices for Neon Drift {.challenge}
+
+Work alone. Use every section of today.
+
+*Byte Bay* must choose its test devices. A good test lab has one device for
+each level: recommended, minimum and below the minimum.
+
+- **Laptop L1:** Windows 11; 8 cores, 4.4 GHz; 16 GB; GPU inside the
+  processor, 2 GB; 120 GB free, SSD.
+- **Desktop D1:** Windows 11; 6 cores, 4.0 GHz; 16 GB; graphics card, 8 GB;
+  300 GB free, SSD.
+- **Old PC O1:** Windows 10 (64-bit); 4 cores, 3.0 GHz; 4 GB; graphics card,
+  2 GB; 60 GB free, HDD.
+
+{{< sim file="sims/spec-match.html" poster="sims/spec-match.png" title="Spec Match: test devices for Neon Drift" kind="game" height="720" >}}
+
+::: {.callout-tip title="Try it 4 · Sort the computers"}
+Neon Drift for PC: minimum 4 cores at 2.5 GHz, 8 GB RAM, 2 GB video memory;
+recommended 6 cores at 3.5 GHz, 16 GB RAM, a graphics card with 6 GB.
+Devices L1, D1 and O1 as above. Choose the right answer.
+
+::: {.match extra="Laptop L1, it has 8 cores"}
+Which computer reaches the recommended level?
+:   Desktop D1
+
+Which computer reaches only the minimum?
+:   Laptop L1
+
+Which computer is below the minimum?
+:   Old PC O1
+
+What would bring Old PC O1 to the minimum?
+:   8 GB of RAM or more
+:::
+:::
+
+::: {.callout-tip title="Try it 5 · Three phones (harder)"}
+Neon Drift Mobile: minimum Android 10, 4 cores, 4 GB RAM, 4 GB free;
+recommended Android 12, 8 cores, 6 GB RAM. P1: Android 14, 8 cores, 8 GB,
+40 GB free. P3: Android 9, 8 cores, 6 GB, 30 GB free. P4: Android 13, 8
+cores, 4 GB, 25 GB free. Choose the right answer.
+
+::: {.match extra="Phone P1|its chip"}
+Which phone cannot install the game?
+:   Phone P3
+
+Why can Phone P3 not install it?
+:   Android 9 is too old
+
+Which phone runs the game at lower settings?
+:   Phone P4
+
+What is the bottleneck of Phone P4?
+:   its RAM
+:::
+:::
+
+## Summary {.summary}
+
+- System requirements list a minimum (low settings) and a recommended level (runs well).
+- Compare a device line by line; the weakest line decides its level.
+- A compatibility problem stops the install: an old OS or too little free storage.
+- A performance problem has a bottleneck: the weakest part limits the whole device.
+- Lower the setting that loads the bottleneck: resolution for the GPU, textures for video memory.

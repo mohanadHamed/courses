@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Share Settings</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .task { font-weight: 800; background: #fff4e6; border: 1.5px dashed #FFC078; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
+    .sim .box { border: 1.5px solid #ced4da; border-radius: 14px; padding: 12px 14px; max-width: 460px; }
+    .sim .box h2 { font-size: 1rem; margin: 0 0 8px; }
+    .sim .box h3 { font-size: 0.85rem; margin: 10px 0 4px; }
+    .sim .box label { display: flex; gap: 8px; align-items: center; font-weight: 700; margin: 3px 0; }
+    .sim .box input[type=text] { font: inherit; padding: 5px 8px; border: 1.5px solid #ced4da; border-radius: 8px; width: 100%; box-sizing: border-box; }
+    .sim .seg { display: flex; gap: 6px; }
+    .sim .seg button.on { background: #1971c2; color: #fff; border-color: #1971c2; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+    .sim .message.bad { color: #c92a2a; }
+    .sim .score { font-weight: 800; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Share Settings: who and what?</h1>
+  <p class="hint">Share each file from OneDrive with the right people and the right permission. Then press <b>Copy link</b>. (The names here are made up.)</p>
+  <div class="task" id="task"></div>
+  <div class="box">
+    <h2 id="fname">Share</h2>
+    <h3>Who can open the link?</h3>
+    <label><input type="radio" name="who" value="anyone"> Anyone with the link</label>
+    <label><input type="radio" name="who" value="org"> People in your organization (the university)</label>
+    <label><input type="radio" name="who" value="specific"> Specific people</label>
+    <input type="text" id="names" placeholder="Names or e-mails (for Specific people)" disabled>
+    <h3>What can they do?</h3>
+    <div class="seg"><button type="button" class="ghost" data-p="view">Can view</button><button type="button" class="ghost" data-p="edit">Can edit</button></div>
+    <div class="pad"><button type="button" id="link">Copy link</button><span class="score" id="score"></span></div>
+  </div>
+  <p id="msg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // file, task text, who, permission, a name that must be in the list (for specific people)
+  const TASKS = [
+    ["class-report.docx", "Your teacher, Ms Rana, must read your report, but not change it.", "specific", "view", "rana"],
+    ["group-project.pptx", "Your classmate Sami must add two slides to the group presentation.", "specific", "edit", "sami"],
+    ["price-list.pdf", "Every customer who gets the link from the shop's page may open the price list and read it.", "anyone", "view", null],
+    ["club-notes.docx", "All students and staff of the university may read the club notes, but nobody from outside.", "org", "view", null],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let t = 0, perm = null, right = 0;
+  function show() {
+    const [f, text] = TASKS[t];
+    $("fname").textContent = `Share "${f}"`; $("task").textContent = `Task ${t + 1} of ${TASKS.length}: ${text}`;
+    document.querySelectorAll('input[name="who"]').forEach((r) => (r.checked = false)); $("names").value = ""; $("names").disabled = true;
+    perm = null; document.querySelectorAll(".seg button").forEach((b) => b.classList.remove("on"));
+  }
+  document.querySelectorAll('input[name="who"]').forEach((r) => r.addEventListener("change", () => { $("names").disabled = r.value !== "specific" || !r.checked; if (!$("names").disabled) $("names").focus(); }));
+  document.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", () => { perm = b.dataset.p; document.querySelectorAll(".seg button").forEach((x) => x.classList.toggle("on", x === b)); }));
+  $("link").addEventListener("click", () => {
+    const [, , who, want, name] = TASKS[t], picked = document.querySelector('input[name="who"]:checked');
+    if (!picked || !perm) { $("msg").textContent = "Choose who can open the link and what they can do."; $("msg").className = "message bad"; return; }
+    const problems = [];
+    if (picked.value !== who) problems.push(picked.value === "anyone" ? "Anyone with the link: the link can travel to strangers." : who === "anyone" ? "The customers are not in the university, so the link must work for anyone." : who === "org" ? "Choose the university (your organization), not specific people." : "Choose Specific people: only the person who needs the file.");
+    if (who === "specific" && picked.value === "specific" && !$("names").value.toLowerCase().includes(name)) problems.push(`Add the person's name (${name[0].toUpperCase() + name.slice(1)}).`);
+    if (perm !== want) problems.push(want === "view" ? "Can edit lets them change the file. They only need to read it." : "Can view does not let them add anything. They must edit.");
+    if (problems.length) { $("msg").textContent = "✗ " + problems.join(" "); $("msg").className = "message bad"; return; }
+    right++; $("score").textContent = `${right} of ${TASKS.length} shared safely`;
+    $("msg").textContent = `✓ The link is copied. ${want === "view" ? "They can read the file, but not change it." : "They can change the file."}`; $("msg").className = "message good";
+    if (t < TASKS.length - 1) { t++; setTimeout(show, 1100); } else $("task").textContent = "All files are shared safely. Share only with the people who need a file.";
+  });
+  show();
+})();
+</script>
+</body>
+</html>

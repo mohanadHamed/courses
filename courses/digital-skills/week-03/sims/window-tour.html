@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Window Tour</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .apps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .sim .apps button.on { background: var(--sim-accent); color: #fff; }
+    .sim .task { font-weight: 800; background: #fff4e6; border: 1.5px dashed #FFC078; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
+    .sim .win { border: 1.5px solid #ced4da; border-radius: 10px; overflow: hidden; user-select: none; }
+    .sim .z { cursor: pointer; }
+    .sim .z:hover { outline: 2px dashed #D9480F; outline-offset: -2px; }
+    .sim .z.hit { outline: 3px solid #2b8a3e; outline-offset: -3px; }
+    .sim .z.miss { outline: 3px solid #c92a2a; outline-offset: -3px; }
+    .sim .title { color: #fff; font-weight: 800; font-size: 0.85rem; padding: 6px 10px; display: flex; gap: 10px; align-items: center; }
+    .sim .qat { background: rgba(255,255,255,.25); border-radius: 4px; padding: 1px 6px; font-size: 0.75rem; }
+    .sim .tabs { display: flex; gap: 2px; background: #f1f3f5; padding: 0 6px; font-size: 0.82rem; font-weight: 700; }
+    .sim .tabs span { padding: 5px 9px; }
+    .sim .ribbon { display: flex; gap: 6px; padding: 6px; background: #f8f9fa; border-bottom: 1px solid #dee2e6; font-size: 0.72rem; color: #868e96; }
+    .sim .ribbon .g { border-right: 1px solid #dee2e6; padding: 0 8px; display: grid; gap: 3px; justify-items: center; }
+    .sim .ribbon .g b { background: #fff; border: 1px solid #dee2e6; border-radius: 4px; padding: 2px 8px; color: #2a211c; font-size: 0.8rem; }
+    .sim .work { min-height: 170px; background: #e9ecef; padding: 10px; display: flex; gap: 8px; justify-content: center; }
+    .sim .page { background: #fff; width: 62%; min-height: 150px; padding: 12px; border: 1px solid #dee2e6; }
+    .sim .page i { display: block; height: 7px; background: #dee2e6; border-radius: 3px; margin: 7px 0; }
+    .sim table.grid { border-collapse: collapse; background: #fff; font-size: 0.78rem; }
+    .sim table.grid td, .sim table.grid th { border: 1px solid #dee2e6; width: 54px; height: 22px; text-align: center; }
+    .sim table.grid th { background: #f1f3f5; color: #868e96; }
+    .sim .sheets { display: flex; gap: 4px; padding: 4px 10px; background: #f8f9fa; font-size: 0.78rem; font-weight: 700; }
+    .sim .sheets span { border: 1px solid #ced4da; border-radius: 4px; padding: 1px 8px; background: #fff; }
+    .sim .thumbs { display: grid; gap: 6px; width: 22%; }
+    .sim .thumbs div { background: #fff; border: 1.5px solid #dee2e6; height: 40px; border-radius: 3px; font-size: 0.7rem; color: #868e96; padding: 2px 4px; }
+    .sim .slide { background: #fff4e6; width: 64%; min-height: 150px; border: 1px solid #dee2e6; padding: 14px; }
+    .sim .slide b { display: block; height: 14px; width: 70%; background: #c43e1c; border-radius: 3px; }
+    .sim .status { display: flex; justify-content: space-between; background: #f1f3f5; padding: 3px 10px; font-size: 0.75rem; color: #868e96; font-weight: 700; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Window Tour: the parts of an Office app</h1>
+  <p class="hint">Word, Excel and PowerPoint look alike. Choose an app, read the task, and tap the right part of the window.</p>
+  <div class="apps" id="apps">
+    <button type="button" class="ghost on" data-app="word">Word</button>
+    <button type="button" class="ghost" data-app="excel">Excel</button>
+    <button type="button" class="ghost" data-app="ppt">PowerPoint</button>
+  </div>
+  <div class="task" id="task"></div>
+  <div class="win" id="win"></div>
+  <p id="msg" class="message"></p>
+  <div class="pad"><span id="score" style="font-weight:800"></span></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const COLORS = { word: "#2b579a", excel: "#217346", ppt: "#c43e1c" };
+  const NAMES = { word: ["report.docx", "Word"], excel: ["budget.xlsx", "Excel"], ppt: ["talk.pptx", "PowerPoint"] };
+  const TASKS = {
+    word: [["title", "Where do you read the name of the file?"], ["ribbon", "Tap the ribbon (the commands)."], ["tab", "Tap the Insert tab."], ["qat", "Tap the Quick Access Toolbar (Save and Undo)."], ["page", "Tap the page of the document."], ["status", "Tap the status bar (pages and words)."]],
+    excel: [["cell", "Tap the cell B3."], ["col", "Tap the letter of column C."], ["sheet", "Tap the worksheet tab Sheet2."], ["ribbon", "Tap the ribbon (the commands)."], ["title", "Where do you read the name of the workbook?"]],
+    ppt: [["thumb", "Tap slide 2 in the list of slides."], ["slide", "Tap the slide that you edit now."], ["tab", "Tap the Insert tab."], ["title", "Where do you read the name of the presentation?"], ["status", "Tap the status bar (slide 1 of 3)."]],
+  };
+  const $ = (id) => document.getElementById(id);
+  let app = "word", step = 0, right = 0, wrongs = 0;
+  const z = (k, html, tag = "div", cls = "") => `<${tag} class="z ${cls}" data-z="${k}">${html}</${tag}>`;
+  function ribbon(a) {
+    const groups = a === "excel" ? [["Clipboard", ["Paste"]], ["Font", ["B", "I"]], ["Number", ["%"]], ["Editing", ["Σ AutoSum"]]]
+      : a === "ppt" ? [["Clipboard", ["Paste"]], ["Slides", ["New Slide"]], ["Font", ["B", "I"]], ["Drawing", ["Shapes"]]]
+      : [["Clipboard", ["Paste"]], ["Font", ["B", "I", "U"]], ["Paragraph", ["List"]], ["Styles", ["Title"]]];
+    return z("ribbon", groups.map(([g, cs]) => `<div class="g">${cs.map((c) => `<b>${c}</b>`).join("")}<span>${g}</span></div>`).join(""), "div", "ribbon");
+  }
+  function work(a) {
+    if (a === "word") return `<div class="work">${z("page", "<i></i><i></i><i style='width:70%'></i><i></i><i style='width:50%'></i>", "div", "page")}</div>`;
+    if (a === "excel") {
+      let t = `<table class="grid"><tr><th></th>${"ABCD".split("").map((c) => (c === "C" ? z("col", c, "th") : `<th>${c}</th>`)).join("")}</tr>`;
+      for (let r = 1; r <= 5; r++) t += `<tr><th>${r}</th>${"ABCD".split("").map((c) => (c === "B" && r === 3 ? z("cell", "", "td") : "<td></td>")).join("")}</tr>`;
+      return `<div class="work">${t}</table></div><div class="sheets"><span>Sheet1</span>${z("sheet", "Sheet2", "span")}<span>+</span></div>`;
+    }
+    return `<div class="work"><div class="thumbs"><div>1</div>${z("thumb", "2")}<div>3</div></div>${z("slide", "<b></b>", "div", "slide")}</div>`;
+  }
+  function render() {
+    const [file, name] = NAMES[app], c = COLORS[app];
+    $("win").innerHTML =
+      `<div class="title" style="background:${c}">${z("qat", "Save · Undo", "span", "qat")}${z("title", `${file} – ${name}`, "span")}</div>` +
+      `<div class="tabs"><span>File</span><span>Home</span>${z("tab", "Insert", "span")}<span>${app === "ppt" ? "Design" : app === "excel" ? "Formulas" : "Layout"}</span><span>Review</span><span>View</span></div>` +
+      ribbon(app) + work(app) +
+      z("status", app === "word" ? "<span>Page 1 of 2 · 312 words</span><span>Zoom 100 %</span>" : app === "ppt" ? "<span>Slide 1 of 3</span><span>Zoom 60 %</span>" : "<span>Ready</span><span>Zoom 100 %</span>", "div", "status");
+    $("win").querySelectorAll(".z").forEach((el) => el.addEventListener("click", (e) => { e.stopPropagation(); pick(el); }));
+    show();
+  }
+  function show() {
+    const list = TASKS[app];
+    if (step >= list.length) { $("task").textContent = `All ${NAMES[app][1]} tasks done. Choose another app.`; return; }
+    $("task").textContent = `Task ${step + 1} of ${list.length}: ${list[step][1]}`;
+  }
+  function pick(el) {
+    const list = TASKS[app];
+    if (step >= list.length) { $("msg").textContent = "This app is done. Choose another app."; return; }
+    const want = list[step][0];
+    $("win").querySelectorAll(".z").forEach((x) => x.classList.remove("hit", "miss"));
+    if (el.dataset.z === want) {
+      el.classList.add("hit"); right++; step++;
+      $("msg").textContent = "✓ Right."; $("msg").className = "message good"; show();
+    } else {
+      el.classList.add("miss"); wrongs++;
+      $("msg").textContent = "✗ Not this part. Read the task again."; $("msg").className = "message bad";
+    }
+    $("score").textContent = `Right: ${right} · Wrong taps: ${wrongs}`;
+  }
+  $("win").addEventListener("click", () => { $("msg").textContent = "Tap a part of the window: the title bar, a tab, the ribbon, the work area or the status bar."; $("msg").className = "message"; });
+  document.querySelectorAll("#apps button").forEach((b) => b.addEventListener("click", () => {
+    app = b.dataset.app; step = 0; document.querySelectorAll("#apps button").forEach((x) => x.classList.toggle("on", x === b)); $("msg").textContent = ""; render();
+  }));
+  render();
+})();
+</script>
+</body>
+</html>

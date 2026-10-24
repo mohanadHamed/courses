@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Branch Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; font-weight: 700; }
+    .sim .seg button.on { background: var(--sim-accent); color: #fff; }
+    .sim .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-top: 10px; }
+    .sim .card { background: #f8f0fc; border-radius: 10px; padding: 6px 10px; }
+    .sim .card small { display: block; color: var(--sim-muted); font-weight: 700; font-size: 0.75rem; }
+    .sim .card b { font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+    .sim canvas { margin-top: 10px; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Branch Builder: how many scenes must the writers make?</h1>
+  <p class="hint">Each decision gives the player some choices. Each choice leads to a new scene. Choose the number of choices and decisions. Then let the paths join again after each decision (branch and bottleneck).</p>
+  <div class="seg" id="ch">Choices at each decision:
+    <button type="button" class="ghost on" data-v="2">2</button><button type="button" class="ghost" data-v="3">3</button>
+  </div>
+  <div class="seg" id="de">Decisions in a row:
+    <button type="button" class="ghost" data-v="1">1</button><button type="button" class="ghost" data-v="2">2</button><button type="button" class="ghost on" data-v="3">3</button>
+  </div>
+  <div class="seg" id="jo">Paths join again:
+    <button type="button" class="ghost on" data-v="0">No: a full tree</button><button type="button" class="ghost" data-v="1">Yes: branch and bottleneck</button>
+  </div>
+  <canvas id="c" aria-label="The story map: scenes as circles, endings in red"></canvas>
+  <div class="cards">
+    <div class="card"><small>scenes to write</small><b id="scenes"></b></div>
+    <div class="card"><small>different endings</small><b id="ends"></b></div>
+    <div class="card"><small>scenes one player sees</small><b id="seen"></b></div>
+  </div>
+  <p id="msg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d"), $ = (id) => document.getElementById(id);
+  let c = 2, d = 3, join = false, W = 0, H = 0;
+  function layout() {
+    // returns levels of nodes: [{x, kind}], and edges between consecutive levels
+    const levels = [], edges = [];
+    if (!join) {
+      for (let k = 0; k <= d; k++) levels.push(Array.from({ length: c ** k }, (_, i) => ({ i, kind: k === d ? "end" : "scene" })));
+      for (let k = 0; k < d; k++) levels[k].forEach((n, i) => { for (let j = 0; j < c; j++) edges.push([k, i, k + 1, i * c + j]); });
+    } else {
+      levels.push([{ kind: "scene" }]);
+      for (let k = 0; k < d; k++) {
+        const last = k === d - 1, opts = Array.from({ length: c }, () => ({ kind: last ? "end" : "scene" }));
+        const from = levels.length - 1; levels.push(opts);
+        opts.forEach((_, j) => edges.push([from, 0, from + 1, j]));
+        if (!last) { levels.push([{ kind: "join" }]); opts.forEach((_, j) => edges.push([from + 1, j, from + 2, 0])); }
+      }
+    }
+    return { levels, edges };
+  }
+  function resize() {
+    W = canvas.clientWidth; const { levels } = layout(); H = Math.max(160, levels.length * 52 + 20);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function draw() {
+    resize();
+    const { levels, edges } = layout();
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, W, H);
+    const pos = levels.map((lv, k) => lv.map((_, i) => [W * (i + 1) / (lv.length + 1), 26 + k * 52]));
+    ctx.strokeStyle = "#ced4da"; ctx.lineWidth = 1.6;
+    edges.forEach(([a, i, b, j]) => { ctx.beginPath(); ctx.moveTo(...pos[a][i]); ctx.lineTo(...pos[b][j]); ctx.stroke(); });
+    levels.forEach((lv, k) => lv.forEach((n, i) => {
+      const [x, y] = pos[k][i], r = lv.length > 12 ? 6 : 10;
+      ctx.fillStyle = n.kind === "end" ? "#e03131" : n.kind === "join" ? "#1971c2" : "#9C36B5";
+      ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+    }));
+    const scenes = levels.reduce((s, lv) => s + lv.length, 0), ends = levels[levels.length - 1].length;
+    const seen = join ? 1 + d + (d - 1) : d + 1;
+    $("scenes").textContent = scenes; $("ends").textContent = ends; $("seen").textContent = seen;
+    $("msg").textContent = join
+      ? `The paths join after each decision. The writers make ${scenes} scenes, and each player still makes ${d} choice${d > 1 ? "s" : ""}.`
+      : `A full tree: every choice opens new scenes. The writers make ${scenes} scenes, but one player sees only ${seen} of them.`;
+  }
+  function seg(id, set) {
+    document.querySelectorAll(`#${id} button`).forEach((b) => b.addEventListener("click", () => {
+      set(Number(b.dataset.v)); document.querySelectorAll(`#${id} button`).forEach((x) => x.classList.toggle("on", x === b)); draw();
+    }));
+  }
+  seg("ch", (v) => (c = v)); seg("de", (v) => (d = v)); seg("jo", (v) => (join = v === 1));
+  window.addEventListener("resize", draw);
+  draw();
+})();
+</script>
+</body>
+</html>

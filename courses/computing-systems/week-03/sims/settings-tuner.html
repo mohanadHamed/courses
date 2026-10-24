@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Settings Tuner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .device { background: #fff9db; border: 1.5px dashed #f59f00; border-radius: 12px; padding: 8px 12px; font-weight: 700; margin-bottom: 10px; }
+    .sim .device b { font-weight: 800; }
+    .sim .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+    .sim .opt { border: 1.5px solid var(--sim-border); border-radius: 12px; padding: 8px 10px; }
+    .sim .opt h2 { font-size: 0.9rem; margin: 0 0 6px; }
+    .sim .opt .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sim .opt button { padding: 5px 10px; }
+    .sim .opt button.on { background: var(--sim-accent); color: #fff; }
+    .sim .meters { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 10px; }
+    .sim .meter { border-radius: 12px; background: #f8f9fa; padding: 8px 12px; }
+    .sim .meter small { display: block; color: var(--sim-muted); font-weight: 700; }
+    .sim .meter b { font-size: 1.4rem; font-variant-numeric: tabular-nums; }
+    .sim .bar { height: 12px; border-radius: 6px; background: #e9ecef; margin-top: 6px; overflow: hidden; }
+    .sim .bar span { display: block; height: 100%; border-radius: 6px; }
+    .sim canvas { height: 120px; margin-top: 10px; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Settings Tuner: Neon Drift</h1>
+  <p class="hint">Byte Bay's racing game must run at <b>60 fps or more</b>, and its textures must fit into the video memory. Choose settings that reach 60 fps and fit into the video memory, then press <b>Test on the device</b>.</p>
+  <div class="hud"><span class="lvl" id="lvl">Device 1 / 3</span><span class="stars" id="stars">★ 0</span></div>
+  <div class="device" id="device"></div>
+  <div class="opts">
+    <div class="opt"><h2>Resolution</h2><div class="seg" data-k="res"><button type="button" class="ghost" data-v="720">720p (0.9 million pixels)</button><button type="button" class="ghost" data-v="1080">1080p (2.1 million pixels)</button></div></div>
+    <div class="opt"><h2>Texture quality</h2><div class="seg" data-k="tex"><button type="button" class="ghost" data-v="1">Low · 1 GB</button><button type="button" class="ghost" data-v="2">Medium · 2 GB</button><button type="button" class="ghost" data-v="4">High · 4 GB</button></div></div>
+    <div class="opt"><h2>Shadows</h2><div class="seg" data-k="sh"><button type="button" class="ghost" data-v="0">Off</button><button type="button" class="ghost" data-v="1">On</button></div></div>
+  </div>
+  <div class="meters">
+    <div class="meter"><small>frame rate (goal: 60 fps or more)</small><b id="fps">—</b><div class="bar"><span id="fpsbar"></span></div></div>
+    <div class="meter"><small>video memory for textures</small><b id="vram">—</b><div class="bar"><span id="vrambar"></span></div></div>
+  </div>
+  <canvas id="c" aria-label="A preview of the race track with the chosen settings"></canvas>
+  <div class="pad"><button id="test" type="button">Test on the device ▶</button><button id="next" type="button" class="ghost" hidden>Next device ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+  <p id="msg" class="message">Device 1 is the story of the lesson.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // Made-up numbers of the case study: at 720p with shadows off, each device runs at `base` fps.
+  // 1080p has about twice as many pixels: the frame rate drops to about half. Shadows on: 1.5 times the work.
+  const DEVICES = [
+    { name: "Laptop L1", gpu: "GPU inside the processor", base: 120, vram: 2, note: "may use 2 GB of the RAM as video memory" },
+    { name: "Phone P1", gpu: "GPU inside the chipset", base: 90, vram: 2, note: "may use 2 GB of the RAM as video memory" },
+    { name: "Desktop D1", gpu: "graphics card", base: 300, vram: 8, note: "8 GB of its own video memory (VRAM)" },
+  ];
+  const $ = (id) => document.getElementById(id);
+  let dev = 0, stars = 0, tries = 0, solved = false, over = false, sound = true, audio = null, t0 = performance.now();
+  let set = { res: 720, tex: 1, sh: 0 };
+  const fpsOf = (d, s) => d.base / (s.res === 1080 ? 2 : 1) / (s.sh ? 1.5 : 1);
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function show() {
+    const d = DEVICES[dev];
+    document.querySelectorAll(".seg").forEach((g) => g.querySelectorAll("button").forEach((b) => b.classList.toggle("on", String(set[g.dataset.k]) === b.dataset.v)));
+    const fps = fpsOf(d, set);
+    $("fps").textContent = Math.round(fps) + " fps";
+    $("fpsbar").style.width = Math.min(100, fps / 1.5) + "%"; $("fpsbar").style.background = fps >= 60 ? "#2b8a3e" : "#e03131";
+    $("vram").textContent = `${set.tex} GB of ${d.vram} GB`;
+    $("vrambar").style.width = Math.min(100, set.tex / d.vram * 100) + "%"; $("vrambar").style.background = set.tex <= d.vram ? "#2b8a3e" : "#e03131";
+  }
+  function start() {
+    if (dev >= DEVICES.length) {
+      over = true; $("lvl").textContent = "All devices done"; $("device").textContent = "Neon Drift runs at 60 fps on all three test devices.";
+      $("msg").textContent = `🎉 Ready for release! ★ ${stars} of ${DEVICES.length * 3}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; $("test").hidden = true; return;
+    }
+    over = false; tries = 0; solved = false; set = { res: 1080, tex: 4, sh: 1 };
+    const d = DEVICES[dev];
+    $("lvl").textContent = `Device ${dev + 1} / ${DEVICES.length}`;
+    $("device").innerHTML = `<b>${d.name}</b> · ${d.gpu}, ${d.note} · <b>${d.base} fps</b> at 720p with shadows off`;
+    $("msg").textContent = dev === 0 ? "Device 1 is the story of the lesson. Choose the settings, then test." : "Choose the settings, then test."; $("msg").className = "message";
+    $("next").hidden = true; $("test").hidden = false; show();
+  }
+  function test() {
+    if (over) return;
+    if (solved) { $("msg").textContent = "This device is done. Press Next device."; return; }
+    const d = DEVICES[dev], fps = fpsOf(d, set); tries++;
+    if (set.tex > d.vram) {
+      $("msg").textContent = `✗ The textures need ${set.tex} GB, but ${d.name} has only ${d.vram} GB of video memory. The game stutters while it swaps textures. Choose lower textures.`;
+      $("msg").className = "message bad"; beep(200, 0.3, "sawtooth"); return;
+    }
+    if (fps < 60) {
+      $("msg").textContent = `✗ Only ${Math.round(fps)} fps. The GPU cannot draw the frames in time. Lower the resolution or switch the shadows off.`;
+      $("msg").className = "message bad"; beep(200, 0.3, "sawtooth"); return;
+    }
+    solved = true;
+    const got = tries === 1 ? 3 : tries === 2 ? 2 : 1;
+    stars += got; $("stars").textContent = "★ " + stars;
+    $("msg").textContent = `✓ ${Math.round(fps)} fps and ${set.tex} GB of ${d.vram} GB: Neon Drift runs well on ${d.name}. ${"★".repeat(got)}`;
+    $("msg").className = "message good"; [660, 880, 1320].forEach((f, i) => setTimeout(() => beep(f, 0.12), i * 110));
+    $("next").hidden = false; $("next").textContent = dev < DEVICES.length - 1 ? "Next device ▶" : "Finish ▶";
+  }
+  // a small preview: more pixels look sharper, shadows appear, textures get more detail
+  const cv = $("c"), ctx = cv.getContext("2d");
+  function resize() { const W = cv.clientWidth, H = 120, dpr = window.devicePixelRatio || 1; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  function draw(now) {
+    const W = cv.clientWidth, H = 120, d = DEVICES[Math.min(dev, DEVICES.length - 1)], fps = fpsOf(d, set);
+    const blocky = set.res === 720 ? 6 : 3;
+    ctx.fillStyle = "#1b1f3b"; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#343a40"; ctx.beginPath(); ctx.moveTo(W * 0.35, 30); ctx.lineTo(W * 0.65, 30); ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+    const speed = Math.min(fps, 120) / 60, k = ((Math.max(0, now - t0) / 1000) * speed) % 1;
+    for (let i = 0; i < 6; i++) {
+      const z = (i + k) / 6, y = 30 + z * z * (H - 30), w = 4 + z * 18;
+      ctx.fillStyle = set.tex >= 2 ? "#ffd43b" : "#ced4da"; ctx.fillRect(W / 2 - w / 2, y, w, 3 + z * 6);
+    }
+    const cx = W / 2 + Math.sin(now / 700) * W * 0.12, cy = H - 26;
+    if (set.sh) { ctx.fillStyle = "rgba(0,0,0,.45)"; ctx.beginPath(); ctx.ellipse(cx + 8, cy + 14, 34, 9, 0, 0, 7); ctx.fill(); }
+    ctx.fillStyle = "#f783ac"; ctx.fillRect(Math.round((cx - 28) / blocky) * blocky, Math.round((cy - 10) / blocky) * blocky, 56, 22);
+    if (set.tex === 4) { ctx.fillStyle = "#fff"; ctx.fillRect(cx - 20, cy - 6, 40, 3); ctx.fillRect(cx - 20, cy + 4, 40, 3); }
+    ctx.fillStyle = "#ffffff"; ctx.font = "800 12px Nunito, system-ui, sans-serif"; ctx.textAlign = "left";
+    ctx.fillText(`${set.res}p · textures ${set.tex === 1 ? "Low" : set.tex === 2 ? "Medium" : "High"} · shadows ${set.sh ? "on" : "off"}`, 10, 18);
+  }
+  function loop(now) { requestAnimationFrame(loop); try { draw(now); } catch (e) { /* keep the loop alive */ } }
+  document.querySelectorAll(".seg").forEach((g) => g.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+    if (solved) { $("msg").textContent = "This device is done. Press Next device."; return; }
+    set[g.dataset.k] = Number(b.dataset.v); show();
+  })));
+  $("test").addEventListener("click", test);
+  $("next").addEventListener("click", () => { if (over) { dev = 0; stars = 0; $("stars").textContent = "★ 0"; } else dev++; start(); });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  window.addEventListener("resize", resize);
+  resize(); start(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

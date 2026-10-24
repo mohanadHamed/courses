@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Turret Turn</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .goal b { color: #e8590c; }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; margin-top: 10px; }
+    .sim .calc { margin-top: 8px; font-variant-numeric: tabular-nums; font-weight: 700; min-height: 1.4em; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Turret Turn</h1>
+  <p class="hint">The tower looks along f. For each drone, work out d = drone − tower, then f × d = f<sub>x</sub> d<sub>y</sub> − f<sub>y</sub> d<sub>x</sub>. Positive: turn left. Negative: turn right. Zero: fire if the drone is in front (f · d &gt; 0), turn around if it is behind.</p>
+  <div class="hud">
+    <span class="lvl" id="lvl">Round 1</span>
+    <span class="goal" id="goal"></span>
+    <span class="stars" id="stars">★ 0</span>
+  </div>
+  <canvas id="c" aria-label="A grid with the defence tower, its forward vector and one drone"></canvas>
+  <div class="pad" id="choices">
+    <button type="button" class="ghost" data-a="left">↺ Turn left</button>
+    <button type="button" class="ghost" data-a="right">↻ Turn right</button>
+    <button type="button" class="ghost" data-a="fire">● Fire straight ahead</button>
+    <button type="button" class="ghost" data-a="around">⟲ Turn around</button>
+  </div>
+  <p class="calc" id="calc"></p>
+  <p id="msg" class="message">Round 1 is the story of the lesson.</p>
+  <div class="pad"><button id="next" type="button" hidden>Next drone ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const COLS = 10, ROWS = 8, TURN_MS = 900;
+  const ROUNDS = [
+    { T: [4, 4], f: [1, 0], drones: [["A", 7, 6], ["B", 6, 1], ["C", 1, 4], ["D", 9, 4]] },
+    { T: [4, 4], f: [0, 1], drones: [["A", 7, 6], ["E", 2, 7], ["F", 4, 8], ["G", 4, 1]] },
+    { T: [3, 2], f: [1, 1], drones: [["H", 7, 6], ["I", 3, 7], ["J", 8, 3], ["K", 1, 0]] },
+    { T: [4, 3], f: [2, 1], drones: [["L", 5, 6], ["M", 7, 2], ["N", 8, 5], ["P", 0, 1]] },
+  ];
+  const NAMES = { left: "turn left", right: "turn right", fire: "fire straight ahead", around: "turn around" };
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => (n < 0 ? "−" : "") + Math.abs(Math.round(n * 100) / 100);
+  const pair = (a, b) => `(${fmt(a)}, ${fmt(b)})`;
+  const par = (n) => (n < 0 ? `(${fmt(n)})` : fmt(n));
+  let W = 0, H = 0, u = 40, round = 0, idx = 0, stars = 0, tries = 0, cur = ROUNDS[0];
+  let angle = 0, turn = null, shot = null, done = false, over = false, busy = false, sound = true, audio = null, hits = [];
+
+  function solve(dr) {
+    const d = [dr[1] - cur.T[0], dr[2] - cur.T[1]];
+    const cross = cur.f[0] * d[1] - cur.f[1] * d[0], dot = cur.f[0] * d[0] + cur.f[1] * d[1];
+    const ans = cross > 0 ? "left" : cross < 0 ? "right" : dot > 0 ? "fire" : "around";
+    return { d, cross, dot, ans };
+  }
+  function startRound() {
+    if (round >= ROUNDS.length) {
+      over = true; $("lvl").textContent = "All rounds done"; $("goal").textContent = ""; $("calc").textContent = "";
+      $("msg").textContent = `🎉 The base is safe! ★ ${stars} of ${ROUNDS.length * 4 * 2}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; return;
+    }
+    over = false; cur = ROUNDS[round]; idx = 0; hits = []; angle = Math.atan2(cur.f[1], cur.f[0]); startDrone();
+  }
+  function startDrone() {
+    tries = 0; done = false; busy = false; turn = null; shot = null; angle = Math.atan2(cur.f[1], cur.f[0]);
+    const dr = cur.drones[idx];
+    $("lvl").textContent = `Round ${round + 1} / ${ROUNDS.length} · drone ${idx + 1} / 4`;
+    $("goal").innerHTML = `Tower <b>T = ${pair(...cur.T)}</b>, <b>f = ${pair(...cur.f)}</b>, drone <b>${dr[0]} = ${pair(dr[1], dr[2])}</b>`;
+    $("calc").textContent = ""; $("next").hidden = true;
+    $("msg").textContent = round === 0 && idx === 0 ? "Round 1 is the story of the lesson. Which way must the tower turn to drone A?" : `Which way must the tower turn to drone ${dr[0]}?`;
+    $("msg").className = "message";
+  }
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function choose(a) {
+    if (over) { $("msg").textContent = "All rounds are done. Press Play again."; return; }
+    if (busy) { $("msg").textContent = "Wait: the tower is still turning."; return; }
+    if (done) { $("msg").textContent = "This drone is down. Press Next drone."; return; }
+    const dr = cur.drones[idx], r = solve(dr); tries++;
+    $("calc").textContent = `d = ${pair(...r.d)} · f × d = ${fmt(cur.f[0])} × ${par(r.d[1])} − ${fmt(cur.f[1])} × ${par(r.d[0])} = ${fmt(r.cross)} · f · d = ${fmt(r.dot)}`;
+    if (a === r.ans) {
+      busy = true;
+      const target = Math.atan2(r.d[1], r.d[0]);
+      let delta = target - angle; while (delta > Math.PI) delta -= 2 * Math.PI; while (delta < -Math.PI) delta += 2 * Math.PI;
+      if (r.ans === "around") delta = Math.PI;   // a half turn (either way)
+      turn = { t0: performance.now(), from: angle, delta };
+      setTimeout(() => {   // decide with a timer, not in draw()
+        angle = turn.from + turn.delta; turn = null; shot = { t0: performance.now(), to: [dr[1], dr[2]] };
+        beep(880, 0.08, "square");
+        setTimeout(() => {
+          shot = null; hits.push(dr[0]); done = true; busy = false;
+          const got = tries === 1 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+          const why = r.cross !== 0 ? `f × d = ${fmt(r.cross)} is ${r.cross > 0 ? "positive" : "negative"}` : `f × d = 0 and f · d = ${fmt(r.dot)} is ${r.dot > 0 ? "positive (in front)" : "negative (behind)"}`;
+          $("msg").textContent = `✓ Right: ${NAMES[r.ans]}. ${why}. ${"★".repeat(got)}`; $("msg").className = "message good";
+          [660, 990].forEach((f, i) => setTimeout(() => beep(f, 0.12), i * 100));
+          $("next").hidden = false;
+          $("next").textContent = idx < 3 ? "Next drone ▶" : round < ROUNDS.length - 1 ? "Next round ▶" : "Finish ▶";
+        }, 420);
+      }, TURN_MS);
+    } else {
+      $("msg").textContent = `✗ Not ${NAMES[a]}. Look at the sign of f × d${r.cross === 0 ? ", then at f · d" : ""} and try again.`;
+      $("msg").className = "message bad"; beep(200, 0.25, "sawtooth");
+    }
+  }
+  function resize() {
+    W = canvas.clientWidth; u = Math.min((W - 40) / COLS, 46);
+    H = Math.round(u * ROWS + 40);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  const X = (x) => (W - u * COLS) / 2 + x * u, Y = (y) => 14 + (ROWS - y) * u;
+  function droneShape(px, py, name, down) {
+    ctx.save(); ctx.translate(px, py); ctx.globalAlpha = down ? 0.3 : 1;
+    ctx.strokeStyle = "#495057"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-11, -11); ctx.lineTo(11, 11); ctx.moveTo(11, -11); ctx.lineTo(-11, 11); ctx.stroke();
+    ctx.fillStyle = "#7048e8";
+    [[-11, -11], [11, -11], [-11, 11], [11, 11]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 5, 0, 7); ctx.fill(); });
+    ctx.fillStyle = "#e8590c"; ctx.beginPath(); ctx.arc(0, 0, 8, 0, 7); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.font = "800 10px Nunito, system-ui, sans-serif"; ctx.textAlign = "center"; ctx.fillText(name, 0, 3.5);
+    ctx.restore();
+  }
+  function draw(now) {
+    ctx.fillStyle = "#f4fbf0"; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = "#e3eee0"; ctx.lineWidth = 1;
+    for (let i = 0; i <= COLS; i++) { ctx.beginPath(); ctx.moveTo(X(i), Y(0)); ctx.lineTo(X(i), Y(ROWS)); ctx.stroke(); }
+    for (let j = 0; j <= ROWS; j++) { ctx.beginPath(); ctx.moveTo(X(0), Y(j)); ctx.lineTo(X(COLS), Y(j)); ctx.stroke(); }
+    ctx.fillStyle = "#868e96"; ctx.font = "600 10px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    for (let i = 0; i <= COLS; i += 2) ctx.fillText(String(i), X(i), Y(0) + 13);
+    ctx.textAlign = "right"; for (let j = 0; j <= ROWS; j += 2) ctx.fillText(String(j), X(0) - 4, Y(j) + 3);
+    if (over) return;
+    const [tx, ty] = cur.T, dr = cur.drones[idx];
+    // the line along f: left side and right side
+    const fa = Math.atan2(cur.f[1], cur.f[0]);
+    ctx.save(); ctx.setLineDash([6, 5]); ctx.strokeStyle = "#f59f00"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(X(tx - Math.cos(fa) * 14), Y(ty - Math.sin(fa) * 14)); ctx.lineTo(X(tx + Math.cos(fa) * 14), Y(ty + Math.sin(fa) * 14)); ctx.stroke(); ctx.restore();
+    ctx.fillStyle = "#2b8a3e"; ctx.font = "800 11px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("left", X(tx + Math.cos(fa + 1.2) * 1.6), Y(ty + Math.sin(fa + 1.2) * 1.6));
+    ctx.fillStyle = "#e8590c"; ctx.fillText("right", X(tx + Math.cos(fa - 1.2) * 1.6), Y(ty + Math.sin(fa - 1.2) * 1.6));
+    // drones already down, then the current one
+    cur.drones.forEach((d, i) => { if (i < idx || (i === idx && done)) droneShape(X(d[1]), Y(d[2]), d[0], true); });
+    if (!done) droneShape(X(dr[1]), Y(dr[2]), dr[0], false);
+    ctx.fillStyle = "#2a211c"; ctx.font = "700 10px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(pair(dr[1], dr[2]), X(dr[1]), Y(dr[2]) + 26);
+    // the tower turns
+    let a = angle;
+    if (turn) { const k = Math.max(0, Math.min((now - turn.t0) / TURN_MS, 1)); a = turn.from + turn.delta * (k * k * (3 - 2 * k)); }
+    const ax = X(tx), ay = Y(ty);
+    ctx.fillStyle = "#495057"; ctx.beginPath(); ctx.arc(ax, ay, 15, 0, 7); ctx.fill();
+    ctx.strokeStyle = "#2F9E44"; ctx.fillStyle = "#2F9E44"; ctx.lineWidth = 5; ctx.lineCap = "round";
+    const bx = ax + Math.cos(a) * u * 1.4, by = ay - Math.sin(a) * u * 1.4;
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bx + Math.cos(a) * 7, by - Math.sin(a) * 7);
+    ctx.lineTo(bx + Math.cos(a + 2.4) * 11, by - Math.sin(a + 2.4) * 11); ctx.lineTo(bx + Math.cos(a - 2.4) * 11, by - Math.sin(a - 2.4) * 11); ctx.fill();
+    ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(ax, ay, 5, 0, 7); ctx.fill();
+    if (!turn && !done) {
+      ctx.fillStyle = "#2a211c"; ctx.font = "800 11px Nunito, system-ui, sans-serif"; ctx.textAlign = "center";
+      ctx.fillText("f = " + pair(...cur.f), bx + Math.cos(a) * 4, by - Math.sin(a) * 4 - 12);
+    }
+    if (shot) {
+      const k = Math.max(0, Math.min((now - shot.t0) / 380, 1));
+      ctx.strokeStyle = "#f03e3e"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax + (X(shot.to[0]) - ax) * k, ay + (Y(shot.to[1]) - ay) * k); ctx.stroke();
+    }
+  }
+  function loop(now) {
+    requestAnimationFrame(loop);
+    try { draw(now); } catch (e) { /* keep the loop alive */ }
+  }
+  document.querySelectorAll("#choices button").forEach((b) => b.addEventListener("click", () => choose(b.dataset.a)));
+  $("next").addEventListener("click", () => {
+    if (over) { round = 0; stars = 0; $("stars").textContent = "★ 0"; startRound(); return; }
+    if (idx < 3) { idx++; startDrone(); } else { round++; startRound(); }
+  });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  window.addEventListener("resize", resize);
+  resize(); startRound(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

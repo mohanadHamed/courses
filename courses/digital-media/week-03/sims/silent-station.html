@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Silent Station</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .scene { background: #f8f0fc; border-radius: 12px; padding: 10px 12px; font-weight: 700; line-height: 1.45; margin-top: 10px; min-height: 3em; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+    .sim .clues { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .sim .clue { background: #fff; border: 1.5px solid var(--sim-accent); color: var(--sim-accent); border-radius: 20px; padding: 3px 10px; font-weight: 800; font-size: 0.85rem; }
+    .sim .map { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; align-items: center; }
+    .sim .n { border: 2px solid #dee2e6; border-radius: 10px; padding: 5px 6px; font-size: 0.78rem; font-weight: 800; text-align: center; color: #868e96; background: #fff; }
+    .sim .n.on { border-color: var(--sim-accent); color: #fff; background: var(--sim-accent); }
+    .sim .n.seen { border-color: var(--sim-accent); color: var(--sim-accent); }
+    .sim .col { display: grid; gap: 6px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Silent Station</h1>
+  <p class="hint">Mira, a radio operator, arrives at a small research station in the desert. Nobody is there. First explore the room: tap the objects that tell what happened. Then make two choices. The story map below shows your path.</p>
+  <div class="hud"><span class="lvl" id="lvl">Part 1: explore the room</span><span class="stars" id="stars">★ 0</span></div>
+  <canvas id="c" aria-label="The empty room of the station with objects to tap"></canvas>
+  <div class="clues" id="clues"></div>
+  <div class="scene" id="scene">Tap the objects in the room. Five of them tell a story.</div>
+  <div class="pad" id="choices"></div>
+  <div class="map" aria-label="Story map">
+    <div class="col"><div class="n" id="m-start">Arrival (the room)</div></div>
+    <div class="col"><div class="n" id="m-foot">Follow the footprints</div><div class="n" id="m-radio">Repair the radio</div></div>
+    <div class="col"><div class="n" id="m-hill">The antenna on the hill</div></div>
+    <div class="col"><div class="n" id="m-endA">Ending A: help is coming</div><div class="n" id="m-endB">Ending B: a safe, silent night</div></div>
+  </div>
+  <p id="msg" class="message"></p>
+  <div class="pad"><button id="again" type="button" class="ghost" hidden>Play the other path ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d"), $ = (id) => document.getElementById(id);
+  // objects in a 600 × 300 room; clue: true if it tells part of the story
+  const OBJ = [
+    { k: "cup", x: 300, y: 170, w: 30, h: 26, name: "a cold cup of tea", clue: true, says: "The tea is full and cold. Someone left in a hurry." },
+    { k: "note", x: 342, y: 172, w: 36, h: 22, name: "a note", clue: true, says: "\"Gone to fix the antenna. Back by 6. – Aziz\"" },
+    { k: "radio", x: 380, y: 140, w: 80, h: 50, name: "a burnt radio", clue: true, says: "The radio smells burnt. Nobody could call for help." },
+    { k: "cal", x: 500, y: 50, w: 90, h: 90, name: "a circled day", clue: true, says: "Yesterday is circled: \"supply truck\". The truck did not come." },
+    { k: "steps", x: 320, y: 262, w: 220, h: 40, name: "footprints", clue: true, says: "Footprints in the sand lead out of the door, towards the hill." },
+    { k: "plant", x: 70, y: 196, w: 40, h: 60, name: "a plant", clue: false, says: "A green plant. It tells nothing about what happened." },
+    { k: "chair", x: 200, y: 200, w: 40, h: 56, name: "a chair", clue: false, says: "An empty chair. Nothing special." },
+  ];
+  let awarded = { first: false, both: false }, found = new Set(), part = 1, path = [], stars = 0, endings = new Set(), W = 0, H = 0, sx = 1, sound = true, audio = null, flash = null;
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function star() { stars++; $("stars").textContent = "★ " + stars; }
+  function mark() {
+    ["start", "foot", "radio", "hill", "endA", "endB"].forEach((k) => { const el = $("m-" + k); el.className = "n" + (path.includes(k) ? " on" : ""); });
+  }
+  function choices(list) {
+    $("choices").innerHTML = "";
+    list.forEach(([label, fn]) => { const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.textContent = label; b.addEventListener("click", fn); $("choices").appendChild(b); });
+  }
+  function startStory() {
+    part = 2; path = ["start"]; mark();
+    $("lvl").textContent = "Part 2: choose";
+    $("scene").textContent = "Mira knows enough: Aziz walked to the antenna yesterday, the radio is dead, and the supply truck did not come. What does she do first?";
+    choices([["Follow the footprints", () => step("foot")], ["Repair the radio first", () => step("radio")]]);
+  }
+  function step(k) {
+    $("choices").innerHTML = "";
+    path.push(k); mark(); beep(520, 0.1);
+    const t = k === "foot" ? "Mira follows the footprints up the hill. The wind has almost covered them." : "Mira changes a burnt wire. The radio hums, but it needs the antenna to reach anyone.";
+    $("scene").textContent = t + " Both paths end at the same place: the antenna on the hill. Aziz sits there with a hurt foot.";
+    path.push("hill"); setTimeout(() => {   // the bottleneck scene
+      mark(); $("lvl").textContent = "Part 2: the bottleneck";
+      choices([["Help Aziz fix the antenna", () => end("endA")], ["Take Aziz back to the station first", () => end("endB")]]);
+    }, 400);
+  }
+  function end(k) {
+    path.push(k); mark(); endings.add(k);
+    $("scene").textContent = k === "endA"
+      ? "Ending A: together they fix the antenna. The station calls the truck, and help is coming by morning."
+      : "Ending B: Aziz is safe and warm in the station, but the radio stays silent for one more night.";
+    $("choices").innerHTML = "";
+    if (!awarded.first) { star(); awarded.first = true; }
+    if (endings.size === 2 && !awarded.both) { star(); awarded.both = true; }
+    $("msg").textContent = endings.size === 2
+      ? "🎉 You saw both endings. The two first choices joined at the antenna: branch and bottleneck."
+      : "The story map shows your path. Play again and take the other choices.";
+    $("msg").className = "message good"; $("again").hidden = false;
+    [660, 880, 1320].forEach((f, i) => setTimeout(() => beep(f, 0.12), i * 110));
+  }
+  function resize() {
+    W = canvas.clientWidth; sx = W / 600; H = Math.round(300 * sx);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr * sx, 0, 0, dpr * sx, 0, 0);
+  }
+  function drawRoom(now) {
+    ctx.fillStyle = "#fff4e6"; ctx.fillRect(0, 0, 600, 300);
+    ctx.fillStyle = "#f1e3d3"; ctx.fillRect(0, 240, 600, 60);
+    ctx.fillStyle = "#d0ebff"; ctx.fillRect(40, 30, 150, 100); ctx.strokeStyle = "#868e96"; ctx.lineWidth = 3; ctx.strokeRect(40, 30, 150, 100);
+    ctx.fillStyle = "#e9c46a"; ctx.beginPath(); ctx.moveTo(40, 120); ctx.quadraticCurveTo(90, 80, 140, 100); ctx.quadraticCurveTo(170, 108, 190, 95); ctx.lineTo(190, 130); ctx.lineTo(40, 130); ctx.fill();
+    ctx.strokeStyle = "#495057"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(130, 98); ctx.lineTo(130, 52); ctx.moveTo(120, 62); ctx.lineTo(140, 62); ctx.stroke();
+    ctx.fillStyle = "#a47148"; ctx.fillRect(250, 190, 230, 12); ctx.fillRect(262, 202, 10, 40); ctx.fillRect(458, 202, 10, 40);
+    // plant
+    ctx.fillStyle = "#c2833e"; ctx.fillRect(76, 226, 28, 30); ctx.fillStyle = "#40c057"; [[90, 214], [80, 204], [100, 202], [90, 194]].forEach(([x, y]) => { ctx.beginPath(); ctx.ellipse(x, y, 9, 15, 0.4, 0, 7); ctx.fill(); });
+    // chair
+    ctx.fillStyle = "#8d6e63"; ctx.fillRect(204, 206, 32, 6); ctx.fillRect(204, 176, 6, 36); ctx.fillRect(206, 212, 5, 30); ctx.fillRect(230, 212, 5, 30);
+    // cup, note, radio
+    ctx.fillStyle = "#fff"; ctx.strokeStyle = "#495057"; ctx.lineWidth = 2; ctx.fillRect(302, 166, 24, 24); ctx.strokeRect(302, 166, 24, 24);
+    ctx.fillStyle = "#fff9db"; ctx.strokeStyle = "#f59f00"; ctx.save(); ctx.translate(360, 183); ctx.rotate(-0.12); ctx.fillRect(-16, -9, 32, 18); ctx.strokeRect(-16, -9, 32, 18); ctx.restore();
+    ctx.fillStyle = "#495057"; ctx.fillRect(380, 140, 80, 50); ctx.fillStyle = "#adb5bd"; ctx.beginPath(); ctx.arc(400, 165, 10, 0, 7); ctx.fill(); ctx.fillRect(418, 154, 32, 6); ctx.fillRect(418, 168, 32, 6);
+    ctx.strokeStyle = "#868e96"; ctx.lineWidth = 2.5; const wv = Math.sin(now / 400) * 3; ctx.beginPath(); ctx.moveTo(440, 138); ctx.quadraticCurveTo(448 + wv, 124, 440, 112); ctx.quadraticCurveTo(434 - wv, 102, 444, 92); ctx.stroke();
+    // calendar
+    ctx.fillStyle = "#fff"; ctx.fillRect(500, 50, 90, 90); ctx.strokeStyle = "#495057"; ctx.strokeRect(500, 50, 90, 90); ctx.fillStyle = "#c92a2a"; ctx.fillRect(500, 50, 90, 20);
+    ctx.fillStyle = "#e9ecef"; for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) ctx.fillRect(508 + c * 20, 78 + r * 18, 14, 12);
+    ctx.strokeStyle = "#c92a2a"; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(555, 102, 11, 0, 7); ctx.stroke();
+    // door and footprints
+    ctx.fillStyle = "#a47148"; ctx.fillRect(530, 150, 60, 90); ctx.fillStyle = "#ffd43b"; ctx.beginPath(); ctx.arc(578, 198, 3.5, 0, 7); ctx.fill();
+    ctx.fillStyle = "#8d6e63"; for (let i = 0; i < 5; i++) { const x = 330 + i * 42, y = 286 - i * 8; ctx.beginPath(); ctx.ellipse(x, y, 7, 4, 0, 0, 7); ctx.ellipse(x + 12, y + 7, 7, 4, 0, 0, 7); ctx.fill(); }
+    // highlight found objects
+    OBJ.forEach((o) => {
+      if (found.has(o.k)) { ctx.strokeStyle = o.clue ? "#9C36B5" : "#adb5bd"; ctx.lineWidth = 2.5; ctx.setLineDash([5, 4]); ctx.strokeRect(o.x - 4, o.y - 4, o.w + 8, o.h + 8); ctx.setLineDash([]); }
+    });
+    if (flash) { const k = Math.max(0, 1 - (now - flash.t) / 500); ctx.fillStyle = `rgba(247,131,172,${0.35 * k})`; ctx.fillRect(flash.o.x - 6, flash.o.y - 6, flash.o.w + 12, flash.o.h + 12); }
+  }
+  function loop(now) { requestAnimationFrame(loop); try { drawRoom(now); } catch (e) { /* keep the loop alive */ } }
+  canvas.addEventListener("pointerdown", (e) => {
+    if (part !== 1) { $("msg").textContent = "The room is explored. Go on with the story below."; $("msg").className = "message"; return; }
+    const r = canvas.getBoundingClientRect(), x = (e.clientX - r.left) / sx, y = (e.clientY - r.top) / sx;
+    const o = OBJ.find((q) => x >= q.x - 6 && x <= q.x + q.w + 6 && y >= q.y - 6 && y <= q.y + q.h + 6);
+    if (!o) { $("msg").textContent = "Nothing there. Tap an object."; $("msg").className = "message"; return; }
+    flash = { o, t: performance.now() };
+    $("scene").textContent = o.says;
+    if (found.has(o.k)) return;
+    found.add(o.k);
+    if (o.clue) {
+      beep(660, 0.12);
+      const n = OBJ.filter((q) => q.clue && found.has(q.k)).length;
+      $("clues").innerHTML = OBJ.filter((q) => q.clue && found.has(q.k)).map((q) => `<span class="clue">${q.name}</span>`).join("");
+      $("msg").textContent = `Clue ${n} of 5.`; $("msg").className = "message good";
+      if (n === 5) { star(); $("msg").textContent = "★ All five clues found. The room told the story without a single cutscene."; setTimeout(startStory, 900); }
+    } else { $("msg").textContent = "Not a clue: it does not tell what happened."; $("msg").className = "message bad"; beep(240, 0.15, "sawtooth"); }
+  });
+  $("again").addEventListener("click", () => { startStory(); $("msg").textContent = "Take the other choices this time."; $("msg").className = "message"; $("again").hidden = true; });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  window.addEventListener("resize", resize);
+  resize(); mark(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

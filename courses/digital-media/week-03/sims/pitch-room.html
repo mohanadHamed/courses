@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Pitch Room</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .brief { background: #fff0f6; border: 1.5px dashed #F783AC; border-radius: 12px; padding: 8px 12px; font-weight: 700; margin-bottom: 10px; }
+    .sim .brief b { font-weight: 800; }
+    .sim .rows { display: grid; gap: 8px; }
+    .sim .row { display: grid; grid-template-columns: 130px 1fr; gap: 8px; align-items: start; }
+    .sim .row h2 { font-size: 0.85rem; margin: 6px 0 0; color: var(--sim-muted); }
+    .sim .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sim .opts button { padding: 5px 10px; font-size: 0.88rem; text-align: left; }
+    .sim .opts button.on { background: var(--sim-accent); color: #fff; }
+    .sim .opts button.bad { background: #c92a2a; border-color: #c92a2a; color: #fff; }
+    .sim .pitch { margin-top: 10px; background: #f8f0fc; border-left: 5px solid var(--sim-accent); border-radius: 10px; padding: 10px 12px; font-weight: 700; line-height: 1.45; min-height: 2.5em; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+    .sim ul.fb { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; }
+    .sim ul.fb li { font-weight: 700; font-size: 0.9rem; padding: 4px 8px; border-radius: 8px; background: #fff5f5; color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+    @media (max-width: 520px) { .sim .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Pitch Room: build a premise</h1>
+  <p class="hint">The producer of Night Owl Games gives you a brief. Choose one card in each row, so that the premise fits the brief. Then pitch it.</p>
+  <div class="hud"><span class="lvl" id="lvl">Brief 1</span><span class="stars" id="stars">★ 0</span></div>
+  <div class="brief" id="brief"></div>
+  <div class="rows" id="rows"></div>
+  <div class="pitch" id="pitch">Your premise appears here.</div>
+  <div class="pad"><button id="go" type="button">Pitch it ▶</button><button id="next" type="button" class="ghost" hidden>Next brief ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+  <p id="msg" class="message">Brief 1 is the story of the lesson.</p>
+  <ul class="fb" id="fb"></ul>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // each option: [text, ok, why it does not fit]
+  const BRIEFS = [
+    { title: "Rooftop Rescue", brief: "A mobile <b>puzzle</b> game. Levels last <b>3 minutes</b>. Setting: <b>a flooded city</b>. The player <b>slides blocks</b> to open a path.",
+      rows: {
+        incident: [["When the river floods the old city,", true], ["When nothing special happens,", false, "there is no inciting incident"], ["When aliens land on the Moon,", false, "it does not fit the flooded city"]],
+        who: [["Nour, a young boat driver,", true], ["everybody in the world", false, "not one clear character"], ["the city", false, "a place is not a character"]],
+        goal: [["must lead the families on the rooftops to the hill", true], ["must be happy", false, "the goal is not clear"], ["must win a car race", false, "it does not fit a puzzle game about a flood"]],
+        stakes: [["before night falls, or the families stay on the rooftops all night,", true], ["or something bad happens,", false, "the stakes are not clear"], ["or nothing changes,", false, "there is nothing at stake"]],
+        obstacle: [["but floating cars and boxes block the streets.", true], ["but nothing stands in the way.", false, "a story needs an obstacle"], ["but a dragon attacks from the sky.", false, "it does not fit the sliding puzzles"]],
+        play: [["The player slides the blocks to open a path for the boat.", true], ["The player reads long dialogues.", false, "the brief asks for sliding puzzles"], ["The player shoots enemies.", false, "the brief is a puzzle game"]],
+      } },
+    { title: "Sunset Run", brief: "A mobile <b>runner</b>. One run lasts <b>1 minute</b>. Setting: <b>a desert at sunset</b>. The player <b>jumps and slides</b>.",
+      rows: {
+        incident: [["When the village doctor runs out of medicine,", true], ["When a cat sleeps all day,", false, "nothing starts the conflict"], ["When the snow covers the mountain,", false, "it does not fit the desert"]],
+        who: [["Sami, a delivery rider,", true], ["a road", false, "a place is not a character"], ["some people", false, "not one clear character"]],
+        goal: [["must carry new medicine to the far village", true], ["must think about life", false, "the goal is not clear"], ["must build a big castle", false, "it does not fit a runner"]],
+        stakes: [["before sunset, or a sick child gets no help tonight,", true], ["or it will be a little sad,", false, "the stakes are weak"], ["or nothing happens,", false, "there is nothing at stake"]],
+        obstacle: [["but a sandstorm buries the road under sand.", true], ["but the road is easy.", false, "there is no obstacle"], ["but the sea is full of sharks.", false, "it does not fit the desert"]],
+        play: [["The player jumps over rocks and slides under signs.", true], ["The player plants and waters seeds.", false, "the brief is a runner"], ["The player solves long riddles.", false, "it does not fit 1-minute runs"]],
+      } },
+    { title: "Grandma's Garden", brief: "A <b>cozy farming</b> game. Sessions of <b>5 minutes</b>. Setting: <b>a small mountain village</b>. The player <b>plants, waters and harvests</b>.",
+      rows: {
+        incident: [["When her grandmother can no longer work,", true], ["When a war starts between planets,", false, "it does not fit a cozy farming game"], ["When it is a normal day,", false, "nothing starts the story"]],
+        who: [["Lina comes back to the old farm, and she", true], ["a farm", false, "a place is not a character"], ["many heroes", false, "not one clear character"]],
+        goal: [["must make the farm grow again before the spring market", true], ["must feel better", false, "the goal is not clear"], ["must defeat an army", false, "it does not fit a cozy game"]],
+        stakes: [["or the family must sell the farm,", true], ["or maybe not,", false, "there is nothing at stake"], ["or the world explodes,", false, "the stakes do not fit a cozy game"]],
+        obstacle: [["but the soil is dry and the old well is broken.", true], ["but everything is perfect.", false, "there is no obstacle"], ["but robots fight in the streets.", false, "it does not fit the village"]],
+        play: [["The player plants, waters and harvests in short sessions.", true], ["The player races cars.", false, "the brief is farming"], ["The player watches long films.", false, "the player must play, not watch"]],
+      } },
+  ];
+  const ORDER = [["incident", "Inciting incident"], ["who", "Character"], ["goal", "Goal"], ["stakes", "Stakes"], ["obstacle", "Obstacle"], ["play", "Player action"]];
+  const $ = (id) => document.getElementById(id);
+  let b = 0, pick = {}, shuffled = {}, stars = 0, tries = 0, solved = false, over = false, sound = true, audio = null;
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function text() {
+    const B = BRIEFS[b];
+    return ORDER.map(([k]) => (pick[k] !== undefined ? shuffled[k][pick[k]][0] : "…")).join(" ");
+  }
+  function start() {
+    if (b >= BRIEFS.length) {
+      over = true; $("lvl").textContent = "All briefs done"; $("brief").textContent = "The producer approves all three pitches."; $("rows").innerHTML = "";
+      $("msg").textContent = `🎉 Three games are in production! ★ ${stars} of ${BRIEFS.length * 3}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; $("go").hidden = true; return;
+    }
+    over = false; pick = {}; tries = 0; solved = false; $("go").hidden = false;
+    const B = BRIEFS[b];
+    $("lvl").textContent = `Brief ${b + 1} / ${BRIEFS.length}: ${B.title}`;
+    $("brief").innerHTML = B.brief;
+    $("rows").innerHTML = "";
+    ORDER.forEach(([k, label], r) => {
+      // a fixed shuffle per row, so the right card is not always first
+      const opts = B.rows[k].slice(); const s = (r + b) % 3; shuffled[k] = opts.slice(s).concat(opts.slice(0, s));
+      const row = document.createElement("div"); row.className = "row";
+      row.innerHTML = `<h2>${label}</h2><div class="opts" data-k="${k}"></div>`;
+      shuffled[k].forEach((o, i) => {
+        const btn = document.createElement("button"); btn.type = "button"; btn.className = "ghost"; btn.textContent = o[0]; btn.dataset.i = i;
+        btn.addEventListener("click", () => {
+          if (solved) { $("msg").textContent = "The pitch is approved. Press Next brief."; return; }
+          pick[k] = i; row.querySelectorAll("button").forEach((x) => { x.classList.toggle("on", Number(x.dataset.i) === i); x.classList.remove("bad"); });
+          $("pitch").textContent = text();
+        });
+        row.querySelector(".opts").appendChild(btn);
+      });
+      $("rows").appendChild(row);
+    });
+    $("pitch").textContent = "Your premise appears here."; $("fb").innerHTML = "";
+    $("msg").textContent = b === 0 ? "Brief 1 is the story of the lesson. Choose one card in each row." : "Choose one card in each row."; $("msg").className = "message";
+    $("next").hidden = true;
+  }
+  function pitch() {
+    if (over) return;
+    if (solved) { $("msg").textContent = "The pitch is approved. Press Next brief."; return; }
+    const empty = ORDER.filter(([k]) => pick[k] === undefined);
+    if (empty.length) { $("msg").textContent = `Choose a card in every row first (${empty.map((e) => e[1]).join(", ")}).`; $("msg").className = "message bad"; return; }
+    tries++;
+    const wrong = ORDER.filter(([k]) => !shuffled[k][pick[k]][1]);
+    if (!wrong.length) {
+      solved = true; const got = tries === 1 ? 3 : tries === 2 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+      $("fb").innerHTML = ""; $("msg").textContent = `✓ The producer says yes! Every part is clear and fits the brief. ${"★".repeat(got)}`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = b < BRIEFS.length - 1 ? "Next brief ▶" : "Finish ▶";
+      [660, 880, 1320].forEach((f, i) => setTimeout(() => beep(f, 0.12), i * 110));
+    } else {
+      wrong.forEach(([k]) => document.querySelector(`.opts[data-k="${k}"] button[data-i="${pick[k]}"]`).classList.add("bad"));
+      $("fb").innerHTML = wrong.map(([k, label]) => `<li>${label}: ${shuffled[k][pick[k]][2]}.</li>`).join("");
+      $("msg").textContent = `✗ The producer says: "Not yet." Change the red card${wrong.length > 1 ? "s" : ""}.`; $("msg").className = "message bad"; beep(200, 0.3, "sawtooth");
+    }
+  }
+  $("go").addEventListener("click", pitch);
+  $("next").addEventListener("click", () => { if (over) { b = 0; stars = 0; $("stars").textContent = "★ 0"; } else b++; start(); });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  start();
+})();
+</script>
+</body>
+</html>

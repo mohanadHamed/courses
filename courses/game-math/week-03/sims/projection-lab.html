@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Projection Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; font-weight: 700; }
+    .sim .seg button.on { background: var(--sim-accent); color: #fff; }
+    .sim .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin-top: 10px; }
+    .sim .card { background: #f8f9fa; border-radius: 10px; padding: 6px 10px; }
+    .sim .card small { display: block; color: var(--sim-muted); font-weight: 700; font-size: 0.75rem; }
+    .sim .card b { font-variant-numeric: tabular-nums; font-size: 1rem; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Projection Lab: along, across and slide</h1>
+  <p class="hint">Drag the tip of the orange vector v. Choose the direction û. In <b>Wall</b> mode, û is the normal of a wall, and the blue arrow shows how the player slides.</p>
+  <div class="seg" id="mode">Mode:
+    <button type="button" class="ghost on" data-m="proj">Along and across</button>
+    <button type="button" class="ghost" data-m="wall">Wall slide</button>
+  </div>
+  <div class="seg" id="dirs">û:
+    <button type="button" class="ghost on" data-u="1,0">(1, 0)</button>
+    <button type="button" class="ghost" data-u="0,1">(0, 1)</button>
+    <button type="button" class="ghost" data-u="0.6,0.8">(0.6, 0.8)</button>
+    <button type="button" class="ghost" data-u="0.8,0.6">(0.8, 0.6)</button>
+    <button type="button" class="ghost" data-u="-1,0">(−1, 0)</button>
+  </div>
+  <canvas id="c" aria-label="A grid with the vector v, the direction u and the parts along and across"></canvas>
+  <div class="cards" id="cards"></div>
+  <p id="msg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
+  const XMIN = -6, XMAX = 6, YMIN = -5, YMAX = 5;
+  let W = 0, H = 0, u = 30, ox = 0, oy = 0, v = [5, 0], dir = [1, 0], mode = "proj", drag = false;
+  const f = (n) => { const r = Math.round(n * 100) / 100; return (Object.is(r, -0) ? 0 : r < 0 ? "−" : "") + Math.abs(r); };
+  const pair = (a) => `(${f(a[0])}, ${f(a[1])})`;
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1];
+  function resize() {
+    W = canvas.clientWidth; u = Math.min((W - 30) / (XMAX - XMIN), 34);
+    H = Math.round(u * (YMAX - YMIN) + 30);
+    ox = W / 2; oy = 15 + YMAX * u;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  const X = (x) => ox + x * u, Y = (y) => oy - y * u;
+  function arrow(a, b, col, w) {
+    const x1 = X(a[0]), y1 = Y(a[1]), x2 = X(b[0]), y2 = Y(b[1]), L = Math.hypot(x2 - x1, y2 - y1);
+    if (L < 2) return;
+    const t = Math.atan2(y2 - y1, x2 - x1);
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = w; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2 - Math.cos(t) * 8, y2 - Math.sin(t) * 8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - Math.cos(t - 0.45) * 14, y2 - Math.sin(t - 0.45) * 14);
+    ctx.lineTo(x2 - Math.cos(t + 0.45) * 14, y2 - Math.sin(t + 0.45) * 14); ctx.fill();
+  }
+  function label(t, x, y, col, align = "left") { ctx.fillStyle = col; ctx.font = "800 12px Nunito, system-ui, sans-serif"; ctx.textAlign = align; ctx.fillText(t, x, y); }
+  function card(k, val) { return `<div class="card"><small>${k}</small><b>${val}</b></div>`; }
+  function draw() {
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = "#e4e8e5"; ctx.lineWidth = 1;
+    for (let i = XMIN; i <= XMAX; i++) { ctx.beginPath(); ctx.moveTo(X(i), Y(YMIN)); ctx.lineTo(X(i), Y(YMAX)); ctx.stroke(); }
+    for (let j = YMIN; j <= YMAX; j++) { ctx.beginPath(); ctx.moveTo(X(XMIN), Y(j)); ctx.lineTo(X(XMAX), Y(j)); ctx.stroke(); }
+    ctx.strokeStyle = "#adb5bd"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(X(XMIN), Y(0)); ctx.lineTo(X(XMAX), Y(0)); ctx.moveTo(X(0), Y(YMIN)); ctx.lineTo(X(0), Y(YMAX)); ctx.stroke();
+    const p = dot(v, dir), along = [dir[0] * p, dir[1] * p], across = [v[0] - along[0], v[1] - along[1]];
+    if (mode === "proj") {
+      ctx.save(); ctx.setLineDash([6, 5]); ctx.strokeStyle = "#7048e8"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(X(-dir[0] * 9), Y(-dir[1] * 9)); ctx.lineTo(X(dir[0] * 9), Y(dir[1] * 9)); ctx.stroke(); ctx.restore();
+      arrow([0, 0], dir, "#7048e8", 3); label("û", X(dir[0]) + 6, Y(dir[1]) - 6, "#7048e8");
+      arrow([0, 0], along, "#2F9E44", 6);
+      arrow(along, v, "#1971c2", 3.5);
+      arrow([0, 0], v, "#e8590c", 3.5);
+      label("v", X(v[0]) + 8, Y(v[1]) - 8, "#e8590c");
+      document.getElementById("cards").innerHTML =
+        card("v", pair(v)) + card("û", pair(dir)) + card("along: v · û", f(p)) +
+        card("along vector (v · û) û", pair(along)) + card("across = v − along", pair(across)) + card("across length", f(Math.hypot(...across)));
+      document.getElementById("msg").textContent = p < 0 ? "v · û is negative: v points backwards along û." : "Green + blue = orange: along + across = v.";
+    } else {
+      // the wall: a thick line through the origin, at a right angle to the normal û
+      const t = [-dir[1], dir[0]];
+      ctx.strokeStyle = "#adb5bd"; ctx.lineWidth = 10;
+      ctx.beginPath(); ctx.moveTo(X(-t[0] * 9), Y(-t[1] * 9)); ctx.lineTo(X(t[0] * 9), Y(t[1] * 9)); ctx.stroke();
+      arrow([0, 0], [dir[0] * 2, dir[1] * 2], "#2F9E44", 3.5); label("n̂ = û", X(dir[0] * 2) + 6, Y(dir[1] * 2) - 6, "#2F9E44");
+      const start = [-v[0], -v[1]];
+      arrow(start, [0, 0], "#e8590c", 3.5); label("v", X(start[0] / 2) + 8, Y(start[1] / 2) - 8, "#e8590c");
+      const into = p < 0, slide = into ? across : v;
+      arrow([0, 0], slide, "#1971c2", 6); label("slide", X(slide[0]) + 8, Y(slide[1]) + 16, "#1971c2");
+      document.getElementById("cards").innerHTML =
+        card("v", pair(v)) + card("wall normal n̂", pair(dir)) + card("v · n̂", f(p)) +
+        card(into ? "slide = v − (v · n̂) n̂" : "no change: v moves away", pair(slide));
+      document.getElementById("msg").textContent = into ? "v · n̂ < 0: v goes into the wall. The game removes that part, and the player slides." : "v · n̂ ≥ 0: v does not go into the wall. Nothing changes.";
+    }
+  }
+  function loop() { requestAnimationFrame(loop); try { draw(); } catch (e) { /* keep the loop alive */ } }
+  function pick(e) {
+    const r = canvas.getBoundingClientRect();
+    let x = Math.round((e.clientX - r.left - ox) / u), y = Math.round((oy - (e.clientY - r.top)) / u);
+    x = Math.max(XMIN + 1, Math.min(XMAX - 1, x)); y = Math.max(YMIN + 1, Math.min(YMAX - 1, y));
+    if (mode === "wall") { x = -x; y = -y; }       // in wall mode the drag point is the start of v
+    if (x !== 0 || y !== 0) v = [x, y];
+  }
+  canvas.addEventListener("pointerdown", (e) => { drag = true; try { canvas.setPointerCapture(e.pointerId); } catch (_) {} pick(e); });
+  canvas.addEventListener("pointermove", (e) => { if (drag) pick(e); });
+  canvas.addEventListener("pointerup", () => { drag = false; });
+  document.querySelectorAll("#dirs button").forEach((b) => b.addEventListener("click", () => {
+    dir = b.dataset.u.split(",").map(Number);
+    document.querySelectorAll("#dirs button").forEach((c) => c.classList.toggle("on", c === b));
+  }));
+  document.querySelectorAll("#mode button").forEach((b) => b.addEventListener("click", () => {
+    mode = b.dataset.m;
+    if (mode === "wall") { dir = [0, 1]; v = [3, -4]; } else { dir = [1, 0]; v = [5, 0]; }
+    document.querySelectorAll("#mode button").forEach((c) => c.classList.toggle("on", c === b));
+    document.querySelectorAll("#dirs button").forEach((c) => c.classList.toggle("on", c.dataset.u === dir.join(",")));
+  }));
+  window.addEventListener("resize", resize);
+  resize(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

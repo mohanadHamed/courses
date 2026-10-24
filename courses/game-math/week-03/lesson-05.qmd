@@ -1,0 +1,296 @@
+---
+title: "The Cross Product: Direction and Surface Normals"
+description: "Left or right with the 2D cross product, the 3D cross product, the order of the vectors, the normal of a triangle, and front or back faces."
+lesson: 5
+ilos: [B1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary cross-product surface-normal triangle-mesh winding-order back-face-culling handedness perpendicular dot-product unit-vector forward-vector >}}
+
+## 5.1 Left or right? The cross product in 2D
+
+- A tower must turn to a drone. The dot product says *in front* or
+  *behind*, but not *left* or *right*.
+- The **cross product** of two 2D vectors is one number:
+  f × d = f~x~ d~y~ − f~y~ d~x~.
+- **Positive:** d is to the left (turn anticlockwise).
+- **Negative:** d is to the right (turn clockwise).
+- **Zero:** d is on the same line: straight ahead or straight behind. The dot
+  product tells which.
+- This works when the y-axis points up.
+
+![f = (2, 1): the cross product with three vectors.](images/cross-sign.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+The order matters: d × f has the opposite sign. Always put the forward
+vector first.
+:::
+
+::: {.callout-note title="Do it · Left or right on paper"}
+On squared paper, draw f = (2, 1) and the vectors (1, 3), (3, −1) and
+(−1, 2) from the same point. Compute f × d for each one. Mark it "left" or
+"right" and check with your drawing.
+:::
+
+::: {.callout-tip title="Try it 1 · Left or right?"}
+Choose the right answer.
+
+::: {.match extra="behind|7"}
+A tower faces (1, 0). The drone is in the direction (3, 2). Which way?
+:   left
+
+A tower faces (1, 0). The drone is in the direction (2, −3). Which way?
+:   right
+
+A kart faces (3, 4). The checkpoint is in the direction (4, 3). What is f × d?
+:   −7
+
+A tower faces (1, 0). The drone is in the direction (5, 0). What is f × d?
+:   0
+
+f × d = 0 and f · d = 5. What must the tower do?
+:   fire straight ahead
+:::
+:::
+
+## 5.2 A vector at a right angle to two vectors
+
+- In 3D, the cross product of two vectors is a **vector**:
+  a × b = (a~y~ b~z~ − a~z~ b~y~, a~z~ b~x~ − a~x~ b~z~, a~x~ b~y~ − a~y~ b~x~).
+- Each part uses the two **other** axes.
+- The result is **perpendicular** to a and to b.
+- Check every result: its dot product with a and with b must be 0.
+- Example: (1, 0, 0) × (0, 1, 0) = (0, 0, 1).
+
+![The three parts of (2, 1, 0) × (0, 3, 1).](images/cross-steps.png){width=88%}
+
+::: {.callout-warning title="Watch out!"}
+Do not multiply matching parts (a~x~ b~x~ …): that is the dot product. The
+cross product always mixes two different axes.
+:::
+
+::: {.callout-note title="Do it · The cross product in GeoGebra 3D"}
+At geogebra.org/3d, type `u = Vector((2, 1, 0))`, `v = Vector((0, 3, 1))`
+and `w = Cross(u, v)`. Turn the view. Then type `w * u` and `w * v`. What
+are the two dot products?
+:::
+
+::: {.callout-tip title="Try it 2 · Compute it"}
+Choose the right answer.
+
+::: {.match extra="(2, 3, 0)|(0, 0, −1)|a number"}
+(1, 0, 0) × (0, 1, 0)
+:   (0, 0, 1)
+
+(2, 1, 0) × (0, 3, 1)
+:   (1, −2, 6)
+
+(0, 1, 0) × (0, 0, 1)
+:   (1, 0, 0)
+
+What kind of result does the 3D cross product give?
+:   a vector
+
+(1, −2, 6) · (2, 1, 0) = 0. What does this check show?
+:   the result is perpendicular to (2, 1, 0)
+:::
+:::
+
+## 5.3 Which way does it point? The order and the hand rule
+
+- Two vectors on a floor have two directions at a right angle: up and down.
+- The **order** decides: b × a = −(a × b).
+- **Curl rule:** fingers along a, curl them towards b, the thumb shows
+  a × b.
+- Use the hand of the tool: the **left** hand in Unity, the **right** hand
+  in GeoGebra and Blender. The numbers are the same.
+- Two vectors on one line give the zero vector.
+
+![Swapping the order turns the result around (Unity axes: left hand).](images/curl-rule.png){width=88%}
+
+{{< sim file="sims/normal-lab.html" poster="sims/normal-lab.png" title="Normal Lab: the normal of a triangle" height="720" >}}
+
+::: {.callout-note title="Do it · The curl rule in Normal Lab"}
+In **Normal Lab** (Unity axes), curl the fingers of your left hand from the
+purple edge (0, 0, 2) to the blue edge (2, 0, 0). Where does your thumb
+point? Compare with the green arrow. Press **Swap B and C** and do it again.
+:::
+
+::: {.callout-tip title="Try it 3 · Order and hand"}
+Choose the right answer.
+
+::: {.match extra="(2, 1, 4)|the right hand"}
+a × b = (2, −1, 4). What is b × a?
+:   (−2, 1, −4)
+
+A ship flies forward f = (0, 0, 1). Its right wing is r = (1, 0, 0). What is f × r?
+:   (0, 1, 0)
+
+Which hand do you use for the curl rule in Unity?
+:   the left hand
+
+(1, 2, 0) × (2, 4, 0). What is the result?
+:   (0, 0, 0)
+
+Why is (1, 2, 0) × (2, 4, 0) the zero vector?
+:   the two vectors lie on one line
+:::
+:::
+
+## 5.4 Which way does a surface face? The normal of a triangle
+
+- A 3D model is a **triangle mesh**: many small, flat triangles.
+- The **normal** is a unit vector at a right angle to the surface. It points
+  out of the front side.
+- For a triangle A, B, C: n = (B − A) × (C − A), then normalize.
+- The **winding order** (the order of the corners) decides the front.
+  A, C, B turns the normal around.
+- Floor A = (0, 0, 0), B = (0, 0, 2), C = (2, 0, 0): n = (0, 4, 0), unit
+  normal (0, 1, 0): up.
+- Ramp with C = (2, 2, 0): n = (−4, 4, 0), unit normal about
+  (−0.71, 0.71, 0).
+
+![The same triangle with two winding orders.](images/normal.png){width=88%}
+
+::: {.callout-warning title="Watch out!"}
+Use the **edges** B − A and C − A, not the corners B and C.
+:::
+
+::: {.callout-note title="Do it · Lift the corner"}
+In **Normal Lab**, move **height of C** to 1, then to 2. Each time, write
+the second edge C − A and the normal n. Check one normal on paper.
+:::
+
+::: {.callout-tip title="Try it 4 · Normals"}
+Choose the right answer.
+
+::: {.match extra="(0, 0, 2)|(4, 0, 0)"}
+A = (0, 0, 0), B = (0, 0, 2), C = (2, 0, 0). What is n = (B − A) × (C − A)?
+:   (0, 4, 0)
+
+The same triangle listed as A, C, B. What is n?
+:   (0, −4, 0)
+
+A = (0, 0, 0), B = (0, 0, 3), C = (3, 0, 0). Which way does the triangle face?
+:   up
+
+What decides the front side of a triangle?
+:   the winding order
+
+n = (0, 4, 0). What is the unit normal?
+:   (0, 1, 0)
+:::
+:::
+
+## 5.5 Facing the camera, facing the light
+
+- Both uses of the normal need the dot product (lecture 4).
+- **Back-face culling:** v goes from the triangle to the camera.
+  n · v > 0: the camera sees the front, the game draws it.
+  n · v < 0: the camera sees the back, the game skips it.
+- **Light:** brightness = n̂ · l̂ (l̂ points towards the light). 1 is fully
+  lit; 0 or less is dark.
+- Floor n̂ = (0, 1, 0), light from above l̂ = (0, 1, 0): 100 %. Ramp
+  (−0.71, 0.71, 0): about 71 %.
+
+![Front or back, bright or dark.](images/facing.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+A wrong winding order makes a normal point inwards. The game skips the
+triangle, and the player sees a hole in the model.
+:::
+
+::: {.callout-note title="Do it · Look from below"}
+In **Normal Lab**, press **View from below**, then **View from above**. Read
+the message each time. What happens to the green triangle, and why?
+:::
+
+::: {.callout-tip title="Try it 5 · Draw it or skip it?"}
+A floor triangle at P = (1, 0, 1) has n = (0, 1, 0). Choose the right
+answer.
+
+::: {.match extra="50 %|draw it, n · v = −3"}
+The camera is at (1, 5, −4), so v = (0, 5, −5). What does the game do?
+:   draw it, n · v = 5
+
+The camera is at (1, −3, 1), so v = (0, −3, 0). What does the game do?
+:   skip it, n · v = −3
+
+Light from above, l̂ = (0, 1, 0). How bright is the floor?
+:   100 %
+
+Light from above. How bright is a wall with n̂ = (1, 0, 0)?
+:   0 %, dark
+
+Light from above. How bright is a surface with n̂ = (0, 0.6, 0.8)?
+:   60 %
+:::
+:::
+
+## Game challenge: Turret Turn {.challenge}
+
+Work alone. Use every section of today.
+
+**Turret Turn** is a tower-defence game. The tower stands at T = (4, 4) and
+looks along f = (1, 0). Four drones fly in: A at (7, 6), B at (6, 1), C at
+(1, 4) and D at (9, 4). For each drone the tower must turn left, turn right,
+fire straight ahead or turn around. Later the tower looks up: f = (0, 1).
+
+{{< sim file="sims/turret-turn.html" poster="sims/turret-turn.png" title="Turret Turn: left, right, fire or turn around" kind="game" height="700" >}}
+
+::: {.callout-tip title="Try it 6 · The tower looks right"}
+Turret Turn: T = (4, 4), f = (1, 0). Drones A (7, 6), B (6, 1), C (1, 4),
+D (9, 4). Choose the right answer.
+
+::: {.match extra="(3, −2)|turn right"}
+The vector d from the tower to drone A.
+:   (3, 2)
+
+f × d for drone B, with d = (2, −3).
+:   −3
+
+What must the tower do for drone C, with d = (−3, 0)?
+:   turn around
+
+What must the tower do for drone D, with d = (5, 0)?
+:   fire straight ahead
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · The tower looks up (harder)"}
+Turret Turn: T = (4, 4), now f = (0, 1). Drone A (7, 6), drone E (2, 7),
+drone F (4, 8). Choose the right answer.
+
+::: {.match extra="2|turn around"}
+f × d for drone A, with d = (3, 2).
+:   −3
+
+What must the tower do for drone A now?
+:   turn right
+
+What must the tower do for drone E, with d = (−2, 3)?
+:   turn left
+
+What must the tower do for drone F, with d = (0, 4)?
+:   fire straight ahead
+
+The tower's right is (1, 0) and its forward is (0, 1). In 3D, (1, 0, 0) × (0, 1, 0) is…
+:   (0, 0, 1)
+:::
+:::
+
+## Summary {.summary}
+
+- 2D: f × d = f~x~ d~y~ − f~y~ d~x~. Positive: left. Negative: right. Zero: on the same line.
+- 3D: a × b is a vector at a right angle to a and b. Check it with two dot products.
+- The order matters: b × a = −(a × b). Curl rule: left hand in Unity.
+- Triangle normal: n = (B − A) × (C − A), normalized. The winding order decides the front.
+- n · v < 0: back face, skipped. n̂ · l̂: the brightness.

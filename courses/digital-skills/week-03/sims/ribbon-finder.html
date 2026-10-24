@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Ribbon Finder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .stars { margin-left: auto; color: var(--sim-accent); }
+    .sim .task { font-weight: 800; background: #fff4e6; border: 1.5px dashed #FFC078; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
+    .sim .win { border: 1.5px solid #ced4da; border-radius: 10px; overflow: hidden; }
+    .sim .title { background: #2b579a; color: #fff; font-weight: 800; font-size: 0.85rem; padding: 6px 10px; text-align: center; }
+    .sim .tabs { display: flex; flex-wrap: wrap; background: #f1f3f5; padding: 0 6px; }
+    .sim .tabs button { background: transparent; color: #2a211c; box-shadow: none; border-radius: 0; padding: 6px 10px; font-size: 0.85rem; }
+    .sim .tabs button.on { background: #fff; color: #2b579a; border-bottom: 3px solid #2b579a; }
+    .sim .ribbon { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; background: #fff; min-height: 92px; }
+    .sim .g { border-right: 1px solid #dee2e6; padding: 0 8px; display: grid; grid-template-rows: 1fr auto; gap: 4px; }
+    .sim .g .cmds { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+    .sim .g .cmds button { background: #f8f9fa; color: #2a211c; border: 1px solid #dee2e6; box-shadow: none; padding: 4px 8px; font-size: 0.8rem; border-radius: 6px; }
+    .sim .g .cmds button.hit { background: #2b8a3e; color: #fff; } .sim .g .cmds button.miss { background: #c92a2a; color: #fff; }
+    .sim .g span { font-size: 0.72rem; color: #868e96; text-align: center; font-weight: 700; }
+    .sim .back { padding: 10px; background: #2b579a; color: #fff; display: grid; gap: 6px; max-width: 220px; }
+    .sim .back button { background: transparent; color: #fff; box-shadow: none; text-align: left; border-radius: 6px; }
+    .sim .back button:hover { background: rgba(255,255,255,.15); }
+    .sim .back button.hit { background: #2b8a3e; } .sim .back button.miss { background: #c92a2a; }
+    .sim .path { margin-top: 8px; font-weight: 800; color: var(--sim-accent); min-height: 1.4em; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 8px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Ribbon Finder</h1>
+  <p class="hint">Find each command on the ribbon of Word: first the tab, then the command. The path is written Tab › Group › Command.</p>
+  <div class="hud"><span id="lvl">Task 1</span><span class="stars" id="stars">★ 0</span></div>
+  <div class="task" id="task"></div>
+  <div class="win">
+    <div class="title">class-report.docx – Word</div>
+    <div class="tabs" id="tabs"></div>
+    <div id="body"></div>
+  </div>
+  <div class="path" id="path"></div>
+  <p id="msg" class="message"></p>
+  <div class="pad"><button id="next" type="button" hidden>Next task ▶</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const RIBBON = {
+    File: null,
+    Home: [["Clipboard", ["Paste", "Cut", "Copy"]], ["Font", ["Bold", "Italic", "Underline", "Font Size"]], ["Paragraph", ["Bullets", "Numbering", "Center"]], ["Styles", ["Heading 1", "Normal"]], ["Editing", ["Find", "Replace"]]],
+    Insert: [["Pages", ["Page Break"]], ["Tables", ["Table"]], ["Illustrations", ["Pictures", "Shapes", "Chart"]], ["Header & Footer", ["Header", "Page Number"]]],
+    Layout: [["Page Setup", ["Margins", "Orientation", "Size", "Columns"]], ["Paragraph", ["Indent", "Spacing"]]],
+    Review: [["Proofing", ["Spelling & Grammar", "Word Count"]], ["Comments", ["New Comment"]], ["Tracking", ["Track Changes"]]],
+    View: [["Views", ["Read Mode", "Print Layout"]], ["Zoom", ["Zoom", "100%"]]],
+  };
+  const BACKSTAGE = ["New", "Open", "Save", "Save As", "Print", "Share", "Export", "Info"];
+  const TASKS = [
+    ["Make the title of the report bold.", "Home", "Bold"],
+    ["Add a photo from the computer.", "Insert", "Pictures"],
+    ["Turn the page sideways (landscape).", "Layout", "Orientation"],
+    ["Check the spelling of the report.", "Review", "Spelling & Grammar"],
+    ["Print the report.", "File", "Print"],
+    ["Add a table with 3 columns.", "Insert", "Table"],
+    ["Find the word \"budget\" in a long text.", "Home", "Find"],
+    ["Make the page look bigger on the screen.", "View", "Zoom"],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let t = 0, tab = "Home", tries = 0, stars = 0, done = false;
+  function groupOf(tb, cmd) { const g = (RIBBON[tb] || []).find(([, cs]) => cs.includes(cmd)); return g ? g[0] : null; }
+  function drawTabs() {
+    $("tabs").innerHTML = "";
+    Object.keys(RIBBON).forEach((k) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = k; b.className = k === tab ? "on" : "";
+      b.addEventListener("click", () => { tab = k; drawTabs(); drawBody(); });
+      $("tabs").appendChild(b);
+    });
+  }
+  function drawBody() {
+    const body = $("body");
+    if (tab === "File") {
+      body.innerHTML = `<div class="back">${BACKSTAGE.map((c) => `<button type="button" data-c="${c}">${c}</button>`).join("")}</div>`;
+    } else {
+      body.innerHTML = `<div class="ribbon">${RIBBON[tab].map(([g, cs]) => `<div class="g"><div class="cmds">${cs.map((c) => `<button type="button" data-c="${c}">${c}</button>`).join("")}</div><span>${g}</span></div>`).join("")}</div>`;
+    }
+    body.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => choose(b)));
+  }
+  function show() {
+    tries = 0; done = false; tab = "Home"; drawTabs(); drawBody();
+    $("lvl").textContent = `Task ${t + 1} / ${TASKS.length}`;
+    $("task").textContent = TASKS[t][0];
+    $("path").textContent = ""; $("msg").textContent = "Choose a tab, then a command."; $("msg").className = "message"; $("next").hidden = true;
+  }
+  function choose(b) {
+    if (done) { $("msg").textContent = "Press Next task."; return; }
+    const [, wantTab, want] = TASKS[t], c = b.dataset.c;
+    if (tab === wantTab && c === want) {
+      done = true; b.classList.add("hit");
+      const got = tries === 0 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+      $("path").textContent = wantTab === "File" ? `File › ${want}` : `${wantTab} › ${groupOf(wantTab, want)} › ${want}`;
+      $("msg").textContent = `✓ Right! ${"★".repeat(got)}`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = t < TASKS.length - 1 ? "Next task ▶" : "Start again ▶";
+    } else {
+      tries++; b.classList.add("miss"); setTimeout(() => b.classList.remove("miss"), 600);
+      $("msg").textContent = tab !== wantTab ? `✗ Not here. Think: which tab has this kind of command? (${c} is on ${tab}.)` : `✗ The right tab, but not this command.`;
+      $("msg").className = "message bad";
+    }
+  }
+  $("next").addEventListener("click", () => { t = (t + 1) % TASKS.length; if (t === 0) { stars = 0; $("stars").textContent = "★ 0"; } show(); });
+  show();
+})();
+</script>
+</body>
+</html>

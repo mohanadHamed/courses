@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Help Desk</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .stars { margin-left: auto; color: var(--sim-accent); }
+    .sim .chat { display: grid; gap: 8px; }
+    .sim .bubble { max-width: 88%; padding: 9px 12px; border-radius: 14px; font-weight: 700; line-height: 1.4; }
+    .sim .from { background: #fff4e6; border: 1.5px solid #FFC078; border-bottom-left-radius: 4px; }
+    .sim .from small { display: block; color: var(--sim-muted); font-size: 0.75rem; margin-bottom: 2px; }
+    .sim .me { justify-self: end; background: #D9480F; color: #fff; border-bottom-right-radius: 4px; }
+    .sim .opts { display: grid; gap: 6px; margin-top: 10px; }
+    .sim .opts button { text-align: left; }
+    .sim .opts button.bad { background: #c92a2a; color: #fff; border-color: #c92a2a; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Help Desk at Sunrise Company</h1>
+  <p class="hint">Today you help your colleagues with Word, Excel and PowerPoint. Read each message and choose the best answer.</p>
+  <div class="hud"><span id="lvl">Message 1</span><span class="stars" id="stars">★ 0</span></div>
+  <div class="chat" id="chat"></div>
+  <div class="opts" id="opts"></div>
+  <p id="msg" class="message"></p>
+  <div class="pad"><button id="next" type="button" hidden>Next message ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // [who, question, [answer, ok, why]...]
+  const TICKETS = [
+    ["Omar (sales)", "I must send the price list to a customer. Nobody may change the prices. Which format do I send?",
+      [["a PDF file (.pdf)", true, "A PDF keeps the look, and people read and print it."], ["the Excel file (.xlsx)", false, "Anyone can change the prices in an .xlsx file."], ["a template (.xltx)", false, "A template is a start for new files, not for sending."]]],
+    ["Lina (office)", "Where is the Bold button in Word?",
+      [["Home › Font › Bold", true, "Bold is in the Font group of the Home tab."], ["Insert › Pictures › Bold", false, "Insert adds things like pictures and tables."], ["File › Print › Bold", false, "The File tab has New, Open, Save, Print and Share."]]],
+    ["Sami (shop)", "I want a copy of budget_v01.xlsx called budget_v02.xlsx, and keep the old one. What do I use?",
+      [["Save As", true, "Save As makes a new copy with a new name."], ["Save (Ctrl + S)", false, "Save keeps the same file and the same name."], ["AutoSave", false, "AutoSave saves the same file again and again."]]],
+    ["Mona (office)", "My laptop turned off. The report was in OneDrive, and AutoSave was on. Did I lose my work?",
+      [["No, AutoSave saved every change after a few seconds", true, "AutoSave saves files in OneDrive all the time."], ["Yes, everything after the morning is lost", false, "With AutoSave on in OneDrive, almost nothing is lost."], ["Only the pictures are lost", false, "AutoSave saves text and pictures."]]],
+    ["Omar (sales)", "In Excel, my manager says: \"Write the total in B3.\" What is B3?",
+      [["a cell: column B, row 3", true, "A cell's name is its column letter and its row number."], ["a worksheet", false, "A worksheet has a name on a tab at the bottom, like Sheet1."], ["a slide", false, "Slides are in PowerPoint."]]],
+    ["Lina (office)", "I must make a nice invitation for the staff party, fast. How do I start?",
+      [["File › New, then choose an invitation template", true, "A template gives a ready-made design."], ["Start from an empty page and draw every line", false, "That is slow; a template is faster."], ["Open an old .pdf and change it", false, "A PDF is hard to change."]]],
+    ["Sami (shop)", "I saved my file on the desktop. Where is the AutoSave switch? It does not work.",
+      [["AutoSave works only for files in OneDrive or SharePoint", true, "Move the file to OneDrive, or press Ctrl + S often."], ["AutoSave works only in PowerPoint", false, "Word, Excel and PowerPoint all have AutoSave."], ["Restart the computer", false, "A restart does not turn AutoSave on."]]],
+    ["Mona (office)", "Which app do I use for the monthly sales figures and their total?",
+      [["Excel: a workbook with a worksheet", true, "Excel calculates totals in cells."], ["PowerPoint: a presentation", false, "PowerPoint shows slides for a talk."], ["Word: a document", false, "Word is for letters and reports; it does not calculate well."]]],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, stars = 0, tries = 0, done = false, sound = true, audio = null;
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function show() {
+    if (i >= TICKETS.length) {
+      $("lvl").textContent = "All messages answered"; $("chat").innerHTML = ""; $("opts").innerHTML = "";
+      $("msg").textContent = `🎉 Everybody at Sunrise Company got help! ★ ${stars} of ${TICKETS.length * 2}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; return;
+    }
+    const [who, q, opts] = TICKETS[i]; tries = 0; done = false;
+    $("lvl").textContent = `Message ${i + 1} / ${TICKETS.length}`;
+    $("chat").innerHTML = `<div class="bubble from"><small>${who}</small>${q}</div>`;
+    const order = opts.map((o, k) => k); const s = i % 3; const shuffled = order.slice(s).concat(order.slice(0, s));
+    $("opts").innerHTML = "";
+    shuffled.forEach((k) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.textContent = opts[k][0];
+      b.addEventListener("click", () => answer(k, b)); $("opts").appendChild(b);
+    });
+    $("msg").textContent = ""; $("next").hidden = true;
+  }
+  function answer(k, b) {
+    if (done) { $("msg").textContent = "Press Next message."; return; }
+    const [, , opts] = TICKETS[i], [text, ok, why] = opts[k];
+    if (ok) {
+      done = true; const got = tries === 0 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+      $("chat").insertAdjacentHTML("beforeend", `<div class="bubble me">${text}</div>`);
+      $("opts").innerHTML = ""; $("msg").textContent = `✓ ${why} ${"★".repeat(got)}`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = i < TICKETS.length - 1 ? "Next message ▶" : "Finish ▶";
+      [660, 990].forEach((f, n) => setTimeout(() => beep(f, 0.12), n * 100));
+    } else {
+      tries++; b.classList.add("bad"); $("msg").textContent = `✗ ${why}`; $("msg").className = "message bad"; beep(220, 0.25, "sawtooth");
+    }
+  }
+  $("next").addEventListener("click", () => { if (i >= TICKETS.length) { i = 0; stars = 0; $("stars").textContent = "★ 0"; } else i++; show(); });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  show();
+})();
+</script>
+</body>
+</html>

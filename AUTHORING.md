@@ -598,9 +598,12 @@ what the class does with it. Short is good; unclear is not.
   about 500 KB. `check_size.py` warns when a slide's simulator has no
   recording. Record again when the simulator changes.
 - **Robust game loops.** `requestAnimationFrame` first, then draw inside
-  `try/catch`, so one failed frame never stops the game. Clamp times computed
-  from the frame time (`Math.max(0, now − start)`): the frame time can be a
-  little *before* the click that started an animation. Never decide a result
+  `try/catch`, so one failed frame never stops the game. Use one clock:
+  `performance.now()` for the start of an animation and for the frame time.
+  In a lesson page the browser can give `requestAnimationFrame` a time many
+  seconds behind `performance.now()`, so `sim-base.js` (loaded before the
+  simulator's own script) passes `performance.now()` to every frame. Still
+  clamp times (`Math.max(0, now − start)`). Never decide a result
   only while drawing (a hidden tab draws nothing): use a timer as well. Never
   ignore a click silently: a button that cannot act now says why.
 - Plain HTML + JavaScript. No paid services, no external APIs, nothing loaded
@@ -842,3 +845,11 @@ do not add it. The draft mechanism still works (a draft lecture is faded,
 - 2026-10-23: no drafts. Lectures and homework are published when their PR is
   merged; the PR review is the check before release. Homework no longer waits
   until its second lecture is taught (rule "Release: no drafts").
+- 2026-10-24 (teacher review): most mini-games did not work inside the
+  lesson page, only with "Open full screen". In an embedded (lazy) iframe,
+  Chrome gave the game loop a frame time about 17 s behind
+  `performance.now()`, so animations that started at a click stood still.
+  `sim-base.js` now gives every frame `performance.now()`, stops Space and
+  the arrow keys from scrolling the page, and keeps `focus()` from scrolling
+  the page; on a phone, a simulator takes the whole width of the screen.
+  Test every new simulator inside the page, not only on its own.

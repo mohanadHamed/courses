@@ -1,7 +1,10 @@
 # Simulators
 
 - `sim-base.css` — shared look. Every simulator links it with a relative path.
-- `sim-base.js` — every simulator loads it. It resizes the lesson iframe to fit.
+- `sim-base.js` — every simulator loads it, before its own script. It gives every
+  animation frame `performance.now()` (one clock, also inside the lesson page),
+  resizes the lesson iframe to fit, and keeps game keys and `focus()` from
+  scrolling the lesson page.
 - `viewer3d.js` — 3D helper for 3D simulators (uses `vendor/three.module.min.js`).
 - `vendor/` — copied third-party libraries with their licenses. Never load from a CDN.
 - Reusable simulators (used by more than one course) go in this folder.

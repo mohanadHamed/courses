@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Save Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .task { font-weight: 800; background: #fff4e6; border: 1.5px dashed #FFC078; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
+    .sim .win { border: 1.5px solid #ced4da; border-radius: 10px; overflow: hidden; }
+    .sim .title { background: #2b579a; color: #fff; font-weight: 800; font-size: 0.85rem; padding: 6px 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .sim .title .auto { display: flex; gap: 6px; align-items: center; font-size: 0.78rem; }
+    .sim .title .auto button { padding: 2px 10px; font-size: 0.75rem; background: #fff; color: #2b579a; }
+    .sim .title .auto button.on { background: #2b8a3e; color: #fff; }
+    .sim .title .auto button:disabled { opacity: .5; cursor: not-allowed; }
+    .sim .title .state { margin-left: auto; font-size: 0.78rem; background: rgba(255,255,255,.2); border-radius: 6px; padding: 1px 8px; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px; background: #f1f3f5; }
+    .sim .bar button { padding: 4px 10px; font-size: 0.82rem; }
+    .sim textarea { width: 100%; min-height: 110px; border: 0; padding: 12px; font: inherit; resize: vertical; box-sizing: border-box; }
+    .sim .files { margin-top: 10px; border: 1.5px solid var(--sim-border); border-radius: 10px; padding: 8px 12px; font-size: 0.88rem; }
+    .sim .files b { display: block; margin-bottom: 4px; }
+    .sim .files span { display: inline-block; margin: 2px 6px 2px 0; padding: 2px 8px; border-radius: 6px; background: #f8f9fa; font-weight: 700; }
+    .sim .dialog { margin-top: 8px; border: 2px solid #2b579a; border-radius: 10px; padding: 10px 12px; display: grid; gap: 8px; }
+    .sim .dialog label { display: flex; gap: 8px; align-items: center; font-weight: 700; flex-wrap: wrap; }
+    .sim .dialog input, .sim .dialog select { font: inherit; padding: 4px 8px; border: 1.5px solid #ced4da; border-radius: 6px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Save Lab: Save, Save As and AutoSave</h1>
+  <p class="hint">Write in the document, then try the buttons. <b>Power cut!</b> shows what you lose if the computer turns off now.</p>
+  <div class="task" id="task"></div>
+  <div class="win">
+    <div class="title">
+      <span class="auto">AutoSave <button type="button" id="auto" disabled>Off</button></span>
+      <span id="fname">report.docx</span>
+      <span class="state" id="state">Saved</span>
+    </div>
+    <div class="bar">
+      <button type="button" id="save">Save (Ctrl + S)</button>
+      <button type="button" id="saveas" class="ghost">Save As…</button>
+      <button type="button" id="cloud" class="ghost">Move to OneDrive</button>
+      <button type="button" id="cut" class="ghost">⚡ Power cut!</button>
+    </div>
+    <textarea id="doc" aria-label="The document text">Class report: Our visit to the city library</textarea>
+  </div>
+  <div class="dialog" id="dlg" hidden>
+    <label>File name <input id="dname" value="report"></label>
+    <label>Save as type <select id="dtype"><option value=".docx">Word Document (.docx)</option><option value=".pdf">PDF (.pdf)</option><option value=".dotx">Word Template (.dotx)</option></select></label>
+    <div><button type="button" id="dok">Save</button> <button type="button" id="dno" class="ghost">Cancel</button></div>
+  </div>
+  <div class="files"><b id="where">Files in: This PC › Documents</b><div id="list"></div></div>
+  <p id="msg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const TASKS = [
+    "Task 1: add a sentence to the report. Then press Power cut! What happens?",
+    "Task 2: add a sentence, press Save, add one more sentence, then Power cut! What is lost?",
+    "Task 3: press Move to OneDrive, switch AutoSave on, add a sentence, wait 3 seconds, then Power cut!",
+    "Task 4: use Save As to make a PDF copy called report. Which files are in the folder now?",
+  ];
+  const $ = (id) => document.getElementById(id);
+  let savedInTask = false, saved = $("doc").value, cloud = false, auto = false, files = ["report.docx"], task = 0, timer = null, dirty = false;
+  function status() {
+    $("state").textContent = dirty ? "Not saved" : auto ? "Saved to OneDrive" : "Saved";
+    $("auto").disabled = !cloud; $("auto").textContent = auto ? "On" : "Off"; $("auto").classList.toggle("on", auto);
+    $("where").textContent = cloud ? "Files in: OneDrive › Documents" : "Files in: This PC › Documents";
+    $("list").innerHTML = files.map((f) => `<span>${f}</span>`).join("");
+    $("task").textContent = TASKS[Math.min(task, TASKS.length - 1)];
+  }
+  function msg(t, cls = "message") { $("msg").textContent = t; $("msg").className = cls; }
+  $("doc").addEventListener("input", () => {
+    dirty = $("doc").value !== saved; status();
+    if (auto) { clearTimeout(timer); timer = setTimeout(() => { saved = $("doc").value; dirty = false; status(); msg("AutoSave saved your change to OneDrive.", "message good"); }, 2000); }
+  });
+  $("save").addEventListener("click", () => {
+    saved = $("doc").value; dirty = false; status();
+    msg("Saved: the same file now has your changes.", "message good");
+    if (task === 1) { savedInTask = true; msg("Saved. Now add one more sentence, then press Power cut!", "message good"); }
+  });
+  $("cut").addEventListener("click", () => {
+    const lost = $("doc").value.length - saved.length;
+    $("doc").value = saved; dirty = false; status();
+    if (lost > 0) msg(`⚡ The computer restarted. ${lost} characters (letters and spaces) were not saved and are lost.`, "message bad");
+    else msg("⚡ The computer restarted. Nothing was lost: every change was saved.", "message good");
+    if (task === 0 && lost > 0) { task = 1; status(); }
+    else if (task === 1 && savedInTask && lost > 0) { task = 2; status(); msg(`⚡ Only the text after your last Save was lost (${lost} characters). Next: try AutoSave.`, "message bad"); }
+    else if (task === 2 && auto && lost === 0) { task = 3; status(); msg("⚡ Nothing lost: AutoSave had saved the change to OneDrive.", "message good"); }
+  });
+  $("cloud").addEventListener("click", () => {
+    if (cloud) { msg("The file is already in OneDrive. Now switch AutoSave on (top left)."); return; }
+    cloud = true; status(); msg("The file is now in OneDrive. The AutoSave switch works now.", "message good");
+  });
+  $("auto").addEventListener("click", () => { auto = !auto; if (auto) { saved = $("doc").value; dirty = false; } status(); msg(auto ? "AutoSave is on: every change is saved after a few seconds." : "AutoSave is off."); });
+  $("saveas").addEventListener("click", () => { $("dlg").hidden = false; });
+  $("dno").addEventListener("click", () => { $("dlg").hidden = true; });
+  $("dok").addEventListener("click", () => {
+    const name = ($("dname").value.trim() || "report").replace(/\s+/g, "-"), ext = $("dtype").value, f = name + ext;
+    if (!files.includes(f)) files.push(f);
+    $("dlg").hidden = true; status();
+    if (ext === ".pdf") msg(`Save As made a new file: ${f}. The .docx file is still there. People can read and print the PDF.`, "message good");
+    else if (ext === ".dotx") msg(`Save As made a template: ${f}. Use it to start new reports.`, "message good");
+    else msg(`Save As made a copy with a new name: ${f}.`, "message good");
+    if (task === 3 && ext === ".pdf") msg(`✓ Done. The folder has ${files.join(" and ")}: Save As made a second file and kept the first one.`, "message good");
+  });
+  window.addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); $("save").click(); } });
+  status();
+})();
+</script>
+</body>
+</html>

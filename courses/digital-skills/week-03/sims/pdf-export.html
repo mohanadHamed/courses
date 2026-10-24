@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: PDF Export</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .apps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .sim .apps button.on { background: var(--sim-accent); color: #fff; }
+    .sim .task { font-weight: 800; background: #fff4e6; border: 1.5px dashed #FFC078; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
+    .sim .win { border: 1.5px solid #ced4da; border-radius: 10px; overflow: hidden; max-width: 640px; }
+    .sim .win.phone { max-width: 300px; border-radius: 22px; border-width: 3px; border-color: #343a40; }
+    .sim .title { background: #2b579a; color: #fff; font-weight: 800; font-size: 0.85rem; padding: 6px 10px; display: flex; gap: 8px; align-items: center; }
+    .sim .title .url { background: #fff; color: #868e96; border-radius: 10px; padding: 1px 10px; font-size: 0.75rem; }
+    .sim .menu { display: flex; flex-wrap: wrap; gap: 2px; background: #f1f3f5; padding: 4px 6px; }
+    .sim .menu button, .sim .list button { background: transparent; color: #2a211c; box-shadow: none; border-radius: 6px; padding: 5px 10px; font-size: 0.85rem; text-align: left; }
+    .sim .menu button:hover, .sim .list button:hover { background: #e9ecef; }
+    .sim .list { display: grid; gap: 2px; padding: 8px; background: #fff; min-height: 150px; align-content: start; }
+    .sim .list h2 { font-size: 0.85rem; margin: 2px 6px 4px; color: #2b579a; }
+    .sim .list button.hit { background: #2b8a3e; color: #fff; } .sim .list button.miss, .sim .menu button.miss { background: #c92a2a; color: #fff; }
+    .sim .page { padding: 16px; min-height: 110px; background: #fff; }
+    .sim .page i { display: block; height: 7px; background: #dee2e6; border-radius: 3px; margin: 8px 0; }
+    .sim .files { margin-top: 10px; font-weight: 700; }
+    .sim .files span { display: inline-block; margin: 2px 6px 2px 0; padding: 2px 8px; border-radius: 6px; background: #f8f9fa; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>PDF Export: one file, three places</h1>
+  <p class="hint">Save a PDF copy of <b>notice.docx</b>. Choose where you work: the desktop app, Office on the web, or the phone app. Then click through the menus.</p>
+  <div class="apps" id="apps">
+    <button type="button" class="ghost on" data-m="desk">Desktop app</button>
+    <button type="button" class="ghost" data-m="web">Office on the web</button>
+    <button type="button" class="ghost" data-m="phone">Phone app</button>
+  </div>
+  <div class="task" id="task"></div>
+  <div class="win" id="win"></div>
+  <div class="files" id="files"></div>
+  <p id="msg" class="message"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // each mode: the menu tree; the right path; what the result says
+  const MODES = {
+    desk: { title: "notice.docx – Word", top: ["File", "Home", "Insert", "Layout"], path: ["File", "Save As", "PDF (*.pdf)", "Save"],
+      menus: { File: ["New", "Open", "Save", "Save As", "Print", "Share", "Export"], "Save As": ["Word Document (*.docx)", "PDF (*.pdf)", "Word Template (*.dotx)", "Plain Text (*.txt)"], "PDF (*.pdf)": ["Save", "Cancel"], Export: ["Create PDF/XPS Document", "Change File Type"], "Create PDF/XPS Document": ["Publish", "Cancel"] },
+      alt: ["File", "Export", "Create PDF/XPS Document", "Publish"], done: "notice.pdf is saved next to notice.docx in the folder." },
+    web: { title: "office.com · notice.docx", top: ["File", "Home", "Insert", "Layout"], path: ["File", "Export", "Download as PDF", "Download"],
+      menus: { File: ["New", "Open", "Save a copy", "Export", "Print", "Share", "Info"], Export: ["Download as PDF", "Download as ODT"], "Download as PDF": ["Download", "Cancel"], "Save a copy": ["Save a copy in OneDrive", "Cancel"] },
+      done: "notice.pdf is in the Downloads folder of the browser." },
+    phone: { title: "Word app", top: ["…", "Share"], path: ["…", "Export", "PDF", "Export"],
+      menus: { "…": ["Save a copy", "Export", "Print", "Version history"], Export: ["PDF", "Cancel"], PDF: ["Export", "Cancel"], Share: ["Send a link", "Send a copy"], "Send a copy": ["Word document", "PDF"] },
+      alt: ["Share", "Send a copy", "PDF"], done: "notice.pdf is ready to save or to send from the phone." },
+  };
+  const $ = (id) => document.getElementById(id);
+  let mode = "desk", trail = [], made = {};
+  function render(open) {
+    const M = MODES[mode];
+    $("win").className = "win" + (mode === "phone" ? " phone" : "");
+    const head = mode === "web" ? `<span class="url">office.com</span>` : "";
+    let html = `<div class="title">${head}<span>${M.title}</span></div><div class="menu">${M.top.map((t) => `<button type="button" data-c="${t}">${t}</button>`).join("")}</div>`;
+    if (open && M.menus[open]) html += `<div class="list"><h2>${trail.join(" › ")}</h2>${M.menus[open].map((c) => `<button type="button" data-c="${c}">${c}</button>`).join("")}</div>`;
+    else html += `<div class="page"><b>Notice</b><i></i><i style="width:70%"></i><i></i><i style="width:40%"></i></div>`;
+    $("win").innerHTML = html;
+    $("win").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => click(b)));
+    $("task").textContent = `Save notice.docx as a PDF in the ${mode === "desk" ? "desktop app" : mode === "web" ? "web app" : "phone app"}.`;
+    $("files").innerHTML = "Files: " + ["notice.docx"].concat(made[mode] ? ["notice.pdf"] : []).map((f) => `<span>${f}</span>`).join("");
+  }
+  function onPath(t) {
+    const M = MODES[mode], paths = [M.path].concat(M.alt ? [M.alt] : []);
+    return paths.find((p) => t.every((x, k) => p[k] === x)) || null;
+  }
+  function click(b) {
+    const c = b.dataset.c, M = MODES[mode];
+    if (c === "Cancel") { trail = []; render(); $("msg").textContent = "Cancelled."; $("msg").className = "message"; return; }
+    const isTop = M.top.includes(c), t = isTop ? [c] : trail.concat([c]), p = onPath(t);
+    if (!p) {
+      b.classList.add("miss"); setTimeout(() => b.classList.remove("miss"), 600);
+      $("msg").textContent = isTop ? "✗ Not this menu. The PDF is a copy of the file: which menu has Save As or Export?" : `✗ ${c} does not make a PDF. Try another command.`;
+      $("msg").className = "message bad"; return;
+    }
+    trail = t;
+    if (t.length === p.length) {
+      made[mode] = true; trail = []; render();
+      $("msg").textContent = `✓ ${t.join(" › ")}. ${M.done}`; $("msg").className = "message good"; return;
+    }
+    render(c); $("msg").textContent = ""; $("msg").className = "message";
+  }
+  document.querySelectorAll("#apps button").forEach((b) => b.addEventListener("click", () => {
+    mode = b.dataset.m; trail = []; document.querySelectorAll("#apps button").forEach((x) => x.classList.toggle("on", x === b)); $("msg").textContent = ""; render();
+  }));
+  render();
+})();
+</script>
+</body>
+</html>

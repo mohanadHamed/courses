@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Paint Race</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .lanes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+    .sim .lane { border: 1.5px solid var(--sim-border); border-radius: 14px; padding: 10px 12px; }
+    .sim .lane h2 { font-size: 0.95rem; margin: 0 0 4px; }
+    .sim .lane p { margin: 0 0 6px; font-size: 0.85rem; color: var(--sim-muted); font-weight: 700; }
+    .sim .time { font-size: 1.3rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .cpu .time { color: #A86700; } .sim .gpu .time { color: #1971c2; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Paint Race: CPU or GPU?</h1>
+  <p class="hint">A tiny frame of 16 × 9 = 144 pixels. The CPU has 4 strong cores: each one paints a pixel fast, but one after another. The GPU has 144 small cores: each one is slower, but all of them paint at the same time.</p>
+  <div class="lanes">
+    <div class="lane cpu"><h2>CPU · 4 cores</h2><p>one pixel in 0.08 s per core</p><canvas id="c1" aria-label="The CPU paints the frame"></canvas><div class="time" id="t1">0.00 s</div></div>
+    <div class="lane gpu"><h2>GPU · 144 small cores</h2><p>one pixel in 0.32 s per core</p><canvas id="c2" aria-label="The GPU paints the frame"></canvas><div class="time" id="t2">0.00 s</div></div>
+  </div>
+  <div class="pad"><button id="go" type="button">Start the race ▶</button></div>
+  <p id="msg" class="message">Press Start. Which one finishes the frame first?</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const COLS = 16, ROWS = 9, N = COLS * ROWS, CPU_STEP = 80, GPU_STEP = 320, CPU_CORES = 4;
+  const CPU_TOTAL = (N / CPU_CORES) * CPU_STEP, GPU_TOTAL = GPU_STEP;   // 2880 ms and 320 ms
+  const c1 = document.getElementById("c1"), c2 = document.getElementById("c2");
+  let t0 = null, running = false, doneCpu = false, doneGpu = false;
+  const colour = (i) => { const x = i % COLS, y = Math.floor(i / COLS); return `hsl(${200 + x * 6 - y * 4}, 70%, ${45 + y * 3}%)`; };
+  function size(cv) {
+    const W = cv.clientWidth || 260, H = Math.round(W * ROWS / COLS), dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.width = "100%"; cv.style.height = H + "px";
+    cv.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0); return { W, H };
+  }
+  function paint(cv, painted, active) {
+    const ctx = cv.getContext("2d"), W = cv.clientWidth, H = W * ROWS / COLS, s = W / COLS;
+    ctx.fillStyle = "#f1f3f5"; ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < N; i++) {
+      const x = (i % COLS) * s, y = Math.floor(i / COLS) * s;
+      if (i < painted) { ctx.fillStyle = colour(i); ctx.fillRect(x + 1, y + 1, s - 2, s - 2); }
+      else if (active(i)) { ctx.fillStyle = "rgba(168,103,0,.35)"; ctx.fillRect(x + 1, y + 1, s - 2, s - 2); }
+    }
+  }
+  function draw(now) {
+    const t = t0 === null ? 0 : Math.max(0, now - t0);
+    const cpuPainted = running || doneCpu ? Math.min(N, Math.floor(t / CPU_STEP) * CPU_CORES) : 0;
+    const gpuPainted = running || doneGpu ? (t >= GPU_TOTAL ? N : 0) : 0;
+    paint(c1, cpuPainted, (i) => running && !doneCpu && i >= cpuPainted && i < cpuPainted + CPU_CORES);
+    paint(c2, gpuPainted, () => running && !doneGpu && gpuPainted < N);
+    if (running) {
+      document.getElementById("t1").textContent = (Math.min(t, CPU_TOTAL) / 1000).toFixed(2) + " s";
+      document.getElementById("t2").textContent = (Math.min(t, GPU_TOTAL) / 1000).toFixed(2) + " s";
+    }
+  }
+  function loop(now) { requestAnimationFrame(loop); try { draw(now); } catch (e) { /* keep the loop alive */ } }
+  document.getElementById("go").addEventListener("click", () => {
+    if (running) { document.getElementById("msg").textContent = "Wait: the race is still running."; return; }
+    t0 = performance.now(); running = true; doneCpu = false; doneGpu = false;
+    document.getElementById("msg").textContent = "Painting…";
+    setTimeout(() => { doneGpu = true; document.getElementById("t2").textContent = (GPU_TOTAL / 1000).toFixed(2) + " s"; }, GPU_TOTAL);
+    setTimeout(() => {   // decide with a timer, not in draw()
+      doneCpu = true; running = false;
+      document.getElementById("t1").textContent = (CPU_TOTAL / 1000).toFixed(2) + " s";
+      document.getElementById("t2").textContent = (GPU_TOTAL / 1000).toFixed(2) + " s";
+      document.getElementById("msg").textContent = `The GPU finished in ${GPU_TOTAL / 1000} s, the CPU in ${CPU_TOTAL / 1000} s: ${CPU_TOTAL / GPU_TOTAL} times longer. A real frame has about 2 million pixels, so a game needs the GPU.`;
+      document.getElementById("msg").className = "message good";
+      document.getElementById("go").textContent = "Race again ▶";
+    }, CPU_TOTAL + 20);
+  });
+  function resize() { size(c1); size(c2); }
+  window.addEventListener("resize", resize);
+  resize(); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

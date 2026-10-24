@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Input Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+    .sim .panel { border: 1.5px solid var(--sim-border); border-radius: 14px; padding: 10px 12px; }
+    .sim .panel h2 { font-size: 0.95rem; margin: 0 0 6px; }
+    .sim #pad { height: 200px; border-radius: 12px; background: #fff9db; border: 1.5px dashed #f59f00; position: relative; touch-action: none; overflow: hidden; user-select: none; }
+    .sim #pad .dot { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: rgba(168,103,0,.35); border: 2px solid #A86700; display: grid; place-items: center; font-weight: 800; color: #5c3900; }
+    .sim #pad .tip { position: absolute; inset: 0; display: grid; place-items: center; color: var(--sim-muted); font-weight: 700; text-align: center; padding: 10px; pointer-events: none; }
+    .sim .big { font-size: 1.4rem; font-weight: 800; color: var(--sim-accent); font-variant-numeric: tabular-nums; }
+    .sim .row { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 6px; font-weight: 700; }
+    .sim .keys { display: flex; flex-wrap: wrap; gap: 6px; min-height: 34px; }
+    .sim .key { background: #A86700; color: #fff; border-radius: 8px; padding: 4px 10px; font-weight: 800; }
+    .sim .stickwrap { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .sim #stick { width: 130px; height: 130px; border-radius: 50%; background: #f1f3f5; border: 2px solid #495057; position: relative; touch-action: none; }
+    .sim #knob { position: absolute; width: 50px; height: 50px; border-radius: 50%; background: #1971c2; left: 40px; top: 40px; }
+    .sim .vbtn { width: 64px; height: 64px; border-radius: 50%; font-size: 1.1rem; }
+    .sim .vbtn.down { background: #5c3900; }
+    .sim table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+    .sim td, .sim th { padding: 3px 6px; border-bottom: 1px solid #f1f3f5; text-align: left; font-size: 0.88rem; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Input Lab: what does the game read?</h1>
+  <p class="hint">Every input device turns an action into numbers. Touch the yellow pad with several fingers, press keys, drag the stick, press A and B. If a gamepad is connected, press its buttons.</p>
+  <div class="grid2">
+    <div class="panel">
+      <h2>Touch screen and mouse</h2>
+      <div id="pad"><div class="tip" id="tip">Touch here with one, two, three… fingers (or click with the mouse).</div></div>
+      <div class="row">Now: <span class="big" id="now">0</span> Most at once: <span class="big" id="max">0</span></div>
+      <div class="row" id="pos">Last point: —</div>
+    </div>
+    <div class="panel">
+      <h2>On-screen gamepad</h2>
+      <div class="stickwrap">
+        <div id="stick" aria-label="Analog stick"><div id="knob"></div></div>
+        <button type="button" class="vbtn" id="ba">A</button>
+        <button type="button" class="vbtn" id="bb">B</button>
+      </div>
+      <table>
+        <tr><th>Control</th><th>Kind</th><th>Value</th></tr>
+        <tr><td>stick x</td><td>analog</td><td id="sx">0</td></tr>
+        <tr><td>stick y</td><td>analog</td><td id="sy">0</td></tr>
+        <tr><td>button A</td><td>digital</td><td id="va">0</td></tr>
+        <tr><td>button B</td><td>digital</td><td id="vb">0</td></tr>
+      </table>
+    </div>
+    <div class="panel">
+      <h2>Keyboard (lab computer)</h2>
+      <div class="keys" id="keys"><span style="color:var(--sim-muted);font-weight:700">Press some keys…</span></div>
+      <div class="row">Keys down at once (most): <span class="big" id="kmax">0</span></div>
+    </div>
+    <div class="panel">
+      <h2>Real gamepad</h2>
+      <div id="gp" style="font-weight:700;color:var(--sim-muted)">No gamepad found. Connect one and press a button.</div>
+    </div>
+  </div>
+  <p id="msg" class="message">Digital controls give 0 or 1. Analog controls give any value in between.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const f2 = (n) => { const r = Math.round(n * 100) / 100; return (Object.is(r, -0) ? 0 : r < 0 ? "−" : "") + Math.abs(r); };
+  // ---- touch pad: one dot per pointer
+  const pad = $("pad"), dots = new Map(); let most = 0;
+  function count() {
+    $("now").textContent = dots.size; most = Math.max(most, dots.size); $("max").textContent = most;
+    $("tip").style.display = dots.size ? "none" : "grid";
+  }
+  function place(e) {
+    const r = pad.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, d = dots.get(e.pointerId);
+    if (!d) return; d.style.left = x + "px"; d.style.top = y + "px";
+    $("pos").textContent = `Last point: x = ${Math.round(x)}, y = ${Math.round(y)} pixels (${e.pointerType || "pointer"})`;
+  }
+  pad.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    try { pad.setPointerCapture(e.pointerId); } catch (_) {}
+    const d = document.createElement("div"); d.className = "dot"; d.textContent = dots.size + 1; pad.appendChild(d);
+    dots.set(e.pointerId, d); place(e); count();
+  });
+  pad.addEventListener("pointermove", place);
+  const up = (e) => { const d = dots.get(e.pointerId); if (d) { d.remove(); dots.delete(e.pointerId); count(); } };
+  pad.addEventListener("pointerup", up); pad.addEventListener("pointercancel", up); pad.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") up(e); });
+  // ---- on-screen stick (analog) and buttons (digital)
+  const stick = $("stick"), knob = $("knob"); let held = false;
+  function setStick(x, y) {
+    const R = 40; knob.style.left = 40 + x * R + "px"; knob.style.top = 40 - y * R + "px";
+    $("sx").textContent = f2(x); $("sy").textContent = f2(y);
+  }
+  function moveStick(e) {
+    const r = stick.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, R = 40;
+    let x = (e.clientX - cx) / R, y = -(e.clientY - cy) / R; const L = Math.hypot(x, y);
+    if (L > 1) { x /= L; y /= L; }
+    setStick(x, y);
+  }
+  stick.addEventListener("pointerdown", (e) => { held = true; try { stick.setPointerCapture(e.pointerId); } catch (_) {} moveStick(e); });
+  stick.addEventListener("pointermove", (e) => { if (held) moveStick(e); });
+  const release = () => { held = false; setStick(0, 0); };
+  stick.addEventListener("pointerup", release); stick.addEventListener("pointercancel", release);
+  [["ba", "va"], ["bb", "vb"]].forEach(([b, v]) => {
+    const el = $(b);
+    const on = () => { el.classList.add("down"); $(v).textContent = "1"; }, off = () => { el.classList.remove("down"); $(v).textContent = "0"; };
+    el.addEventListener("pointerdown", on); el.addEventListener("pointerup", off); el.addEventListener("pointerleave", off); el.addEventListener("pointercancel", off);
+  });
+  // ---- keyboard
+  const keys = new Set(); let kmost = 0;
+  function showKeys() {
+    $("keys").innerHTML = keys.size ? [...keys].map((k) => `<span class="key">${k === " " ? "Space" : k}</span>`).join("") : '<span style="color:var(--sim-muted);font-weight:700">Press some keys…</span>';
+    kmost = Math.max(kmost, keys.size); $("kmax").textContent = kmost;
+  }
+  window.addEventListener("keydown", (e) => { keys.add(e.key.length === 1 ? e.key.toUpperCase() : e.key); showKeys(); if (e.key === " ") e.preventDefault(); });
+  window.addEventListener("keyup", (e) => { keys.delete(e.key.length === 1 ? e.key.toUpperCase() : e.key); showKeys(); });
+  window.addEventListener("blur", () => { keys.clear(); showKeys(); });
+  // ---- real gamepad (Gamepad API), read in every frame
+  function loop() {
+    requestAnimationFrame(loop);
+    try {
+      const pads = navigator.getGamepads ? [...navigator.getGamepads()].filter(Boolean) : [];
+      if (!pads.length) return;
+      const g = pads[0];
+      const pressed = g.buttons.map((b, i) => (b.pressed ? i : null)).filter((i) => i !== null);
+      const axes = g.axes.slice(0, 4).map(f2).join(", ");
+      $("gp").innerHTML = `<b>${g.id.slice(0, 40)}</b><br>Buttons down (digital): ${pressed.length ? pressed.join(", ") : "none"}<br>Sticks (analog): ${axes}`;
+    } catch (e) { /* keep the loop alive */ }
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

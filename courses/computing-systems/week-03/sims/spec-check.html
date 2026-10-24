@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Spec Check</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .sim .presets button.on { background: var(--sim-accent); color: #fff; }
+    .sim .form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px 12px; }
+    .sim .form label { display: grid; grid-template-columns: 1fr; gap: 3px; font-size: 0.85rem; }
+    .sim select { font: inherit; font-weight: 700; padding: 5px 8px; border-radius: 8px; border: 1.5px solid var(--sim-border); background: #fff; }
+    .sim table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 0.9rem; }
+    .sim th, .sim td { padding: 5px 8px; border-bottom: 1px solid #f1f3f5; text-align: left; }
+    .sim th { color: var(--sim-muted); }
+    .sim .rec { color: #2b8a3e; font-weight: 800; } .sim .min { color: #A86700; font-weight: 800; } .sim .below { color: #c92a2a; font-weight: 800; }
+    .sim .verdict { margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-weight: 800; background: #f8f9fa; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Spec Check: does Neon Drift run here?</h1>
+  <p class="hint">Choose a device, or enter the values of your lab computer (from Settings → System → About and Task Manager → Performance). The table compares each line with the requirements.</p>
+  <div class="presets" id="presets">
+    <button type="button" class="ghost" data-p="L1">Laptop L1</button>
+    <button type="button" class="ghost" data-p="D1">Desktop D1</button>
+    <button type="button" class="ghost" data-p="O1">Old PC O1</button>
+    <button type="button" class="ghost" data-p="mine">My lab computer</button>
+  </div>
+  <div class="form">
+    <label>Operating system<select id="os"><option value="8">Windows 8.1</option><option value="10">Windows 10 (64-bit)</option><option value="11">Windows 11</option></select></label>
+    <label>Processor cores<select id="cores"><option>2</option><option>4</option><option>6</option><option>8</option><option>12</option><option>16</option></select></label>
+    <label>Fastest speed (GHz)<select id="ghz"><option>2.0</option><option>2.5</option><option>3.0</option><option>3.5</option><option>4.0</option><option>4.4</option><option>5.0</option></select></label>
+    <label>Memory (RAM)<select id="ram"><option value="4">4 GB</option><option value="8">8 GB</option><option value="16">16 GB</option><option value="32">32 GB</option></select></label>
+    <label>Graphics<select id="gpu"><option value="i1">integrated, 1 GB</option><option value="i2">integrated, 2 GB</option><option value="c2">graphics card, 2 GB</option><option value="c4">graphics card, 4 GB</option><option value="c6">graphics card, 6 GB</option><option value="c8">graphics card, 8 GB</option></select></label>
+    <label>Free storage<select id="free"><option value="10h">10 GB free, HDD</option><option value="10s">10 GB free, SSD</option><option value="60h">60 GB free, HDD</option><option value="60s">60 GB free, SSD</option><option value="120s">120 GB free, SSD</option><option value="300s">300 GB free, SSD</option></select></label>
+  </div>
+  <table>
+    <thead><tr><th>Line</th><th>This device</th><th>Minimum</th><th>Recommended</th><th>Result</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="verdict" id="verdict"></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const PRESETS = {
+    L1: { os: "11", cores: "8", ghz: "4.4", ram: "16", gpu: "i2", free: "120s" },
+    D1: { os: "11", cores: "6", ghz: "4.0", ram: "16", gpu: "c8", free: "300s" },
+    O1: { os: "10", cores: "4", ghz: "3.0", ram: "4", gpu: "c2", free: "60h" },
+    mine: null,
+  };
+  const ids = ["os", "cores", "ghz", "ram", "gpu", "free"], $ = (id) => document.getElementById(id);
+  const LV = { below: 0, min: 1, rec: 2 }, NAME = ["below minimum", "minimum", "recommended"], CLS = ["below", "min", "rec"];
+  function lines(v) {
+    const cores = Number(v.cores), ghz = Number(v.ghz), ram = Number(v.ram), card = v.gpu[0] === "c", vram = Number(v.gpu.slice(1));
+    const free = parseInt(v.free, 10), ssd = v.free.endsWith("s");
+    return [
+      { k: "OS", val: v.os === "8" ? "Windows 8.1" : `Windows ${v.os}`, min: "Windows 10 (64-bit)", rec: "Windows 11",
+        lv: v.os === "11" ? 2 : v.os === "10" ? 1 : 0, install: true },
+      { k: "Processor", val: `${cores} cores, ${ghz} GHz`, min: "4 cores, 2.5 GHz", rec: "6 cores, 3.5 GHz",
+        lv: cores >= 6 && ghz >= 3.5 ? 2 : cores >= 4 && ghz >= 2.5 ? 1 : 0 },
+      { k: "Memory", val: `${ram} GB`, min: "8 GB", rec: "16 GB", lv: ram >= 16 ? 2 : ram >= 8 ? 1 : 0 },
+      { k: "Graphics", val: `${card ? "graphics card" : "integrated"}, ${vram} GB`, min: "2 GB video memory", rec: "graphics card, 6 GB",
+        lv: card && vram >= 6 ? 2 : vram >= 2 ? 1 : 0 },
+      { k: "Storage", val: `${free} GB free, ${ssd ? "SSD" : "HDD"}`, min: "20 GB free", rec: "20 GB free on an SSD",
+        lv: free >= 20 && ssd ? 2 : free >= 20 ? 1 : 0, install: true },
+    ];
+  }
+  function update() {
+    const v = {}; ids.forEach((id) => (v[id] = $(id).value));
+    const L = lines(v);
+    $("rows").innerHTML = L.map((l) => `<tr><td><b>${l.k}</b></td><td>${l.val}</td><td>${l.min}</td><td>${l.rec}</td><td class="${CLS[l.lv]}">${NAME[l.lv]}</td></tr>`).join("");
+    const worst = Math.min(...L.map((l) => l.lv)), weak = L.filter((l) => l.lv === worst).map((l) => l.k);
+    const blocked = L.filter((l) => l.install && l.lv === 0).map((l) => l.k);
+    let text;
+    if (blocked.length) text = `<span class="below">Compatibility problem: the game cannot install or start (${blocked.join(", ")}).</span>`;
+    else if (worst === 0) text = `<span class="below">Below minimum: the game may start, but it runs very badly. Weakest line: ${weak.join(", ")}.</span>`;
+    else if (worst === 1) text = `<span class="min">Minimum: the game runs at low settings. The bottleneck: ${weak.join(", ")}.</span>`;
+    else text = `<span class="rec">Recommended: the game runs well at normal settings.</span>`;
+    $("verdict").innerHTML = text;
+  }
+  function preset(p) {
+    document.querySelectorAll("#presets button").forEach((b) => b.classList.toggle("on", b.dataset.p === p));
+    if (PRESETS[p]) ids.forEach((id) => ($(id).value = PRESETS[p][id]));
+    update();
+  }
+  document.querySelectorAll("#presets button").forEach((b) => b.addEventListener("click", () => preset(b.dataset.p)));
+  ids.forEach((id) => $(id).addEventListener("change", () => { document.querySelectorAll("#presets button").forEach((b) => b.classList.toggle("on", b.dataset.p === "mine")); update(); }));
+  preset("L1");
+})();
+</script>
+</body>
+</html>

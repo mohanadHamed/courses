@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Spec Match</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; margin: 0 0 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .sim .hud .lvl { color: var(--sim-accent); }
+    .sim .hud .stars { margin-left: auto; }
+    .sim .req { border: 1.5px solid var(--sim-border); border-radius: 12px; padding: 8px 10px; font-size: 0.85rem; margin-bottom: 10px; }
+    .sim .req table { border-collapse: collapse; width: 100%; }
+    .sim .req th, .sim .req td { padding: 2px 6px; text-align: left; }
+    .sim .req th { color: var(--sim-muted); }
+    .sim .card { background: #fff9db; border: 2px solid #f59f00; border-radius: 14px; padding: 10px 12px; }
+    .sim .card h2 { font-size: 1.05rem; margin: 0 0 6px; }
+    .sim .card dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; margin: 0; font-size: 0.92rem; }
+    .sim .card dt { color: var(--sim-muted); font-weight: 700; } .sim .card dd { margin: 0; font-weight: 800; }
+    .sim .ask { font-weight: 800; margin: 12px 0 6px; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Spec Match: test devices for Neon Drift</h1>
+  <p class="hint">Compare each device with the requirements, line by line. The weakest line decides. First choose the level, then the weakest line.</p>
+  <div class="hud"><span class="lvl" id="lvl">Device 1</span><span class="stars" id="stars">★ 0</span></div>
+  <div class="req" id="req"></div>
+  <div class="card" id="card"></div>
+  <div class="ask" id="ask"></div>
+  <div class="pad" id="choices"></div>
+  <p id="msg" class="message">Round 1 is the story of the lesson.</p>
+  <div class="pad"><button id="next" type="button" hidden>Next device ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const PC = {
+    title: "Neon Drift for PC",
+    lines: ["OS", "Processor", "Memory", "Graphics", "Storage"],
+    min: ["Windows 10 (64-bit)", "4 cores, 2.5 GHz", "8 GB RAM", "2 GB video memory", "20 GB free"],
+    rec: ["Windows 11", "6 cores, 3.5 GHz", "16 GB RAM", "graphics card, 6 GB", "20 GB free on an SSD"],
+  };
+  const MOB = {
+    title: "Neon Drift Mobile (Android)",
+    lines: ["OS", "Chipset", "RAM", "Storage"],
+    min: ["Android 10", "4 cores", "4 GB", "4 GB free"],
+    rec: ["Android 12", "8 cores", "6 GB", "4 GB free"],
+  };
+  // each device: values, the level of each line (0 below, 1 minimum, 2 recommended)
+  const DEVICES = [
+    { req: PC, name: "Laptop L1", vals: ["Windows 11", "8 cores, up to 4.4 GHz", "16 GB", "GPU inside the processor, 2 GB", "120 GB free, SSD"], lv: [2, 2, 2, 1, 2] },
+    { req: PC, name: "Desktop D1", vals: ["Windows 11", "6 cores, up to 4.0 GHz", "16 GB", "graphics card, 8 GB", "300 GB free, SSD"], lv: [2, 2, 2, 2, 2] },
+    { req: PC, name: "Old PC O1", vals: ["Windows 10 (64-bit)", "4 cores, 3.0 GHz", "4 GB", "graphics card, 2 GB", "60 GB free, HDD"], lv: [1, 1, 0, 1, 1] },
+    { req: MOB, name: "Phone P1", vals: ["Android 14", "8 cores", "8 GB", "40 GB free"], lv: [2, 2, 2, 2] },
+    { req: MOB, name: "Phone P3", vals: ["Android 9", "8 cores", "6 GB", "30 GB free"], lv: [0, 2, 2, 2] },
+    { req: MOB, name: "Phone P4", vals: ["Android 13", "8 cores", "4 GB", "25 GB free"], lv: [2, 2, 1, 2] },
+  ];
+  const LEVELS = ["Below minimum", "Minimum", "Recommended"];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, stars = 0, step = 0, tries = 0, done = false, over = false, sound = true, audio = null;
+  const worst = (d) => Math.min(...d.lv);
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function buttons(list, fn) {
+    $("choices").innerHTML = "";
+    list.forEach((t, k) => { const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.textContent = t; b.dataset.k = k; b.addEventListener("click", () => fn(k)); $("choices").appendChild(b); });
+  }
+  function start() {
+    if (i >= DEVICES.length) {
+      over = true; $("lvl").textContent = "All devices done"; $("card").textContent = "The test lab is ready."; $("ask").textContent = ""; $("choices").innerHTML = "";
+      $("msg").textContent = `🎉 Every device sorted! ★ ${stars} of ${DEVICES.length * 2}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; return;
+    }
+    over = false; step = 0; tries = 0; done = false;
+    const d = DEVICES[i], r = d.req;
+    $("lvl").textContent = `Device ${i + 1} / ${DEVICES.length}`;
+    $("req").innerHTML = `<b>${r.title}</b><table><tr><th></th><th>Minimum</th><th>Recommended</th></tr>${r.lines.map((l, k) => `<tr><th>${l}</th><td>${r.min[k]}</td><td>${r.rec[k]}</td></tr>`).join("")}</table>`;
+    $("card").innerHTML = `<h2>${d.name}</h2><dl>${r.lines.map((l, k) => `<dt>${l}</dt><dd>${d.vals[k]}</dd>`).join("")}</dl>`;
+    $("ask").textContent = "Which level does this device reach?";
+    buttons(LEVELS, chooseLevel);
+    $("msg").textContent = i === 0 ? "Round 1 is the story of the lesson." : "Compare line by line."; $("msg").className = "message";
+    $("next").hidden = true;
+  }
+  function win() {
+    done = true; const got = tries === 0 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+    $("next").hidden = false; $("next").textContent = i < DEVICES.length - 1 ? "Next device ▶" : "Finish ▶";
+    [660, 880].forEach((f, k) => setTimeout(() => beep(f, 0.12), k * 110));
+    return got;
+  }
+  function chooseLevel(k) {
+    if (over || done) { $("msg").textContent = "Press Next device."; return; }
+    const d = DEVICES[i], w = worst(d);
+    if (k !== w) { tries++; $("msg").textContent = "✗ Not this level. Find the weakest line: the device reaches only the level of that line."; $("msg").className = "message bad"; beep(200, 0.3, "sawtooth"); return; }
+    if (w === 2) { const got = win(); $("msg").textContent = `✓ Recommended: every line reaches the recommended value. ${"★".repeat(got)}`; $("msg").className = "message good"; $("choices").innerHTML = ""; $("ask").textContent = ""; return; }
+    step = 1; $("ask").textContent = "Right level. Which line holds this device back?";
+    $("msg").textContent = `✓ ${LEVELS[w]}.`; $("msg").className = "message good";
+    buttons(d.req.lines, chooseLine);
+  }
+  function chooseLine(k) {
+    if (over || done) { $("msg").textContent = "Press Next device."; return; }
+    const d = DEVICES[i], w = worst(d);
+    if (d.lv[k] !== w) { tries++; $("msg").textContent = `✗ ${d.req.lines[k]} is not the weakest line. Look for the line that misses its value.`; $("msg").className = "message bad"; beep(200, 0.3, "sawtooth"); return; }
+    const got = win(), line = d.req.lines[k];
+    const kind = w === 0 && (line === "OS" || line === "Storage") ? " This is a compatibility problem: the game cannot install or start." : w === 0 ? " The game may start, but it runs very badly." : " The game runs at low settings.";
+    $("msg").textContent = `✓ ${line}: ${d.vals[k]}.${kind} ${"★".repeat(got)}`; $("msg").className = "message good"; $("choices").innerHTML = ""; $("ask").textContent = "";
+  }
+  $("next").addEventListener("click", () => { if (over) { i = 0; stars = 0; $("stars").textContent = "★ 0"; } else i++; start(); });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  start();
+})();
+</script>
+</body>
+</html>

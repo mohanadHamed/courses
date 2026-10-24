@@ -9,6 +9,8 @@ project:
   # Warn when a lesson is too small or too big for its lecture time (AUTHORING.md).
   pre-render:
     - _extensions/lesson/check_size.py
+    # Warn about cross shapes in figures and simulators (AUTHORING.md, "Rich and visual").
+    - _extensions/lesson/check_figures.py
   # Slides: course colours, answer cards and click animations (see the script).
   post-render:
     - _extensions/lesson/pptx_finish.py

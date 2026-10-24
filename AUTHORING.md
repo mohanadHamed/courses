@@ -165,6 +165,14 @@ slides.
   copyrighted images.
 - No emoji or special symbols inside SVG figures (the PDF engine cannot draw
   them); draw icons as shapes.
+- No religious symbols, and nothing that looks like one. Above all, never a
+  cross shape: an upright stroke with a crossbar. An antenna is a tower (two
+  legs meeting at the top, a light and radio waves), not a mast with bars;
+  a kite has two coloured halves, not two sticks; a gamepad's direction pad
+  is four small arrows; first aid is a box with a heart or the words "first
+  aid", never a red cross. `_extensions/lesson/check_figures.py` (project
+  pre-render) warns about cross shapes in every figure, poster and
+  simulator; fix every warning before a PR.
 
 ### Mini-games
 

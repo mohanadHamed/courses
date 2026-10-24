@@ -112,7 +112,12 @@
     ctx.fillStyle = "#f1e3d3"; ctx.fillRect(0, 240, 600, 60);
     ctx.fillStyle = "#d0ebff"; ctx.fillRect(40, 30, 150, 100); ctx.strokeStyle = "#868e96"; ctx.lineWidth = 3; ctx.strokeRect(40, 30, 150, 100);
     ctx.fillStyle = "#e9c46a"; ctx.beginPath(); ctx.moveTo(40, 120); ctx.quadraticCurveTo(90, 80, 140, 100); ctx.quadraticCurveTo(170, 108, 190, 95); ctx.lineTo(190, 130); ctx.lineTo(40, 130); ctx.fill();
-    ctx.strokeStyle = "#495057"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(130, 98); ctx.lineTo(130, 52); ctx.moveTo(120, 62); ctx.lineTo(140, 62); ctx.stroke();
+    // the antenna: a tower with a red light and radio waves (no crossbar: it must not look like a cross)
+    ctx.strokeStyle = "#495057"; ctx.lineWidth = 2.5; ctx.lineJoin = "round"; ctx.beginPath(); ctx.moveTo(122, 100); ctx.lineTo(130, 56); ctx.lineTo(138, 100);
+    ctx.moveTo(124.7, 85); ctx.lineTo(135.3, 85); ctx.moveTo(127.5, 70); ctx.lineTo(132.5, 70); ctx.stroke();
+    ctx.strokeStyle = "#868e96"; ctx.lineWidth = 2; ctx.beginPath();
+    [[122, 47, 117, 61], [116, 42, 108, 66], [138, 47, 143, 61], [144, 42, 152, 66]].forEach(([x, y, cx, y2]) => { ctx.moveTo(x, y); ctx.quadraticCurveTo(cx, (y + y2) / 2, x, y2); });
+    ctx.stroke(); ctx.fillStyle = "#e03131"; ctx.beginPath(); ctx.arc(130, 54, 3, 0, 7); ctx.fill();
     ctx.fillStyle = "#a47148"; ctx.fillRect(250, 190, 230, 12); ctx.fillRect(262, 202, 10, 40); ctx.fillRect(458, 202, 10, 40);
     // plant
     ctx.fillStyle = "#c2833e"; ctx.fillRect(76, 226, 28, 30); ctx.fillStyle = "#40c057"; [[90, 214], [80, 204], [100, 202], [90, 194]].forEach(([x, y]) => { ctx.beginPath(); ctx.ellipse(x, y, 9, 15, 0.4, 0, 7); ctx.fill(); });

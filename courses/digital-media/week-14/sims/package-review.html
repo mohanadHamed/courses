@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Package Review</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .crit { border: 1.5px solid #dee2e6; border-radius: 10px; padding: 6px 10px; margin: 6px 0; }
+    .sim .crit .t { font-weight: 800; color: #862e9c; }
+    .sim .crit .ev { font-weight: 600; font-size: .88rem; margin: 2px 0 4px; }
+    .sim .crit .sc { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-weight: 700; font-size: .85rem; }
+    .sim .crit .sc button.on { background: var(--sim-accent); color: #fff; }
+    .sim .crit .ref { font-weight: 700; font-size: .85rem; color: #495057; margin-top: 4px; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Package Review: score with evidence</h1>
+  <p class="hint">Team Blue presents its "Storm Night" package. Read the evidence for each criterion and give a score from 1 (weak) to 4 (excellent). Then compare your scores with the teacher's review.</p>
+  <div id="crit"></div>
+  <div class="bar"><button type="button" id="cmp">Compare with the teacher</button></div>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const K = [
+    ["fits the gameplay", "The clip shows real gameplay of the rooftops in rain; the storyboard panels match the shots.", 4, "Real gameplay and matching panels: excellent fit."],
+    ["consistent", "Dark blue panels and clip; but the music loop is bright and happy, unlike the tense brief.", 2, "The music mood breaks the style: weak to fair."],
+    ["technical", "30 s, 16:9, 1920 × 1080; peaks at −1.5 dB; one sound effect is quieter than the others.", 3, "Meets the formats; a small level problem."],
+    ["clear", "A viewer says after one view: \"Nour and Pasha escape a storm on the roofs.\"", 4, "The message is understood at once."],
+    ["rights cleared", "The credits file lists all assets with TASL; the font licence is saved.", 4, "Complete and allowed."],
+  ];
+  const s = { sc: {}, shown: false };
+  const close = () => K.every((k, i) => s.sc[i] !== undefined && Math.abs(s.sc[i] - k[2]) <= 1);
+  const TASKS = [
+    { q: "Task 1: Give every criterion a score, then compare with the teacher.", ok: () => s.shown && Object.keys(s.sc).length === K.length },
+    { q: "Task 2: Change your scores until each is at most one point from the teacher's. Which criterion did you judge differently, and why?", ok: () => s.shown && close() },
+  ];
+  let ti = 0;
+  function render() {
+    $("crit").innerHTML = "";
+    K.forEach(([t, ev, ref, why], i) => {
+      const box = Kit.el("div", { class: "crit" });
+      box.append(Kit.el("div", { class: "t" }, t), Kit.el("div", { class: "ev" }, "Evidence: " + ev));
+      const sc = Kit.el("div", { class: "sc" }, "Your score: "), btns = Kit.el("span", { style: "display:flex;gap:6px" });
+      sc.append(btns); box.append(sc);
+      Kit.buttons(btns, [1, 2, 3, 4].map((k) => ({ k: String(k), label: String(k) })), (k) => { s.sc[i] = +k; render(); upd(); });
+      btns.querySelectorAll("button").forEach((b) => b.classList.toggle("on", +b.dataset.k === s.sc[i]));
+      if (s.shown) box.append(Kit.el("div", { class: "ref" }, `Teacher: ${ref}. ${why}`));
+      $("crit").appendChild(box);
+    });
+  }
+  function upd() {
+    const tot = Object.values(s.sc).reduce((a, b) => a + b, 0);
+    $("calc").textContent = Object.keys(s.sc).length ? `Your total: ${tot} of 20.` + (s.shown ? " Teacher's total: 17 of 20." : "") : "";
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a score is only as good as its evidence.";
+    $("msg").textContent = m + "Score what you see and hear, not how much work it was.";
+  }
+  $("cmp").addEventListener("click", () => { s.shown = true; render(); upd(); });
+  window.PR = { score: (i, v) => { s.sc[i] = v; render(); upd(); }, compare: () => $("cmp").click() };
+  render(); upd();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Feedback Desk</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #f8f0fc; border: 1.5px solid #9C36B5; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Feedback Desk</h1>
+  <p class="hint">After each package presentation, the reviewers write feedback. For each situation, choose the most <b>constructive</b> feedback: it names what works or what to improve, and how, with evidence.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { card: "In Team Blue's promo, the music covers Nour's voice line.", answer: "Lower the music by about 6 dB under the voice at 0:08–0:14.", choices: C(["Lower the music by about 6 dB under the voice at 0:08–0:14.", "The sound is bad.", "I don't like this music.", "Make everything louder."]), good: "It names the problem, the place and the fix." },
+    { card: "Team Green's storyboard panels match the clip shot by shot.", answer: "Panels 2–5 match the shots exactly; the handoff worked.", choices: C(["Panels 2–5 match the shots exactly; the handoff worked.", "Nice.", "The storyboard was not needed.", "Good job, everyone."]), good: "Praise is useful too when it says what exactly works." },
+    { card: "Team Red's clip is 45 s; the brief asked for 30 s.", answer: "Cut the 15 s intro and start on the lightning shot.", choices: C(["Cut the 15 s intro and start on the lightning shot.", "Too long.", "Why didn't you read the brief?", "Speed the whole clip up to 1.5×."]), good: "A concrete cut that keeps the best shots." },
+    { card: "Team Yellow's credits file has no licence for the font.", answer: "Add the font's licence file and its TASL line before release.", choices: C(["Add the font's licence file and its TASL line before release.", "Fonts don't need credits.", "Change the font colour.", "It's fine for a school project."]), good: "Rights are part of the quality: name the missing proof." },
+    { card: "A team member asks: \"Was our package good?\"", answer: "It fits the gameplay well; the music mood is the main thing to improve.", choices: C(["It fits the gameplay well; the music mood is the main thing to improve.", "Yes, perfect.", "No, not really.", "Ask the other teams."]), good: "One strength and the most important improvement, each linked to a criterion." },
+    { card: "A student who worked alone shows a production log for all four roles.", answer: "The log shows each role clearly; next time, plan the sound earlier.", choices: C(["The log shows each role clearly; next time, plan the sound earlier.", "You should have joined a team.", "Logs are not important.", "Too much work for one person."]), good: "The individual alternative is judged with the same criteria." },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; r.goal = "Which feedback is most constructive?"; });
+  const g = Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is the first situation of the seminar: music over the voice." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "All the feedback is written." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

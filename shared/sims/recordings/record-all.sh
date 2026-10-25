@@ -175,6 +175,9 @@ ranas-questions|courses/digital-skills/week-07/sims/ranas-questions.html|8|cours
 huda-day|courses/digital-skills/week-08/sims/huda-day.html|8|courses/digital-skills/week-08/sims/huda-day.gif
 slide-builder|courses/digital-skills/week-09/sims/slide-builder.html|9|courses/digital-skills/week-09/sims/slide-builder.gif
 slide-doctor|courses/digital-skills/week-09/sims/slide-doctor.html|8|courses/digital-skills/week-09/sims/slide-doctor.gif
+outline-lab|courses/digital-skills/week-10/sims/outline-lab.html|9|courses/digital-skills/week-10/sims/outline-lab.gif
+image-prompt-lab|courses/digital-skills/week-10/sims/image-prompt-lab.html|9|courses/digital-skills/week-10/sims/image-prompt-lab.gif
+ai-deck-check|courses/digital-skills/week-10/sims/ai-deck-check.html|8|courses/digital-skills/week-10/sims/ai-deck-check.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

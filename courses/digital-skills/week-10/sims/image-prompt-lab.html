@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Image Prompt Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 4px 0; font-weight: 700; font-size: .88rem; }
+    .sim .bar > span.l { min-width: 70px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .prompt { font: 600 .9rem ui-monospace, Consolas, monospace; background: #1e1e2e; color: #e9ecef; border-radius: 10px; padding: 8px 10px; margin: 6px 0; }
+    .sim input[type=text] { font: inherit; width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 8px; border: 1.5px solid #ced4da; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Image Prompt Lab: a picture for a slide</h1>
+  <p class="hint">Huda needs one picture for the slide “The plan” (shared folders, e-forms). The slides use an orange theme. Build the image prompt, press Generate, then check the picture.</p>
+  <div class="bar"><span class="l">Subject</span><span id="subject" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Style</span><span id="style" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Colours</span><span id="colours" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Shape</span><span id="shape" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Text</span><span id="text" style="display:contents"></span></div>
+  <div class="prompt" id="prompt"></div>
+  <div class="bar"><button type="button" id="gen">Generate ▶</button></div>
+  <canvas id="c" aria-label="The generated picture"></canvas>
+  <label class="bar">Alt text <input type="text" id="alt" placeholder="One sentence: what the picture shows"></label>
+  <label class="bar"><input type="checkbox" id="note"> Add the small note “Picture: AI-generated”</label>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const OPT = {
+    subject: ["an office desk with a laptop and folders", "a famous football player", "a cat"],
+    style: ["flat illustration", "photo-realistic", "comic with speech bubbles"],
+    colours: ["orange and white", "neon green and purple", "any colours"],
+    shape: ["wide 16:9", "tall 9:16", "square"],
+    text: ["no text in the picture", "the words “Sunrise Company” on a sign"],
+  };
+  const s = { subject: "a cat", style: "comic with speech bubbles", colours: "neon green and purple", shape: "square", text: "the words “Sunrise Company” on a sign", gen: null, alt: "", note: false };
+  const done = {};
+  const TASKS = [
+    { q: "Task 1: Build a prompt that fits the slide (subject, style, theme colours, wide shape, no text) and press Generate.", ok: () => s.gen && checks(s.gen).slice(0, 5).every((x) => x[0]) },
+    { q: "Task 2: Write an alt text of at least 5 words and add the note “AI-generated”.", ok: () => s.gen && checks(s.gen).every((x) => x[0]) },
+    { q: "Task 3: Try the prompt with the words on a sign. What goes wrong?", ok: () => done.textTried },
+  ];
+  let ti = 0;
+  const wc = (t) => t.trim().split(/\s+/).filter(Boolean).length;
+  function checks(g) {
+    return [
+      [g.subject === OPT.subject[0], "fits the slide “The plan”"],
+      [g.subject !== OPT.subject[1], "no real person"],
+      [g.colours === OPT.colours[0], "the colours of the orange theme"],
+      [g.shape === OPT.shape[0], "wide, fits next to the points"],
+      [g.text === OPT.text[0], "no text that the AI can get wrong"],
+      [wc(s.alt) >= 5, "alt text of at least 5 words"],
+      [s.note, "marked as AI-generated"],
+    ];
+  }
+  function tabs(k) {
+    Kit.buttons($(k), OPT[k].map((t) => ({ k: t, label: t })), (t) => { s[k] = t; tabs(k); upd(); });
+    $(k).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[k]));
+  }
+  function upd() {
+    $("prompt").textContent = `Make a picture: ${s.subject}, ${s.style}, ${s.colours}, ${s.shape}, ${s.text}.`;
+    const C = s.gen ? checks(s.gen) : [];
+    $("chk").innerHTML = C.map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a clear prompt, a checked picture, alt text and an honest note.";
+    if (!m && s.gen) m = s.gen.subject === OPT.subject[1] ? "Never make pictures of real people: it can hurt them and it can break the law." : s.gen.text !== OPT.text[0] ? "Look closely at the sign: AI tools often write wrong letters. Add text in PowerPoint instead." : "";
+    $("msg").textContent = m || (!s.gen ? "Press Generate to see the picture." : "");
+  }
+  $("gen").addEventListener("click", () => { s.gen = { ...s }; if (s.text !== OPT.text[0]) done.textTried = true; paint(); upd(); });
+  $("alt").addEventListener("input", (e) => { s.alt = e.target.value; upd(); });
+  $("note").addEventListener("change", (e) => { s.note = e.target.checked; paint(); upd(); });
+  const cv = Kit.canvas($("c"), (W) => Math.min(240, W * 0.45));
+  function paint() {
+    cv.resize();
+    const c = cv.ctx, W = cv.W, H = cv.H, g = s.gen;
+    c.fillStyle = "#f1f3f5"; c.fillRect(0, 0, W, H);
+    if (!g) { Kit.text(c, "no picture yet", W / 2, H / 2, 14, "#868e96"); return; }
+    const ar = g.shape === "wide 16:9" ? 16 / 9 : g.shape === "tall 9:16" ? 9 / 16 : 1;
+    const h = Math.min(H - 10, (W - 10) / ar), w = h * ar, x = (W - w) / 2, y = (H - h) / 2;
+    const pal = g.colours === "orange and white" ? ["#fff4e6", "#e8590c", "#ffa94d"] : g.colours === "neon green and purple" ? ["#d8f5a2", "#9c36b5", "#40c057"] : ["#e7f5ff", "#f03e3e", "#fab005"];
+    c.save(); c.beginPath(); c.rect(x, y, w, h); c.clip();
+    c.fillStyle = pal[0]; c.fillRect(x, y, w, h);
+    if (g.style === "comic with speech bubbles") { c.strokeStyle = "#000"; c.lineWidth = 3; c.strokeRect(x + 3, y + 3, w - 6, h - 6); }
+    if (g.subject === OPT.subject[0]) {
+      c.fillStyle = "#c97b44"; c.fillRect(x + w * 0.1, y + h * 0.66, w * 0.8, h * 0.06);
+      c.fillStyle = "#495057"; c.fillRect(x + w * 0.35, y + h * 0.38, w * 0.26, h * 0.28); c.fillStyle = "#a5d8ff"; c.fillRect(x + w * 0.37, y + h * 0.41, w * 0.22, h * 0.22);
+      [0, 1, 2].forEach((i) => { c.fillStyle = pal[1 + (i % 2)]; c.fillRect(x + w * (0.66 + i * 0.06), y + h * 0.44, w * 0.05, h * 0.22); });
+    } else if (g.subject === OPT.subject[1]) {
+      c.fillStyle = pal[1]; c.beginPath(); c.arc(x + w / 2, y + h * 0.35, h * 0.12, 0, 7); c.fill(); c.fillRect(x + w / 2 - h * 0.12, y + h * 0.48, h * 0.24, h * 0.35);
+      Kit.text(c, "a real person?", x + w / 2, y + h * 0.95, Math.max(11, h * 0.07), "#c92a2a");
+    } else {
+      c.fillStyle = "#fd7e14"; c.beginPath(); c.ellipse(x + w / 2, y + h * 0.62, h * 0.2, h * 0.14, 0, 0, 7); c.fill(); c.beginPath(); c.arc(x + w / 2 + h * 0.18, y + h * 0.45, h * 0.1, 0, 7); c.fill();
+    }
+    if (g.style === "photo-realistic") { const gr = c.createLinearGradient(x, y, x, y + h); gr.addColorStop(0, "rgba(0,0,0,0)"); gr.addColorStop(1, "rgba(0,0,0,.18)"); c.fillStyle = gr; c.fillRect(x, y, w, h); }
+    if (g.text !== OPT.text[0]) { c.fillStyle = "#fff"; c.fillRect(x + w * 0.2, y + h * 0.08, w * 0.6, h * 0.16); c.strokeStyle = "#495057"; c.lineWidth = 2; c.strokeRect(x + w * 0.2, y + h * 0.08, w * 0.6, h * 0.16); Kit.text(c, "SUNRSIE CMOPANY", x + w / 2, y + h * 0.19, Math.max(10, h * 0.08), "#2a2f2c"); }
+    if (s.note) Kit.text(c, "Picture: AI-generated", x + w - 6, y + h - 6, Math.max(9, h * 0.05), "#495057", "right", 700);
+    c.restore();
+  }
+  window.addEventListener("resize", () => setTimeout(paint, 60));
+  window.IP = { set: (o) => { Object.assign(s, o); Object.keys(OPT).forEach(tabs); upd(); }, gen: () => $("gen").click(), alt: (t) => { $("alt").value = t; s.alt = t; upd(); }, note: () => { $("note").checked = true; s.note = true; paint(); upd(); } };
+  Object.keys(OPT).forEach(tabs); paint(); upd();
+})();
+</script>
+</body>
+</html>

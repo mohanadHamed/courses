@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Crate Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim table.ct { border-collapse: collapse; width: 100%; margin: 6px 0; font-variant-numeric: tabular-nums; }
+    .sim table.ct td, .sim table.ct th { border: 1px solid #dee2e6; padding: 3px 6px; font-weight: 700; font-size: .9rem; }
+    .sim table.ct th { background: #ebfbee; color: #2b8a3e; }
+    .sim table.ct input[type=range] { width: 100%; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Crate Lab: the expected value of a loot crate</h1>
+  <p class="hint">A crate of <i>Lucky Raft</i> holds 10 items. Set how many of each item and how many coins each is worth, and the price of a crate. Then open many crates and compare the average with E.</p>
+  <table class="ct" id="tbl"></table>
+  <div class="bar" id="price"></div>
+  <div class="bar" id="go"></div>
+  <canvas id="c" aria-label="The average coins per crate after many crates"></canvas>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const IT = [{ n: "gold", v: 100, k: 1, col: "#fab005" }, { n: "silver", v: 20, k: 3, col: "#adb5bd" }, { n: "wood", v: 5, k: 6, col: "#c97b44" }];
+  const s = { price: 25, opened: 0, total: 0, path: [], golds: [], sinceGold: 0 };
+  const N = () => IT.reduce((a, x) => a + x.k, 0);
+  const E = () => (N() ? IT.reduce((a, x) => a + x.v * x.k, 0) / N() : 0);
+  const TASKS = [
+    { q: "Task 1: With 1 gold (100), 3 silver (20) and 6 wood (5), what is E? Open 1000 crates and compare the average.", ok: () => s.opened >= 1000 && Math.abs(E() - 19) < 0.01 },
+    { q: "Task 2: Set the price so that the crate is a fair game (expected gain 0).", ok: () => Math.abs(E() - s.price) < 0.51 },
+    { q: "Task 3: Set 2 gold items (and 2 silver, 6 wood). How many crates until a gold item, on average?", ok: () => IT[0].k === 2 && s.golds.length >= 20 },
+  ];
+  let ti = 0;
+  function reset() { s.opened = 0; s.total = 0; s.path = []; s.golds = []; s.sinceGold = 0; }
+  function table() {
+    $("tbl").innerHTML = "<tr><th>item</th><th>how many of 10</th><th>coins x</th><th>p</th><th>x · p</th></tr>" + IT.map((x, i) => `<tr><td style="color:${x.col}">${x.n}</td><td><input type="range" min="0" max="10" step="1" value="${x.k}" data-k="${i}" aria-label="how many ${x.n}"> ${x.k}</td><td><input type="range" min="0" max="200" step="5" value="${x.v}" data-v="${i}" aria-label="coins for ${x.n}"> ${x.v}</td><td>${x.k}/${N()}</td><td>${Kit.fmt(N() ? x.v * x.k / N() : 0, 2)}</td></tr>`).join("") + `<tr><td colspan="4" style="text-align:right">E =</td><td>${Kit.fmt(E(), 2)}</td></tr>`;
+    $("tbl").querySelectorAll("input").forEach((inp) => inp.addEventListener("change", () => { const i = +(inp.dataset.k ?? inp.dataset.v); if (inp.dataset.k !== undefined) IT[i].k = +inp.value; else IT[i].v = +inp.value; reset(); upd(); }));
+  }
+  function open(n) {
+    for (let j = 0; j < n; j++) {
+      let r = Math.random() * N(), item = IT[IT.length - 1];
+      for (const x of IT) { if (r < x.k) { item = x; break; } r -= x.k; }
+      s.opened++; s.total += item.v; s.sinceGold++;
+      if (item === IT[0]) { s.golds.push(s.sinceGold); s.sinceGold = 0; }
+      if (s.opened <= 50 || s.opened % Math.ceil(s.opened / 300) === 0) s.path.push([s.opened, s.total / s.opened]);
+    }
+    upd();
+  }
+  Kit.slider($("price"), "Price of a crate", 0, 60, 1, s.price, (v) => { s.price = v; if (ti !== undefined) upd(); }, (v) => v + " coins");
+  Kit.buttons($("go"), [1, 10, 100, 1000].map((k) => ({ k, label: "Open ×" + k })).concat([{ k: "r", label: "Reset" }]), (k) => (k === "r" ? (reset(), upd()) : open(+k)));
+  function upd() {
+    table();
+    const avg = s.opened ? s.total / s.opened : 0, gain = E() - s.price, tries = s.golds.length ? s.golds.reduce((a, b) => a + b, 0) / s.golds.length : 0;
+    $("calc").textContent = `E = ${Kit.fmt(E(), 2)} coins · expected gain = E − price = ${Kit.fmt(gain, 2)} · opened ${s.opened}, average ${s.opened ? Kit.fmt(avg, 2) : "—"}` + (IT[0].k ? ` · crates per gold: ${s.golds.length ? Kit.fmt(tries, 1) : "—"} (1/p = ${Kit.fmt(N() / IT[0].k, 1)})` : "");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: E is the long-run average, and 1/p is the average wait.";
+    if (!m) m = Math.abs(gain) < 0.51 ? "A fair game: on average the player gets back the price." : gain < 0 ? "On average the player loses coins on every crate." : "On average the player wins coins: the game gives away more than it takes.";
+    $("msg").textContent = m;
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.min(200, W * 0.38));
+  Kit.loop(() => {
+    const c = cv.ctx, W = cv.W, H = cv.H, x0 = 40, x1 = W - 10, y0 = 10, y1 = H - 22, vmax = Math.max(40, E() * 2, s.price * 1.3);
+    c.clearRect(0, 0, W, H);
+    c.strokeStyle = "#adb5bd"; c.lineWidth = 1.5; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0, y1); c.lineTo(x1, y1); c.stroke();
+    const Y = (v) => y1 - (y1 - y0) * Math.min(v, vmax) / vmax, Nn = Math.max(10, s.opened), X = (t) => x0 + (x1 - x0) * Math.log10(t) / Math.log10(Nn);
+    [0, vmax / 2, vmax].forEach((v) => Kit.text(c, Math.round(v), x0 - 6, Y(v) + 4, 10, "#868e96", "right", 700));
+    [1, 10, 100, 1000, 10000].filter((t) => t <= Nn).forEach((t) => Kit.text(c, t, X(t), y1 + 15, 10, "#868e96"));
+    c.setLineDash([6, 5]); c.lineWidth = 2;
+    c.strokeStyle = "#2F9E44"; c.beginPath(); c.moveTo(x0, Y(E())); c.lineTo(x1, Y(E())); c.stroke();
+    c.strokeStyle = "#c92a2a"; c.beginPath(); c.moveTo(x0, Y(s.price)); c.lineTo(x1, Y(s.price)); c.stroke(); c.setLineDash([]);
+    Kit.text(c, "E", x1 - 6, Y(E()) - 5, 11, "#2F9E44", "right"); Kit.text(c, "price", x1 - 6, Y(s.price) - 5, 11, "#c92a2a", "right");
+    if (s.path.length) { c.strokeStyle = "#1c7ed6"; c.lineWidth = 2; c.beginPath(); s.path.forEach(([t, v], i) => (i ? c.lineTo(X(t), Y(v)) : c.moveTo(X(t), Y(v)))); c.stroke(); }
+  });
+  window.CR = { open, set: (i, k, v) => { if (k !== null) IT[i].k = k; if (v !== null) IT[i].v = v; reset(); upd(); }, price: (p) => { const inp = document.querySelector("#price input"); inp.value = p; inp.dispatchEvent(new Event("input")); } };
+  upd();
+})();
+</script>
+</body>
+</html>

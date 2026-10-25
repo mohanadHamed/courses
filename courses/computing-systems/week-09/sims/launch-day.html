@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Launch Day</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Launch Day</h1>
+  <p class="hint">Byte Bay publishes <i>Pocket Quest 1.0</i> on Google Play and on the App Store. Every step has a problem. Choose what the studio must do.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const STEPS = ["account", "build", "listing", "rating", "review", "release"];
+  const rounds = [
+    { s: 0, goal: "Byte Bay wants to upload the game to Google Play today. What does it need first?", choices: C(["a Google Play developer account", "a website", "a Mac", "1000 players"]), answer: "a Google Play developer account",
+      good: "Without a developer account (25 USD once, with an identity check) there is no upload.", why: { "a Mac": "A Mac is needed for iOS builds, not for Google Play." } },
+    { s: 1, goal: "The upload fails: “version code 12 has already been used”. What is wrong?", choices: C(["the new build needs a higher version code", "the game is too small", "the icon is wrong", "the store is closed"]), answer: "the new build needs a higher version code",
+      good: "Every upload needs a higher build number (Android: versionCode; iOS: build number). Players see the version name, such as 1.0.1.", why: {} },
+    { s: 1, goal: "Rami lost the file with the <b>upload key</b> that signed version 1.0. Why is this a problem?", choices: C(["the store accepts updates only from the right key", "the game gets slower", "players lose their progress", "nothing, keys are not needed"]), answer: "the store accepts updates only from the right key",
+      good: "Builds are signed so that only the studio can update the game. Keep the keys safe, with a backup (Google Play can reset an upload key, after a request).", why: {} },
+    { s: 2, goal: "The listing shows screenshots of a <b>different game</b>, made with a nicer art style. What will the review say?", choices: C(["misleading listing: show the real game", "approved: nice pictures sell", "add more screenshots", "remove the icon"]), answer: "misleading listing: show the real game",
+      good: "Screenshots and descriptions must show the real game. Misleading listings are a common reason for rejection.", why: { "approved: nice pictures sell": "Both stores forbid listings that do not match the app." } },
+    { s: 3, goal: "Pocket Quest has cartoon fights. Who decides its <b>age rating</b>?", choices: C(["the studio answers the store's questionnaire", "the players vote", "the studio picks any age", "no rating is needed"]), answer: "the studio answers the store's questionnaire",
+      good: "The studio answers questions about violence, language, purchases and more; the rating follows from the answers. Wrong answers can remove the game.", why: {} },
+    { s: 4, goal: "The review rejects the game: it collects e-mail addresses but has <b>no privacy policy</b>. Fix?", choices: C(["add a privacy policy link and the data form, then submit again", "remove the e-mail field silently and wait", "publish on a website instead", "change the game's name"]), answer: "add a privacy policy link and the data form, then submit again",
+      good: "Both stores ask for a privacy policy and a form about the data the game collects (Google: Data safety; Apple: privacy labels).", why: {} },
+    { s: 5, goal: "Version 1.1 is approved. Byte Bay fears a hidden bug. How can it release safely?", choices: C(["a staged rollout: first to a small part of the players", "release to everyone at midnight", "delete version 1.0 first", "release without a review"]), answer: "a staged rollout: first to a small part of the players",
+      good: "A staged (phased) release goes to a few percent of players first; if the crash rate rises, the studio stops it.", why: {} },
+  ];
+  Kit.game({
+    rounds, cols: 1, colsPhone: 1, animMs: 600, still: true,
+    intro: "Round 1 is the story of the lesson: the morning of launch day.",
+    canvas: () => 66,
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fffdf5"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const w = (W - 20) / STEPS.length;
+      STEPS.forEach((t, i) => { const on = i === r.s, done = i < r.s || (on && st.done && st.ok); Kit.rrect(c, 10 + i * w + 3, 14, w - 6, 38, 10, on ? "#A86700" : done ? "#ffe8a3" : "#fff", "#A86700", 2); Kit.text(c, t, 10 + i * w + w / 2, 38, W < 460 ? 9.5 : 12.5, on ? "#fff" : "#7a5a00"); });
+    },
+  });
+})();
+</script>
+</body>
+</html>

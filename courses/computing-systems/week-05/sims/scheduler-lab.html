@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Scheduler Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .procs { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 8px 0; }
+    .sim .procs button { padding: 6px 12px; }
+    .sim .procs button.off { background: #fff; color: #868e96; border: 1.5px dashed #ced4da; box-shadow: none; }
+    .sim .out { font-weight: 800; font-variant-numeric: tabular-nums; margin-top: 8px; line-height: 1.5; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Scheduler Lab</h1>
+  <p class="hint">One CPU core (to keep it simple). The scheduler gives each <b>ready</b> process a time slice of 4 ms, one after the other. Tap a process to open or close it. A <b>waiting</b> process gets no slices.</p>
+  <div class="procs" id="procs"></div>
+  <canvas id="c" aria-label="A time line of one CPU core with coloured time slices"></canvas>
+  <p class="out" id="out"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const P = [
+    { k: "game", name: "Game", col: "#A86700", on: true, wait: false },
+    { k: "music", name: "Music", col: "#1c7ed6", on: true, wait: false },
+    { k: "down", name: "Download", col: "#7048e8", on: false, wait: false },
+    { k: "chat", name: "Chat sync", col: "#0c8599", on: false, wait: false },
+  ];
+  const SLICE = 4, WINDOW = 48, MS = 90;         // 1 ms of CPU time lasts MS ms on the screen
+  const $ = (id) => document.getElementById(id);
+  let slices = [], next = 0, t0 = performance.now(), turn = 0;
+  function buttons() {
+    const items = P.map((p) => ({ k: p.k, label: (p.on ? (p.wait ? "⏳ " : "▶ ") : "+ ") + p.name + (p.on ? (p.wait ? " (waiting)" : "") : " (closed)") }));
+    items.push({ k: "wait", label: P[0].wait ? "Game: file loaded" : "Game: load a file" });
+    Kit.buttons($("procs"), items, pick, "");
+    $("procs").querySelectorAll("button").forEach((b) => { const p = P.find((x) => x.k === b.dataset.k); if (p && !p.on) b.classList.add("off"); if (b.dataset.k === "wait") b.className = "ghost"; });
+  }
+  function pick(k) {
+    if (k === "wait") { P[0].wait = !P[0].wait; say(P[0].wait ? "The game waits for its file: it is not ready, so it gets no slices." : "The file is loaded: the game is ready again."); }
+    else if (k === "game") { say("The game stays open in this lab: it is the app the player uses."); return; }
+    else { const p = P.find((x) => x.k === k); p.on = !p.on; say(p.on ? p.name + " is open: one more process shares the core." : p.name + " is closed: the others get more slices."); }
+    buttons(); stats(); Kit.beep(440, 0.08);
+  }
+  function say(s) { $("msg").textContent = s; }
+  const ready = () => P.filter((p) => p.on && !p.wait);
+  function stats() {
+    const r = ready(), g = r.includes(P[0]);
+    const share = g ? 1 / r.length : 0;
+    const frame = g ? 10 / share : Infinity;
+    $("out").innerHTML = g
+      ? `Ready processes: ${r.length}. The game gets 1 of every ${r.length} slices (${Math.round(share * 100)} %).<br>A frame needs 10 ms of CPU work, so it takes about ${Math.round(frame)} ms: about ${Math.min(60, Math.round(1000 / frame))} fps.`
+      : "The game is waiting: it gets no CPU time until its file is loaded.";
+  }
+  function step(now) {
+    const cpuNow = (now - t0) / MS;
+    while (next <= cpuNow) {
+      const r = ready();
+      const p = r.length ? r[turn % r.length] : null;
+      turn++;
+      slices.push({ t: next, p });
+      next += SLICE;
+    }
+    slices = slices.filter((s) => s.t > cpuNow - WINDOW - SLICE);
+    return cpuNow;
+  }
+  const cv = Kit.canvas($("c"), (W) => 152);
+  Kit.loop((now) => {
+    const c = cv.ctx, W = cv.W, H = cv.H, cpu = step(now);
+    c.fillStyle = "#fffdf5"; c.fillRect(0, 0, W, H);
+    const x0 = 14, w = W - 28, X = (t) => x0 + (t - (cpu - WINDOW)) / WINDOW * w;
+    Kit.text(c, "CPU core: the last 48 ms", x0, 18, 12, "#7a6a60", "left");
+    slices.forEach((s) => {
+      const a = Math.max(x0, X(s.t)), b = Math.min(x0 + w, X(Math.min(s.t + SLICE, cpu)));
+      if (b <= a) return;
+      Kit.rrect(c, a + 1, 30, b - a - 2, 52, 5, s.p ? s.p.col : "#e9ecef");
+      if (s.p) { c.font = "800 11px Nunito, system-ui, sans-serif"; const nm = c.measureText(s.p.name.split(" ")[0]).width < b - a - 6 ? s.p.name.split(" ")[0] : s.p.name[0]; if (b - a > 12) Kit.text(c, nm, (a + b) / 2, 61, 11, "#fff"); }
+    });
+    c.fillStyle = "#2a211c"; c.fillRect(x0 + w - 1, 26, 2, 60);
+    Kit.text(c, "now", x0 + w - 2, 100, 11, "#2a211c", "right");
+    P.forEach((p, i) => { const st = !p.on ? "closed" : p.wait ? "waiting" : "ready or running"; const lx = x0 + (i % 2) * (w / 2), ly = 112 + Math.floor(i / 2) * 18; c.fillStyle = p.col; c.fillRect(lx, ly, 12, 12); Kit.text(c, p.name + ": " + st, lx + 16, ly + 11, 11.5, "#2a211c", "left", 700); });
+  });
+  buttons(); stats(); say("Open Download and Chat sync, and watch the game's slices.");
+})();
+</script>
+</body>
+</html>

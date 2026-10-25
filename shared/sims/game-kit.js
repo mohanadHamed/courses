@@ -204,6 +204,17 @@
   Kit.text = (c, s, x, y, size = 13, color = "#2a211c", align = "center", weight = 800) => {
     c.fillStyle = color; c.font = `${weight} ${size}px Nunito, system-ui, sans-serif`; c.textAlign = align; c.fillText(s, x, y);
   };
+  // Text that wraps inside maxW; returns the y below the last line.
+  Kit.wrap = (c, s, x, y, maxW, size = 13, color = "#2a211c", align = "left", weight = 700, lh = 1.3) => {
+    c.font = `${weight} ${size}px Nunito, system-ui, sans-serif`;
+    let line = "";
+    String(s).split(" ").forEach((w) => {
+      const t = line ? line + " " + w : w;
+      if (c.measureText(t).width > maxW && line) { Kit.text(c, line, x, y, size, color, align, weight); y += size * lh; line = w; } else line = t;
+    });
+    if (line) { Kit.text(c, line, x, y, size, color, align, weight); y += size * lh; }
+    return y;
+  };
   Kit.rrect = (c, x, y, w, h, r, fill, stroke, lw = 2) => {
     c.beginPath();
     if (c.roundRect) c.roundRect(x, y, w, h, r); else c.rect(x, y, w, h);

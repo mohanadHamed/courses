@@ -55,6 +55,10 @@ battery-lab|courses/computing-systems/week-04/sims/battery-lab.html|9|courses/co
 marble-peak|courses/computing-systems/week-04/sims/marble-peak.html|9|courses/computing-systems/week-04/sims/marble-peak.gif
 sheet-filter|courses/computing-systems/week-04/sims/sheet-filter.html|10|courses/computing-systems/week-04/sims/sheet-filter.gif
 phone-picker|courses/computing-systems/week-04/sims/phone-picker.html|9|courses/computing-systems/week-04/sims/phone-picker.gif
+scheduler-lab|courses/computing-systems/week-05/sims/scheduler-lab.html|8|courses/computing-systems/week-05/sims/scheduler-lab.gif
+ram-rush|courses/computing-systems/week-05/sims/ram-rush.html|9|courses/computing-systems/week-05/sims/ram-rush.gif
+settings-explorer|courses/computing-systems/week-05/sims/settings-explorer.html|9|courses/computing-systems/week-05/sims/settings-explorer.gif
+help-ticket|courses/computing-systems/week-05/sims/help-ticket.html|8|courses/computing-systems/week-05/sims/help-ticket.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
 ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif

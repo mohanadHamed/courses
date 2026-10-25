@@ -1,0 +1,139 @@
+---
+title: "Operating-System Tour on PC and Mobile"
+subtitle: "Lecture 10 · Seminar"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary system-settings task-manager device-driver app-permission sandbox app-storage background-app process >}}
+
+## 10.1 A tour of Windows: four tools
+
+:::: {.columns}
+::: {.column width="50%"}
+- Settings › About shows the Windows version and the RAM.
+- Task Manager (Ctrl + Shift + Esc) shows the processes and their CPU use.
+- File Explorer shows the drives, and Device Manager shows the devices and drivers.
+- **Do it:** Open Device Manager › Display adapters. Which graphics card does the lab computer have?
+:::
+::: {.column width="50%"}
+![](images/pc-tour.png)
+:::
+::::
+
+## Example · The gamepad does not work
+
+Ali's new gamepad does nothing in the game on his Windows PC.
+**Where does he look, and what does he find?**
+
+::: {.reveal}
+1. He opens Device Manager and finds the gamepad under Human Interface Devices.
+2. A yellow warning sign shows that Windows has no working driver.
+3. He installs the driver from the maker, and the gamepad works.
+:::
+
+## Try it 1 · Which Windows tool?
+
+a) Which tool shows the program that uses most of the CPU now?
+b) Which tool shows if the driver of the graphics card works?
+c) Where do you see the Windows version and the RAM?
+
+::: {.answer}
+a) Task Manager
+b) Device Manager
+c) Settings › System › About
+:::
+
+## 10.2 A tour of the phone: Settings
+
+:::: {.columns}
+::: {.column width="50%"}
+- About phone shows the OS version, and Battery shows the use of each app.
+- Storage shows the free space and the space of each app.
+- Apps › a game shows its permissions, and on Android also Clear cache.
+- **Do it:** On your phone, open Settings › Battery. Which app used the most battery today?
+:::
+::: {.column width="50%"}
+![](images/phone-tour.png)
+:::
+::::
+
+## Live demo · Settings Explorer
+
+{{< sim file="sims/settings-explorer.html" poster="sims/settings-explorer.png" title="Settings Explorer: find the answer in a phone's Settings" task="**Show:** find the Android version and the app with the most battery use. **Ask:** where would you look if voice chat is silent?" >}}
+
+## Try it 2 · Where in Settings?
+
+a) Voice chat is silent. Where on the phone do you look?
+b) Pocket Quest has app 2.1 GB, user data 0.9 GB and cache 0.2 GB. How much does Clear cache free?
+c) Why can a game not read the files of the gallery app?
+
+::: {.answer}
+a) Apps › the game › Permissions
+b) 0.2 GB
+c) Each app has its own sandbox.
+:::
+
+## 10.3 The same game on a PC and a phone
+
+:::: {.columns}
+::: {.column width="50%"}
+- On a phone, the OS pauses a game in the background and may close it.
+- On a PC, the game keeps running after Alt + Tab.
+- A phone game runs in a sandbox and asks for permissions.
+- **Do it:** Switch away from a game on your phone for one minute. What does the game do?
+:::
+::: {.column width="50%"}
+![](images/pc-vs-mobile.png)
+:::
+::::
+
+## Example · A call during a match
+
+A call arrives on the phone in the middle of a match of Pocket Quest.
+**What does the phone OS do, and what must the game do?**
+
+::: {.reveal}
+1. The OS shows the call screen and moves the game to the background.
+2. The OS pauses the game, and it may close it if the RAM is needed.
+3. So the game must **pause the match and save its state**.
+:::
+
+## Try it 3 · PC or phone?
+
+a) Which OS pauses a game in the background?
+b) Which OS uses a page file when the RAM is full?
+c) On which device does an online match go on after Alt + Tab?
+
+::: {.answer}
+a) the phone OS
+b) Windows
+c) on the PC
+:::
+
+## Game challenge · Help Ticket
+
+{{< sim file="sims/help-ticket.html" poster="sims/help-ticket.png" title="Help Ticket: send each player to the right place of the OS" kind="game" task="**The story:** six players write to the support desk of Byte Bay about Pocket Quest. **Play:** send each player to the right tool or screen of the OS." >}}
+
+## Try it 4 · The tickets (harder)
+
+The facts: Lina's voice chat says "Microphone not allowed" on her phone. Omar's game stutters on his PC. Sara's update fails with "Not enough space" on her phone.
+
+a) Where does Lina look?
+b) Where does Omar look?
+c) Where does Sara look, and what should she clear first?
+
+::: {.answer}
+a) Apps › Pocket Quest › Permissions
+b) Task Manager
+c) Settings › Storage; the cache, not the storage
+:::
+
+## Summary
+
+- Windows shows the system in About, Task Manager, File Explorer and Device Manager.
+- A phone shows the same services in Settings: About, Battery, Storage and Apps.
+- Each mobile app runs in a sandbox and needs permissions for private hardware.
+- A phone OS pauses or closes a game in the background, but Windows keeps it running.
+- Clearing the cache frees space without losing the progress.

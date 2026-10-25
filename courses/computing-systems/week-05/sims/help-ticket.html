@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Help Ticket</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Help Ticket</h1>
+  <p class="hint">You work at the support desk of <b>Byte Bay</b>. Each ticket is a player's problem with <i>Pocket Quest</i>. Send the player to the right place of the operating system.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const PLACES = ["Task Manager", "Device Manager", "Settings › About", "Settings › Storage", "Settings › Battery", "Apps › Permissions"];
+  const all = PLACES.map((p) => ({ k: p, label: p }));
+  const T = (who, dev, text, answer, good, why) => ({ who, dev, text, goal: `Ticket from <b>${who}</b> (${dev})`, choices: all, answer, good, why });
+  const rounds = [
+    T("Lina", "phone", "Voice chat says: “Microphone not allowed”.", "Apps › Permissions", "The microphone permission of Pocket Quest is off: the player turns it on in the app's permissions.",
+      { "Settings › About": "About shows the OS version and the RAM, not the permissions." }),
+    T("Omar", "Windows PC", "The game stutters. Is another program using the CPU?", "Task Manager", "Task Manager (Ctrl + Shift + Esc) shows every process and its CPU %.",
+      { "Device Manager": "Device Manager lists the hardware and drivers, not the CPU use of programs." }),
+    T("Sara", "phone", "The update fails: “Not enough space”.", "Settings › Storage", "Storage shows the free space and what uses it: photos, apps, system.",
+      { "Settings › Battery": "The battery has nothing to do with space." }),
+    T("Ali", "Windows PC", "My new gamepad does not work in the game.", "Device Manager", "Device Manager shows if Windows sees the gamepad and if its driver works.",
+      { "Task Manager": "Task Manager shows programs, not the drivers of devices." }),
+    T("Maya", "phone", "The game needs Android 12 or newer. Can I install it?", "Settings › About", "About phone shows the Android (or iOS) version.",
+      { "Settings › Storage": "Storage shows space, not the OS version." }),
+    T("Yousef", "phone", "My phone is empty after one hour of play.", "Settings › Battery", "Battery shows how much of the battery each app used.",
+      { "Apps › Permissions": "Permissions say what an app may use, not how much power it used." }),
+  ];
+  Kit.game({
+    rounds, cols: 2, colsPhone: 2, animMs: 600,
+    intro: "Round 1 is the story of the lesson: the first ticket of the day at Byte Bay.",
+    canvas: () => 120,
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fffdf5"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      Kit.rrect(c, 12, 12, W - 24, H - 24, 12, "#fff", "#FFD43B", 2.5);
+      c.fillStyle = "#A86700"; c.beginPath(); c.arc(44, 46, 16, 0, 7); c.fill();
+      Kit.text(c, r.who[0], 44, 52, 16, "#fff");
+      Kit.text(c, r.who + " · " + r.dev, 72, 42, 13, "#A86700", "left");
+      Kit.wrap(c, "“" + r.text + "”", 72, 66, W - 100, W < 460 ? 12 : 14);
+      if (st.done && st.ok) Kit.text(c, "✓ solved", W - 26, 98, 14, "#2b8a3e", "right");
+    },
+  });
+})();
+</script>
+</body>
+</html>

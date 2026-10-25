@@ -60,7 +60,7 @@
     let m = "";
     while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
     $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: old music can be free, but check the rule of the country and the date of death.";
-    $("msg").textContent = m + "Careful: a new recording or a new edition of old music can have its own copyright. Yara records the piece herself.";
+    $("msg").textContent = m + "Careful: a new recording or a new edition of old music can have its own copyright. So Yara records the piece on the studio piano.";
   }
   window.addEventListener("resize", draw);
   window.PD = { set: (o) => { if (o.rule) s.rule = o.rule; if (o.died) { s.died = o.died; sl.value = o.died; sl.dispatchEvent(new Event("input")); } upd(); } };

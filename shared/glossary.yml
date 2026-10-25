@@ -912,6 +912,46 @@ applied-problem:
   ar: مسألة تطبيقية
   def: A problem from a real situation, such as a game scene, that needs several mathematical tools in a row to solve it.
 
+delta-time:
+  en: delta time (Δt)
+  ar: الزمن بين إطارين
+  def: The time between two frames, for example 1/60 s at 60 fps; multiplying by it makes movement the same at every frame rate.
+
+frame-rate-independence:
+  en: frame-rate independence
+  ar: الاستقلال عن معدل الإطارات
+  def: Movement that covers the same distance per second at 30, 60 or 144 frames per second, because each step is scaled by Δt.
+
+input-vector:
+  en: input vector
+  ar: متجه الإدخال
+  def: The direction that the player's keys or stick give, such as (1, 1) for right and up; it is normalized so that diagonals are not faster.
+
+acceleration:
+  en: acceleration
+  ar: التسارع
+  def: The change of velocity per second; the velocity grows by acceleration × Δt in each frame.
+
+damping:
+  en: damping (friction)
+  ar: التخميد (الاحتكاك)
+  def: A rule that makes the velocity a little smaller in every frame, so that an object slows down when the player lets go.
+
+reflection-vector:
+  en: reflected velocity (bounce)
+  ar: متجه الارتداد
+  def: The velocity after a bounce, v' = v − 2(v · n)n, where n is the unit normal of the wall.
+
+bounciness:
+  en: bounciness
+  ar: معامل الارتداد
+  def: A number from 0 to 1 that says how much of the speed towards a wall is kept after a bounce.
+
+team-roles:
+  en: team roles
+  ar: أدوار الفريق
+  def: The parts of a shared task that each member of a team takes, for example solver, checker and presenter.
+
 # -------------------------------------------------------- computing-systems
 
 computing-system:

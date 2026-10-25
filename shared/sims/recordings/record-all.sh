@@ -104,6 +104,9 @@ notice-maker|courses/digital-skills/week-04/sims/notice-maker.html|10|courses/di
 page-setup-lab|courses/digital-skills/week-04/sims/page-setup-lab.html|9|courses/digital-skills/week-04/sims/page-setup-lab.gif
 header-footer-lab|courses/digital-skills/week-04/sims/header-footer-lab.html|8|courses/digital-skills/week-04/sims/header-footer-lab.gif
 toc-builder|courses/digital-skills/week-04/sims/toc-builder.html|9|courses/digital-skills/week-04/sims/toc-builder.gif
+word-ai-lab|courses/digital-skills/week-05/sims/word-ai-lab.html|10|courses/digital-skills/week-05/sims/word-ai-lab.gif
+tone-lab|courses/digital-skills/week-05/sims/tone-lab.html|9|courses/digital-skills/week-05/sims/tone-lab.gif
+morning-desk|courses/digital-skills/week-05/sims/morning-desk.html|8|courses/digital-skills/week-05/sims/morning-desk.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

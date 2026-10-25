@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: CV Checker</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .grid2 { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 12px; }
+    @media (max-width: 600px) { .sim .grid2 { grid-template-columns: 1fr; } }
+    .sim .facts { background: #fff4e6; border-radius: 10px; padding: 8px 12px; font-size: .88rem; }
+    .sim .facts ul { margin: 4px 0 0; padding-left: 1.1em; }
+    .sim .cv { background: #fff; border: 1px solid #dee2e6; border-radius: 6px; padding: 12px 14px; font-size: .86rem; }
+    .sim .cv h3 { margin: 0; font-size: 1.05rem; }
+    .sim .cv h4 { margin: 8px 0 2px; font-size: .9rem; color: #D9480F; }
+    .sim .cv .l { cursor: pointer; border-radius: 4px; padding: 1px 3px; }
+    .sim .cv .l:hover { background: #fff3bf; }
+    .sim .cv .l.bad { background: #ffe3e3; text-decoration: line-through; }
+    .sim .cv .l.fine { background: #d3f9d8; }
+    .sim .count { font-weight: 800; margin-top: 8px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>CV Checker: what did the AI get wrong?</h1>
+  <p class="note">Sami asked an AI tool to write his CV. Compare the CV with Sami's real facts. Tap every line that is wrong or must not be in a CV. There are <b>4</b> problems.</p>
+  <div class="grid2">
+    <div class="facts"><b>Sami's real facts</b><ul>
+      <li>First-year diploma student, Technical College, since 2025</li>
+      <li>Summer job: shop assistant, Sunrise Company shop, 2025</li>
+      <li>Skills: Word, Excel, helping customers</li>
+      <li>Languages: Arabic, English</li>
+      <li>E-mail: sami.odeh@example.com (made up)</li></ul></div>
+    <div class="cv" id="cv"></div>
+  </div>
+  <p class="count" id="count"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  // [section, line, problem (or "")]
+  const L = [
+    ["", "<h3>Sami Odeh</h3>", ""],
+    ["", "sami.odeh@example.com · Amman", ""],
+    ["", "ID number: 9981234567", "A CV does not need an ID number. Never give personal numbers to an AI tool or put them in a CV."],
+    ["Profile", "A first-year diploma student who is friendly and careful, with experience in helping customers.", ""],
+    ["Education", "Diploma, Technical College, Al-Israa University, 2025 – now", ""],
+    ["Education", "Graduated with honours in 2021", "Sami started his diploma in 2025 and has not graduated. The AI invented this."],
+    ["Experience", "Shop assistant, Sunrise Company shop, summer 2025", ""],
+    ["Experience", "Sales manager at a big international company, 2019 – 2024", "Sami never had this job. An invented job is dishonest, and it is easy to check."],
+    ["Skills", "Word, Excel, helping customers", ""],
+    ["Skills", "Expert in Python and Java programming", "Sami did not learn programming. Write only the skills you really have."],
+    ["Languages", "Arabic, English", ""],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let found = 0;
+  const total = L.filter((x) => x[2]).length;
+  let sec = null;
+  L.forEach(([s, line, prob]) => {
+    if (s && s !== sec) { $("cv").appendChild(Kit.el("h4", {}, s)); sec = s; }
+    const d = Kit.el("div", { class: line.startsWith("<h3") ? "" : "l" }, line);
+    if (!line.startsWith("<h3")) d.addEventListener("click", () => {
+      if (d.classList.contains("bad") || d.classList.contains("fine")) return;
+      if (prob) { d.classList.add("bad"); found++; $("msg").textContent = "✓ " + prob; $("msg").className = "message good"; Kit.good(); }
+      else { d.classList.add("fine"); $("msg").textContent = "This line agrees with Sami's facts. It can stay."; $("msg").className = "message"; Kit.beep(300, 0.1); }
+      $("count").textContent = found < total ? `Problems found: ${found} of ${total}` : `🎉 All ${total} problems found. Fix them before you send the CV.`;
+    });
+    $("cv").appendChild(d);
+  });
+  $("count").textContent = `Problems found: 0 of ${total}`;
+})();
+</script>
+</body>
+</html>

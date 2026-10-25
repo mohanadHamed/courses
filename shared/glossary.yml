@@ -347,6 +347,641 @@ period:
   ar: الزمن الدوري
   def: The time of one full back-and-forth cycle of an oscillation or one full turn of a circular motion.
 
+matrix:
+  en: matrix
+  ar: المصفوفة
+  def: A rectangular table of numbers arranged in rows and columns, used in games to store data and transformations.
+
+matrix-row:
+  en: row (of a matrix)
+  ar: الصف
+  def: One horizontal line of entries in a matrix; rows are numbered from the top.
+
+matrix-column:
+  en: column (of a matrix)
+  ar: العمود
+  def: One vertical line of entries in a matrix; columns are numbered from the left.
+
+matrix-size:
+  en: size (dimensions) of a matrix
+  ar: أبعاد المصفوفة
+  def: The number of rows and the number of columns of a matrix, written rows × columns, for example 3 × 4.
+
+matrix-entry:
+  en: entry (element)
+  ar: عنصر المصفوفة
+  def: One number of a matrix; a₂₃ is the entry in row 2 and column 3.
+
+row-vector:
+  en: row vector
+  ar: المتجه الصفّي
+  def: A matrix with one row (size 1 × n), for example (3 5).
+
+column-vector:
+  en: column vector
+  ar: المتجه العمودي
+  def: A matrix with one column (size n × 1); game engines write positions and directions as column vectors.
+
+transpose:
+  en: transpose
+  ar: منقول المصفوفة
+  def: The matrix made by turning the rows into columns; the transpose of an m × n matrix has the size n × m.
+
+square-matrix:
+  en: square matrix
+  ar: المصفوفة المربعة
+  def: A matrix with as many rows as columns, for example 2 × 2 or 4 × 4.
+
+main-diagonal:
+  en: main diagonal
+  ar: القطر الرئيسي
+  def: The entries of a square matrix whose row number equals the column number (a₁₁, a₂₂, …), from the top left to the bottom right.
+
+matrix-addition:
+  en: matrix addition
+  ar: جمع المصفوفات
+  def: Adding two matrices of the same size entry by entry; the result has the same size.
+
+transformation-matrix:
+  en: transformation matrix
+  ar: مصفوفة التحويل
+  def: A matrix that a game engine stores for an object and uses to move, turn and scale its points.
+
+matrix-multiplication:
+  en: matrix multiplication
+  ar: ضرب المصفوفات
+  def: The product AB, in which each entry is a row of A times a column of B (a dot product); A needs as many columns as B has rows.
+
+identity-matrix:
+  en: identity matrix (I)
+  ar: مصفوفة الوحدة
+  def: The square matrix with 1 on the main diagonal and 0 everywhere else; multiplying by it changes nothing.
+
+inverse-matrix:
+  en: inverse matrix
+  ar: المصفوفة العكسية
+  def: The matrix A⁻¹ that undoes A, so that A A⁻¹ = A⁻¹ A = I; it exists only when the determinant is not 0.
+
+determinant:
+  en: determinant (det)
+  ar: المحدِّد
+  def: A number computed from a square matrix; for a 2 × 2 matrix with rows (a, b) and (c, d) it is ad − bc, and 0 means the matrix has no inverse.
+
+transformation:
+  en: transformation
+  ar: التحويل
+  def: A rule that moves every point of a shape in the same way, for example a translation, a rotation or a scaling.
+
+commutative:
+  en: commutative (order does not matter)
+  ar: تبديلي (إبدالي)
+  def: Said of an operation where the order does not change the result; matrix multiplication is not commutative, so AB and BA can differ.
+
+translation:
+  en: translation
+  ar: الإزاحة (الانسحاب)
+  def: A transformation that moves every point of a shape by the same vector (tx, ty), so that the shape moves without turning or changing size.
+
+scaling:
+  en: scaling
+  ar: التحجيم
+  def: A transformation that multiplies the coordinates by scale factors; a factor bigger than 1 makes a shape bigger, a factor between 0 and 1 makes it smaller.
+
+scale-factor:
+  en: scale factor
+  ar: معامل التحجيم
+  def: The number by which a scaling multiplies one coordinate; (sx, sy) = (2, 2) doubles the size, (1, 3) stretches only y.
+
+uniform-scaling:
+  en: uniform scaling
+  ar: التحجيم المنتظم
+  def: Scaling with the same factor for x and y (and z), so that the shape keeps its proportions.
+
+pivot:
+  en: pivot (pivot point)
+  ar: نقطة الارتكاز
+  def: The point that stays still when a shape is scaled or turned; engines often put it at the centre or at the feet of a sprite.
+
+vertex:
+  en: vertex (corner point)
+  ar: الرأس (نقطة الزاوية)
+  def: One corner point of a shape or a mesh; a transformation moves a shape by moving all its vertices.
+
+reflection:
+  en: reflection (mirror)
+  ar: الانعكاس
+  def: A transformation that mirrors a shape across a line; a scale factor of −1 on x mirrors it across the y-axis.
+
+composite-transformation:
+  en: composite transformation
+  ar: التحويل المركّب
+  def: Two or more transformations done one after the other; the order changes the result.
+
+rotation:
+  en: rotation
+  ar: الدوران
+  def: A transformation that turns every point of a shape by the same angle around a fixed point, without changing lengths.
+
+rotation-matrix:
+  en: rotation matrix
+  ar: مصفوفة الدوران
+  def: The 2 × 2 matrix with the rows (cos θ, −sin θ) and (sin θ, cos θ); multiplying a point by it turns the point by θ around the origin.
+
+homogeneous-coordinates:
+  en: homogeneous coordinates
+  ar: الإحداثيات المتجانسة
+  def: Coordinates with one extra number w, (x, y, 1) in 2D or (x, y, z, 1) in 3D, so that a translation can be written as a matrix.
+
+translation-matrix:
+  en: translation matrix
+  ar: مصفوفة الإزاحة
+  def: The 3 × 3 (2D) or 4 × 4 (3D) matrix with 1 on the main diagonal and the move (tx, ty) in the last column.
+
+local-space:
+  en: local space (object space)
+  ar: الفضاء المحلي (فضاء الجسم)
+  def: Coordinates measured from an object's own origin and axes, for example a cannon at (2, 1) on its ship.
+
+camera-space:
+  en: camera space (view space)
+  ar: فضاء الكاميرا
+  def: Coordinates measured from the camera, so that the camera is at the origin and looks along one axis.
+
+transform-hierarchy:
+  en: parent and child (hierarchy)
+  ar: التسلسل الهرمي (الأب والابن)
+  def: Objects attached to other objects; a child's world matrix is its parent's matrix times its own local matrix.
+
+trs-matrix:
+  en: TRS matrix
+  ar: مصفوفة TRS
+  def: The one matrix of an object made from its translation, rotation and scale, M = T × R × S; the scale acts first.
+
+rotation-axis:
+  en: rotation axis (yaw, pitch, roll)
+  ar: محور الدوران
+  def: The line that a 3D object turns around; turning around y is yaw (left and right), around x pitch (up and down), around z roll.
+
+proposition:
+  en: proposition
+  ar: قضية منطقية
+  def: A statement that is either true or false, but not both, such as “the player has the key”.
+
+truth-value:
+  en: truth value
+  ar: قيمة الصدق
+  def: The value of a proposition, true (T, 1) or false (F, 0).
+
+boolean-variable:
+  en: Boolean variable (bool)
+  ar: متغير منطقي
+  def: A variable in code that holds only true or false, such as bool hasKey.
+
+logical-operator:
+  en: logical operator
+  ar: عامل منطقي
+  def: A symbol that joins or changes propositions to make a new one, such as NOT, AND, OR, XOR and IF–THEN.
+
+negation:
+  en: negation (NOT, ¬)
+  ar: النفي
+  def: The operator that turns true into false and false into true; in C# it is written !.
+
+conjunction:
+  en: conjunction (AND, ∧)
+  ar: العطف (و)
+  def: The operator that is true only when both propositions are true; in C# it is written &&.
+
+disjunction:
+  en: disjunction (OR, ∨)
+  ar: الفصل (أو)
+  def: The operator that is true when at least one of the propositions is true; in C# it is written ||.
+
+exclusive-or:
+  en: exclusive or (XOR, ⊕)
+  ar: أو الحصرية
+  def: The operator that is true when exactly one of the two propositions is true.
+
+implication:
+  en: implication (IF–THEN, →)
+  ar: الاستلزام
+  def: The operator p → q, which is false only when p is true and q is false; it has the same value as ¬p ∨ q.
+
+compound-proposition:
+  en: compound proposition
+  ar: قضية مركبة
+  def: A proposition made from smaller propositions joined with logical operators, such as hasKey ∧ (hasTorch ∨ bossDead).
+
+operator-precedence:
+  en: operator precedence
+  ar: أولوية العوامل
+  def: The order in which operators are computed — NOT first, then AND, then OR; brackets change it.
+
+truth-table:
+  en: truth table
+  ar: جدول الصدق
+  def: A table that lists every combination of truth values of the variables and the value of a compound proposition in each one; n variables give 2^n rows.
+
+tautology:
+  en: tautology
+  ar: تحصيل حاصل (قضية صادقة دائماً)
+  def: A compound proposition that is true in every row of its truth table, such as p ∨ ¬p.
+
+contradiction:
+  en: contradiction
+  ar: تناقض
+  def: A compound proposition that is false in every row of its truth table, such as p ∧ ¬p.
+
+logical-equivalence:
+  en: logical equivalence (≡)
+  ar: التكافؤ المنطقي
+  def: Two compound propositions are equivalent when they have the same truth value in every row; then one can replace the other.
+
+boolean-algebra:
+  en: Boolean algebra
+  ar: الجبر البولياني
+  def: The rules for calculating with the values 1 (true) and 0 (false) and the operators AND, OR and NOT.
+
+de-morgan-laws:
+  en: De Morgan's laws
+  ar: قانونا دي مورغان
+  def: The laws ¬(p ∧ q) ≡ ¬p ∨ ¬q and ¬(p ∨ q) ≡ ¬p ∧ ¬q; a NOT in front of brackets swaps AND and OR.
+
+distributive-law:
+  en: distributive law
+  ar: قانون التوزيع
+  def: The laws p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) and p ∨ (q ∧ r) ≡ (p ∨ q) ∧ (p ∨ r).
+
+absorption-law:
+  en: absorption law
+  ar: قانون الامتصاص
+  def: The laws p ∨ (p ∧ q) ≡ p and p ∧ (p ∨ q) ≡ p.
+
+test-case:
+  en: test case
+  ar: حالة اختبار
+  def: One set of inputs with the result the program should give, such as one row of a truth table.
+
+guard-clause:
+  en: guard clause
+  ar: شرط الحماية
+  def: A check at the start of a function that leaves the function early when a condition fails, so the rest of the code needs fewer nested conditions.
+
+sufficient-condition:
+  en: sufficient condition
+  ar: الشرط الكافي
+  def: A condition p is sufficient for q when p → q is always true; if p happens, q surely happens.
+
+necessary-condition:
+  en: necessary condition
+  ar: الشرط الضروري
+  def: A condition q is necessary for p when p → q is always true; without q, p cannot happen.
+
+contrapositive:
+  en: contrapositive
+  ar: العكس النقيض
+  def: The contrapositive of p → q is ¬q → ¬p; it is always equivalent to p → q.
+
+decision-table:
+  en: decision table
+  ar: جدول القرار
+  def: A table with one row for each combination of conditions and the action the game takes in that case.
+
+else-if-chain:
+  en: else-if chain
+  ar: سلسلة الشروط المتتالية (else if)
+  def: A list of if and else if rules that are checked from the top; only the first rule whose condition is true runs.
+
+unreachable-rule:
+  en: unreachable rule
+  ar: قاعدة غير قابلة للوصول
+  def: A rule in an else-if chain that never runs, because the rules above it always catch its cases first.
+
+state-machine:
+  en: state machine
+  ar: آلة الحالات
+  def: A model of a game character with a few states, such as Patrol or Chase, and conditions that move it from one state to another.
+
+edge-case:
+  en: edge case
+  ar: حالة حدّية
+  def: A test case at the border of a rule, such as health exactly 30 when the rule says health < 30.
+
+probability:
+  en: probability
+  ar: الاحتمال
+  def: A number from 0 to 1 that says how likely an event is; 0 means impossible and 1 means certain.
+
+random-experiment:
+  en: random experiment
+  ar: التجربة العشوائية
+  def: An action whose result we cannot know in advance, such as rolling a die or opening a loot crate.
+
+outcome:
+  en: outcome
+  ar: النتيجة (الناتج)
+  def: One possible result of a random experiment, such as rolling a 4.
+
+sample-space:
+  en: sample space
+  ar: فضاء العينة
+  def: The set S of all possible outcomes of a random experiment; for one die S = {1, 2, 3, 4, 5, 6}.
+
+event:
+  en: event
+  ar: الحدث
+  def: A set of outcomes of a random experiment, such as rolling an even number = {2, 4, 6}.
+
+equally-likely-outcomes:
+  en: equally likely outcomes
+  ar: النتائج متساوية الاحتمال
+  def: Outcomes that all have the same chance; then P(A) is the number of outcomes in A divided by the number in S.
+
+complement-event:
+  en: complement of an event
+  ar: الحدث المتمم
+  def: The event not A, made of all outcomes that are not in A; P(not A) = 1 − P(A).
+
+mutually-exclusive-events:
+  en: mutually exclusive events
+  ar: الأحداث المتنافية
+  def: Events that cannot happen together, because they have no outcome in common.
+
+independent-events:
+  en: independent events
+  ar: الأحداث المستقلة
+  def: Events where the result of one does not change the chance of the other; then P(A and B) = P(A) × P(B).
+
+tree-diagram:
+  en: tree diagram
+  ar: المخطط الشجري
+  def: A diagram that shows the outcomes of an experiment in steps, with one branch for each outcome of each step.
+
+relative-frequency:
+  en: relative frequency
+  ar: التكرار النسبي
+  def: The number of times an event happened divided by the number of trials; an estimate of its probability.
+
+law-of-large-numbers:
+  en: law of large numbers
+  ar: قانون الأعداد الكبيرة
+  def: The rule that the relative frequency of an event comes closer to its probability when the number of trials grows.
+
+conditional-probability:
+  en: conditional probability
+  ar: الاحتمال الشرطي
+  def: The probability of A when we already know that B happened, written P(A | B) = P(A and B) / P(B).
+
+dependent-events:
+  en: dependent events
+  ar: الأحداث غير المستقلة (المرتبطة)
+  def: Events where the result of one changes the chance of the other, such as two cards drawn without putting the first back.
+
+multiplication-rule:
+  en: multiplication rule
+  ar: قاعدة الضرب
+  def: The rule P(A and B) = P(A) × P(B | A); for independent events P(B | A) = P(B).
+
+random-variable:
+  en: random variable
+  ar: المتغير العشوائي
+  def: A number that depends on the outcome of a random experiment, such as the coins in a loot crate.
+
+expected-value:
+  en: expected value
+  ar: القيمة المتوقعة
+  def: The long-run average of a random variable, E = x1·p1 + x2·p2 + …, each value times its probability.
+
+fair-game:
+  en: fair game
+  ar: اللعبة العادلة
+  def: A game of chance whose expected gain for the player is 0.
+
+pseudo-random-number:
+  en: pseudo-random number
+  ar: العدد شبه العشوائي
+  def: A number made by a fixed formula that only looks random; the same start gives the same numbers.
+
+prng:
+  en: pseudo-random number generator (PRNG)
+  ar: مولّد الأعداد شبه العشوائية
+  def: A formula or program that makes a long sequence of pseudo-random numbers from a start value.
+
+seed:
+  en: seed
+  ar: البذرة
+  def: The start value of a pseudo-random number generator; the same seed always gives the same sequence.
+
+lcg:
+  en: linear congruential generator (LCG)
+  ar: المولّد الخطي التطابقي
+  def: A simple PRNG with the rule x(n+1) = (a·x(n) + c) mod m.
+
+modulo:
+  en: modulo (mod)
+  ar: باقي القسمة
+  def: The remainder after a division, such as 17 mod 5 = 2.
+
+generator-period:
+  en: period of a generator
+  ar: دورة المولّد
+  def: The number of values a PRNG makes before the sequence repeats.
+
+procedural-generation:
+  en: procedural generation
+  ar: التوليد الإجرائي
+  def: Making game content such as levels or maps with rules and random numbers instead of by hand.
+
+probability-distribution:
+  en: probability distribution
+  ar: التوزيع الاحتمالي
+  def: The list of all values of a random variable with the probability of each one.
+
+uniform-distribution:
+  en: uniform distribution
+  ar: التوزيع المنتظم
+  def: A distribution in which every value has the same probability, such as the faces of a fair die.
+
+weighted-random:
+  en: weighted random choice
+  ar: الاختيار العشوائي الموزون
+  def: A random choice in which each option has a weight; its probability is its weight divided by the sum of all weights.
+
+weight:
+  en: weight
+  ar: الوزن (في الاختيار العشوائي)
+  def: A number that says how often an option should be chosen compared with the others.
+
+cumulative-weight:
+  en: cumulative weight
+  ar: الوزن التراكمي
+  def: The sum of the weights of an option and all options before it; used to pick an option from one random number.
+
+loot-table:
+  en: loot table
+  ar: جدول الغنائم
+  def: A table of the items an enemy or a chest can give, with the weight or the probability of each item.
+
+histogram:
+  en: histogram
+  ar: المدرج التكراري
+  def: A bar chart of how often each value (or each range of values) appeared.
+
+bell-curve:
+  en: bell-shaped distribution
+  ar: التوزيع الجرسي
+  def: A distribution with many values near the middle and few at the ends, such as the sum of several dice.
+
+drop-rate:
+  en: drop rate
+  ar: معدل الإسقاط
+  def: The probability that an enemy or a chest gives a certain item, often written in percent.
+
+pity-timer:
+  en: pity timer
+  ar: عدّاد الضمان
+  def: A rule that guarantees a rare item after a number of tries without it, or raises its chance step by step.
+
+game-balance:
+  en: game balance
+  ar: توازن اللعبة
+  def: Setting the numbers of a game, such as damage, prices and chances, so that it is fair, challenging and fun.
+
+hit-chance:
+  en: hit chance
+  ar: احتمال الإصابة
+  def: The probability that an attack hits its target.
+
+streak:
+  en: streak (run)
+  ar: سلسلة متتالية
+  def: Several equal results in a row, such as five misses one after another.
+
+gamblers-fallacy:
+  en: gambler's fallacy
+  ar: مغالطة المقامر
+  def: The wrong belief that a result is "due" after it has not happened for a while, although the tries are independent.
+
+hot-hand-fallacy:
+  en: hot-hand fallacy
+  ar: مغالطة اليد الساخنة
+  def: The wrong belief that a success makes the next success more likely, when the tries are independent.
+
+perceived-probability:
+  en: perceived probability
+  ar: الاحتمال المُدرَك
+  def: How likely a result feels to a player; it often differs from the real probability.
+
+critical-hit:
+  en: critical hit (crit)
+  ar: الضربة الحرجة
+  def: A rare attack that does extra damage, usually decided by a random chance.
+
+drought:
+  en: drought (dry streak)
+  ar: فترة الجفاف
+  def: A long run of tries without a wanted result, such as many attacks without a critical hit.
+
+shuffle-bag:
+  en: shuffle bag
+  ar: الكيس المخلوط
+  def: A random method that puts a fixed set of results in a bag, draws them in a shuffled order without putting them back, and refills the bag when it is empty.
+
+prd:
+  en: pseudo-random distribution (PRD)
+  ar: التوزيع شبه العشوائي
+  def: A method in which the chance of an event grows after each try without it and goes back to the start value after it happens.
+
+input-randomness:
+  en: input randomness
+  ar: العشوائية قبل القرار
+  def: Randomness that happens before the player decides, such as a random map or a card draw.
+
+output-randomness:
+  en: output randomness
+  ar: العشوائية بعد القرار
+  def: Randomness that decides the result after the player's choice, such as a hit roll.
+
+geometric-probability:
+  en: geometric probability
+  ar: الاحتمال الهندسي
+  def: The probability that a random point in a region falls into one part of it, computed as the area of the part divided by the area of the whole region.
+
+applied-problem:
+  en: applied problem
+  ar: مسألة تطبيقية
+  def: A problem from a real situation, such as a game scene, that needs several mathematical tools in a row to solve it.
+
+delta-time:
+  en: delta time (Δt)
+  ar: الزمن بين إطارين
+  def: The time between two frames, for example 1/60 s at 60 fps; multiplying by it makes movement the same at every frame rate.
+
+frame-rate-independence:
+  en: frame-rate independence
+  ar: الاستقلال عن معدل الإطارات
+  def: Movement that covers the same distance per second at 30, 60 or 144 frames per second, because each step is scaled by Δt.
+
+input-vector:
+  en: input vector
+  ar: متجه الإدخال
+  def: The direction that the player's keys or stick give, such as (1, 1) for right and up; it is normalized so that diagonals are not faster.
+
+acceleration:
+  en: acceleration
+  ar: التسارع
+  def: The change of velocity per second; the velocity grows by acceleration × Δt in each frame.
+
+damping:
+  en: damping (friction)
+  ar: التخميد (الاحتكاك)
+  def: A rule that makes the velocity a little smaller in every frame, so that an object slows down when the player lets go.
+
+reflection-vector:
+  en: reflected velocity (bounce)
+  ar: متجه الارتداد
+  def: The velocity after a bounce, v' = v − 2(v · n)n, where n is the unit normal of the wall.
+
+bounciness:
+  en: bounciness
+  ar: معامل الارتداد
+  def: A number from 0 to 1 that says how much of the speed towards a wall is kept after a bounce.
+
+team-roles:
+  en: team roles
+  ar: أدوار الفريق
+  def: The parts of a shared task that each member of a team takes, for example solver, checker and presenter.
+
+random-walk:
+  en: random walk (drunkard's walk)
+  ar: المشي العشوائي
+  def: A way to dig a cave on a grid - a walker moves one random step at a time and turns each visited tile into floor.
+
+level-generator:
+  en: level generator
+  ar: مولد المستويات
+  def: Code that builds a game level from random numbers and rules, so that each seed gives a different but valid level.
+
+rejection-sampling:
+  en: rejection sampling
+  ar: أخذ العينات بالرفض
+  def: Drawing random candidates again and again until one meets the rules, for example a chest at least five tiles from the start.
+
+flood-fill:
+  en: flood fill
+  ar: التعبئة بالفيضان
+  def: A method that starts on one tile and visits every tile it can reach through its neighbours, to check that all parts of a level are connected.
+
+event-table:
+  en: event table
+  ar: جدول الأحداث
+  def: A weighted list of the random events that can happen in a room or on a turn, with the weight of each one.
+
+generator-test:
+  en: generator test
+  ar: اختبار المولد
+  def: Running a level generator with many seeds and measuring its results, such as the share of valid levels and the average path length.
+
 # -------------------------------------------------------- computing-systems
 
 computing-system:
@@ -714,6 +1349,646 @@ sustained-performance:
   ar: الأداء المستمر
   def: The speed a device keeps during a long session, after it has warmed up, as opposed to its short peak speed.
 
+os-services:
+  en: services of an operating system
+  ar: خدمات نظام التشغيل
+  def: The jobs that an operating system does for every app - running processes, sharing memory, keeping files, controlling devices and checking permissions.
+
+multitasking:
+  en: multitasking
+  ar: تعدد المهام
+  def: Running several processes at the same time; on one core the operating system switches between them many times per second.
+
+scheduler:
+  en: scheduler
+  ar: المُجدوِل
+  def: The part of the operating system that decides which process runs on a CPU core next, and for how long.
+
+time-slice:
+  en: time slice
+  ar: الشريحة الزمنية
+  def: The short time (a few milliseconds) that the scheduler gives a process on a core before it switches to the next one.
+
+process-state:
+  en: process state (running, ready, waiting)
+  ar: حالة العملية
+  def: What a process is doing now - running on a core, ready and waiting for a core, or waiting for something else such as a file or the network.
+
+foreground-app:
+  en: foreground app
+  ar: التطبيق في المقدمة
+  def: The app that the user sees and uses now; the operating system gives it the most CPU time and memory.
+
+background-app:
+  en: background app
+  ar: التطبيق في الخلفية
+  def: An app that is open but not on the screen; a phone operating system pauses it and may close it to free memory.
+
+memory-management:
+  en: memory management
+  ar: إدارة الذاكرة
+  def: The job of the operating system that gives each process its own part of RAM, keeps the parts apart and takes memory back when a process ends.
+
+virtual-memory:
+  en: virtual memory (page file)
+  ar: الذاكرة الافتراضية
+  def: Space on the storage drive that a computer operating system uses as extra memory when RAM is full; it is much slower than RAM.
+
+task-manager:
+  en: Task Manager
+  ar: مدير المهام
+  def: The Windows tool (Ctrl + Shift + Esc) that shows the running processes and how much CPU, memory, disk and network each one uses.
+
+device-driver:
+  en: device driver
+  ar: برنامج تشغيل الجهاز
+  def: A small program that lets the operating system control one kind of hardware, such as a graphics card or a game controller.
+
+app-permission:
+  en: app permission
+  ar: إذن التطبيق
+  def: The right that a user gives an app to use something private, such as the camera, the microphone or the location.
+
+sandbox:
+  en: app sandbox
+  ar: بيئة العزل (الصندوق الرملي)
+  def: The closed area of storage and memory in which a mobile operating system runs each app, so that it cannot read the files of other apps.
+
+system-settings:
+  en: system settings
+  ar: إعدادات النظام
+  def: The app of the operating system where the user sees and changes the device's information, storage, battery, apps and permissions.
+
+file-system:
+  en: file system
+  ar: نظام الملفات
+  def: The part of the operating system that keeps files and folders on a drive - their names, places, sizes and dates.
+
+file-system-format:
+  en: file system format (NTFS, exFAT, APFS, ext4)
+  ar: صيغة نظام الملفات
+  def: The way a drive is organised; Windows uses NTFS, memory cards and USB sticks often exFAT, Apple devices APFS, and Android phones ext4 or F2FS.
+
+storage-block:
+  en: block (cluster)
+  ar: الكتلة (العنقود)
+  def: The smallest piece of a drive that the file system gives to a file, often 4 KB; a file always uses whole blocks.
+
+size-on-disk:
+  en: size on disk
+  ar: الحجم على القرص
+  def: The space that a file really takes on the drive - its size rounded up to whole blocks.
+
+file-metadata:
+  en: metadata (of a file)
+  ar: البيانات الوصفية للملف
+  def: Data about a file, not its content - its name, type, size, dates and permissions.
+
+system-resources:
+  en: system resources
+  ar: موارد النظام
+  def: The parts of a device that apps share and the operating system manages - CPU time, memory, storage, battery, network and devices.
+
+plug-and-play:
+  en: plug and play
+  ar: التوصيل والتشغيل
+  def: The way an operating system finds a new device when it is connected and loads its driver by itself.
+
+usb-mode:
+  en: USB mode (charging, file transfer)
+  ar: وضع الـ USB
+  def: The choice on a phone of what a USB cable does - only charge, transfer files, or transfer photos.
+
+game-build:
+  en: build (of a game)
+  ar: نسخة البناء
+  def: One finished version of a game made from the project, for one platform, with a version number, for example PocketQuest_1.2_android.
+
+test-device:
+  en: test device
+  ar: جهاز الاختبار
+  def: A real phone, tablet or computer that a team uses to try a game before players get it.
+
+kernel:
+  en: kernel
+  ar: النواة
+  def: The core of an operating system that runs directly on the hardware and manages processes, memory, drivers and power.
+
+software-stack:
+  en: software stack
+  ar: مكدس البرمجيات
+  def: The layers of software between the hardware and the apps, where each layer uses the services of the layer below it.
+
+hal:
+  en: hardware abstraction layer (HAL)
+  ar: طبقة تجريد العتاد
+  def: An Android layer that gives the upper layers one standard way to use hardware such as the camera, sensors and audio on any phone.
+
+android-runtime:
+  en: Android Runtime (ART)
+  ar: بيئة تشغيل أندرويد
+  def: The part of Android that runs the code of Android apps, compiled into instructions for the phone's CPU.
+
+app-framework:
+  en: app framework
+  ar: إطار التطبيقات
+  def: The layer of ready-made services (windows, notifications, permissions, touch) that apps call through the platform's programming interface.
+
+app-lifecycle:
+  en: app life cycle
+  ar: دورة حياة التطبيق
+  def: The states an app goes through (not running, foreground, background, suspended, ended) and the events that move it between them.
+
+api-level:
+  en: API level
+  ar: مستوى واجهة البرمجة
+  def: A number that names the version of the Android programming interface, so that an app can state the oldest Android version it supports.
+
+security-patch:
+  en: security patch
+  ar: تحديث أمني
+  def: A small update that closes security holes in the operating system; Android shows the date of the latest one.
+
+developer-options:
+  en: developer options
+  ar: خيارات المطوّر
+  def: A hidden Android settings menu, shown by tapping the build number seven times, with tools for developers and testers such as USB debugging.
+
+usb-debugging:
+  en: USB debugging
+  ar: تصحيح الأخطاء عبر USB
+  def: An Android setting that lets a connected computer install apps on the phone and read its log.
+
+beta-build:
+  en: beta build
+  ar: نسخة تجريبية
+  def: A test version of an app given to testers before it is published in the store, on iOS usually through TestFlight.
+
+runtime-permission:
+  en: runtime permission
+  ar: إذن وقت التشغيل
+  def: A permission that an app asks for while it runs, for example the camera or the location, which the user can allow, allow once or deny.
+
+power-saving-mode:
+  en: power-saving mode
+  ar: وضع توفير الطاقة
+  def: A mode (Battery saver on Android, Low Power Mode on iPhone) that makes the battery last longer by lowering the CPU speed, the frame rate and background work.
+
+focus-mode:
+  en: Do not disturb (Focus)
+  ar: عدم الإزعاج (التركيز)
+  def: A mode that silences calls and notifications for a time; on iPhone it is one of the Focus modes.
+
+market-share:
+  en: market share
+  ar: الحصة السوقية
+  def: The part of all devices (or of all sales) that one platform has, usually given in percent for a region and a month.
+
+developer-account:
+  en: developer account
+  ar: حساب المطوّر
+  def: The paid account that a studio needs to publish apps in a store, such as the Google Play Console or the Apple Developer Program.
+
+app-review:
+  en: app review
+  ar: مراجعة التطبيق
+  def: The check that a store makes before an app or an update is published, to see that it follows the store's rules.
+
+sideloading:
+  en: sideloading
+  ar: التثبيت الجانبي
+  def: Installing an app from a file or from another source, outside the official store of the platform.
+
+reliable-source:
+  en: reliable source
+  ar: مصدر موثوق
+  def: A source with a known author or organisation, a date and its data, such as the maker's official documentation.
+
+comparison-criteria:
+  en: comparison criteria
+  ar: معايير المقارنة
+  def: The points on which two things are compared, such as reach, cost, testing and updates.
+
+store-listing:
+  en: store listing
+  ar: صفحة المتجر
+  def: The page of an app in a store, with its name, icon, screenshots, description, category and age rating.
+
+app-signing:
+  en: app signing
+  ar: توقيع التطبيق
+  def: Adding a digital signature to a build with a secret key, so that the store and the phone know which developer made it and accept updates only from the same key.
+
+build-number:
+  en: build number (version code)
+  ar: رقم البناء
+  def: A number that must grow with every upload of a build to a store; players see a version name such as 1.0.1 instead.
+
+age-rating:
+  en: age rating
+  ar: التصنيف العمري
+  def: The minimum age for an app, which follows from the answers of the developer to the store's questionnaire about violence, language, purchases and more.
+
+privacy-policy:
+  en: privacy policy
+  ar: سياسة الخصوصية
+  def: A public text that says which data an app collects, why, and with whom it shares it; both stores require a link to it.
+
+staged-rollout:
+  en: staged rollout
+  ar: الإطلاق المرحلي
+  def: Releasing a new version to a small part of the players first, and to everyone later if no serious problems appear.
+
+store-guidelines:
+  en: store guidelines
+  ar: إرشادات المتجر
+  def: The rules that an app must follow to be published in a store, such as Apple's App Review Guidelines and the Google Play Developer Policy.
+
+loot-box:
+  en: loot box
+  ar: صندوق الغنائم
+  def: A paid item in a game that gives random rewards; the stores require the odds of each reward to be shown before the purchase.
+
+in-app-purchase:
+  en: in-app purchase
+  ar: الشراء داخل التطبيق
+  def: Buying digital items or features inside an app through the store's payment system.
+
+computer-network:
+  en: computer network
+  ar: شبكة الحاسوب
+  def: Two or more devices connected by cables or radio so that they can exchange data.
+
+lan:
+  en: LAN (local area network)
+  ar: الشبكة المحلية
+  def: A network in one small place, such as an office, a lab or a home.
+
+wan:
+  en: WAN (wide area network)
+  ar: الشبكة الواسعة
+  def: A network that connects places far apart, such as the offices of a company in two cities.
+
+internet:
+  en: Internet
+  ar: الإنترنت
+  def: The worldwide network of networks that all use the same protocols (TCP/IP).
+
+router:
+  en: router
+  ar: الموجّه (الراوتر)
+  def: A device that connects networks and sends each packet towards its destination, for example from the office LAN to the Internet.
+
+network-switch:
+  en: switch
+  ar: المبدّل (السويتش)
+  def: A device that connects the wired devices of one LAN and sends each frame only to the device it is for.
+
+access-point:
+  en: wireless access point
+  ar: نقطة الوصول اللاسلكية
+  def: A device that connects Wi-Fi devices to a wired LAN.
+
+ip-address:
+  en: IP address
+  ar: عنوان IP
+  def: The number that identifies a device on a network, such as 192.168.1.20 (IPv4).
+
+mac-address:
+  en: MAC address
+  ar: العنوان الفيزيائي (MAC)
+  def: The fixed address of a network card, such as 3C:52:82:1A:7F:04, used inside one LAN.
+
+dns:
+  en: DNS (Domain Name System)
+  ar: نظام أسماء النطاقات
+  def: The service that turns a name such as play.example.net into an IP address.
+
+network-packet:
+  en: packet
+  ar: الحزمة
+  def: A small piece of data with the addresses of the sender and the receiver; large data is sent as many packets.
+
+network-protocol:
+  en: protocol
+  ar: البروتوكول
+  def: A set of rules that devices follow to exchange data, such as TCP, UDP, HTTPS or DNS.
+
+tcp:
+  en: TCP
+  ar: بروتوكول التحكم بالنقل (TCP)
+  def: A transport protocol that checks that every packet arrives, in order, and sends lost packets again.
+
+udp:
+  en: UDP
+  ar: بروتوكول حزم بيانات المستخدم (UDP)
+  def: A fast transport protocol that sends packets without checking that they arrive; lost packets are not sent again.
+
+https:
+  en: HTTPS
+  ar: بروتوكول HTTPS
+  def: The protocol of web pages and many app services, encrypted so that others cannot read or change the data.
+
+ping-tool:
+  en: ping
+  ar: أمر ping
+  def: A tool that sends small test packets to a device and shows the time of each round trip and the lost packets.
+
+packet-loss:
+  en: packet loss
+  ar: فقدان الحزم
+  def: The share of packets that never arrive, in percent.
+
+jitter:
+  en: jitter
+  ar: التذبذب (عدم ثبات زمن الوصول)
+  def: How much the latency changes from one packet to the next.
+
+traceroute:
+  en: traceroute (tracert)
+  ar: تتبع المسار
+  def: A tool that lists the routers (hops) on the way to a destination with the time to each one.
+
+ipconfig:
+  en: ipconfig
+  ar: أمر ipconfig
+  def: A Windows tool that shows the IP address, the default gateway and the DNS server of a computer (ifconfig or ip on Linux and macOS).
+
+default-gateway:
+  en: default gateway
+  ar: البوابة الافتراضية
+  def: The router that a device sends its packets to when the destination is outside the LAN.
+
+nslookup:
+  en: nslookup
+  ar: أمر nslookup
+  def: A tool that asks a DNS server for the IP address of a name.
+
+speed-test:
+  en: speed test
+  ar: اختبار السرعة
+  def: A test that measures the download and upload bandwidth and the latency of an Internet connection.
+
+network-latency:
+  en: latency (ping time)
+  ar: زمن الوصول في الشبكة
+  def: The time a packet needs to travel to a device and back, in milliseconds (ms).
+
+cloud-computing:
+  en: cloud computing
+  ar: الحوسبة السحابية
+  def: Using computing power, storage and software from a provider over the Internet, when needed, and paying for what you use.
+
+data-centre:
+  en: data centre
+  ar: مركز البيانات
+  def: A building with thousands of servers, power, cooling and fast network links, run by a cloud provider.
+
+cloud-region:
+  en: cloud region
+  ar: المنطقة السحابية
+  def: A place in the world where a provider has data centres, such as Europe (Frankfurt); servers near the players give lower latency.
+
+iaas:
+  en: IaaS (Infrastructure as a Service)
+  ar: البنية التحتية كخدمة
+  def: A cloud model where you rent virtual machines, storage and networks and manage the operating system and the software yourself.
+
+paas:
+  en: PaaS (Platform as a Service)
+  ar: المنصة كخدمة
+  def: A cloud model where the provider runs the operating system and the runtime, and you upload only your code and data.
+
+saas:
+  en: SaaS (Software as a Service)
+  ar: البرمجيات كخدمة
+  def: A cloud model where you use a finished application in the browser or an app, such as online office software.
+
+baas:
+  en: BaaS (Backend as a Service)
+  ar: الواجهة الخلفية كخدمة
+  def: Ready cloud services for apps and games, such as player accounts, cloud saves and leaderboards, used through an SDK.
+
+virtual-machine:
+  en: virtual machine (VM)
+  ar: الآلة الافتراضية
+  def: A computer made in software on a real server; one server can run many virtual machines.
+
+public-cloud:
+  en: public cloud
+  ar: السحابة العامة
+  def: Cloud services that a provider sells to many customers over the Internet.
+
+private-cloud:
+  en: private cloud
+  ar: السحابة الخاصة
+  def: Cloud technology that serves only one organization, in its own or a rented data centre.
+
+hybrid-cloud:
+  en: hybrid cloud
+  ar: السحابة الهجينة
+  def: A mix of a private cloud (or own servers) and a public cloud that work together.
+
+scalability:
+  en: scalability (auto-scaling)
+  ar: قابلية التوسع (التوسع التلقائي)
+  def: The ability to add or remove servers as the number of users grows or falls; auto-scaling does it by itself.
+
+pay-as-you-go:
+  en: pay-as-you-go
+  ar: الدفع حسب الاستخدام
+  def: A way of paying in which the cost depends on how much you use, for example per server hour or per gigabyte.
+
+vendor-lock-in:
+  en: vendor lock-in
+  ar: الارتباط بمزوّد واحد
+  def: The problem that moving to another provider is hard and expensive because the system depends on one provider's special services.
+
+cloud-save:
+  en: cloud save
+  ar: الحفظ السحابي
+  def: Saving a player's progress on a server, so that it is safe and can be loaded on another device.
+
+object-storage:
+  en: object storage
+  ar: التخزين الكائني
+  def: Cloud storage for files (objects) such as pictures, videos and game asset bundles, reached by a web address.
+
+cdn:
+  en: CDN (content delivery network)
+  ar: شبكة توصيل المحتوى
+  def: Many servers around the world that keep copies of files, so that each player downloads from a near server.
+
+dedicated-server:
+  en: dedicated game server
+  ar: خادم اللعبة المخصص
+  def: A server that runs a match of a multiplayer game and decides what really happens, instead of one player's device.
+
+leaderboard:
+  en: leaderboard
+  ar: لوحة المتصدرين
+  def: A list of the best players and their scores, stored on a server.
+
+data-egress:
+  en: data transfer out (egress)
+  ar: نقل البيانات إلى الخارج
+  def: The data that leaves the cloud to the players, for example downloads; providers often charge for it per gigabyte.
+
+gaming-platform:
+  en: gaming platform
+  ar: منصة الألعاب
+  def: The hardware and software on which players play a game, such as a console, a gaming PC, a smartphone or a cloud gaming service.
+
+game-console:
+  en: game console
+  ar: جهاز الألعاب المنزلي
+  def: A computer made for games with the same fixed hardware for all players, connected to a TV or built into a handheld.
+
+gaming-pc:
+  en: gaming PC
+  ar: حاسوب الألعاب
+  def: A personal computer used for games; players have very different hardware, from weak laptops to strong desktop PCs.
+
+porting:
+  en: porting (a port)
+  ar: النقل إلى منصة أخرى
+  def: Adapting a game made for one platform so that it runs well on another platform.
+
+dev-kit:
+  en: development kit (dev kit)
+  ar: عدة التطوير
+  def: Special hardware and software from a platform maker that a studio needs to build and test games for that platform.
+
+certification:
+  en: certification
+  ar: الاعتماد (الفحص قبل النشر)
+  def: The checks that a platform maker runs on a game before it may be sold on that platform.
+
+cross-play:
+  en: cross-play
+  ar: اللعب عبر المنصات
+  def: Players on different platforms can play together in the same match.
+
+cross-save:
+  en: cross-save
+  ar: الحفظ عبر المنصات
+  def: A player's progress is shared between platforms, so they can continue on another device.
+
+free-to-play:
+  en: free-to-play
+  ar: مجاني اللعب
+  def: A business model in which the game is free to download and earns money from purchases or ads inside the game.
+
+premium-game:
+  en: premium game
+  ar: اللعبة المدفوعة
+  def: A business model in which players pay once to buy the game.
+
+decision-matrix:
+  en: decision matrix
+  ar: مصفوفة القرار
+  def: A table that scores options against weighted criteria, so that the total shows the best option.
+
+test-environment:
+  en: test environment
+  ar: بيئة الاختبار
+  def: Everything a team needs to test a game - the devices or emulators, the OS versions, the build, the tools and the test plan.
+
+emulator:
+  en: emulator
+  ar: المحاكي
+  def: Software that copies the hardware and the operating system of a device on a computer, so that the real app can run on it without the device.
+
+ios-simulator:
+  en: iOS Simulator
+  ar: محاكي iOS
+  def: A tool in Xcode on a Mac that runs iPhone and iPad apps built for the Mac's processor; it imitates iOS but does not copy the phone's hardware.
+
+android-studio:
+  en: Android Studio
+  ar: أندرويد ستوديو
+  def: The official program from Google for making Android apps; it includes the Android Emulator and the tools to manage virtual devices.
+
+avd:
+  en: Android Virtual Device (AVD)
+  ar: جهاز أندرويد افتراضي
+  def: A saved emulator setup with a device profile (screen size, RAM) and a system image (an Android version).
+
+system-image:
+  en: system image
+  ar: صورة النظام
+  def: A copy of one Android version for one processor type, which an emulator starts like a phone starts its OS.
+
+adb:
+  en: adb (Android Debug Bridge)
+  ar: جسر تصحيح أندرويد
+  def: A command-line tool that talks to an emulator or a phone with USB debugging, for example to list devices, install an app or read the log.
+
+apk:
+  en: APK (Android app package)
+  ar: حزمة تطبيق أندرويد
+  def: The file format of an Android app that can be installed directly on a device or an emulator for testing.
+
+logcat:
+  en: Logcat
+  ar: سجل أندرويد
+  def: The Android system log that shows messages and errors of the apps on a device or an emulator.
+
+device-farm:
+  en: device farm
+  ar: مزرعة الأجهزة
+  def: A cloud service with many real phones and tablets that a team can rent to run tests remotely.
+
+device-matrix:
+  en: device matrix
+  ar: مصفوفة الأجهزة
+  def: A table of the test devices a team chooses, so that the important OS versions, screen sizes and performance levels are covered.
+
+frame-time:
+  en: frame time
+  ar: زمن الإطار
+  def: The time one frame takes, in milliseconds; 60 fps means about 16.7 ms per frame, and a long frame is felt as a stutter.
+
+stutter:
+  en: stutter
+  ar: التقطع
+  def: A short freeze or jump in the picture, caused by single frames that take much longer than the others.
+
+one-percent-low:
+  en: 1 % low
+  ar: أدنى 1 %
+  def: The frame rate of the slowest 1 % of frames; it shows the stutters that the average frame rate hides.
+
+frame-rate-cap:
+  en: frame-rate cap
+  ar: سقف معدل الإطارات
+  def: A limit on the frame rate, for example 30 fps, that saves battery and heat and keeps the frame time steady.
+
+graphics-api:
+  en: graphics API
+  ar: واجهة برمجة الرسوميات
+  def: The interface through which a game talks to the GPU, such as Vulkan, OpenGL ES, Metal or DirectX; not every device supports every API.
+
+compatibility-matrix:
+  en: compatibility matrix
+  ar: مصفوفة التوافق
+  def: A table that shows which devices or OS versions a build supports and which tests passed on each.
+
+release-notes:
+  en: release notes
+  ar: ملاحظات الإصدار
+  def: The official list of changes in a new version of an OS, an engine or an app, which shows what may affect a game.
+
+project-brief:
+  en: project brief
+  ar: موجز المشروع
+  def: A short document that describes a project - its goal, its parts, the deliverables, the deadline and how it is marked.
+
+presentation-rubric:
+  en: presentation rubric
+  ar: معايير تقييم العرض
+  def: A table of the criteria and the marks for a presentation, so that the presenter knows what is expected.
+
 # ------------------------------------------------------------ digital-media
 
 digital-media:
@@ -995,6 +2270,646 @@ character-voice:
   en: character voice
   ar: صوت الشخصية
   def: The way one character speaks — the words, the length of the sentences and the tone — that makes the character sound different from the others.
+
+storyboard:
+  en: storyboard
+  ar: اللوحة القصصية (ستوري بورد)
+  def: A series of simple drawings (panels) that shows, shot by shot, what the camera will show in a scene or a cutscene, with short notes under each drawing.
+
+panel:
+  en: panel (frame of a storyboard)
+  ar: الإطار (لوحة مفردة)
+  def: One drawing of a storyboard; it shows one shot or one moment, with its number and a caption.
+
+panel-caption:
+  en: caption (of a panel)
+  ar: تعليق الإطار
+  def: The short notes under a panel - the action, the dialogue, the sound and the time.
+
+shot:
+  en: shot
+  ar: اللقطة
+  def: What the camera shows without a cut, described by how big the subject looks (shot size) and from where the camera looks (angle).
+
+wide-shot:
+  en: wide shot (establishing shot)
+  ar: اللقطة الواسعة (التأسيسية)
+  def: A shot that shows the whole place and the characters small in it; it tells the player where the scene happens.
+
+medium-shot:
+  en: medium shot
+  ar: اللقطة المتوسطة
+  def: A shot that shows a character from about the waist up; it shows actions and gestures.
+
+close-up:
+  en: close-up
+  ar: اللقطة القريبة
+  def: A shot in which the face (or one object) fills most of the frame; it shows feelings and important details.
+
+camera-angle:
+  en: camera angle
+  ar: زاوية الكاميرا
+  def: The height from which the camera looks - from above (high angle), at eye level, or from below (low angle).
+
+composition:
+  en: composition
+  ar: التكوين
+  def: The way the things in a frame are placed, so that the player looks at the right place first.
+
+rule-of-thirds:
+  en: rule of thirds
+  ar: قاعدة الأثلاث
+  def: A guide for composition - two lines across and two lines down split the frame in thirds, and the main subject is placed on a line or where two lines meet.
+
+lead-room:
+  en: lead room (looking room)
+  ar: مساحة الحركة أمام الشخصية
+  def: Empty space in the frame in front of a character, in the direction it looks or moves.
+
+screen-direction:
+  en: screen direction
+  ar: اتجاه الحركة على الشاشة
+  def: The direction in which a character moves or looks on the screen (left to right, or right to left); it must stay the same from panel to panel.
+
+180-degree-rule:
+  en: 180-degree rule
+  ar: قاعدة الـ180 درجة
+  def: A rule of continuity - the camera stays on one side of the line of action, so that characters keep their sides and their screen direction.
+
+thumbnail-sketch:
+  en: thumbnail sketch
+  ar: الرسم المصغّر
+  def: A small, fast drawing of a panel with simple shapes, made to plan the shot before any detailed art.
+
+camera-move:
+  en: camera move
+  ar: حركة الكاميرا
+  def: A movement of the camera during a shot, for example a pan (it turns to the side) or a zoom (it comes closer); drawn as an arrow in the panel.
+
+gameplay-storyboard:
+  en: gameplay storyboard
+  ar: اللوحة القصصية للعب
+  def: A storyboard of a moment that the player plays - it shows the player's view, the HUD, what the player does and how the game answers.
+
+hud:
+  en: HUD (heads-up display)
+  ar: واجهة العرض العلوية (HUD)
+  def: The information that a game shows on top of the picture while the player plays, for example lives, score and a map.
+
+player-input:
+  en: player input
+  ar: مدخلات اللاعب
+  def: What the player does to control the game - a tap, a swipe, a button or a tilt; drawn in a gameplay panel as an icon.
+
+animatic:
+  en: animatic
+  ar: الأنيماتيك (لوحة قصصية متحركة)
+  def: The panels of a storyboard played one after the other with their times and simple sound, to check the pacing before production.
+
+pacing:
+  en: pacing
+  ar: الإيقاع
+  def: How fast or slow the moments of a scene follow each other, set by the time of each shot.
+
+storyboard-template:
+  en: storyboard template
+  ar: قالب اللوحة القصصية
+  def: A ready page or file with empty 16:9 frames and caption lines, on paper or in a program such as PowerPoint.
+
+beat-sheet:
+  en: beat list (beat sheet)
+  ar: قائمة اللحظات
+  def: A numbered list of the beats of a scene, each with what changes, written before the panels are drawn.
+
+fail-state:
+  en: fail state
+  ar: حالة الإخفاق
+  def: What the game shows when the player does not succeed, for example a splash, a lost life and a second try.
+
+sound-wave:
+  en: sound wave
+  ar: موجة صوتية
+  def: A vibration of the air that travels to the ear; its frequency gives the pitch and its amplitude the loudness.
+
+frequency:
+  en: frequency (Hz)
+  ar: التردد
+  def: The number of vibrations of a sound wave per second, measured in hertz (Hz); a higher frequency sounds higher.
+
+decibel:
+  en: decibel (dB)
+  ar: الديسيبل
+  def: The unit of loudness levels; in an audio editor 0 dB is the loudest level a file can hold and quieter levels are negative.
+
+sample-rate:
+  en: sample rate
+  ar: معدل أخذ العينات
+  def: The number of times per second that a recording measures the sound wave, for example 48000 per second (48 kHz).
+
+bit-depth:
+  en: bit depth
+  ar: عمق البت
+  def: The number of bits that store each sample; more bits give more levels and less noise (16-bit gives 65536 levels).
+
+mono-stereo:
+  en: mono and stereo
+  ar: أحادي وستيريو
+  def: Mono audio has one channel; stereo audio has two channels, left and right, and twice the size.
+
+uncompressed-audio:
+  en: uncompressed audio (WAV)
+  ar: صوت غير مضغوط
+  def: Audio that keeps every sample as it is, such as a WAV file; it plays at once but is large.
+
+lossy-compression:
+  en: lossy compression
+  ar: ضغط مع فقدان
+  def: Compression that removes sound details people hardly hear, such as MP3 or OGG, so that a file is about ten times smaller.
+
+clipping:
+  en: clipping
+  ar: القص (التشبع)
+  def: Distortion that happens when a sound is louder than 0 dB, so that the tops of the wave are cut flat.
+
+input-level:
+  en: input level
+  ar: مستوى الإدخال
+  def: How loud the microphone signal comes into the recorder; good peaks are near −6 dB, never at 0 dB.
+
+take:
+  en: take
+  ar: لقطة تسجيل
+  def: One recording of a sound; a sound designer usually records several takes and keeps the best.
+
+audio-editor:
+  en: audio editor
+  ar: محرر الصوت
+  def: A program that records, cuts, cleans and exports sound, such as Audacity.
+
+trim-audio:
+  en: trim
+  ar: التقليم
+  def: To cut away the unwanted parts at the start or the end of a recording.
+
+fade:
+  en: fade in and fade out
+  ar: الظهور والتلاشي التدريجي
+  def: A smooth rise of the volume from silence at the start, or a smooth fall to silence at the end.
+
+normalize:
+  en: normalize
+  ar: التسوية
+  def: To raise or lower the whole recording so that its loudest peak reaches a chosen level, such as −1 dB.
+
+noise-reduction:
+  en: noise reduction
+  ar: تقليل الضجيج
+  def: An effect that learns a steady noise from a silent part (the noise profile) and removes it from the whole recording.
+
+tempo:
+  en: tempo (BPM)
+  ar: الإيقاع (نبضة في الدقيقة)
+  def: The speed of music in beats per minute; at 120 BPM one beat lasts 0.5 seconds.
+
+music-bar:
+  en: bar
+  ar: المازورة
+  def: A group of beats in music, usually 4; at 120 BPM a bar of 4 beats lasts 2 seconds.
+
+seamless-loop:
+  en: seamless loop
+  ar: حلقة متصلة
+  def: A piece of music or sound that can repeat with no gap and no click, because it ends exactly where it starts.
+
+loop-point:
+  en: loop point
+  ar: نقطة التكرار
+  def: The place where a loop ends and starts again.
+
+adaptive-music:
+  en: adaptive music
+  ar: الموسيقى التكيفية
+  def: Game music that changes with the game state, for example by adding or removing layers.
+
+music-layer:
+  en: layer (stem)
+  ar: طبقة موسيقية
+  def: One part of a piece of music, such as the drums or the melody, kept as its own track so that the game can turn it on or off.
+
+stinger:
+  en: stinger
+  ar: مقطع تنبيهي
+  def: A short musical phrase, one to three seconds long, that marks one event in a game.
+
+foley:
+  en: foley
+  ar: مؤثرات فولي
+  def: Sound effects recorded by performing actions with real objects, such as a towel for a cat jumping.
+
+sound-layering:
+  en: sound layering
+  ar: طبقات الصوت
+  def: Making one sound effect from several sounds played together, such as a thump, a splash and drops.
+
+sound-variation:
+  en: sound variation
+  ar: تنويع الصوت
+  def: Small changes of a sound each time it plays, such as several takes and a random pitch, so that it does not sound repetitive.
+
+step-sequencer:
+  en: step sequencer
+  ar: المتسلسل الخطوي
+  def: A music tool with a grid of steps in time, where each cell turns a sound on or off.
+
+audio-mix:
+  en: mix
+  ar: المزج الصوتي
+  def: The balance of all sounds that play at once, set with the volume (level), the position and the effects of each sound or group.
+
+mixer-group:
+  en: mixer group (bus)
+  ar: مجموعة المازج
+  def: A channel that joins sounds of one kind, such as music, effects, voices or interface, so that their level can be set together.
+
+master-level:
+  en: master level
+  ar: المستوى الرئيسي
+  def: The level of the final mix of all groups; it must stay below 0 dB, or the sound clips.
+
+ducking:
+  en: ducking
+  ar: الخفض التلقائي
+  def: Lowering one group, usually the music, while a more important sound such as a voice plays, and raising it again afterwards.
+
+panning:
+  en: panning
+  ar: التوزيع يمينًا ويسارًا
+  def: Placing a sound between the left and the right speaker.
+
+spatial-audio:
+  en: 3D sound (spatial audio)
+  ar: الصوت ثلاثي الأبعاد
+  def: Sound that the game engine places and changes by itself from the positions of the sound source and the listener.
+
+distance-falloff:
+  en: distance falloff
+  ar: التلاشي مع المسافة
+  def: The drop of a sound's volume as the distance between the source and the listener grows.
+
+audio-streaming:
+  en: audio streaming
+  ar: البث الصوتي التدفقي
+  def: Playing a long sound file while it is read from storage, instead of loading it all into memory first.
+
+audio-critique:
+  en: critique
+  ar: النقد البنّاء
+  def: Feedback on a piece of work that names the moment, explains the effect on the player and suggests a change.
+
+visual-cue:
+  en: visual cue
+  ar: إشارة بصرية
+  def: A picture or animation that shows the information of an important sound, for players who cannot hear it.
+
+digital-video:
+  en: digital video
+  ar: الفيديو الرقمي
+  def: A series of still pictures (frames) shown quickly one after another, usually with sound, stored as numbers.
+
+video-frame-rate:
+  en: video frame rate
+  ar: معدل إطارات الفيديو
+  def: The number of frames a video shows per second, such as 24, 30 or 60 fps.
+
+aspect-ratio:
+  en: aspect ratio
+  ar: نسبة العرض إلى الارتفاع
+  def: The width of a picture compared with its height, such as 16:9 (wide), 9:16 (tall) or 1:1 (square).
+
+video-codec:
+  en: video codec
+  ar: ترميز الفيديو (الكوديك)
+  def: The method that compresses and decompresses video, such as H.264, H.265 (HEVC), VP9 or AV1.
+
+video-container:
+  en: container format
+  ar: صيغة الحاوية
+  def: The file format that holds the video, the audio and information together, such as MP4, MOV or WebM.
+
+bitrate:
+  en: bitrate
+  ar: معدل البت
+  def: The amount of data used for one second of video or audio, in Mbit/s or kbit/s; with the length it decides the file size.
+
+key-frame:
+  en: key frame (I-frame)
+  ar: الإطار المفتاحي
+  def: A frame stored as a whole picture; the frames between key frames store only what changed.
+
+video-editor:
+  en: video editor (NLE)
+  ar: محرر الفيديو
+  def: A program that arranges clips on a timeline without changing the original files (a non-linear editor).
+
+media-pool:
+  en: media pool (bin)
+  ar: مكتبة الوسائط
+  def: The panel of a video editor that lists the imported clips, sounds and pictures of a project.
+
+timeline:
+  en: timeline
+  ar: الخط الزمني
+  def: The panel of a video editor where clips are placed in order on tracks, from left (start) to right (end).
+
+playhead:
+  en: playhead
+  ar: مؤشر التشغيل
+  def: The line on the timeline that marks the frame shown in the viewer.
+
+video-track:
+  en: track
+  ar: المسار
+  def: One row of the timeline; video tracks higher up cover the lower ones, audio tracks play together.
+
+video-clip:
+  en: clip
+  ar: المقطع
+  def: One piece of video, audio or a picture on the timeline.
+
+split-clip:
+  en: split (blade, razor)
+  ar: القص (التقسيم)
+  def: Cutting a clip into two parts at the playhead.
+
+trim-clip:
+  en: trim
+  ar: تشذيب المقطع
+  def: Making a clip shorter or longer by dragging its start or its end.
+
+inspector:
+  en: inspector
+  ar: لوحة الخصائص
+  def: The panel that shows the settings of the selected clip, such as size, position, opacity and volume.
+
+export-preset:
+  en: export preset
+  ar: إعداد التصدير الجاهز
+  def: A saved set of export settings, such as MP4, H.264, 1920 × 1080, 30 fps.
+
+hard-cut:
+  en: cut (hard cut)
+  ar: القطع المباشر
+  def: The change from one clip to the next without any effect; the most common edit.
+
+cut-on-action:
+  en: cut on action
+  ar: القطع أثناء الحركة
+  def: A cut in the middle of a movement, so that the movement seems to continue in the next shot and the cut is hardly seen.
+
+jump-cut:
+  en: jump cut
+  ar: القطع القافز
+  def: A cut between two very similar shots of the same subject, which makes the picture jump; usually a mistake, sometimes a style.
+
+video-transition:
+  en: video transition
+  ar: الانتقال بين اللقطات
+  def: An effect between two clips, such as a cross dissolve, a dip to black or a wipe.
+
+cross-dissolve:
+  en: cross dissolve
+  ar: التلاشي المتداخل
+  def: A transition in which the first clip fades out while the next fades in, often used to show that time passes.
+
+title-safe-area:
+  en: title safe area
+  ar: المنطقة الآمنة للعناوين
+  def: The inner part of the frame where text is never cut off on any screen; text stays inside it.
+
+colour-correction:
+  en: colour correction
+  ar: تصحيح الألوان
+  def: Changing the brightness, contrast, white balance and saturation of clips so that they look right and match each other.
+
+speed-change:
+  en: speed change (slow motion)
+  ar: تغيير السرعة (الحركة البطيئة)
+  def: Playing a clip slower or faster; smooth slow motion needs a clip recorded at a higher frame rate.
+
+video-keyframe:
+  en: keyframe (animation)
+  ar: الإطار المفتاحي للحركة
+  def: A point on the timeline where a setting such as zoom or position has a fixed value; the editor animates between keyframes.
+
+promo-clip:
+  en: promotional clip (promo)
+  ar: المقطع الترويجي
+  def: A short video that makes people want to play a game, such as a trailer for a store page or social media.
+
+call-to-action:
+  en: call to action
+  ar: الدعوة إلى الإجراء
+  def: The end of a promo that tells viewers what to do, such as "Play free now" with the name of the game.
+
+shot-list:
+  en: shot list
+  ar: قائمة اللقطات
+  def: A table of the shots of a video in order, with their content and length.
+
+intellectual-property:
+  en: intellectual property
+  ar: الملكية الفكرية
+  def: Creations of the mind, such as art, music, code, names and inventions, that the law protects so that their owners control how they are used.
+
+copyright:
+  en: copyright
+  ar: حق المؤلف
+  def: The right of a creator to control the copying, sharing and changing of an original work; it starts automatically when the work is made.
+
+copyright-holder:
+  en: copyright holder
+  ar: صاحب حق المؤلف
+  def: The person or company that owns the copyright of a work, for example the artist, or the studio that employed the artist.
+
+licence:
+  en: licence
+  ar: الترخيص
+  def: Permission from the copyright holder to use a work under stated conditions, such as where, for how long and with which credit.
+
+all-rights-reserved:
+  en: all rights reserved
+  ar: جميع الحقوق محفوظة
+  def: The default for a work with copyright; nobody may copy, share or change it without the permission of the copyright holder.
+
+public-domain:
+  en: public domain
+  ar: الملك العام
+  def: Works that nobody owns any more, for example because the copyright has expired or the creator gave it up; anyone may use them.
+
+creative-commons:
+  en: Creative Commons licence
+  ar: رخصة المشاع الإبداعي
+  def: A set of standard licences, such as CC BY or CC BY-NC, that let anyone use a work under simple conditions.
+
+attribution:
+  en: attribution (credit)
+  ar: الإسناد (ذكر المصدر)
+  def: Naming the creator, the title, the source and the licence of a work that you use.
+
+fair-use:
+  en: fair use (fair dealing)
+  ar: الاستخدام العادل
+  def: Legal exceptions that allow limited use of a work without permission, for example for criticism, teaching or parody; they depend on the country and on each case.
+
+trademark:
+  en: trademark
+  ar: العلامة التجارية
+  def: A protected name, logo or sign that shows which company a product comes from.
+
+patent:
+  en: patent
+  ar: براءة الاختراع
+  def: A protection of an invention, such as a new technical method, for a limited time.
+
+derivative-work:
+  en: derivative work
+  ar: العمل المشتق
+  def: A new work based on an existing work, such as a remix, a translation or fan art; it usually needs the permission of the copyright holder.
+
+work-for-hire:
+  en: work for hire
+  ar: العمل مقابل أجر
+  def: Work made by an employee, or by a freelancer under a contract, whose copyright belongs to the company that paid for it.
+
+royalty-free:
+  en: royalty-free
+  ar: خالٍ من الإتاوات
+  def: A licence paid once, or free, that allows use without paying again for each copy sold; it does not mean free of copyright.
+
+rights-clearance:
+  en: rights clearance
+  ar: تصفية الحقوق
+  def: Checking and getting the permissions for every asset before a product is published.
+
+takedown-notice:
+  en: takedown notice
+  ar: إشعار الإزالة
+  def: A request from a copyright holder to a store or a website to remove content that uses a work without permission.
+
+open-asset:
+  en: open asset
+  ar: الأصل المفتوح
+  def: Art, sound, music, a font or code that its creator shares under an open licence, such as CC0, CC BY or an open-source licence.
+
+asset-library:
+  en: asset library
+  ar: مكتبة الأصول
+  def: A website or store that offers many assets with their licences, free or paid.
+
+tasl:
+  en: TASL (title, author, source, licence)
+  ar: عنوان، مؤلف، مصدر، ترخيص
+  def: A simple rule for a correct credit - the title of the work, its author, the source (a link) and the licence.
+
+credits-screen:
+  en: credits screen
+  ar: شاشة الاعتمادات
+  def: The part of a game that names the people who made it and the creators and licences of the assets it uses.
+
+credits-file:
+  en: credits file
+  ar: ملف الاعتمادات
+  def: A text file in the project that lists every asset with its TASL details, so that the credits screen and the audit can use it.
+
+permissive-licence:
+  en: permissive licence
+  ar: الترخيص المتساهل
+  def: An open-source licence, such as MIT, that allows use in any product if the copyright notice is kept.
+
+copyleft:
+  en: copyleft
+  ar: الحقوق المتروكة
+  def: An open licence, such as GPL or CC BY-SA, that requires changed versions to be shared under the same licence.
+
+open-font-licence:
+  en: SIL Open Font License (OFL)
+  ar: رخصة الخطوط المفتوحة
+  def: A licence for fonts that allows using and embedding the font in a game for free, but not selling the font by itself.
+
+asset-inventory:
+  en: asset inventory
+  ar: جرد الأصول
+  def: A complete list of all assets in a project, with the file name, the type and where each one came from.
+
+licence-audit:
+  en: licence audit
+  ar: تدقيق التراخيص
+  def: A check of every asset in a project against its licence, which marks each one as cleared, to fix, or to replace.
+
+media-package:
+  en: media package
+  ar: الحزمة الإعلامية
+  def: A set of finished media for one part of a game - for example a storyboard, a sound set, a promo clip and a credits file - made to one brief.
+
+production-brief:
+  en: production brief
+  ar: موجز الإنتاج
+  def: A short document that says what to make, for whom, in which format and length, and by when.
+
+production-role:
+  en: production role
+  ar: دور الإنتاج
+  def: The job of one member of a production team, such as producer, artist, sound designer or video editor.
+
+production-schedule:
+  en: production schedule
+  ar: جدول الإنتاج
+  def: A plan of the production tasks in order, with who does each one and when, so that each task gets what it needs in time.
+
+handoff:
+  en: handoff
+  ar: التسليم
+  def: The moment one team member passes finished work, such as a storyboard or a sound file, to the next member who needs it.
+
+naming-convention:
+  en: naming convention
+  ar: قاعدة التسمية
+  def: A fixed rule for file names, for example storm_sfx_thunder_v02.wav, so that every team member finds and recognises the right file.
+
+production-log:
+  en: production log
+  ar: سجل الإنتاج
+  def: A dated record of what was made, by whom, which decisions were taken, and which problems were solved.
+
+quality-review:
+  en: quality review
+  ar: مراجعة الجودة
+  def: A check of finished media against the brief and quality criteria, before it is delivered.
+
+constructive-feedback:
+  en: constructive feedback
+  ar: الملاحظات البناءة
+  def: Feedback that names what works, what to improve and how, with examples, so that the maker can act on it.
+
+quality-criterion:
+  en: quality criterion
+  ar: معيار الجودة
+  def: One question that a reviewer uses to judge media, such as whether it fits the gameplay, with the evidence that answers it.
+
+team-presentation:
+  en: team presentation
+  ar: العرض الجماعي
+  def: A short talk in which every member of a production team presents the part of their own role.
+
+action-list:
+  en: action list
+  ar: قائمة الإجراءات
+  def: A list of the changes to make after feedback, each with an owner and a priority.
+
+final-delivery:
+  en: final delivery
+  ar: التسليم النهائي
+  def: The last, checked version of a package, handed over in one folder with its credits and review.
 
 # ------------------------------------------------------------ digital-skills
 
@@ -1387,3 +3302,413 @@ table-of-contents:
   en: table of contents
   ar: جدول المحتويات
   def: A list of the headings of a document with their page numbers, which Word makes from the heading styles.
+
+first-draft:
+  en: first draft
+  ar: المسودة الأولى
+  def: The first version of a text; an AI tool can write it fast, and you then check it, change it and format it.
+
+summary:
+  en: summary
+  ar: الملخّص
+  def: A short text that keeps only the main points of a longer text.
+
+rewrite:
+  en: rewrite
+  ar: إعادة الصياغة
+  def: Saying the same thing in other words, for example shorter, simpler or in another tone.
+
+machine-translation:
+  en: machine translation
+  ar: الترجمة الآلية
+  def: A translation made by a computer program or an AI tool; it is fast, but names, numbers and meanings must be checked.
+
+check-ai-output:
+  en: checking AI output
+  ar: التحقق من مخرجات الذكاء الاصطناعي
+  def: Reading what an AI tool wrote and comparing it with the facts and the original text before you use it.
+
+copilot-in-office:
+  en: Copilot in Word, Excel and PowerPoint
+  ar: Copilot داخل تطبيقات Office
+  def: The AI assistant inside Microsoft Office apps (if your account has it); it drafts, sums up and rewrites in the app.
+
+formal-letter:
+  en: formal letter
+  ar: الرسالة الرسمية
+  def: A letter to a company, a school or an office, with fixed parts and a polite, clear tone.
+
+subject-line:
+  en: subject line
+  ar: سطر الموضوع
+  def: One short line at the top of a letter or an e-mail that says what it is about, for example "Subject - Request for a training place".
+
+letter-greeting:
+  en: greeting and closing
+  ar: التحية والختام
+  def: The polite first words of a letter (Dear Ms Rana,) and its last words before the name (Yours sincerely,).
+
+cv:
+  en: CV (curriculum vitae)
+  ar: السيرة الذاتية
+  def: A one- or two-page document about you for a job or a training place - contact details, a short profile, education, skills and experience.
+
+cv-profile:
+  en: profile (in a CV)
+  ar: النبذة الشخصية
+  def: Two or three sentences at the top of a CV that say who you are and what you can do.
+
+cell-address:
+  en: cell address
+  ar: عنوان الخلية
+  def: The name of a cell - its column letter and row number, for example B3.
+
+cell-range:
+  en: range
+  ar: النطاق
+  def: A block of cells written with its first and last cell, for example B2:B6.
+
+formula:
+  en: formula
+  ar: الصيغة (المعادلة)
+  def: A calculation in a cell that starts with =, for example =B2*C2; the cell shows the result.
+
+formula-bar:
+  en: formula bar
+  ar: شريط الصيغة
+  def: The bar above the sheet that shows what is really in the selected cell, for example the formula.
+
+function:
+  en: function (in Excel)
+  ar: الدالة
+  def: A ready formula with a name, for example SUM, AVERAGE, MAX and MIN, used on a range.
+
+relative-reference:
+  en: relative reference
+  ar: المرجع النسبي
+  def: A cell address like B2 that changes when you copy the formula to another row or column.
+
+absolute-reference:
+  en: absolute reference
+  ar: المرجع المطلق
+  def: A cell address with $ signs, like $F$1, that stays the same when you copy the formula.
+
+fill-handle:
+  en: fill handle
+  ar: مقبض التعبئة
+  def: The small square at the corner of a selected cell; drag it (or double-click it) to copy the cell to the cells next to it.
+
+autosum:
+  en: AutoSum
+  ar: الجمع التلقائي
+  def: The Σ button on the Home tab that writes a SUM formula for the numbers above or beside a cell.
+
+number-format:
+  en: number format
+  ar: تنسيق الأرقام
+  def: How a number looks in a cell - for example 36%, 55.00 JD or 11/11/2026; the value itself does not change.
+
+budget:
+  en: budget
+  ar: الميزانية
+  def: A plan of the money that comes in (income) and goes out (expenses) in a month.
+
+sort-data:
+  en: sort
+  ar: الفرز
+  def: To put the rows of a table in order by one column, for example from the largest total to the smallest; each row moves as a whole.
+
+filter-data:
+  en: filter
+  ar: التصفية
+  def: To show only the rows that match a choice, for example only the drinks; the other rows are hidden, not deleted.
+
+conditional-formatting:
+  en: conditional formatting
+  ar: التنسيق الشرطي
+  def: A rule that colours cells by themselves when their value matches, for example every total greater than 20.
+
+chart:
+  en: chart
+  ar: مخطط بياني
+  def: A picture of numbers from a sheet, such as columns, a line or a pie, that makes them easy to compare.
+
+column-chart:
+  en: column chart
+  ar: مخطط عمودي
+  def: A chart with one column for each item; the tallest column is the biggest amount.
+
+line-chart:
+  en: line chart
+  ar: مخطط خطي
+  def: A chart with points joined by a line, used to show how a number changes over time.
+
+pie-chart:
+  en: pie chart
+  ar: مخطط دائري
+  def: A circle cut into parts, used to show the part of each item in one whole.
+
+chart-title:
+  en: chart title
+  ar: عنوان المخطط
+  def: The text above a chart that says what the chart shows.
+
+data-cleaning:
+  en: data cleaning
+  ar: تنظيف البيانات
+  def: Fixing a table before you use it, for example removing empty and duplicate rows, extra spaces and numbers stored as text.
+
+duplicate-row:
+  en: duplicate row
+  ar: صف مكرر
+  def: A row that has exactly the same values as another row, often typed twice by mistake.
+
+sumif:
+  en: SUMIF
+  ar: الدالة SUMIF
+  def: An Excel function that adds only the numbers whose row matches a rule, for example =SUMIF(C2:C11,"Drinks",E2:E11).
+
+countif:
+  en: COUNTIF
+  ar: الدالة COUNTIF
+  def: An Excel function that counts the cells that match a rule, for example =COUNTIF(E2:E11,">20").
+
+slide-layout:
+  en: slide layout
+  ar: تخطيط الشريحة
+  def: The plan of a slide, with boxes for the title, the text and pictures, such as Title Slide or Title and Content.
+
+placeholder:
+  en: placeholder
+  ar: العنصر النائب
+  def: A box on a slide with a hint such as “Click to add title”, where you type text or put a picture.
+
+theme:
+  en: theme
+  ar: النسق
+  def: A set of colours, fonts and backgrounds that gives all slides the same look.
+
+designer:
+  en: Designer (Design Ideas)
+  ar: المصمم (أفكار التصميم)
+  def: A PowerPoint tool that suggests ready designs for a slide; it is available only with some accounts.
+
+colour-contrast:
+  en: colour contrast
+  ar: تباين الألوان
+  def: The difference between the colour of the text and of the background; strong contrast is easy to read.
+
+slide-transition:
+  en: transition
+  ar: الانتقال بين الشرائح
+  def: The effect when one slide changes to the next, such as Fade or Push.
+
+speaker-notes:
+  en: speaker notes
+  ar: ملاحظات المتحدث
+  def: Notes under a slide that only the speaker sees, with what to say.
+
+presenter-view:
+  en: Presenter View
+  ar: طريقة عرض مقدم العرض
+  def: The screen that the speaker sees during a slide show, with the notes, the next slide and a timer.
+
+slide-show:
+  en: slide show
+  ar: عرض الشرائح
+  def: Showing the slides on the full screen, one after the other, during a talk.
+
+presentation-outline:
+  en: presentation outline
+  ar: مخطط العرض التقديمي
+  def: The list of slide titles and their main points, in order, before the slides are designed.
+
+outline-view:
+  en: Outline view
+  ar: عرض المخطط التفصيلي
+  def: A view of PowerPoint (View › Outline) that shows the titles and points of all slides as text; a new line at the left edge becomes a new slide.
+
+ai-image:
+  en: AI-generated image
+  ar: صورة مولّدة بالذكاء الاصطناعي
+  def: A picture that an AI tool makes from a text prompt; it can contain mistakes such as wrong hands or unreadable text.
+
+image-prompt:
+  en: image prompt
+  ar: موجّه الصورة
+  def: A request that describes the picture an AI tool should make, with the subject, the style, the setting, the colours and the shape.
+
+stock-image:
+  en: stock image
+  ar: صورة من المكتبة الجاهزة
+  def: A ready picture from a library, such as Insert › Pictures › Stock Images in Office, that you may use in your documents.
+
+fact-checking:
+  en: fact-checking
+  ar: التحقق من الحقائق
+  def: Comparing each claim of a text, such as a number, a date or a name, with reliable sources before you use it.
+
+ai-claim:
+  en: claim
+  ar: الادعاء
+  def: A sentence that says something is true and can be checked, such as "students who sleep 8 hours get better marks".
+
+lateral-reading:
+  en: lateral reading
+  ar: القراءة الجانبية
+  def: Checking a claim or a source by opening other, independent sources about it, instead of reading only the page itself.
+
+citation:
+  en: citation
+  ar: الاستشهاد بالمصدر
+  def: The details of a source in a text, such as the author, the title, the year and the link, so that a reader can find it.
+
+made-up-source:
+  en: made-up source
+  ar: المصدر المختلق
+  def: A source that an AI tool names but that does not exist, or that does not say what the AI claims.
+
+stereotype:
+  en: stereotype
+  ar: الصورة النمطية
+  def: A fixed, simple and often unfair idea about a group of people, for example that all engineers are men.
+
+personal-data:
+  en: personal data
+  ar: البيانات الشخصية
+  def: Any information about a person who can be identified, such as a name, a phone number, an ID number, an address or a photo.
+
+sensitive-data:
+  en: sensitive personal data
+  ar: البيانات الشخصية الحساسة
+  def: Personal data that can harm a person if it is shared, such as health, salary, religion, passwords or bank details.
+
+confidential-information:
+  en: confidential information
+  ar: المعلومات السرية
+  def: Information of a company or a university that only certain people may see, such as customer lists, contracts or exam questions.
+
+anonymize:
+  en: anonymize
+  ar: إخفاء الهوية
+  def: To remove or replace names and other details in a text so that nobody can find out who the person is.
+
+privacy-settings:
+  en: privacy settings
+  ar: إعدادات الخصوصية
+  def: The options of an app or a service that control what it saves, shares or uses, for example the chat history or training on your chats.
+
+terms-of-use:
+  en: terms of use
+  ar: شروط الاستخدام
+  def: The rules of a service that you accept when you use it, for example what you may do with its output and how it uses your data.
+
+academic-integrity:
+  en: academic integrity
+  ar: النزاهة الأكاديمية
+  def: Honest work at university - your own work, correct sources, and following the rules of each course, including the rules for AI.
+
+plagiarism:
+  en: plagiarism
+  ar: الانتحال
+  def: Presenting someone else's words, ideas or work, including AI-written text, as your own without saying where it came from.
+
+ai-use-statement:
+  en: AI-use statement
+  ar: بيان استخدام الذكاء الاصطناعي
+  def: A short note that says which AI tool you used, for what, and how you checked and changed its output.
+
+responsible-ai-use:
+  en: responsible AI use
+  ar: الاستخدام المسؤول للذكاء الاصطناعي
+  def: Using AI tools safely, legally and honestly, by protecting personal data, respecting copyright, checking the output and stating the use.
+
+excel-table:
+  en: Excel table (Format as Table)
+  ar: جدول Excel
+  def: A range turned into a table with Home › Format as Table; it gets a name, filter buttons, banded rows, and grows when new rows are added.
+
+total-row:
+  en: total row
+  ar: صف الإجمالي
+  def: An extra row at the bottom of an Excel table that shows a sum, an average or a count for each column you choose.
+
+averageif:
+  en: AVERAGEIF
+  ar: الدالة AVERAGEIF
+  def: A function that gives the average of only the cells that match a condition, for example =AVERAGEIF(C2:C25,"Paper",E2:E25).
+
+summary-table:
+  en: summary table
+  ar: جدول ملخص
+  def: A small table that shows totals, counts or averages of a big list, for example one row per product type.
+
+pivottable:
+  en: PivotTable
+  ar: الجدول المحوري
+  def: An Excel tool that builds a summary table from a list in a few clicks, by choosing which field goes into the rows and which into the values.
+
+row-field:
+  en: row field
+  ar: حقل الصفوف
+  def: The column of the data that a PivotTable uses to make its rows, for example the type of product.
+
+value-field:
+  en: value field
+  ar: حقل القيم
+  def: The column that a PivotTable adds up, counts or averages for each row, for example the total in JD.
+
+data-insight:
+  en: data insight
+  ar: استنتاج من البيانات
+  def: A short, true statement that a summary shows, such as "Paper sold the most in March"; it must be checked against the numbers.
+
+linked-object:
+  en: linked table or chart
+  ar: جدول أو مخطط مرتبط
+  def: A table or chart pasted with a link to its Excel file, so that it can change when the Excel file changes.
+
+update-link:
+  en: Update Link
+  ar: تحديث الارتباط
+  def: The command in Word or PowerPoint that reads the linked Excel file again and shows its new numbers.
+
+slides-from-outline:
+  en: Slides from Outline
+  ar: شرائح من المخطط التفصيلي
+  def: A PowerPoint command that makes slides from a Word file - Heading 1 gives a slide title, Heading 2 a bullet.
+
+office-workflow:
+  en: workflow across apps
+  ar: سير العمل بين التطبيقات
+  def: The order of steps in which content moves between apps, for example from Excel to Word to PowerPoint.
+
+course-project:
+  en: course project
+  ar: مشروع المساق
+  def: One topic worked out alone in three files - a data sheet, a report and a short talk - presented and handed in at the end of the course.
+
+project-question:
+  en: project question
+  ar: سؤال المشروع
+  def: The one clear question that the project answers with its own data, for example what sells most in the canteen.
+
+data-sheet:
+  en: data sheet
+  ar: ورقة البيانات
+  def: The Excel file of a project, with the data as a table, a summary and a chart.
+
+rehearsal:
+  en: rehearsal
+  ar: التدريب على العرض
+  def: Saying the whole talk aloud once or twice before the real talk, with a timer, to check the time and the words.
+
+peer-feedback:
+  en: peer feedback
+  ar: ملاحظات الزملاء
+  def: Short comments from classmates on your work - one thing that works, one question and one idea to improve it.
+
+final-version:
+  en: final version
+  ar: النسخة النهائية
+  def: The last, checked version of a file that you hand in, after the feedback and the corrections.

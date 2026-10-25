@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Practice Quiz</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .q { font-weight: 800; font-size: 1.02rem; margin: 8px 0; }
+    .sim .opts { display: grid; gap: 6px; }
+    .sim .opts button { text-align: left; }
+    .sim .opts button.right { background: #d3f9d8; border-color: #2b8a3e; color: #2b8a3e; }
+    .sim .opts button.wrong { background: #ffe3e3; border-color: #c92a2a; color: #c92a2a; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .score { font-weight: 800; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Practice Quiz: lectures 1–14</h1>
+  <p class="hint">Practice questions like the ones in the exam. Choose a part, answer, and read the feedback. Your score is only for you: nothing is saved or sent.</p>
+  <div class="bar" id="parts"></div>
+  <p class="score" id="score"></p>
+  <p class="q" id="q"></p>
+  <div class="opts" id="opts"></div>
+  <p class="message" id="msg"></p>
+  <div class="row"><button type="button" id="next">Next question ▶</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  // [part, question, right answer, wrong answers, feedback]
+  const Q = [
+    ["Files", "Which file name is best for a report of 3 November 2026?", "2026-11-03_report.docx", ["report final new.docx", "Document1.docx", "11-3-26.docx"], "Date first (year-month-day), then what it is, no spaces."],
+    ["Files", "What does a cloud folder do when you change a file on your phone?", "it syncs the change to your other devices", ["it deletes the file", "it prints the file", "nothing"], "Synchronization keeps the same file on every device."],
+    ["Files", "What is the difference between sync and backup?", "a backup keeps an extra copy you can go back to", ["there is no difference", "sync is slower", "a backup is only for photos"], "Sync copies changes everywhere, also mistakes; a backup keeps older copies."],
+    ["AI", "Which three parts make a clear prompt?", "task, context and format", ["only the task", "a long story", "the name of the AI"], "Say what to do, the facts it needs, and the form of the answer."],
+    ["AI", "An AI answer gives a date that is not in your document. What is it?", "a hallucination: check and correct it", ["always right", "a virus", "a format"], "AI tools can invent facts that sound right."],
+    ["AI", "What must you never type into an AI tool?", "real personal data, such as an ID number", ["a short prompt", "a question about Excel", "the word please"], "Personal data can be stored and seen by others."],
+    ["Word", "How do you make a table of contents that updates itself?", "use heading styles, then References › Table of Contents", ["type the headings in bold", "draw a table", "copy it from the Internet"], "Word builds the contents from Heading 1, Heading 2 …"],
+    ["Word", "Where do you put the page number so that it is on every page?", "in the header or the footer", ["at the end of each page by hand", "in a text box", "in the title"], "Insert › Page Number places it in the header or footer of every page."],
+    ["Word", "A picture should sit beside the text. Which setting?", "Wrap Text: Square", ["Bold", "Line spacing", "Page break"], "Text wrapping decides how text flows around a picture."],
+    ["Excel", "B2 = 4 and C2 = 5. What does =B2*C2 show?", "20", ["9", "45", "=B2*C2"], "* multiplies: 4 × 5 = 20."],
+    ["Excel", "You copy =B2*$F$1 from C2 down to C3. What is in C3?", "=B3*$F$1", ["=B2*$F$1", "=B3*$F$2", "=B3*F2"], "B2 moves to B3; $F$1 stays."],
+    ["Excel", "Which function gives the biggest number in B2:B9?", "=MAX(B2:B9)", ["=SUM(B2:B9)", "=BIG(B2:B9)", "=AVERAGE(B2:B9)"], "MAX finds the largest value."],
+    ["Excel", "You want to see only the rows of the type Drinks. What do you use?", "a filter", ["delete the other rows", "a pie chart", "Save As"], "A filter hides rows; it does not delete them."],
+    ["Excel", "Which chart compares the sales of three shops?", "a column chart", ["a line chart", "a pie chart of the days", "no chart"], "Columns compare amounts; lines show change over time."],
+  ];
+  const PARTS = ["All", "Files", "AI", "Word", "Excel"];
+  let part = "All", list = [], i = 0, right = 0, done = 0, answered = false;
+  function shuffle(a, seed) { let s = seed; const r = () => ((s = (s * 9301 + 49297) % 233280) / 233280); return a.map((x) => [r(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]); }
+  function start(p) {
+    part = p; list = shuffle(Q.filter((q) => p === "All" || q[0] === p), 7); i = 0; right = 0; done = 0;
+    Kit.buttons($("parts"), PARTS.map((k) => ({ k, label: k })), start); $("parts").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === part));
+    show();
+  }
+  function show() {
+    answered = false;
+    $("score").textContent = `${part} · question ${i + 1} of ${list.length} · right so far: ${right} / ${done}`;
+    const [, q, a, w] = list[i];
+    $("q").textContent = q;
+    Kit.buttons($("opts"), shuffle([a, ...w], i + 3).map((t) => ({ k: t, label: t })), pick);
+    $("msg").textContent = ""; $("next").hidden = true;
+  }
+  function pick(k) {
+    if (answered) return; answered = true; done++;
+    const [, , a, , fb] = list[i], ok = k === a;
+    if (ok) { right++; Kit.good(); } else Kit.bad();
+    $("opts").querySelectorAll("button").forEach((b) => { if (b.dataset.k === a) b.classList.add("right"); else if (b.dataset.k === k) b.classList.add("wrong"); });
+    $("msg").textContent = (ok ? "✓ Right. " : "Not quite. ") + fb; $("msg").classList.toggle("bad", !ok);
+    $("score").textContent = `${part} · question ${i + 1} of ${list.length} · right so far: ${right} / ${done}`;
+    $("next").hidden = false; $("next").textContent = i < list.length - 1 ? "Next question ▶" : "Start again ▶";
+  }
+  $("next").addEventListener("click", () => { if (i < list.length - 1) { i++; show(); } else start(part); });
+  window.PQ = { part: start, pick: (n) => $("opts").querySelectorAll("button")[n].click(), right: () => { const a = list[i][2]; [...$("opts").querySelectorAll("button")].find((b) => b.dataset.k === a).click(); }, next: () => $("next").click() };
+  start("All");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Logic Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .props { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+    @media (max-width: 520px) { .sim .props { grid-template-columns: 1fr; } }
+    .sim .prop { border: 2px solid var(--sim-border); border-radius: 12px; padding: 8px 10px; background: #fff; font-weight: 700; }
+    .sim .prop button { margin-top: 6px; min-width: 90px; }
+    .sim .prop button.t { background: #2F9E44; color: #fff; }
+    .sim .prop button.f { background: #f1f3f5; color: #495057; }
+    .sim table.ops { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+    .sim table.ops td, .sim table.ops th { border: 1px solid #dee2e6; padding: 6px 8px; text-align: left; }
+    .sim table.ops td.v { font-weight: 800; text-align: center; width: 80px; }
+    .sim table.ops td.T { background: #ebfbee; color: #2b8a3e; }
+    .sim table.ops td.F { background: #fff5f5; color: #c92a2a; }
+    .sim code { font-weight: 700; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Logic Lab: NOT, AND, OR, XOR and IF–THEN</h1>
+  <p class="hint">Two propositions about a player in a dungeon game. Tap them to make them true or false, and watch the value of each logical operator, as a game would compute it.</p>
+  <div class="props">
+    <div class="prop">p: “the player has the key”<br><button type="button" id="p"></button></div>
+    <div class="prop">q: “the boss is defeated”<br><button type="button" id="q"></button></div>
+  </div>
+  <table class="ops" id="ops"></table>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const s = { p: true, q: false };
+  const $ = (id) => document.getElementById(id);
+  const OPS = [
+    ["NOT p", "¬p", "!hasKey", (p) => !p, "the player has no key"],
+    ["p AND q", "p ∧ q", "hasKey && bossDead", (p, q) => p && q, "the door to the treasure opens"],
+    ["p OR q", "p ∨ q", "hasKey || bossDead", (p, q) => p || q, "the next level is shown on the map"],
+    ["p XOR q", "p ⊕ q", "hasKey ^ bossDead", (p, q) => p !== q, "exactly one of the two is true"],
+    ["IF p THEN q", "p → q", "!hasKey || bossDead", (p, q) => !p || q, "the rule “a key holder has beaten the boss” is kept"],
+  ];
+  const TF = (v) => (v ? "true" : "false");
+  function show() {
+    for (const k of ["p", "q"]) { $(k).textContent = TF(s[k]); $(k).className = s[k] ? "t" : "f"; }
+    $("ops").innerHTML = "<tr><th>operator</th><th>symbol</th><th>in C#</th><th>value</th></tr>" + OPS.map(([n, sym, cs, f]) => { const v = f(s.p, s.q);
+      return `<tr><td>${n}</td><td>${sym}</td><td><code>${cs}</code></td><td class="v ${v ? "T" : "F"}">${TF(v)}</td></tr>`; }).join("");
+    const imp = !s.p || s.q;
+    $("msg").textContent = s.p && !s.q ? "p is true and q is false: AND is false, OR is true, and IF p THEN q is false: the only case that breaks the rule." :
+      !s.p ? `p is false: IF p THEN q is ${TF(imp)} whatever q is. A rule about key holders says nothing about players without a key.` :
+      "Both are true: AND, OR and IF–THEN are true, but XOR is false (not exactly one).";
+  }
+  for (const k of ["p", "q"]) $(k).addEventListener("click", () => { s[k] = !s[k]; Kit.beep && Kit.beep(s[k] ? 660 : 440); show(); });
+  window.LL = { set: (p, q) => { s.p = p; s.q = q; show(); } };
+  show();
+})();
+</script>
+</body>
+</html>

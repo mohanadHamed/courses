@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Matrix Chain</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .mats { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 8px 0; font-weight: 800; }
+    .sim .m { display: inline-grid; grid-template-columns: repeat(3, auto); gap: 1px 8px; padding: 3px 7px; border-left: 2.5px solid #2a211c; border-right: 2.5px solid #2a211c; border-radius: 5px; font-size: .85rem; font-variant-numeric: tabular-nums; text-align: right; }
+    .sim .m.res { background: #ebfbee; }
+    .sim .lbl { font-size: .8rem; color: var(--sim-muted); display: block; text-align: center; }
+    .sim .controls label { min-width: 45%; }
+    .sim .controls input[type="range"] { flex: 1; min-width: 80px; }
+    .sim .out { font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.5; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Matrix Chain: M = T × R × S</h1>
+  <p class="hint">The boat is drawn in its own local space (green). One 3 × 3 matrix M = T × R × S places it in the world (blue): first scale, then rotate, then translate. The orange arrow is a direction (w = 0): the translation does not move it.</p>
+  <canvas id="c" aria-label="A grid with a boat in local space and in world space"></canvas>
+  <div class="controls" id="sl"></div>
+  <div class="mats" id="mats"></div>
+  <p class="out" id="out"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const BOAT = [[-1, -0.5], [1.5, -0.5], [2, 0.3], [-1.3, 0.3]];
+  const s = { k: 1, th: 0, tx: 4, ty: 2 };
+  const $ = (id) => document.getElementById(id), f = (v) => Kit.fmt(v, 2);
+  const mul = (A, B) => A.map((r, i) => B[0].map((_, j) => r.reduce((t, _, k) => t + A[i][k] * B[k][j], 0)));
+  const app = (M, p, w = 1) => [M[0][0] * p[0] + M[0][1] * p[1] + M[0][2] * w, M[1][0] * p[0] + M[1][1] * p[1] + M[1][2] * w];
+  function mats() {
+    const a = s.th * Math.PI / 180, c = Math.round(Math.cos(a) * 1000) / 1000, n = Math.round(Math.sin(a) * 1000) / 1000;
+    const S = [[s.k, 0, 0], [0, s.k, 0], [0, 0, 1]], R = [[c, -n, 0], [n, c, 0], [0, 0, 1]], T = [[1, 0, s.tx], [0, 1, s.ty], [0, 0, 1]];
+    return { S, R, T, M: mul(T, mul(R, S)) };
+  }
+  const html = (M, name, res) => `<span><span class="lbl">${name}</span><span class="m${res ? " res" : ""}">${M.flat().map((v) => `<span>${f(v)}</span>`).join("")}</span></span>`;
+  function show() {
+    const { S, R, T, M } = mats();
+    $("mats").innerHTML = html(M, "M", true) + "<span>=</span>" + html(T, "T") + "<span>×</span>" + html(R, "R") + "<span>×</span>" + html(S, "S");
+    const p = app(M, [2, 0.3]), d = app(M, [1, 0], 0);
+    $("out").innerHTML = `Nose of the boat: local (2, 0.3, 1) → world (${f(p[0])}, ${f(p[1])}, 1).<br>Direction (1, 0, 0) → (${f(d[0])}, ${f(d[1])}, 0): turned and scaled, but not moved.`;
+  }
+  Kit.slider($("sl"), "scale", 0.5, 2, 0.5, s.k, (v) => { s.k = v; show(); }, f);
+  Kit.slider($("sl"), "θ", 0, 360, 15, s.th, (v) => { s.th = v; show(); }, (v) => v + "°");
+  Kit.slider($("sl"), "tx", -5, 5, 1, s.tx, (v) => { s.tx = v; show(); }, f);
+  Kit.slider($("sl"), "ty", -4, 4, 1, s.ty, (v) => { s.ty = v; show(); }, f);
+  const cv = Kit.canvas($("c"), (W) => Math.min(360, W * 0.68));
+  window.MC = { set: (o) => { Object.assign(s, o); document.querySelectorAll("#sl input").forEach((inp, i) => { inp.value = [s.k, s.th, s.tx, s.ty][i]; inp.dispatchEvent(new Event("input")); }); } };
+  Kit.loop(() => {
+    const c = cv.ctx, G = Kit.grid(c, cv.W, cv.H, -7, 9, -5, 6, { step: 2 }), { M } = mats();
+    const poly = (pts, fill, stroke) => { c.beginPath(); pts.forEach((p, i) => (i ? c.lineTo(G.X(p[0]), G.Y(p[1])) : c.moveTo(G.X(p[0]), G.Y(p[1])))); c.closePath(); c.fillStyle = fill; c.fill(); c.strokeStyle = stroke; c.lineWidth = 2.2; c.stroke(); };
+    poly(BOAT, "rgba(47,158,68,0.2)", "#2F9E44");
+    poly(BOAT.map((p) => app(M, p)), "rgba(28,126,214,0.25)", "#1c7ed6");
+    const o = app(M, [0, 0]), d = app(M, [1, 0], 0);
+    Kit.arrow(c, G.X(o[0]), G.Y(o[1]), G.X(o[0] + d[0] * 1.5), G.Y(o[1] + d[1] * 1.5), "#e8590c", 3, 10);
+    Kit.arrow(c, G.X(0), G.Y(0), G.X(1.5), G.Y(0), "rgba(232,89,12,0.45)", 2.5, 9);
+    c.fillStyle = "#1c7ed6"; c.beginPath(); c.arc(G.X(o[0]), G.Y(o[1]), 4, 0, 7); c.fill();
+  });
+  show();
+})();
+</script>
+</body>
+</html>

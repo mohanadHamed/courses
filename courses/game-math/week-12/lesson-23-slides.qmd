@@ -1,0 +1,215 @@
+---
+title: "Random Distributions: Uniform and Weighted"
+subtitle: "Lecture 23"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary probability-distribution uniform-distribution weighted-random cumulative-weight loot-table histogram bell-curve >}}
+
+## 23.1 Distributions
+
+:::: {.columns}
+::: {.column width="50%"}
+- A distribution gives every value its probability.
+- The probabilities add up to 1.
+- A histogram shows how often each value came.
+- **Do it:** Write the distribution of the heads with two coins. What is the sum?
+:::
+::: {.column width="50%"}
+![](images/uniform.png)
+:::
+::::
+
+## Example · Two distributions
+
+One die and a chest of Torch Hall both have a distribution.
+**What are they, and what does a histogram show?**
+
+::: {.reveal}
+1. One die has the values 1 to 6, each with probability **1/6**.
+2. A chest gives common 0.6, rare 0.3, epic 0.09 and legendary 0.01, with the **sum 1**.
+3. After 1000 chests, the histogram shows about **600, 300, 90 and 10**.
+:::
+
+## Try it 1 · Distributions
+
+a) What is P(0 heads) with two coins?
+b) What is P(1 head) with two coins?
+c) What do all the probabilities of a distribution add up to?
+
+::: {.answer}
+a) 1/4
+b) 1/2
+c) 1
+:::
+
+## 23.2 Uniform
+
+:::: {.columns}
+::: {.column width="50%"}
+- In a uniform distribution, all values are equally likely.
+- With n values, each has the probability 1/n.
+- In a range, the chance of a part is its share of the length.
+- **Do it:** Find P(5) for Random.Range(0, 8). What is it?
+:::
+::: {.column width="50%"}
+![](images/uniform.png)
+:::
+::::
+
+## Example · A random spawn time
+
+A bat appears after Random.Range(2f, 6f) seconds.
+**What is the chance that it comes in the first second?**
+
+::: {.reveal}
+1. The range from 2 to 6 is **4 seconds** long.
+2. The first second, from 2 to 3, is **1 second** of it.
+3. P = 1/4, because the chance is the **share of the length**.
+:::
+
+## Try it 2 · Uniform
+
+a) What is P(5) for Random.Range(0, 8)?
+b) What is P(7 to 10) for Random.Range(0f, 10f)?
+c) What is P(legendary) when four rarities are uniform?
+
+::: {.answer}
+a) 1/8
+b) 3/10
+c) 1/4
+:::
+
+## 23.3 Weighted choice
+
+:::: {.columns}
+::: {.column width="50%"}
+- Each option has a weight.
+- P(i) is its weight divided by the sum of the weights.
+- We pick with cumulative weights and one random number.
+- **Do it:** Make epic items 5 % in Loot Table Lab. Which weights did you use?
+:::
+::: {.column width="50%"}
+![](images/weighted.png)
+:::
+::::
+
+## Example · A chest of Torch Hall
+
+The weights are 60, 30, 9 and 1, so the cumulative weights are 60, 90, 99 and 100.
+**Which item does each random number give?**
+
+::: {.reveal}
+1. r = 72 falls between 60 and 90, so the chest gives **rare**.
+2. r = 99.4 falls between 99 and 100, so it gives **legendary**.
+3. P(epic) = 9/100, and weights **3 and 1** would give 3/4 and 1/4.
+:::
+
+## Live demo · Loot Table Lab
+
+{{< sim file="sims/loot-table-lab.html" poster="sims/loot-table-lab.png" title="Loot Table Lab: weights and chances" task="**Show:** open 1, 100 and 1000 chests, then set the weights 60, 34, 5, 1 and open 1000 again. **Ask:** why are the counts close to, but not exactly, the expected values?" >}}
+
+## Try it 3 · Weights
+
+a) What is P(shield) with the weights sword 3 and shield 1?
+b) Which item does r = 93.5 give with cumulative weights 60, 90, 99, 100?
+c) What does a weight of 0 mean?
+
+::: {.answer}
+a) 1/4
+b) epic
+c) The item never drops.
+:::
+
+## 23.4 Bell shapes
+
+:::: {.columns}
+::: {.column width="50%"}
+- A sum of random numbers is bell-shaped.
+- Middle values come often, and extremes are rare.
+- Three dice give steadier damage than one range.
+- **Do it:** Compare one die and three dice in the lab. What changes?
+:::
+::: {.column width="50%"}
+![](images/dice-sums.png)
+:::
+::::
+
+## Example · Damage 3 to 18
+
+Damage can come from Random.Range(3, 19) or from three dice.
+**How do the two compare?**
+
+::: {.reveal}
+1. Random.Range(3, 19) is **uniform**: P(3) = P(10) = 1/16.
+2. Three dice give P(3) = **1/216** but P(10) = **27/216**.
+3. The range is the same, but the dice make damage **steadier**.
+:::
+
+## Try it 4 · Sums
+
+a) What is P(sum 3) with three dice?
+b) Which sum of two dice is the most common?
+c) Which values does one die × 3 give?
+
+::: {.answer}
+a) 1/216
+b) 7
+c) 3, 6, 9, 12, 15 and 18
+:::
+
+## 23.5 Points in an area
+
+:::: {.columns}
+::: {.column width="50%"}
+- In a rectangle, we pick x and y at random.
+- In a circle, we pick an angle and use the radius R√r.
+- Without the square root, the points crowd the centre.
+- **Do it:** Scatter coins both ways. How many land in the inner half?
+:::
+::: {.column width="50%"}
+![](images/circle-points.png)
+:::
+::::
+
+## Live demo · Distribution Shape Lab
+
+{{< sim file="sims/shape-lab.html" poster="sims/shape-lab.png" title="Distribution Shape Lab: flat, bell or crowded?" task="**Show:** one die, then three dice, then coins with R · r and with R · √r. **Ask:** why do the outer rings need more points?" >}}
+
+## Try it 5 · Areas
+
+a) Which radius gives an even spread in a circle?
+b) Where does R · r crowd the points?
+c) What share of the area lies inside half the radius?
+
+::: {.answer}
+a) R · √r
+b) in the centre
+c) a quarter
+:::
+
+## Game challenge · Loot Forge
+
+{{< sim file="sims/loot-forge.html" poster="sims/loot-forge.png" title="Loot Forge: shape the randomness" kind="game" task="**The story:** the loot designer of Torch Hall builds the random parts of the game. **Play:** answer each question of the forge." >}}
+
+## Try it 6 · Design (harder)
+
+a) Which weight makes a legendary item 1 in 200 with a total of 200?
+b) What is P(the second option) with the weights 5, 3 and 2?
+c) Which option does r = 81 give with cumulative weights 50, 80, 95, 100?
+
+::: {.answer}
+a) 1
+b) 3/10
+c) the third option
+:::
+
+## Summary
+
+- A distribution gives every value a probability.
+- In a uniform distribution, all values are equally likely.
+- A weighted choice uses weight ÷ sum and cumulative weights.
+- Sums of random numbers are bell-shaped.
+- The radius R√r gives an even spread in a circle.

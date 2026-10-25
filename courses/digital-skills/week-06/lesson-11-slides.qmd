@@ -1,0 +1,158 @@
+---
+title: "Excel (1): Cells, Formulas, References and Basic Functions"
+subtitle: "Lecture 11 · Lab session"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary cell-address cell-range formula formula-bar relative-reference absolute-reference function autosum >}}
+
+## 11.1 Cells and ranges
+
+:::: {.columns}
+::: {.column width="50%"}
+- A cell address is a column letter and a row number, for example B3.
+- A range is a block of cells, for example B2:B4.
+- Text sits on the left of a cell, and numbers sit on the right.
+- **Do it:** Type the shop list in Excel and click B3. What does the Name Box show?
+:::
+::: {.column width="50%"}
+![](images/excel-grid.png)
+:::
+::::
+
+## Try it 1 · Cells
+
+a) Which column and row is cell C4?
+b) Which range holds the cells A2 to A6?
+c) Why is "2 JD" in a cell a problem?
+
+::: {.answer}
+a) column C, row 4
+b) A2:A6
+c) It is text, so Excel cannot compute with it.
+:::
+
+## 11.2 Formulas
+
+:::: {.columns}
+::: {.column width="50%"}
+- A formula starts with = and uses cell addresses.
+- The cell shows the result, and the formula bar shows the formula.
+- When a number changes, the result changes by itself.
+- **Do it:** Write =B2\*C2 in D2 and change the price. What happens?
+:::
+::: {.column width="50%"}
+![](images/formula-parts.png)
+:::
+::::
+
+## Live demo · Formula Lab
+
+{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" task="**Show:** type =B2\*C2 in D2, copy it down, then add SUM in D5. **Ask:** why did the total change when the formula was copied?" >}}
+
+## Try it 2 · Formulas
+
+a) B2 is 6 and C2 is 5. What does =B2\*C2 show?
+b) What does =2+3\*4 give?
+c) Why should a formula use B2 and not the number 6?
+
+::: {.answer}
+a) 30
+b) 14
+c) so that it changes when B2 changes
+:::
+
+## 11.3 Relative and absolute references
+
+:::: {.columns}
+::: {.column width="50%"}
+- The fill handle copies a formula to the next rows.
+- A relative reference like B2 changes in each row.
+- An absolute reference like \$F\$1 stays the same everywhere.
+- **Do it:** Copy =D2\*\$F\$1 down. Which formula is in E4?
+:::
+::: {.column width="50%"}
+![](images/references.png)
+:::
+::::
+
+## Live demo · Reference Lab
+
+{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" task="**Show:** copy =B2\*F1 down and look at the zeros, then copy =B2\*\$F\$1 down. **Ask:** which part of the formula stayed the same?" >}}
+
+## Example · One discount rate for all
+
+The rate 10 % is in F1, and Rana copies =B2\*F1 from C2 down.
+**What goes wrong, and how does she fix it?**
+
+::: {.reveal}
+1. C3 gets =B3\*F2, and F2 is empty, so the discount is 0.
+2. She writes **=B2\*\$F\$1** and copies it again.
+3. Now every row uses F1, and a new rate changes all rows.
+:::
+
+## Try it 3 · References
+
+a) You copy =B2\*C2 from D2 to D5. Which formula is in D5?
+b) You copy =B2\*\$F\$1 from C2 to C4. Which formula is in C4?
+c) Which key adds the $ signs after you type F1?
+
+::: {.answer}
+a) =B5\*C5
+b) =B4\*\$F\$1
+c) F4
+:::
+
+## 11.4 SUM, AVERAGE, MAX and MIN
+
+:::: {.columns}
+::: {.column width="50%"}
+- A function is a ready formula with a name, used on a range.
+- SUM adds, AVERAGE gives the average, MAX the highest and MIN the lowest.
+- The Σ button (AutoSum) writes a SUM formula for you.
+- **Do it:** Use AutoSum under your totals. Which formula does Excel write?
+:::
+::: {.column width="50%"}
+![](images/functions.png)
+:::
+::::
+
+## Try it 4 · Functions
+
+a) The sales are 5, 10, 15 and 20. What does SUM give?
+b) What does AVERAGE give for the same sales?
+c) A cell shows #NAME?. What is a likely reason?
+
+::: {.answer}
+a) 50
+b) 12.5
+c) The function name is wrong, for example SUMM.
+:::
+
+## Game challenge · The Shop's Week
+
+{{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" task="**The story:** Rana keeps the sales of the Sunrise shop in Excel and predicts each cell before she presses Enter. **Play:** choose what each cell will show, or which formula a copy makes." >}}
+
+## Try it 5 · Copy and errors (harder)
+
+The facts: D2 has =C2\*\$F\$1, the week of sales is 10, 20, 30, 40 and 50 JD, and B2 is empty.
+
+a) Rana copies D2 to D3. Which formula is in D3?
+b) What does AVERAGE give for the week?
+c) What does =A2/B2 show when B2 is empty?
+
+::: {.answer}
+a) =C3\*\$F\$1
+b) 30
+c) #DIV/0!
+:::
+
+## Summary
+
+- A cell address is a column and a row, and a range is written like B2:B6.
+- A formula starts with = and changes by itself.
+- Copying moves relative references, but not absolute ones.
+- SUM, AVERAGE, MAX and MIN work on a range.
+- Error values tell you what to fix.

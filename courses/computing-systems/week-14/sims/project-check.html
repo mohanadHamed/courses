@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Project Check</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; border-bottom: 1px solid #f1f3f5; padding: 6px 0; font-weight: 700; font-size: .9rem; }
+    .sim .row .q { flex: 1 1 260px; }
+    .sim .row button.on { background: var(--sim-accent); color: #fff; }
+    .sim .score { font-size: 1.2rem; font-weight: 800; margin: 8px 0; }
+    .sim ul.todo { margin: 4px 0; padding-left: 1.2em; font-weight: 600; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Project Check: before you hand in</h1>
+  <p class="hint">Answer each question about your project honestly. The check uses the example rubric (10 marks) and lists what to fix before the presentation.</p>
+  <div id="rows"></div>
+  <p class="score" id="score"></p>
+  <ul class="todo" id="todo"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  // [question, criterion, marks if yes, partial marks, fix]
+  const Q = [
+    ["Does the report have all six parts?", "content", 2, 1, "Add the missing parts (game, platforms, specs, test plan, risks, publishing)."],
+    ["Are the facts correct and checked?", "content", 2, 1, "Check each number again in its source."],
+    ["Does every number have a reliable source with a date?", "sources", 2, 1, "Add the source and the date under each table and chart."],
+    ["Does each slide have one message and readable text?", "slides", 2, 1, "Split crowded slides; use 24 pt text or bigger."],
+    ["Does the talk take about five minutes in practice?", "talk", 1, 0, "Practise with a timer; cut words, not facts."],
+    ["Can you answer three likely questions with facts from the report?", "questions", 1, 0, "Write three likely questions and short answers."],
+  ];
+  const s = { a: {} };
+  const TASKS = [
+    { q: "Task 1: Answer all six questions for your own project (or for a draft you imagine).", ok: () => Object.keys(s.a).length === Q.length },
+    { q: "Task 2: Change the answers to see which fix gives the most marks. Which one is it?", ok: () => Object.keys(s.a).length === Q.length && s.changed },
+  ];
+  let ti = 0;
+  function upd() {
+    $("rows").innerHTML = "";
+    Q.forEach(([q], i) => {
+      const row = Kit.el("div", { class: "row" }), box = Kit.el("span", { style: "display:flex;gap:6px" });
+      row.append(Kit.el("span", { class: "q" }, q), box); $("rows").appendChild(row);
+      Kit.buttons(box, ["yes", "partly", "no"].map((k) => ({ k, label: k })), (k) => { if (s.a[i] && s.a[i] !== k) s.changed = true; s.a[i] = k; upd(); });
+      box.querySelectorAll("button").forEach((b) => b.classList.toggle("on", s.a[i] === b.dataset.k));
+    });
+    let tot = 0; const todo = [];
+    Q.forEach(([, , full, part, fix], i) => { const a = s.a[i]; tot += a === "yes" ? full : a === "partly" ? part : 0; if (a && a !== "yes") todo.push(`${fix} (+${full - (a === "partly" ? part : 0)})`); });
+    $("score").textContent = Object.keys(s.a).length ? `Expected: about ${tot} of 10 marks` : "";
+    $("todo").innerHTML = todo.map((t) => `<li>${t}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: fix the list from the top, then practise the talk.";
+    $("msg").textContent = m + "Only your teacher's rubric counts; this check helps you prepare.";
+  }
+  window.PC = { answer: (i, k) => { if (s.a[i] && s.a[i] !== k) s.changed = true; s.a[i] = k; upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

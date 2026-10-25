@@ -1,0 +1,331 @@
+---
+title: "Case Study: Movement of a 2D Object"
+description: "Lesson notes · A case study that builds the movement of a 2D shuttle step by step: motion per frame with Δt, normalized input, facing the velocity with atan2, acceleration and damping, bouncing with the reflected velocity, and drawing the sprite with a TRS transform; with one team activity."
+lesson: 27
+ilos: [B1, C1, D1]
+format: lesson-typst
+---
+
+::: {.lead}
+The shuttle of *Star Dock* finally gets its controls. The first test is a
+disaster: on a fast laptop the shuttle races, on an old one it crawls; it
+flies faster diagonally; it always points to the right, even when it flies
+up; it stops dead when the key is released; it flies through the hangar
+walls; and the sprite is drawn in the wrong place. Each problem has a
+mathematical fix that you already know: vectors (lectures 2–6), angles
+(lectures 7–8) and transformations (lectures 9–14). In this case study you
+build the movement of one 2D object, step by step, and solve one part of it
+together with a team. Every section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary game-loop delta-time frame-rate-independence input-vector unit-vector velocity atan2 acceleration damping surface-normal reflection-vector bounciness trs-matrix team-roles >}}
+
+## 27.1 Motion per frame with Δt
+
+The game loop moves the shuttle a little in every frame. The size of that
+step must depend on the time of the frame (@fig-steps).
+
+::: {.callout-important title="Definition 27.1 — Motion per frame"}
+Each frame takes $\Delta t$ seconds (1/60 s at 60 fps). With velocity
+$\vec{v}$ (units per second):
+$$\vec{p}_{\text{new}} = \vec{p} + \vec{v} \cdot \Delta t.$$
+This is **frame-rate independence**: at 30, 60 or 144 fps the shuttle
+covers the same distance per second.
+:::
+
+![The same second at 30 and at 60 fps.](images/frame-steps.png){#fig-steps width=94%}
+
+::: {.callout-note title="Example 27.1 — 30 or 60 fps"}
+Speed 5 units per second, to the right.
+
+1. At 60 fps: each step is $5 \cdot \frac{1}{60} \approx 0.083$; 60 steps give
+   5 units.
+2. At 30 fps: each step is $5 \cdot \frac{1}{30} \approx 0.167$; 30 steps give
+   5 units.
+3. Without $\Delta t$ ("move 0.083 every frame"), the 30 fps laptop moves
+   only 2.5 units per second.
+:::
+
+::: {.callout-caution title="In game code"}
+```csharp
+void Update() {
+    transform.position += (Vector3)(velocity * Time.deltaTime);
+}
+```
+:::
+
+::: {.callout-warning title="Common mistake"}
+Using a fixed step per frame. The game then runs faster on fast computers
+and slower on slow ones.
+:::
+
+::: {.callout-note title="Do it · Δt"}
+A meteor flies at 12 units per second. Compute its step per frame at 30,
+60 and 144 fps, and check that each gives 12 units per second.
+
+*Your result:* three steps and three checks.
+:::
+
+## 27.2 Input and diagonal movement
+
+Keys or a stick give an **input vector** (@fig-diag).
+
+::: {.callout-important title="Definition 27.2 — Normalized input"}
+Right gives (1, 0), up gives (0, 1); right + up gives (1, 1) with length
+$\sqrt{2} \approx 1.41$. To fly at the same speed in every direction,
+**normalize** the input when its length is greater than 1:
+$$\vec{d} = \frac{\text{input}}{|\text{input}|}, \qquad \vec{v} = \text{speed} \cdot \vec{d}.$$
+A stick can give a length below 1 (half pushed): keep it, for slow
+movement.
+:::
+
+![Diagonal input.](images/diagonal.png){#fig-diag width=94%}
+
+::: {.callout-note title="Example 27.2 — The fast diagonal"}
+1. Speed 5, input (1, 1): $\vec{v} = (5, 5)$, $|\vec{v}| = 5\sqrt{2} \approx
+   7.07$: 41 % too fast.
+2. Normalized: $(1, 1)/1.41 \approx (0.71, 0.71)$; $\vec{v} \approx (3.54,
+   3.54)$; $|\vec{v}| = 5$.
+:::
+
+{{< sim file="sims/move-lab.html" poster="sims/move-lab.png" title="Move Lab: fly the shuttle of Star Dock" height="820" >}}
+
+::: {.callout-warning title="Common mistake"}
+Normalizing (0, 0). A zero vector has no direction: dividing by its length
+0 gives an error. Check the length first.
+:::
+
+::: {.callout-note title="Do it · Diagonals"}
+1. In **Move Lab**, fly ↗ with "normalize input" off and on. Write both
+   speeds.
+2. Compute the velocity for input (−1, 1) and speed 8, normalized.
+
+*Your result:* two speeds and one vector.
+:::
+
+## 27.3 Facing the velocity
+
+The shuttle should point where it flies (@fig-face).
+
+::: {.callout-important title="Definition 27.3 — Facing with atan2"}
+If the sprite is drawn facing $+x$, its rotation angle is
+$$\theta = \operatorname{atan2}(v_y, v_x).$$
+Turn only when the speed is not 0; otherwise keep the last angle.
+:::
+
+![Turn the ship to face its velocity.](images/facing.png){#fig-face width=94%}
+
+::: {.callout-note title="Example 27.3 — Three directions"}
+1. $\vec{v} = (3, 4)$: $\operatorname{atan2}(4, 3) \approx 53.1°$.
+2. $\vec{v} = (0, 5)$: 90°. $\vec{v} = (-5, 0)$: 180°.
+3. $\vec{v} = (-3, -4)$: $\operatorname{atan2}(-4, -3) \approx -126.9°$
+   (the same as 233.1°).
+:::
+
+::: {.callout-caution title="In game code"}
+```csharp
+if (velocity.sqrMagnitude > 0.0001f) {
+    float deg = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+    transform.rotation = Quaternion.Euler(0, 0, deg);
+}
+```
+:::
+
+::: {.callout-warning title="Common mistake"}
+Writing atan2(x, y) instead of atan2(y, x): the angle is then measured from
+the y-axis, and the ship points the wrong way.
+:::
+
+::: {.callout-note title="Do it · Facing"}
+Compute the facing angle for $\vec{v} = (5, 5)$, $(-4, 3)$ and $(0, -2)$.
+
+*Your result:* three angles.
+:::
+
+## 27.4 Acceleration and damping
+
+Real ships do not start and stop at once (@fig-accel).
+
+::: {.callout-important title="Definition 27.4 — Acceleration and damping"}
+- **Acceleration** $\vec{a}$ changes the velocity: $\vec{v} \mathrel{+}=
+  \vec{a} \cdot \Delta t$, up to a maximum speed.
+- **Damping** slows it down when no key is pressed: $\vec{v} \mathrel{\times}=
+  (1 - k \cdot \Delta t)$ in each frame, with a damping factor $k$.
+:::
+
+![Speed over time.](images/accel.png){#fig-accel width=94%}
+
+::: {.callout-note title="Example 27.4 — Speeding up and slowing down"}
+1. $a = 10$, max speed 5: the shuttle reaches 5 after $5/10 = 0.5$ s.
+2. Released, with $k = 4$ at 60 fps: each frame multiplies the speed by
+   $1 - 4/60 \approx 0.933$: $5 \to 4.67 \to 4.36 \to \ldots$
+3. After one second (60 frames): $5 \cdot 0.933^{60} \approx 0.08$: almost
+   stopped.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Damping without $\Delta t$ (×0.9 every frame): the ship stops faster on
+fast computers. Use $1 - k \cdot \Delta t$.
+:::
+
+::: {.callout-note title="Do it · Smooth flight"}
+In **Move Lab**, switch on "accelerate" and "face the velocity". Fly, then
+let go. Compute: with $a = 8$ and max speed 6, when is the max speed
+reached?
+
+*Your result:* a description and a time.
+:::
+
+## 27.5 Bouncing off walls
+
+When the shuttle hits a hangar wall, its velocity is reflected
+(@fig-bounce).
+
+::: {.callout-important title="Definition 27.5 — Reflected velocity"}
+With the unit normal $\vec{n}$ of the wall (pointing into the hangar):
+$$\vec{v}\,' = \vec{v} - 2(\vec{v} \cdot \vec{n})\,\vec{n}.$$
+The part of $\vec{v}$ along the wall stays; the part into the wall turns
+around. With **bounciness** $e$ (0 to 1): $\vec{v}\,' = \vec{v} - (1 + e)(\vec{v}
+\cdot \vec{n})\,\vec{n}$.
+:::
+
+![A bounce.](images/bounce.png){#fig-bounce width=94%}
+
+::: {.callout-note title="Example 27.5 — Floor and wall"}
+1. Floor, $\vec{n} = (0, 1)$, $\vec{v} = (4, -3)$: $\vec{v} \cdot \vec{n} = -3$;
+   $\vec{v}\,' = (4, -3) - 2(-3)(0, 1) = (4, 3)$.
+2. With $e = 0.8$: $\vec{v}\,' = (4, -3) - 1.8(-3)(0, 1) = (4, 2.4)$.
+3. Right wall, $\vec{n} = (-1, 0)$, $\vec{v} = (4, 3)$: $\vec{v} \cdot \vec{n} =
+   -4$; $\vec{v}\,' = (4, 3) - 2(-4)(-1, 0) = (-4, 3)$.
+:::
+
+{{< sim file="sims/bounce-lab.html" poster="sims/bounce-lab.png" title="Bounce Lab: reflect the velocity" height="680" >}}
+
+::: {.callout-warning title="Common mistake"}
+Turning both parts: $(4, -3) \to (-4, 3)$. Only the part along the normal
+changes its sign.
+:::
+
+::: {.callout-note title="Do it · Bounces"}
+1. In **Bounce Lab**, check Example 27.5 with e = 1 and e = 0.8.
+2. Compute the bounce of $\vec{v} = (-2, 5)$ on the ceiling, $\vec{n} = (0, -1)$.
+
+*Your result:* the lab results and one vector.
+:::
+
+## 27.6 Drawing the sprite: local to world
+
+The game knows the shuttle's position, angle and size; the sprite's corners
+are stored in **local space**. A TRS transform puts them into the world
+(@fig-trs).
+
+::: {.callout-important title="Definition 27.6 — The sprite's transform"}
+For a corner $\vec{c}$ in local space: first **scale** (S), then
+**rotate** (R) by the facing angle, then **translate** (T) to the
+position:
+$$\vec{c}_{\text{world}} = T \cdot R \cdot S \cdot \vec{c}$$
+(lecture 13). In homogeneous coordinates this is one $3 \times 3$ matrix.
+:::
+
+![Local corners to world.](images/sprite-trs.png){#fig-trs width=94%}
+
+::: {.callout-note title="Example 27.6 — The nose of the shuttle"}
+Scale 2, angle 90°, position (5, 3).
+
+1. Nose (1, 0) → S → (2, 0) → R(90°) → (0, 2) → T → **(5, 5)**.
+2. Back (−0.5, 0.5) → (−1, 1) → (−1, −1) → **(4, 2)**.
+3. Back (−0.5, −0.5) → (−1, −1) → (1, −1) → **(6, 2)**.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Translating before rotating: the shuttle then circles around the origin
+instead of turning on the spot.
+:::
+
+::: {.callout-note title="Do it · World corners"}
+Compute the world corners of the shuttle with scale 1, angle 180° and
+position (2, 4).
+
+*Your result:* three points.
+:::
+
+## Team activity: the drone mission
+
+::: {.callout-note title="Team activity · The drone mission (about 20 minutes)"}
+**Mission.** A repair drone of *Star Dock* starts at (2, 1) with speed 5 and
+the input ↗. After 2 seconds it hits the hangar ceiling ($\vec{n} = (0, -1)$,
+$e = 0.8$). Its sprite has scale 1.5.
+
+**Team roles** (teams of three):
+
+1. **Movement:** the normalized velocity, the position after 2 s at 60 fps
+   (ignore the ceiling until then), the step per frame.
+2. **Facing and drawing:** the facing angle before the hit, and the world
+   position of the nose (1, 0) at the start.
+3. **Bounce:** the velocity after the ceiling, and the new facing angle.
+
+Each member solves one part and **checks** the part of one other member.
+Then the team presents its solution in two minutes: one slide or one page,
+with every step.
+
+**Individual alternative.** A student who works alone solves all three
+parts in order, checks each part with **Move Lab** or **Bounce Lab**, and
+hands in one page with the steps.
+:::
+
+## Case study: Pilot Check
+
+Before the shuttle may fly, the test pilots check six numbers of its
+movement code: the step at 30 fps, the speed of a diagonal without
+normalizing, the facing angle of (3, 4), the time to reach the max speed,
+the velocity after a bounce on the floor, and the world position of the
+sprite's nose. The Game challenge of the interactive lesson uses these
+checks. In the mini-game below you choose the right result for each one.
+
+{{< sim file="sims/pilot-check.html" poster="sims/pilot-check.png" title="Pilot Check: six numbers of the movement code" kind="game" height="440" >}}
+
+## Further reading
+
+Dunn and Parberry, *3D Math Primer for Graphics and Game Development*, 2nd
+ed. (2011), Chapters 2 and 5. Nystrom, *Game Programming Patterns* (2014),
+the chapter "Game Loop" (free online).
+
+## Exercises
+
+1. Write the update rule for the position with Δt.
+2. Speed 9, 30 fps: what is the step per frame?
+3. Why is a game without Δt slower on a slow computer?
+4. What is the length of the input (1, −1)? Normalize it.
+5. Speed 6 and input (1, 1), normalized: what is the velocity?
+6. Facing angle for $\vec{v} = (-1, 1)$?
+7. Facing angle for $\vec{v} = (0, -3)$?
+8. $a = 12$, max speed 6: when is the max speed reached?
+9. Damping with $k = 6$ at 60 fps: by which factor does the speed shrink in
+   one frame?
+10. Reflect $\vec{v} = (3, -2)$ on the floor $\vec{n} = (0, 1)$.
+11. Reflect $\vec{v} = (-5, 1)$ on the left wall $\vec{n} = (1, 0)$.
+12. In exercise 10, what is $\vec{v}\,'$ with $e = 0.5$?
+13. Scale 1, angle 90°, position (3, 3): where is the nose (1, 0)?
+14. Why must the sprite be rotated before it is translated?
+
+## Answers to the exercises
+
+::: {.answers}
+1. $\vec{p} \mathrel{+}= \vec{v} \cdot \Delta t$.
+2. $9 / 30 = 0.3$.
+3. It moves the same step per frame, and a slow computer has fewer frames
+   per second.
+4. $\sqrt{2} \approx 1.41$; $(0.71, -0.71)$.
+5. $6 \cdot (0.71, 0.71) \approx (4.24, 4.24)$.
+6. 135°.
+7. −90° (or 270°).
+8. $6 / 12 = 0.5$ s.
+9. $1 - 6/60 = 0.9$.
+10. $(3, 2)$.
+11. $(5, 1)$.
+12. $(3, -2) - 1.5(-2)(0, 1) = (3, 1)$.
+13. (1, 0) → (0, 1) → (3, 4).
+14. Otherwise it rotates around the origin of the world and moves away.
+:::

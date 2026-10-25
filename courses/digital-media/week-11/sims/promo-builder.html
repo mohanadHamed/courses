@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Promo Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .pool { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; margin: 6px 0; }
+    .sim .pool button { text-align: left; font-size: .86rem; padding: 6px 8px; }
+    .sim .tl { display: grid; gap: 4px; margin: 6px 0; }
+    .sim .tl .row { display: flex; gap: 6px; align-items: center; font-weight: 700; font-size: .88rem; background: #f8f0fc; border-radius: 8px; padding: 3px 6px; }
+    .sim .tl .row span.t { min-width: 46px; color: #9C36B5; font-variant-numeric: tabular-nums; }
+    .sim .tl .row span.n { flex: 1; }
+    .sim .tl .row button { padding: 1px 8px; font-size: .8rem; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Promo Builder: 30 seconds of Rooftop Rescue</h1>
+  <p class="hint">Build the store promo of <i>Rooftop Rescue</i> from the shots of the gameplay capture. Tap a shot to add it at the end, use ▲ to move it up and ✕ to remove it. The checks show if the promo works.</p>
+  <div class="pool" id="pool"></div>
+  <canvas id="c" aria-label="The promo on a timeline with its excitement curve"></canvas>
+  <div class="tl" id="tl"></div>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const SH = {
+    wave: { n: "the wave hits the roof, Nour jumps", d: 2.5, ex: 9, col: "#e8590c" },
+    town: { n: "wide shot of the flooded town (title)", d: 3, ex: 4, col: "#1c7ed6" },
+    row: { n: "Nour rows in the rain", d: 2, ex: 5, col: "#1c7ed6" },
+    net: { n: "the net catches Pasha", d: 2, ex: 7, col: "#2b8a3e" },
+    levels: { n: "three short level shots", d: 4.5, ex: 7, col: "#2b8a3e" },
+    boss: { n: "the giant wave chases the boat", d: 3, ex: 9, col: "#7048e8" },
+    happy: { n: "Pasha safe on the roof, Nour smiles", d: 3, ex: 8, col: "#7048e8" },
+    menu: { n: "the main menu", d: 4, ex: 1, col: "#868e96" },
+    loading: { n: "the loading screen", d: 3, ex: 0, col: "#868e96" },
+    logo: { n: "logo + “Play free now”", d: 5, ex: 6, col: "#9C36B5" },
+  };
+  let T = ["town", "menu", "row", "net"];
+  const total = () => T.reduce((a, k) => a + SH[k].d, 0);
+  const checks = () => [
+    [T[0] === "wave" || T[0] === "boss", "the hook comes first (an exciting shot in 0–3 s)"],
+    [total() >= 25 && total() <= 30, `25–30 seconds long (now ${total()} s)`],
+    [T[T.length - 1] === "logo", "it ends with the logo and the call to action"],
+    [!T.includes("menu") && !T.includes("loading"), "no menu or loading screens"],
+    [T.includes("happy") && T.indexOf("happy") >= T.length - 3, "the big moment comes near the end"],
+    [new Set(T).size === T.length, "no shot is used twice"],
+  ];
+  const TASKS = [
+    { q: "Task 1: Start the promo with a hook: move an exciting shot to the top.", ok: () => checks()[0][0] },
+    { q: "Task 2: Remove the menu and the loading screen; end with the logo.", ok: () => checks()[2][0] && checks()[3][0] },
+    { q: "Task 3: Make all six checks green.", ok: () => checks().every((c) => c[0]) },
+  ];
+  let ti = 0;
+  function draw() {
+    Kit.buttons($("pool"), Object.keys(SH).map((k) => ({ k, label: `+ ${SH[k].n} (${SH[k].d} s)` })), (k) => { T.push(k); draw(); });
+    let t = 0;
+    $("tl").innerHTML = T.map((k, i) => { const r = `<div class="row"><span class="t">${Kit.fmt(t, 1)} s</span><span class="n" style="color:${SH[k].col}">${SH[k].n}</span><button type="button" class="ghost" data-up="${i}" aria-label="move up">▲</button><button type="button" class="ghost" data-del="${i}" aria-label="remove">✕</button></div>`; t += SH[k].d; return r; }).join("");
+    $("tl").querySelectorAll("[data-up]").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.up; if (i > 0) { [T[i - 1], T[i]] = [T[i], T[i - 1]]; draw(); } }));
+    $("tl").querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", () => { T.splice(+b.dataset.del, 1); draw(); }));
+    const C = checks();
+    $("chk").innerHTML = C.map(([ok, txt]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${txt}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a promo that grabs, grows and ends with a call to action.";
+    $("msg").textContent = m + (C.every((c) => c[0]) ? "Now cut it on the beats and export it." : "The orange line shows how exciting each moment is: it should start high and end high.");
+    paint();
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.min(130, W * 0.24));
+  function paint() {
+    const c = cv.ctx, W = cv.W, H = cv.H, x0 = 10, x1 = W - 10, max = Math.max(30, total()), X = (s) => x0 + (x1 - x0) * s / max;
+    c.clearRect(0, 0, W, H);
+    let t = 0;
+    const pts = [];
+    T.forEach((k) => { const sh = SH[k]; Kit.rrect(c, X(t) + 1, H - 46, X(t + sh.d) - X(t) - 2, 30, 4, sh.col); pts.push([X(t + sh.d / 2), 10 + (H - 64) * (1 - sh.ex / 10)]); t += sh.d; });
+    c.strokeStyle = "#ced4da"; c.setLineDash([4, 4]); [25, 30].forEach((s) => { c.beginPath(); c.moveTo(X(s), 4); c.lineTo(X(s), H - 12); c.stroke(); Kit.text(c, s + " s", X(s), H - 2, 10, "#868e96"); }); c.setLineDash([]);
+    if (pts.length) { c.strokeStyle = "#e8590c"; c.lineWidth = 2.5; c.beginPath(); pts.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y))); c.stroke(); pts.forEach(([x, y]) => { c.fillStyle = "#e8590c"; c.beginPath(); c.arc(x, y, 3.5, 0, 7); c.fill(); }); }
+  }
+  window.addEventListener("resize", () => setTimeout(paint, 60));
+  window.PB = { set: (arr) => { T = arr.slice(); draw(); } };
+  draw();
+})();
+</script>
+</body>
+</html>

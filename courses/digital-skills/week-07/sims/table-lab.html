@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Table Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .task { font-weight: 700; margin: 4px 0 8px; }
+    .sim table.t { border-collapse: collapse; width: 100%; font-size: .9rem; font-variant-numeric: tabular-nums; }
+    .sim table.t th, .sim table.t td { border: 1px solid #dee2e6; padding: 4px 6px; text-align: left; }
+    .sim table.t th { background: #fff4e6; color: #D9480F; }
+    .sim table.t td.n { text-align: right; }
+    .sim table.t td.hl { background: #d3f9d8; color: #2b8a3e; font-weight: 800; }
+    .sim table.t tr.sum td { font-weight: 800; background: #f8f9fa; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 6px 0; font-weight: 700; font-size: .9rem; }
+    .sim select, .sim input[type=number] { font: inherit; padding: 4px 6px; border-radius: 8px; border: 1.5px solid #ced4da; }
+    .sim input[type=number] { width: 70px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Table Lab: sort, filter and colour the Sunrise sales</h1>
+  <p class="note">A practice model that works like Excel (Data › Sort, Data › Filter, Home › Conditional Formatting).</p>
+  <p class="task" id="task"></p>
+  <div class="bar">Sort by <select id="scol"></select>
+    <button type="button" class="ghost" id="asc">A → Z / smallest first</button>
+    <button type="button" class="ghost" id="desc">Z → A / largest first</button></div>
+  <div class="bar">Filter Type: <select id="ftype"><option>All</option><option>Paper</option><option>Drinks</option><option>Bags</option></select></div>
+  <div class="bar">Highlight Total greater than <input type="number" id="hval" value="20" step="1">
+    <button type="button" class="ghost" id="hl">Apply</button><button type="button" class="ghost" id="clr">Clear rules</button></div>
+  <div style="overflow-x:auto"><table class="t" id="t"></table></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="sales-data.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const s = { rows: SALES.slice(), sort: null, type: "All", hl: null };
+  SALES_HEAD.forEach((h, i) => $("scol").add(new Option(h, i)));
+  $("scol").value = 4;
+  const TASKS = [
+    { q: "Task 1: Sort the table by Total (JD), largest first. Which sale was the biggest?", ok: () => s.sort && s.sort.col === 4 && s.sort.dir < 0, done: "Sorted: the bag on Tuesday (36 JD) is at the top, the juice on Sunday (10 JD) at the bottom." },
+    { q: "Task 2: Show only the rows of the type Drinks with the filter.", ok: () => s.type === "Drinks", done: "Filtered: 4 rows stay. The other rows are hidden, not deleted. Total of the drinks: 50 JD." },
+    { q: "Task 3: Show all types again, then highlight the totals greater than 20.", ok: () => s.type === "All" && s.hl === 20, done: "Three totals are green: 24, 36 and 24 JD. 20 is not greater than 20." },
+  ];
+  let ti = 0;
+  function render(t, bad) {
+    const rows = s.rows.filter((r) => s.type === "All" || r[2] === s.type);
+    const sum = rows.reduce((a, r) => a + r[4], 0);
+    $("t").innerHTML = "<tr>" + SALES_HEAD.map((h) => `<th>${h}</th>`).join("") + "</tr>" +
+      rows.map((r) => "<tr>" + r.map((v, i) => `<td class="${i >= 3 ? "n" : ""} ${i === 4 && s.hl !== null && v > s.hl ? "hl" : ""}">${v}</td>`).join("") + "</tr>").join("") +
+      `<tr class="sum"><td colspan="4">Total of the rows shown</td><td class="n">${sum}</td></tr>`;
+    while (ti < TASKS.length && TASKS[ti].ok()) { t = "✓ " + TASKS[ti].done; ti++; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done. Try other sorts, filters and rules.";
+    if (t) { $("msg").textContent = t; $("msg").classList.toggle("bad", !!bad); }
+  }
+  function sort(dir) {
+    const col = +$("scol").value;
+    s.sort = { col, dir };
+    s.rows.sort((a, b) => (typeof a[col] === "number" ? (a[col] - b[col]) : a[col].localeCompare(b[col])) * dir);
+    render(`Sorted by ${SALES_HEAD[col]}, ${dir > 0 ? "A → Z / smallest first" : "Z → A / largest first"}. Each row moved as a whole.`);
+  }
+  $("asc").addEventListener("click", () => sort(1));
+  $("desc").addEventListener("click", () => sort(-1));
+  $("ftype").addEventListener("change", (e) => { s.type = e.target.value; render(s.type === "All" ? "The filter is off: all rows are shown." : `Filter: only ${s.type}. The hidden rows are still in the sheet.`); });
+  $("hl").addEventListener("click", () => { s.hl = +$("hval").value; render(`Rule: Total greater than ${s.hl} → green. The colour changes by itself when a number changes.`); });
+  $("clr").addEventListener("click", () => { s.hl = null; render("The rules are cleared."); });
+  window.TL = { sort: (col, dir) => { $("scol").value = col; sort(dir); }, filter: (t) => { $("ftype").value = t; $("ftype").dispatchEvent(new Event("change")); }, hl: (v) => { $("hval").value = v; $("hl").click(); } };
+  render("The sales of one week, in the order Rana typed them.");
+})();
+</script>
+</body>
+</html>

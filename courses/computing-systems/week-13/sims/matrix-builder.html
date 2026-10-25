@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Matrix Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .pick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 6px 0; }
+    .sim .pick button { text-align: left; line-height: 1.3; padding: 6px 8px; }
+    .sim .pick button.on { background: var(--sim-accent); color: #fff; }
+    .sim .pick small { display: block; font-weight: 600; opacity: .85; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .total { font-weight: 800; font-size: 1.05rem; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+    @media (max-width: 520px) { .sim .pick { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Matrix Builder: which devices for the test?</h1>
+  <p class="hint">Rami plans the tests of <i>Pocket Quest 1.3</i>. Choose test devices and emulators until every row of the checklist is green. Prices are <b>example values</b>; emulators are free.</p>
+  <div class="pick" id="pick"></div>
+  <p class="total" id="total"></p>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const ITEMS = {
+    "P5 (real)": { cost: 150, d: "Android 11, 4 GB, the weakest supported", tags: ["weak", "realA"] },
+    "P6 (real)": { cost: 400, d: "Android 14, 120 Hz", tags: ["newest", "realA"] },
+    "P8 (real iPhone)": { cost: 500, d: "iOS 17", tags: ["ios", "realI"] },
+    "AVD API 26": { cost: 0, d: "emulator, Android 8, oldest supported", tags: ["oldest"] },
+    "AVD API 34": { cost: 0, d: "emulator, Android 14", tags: ["newest"] },
+    "AVD tablet API 33": { cost: 0, d: "emulator, 10-inch screen", tags: ["tablet"] },
+    "iOS Simulator (office Mac)": { cost: 0, d: "iPhone screens, not a real iPhone", tags: ["ios"] },
+    "device farm, 10 hours": { cost: 60, d: "rented real phones, Android and iPhone", tags: ["realI", "tablet"] },
+  };
+  const NEED = [["oldest", "the oldest supported Android (API 26)"], ["newest", "the newest Android (API 34)"], ["weak", "the weakest supported device, real (P5)"], ["realA", "a real Android phone for speed, heat and touch"], ["ios", "iPhone screens"], ["realI", "a real iPhone before the release"], ["tablet", "a tablet screen"]];
+  const s = { on: new Set() };
+  const cov = (t) => [...s.on].some((k) => ITEMS[k].tags.includes(t));
+  const cost = () => [...s.on].reduce((a, k) => a + ITEMS[k].cost, 0);
+  const all = () => NEED.every(([t]) => cov(t));
+  const TASKS = [
+    { q: "Task 1: Choose the real P5 and the two Android emulators API 26 and API 34. Which rows are green now?", ok: () => ["P5 (real)", "AVD API 26", "AVD API 34"].every((k) => s.on.has(k)) },
+    { q: "Task 2: Make every row green. What does the matrix cost?", ok: () => all() },
+    { q: "Task 3: The budget is $300. Make every row green for $300 or less.", ok: () => all() && cost() <= 300 },
+  ];
+  let ti = 0;
+  function upd() {
+    Kit.buttons($("pick"), Object.keys(ITEMS).map((k) => ({ k, label: `${k} · ${ITEMS[k].cost ? "$" + ITEMS[k].cost : "free"}<small>${ITEMS[k].d}</small>` })), (k) => { s.on.has(k) ? s.on.delete(k) : s.on.add(k); upd(); });
+    $("pick").querySelectorAll("button").forEach((b) => b.classList.toggle("on", s.on.has(b.dataset.k)));
+    $("total").textContent = `${s.on.size} setups · cost $${cost()}`;
+    $("chk").innerHTML = NEED.map(([t, d]) => `<li class="${cov(t) ? "ok" : "no"}">${cov(t) ? "✔" : "✘"} ${d}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: free emulators for breadth, one weak real phone and a few rented hours for the rest.";
+    $("msg").textContent = m + (all() ? `Every row is covered for $${cost()}.` : "Emulators are free, but some rows need real hardware.");
+  }
+  window.MB = { set: (list) => { s.on = new Set(list); upd(); }, toggle: (k) => { s.on.has(k) ? s.on.delete(k) : s.on.add(k); upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

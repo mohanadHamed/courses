@@ -69,7 +69,7 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 ## Notes
 
 - **Independent study first.** Pages, slides and homework never require classmates; seminars are analyses or production exercises a student can do alone.
-- **Team activity (D1, work within a production team): lessons 27–28 only.** The week-15 team workshop and team presentation are described in the notes (PDF) of lessons 29 and 30 as one team activity (roles in a small production team, one media package, one presentation), each with an individual alternative (the student takes every role in turn and keeps a production log). No other lesson has team work.
+- **Team activity (D1, work within a production team): lessons 27–28 only.** The team workshop and team presentation are described in the notes (PDF) of lessons 27 and 28 as one team activity (roles in a small production team, one media package, one presentation), each with an individual alternative (the student takes every role in turn and keeps a production log). No other lesson has team work.
 - Intellectual property (D1) in weeks 13–14 is practised individually: a credits and licences file for every asset.
 - Week 8: midterm exam and midterm discussion (no lessons). Week 16: final exam.
 - One homework per week (1–2 simple tasks, under 10 minutes); week 15: the project instead (syllabus).

@@ -1,0 +1,136 @@
+---
+title: "Recording and Editing a Sound Sample"
+subtitle: "Lecture 14 · Seminar"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary audio-editor take input-level trim-audio noise-reduction fade normalize clipping >}}
+
+## 14.1 Record a sample in Audacity
+
+:::: {.columns}
+::: {.column width="50%"}
+- Set the project rate to 48000 Hz and record one channel (mono).
+- Watch the meter first, so that the peaks stay near −6 dB.
+- Record 2 seconds of room tone, then three takes of the sound.
+- **Do it:** Record three takes of a short sound. Which settings did you use?
+:::
+::: {.column width="50%"}
+![](images/edit-steps.png)
+:::
+::::
+
+## Try it 1 · Settings
+
+a) Which project rate do you set for a game sound?
+b) How many recording channels does one sound source need?
+c) What do you record before the three takes?
+
+::: {.answer}
+a) 48000 Hz
+b) one channel (mono)
+c) 2 seconds of room tone
+:::
+
+## 14.2 Trim, noise reduction and fades
+
+:::: {.columns}
+::: {.column width="50%"}
+- Trim deletes the silence before and after the best take.
+- Noise Reduction learns the hum from the room tone and removes it.
+- A short fade-out at the end removes the click.
+- **Do it:** Clean your best take. Which step changed the sound most?
+:::
+::: {.column width="50%"}
+![](images/before-after.png)
+:::
+::::
+
+## Example · Cleaning the meow
+
+The best meow starts 0.9 s late, has a fridge hum and ends with a click.
+**Which three edits does Yara make, in which order?**
+
+::: {.reveal}
+1. **Trim:** she deletes the silence and leaves 0.05 s.
+2. **Noise Reduction:** she takes the profile from the room tone and applies it to the take.
+3. **Fade Out:** the last 0.2 s fades to silence, so the click is gone.
+:::
+
+## Live demo · Wave Editor
+
+{{< sim file="sims/wave-editor.html" poster="sims/wave-editor.png" title="Wave Editor: clean up Pasha's meow" task="**Show:** trim, remove the hum, fade out and normalize; then start again and press Amplify +20 dB. **Ask:** why does Amplify break the sound, and Normalize does not?" >}}
+
+## Try it 2 · Cleaning
+
+a) The meow starts almost a second late. Which edit fixes it?
+b) A low hum runs under the whole take. Which tool removes it?
+c) Where does Noise Reduction get its noise profile?
+
+::: {.answer}
+a) trim the silence at the start
+b) Noise Reduction
+c) from the room tone
+:::
+
+## 14.3 Normalize and export
+
+:::: {.columns}
+::: {.column width="50%"}
+- Normalize raises the loudest peak of the clean take to −1 dB.
+- A sound effect is exported as a WAV with 16 bits in mono.
+- The name says the type, what and the version, with no spaces.
+- **Do it:** Export your sample as a WAV. Which name did you give it?
+:::
+::: {.column width="50%"}
+![](images/export-names.png)
+:::
+::::
+
+## Example · The meow is ready
+
+The cleaned meow lasts about 1 second, and its loudest peak is at −14 dB.
+**How does Yara make it ready for the game?**
+
+::: {.reveal}
+1. She **normalizes** the take to −1 dB, with no clipping.
+2. She exports a WAV with 16 bits in mono, about **94 KB**.
+3. She names it **sfx_pasha_meow_01.wav** and adds it to the sound list.
+:::
+
+## Try it 3 · Ready for the game
+
+a) To which level do you normalize a sound effect?
+b) Why do you normalize after the cleaning?
+c) Which name fits the meow?
+
+::: {.answer}
+a) −1 dB
+b) Otherwise the noise and the clicks get louder too.
+c) sfx_pasha_meow_01.wav
+:::
+
+## Game challenge · Clean Take
+
+{{< sim file="sims/clean-take.html" poster="sims/clean-take.png" title="Clean Take: the right edit for each take" kind="game" task="**The story:** Yara edits the takes of Rooftop Rescue before she exports them. **Play:** look at each waveform and choose the right edit, from the late start to the file name." >}}
+
+## Try it 4 · Order and size (harder)
+
+a) Why can no edit repair a clipped take?
+b) How big is 2 seconds of a 48 kHz, 16-bit mono WAV?
+c) Which name fits the second version of a splash sound?
+
+::: {.answer}
+a) The flat tops of the wave are lost.
+b) about 188 KB
+c) sfx_splash_02.wav
+:::
+
+## Summary
+
+- We record at 48000 Hz in mono, with the peaks near −6 dB.
+- We clean in order: trim, Noise Reduction and fades.
+- We normalize to −1 dB after the cleaning and never amplify into clipping.
+- We export a WAV with a name like sfx_what_01.wav.

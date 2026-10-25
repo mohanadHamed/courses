@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Store Listing Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .f { display: grid; grid-template-columns: 150px 1fr; gap: 6px 10px; align-items: center; margin: 8px 0; font-weight: 700; font-size: .92rem; }
+    @media (max-width: 520px) { .sim .f { grid-template-columns: 1fr; } }
+    .sim .f input, .sim .f select, .sim .f textarea { font: inherit; font-weight: 600; padding: 5px 8px; border-radius: 8px; border: 1.5px solid #ced4da; width: 100%; box-sizing: border-box; }
+    .sim .f small { color: var(--sim-muted); font-weight: 600; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 8px 0; line-height: 1.6; font-weight: 700; }
+    .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .tabs { display: flex; gap: 6px; flex-wrap: wrap; } .sim .tabs button.on { background: var(--sim-accent); color: #fff; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Store Listing Builder: is Pocket Quest ready?</h1>
+  <p class="hint">Fill the store listing of <i>Pocket Quest</i> for one store. The checklist shows what the store needs before it accepts the game. Limits are the ones of 2026: check the store's help pages before a real launch.</p>
+  <div class="tabs" id="store"></div>
+  <div class="f">
+    <label for="name">App name</label><div><input id="name" value="Pocket Quest: The Lost Island of the Seven Golden Keys"><small id="nameN"></small></div>
+    <label for="short">Short text</label><div><input id="short" value="A small adventure."><small id="shortN"></small></div>
+    <label for="icon">Icon size</label><select id="icon"><option>256 × 256</option><option>512 × 512</option><option>1024 × 1024</option></select>
+    <label for="shots">Screenshots</label><select id="shots"><option>0</option><option>1</option><option>2</option><option>4</option><option>8</option></select>
+    <label for="rating">Age rating</label><select id="rating"><option>not done</option><option>questionnaire done</option></select>
+    <label for="privacy">Privacy policy</label><select id="privacy"><option>no link</option><option>link to our policy page</option></select>
+    <label for="version">Build number</label><select id="version"><option>same as the last upload (12)</option><option>higher than the last upload (13)</option></select>
+  </div>
+  <ul class="chk" id="chk"></ul>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  let store = "google";
+  const S = { google: { name: "Google Play", icon: "512 × 512", short: 80, shortName: "Short description (80 characters)" }, apple: { name: "App Store", icon: "1024 × 1024", short: 30, shortName: "Subtitle (30 characters)" } };
+  function tabs() { Kit.buttons($("store"), [{ k: "google", label: "Google Play" }, { k: "apple", label: "App Store" }], (k) => { store = k; tabs(); check(); });
+    $("store").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === store)); }
+  function check() {
+    const st = S[store], name = $("name").value.trim(), short = $("short").value.trim(), shots = +$("shots").value;
+    $("nameN").textContent = `${name.length} / 30 characters`; $("shortN").textContent = `${short.length} / ${st.short} characters · ${st.shortName}`;
+    const items = [
+      [name.length > 0 && name.length <= 30, `App name: at most 30 characters (now ${name.length})`],
+      [short.length > 0 && short.length <= st.short, `${st.shortName.split(" (")[0]}: at most ${st.short} characters`],
+      [$("icon").value === st.icon, `Icon: ${st.icon} pixels for ${st.name}`],
+      [shots >= (store === "google" ? 2 : 1), store === "google" ? "At least 2 screenshots of the real game" : "At least 1 screenshot of the real game for each screen size"],
+      [$("rating").value !== "not done", "Age rating: the questionnaire is done"],
+      [$("privacy").value !== "no link", "A link to a privacy policy"],
+      [$("version").value.startsWith("higher"), "A build number higher than the last upload"],
+    ];
+    $("chk").innerHTML = items.map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    const n = items.filter((x) => x[0]).length;
+    $("msg").textContent = n === items.length ? `Ready: ${st.name} can review Pocket Quest now.` : `${items.length - n} problem${items.length - n > 1 ? "s" : ""} left: the store would refuse the upload or the review.`;
+    $("msg").classList.toggle("bad", n < items.length);
+    if (n === items.length) Kit.good();
+  }
+  ["name", "short"].forEach((id) => $(id).addEventListener("input", check));
+  ["icon", "shots", "rating", "privacy", "version"].forEach((id) => $(id).addEventListener("change", check));
+  window.LB = { set: (o) => { if (o.store) { store = o.store; tabs(); } Object.entries(o).forEach(([k, v]) => { if (k !== "store") $(k).value = v; }); check(); } };
+  tabs(); check();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+---
+title: "Matrices: Definition and Basic Operations"
+description: "Lesson notes · Matrices as tables of game data, size and entries, row and column vectors, adding matrices, multiplying a matrix by a number, and the matrix that a game engine keeps for every object."
+lesson: 9
+ilos: [A1]
+format: lesson-typst
+---
+
+::: {.lead}
+A mining game stores its level as a table: in each tile, the number of gems.
+An RPG stores its enemies as a table: one row for each enemy, one column for
+each stat. A game engine stores, for every object, a table of 16 numbers
+that says where the object is, how it is turned and how big it is. All
+these tables are **matrices**. In lectures 2 to 8 you worked with vectors and
+angles. In this lesson you meet matrices: how to name their parts, how to add
+them and how to multiply them by a number. In lecture 10 you multiply
+matrices, and from lecture 11 on they move, turn and scale game objects.
+Every section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary matrix matrix-row matrix-column matrix-size matrix-entry row-vector column-vector transpose square-matrix main-diagonal matrix-addition transformation-matrix >}}
+
+## 9.1 The mine map: what a matrix is
+
+The level designer of *Gem Grid* draws a mine of 3 rows of 4 tiles. Each tile
+holds some gems. The programmer needs one name for the whole map, and a clear
+way to say "the tile in row 2, column 3". A matrix gives both (@fig-map).
+
+::: {.callout-important title="Definition 9.1 — Matrix, size and entry"}
+A **matrix** is a rectangular table of numbers in **rows** (across) and
+**columns** (down). Its **size** is "rows × columns": a matrix with 3 rows and
+4 columns is a 3 × 4 matrix. The number in row *i* and column *j* is the
+**entry** $a_{ij}$. The row number always comes first.
+:::
+
+![The gem map of *Gem Grid* as a 3 × 4 matrix M. The entry $m_{23}$ (row 2, column 3) is 0.](images/matrix-map.png){#fig-map width=96%}
+
+$$M = \begin{bmatrix} 2 & 0 & 5 & 1 \\ 4 & 3 & 0 & 6 \\ 1 & 7 & 2 & 0 \end{bmatrix}$$
+
+Matrices are written with a capital letter (M, A, B), and their entries with
+the small letter and two numbers: $m_{23}$ is "m two three", not "m
+twenty-three".
+
+::: {.callout-note title="Example 9.1 — Reading the mine map"}
+1. M has 3 rows and 4 columns, so its size is **3 × 4**. It has 3 × 4 = 12
+   entries.
+2. $m_{14}$ is in row 1, column 4: **1** gem.
+3. $m_{32}$ is in row 3, column 2: **7** gems. $m_{23}$ is in row 2, column 3:
+   **0** gems. Swapping the two numbers gives another tile.
+:::
+
+::: {.callout-note title="Example 9.2 — An enemy table"}
+An RPG keeps its enemies in a 2 × 3 matrix E. Row 1 is the slime, row 2 the
+troll; the columns are HP, damage and speed:
+$$E = \begin{bmatrix} 40 & 10 & 4 \\ 60 & 20 & 2 \end{bmatrix}$$
+
+1. The damage of the troll is in row 2, column 2: $e_{22} = 20$.
+2. $e_{13} = 4$ is the speed of the slime.
+3. To add a third enemy, the designer adds a row: E becomes 3 × 3.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Writing the size as "columns × rows". The size of M is 3 × 4, not 4 × 3. A
+spreadsheet makes this mistake easy: the cell C2 is column C, row 2, but the
+entry $a_{23}$ is row 2, column 3.
+:::
+
+::: {.callout-note title="Do it · Your own level as a matrix"}
+On squared paper, draw a small level of 3 rows and 3 tiles. Write a number of
+coins in each tile.
+
+1. Write the level as a matrix L. What is its size?
+2. Circle $l_{32}$ and $l_{23}$. Are they the same tile?
+
+*Your result:* the matrix L, its size, and the two circled entries.
+:::
+
+## 9.2 A position is a small matrix: row and column vectors
+
+The player stands at P = (3, 5). A vector is also a matrix, with only one row
+or only one column (@fig-rowcol).
+
+::: {.callout-important title="Definition 9.2 — Row vector, column vector and transpose"}
+A **row vector** is a matrix with one row (size 1 × n). A **column vector**
+is a matrix with one column (size n × 1). The **transpose** $A^T$ of a matrix
+A turns its rows into columns: the entry $a_{ij}$ moves to row *j*, column
+*i*. A matrix of size m × n has a transpose of size n × m.
+:::
+
+![P = (3, 5) as a row vector and as a column vector. The transpose turns one into the other.](images/row-column.png){#fig-rowcol width=94%}
+
+$$\begin{bmatrix} 3 & 5 \end{bmatrix}^T = \begin{bmatrix} 3 \\ 5 \end{bmatrix}$$
+
+Game engines and the textbook of this course write positions and directions
+as **column vectors**. From lecture 10 on, a matrix multiplies a column
+vector to move a point.
+
+::: {.callout-note title="Example 9.3 — Three enemies in one matrix"}
+Three enemies stand at (2, 1), (5, 3) and (0, 4). The game keeps their
+positions as the columns of one 2 × 3 matrix:
+$$P = \begin{bmatrix} 2 & 5 & 0 \\ 1 & 3 & 4 \end{bmatrix}$$
+
+1. Row 1 holds the x-coordinates, row 2 the y-coordinates.
+2. Column 2 is the second enemy: (5, 3).
+:::
+
+::: {.callout-note title="Example 9.4 — The transpose of the enemy table"}
+The enemy table E of Example 9.2 is 2 × 3.
+
+1. Its transpose $E^T$ is 3 × 2: the rows (40, 10, 4) and (60, 20, 2) become
+   columns.
+2. In $E^T$ each row is a stat: row 1 is HP (40, 60), row 2 is damage
+   (10, 20), row 3 is speed (4, 2).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that the transpose changes the numbers. It only moves them: the
+same 6 numbers, in other places.
+:::
+
+::: {.callout-note title="Do it · Transpose the mine map"}
+Write the transpose $M^T$ of the mine map M of section 9.1.
+
+1. What is the size of $M^T$?
+2. Which number is in row 3, column 2 of $M^T$? Find it in M too.
+
+*Your result:* $M^T$, its size and the entry you found twice.
+:::
+
+## 9.3 Two rounds, one total: adding matrices
+
+A puzzle game shows the points of two players (rows) in three levels
+(columns). Round 1 gives one matrix of points, the bonus round another. The
+total of each player in each level is the sum of two entries in the same
+place (@fig-add).
+
+::: {.callout-important title="Definition 9.3 — Matrix addition and subtraction"}
+Two matrices of the **same size** are added entry by entry:
+$(A + B)_{ij} = a_{ij} + b_{ij}$. Subtraction works the same way:
+$(A - B)_{ij} = a_{ij} - b_{ij}$. The result has the same size. Matrices of
+different sizes cannot be added.
+:::
+
+![Adding two 2 × 3 matrices: every entry with the entry in the same place.](images/matrix-add.png){#fig-add width=96%}
+
+::: {.callout-note title="Example 9.5 — Points after the bonus round"}
+$$\begin{bmatrix} 120 & 80 & 50 \\ 90 & 60 & 40 \end{bmatrix} + \begin{bmatrix} 30 & 20 & 10 \\ 10 & 40 & 0 \end{bmatrix} = \begin{bmatrix} 150 & 100 & 60 \\ 100 & 100 & 40 \end{bmatrix}$$
+
+1. Both matrices are 2 × 3, so the sum exists and is 2 × 3.
+2. Player 1 in level 2: 80 + 20 = 100.
+3. Player 2 in level 3: 40 + 0 = 40.
+:::
+
+::: {.callout-note title="Example 9.6 — Moving three enemies at once"}
+The enemies of Example 9.3 each take one step. The steps are the columns of
+D:
+$$P + D = \begin{bmatrix} 2 & 5 & 0 \\ 1 & 3 & 4 \end{bmatrix} + \begin{bmatrix} 1 & -1 & 0 \\ 0 & 0 & -2 \end{bmatrix} = \begin{bmatrix} 3 & 4 & 0 \\ 1 & 3 & 2 \end{bmatrix}$$
+
+1. Enemy 1: (2, 1) + (1, 0) = (3, 1). This is vector addition (lecture 3),
+   done for all enemies at once.
+2. Enemy 3: (0, 4) + (0, −2) = (0, 2).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Adding a 2 × 3 matrix to a 3 × 2 matrix. There is no entry in the same place
+for every number, so the sum does not exist. Check the sizes first.
+:::
+
+{{< sim file="sims/matrix-lab.html" poster="sims/matrix-lab.png" title="Matrix Lab: add, subtract and multiply by a number" height="560" >}}
+
+::: {.callout-note title="Do it · Add in Matrix Lab"}
+Open **Matrix Lab** (above, or scan the QR code).
+
+1. Choose A + B. Tap three entries of the result and write each sum.
+2. Choose A − B and tap one entry. Then press "B: 2 × 3" to make B a 3 × 2
+   matrix. What does the lab say?
+
+*Your result:* four calculations and one sentence about the sizes.
+:::
+
+## 9.4 Hard mode: multiplying a matrix by a number
+
+In hard mode, every enemy of the RPG has 1.5 times its HP, damage and speed.
+The designer does not change the table number by number: the game multiplies
+the whole matrix by 1.5 (@fig-scale).
+
+::: {.callout-important title="Definition 9.4 — A number times a matrix"}
+To multiply a matrix A by a number k (a **scalar**), multiply every entry by
+k: $(kA)_{ij} = k\,a_{ij}$. The size does not change.
+:::
+
+![Hard mode multiplies every entry of the stats matrix by 1.5.](images/matrix-scale.png){#fig-scale width=96%}
+
+::: {.callout-note title="Example 9.7 — The stats in hard mode"}
+$$1.5 \begin{bmatrix} 40 & 10 & 4 \\ 60 & 20 & 2 \end{bmatrix} = \begin{bmatrix} 60 & 15 & 6 \\ 90 & 30 & 3 \end{bmatrix}$$
+
+1. The troll's HP: 1.5 × 60 = 90.
+2. The slime's damage: 1.5 × 10 = 15.
+:::
+
+::: {.callout-note title="Example 9.8 — Negative numbers and subtraction"}
+1. A velocity (3, −1) as a column vector, times 2, gives (6, −2): the same
+   rule as scaling a vector in lecture 3.
+2. Times −1, a matrix gets the opposite signs: −1 × (3, −1) = (−3, 1).
+3. So A − B is the same as A + (−1)B.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Multiplying only one row or one column. The number multiplies **every** entry
+of the matrix.
+:::
+
+::: {.callout-note title="Do it · k × A in Matrix Lab"}
+In **Matrix Lab**, choose k × A.
+
+1. Set k = 1.5 and tap two entries of the result. Write each product.
+2. Set k = −1. What happens to every sign?
+
+*Your result:* two products and one sentence about k = −1.
+:::
+
+## 9.5 The matrix that the engine keeps for every object
+
+A game engine keeps, for every object in the scene, one **square** matrix of
+size 4 × 4. It is the object's **transformation matrix**: its 16 numbers say
+where the object is, how it is turned and how big it is (@fig-trs). You read
+it now; lectures 11 to 14 show how it is built.
+
+::: {.callout-important title="Definition 9.5 — Square matrix and main diagonal"}
+A **square matrix** has as many rows as columns (2 × 2, 3 × 3, 4 × 4). Its
+**main diagonal** is the entries $a_{11}, a_{22}, a_{33}, \ldots$ from the
+top left to the bottom right.
+:::
+
+![The 4 × 4 matrix of a crate. The last column holds its position; the top-left 3 × 3 part holds its turn and size.](images/transform-matrix.png){#fig-trs width=96%}
+
+In the matrix of an object that is not turned and has size 1, the main
+diagonal holds 1s, and the last column holds the position (x, y, z) and a 1.
+
+::: {.callout-note title="Example 9.9 — Where is the crate?"}
+$$T = \begin{bmatrix} 1 & 0 & 0 & 4 \\ 0 & 1 & 0 & 2 \\ 0 & 0 & 1 & 7 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$
+
+1. T is square: 4 × 4. Its main diagonal is 1, 1, 1, 1.
+2. The last column is (4, 2, 7, 1). The crate stands at **(4, 2, 7)**.
+3. The crate moves 2 units along +x: only $t_{14}$ changes, from 4 to 6.
+:::
+
+::: {.callout-caution title="In game code"}
+```csharp
+Matrix4x4 m = transform.localToWorldMatrix;  // the object's 4 × 4 matrix
+Vector4 last = m.GetColumn(3);               // (4, 2, 7, 1)
+float x = m[0, 3];                           // row 0, column 3: 4
+```
+`Matrix4x4` is Unity's 4 × 4 matrix. `GetColumn(3)` gives the last column.
+Code counts rows and columns from 0, so `m[0, 3]` is the entry $t_{14}$ of
+the maths.
+:::
+
+::: {.callout-note title="Example 9.10 — Code numbers and maths numbers"}
+1. `m[1, 3]` is row 1, column 3 in code: row 2, column 4 in maths, so
+   $t_{24} = 2$, the y-coordinate.
+2. `m[2, 2]` is $t_{33}$, on the main diagonal: 1.
+:::
+
+::: {.callout-note title="Do it · Two objects, two matrices"}
+A tree has the matrix with rows (1, 0, 0, 3), (0, 1, 0, 0), (0, 0, 1, 5),
+(0, 0, 0, 1). A lamp has rows (1, 0, 0, −2), (0, 1, 0, 4), (0, 0, 1, 5),
+(0, 0, 0, 1).
+
+1. Write both matrices and mark their last columns.
+2. Where is each object? Which one is higher (larger y)?
+
+*Your result:* the two positions and the higher object.
+:::
+
+## Case study: Gem Grid
+
+*Gem Grid* is a made-up mining game. The mine map is the 3 × 4 matrix M of
+section 9.1: rows (2, 0, 5, 1), (4, 3, 0, 6) and (1, 7, 2, 0). At night, a
+bonus layer N adds gems: rows (1, 1, 0, 0), (0, 2, 1, 0) and (0, 0, 3, 1).
+In hard mode every tile has twice the gems: 2M. The player must read the
+right tile, add the night layer, and double the map. The Game challenge of
+the interactive lesson uses these numbers. In the mini-game below you play
+five rounds.
+
+{{< sim file="sims/gem-grid.html" poster="sims/gem-grid.png" title="Gem Grid: read, add and double the mine map" kind="game" height="640" >}}
+
+## Further reading
+
+Dunn and Parberry, *3D Math Primer for Graphics and Game Development*,
+2nd ed., Chapter 4 (Introduction to Matrices): matrix dimensions and
+notation, square matrices, the transpose, and row and column vectors.
+
+## Exercises
+
+1. A matrix has 2 rows and 5 columns. What is its size, and how many entries
+   does it have?
+2. In the mine map M, what is $m_{21}$? What is $m_{12}$?
+3. In the enemy table E (rows (40, 10, 4) and (60, 20, 2)), which entry is
+   the speed of the troll?
+4. Write P = (−2, 6) as a column vector and as a row vector.
+5. A matrix is 4 × 2. What is the size of its transpose?
+6. Write the transpose of the matrix with rows (1, 2, 3) and (4, 5, 6).
+7. Add the matrices with rows (3, 1), (0, 2) and rows (1, 1), (4, −2).
+8. Can a 3 × 2 matrix and a 2 × 3 matrix be added? Why?
+9. Three coins are at (1, 1), (4, 0) and (2, 5). They all fall by 1 unit.
+   Write the position matrix and the step matrix, and add them.
+10. Compute 3A for A with rows (2, 0) and (−1, 4).
+11. In hard mode the stats are 1.5 E. What is the HP of the slime (40)?
+12. Compute A − B for A with rows (5, 2) and B with rows (1, 3).
+13. Which of these are square: 2 × 2, 2 × 3, 4 × 4, 1 × 1?
+14. An object's matrix has the last column (−3, 1, 8, 1). Where is the
+    object?
+15. *Gem Grid*: how many gems are in row 1, column 3 of M + N? And of 2M?
+
+## Answers to the exercises
+
+::: {.answers}
+1. 2 × 5; 10 entries.
+2. $m_{21} = 4$; $m_{12} = 0$.
+3. $e_{23} = 2$.
+4. Column: rows −2 and 6. Row: (−2  6).
+5. 2 × 4.
+6. Rows (1, 4), (2, 5), (3, 6): a 3 × 2 matrix.
+7. Rows (4, 2) and (4, 0).
+8. No: the sizes are different.
+9. Rows (1, 4, 2) and (1, 0, 5) plus rows (0, 0, 0) and (−1, −1, −1) gives rows (1, 4, 2) and (0, −1, 4).
+10. Rows (6, 0) and (−3, 12).
+11. 1.5 × 40 = 60.
+12. (4, −1).
+13. 2 × 2, 4 × 4 and 1 × 1.
+14. At (−3, 1, 8).
+15. M + N: 5 + 0 = 5. 2M: 2 × 5 = 10.
+:::

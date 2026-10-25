@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Number Format Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .cellbox { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin: 8px 0; }
+    .sim .cell { min-width: 150px; padding: 10px 14px; border: 2.5px solid #217346; border-radius: 6px; text-align: right; font-size: 1.4rem; font-weight: 800; font-variant-numeric: tabular-nums; background: #fff; }
+    .sim .bar { font-weight: 700; color: #1864ab; }
+    .sim .task { font-weight: 800; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Number Format Lab: the same number, another look</h1>
+  <p class="note">A number format changes how a number <b>looks</b>, not the number itself. The formula bar always shows the real value.</p>
+  <p class="task" id="task"></p>
+  <div class="cellbox"><div class="cell" id="cell"></div><div class="bar" id="bar"></div></div>
+  <div class="controls" id="fmts"></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const F = {
+    General: (v) => String(v),
+    "Number (2 decimals)": (v) => v.toFixed(2),
+    "Currency (JD)": (v) => v.toFixed(2) + " JD",
+    Percentage: (v) => Math.round(v * 1000) / 10 + "%",
+    Date: (v) => { const d = new Date(Date.UTC(1899, 11, 30) + Math.round(v) * 86400000); return `${d.getUTCDate()}/${d.getUTCMonth() + 1}/${d.getUTCFullYear()}`; },
+  };
+  const TASKS = [
+    { v: 0.36, q: "The part of the income spent on food is 0.36. Show it as a percentage.", want: "Percentage", ok: "0.36 looks like 36%; the value is still 0.36." },
+    { v: 55, q: "Sami saves 55. Show it as money.", want: "Currency (JD)", ok: "55 looks like 55.00 JD." },
+    { v: 4.8333333, q: "The average price is 4.8333333. Show it with 2 decimals.", want: "Number (2 decimals)", ok: "It looks like 4.83, but Excel still computes with 4.8333333." },
+    { v: 46337, q: "A cell shows 46337. It should be the date of the exam. Which format?", want: "Date", ok: "Excel keeps a date as a number of days: 46337 is 11/11/2026." },
+  ];
+  let t = 0, cur = "General";
+  function show() {
+    const T = TASKS[t];
+    $("task").textContent = `Task ${t + 1} / ${TASKS.length}: ${T.q}`;
+    $("cell").textContent = F[cur](T.v);
+    $("bar").textContent = "fx  " + T.v;
+    $("fmts").querySelectorAll("button").forEach((b) => (b.className = b.dataset.k === cur ? "" : "ghost"));
+  }
+  Kit.buttons($("fmts"), Object.keys(F).map((k) => ({ k, label: k })), (k) => {
+    cur = k; show();
+    const T = TASKS[t];
+    if (k === T.want) {
+      $("msg").textContent = "✓ " + T.ok; $("msg").className = "message good"; Kit.good();
+      setTimeout(() => { t = (t + 1) % TASKS.length; cur = "General"; show(); if (t === 0) { $("msg").textContent = "🎉 All four tasks done. They start again."; } }, 1800);
+    } else { $("msg").textContent = "This changes the look, but not as the task asks. Try another format."; $("msg").className = "message"; }
+  });
+  show();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+---
+title: "Matrix Multiplication, the Identity and the Inverse"
+description: "A matrix times a vector, a matrix times a matrix, why the order matters, the identity matrix that changes nothing, and the inverse that undoes a matrix."
+lesson: 10
+ilos: [A1, C1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary matrix-multiplication dot-product column-vector transformation commutative identity-matrix inverse-matrix determinant square-matrix main-diagonal >}}
+
+## 10.1 Casting a spell: a matrix times a vector
+
+- A spell is a 2 × 2 matrix; the crystal's position is a column vector.
+- Matrix × vector: **each row times the vector** (a dot product, lecture 4).
+  For the rows (a, b) and (c, d) and the vector (x, y): the result is
+  (ax + by, cx + dy).
+- Stretch = rows (2, 0) and (0, 3). On (4, 1): row 1 gives 2 × 4 + 0 × 1 = 8,
+  row 2 gives 0 × 4 + 3 × 1 = 3. The crystal goes to **(8, 3)**.
+- Turn = rows (0, −1) and (1, 0). On (3, 2): (−2, 3). (x, y) becomes (−y, x).
+- One matrix moves every point of a sprite in the same way.
+
+![Each row times the vector gives one coordinate.](images/matrix-vector.png){width=92%}
+
+{{< sim file="sims/multiply-lab.html" poster="sims/multiply-lab.png" title="Multiply Lab: a 2 × 2 matrix moves a point and a shape" height="760" >}}
+
+::: {.callout-warning title="Watch out!"}
+Do not multiply entry by entry. Every row uses both x and y.
+:::
+
+::: {.callout-note title="Do it · Check Turn in Multiply Lab"}
+On paper, multiply Turn (rows (0, −1) and (1, 0)) by P = (2, 3). Then press
+"Turn 90°" in **Multiply Lab** and drag P to (2, 3). Compare.
+:::
+
+::: {.callout-tip title="Try it 1 · Matrix × vector"}
+Choose the right answer.
+
+::: {.match extra="(2, 15)|(6, 0)"}
+What is the matrix with rows (3, 0) and (0, 1) times (2, 5)?
+:   (6, 5)
+
+What is the matrix with rows (1, 2) and (0, 1) times (1, 3)?
+:   (7, 3)
+
+Turn has the rows (0, −1) and (1, 0). Where does it send (4, 0)?
+:   (0, 4)
+
+Stretch has the rows (2, 0) and (0, 3). Where does it send (4, 1)?
+:   (8, 3)
+
+Each entry of a matrix × vector is …
+:   one row times the vector
+:::
+:::
+
+## 10.2 Two spells at once: a matrix times a matrix
+
+- AB exists when A has as many **columns** as B has **rows**.
+  (m × **n**) times (**n** × p) gives m × p.
+- The entry in row i, column j of AB = row i of A · column j of B.
+- A = rows (1, 2), (3, 0); B = rows (4, 1), (0, 2).
+  AB = rows **(4, 5)** and **(12, 3)**. For example row 1 · column 2 =
+  1 × 1 + 2 × 2 = 5.
+- (2 × 3) times (3 × 4) gives 2 × 4. (2 × 3) times (2 × 3): no product.
+- Games multiply two spell matrices once and use the result for every point.
+  Grow × Turn = rows (0, −2) and (2, 0).
+
+![Row i of A times column j of B.](images/matrix-matrix.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+The matrix product is not entry by entry. Each entry is a whole row times a
+whole column.
+:::
+
+::: {.callout-note title="Do it · A product on paper"}
+A = rows (2, 1) and (0, 3); B = rows (1, 0) and (4, 2). Compute the four
+entries of AB, each as a dot product. What is the size of AB?
+:::
+
+::: {.callout-tip title="Try it 2 · Matrix × matrix"}
+Choose the right answer.
+
+::: {.match extra="3 × 3|rows (3, 1) and (0, 2)"}
+A = rows (1, 1), (0, 2); B = rows (3, 0), (1, 1). What is AB?
+:   rows (4, 1) and (2, 2)
+
+A is 3 × 2 and B is 2 × 5. What is the size of AB?
+:   3 × 5
+
+Can a 2 × 3 matrix be multiplied by a 2 × 3 matrix?
+:   no, 3 and 2 are different
+
+The entry in row 2, column 1 of AB uses …
+:   row 2 of A and column 1 of B
+
+Why do games multiply two spell matrices first?
+:   then each point is multiplied only once
+:::
+:::
+
+## 10.3 First stretch, then turn: the order matters
+
+- In general **AB ≠ BA**: matrix multiplication is **not commutative**.
+- With A = rows (1, 2), (3, 0) and B = rows (4, 1), (0, 2):
+  AB = rows (4, 5), (12, 3) but BA = rows (7, 8), (6, 0).
+- In AB**v**, the matrix next to the vector acts first: **first B, then A**.
+  Read from right to left.
+- Point (2, 1): Flip then Turn gives (−1, −2). Turn then Flip gives (1, 2).
+
+![Stretch then turn, and turn then stretch.](images/order-matters.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+Do not read a product from left to right. In AB**v**, B acts first.
+:::
+
+::: {.callout-note title="Do it · Order on paper and in the lab"}
+Take the point (3, 1). Apply Flip then Turn, and Turn then Flip, on paper.
+Then do the same in **Multiply Lab**, one matrix after the other.
+:::
+
+::: {.callout-tip title="Try it 3 · The order"}
+Choose the right answer.
+
+::: {.match extra="always|(2, −1)"}
+Is AB always equal to BA?
+:   no
+
+In AB**v**, which matrix acts first?
+:   B
+
+From (2, 1), Flip then Turn: where does the point go?
+:   (−1, −2)
+
+From (2, 1), Turn then Flip: where does the point go?
+:   (1, 2)
+
+In which order do you read a product of transformations?
+:   from right to left
+:::
+:::
+
+## 10.4 The spell that changes nothing: the identity
+
+- The **identity matrix** I has 1 on the main diagonal and 0 everywhere
+  else.
+- I**v** = **v** and IA = AI = A: it changes nothing.
+- I × (5, −2): row 1 = 1 × 5 + 0 × (−2) = 5; row 2 = −2. The point stays.
+- The 4 × 4 identity is the matrix of a new object: at the origin, not
+  turned, size 1. In Unity: `Matrix4x4.identity`.
+- A matrix full of 1s is **not** the identity: rows (1, 1), (1, 1) send
+  (5, −2) to (3, 3).
+
+![The identity matrix leaves every point where it is.](images/identity.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+The identity has 1s only on the main diagonal.
+:::
+
+::: {.callout-note title="Do it · The identity in Multiply Lab"}
+Press "Identity" in **Multiply Lab** and drag P to three points. Where is MP?
+Then change one 0 into a 1: what happens to the house?
+:::
+
+::: {.callout-tip title="Try it 4 · The identity"}
+Choose the right answer.
+
+::: {.match extra="rows (1, 1) and (1, 1)|(0, 0)"}
+What is I × (7, −3)?
+:   (7, −3)
+
+Which matrix is the 2 × 2 identity?
+:   rows (1, 0) and (0, 1)
+
+Where does a new object with the identity matrix stand?
+:   at the origin
+
+Rows (1, 1) and (1, 1) times (5, −2) gives …
+:   (3, 3)
+
+What is I × A?
+:   A
+:::
+:::
+
+## 10.5 Undo: the inverse matrix
+
+- The **inverse** A^−1^ undoes A: A A^−1^ = I.
+- For the rows (a, b) and (c, d): the **determinant** det = ad − bc, and
+  A^−1^ = (1 ÷ det) × the rows (d, −b) and (−c, a).
+- Grow = rows (2, 0), (0, 2): det = 4, inverse = rows (0.5, 0), (0, 0.5) =
+  Shrink. Shrink × (6, 4) = (3, 2).
+- Rows (2, 1), (1, 1): det = 1, inverse = rows (1, −1), (−1, 2).
+- **det = 0: no inverse.** Squash = rows (1, 2), (1, 2) sends (2, 0) and
+  (0, 1) to the same point (2, 2); nothing can bring them back.
+- In Unity: `m.inverse`. `worldToLocalMatrix` is the inverse of
+  `localToWorldMatrix`.
+
+![Grow and its inverse.](images/inverse.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+The inverse is not "1 ÷ every entry". Use the formula and check A A^−1^ = I.
+:::
+
+::: {.callout-note title="Do it · Which spells can be undone?"}
+Compute the determinant of: rows (4, 0), (0, 2); rows (3, 6), (1, 2); rows
+(0, −1), (1, 0). Which ones have an inverse? Write the inverse of the first.
+Then press "Squash" in **Multiply Lab**.
+:::
+
+::: {.callout-tip title="Try it 5 · Determinant and inverse"}
+Choose the right answer.
+
+::: {.match extra="rows (0.2, 0.5) and (0.5, 1)|4"}
+What is the determinant of the rows (5, 2) and (2, 1)?
+:   1
+
+What is the inverse of the rows (5, 2) and (2, 1)?
+:   rows (1, −2) and (−2, 5)
+
+What is the inverse of Grow (rows (2, 0) and (0, 2))?
+:   rows (0.5, 0) and (0, 0.5)
+
+The rows (2, 4) and (1, 2): why is there no inverse?
+:   det = 0
+
+What is A × A^−1^?
+:   the identity I
+:::
+:::
+
+## Game challenge: Crystal Spells {.challenge}
+
+Work alone. Use every section of today.
+
+**Crystal Spells** is a puzzle game. The crystal starts at (2, 1). Each
+spell is a 2 × 2 matrix: **Grow** = rows (2, 0), (0, 2); **Shrink** = rows
+(0.5, 0), (0, 0.5); **Turn** = rows (0, −1), (1, 0); **Flip** = rows (−1, 0),
+(0, 1); **Stay** = the identity.
+
+{{< sim file="sims/crystal-spells.html" poster="sims/crystal-spells.png" title="Crystal Spells: cast the right matrix" kind="game" height="720" >}}
+
+::: {.callout-tip title="Try it 6 · One spell"}
+Crystal at (2, 1). Grow = rows (2, 0), (0, 2); Turn = rows (0, −1), (1, 0);
+Flip = rows (−1, 0), (0, 1); Stay = identity. Choose the right answer.
+
+::: {.match extra="Shrink|(1, 2)"}
+Where does Grow send the crystal?
+:   (4, 2)
+
+Which spell sends the crystal to (−1, 2)?
+:   Turn
+
+Which spell sends the crystal to (−2, 1)?
+:   Flip
+
+Which spell keeps the crystal at (2, 1)?
+:   Stay
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · Spells in a row (harder)"}
+Grow = rows (2, 0), (0, 2); Shrink = rows (0.5, 0), (0, 0.5); Turn = rows
+(0, −1), (1, 0); Flip = rows (−1, 0), (0, 1). Choose the right answer.
+
+::: {.match extra="(2, −1)|Turn"}
+Grow sent the crystal to (4, 2) by mistake. Which spell undoes it?
+:   Shrink
+
+From (2, 1): Flip, then Turn. Where does the crystal land?
+:   (−1, −2)
+
+From (1, 2): Turn, then Grow. Where does the crystal land?
+:   (−4, 2)
+
+Grow × Turn as one matrix: what are its rows?
+:   (0, −2) and (2, 0)
+:::
+:::
+
+## Summary {.summary}
+
+- Matrix × vector: each row times the vector gives one coordinate.
+- In AB, each entry is a row of A times a column of B; A needs as many columns as B has rows.
+- AB is usually not BA; in AB**v**, B acts first.
+- The identity matrix I changes nothing: 1 on the main diagonal, 0 elsewhere.
+- The inverse undoes a matrix; a 2 × 2 matrix with det = ad − bc = 0 has no inverse.

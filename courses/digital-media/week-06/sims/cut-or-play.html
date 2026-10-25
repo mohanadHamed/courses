@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Cut or Play?</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Cut or Play?</h1>
+  <p class="hint"><b>Night Owl Games</b> plans the boards of <i>Rooftop Rescue</i>, level 1. Some moments are cutscenes (the player watches); others are gameplay (the player plays). Choose the right board, and what it must show.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="../../week-05/sims/rooftop-scene.js"></script>
+<script src="gameplay-overlay.js"></script>
+<script>
+(() => {
+  const S = RS.SHOTS, C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { cam: S.closeSalma, goal: "Salma begs on the roof. The player only <b>watches</b> and listens. Which board?",
+      choices: C(["a cutscene board", "a gameplay board"]), answer: "a cutscene board", good: "The player does not control anything: the team chooses every shot.", why: { "a gameplay board": "The player does nothing here; there is no input to draw." } },
+    { cam: S.medNour, hud: true, input: "swipe", goal: "The player <b>swipes</b> to row between floating boxes. Which board?",
+      choices: C(["a cutscene board", "a gameplay board"]), answer: "a gameplay board", good: "The player controls the boat: draw the player's view, the HUD and the input.", why: { "a cutscene board": "The player rows: this is play, not watching." } },
+    { cam: S.medNour, hud: true, input: "swipe", goal: "The first panel of the rowing board. What must it show that a cutscene panel does not?",
+      choices: C(["the player input (a swipe icon)", "a close-up of Salma", "the credits", "nothing more"]), answer: "the player input (a swipe icon)",
+      good: "A gameplay panel shows what the player does: here the swipe, with the HUD.", why: { "nothing more": "The team must see what the player does and sees on the screen." } },
+    { cam: S.medNour, hud: true, lives: 2, fb: "splash", goal: "The boat hits a box. What must the board show next?",
+      choices: C(["the fail state: splash, one heart lost, try again", "a new level", "the end credits", "nothing, the game goes on"]), answer: "the fail state: splash, one heart lost, try again",
+      good: "A gameplay board shows what happens when the player fails, not only when the player wins.", why: { "nothing, the game goes on": "Then the player never knows that something went wrong: show the feedback." } },
+    { cam: S.wideStreet, hud: true, goal: "Where is the HUD (lives, score) drawn in a gameplay panel?",
+      choices: C(["on top of the picture, in the corners", "in the caption only", "in a separate panel", "it is not drawn"]), answer: "on top of the picture, in the corners",
+      good: "The HUD is part of what the player sees, so the panel shows it where the game shows it.", why: { "it is not drawn": "The team must check that the HUD does not hide the action." } },
+    { cam: S.wideRoof, goal: "The team wants a quick animatic in the lab. Which tool can make one?",
+      choices: C(["PowerPoint: one slide per panel, export as a video", "Excel: one cell per panel", "Notepad", "the calculator"]), answer: "PowerPoint: one slide per panel, export as a video",
+      good: "Slide timings and File › Export › Create a Video turn the board into a timed animatic.", why: { "Excel: one cell per panel": "Excel cannot play panels with times and sound." } },
+  ];
+  Kit.game({
+    rounds, still: true, cols: 1, colsPhone: 1, animMs: 600,
+    intro: "Round 1 is the story of the lesson: the moments of level 1 of Rooftop Rescue.",
+    canvas: (W) => Math.round(Math.min(W, 560) * 9 / 16) + 6,
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const w = Math.min(W, 560), h = Math.round(w * 9 / 16), x = (W - w) / 2;
+      RS.draw(c, x, 3, w, h, r.cam, {});
+      if (r.hud) GO.hud(c, x, 3, w, h, { lives: r.lives ?? 3 });
+      if (r.input) GO.input(c, x + w * 0.72, 3 + h * 0.7, r.input, Math.max(9, w * 0.025));
+      if (r.fb) GO.feedback(c, x + w * 0.45, 3 + h * 0.62, r.fb, w / 500);
+    },
+  });
+})();
+</script>
+</body>
+</html>

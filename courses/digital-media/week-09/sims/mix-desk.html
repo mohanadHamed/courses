@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Mix Desk</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .desk { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin: 8px 0; }
+    .sim .ch { border: 1.5px solid #e5dbff; border-radius: 12px; padding: 8px 6px; background: #fbf8ff; text-align: center; font-weight: 800; font-size: .85rem; }
+    .sim .ch input[type=range] { writing-mode: vertical-lr; direction: rtl; height: 130px; width: 28px; }
+    .sim .ch .db { font-variant-numeric: tabular-nums; color: #5f3dc4; }
+    .sim .meter { height: 130px; width: 12px; background: #f1f3f5; border-radius: 4px; position: relative; display: inline-block; vertical-align: top; margin-left: 4px; overflow: hidden; }
+    .sim .meter i { position: absolute; left: 0; right: 0; bottom: 0; background: #2b8a3e; }
+    .sim .meter i.hot { background: #e03131; }
+    .sim .row2 { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-weight: 700; }
+    .sim ul.warn { margin: 6px 0; padding-left: 1.2em; line-height: 1.5; font-weight: 700; }
+    .sim ul.warn li.bad { color: #c92a2a; } .sim ul.warn li.ok { color: #2b8a3e; }
+    @media (max-width: 520px) { .sim .ch input[type=range] { height: 100px; } .sim .meter { height: 100px; } }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Mix Desk: the flood level of Rooftop Rescue</h1>
+  <p class="hint">Four groups play at once: music, effects, Nour's voice and the interface sounds. Move the faders (in dB), turn on <b>ducking</b>, and read the warnings. Every few seconds Nour speaks. Tap <b>Play</b> to hear the mix.</p>
+  <div class="desk" id="desk"></div>
+  <div class="row2"><label><input type="checkbox" id="duck"> ducking: lower the music while Nour speaks</label>
+    <button type="button" id="play">▶ Play</button><button type="button" class="ghost" id="reset">Start again</button></div>
+  <ul class="warn" id="warn"></ul>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const G = [["music", -8], ["effects", -6], ["voice", -12], ["UI", -12]];   // [group, peak level of the source at 0 dB]
+  const START = { music: 0, effects: -6, voice: 0, UI: 0 };
+  const s = { f: { ...START }, duck: false, playing: false };
+  const lin = (db) => 10 ** (db / 20), dB = (x) => 20 * Math.log10(Math.max(x, 1e-6));
+  const speaking = (t) => (t % 6) > 2 && (t % 6) < 5;
+  function levels(t) {
+    const L = {}, v = speaking(t);
+    G.forEach(([g, base]) => { let l = base + s.f[g]; if (g === "music" && s.duck && v) l -= 8; if (g === "voice" && !v) l = -60; if (g === "UI" && (t % 3) > 0.3) l = -60; if (g === "effects" && (t % 2) > 0.6) l -= 10; L[g] = l; });
+    L.master = dB(G.reduce((a, [g]) => a + lin(L[g]), 0));
+    return L;
+  }
+  function checks() {
+    const t = 3.5, L = levels(t), music = L.music, voice = L.voice;   // a moment while Nour speaks
+    const peak = Math.max(...[0, 0.5, 1, 3.5].map((x) => levels(x).master));
+    return [
+      [peak <= 0, `Master below 0 dB, no clipping (loudest moment ${Kit.fmt(peak, 1)} dB)`],
+      [voice - music >= 6, `Nour's voice at least 6 dB above the music while she speaks (now ${Kit.fmt(voice - music, 1)} dB)`],
+      [G[1][1] + s.f.effects >= G[0][1] + s.f.music - (s.duck ? 4 : 2), "Effects not lost under the music"],
+      [G[3][1] + s.f.UI <= G[2][1] + s.f.voice - 3, "Interface clicks quieter than the voice"],
+    ];
+  }
+  function desk() {
+    $("desk").innerHTML = G.map(([g]) => `<div class="ch">${g}<br><input type="range" min="-24" max="6" step="1" value="${s.f[g]}" data-g="${g}" aria-label="${g} fader"><span class="meter"><i id="m-${g}"></i></span><br><span class="db" id="d-${g}">${s.f[g]} dB</span></div>`).join("") +
+      `<div class="ch">master<br><span class="meter" style="height:130px"><i id="m-master"></i></span><br><span class="db" id="d-master"></span></div>`;
+    $("desk").querySelectorAll("input").forEach((i) => i.addEventListener("input", () => { s.f[i.dataset.g] = +i.value; $("d-" + i.dataset.g).textContent = i.value + " dB"; warn(); }));
+  }
+  function warn() {
+    const c = checks(), n = c.filter((x) => x[0]).length;
+    $("warn").innerHTML = c.map(([ok, t]) => `<li class="${ok ? "ok" : "bad"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    $("msg").textContent = n === c.length ? "A clear mix: the voice is understood, the effects are heard, nothing clips." : "Fix the red lines: lower what is too loud before you raise anything.";
+    $("msg").classList.toggle("bad", n < c.length);
+  }
+  const t0 = performance.now();
+  Kit.loop((now) => {
+    const t = (now - t0) / 1000, L = levels(t);
+    [...G.map((x) => x[0]), "master"].forEach((g) => { const el = $("m-" + g); if (!el) return; const h = Math.max(0, Math.min(1, (L[g] + 40) / 46)); el.style.height = (h * 100) + "%"; el.classList.toggle("hot", L[g] > 0); });
+    const dm = $("d-master"); if (dm) dm.textContent = Kit.fmt(L.master, 1) + " dB";
+    if (s.playing && ac) schedule(t);
+  });
+  // sound: a simple loop and voice made in the browser
+  let ac = null, gains = {}, nextBeat = 0;
+  function startAudio() {
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    G.forEach(([g]) => { gains[g] = gains[g] || ac.createGain(); gains[g].connect(ac.destination); });
+    nextBeat = ac.currentTime + 0.05;
+  }
+  function tone(g, f, t, len, type = "sine", v = 0.2) { const o = ac.createOscillator(), e = ac.createGain(); o.type = type; o.frequency.value = f; e.gain.setValueAtTime(v, t); e.gain.exponentialRampToValueAtTime(0.001, t + len); o.connect(e); e.connect(gains[g]); o.start(t); o.stop(t + len + 0.02); }
+  function schedule(t) {
+    G.forEach(([g]) => { const L = levels(t)[g]; gains[g].gain.setTargetAtTime(L < -50 ? 0 : lin(s.f[g] + (g === "music" && s.duck && speaking(t) ? -8 : 0)) * 0.5, ac.currentTime, 0.05); });
+    while (nextBeat < ac.currentTime + 0.2) {
+      const k = Math.round(nextBeat * 2) % 8;
+      tone("music", [196, 220, 262, 220][Math.floor(k / 2)], nextBeat, 0.45, "triangle", 0.25);
+      if (k % 4 === 0) tone("effects", 90, nextBeat, 0.3, "sine", 0.5);
+      if (speaking(t)) for (let j = 0; j < 3; j++) tone("voice", 180 + 40 * Math.sin(nextBeat * 7 + j), nextBeat + j * 0.15, 0.12, "sawtooth", 0.08);
+      if (k === 2) tone("UI", 1400, nextBeat, 0.05, "square", 0.08);
+      nextBeat += 0.5;
+    }
+  }
+  $("play").addEventListener("click", () => { s.playing = !s.playing; $("play").textContent = s.playing ? "■ Stop" : "▶ Play"; try { if (s.playing) startAudio(); else G.forEach(([g]) => gains[g] && gains[g].gain.setTargetAtTime(0, ac.currentTime, 0.05)); } catch (_) {} });
+  $("duck").addEventListener("change", (e) => { s.duck = e.target.checked; warn(); });
+  $("reset").addEventListener("click", () => { s.f = { ...START }; s.duck = false; $("duck").checked = false; desk(); warn(); });
+  window.MD = { set: (o) => { Object.assign(s.f, o.f || {}); if (o.duck !== undefined) { s.duck = o.duck; $("duck").checked = o.duck; } desk(); warn(); } };
+  desk(); warn();
+})();
+</script>
+</body>
+</html>

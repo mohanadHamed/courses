@@ -1,0 +1,328 @@
+---
+title: "Translation and Scaling Transformations"
+description: "Lesson notes · Moving a shape with a translation, making it bigger or smaller with a scaling matrix, scaling about a pivot, mirroring with a negative factor, and combining transformations in the right order."
+lesson: 11
+ilos: [C1]
+format: lesson-typst
+---
+
+::: {.lead}
+The level designer of the platform game *Sky Steps* builds a level from a
+few pieces: a platform, a crate, a flag. Every piece is the same small shape,
+placed somewhere, made bigger or smaller, and sometimes mirrored. The game
+does not store a new drawing for each copy. It stores one shape and a
+**transformation** for each copy. In lectures 9 and 10 you multiplied a
+matrix by a point. In this lesson you use two transformations: the
+**translation**, which moves a shape, and the **scaling**, which changes its
+size. You also choose the point that stays still (the **pivot**), mirror a
+sprite, and combine two transformations in the right order. Every section
+ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary transformation translation scaling scale-factor uniform-scaling pivot vertex reflection composite-transformation matrix >}}
+
+## 11.1 Move the platform: translation
+
+The platform of *Sky Steps* is drawn with its corner at (1, 1). The designer
+needs it 4 units to the right and 3 units up. Every **vertex** (corner) of
+the shape moves by the same vector (@fig-move).
+
+::: {.callout-important title="Definition 11.1 — Translation"}
+A **translation** by the vector $(t_x, t_y)$ moves every point $(x, y)$ of a
+shape to
+$$(x + t_x,\ y + t_y).$$
+The shape keeps its size and its direction; only its place changes.
+:::
+
+![The house moves by (5, 2). Every vertex moves by the same arrow.](images/translate.png){#fig-move width=96%}
+
+A translation is the vector addition of lecture 3, done for every vertex. A
+2 × 2 matrix **cannot** translate: $M \times (0, 0)$ is always $(0, 0)$, so
+the origin never moves. Lecture 13 solves this with one more coordinate.
+
+::: {.callout-note title="Example 11.1 — The house moves by (5, 2)"}
+1. (0, 0) → (0 + 5, 0 + 2) = (5, 2).
+2. (2, 2) → (7, 4).
+3. The roof (1, 3) → (6, 5). All five vertices move by the same (5, 2).
+:::
+
+::: {.callout-note title="Example 11.2 — Which move?"}
+A platform has its corner at (1, 1). It must have it at (5, 4).
+
+1. $t_x$ = 5 − 1 = 4 and $t_y$ = 4 − 1 = 3.
+2. The translation is by **(4, 3)**, not by (5, 4).
+:::
+
+::: {.callout-caution title="In game code"}
+```csharp
+transform.position += new Vector3(4, 3, 0);   // move 4 right and 3 up
+```
+`transform.position` is the place of the object; adding a vector translates
+it.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Using the target point as the move. To move a corner from (1, 1) to (5, 4),
+the move is the difference (4, 3).
+:::
+
+{{< sim file="sims/transform-lab.html" poster="sims/transform-lab.png" title="Transform Lab: translate, scale and mirror a shape" height="760" >}}
+
+::: {.callout-note title="Do it · Predict, then check"}
+Open **Transform Lab** (above, or scan the QR code). Keep sx = sy = 1.
+
+1. On paper: where does the corner (2, 2) go with the move (−3, 1)?
+2. Set tx = −3 and ty = 1 in the lab and compare.
+
+*Your result:* your point and the point of the lab.
+:::
+
+## 11.2 Bigger and smaller: scaling
+
+The crate of *Sky Steps* is too small. The designer makes it twice as big.
+This is a **scaling**, and a matrix can do it (@fig-scale).
+
+::: {.callout-important title="Definition 11.2 — Scaling matrix"}
+A **scaling** by the **scale factors** $s_x$ and $s_y$ multiplies the
+coordinates:
+$$S = \begin{bmatrix} s_x & 0 \\ 0 & s_y \end{bmatrix}, \qquad S \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} s_x x \\ s_y y \end{bmatrix}.$$
+With $s_x = s_y$ it is a **uniform scaling**: the shape keeps its
+proportions. A factor bigger than 1 makes the shape bigger; a factor between
+0 and 1 makes it smaller.
+:::
+
+![Uniform scaling by 2, and a stretch with sx = 2, sy = 1.](images/scale-matrix.png){#fig-scale width=96%}
+
+::: {.callout-note title="Example 11.3 — The house, twice as big"}
+$S$ = rows (2, 0) and (0, 2).
+
+1. The roof (1, 3) → (2 × 1, 2 × 3) = (2, 6).
+2. The corner (2, 0) → (4, 0). The house is 4 wide and 6 high: twice as big.
+:::
+
+::: {.callout-note title="Example 11.4 — A stretched tree"}
+A tree sprite gets the factors (1, 3).
+
+1. Its top (1, 2) → (1, 6): three times as high.
+2. The width stays the same. The tree looks tall and thin: a non-uniform
+   scaling.
+3. With (0.5, 0.5), the top goes to (0.5, 1): the tree is half as big.
+:::
+
+::: {.callout-caution title="In game code"}
+```csharp
+transform.localScale = new Vector3(2, 2, 1);  // twice as big in x and y
+```
+:::
+
+::: {.callout-warning title="Common mistake"}
+Adding the factor: (1, 3) + 2 = (3, 5). A scaling **multiplies** each
+coordinate by its factor.
+:::
+
+::: {.callout-note title="Do it · Uniform or stretched?"}
+In **Transform Lab**, set tx = ty = 0 and the pivot "origin".
+
+1. Set sx = sy = 2. Where does the corner (2, 2) go?
+2. Set sx = 2, sy = 1. Where does it go now? Which house keeps its shape?
+
+*Your result:* two points and one sentence.
+:::
+
+## 11.3 Grow in place: the pivot
+
+The designer scales a crate whose corners are (2, 2) and (4, 4). The crate
+grows, but it also jumps away from its place. A scaling with a matrix keeps
+only the **origin** still. To grow in place, the crate needs another fixed
+point, a **pivot** (@fig-pivot).
+
+::: {.callout-important title="Definition 11.3 — Scaling about a pivot"}
+To scale about the **pivot** C:
+
+1. move the shape by −C, so that the pivot is at the origin;
+2. scale;
+3. move it back by +C.
+
+For one point: $P' = C + S\,(P - C)$.
+:::
+
+![Scaling by 2 about the origin moves the crate away; about its centre (3, 3), it grows in place.](images/pivot-scale.png){#fig-pivot width=96%}
+
+::: {.callout-note title="Example 11.5 — The crate about its centre"}
+The crate has the corners (2, 2), (4, 2), (4, 4), (2, 4); its centre is
+C = (3, 3). Scale by 2.
+
+1. P = (4, 4): P − C = (1, 1).
+2. Scale: (2, 2).
+3. Back: (2, 2) + (3, 3) = **(5, 5)**. The other corners go to (1, 1),
+   (5, 1) and (1, 5). The centre stays at (3, 3).
+:::
+
+::: {.callout-note title="Example 11.6 — A hero grows from the feet"}
+A power-up makes the hero 1.5 times as big. The pivot is at the feet,
+(1, 0), so the feet stay on the ground.
+
+1. The head (1, 3): P − C = (0, 3); scale: (0, 4.5); back: **(1, 4.5)**.
+2. The feet: (1, 0) − C = (0, 0), so they stay at (1, 0), on the ground.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Forgetting step 3. After "move to the origin and scale", the shape still
+sits around the origin; move it back by +C.
+:::
+
+::: {.callout-note title="Do it · Three pivots"}
+In **Transform Lab**, set tx = ty = 0 and sx = sy = 2.
+
+1. Try the three pivots: origin, feet (1, 0) and centre (1, 1.5).
+2. For each pivot, write which point of the house stays still.
+
+*Your result:* three pivots and the point that stays each time.
+:::
+
+## 11.4 Turn the enemy round: mirroring
+
+An enemy walks to the right. At a wall it must walk to the left. The game
+does not need a second drawing: it **mirrors** the sprite (@fig-mirror).
+
+::: {.callout-important title="Definition 11.4 — Reflection by a negative factor"}
+A **reflection** (mirror) across a vertical line is a scaling with
+$s_x = -1$ and $s_y = 1$. About the pivot C, a point $(x, y)$ goes to
+$(2c_x - x,\ y)$.
+:::
+
+![Scale (−1, 1) about the pivot at the feet: the sprite looks the other way and stays in place.](images/reflect.png){#fig-mirror width=96%}
+
+::: {.callout-note title="Example 11.7 — The flag turns round"}
+A flag stands on its pole at (4, 1); its tip is at (6, 3).
+
+1. About the pole: tip → (2 × 4 − 6, 3) = **(2, 3)**. The flag points left.
+2. About the origin: tip → (−6, 3). The flag jumps to the other side of the
+   y-axis.
+:::
+
+::: {.callout-caution title="In game code"}
+```csharp
+spriteRenderer.flipX = true;                 // mirror the picture
+transform.localScale = new Vector3(-1, 1, 1); // or: scale x by -1
+```
+:::
+
+::: {.callout-warning title="Common mistake"}
+Mirroring about the origin. The enemy jumps far away. Mirror about its own
+pivot.
+:::
+
+::: {.callout-note title="Do it · Mirror the house"}
+In **Transform Lab**, set sx = −1, sy = 1, tx = ty = 0.
+
+1. Choose the pivot "feet (1, 0)". Where does the corner (2, 2) go?
+2. Choose "origin". Where does it go now?
+
+*Your result:* two points and the pivot you would use in a game.
+:::
+
+## 11.5 Two steps: composite transformations
+
+A designer often needs two steps: make the block bigger, and put it in its
+place. Two transformations one after the other are a **composite
+transformation**. The order matters (@fig-order).
+
+::: {.callout-important title="Definition 11.5 — Composite transformation"}
+A **composite transformation** does two or more transformations one after
+the other. In general, "first A, then B" gives another result than "first
+B, then A". In games the usual order is: **scale, (turn,) then move**.
+:::
+
+![First move then scale, and first scale then move, send P = (1, 1) to different points.](images/compose-order.png){#fig-order width=96%}
+
+::: {.callout-note title="Example 11.8 — Two orders"}
+P = (1, 1). Scale 2 (about the origin) and move (2, 0).
+
+1. Scale, then move: (2, 2) → **(4, 2)**.
+2. Move, then scale: (3, 1) → **(6, 2)**. The move was doubled too.
+:::
+
+::: {.callout-note title="Example 11.9 — The big step of Sky Steps"}
+A unit block has the corners (0, 0) and (1, 1). The step must be 2 × 2,
+with its corners at (4, 2) and (6, 4).
+
+1. Scale 2: (0, 0) → (0, 0) and (1, 1) → (2, 2).
+2. Move (4, 2): (0, 0) → (4, 2) and (2, 2) → (6, 4). Done.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Moving first and scaling about the origin second. The scaling then also
+multiplies the move. Scale first, then move.
+:::
+
+::: {.callout-note title="Do it · Order on paper"}
+A coin is at (2, 1). Scale by 3 (about the origin) and move by (1, 0).
+
+1. Compute "scale, then move" and "move, then scale".
+2. Check one of them in **Transform Lab** with the "order" button.
+
+*Your result:* two points and the order the lab used.
+:::
+
+## Case study: Sky Steps
+
+*Sky Steps* is a made-up platform game. Its designer builds a level from
+small pieces. A platform with the corners (1, 1) and (3, 2) must land on its
+outline at (5, 4) and (7, 5). A crate (1, 1)–(2, 2) must be twice as big at
+(2, 2)–(4, 4). Another crate (2, 2)–(4, 4) must grow to twice its size in
+place, to (1, 1)–(5, 5). A flag on its pole at (4, 1) must point to the left.
+And a unit block (0, 0)–(1, 1) must become the 2 × 2 step at (4, 2)–(6, 4).
+The Game challenge of the interactive lesson uses these pieces. In the
+mini-game below you choose the transformation for each piece.
+
+{{< sim file="sims/sky-steps.html" poster="sims/sky-steps.png" title="Sky Steps: choose the transformation for each piece" kind="game" height="720" >}}
+
+## Further reading
+
+Dunn and Parberry, *3D Math Primer for Graphics and Game Development*,
+2nd ed., Chapter 5 (Matrices and Linear Transformations): scale, reflection
+and the order of combined transformations.
+
+## Exercises
+
+1. Translate (3, −1) by (−2, 4).
+2. A corner must go from (2, 5) to (7, 1). What is the translation?
+3. Why can a 2 × 2 matrix not translate a shape?
+4. Write the scaling matrix with $s_x = 3$, $s_y = 0.5$. Where does (2, 4)
+   go?
+5. Is the scaling (2, 2) uniform? Is (2, 1)?
+6. Scale (4, 2) by 0.5. What does the factor 0.5 do?
+7. Scale (5, 5) by 2 about the pivot (3, 3).
+8. A hero's head is at (2, 4) and the feet at (2, 0). Scale by 2 about the
+   feet. Where is the head?
+9. Mirror (6, 3) with the factors (−1, 1) about the pivot (4, 1).
+10. Mirror (6, 3) with the factors (−1, 1) about the origin. Why is this bad
+    for an enemy at (4, 1)?
+11. P = (2, 1). Scale 2, then move (1, 1). Then the other order.
+12. In which order do games usually combine scaling and moving?
+13. *Sky Steps*: the platform (1, 1)–(3, 2) must land at (5, 4)–(7, 5).
+    Which move?
+14. *Sky Steps*: the crate (2, 2)–(4, 4) grows by 2 about its centre. Where
+    are its new corners?
+
+## Answers to the exercises
+
+::: {.answers}
+1. (1, 3).
+2. (5, −4).
+3. M × (0, 0) is always (0, 0): the origin cannot move.
+4. Rows (3, 0) and (0, 0.5); (6, 2).
+5. (2, 2) yes; (2, 1) no, it stretches x only.
+6. (2, 1); it halves the size.
+7. (5, 5) − (3, 3) = (2, 2); × 2 = (4, 4); + (3, 3) = (7, 7).
+8. (2, 4) − (2, 0) = (0, 4); × 2 = (0, 8); + (2, 0) = (2, 8).
+9. (2 × 4 − 6, 3) = (2, 3).
+10. (−6, 3): the enemy jumps to the other side of the y-axis, far from its place.
+11. Scale then move: (4, 2) → (5, 3). Move then scale: (3, 2) → (6, 4).
+12. Scale first, then move.
+13. (4, 3).
+14. (1, 1), (5, 1), (5, 5) and (1, 5).
+:::

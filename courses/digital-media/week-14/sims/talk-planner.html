@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Package Talk Planner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Package Talk Planner: six minutes</h1>
+  <p class="hint">Plan the six-minute presentation of the "Storm Night" package. Set the time of each part (in half minutes). The bar shows the talk; the checks show what the audience needs.</p>
+  <div class="bar"><span>Presenters</span><span id="mode" style="display:contents"></span></div>
+  <div class="bar" id="sl"></div>
+  <canvas id="c" aria-label="The timeline of the talk"></canvas>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const P = [["brief and package", "producer", "#9c36b5"], ["storyboard", "artist", "#1c7ed6"], ["sound set", "sound", "#2f9e44"], ["promo clip", "editor", "#e8590c"], ["review, credits, lessons", "producer", "#c92a2a"]];
+  const s = { mode: "team", t: [1, 0.5, 0.5, 0.5, 0.5] };
+  const total = () => s.t.reduce((a, b) => a + b, 0);
+  const checks = () => [
+    [Math.abs(total() - 6) < 0.01, `total ${total()} min (the limit is 6)`],
+    [s.t[3] >= 1, "the promo clip (30 s) is shown in full and explained: at least 1 min"],
+    [s.t[4] >= 1, "time for the review, the credits and what was learned: at least 1 min"],
+    [s.t.every((v) => v >= 0.5), "every part has at least half a minute"],
+  ];
+  const TASKS = [
+    { q: "Task 1: Make the talk exactly six minutes, with the promo clip shown in full.", ok: () => checks().every((c) => c[0]) },
+    { q: "Task 2: Switch to \"alone\". What changes, and what stays the same?", ok: () => s.mode === "alone" && checks().every((c) => c[0]) },
+  ];
+  let ti = 0, ready = false;
+  const sl = P.map(([n], i) => Kit.slider($("sl"), n, 0, 3, 0.5, s.t[i], (v) => { s.t[i] = v; if (ready) upd(); }, (v) => v + " min"));
+  const cv = Kit.canvas($("c"), 90);
+  function draw() {
+    const c = cv.ctx, W = cv.W, scale = (W - 20) / 7;
+    c.clearRect(0, 0, W, 90);
+    let x = 10;
+    P.forEach(([n, who, col], i) => { const w = s.t[i] * scale; Kit.rrect(c, x, 14, Math.max(0, w - 2), 36, 6, col); const lab = s.mode === "team" ? who : "me"; c.font = "800 11px sans-serif"; if (c.measureText(lab).width + 8 < w) Kit.text(c, lab, x + w / 2, 37, 11, "#fff", "center", 800); x += w; });
+    c.strokeStyle = "#c92a2a"; c.lineWidth = 2; c.setLineDash([5, 4]); c.beginPath(); c.moveTo(10 + 6 * scale, 6); c.lineTo(10 + 6 * scale, 58); c.stroke(); c.setLineDash([]);
+    Kit.text(c, "6 min", 10 + 6 * scale, 76, 11, "#c92a2a", "center", 800);
+  }
+  function tabs() { Kit.buttons($("mode"), ["team", "alone"].map((k) => ({ k, label: k })), (k) => { s.mode = k; upd(); }); $("mode").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.mode)); }
+  function upd() {
+    tabs(); draw();
+    $("chk").innerHTML = checks().map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the same parts and times; alone, you present every part yourself, guided by your production log.";
+    $("msg").textContent = m + (s.mode === "team" ? "In a team, each member presents the part of their role." : "Alone, you present all parts; the production log shows each role.");
+  }
+  window.addEventListener("resize", draw);
+  window.TP = { set: (arr) => { arr.forEach((v, i) => { s.t[i] = v; sl[i].value = v; sl[i].dispatchEvent(new Event("input")); }); upd(); }, mode: (k) => { s.mode = k; upd(); } };
+  ready = true; upd();
+})();
+</script>
+</body>
+</html>

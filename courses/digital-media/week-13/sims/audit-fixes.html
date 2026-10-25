@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Audit Fixes</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #f8f0fc; border: 1.5px solid #9C36B5; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Audit Fixes</h1>
+  <p class="hint">The licence audit of Rooftop Rescue found six problems. For each finding, choose the fix Salma puts in the audit report.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { card: "night_rain.ogg: CC BY 4.0, but the credits file has no line for it.", answer: "write the TASL credit", choices: C(["write the TASL credit", "replace the sound", "buy a licence", "nothing: it is free"]), good: "The licence allows it; only the credit is missing." },
+    { card: "cat_sticker.png: CC BY-NC, used on the store page of the paid game.", answer: "replace it or buy a commercial licence", choices: C(["replace it or buy a commercial licence", "write a bigger credit", "make it smaller", "nothing: it is only the store page"]), good: "The store page sells the game: that is commercial use." },
+    { card: "poster_bg.jpg: from an image search; nobody knows the source.", answer: "replace it", choices: C(["replace it", "write \"source unknown\" in the credits", "make it blurry", "keep it until somebody complains"]), good: "Unknown owner, unknown licence: replace it with own art or a licensed image." },
+    { card: "physics.dll: MIT licence, but its copyright notice is not in the game.", answer: "add the notice to the licence file", choices: C(["add the notice to the licence file", "replace the library", "pay the author", "rename the file"]), good: "MIT asks only that the copyright and licence notice stay with the code." },
+    { card: "boss_theme.ogg: a freelancer was paid by bank transfer; there is no contract.", answer: "sign a written contract", choices: C(["sign a written contract", "nothing: we paid", "write a credit only", "change two notes"]), good: "The contract says who owns or may use the music." },
+    { card: "The audit is finished. The game gets an update with ten new assets next month.", answer: "audit the new assets too", choices: C(["audit the new assets too", "the old audit is enough", "delete the credits file", "audit only the art"]), good: "Every update that adds assets needs the same check." },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; r.goal = "Which fix goes into the report?"; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the first finding of the seminar: a missing credit." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "The audit report is complete." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

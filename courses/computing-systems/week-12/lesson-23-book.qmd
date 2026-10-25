@@ -1,0 +1,251 @@
+---
+title: "Gaming Platforms: Consoles, PC, Mobile and Cloud Gaming"
+description: "Lesson notes · What a gaming platform is, consoles with fixed hardware, dev kits and certification, gaming PCs with many configurations, mobile platforms with touch and battery limits, cloud gaming and its network needs, and cross-platform games with porting, cross-play and cross-save."
+lesson: 23
+ilos: [B1]
+format: lesson-typst
+---
+
+::: {.lead}
+*Pocket Quest* is a success on Android and iOS phones. Now the players ask
+for more: "Can I race on my PC?", "Is there a console version?", "My
+friend plays games on a TV stick through the cloud, can I race with
+them?". Before Byte Bay spends money on a new version, the team must know
+what each platform can do and what it costs to make a game for it. In
+earlier lectures you compared Android and iOS, and in lectures 21 and 22
+you saw the cloud. In this lesson you compare the four big kinds of
+**gaming platforms**: consoles, gaming PCs, mobile devices and cloud
+gaming. Every section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary gaming-platform game-console gaming-pc cloud-gaming dev-kit certification graphics-settings system-requirements free-to-play premium-game porting cross-platform cross-play cross-save >}}
+
+## 23.1 What is a gaming platform?
+
+A **gaming platform** is more than a device: it is the hardware, the
+operating system, the store and the rules that come with them
+(@fig-platforms).
+
+::: {.callout-important title="Definition 23.1 — Gaming platform"}
+A **gaming platform** is the hardware and software on which players play a
+game, together with its store and its rules. The four big kinds are:
+
+- **Game consoles:** computers made for games, with the same hardware for
+  all players; home consoles connect to a TV, handheld consoles have the
+  screen and the controls built in.
+- **Gaming PCs:** personal computers with very different hardware.
+- **Mobile devices:** smartphones and tablets (Android and iOS).
+- **Cloud gaming:** the game runs on a server and is streamed to the
+  player's screen.
+:::
+
+![Four kinds of gaming platforms.](images/platforms.png){#fig-platforms width=94%}
+
+::: {.callout-note title="Example 23.1 — Where Pocket Quest could run"}
+1. Today: Android and iOS phones, from the cheap P5 to the strong P8.
+2. A **PC** version for players who want a bigger screen and a keyboard.
+3. A **console** version for players who race on the sofa with a
+   controller.
+4. A **cloud gaming** version for players with a weak device and a fast
+   network.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"A platform is just the device." Two devices with the same chip can be
+different platforms: the store, its rules, its fees and its players are
+part of the platform too.
+:::
+
+::: {.callout-note title="Do it · Your platforms"}
+List the platforms on which you and your family play games. For each one,
+write the device, the input (touch, controller, keyboard) and the store.
+
+*Your result:* a list with at least two platforms.
+:::
+
+## 23.2 Consoles and gaming PCs
+
+Consoles and PCs can both run big games, but they differ in one important
+way: **how much the hardware differs between players** (@fig-hardware).
+
+::: {.callout-important title="Definition 23.2 — Fixed and varied hardware"}
+- A **console** has **fixed hardware**: every player has the same CPU, GPU
+  and memory. The studio can tune the game for one target and test on few
+  devices. To make console games, a studio needs a **dev kit** from the
+  platform maker and must pass **certification** before release.
+- A **gaming PC** has **varied hardware**: from old laptops to strong
+  desktops. The game needs **graphics settings** (low, medium, high) and
+  published **system requirements** (minimum and recommended). PC stores are
+  open: no dev kit is needed, but testing is much bigger.
+:::
+
+![Fixed hardware or many kinds of hardware (example points).](images/hardware-variety.png){#fig-hardware width=94%}
+
+::: {.callout-note title="Example 23.2 — Two ways to make Pocket Quest run well"}
+1. **Console:** Rami tunes the game once for the console GPU: 4K, high
+   settings, 60 fps. Every player sees the same.
+2. Before release, the console version goes to **certification**: the
+   platform maker checks, for example, what happens when the controller is
+   unplugged.
+3. **PC:** Rami adds a settings menu. An old laptop runs it on low, a strong
+   PC on high. The store page lists the minimum and recommended
+   requirements.
+:::
+
+{{< sim file="sims/platform-profiles.html" poster="sims/platform-profiles.png" title="Platform Profiles: compare two platforms" height="760" >}}
+
+::: {.callout-warning title="Common mistake"}
+"Consoles are always stronger than PCs." A new console is stronger than
+most old laptops, but a strong gaming PC can be stronger than a console.
+The console's strength is that **all** players have the same hardware.
+:::
+
+::: {.callout-note title="Do it · Compare two platforms"}
+1. In **Platform Profiles**, compare the console and the gaming PC.
+2. Write two differences that matter for Byte Bay.
+
+*Your result:* two sentences.
+:::
+
+## 23.3 Mobile and cloud gaming
+
+Mobile devices reach the most players; cloud gaming lets weak devices play
+big games (@fig-cloud).
+
+::: {.callout-important title="Definition 23.3 — Mobile and cloud gaming"}
+- **Mobile:** touch screens, many devices (fragmentation), and limits of
+  **battery, heat** and screen size. Players play short sessions, and most
+  games are **free-to-play**: free to download, paid by purchases or ads.
+  A **premium game** is paid once.
+- **Cloud gaming:** the game runs on a **server with a GPU**; the player's
+  device sends the inputs and shows a **video stream**. It needs
+  **bandwidth** for the picture and a **low latency** for the controls.
+  Example values: 720p about 10 Mbps, 1080p about 20 Mbps; the stream adds
+  about 40 ms to the ping.
+:::
+
+![Cloud gaming (example values).](images/cloud-gaming.png){#fig-cloud width=94%}
+
+::: {.callout-note title="Example 23.3 — Racing through the cloud"}
+1. A player with a TV stick and a line of 8 Mbps chooses 720p: the picture
+   is **blocky**, because 720p needs about 10 Mbps.
+2. With 25 Mbps, 1080p is sharp. The ping is 60 ms: total delay
+   60 + 40 = **100 ms**; the car reacts late in fast curves.
+3. With a ping of 30 ms the total is 70 ms: good for racing. The network
+   is part of the platform.
+:::
+
+{{< sim file="sims/cloud-gaming-lab.html" poster="sims/cloud-gaming-lab.png" title="Cloud Gaming Lab: is the network good enough?" height="700" >}}
+
+::: {.callout-warning title="Common mistake"}
+"Cloud gaming needs no hardware." The player's device can be weak, but the
+**network** must be fast and stable, and the provider's servers do the
+work. A slow or busy home network ruins the game.
+:::
+
+::: {.callout-note title="Do it · Test the network"}
+1. In **Cloud Gaming Lab**, find the bandwidth for a sharp 1080p picture and
+   the highest ping that is still good for racing.
+2. Run a speed test on your phone (lecture 20). Could you stream 1080p?
+
+*Your result:* three numbers and one sentence.
+:::
+
+## 23.4 Strengths, limits and cross-platform games
+
+Each platform has strengths and limits (@fig-limits). Many studios make one
+game for several platforms (@fig-cross).
+
+::: {.callout-important title="Definition 23.4 — Cross-platform games"}
+A **cross-platform** game is built from one code base, usually in a game
+engine, for several platforms. Still, each build needs work:
+
+- **Porting:** adapting the game to a new platform (controls, menus,
+  settings, store rules).
+- **Cross-play:** players on different platforms play in the same match.
+- **Cross-save:** the player's progress is shared between platforms through
+  one account.
+:::
+
+![Strengths and limits (typical).](images/strengths-limits.png){#fig-limits width=94%}
+
+![One code base, many platforms.](images/cross-platform.png){#fig-cross width=94%}
+
+::: {.callout-note title="Example 23.4 — Pocket Quest on PC"}
+1. **Porting:** touch steering becomes keys and controller sticks; the menus
+   get mouse support; a settings menu is added.
+2. **Cross-save:** a player logs in with the same account and continues on
+   the PC with level 12 and 840 coins (lecture 22).
+3. **Cross-play:** PC and phone players race together, so the server must
+   keep the race fair for both inputs.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"The engine exports to every platform, so the port is free." The export is
+only the start: controls, menus, performance on the weakest device, store
+rules and testing take most of the time.
+:::
+
+::: {.callout-note title="Do it · Strength and limit"}
+For each of the four kinds of platforms, write one strength and one limit
+for *Pocket Quest*.
+
+*Your result:* a small table with four rows.
+:::
+
+## Case study: Platform Match
+
+Byte Bay's team reads six notes: a platform with the same GPU for every
+player, a dev kit and certification; players with anything from an old
+laptop to a strong desktop; touch controls, battery limits and short
+sessions; a TV stick that plays big games through a video stream; a PC
+player and a console player who want to race together; and the work of
+adapting the mobile version for the PC. The Game challenge of the
+interactive lesson uses these notes. In the mini-game below you match each
+note with the platform or the word that fits.
+
+{{< sim file="sims/platform-match.html" poster="sims/platform-match.png" title="Platform Match: which platform is it?" kind="game" height="460" >}}
+
+## Further reading
+
+Novak, *Game Development Essentials* (3rd ed., 2012), Chapter 1 (game
+platforms). Unity Manual, "Platform development" (docs.unity3d.com). The
+developer pages of the console makers and of the PC and mobile stores
+explain their rules for studios.
+
+## Exercises
+
+1. What is a gaming platform?
+2. Name the four big kinds of gaming platforms.
+3. Why is it easier to test a game on a console than on PCs?
+4. What is a dev kit, and what is certification?
+5. Why does a PC game need graphics settings and system requirements?
+6. Name two limits of mobile devices for games.
+7. What is the difference between free-to-play and a premium game?
+8. In cloud gaming, what runs where?
+9. Which two network values matter most for cloud gaming?
+10. What is the difference between cross-play and cross-save?
+
+## Answers to the exercises
+
+::: {.answers}
+1. The hardware and software on which players play a game, with its store
+   and its rules.
+2. Consoles, gaming PCs, mobile devices, cloud gaming.
+3. All console players have the same hardware; PCs have many
+   configurations.
+4. A dev kit is special hardware and software from the platform maker for
+   making the game; certification is the check of the game before release.
+5. PC players have very different hardware: settings let each PC run the
+   game well, and the requirements tell players what they need.
+6. For example battery, heat, small screen, touch only, weak phones.
+7. Free-to-play is free to download and earns money inside the game; a
+   premium game is paid once.
+8. The game runs on a server; the player's device sends inputs and shows
+   the video stream.
+9. Bandwidth (for the picture) and latency or ping (for the controls).
+10. Cross-play lets players on different platforms play together;
+    cross-save shares one player's progress between platforms.
+:::

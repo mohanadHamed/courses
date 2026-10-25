@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Packet Journey</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .92rem; }
+    .sim .bar > span.l { min-width: 86px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .slots { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin: 6px 0; }
+    .sim .slots div { border: 1.5px solid #ced4da; border-radius: 6px; text-align: center; font-weight: 800; padding: 3px 0; font-size: .9rem; }
+    .sim .slots div.ok { background: #ebfbee; border-color: #2b8a3e; color: #2b8a3e; }
+    .sim .slots div.re { background: #e7f5ff; border-color: #1c7ed6; color: #1c7ed6; }
+    .sim .slots div.lost { background: #fff5f5; border-color: #c92a2a; color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Packet Journey: TCP or UDP?</h1>
+  <p class="hint">Rami's phone sends 10 packets to the game server of <i>Pocket Quest</i>. Choose what the packets carry, the protocol and how many packets get lost on the way, then press Send.</p>
+  <div class="bar"><span class="l">Message</span><span id="msg-type" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Protocol</span><span id="proto" style="display:contents"></span></div>
+  <div class="bar" id="loss"></div>
+  <div class="bar"><button type="button" id="send">Send 10 packets ▶</button></div>
+  <canvas id="c" aria-label="The packets on their way from the phone to the server"></canvas>
+  <div class="slots" id="slots"></div>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const TYPES = { "player positions": "UDP", "a purchase": "TCP", "a chat message": "TCP", "voice chat": "UDP" };
+  const NODES = ["phone", "access point", "router", "ISP", "server"];
+  const s = { type: "a purchase", proto: "TCP", loss: 0, run: null, runs: [] };
+  const TASKS = [
+    { q: "Task 1: Send a purchase with TCP and 0 % loss. Do all 10 packets arrive?", ok: () => s.runs.some((r) => r.proto === "TCP" && r.loss === 0) },
+    { q: "Task 2: Set the loss to 20 % and send again with TCP. What happens to the lost packets?", ok: () => s.runs.some((r) => r.proto === "TCP" && r.loss >= 20 && r.resent > 0) },
+    { q: "Task 3: Now send with UDP and 20 % loss. Which packets are missing, and is it faster?", ok: () => s.runs.some((r) => r.proto === "UDP" && r.loss >= 20) },
+    { q: "Task 4: Choose the message “player positions” and the protocol that fits it, and send.", ok: () => s.runs.some((r) => r.type === "player positions" && r.proto === "UDP") },
+  ];
+  let ti = 0;
+  function tabs(id, items, key) {
+    Kit.buttons($(id), items.map((k) => ({ k, label: k })), (k) => { s[key] = k; tabs(id, items, key); hint(); });
+    $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key]));
+  }
+  Kit.slider($("loss"), "Packet loss", 0, 30, 5, s.loss, (v) => { s.loss = v; }, (v) => v + " %");
+  const HOP = 260;   // ms per hop in the animation
+  function send() {
+    if (s.run && !s.run.done) return;
+    const now = performance.now(), P = [];
+    for (let i = 0; i < 10; i++) {
+      const lostAt = Math.random() * 100 < s.loss ? 1 + Math.floor(Math.random() * 3) : 0;
+      P.push({ id: i + 1, t0: now + i * 140, lostAt, re: false, done: false, arrived: 0 });
+    }
+    s.run = { proto: s.proto, type: s.type, loss: s.loss, P, t0: now, resent: 0, done: false, order: [] };
+    $("calc").textContent = "Sending …";
+    draw();
+  }
+  $("send").addEventListener("click", send);
+  function step(now) {
+    const r = s.run; if (!r || r.done) return;
+    r.P.forEach((p) => {
+      if (p.done) return;
+      const hop = (now - p.t0) / HOP;
+      if (p.lostAt && hop >= p.lostAt) {
+        if (r.proto === "TCP" && !p.re) { p.re = true; r.resent++; p.t0 = now + 4 * HOP; p.lostAt = 0; }   // timeout, then sent again
+        else if (r.proto === "UDP") { p.done = true; p.lost = true; }
+      } else if (hop >= NODES.length - 1) { p.done = true; p.arrived = now; r.order.push(p.id); }
+    });
+    if (r.P.every((p) => p.done)) {
+      r.done = true; r.ms = Math.round((Math.max(...r.P.map((p) => p.arrived || 0)) - r.t0) / HOP * 12);
+      s.runs.push(r); draw();
+    }
+  }
+  function hint() {
+    const want = TYPES[s.type];
+    $("msg").textContent = s.proto === want ? `${s.proto} fits ${s.type}: ${want === "TCP" ? "every packet must arrive." : "a late position is useless; the next one is newer."}` :
+      `${s.proto} is not the best for ${s.type}: ${want === "TCP" ? "a lost packet would lose money or words." : "waiting for old packets makes the game lag."}`;
+    $("msg").classList.toggle("bad", s.proto !== want);
+  }
+  function draw() {
+    const r = s.run;
+    $("slots").innerHTML = Array.from({ length: 10 }, (_, i) => {
+      const p = r && r.P[i];
+      const cls = !p || !p.done ? "" : p.lost ? "lost" : p.re ? "re" : "ok";
+      return `<div class="${cls}">${i + 1}</div>`;
+    }).join("");
+    if (r && r.done) {
+      const got = r.P.filter((p) => !p.lost).length;
+      $("calc").textContent = `${r.proto}: ${got} of 10 arrived · ${r.resent} sent again · ${10 - got} missing · time ≈ ${r.ms} ms (12 ms per hop)`;
+    }
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: TCP is reliable but waits; UDP is fast but may lose packets.";
+    if (m) { $("msg").textContent = m; $("msg").classList.remove("bad"); }
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.min(150, W * 0.3));
+  Kit.loop((now) => {
+    step(now);
+    const c = cv.ctx, W = cv.W, H = cv.H, x0 = 40, x1 = W - 40, y = H * 0.5, X = (h) => x0 + (x1 - x0) * h / (NODES.length - 1);
+    c.clearRect(0, 0, W, H);
+    c.strokeStyle = "#ced4da"; c.lineWidth = 4; c.beginPath(); c.moveTo(x0, y); c.lineTo(x1, y); c.stroke();
+    NODES.forEach((n, i) => { Kit.rrect(c, X(i) - 18, y - 18, 36, 36, 8, "#fff", "#A86700", 2.5); Kit.text(c, n, X(i), y + 36, 11, "#495057", "center", 700); });
+    const r = s.run;
+    if (r) r.P.forEach((p) => {
+      if (p.done && !p.lost) return;
+      const hop = (now - p.t0) / HOP;
+      if (p.lost) { const lx = X(p.lostAt - 0.5); Kit.text(c, "×", lx, y - 26, 16, "#c92a2a"); return; }
+      if (hop < 0) { if (p.re) Kit.text(c, "↻", x0, y - 26, 13, "#1c7ed6"); return; }
+      const h = Math.min(hop, p.lostAt ? p.lostAt - 0.5 : NODES.length - 1);
+      c.fillStyle = p.re ? "#1c7ed6" : r.proto === "TCP" ? "#A86700" : "#e8590c";
+      c.beginPath(); c.arc(X(h), y - 2 - (p.id % 3) * 4, 6, 0, 7); c.fill();
+    });
+    Kit.text(c, r ? r.proto : s.proto, W / 2, 16, 13, "#A86700");
+  });
+  tabs("msg-type", Object.keys(TYPES), "type"); tabs("proto", ["TCP", "UDP"], "proto");
+  window.PJ = { set: (o) => { Object.assign(s, o); if (o.loss !== undefined) { const i = document.querySelector("#loss input"); i.value = o.loss; i.dispatchEvent(new Event("input")); } tabs("msg-type", Object.keys(TYPES), "type"); tabs("proto", ["TCP", "UDP"], "proto"); hint(); }, send };
+  hint(); draw();
+})();
+</script>
+</body>
+</html>

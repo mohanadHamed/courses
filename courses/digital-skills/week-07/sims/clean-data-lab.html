@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Clean Data Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .ai { border: 1.5px solid #ffd8a8; border-radius: 10px; padding: 8px 10px; background: #fffaf3; margin-bottom: 8px; font-size: .9rem; line-height: 1.45; }
+    .sim .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 8px 0; }
+    .sim .tools button { text-align: left; }
+    .sim table.t { border-collapse: collapse; width: 100%; font-size: .88rem; font-variant-numeric: tabular-nums; }
+    .sim table.t th, .sim table.t td { border: 1px solid #dee2e6; padding: 3px 6px; text-align: left; white-space: pre; }
+    .sim table.t th { background: #fff4e6; color: #D9480F; }
+    .sim table.t td.bad { background: #fff5f5; color: #c92a2a; }
+    .sim .out { font-weight: 700; margin-top: 6px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Clean Data Lab: tidy the sales list with AI advice</h1>
+  <p class="note">Huda copied the sales from three notebooks into Excel. Red cells have a problem. The AI gave six steps; <b>one step is a bad idea</b>. Use only the good ones.</p>
+  <div class="ai"><b>AI:</b> To clean your sales list: 1) Remove the empty rows. 2) Remove the duplicate rows (Data › Remove Duplicates). 3) Remove extra spaces with TRIM. 4) Write each Type the same way (Find and Replace). 5) Make “12 JD” a number. 6) Delete the rows with a Total under 12, they are too small to matter.</div>
+  <div class="tools" id="tools"></div>
+  <div style="overflow-x:auto"><table class="t" id="t"></table></div>
+  <p class="out" id="out"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="sales-data.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const RAW = [
+    ["Sun", "Notebook", "Paper", 12, 24], ["Sun", " Juice", "drinks", 20, 10], ["Mon", "Pen", "PAPER", 40, 20], ["", "", "", "", ""],
+    ["Mon", "Water", "Drinks", 30, 15], ["Tue", "Bag", "Bags", 3, 36], ["Tue", "Juice ", "Drinks", 24, "12 JD"], ["Tue", "Bag", "Bags", 3, 36],
+    ["Wed", "Notebook", "Paper", 8, 16], ["Wed", "Bag", "Bags", 2, 24], ["Thu", "Water", "drinks ", 26, 13], ["Thu", "Pen", "Paper", 30, 15],
+  ];
+  let rows, lost;
+  const TOOLS = [
+    ["empty", "1 · Remove the empty rows"], ["dup", "2 · Remove the duplicate rows"], ["trim", "3 · TRIM the extra spaces"],
+    ["case", "4 · Write each Type the same way"], ["num", "5 · Make “12 JD” the number 12"], ["small", "6 · Delete Totals under 12"], ["reset", "Start again"],
+  ];
+  const Tp = (t) => t.trim()[0].toUpperCase() + t.trim().slice(1).toLowerCase();
+  function problem(r, i) {
+    if (r.every((v) => v === "")) return [0, 1, 2, 3, 4];
+    const p = [];
+    if (r[1] !== r[1].trim()) p.push(1);
+    if (r[2] !== "" && r[2] !== Tp(r[2])) p.push(2);
+    if (typeof r[4] !== "number") p.push(4);
+    if (rows.findIndex((q) => q.join("|") === r.join("|")) !== i) p.push(0, 1, 2, 3, 4);
+    return p;
+  }
+  function act(k) {
+    if (k === "reset") { rows = RAW.map((r) => r.slice()); lost = false; render("The raw list: 12 rows, with problems in red."); return; }
+    if (k === "empty") rows = rows.filter((r) => !r.every((v) => v === ""));
+    if (k === "dup") rows = rows.filter((r, i) => rows.findIndex((q) => q.join("|") === r.join("|")) === i);
+    if (k === "trim") rows = rows.map((r) => r.map((v) => (typeof v === "string" ? v.trim() : v)));
+    if (k === "case") rows = rows.map((r) => (r[2] ? [r[0], r[1], Tp(r[2]), r[3], r[4]] : r));
+    if (k === "num") rows = rows.map((r) => (typeof r[4] === "string" && r[4] ? [r[0], r[1], r[2], r[3], parseFloat(r[4])] : r));
+    if (k === "small") { rows = rows.filter((r) => !(typeof r[4] === "number" && r[4] < 12)); lost = true; Kit.bad();
+      render("Step 6 is a bad idea: it deletes real sales (the juice of Sunday, 10 JD). The total of the week is now wrong. Never let an AI step delete data you need. Press Start again.", true); return; }
+    Kit.good(); render(TOOLS.find((t) => t[0] === k)[1].slice(4) + ": done.");
+  }
+  function render(t, bad) {
+    $("t").innerHTML = "<tr>" + SALES_HEAD.map((h) => `<th>${h}</th>`).join("") + "</tr>" +
+      rows.map((r, i) => { const p = problem(r, i); return "<tr>" + r.map((v, j) => `<td class="${p.includes(j) ? "bad" : ""}">${v === "" ? " " : String(v).replace(/^ | $/g, "·")}</td>`).join("") + "</tr>"; }).join("");
+    const sum = rows.reduce((a, r) => a + (typeof r[4] === "number" ? r[4] : 0), 0);
+    const drinks = rows.filter((r) => r[2] === "Drinks").length;
+    const clean = !lost && rows.length === 10 && rows.every((r, i) => !problem(r, i).length);
+    $("out").textContent = `SUM of Total: ${sum} JD · rows with the Type “Drinks”: ${drinks}` + (clean ? " · The list is clean: 185 JD and 4 drinks, as on the paper." : "");
+    $("msg").textContent = clean ? "✓ Clean. You used the five good steps and skipped the bad one." : t;
+    $("msg").classList.toggle("bad", !!bad);
+    if (clean) Kit.good();
+  }
+  Kit.buttons($("tools"), TOOLS.map(([k, label]) => ({ k, label })), act);
+  window.CD = { do: act };
+  act("reset");
+})();
+</script>
+</body>
+</html>

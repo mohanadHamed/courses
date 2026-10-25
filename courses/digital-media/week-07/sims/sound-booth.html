@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Sound Booth</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Sound Booth</h1>
+  <p class="hint">Yara, the sound designer of <b>Night Owl Games</b>, records the sounds of <i>Rooftop Rescue</i>: Pasha's meow, Nour's footsteps on the roof, and the music of the flood level. Help her choose the right settings.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="take.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { take: { gain: 0.6 }, goal: "Yara sets up the recording of <b>Pasha's meow</b>. Which settings fit a game?",
+      choices: C(["48 kHz, 16-bit", "8 kHz, 4-bit", "22 Hz, 1-bit", "1000 kHz, 64-bit"]), answer: "48 kHz, 16-bit",
+      good: "48 kHz (or 44.1 kHz) and 16-bit keep every sound people hear, and the files stay small enough.", why: { "8 kHz, 4-bit": "Too few samples and only 16 levels: the meow sounds like an old phone." } },
+    { take: { gain: 0.6 }, goal: "Pasha is one sound source. Does Yara record the meow in <b>mono or stereo</b>?",
+      choices: C(["mono: one channel", "stereo: two channels", "5.1 surround", "no channel"]), answer: "mono: one channel",
+      good: "One source needs one channel. The game engine places it left or right later, and the file is half the size.", why: { "stereo: two channels": "Stereo doubles the size; a single cat does not need it." } },
+    { take: { gain: 1, clip: true }, goal: "In the first take, the meter hits <b>0 dB</b> and the tops of the wave are flat (red marks). What is wrong?",
+      choices: C(["clipping: the input level is too high", "the file is too small", "the cat is too far away", "the sample rate is too high"]), answer: "clipping: the input level is too high",
+      good: "Above 0 dB the wave is cut flat and sounds broken. Lower the input level so that the peaks stay near −6 dB, and record again.", why: { "the cat is too far away": "Far away would be too quiet, not flat at the top." } },
+    { take: { gain: 0.15, hum: 0.05 }, goal: "The second take is very quiet, with a hum of the fridge under it. What should Yara change?",
+      choices: C(["go closer (15–30 cm) and turn off the fridge", "turn the volume of her speakers up", "record in the kitchen", "use 8-bit"]), answer: "go closer (15–30 cm) and turn off the fridge",
+      good: "A good take starts in the room: close to the mic, in a quiet room with soft things around. Fixing it later is harder.", why: { "turn the volume of her speakers up": "That only changes what she hears, not the recording." } },
+    { take: { gain: 0.7 }, goal: "<b>Footsteps</b> are short and play many times a second. Which format does the game use for them?",
+      choices: C(["WAV: uncompressed, plays at once", "MP3 of a whole minute", "a video file", "a text file"]), answer: "WAV: uncompressed, plays at once",
+      good: "Short effects are small anyway, and WAV needs no decoding: they play with no delay.", why: { "MP3 of a whole minute": "A short step does not need a minute, and decoding adds a delay." } },
+    { take: { gain: 0.7 }, goal: "The <b>music</b> of the level lasts 3 minutes: about 33 MB as a 48 kHz, 16-bit stereo WAV. Which format?",
+      choices: C(["OGG or MP3: compressed, about 3 MB", "WAV: 33 MB is fine on a phone", "a 4-bit WAV", "no music"]), answer: "OGG or MP3: compressed, about 3 MB",
+      good: "Lossy compression makes long music about 10 times smaller, and players do not hear the difference in a game.", why: { "WAV: 33 MB is fine on a phone": "Every level with 33 MB of music makes the download much bigger." } },
+  ];
+  Kit.game({
+    rounds, cols: 1, colsPhone: 1, animMs: 700, still: true,
+    intro: "Round 1 is the story of the lesson: the first recording of the day.",
+    canvas: (W) => Math.min(120, W * 0.3),
+    draw(c, W, H, now, r) {
+      c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      TK.draw(c, 0, 0, W, H, r.data || (r.data = TK.make({ lead: 0.2, ...r.take })));
+    },
+  });
+})();
+</script>
+</body>
+</html>

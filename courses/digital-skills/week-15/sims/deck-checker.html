@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Deck Checker</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .facts { background: #ebfbee; border: 1.5px solid #217346; border-radius: 10px; padding: 6px 10px; font-weight: 700; font-size: .88rem; line-height: 1.5; }
+    .sim .slide { border: 2px solid #c43e1c; border-radius: 8px; padding: 6px 10px; margin: 8px 0; background: #fff; }
+    .sim .slide .n { font-size: .75rem; font-weight: 800; color: #868e96; }
+    .sim .slide .tt { color: #c43e1c; font-weight: 800; }
+    .sim .slide .bd { font-weight: 700; font-size: .92rem; }
+    .sim .slide .opts { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .sim .slide .opts button { padding: 3px 9px; font-size: .8rem; }
+    .sim .slide .opts button.on { background: var(--sim-accent); color: #fff; }
+    .sim .slide .fb { font-size: .84rem; font-weight: 700; margin-top: 4px; }
+    .sim .slide .fb.ok { color: #2b8a3e; } .sim .slide .fb.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Deck Checker: ready to present?</h1>
+  <p class="hint">Sami made five slides about the canteen sales, with AI help. Compare each slide with the facts from the Excel sheet. Mark each slide <b>OK</b> or name its problem.</p>
+  <div class="facts">Excel facts: total 415 JD in four weeks. Sandwiches earned the most (138 JD); tea sold the most cups (150). Weeks: 101, 101, 105, 108 JD.</div>
+  <div id="deck"></div>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const OPT = { ok: "OK", num: "wrong number", claim: "claim not in the data", pic: "picture does not fit", ai: "no AI-use line" };
+  const D = [
+    ["Canteen Sales in Four Weeks", "Sami, Digital Skills project", "ok", "A clear title and the name."],
+    ["What sells most?", "Which item earns the most money, and which sells the most cups? [AI picture: a big, busy restaurant with waiters]", "pic", "The question is clear, but the picture does not show a small canteen."],
+    ["The answer in a chart", "[column chart of the total by item] Total: 451 JD", "num", "Excel says 415 JD: two digits swapped."],
+    ["Two insights", "Sandwiches earned the most. Everyone loves sandwiches.", "claim", "The data shows sales, not what everyone loves."],
+    ["Thank you!", "Questions?", "ai", "AI helped, so the last slide needs an AI-use line."],
+  ];
+  const s = { m: {} };
+  const right = () => D.filter((d, i) => s.m[i] === d[2]).length;
+  const TASKS = [
+    { q: "Task 1: Find the slide with a wrong number and the slide with a claim that the data does not show.", ok: () => s.m[2] === "num" && s.m[3] === "claim" },
+    { q: "Task 2: Mark all six slides correctly. How would you fix each problem?", ok: () => right() === D.length },
+  ];
+  let ti = 0;
+  function render() {
+    $("deck").innerHTML = "";
+    D.forEach(([t, b, ans, why], i) => {
+      const sl = Kit.el("div", { class: "slide" }), o = Kit.el("div", { class: "opts" });
+      sl.append(Kit.el("div", { class: "n" }, "slide " + (i + 1)), Kit.el("div", { class: "tt" }, t), Kit.el("div", { class: "bd" }, b), o);
+      Kit.buttons(o, Object.keys(OPT).map((k) => ({ k, label: OPT[k] })), (k) => { s.m[i] = k; if (k !== ans) Kit.bad(); render(); });
+      o.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x.dataset.k === s.m[i]));
+      if (s.m[i]) sl.append(Kit.el("div", { class: "fb " + (s.m[i] === ans ? "ok" : "no") }, s.m[i] === ans ? "✔ " + why : "✘ Look again at the facts above."));
+      $("deck").appendChild(sl);
+    });
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: fix 451 to 415, delete the claim, change the picture, and add the AI-use line.";
+    $("msg").textContent = m + `${right()} of ${D.length} slides marked correctly.`;
+  }
+  window.DC = { mark: (i, k) => { s.m[i] = k; render(); } };
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Letter Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 12px; }
+    @media (max-width: 600px) { .sim .grid2 { grid-template-columns: 1fr; } }
+    .sim .parts { display: grid; gap: 6px; align-content: start; }
+    .sim .parts button { text-align: left; background: #fff; color: inherit; border: 1.5px solid #ffc078; box-shadow: none; font-weight: 700; font-size: .85rem; padding: 6px 8px; }
+    .sim .parts button.used { opacity: .3; }
+    .sim .page { background: #fff; border: 1px solid #dee2e6; border-radius: 6px; box-shadow: 0 4px 14px -8px #868e96; padding: 14px 16px; min-height: 340px; font-size: .82rem; line-height: 1.45; }
+    .sim .page p { margin: 0 0 8px; white-space: pre-line; }
+    .sim .page .r { text-align: right; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Letter Builder: the parts of a formal letter</h1>
+  <p class="note">Sami (a made-up student) asks Sunrise Company for a training place. An AI tool wrote the parts. Tap them in the right order, from the top of the page to the bottom.</p>
+  <div class="grid2"><div class="parts" id="parts"></div><div class="page" id="page"></div></div>
+  <p class="message" id="msg"></p>
+  <button type="button" class="ghost" id="again">Start again</button>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  // [name, text, right-aligned?, tip when tapped too early]
+  const PARTS = [
+    ["Your address", "Sami Odeh\n12 Garden Street\nAmman", true, "Your own address comes first, at the top."],
+    ["The date", "5 December 2026", true, "The date comes after your address."],
+    ["The address of the company", "Ms Rana Saleh\nHR Manager, Sunrise Company\n40 Park Road, Amman", false, "The reader's name and address come after the date."],
+    ["The subject line", "Subject: Request for a training place", false, "The subject line comes before the greeting."],
+    ["The greeting", "Dear Ms Saleh,", false, "The greeting comes before the text."],
+    ["Paragraph 1: why you write", "I am writing to ask for a training place in your office for the summer.", false, "The text starts with why you write."],
+    ["Paragraph 2: about you", "I study in the first year of a diploma at the Technical College. I can use Word and Excel, and I speak Arabic and English.", false, "After why you write, say who you are."],
+    ["Paragraph 3: what you ask, and thanks", "I attach my CV. I would be happy to come for an interview. Thank you for your time.", false, "The last paragraph asks and thanks."],
+    ["The closing", "Yours sincerely,", false, "The closing comes after the text, before your name."],
+    ["Your name", "Sami Odeh", false, "Your name is the last part."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let next = 0;
+  const order = PARTS.map((_, i) => i).sort(() => Math.random() - 0.5);
+  function build() {
+    $("parts").innerHTML = ""; $("page").innerHTML = "";
+    order.forEach((i) => {
+      const b = Kit.el("button", { type: "button", "data-k": i }, PARTS[i][0]);
+      b.addEventListener("click", () => tap(i, b));
+      $("parts").appendChild(b);
+    });
+    $("msg").textContent = "Which part goes at the top of the page?"; $("msg").className = "message";
+  }
+  function tap(i, b) {
+    if (next >= PARTS.length) { $("msg").textContent = "The letter is complete. Press Start again to try once more."; return; }
+    if (b.classList.contains("used")) { $("msg").textContent = "This part is already on the page."; return; }
+    if (i !== next) { $("msg").textContent = "✗ Not yet. " + PARTS[next][3]; $("msg").className = "message bad"; Kit.bad(); return; }
+    b.classList.add("used");
+    $("page").appendChild(Kit.el("p", { class: PARTS[i][2] ? "r" : "" }, PARTS[i][1]));
+    next++; Kit.beep(560, 0.08);
+    $("msg").className = "message good";
+    $("msg").textContent = next === PARTS.length ? "🎉 The letter is complete: address, date, reader, subject, greeting, three paragraphs, closing, name." : "✓ " + PARTS[i][0] + ". What comes next?";
+    if (next === PARTS.length) Kit.good();
+  }
+  $("again").addEventListener("click", () => { next = 0; order.sort(() => Math.random() - 0.5); build(); });
+  build();
+})();
+</script>
+</body>
+</html>

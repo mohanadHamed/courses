@@ -1,0 +1,292 @@
+---
+title: "Applying Logic to Game Rules and Decisions"
+description: "Turning the words of a game designer into exact conditions, if-then rules with sufficient and necessary conditions, decision tables, the order of else-if chains, a guard as a state machine, and testing rules with edge cases."
+lesson: 19
+ilos: [B2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+has a short summary, a picture, a **Do it** task and one set of questions.
+The full explanations, examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary implication sufficient-condition necessary-condition contrapositive decision-table else-if-chain unreachable-rule state-machine edge-case test-case >}}
+
+## 19.1 From words to conditions
+
+- **and** → `&&` · **or** → `||` (also both) · **not, no** → `!`
+- **either … or, not both** → `^` · **unless p** → if not p · **only if
+  q** → … → q
+- Give each fact a letter, then find the word that joins the two big parts.
+- "Key and no skeleton, **or** thief" → `(k && !s) || t`.
+
+![Rule words and their logic.](images/rule-words.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+`k && (!s || t)` looks similar, but then a thief needs a key.
+:::
+
+::: {.callout-note title="Do it · Translate"}
+Write as conditions: "The trap fires when the player steps on the plate and
+is not flying"; "the red key or the blue key, but not both"; "the alarm
+rings unless the guard is asleep".
+:::
+
+::: {.callout-tip title="Try it 1 · Words to logic"}
+Choose the condition.
+
+::: {.match extra="p -> !q|!(p || q)"}
+plate pressed and not flying
+:   p && !f
+
+the red key or the blue key, but not both
+:   r ^ b
+
+the alarm rings unless the guard is asleep
+:   alarm = !a
+
+key and no skeleton, or thief
+:   (k && !s) || t
+:::
+:::
+
+## 19.2 If-then rules: sufficient and necessary
+
+- In p → q: **p is sufficient** for q, **q is necessary** for p.
+- **Contrapositive** ¬q → ¬p: the same rule. **Converse** q → p: not the
+  same.
+- "p **only if** q" = p → q.
+- Only the case p = T, q = F breaks the rule.
+
+![The implication, its contrapositive and its converse.](images/implication.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+"If crown, then gate open" does **not** say "if gate open, then crown".
+:::
+
+::: {.callout-note title="Do it · What follows?"}
+Rule: "If the boss is defeated, the music changes." What follows when (a)
+the boss is defeated; (b) the music did not change; (c) the music changed?
+:::
+
+::: {.callout-tip title="Try it 2 · Crown and gate"}
+Rule: crown → gate open. Choose what we know.
+
+::: {.match extra="the gate will close|the player holds two crowns"}
+The player holds the crown.
+:   the gate is open
+
+The gate is shut.
+:   the player has no crown
+
+The gate is open.
+:   nothing about the crown
+
+Which case breaks the rule?
+:   crown, but the gate is shut
+:::
+:::
+
+## 19.3 Decision tables
+
+- One column per condition, **2^n rows**, and the **action** in each row.
+- **Complete:** every row has an action. **No conflict:** never two actions.
+- The guard: s = sees, n = near, w = weak; 8 rows; Flee in all rows with w.
+
+![The decision table of the guard.](images/decision-table.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+A table shows the cases that the designer forgot.
+:::
+
+::: {.callout-note title="Do it · A trap table"}
+The spike trap fires when the plate is pressed (p) and the trap is armed
+(a), unless the player is flying (f). Make the 8-row table.
+:::
+
+::: {.callout-tip title="Try it 3 · The guard table"}
+Use the table of the guard. Choose the action.
+
+::: {.match extra="Sleep|Jump"}
+s = T, n = T, w = F
+:   Attack
+
+s = T, n = F, w = F
+:   Chase
+
+s = T, n = T, w = T
+:   Flee
+
+s = F, n = F, w = F
+:   Patrol
+:::
+:::
+
+## 19.4 Else-if chains: the order matters
+
+- The chain is read from the top: **the first true rule wins**.
+- A rule whose cases are all caught above it is **unreachable**.
+- Most important and most specific rules first; `else` last.
+
+![The same rules in a wrong and a right order.](images/rule-order.png){width=94%}
+
+{{< sim file="sims/guard-brain.html" poster="sims/guard-brain.png" title="Guard Brain: rules, order and the decision table" height="900" >}}
+
+::: {.callout-warning title="Watch out!"}
+`if (s)` before `else if (s && n)`: Attack never runs.
+:::
+
+::: {.callout-note title="Do it · Order the rules"}
+In **Guard Brain**, switch on s and n, then change the order until the
+chain agrees with the designer in all 8 rows.
+:::
+
+::: {.callout-tip title="Try it 4 · The chain"}
+Use Guard Brain. Choose the right answer.
+
+::: {.match extra="Patrol()|the last rule"}
+In the first chain, which rule never runs?
+:   Attack()
+
+Which rule must come first?
+:   Flee() if w
+
+Which rule runs when two conditions are true?
+:   the first true rule from the top
+
+How many rows agree after the fix?
+:   all 8
+:::
+:::
+
+## 19.5 The guard as a state machine
+
+- **States:** Patrol, Chase, Attack, Flee. **Transitions:** arrows with
+  conditions.
+- Each frame, check only the arrows that leave the current state.
+- From every state, w leads to Flee.
+
+![The guard as a state machine.](images/guard-states.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Two arrows from one state can be true together: give them an order.
+:::
+
+::: {.callout-note title="Do it · Follow the guard"}
+Start in Patrol. Frames: (1) s; (2) s, n; (3) s, ¬n; (4) ¬s; (5) w. Write
+the state after each frame.
+:::
+
+::: {.callout-tip title="Try it 5 · Next state"}
+Choose the next state.
+
+::: {.match extra="Sleep|Hide"}
+In Patrol, the guard sees the player.
+:   Chase
+
+In Chase, the player comes near.
+:   Attack
+
+In Attack, the player walks away.
+:   Chase
+
+In Chase, the guard's health falls to 25.
+:   Flee
+:::
+:::
+
+## 19.6 Testing rules with edge cases
+
+- A **test case** is one input with the expected result: one row of the
+  table.
+- An **edge case** tests the border of a number rule: for health < 30, test
+  **29, 30, 31**.
+- Bugs hide at `<` / `<=` and `>` / `>=`.
+
+![Testing at the border of the rule.](images/edge-cases.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Tests with 10 and 80 never find the bug at 30.
+:::
+
+::: {.callout-note title="Do it · Edge cases"}
+"A bonus life when the player has at least 100 coins and less than 3
+lives." Write four edge-case tests with the expected result.
+:::
+
+::: {.callout-tip title="Try it 6 · Edge cases"}
+Choose the test that finds the bug.
+
+::: {.match extra="health = 50|speed = 100"}
+Rule health < 30, code health <= 30.
+:   health = 30
+
+Rule speed > 5, code speed >= 5.
+:   speed = 5
+
+Rule coins >= 100, code coins > 100.
+:   coins = 100
+
+Rule lives < 3, code lives <= 3.
+:   lives = 3
+:::
+:::
+
+## Game challenge: Rule Smith {.challenge}
+
+Work alone. Use every section of today.
+
+The designer of *Torch Hall* gives six rules: the chest and the thief, the
+bridge **unless** the lever is pulled, the boss room **only if** the
+torches are lit, the crown and the shut gate, a guard chain with an
+unreachable rule, and the flee rule with `<=`.
+
+{{< sim file="sims/rule-smith.html" poster="sims/rule-smith.png" title="Rule Smith: exact rules, no bugs" kind="game" height="560" >}}
+
+::: {.callout-tip title="Try it 7 · The rules of Torch Hall"}
+Choose the right answer.
+
+::: {.match extra="bridgeUp = l|nothing"}
+The chest rule in code?
+:   (k && !s) || t
+
+The bridge stays up unless the lever is pulled.
+:   bridgeUp = !l
+
+A tester is in the boss room. What do we know?
+:   the torches are lit
+
+The gate is shut. What follows?
+:   the player has no crown
+:::
+:::
+
+::: {.callout-tip title="Try it 8 · Count the cases (harder)"}
+Choose the right answer.
+
+::: {.match extra="6|12"}
+How many rows has a table with 4 conditions?
+:   16
+
+In how many of 8 rows does (k ∧ ¬s) ∨ t open the chest?
+:   5
+
+In how many of 8 rows does the guard flee?
+:   4
+
+In how many of 8 rows does the guard attack?
+:   1
+:::
+:::
+
+## Summary {.summary}
+
+- Give each fact a letter and translate and, or, not, unless, only if.
+- p → q: p is sufficient, q is necessary; the contrapositive is the same
+  rule, the converse is not.
+- A decision table lists every case with one action.
+- In an else-if chain the first true rule wins: special rules first.
+- A state machine checks only the arrows that leave its state.
+- Test every row, and test numbers at their borders.

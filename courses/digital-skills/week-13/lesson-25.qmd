@@ -1,0 +1,197 @@
+---
+title: "Excel (3): Summarizing Data with AI Help"
+description: "Turning a list into an Excel table with a total row, summary formulas (SUMIF, COUNTIF, AVERAGEIF, MAX), PivotTables that summarize by type or by week, and asking an AI tool for a summary of the data and checking every number."
+lesson: 25
+ilos: [C2, C4, B1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem at work. Then it shows one skill. It ends with a
+**Lab task** and one set of questions. The full explanations, examples and
+exercises are in the notes.
+
+## Key terms
+
+{{< glossary excel-table total-row sumif countif averageif summary-table pivottable row-field value-field data-insight check-ai-output >}}
+
+## 25.1 Make the list a table
+
+- **Home › Format as Table** (Ctrl + T), "My table has headers".
+- A **name**, **filter buttons**, bands, a **total row**.
+- New rows join the table.
+
+![Format as Table.](images/format-table.png){width=100%}
+
+::: {.callout-warning title="Watch out!"}
+No empty rows in the middle of the list.
+:::
+
+::: {.callout-note title="Lab task · Make the table"}
+Make the March sales a table named `Sales` with a total row; save
+`march.xlsx`.
+:::
+
+::: {.callout-tip title="Try it 1 · Tables"}
+Choose the right answer.
+
+::: {.match extra="File › Print|Insert › Picture"}
+the shortcut for Format as Table
+:   Ctrl + T
+
+where you name the table
+:   Table Design › Table Name
+
+the total of Total (JD) in the total row
+:   355
+
+what stops the table early
+:   an empty row
+:::
+:::
+
+## 25.2 Summary formulas
+
+- **SUMIF** adds, **COUNTIF** counts, **AVERAGEIF** averages the matching
+  rows.
+- **MAX** and **MIN**: the biggest and the smallest value.
+- A **summary table**: one row per type.
+
+![Summary formulas.](images/summary-formulas.png){width=100%}
+
+::: {.callout-warning title="Watch out!"}
+"paper " with a space gives 0: copy the exact text.
+:::
+
+::: {.callout-note title="Lab task · A summary table"}
+Make a summary table: Paper, Drinks, Bags × Total, Count, Average.
+:::
+
+::: {.callout-tip title="Try it 2 · Formulas"}
+Choose the result for Rana's month.
+
+::: {.match extra="24|0"}
+=SUMIF(C2:C25,"Paper",E2:E25)
+:   206
+
+=COUNTIF(C2:C25,"Bags")
+:   4
+
+=AVERAGEIF(C2:C25,"Drinks",E2:E25)
+:   7.1
+
+=MAX(E2:E25)
+:   60
+:::
+:::
+
+## 25.3 PivotTables
+
+- **Insert › PivotTable**; **Rows**: a field (Type, Week, Item).
+- **Values**: Sum, Count or Average of Total.
+- **Refresh** after the data changes.
+
+![A PivotTable.](images/pivot.png){width=100%}
+
+{{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" height="600" >}}
+
+::: {.callout-warning title="Watch out!"}
+A PivotTable does not update by itself: Refresh.
+:::
+
+::: {.callout-note title="Lab task · Your PivotTable"}
+Answer the four tasks in **Pivot Lab**; make a PivotTable by Week in
+`march.xlsx`.
+:::
+
+::: {.callout-tip title="Try it 3 · PivotTables"}
+Use Pivot Lab. Choose the right answer.
+
+::: {.match extra="Bags|the second week"}
+the type that sold the most
+:   Paper
+
+the best week
+:   the third week
+
+the biggest average sale by type
+:   Paper (20.6 JD)
+
+items sold four times
+:   Juice, Notebook and Pen
+:::
+:::
+
+## 25.4 AI help: summarize and check
+
+- No personal data in the prompt; or AI in Excel with the university
+  account.
+- Ask for a summary **with numbers**.
+- **Check** every number and trend with the PivotTable; keep the true
+  **data insights**; say AI helped.
+
+![An AI summary, checked.](images/ai-summary.png){width=100%}
+
+{{< sim file="sims/summary-check.html" poster="sims/summary-check.png" title="Summary Check: is the AI right?" height="640" >}}
+
+::: {.callout-warning title="Watch out!"}
+A trend that sounds normal can still be wrong.
+:::
+
+::: {.callout-note title="Lab task · Ask and check"}
+Mark the six sentences in **Summary Check**; then check an AI summary of
+your own table.
+:::
+
+::: {.callout-tip title="Try it 4 · Check the AI"}
+Use Summary Check. Choose the right answer.
+
+::: {.match extra="Bags sold the most|sales grew every week"}
+"Total sales were 355 JD."
+:   true
+
+"The average sale was about 15 JD."
+:   true
+
+the type that really sold the most
+:   Paper
+
+the biggest single sale
+:   60 JD (notebooks)
+:::
+:::
+
+## Game challenge: The Right Tool {.challenge}
+
+Work alone. Use every section of today.
+
+Six questions: the **total of Paper**, the **biggest sale**, the **number of
+Bags sales**, the **average Drinks sale**, **all weeks and types** at once,
+and **three sentences** for the newsletter.
+
+{{< sim file="sims/summary-tool.html" poster="sims/summary-tool.png" title="The Right Tool: six questions about the month" kind="game" height="460" >}}
+
+::: {.callout-tip title="Try it 5 · The tools"}
+Choose the tool.
+
+::: {.match extra="a pie chart|Ctrl + T"}
+the total of Paper in one cell
+:   SUMIF
+
+the biggest single sale
+:   MAX
+
+every week and every type at once
+:   a PivotTable
+
+three sentences for the newsletter
+:   an AI summary, then check it
+:::
+:::
+
+## Summary {.summary}
+
+- Make the list an Excel table with a total row.
+- SUMIF, COUNTIF, AVERAGEIF and MAX answer single questions.
+- A PivotTable summarizes by any field in a few clicks.
+- AI can draft a summary; check every number before you use it.

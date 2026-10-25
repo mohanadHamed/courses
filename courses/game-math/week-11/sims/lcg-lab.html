@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: LCG Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .92rem; }
+    .sim .seq { font: 700 .95rem ui-monospace, Consolas, monospace; background: #1e1e2e; color: #e9ecef; padding: 8px 10px; border-radius: 10px; margin: 6px 0; word-spacing: 4px; }
+    .sim .seq b { color: #ffd43b; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>LCG Lab: x(n+1) = (a · x(n) + c) mod m</h1>
+  <p class="hint">A linear congruential generator makes each number from the one before. Change a, c, m and the seed. Watch the sequence, its period, and the dice it gives.</p>
+  <div class="bar" id="sl"></div>
+  <div class="seq" id="seq"></div>
+  <canvas id="c" aria-label="Pairs of following numbers, and the dice made from the numbers"></canvas>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const s = { a: 5, c: 3, m: 16, seed: 3 };
+  const seen = [];
+  const TASKS = [
+    { q: "Task 1: Set the seed to 7 (a = 5, c = 3, m = 16). After how many numbers does the sequence repeat (the period)?", ok: () => seen.some((k) => k === "5,3,16,7") },
+    { q: "Task 2: Change only c to 4. What happens to the period?", ok: () => seen.some((k) => k.startsWith("5,4,16")) },
+    { q: "Task 3: Set c back to 3 and make m = 256. How long is the period now?", ok: () => seen.some((k) => k.startsWith("5,3,256")) },
+    { q: "Task 4: Change the seed. Is the period the same? Does the sequence start at a new place?", ok: () => seen.some((k) => k.startsWith("5,3,256,") && !k.endsWith(",7")) },
+  ];
+  let ti = 0, ready = false;
+  function seq(n) { const out = []; let x = s.seed % s.m; for (let i = 0; i < n; i++) { out.push(x); x = (s.a * x + s.c) % s.m; } return out; }
+  function period() { const first = {}; let x = s.seed % s.m; for (let i = 0; i <= s.m + 1; i++) { if (first[x] !== undefined) return [i - first[x], first[x]]; first[x] = i; x = (s.a * x + s.c) % s.m; } return [s.m, 0]; }
+  const sl = {};
+  [["a", 1, 37, 1], ["c", 0, 15, 1], ["m", 8, 256, 8], ["seed", 0, 255, 1]].forEach(([k, lo, hi, st]) => { sl[k] = Kit.slider($("sl"), k, lo, hi, st, s[k], (v) => { s[k] = v; if (ready) upd(); }); });
+  function upd() {
+    seen.push([s.a, s.c, s.m, s.seed].join(","));
+    const [p, start] = period(), q = seq(Math.min(40, s.m + 4));
+    $("seq").innerHTML = q.map((v, i) => (i === start + p ? "<b>" + v + "</b>" : v)).join(" ") + (q.length > p + start ? " …" : "");
+    $("calc").textContent = `period: ${p} of at most ${s.m} · the bold number starts the repeat`;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the parameters decide the period; the seed decides where the sequence starts.";
+    if (!m) m = p === s.m ? "Full period: every number from 0 to m − 1 comes once before the repeat." : p <= 4 ? "A very short period: the 'random' numbers repeat at once. Useless for a game." : "The period is shorter than m: some numbers never come.";
+    $("msg").textContent = m;
+    paint();
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.min(240, W * 0.45));
+  function paint() {
+    const c = cv.ctx, W = cv.W, H = cv.H, q = seq(400), half = W / 2 - 10;
+    c.clearRect(0, 0, W, H);
+    const sz = Math.min(half, H) - 30, x0 = 30, y0 = 10;
+    c.strokeStyle = "#ced4da"; c.strokeRect(x0, y0, sz, sz);
+    c.fillStyle = "#2F9E44";
+    for (let i = 0; i + 1 < q.length; i++) { c.beginPath(); c.arc(x0 + q[i] / s.m * sz + 2, y0 + sz - q[i + 1] / s.m * sz - 2, 3, 0, 7); c.fill(); }
+    Kit.text(c, "x(n) → x(n+1)", x0 + sz / 2, y0 + sz + 16, 11, "#495057");
+    const counts = [0, 0, 0, 0, 0, 0]; q.slice(0, 120).forEach((v) => counts[v % 6]++);
+    const bx = W / 2 + 20, bw = (W - bx - 10) / 6, mx = Math.max(...counts, 1);
+    counts.forEach((k, i) => { const h = (sz - 30) * k / mx; c.fillStyle = "#74c0fc"; c.fillRect(bx + i * bw + 3, y0 + sz - h, bw - 6, h); Kit.text(c, i + 1, bx + (i + 0.5) * bw, y0 + sz + 16, 11, "#495057"); });
+    Kit.text(c, "dice: x mod 6 + 1 (120 numbers)", bx + 3 * bw, y0 + 12, 11, "#495057");
+  }
+  window.addEventListener("resize", () => setTimeout(paint, 60));
+  window.LG2 = { set: (o) => { Object.entries(o).forEach(([k, v]) => { sl[k].value = v; s[k] = v; sl[k].dispatchEvent(new Event("input")); }); } };
+  ready = true; upd();
+})();
+</script>
+</body>
+</html>

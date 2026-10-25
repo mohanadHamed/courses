@@ -1,0 +1,189 @@
+---
+title: "Recording and Editing a Sound Sample"
+description: "Lesson notes · Recording a sound sample in Audacity with the right settings, cleaning it (trim, noise reduction, fades), normalizing it, and exporting it with the right format and name for a game."
+lesson: 14
+ilos: [C2]
+format: lesson-typst
+---
+
+::: {.lead}
+Yara has three takes of Pasha's meow. The best one still starts almost a
+second late, has a low hum under it, ends with a click, and is quiet. The
+programmer of *Rooftop Rescue* needs one clean file, named so that he finds
+it at once. In lecture 13 you learned what a good take is. In this seminar
+you **make** one: you record a short sound in the free **audio editor**
+Audacity, clean it in a good order, and export it for a game. Every section
+ends with a task, and at the end you have your own sound file, ready for a
+game.
+:::
+
+## Key terms
+
+{{< glossary audio-editor take sample-rate mono-stereo input-level trim-audio noise-reduction fade normalize clipping >}}
+
+## 14.1 Record a sample in Audacity
+
+Audacity runs on Windows, macOS and Linux and is free. Before Record, set it
+up for a game sound.
+
+::: {.callout-important title="Definition 14.1 — The recording settings"}
+1. **Project rate:** 48000 Hz (bottom left, or Audio Settings).
+2. **Recording channels:** 1 (mono) for one source.
+3. **Microphone:** choose it in the device toolbar; click the recording
+   meter to watch the level.
+4. **Level:** speak or make the sound; set the recording volume so that the
+   peaks stay near −6 dB.
+5. Record about **2 seconds of silence** first (the room tone), then three
+   **takes** of the sound in one track.
+:::
+
+![From take to game file: the order of the edits.](images/edit-steps.png){#fig-steps width=94%}
+
+::: {.callout-note title="Example 14.1 — Yara's session"}
+1. Project rate 48000 Hz, 1 channel, the USB microphone.
+2. The meter shows −6 dB when Pasha meows near the microphone.
+3. She records: 2 s of room tone, then three meows with a pause between
+   them. She saves the project as `pasha_meow.aup3`.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Pressing Record before checking the meter. If the first take clips, it is
+lost. Watch the meter for a few seconds first, then record.
+:::
+
+::: {.callout-note title="Do it · Record three takes"}
+1. Open Audacity on the lab computer (or a free recorder app on your
+   phone). Set 48000 Hz and mono.
+2. Record 2 seconds of silence and three takes of one short sound: a cup
+   on a table, a door, a clap, or your voice saying a game word ("Go!").
+3. Save the project.
+
+*Your result:* one project with room tone and three takes.
+:::
+
+## 14.2 Clean it: trim, noise reduction and fades
+
+Now the take is cleaned in a good order: first cut, then remove the noise,
+then make smooth ends (@fig-ba).
+
+::: {.callout-important title="Definition 14.2 — Three cleaning steps"}
+1. **Trim:** select the parts before and after the best take and press
+   Delete. Leave a few milliseconds of silence at the start.
+2. **Noise reduction:** select a part of the room tone › Effect › Noise
+   Reduction › **Get Noise Profile**; then select the whole take ›
+   Noise Reduction again › OK. A steady hum or hiss gets much quieter.
+3. **Fades:** select the last 0.1–0.2 s › **Fade Out**; if the start is
+   hard, select the first few milliseconds › Fade In. Clicks at the ends
+   disappear.
+:::
+
+![Pasha's meow before and after the edits.](images/before-after.png){#fig-ba width=94%}
+
+::: {.callout-note title="Example 14.2 — Cleaning the meow"}
+1. Trim: the meow started 0.9 s late; Yara deletes the silence, leaving
+   0.05 s.
+2. Noise Reduction: she takes the noise profile from the room tone and
+   applies it to the take. The hum of the fridge is almost gone.
+3. Fade Out: the last 0.2 s fades to silence, and the click at the end is
+   gone.
+:::
+
+{{< sim file="sims/wave-editor.html" poster="sims/wave-editor.png" title="Wave Editor: clean up Pasha's meow" height="640" >}}
+
+::: {.callout-warning title="Common mistake"}
+Turning Noise Reduction up to the maximum. Too much reduction makes the
+sound "watery" and robotic. Use a small amount, and listen.
+:::
+
+::: {.callout-note title="Do it · Clean your best take"}
+1. In **Wave Editor**, clean Pasha's meow in a good order.
+2. In Audacity, clean your own best take: trim, Noise Reduction with the
+   profile of your room tone, and a fade-out.
+
+*Your result:* the four tasks of Wave Editor done, and your cleaned take.
+:::
+
+## 14.3 Normalize and export for the game
+
+The clean take is still quiet. Raise it to a fixed level, then save it as
+a game file (@fig-export).
+
+::: {.callout-important title="Definition 14.3 — Normalize and export"}
+- **Normalize** (Effect › Normalize): raises the whole take so that the
+  loudest peak reaches a chosen level, for example **−1 dB**. Do it after
+  the cleaning, so that the noise is not raised too.
+- **Export** (File › Export Audio): WAV, 16-bit, mono for a sound effect;
+  OGG for music and long loops. Keep the project and the raw takes.
+- **Name:** type_what_version, no spaces: `sfx_pasha_meow_01.wav`.
+:::
+
+![The format and the name tell the team everything.](images/export-names.png){#fig-export width=94%}
+
+::: {.callout-note title="Example 14.3 — The meow is ready"}
+1. The cleaned meow peaks at −14 dB. Normalize to −1 dB: now it peaks at
+   −1 dB, with no clipping.
+2. Export as WAV, 16-bit, mono: `sfx_pasha_meow_01.wav`, about 1 second,
+   about 94 KB (48 000 × 2 bytes).
+3. Yara puts it in the sound folder of the game and writes it in the sound
+   list.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Using Amplify +20 dB instead of Normalize. 20 dB is 10 times louder: the
+peaks pass 0 dB and clip. Normalize stops exactly at the level you choose.
+:::
+
+::: {.callout-note title="Do it · Export your sample"}
+1. Normalize your cleaned take to −1 dB.
+2. Export it as WAV, 16-bit, mono, with a good name (sfx_…_01.wav).
+3. Play the file in a media player. Does it start at once and end without a
+   click?
+
+*Your result:* one WAV file with a good name.
+:::
+
+## Case study: Clean Take
+
+Yara edits the takes of *Rooftop Rescue* before she exports them. One meow
+starts almost a second late; another take has a click at the end; one has a
+hum under the whole sound; one is too quiet, with peaks near −14 dB; and one
+is clipped. At the end, the clean meow needs a file name for the game's
+sound folder. The Game challenge of the interactive lesson uses this story.
+In the mini-game below you choose each edit.
+
+{{< sim file="sims/clean-take.html" poster="sims/clean-take.png" title="Clean Take: the right edit for each take" kind="game" height="600" >}}
+
+## Further reading
+
+Audacity Manual, "Noise Reduction", "Normalize", "Fade In and Fade Out" and
+"Exporting audio". Collins, *Game Sound* (2008), Chapter 5 (making sound
+for games).
+
+## Exercises
+
+1. Which project rate and how many channels do you set for a sound effect?
+2. Why do you record 2 seconds of room tone first?
+3. Where should the peaks be while you record?
+4. Write the three cleaning steps in order.
+5. How does Noise Reduction learn which noise to remove?
+6. Which edit removes a click at the end of a take?
+7. Why do you normalize after the cleaning, not before?
+8. Why is "Amplify +20 dB" risky?
+9. Which format and settings do you export for a short sound effect?
+10. Write a good name for the third version of a door sound.
+
+## Answers to the exercises
+
+::: {.answers}
+1. 48000 Hz and 1 channel (mono).
+2. To get the noise profile for Noise Reduction.
+3. Near −6 dB.
+4. Trim, Noise Reduction, fades.
+5. From a noise profile, taken from a part with only the noise (the room
+   tone).
+6. A short fade-out.
+7. Normalizing first would make the noise and the clicks louder too.
+8. It can push the peaks above 0 dB, so the sound clips.
+9. WAV, 16-bit, mono.
+10. `sfx_door_03.wav` (or `sfx_door_open_03.wav`).
+:::

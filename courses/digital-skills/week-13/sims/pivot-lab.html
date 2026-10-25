@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Pivot Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar .lab { min-width: 64px; }
+    .sim .bar button.on { background: #217346; color: #fff; border-color: #217346; }
+    .sim .two { display: grid; grid-template-columns: 220px 1fr; gap: 10px; align-items: start; }
+    .sim table.pv { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+    .sim table.pv td, .sim table.pv th { border: 1px solid #dee2e6; padding: 3px 8px; font-weight: 700; font-size: .9rem; }
+    .sim table.pv th { background: #217346; color: #fff; text-align: left; }
+    .sim table.pv td.n { text-align: right; } .sim table.pv tr.gt td { background: #d3f9d8; }
+    .sim .note { font-size: .82rem; color: #6b726e; margin: 2px 0 6px; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+    @media (max-width: 520px) { .sim .two { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Pivot Lab: summarize Rana's month</h1>
+  <p class="hint">Rana's shop sold 24 times in March (four weeks). Build a PivotTable: choose the field for the <b>rows</b> and how to summarize the <b>Total (JD)</b>. The chart shows the same numbers.</p>
+  <p class="note">A practice model that works like Excel (Insert › PivotTable). The data is made up.</p>
+  <div class="bar"><span class="lab">Rows</span><span id="rows" style="display:contents"></span></div>
+  <div class="bar"><span class="lab">Values</span><span id="vals" style="display:contents"></span></div>
+  <div class="two"><table class="pv" id="pv"></table><canvas id="c" aria-label="A chart of the PivotTable"></canvas></div>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="month-data.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const F = { Type: 2, Week: 0, Item: 1 };
+  const V = ["Sum of Total", "Count of sales", "Average of Total"];
+  const s = { row: "Item", val: "Count of sales", seen: new Set() };
+  const TASKS = [
+    { q: "Task 1: Rows Type, Values Sum of Total. Which type sold the most in March?", ok: () => s.seen.has("Type|Sum of Total") },
+    { q: "Task 2: Change the rows to Week. Which week was the best, and which the weakest?", ok: () => s.seen.has("Week|Sum of Total") },
+    { q: "Task 3: Rows Type, Values Average of Total. Which type has the biggest average sale?", ok: () => s.seen.has("Type|Average of Total") },
+    { q: "Task 4: Rows Item, Values Count of sales. Which items were sold four times?", ok: () => s.seen.has("Item|Count of sales") && ti >= 3 },
+  ];
+  let ti = 0;
+  function pivot() {
+    const g = {};
+    MONTH.forEach((r) => { const k = s.row === "Week" ? ["1st", "2nd", "3rd", "4th"][r[0] - 1] + " week" : r[F[s.row]]; (g[k] = g[k] || []).push(r[4]); });
+    const keys = Object.keys(g).sort();
+    const f = (a) => (s.val === "Sum of Total" ? a.reduce((x, y) => x + y, 0) : s.val === "Count of sales" ? a.length : a.reduce((x, y) => x + y, 0) / a.length);
+    const all = MONTH.map((r) => r[4]);
+    return { rows: keys.map((k) => [k, f(g[k])]), gt: f(all) };
+  }
+  const cv = Kit.canvas($("c"), 220);
+  const fmt = (v) => (Math.round(v * 10) / 10).toString();
+  function draw(P) {
+    const c = cv.ctx, W = cv.W, H = cv.H, n = P.rows.length, mx = Math.max(...P.rows.map((r) => r[1])), bw = (W - 20) / n;
+    c.clearRect(0, 0, W, H);
+    P.rows.forEach(([k, v], i) => {
+      const h = (H - 56) * v / mx, x = 10 + i * bw;
+      Kit.rrect(c, x + bw * 0.15, H - 30 - h, bw * 0.7, h, 3, "#217346");
+      Kit.text(c, fmt(v), x + bw / 2, H - 34 - h, 11, "#2a2f2c", "center", 800);
+      Kit.text(c, k.replace(" week", ""), x + bw / 2, n > 6 && i % 2 ? H - 3 : H - 16, n > 6 ? 10 : 11, "#6b726e", "center", 700);
+    });
+  }
+  function tabs(id, list, key) { Kit.buttons($(id), list.map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }
+  function upd() {
+    tabs("rows", Object.keys(F), "row"); tabs("vals", V, "val");
+    const P = pivot();
+    $("pv").innerHTML = `<tr><th>${s.row}</th><th>${s.val}</th></tr>` + P.rows.map(([k, v]) => `<tr><td>${k}</td><td class="n">${fmt(v)}</td></tr>`).join("") + `<tr class="gt"><td>Grand Total</td><td class="n">${fmt(P.gt)}</td></tr>`;
+    draw(P);
+    s.seen.add(s.row + "|" + s.val);
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: one list, many summaries, each in one click.";
+    const top = P.rows.slice().sort((a, b) => b[1] - a[1])[0];
+    $("msg").textContent = m + `Highest: ${top[0]} (${fmt(top[1])}).`;
+  }
+  window.addEventListener("resize", upd);
+  window.PV = { set: (row, val) => { s.row = row; s.val = val; upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

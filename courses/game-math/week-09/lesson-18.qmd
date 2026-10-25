@@ -1,0 +1,253 @@
+---
+title: "Boolean Algebra and Decision Conditions"
+description: "Calculating with 1 and 0, the laws of Boolean algebra, De Morgan's laws, simplifying a condition step by step, and clear decision conditions in game code with guard clauses."
+lesson: 18
+ilos: [B2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary boolean-algebra logical-equivalence de-morgan-laws distributive-law absorption-law tautology contradiction guard-clause operator-precedence >}}
+
+## 18.1 Calculating with 1 and 0
+
+- True = **1**, false = **0**.
+- NOT p = 1 − p; p AND q = p × q; p OR q = p + q, with 1 + 1 = 1.
+- Dock door p ∧ (q ∨ r) with p = 1, q = 0, r = 1: 1 × (0 + 1) = 1, open.
+
+![True = 1, false = 0.](images/bool-arith.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+In Boolean algebra, 1 + 1 = 1.
+:::
+
+::: {.callout-note title="Do it · Calculate"}
+With p = 1, q = 0, r = 0: compute p ∨ (q ∧ r), (p ∨ q) ∧ r and ¬p ∨ ¬q.
+:::
+
+::: {.callout-tip title="Try it 1 · Numbers"}
+p = 1, q = 0, r = 0. Choose the value.
+
+::: {.match extra="2|−1"}
+p ∨ (q ∧ r)
+:   1
+
+(p ∨ q) ∧ r
+:   0
+
+¬p ∨ ¬q
+:   1
+
+p ∧ q
+:   0
+
+¬q
+:   1
+:::
+:::
+
+## 18.2 The laws of Boolean algebra
+
+- Identity, domination, idempotent, complement, double negation.
+- Commutative and associative: order and brackets of one operator do not
+  matter.
+- **Distributive:** p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r), and p ∨ (q ∧ r) ≡
+  (p ∨ q) ∧ (p ∨ r).
+- **Absorption:** p ∨ (p ∧ q) ≡ p.
+
+![Laws of Boolean algebra.](images/bool-laws.png){width=90%}
+
+{{< sim file="sims/equivalence-lab.html" poster="sims/equivalence-lab.png" title="Equivalence Lab: are two conditions the same?" height="640" >}}
+
+::: {.callout-warning title="Watch out!"}
+Not every law of numbers is a law of logic, and the other way round.
+:::
+
+::: {.callout-note title="Do it · Check two laws"}
+In **Equivalence Lab**, check the distributive and absorption laws. Then
+compare p ∨ (q ∧ r) with (p ∨ q) ∧ (p ∨ r).
+:::
+
+::: {.callout-tip title="Try it 2 · Laws"}
+Simplify.
+
+::: {.match extra="q|¬p"}
+p ∧ T
+:   p
+
+p ∨ T
+:   T
+
+p ∧ ¬p
+:   F
+
+p ∨ (p ∧ q)
+:   p
+:::
+:::
+
+## 18.3 De Morgan's laws
+
+- **¬(p ∧ q) ≡ ¬p ∨ ¬q** and **¬(p ∨ q) ≡ ¬p ∧ ¬q**.
+- The NOT goes into the brackets and AND and OR swap.
+- Cannot dock: `!(hasPass && shieldsUp)` = `!hasPass || !shieldsUp`.
+
+![De Morgan's laws.](images/de-morgan.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+¬(p ∧ q) is not ¬p ∧ ¬q: the row (T, F) differs.
+:::
+
+::: {.callout-note title="Do it · Remove the NOT"}
+Rewrite `!(isDay || isLit)` and `!(hasKey && !doorLocked)` without a NOT in
+front of brackets.
+:::
+
+::: {.callout-tip title="Try it 3 · De Morgan"}
+Choose the equivalent condition.
+
+::: {.match extra="!isDay || !isLit|hasKey && doorLocked"}
+!(hasPass && shieldsUp)
+:   !hasPass || !shieldsUp
+
+!(isDay || isLit)
+:   !isDay && !isLit
+
+!(hasKey && !doorLocked)
+:   !hasKey || doorLocked
+
+!(!a || !b)
+:   a && b
+:::
+:::
+
+## 18.4 Simplifying a condition
+
+- One law per step, with its name; check the end with a truth table.
+- (p ∧ q) ∨ (p ∧ ¬q) → p ∧ (q ∨ ¬q) → p ∧ T → **p**.
+- ¬(¬p ∨ q) → ¬¬p ∧ ¬q → **p ∧ ¬q**.
+
+![Simplifying step by step.](images/simplify-steps.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Do not jump two laws at once without a check.
+:::
+
+::: {.callout-note title="Do it · Simplify"}
+Simplify with the name of each law: p ∧ (p ∨ q); ¬(¬p ∧ ¬q);
+(p ∨ q) ∧ (p ∨ ¬q).
+:::
+
+::: {.callout-tip title="Try it 4 · Simplify"}
+Choose the simplest equivalent.
+
+::: {.match extra="p ∧ q|¬p ∨ q"}
+p ∧ (p ∨ q)
+:   p
+
+¬(¬p ∧ ¬q)
+:   p ∨ q
+
+(p ∨ q) ∧ (p ∨ ¬q)
+:   p
+
+¬(¬p ∨ q)
+:   p ∧ ¬q
+
+p ∨ (q ∧ ¬q)
+:   p
+:::
+:::
+
+## 18.5 Clear decision conditions in game code
+
+- **Guard clause:** check at the start and `return` early; no deep nesting.
+- Each guard is the NOT of one part of the condition.
+- Name long conditions: `bool mayEnter = hasPass && !alarmOn;`.
+
+![Nested ifs and guard clauses.](images/guard-clauses.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+A guard leaves when the condition to go on is **false**.
+:::
+
+::: {.callout-note title="Do it · Rewrite with guards"}
+Rewrite with guard clauses: `if (isAlive) { if (hasAmmo && !reloading) Fire(); }`.
+:::
+
+::: {.callout-tip title="Try it 5 · Code"}
+Choose the right answer.
+
+::: {.match extra="if (isAlive) return;|a && b || !c"}
+Which guard starts a function that needs a living player?
+:   if (!isAlive) return;
+
+if (a) { if (b) { if (!c) Go(); } } as one condition?
+:   a && b && !c
+
+!(isDead || !hasAmmo) simplified?
+:   !isDead && hasAmmo
+
+Why name a condition with a bool?
+:   the rule becomes readable
+:::
+:::
+
+## Game challenge: Code Cleaner {.challenge}
+
+Work alone. Use every section of today.
+
+The code of **Star Dock** has six strange conditions. Replace each one with
+the **simplest equivalent** condition.
+
+{{< sim file="sims/code-cleaner.html" poster="sims/code-cleaner.png" title="Code Cleaner: the simplest equivalent condition" kind="game" height="560" >}}
+
+::: {.callout-tip title="Try it 6 · Clean lines"}
+Choose the simplest equivalent.
+
+::: {.match extra="!hasPass|alarm && docked"}
+!(!hasPass)
+:   hasPass
+
+hasPass && true
+:   hasPass
+
+docked || (docked && alarm)
+:   docked
+
+!(alarm || docked)
+:   !alarm && !docked
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · Name the law (harder)"}
+Which law does the step use?
+
+::: {.match extra="identity|commutative"}
+!(a && b) → !a || !b
+:   De Morgan
+
+(p && q) || (p && r) → p && (q || r)
+:   distributive
+
+docked || (docked && alarm) → docked
+:   absorption
+
+!(!hasPass) → hasPass
+:   double negation
+:::
+:::
+
+## Summary {.summary}
+
+- True = 1, false = 0; AND is ×, OR is + with 1 + 1 = 1, NOT is 1 − p.
+- The laws rewrite a condition without changing its value.
+- De Morgan: the NOT goes into the brackets and AND and OR swap.
+- Simplify one law at a time, then check with a truth table.
+- Guard clauses and named conditions make game decisions clear.

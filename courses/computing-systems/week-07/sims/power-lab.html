@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Power Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .toggles { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 6px; font-weight: 700; }
+    .sim .toggles label { display: flex; gap: 6px; align-items: center; }
+    .sim .out { font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.5; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Power Lab: battery saver, Do not disturb and a game</h1>
+  <p class="hint"><i>Pocket Quest</i> runs at 60 fps on a test phone. Change the battery, the power saving mode (Android: Battery saver; iPhone: Low Power Mode), Do not disturb (iPhone: a Focus) and the apps in the background. Watch the frame rate, the notifications and the play time.</p>
+  <canvas id="c" aria-label="A phone that runs a game, with the frame rate and the battery"></canvas>
+  <div class="controls" id="sl"></div>
+  <div class="toggles">
+    <label><input type="checkbox" id="saver"> power saving mode</label>
+    <label><input type="checkbox" id="dnd"> Do not disturb</label>
+  </div>
+  <p class="out" id="out"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const s = { bat: 80, apps: 0, saver: false, dnd: false };
+  const $ = (id) => document.getElementById(id);
+  // A simple model with round numbers (real phones differ):
+  // 60 fps uses about 25 % of the battery per hour; power saving caps the game at 30 fps and uses about 15 % per hour;
+  // each background app adds about 1 % per hour; more than 5 apps on a 4 GB phone also cost frames.
+  function model() {
+    const fps = (s.saver ? 30 : 60) - (s.apps > 5 ? 10 : 0);
+    const drain = (s.saver ? 15 : 25) + s.apps;
+    return { fps, drain, hours: s.bat / drain };
+  }
+  function show() {
+    const m = model(), h = Math.floor(m.hours), min = Math.round((m.hours - h) * 60);
+    $("out").innerHTML = `Frame rate: ${m.fps} fps · battery use: about ${m.drain} % per hour · play time left: about ${h} h ${min} min`;
+    $("msg").textContent = s.bat <= 20 && !s.saver ? "The phone asks: turn on power saving? Many phones do this at about 20 %." :
+      s.saver ? "Power saving lowers the frame rate and the brightness: the test no longer shows the normal game." :
+      !s.dnd ? "Notifications can cover the game and stop the test. Turn on Do not disturb for a test." :
+      s.apps > 5 ? "Many background apps take RAM and CPU time: the game loses frames." : "Ready for a fair test: normal mode, Do not disturb, no background apps.";
+  }
+  Kit.slider($("sl"), "battery", 5, 100, 5, s.bat, (v) => { s.bat = v; show(); }, (v) => v + " %");
+  Kit.slider($("sl"), "apps in the background", 0, 10, 1, s.apps, (v) => { s.apps = v; show(); }, (v) => String(v));
+  $("saver").addEventListener("change", (e) => { s.saver = e.target.checked; show(); });
+  $("dnd").addEventListener("change", (e) => { s.dnd = e.target.checked; show(); });
+  window.PL = { set: (o) => { Object.assign(s, o); const ins = document.querySelectorAll("#sl input"); ins[0].value = s.bat; ins[1].value = s.apps; ins.forEach((i) => i.dispatchEvent(new Event("input"))); $("saver").checked = s.saver; $("dnd").checked = s.dnd; show(); } };
+  const cv = Kit.canvas($("c"), (W) => Math.min(250, W * 0.5));
+  let x = 0, last = 0, acc = 0;
+  Kit.loop((now) => {
+    const c = cv.ctx, W = cv.W, H = cv.H, m = model();
+    // the game only draws a new picture fps times per second
+    acc += Math.min(now - last, 100); last = now;
+    const step = 1000 / m.fps;
+    while (acc >= step) { acc -= step; x = (x + 180 / m.fps) % 1; }
+    const pw = Math.min(H * 1.9, W - 20), px = (W - pw) / 2;
+    c.fillStyle = "#fffdf5"; c.fillRect(0, 0, W, H);
+    Kit.rrect(c, px, 6, pw, H - 12, 18, "#343a40");
+    const sx = px + 14, sy = 16, sw = pw - 28, sh = H - 32, dim = s.saver ? 0.75 : 1;
+    c.fillStyle = `rgba(${Math.round(116 * dim)},${Math.round(192 * dim)},${Math.round(252 * dim)},1)`; c.fillRect(sx, sy, sw, sh);
+    c.fillStyle = "#2f9e44"; c.fillRect(sx, sy + sh * 0.78, sw, sh * 0.22);
+    const hx = sx + 20 + x * (sw - 60);
+    Kit.rrect(c, hx, sy + sh * 0.78 - 34, 26, 34, 6, "#e8590c");
+    Kit.text(c, `${m.fps} fps`, sx + 40, sy + 20, 14, "#1d1b2e");
+    Kit.rrect(c, sx + sw - 62, sy + 8, 50, 18, 4, s.bat <= 20 ? "#c92a2a" : "#2b8a3e");
+    Kit.text(c, s.bat + " %", sx + sw - 37, sy + 21, 12, "#fff");
+    if (!s.dnd && (now / 1000) % 4 < 2) {
+      Kit.rrect(c, sx + sw * 0.2, sy + 34, sw * 0.6, 34, 8, "rgba(255,255,255,0.95)", "#adb5bd", 1.5);
+      Kit.text(c, "New message from Omar", sx + sw / 2, sy + 56, 12, "#1d1b2e");
+    }
+  });
+  show();
+})();
+</script>
+</body>
+</html>

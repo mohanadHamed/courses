@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Can We Use It?</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #f8f0fc; border: 1.5px solid #9C36B5; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Can We Use It?</h1>
+  <p class="hint">Salma, the producer of <i>Rooftop Rescue</i>, checks six assets that the team found. The game will be sold. For each asset, choose what Night Owl Games may do.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const U = ["use it with a credit", "use it freely", "ask for permission or replace it", "use it: short parts are always fine"];
+  const rounds = [
+    { card: "A rain sound from a sound website, under CC BY.", goal: "What may Night Owl do?", answer: "use it with a credit", choices: C(U), good: "CC BY allows commercial use; write the credit: creator, title, source, licence." },
+    { card: "A drawing of a cat under CC BY-NC. Rooftop Rescue is sold in the stores.", goal: "What may Night Owl do?", answer: "ask for permission or replace it", choices: C(U), good: "NC means non-commercial only; ask the artist for a commercial licence, or draw your own cat.", why: { "use it with a credit": "A credit is not enough: NC forbids commercial use." } },
+    { card: "A piano piece by a composer who died in 1900. Yara records it on the studio piano.", goal: "What may Night Owl do?", answer: "use it freely", choices: C(U), good: "The piece is in the public domain, and the recording is Yara's own. Naming the composer is still kind." },
+    { card: "A famous pop song from a video site. The description says \"no copyright intended\".", goal: "What may Night Owl do?", answer: "ask for permission or replace it", choices: C(U), good: "Such a sentence changes nothing: the song is all rights reserved.", why: { "use it: short parts are always fine": "Short parts are not automatically allowed." } },
+    { card: "A font with the note \"free for personal use\", for the game menu.", goal: "What may Night Owl do?", answer: "ask for permission or replace it", choices: C(U), good: "A game for sale is commercial use: buy a commercial licence or choose a font with an open licence." },
+    { card: "Tariq wants 8 seconds of a famous film in the promo clip, \"because it is short\".", goal: "What may Night Owl do?", answer: "ask for permission or replace it", choices: C(U), good: "A promo sells a product; fair use is a court's case-by-case decision, not a plan.", why: { "use it: short parts are always fine": "There is no number of seconds that is always fine." } },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the first asset of the lesson: a rain sound." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "All assets are checked." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

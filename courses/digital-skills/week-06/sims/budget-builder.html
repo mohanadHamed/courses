@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Budget Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .task { font-weight: 700; margin: 4px 0 8px; } .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }</style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Budget Builder: Sami's month</h1>
+  <p class="note">A practice sheet that works like Excel (made-up numbers). Tap a cell, type in the formula bar, press Enter. The format buttons change how the selected cell looks.</p>
+  <p class="task" id="task"></p>
+  <div id="sheet"></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="../../../../shared/sims/mini-sheet.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const say = (t, cls = "") => { $("msg").textContent = t; $("msg").className = "message " + cls; };
+  const data = { A1: "Income", B1: "JD", C1: "% of income", A2: "Allowance", B2: 150, A3: "Part-time job", B3: 100, A4: "Total income",
+    A6: "Expenses", A7: "Transport", B7: 40, A8: "Phone", B8: 15, A9: "Food", B9: 90, A10: "Books", B10: 20, A11: "Fun", B11: 30, A12: "Total expenses", A14: "Left (saving)" };
+  const locked = Object.keys(data).filter((a) => a[0] === "A" || a === "B1" || a === "C1");
+  const tasks = [
+    { q: "B4: add up the income with SUM.", check: (s) => /^=SUM\(B2:B3\)$/.test(s.formula("B4")), ok: "Total income = 150 + 100 = 250 JD." },
+    { q: "B12: add up all expenses with SUM.", check: (s) => /^=SUM\(B7:B11\)$/.test(s.formula("B12")), ok: "Total expenses = 40 + 15 + 90 + 20 + 30 = 195 JD." },
+    { q: "B14: what is left? Total income minus total expenses.", check: (s) => /^=B4-B12$/.test(s.formula("B14")), ok: "250 − 195 = 55 JD left to save." },
+    { q: "C9: which part of the income goes to food? Divide B9 by $B$4.", check: (s) => /^=B9\/\$B\$4$/.test(s.formula("C9")), ok: "90 ÷ 250 = 0.36." },
+    { q: "Show C9 as a percentage: tap C9, then the % button.", check: (s) => s.formats.C9 === "%", ok: "0.36 is 36 %: more than a third of the money goes to food." },
+  ];
+  const sheet = MiniSheet.create($("sheet"), {
+    rows: 14, cols: 3, data, locked, widths: { A: 120 }, select: "B4", bold: ["A1", "A4", "A6", "A12", "A14"],
+    taskEl: $("task"), say, tasks, onTask: (t) => { say("✓ " + t.ok, "good"); Kit.good(); },
+  });
+  [["General", ""], ["0.00", "0.00"], ["JD", "JOD"], ["%", "%"]].forEach(([label, f]) => {
+    const b = Kit.el("button", { type: "button", class: "ghost", "data-k": label }, label);
+    b.addEventListener("click", () => sheet.format(sheet.sel, f));
+    sheet.tools.appendChild(b);
+  });
+  window.BB = sheet;
+  say("Tap B4 and type =SUM(B2:B3).");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Edit Doctor</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #f8f0fc; border: 1.5px solid #9C36B5; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Edit Doctor</h1>
+  <p class="hint">Salma watches the first cut of the <i>Rooftop Rescue</i> trailer and writes notes. For each note, choose the fix that the editor should make.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { card: "0:08 — Between the boat shot and the net shot there is a slow 2-second wipe. The action stops.", answer: "a cut on the action", choices: C(["a cut on the action", "a longer wipe", "a dip to black", "slow motion"]), good: "A cut in the middle of the movement keeps the action going." },
+    { card: "0:12 — Two almost identical shots of Nour follow each other: the picture jumps.", answer: "remove one shot, or use a different angle", choices: C(["remove one shot, or use a different angle", "add a cross dissolve", "make it louder", "add a title"]), good: "That is a jump cut. Use a really different shot, or keep only one." },
+    { card: "0:15 — The slow-motion jump stutters. It was recorded at 30 fps and plays at 50 %.", answer: "use the 60 fps recording", choices: C(["use the 60 fps recording", "export at 15 fps", "raise the bitrate", "add a transition"]), good: "60 fps at 50 % gives 30 real frames per second: smooth." },
+    { card: "0:18 — The night shot is dark and blue, the next one warm and bright. The cut jumps.", answer: "colour-correct both shots to match", choices: C(["colour-correct both shots to match", "add a wipe", "remove the music", "speed up the clip"]), good: "Correct each clip, then match them, so the cut does not jump in colour." },
+    { card: "0:21 — Nour's line “Hold on, Pasha!” is lost under the music.", answer: "duck the music under the voice", choices: C(["duck the music under the voice", "make everything louder", "remove the voice", "add a subtitle only"]), good: "Lower the music by about 8 dB while Nour speaks; the master stays below 0 dB." },
+    { card: "0:27 — On a phone, “Play free now” is cut off at the right edge.", answer: "move the text into the title safe area", choices: C(["move the text into the title safe area", "make the font bigger", "show it for 0.5 s", "use a wipe"]), good: "All text inside the title safe area (80 %), and on screen for at least 2 s." },
+  ];
+  rounds.forEach((r) => { r.goal = "Which fix?"; r.why = {}; });
+  const g = Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: the boat and the net." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "The second cut is ready for Salma." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

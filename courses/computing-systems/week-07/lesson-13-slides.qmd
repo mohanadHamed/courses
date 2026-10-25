@@ -1,0 +1,163 @@
+---
+title: "Mobile Operating Systems: Android and iOS Architecture"
+subtitle: "Lecture 13"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary kernel software-stack hal android-runtime app-framework sandbox app-lifecycle background-app >}}
+
+## 13.1 A mobile OS is built in layers
+
+:::: {.columns}
+::: {.column width="50%"}
+- A mobile OS is a stack of layers between the hardware and the apps.
+- Each layer uses only the services of the layer below it.
+- The kernel runs on the hardware and manages processes, memory and drivers.
+- **Do it:** Build both stacks in Stack Builder. Which iOS layer has the kernel?
+:::
+::: {.column width="50%"}
+![](images/os-stack.png)
+:::
+::::
+
+## Live demo · Stack Builder
+
+{{< sim file="sims/stack-builder.html" poster="sims/stack-builder.png" title="Stack Builder: the layers of Android and iOS" task="**Show:** build the Android stack, placing the framework too early once, then the iOS stack. **Ask:** why can the framework not sit right on the kernel?" >}}
+
+## Try it 1 · Layers
+
+a) Which layer of a mobile OS runs directly on the hardware?
+b) Which layers may each layer of the stack use?
+c) Which jobs does the kernel do?
+
+::: {.answer}
+a) the kernel
+b) only the layer below it
+c) It manages processes, memory, drivers and power.
+:::
+
+## 13.2 Android and iOS
+
+:::: {.columns}
+::: {.column width="50%"}
+- Android has the Linux kernel, the HAL, ART, the framework and the apps.
+- iOS has Core OS, Core Services, Media, Cocoa Touch and the apps.
+- The HAL lets Android use the hardware of many phone makers in one way.
+- **Do it:** Which OS does your phone run? Who made the phone, and who made the OS?
+:::
+::: {.column width="50%"}
+![](images/android-ios.png)
+:::
+::::
+
+## Example · One game, two builds
+
+Byte Bay makes Pocket Quest in Unity for P5 (Android) and P8 (an iPhone).
+**What does Byte Bay build for each phone?**
+
+::: {.reveal}
+1. For P5, an **.apk** package (an .aab for Google Play), drawn with Vulkan or OpenGL ES.
+2. For P8, an **.ipa** package, built on a Mac and drawn with Metal.
+3. The game code is the same, but each build uses the layers of its own OS.
+:::
+
+## Try it 2 · Android or iOS?
+
+a) Which OS has the Linux kernel?
+b) Which OS uses Metal for its graphics?
+c) Can an iPhone install an .apk package?
+
+::: {.answer}
+a) Android
+b) iOS
+c) No, each platform needs its own build.
+:::
+
+## 13.3 Every app in its own sandbox
+
+:::: {.columns}
+::: {.column width="50%"}
+- A sandbox gives each app its own files and its own memory.
+- An app cannot read the files of another app.
+- An app reaches the camera, microphone or location only with a permission.
+- **Do it:** Open the settings of a game. Which permissions does it have?
+:::
+::: {.column width="50%"}
+![](images/sandbox.png)
+:::
+::::
+
+## Try it 3 · The sandbox
+
+a) Pocket Quest wants the camera. Whom does it ask?
+b) Can Pocket Quest read the files of the messages app?
+c) What removes the saved progress of a game?
+
+::: {.answer}
+a) the OS
+b) No, they are in another sandbox.
+c) clearing its storage or deleting the app
+:::
+
+## 13.4 The life cycle of a game
+
+:::: {.columns}
+::: {.column width="50%"}
+- A game moves between foreground, background, suspended and ended.
+- The OS warns the game before it leaves the foreground, so it can pause and save.
+- When RAM is low, the OS ends apps in the background.
+- **Do it:** Leave a game for a minute and come back. Did it continue or start again?
+:::
+::: {.column width="50%"}
+![](images/app-lifecycle.png)
+:::
+::::
+
+## Example · A call in level 3
+
+Rami plays level 3 on P5, a call arrives, and then he opens ten other apps.
+**What happens to the game, and what does Rami see at the end?**
+
+::: {.reveal}
+1. Android tells the game it leaves the foreground, and the game **saves** level 3.
+2. RAM gets low on P5, so Android **ends** the game in the background.
+3. Rami opens the game again, and it loads the save: he is **back in level 3**.
+:::
+
+## Try it 4 · States
+
+a) The game is on the screen and running. In which state is it?
+b) The game is in RAM but gets no CPU time. In which state is it?
+c) What must a game do when a call arrives?
+
+::: {.answer}
+a) foreground
+b) suspended
+c) pause and save
+:::
+
+## Game challenge · Pause, Please!
+
+{{< sim file="sims/pause-please.html" poster="sims/pause-please.png" title="Pause, Please!: a game through its life cycle" kind="game" task="**The story:** Rami tests Pocket Quest on P5 and P8; a call arrives in level 3, and later RAM gets low. **Play:** say what the OS does with the game, and what the game must do." >}}
+
+## Try it 5 · Two builds (harder)
+
+a) Which package does Byte Bay build for the iPhone P8?
+b) Which layer lets the camera of P5 work like on other Android phones?
+c) Which Unity function is the right place to save on a phone?
+
+::: {.answer}
+a) .ipa
+b) the HAL
+c) OnApplicationPause
+:::
+
+## Summary
+
+- A mobile OS is a stack of layers, from the kernel up to the apps.
+- Android and iOS fill the same layers with different parts.
+- Each platform needs its own build of the game.
+- Every app lives in its own sandbox and needs permissions.
+- A game must pause and save, because the OS may end it later.

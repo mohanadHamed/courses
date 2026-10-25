@@ -1,0 +1,236 @@
+---
+title: "Storyboards for Gameplay and Cutscenes; Storyboard Tools"
+description: "Lesson notes · How a gameplay storyboard differs from a cutscene storyboard, what a gameplay panel shows (HUD, player input, feedback, fail state), timing a board as an animatic, and the tools that make storyboards in the lab."
+lesson: 11
+ilos: [C1]
+format: lesson-typst
+---
+
+::: {.lead}
+Level 1 of *Rooftop Rescue* has two kinds of moments. In some, the player
+**watches**: Salma begs on the roof, and the camera shows her fear. In
+others, the player **plays**: Nour rows between floating boxes, and Pasha the
+cat jumps from the roof into her net. A storyboard for a film shows only the
+first kind. A game needs both, and the second kind must also show what the
+player sees on the screen, what the player does, and what the game answers.
+In lectures 9 and 10 you drew boards for a cutscene. In this lesson you draw
+**gameplay** panels, you time a board as an **animatic**, and you meet the
+tools that make storyboards in the lab. Every section ends with a short
+task.
+:::
+
+## Key terms
+
+{{< glossary storyboard cutscene gameplay-storyboard hud player-input feedback fail-state animatic pacing storyboard-template >}}
+
+## 11.1 Watch or play? Two kinds of boards
+
+The team of *Night Owl Games* lists the moments of level 1. For each one it
+asks: does the player watch, or play? The answer decides the board
+(@fig-two).
+
+::: {.callout-important title="Definition 11.1 — Cutscene and gameplay storyboards"}
+A **cutscene storyboard** plans a moment the player only watches: the team
+chooses every shot. A **gameplay storyboard** plans a moment the player
+plays: it shows the player's view, the **HUD**, the **player input** and
+the game's **feedback**.
+:::
+
+![A cutscene panel (the team chooses the close-up) and a gameplay panel (the player's view with the HUD and the input).](images/cut-vs-play.png){#fig-two width=96%}
+
+::: {.callout-note title="Example 11.1 — The moments of level 1"}
+1. "Salma begs on the roof." The player watches: a cutscene board with a
+   close-up.
+2. "Nour rows between floating boxes." The player swipes: a gameplay board.
+3. "Pasha jumps; the player taps to catch." The player taps: a gameplay
+   board.
+:::
+
+::: {.callout-note title="Example 11.2 — The camera in gameplay"}
+In a cutscene, the shot can change in every panel. In gameplay, the camera
+usually follows rules (for example, it follows the boat from the side), so
+gameplay panels often keep the same view. What changes is the action, the
+HUD and the feedback.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Drawing gameplay like a film: a close-up of a face while the player must
+steer a boat. The player cannot see the boxes and loses control. In
+gameplay, show what the player needs to play.
+:::
+
+::: {.callout-note title="Do it · Watch or play?"}
+Choose a mobile game you know. Write four of its moments.
+
+1. For each moment, write "watch" or "play".
+2. For one "play" moment, write what is on the screen: the HUD, and what the
+   player does.
+
+*Your result:* four moments with their kind, and one screen described.
+:::
+
+## 11.2 What a gameplay panel shows
+
+A gameplay panel must answer four questions: what does the player see, what
+does the player do, how does the game answer, and what happens if the player
+fails (@fig-gameplay)?
+
+::: {.callout-important title="Definition 11.2 — The parts of a gameplay panel"}
+A gameplay panel shows: the **player's view** (the game camera); the **HUD**
+(lives, score, a map) where the game shows it; the **player input** as an
+icon (a tap, a swipe, a button); the **feedback** (a sound, a flash, points);
+and, in a next panel, the **fail state**: what the game shows when the player
+does not succeed.
+:::
+
+![A gameplay board: the swipe, then success (+100) and fail (splash, one heart lost).](images/gameplay-board.png){#fig-gameplay width=96%}
+
+::: {.callout-note title="Example 11.3 — The rowing board"}
+1. Panel 1: the boat from the side; the HUD (three hearts, the score); a
+   swipe icon; an arrow to the right.
+2. Panel 2a (success): the boat passes the box; "+100" pops up.
+3. Panel 2b (fail): the boat hits the box; a splash; one heart grey; the
+   caption says "try again from panel 1".
+:::
+
+::: {.callout-note title="Example 11.4 — Feedback in the caption"}
+Some feedback cannot be drawn. The caption says it: "SFX: splash. The phone
+vibrates. The heart shakes and turns grey."
+:::
+
+::: {.callout-warning title="Common mistake"}
+Drawing only the success. Players fail often, and the fail state is part of
+the experience: what they see, hear and do next must be planned too.
+:::
+
+::: {.callout-note title="Do it · One gameplay moment"}
+Take the "play" moment of your game from section 11.1.
+
+1. Draw two panels: the player's action, and the success.
+2. Draw a third panel for the fail state. Add the HUD and an input icon.
+
+*Your result:* three gameplay panels with captions.
+:::
+
+## 11.3 Is the timing right? The animatic
+
+A board on paper does not show time. The team wants to feel the **pacing**:
+does a line stay long enough to read? Does a shot drag? It makes an
+**animatic** (@fig-animatic).
+
+::: {.callout-important title="Definition 11.3 — Animatic"}
+An **animatic** plays the panels of a storyboard one after the other, each
+for its planned time, with simple sound (lines, effects). It is the first
+"video" of a scene, made before any 3D work.
+:::
+
+![The six panels of the opening on a time line: 16 s in total.](images/animatic.png){#fig-animatic width=96%}
+
+::: {.callout-note title="Example 11.5 — Timing the opening"}
+The six panels of the opening have 3, 3, 2, 3, 2 and 2 seconds.
+
+1. Total: 15 s; the producer wants 12 to 16 s.
+2. In the animatic, Salma's line (2 s) is gone before the player has read
+   it. The team gives it 3 s.
+3. New total: 16 s, still inside the limit.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Timing panels by the drawing, not by the content. A line of dialogue needs
+the time to read it; an action needs the time to happen.
+:::
+
+{{< sim file="sims/animatic-player.html" poster="sims/animatic-player.png" title="Animatic Player: time the opening" height="740" >}}
+
+::: {.callout-note title="Do it · Time the opening"}
+Open **Animatic Player** (above, or scan the QR code).
+
+1. Press Play and watch the six panels. Which panel feels too short?
+2. Change the times so that the check passes. Write your six times.
+
+*Your result:* six times, the total and one sentence about the pacing.
+:::
+
+## 11.4 Tools: from paper to an animatic
+
+Storyboards do not need expensive software. The lab has enough
+(@fig-tools).
+
+| Tool | Good for |
+|---|---|
+| Paper and a storyboard template | fast thumbnails; works without a computer |
+| PowerPoint (or Google Slides) | one slide per panel, the caption in the notes; slide timings and File › Export › Create a Video make an animatic |
+| A free drawing app (Krita) | clean panels with layers |
+| A free storyboard app (Storyboarder) | panels, captions and timing in one place |
+
+: Storyboard tools. {#tbl-tools}
+
+![Four ways to make a storyboard in the lab.](images/board-tools.png){#fig-tools width=96%}
+
+::: {.callout-note title="Example 11.6 — An animatic in PowerPoint"}
+1. Insert one picture (photo of a panel) per slide; type the caption in the
+   speaker notes.
+2. Transitions › After: set each slide's time (3 s, 3 s, 2 s, …).
+3. Insert › Audio adds the sound; File › Export › Create a Video gives an MP4
+   animatic.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Spending the time on the tool, not on the board. Start on paper; move to a
+tool only to time, clean and share the board.
+:::
+
+::: {.callout-note title="Do it · Three slides, one animatic"}
+Take a photo of three of your panels with your phone.
+
+1. In PowerPoint, put one photo per slide and the caption in the notes.
+2. Set the times (Transitions › After) and play the slide show.
+
+*Your result:* a file `animatic.pptx` with three timed slides.
+:::
+
+## Case study: Cut or Play? Planning level 1
+
+*Night Owl Games* plans the boards of level 1 of *Rooftop Rescue*. The team
+must decide which moments are cutscenes (Salma begs on the roof) and which
+are gameplay (Nour rows between boxes by swiping; Pasha jumps and the player
+taps to catch). For the gameplay boards it must show the swipe, the HUD and
+the fail state (a splash and one heart lost), and it wants a quick animatic
+made in the lab. The Game challenge of the interactive lesson uses these
+decisions. In the mini-game below you plan them.
+
+{{< sim file="sims/cut-or-play.html" poster="sims/cut-or-play.png" title="Cut or Play? Plan the boards of level 1" kind="game" height="760" >}}
+
+## Further reading
+
+Schell, *The Art of Game Design*, 3rd ed., the chapters on interface and
+feedback (what the player needs to see) and on story and gameplay. Microsoft
+Support, "Turn your presentation into a video".
+
+## Exercises
+
+1. What is the difference between a cutscene board and a gameplay board?
+2. Name four things that a gameplay panel shows.
+3. Why does a gameplay panel often keep the same view?
+4. What is a fail state? Give an example from *Rooftop Rescue*.
+5. How do you show feedback that cannot be drawn, such as a vibration?
+6. What is an animatic? What does it show that paper does not?
+7. Six panels have 2, 3, 3, 2, 3 and 2 s. What is the total?
+8. A line of dialogue is on screen for 1 s. What is the problem?
+9. Name two free or lab tools for storyboards.
+10. How do you make an animatic in PowerPoint?
+
+## Answers to the exercises
+
+::: {.answers}
+1. A cutscene board plans a moment the player watches; a gameplay board a moment the player plays, with the player's view, HUD, input and feedback.
+2. The player's view, the HUD, the player input, the feedback (and the fail state).
+3. In gameplay the camera follows rules (for example it follows the boat); the action changes.
+4. What the game shows when the player does not succeed: a splash and one heart lost.
+5. In the caption: "The phone vibrates."
+6. The panels played with their times and sound; it shows the pacing.
+7. 15 s.
+8. The player cannot read it in time.
+9. For example paper with a template, PowerPoint, Krita, Storyboarder.
+10. One slide per panel, timings in Transitions › After, then File › Export › Create a Video.
+:::

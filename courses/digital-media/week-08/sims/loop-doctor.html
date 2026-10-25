@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Loop Doctor</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Loop Doctor</h1>
+  <p class="hint">Students sent their loops for <i>Rooftop Rescue</i>. Each loop has one problem. Look at the waveform of the loop (shown twice, end to start) and choose the fix.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  // kind: what the drawing shows
+  const rounds = [
+    { kind: "click", goal: "At the loop point, the player hears a <b>click</b> every time. The wave jumps from high to zero (red mark). Fix?",
+      choices: C(["a very short fade at the end and the start", "make the loop longer", "add reverb", "export it as MP3"]), answer: "a very short fade at the end and the start",
+      good: "A jump in the wave is a click. A few milliseconds of fade (or a cut at a zero crossing) make the join smooth.", why: { "export it as MP3": "MP3 even adds a short silence at the start." } },
+    { kind: "short", goal: "The loop is <b>7.5 bars</b> long at 100 BPM. When it repeats, the beat stumbles. Fix?",
+      choices: C(["cut it to exactly 8 bars: 19.2 s", "speed it up a little", "add a fade-out", "cut it to 7 seconds"]), answer: "cut it to exactly 8 bars: 19.2 s",
+      good: "A loop must be a whole number of bars: at 100 BPM one bar is 2.4 s, so 8 bars = 19.2 s.", why: { "cut it to 7 seconds": "7 s is not a whole number of bars at 100 BPM." } },
+    { kind: "tail", goal: "The loop ends with <b>2 seconds of reverb tail</b> and silence. In the game you hear a gap. Fix?",
+      choices: C(["cut the silence; move the tail to the start of the loop", "make the tail longer", "turn the music up", "play it once only"]), answer: "cut the silence; move the tail to the start of the loop",
+      good: "Seamless loops end on the bar line. The tail that rings over the end is mixed into the start, so the join sounds natural.", why: { "make the tail longer": "A longer tail is a longer gap." } },
+    { kind: "busy", goal: "The calm rowing loop has drums, a fast melody and a loud bass. Testers say it is tiring. Fix?",
+      choices: C(["fewer layers: keep melody and bass, slower tempo", "add more instruments", "make it louder", "make it shorter"]), answer: "fewer layers: keep melody and bass, slower tempo",
+      good: "Calm music has fewer layers and a slower tempo. The drums can wait for the danger layer.", why: { "add more instruments": "More layers make it even busier." } },
+    { kind: "loud", goal: "The loop peaks at <b>0 dB</b> and has flat tops; the sound effects are lost under it. Fix?",
+      choices: C(["lower the music, peaks near −6 dB, no clipping", "make the effects quieter", "export at 8-bit", "add a stinger"]), answer: "lower the music, peaks near −6 dB, no clipping",
+      good: "Music is a bed under the effects and voices: lower it and leave room (more in lecture 17).", why: { "make the effects quieter": "Then the player hears even less." } },
+    { kind: "ok", goal: "The loop is 8 bars at 120 BPM, starts and ends at zero, peaks at −6 dB. Which file name?",
+      choices: C(["mus_rowing_calm_loop_120bpm.ogg", "final song NEW.wav", "loop.mp3", "Recording 7.ogg"]), answer: "mus_rowing_calm_loop_120bpm.ogg",
+      good: "Type, what, loop and tempo: the programmer knows how to use it. OGG keeps the music file small.", why: { "loop.mp3": "Which loop? For which level?" } },
+  ];
+  function wave(c, x, y, w, h, kind) {
+    const mid = y + h / 2, n = Math.floor(w);
+    c.strokeStyle = "#9C36B5"; c.lineWidth = 1.2; c.beginPath();
+    for (let i = 0; i < n; i++) {
+      const t = (i / n) * 2, ph = t % 1;
+      let a = kind === "busy" ? 0.85 : kind === "loud" ? 1.3 : 0.55;
+      if (kind === "tail" && ph > 0.8) a *= Math.max(0, 1 - (ph - 0.8) * 5);
+      let v = a * Math.sin(i * (kind === "busy" ? 1.3 : 0.7)) * (0.7 + 0.3 * Math.sin(i * 0.05));
+      if (kind === "loud") v = Math.max(-1, Math.min(1, v));
+      if (kind === "click" && ph > 0.97) v = 0.9 * Math.sign(Math.sin(i));
+      if (kind === "short" && ph > 0.94) v *= 0.1;
+      c.moveTo(x + i, mid); c.lineTo(x + i, mid - v * (h / 2 - 4));
+    }
+    c.stroke();
+    c.strokeStyle = "#fab005"; c.lineWidth = 2; c.setLineDash([5, 4]); c.beginPath(); c.moveTo(x + w / 2, y); c.lineTo(x + w / 2, y + h); c.stroke(); c.setLineDash([]);
+    Kit.text(c, "loop point", x + w / 2, y + 12, 11, "#a37400");
+    if (kind === "click") { c.fillStyle = "#e03131"; c.fillRect(x + w / 2 - 6, y + h - 10, 12, 8); }
+    if (kind === "loud") { c.fillStyle = "#e03131"; c.fillRect(x, y + 2, w, 3); }
+  }
+  Kit.game({
+    rounds, cols: 1, colsPhone: 1, animMs: 700, still: true,
+    intro: "Round 1 is the story of the lesson: the first loop on Yara's desk.",
+    canvas: (W) => Math.min(120, W * 0.3),
+    draw(c, W, H, now, r) { c.fillStyle = "#fbf8ff"; c.fillRect(0, 0, W, H); if (r) wave(c, 6, 6, W - 12, H - 12, r.kind); },
+  });
+})();
+</script>
+</body>
+</html>

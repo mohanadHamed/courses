@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Lighthouse</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <script type="importmap">
+    { "imports": { "three": "../../../../shared/sims/vendor/three.module.min.js" } }
+  </script>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Lighthouse</h1>
+  <p class="hint">The lighthouse stands at the origin. Its lamp turns around the y-axis; at the yaw θ the beam points along R<sub>y</sub>(θ) × (0, 0, 1) = (sin θ, 0, cos θ). Light up each ship. Ships are 10 units away.</p>
+  <div id="view" class="view3d" aria-label="A lighthouse at the origin and ships on the sea"></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script type="module">
+import { createViewer } from "../../../../shared/sims/viewer3d.js";
+const A = (list) => list.map((d) => ({ k: String(d), label: Kit.fmt(d, 0) + "°", d }));
+const rounds = [
+  { ship: [10, 0, 0], goal: "A ship waits at <b>(10, 0, 0)</b>. Which yaw lights it up?", choices: A([90, -90, 0, 180]), answer: "90",
+    good: "(sin 90°, 0, cos 90°) = (1, 0, 0): the beam points along +x.", why: { "-90": "−90° points along −x, to the left.", "0": "0° points forward, along +z." } },
+  { ship: [0, 0, -10], goal: "A ship is behind the lighthouse at <b>(0, 0, −10)</b>. Which yaw?", choices: A([180, 0, 90, -90]), answer: "180",
+    good: "(sin 180°, 0, cos 180°) = (0, 0, −1): the beam points back.", why: { "0": "0° points forward, to +z." } },
+  { ship: [5, 0, 8.7], goal: "A ship at <b>(5, 0, 8.7)</b>. Which yaw? (sin 30° = 0.5, cos 30° = 0.87)", choices: A([30, 60, -30, 150]), answer: "30",
+    good: "(sin 30°, 0, cos 30°) = (0.5, 0, 0.87); × 10 = (5, 0, 8.7).", why: { "60": "At 60° the beam ends at (8.7, 0, 5).", "-30": "−30° turns to the left: (−5, 0, 8.7)." } },
+  { ship: [-7.1, 0, 7.1], goal: "A ship at <b>(−7.1, 0, 7.1)</b>, forward and to the left. Which yaw?", choices: A([-45, 45, 135, -135]), answer: "-45",
+    good: "(sin(−45°), 0, cos(−45°)) = (−0.71, 0, 0.71); × 10 = (−7.1, 0, 7.1).", why: { "45": "45° turns to the right: (7.1, 0, 7.1).", "135": "135° points back and to the right." } },
+  { ship: [-10, 0, 0], goal: "The lamp points at 90°. A ship at <b>(−10, 0, 0)</b> calls. Which turn from 90° reaches it?", choices: A([180, 90, -90, 0]), answer: "180", from: 90,
+    good: "90° + 180° = 270°, the same as −90°: (−1, 0, 0).", why: { "90": "90° + 90° = 180° points back, along −z.", "-90": "90° − 90° = 0° points forward.", "0": "No turn: the beam still points along +x." } },
+];
+const g = Kit.game({ rounds, cols: 4, colsPhone: 2, animMs: 1200, intro: "Round 1 is the story of the lesson: the first ship of the night." });
+// the 3D view goes between the line with the goal and the buttons
+const main = document.querySelector("main.sim"), pad = document.getElementById("choices"), viewEl = document.getElementById("view");
+main.insertBefore(viewEl, pad);
+const v = createViewer(viewEl, { background: "#0b1d3a" });
+v.view([0, 16, -14], [0, 0, 1]);
+const T = v.THREE;
+const sea = new T.Mesh(new T.CircleGeometry(14, 48), new T.MeshStandardMaterial({ color: "#1c4f8a" })); sea.rotation.x = -Math.PI / 2; v.scene.add(sea);
+const ring = new T.Mesh(new T.RingGeometry(9.9, 10.05, 64), new T.MeshBasicMaterial({ color: "#74c0fc", side: T.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.02; v.scene.add(ring);
+const tower = new T.Mesh(new T.CylinderGeometry(0.5, 0.8, 3, 20), new T.MeshStandardMaterial({ color: "#f1f3f5" })); tower.position.y = 1.5; v.scene.add(tower);
+const lamp = new T.Group(); lamp.position.y = 3.2; v.scene.add(lamp);
+const beam = new T.Mesh(new T.ConeGeometry(1.2, 10, 24, 1, true), new T.MeshBasicMaterial({ color: "#ffe066", transparent: true, opacity: 0.45, side: T.DoubleSide }));
+beam.rotation.x = -Math.PI / 2; beam.position.z = -5; lamp.add(beam);
+const ship = new T.Group();
+const hull = new T.Mesh(new T.BoxGeometry(1.6, 0.5, 0.7), new T.MeshStandardMaterial({ color: "#a0522d" })); hull.position.y = 0.25; ship.add(hull);
+const sail = new T.Mesh(new T.ConeGeometry(0.45, 1.2, 4), new T.MeshStandardMaterial({ color: "#f8f9fa" })); sail.position.y = 1.1; ship.add(sail);
+v.scene.add(ship);
+v.label("+z", [0, 0.1, 12], { color: "#a5d8ff", size: 1.2 }); v.label("+x", [11.5, 0.1, 0], { color: "#a5d8ff", size: 1.2 });
+let shown = -1;
+v.onFrame(() => {
+  const st = g.st, r = st.over ? null : g.cur();
+  if (!r) return;
+  if (shown !== st.i) { shown = st.i; ship.position.copy(v.v3(r.ship)); }
+  let deg = r.from || 0;
+  if (st.pick) { const c = r.choices.find((x) => x.k === st.pick); const goal = (r.from || 0) + c.d; const k = st.done ? 1 : Math.max(0, Math.min((performance.now() - st.t0) / 1100, 1)); deg = (r.from || 0) + (goal - (r.from || 0)) * k; }
+  lamp.rotation.y = -deg * Math.PI / 180;
+  sail.material.color.set(st.done && st.ok ? "#ffd43b" : "#f8f9fa");
+});
+</script>
+</body>
+</html>

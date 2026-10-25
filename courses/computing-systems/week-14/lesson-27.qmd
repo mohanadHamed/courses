@@ -1,0 +1,197 @@
+---
+title: "Platform Performance and Compatibility: Case Studies"
+description: "Measuring performance with frame times and the 1 % low, a case study of heat, throttling and a frame-rate cap on a phone, a case study of compatibility (minimum OS version, graphics APIs, screen shapes), and following platform developments with reliable sources."
+lesson: 27
+ilos: [B2, C1, D1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+has a short summary, a picture, a **Do it** task and one set of questions.
+The full explanations, examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary frame-rate frame-time stutter one-percent-low thermal-throttling frame-rate-cap compatibility api-level graphics-api compatibility-matrix release-notes reliable-source >}}
+
+## 27.1 Measuring performance
+
+- **Frame time:** 60 fps ≈ 16.7 ms; 30 fps ≈ 33.3 ms.
+- **1 % low:** the slowest frames; **stutters** hide in the average.
+- Also: load time, battery, temperature.
+
+![Frame times (example values).](images/frame-times.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+A high average with stutters feels worse than a steady 30 fps.
+:::
+
+::: {.callout-note title="Do it · Frame times"}
+Frame times of 30, 60 and 120 fps; what fps is a 50 ms frame?
+:::
+
+::: {.callout-tip title="Try it 1 · Measures"}
+Choose the right answer.
+
+::: {.match extra="100 ms|0 ms"}
+the frame time at 60 fps
+:   about 16.7 ms
+
+the frame time at 30 fps
+:   about 33.3 ms
+
+the number that shows stutters
+:   the 1 % low
+
+a single 50 ms frame in a 60 fps race
+:   a stutter
+:::
+:::
+
+## 27.2 Case study: heat, throttling and a cap
+
+- A long, heavy load heats the chip: **thermal throttling**.
+- The frame rate falls and jumps.
+- A **frame-rate cap** or lower settings: steady, cooler, longer battery.
+
+![The P5 in a 20-minute race.](images/thermal.png){width=94%}
+
+{{< sim file="sims/perf-lab.html" poster="sims/perf-lab.png" title="Performance Lab: a 20-minute race" height="680" >}}
+
+::: {.callout-warning title="Watch out!"}
+Throttling starts after minutes: test as long as players play.
+:::
+
+::: {.callout-note title="Do it · The long race"}
+In **Performance Lab**, compare the P5 uncapped, capped at 30, and low with
+a 60 cap; choose one.
+:::
+
+::: {.callout-tip title="Try it 2 · The long race"}
+Use Performance Lab. Choose the right answer.
+
+::: {.match extra="120 fps|0 °C"}
+the P5 at the end, high, no cap
+:   about 45 fps
+
+the P5 capped at 30
+:   a steady 30 fps
+
+the P5 with low graphics, 60 cap
+:   a steady 60 fps
+
+what heat does to the chip
+:   it throttles
+:::
+:::
+
+## 27.3 Case study: compatibility
+
+- **Minimum OS version:** API 30 does not start on Android 8.
+- **Graphics API:** Vulkan only → black screen on old GPUs.
+- **Screen shapes:** anchor menus to the **safe area**.
+- A **compatibility matrix** records each device and check.
+
+![Compatibility matrix.](images/compat-matrix.png){width=94%}
+
+![Three screen shapes.](images/aspect.png){width=94%}
+
+{{< sim file="sims/compat-lab.html" poster="sims/compat-lab.png" title="Compatibility Lab: build 43 for every device" height="580" >}}
+
+::: {.callout-warning title="Watch out!"}
+Every older version and graphics path adds testing: count the players.
+:::
+
+::: {.callout-note title="Do it · The matrix"}
+Make every row green in **Compatibility Lab**; write the cost of each
+change.
+:::
+
+::: {.callout-tip title="Try it 3 · Compatibility"}
+Use Compatibility Lab. Choose the fix.
+
+::: {.match extra="a bigger icon|a faster network"}
+crash at start on Android 8
+:   minimum Android 8 (API 26)
+
+black screen on a GPU without Vulkan
+:   add OpenGL ES 3
+
+Start button cut off on a tablet
+:   anchor the menu to the safe area
+
+the cost of all three fixes
+:   more testing
+:::
+:::
+
+## 27.4 Following developments with reliable sources
+
+- Read the **release notes** of new OS and engine versions.
+- Reliable: official docs, release notes, benchmarks with a method, your
+  own tests.
+- After an update, test again on an updated device.
+
+![Where do performance facts come from?](images/sources.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+No number in a report without its source and date.
+:::
+
+::: {.callout-note title="Do it · A release note"}
+Find two game-relevant changes in the newest Android or iOS release notes,
+with the source and the date.
+:::
+
+::: {.callout-tip title="Try it 4 · Sources"}
+Choose the kind of source.
+
+::: {.match extra="a secret|a guess"}
+official release notes of an OS
+:   reliable
+
+a forum post without tests
+:   a claim to check
+
+your own test log with dates
+:   reliable
+
+an undated video with one device
+:   a claim to check
+:::
+:::
+
+## Game challenge: Performance Detective {.challenge}
+
+Work alone. Use every section of today.
+
+Six reports: a race that **jerks** at 58 fps, a **hot phone**, a **crash on
+Android 8**, a **black screen**, a **cut-off button** and a **forum claim**.
+
+{{< sim file="sims/perf-detective.html" poster="sims/perf-detective.png" title="Performance Detective: six player reports" kind="game" height="460" >}}
+
+::: {.callout-tip title="Try it 5 · The reports"}
+Choose the cause or the fix.
+
+::: {.match extra="a full storage|a slow network"}
+jerks at 58 fps
+:   stutters: look at the 1 % low
+
+slower after 15 minutes, hot
+:   thermal throttling
+
+black screen on an old phone
+:   no support for the graphics API
+
+"every game 30 % faster"
+:   check the release notes and test
+:::
+:::
+
+## Summary {.summary}
+
+- Measure frame times and the 1 % low, not only the average.
+- Heat makes phones throttle; a cap keeps the race steady.
+- Builds fail by OS version, graphics API or screen shape.
+- A compatibility matrix records every device and check.
+- Follow platform changes with reliable sources and your own tests.

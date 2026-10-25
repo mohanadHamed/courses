@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: RAM Rush</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>RAM Rush</h1>
+  <p class="hint">You are the operating system of a phone. Keep the app on the screen (the <b>foreground app</b>) running. When the RAM is full, a phone OS closes <b>background apps</b>, the one used longest ago first.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const COL = { OS: "#868e96", "Pocket Quest": "#A86700", Camera: "#1c7ed6", Music: "#7048e8", Chat: "#0c8599", Browser: "#e8590c", Game: "#A86700" };
+  const o = (list) => list.map((s) => ({ k: s, label: s }));
+  // apps: [name, GB, "fg" | "bg" | "", minutes since last use]
+  const rounds = [
+    { ram: 4, apps: [["OS", 1.5, ""], ["Pocket Quest", 1.8, "bg", 1], ["Camera", 0.9, "fg"]],
+      goal: "The player leaves <b>Pocket Quest</b> to take a photo. RAM 4 GB, in use 4.2 GB. Which app does the OS close?",
+      choices: o(["Pocket Quest", "Camera", "OS", "nothing"]), answer: "Pocket Quest", closeOk: ["Pocket Quest"],
+      good: "The game is in the background, so the OS closes it to free 1.8 GB. The camera on the screen keeps running.",
+      why: { Camera: "The camera is on the screen: the OS keeps the foreground app.", OS: "The OS never closes itself.", nothing: "4.2 GB does not fit in 4 GB: something must go." } },
+    { ram: 4, apps: [["OS", 1.5, ""], ["Pocket Quest", 1.8, "fg"], ["Music", 0.3, "bg", 5]],
+      goal: "RAM 4 GB. OS 1.5 GB, Pocket Quest 1.8 GB, Music 0.3 GB. How much RAM is free?",
+      choices: o(["0.4 GB", "0.6 GB", "2.2 GB", "1 GB"]), answer: "0.4 GB", good: "1.5 + 1.8 + 0.3 = 3.6 GB in use, so 4 − 3.6 = 0.4 GB is free.",
+      why: { "2.2 GB": "Add all three apps: 1.5 + 1.8 + 0.3.", "0.6 GB": "Check the sum again: 3.6 GB in use.", "1 GB": "Subtract the RAM in use from 4 GB." } },
+    { ram: 4, apps: [["OS", 1.5, ""], ["Pocket Quest", 2.3, "fg"], ["Chat", 0.4, "bg", 1], ["Music", 0.3, "bg", 20]],
+      goal: "Pocket Quest loads a bigger level: it now needs 2.3 GB. Which apps does the OS close?",
+      choices: o(["Music and Chat", "Music only", "Chat only", "Pocket Quest"]), answer: "Music and Chat", closeOk: ["Music", "Chat"],
+      good: "In use: 1.5 + 2.3 + 0.4 + 0.3 = 4.5 GB. Closing Music (used 20 min ago) frees 0.3 GB, not enough; Chat goes too.",
+      why: { "Music only": "Without Music: 4.2 GB. Still more than 4 GB.", "Chat only": "Without Chat: 4.1 GB, still too much; and Music was used longest ago.", "Pocket Quest": "The game is on the screen: the OS keeps it." } },
+    { ram: 8, pc: true, apps: [["OS", 2, ""], ["Game", 6, "fg"], ["Browser", 3, "bg", 2]],
+      goal: "A <b>PC</b> with 8 GB RAM: OS 2 GB, game 6 GB, browser 3 GB = 11 GB. What does Windows do?",
+      choices: o(["uses the page file", "closes the game", "closes the browser", "deletes files"]), answer: "uses the page file",
+      good: "Windows moves memory that is not used now to the page file on the drive. Nothing closes, but the PC gets slower.",
+      why: { "closes the game": "A PC OS does not close the app on the screen.", "closes the browser": "Windows does not close apps to free RAM: it uses virtual memory.", "deletes files": "Memory is not files: nothing is deleted." } },
+    { ram: 4, apps: [["OS", 1.5, ""], ["Camera", 0.9, "fg"]], closed: true,
+      goal: "The OS closed Pocket Quest in the background. The player comes back. How does the game keep the progress?",
+      choices: o(["it saved when it went to the background", "it asks for more RAM", "it uses the page file", "it closes the camera"]), answer: "it saved when it went to the background",
+      good: "A mobile game saves its state when it goes to the background: after a restart it continues from there.",
+      why: { "it asks for more RAM": "A closed app cannot ask for anything.", "it uses the page file": "Phones do not swap apps to a page file like a PC.", "it closes the camera": "Apps cannot close other apps: the OS decides." } },
+  ];
+  Kit.game({
+    rounds, cols: 2, colsPhone: 1, animMs: 900,
+    intro: "Round 1 is the story of the lesson: Pocket Quest on a 4 GB phone.",
+    canvas: () => 170,
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fffdf5"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const x0 = 12, w = W - 24, sc = w / (r.ram * 1.15);
+      Kit.text(c, (r.pc ? "PC" : "Phone") + " RAM: " + r.ram + " GB", x0, 20, 13, "#2a211c", "left");
+      c.strokeStyle = "#c92a2a"; c.setLineDash([6, 4]); c.lineWidth = 2; c.strokeRect(x0, 32, r.ram * sc, 64); c.setLineDash([]);
+      const k = st.done && st.ok ? 1 : 0;
+      let x = x0;
+      r.apps.forEach(([name, gb, mode, mins]) => {
+        const gone = k && r.closeOk && r.closeOk.includes(name);
+        const bw = gb * sc - 3;
+        Kit.rrect(c, x, 36, bw, 56, 6, gone ? "#f1f3f5" : COL[name], gone ? "#adb5bd" : null, 1.5);
+        Kit.text(c, gone ? "closed" : name, x + bw / 2, 58, bw > 70 ? 12 : 10, gone ? "#868e96" : "#fff");
+        Kit.text(c, gb + " GB", x + bw / 2, 76, 11, gone ? "#868e96" : "#fff");
+        if (mode) Kit.text(c, mode === "fg" ? "on screen" : "background" + (mins ? ", " + mins + " min" : ""), x + bw / 2, 112, 10, mode === "fg" ? "#2b8a3e" : "#7a6a60");
+        x += gb * sc;
+      });
+      const used = r.apps.reduce((s, a) => s + a[1], 0);
+      Kit.text(c, `in use: ${Kit.fmt(used, 1)} GB` + (used > r.ram ? ` (more than ${r.ram} GB)` : ""), x0, 145, 13, used > r.ram ? "#c92a2a" : "#2b8a3e", "left");
+      if (r.closed) Kit.text(c, "Pocket Quest: closed by the OS", W - 12, 145, 12, "#7a6a60", "right");
+    },
+  });
+})();
+</script>
+</body>
+</html>

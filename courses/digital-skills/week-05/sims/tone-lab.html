@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tone Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .orig { background: #f8f9fa; border-radius: 10px; padding: 8px 10px; font-size: .92rem; }
+    .sim .ask { font-weight: 800; margin: 10px 0 4px; }
+    .sim .row2 { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; align-items: center; }
+    .sim .row2 b { min-width: 4.5em; }
+    .sim .row2 button { padding: 5px 12px; }
+    .sim .out { margin-top: 8px; background: #fff; border: 1.5px solid #ffc078; border-radius: 12px; padding: 10px 12px; line-height: 1.5; min-height: 4em; }
+    .sim .task { font-weight: 800; margin-top: 10px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tone Lab: rewrite one message</h1>
+  <p class="note">Prepared answers, as an AI assistant would rewrite. Nothing is sent to the Internet.</p>
+  <div class="orig"><b>Huda's first text:</b> “Your order is late. It comes in 2 days. Sorry.”</div>
+  <div class="row2" id="tone"><b>Tone:</b></div>
+  <div class="row2" id="len"><b>Length:</b></div>
+  <div class="out" id="out"></div>
+  <p class="task" id="task"></p>
+  <button type="button" id="use">Use this version</button>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const T = {
+    "formal|short": "Dear Mr Haddad, we are sorry: your order will arrive two days late. Kind regards, Sunrise Company",
+    "formal|long": "Dear Mr Haddad, thank you for your order. We are sorry to tell you that it will arrive two days later than planned, on Thursday. We apologise for this delay and thank you for your patience. Kind regards, Huda, Sunrise Company",
+    "neutral|short": "Hello Mr Haddad, your order is two days late. It will arrive on Thursday. Sorry for the delay.",
+    "neutral|long": "Hello Mr Haddad, your order will not arrive today. It will arrive in two days, on Thursday. We are sorry for the delay. Please write to us if you have questions.",
+    "friendly|short": "Hi Sami! Sorry, your order is running two days late. It will be with you on Thursday.",
+    "friendly|long": "Hi Sami! We're really sorry, but your order is running two days late. It will be with you on Thursday. Thanks so much for waiting, and have a great week!",
+  };
+  const TASKS = [
+    { q: "Task 1: an e-mail to Mr Haddad, a big customer you have never met. Short.", want: "formal|short", ok: "Formal and short: right for a customer you do not know." },
+    { q: "Task 2: a chat message to Sami, a customer who is also your friend. Short.", want: "friendly|short", ok: "Friendly: right for a person you know well, in a chat." },
+    { q: "Task 3: a letter for the company file that explains the delay fully.", want: "formal|long", ok: "Formal and long: a letter for the file needs all the facts." },
+  ];
+  const $ = (id) => document.getElementById(id);
+  let tone = "neutral", len = "short", task = 0;
+  function set(group, list, cur, cb) { Kit.buttons($(group), list.map((k) => ({ k, label: k })), cb); $(group).insertAdjacentHTML("afterbegin", `<b>${group === "tone" ? "Tone:" : "Length:"}</b>`); $(group).querySelectorAll("button").forEach((b) => (b.className = b.dataset.k === cur ? "" : "ghost")); }
+  function show() {
+    set("tone", ["formal", "neutral", "friendly"], tone, (k) => { tone = k; show(); Kit.beep(500, 0.06); });
+    set("len", ["short", "long"], len, (k) => { len = k; show(); Kit.beep(500, 0.06); });
+    $("out").textContent = T[tone + "|" + len];
+    $("task").textContent = task < TASKS.length ? TASKS[task].q : "🎉 All three versions are right.";
+  }
+  $("use").addEventListener("click", () => {
+    if (task >= TASKS.length) { $("msg").textContent = "All tasks are done. Try other tones and lengths."; return; }
+    const t = TASKS[task];
+    if (tone + "|" + len === t.want) { $("msg").textContent = "✓ " + t.ok + " The facts stay the same: late, two days, Thursday."; $("msg").className = "message good"; Kit.good(); task++; show(); }
+    else { $("msg").textContent = "✗ Not this one. Who reads it, and where? Change the tone or the length."; $("msg").className = "message bad"; Kit.bad(); }
+  });
+  show();
+})();
+</script>
+</body>
+</html>

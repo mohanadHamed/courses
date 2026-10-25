@@ -1,0 +1,239 @@
+---
+title: "Operating Systems: Functions, Processes and Memory Management"
+description: "Lesson notes · What the operating system does for a game, how many processes share the CPU, and how the OS shares the RAM, and what it does when the RAM is full."
+lesson: 9
+ilos: [A2]
+format: lesson-typst
+---
+
+::: {.lead}
+A player opens *Pocket Quest* on a phone. Music plays in another app, a chat
+app waits for messages, and an update downloads. The phone has one screen,
+a few CPU cores and a few gigabytes of RAM, but all these apps seem to run
+at once. Who decides which app uses the CPU, and how much memory each one
+gets? The **operating system** (OS). In lectures 3 to 8 you met the
+hardware. In this lesson you meet the software that manages it: what the OS
+does for a game, how it shares the CPU between **processes**, and how it
+shares the RAM. Every section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary operating-system os-services process multitasking scheduler time-slice process-state foreground-app background-app memory-management virtual-memory task-manager >}}
+
+## 9.1 What the OS does for a game
+
+*Pocket Quest* wants to show a picture, read a tap, save the progress and
+play a sound. It does not talk to the GPU, the touch screen, the storage or
+the speaker by itself. It asks the operating system, and the OS does the job
+(@fig-layers).
+
+::: {.callout-important title="Definition 9.1 — Operating system and its services"}
+The **operating system** is the software that manages the hardware and gives
+services to all other programs. Its main services are: running **processes**
+on the CPU, sharing the **memory**, keeping **files** in storage, controlling
+**devices** (screen, touch, sound, camera) and checking **permissions**.
+:::
+
+![The OS works between the apps and the hardware. Every app asks the OS for the CPU, memory, files and devices.](images/os-layers.png){#fig-layers width=96%}
+
+Windows, macOS and Linux are operating systems for computers; Android and
+iOS are operating systems for phones and tablets. Lecture 13 looks inside
+Android and iOS.
+
+::: {.callout-note title="Example 9.1 — The player taps the game icon"}
+1. **Files:** the OS finds the game in storage and loads it into RAM
+   (lecture 2).
+2. **Processes:** the OS starts a new process for the game and gives it CPU
+   time.
+3. **Memory:** the OS gives the process its own part of the RAM.
+4. **Devices:** the OS sends every tap to the game and shows its frames on
+   the screen.
+:::
+
+::: {.callout-note title="Example 9.2 — The game asks for the microphone"}
+*Pocket Quest* has voice chat. The first time, the phone shows: "Allow
+Pocket Quest to record audio?" This is the **permission** service. If the
+player says no, the OS does not give the game the microphone, and voice chat
+stays silent.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that the OS is only the home screen and the icons. The home screen
+is only one part. Most of the OS works where the player cannot see it:
+sharing the CPU, the RAM and the devices.
+:::
+
+::: {.callout-note title="Do it · Name your two operating systems"}
+On the lab computer, open Settings › System › About (Windows: Win + I). On
+your phone, open Settings › About phone (iPhone: Settings › General ›
+About).
+
+1. Write the name and the version of each OS.
+2. Write one service of the OS that you used today, and what it did.
+
+*Your result:* two OS names with versions, and one service.
+:::
+
+## 9.2 Many apps, few cores: processes and the scheduler
+
+The phone has 8 CPU cores, but more than 100 processes. A PC can have 200.
+They cannot all run on a core at the same moment. The OS **switches** between
+them very fast (@fig-slices).
+
+::: {.callout-important title="Definition 9.2 — Process, scheduler and time slice"}
+A **process** is a running program with its own part of memory. The
+**scheduler** of the OS decides which process runs on a core, for a short
+**time slice** of a few milliseconds, and then switches to the next one.
+This is **multitasking**. At each moment, a process is **running** (on a
+core), **ready** (waiting for a core) or **waiting** (for a file, the
+network or a tap).
+:::
+
+![One core shared by three processes in time slices of 4 ms. The switches are so fast that all apps seem to run at once.](images/time-slices.png){#fig-slices width=96%}
+
+::: {.callout-note title="Example 9.3 — Three processes on one core"}
+To keep the numbers simple, take one core and slices of 4 ms. The game,
+the music app and a download are ready.
+
+1. The scheduler gives each one 4 ms in turn: game, music, download, game, …
+2. In every 12 ms, the game runs for 4 ms: one third of the time.
+3. The player closes the download. Now the game runs 4 ms of every 8 ms:
+   half of the time. The game gets faster.
+:::
+
+::: {.callout-note title="Example 9.4 — Waiting for a file"}
+The game loads the next level from storage. Until the data arrives, the game
+process is **waiting**: the scheduler gives its slices to the music app.
+When the file is loaded, the game is **ready** again. A slow drive makes the
+game wait longer (lecture 3).
+:::
+
+The OS gives the **foreground app** (the one on the screen) more CPU time
+than the **background apps**. A phone OS even pauses most background apps.
+
+::: {.callout-warning title="Common mistake"}
+"Eight cores, so eight apps at most." A core runs one process at a time, but
+the scheduler switches many times per second, so hundreds of processes share
+the cores.
+:::
+
+{{< sim file="sims/scheduler-lab.html" poster="sims/scheduler-lab.png" title="Scheduler Lab: one core, many processes" height="560" >}}
+
+::: {.callout-note title="Do it · The processes of the lab computer"}
+Open **Task Manager** (Ctrl + Shift + Esc) and choose the Processes tab
+(press "More details" if you see only a short list).
+
+1. How many apps and how many background processes are there?
+2. Which three processes use the most memory?
+
+*Your result:* two numbers and three process names with their memory.
+:::
+
+## 9.3 Sharing the RAM: memory management
+
+The player leaves *Pocket Quest* to take a photo for a quest. When the player
+comes back, the game starts again from the title screen. What happened? The
+RAM was full, and the OS took memory back (@fig-ram).
+
+::: {.callout-important title="Definition 9.3 — Memory management"}
+**Memory management** is the job of the OS that gives each process its own
+part of the RAM, keeps these parts apart (one app cannot read another app's
+memory) and takes the memory back when a process ends. When the RAM is full,
+a **phone** OS closes background apps; a **computer** OS moves data that is
+not used now to the drive, as **virtual memory** (Windows: the page file).
+:::
+
+![A 4 GB phone. The OS, the game and the camera need 4.2 GB, so the OS closes the background game.](images/ram-full.png){#fig-ram width=96%}
+
+::: {.callout-note title="Example 9.5 — Pocket Quest and the camera"}
+The phone has 4 GB of RAM. The OS uses 1.5 GB and Pocket Quest 1.8 GB.
+
+1. In use: 1.5 + 1.8 = 3.3 GB. Free: 4 − 3.3 = 0.7 GB.
+2. The player opens the camera, which needs 0.9 GB. 3.3 + 0.9 = 4.2 GB: more
+   than 4 GB.
+3. The game is now in the background, so the OS closes it and frees 1.8 GB.
+   The camera on the screen keeps running.
+:::
+
+::: {.callout-note title="Example 9.6 — The same on a PC"}
+A PC has 8 GB of RAM. The OS uses 2 GB, a game 6 GB and a browser 3 GB:
+11 GB.
+
+1. Windows does not close the browser. It moves memory that is not used now
+   to the page file on the drive.
+2. The drive is much slower than RAM (lecture 3), so the PC slows down when
+   the player switches between the apps.
+:::
+
+Because a phone OS may close a game in the background at any time, a good
+mobile game **saves its state** when it goes to the background. Then it can
+continue at the same place after a restart.
+
+::: {.callout-warning title="Common mistake"}
+"The game crashed." When a mobile game starts again after the player used
+other apps, it often did not crash: the OS closed it to free RAM. The fix is
+to save the state, not to look for a bug in the game.
+:::
+
+::: {.callout-note title="Do it · The memory of the lab computer"}
+In **Task Manager**, open the Performance tab and choose Memory.
+
+1. Write the total RAM, the RAM in use and the RAM available.
+2. Open three browser tabs with videos. How much does "in use" grow?
+
+*Your result:* three numbers before, and the new "in use" after.
+:::
+
+## Case study: Pocket Quest on a 4 GB phone
+
+*Pocket Quest* is a made-up adventure game by the studio *Byte Bay*. It runs
+on a phone with 4 GB of RAM. The OS takes 1.5 GB, and the game 1.8 GB. In
+one quest, the player must take a photo with the camera (0.9 GB) and come
+back. Later the game loads a bigger level of 2.3 GB while Chat (0.4 GB, used
+1 minute ago) and Music (0.3 GB, used 20 minutes ago) wait in the
+background. The team must know what the OS will do each time. The Game
+challenge of the interactive lesson uses these numbers. In the mini-game
+below you are the OS.
+
+{{< sim file="sims/ram-rush.html" poster="sims/ram-rush.png" title="RAM Rush: you are the operating system of a phone" kind="game" height="640" >}}
+
+## Further reading
+
+Silberschatz, Galvin and Gagne, *Operating System Concepts*, 10th ed.,
+Chapter 1 (what operating systems do), Chapter 3 (processes) and Chapter 9
+(main memory). Tanenbaum and Austin, *Structured Computer Organization*,
+6th ed., Chapter 6 (the operating system machine level).
+
+## Exercises
+
+1. Name four services of an operating system.
+2. Name two operating systems for computers and two for phones.
+3. A game wants to use the camera. Which service of the OS decides if it may?
+4. What is a process? What does the scheduler do?
+5. What are the three states of a process? Give a game example of each.
+6. One core, slices of 4 ms. A game and three other processes are ready.
+   How many ms of every 16 ms does the game run?
+7. A phone has 6 GB of RAM. The OS uses 2 GB and a game 2.5 GB. How much is
+   free?
+8. On the phone of exercise 7, the player opens an app of 2 GB. What does
+   the OS do?
+9. What does Windows do when the RAM is full? Why does the PC get slower?
+10. *Pocket Quest*: the game loads a level of 2.3 GB, with Chat (0.4 GB) and
+    Music (0.3 GB) in the background. Which apps does the OS close, and why
+    in this order?
+
+## Answers to the exercises
+
+::: {.answers}
+1. For example: running processes, sharing memory, keeping files, controlling devices, checking permissions.
+2. Computers: Windows, macOS, Linux. Phones: Android, iOS.
+3. The permission service: the player allows or refuses the camera.
+4. A running program with its own memory. The scheduler decides which process runs on a core, and for how long.
+5. Running (the game computes a frame), ready (the game waits for a core), waiting (the game waits for a file to load).
+6. 4 ms of every 16 ms (one quarter).
+7. 6 − 2 − 2.5 = 1.5 GB.
+8. 4.5 + 2 = 6.5 GB is more than 6 GB: the OS closes the game if it is in the background.
+9. It moves memory that is not used now to the page file on the drive; the drive is much slower than RAM.
+10. 1.5 + 2.3 + 0.4 + 0.3 = 4.5 GB. It closes Music first (used longest ago), then Chat, because 4.2 GB is still too much.
+:::

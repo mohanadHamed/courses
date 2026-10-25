@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Board Fixer</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Board Fixer</h1>
+  <p class="hint">Night Owl Games checks five storyboards of <i>Rooftop Rescue</i> before the team builds the scene. Find what is wrong with each board, or say that it is ready.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="rooftop-scene.js"></script>
+<script>
+(() => {
+  const S = RS.SHOTS, flipped = Object.assign({}, S.medNour, { flip: true });
+  const CH = [
+    { k: "est", label: "no establishing shot" }, { k: "dir", label: "the screen direction flips" },
+    { k: "same", label: "the same shot twice in a row" }, { k: "far", label: "a feeling is shown too far away" },
+    { k: "ok", label: "nothing: the board is ready" },
+  ];
+  const R = (panels, caps, answer, good, arrows) => ({ panels, caps, answer, good, arrows: arrows || [], choices: CH, goal: "What is wrong with this board?" });
+  const rounds = [
+    R([S.closeNour, S.medNour, S.closeSalma], ["Nour looks ahead.", "Nour rows.", "Salma: “I won't leave without my cat.”"], "est",
+      "Panel 1 is a close-up: the player never sees the flooded street. Start with a wide shot."),
+    R([S.wideStreet, S.medNour, flipped], ["The flooded street.", "Nour rows to the roof.", "Nour rows on."], "dir",
+      "Panel 3 is shot from the other side of the line: Nour now rows right to left. Keep the camera on one side.", [1, 2]),
+    R([S.wideStreet, S.medNour, S.medNour], ["The flooded street.", "Nour rows.", "Nour: “Hold on, everyone.”"], "same",
+      "Panels 2 and 3 are the same shot. For Nour's line, cut to a close-up."),
+    R([S.wideStreet, S.medNour, S.wideRoof], ["The flooded street.", "Nour rows.", "Salma: “I won't leave without my cat.”"], "far",
+      "Salma's fear is in a wide shot of the roof: her face is tiny. Use a close-up."),
+    R([S.wideStreet, S.medNour, S.closeSalma], ["The flooded street.", "Nour rows to the roof.", "Salma: “I won't leave without my cat.”"], "ok",
+      "Wide, then medium, then close-up: place, action, feeling. The board is ready."),
+  ];
+  rounds.forEach((r) => (r.why = { est: "Look at panel 1 again: is the place clear?", dir: "Look at the way Nour moves in each panel.", same: "Compare the shots of the panels next to each other.", far: "Look at the panel with a feeling: can you see the face?", ok: "Look again: one rule is broken." }));
+  Kit.game({
+    rounds, still: true, cols: 2, colsPhone: 1, animMs: 600,
+    intro: "Round 1 is the story of the lesson: the first board on the review table.",
+    canvas: (W) => Math.round((W - 32) / 3 * 9 / 16) + 66,
+    draw(c, W, H, now, r) {
+      c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const w = (W - 32) / 3, h = w * 9 / 16;
+      r.panels.forEach((cam, i) => {
+        const x = 8 + i * (w + 8);
+        RS.draw(c, x, 4, w, h, cam, { arrow: r.arrows.includes(i) ? [24, 33, 30, 33] : null });
+        Kit.text(c, String(i + 1), x + 12, 20, 13, "#fff", "left");
+        Kit.wrap(c, r.caps[i], x, h + 20, w, W < 480 ? 10 : 12, "#2a211c", "left", 700);
+      });
+    },
+  });
+})();
+</script>
+</body>
+</html>

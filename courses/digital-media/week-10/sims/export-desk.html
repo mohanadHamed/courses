@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Export Desk</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Export Desk</h1>
+  <p class="hint">Salma, the producer of Night Owl Games, needs videos of <i>Rooftop Rescue</i> for many places. Read each request and choose the right setting.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="scene.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { ar: [16, 9], goal: "“A wide trailer in Full HD for the store page.” Which resolution?", answer: "1920 × 1080", choices: C(["1920 × 1080", "1080 × 1920", "1280 × 720", "3840 × 2160"]),
+      good: "Full HD, wide: 1920 × 1080 (16:9).", why: { "1080 × 1920": "That is tall (9:16), for phones held upright.", "1280 × 720": "That is HD (720p), not Full HD." } },
+    { ar: [16, 9], goal: "“The trailer is 30 s at 10 Mbit/s. How big is the file?”", answer: "about 37.5 MB", choices: C(["about 37.5 MB", "about 300 MB", "about 3.75 MB", "about 10 MB"]),
+      good: "10 Mbit/s × 30 s = 300 Mbit; ÷ 8 = 37.5 MB.", why: { "about 300 MB": "300 is in megabits. Divide by 8 for megabytes." } },
+    { ar: [16, 9], goal: "“It must play on every phone and in every browser.” Which file?", answer: "H.264 in MP4", choices: C(["H.264 in MP4", "ProRes in MOV", "AV1 in WebM", "uncompressed video"]),
+      good: "H.264 in an MP4 container plays almost everywhere.", why: { "ProRes in MOV": "ProRes files are huge and made for editing, not for players.", "uncompressed video": "Far too big: gigabytes for a few seconds." } },
+    { ar: [16, 9], block: 9, goal: "“The boat chase looks like blocks at 3 Mbit/s.” What helps most?", answer: "raise the bitrate to about 10 Mbit/s", choices: C(["raise the bitrate to about 10 Mbit/s", "change the container to MOV", "lower the frame rate to 10 fps", "add a title"]),
+      good: "More bits per second give the moving parts enough detail.", why: { "lower the frame rate to 10 fps": "Then the blocks get fewer, but the motion becomes jerky." } },
+    { ar: [9, 16], goal: "“A short clip for phones held upright.” Which shape?", answer: "1080 × 1920 (9:16)", choices: C(["1080 × 1920 (9:16)", "1920 × 1080 (16:9)", "1080 × 1080 (1:1)", "720 × 1280 at 10 fps"]),
+      good: "Tall 9:16 fills the whole phone screen held upright." },
+    { ar: [16, 9], goal: "“Keep the gameplay capture for more editing later.” Which export?", answer: "ProRes in MOV, 60 fps as recorded", choices: C(["ProRes in MOV, 60 fps as recorded", "H.264 at 2 Mbit/s", "a GIF", "720p at 24 fps"]),
+      good: "An edit master keeps the most detail; every new compression loses some.", why: { "H.264 at 2 Mbit/s": "Small, but much detail is lost for good." } },
+  ];
+  Kit.game({
+    rounds, cols: 2, colsPhone: 1, animMs: 700,
+    intro: "Round 1 is the story of the lesson: the store trailer of Rooftop Rescue.",
+    canvas: (W) => Math.min(200, W * 0.36),
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#2b2a33"; c.fillRect(0, 0, W, H);
+      if (!r) { Kit.text(c, "All videos are exported!", W / 2, H / 2, 18, "#f783ac"); return; }
+      const [a, b] = r.ar, k = Math.min((W - 30) / a, (H - 20) / b), w = a * k, h = b * k;
+      const solved = st.done && st.ok;
+      RS.draw(c, (W - w) / 2, (H - h) / 2, w, h, now / 450, { block: r.block && !solved ? r.block : 0 });
+    },
+  });
+})();
+</script>
+</body>
+</html>

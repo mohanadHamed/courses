@@ -1,0 +1,151 @@
+---
+title: "Networking Concepts: LAN, the Internet and Protocols"
+subtitle: "Lecture 19"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary lan internet router network-switch access-point ip-address dns network-protocol tcp udp >}}
+
+## 19.1 From the LAN to the Internet
+
+:::: {.columns}
+::: {.column width="50%"}
+- A LAN connects the devices of one place.
+- A switch joins the cables, and an access point gives Wi-Fi.
+- A router connects the LAN through the ISP to the Internet.
+- **Do it:** Draw the network at your home. Which box is the router?
+:::
+::: {.column width="50%"}
+![](images/lan-map.png)
+:::
+::::
+
+## Try it 1 · The devices
+
+a) Which device joins the cables of the office PCs?
+b) Which device gives Wi-Fi to the test phones?
+c) Which device connects the LAN to the ISP?
+
+::: {.answer}
+a) a switch
+b) an access point
+c) a router
+:::
+
+## 19.2 Addresses and the DNS
+
+:::: {.columns}
+::: {.column width="50%"}
+- An IP address identifies a device, such as 192.168.1.23.
+- Private addresses work only inside the LAN.
+- The DNS turns a name into an IP address.
+- **Do it:** Find the IP address of your phone. Is it private?
+:::
+::: {.column width="50%"}
+![](images/addresses.png)
+:::
+::::
+
+## Example · The phone finds the server
+
+The game of Rami's phone knows only the name play.example.net.
+**How do its packets reach the server?**
+
+::: {.reveal}
+1. The phone asks the **DNS**, and the answer is **198.51.100.7**.
+2. It sends the packets to its **default gateway**, the router.
+3. The routers of the Internet **forward** them to 198.51.100.7.
+:::
+
+## Try it 2 · Addresses
+
+a) Is 192.168.1.23 a private or a public address?
+b) What does the DNS do with play.example.net?
+c) Which device is the default gateway of a laptop?
+
+::: {.answer}
+a) private
+b) It finds its IP address.
+c) the router
+:::
+
+## 19.3 Packets and protocols
+
+:::: {.columns}
+::: {.column width="50%"}
+- Data travels in packets with two addresses.
+- Protocols work in four layers.
+- TCP is reliable, and UDP is fast.
+- **Do it:** Send packets with TCP and UDP at 20 % loss. What is different?
+:::
+::: {.column width="50%"}
+![](images/tcp-udp.png)
+:::
+::::
+
+## Live demo · Packet Journey
+
+{{< sim file="sims/packet-journey.html" poster="sims/packet-journey.png" title="Packet Journey: TCP or UDP?" task="**Show:** send a purchase with TCP and no loss, then 20 % loss, then the same with UDP. **Ask:** which protocol fits the player positions, and why?" >}}
+
+## Example · Two kinds of data
+
+The online race of Pocket Quest sends positions and purchases.
+**Which protocol does each one use?**
+
+::: {.reveal}
+1. **Positions** go 30 times per second over **UDP**, because the next one is newer anyway.
+2. **A purchase** goes over **HTTPS on TCP**, because every byte must arrive.
+3. The **leaderboard** and the save game also use TCP.
+:::
+
+## Try it 3 · TCP or UDP
+
+a) Which protocol carries voice chat?
+b) Which protocol carries a chat message?
+c) What does TCP do with a lost packet?
+
+::: {.answer}
+a) UDP
+b) TCP
+c) It sends it again.
+:::
+
+## 19.4 Network quality
+
+:::: {.columns}
+::: {.column width="50%"}
+- Latency is the time of a packet there and back.
+- Jitter is how much the latency changes.
+- Packet loss counts the packets that never arrive.
+- **Do it:** Compare the ping near and far from the router. What changes?
+:::
+::: {.column width="50%"}
+![](images/net-quality.png)
+:::
+::::
+
+## Game challenge · Net Fixer
+
+{{< sim file="sims/net-fixer.html" poster="sims/net-fixer.png" title="Net Fixer: a network for Byte Bay" kind="game" task="**The story:** Byte Bay moves into a new office, and Rami sets up the network for testing. **Play:** choose the right device, address or protocol for each job." >}}
+
+## Try it 4 · Quality (harder)
+
+a) What is the packet loss when 6 of 8 packets arrive?
+b) What is the problem when the ping is 30, 180, 40 and 210 ms?
+c) Does 200 Mbit/s with 8 % loss give a smooth race?
+
+::: {.answer}
+a) 25 %
+b) high jitter
+c) No, the lost packets make players jump.
+:::
+
+## Summary
+
+- A switch, an access point and a router build a LAN and connect it to the Internet.
+- IP addresses find devices, and the DNS turns names into addresses.
+- Data travels in packets, and protocols work in four layers.
+- Purchases go over TCP, and live positions go over UDP.
+- Games need low latency, low jitter and almost no packet loss.

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Slide Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .task { font-weight: 700; margin: 4px 0 8px; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim input[type=text], .sim textarea { font: inherit; padding: 5px 8px; border-radius: 8px; border: 1.5px solid #ced4da; width: 100%; box-sizing: border-box; }
+    .sim textarea { height: 80px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Slide Builder: one good slide</h1>
+  <p class="note">A practice model that works like PowerPoint: Home › Layout, the Design tab, Insert › Pictures. Huda makes a slide about the new opening hours of the Sunrise shop.</p>
+  <p class="task" id="task"></p>
+  <canvas id="c" aria-label="The slide"></canvas>
+  <div class="bar">Layout: <span id="lay"></span></div>
+  <div class="bar">Theme: <span id="th"></span></div>
+  <div class="bar" style="display:block">Title <input type="text" id="title" placeholder="Click to add title"></div>
+  <div class="bar" style="display:block">Text (one point per line) <textarea id="body"></textarea></div>
+  <div class="bar"><button type="button" class="ghost" id="pic">Insert › Pictures</button> Alt text: <input type="text" id="alt" style="max-width:260px" placeholder="describe the picture"></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="slide-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const s = { layout: "Title Slide", theme: "Plain", title: "", body: [], pic: false, alt: "" };
+  const LAYOUTS = ["Title Slide", "Title and Content", "Two Content", "Section Header"];
+  const words = (t) => t.trim().split(/\s+/).filter(Boolean).length;
+  const TASKS = [
+    { q: "Task 1: Choose the layout Title and Content.", ok: () => s.layout === "Title and Content" },
+    { q: "Task 2: Write a short title (at most 8 words), for example “New shop hours”.", ok: () => s.title && words(s.title) <= 8 },
+    { q: "Task 3: Write 3 to 5 short points, at most 8 words each.", ok: () => s.body.length >= 3 && s.body.length <= 5 && s.body.every((l) => words(l) <= 8) },
+    { q: "Task 4: Choose a theme from the Design tab.", ok: () => s.theme !== "Plain" },
+    { q: "Task 5: Insert the picture of the shop and write its alt text.", ok: () => s.pic && words(s.alt) >= 3 },
+  ];
+  let ti = 0;
+  function tabs(id, items, key) { Kit.buttons($(id), items.map((k) => ({ k, label: k })), (k) => { s[key] = k; tabs(id, items, key); upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }
+  function upd(msg) {
+    const c = cv.ctx; c.clearRect(0, 0, cv.W, cv.H); SK.draw(c, 0, 0, cv.W, s);
+    let m = msg;
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a clear slide with a layout, a theme, a few points and a picture with alt text.";
+    const long = s.body.find((l) => words(l) > 8);
+    if (!m) m = s.body.length > 6 ? "Too much text: the audience reads instead of listening. Keep 3 to 5 short points." : long ? `“${long.slice(0, 30)}…” is long. Use a few key words.` : s.pic && words(s.alt) < 3 ? "Add alt text: it tells a screen reader what the picture shows." : "";
+    $("msg").textContent = m; $("msg").classList.toggle("bad", !!m && !m.startsWith("✓"));
+  }
+  $("title").addEventListener("input", (e) => { s.title = e.target.value; upd(); });
+  $("body").addEventListener("input", (e) => { s.body = e.target.value.split("\n").map((l) => l.trim()).filter(Boolean); upd(); });
+  $("alt").addEventListener("input", (e) => { s.alt = e.target.value; upd(); });
+  $("pic").addEventListener("click", () => { s.pic = !s.pic; $("pic").textContent = s.pic ? "Delete the picture" : "Insert › Pictures"; upd(); });
+  const cv = Kit.canvas($("c"), (W) => W * 9 / 16);
+  window.addEventListener("resize", () => setTimeout(() => upd(), 60));
+  window.SB = { set: (o) => { Object.assign(s, o); if (o.title !== undefined) $("title").value = o.title; if (o.body) $("body").value = o.body.join("\n"); if (o.alt !== undefined) $("alt").value = o.alt; tabs("lay", LAYOUTS, "layout"); tabs("th", Object.keys(SK.THEMES), "theme"); upd(); } };
+  tabs("lay", LAYOUTS, "layout"); tabs("th", Object.keys(SK.THEMES), "theme");
+  setTimeout(() => upd(), 30);
+})();
+</script>
+</body>
+</html>

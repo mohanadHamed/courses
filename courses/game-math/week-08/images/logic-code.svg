@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="280" viewBox="0 0 680 280" font-family="Helvetica, Arial, sans-serif" font-weight="600">
+<rect width="680" height="280" fill="#ffffff"/>
+<text x="20" y="30" font-size="17" fill="#2a2f2c" text-anchor="start" font-weight="800" xml:space="preserve">Logic in game code: the condition of an if</text>
+<rect x="20" y="54" width="640" height="150" rx="12" fill="#1e1e2e"/>
+<text x="36" y="80" font-size="12.5" fill="#e9ecef" text-anchor="start" font-weight="600" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">bool hasKey = true, hasTorch = false, bossDead = true;</text>
+<text x="36" y="101" font-size="12.5" fill="#e9ecef" text-anchor="start" font-weight="600" font-family="DejaVu Sans Mono, monospace" xml:space="preserve"></text>
+<text x="36" y="122" font-size="12.5" fill="#e9ecef" text-anchor="start" font-weight="600" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">if (bossDead &amp;&amp; (hasKey || hasTorch))   // true &amp;&amp; (true || false) = true</text>
+<text x="36" y="143" font-size="12.5" fill="#e9ecef" text-anchor="start" font-weight="600" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">    OpenGate();</text>
+<text x="36" y="164" font-size="12.5" fill="#e9ecef" text-anchor="start" font-weight="600" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">if (!hasTorch)                           // !false = true</text>
+<text x="36" y="185" font-size="12.5" fill="#e9ecef" text-anchor="start" font-weight="600" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">    ShowHint(&quot;It is dark. Find a torch.&quot;);</text>
+<text x="340" y="236" font-size="12.5" fill="#6b726e" text-anchor="middle" font-weight="700" xml:space="preserve">The computer finds the value of the condition first; the body runs only when it is true.</text>
+<text x="340" y="258" font-size="12.5" fill="#6b726e" text-anchor="middle" font-weight="700" xml:space="preserve">&amp;&amp; and || stop early: false &amp;&amp; … is false without looking further.</text>
+</svg>

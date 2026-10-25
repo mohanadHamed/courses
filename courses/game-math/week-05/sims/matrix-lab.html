@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Matrix Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .eq { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 12px; margin: 10px 0; }
+    .sim .mat { display: inline-grid; gap: 4px; padding: 6px 10px; border-left: 3px solid #2a211c; border-right: 3px solid #2a211c; border-radius: 6px; }
+    .sim .mat span { min-width: 2.6em; padding: 6px 4px; text-align: center; font-weight: 800; font-size: 1.05rem; border-radius: 6px; font-variant-numeric: tabular-nums; }
+    .sim .mat.res span { cursor: pointer; background: #ebfbee; }
+    .sim .mat span.lit { background: #fff3bf; outline: 2px solid #e8590c; }
+    .sim .name { display: block; text-align: center; font-weight: 800; color: var(--sim-muted); font-size: 0.85rem; margin-bottom: 2px; }
+    .sim .op { font-size: 1.6rem; font-weight: 800; }
+    .sim .bad { color: #c92a2a; font-weight: 800; text-align: center; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Matrix Lab</h1>
+  <p class="hint">Choose an operation. Tap an entry of the result to see how it is made.</p>
+  <div class="controls" id="ops"></div>
+  <div class="controls" id="kbox"></div>
+  <div class="eq" id="eq"></div>
+  <p class="message" id="msg">Tap an entry of the result.</p>
+  <div class="controls"><button type="button" id="new">New numbers</button><button type="button" class="ghost" id="shape">B: 2 × 3</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  let A = [[2, 0, 5], [4, 3, 1]], B = [[1, 3, 0], [2, 1, 6]], op = "add", k = 2, tall = false;
+  const $ = (id) => document.getElementById(id), f = (v) => Kit.fmt(v, 1);
+  const rnd = () => Math.floor(Math.random() * 10) - 2;
+  const Bnow = () => tall ? [[B[0][0], B[1][0]], [B[0][1], B[1][1]], [B[0][2], B[1][2]]] : B;
+  function matEl(m, name, res) {
+    const box = Kit.el("div");
+    box.appendChild(Kit.el("span", { class: "name" }, name + " (" + m.length + " × " + m[0].length + ")"));
+    const g = Kit.el("div", { class: "mat" + (res ? " res" : "") });
+    g.style.gridTemplateColumns = `repeat(${m[0].length}, auto)`;
+    m.forEach((row, i) => row.forEach((v, j) => {
+      const s = Kit.el("span", { "data-i": i, "data-j": j }, f(v));
+      if (res) s.addEventListener("click", () => explain(i, j));
+      g.appendChild(s);
+    }));
+    box.appendChild(g);
+    return box;
+  }
+  function result() {
+    const b = Bnow();
+    if (op === "k") return A.map((r) => r.map((v) => k * v));
+    if (b.length !== A.length || b[0].length !== A[0].length) return null;
+    return A.map((r, i) => r.map((v, j) => op === "add" ? v + b[i][j] : v - b[i][j]));
+  }
+  function show() {
+    const eq = $("eq"); eq.innerHTML = "";
+    const R = result();
+    if (op === "k") { eq.appendChild(Kit.el("span", { class: "op" }, f(k) + " ×")); eq.appendChild(matEl(A, "A")); }
+    else { eq.appendChild(matEl(A, "A")); eq.appendChild(Kit.el("span", { class: "op" }, op === "add" ? "+" : "−")); eq.appendChild(matEl(Bnow(), "B")); }
+    eq.appendChild(Kit.el("span", { class: "op" }, "="));
+    if (R) { eq.appendChild(matEl(R, "result", true)); $("msg").textContent = "Tap an entry of the result."; $("msg").className = "message"; }
+    else { eq.appendChild(Kit.el("p", { class: "bad" }, "No result")); $("msg").textContent = "✗ A is 2 × 3 and B is 3 × 2: matrices of different sizes cannot be added or subtracted."; $("msg").className = "message bad"; }
+    $("kbox").style.display = op === "k" ? "" : "none";
+    $("shape").textContent = "B: " + (tall ? "3 × 2" : "2 × 3");
+  }
+  function explain(i, j) {
+    document.querySelectorAll(".mat span").forEach((s) => s.classList.toggle("lit", +s.dataset.i === i && +s.dataset.j === j && (op !== "k" || true)));
+    const name = `${i + 1}${j + 1}`, a = A[i][j];
+    if (op === "k") $("msg").textContent = `Entry ${name}: ${f(k)} × a${name} = ${f(k)} × ${f(a)} = ${f(k * a)}`;
+    else { const b = B[i][j]; $("msg").textContent = `Entry ${name}: a${name} ${op === "add" ? "+" : "−"} b${name} = ${f(a)} ${op === "add" ? "+" : "−"} ${f(b)} = ${f(op === "add" ? a + b : a - b)}`; }
+    $("msg").className = "message good"; Kit.beep(520, 0.1);
+  }
+  Kit.buttons($("ops"), [{ k: "add", label: "A + B" }, { k: "sub", label: "A − B" }, { k: "k", label: "k × A" }], (key) => {
+    op = key; document.querySelectorAll("#ops button").forEach((b) => b.className = b.dataset.k === op ? "" : "ghost"); show();
+  });
+  document.querySelector('#ops [data-k="add"]').className = "";
+  const ks = [-1, 0.5, 1, 1.5, 2, 3];
+  Kit.slider($("kbox"), "k =", 0, ks.length - 1, 1, 4, (v) => { k = ks[v]; show(); }, (v) => f(ks[v]));
+  $("new").addEventListener("click", () => { A = A.map((r) => r.map(rnd)); B = B.map((r) => r.map(rnd)); show(); });
+  $("shape").addEventListener("click", () => { tall = !tall; show(); });
+  show();
+})();
+</script>
+</body>
+</html>

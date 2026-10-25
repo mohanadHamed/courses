@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: AVD Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar .lab { min-width: 110px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .wrap2 { display: grid; grid-template-columns: 1fr 180px; gap: 10px; align-items: start; }
+    .sim ul.list { list-style: none; padding: 0; margin: 4px 0; font: 600 .85rem ui-monospace, Consolas, monospace; }
+    .sim ul.list li { border: 1px solid #dee2e6; border-radius: 6px; padding: 3px 6px; margin: 3px 0; background: #f8f9fa; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+    @media (max-width: 520px) { .sim .wrap2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>AVD Builder: virtual devices for Pocket Quest</h1>
+  <p class="hint">In the Device Manager of Android Studio, Rami creates Android Virtual Devices. Choose a device profile, a system image and the graphics, then press <b>Create AVD</b>. The emulator preview shows the result.</p>
+  <div class="bar"><span class="lab">Device profile</span><span id="prof" style="display:contents"></span></div>
+  <div class="bar"><span class="lab">System image</span><span id="img" style="display:contents"></span></div>
+  <div class="bar"><span class="lab">Graphics</span><span id="gfx" style="display:contents"></span></div>
+  <div class="bar"><button type="button" id="create">Create AVD</button></div>
+  <div class="wrap2"><canvas id="c" aria-label="The emulator preview"></canvas><div><b>Your AVDs</b><ul class="list" id="list"></ul></div></div>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const PROF = { "small phone 720×1600, 4 GB": { w: 720, h: 1600, ram: 4, tag: "P5" }, "big phone 1080×2400, 8 GB": { w: 1080, h: 2400, ram: 8, tag: "Big" }, "tablet 1600×2560, 6 GB": { w: 1600, h: 2560, ram: 6, tag: "Tab" } };
+  const IMG = { "Android 8 (API 26)": 26, "Android 11 (API 30)": 30, "Android 13 (API 33)": 33, "Android 14 (API 34)": 34 };
+  const s = { prof: "big phone 1080×2400, 8 GB", img: "Android 14 (API 34)", gfx: "hardware", avds: [] };
+  const has = (p, api, g) => s.avds.some((a) => a.prof === p && a.api === api && (!g || a.gfx === g));
+  const TASKS = [
+    { q: "Task 1: Create the \"P5 twin\": the small phone 720×1600 with 4 GB and Android 11 (API 30).", ok: () => has("small phone 720×1600, 4 GB", 30) },
+    { q: "Task 2: Pocket Quest supports Android 8 and newer. Create the oldest supported phone: the small phone with API 26.", ok: () => has("small phone 720×1600, 4 GB", 26) },
+    { q: "Task 3: Create a tablet with Android 13 (API 33) to test the big screen.", ok: () => has("tablet 1600×2560, 6 GB", 33) },
+    { q: "Task 4: Create one AVD with software graphics. What happens to the frame rate in the preview?", ok: () => s.avds.some((a) => a.gfx === "software") },
+  ];
+  let ti = 0;
+  const cv = Kit.canvas($("c"), 260);
+  let last = 0, x = 0;
+  Kit.loop((now) => {
+    const fps = s.gfx === "hardware" ? 60 : 12;
+    if (now - last < 1000 / fps) return; last = now;
+    const c = cv.ctx, W = cv.W, H = cv.H, P = PROF[s.prof];
+    c.clearRect(0, 0, W, H);
+    const sc = Math.min((W - 40) / P.w, (H - 46) / P.h), pw = P.w * sc, ph = P.h * sc, px = (W - pw) / 2, py = 8;
+    Kit.rrect(c, px - 8, py - 4, pw + 16, ph + 16, 14, "#343a40");
+    c.fillStyle = "#74c0fc"; c.fillRect(px, py + 4, pw, ph);
+    c.fillStyle = "#495057"; c.fillRect(px + pw * 0.3, py + 4, pw * 0.4, ph);
+    x = (x + 4) % ph;
+    for (let k = 0; k < 6; k++) { c.fillStyle = "#fff"; c.fillRect(px + pw / 2 - 2, py + 4 + ((x + k * ph / 6) % ph), 4, 14); }
+    Kit.rrect(c, px + pw / 2 - 10, py + ph * 0.72, 20, 30, 4, "#e03131");
+    Kit.text(c, `API ${IMG[s.img]} · ${fps} fps`, W / 2, H - 6, 12, "#2a2f2c", "center", 800);
+  });
+  function tabs(id, obj, key) { Kit.buttons($(id), Object.keys(obj).map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }
+  function upd(note) {
+    tabs("prof", PROF, "prof"); tabs("img", IMG, "img"); tabs("gfx", { hardware: 1, software: 1 }, "gfx");
+    $("list").innerHTML = s.avds.length ? s.avds.map((a) => `<li>${a.name}</li>`).join("") : "<li>(none yet)</li>";
+    const P = PROF[s.prof];
+    $("calc").textContent = `Profile ${P.w} × ${P.h}, ${P.ram} GB RAM; system image API ${IMG[s.img]}; graphics: ${s.gfx} (${s.gfx === "hardware" ? "uses the computer's GPU: smooth" : "uses only the CPU: slow"}).`;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: one computer now holds an old phone, a P5 twin and a tablet.";
+    $("msg").textContent = m + (note || "An emulator shows the layout and the OS version; it does not show the real speed, heat or battery of a phone.");
+  }
+  function create() {
+    const P = PROF[s.prof], api = IMG[s.img], name = `${P.tag}_API_${api}${s.gfx === "software" ? "_sw" : ""}`;
+    if (s.avds.some((a) => a.name === name)) { upd(`${name} exists already.`); return; }
+    s.avds.push({ name, prof: s.prof, api, gfx: s.gfx }); Kit.beep(880, 0.08); upd(`Created ${name}.`);
+  }
+  $("create").addEventListener("click", create);
+  window.AV = { set: (o) => { Object.assign(s, o); upd(); }, create };
+  upd();
+})();
+</script>
+</body>
+</html>

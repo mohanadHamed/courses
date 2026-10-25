@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Critique Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .part { margin: 8px 0; } .sim .part b { display: block; margin-bottom: 4px; }
+    .sim .opts { display: grid; gap: 6px; } .sim .opts button { text-align: left; } .sim .opts button.on { background: var(--sim-accent); color: #fff; }
+    .sim .out { border: 1.5px solid #e5dbff; background: #fbf8ff; border-radius: 12px; padding: 10px 12px; font-weight: 700; line-height: 1.5; min-height: 3em; }
+    .sim ul.q { margin: 6px 0; padding-left: 1.2em; line-height: 1.5; font-weight: 700; } .sim ul.q li.ok { color: #2b8a3e; } .sim ul.q li.no { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Critique Builder: useful feedback on a mix</h1>
+  <p class="hint">Salma listened to Yara's mix of the flood level. Build her feedback from three parts: what she <b>hears</b> (with the moment), <b>why</b> it matters for the player, and a <b>suggestion</b>. The checks show if the feedback is useful.</p>
+  <div class="part"><b>1 · What I hear</b><div class="opts" id="o0"></div></div>
+  <div class="part"><b>2 · Why it matters</b><div class="opts" id="o1"></div></div>
+  <div class="part"><b>3 · Suggestion</b><div class="opts" id="o2"></div></div>
+  <p class="out" id="out"></p>
+  <ul class="q" id="q"></ul>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  // [text, specific?, kind?]
+  const P = [
+    [["At 0:42, when Nour says “Hold on, Pasha!”, the music covers her words.", 1, 1], ["The sound is bad.", 0, 1], ["Your mix is terrible.", 0, 0]],
+    [["Players may miss the hint about where Pasha is.", 1, 1], ["I just do not like it.", 0, 1], ["Everyone knows that.", 0, 0]],
+    [["Try ducking the music by about 8 dB while she speaks.", 1, 1], ["Fix it.", 0, 1], ["Start again from zero.", 0, 0]],
+  ];
+  const pick = [null, null, null];
+  function draw() {
+    P.forEach((opts, k) => { Kit.buttons($("o" + k), opts.map((o, i) => ({ k: String(i), label: o[0] })), (i) => { pick[k] = +i; draw(); });
+      $("o" + k).querySelectorAll("button").forEach((b, i) => b.classList.toggle("on", i === pick[k])); });
+    const chosen = pick.map((i, k) => (i === null ? null : P[k][i]));
+    $("out").textContent = chosen.every((x) => x) ? chosen.map((x) => x[0]).join(" ") : "Choose one sentence in each part.";
+    const done = chosen.every((x) => x);
+    const items = [
+      [done && chosen[0][1], "Specific: it names the moment and the sound"],
+      [done && chosen[1][1], "It says why it matters for the player"],
+      [done && chosen[2][1], "It gives a suggestion that can be tried"],
+      [done && chosen.every((x) => x[2]), "Kind: about the work, not about the person"],
+    ];
+    $("q").innerHTML = items.map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    if (items.every((x) => x[0])) Kit.good();
+  }
+  window.CB = { pick: (k, i) => { pick[k] = i; draw(); } };
+  draw();
+})();
+</script>
+</body>
+</html>

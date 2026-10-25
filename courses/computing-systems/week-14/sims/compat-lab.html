@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Compatibility Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar .lab { min-width: 120px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim table.cm { border-collapse: collapse; width: 100%; margin: 6px 0; }
+    .sim table.cm td, .sim table.cm th { border: 1px solid #dee2e6; padding: 3px 6px; font-weight: 700; font-size: .85rem; text-align: center; }
+    .sim table.cm th { background: #fff9db; color: #A86700; }
+    .sim table.cm td:first-child, .sim table.cm td:nth-child(2) { text-align: left; }
+    .sim td.p { background: #d3f9d8; } .sim td.f { background: #ffe3e3; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Compatibility Lab: build 43 for every device</h1>
+  <p class="hint">Build 42 of <i>Pocket Quest</i> failed on three test devices. Change three build settings and watch the compatibility matrix. Each setting has a cost, so choose with care.</p>
+  <div class="bar"><span class="lab">Minimum Android</span><span id="api" style="display:contents"></span></div>
+  <div class="bar"><span class="lab">Graphics APIs</span><span id="gfx" style="display:contents"></span></div>
+  <div class="bar"><span class="lab">Menu buttons</span><span id="ui" style="display:contents"></span></div>
+  <table class="cm" id="tbl"></table>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const API = { "Android 11 (API 30)": 30, "Android 8 (API 26)": 26 };
+  const GFX = { "Vulkan only": ["vk"], "Vulkan + OpenGL ES 3": ["vk", "gl"] };
+  const UI = { "fixed positions": "fixed", "anchored to the safe area": "safe" };
+  const DEV = [["P5", "Android 11", 30, ["vk", "gl"], "phone"], ["AVD API 26", "Android 8", 26, ["vk", "gl"], "phone"], ["AVD tablet", "Android 13", 33, ["vk", "gl"], "tablet"], ["old phone", "Android 9", 28, ["gl"], "phone"], ["P6", "Android 14", 34, ["vk", "gl"], "notch"]];
+  const s = { api: "Android 11 (API 30)", gfx: "Vulkan only", ui: "fixed positions" };
+  const check = (d) => {
+    const starts = d[2] >= API[s.api], gfx = d[3].some((g) => GFX[s.gfx].includes(g)), layout = UI[s.ui] === "safe" || d[4] === "phone";
+    return { starts, gfx: starts ? gfx : null, layout: starts && gfx ? layout : null };
+  };
+  const all = () => DEV.every((d) => { const c = check(d); return c.starts && c.gfx && c.layout; });
+  const TASKS = [
+    { q: "Task 1: The AVD with Android 8 does not even start. Which setting fixes it?", ok: () => API[s.api] === 26 },
+    { q: "Task 2: The old phone starts, but shows no picture. Its GPU has no Vulkan. Fix it.", ok: () => GFX[s.gfx].includes("gl") },
+    { q: "Task 3: Make every row green. What does build 43 cost the team in testing?", ok: () => all() },
+  ];
+  let ti = 0;
+  function tabs(id, obj, key) { Kit.buttons($(id), Object.keys(obj).map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }
+  const cell = (v) => (v === null ? "<td>–</td>" : `<td class="${v ? "p" : "f"}">${v ? "pass" : "fail"}</td>`);
+  function upd() {
+    tabs("api", API, "api"); tabs("gfx", GFX, "gfx"); tabs("ui", UI, "ui");
+    $("tbl").innerHTML = "<tr><th>device</th><th>OS</th><th>starts</th><th>picture</th><th>menu fits</th></tr>" + DEV.map((d) => { const c = check(d); return `<tr><td>${d[0]}</td><td>${d[1]}</td>${cell(c.starts)}${cell(c.gfx)}${cell(c.layout)}</tr>`; }).join("");
+    const costs = [];
+    if (API[s.api] === 26) costs.push("test on Android 8 too, and avoid newer features");
+    if (GFX[s.gfx].includes("gl")) costs.push("a second graphics path to test");
+    if (UI[s.ui] === "safe") costs.push("one more layout check per screen shape");
+    $("calc").textContent = "Cost of this build: " + (costs.length ? costs.join("; ") + "." : "none, but some players cannot play.");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: wider compatibility means more players, and more testing.";
+    $("msg").textContent = m + (all() ? "Build 43 runs on all five test devices." : "");
+  }
+  window.CL = { set: (o) => { Object.assign(s, o); upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

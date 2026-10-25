@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Plan Checker</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .row { border: 1.5px solid #dee2e6; border-radius: 10px; padding: 6px 10px; margin: 6px 0; background: #fff; }
+    .sim .row .t { font-weight: 800; color: #D9480F; }
+    .sim .row .opts { display: flex; flex-direction: column; gap: 4px; margin: 4px 0; }
+    .sim .row .opts button { text-align: left; }
+    .sim .row .opts button.on { background: var(--sim-accent); color: #fff; }
+    .sim .row .fb { font-size: .86rem; font-weight: 700; }
+    .sim .row .fb.ok { color: #2b8a3e; } .sim .row .fb.no { color: #c92a2a; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-weight: 700; margin: 6px 0; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Plan Checker: your course project</h1>
+  <p class="hint">The course project has three files: a data sheet (Excel), a report (Word) and a short talk (PowerPoint). Choose a topic, then choose one answer for each part of the plan. The checker says if the plan works.</p>
+  <div class="bar"><span>Topic</span><span id="topics" style="display:contents"></span></div>
+  <div id="rows"></div>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const SAME = {
+    report: ["headings: introduction, data, results, what I learned, AI use", "one long paragraph with no headings", "an AI answer copied as it is"],
+    slides: ["5 slides: few words and one chart", "20 slides full of text", "the whole report pasted on one slide"],
+    why: { report: ["Headings make the report easy to read and give the slides.", "Without headings there is no structure and no outline.", "AI output must be checked and made your own."],
+           slides: ["A three-minute talk needs few slides with few words.", "Too many slides and too much text for three minutes.", "Nobody can read a whole report on a slide."] },
+  };
+  const T = {
+    canteen: {
+      label: "Canteen sales",
+      q: [["What sells most in the canteen, by money and by count?", 1, "Clear, and the data can answer it."], ["Is the canteen good?", 0, "Too vague: the data cannot answer it."], ["Who are the customers who buy the most?", 0, "Personal data: no names of customers."]],
+      d: [["20 rows: week, item, quantity, price", 1, "Enough rows for a table, a PivotTable and a chart."], ["3 numbers in a sentence", 0, "Too little data for a table and a chart."], ["names and phone numbers of buyers", 0, "Personal data: never needed and never shared."]],
+      c: [["a column chart of the total by item", 1, "A column chart compares the items."], ["a pie chart with 20 slices", 0, "A pie works only with a few parts."], ["no chart", 0, "The project needs one clear chart."]],
+    },
+    study: {
+      label: "My study week",
+      q: [["Which subject takes most of my study time in two weeks?", 1, "Clear, and your own data can answer it."], ["Am I a good student?", 0, "Too vague: minutes cannot answer it."], ["What are my classmates' marks?", 0, "Other people's personal data: not allowed."]],
+      d: [["14 rows: day, subject, minutes", 1, "Your own data, enough for a table and a chart."], ["one number for each week", 0, "Too little data for a table and a chart."], ["screenshots of classmates' chats", 0, "Other people's personal data: not allowed."]],
+      c: [["a column chart of minutes by subject", 1, "A column chart compares the subjects."], ["a pie chart with 14 slices", 0, "A pie works only with a few parts."], ["no chart", 0, "The project needs one clear chart."]],
+    },
+  };
+  const PARTS = [["q", "1. The question"], ["d", "2. The data (Excel)"], ["c", "3. The chart"], ["report", "4. The report (Word)"], ["slides", "5. The talk (PowerPoint)"]];
+  const s = { topic: "canteen", pick: {}, done: {} };
+  const ORDER = { q: [0, 1, 2], d: [1, 0, 2], c: [2, 0, 1], report: [1, 2, 0], slides: [0, 2, 1] };
+  const raw = (k) => (k === "report" || k === "slides") ? SAME[k].map((t, i) => [t, i === 0 ? 1 : 0, SAME.why[k][i]]) : T[s.topic][k];
+  const opts = (k) => ORDER[k].map((i) => raw(k)[i]);
+  const allGood = () => PARTS.every(([k]) => s.pick[k] !== undefined && opts(k)[s.pick[k]][1] === 1);
+  const TASKS = [
+    { q: "Task 1: Make a plan for \"Canteen sales\" that passes all five checks.", ok: () => s.topic === "canteen" && allGood() },
+    { q: "Task 2: Switch to \"My study week\" and make a plan that passes too. Which answers were wrong because of personal data?", ok: () => s.topic === "study" && allGood() },
+  ];
+  let ti = 0;
+  function render() {
+    Kit.buttons($("topics"), Object.keys(T).map((k) => ({ k, label: T[k].label })), (k) => { s.topic = k; s.pick = {}; render(); });
+    $("topics").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.topic));
+    $("rows").innerHTML = "";
+    PARTS.forEach(([k, name]) => {
+      const row = Kit.el("div", { class: "row" }), o = Kit.el("div", { class: "opts" });
+      row.append(Kit.el("div", { class: "t" }, name), o);
+      Kit.buttons(o, opts(k).map((x, i) => ({ k: String(i), label: x[0] })), (i) => { s.pick[k] = +i; render(); });
+      o.querySelectorAll("button").forEach((b) => b.classList.toggle("on", +b.dataset.k === s.pick[k]));
+      if (s.pick[k] !== undefined) { const x = opts(k)[s.pick[k]]; row.append(Kit.el("div", { class: "fb " + (x[1] ? "ok" : "no") }, (x[1] ? "✔ " : "✘ ") + x[2])); }
+      $("rows").appendChild(row);
+    });
+    const n = PARTS.filter(([k]) => s.pick[k] !== undefined && opts(k)[s.pick[k]][1] === 1).length;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a clear question, your own data without personal details, one chart, a report with headings and a short talk.";
+    $("msg").textContent = m + `${n} of 5 checks pass.`;
+  }
+  window.PC = { topic: (k) => { s.topic = k; s.pick = {}; render(); }, pick: (k, i) => { s.pick[k] = i; render(); } };
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Emulator or Real?</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #fff9db; border: 1.5px solid #A86700; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Emulator or Real?</h1>
+  <p class="hint">Rami's test plan for <i>Pocket Quest 1.3</i> has six tests. For each test, choose the best test environment.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const E = ["an Android emulator", "a real phone", "the iOS Simulator on a Mac", "a device farm"];
+  const rounds = [
+    { card: "Does the menu fit on six Android screen sizes, from a small phone to a tablet?", goal: "Where do you test it first?", answer: "an Android emulator", choices: C(E), good: "Emulators give any screen size in minutes, for free." },
+    { card: "Does the P5 get hot and drop below 30 fps after 20 minutes of racing?", goal: "Where do you test it?", answer: "a real phone", choices: C(E), good: "Heat, battery and real speed need the real device.", why: { "an Android emulator": "An emulator runs on the computer's CPU and GPU: its speed and heat say nothing about the P5." } },
+    { card: "Does the game start on Android 8 (API 26), the oldest supported version?", goal: "What is the quickest way?", answer: "an Android emulator", choices: C(E), good: "A system image for API 26 is a free download; nobody needs an old phone for a first check." },
+    { card: "Does the new menu look right on the iPhone screen? The team has a Mac but no iPhone today.", goal: "Where do you test it first?", answer: "the iOS Simulator on a Mac", choices: C(E), good: "The iOS Simulator shows the layout on many iPhone screens; a real iPhone is still needed before release." },
+    { card: "Before the release: a final check on 15 different real phones, but Byte Bay owns only two.", goal: "Where do you test it?", answer: "a device farm", choices: C(E), good: "A device farm rents many real phones for a few hours." },
+    { card: "Does the tilt steering work with the phone's gyroscope?", goal: "Where do you test it?", answer: "a real phone", choices: C(E), good: "Sensors like the gyroscope are only imitated in an emulator; the feel needs real hands and a real phone." },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the first test of the lesson: six screen sizes." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "The test plan is ready." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

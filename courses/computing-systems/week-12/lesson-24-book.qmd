@@ -1,0 +1,245 @@
+---
+title: "Case Study: Comparing Gaming Platforms"
+description: "Lesson notes · A seminar that compares gaming platforms for one game: criteria for the comparison, how the specifications of devices change the performance and sets system requirements, a weighted decision matrix, and a porting plan with a short recommendation."
+lesson: 24
+ilos: [B1, B2]
+format: lesson-typst
+---
+
+::: {.lead}
+The managers of Byte Bay have money for **one** new platform for *Pocket
+Quest* this year: PC, console or cloud gaming. Everyone in the team has an
+opinion. "Console players spend the most!" says one. "PC is easy, we
+already use the engine!" says another. Opinions are not enough: the
+managers want a comparison with clear criteria, numbers and a
+recommendation. In lecture 23 you learned the four kinds of gaming
+platforms. In this seminar you **compare** them for one game, see how the
+specifications of the devices change the performance, and write a
+recommendation. Every section ends with a task, and at the end you have a
+one-page platform comparison.
+:::
+
+## Key terms
+
+{{< glossary comparison-criteria system-requirements graphics-settings bottleneck decision-matrix porting certification cross-save >}}
+
+## 24.1 Criteria for the comparison
+
+A fair comparison starts with **criteria**, chosen before you look at the
+scores (@fig-criteria).
+
+::: {.callout-important title="Definition 24.1 — Criteria for comparing platforms"}
+Typical criteria for a game:
+
+- **Reach:** how many players can buy and play it on this platform.
+- **Fit for the game:** controls, screen and session length.
+- **Cost and time:** dev kits, porting work, store fees.
+- **Performance:** CPU, GPU and memory of the devices.
+- **Testing:** how many devices and settings must be tested.
+- **Business model:** premium, free-to-play or subscription.
+
+Take facts from **reliable sources**: the developer pages of the platform
+makers and stores, and market reports with a date.
+:::
+
+![Criteria for comparing platforms.](images/criteria.png){#fig-criteria width=94%}
+
+::: {.callout-note title="Example 24.1 — Opinions become criteria"}
+1. "Console players spend the most!" becomes the criterion **business
+   model**, checked with a dated market report.
+2. "PC is easy, we already use the engine!" becomes **cost and time**,
+   checked by listing the porting work.
+3. "Our players race on the bus" becomes **fit for the game**.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Choosing the criteria after looking at the platforms, so that the favourite
+wins. Write the criteria and their weights first, then score.
+:::
+
+::: {.callout-note title="Do it · Your criteria"}
+Choose a game you know. Write five criteria for choosing its next platform
+and say why each one matters for this game.
+
+*Your result:* five criteria with one reason each.
+:::
+
+## 24.2 Specifications and performance
+
+The same game must run on devices with very different **specifications**
+(@fig-targets).
+
+::: {.callout-important title="Definition 24.2 — Specs, settings and requirements"}
+The **GPU, CPU and memory** of a device decide how fast it can draw each
+frame. A higher setting costs more work per frame: on a weak GPU the frame
+rate falls. If the **memory** is too small for a setting, the game
+stutters. The weakest part is the **bottleneck**. A studio therefore:
+
+- sets a **target** per platform (resolution, frame rate, memory,
+  download size);
+- offers **graphics settings** on PC;
+- publishes **system requirements:** the **minimum** (low settings, the
+  weakest supported device) and the **recommended** (high settings).
+:::
+
+![Pocket Quest: targets per platform (example values).](images/targets.png){#fig-targets width=94%}
+
+::: {.callout-note title="Example 24.2 — Four PCs, one game"}
+With example GPU points (low needs 1.5, medium 3, high 6, ultra 10 for
+60 fps):
+
+1. **Old laptop** (2 points, 4 GB RAM): low gives 80 fps; medium needs
+   6 GB RAM and stutters.
+2. **Office PC** (4 points, 8 GB): high gives only 40 fps; the **GPU** is
+   the bottleneck. Medium gives 80 fps.
+3. **Handheld PC** (6 points, 16 GB): high at 60 fps.
+4. **Gaming PC** (12 points, 16 GB): ultra at 72 fps.
+5. Minimum: GPU 2 points, 4 GB RAM. Recommended: GPU 6 points, 8 GB RAM.
+:::
+
+{{< sim file="sims/spec-compare.html" poster="sims/spec-compare.png" title="Spec Check: will Pocket Quest run well?" height="700" >}}
+
+::: {.callout-warning title="Common mistake"}
+Testing only on the developers' strong PCs. The minimum requirements must
+come from a test on the weakest supported device.
+:::
+
+::: {.callout-note title="Do it · Find the settings"}
+1. In **Spec Check**, find the highest setting with 60 fps for each device.
+2. Write the minimum and recommended requirements in your own words.
+
+*Your result:* a table of four devices and two requirement lines.
+:::
+
+## 24.3 The decision matrix
+
+A **decision matrix** turns the criteria into numbers (@fig-matrix).
+
+::: {.callout-important title="Definition 24.3 — Decision matrix"}
+1. Write the criteria and give each a **weight** (for example 1 to 3).
+2. Give each platform a **score** per criterion (1 to 5, 5 = best), with a
+   reason or a source.
+3. Multiply score × weight and **add up**. The highest total is the best
+   option **for these weights**.
+4. Check how the result changes when a weight changes (a **sensitivity
+   check**).
+:::
+
+![A decision matrix (example scores).](images/decision-matrix.png){#fig-matrix width=94%}
+
+::: {.callout-note title="Example 24.3 — The next platform for Pocket Quest"}
+1. Weights: reach 3, fit 3, cost and time 2, performance 1, testing 1.
+2. Totals: **PC 37**, console 35, cloud 29 (of 50).
+3. With equal weights the console wins (19 to 17): the result depends on
+   what matters most to Byte Bay.
+4. With little money (cost and time 3), PC still leads: 41 to 37.
+:::
+
+{{< sim file="sims/decision-matrix.html" poster="sims/decision-matrix.png" title="Decision Matrix: the next platform for Pocket Quest" height="620" >}}
+
+::: {.callout-warning title="Common mistake"}
+Treating the total as the truth. The scores are estimates; if two options
+are only a few points apart, say so, and explain which weight decides.
+:::
+
+::: {.callout-note title="Do it · Your matrix"}
+1. In **Decision Matrix**, find weights where the console wins with reach at
+   2 or more.
+2. Make your own matrix for the game you chose in 24.1, with three
+   platforms.
+
+*Your result:* a matrix with weights, scores and totals.
+:::
+
+## 24.4 From the matrix to a recommendation
+
+The managers want a short **recommendation** with a plan for the port
+(@fig-port).
+
+::: {.callout-important title="Definition 24.4 — A platform recommendation"}
+A one-page recommendation has:
+
+1. **The question** (which platform next, and why now).
+2. **The matrix** with weights, scores and sources.
+3. **The choice** and the margin, with the result of the sensitivity check.
+4. **The porting plan:** controls, menus, graphics settings, accounts and
+   saves, store rules, testing on the weakest device.
+5. **The risks** and how to reduce them.
+:::
+
+![What changes in a port?](images/port-checklist.png){#fig-port width=94%}
+
+::: {.callout-note title="Example 24.4 — Byte Bay's recommendation"}
+1. *Question:* which platform for *Pocket Quest* this year?
+2. *Choice:* **PC** (37 of 50), ahead of the console (35); the console
+   wins only if testing matters much more.
+3. *Port plan:* keyboard and controller, mouse menus, low to ultra
+   settings, cross-save with the same account, requirements on the store
+   page.
+4. *Risk:* many PC configurations; reduce it with tests on an old laptop
+   and an office PC.
+:::
+
+::: {.callout-warning title="Common mistake"}
+A recommendation without the port plan. The cost of the port is often the
+biggest surprise: list the work before the decision, not after.
+:::
+
+::: {.callout-note title="Do it · Your recommendation"}
+Write a one-page recommendation for the game you chose: the question, your
+matrix, the choice with its margin, a port plan of five points and one
+risk.
+
+*Your result:* a one-page recommendation.
+:::
+
+## Case study: Port Planner
+
+The first test builds of *Pocket Quest* bring six reports: 20 fps on an old
+laptop; a console menu that says "Tap to start"; a certification report
+about an unplugged controller; a PC store page without hardware
+requirements; a player who starts the PC version at level 1; and cloud
+players at 70 ms ping who feel the car react late. The Game challenge of
+the interactive lesson uses these reports. In the mini-game below you
+choose the best fix for each one.
+
+{{< sim file="sims/port-planner.html" poster="sims/port-planner.png" title="Port Planner: fix the test reports" kind="game" height="480" >}}
+
+## Further reading
+
+Novak, *Game Development Essentials* (3rd ed., 2012), Chapter 1. The
+"system requirements" sections of PC store pages and the developer pages
+of the platform makers show real targets and rules.
+
+## Exercises
+
+1. Name four criteria for comparing gaming platforms.
+2. Why must the criteria and weights be written before the scores?
+3. What is a bottleneck?
+4. What do the minimum and the recommended requirements describe?
+5. A device has GPU 4 points; high needs 6 points for 60 fps. About how
+   many fps does it reach on high?
+6. What happens when the memory is too small for a setting?
+7. How do you compute the total of a platform in a decision matrix?
+8. PC scores 4, 4, 4, 3, 2 with weights 3, 3, 2, 1, 1. What is the total?
+9. What is a sensitivity check?
+10. Name four points of a porting plan.
+
+## Answers to the exercises
+
+::: {.answers}
+1. For example reach, fit for the game, cost and time, performance,
+   testing, business model.
+2. So that the favourite does not win just because the criteria were made
+   for it.
+3. The weakest part of a system, which limits the performance.
+4. Minimum: the weakest supported device, low settings. Recommended: a
+   device that runs high settings well.
+5. 60 × 4 / 6 = 40 fps.
+6. The game stutters (for example the frame rate halves).
+7. Multiply each score by its weight and add up.
+8. 12 + 12 + 8 + 3 + 2 = 37.
+9. Changing a weight to see whether the winner changes.
+10. For example controls, menus, graphics settings, accounts and saves,
+    store rules, testing.
+:::

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Performance Detective</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #fff9db; border: 1.5px solid #A86700; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Performance Detective</h1>
+  <p class="hint">Players of <i>Pocket Quest</i> send six reports about performance and compatibility. For each report, find the cause or the best fix.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { card: "\"The counter says 58 fps, but the race jerks every few seconds.\"", goal: "Which number shows the problem?", answer: "the 1 % low and the frame times", choices: C(["the 1 % low and the frame times", "the average fps", "the download size", "the screen size"]), good: "A few long frames (stutters) hide in the average; the 1 % low shows them." },
+    { card: "\"On my P5 the race starts at 60 fps and falls to about 40 after 15 minutes. The phone is hot.\"", goal: "What is happening?", answer: "thermal throttling", choices: C(["thermal throttling", "a slow network", "a full storage", "a bad touch screen"]), good: "The hot chip slows down to protect itself. A 30 fps cap or lower settings help." },
+    { card: "\"The game closes at once on my Android 8 phone.\"", goal: "What should the team check first?", answer: "the minimum Android version of the build", choices: C(["the minimum Android version of the build", "the colour of the menu", "the speed of the Wi-Fi", "the price in the store"]), good: "Build 42 needs Android 11; an older phone cannot start it." },
+    { card: "\"The game starts on my old phone, but the screen stays black.\"", goal: "What is a likely cause?", answer: "the GPU does not support the graphics API", choices: C(["the GPU does not support the graphics API", "the phone is too new", "the volume is off", "the account is wrong"]), good: "A build with Vulkan only needs a second graphics path (OpenGL ES) for older GPUs." },
+    { card: "\"On my tablet the Start button is half outside the screen.\"", goal: "What is the fix?", answer: "anchor the menu to the safe area", choices: C(["anchor the menu to the safe area", "make the font smaller", "remove the tablet from the store", "add more graphics"]), good: "Anchored layouts adapt to 4:3 tablets and to phones with notches." },
+    { card: "A forum post says: \"The new OS update makes every game 30 % faster!\" No test is shown.", goal: "What does Rami do?", answer: "check the official release notes and test it", choices: C(["check the official release notes and test it", "tell all players to update", "copy the number into the report", "ignore all updates"]), good: "Follow developments with reliable sources, and measure on your own test devices." },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the first report of the lesson: a race that jerks." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "All reports are solved." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

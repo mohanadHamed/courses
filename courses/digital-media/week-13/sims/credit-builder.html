@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Credit Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar .lab { min-width: 70px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .page { border: 1.5px solid #ced4da; border-radius: 10px; padding: 8px 12px; background: #fff; font-size: .9rem; font-weight: 600; line-height: 1.5; margin: 6px 0; }
+    .sim .page b { color: #862e9c; }
+    .sim .credit { background: #212529; color: #fff; border-radius: 10px; padding: 10px 12px; font-weight: 800; text-align: center; margin: 6px 0; min-height: 1.4em; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Credit Builder: TASL for Rooftop Rescue</h1>
+  <p class="hint">Choose an asset and read its licence page. Then build the credit for the credits screen: the <b>T</b>itle, the <b>A</b>uthor, the <b>S</b>ource and the <b>L</b>icence. If Night Owl changed the asset, say so.</p>
+  <div class="bar"><span class="lab">Asset</span><span id="asset" style="display:contents"></span></div>
+  <div class="page" id="page"></div>
+  <div id="rows"></div>
+  <div class="credit" id="credit"></div>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const A = {
+    "rain sound": { page: "<b>Night Rain</b> (loop, 30 s) · uploaded by <b>Lina Haddad</b> · sounds.example.org/night-rain · Licence: <b>CC BY 4.0</b> · Night Owl shortened it to 20 s.",
+      opts: { T: ["\"Night Rain\"", "\"rain.ogg\"", "\"Sound 1\""], A: ["by Lina Haddad", "by the website", "by unknown"], S: ["sounds.example.org/night-rain", "the Internet", "a search engine"], L: ["CC BY 4.0", "free", "no copyright"], C: ["shortened to 20 s", "(no changes)"] },
+      ok: { T: "\"Night Rain\"", A: "by Lina Haddad", S: "sounds.example.org/night-rain", L: "CC BY 4.0", C: "shortened to 20 s" } },
+    "roof tiles": { page: "<b>Roof Tiles Pack</b> · by <b>Karim Art</b> · art.example.net/roof-tiles · Licence: <b>CC BY-SA 4.0</b> · Nour recoloured the tiles blue.",
+      opts: { T: ["\"Roof Tiles Pack\"", "\"tiles.png\"", "\"Free tiles\""], A: ["by Karim Art", "by Nour", "by art.example.net"], S: ["art.example.net/roof-tiles", "Google Images", "a friend"], L: ["CC BY-SA 4.0", "CC BY 4.0", "royalty-free"], C: ["recoloured by Nour (CC BY-SA 4.0)", "(no changes)"] },
+      ok: { T: "\"Roof Tiles Pack\"", A: "by Karim Art", S: "art.example.net/roof-tiles", L: "CC BY-SA 4.0", C: "recoloured by Nour (CC BY-SA 4.0)" } },
+    "menu font": { page: "<b>Roof Sans</b> · by <b>Omar Studio</b> · fonts.example.com/roof-sans · Licence: <b>SIL Open Font License 1.1</b> · used unchanged.",
+      opts: { T: ["\"Roof Sans\"", "\"Arial\"", "\"font.ttf\""], A: ["by Omar Studio", "by fonts.example.com", "by Night Owl"], S: ["fonts.example.com/roof-sans", "my computer", "the Internet"], L: ["SIL OFL 1.1", "CC0", "free for personal use"], C: ["(no changes)", "made bolder"] },
+      ok: { T: "\"Roof Sans\"", A: "by Omar Studio", S: "fonts.example.com/roof-sans", L: "SIL OFL 1.1", C: "(no changes)" } },
+  };
+  const NAMES = { T: "Title", A: "Author", S: "Source", L: "Licence", C: "Changes" };
+  const s = { a: "rain sound", pick: {} };
+  Object.keys(A).forEach((k) => (s.pick[k] = {}));
+  const right = (k) => Object.keys(NAMES).every((f) => s.pick[k][f] === A[k].ok[f]);
+  const TASKS = [
+    { q: "Task 1: Build the correct credit for the rain sound, including the change.", ok: () => right("rain sound") },
+    { q: "Task 2: Build the credit for the roof tiles. Why must the changed tiles keep CC BY-SA?", ok: () => right("roof tiles") },
+    { q: "Task 3: Build the credit for the menu font.", ok: () => right("menu font") },
+  ];
+  let ti = 0;
+  function upd() {
+    Kit.buttons($("asset"), Object.keys(A).map((k) => ({ k, label: k })), (k) => { s.a = k; upd(); });
+    $("asset").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.a));
+    const X = A[s.a], P = s.pick[s.a];
+    $("page").innerHTML = "Licence page: " + X.page;
+    $("rows").innerHTML = "";
+    Object.keys(NAMES).forEach((f) => {
+      const row = Kit.el("div", { class: "bar" }), lab = Kit.el("span", { class: "lab" }, NAMES[f]), box = Kit.el("span", { style: "display:contents" });
+      row.append(lab, box); $("rows").appendChild(row);
+      Kit.buttons(box, X.opts[f].map((k) => ({ k, label: k })), (k) => { P[f] = k; upd(); });
+      box.querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === P[f]));
+    });
+    const ch = P.C && P.C !== "(no changes)" ? `, ${P.C}` : "";
+    $("credit").textContent = ["T", "A", "S", "L"].map((f) => P[f] || "…").join(", ").replace(", by", " by") + ch;
+    $("chk").innerHTML = Object.keys(NAMES).map((f) => { const ok = P[f] === X.ok[f]; return `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${NAMES[f]}${P[f] && !ok ? ": check the licence page again" : ""}</li>`; }).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: three correct TASL credits for the credits screen and the credits file.";
+    $("msg").textContent = m + "The author is the person or studio who made the work, not the website.";
+  }
+  window.CB = { pick: (a, o) => { s.a = a; Object.assign(s.pick[a], o); upd(); }, fill: (a) => { s.a = a; s.pick[a] = { ...A[a].ok }; upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

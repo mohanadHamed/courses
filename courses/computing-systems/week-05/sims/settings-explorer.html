@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Settings Explorer</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .layout { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 14px; align-items: start; }
+    @media (max-width: 600px) { .sim .layout { grid-template-columns: 1fr; } }
+    .sim .phone { background: #343a40; border-radius: 26px; padding: 14px 10px 18px; }
+    .sim .screen { background: #fff; border-radius: 12px; min-height: 380px; overflow: hidden; }
+    .sim .bar { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #fff9db; font-weight: 800; color: #A86700; }
+    .sim .bar button { padding: 2px 10px; }
+    .sim .row { display: flex; justify-content: space-between; gap: 8px; padding: 11px 12px; border-bottom: 1px solid #f1f3f5; cursor: pointer; font-weight: 700; font-size: 0.95rem; }
+    .sim .row:hover { background: #fffbe6; }
+    .sim .row span:last-child { color: #7a6a60; text-align: right; }
+    .sim .row.hit { background: #d3f9d8; }
+    .sim .task { font-weight: 800; }
+    .sim .done { color: #2b8a3e; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Settings Explorer</h1>
+  <p class="hint">A phone's Settings app (a simple model: Android and iOS use other names). Find each answer: open the right screen and tap the line that answers the task.</p>
+  <div class="layout">
+    <div class="phone"><div class="screen" id="screen"></div></div>
+    <div><p class="task" id="task"></p><p class="message" id="msg"></p><ol id="list"></ol><button type="button" id="again" class="ghost" hidden>Start again</button></div>
+  </div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  // Screens: [label, value, target screen or answer id]
+  const SCREENS = {
+    home: { title: "Settings", rows: [["About phone", "›", "about"], ["Battery", "›", "battery"], ["Storage", "›", "storage"], ["Apps", "›", "apps"], ["Display", "›", "display"]] },
+    about: { title: "About phone", rows: [["Model", "Nova 5", "a-model"], ["Android version", "14", "a-os"], ["RAM", "8 GB", "a-ram"], ["Storage", "128 GB", "a-sto"]] },
+    battery: { title: "Battery use (24 h)", rows: [["Pocket Quest", "34 %", "b-pq"], ["Video app", "21 %", "b-vid"], ["Screen", "18 %", "b-scr"], ["Chat app", "6 %", "b-chat"]] },
+    storage: { title: "Storage: 101 of 128 GB used", rows: [["Free", "27 GB", "s-free"], ["Photos and videos", "44 GB", "s-photo"], ["Apps", "38 GB", "s-apps"], ["System", "19 GB", "s-sys"]] },
+    apps: { title: "Apps", rows: [["Pocket Quest", "›", "pq"], ["Chat app", "›", "chat"], ["Video app", "›", "vid"]] },
+    pq: { title: "Pocket Quest", rows: [["Storage", "3.2 GB", "pq-store"], ["Permissions", "›", "pqperm"], ["Battery", "34 %", "pq-bat"], ["Force stop", "", "pq-stop"]] },
+    pqperm: { title: "Pocket Quest › Permissions", rows: [["Camera", "Allowed", "p-cam"], ["Microphone", "Not allowed", "p-mic"], ["Location", "Ask every time", "p-loc"]] },
+    chat: { title: "Chat app", rows: [["Storage", "1.1 GB", "c-store"], ["Permissions", "Camera, Microphone", "c-perm"]] },
+    vid: { title: "Video app", rows: [["Storage", "0.6 GB", "v-store"], ["Permissions", "none", "v-perm"]] },
+    display: { title: "Display", rows: [["Refresh rate", "120 Hz", "d-hz"], ["Brightness", "auto", "d-br"]] },
+  };
+  const TASKS = [
+    { q: "Which Android version does the phone have?", a: "a-os", ok: "Android 14: About phone shows the OS version." },
+    { q: "Which app used the most battery today?", a: "b-pq", ok: "Pocket Quest used 34 % of the battery." },
+    { q: "How much storage is free for a 5 GB update?", a: "s-free", ok: "27 GB is free, so the 5 GB update fits." },
+    { q: "Why can Pocket Quest not use voice chat?", a: "p-mic", ok: "The microphone permission is 'Not allowed'." },
+    { q: "How much space does Pocket Quest take?", a: "pq-store", ok: "Apps › Pocket Quest › Storage: 3.2 GB." },
+  ];
+  const $ = (id) => document.getElementById(id);
+  let at = "home", task = 0;
+  function show() {
+    const s = SCREENS[at];
+    $("screen").innerHTML = "";
+    const bar = Kit.el("div", { class: "bar" });
+    if (at !== "home") { const b = Kit.el("button", { type: "button", class: "ghost" }, "‹"); b.addEventListener("click", back); bar.appendChild(b); }
+    bar.appendChild(Kit.el("span", {}, s.title));
+    $("screen").appendChild(bar);
+    s.rows.forEach(([l, v, to]) => {
+      const r = Kit.el("div", { class: "row", "data-k": to }, `<span>${l}</span><span>${v}</span>`);
+      r.addEventListener("click", () => tap(to, r));
+      $("screen").appendChild(r);
+    });
+  }
+  const parent = { about: "home", battery: "home", storage: "home", apps: "home", display: "home", pq: "apps", chat: "apps", vid: "apps", pqperm: "pq" };
+  function back() { at = parent[at] || "home"; show(); }
+  function tap(to, row) {
+    if (SCREENS[to]) { at = to; show(); return; }
+    if (task >= TASKS.length) { $("msg").textContent = "All tasks are done. Press Start again."; return; }
+    const t = TASKS[task];
+    if (to === t.a) {
+      row.classList.add("hit"); Kit.good();
+      $("msg").textContent = "✓ " + t.ok; $("msg").className = "message good";
+      const li = Kit.el("li", { class: "done" }, t.q + " ✓"); $("list").appendChild(li);
+      task++; setTimeout(() => { at = "home"; show(); setTask(); }, 1300);
+    } else { Kit.bad(); $("msg").textContent = "✗ This line does not answer the task. Look in another screen."; $("msg").className = "message bad"; }
+  }
+  function setTask() {
+    if (task >= TASKS.length) { $("task").textContent = "🎉 All five answers found."; $("again").hidden = false; return; }
+    $("task").textContent = `Task ${task + 1} / ${TASKS.length}: ${TASKS[task].q}`;
+  }
+  $("again").addEventListener("click", () => { task = 0; $("list").innerHTML = ""; $("again").hidden = true; at = "home"; show(); setTask(); $("msg").textContent = ""; });
+  show(); setTask(); $("msg").textContent = "Tap a screen to open it. ‹ goes back.";
+})();
+</script>
+</body>
+</html>

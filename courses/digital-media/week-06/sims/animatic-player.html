@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Animatic Player</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .strip { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+    @media (max-width: 560px) { .sim .strip { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .sim .strip .p { border: 1.5px solid var(--sim-border); border-radius: 8px; padding: 4px; text-align: center; font-size: .78rem; font-weight: 700; }
+    .sim .strip .p.on { border-color: var(--sim-accent); background: #f8f0fc; }
+    .sim .strip .p button { padding: 1px 8px; font-size: .85rem; }
+    .sim .strip .p b { display: inline-block; min-width: 2.2em; font-size: .95rem; }
+    .sim .cap { font-weight: 700; min-height: 1.4em; margin: 6px 0 0; }
+    .sim .bar { height: 8px; background: #f1f3f5; border-radius: 4px; overflow: hidden; margin-top: 4px; }
+    .sim .bar span { display: block; height: 100%; background: var(--sim-accent); width: 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Animatic Player: time the opening</h1>
+  <p class="hint">The six panels of the <i>Rooftop Rescue</i> opening. Give each panel its time (in seconds) and press <b>Play</b>. The producer wants the opening between <b>12 and 16 s</b>, and Salma's line on screen for at least <b>3 s</b>.</p>
+  <canvas id="c" aria-label="The current panel of the animatic"></canvas>
+  <p class="cap" id="cap"></p>
+  <div class="bar"><span id="bar"></span></div>
+  <div class="strip" id="strip"></div>
+  <div class="controls"><button type="button" id="play">▶ Play</button><button type="button" class="ghost" id="check">Check the timing</button></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="../../week-05/sims/rooftop-scene.js"></script>
+<script>
+(() => {
+  const S = RS.SHOTS;
+  const P = [
+    { cam: S.wideStreet, cap: "1 · Wide: the flooded street at dusk. SFX: water, wind", t: 3, f: 220 },
+    { cam: S.medNour, cap: "2 · Medium: Nour jumps into the boat and rows. SFX: splash", t: 3, f: 330, arrow: true },
+    { cam: S.closeNour, cap: "3 · Close-up: NOUR: “Hold on, everyone. I'm coming.”", t: 2, f: 440 },
+    { cam: S.wideRoof, cap: "4 · Wide: the roof, Salma and the cat", t: 3, f: 260 },
+    { cam: S.closeSalma, cap: "5 · Close-up: SALMA: “I won't leave without my cat.”", t: 2, f: 520 },
+    { cam: S.medSalma, cap: "6 · Medium: the cat looks down at the water", t: 2, f: 390 },
+  ];
+  const $ = (id) => document.getElementById(id);
+  let cur = 0, playing = false, t0 = 0, timer = null;
+  const total = () => P.reduce((s, p) => s + p.t, 0);
+  function strip() {
+    $("strip").innerHTML = "";
+    P.forEach((p, i) => {
+      const d = Kit.el("div", { class: "p" + (i === cur ? " on" : "") }, `Panel ${i + 1}<br>`);
+      const m = Kit.el("button", { type: "button", class: "ghost", "data-k": "m" + i }, "−"), pl = Kit.el("button", { type: "button", class: "ghost", "data-k": "p" + i }, "+");
+      m.addEventListener("click", () => { if (playing) return; p.t = Math.max(1, p.t - 1); strip(); });
+      pl.addEventListener("click", () => { if (playing) return; p.t = Math.min(6, p.t + 1); strip(); });
+      d.append(m, Kit.el("b", {}, p.t + " s"), pl);
+      d.addEventListener("click", (e) => { if (e.target.tagName !== "BUTTON" && !playing) { cur = i; draw(); strip(); } });
+      $("strip").appendChild(d);
+    });
+    $("msg").textContent = `Total: ${total()} s.`; $("msg").className = "message";
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.round(Math.min(W, 620) * 9 / 16));
+  function draw() {
+    const w = Math.min(cv.W, 620), h = Math.round(w * 9 / 16), p = P[cur];
+    cv.ctx.clearRect(0, 0, cv.W, cv.H);
+    RS.draw(cv.ctx, (cv.W - w) / 2, 0, w, h, p.cam, { arrow: p.arrow ? [24, 33, 30, 33] : null });
+    $("cap").textContent = p.cap + ` (${p.t} s)`;
+  }
+  function step() {
+    if (cur >= P.length) { playing = false; $("play").textContent = "▶ Play"; $("bar").style.width = "100%"; cur = P.length - 1; strip(); $("msg").textContent = `The animatic is over: ${total()} s. Check the timing.`; return; }
+    draw(); strip(); Kit.beep(P[cur].f, 0.25, "sine", 0.05);
+    timer = setTimeout(() => { cur++; step(); }, P[cur].t * 1000);
+  }
+  $("play").addEventListener("click", () => {
+    if (playing) { clearTimeout(timer); playing = false; $("play").textContent = "▶ Play"; return; }
+    playing = true; cur = 0; t0 = performance.now(); $("play").textContent = "■ Stop"; step();
+  });
+  $("check").addEventListener("click", () => {
+    const T = total(), notes = [];
+    if (T < 12) notes.push(`${T} s is too short: the player cannot follow.`);
+    if (T > 16) notes.push(`${T} s is too long: the opening drags.`);
+    if (P[4].t < 3) notes.push("Salma's line needs at least 3 s to read and feel.");
+    if (P[2].t < 2) notes.push("Nour's line needs 2 s to read.");
+    if (notes.length) { $("msg").textContent = "✗ " + notes.join(" "); $("msg").className = "message bad"; Kit.bad(); }
+    else { $("msg").textContent = `✓ ${T} s, and every line has time to be read. Good pacing.`; $("msg").className = "message good"; Kit.good(); }
+  });
+  Kit.loop(() => { if (playing) { const done = P.slice(0, cur).reduce((s, p) => s + p.t, 0); $("bar").style.width = Math.min(100, ((done + Math.min(P[cur] ? P[cur].t : 0, (performance.now() - t0) / 1000 - done)) / total()) * 100) + "%"; } });
+  window.AP = { P, strip };
+  draw(); strip();
+})();
+</script>
+</body>
+</html>

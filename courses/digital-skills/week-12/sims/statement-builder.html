@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Statement Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; }
+    .sim .row .lab { min-width: 92px; }
+    .sim .row button.on { background: var(--sim-accent); color: #fff; }
+    .sim .stmt { background: #fff; border: 1.5px solid #D9480F; border-left-width: 6px; border-radius: 10px; padding: 10px 12px; font-weight: 600; line-height: 1.6; margin: 8px 0; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Statement Builder: say how you used AI</h1>
+  <p class="hint">Sami used AI for a two-page report on "Water at work". Build an honest <b>AI-use statement</b>: the tool, what it was used for, what Sami changed, and how Sami checked it.</p>
+  <div class="row"><span class="lab">Tool</span><span id="tool" style="display:contents"></span></div>
+  <div class="row"><span class="lab">Used for</span><span id="use" style="display:contents"></span></div>
+  <div class="row"><span class="lab">Changed</span><span id="chg" style="display:contents"></span></div>
+  <div class="row"><span class="lab">Checked</span><span id="chk2" style="display:contents"></span></div>
+  <div class="stmt" id="stmt"></div>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const TOOLS = ["(no tool named)", "an AI chat tool", "an AI image tool", "a translation tool"];
+  const USES = ["ideas", "an outline", "a first draft", "grammar", "a summary of a source", "the cover image"];
+  const CHG = ["(nothing said)", "I kept the text as it was", "I rewrote it in my own words", "I added my own examples"];
+  const CHK = ["(nothing said)", "I did not check it", "I checked the spelling", "I checked every fact in two reliable sources"];
+  const s = { tool: TOOLS[0], use: new Set(), chg: CHG[0], chk: CHK[0] };
+  const parts = () => [
+    [s.tool !== TOOLS[0], "names the tool"],
+    [s.use.size > 0, "says what the AI did"],
+    [s.chg !== CHG[0], "says what you changed"],
+    [s.chk === CHK[3], "says how the facts were checked"],
+    [s.use.size > 0 && !(s.use.has("a first draft") && s.chg === CHG[1]) && s.chk !== CHK[1], "shows your own work (no unchecked or unchanged AI text)"],
+  ];
+  const TASKS = [
+    { q: "Task 1: Name the tool and choose what Sami used it for: ideas, an outline and a first draft.", ok: () => s.tool === TOOLS[1] && ["ideas", "an outline", "a first draft"].every((u) => s.use.has(u)) },
+    { q: "Task 2: Choose \"I kept the text as it was\". Why is the statement now a warning sign? Then fix it.", ok: () => s.chg === CHG[1] },
+    { q: "Task 3: Make all five checks green.", ok: () => parts().every((p) => p[0]) },
+  ];
+  let ti = 0;
+  function one(id, list, key) { Kit.buttons($(id), list.map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }
+  function upd() {
+    one("tool", TOOLS, "tool"); one("chg", CHG, "chg"); one("chk2", CHK, "chk");
+    Kit.buttons($("use"), USES.map((k) => ({ k, label: k })), (k) => { s.use.has(k) ? s.use.delete(k) : s.use.add(k); upd(); });
+    $("use").querySelectorAll("button").forEach((b) => b.classList.toggle("on", s.use.has(b.dataset.k)));
+    const u = [...s.use], list = u.length ? (u.length === 1 ? u[0] : u.slice(0, -1).join(", ") + " and " + u[u.length - 1]) : "(what?)";
+    $("stmt").innerHTML = `<b>AI-use statement.</b> I used ${s.tool === TOOLS[0] ? "AI" : s.tool} for ${list}.` + (s.chg !== CHG[0] ? ` ${s.chg}.` : "") + (s.chk !== CHK[0] ? ` ${s.chk}.` : "") + (s.use.size ? " The rest of the report is my own work." : "");
+    $("chk").innerHTML = parts().map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a good statement is short, specific and true.";
+    $("msg").textContent = m + (s.chg === CHG[1] && s.use.has("a first draft") ? "Handing in an AI draft unchanged is usually not allowed: rewrite it, and check the course rules." : "Write the statement at the end of the work, and keep your drafts.");
+  }
+  window.SB = { set: (o) => { if (o.tool) s.tool = o.tool; if (o.use) s.use = new Set(o.use); if (o.chg) s.chg = o.chg; if (o.chk) s.chk = o.chk; upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

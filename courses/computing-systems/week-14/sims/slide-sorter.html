@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Slide Sorter</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim ol.deck { padding: 0; margin: 6px 0; list-style: none; counter-reset: s; }
+    .sim ol.deck li { display: flex; gap: 8px; align-items: center; border: 1.5px solid #dee2e6; border-radius: 10px; padding: 6px 8px; margin: 5px 0; font-weight: 700; background: #fff; counter-increment: s; }
+    .sim ol.deck li::before { content: counter(s); font-weight: 800; color: var(--sim-accent); min-width: 1.2em; }
+    .sim ol.deck li span { flex: 1; }
+    .sim ol.deck li.ok { border-color: #2b8a3e; background: #ebfbee; }
+    .sim ol.deck li button { padding: 2px 8px; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Slide Sorter: a five-minute talk</h1>
+  <p class="hint">Lina's project compares two platforms for the puzzle game <i>Tile Garden</i>. The six slides are mixed up. Put them in the order of a clear talk with ▲ and ▼, then press <b>Check the order</b>.</p>
+  <ol class="deck" id="deck"></ol>
+  <div class="bar"><button type="button" id="check">Check the order</button></div>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const RIGHT = [
+    "Tile Garden on PC or console? The question of this report",
+    "Two platforms compared: reach, cost, controls, testing",
+    "Specs and targets: 60 fps on a weak PC, 4K on the console",
+    "Test plan: two emulators, one weak laptop, a device farm",
+    "Risks and fixes: many PC configurations, certification",
+    "Recommendation: PC first (37 of 50), console next year",
+  ];
+  const s = { order: [3, 5, 0, 2, 4, 1], checked: false };
+  const correct = () => s.order.every((v, i) => v === i);
+  const TASKS = [
+    { q: "Task 1: Which slide must come first? Move it to the top and check the order.", ok: () => s.checked && s.order[0] === 0 },
+    { q: "Task 2: Put all six slides in the right order.", ok: () => s.checked && correct() },
+  ];
+  let ti = 0;
+  function render() {
+    $("deck").innerHTML = "";
+    s.order.forEach((v, i) => {
+      const li = Kit.el("li", { class: s.checked && v === i ? "ok" : "" });
+      li.append(Kit.el("span", {}, RIGHT[v]));
+      const up = Kit.el("button", { type: "button", class: "ghost", "aria-label": "move up" }, "▲"), dn = Kit.el("button", { type: "button", class: "ghost", "aria-label": "move down" }, "▼");
+      up.addEventListener("click", () => move(i, -1)); dn.addEventListener("click", () => move(i, 1));
+      li.append(up, dn); $("deck").appendChild(li);
+    });
+  }
+  function move(i, d) { const j = i + d; if (j < 0 || j >= s.order.length) return; [s.order[i], s.order[j]] = [s.order[j], s.order[i]]; s.checked = false; render(); upd(); }
+  function check() { s.checked = true; render(); const n = s.order.filter((v, i) => v === i).length; $("calc").textContent = `${n} of 6 slides are in the right place.`; upd(); }
+  function upd() {
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: question, comparison, specs, tests, risks, recommendation.";
+    $("msg").textContent = m + "A talk starts with the question and ends with the answer.";
+  }
+  $("check").addEventListener("click", check);
+  window.SS = { move, check, solve: () => { s.order = [0, 1, 2, 3, 4, 5]; s.checked = false; render(); upd(); } };
+  render(); upd();
+})();
+</script>
+</body>
+</html>

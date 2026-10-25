@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Conditional Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .92rem; }
+    .sim .bar > span.l { min-width: 92px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .bar.b button.on { background: #1c7ed6; }
+    .sim .calc { font-size: 1.02rem; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Conditional Lab: what do we know already?</h1>
+  <p class="hint">Two dice in <i>Lucky Raft</i>. Choose what you already know (the condition B, blue) and the event A (green). With a condition, only the blue cells count.</p>
+  <div class="bar b"><span class="l">We know B</span><span id="cb" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Event A</span><span id="ca" style="display:contents"></span></div>
+  <canvas id="c" aria-label="The 36 outcomes of two dice"></canvas>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="dice.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const B = { "nothing": () => true, "first die is 6": (a) => a === 6, "at least one 6": (a, b) => a === 6 || b === 6, "the sum is even": (a, b) => (a + b) % 2 === 0, "first die is 1": (a) => a === 1 };
+  const A = { "sum 10 or more": (a, b) => a + b >= 10, "a double": (a, b) => a === b, "sum 7": (a, b) => a + b === 7, "second die is 6": (a, b) => b === 6 };
+  const s = { b: "nothing", a: "sum 10 or more" };
+  const seen = {};
+  const cnt = (f) => { let k = 0; for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) if (f(a, b)) k++; return k; };
+  const TASKS = [
+    { q: "Task 1: A = sum 10 or more. First with no condition, then with B = first die is 6. How does the probability change?", ok: () => seen["nothing|sum 10 or more"] && seen["first die is 6|sum 10 or more"] },
+    { q: "Task 2: Find B and A where knowing B does not change the probability of A (independent events).", ok: () => Object.keys(seen).some((k) => { const [b, a] = k.split("|"); return b !== "nothing" && indep(b, a); }) },
+    { q: "Task 3: B = at least one 6, A = a double. What is P(A | B)?", ok: () => seen["at least one 6|a double"] },
+  ];
+  let ti = 0;
+  function indep(b, a) { const nB = cnt(B[b]), nAB = cnt((x, y) => B[b](x, y) && A[a](x, y)), nA = cnt(A[a]); return nAB * 36 === nA * nB; }
+  function tabs(id, obj, key) {
+    Kit.buttons($(id), Object.keys(obj).map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); });
+    $(id).querySelectorAll("button").forEach((x) => x.classList.toggle("on", x.dataset.k === s[key]));
+  }
+  function upd() {
+    tabs("cb", B, "b"); tabs("ca", A, "a");
+    seen[s.b + "|" + s.a] = true;
+    const nB = cnt(B[s.b]), nA = cnt(A[s.a]), nAB = cnt((x, y) => B[s.b](x, y) && A[s.a](x, y));
+    $("calc").textContent = s.b === "nothing" ? `P(A) = ${DC.frac(nA, 36)}` : `P(A) = ${DC.frac(nA, 36)}   ·   P(A | B) = ${nAB}/${nB}${DC.gcd(nAB, nB) > 1 && nAB ? " = " + nAB / DC.gcd(nAB, nB) + "/" + nB / DC.gcd(nAB, nB) : ""}  (count A only inside the ${nB} blue cells)`;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a condition makes the sample space smaller, and sometimes it changes nothing.";
+    if (!m && s.b !== "nothing") m = indep(s.b, s.a) ? "P(A | B) = P(A): knowing B does not change A. A and B are independent." : nAB / nB > nA / 36 ? "Knowing B makes A more likely." : "Knowing B makes A less likely.";
+    $("msg").textContent = m;
+    paint();
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.min(320, W * 0.62));
+  function paint() {
+    const c = cv.ctx, W = cv.W, H = cv.H, cell = Math.min((W - 40) / 6, (H - 26) / 6), x0 = (W - cell * 6) / 2 + 10, y0 = 20;
+    c.clearRect(0, 0, W, H);
+    for (let a = 1; a <= 6; a++) { Kit.text(c, a, x0 - 12, y0 + (a - 0.5) * cell + 5, 12, "#2F9E44"); Kit.text(c, a, x0 + (a - 0.5) * cell, y0 - 6, 12, "#2F9E44"); }
+    for (let a = 1; a <= 6; a++) for (let b = 1; b <= 6; b++) {
+      const inB = B[s.b](a, b), inA = A[s.a](a, b), x = x0 + (b - 1) * cell, y = y0 + (a - 1) * cell;
+      const fill = s.b === "nothing" ? (inA ? "#69db7c" : "#fff") : !inB ? "#f1f3f5" : inA ? "#69db7c" : "#d0ebff";
+      Kit.rrect(c, x + 1, y + 1, cell - 2, cell - 2, 4, fill, inB && s.b !== "nothing" ? "#1c7ed6" : "#ced4da", inB && s.b !== "nothing" ? 2 : 1);
+      Kit.text(c, `${a},${b}`, x + cell / 2, y + cell / 2 + 4, Math.min(12, cell * 0.28), !inB && s.b !== "nothing" ? "#ced4da" : "#2a2f2c", "center", 700);
+    }
+  }
+  window.addEventListener("resize", () => setTimeout(paint, 60));
+  window.CL = { set: (o) => { Object.assign(s, o); upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

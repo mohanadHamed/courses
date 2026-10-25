@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Prompt Cleaner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; font-weight: 700; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .doc { background: #fff; border: 1.5px solid #ced4da; border-radius: 10px; padding: 10px 12px; line-height: 1.9; font-size: 1rem; font-weight: 600; }
+    .sim .doc .p { border-radius: 5px; padding: 1px 3px; cursor: pointer; border-bottom: 2px dashed #adb5bd; }
+    .sim .doc .p:hover { background: #fff3bf; }
+    .sim .doc .p.clean { background: #d3f9d8; border-bottom: 2px solid #2b8a3e; color: #2b8a3e; font-weight: 800; }
+    .sim .doc .p.keep { background: #e7f5ff; border-bottom: 2px solid #1c7ed6; }
+    .sim .who { font-weight: 800; margin: 4px 0; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Prompt Cleaner: no personal data in the chat</h1>
+  <p class="hint">Three people at Sunrise Company want to paste a prompt into a free AI chat tool. Click every part that is <b>personal, sensitive or confidential</b> to replace it with a placeholder. Parts the AI really needs can stay.</p>
+  <div class="bar" id="pick"></div>
+  <p class="who" id="who"></p>
+  <div class="doc" id="doc"></div>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  // Parts: [text] plain; [text, placeholder, kind] to clean; [text, null, why] to keep.
+  const P = {
+    "Huda's reminder": { who: "Huda, office manager: a payment reminder", parts: [
+      ["Write a polite e-mail to "], ["Omar Haddad", "[Customer]", "a name: personal data"], [" ("], ["omar.haddad@example.com", "[e-mail]", "an e-mail address: personal data"],
+      [") who has not paid "], ["340 JD", null, "the amount is fine once the name is gone, and the AI needs it"], [" since "], ["March", null, "a month alone is not personal"],
+      [". Our bank account for the payment is "], ["JO71 0000 0000 1234 5678", "[bank account]", "bank details: sensitive"], [". Keep it short and friendly."]] },
+    "Rana's customer": { who: "Rana, shop owner: gift ideas for a regular customer", parts: [
+      ["Suggest three gift ideas for a regular customer, "], ["Lina Saleh", "[Customer]", "a name: personal data"], [", born on "], ["3 May 1990", "[birthday]", "a birth date: personal data"],
+      [", who buys "], ["tea and cups", null, "the AI needs this to suggest gifts"], [" every month and lives at "], ["12 Garden Street", "[address]", "an address: personal data"], ["."]] },
+    "Sami's e-mail": { who: "Sami, student: an e-mail about a missed lab", parts: [
+      ["Write an e-mail to my teacher, "], ["Ms Reem Odeh", "[teacher]", "a name: personal data"], [". I missed the lab on "], ["Monday", null, "a day is fine and the AI needs it"],
+      [" because of "], ["a kidney infection, diagnosis code N10", "[an illness]", "health: sensitive data"], [". My student number is "], ["20231234", "[student number]", "an ID number: personal data"],
+      [" and my password is "], ["Sami2024!", "[never share a password]", "a password: never in any prompt"], [". Ask how I can make up the lab."]] },
+  };
+  const s = { k: "Huda's reminder", clean: {}, kept: {} };
+  Object.keys(P).forEach((k) => { s.clean[k] = new Set(); s.kept[k] = new Set(); });
+  const need = (k) => P[k].parts.map((p, i) => [p, i]).filter(([p]) => p[1]).map(([, i]) => i);
+  const doneP = (k) => need(k).every((i) => s.clean[k].has(i));
+  const TASKS = [
+    { q: "Task 1: Clean Huda's reminder. Which parts must go, and which may stay?", ok: () => doneP("Huda's reminder") },
+    { q: "Task 2: Clean Rana's prompt. Can the AI still suggest good gifts?", ok: () => doneP("Rana's customer") },
+    { q: "Task 3: Clean Sami's e-mail. Which part is sensitive data, and which part must never be in any prompt?", ok: () => doneP("Sami's e-mail") },
+  ];
+  let ti = 0, note = "";
+  function upd() {
+    Kit.buttons($("pick"), Object.keys(P).map((k) => ({ k, label: k })), (k) => { s.k = k; note = ""; upd(); });
+    $("pick").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.k));
+    const p = P[s.k];
+    $("who").textContent = p.who;
+    $("doc").innerHTML = p.parts.map((x, i) => x.length === 1 ? x[0] : `<span class="p ${s.clean[s.k].has(i) ? "clean" : s.kept[s.k].has(i) ? "keep" : ""}" data-i="${i}">${s.clean[s.k].has(i) ? x[1] : x[0]}</span>`).join("");
+    $("doc").querySelectorAll(".p").forEach((el) => el.addEventListener("click", () => {
+      const i = +el.dataset.i, x = p.parts[i];
+      if (x[1]) { s.clean[s.k].add(i); note = `Replaced: ${x[2]}.`; Kit.beep(880, 0.08); }
+      else { s.kept[s.k].add(i); note = `This can stay: ${x[2]}.`; }
+      upd();
+    }));
+    const n = need(s.k), got = n.filter((i) => s.clean[s.k].has(i)).length;
+    $("calc").textContent = `Cleaned ${got} of ${n.length} parts. ${got === n.length ? "This prompt is safe to paste." : ""}`;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the AI gets what it needs for the task, and nothing about the person.";
+    $("msg").textContent = m + (note || "Click a part with a dashed line.");
+  }
+  window.PC = { pick: (k) => { s.k = k; note = ""; upd(); }, clean: (i) => { const x = P[s.k].parts[i]; if (x[1]) s.clean[s.k].add(i); else s.kept[s.k].add(i); note = x[1] ? `Replaced: ${x[2]}.` : `This can stay: ${x[2]}.`; upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

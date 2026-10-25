@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Seed Detective</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { font-family: ui-monospace, Consolas, monospace; text-align: left; } .sim .code { font: 700 .95rem ui-monospace, Consolas, monospace; background: #1e1e2e; color: #e9ecef; padding: 10px 12px; border-radius: 10px; margin: 6px 0; white-space: pre-wrap; } .sim .code .say { font-family: Nunito, system-ui, sans-serif; color: #ffd43b; }</style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Seed Detective</h1>
+  <p class="hint">Testers of <i>Torch Hall</i> report strange randomness. Read each report and the code, and choose the fix.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { box: "<span class=say>“In the dice room, nobody ever rolls a 6.”</span>\nint face = Random.Range(1, 6);",
+      answer: "Random.Range(1, 7)", choices: C(["Random.Range(1, 7)", "Random.Range(0, 6)", "Random.Range(1, 6) + 1", "Random.value * 6"]),
+      good: "For integers the max is not included: Range(1, 7) gives 1 … 6.", why: { "Random.Range(1, 6) + 1": "That gives 2 … 6: no more 1s.", "Random.Range(0, 6)": "That gives 0 … 5." } },
+    { box: "<span class=say>“All five bats fly the same way.”</span>\nvoid Update() {\n  Random.InitState((int)Time.time);\n  dir = Random.Range(0, 4);\n}",
+      answer: "seed once at the start, not in Update", choices: C(["seed once at the start, not in Update", "use a bigger seed", "call InitState twice", "add 1 to the seed of each bat"]),
+      good: "In one frame Time.time is the same for every bat, so each new seed gives the same number. Seed one generator once." },
+    { box: "<span class=say>“My daily cave is different from my friend's.”</span>\nRandom.InitState(System.Environment.TickCount);",
+      answer: "seed with today's date", choices: C(["seed with today's date", "seed with the player's name", "do not use a seed", "seed with 0 every time"]),
+      good: "A date seed (for example 20261025) gives every player the same cave today and a new one tomorrow.", why: { "seed with 0 every time": "Then the cave is the same every day, not daily." } },
+    { box: "<span class=say>“The replay of my best run looks different from my run.”</span>\nThe replay file saves only the player's inputs.",
+      answer: "save the seed with the inputs", choices: C(["save the seed with the inputs", "save a video instead", "use a faster generator", "record more inputs"]),
+      good: "With the same seed and the same inputs, the game repeats exactly." },
+    { box: "<span class=say>“After 16 levels, the caves repeat.”</span>\nx = (5 * x + 3) % 16;",
+      answer: "a generator with a much longer period", choices: C(["a generator with a much longer period", "change the seed to 8", "use % 6 instead", "call it twice per level"]),
+      good: "With m = 16 the period is at most 16. Engine generators have huge periods.", why: { "change the seed to 8": "The seed only moves the start; the period stays 16." } },
+    { box: "<span class=say>“Coins never appear in lane 3.”</span>\n// lanes are 1, 2 and 3\nint lane = Random.Range(1, 3);",
+      answer: "Random.Range(1, 4)", choices: C(["Random.Range(1, 4)", "Random.Range(0, 3)", "Random.Range(1, 3) * 3", "Random.Range(2, 3)"]),
+      good: "The max is excluded: Range(1, 4) gives 1, 2 or 3." },
+  ];
+  rounds.forEach((r) => { r.goal = "Which fix?"; r.why = r.why || {}; });
+  const g = Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: the dice room of Torch Hall." });
+  const box = Kit.el("div", { class: "code", id: "code" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.innerHTML = g.st.over ? "All reports are closed." : g.cur().box; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

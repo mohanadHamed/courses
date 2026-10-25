@@ -1,0 +1,303 @@
+---
+title: "Homogeneous Coordinates and Transformation Matrices"
+description: "Why a 2 × 2 matrix cannot move a shape, homogeneous coordinates (x, y, 1), the 3 × 3 translation matrix, scaling and rotation as 3 × 3 matrices, one matrix M = T × R × S, points and directions, and local, world and camera space."
+lesson: 13
+ilos: [C1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary homogeneous-coordinates translation-matrix transformation-matrix composite-transformation trs-matrix local-space world-space camera-space direction translation >}}
+
+## 13.1 Why a 2 × 2 matrix cannot move a shape
+
+- Every 2 × 2 matrix sends (0, 0) to (0, 0): it can scale and turn, but
+  never move.
+- **Homogeneous coordinates:** the point (x, y) becomes **(x, y, 1)**.
+- Transformations then become 3 × 3 matrices; their last row is always
+  (0, 0, 1).
+- To read the point again, drop the last 1: (7, 3, 1) is (7, 3).
+
+![A 3 × 3 matrix can move the origin.](images/homogeneous.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+A point needs w = 1, not 0. With w = 0 the move is lost.
+:::
+
+::: {.callout-note title="Do it · Add the third coordinate"}
+Write (4, −2), (0, 3) and (0, 0) in homogeneous coordinates. Then multiply
+any 2 × 2 matrix by (0, 0). What do you always get?
+:::
+
+::: {.callout-tip title="Try it 1 · Three coordinates"}
+Choose the right answer.
+
+::: {.match extra="(2, 1, 0)|(1, 2, 1)"}
+How do you write the point (2, 1) in homogeneous coordinates?
+:   (2, 1, 1)
+
+Which 2D point is (7, 3, 1)?
+:   (7, 3)
+
+What does any 2 × 2 matrix do to (0, 0)?
+:   it keeps it at (0, 0)
+
+What is the last row of a 3 × 3 transformation matrix?
+:   (0, 0, 1)
+:::
+:::
+
+## 13.2 The translation matrix
+
+- **T(tx, ty) = rows (1, 0, tx), (0, 1, ty), (0, 0, 1)**: the move is in the
+  last column.
+- T(5, 2) × (2, 1, 1) = (7, 3, 1): the same as (2, 1) + (5, 2).
+- Undo it with T(−tx, −ty).
+
+![The translation matrix T(tx, ty).](images/translate-matrix.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+tx and ty go into the last column, not the last row.
+:::
+
+::: {.callout-note title="Do it · Build T(−3, 4)"}
+Write T(−3, 4) and multiply it by (5, 1, 1). Check with an addition.
+:::
+
+::: {.callout-tip title="Try it 2 · The translation matrix"}
+Choose the right answer.
+
+::: {.match extra="(4, −1, 1)|T(1, 4)"}
+What is T(4, −1) × (2, 5, 1)?
+:   (6, 4, 1)
+
+Which matrix undoes T(4, −1)?
+:   T(−4, 1)
+
+Where is the move in T(tx, ty)?
+:   in the last column
+
+What is T(−3, 4) × (5, 1, 1)?
+:   (2, 5, 1)
+:::
+:::
+
+## 13.3 Scaling and rotation as 3 × 3 matrices
+
+- Put the 2 × 2 matrix in the top-left corner; the last column and row are
+  (0, 0, 1).
+- S(2) = rows (2, 0, 0), (0, 2, 0), (0, 0, 1).
+- R(90°) = rows (0, −1, 0), (1, 0, 0), (0, 0, 1).
+- R(90°) × (2, 1, 1) = (−1, 2, 1).
+
+![Scaling and rotation in 3 × 3.](images/scale-rotate-3x3.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+The bottom-right corner is always 1, never 0.
+:::
+
+::: {.callout-note title="Do it · Two 3 × 3 matrices"}
+Write S(3, 1) and R(180°) as 3 × 3 matrices and multiply each by (1, 2, 1).
+:::
+
+::: {.callout-tip title="Try it 3 · Scale and turn in 3 × 3"}
+Choose the right answer.
+
+::: {.match extra="(3, 2, 3)|(1, −2, 1)"}
+What is S(3, 1) × (1, 2, 1)?
+:   (3, 2, 1)
+
+What is R(180°) × (1, 2, 1)?
+:   (−1, −2, 1)
+
+What is R(90°) × (2, 1, 1)?
+:   (−1, 2, 1)
+
+What does the last column (0, 0, 1) of S and R mean?
+:   no move
+:::
+:::
+
+## 13.4 One matrix: M = T × R × S
+
+- The **TRS matrix** M = T × R × S: first scale, then rotate, then translate
+  (read from right to left).
+- S(2), R(90°), T(5, 1): **M = rows (0, −2, 5), (2, 0, 1), (0, 0, 1)**.
+- M × (1, 0, 1) = (5, 3). Step by step: (2, 0), (0, 2), (5, 3).
+- The order matters: for (1, 0), T(2, 0) × R(90°) gives (2, 1), but
+  R(90°) × T(2, 0) gives (0, 3).
+
+![M = T × R × S.](images/trs-chain.png){width=92%}
+
+{{< sim file="sims/matrix-chain.html" poster="sims/matrix-chain.png" title="Matrix Chain: M = T × R × S" height="820" >}}
+
+::: {.callout-warning title="Watch out!"}
+In M = T × R × S, S acts first, although it is written last.
+:::
+
+::: {.callout-note title="Do it · Build M in Matrix Chain"}
+Set scale 2, θ = 90°, tx = 5, ty = 1 and compare M with the notes. Then set
+θ = 180°. Where does the nose (2, 0.3) go?
+:::
+
+::: {.callout-tip title="Try it 4 · The TRS matrix"}
+M = T(5, 1) × R(90°) × S(2) = rows (0, −2, 5), (2, 0, 1), (0, 0, 1). Choose
+the right answer.
+
+::: {.match extra="(2, 5)|T first"}
+Where does M send the point (1, 0)?
+:   (5, 3)
+
+Where does M send the point (0, 1)?
+:   (3, 1)
+
+Which matrix acts first in T × R × S?
+:   S
+
+What does R(90°) × T(2, 0) do to (1, 0)?
+:   (0, 3)
+:::
+:::
+
+## 13.5 Points and directions
+
+- A **point** has w = 1: the move is added. A **direction** has w = 0: the
+  move is multiplied by 0.
+- M = T(5, 1) × R(90°): the point (1, 1, 1) goes to (4, 2, 1); the direction
+  (2, 0, 0) only turns to (0, 2, 0).
+- Unity: `m.MultiplyPoint3x4(p)` (w = 1) and `m.MultiplyVector(d)` (w = 0);
+  `Matrix4x4.TRS(position, rotation, scale)` builds M.
+
+![A point moves; a direction only turns.](images/point-direction.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+A velocity "moved" with the object flies the wrong way. Directions get
+w = 0.
+:::
+
+::: {.callout-note title="Do it · Point or direction?"}
+With M = T(5, 1) × R(90°), apply M to the point (2, 0, 1) and to the
+direction (2, 0, 0). Which one moved?
+:::
+
+::: {.callout-tip title="Try it 5 · w = 1 or w = 0"}
+M = T(5, 1) × R(90°) = rows (0, −1, 5), (1, 0, 1), (0, 0, 1). Choose the
+right answer.
+
+::: {.match extra="(7, 1, 0)|w = 2"}
+Where does M send the point (2, 0, 1)?
+:   (5, 3, 1)
+
+Where does M send the direction (2, 0, 0)?
+:   (0, 2, 0)
+
+Where does M send the direction (0, 3, 0)?
+:   (−3, 0, 0)
+
+Which w does a direction have?
+:   w = 0
+:::
+:::
+
+## 13.6 Local, world and camera space
+
+- **Local space:** measured on the object. **World space:** in the level.
+  **Camera space:** measured from the camera.
+- The object's matrix M takes local to world; the inverse of the camera's
+  matrix takes world to camera.
+- Cannon (2, 1) on a ship at (10, 4), turned 90°: world (9, 6). Camera at
+  (8, 3): camera space (1, 3).
+- Unity: `transform.TransformPoint(p)` (local → world),
+  `transform.InverseTransformPoint(p)` (world → local).
+
+![Local, world and camera space.](images/spaces.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+Camera space subtracts the camera position; it does not add it.
+:::
+
+::: {.callout-note title="Do it · Three spaces"}
+A ship at (6, 3), not turned, has a flag at (1, 2). The camera stands at
+(5, 0). Where is the flag in the world, and in camera space?
+:::
+
+::: {.callout-tip title="Try it 6 · Three spaces"}
+Choose the right answer.
+
+::: {.match extra="(5, 1)|(13, 5)"}
+A ship at (6, 3), not turned, has a flag at (1, 2). Where is the flag in the world?
+:   (7, 5)
+
+The camera stands at (5, 0). Where is the world point (7, 5) in camera space?
+:   (2, 5)
+
+The same ship is turned by 90°. Where is the flag (1, 2) now?
+:   (4, 4)
+
+Which space measures from the object's own pivot?
+:   local space
+:::
+:::
+
+## Game challenge: Cannon Cove {.challenge}
+
+Work alone. Use every section of today.
+
+**Cannon Cove** is a pirate game. The cannon sits at **(2, 1)** in the
+ship's local space. The ship enters the harbour at **(10, 4)**; later it
+turns by **90°**. The camera stands at **(8, 3)**.
+
+{{< sim file="sims/cannon-cove.html" poster="sims/cannon-cove.png" title="Cannon Cove: local, world and camera space" kind="game" height="760" >}}
+
+::: {.callout-tip title="Try it 7 · The cannon"}
+Choose the right answer.
+
+::: {.match extra="(2, 1)|(17, 9)"}
+The ship is not turned. Where is the cannon in the world?
+:   (12, 5)
+
+The ship is turned by 90°. Where is the cannon in the world?
+:   (9, 6)
+
+Where is the cannon (9, 6) in camera space?
+:   (1, 3)
+
+The cannon fires along local (1, 0). Which way does it fire on the turned ship?
+:   (0, 1)
+:::
+:::
+
+::: {.callout-tip title="Try it 8 · New orders (harder)"}
+Local cannon (2, 1), ship at (10, 4). Choose the right answer.
+
+::: {.match extra="(12, 5)|(10, 4)"}
+Which matrix puts the ship turned by 90° into the world?
+:   rows (0, −1, 10), (1, 0, 4), (0, 0, 1)
+
+The ship turns by 180°. Where is the cannon?
+:   (8, 3)
+
+The ship turns by −90°. Where is the cannon?
+:   (11, 2)
+
+The ship is turned by 180°. Where is the cannon in camera space (camera at (8, 3))?
+:   (0, 0)
+:::
+:::
+
+## Summary {.summary}
+
+- Homogeneous coordinates: (x, y) becomes (x, y, 1); transformations become
+  3 × 3 matrices.
+- T(tx, ty) has the move in its last column; S and R have the 2 × 2 matrix
+  in the top-left corner.
+- M = T × R × S scales, then rotates, then translates, in one matrix.
+- Points have w = 1 and move; directions have w = 0 and only turn.
+- Local → world with the object's matrix; world → camera with the inverse of
+  the camera's matrix.

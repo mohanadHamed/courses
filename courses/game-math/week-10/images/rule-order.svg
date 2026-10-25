@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="316" viewBox="0 0 680 316" font-family="Helvetica, Arial, sans-serif" font-weight="600">
+<rect width="680" height="316" fill="#ffffff"/>
+<text x="20" y="30" font-size="17" fill="#2a2f2c" text-anchor="start" font-weight="800" xml:space="preserve">An else-if chain: only the first true rule runs</text>
+<rect x="20" y="54" width="300" height="130" rx="12" fill="#1e1e2e"/>
+<text x="36" y="82" font-size="13" fill="#e9ecef" text-anchor="start" font-weight="700" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">if (s) Chase();</text>
+<text x="36" y="108" font-size="13" fill="#ffd43b" text-anchor="start" font-weight="700" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">else if (s &amp;&amp; n) Attack();</text>
+<text x="36" y="134" font-size="13" fill="#e9ecef" text-anchor="start" font-weight="700" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">else if (w) Flee();</text>
+<text x="36" y="160" font-size="13" fill="#e9ecef" text-anchor="start" font-weight="700" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">else Patrol();</text>
+<text x="170" y="206" font-size="13.5" fill="#c92a2a" text-anchor="middle" font-weight="800" xml:space="preserve">wrong order</text>
+<rect x="360" y="54" width="300" height="130" rx="12" fill="#1e1e2e"/>
+<text x="376" y="82" font-size="13" fill="#e9ecef" text-anchor="start" font-weight="700" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">if (w) Flee();</text>
+<text x="376" y="108" font-size="13" fill="#e9ecef" text-anchor="start" font-weight="700" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">else if (s &amp;&amp; n) Attack();</text>
+<text x="376" y="134" font-size="13" fill="#e9ecef" text-anchor="start" font-weight="700" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">else if (s) Chase();</text>
+<text x="376" y="160" font-size="13" fill="#e9ecef" text-anchor="start" font-weight="700" font-family="DejaVu Sans Mono, monospace" xml:space="preserve">else Patrol();</text>
+<text x="510" y="206" font-size="13.5" fill="#2b8a3e" text-anchor="middle" font-weight="800" xml:space="preserve">right order</text>
+<text x="20" y="236" font-size="12.5" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">Wrong: every case with s is caught by Chase</text>
+<text x="20" y="252.2" font-size="12.5" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">first, so Attack never runs (an unreachable</text>
+<text x="20" y="268.5" font-size="12.5" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">rule), and a weak guard that sees the player</text>
+<text x="20" y="284.8" font-size="12.5" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">chases instead of fleeing.</text>
+<text x="360" y="236" font-size="12.5" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">Right: the most important and the most</text>
+<text x="360" y="252.2" font-size="12.5" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">specific rules come first; the else at the end</text>
+<text x="360" y="268.5" font-size="12.5" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">catches every other case.</text>
+</svg>

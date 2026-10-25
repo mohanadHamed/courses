@@ -1,0 +1,201 @@
+---
+title: "Case Study: Comparing Gaming Platforms"
+description: "A seminar that compares gaming platforms for one game: criteria for the comparison, how the specifications of devices change the performance and sets system requirements, a weighted decision matrix, and a porting plan with a short recommendation."
+lesson: 24
+ilos: [B1, B2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+is one step of the seminar. It ends with a **Do it** task and one set of
+questions. The full explanations, examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary comparison-criteria system-requirements graphics-settings bottleneck decision-matrix porting certification cross-save >}}
+
+## 24.1 Criteria for the comparison
+
+- **Reach**, **fit for the game**, **cost and time**, **performance**,
+  **testing**, **business model**.
+- Facts from **reliable sources** with a date.
+
+![Criteria for comparing platforms.](images/criteria.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Write the criteria and weights first, then score.
+:::
+
+::: {.callout-note title="Do it · Your criteria"}
+Choose a game you know; write five criteria for its next platform, with a
+reason each.
+:::
+
+::: {.callout-tip title="Try it 1 · Criteria"}
+Choose the criterion.
+
+::: {.match extra="the logo colour|the font"}
+"Console players spend the most."
+:   business model
+
+"We already use the engine, PC is easy."
+:   cost and time
+
+"Our players race on the bus."
+:   fit for the game
+
+"Thousands of PC configurations to check."
+:   testing
+:::
+:::
+
+## 24.2 Specifications and performance
+
+- GPU, CPU and memory decide the frame rate; the weakest part is the
+  **bottleneck**.
+- Too little memory: the game stutters.
+- Targets per platform; **graphics settings**; **minimum** and
+  **recommended** requirements.
+
+![Targets per platform (example values).](images/targets.png){width=94%}
+
+{{< sim file="sims/spec-compare.html" poster="sims/spec-compare.png" title="Spec Check: will Pocket Quest run well?" height="700" >}}
+
+::: {.callout-warning title="Watch out!"}
+Test the minimum on the weakest supported device, not on the developers'
+PCs.
+:::
+
+::: {.callout-note title="Do it · Find the settings"}
+In **Spec Check**, find the highest setting with 60 fps for each device;
+write the minimum and recommended requirements.
+:::
+
+::: {.callout-tip title="Try it 2 · Specs"}
+Use Spec Check. Choose the right answer (example points).
+
+::: {.match extra="ultra|4K"}
+the best 60 fps setting on the old laptop
+:   low
+
+the frame rate of the office PC on high
+:   40 fps
+
+the bottleneck of the office PC on high
+:   the GPU
+
+the device that runs ultra at 60 fps or more
+:   the gaming PC
+:::
+:::
+
+## 24.3 The decision matrix
+
+- Criteria with **weights**; scores 1 to 5 with reasons.
+- Total = Σ score × weight; the highest wins **for these weights**.
+- A **sensitivity check:** change a weight, does the winner change?
+
+![A decision matrix (example scores).](images/decision-matrix.png){width=94%}
+
+{{< sim file="sims/decision-matrix.html" poster="sims/decision-matrix.png" title="Decision Matrix: the next platform for Pocket Quest" height="620" >}}
+
+::: {.callout-warning title="Watch out!"}
+A few points apart is close: say which weight decides.
+:::
+
+::: {.callout-note title="Do it · Your matrix"}
+In **Decision Matrix**, find weights where the console wins with reach at 2
+or more. Then make your own matrix with three platforms.
+:::
+
+::: {.callout-tip title="Try it 3 · The matrix"}
+Use Decision Matrix. Choose the right answer.
+
+::: {.match extra="50|12"}
+PC with the Byte Bay weights (3, 3, 2, 1, 1)
+:   37
+
+console with the Byte Bay weights
+:   35
+
+the winner with equal weights
+:   the console
+
+PC with cost and time at 3
+:   41
+:::
+:::
+
+## 24.4 From the matrix to a recommendation
+
+- The question, the matrix, the choice with its margin, the **port plan**,
+  the risks.
+- Port plan: controls, menus, settings, accounts and saves, store rules,
+  testing.
+
+![What changes in a port?](images/port-checklist.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+List the porting work before the decision, not after.
+:::
+
+::: {.callout-note title="Do it · Your recommendation"}
+Write a one-page recommendation: question, matrix, choice with margin, a
+five-point port plan, one risk.
+:::
+
+::: {.callout-tip title="Try it 4 · The port plan"}
+Choose the point of the port plan.
+
+::: {.match extra="a new logo|a longer trailer"}
+touch steering becomes keys and sticks
+:   controls
+
+low, medium, high and ultra
+:   graphics settings
+
+level 12 on the phone and on the PC
+:   accounts and saves
+
+the console maker checks the build
+:   store rules (certification)
+:::
+:::
+
+## Game challenge: Port Planner {.challenge}
+
+Work alone. Use every section of today.
+
+Six test reports: **20 fps** on an old laptop, **"Tap to start"** on the
+console, an **unplugged controller**, a store page **without
+requirements**, **level 1** on the PC, and a **late car** at 70 ms ping.
+
+{{< sim file="sims/port-planner.html" poster="sims/port-planner.png" title="Port Planner: fix the test reports" kind="game" height="480" >}}
+
+::: {.callout-tip title="Try it 5 · The reports"}
+Choose the best fix.
+
+::: {.match extra="a lower price|more race tracks"}
+20 fps on an old laptop
+:   low, medium and high settings
+
+freeze when the controller is unplugged
+:   pause, show a message, resubmit
+
+no hardware facts on the store page
+:   minimum and recommended requirements
+
+the car reacts late at 70 ms ping
+:   a server region near the players
+:::
+:::
+
+## Summary {.summary}
+
+- Compare platforms with criteria and weights written first.
+- Specs decide the frame rate; the weakest part is the bottleneck.
+- Settings and requirements let many devices run the game.
+- A decision matrix gives totals for given weights; check the
+  sensitivity.
+- A recommendation needs the choice, the margin, a port plan and the
+  risks.

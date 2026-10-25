@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Cloud Cost Planner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 4px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim table.ct { border-collapse: collapse; width: 100%; margin: 6px 0; font-variant-numeric: tabular-nums; }
+    .sim table.ct td, .sim table.ct th { border: 1px solid #dee2e6; padding: 3px 6px; font-weight: 700; font-size: .88rem; }
+    .sim table.ct th { background: #fff9db; color: #A86700; }
+    .sim table.ct td.n { text-align: right; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Cloud Cost Planner: one month of Pocket Quest</h1>
+  <p class="hint">Plan the cloud services of <i>Pocket Quest</i> for one month and see the cost with <b>example prices</b>. Most players are in the Middle East. The budget is $300 a month.</p>
+  <div class="bar" id="sl"></div>
+  <div class="bar"><span>Race region</span><span id="reg" style="display:contents"></span></div>
+  <div class="bar"><span>Downloads</span><span id="cdn" style="display:contents"></span></div>
+  <table class="ct" id="tbl"></table>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const PRICE = { storage: 0.02, cdn: 0.05, direct: 0.09, server: 0.10, baasFree: 50000, baas: 0.002 };
+  const REG = { "Bahrain (near)": 25, "Frankfurt": 65, "Mumbai": 80 };
+  const s = { players: 50000, pack: 80, share: 50, servers: 4, hours: 24, region: "Frankfurt", cdn: "direct from storage" };
+  const TASKS = [
+    { q: "Task 1: Choose the race region near most players. What is the ping now?", ok: () => s.region === "Bahrain (near)" },
+    { q: "Task 2: The downloads are the biggest cost. Send them through the CDN. How much do you save?", ok: () => s.cdn === "through a CDN" },
+    { q: "Task 3: The races run only from 16:00 to 24:00. Set the server hours per day to 8 and stay under $300 with 4 servers.", ok: () => s.hours === 8 && total() <= 300 && s.servers >= 4 },
+    { q: "Task 4: The game grows to 120,000 players. Can you stay under the budget? Which cost grows?", ok: () => s.players >= 120000 },
+  ];
+  let ti = 0, ready = false;
+  const rows = () => {
+    const gb = s.players * s.share / 100 * s.pack / 1000;
+    const baas = Math.max(0, s.players - PRICE.baasFree) * PRICE.baas;
+    return [
+      ["cloud save + leaderboard (BaaS)", `${s.players.toLocaleString("en")} players`, `first 50,000 free, then $0.002 / player`, baas],
+      ["object storage (level packs)", "20 GB", "$0.02 / GB", 20 * PRICE.storage],
+      ["downloads " + (s.cdn === "through a CDN" ? "(CDN)" : "(direct)"), `${Math.round(gb).toLocaleString("en")} GB`, s.cdn === "through a CDN" ? "$0.05 / GB" : "$0.09 / GB", gb * (s.cdn === "through a CDN" ? PRICE.cdn : PRICE.direct)],
+      ["race servers", `${s.servers} × ${s.hours} h × 30 days`, "$0.10 / h", s.servers * s.hours * 30 * PRICE.server],
+    ];
+  };
+  const total = () => rows().reduce((a, r) => a + r[3], 0);
+  const sl = {};
+  [["players", "Players", 10000, 200000, 10000, (v) => v.toLocaleString("en")], ["share", "Who downloads the pack", 0, 100, 10, (v) => v + " %"], ["servers", "Race servers", 1, 10, 1, (v) => v], ["hours", "Server hours per day", 2, 24, 2, (v) => v + " h"]]
+    .forEach(([k, l, lo, hi, st, show]) => { sl[k] = Kit.slider($("sl"), l, lo, hi, st, s[k], (v) => { s[k] = v; if (ready) upd(); }, show); });
+  function tabs(id, items, key) { Kit.buttons($(id), items.map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }
+  function upd() {
+    tabs("reg", Object.keys(REG), "region"); tabs("cdn", ["direct from storage", "through a CDN"], "cdn");
+    const R = rows(), T = total();
+    $("tbl").innerHTML = "<tr><th>service</th><th>use per month</th><th>example price</th><th>cost</th></tr>" + R.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="n">$${r[3].toFixed(2)}</td></tr>`).join("") + `<tr><td colspan="3" style="text-align:right">total</td><td class="n">$${T.toFixed(2)}</td></tr>`;
+    const ping = REG[s.region];
+    $("chk").innerHTML = [[T <= 300, `under the budget of $300 (now $${T.toFixed(0)})`], [ping <= 40, `race ping for most players about ${ping} ms (good: under 40)`], [s.cdn === "through a CDN", "downloads from a near copy (CDN)"]].map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: near regions, a CDN, servers only when players race, and an eye on the downloads.";
+    const big = R.slice().sort((a, b) => b[3] - a[3])[0];
+    $("msg").textContent = m + `The biggest cost now: ${big[0]} ($${big[3].toFixed(0)}). Prices are only examples.`;
+  }
+  window.CC = { set: (o) => { Object.entries(o).forEach(([k, v]) => { if (sl[k]) { sl[k].value = v; s[k] = v; sl[k].dispatchEvent(new Event("input")); } else s[k] = v; }); upd(); } };
+  ready = true; upd();
+})();
+</script>
+</body>
+</html>

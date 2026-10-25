@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Report Doctor</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #fff9db; border: 1.5px solid #A86700; border-radius: 10px; padding: 8px 12px; margin: 6px 0; white-space: pre-line; }</style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Report Doctor</h1>
+  <p class="hint">After the emulator session, six bug reports reach Byte Bay's developers. Each one has a problem. Choose what must be fixed in the report.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const F = ["the device and OS version are missing", "the steps to repeat it are missing", "expected and actual are missing", "the build number is missing", "two bugs in one report", "the log or screenshot is missing"];
+  const rounds = [
+    { card: "Title: Race freezes\nBuild: 1.3 (build 42)\nSteps: start a race, rotate to landscape\nExpected: the race goes on. Actual: freeze.\nLog: attached", answer: "the device and OS version are missing", choices: C(F.slice(0, 4)), good: "On which device or AVD, and which Android version? The bug may appear only there." },
+    { card: "Title: Crash\nBuild: 42 · Device: AVD P5_API_30 (Android 11)\nExpected: no crash. Actual: the game crashes.\nLog: attached", answer: "the steps to repeat it are missing", choices: C(F.slice(0, 4)), good: "Without steps, the developer cannot make the crash happen again." },
+    { card: "Title: The tablet menu\nBuild: 42 · Device: AVD tablet API 33\nSteps: open the settings menu\nNotes: \"looks bad\"", answer: "expected and actual are missing", choices: C(F.slice(0, 4)), good: "Say what should happen and what really happens, for example: the buttons are cut off on the right." },
+    { card: "Title: No sound after a call\nDevice: P5 (Android 11)\nSteps: race, receive a call, go back\nExpected: sound. Actual: silence.", answer: "the build number is missing", choices: C(F.slice(0, 4)), good: "The developer must know which version: maybe build 43 already fixed it." },
+    { card: "Title: Freeze in landscape, and the coins are wrong, and the font is small\nBuild: 42 · Device: AVD P5_API_30\nSteps: …", answer: "two bugs in one report", choices: C(F.slice(2)), good: "One bug per report: each one can be fixed, tested and closed alone." },
+    { card: "Title: Black screen at start\nBuild: 42 · Device: AVD API 26 (Android 8)\nSteps: install, open\nExpected: menu. Actual: black screen.", answer: "the log or screenshot is missing", choices: C(F.slice(2)), good: "adb logcat and a screenshot show the developer what the device saw." },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; r.goal = "What must be fixed?"; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the bug of the seminar: the frozen race." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "Every report can now be repeated by a developer." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

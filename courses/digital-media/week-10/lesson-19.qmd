@@ -1,0 +1,216 @@
+---
+title: "Digital Video Basics: Formats, Resolution and Codecs"
+description: "Video as a series of frames and the frame rate, resolution and aspect ratio, containers, codecs, compression and bitrate, and choosing the right export settings for a store trailer, a social clip and an edit master."
+lesson: 19
+ilos: [C3]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+has a short summary, a picture, a **Do it** task and one set of questions.
+The full explanations, examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary digital-video frame video-frame-rate resolution aspect-ratio video-container video-codec bitrate key-frame lossy-compression >}}
+
+## 19.1 Frames and the frame rate
+
+- Video = a series of **frames** (still pictures), usually with audio.
+- **Frame rate:** frames per second. 24 fps: cinema look. 30 fps:
+  trailers. 60 fps: fast game action.
+- 2 minutes at 60 fps = 7200 frames.
+
+![Video is a series of frames.](images/frames.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Choose the project's frame rate first; mixed frame rates stutter.
+:::
+
+::: {.callout-note title="Do it · Count the frames"}
+Count the frames of a 30 s trailer at 30 fps, a 10 s clip at 60 fps, and a
+2-minute film at 24 fps.
+:::
+
+::: {.callout-tip title="Try it 1 · Frames"}
+Choose the right answer.
+
+::: {.match extra="1 fps|1000"}
+frames in 1 s at 30 fps
+:   30
+
+frames in 10 s at 60 fps
+:   600
+
+the frame rate for a cinema look
+:   24 fps
+
+the frame rate for fast game action
+:   60 fps
+:::
+:::
+
+## 19.2 Resolution and aspect ratio
+
+- **Resolution:** 1280 × 720 (720p), 1920 × 1080 (1080p), 3840 × 2160
+  (4K).
+- **Aspect ratio:** 16:9 wide, 9:16 tall, 1:1 square.
+- From wide to tall: **crop** a part, never stretch.
+
+![Resolution and aspect ratio.](images/resolution.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+A stretched picture makes Nour thin and tall.
+:::
+
+::: {.callout-note title="Do it · Shapes"}
+Write the resolution and aspect ratio of one video on your phone and one on
+a store page.
+:::
+
+::: {.callout-tip title="Try it 2 · Sizes and shapes"}
+Choose the right answer.
+
+::: {.match extra="640 × 480|2:1"}
+Full HD
+:   1920 × 1080
+
+a phone held upright
+:   9:16
+
+a trailer for a monitor
+:   16:9
+
+4K
+:   3840 × 2160
+:::
+:::
+
+## 19.3 Containers, codecs and bitrate
+
+- **Container:** MP4, MOV, WebM; it holds the tracks.
+- **Codec:** H.264 (plays everywhere), H.265, VP9, AV1; ProRes for editing;
+  AAC for audio.
+- **Key frame:** a whole picture; the frames between store only changes.
+- **Bitrate:** data per second. **Size (MB) ≈ Mbit/s × s ÷ 8.**
+- Too low a bitrate for fast action: **blocks**.
+
+![A container with coded tracks.](images/container-codec.png){width=94%}
+
+![Compression and bitrate.](images/compression.png){width=94%}
+
+{{< sim file="sims/video-settings-lab.html" poster="sims/video-settings-lab.png" title="Video Settings Lab: export the trailer" height="940" >}}
+
+::: {.callout-warning title="Watch out!"}
+Renaming .mov to .mp4 converts nothing.
+:::
+
+::: {.callout-note title="Do it · Bitrate and size"}
+Compute 45 s at 8 Mbit/s and 15 s at 20 Mbit/s. In **Video Settings Lab**,
+find the bitrate where the trailer gets blocky.
+:::
+
+::: {.callout-tip title="Try it 3 · Files"}
+Use Video Settings Lab. Choose the right answer.
+
+::: {.match extra="the file name|GIF"}
+30 s at 10 Mbit/s
+:   37.5 MB
+
+the container of trailer.mp4
+:   MP4
+
+plays on almost every phone
+:   H.264
+
+the codec for an edit master
+:   ProRes
+:::
+:::
+
+## 19.4 Settings for each target
+
+- **Store trailer:** 1920 × 1080, 30 fps, H.264 in MP4, short.
+- **Social clip:** 1080 × 1920 (9:16), 30 fps, H.264, 15–30 s.
+- **Edit master:** as recorded (60 fps), ProRes.
+- Check the platform's help pages before each export.
+
+![The target decides the settings.](images/targets.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Every new lossy export loses detail: export each target from the project.
+:::
+
+::: {.callout-note title="Do it · Three targets"}
+In **Video Settings Lab**, make all three targets pass. Write their
+settings and file sizes.
+:::
+
+::: {.callout-tip title="Try it 4 · Targets"}
+Choose the right settings.
+
+::: {.match extra="720 × 1280 at 10 fps|a GIF of 2 minutes"}
+store trailer
+:   1920 × 1080, 30 fps, H.264
+
+social clip
+:   1080 × 1920, 30 fps, H.264
+
+edit master
+:   1920 × 1080, 60 fps, ProRes
+:::
+:::
+
+## Game challenge: Export Desk {.challenge}
+
+Work alone. Use every section of today.
+
+Salma sends six requests: a **wide Full HD** trailer, the **size** of a
+30 s trailer, a file for **every phone**, a **blocky** boat chase, a
+**tall** clip, and a copy **for later editing**.
+
+{{< sim file="sims/export-desk.html" poster="sims/export-desk.png" title="Export Desk: the right settings for each request" kind="game" height="600" >}}
+
+::: {.callout-tip title="Try it 5 · Salma's requests"}
+Choose the right answer.
+
+::: {.match extra="change the container to MOV|add a title"}
+The boat chase is blocky at 3 Mbit/s.
+:   raise the bitrate to about 10 Mbit/s
+
+It must play on every phone.
+:   H.264 in MP4
+
+A short clip for phones held upright.
+:   1080 × 1920
+
+Keep the capture for more editing.
+:   ProRes, as recorded
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Numbers (harder)"}
+Choose the right answer.
+
+::: {.match extra="2 MB|half as many"}
+60 s at 6 Mbit/s
+:   45 MB
+
+30 s at 240 Mbit/s
+:   900 MB
+
+frames in 2 minutes at 60 fps
+:   7200
+
+pixels of 4K compared with 1080p
+:   4 times as many
+:::
+:::
+
+## Summary {.summary}
+
+- Video is a series of frames; the frame rate is frames per second.
+- Resolution is the size in pixels; the aspect ratio is the shape.
+- The container holds the tracks; the codec compresses them.
+- Size ≈ bitrate × time ÷ 8; too little bitrate gives blocks.
+- The target decides the settings; keep an edit master.

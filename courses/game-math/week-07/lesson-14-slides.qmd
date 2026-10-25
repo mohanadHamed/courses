@@ -1,0 +1,237 @@
+---
+title: "3D Transformations: Translation, Rotation and Scaling"
+subtitle: "Lecture 14"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary homogeneous-coordinates translation-matrix scaling rotation-axis rotation-matrix trs-matrix transform-hierarchy forward-vector >}}
+
+## 14.1 From 3 × 3 to 4 × 4
+
+:::: {.columns}
+::: {.column width="50%"}
+- In 3D, a point becomes (x, y, z, 1) and a direction becomes (x, y, z, 0).
+- The translation matrix T(tx, ty, tz) is 4 × 4, with the move in the last column.
+- T(−tx, −ty, −tz) moves the point back again.
+- **Do it:** Write T(1, 2, 3). Where does it send the point (4, 0, 0, 1)?
+:::
+::: {.column width="50%"}
+![](images/translate-4x4.png)
+:::
+::::
+
+## Example · Moving a crate
+
+A crate stands at (1, 0, 2), and it slides by (3, 0, 4).
+**Where is the crate after T(3, 0, 4)?**
+
+::: {.reveal}
+1. Row 1: 1 + 3 × 1 = 4, and row 2: 0 + 0 = 0.
+2. Row 3: 2 + 4 × 1 = 6.
+3. The crate is at **(4, 0, 6)**, and T(−3, 0, −4) brings it back.
+:::
+
+## Try it 1 · Translation in 3D
+
+a) What is T(1, 2, 3) × (4, 0, 0, 1)?
+b) What is T(1, 2, 3) × (4, 0, 0, 0)?
+c) Which matrix undoes T(1, 2, 3)?
+
+::: {.answer}
+a) (5, 2, 3, 1)
+b) (4, 0, 0, 0), because a direction does not move.
+c) T(−1, −2, −3)
+:::
+
+## 14.2 Scaling in 3D
+
+:::: {.columns}
+::: {.column width="50%"}
+- S(sx, sy, sz) has the three factors on the main diagonal.
+- It multiplies x by sx, y by sy and z by sz.
+- A uniform scale of 2 makes the volume 8 times bigger.
+- **Do it:** Which scaling turns the unit cube into a pillar 4 units tall?
+:::
+::: {.column width="50%"}
+![](images/scale-3d.png)
+:::
+::::
+
+## Example · A tall box
+
+The unit cube has a corner at (1, 1, 1), and it gets S(2, 3, 1).
+**Where does the corner go, and what is the size of the box?**
+
+::: {.reveal}
+1. x: 2 × 1 = 2, y: 3 × 1 = 3 and z: 1 × 1 = 1.
+2. The corner goes to **(2, 3, 1)**.
+3. The box is 2 wide, 3 tall and 1 deep, like Scale (2, 3, 1) in Unity.
+:::
+
+## Try it 2 · Scaling in 3D
+
+a) What is S(2, 2, 2) × (1, −1, 3)?
+b) Which scaling makes a pillar 1 wide, 4 tall and 1 deep?
+c) How much bigger is the volume of a cube after a uniform scale of 2?
+
+::: {.answer}
+a) (2, −2, 6)
+b) S(1, 4, 1)
+c) 8 times
+:::
+
+## 14.3 Yaw: turning around the y-axis
+
+:::: {.columns}
+::: {.column width="50%"}
+- R_y(θ) has the rows (cos θ, 0, sin θ), (0, 1, 0) and (−sin θ, 0, cos θ).
+- The y coordinate stays, and x and z mix like x and y in 2D.
+- Forward (0, 0, 1) goes to (sin θ, 0, cos θ), so a positive yaw turns right.
+- **Do it:** Compute R_y(180°) × (0, 0, 1). Does Yaw Lab agree?
+:::
+::: {.column width="50%"}
+![](images/yaw.png)
+:::
+::::
+
+## Example · The beam at 90°
+
+The lamp looks forward along (0, 0, 1) and turns by 90° (cos 0, sin 1).
+**Where does the beam point now?**
+
+::: {.reveal}
+1. Row 1: 0 × 0 + 0 × 0 + 1 × 1 = 1.
+2. Row 2 gives 0, and row 3: −1 × 0 + 0 × 1 = 0.
+3. The beam points along **(1, 0, 0)**, to the right.
+:::
+
+## Example · A point to the right
+
+The right side of a tank is at (2, 0, 0), and the tank turns by 90°.
+**Where does the right side go?**
+
+::: {.reveal}
+1. Row 1: cos 90° × 2 = 0.
+2. Row 3: −sin 90° × 2 = −2.
+3. It goes to **(0, 0, −2)**: after a right turn, the right side points back.
+:::
+
+## Live demo · Yaw Lab
+
+{{< sim file="sims/yaw-lab.html" poster="sims/yaw-lab.png" title="Yaw Lab: turning around the y-axis in 3D" task="**Show:** turn the tank to 90°, −90° and 180°, and drag the picture to look from above. **Ask:** why does the middle row of the matrix never change?" >}}
+
+## Try it 3 · Yaw
+
+a) What is R_y(180°) × (3, 2, 1)?
+b) A player has a yaw of 30°. What is the forward vector?
+c) What is R_y(−90°) × (0, 0, 1)?
+
+::: {.answer}
+a) (−3, 2, −1)
+b) (0.5, 0, 0.87)
+c) (−1, 0, 0)
+:::
+
+## 14.4 Pitch and roll
+
+:::: {.columns}
+::: {.column width="50%"}
+- The pitch turns around x, the yaw around y and the roll around z.
+- The axis of each turn keeps its 1, and the other two coordinates mix.
+- Unity turns around z first, then around x, then around y.
+- **Do it:** A car drives up a ramp. Is that a pitch, a yaw or a roll?
+:::
+::: {.column width="50%"}
+![](images/three-axes.png)
+:::
+::::
+
+## Example · Nose down, wing up
+
+An aircraft looks along (0, 0, 1), and its right wing points along (1, 0, 0).
+**Where do they point after a pitch of 90° and a roll of 90°?**
+
+::: {.reveal}
+1. R_x(90°) × (0, 0, 1) = (0, −1, 0), so the nose points **down**.
+2. R_z(90°) × (1, 0, 0) = (0, 1, 0), so the right wing points **up**.
+3. A yaw of 90° would send the nose to (1, 0, 0), to the right.
+:::
+
+## Try it 4 · Three axes
+
+a) Around which axis is the pitch?
+b) Around which axis is the roll?
+c) What is R_z(180°) × (1, 2, 0)?
+
+::: {.answer}
+a) around x
+b) around z
+c) (−1, −2, 0)
+:::
+
+## 14.5 The TRS matrix and the hierarchy
+
+:::: {.columns}
+::: {.column width="50%"}
+- Every 3D object has a 4 × 4 TRS matrix, built in Unity with Matrix4x4.TRS.
+- A child's position, turn and scale are in its parent's space.
+- The child's world matrix is the parent's world matrix times its local matrix.
+- **Do it:** The tank has a yaw of 180°. Where is the barrel tip in the world?
+:::
+::: {.column width="50%"}
+![](images/hierarchy.png)
+:::
+::::
+
+## Example · The barrel tip in the world
+
+The tank stands at (10, 0, 5) with a yaw of 90°, and the barrel tip is at (0, 1, 2) in the tank's space.
+**Where is the barrel tip in the world?**
+
+::: {.reveal}
+1. R_y(90°) × (0, 1, 2) = (2, 1, 0).
+2. Then we add the tank's position (10, 0, 5).
+3. The tip is at **(12, 1, 5)**, not at (10, 1, 7).
+:::
+
+## Try it 5 · Parent and child
+
+The barrel tip is at (0, 1, 2) in the tank's space.
+
+a) The tank is at (0, 0, 0) with a yaw of 0. Where is the tip?
+b) The tank is at (10, 0, 5) with a yaw of 180°. Where is the tip?
+c) How do we get the child's world matrix?
+
+::: {.answer}
+a) (0, 1, 2)
+b) (10, 1, 3)
+c) the parent's world matrix × the child's local matrix
+:::
+
+## Game challenge · Lighthouse
+
+{{< sim file="sims/lighthouse.html" poster="sims/lighthouse.png" title="Lighthouse: light up the ships with a yaw" kind="game" task="**The story:** a lighthouse at the origin turns its lamp around the y-axis to find ships 10 units away. **Play:** choose the yaw for each ship, using the beam (sin θ, 0, cos θ)." >}}
+
+## Try it 6 · A busy night (harder)
+
+The facts: at the yaw θ, the beam points along (sin θ, 0, cos θ), and ships are 10 units away.
+
+a) Which yaw lights a ship at (−7.1, 0, 7.1)?
+b) The lamp points at 90°. Which turn reaches a ship at (−10, 0, 0)?
+c) Where does a beam of length 10 end at a yaw of 60°?
+
+::: {.answer}
+a) −45°
+b) 180°
+c) (8.7, 0, 5)
+:::
+
+## Summary
+
+- In 3D, a point is (x, y, z, 1), and every transformation is a 4 × 4 matrix.
+- The translation has the move in its last column, and the scale is on the diagonal.
+- The yaw keeps y and sends forward to (sin θ, 0, cos θ).
+- The pitch turns around x, and the roll turns around z.
+- A child's world matrix is its parent's matrix times its local matrix.

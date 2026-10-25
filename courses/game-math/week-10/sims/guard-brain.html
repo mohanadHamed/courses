@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Guard Brain</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; font-weight: 700; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .code { font: 700 .95rem ui-monospace, Consolas, monospace; background: #1e1e2e; color: #e9ecef; padding: 8px 10px; border-radius: 10px; margin: 6px 0; }
+    .sim .code div { display: flex; align-items: center; gap: 8px; padding: 2px 4px; border-radius: 6px; }
+    .sim .code div.fire { background: #2b8a3e; }
+    .sim .code div.dead { color: #ff8787; }
+    .sim .code button { padding: 0 8px; font-size: .8rem; }
+    .sim table.dt { border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; width: 100%; }
+    .sim table.dt th, .sim table.dt td { border: 1px solid #dee2e6; padding: 3px 6px; text-align: center; font-weight: 800; font-size: .88rem; }
+    .sim table.dt th { background: #ebfbee; color: #2b8a3e; }
+    .sim table.dt tr.now td { outline: 2px solid #fab005; outline-offset: -2px; }
+    .sim table.dt td.ok { color: #2b8a3e; } .sim table.dt td.no { color: #c92a2a; background: #fff5f5; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Guard Brain: rules, order and the decision table</h1>
+  <p class="hint">The guard of <i>Torch Hall</i> decides with an else-if chain. The designer wants: <b>a weak guard flees; else it attacks a player it sees near; else it chases a player it sees; else it patrols.</b> Switch the facts, and use ▲ to change the order of the rules.</p>
+  <canvas id="c" aria-label="The hall with the guard and the player"></canvas>
+  <div class="bar" id="facts"></div>
+  <div class="code" id="code"></div>
+  <p class="task" id="task"></p>
+  <div style="overflow-x:auto"><table class="dt" id="dt"></table></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const RULES = {
+    Chase: { cond: "s", f: (v) => v.s },
+    Attack: { cond: "s && n", f: (v) => v.s && v.n },
+    Flee: { cond: "w", f: (v) => v.w },
+  };
+  const COL = { Patrol: "#2b8a3e", Chase: "#e8590c", Attack: "#c92a2a", Flee: "#1c7ed6" };
+  let order = ["Chase", "Attack", "Flee"];
+  const v = { s: false, n: false, w: false };
+  const FACTS = [["s", "sees the player (s)"], ["n", "player is near (n)"], ["w", "weak: health < 30 (w)"]];
+  const want = (x) => x.w ? "Flee" : x.s && x.n ? "Attack" : x.s ? "Chase" : "Patrol";
+  const run = (x) => { for (const k of order) if (RULES[k].f(x)) return k; return "Patrol"; };
+  const rows = [];
+  [1, 0].forEach((s) => [1, 0].forEach((n) => [1, 0].forEach((w) => rows.push({ s: !!s, n: !!n, w: !!w }))));
+  const TASKS = [
+    { q: "Task 1: Switch on s and n (the guard sees the player near). Which action runs? Is it what the designer wants?", ok: () => v.s && v.n && !v.w },
+    { q: "Task 2: One rule never runs. Move the rules so that every rule runs in at least one row.", ok: () => Object.keys(RULES).every((k) => rows.some((x) => run(x) === k)) },
+    { q: "Task 3: Make the chain agree with the designer in all 8 rows.", ok: () => rows.every((x) => run(x) === want(x)) },
+  ];
+  let ti = 0;
+
+  function draw() {
+    Kit.buttons($("facts"), FACTS.map(([k, t]) => ({ k, label: t })), (k) => { v[k] = !v[k]; draw(); });
+    $("facts").querySelectorAll("button").forEach((b) => b.classList.toggle("on", v[b.dataset.k]));
+    const act = run(v);
+    const dead = Object.keys(RULES).filter((k) => !rows.some((x) => run(x) === k));
+    $("code").innerHTML = order.map((k, i) => `<div class="${act === k ? "fire" : dead.includes(k) ? "dead" : ""}"><button type="button" class="ghost" data-up="${i}" aria-label="move ${k} up">▲</button>${i ? "else if" : "if"} (${RULES[k].cond}) ${k}();${dead.includes(k) ? "  // never runs" : ""}</div>`).join("") +
+      `<div class="${act === "Patrol" ? "fire" : ""}"><span style="width:28px"></span>else Patrol();</div>`;
+    $("code").querySelectorAll("[data-up]").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.up; if (i > 0) { [order[i - 1], order[i]] = [order[i], order[i - 1]]; draw(); } }));
+    const TF = (b) => (b ? "T" : "F");
+    $("dt").innerHTML = "<tr><th>s</th><th>n</th><th>w</th><th>the chain</th><th>the designer</th><th></th></tr>" + rows.map((x) => {
+      const a = run(x), d = want(x), now = x.s === v.s && x.n === v.n && x.w === v.w;
+      return `<tr class="${now ? "now" : ""}"><td>${TF(x.s)}</td><td>${TF(x.n)}</td><td>${TF(x.w)}</td><td style="color:${COL[a]}">${a}</td><td style="color:${COL[d]}">${d}</td><td class="${a === d ? "ok" : "no"}">${a === d ? "✔" : "✘"}</td></tr>`;
+    }).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the special rules first, the general ones after, and else at the end.";
+    const bad = rows.filter((x) => run(x) !== want(x)).length;
+    if (!m) m = dead.length ? `${dead.join(" and ")} never runs: the rules above it catch all its cases first (an unreachable rule).` : bad ? `${bad} of 8 rows differ from the designer. The first true rule wins, so the order matters.` : "The chain and the designer agree in every row.";
+    $("msg").textContent = m; $("msg").classList.toggle("bad", !!dead.length || !!bad);
+  }
+
+  // The hall: the guard moves by its action.
+  const cv = Kit.canvas($("c"), (W) => Math.min(170, W * 0.32));
+  let gx = 0.35, dir = 1, last = 0;
+  Kit.loop((now) => {
+    const c = cv.ctx, W = cv.W, H = cv.H, dt = Math.min(0.05, (now - last) / 1000 || 0); last = now;
+    const act = run(v), px = v.n ? Math.min(0.92, gx + 0.14) : 0.9;
+    if (act === "Patrol") { gx += dir * dt * 0.08; if (gx > 0.6) dir = -1; if (gx < 0.1) dir = 1; }
+    else if (act === "Chase") gx += (px - 0.14 - gx) * dt * 1.2;
+    else if (act === "Flee") gx += (0.06 - gx) * dt * 1.5;
+    c.fillStyle = "#2b2a33"; c.fillRect(0, 0, W, H);
+    c.fillStyle = "#3b3a45"; c.fillRect(0, H * 0.72, W, H * 0.28);
+    for (let i = 0; i < 4; i++) { const tx = W * (0.12 + i * 0.26); c.fillStyle = "#ffa94d"; c.beginPath(); c.arc(tx, H * 0.18, 5 + Math.sin(now / 150 + i) * 1.5, 0, 7); c.fill(); }
+    const gy = H * 0.62, X = gx * W, P = px * W;
+    if (v.s) { c.strokeStyle = "rgba(255,224,102,.6)"; c.setLineDash([6, 5]); c.lineWidth = 2; c.beginPath(); c.moveTo(X, gy - 10); c.lineTo(P, gy - 10); c.stroke(); c.setLineDash([]); }
+    c.fillStyle = "#74c0fc"; c.beginPath(); c.arc(P, gy, 13, 0, 7); c.fill(); Kit.text(c, "player", P, gy + 32, 11, "#e9ecef");
+    const shake = act === "Attack" ? Math.sin(now / 60) * 4 : 0;
+    c.fillStyle = COL[act]; c.beginPath(); c.arc(X + shake, gy, 17, 0, 7); c.fill();
+    Kit.text(c, "guard", X, gy + 34, 11, "#e9ecef");
+    c.fillStyle = "#495057"; c.fillRect(X - 20, gy - 32, 40, 6); c.fillStyle = v.w ? "#fa5252" : "#51cf66"; c.fillRect(X - 20, gy - 32, v.w ? 10 : 34, 6);
+    Kit.text(c, act.toUpperCase(), W / 2, 22, 16, COL[act] === "#2b8a3e" ? "#69db7c" : COL[act] === "#1c7ed6" ? "#74c0fc" : COL[act] === "#e8590c" ? "#ffa94d" : "#ff8787");
+  });
+  window.GB = { facts: (o) => { Object.assign(v, o); draw(); }, order: (o) => { order = o; draw(); } };
+  draw();
+})();
+</script>
+</body>
+</html>

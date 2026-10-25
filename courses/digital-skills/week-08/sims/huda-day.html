@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Huda's Busy Day</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Huda's Busy Day</h1>
+  <p class="hint">Huda, the office manager of the <b>Sunrise Company</b>, has a busy day. Every hour brings a new job: files, AI, Word and Excel. Choose the best way to do each job.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { h: "8:00", goal: "Huda saves the price list for the shop. Which file name is best?", choices: C(["2026-11-03_price-list.xlsx", "new list final.xlsx", "Book1.xlsx", "list.xlsx"]), answer: "2026-11-03_price-list.xlsx",
+      good: "The date first and what it is: everyone finds it, and the files sort by date.", why: { "Book1.xlsx": "It says nothing about the file." } },
+    { h: "9:00", goal: "Rana in the shop needs the file too. How does Huda share it safely?", choices: C(["a share link from the cloud, only for Rana, can edit", "a link for anyone with the link", "a copy on a USB stick", "a photo of the screen"]), answer: "a share link from the cloud, only for Rana, can edit",
+      good: "Share with the person who needs it, with the right permission.", why: { "a link for anyone with the link": "Anyone who gets the link could open the prices." } },
+    { h: "10:00", goal: "Huda asks an AI tool for a short notice to the staff. Which prompt is best?", choices: C(["Write a notice to staff: office closed Thursday 1 pm, cleaning. Friendly, 3 sentences.", "Write a notice.", "Notice!!!", "Write everything about our company."]), answer: "Write a notice to staff: office closed Thursday 1 pm, cleaning. Friendly, 3 sentences.",
+      good: "Task, context and format: the AI has everything it needs.", why: { "Write a notice.": "No facts, no tone, no length: the AI must guess." } },
+    { h: "11:00", goal: "The AI's notice says the shop also closes at 1 pm. That is not true. What does Huda do?", choices: C(["correct it before she sends it", "send it: the AI is always right", "ask the AI to make it longer", "print it"]), answer: "correct it before she sends it",
+      good: "Check every AI answer against the facts: AI can add wrong details.", why: { "send it: the AI is always right": "AI tools make mistakes that sound right." } },
+    { h: "12:00", goal: "Huda's report has ten headings. She wants a contents page that updates itself. What does she use first?", choices: C(["the styles Heading 1 and Heading 2", "bold text and a bigger font", "a table", "a picture"]), answer: "the styles Heading 1 and Heading 2",
+      good: "The table of contents is built from the heading styles.", why: { "bold text and a bigger font": "Bold text looks like a heading but Word does not see it as one." } },
+    { h: "13:00", goal: "In Excel, D2 has =B2*C2. Huda copies it down to D3. What is in D3?", choices: C(["=B3*C3", "=B2*C2", "=B3*C2", "20"]), answer: "=B3*C3",
+      good: "Relative references move with the row.", why: { "=B2*C2": "Without $, the addresses change when you copy." } },
+    { h: "14:00", goal: "Every price must be multiplied by the tax rate in F1. Which formula can she copy down?", choices: C(["=B2*$F$1", "=B2*F1", "=$B$2*F1", "=B2+F1"]), answer: "=B2*$F$1",
+      good: "$F$1 stays the same in every row; B2 moves.", why: { "=B2*F1": "Copied down, F1 becomes F2, F3 …: empty cells." } },
+    { h: "15:00", goal: "The manager asks: “How did our sales change from Sunday to Thursday?” Which chart?", choices: C(["a line chart", "a pie chart", "a table only", "conditional formatting"]), answer: "a line chart",
+      good: "A line chart shows a change over time.", why: { "a pie chart": "A pie shows the parts of one whole, not a change." } },
+  ];
+  Kit.game({
+    rounds, cols: 1, colsPhone: 1, animMs: 600, still: true,
+    intro: "Round 1 is the story of the lesson: Huda's first job of the day.",
+    canvas: () => 64,
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fff4e6"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const hs = rounds.map((x) => x.h), w = (W - 20) / hs.length, cur = hs.indexOf(r.h);
+      hs.forEach((t, i) => { const on = i === cur, done = i < cur || (on && st.done && st.ok); Kit.rrect(c, 10 + i * w + 2, 14, w - 4, 36, 9, on ? "#D9480F" : done ? "#ffd8a8" : "#fff", "#D9480F", 2); Kit.text(c, t, 10 + i * w + w / 2, 37, W < 460 ? 9.5 : 12.5, on ? "#fff" : "#a33b0a"); });
+    },
+  });
+})();
+</script>
+</body>
+</html>

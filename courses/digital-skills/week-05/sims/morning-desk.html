@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Huda's Morning</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Huda's Morning</h1>
+  <p class="hint">Huda is the office manager of <b>Sunrise Company</b>. Six requests arrive on Monday morning. For each one, choose the AI job in Word, or the right check.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const JOBS = ["draft", "sum up", "rewrite", "translate"].map((k) => ({ k, label: k }));
+  const R = (from, text, answer, good, why, choices) => ({ from, text, goal: `Request from <b>${from}</b>`, answer, good, why, choices: choices || JOBS });
+  const rounds = [
+    R("the manager", "Write a notice: the office closes early on Thursday at 1 pm.", "draft", "There is no text yet: ask the AI for a first draft, then check and format it.",
+      { "sum up": "There is no long text to sum up yet.", rewrite: "There is nothing to rewrite yet." }),
+    R("the manager", "This report has 6 pages. I need the main points before the 10:00 meeting.", "sum up", "A summary keeps the main points. Then compare each point with the report.",
+      { draft: "The report exists already: you need its main points." }),
+    R("a colleague", "My e-mail to a customer says: “Send the money now.” It sounds rude.", "rewrite", "Rewrite it in a polite tone. Check that the facts stay the same.",
+      { translate: "The language is fine; the tone is the problem." }),
+    R("the reception", "A visitor reads only Arabic. The notice about the closing time is in English.", "translate", "Translate it, then check the day, the date and the time in the translation.",
+      { rewrite: "The words are fine; the reader needs another language." }),
+    R("Huda herself", "The AI summary says the meeting is on Monday. The report says Tuesday.", "orig", "The original text wins: correct the summary to Tuesday.",
+      { trust: "AI tools make mistakes. Check against the original.", again: "A new answer can be wrong too. Check it against the report." },
+      [{ k: "orig", label: "correct it: the report wins" }, { k: "trust", label: "trust the AI summary" }, { k: "again", label: "ask again and use the new answer" }]),
+    R("Huda herself", "The AI draft of the notice says: “Free coffee for all staff on Thursday.” Nobody said this.", "delete", "Delete the invented sentence. A draft must have only true facts.",
+      { keep: "It is not true: people will come for coffee that does not exist.", bold: "Bold does not make it true." },
+      [{ k: "delete", label: "delete the invented sentence" }, { k: "keep", label: "keep it, it is nice" }, { k: "bold", label: "make it bold" }]),
+  ];
+  Kit.game({
+    rounds, still: true, cols: 2, colsPhone: 2, animMs: 600,
+    intro: "Round 1 is the story of the lesson: Huda's first request of the day.",
+    canvas: () => 112,
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fff9f2"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      Kit.rrect(c, 10, 10, W - 20, H - 20, 12, "#fff", "#FFC078", 2.5);
+      Kit.text(c, "✉ " + r.from, 26, 36, 13, "#D9480F", "left");
+      Kit.wrap(c, "“" + r.text + "”", 26, 60, W - 52, W < 460 ? 12 : 14);
+    },
+  });
+})();
+</script>
+</body>
+</html>

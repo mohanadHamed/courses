@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Transition Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Transition Lab: from one slide to the next</h1>
+  <p class="note">A practice model that works like the Transitions tab of PowerPoint. Choose a transition and its duration, then press <b>Next slide</b> to see it.</p>
+  <canvas id="c" aria-label="Two slides and the transition between them"></canvas>
+  <div class="bar">Transition: <span id="tr"></span></div>
+  <div class="controls" id="sl"></div>
+  <div class="bar"><button type="button" id="next">Next slide ▶</button><label><input type="checkbox" id="all"> Apply To All</label></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="slide-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const S = [
+    { layout: "Title Slide", theme: "Sunrise", title: "New shop hours", body: ["Huda, Office Manager"] },
+    { layout: "Title and Content", theme: "Sunrise", title: "From 1 December", body: ["Sun–Thu: 9:00–20:00", "Friday: closed", "Saturday: 10:00–18:00"] },
+    { layout: "Title and Content", theme: "Sunrise", title: "Why the change?", body: ["More customers in the evening", "A free Friday for the staff"] },
+  ];
+  const s = { tr: "None", dur: 0.7, all: false, i: 0, t0: 0, anim: false };
+  const TR = ["None", "Fade", "Push", "Wipe", "Vortex"];
+  function tabs() { Kit.buttons($("tr"), TR.map((k) => ({ k, label: k })), (k) => { s.tr = k; tabs(); msg(); }); $("tr").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.tr)); }
+  function msg() {
+    const m = s.tr === "Vortex" ? "Vortex is fun once, but it pulls the eyes away from your message. For a work talk, choose a quiet one." :
+      s.dur > 1.5 ? "A long transition makes the audience wait. 0.5–1 second is enough." :
+      s.tr === "None" ? "No transition is fine. A quiet transition such as Fade helps the audience see that the slide changed." :
+      !s.all ? "Good choice. Press Apply To All, so that every slide changes the same way." : `✓ ${s.tr}, ${Kit.fmt(s.dur, 1)} s, on all slides: calm and the same everywhere.`;
+    $("msg").textContent = m; $("msg").classList.toggle("bad", s.tr === "Vortex" || s.dur > 1.5);
+  }
+  Kit.slider($("sl"), "Duration", 0.3, 3, 0.1, s.dur, (v) => { s.dur = v; msg(); }, (v) => Kit.fmt(v, 1) + " s");
+  $("all").addEventListener("change", (e) => { s.all = e.target.checked; msg(); });
+  $("next").addEventListener("click", () => { if (s.anim) return; s.anim = true; s.t0 = performance.now(); });
+  const cv = Kit.canvas($("c"), (W) => Math.min(320, W * 9 / 16));
+  Kit.loop((now) => {
+    const c = cv.ctx, W = cv.W, H = cv.H, w = Math.min(W, H * 16 / 9), x = (W - w) / 2;
+    c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+    const A = S[s.i], B = S[(s.i + 1) % S.length];
+    let k = s.anim ? Math.min(1, (now - s.t0) / 1000 / (s.tr === "None" ? 0.001 : s.dur)) : 0;
+    if (!s.anim || s.tr === "None") { SK.draw(c, x, 0, w, k >= 1 ? B : A); }
+    else if (s.tr === "Fade") { SK.draw(c, x, 0, w, A); c.globalAlpha = k; SK.draw(c, x, 0, w, B); c.globalAlpha = 1; }
+    else if (s.tr === "Push") { c.save(); c.beginPath(); c.rect(x, 0, w, H); c.clip(); SK.draw(c, x - w * k, 0, w, A); SK.draw(c, x + w * (1 - k), 0, w, B); c.restore(); }
+    else if (s.tr === "Wipe") { SK.draw(c, x, 0, w, A); c.save(); c.beginPath(); c.rect(x, 0, w * k, H); c.clip(); SK.draw(c, x, 0, w, B); c.restore(); }
+    else { c.save(); c.translate(x + w / 2, H / 2); c.rotate(k * 6.28 * 2); c.scale(1 - Math.sin(k * Math.PI) * 0.8, 1 - Math.sin(k * Math.PI) * 0.8); SK.draw(c, -w / 2, -H / 2, w, k < 0.5 ? A : B); c.restore(); }
+    if (s.anim && k >= 1) { s.anim = false; s.i = (s.i + 1) % S.length; }
+  });
+  window.TL = { set: (o) => { Object.assign(s, o); if (o.dur) { const i = document.querySelector("#sl input"); i.value = o.dur; i.dispatchEvent(new Event("input")); } $("all").checked = s.all; tabs(); msg(); }, next: () => $("next").click() };
+  tabs(); msg();
+})();
+</script>
+</body>
+</html>

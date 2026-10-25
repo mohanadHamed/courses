@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Equivalence Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; font-weight: 800; }
+    .sim input[type=text] { font: 600 1rem ui-monospace, Consolas, monospace; padding: 6px 8px; border-radius: 8px; border: 1.5px solid #ced4da; flex: 1; min-width: 180px; }
+    .sim table.tt { border-collapse: collapse; margin-top: 8px; }
+    .sim table.tt th, .sim table.tt td { border: 1px solid #dee2e6; padding: 5px 10px; text-align: center; font-weight: 800; }
+    .sim table.tt th { background: #ebfbee; color: #2b8a3e; font-family: ui-monospace, Consolas, monospace; font-size: .85rem; }
+    .sim table.tt td.T { background: #ebfbee; color: #2b8a3e; }
+    .sim table.tt td.F { background: #fff5f5; color: #c92a2a; }
+    .sim table.tt tr.diff td { outline: 3px solid #e03131; outline-offset: -3px; }
+    .sim .ex button { font-family: ui-monospace, Consolas, monospace; font-size: .82rem; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Equivalence Lab: are two conditions the same?</h1>
+  <p class="hint">Two conditions are equivalent when they have the same value in every row. Type two conditions (or pick a law), and the lab compares them row by row. A red row shows where they differ.</p>
+  <div class="bar">A <input type="text" id="a" value="!(p && q)" aria-label="condition A"></div>
+  <div class="bar">B <input type="text" id="b" value="!p || !q" aria-label="condition B"></div>
+  <div class="bar"><button type="button" id="go">Compare</button></div>
+  <div class="bar ex" id="ex"></div>
+  <div style="overflow-x:auto"><table class="tt" id="tt"></table></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="logic.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const EX = [["De Morgan (AND)", "!(p && q)", "!p || !q"], ["De Morgan (OR)", "!(p || q)", "!p && !q"], ["a wrong De Morgan", "!(p && q)", "!p && !q"],
+    ["distributive", "p && (q || r)", "(p && q) || (p && r)"], ["implication", "p -> q", "!p || q"], ["absorption", "p || (p && q)", "p"]];
+  Kit.buttons($("ex"), EX.map(([n], k) => ({ k: String(k), label: n })), (k) => { $("a").value = EX[k][1]; $("b").value = EX[k][2]; go(); });
+  function go() {
+    let A, B;
+    try { A = LG.parse($("a").value); B = LG.parse($("b").value); } catch (err) { $("msg").textContent = "Check the conditions: " + err.message + "."; $("msg").classList.add("bad"); return; }
+    const vars = [...new Set([...A.vars, ...B.vars])].sort(), rows = LG.rows(vars);
+    const diff = rows.filter((r) => A.eval(r) !== B.eval(r)).length;
+    const esc = (s) => s.replace(/</g, "&lt;");
+    $("tt").innerHTML = `<tr>${vars.map((v) => `<th>${v}</th>`).join("")}<th>A: ${esc($("a").value)}</th><th>B: ${esc($("b").value)}</th></tr>` +
+      rows.map((r) => { const a = A.eval(r), b = B.eval(r); return `<tr class="${a !== b ? "diff" : ""}">${vars.map((v) => `<td class="${r[v] ? "T" : "F"}">${LG.TF(r[v])}</td>`).join("")}<td class="${a ? "T" : "F"}">${LG.TF(a)}</td><td class="${b ? "T" : "F"}">${LG.TF(b)}</td></tr>`; }).join("");
+    $("msg").textContent = diff ? `Not equivalent: they differ in ${diff} of ${rows.length} rows (red). In the game, these cases would behave differently.` : `Equivalent: the same value in all ${rows.length} rows. You may replace one by the other in your code.`;
+    $("msg").classList.toggle("bad", !!diff); diff ? Kit.bad() : Kit.good();
+  }
+  $("go").addEventListener("click", go);
+  window.EQ = { pick: (k) => $("ex").querySelectorAll("button")[k].click(), set: (a, b) => { $("a").value = a; $("b").value = b; go(); } };
+  go();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Outline Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .lines { border: 1.5px solid #ced4da; border-radius: 10px; padding: 6px; background: #fff; }
+    .sim .ln { display: flex; gap: 4px; align-items: center; margin: 2px 0; }
+    .sim .ln input { flex: 1; font: 600 .92rem system-ui, sans-serif; padding: 4px 6px; border-radius: 6px; border: 1px solid #dee2e6; }
+    .sim .ln.l0 input { font-weight: 800; color: #a33b0a; }
+    .sim .ln.l1 { padding-left: 26px; }
+    .sim .ln button { padding: 2px 7px; font-size: .8rem; }
+    .sim .slides { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+    .sim .slides canvas { width: 100%; }
+    @media (max-width: 520px) { .sim .slides { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .sim .facts { background: #fff9db; border: 1.5px solid #fab005; border-radius: 10px; padding: 6px 10px; font-weight: 700; font-size: .9rem; margin: 6px 0; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Outline Lab: from an AI outline to slides</h1>
+  <p class="hint">An AI tool wrote this outline for Huda's talk “Going paperless”. Like in PowerPoint's Outline view, a line at the left edge is a slide title; a line moved right (→, like Tab) is a point. Fix the levels, check the facts with Huda's notes, and edit the text.</p>
+  <div class="facts">Huda's notes (the real data): we print about <b>6,500 pages a month</b> · plan: shared folders and e-forms · goal: half the paper in 3 months · no report or study was used.</div>
+  <div class="lines" id="lines"></div>
+  <div class="slides" id="slides"></div>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="../../week-09/sims/slide-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  let L = [
+    [0, "Going paperless"], [0, "Huda, Office Manager"], [0, "The problem"], [1, "We print 9,000 pages a month"], [1, "Lost papers and full cupboards"],
+    [0, "The plan"], [1, "Shared folders for every team"], [0, "E-forms instead of paper forms"], [1, "Source: Green Office Report 2021"],
+    [0, "Our goal"], [1, "Half the paper in three months, which will help the environment and also save a lot of money for the company"], [0, "Questions?"],
+  ];
+  const words = (t) => t.trim().split(/\s+/).filter(Boolean).length;
+  const slides = () => { const S = []; L.forEach(([lv, t]) => { if (lv === 0 || !S.length) S.push({ title: t, body: [] }); else S[S.length - 1].body.push(t); }); return S; };
+  const TASKS = [
+    { q: "Task 1: Some lines are at the wrong level. Use → and ← until there are 5 slides: Going paperless, The problem, The plan, Our goal, Questions?", ok: () => slides().map((s) => s.title).join("|") === "Going paperless|The problem|The plan|Our goal|Questions?" },
+    { q: "Task 2: One number is wrong. Compare it with Huda's notes and correct it.", ok: () => L.some(([, t]) => t.includes("6,500")) && !L.some(([, t]) => t.includes("9,000")) },
+    { q: "Task 3: The AI added a source that does not exist. Delete that line (✕).", ok: () => !L.some(([, t]) => /report|study/i.test(t)) },
+    { q: "Task 4: Every point must have 8 words or fewer. Shorten the long one.", ok: () => L.every(([lv, t]) => lv === 0 || words(t) <= 8) },
+  ];
+  let ti = 0;
+  function draw() {
+    $("lines").innerHTML = L.map(([lv, t], i) => `<div class="ln l${lv}"><button type="button" class="ghost" data-a="out" data-i="${i}" aria-label="move left">←</button><button type="button" class="ghost" data-a="in" data-i="${i}" aria-label="move right">→</button><input type="text" data-i="${i}" value="${t.replace(/"/g, "&quot;")}" aria-label="line ${i + 1}"><button type="button" class="ghost" data-a="del" data-i="${i}" aria-label="delete line">✕</button></div>`).join("");
+    $("lines").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.i; if (b.dataset.a === "del") L.splice(i, 1); else L[i][0] = b.dataset.a === "in" ? 1 : 0; draw(); }));
+    $("lines").querySelectorAll("input").forEach((inp) => inp.addEventListener("change", () => { L[+inp.dataset.i][1] = inp.value; draw(); }));
+    preview(); check();
+  }
+  function preview() {
+    const S = slides();
+    $("slides").innerHTML = S.map(() => "<canvas></canvas>").join("");
+    $("slides").querySelectorAll("canvas").forEach((cv, i) => {
+      const W = cv.clientWidth || 180, dpr = window.devicePixelRatio || 1; cv.width = W * dpr; cv.height = W * 9 / 16 * dpr; cv.style.height = W * 9 / 16 + "px";
+      const c = cv.getContext("2d"); c.scale(dpr, dpr);
+      SK.draw(c, 0, 0, W, { theme: "Sunrise", layout: i === 0 || i === S.length - 1 && !S[i].body.length ? "Title Slide" : "Title and Content", title: S[i].title, body: S[i].body });
+    });
+  }
+  function check() {
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: an outline with the right levels, true facts, no made-up source and short points.";
+    const S = slides();
+    if (!m) m = `${S.length} slides now. ` + (S.length > 5 ? "A point at the left edge became its own slide." : "");
+    $("msg").textContent = m;
+  }
+  window.addEventListener("resize", () => setTimeout(preview, 60));
+  window.OL = { level: (i, lv) => { L[i][0] = lv; draw(); }, text: (i, t) => { L[i][1] = t; draw(); }, del: (i) => { L.splice(i, 1); draw(); }, find: (re) => L.findIndex(([, t]) => re.test(t)) };
+  draw();
+})();
+</script>
+</body>
+</html>

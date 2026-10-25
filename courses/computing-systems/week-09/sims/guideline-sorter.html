@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Guideline Sorter</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .case { border: 1.5px solid var(--sim-border); border-radius: 12px; padding: 10px 12px; background: #fff; margin: 8px 0; font-weight: 700; line-height: 1.45; }
+    .sim .opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    @media (max-width: 520px) { .sim .opts { grid-template-columns: 1fr 1fr; } }
+    .sim .score { font-weight: 800; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Guideline Sorter: which part of the rules?</h1>
+  <p class="hint">Store guidelines are long, but they have a few main parts. Read each problem in a game and choose the part of the guidelines that covers it. Apple's App Review Guidelines have five parts; Google Play's Developer Policy has similar topics.</p>
+  <p class="score" id="score"></p>
+  <div class="case" id="case"></div>
+  <div class="opts" id="opts"></div>
+  <p class="message" id="msg"></p>
+  <div class="row"><button type="button" id="next">Next problem ▶</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const P = ["Safety", "Performance", "Business", "Design", "Legal"];
+  const D = { Safety: "objectionable content, children, user-generated content", Performance: "complete builds, crashes, accurate listing, hardware use", Business: "payments, in-app purchases, ads", Design: "copies, spam, minimum functionality, sign-in", Legal: "privacy, data, intellectual property" };
+  const CASES = [
+    ["The game crashes when the player opens the shop.", "Performance", "A build that crashes is not complete: the review rejects it."],
+    ["The listing shows features that the game does not have.", "Performance", "The listing (metadata) must match the app."],
+    ["Players buy gems with a link to a website payment, not with the store's in-app purchase.", "Business", "Digital items in a game must use the store's payment system (with some regional exceptions)."],
+    ["A loot box gives random items for money, and the odds are not shown.", "Business", "Both stores ask games to show the odds of random paid items before the purchase."],
+    ["The game collects the player's location but has no privacy policy.", "Legal", "Data collection needs a privacy policy and a clear reason."],
+    ["The hero is a famous character from a film, without permission.", "Legal", "Using someone else's intellectual property needs a licence from its owner."],
+    ["Players can send chat messages, and there is no way to report abuse.", "Safety", "User-generated content needs filtering, reporting and blocking."],
+    ["The studio uploads 20 copies of the same game with new names.", "Design", "Copies and spam are not allowed."],
+    ["A game for young children shows ads for adult products.", "Safety", "Apps for children have strict rules about ads and data."],
+  ];
+  let i = 0, right = 0, done = 0, answered = false;
+  function show() {
+    answered = false; const [t] = CASES[i];
+    $("score").textContent = `Problem ${i + 1} of ${CASES.length} · right: ${right} / ${done}`;
+    $("case").textContent = t;
+    Kit.buttons($("opts"), P.map((k) => ({ k, label: `${k}` })), pick);
+    $("opts").querySelectorAll("button").forEach((b) => (b.title = D[b.dataset.k]));
+    $("msg").textContent = "Tip: " + P.map((k) => `${k} = ${D[k]}`).join(" · "); $("msg").classList.remove("bad"); $("next").hidden = true;
+  }
+  function pick(k) {
+    if (answered) return; answered = true; done++;
+    const [, a, why] = CASES[i], ok = k === a;
+    if (ok) { right++; Kit.good(); } else Kit.bad();
+    $("msg").textContent = (ok ? "✓ " : `Not ${k}: it is ${a}. `) + why; $("msg").classList.toggle("bad", !ok);
+    $("score").textContent = `Problem ${i + 1} of ${CASES.length} · right: ${right} / ${done}`;
+    $("next").hidden = false; $("next").textContent = i < CASES.length - 1 ? "Next problem ▶" : "Start again ▶";
+  }
+  $("next").addEventListener("click", () => { if (i < CASES.length - 1) i++; else { i = 0; right = 0; done = 0; } show(); });
+  window.GS = { pick: (k) => pick(k), next: () => $("next").click() };
+  show();
+})();
+</script>
+</body>
+</html>

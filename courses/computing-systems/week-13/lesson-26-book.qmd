@@ -1,0 +1,218 @@
+---
+title: "Hands-on: Running a Sample App on an Emulator"
+description: "Lesson notes · A hands-on seminar: create and start an Android Virtual Device, install a sample build by drag-and-drop or with adb, run test cases with the emulator's extended controls, collect evidence with Logcat and screenshots, and write a bug report that a developer can repeat."
+lesson: 26
+ilos: [C1]
+format: lesson-typst
+---
+
+::: {.lead}
+Today the lab computers are Rami's desk. Each student gets the same build,
+`PocketQuest_1.3.apk`, and the same test plan with eight test cases. One of
+the test cases hides a real bug. In lecture 25 you planned a test
+environment with emulators and real devices. In this seminar you **do** it:
+you create an Android Virtual Device, start it, install the build, run the
+test cases, collect the evidence and write a bug report. You work alone.
+Each section is one step of the seminar and ends with a task; at the end
+you hand in a short test report.
+:::
+
+## Key terms
+
+{{< glossary android-studio avd system-image emulator adb apk logcat game-build >}}
+
+## 26.1 Create and start the virtual device
+
+Steps 1–3 happen in Android Studio (@fig-steps).
+
+::: {.callout-important title="Definition 26.1 — Steps 1–3"}
+1. Open Android Studio → **Device Manager** → **Create device**.
+2. Choose the device profile and the **system image** (download it once),
+   name the AVD, for example `P5_API_30`.
+3. Press **Start**. The first start (a **cold boot**) takes longer; later
+   starts use a saved state (**quick boot**).
+
+From a terminal, the same AVD starts with `emulator -avd P5_API_30`;
+`emulator -list-avds` lists the names.
+:::
+
+![The steps of the seminar.](images/seminar-steps.png){#fig-steps width=94%}
+
+::: {.callout-note title="Example 26.1 — The first boot in the lab"}
+1. Rami creates `P5_API_30`: 720 × 1600, 4 GB, Android 11.
+2. The system image is about 1 GB: on the lab network the download takes
+   two minutes, so the teacher downloads it before the seminar.
+3. The first boot takes 18 seconds; the home screen of Android 11 appears.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"The emulator does not start." Often virtualization is off in the BIOS, or
+the computer has too little free RAM. Close other programs, and ask the lab
+technician about virtualization.
+:::
+
+::: {.callout-note title="Do it · Steps 1–3"}
+On the lab computer (or in **Emulator Lab**), create and start
+`P5_API_30`. Write how long the first boot took.
+
+*Your result:* a running emulator and one time.
+:::
+
+## 26.2 Install the build
+
+Step 4 puts the build on the emulator (@fig-adb).
+
+::: {.callout-important title="Definition 26.2 — Installing an APK"}
+Two ways:
+
+- **Drag and drop** the `.apk` file onto the emulator window.
+- **adb:** `adb devices` must list the emulator (for example
+  `emulator-5554 device`); then `adb install PocketQuest_1.3.apk`.
+  `adb uninstall` with the package name removes the app again.
+:::
+
+![Commands of the seminar.](images/adb-commands.png){#fig-adb width=94%}
+
+::: {.callout-note title="Example 26.2 — No devices"}
+1. A student types `adb install PocketQuest_1.3.apk` and sees
+   `adb: no devices/emulators found`.
+2. `adb devices` shows an empty list: the emulator was closed.
+3. After `emulator -avd P5_API_30` and a new `adb devices`, the install
+   prints `Success`, and the Pocket Quest icon appears.
+:::
+
+{{< sim file="sims/adb-lab.html" poster="sims/adb-lab.png" title="Emulator Lab: run Pocket Quest 1.3" height="720" >}}
+
+::: {.callout-warning title="Common mistake"}
+Installing from the wrong folder: `failed to stat … No such file`. Run adb
+in the folder of the APK, or write the full path.
+:::
+
+::: {.callout-note title="Do it · Step 4"}
+Install the build twice: once by drag and drop, once with `adb install`
+(uninstall it in between). Copy the output of `adb devices`.
+
+*Your result:* two installs and one line of output.
+:::
+
+## 26.3 Run the test cases and collect evidence
+
+Steps 5 and 6: test, and keep the proof.
+
+::: {.callout-important title="Definition 26.3 — Testing on the emulator"}
+- Follow the test plan **in order**, and mark each case pass or fail.
+- The emulator's **extended controls** change the device: rotation, the
+  battery level, the location, the network speed and delay, a phone call.
+- Collect **evidence**: a **screenshot** of the problem, and the lines of
+  **Logcat** (`adb logcat`, or the Logcat window of Android Studio) from
+  the moment it happened.
+- Repeat a failed case once, to be sure the steps make it happen again.
+:::
+
+::: {.callout-note title="Example 26.3 — Test case 7"}
+1. Test case 7: "Start a race, then turn the device to landscape."
+2. The race freezes; after five seconds Android says *Pocket Quest isn't
+   responding*.
+3. Logcat shows `E/Unity: NullReferenceException: RaceHud.OnScreenRotate
+   () (at RaceHud.cs:118)`.
+4. Rami repeats the steps: the freeze happens again. Rami saves a
+   screenshot and the 20 lines of the log around the error.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Copying the whole log, thousands of lines. Copy the lines around the error,
+with the time, so that the developer finds it at once.
+:::
+
+::: {.callout-note title="Do it · Steps 5–6"}
+1. In **Emulator Lab**, run test case 7, then read the log and take a
+   screenshot.
+2. On the lab emulator, change the network to a slow, delayed connection
+   in the extended controls, and race once. What changes?
+
+*Your result:* a screenshot, the error line and one observation.
+:::
+
+## 26.4 Write the bug report
+
+Step 7: a developer must be able to repeat the bug from the report alone
+(@fig-report).
+
+::: {.callout-important title="Definition 26.4 — A good bug report"}
+- **Title:** what goes wrong, in one line.
+- **Build:** the version and the build number.
+- **Device:** the device or AVD and the OS version.
+- **Steps:** numbered, from the start.
+- **Expected** and **actual** result.
+- **Attached:** a screenshot and the lines of the log.
+
+One bug per report.
+:::
+
+![A good bug report.](images/bug-report.png){#fig-report width=94%}
+
+::: {.callout-note title="Example 26.4 — From \"it broke\" to a report"}
+1. First draft: "The game broke when I turned it."
+2. Rami adds the build (42), the AVD (`P5_API_30`, Android 11), the two
+   steps, expected (the race goes on) and actual (freeze), and attaches the
+   screenshot and the log.
+3. The developer repeats it in two minutes and fixes `RaceHud.cs` line 118.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Writing your opinion instead of the facts ("the HUD code is bad"). Report
+what you did and what you saw; the developer finds the cause.
+:::
+
+::: {.callout-note title="Do it · Your test report"}
+Write a one-page test report: the test environment (build, AVD, OS), the
+eight test cases with pass or fail, and one complete bug report.
+
+*Your result:* a one-page test report.
+:::
+
+## Case study: Report Doctor
+
+After the emulator session, six bug reports reach Byte Bay's developers: one
+without the device, one without steps, one that says only "looks bad", one
+without a build number, one with three bugs at once, and one without any
+log or screenshot. The Game challenge of the interactive lesson uses these
+reports. In the mini-game below you decide what must be fixed in each one.
+
+{{< sim file="sims/report-doctor.html" poster="sims/report-doctor.png" title="Report Doctor: fix the bug reports" kind="game" height="520" >}}
+
+## Further reading
+
+Android Developers, "Android Debug Bridge (adb)" and "Run apps on the
+Android Emulator" (developer.android.com). Kaner, Falk and Nguyen, *Testing
+Computer Software* (2nd ed., 1999), the chapter on reporting and analysing
+bugs.
+
+## Exercises
+
+1. Where do you create an AVD in Android Studio?
+2. What is the difference between a cold boot and a quick boot?
+3. Name two ways to install an APK on the emulator.
+4. What must `adb devices` show before `adb install` works?
+5. What does `adb: no devices/emulators found` mean?
+6. Name three things the extended controls can change.
+7. Why do you repeat a failed test case?
+8. Which part of the log do you copy into a report?
+9. List the parts of a good bug report.
+10. Why only one bug per report?
+
+## Answers to the exercises
+
+::: {.answers}
+1. In the Device Manager.
+2. A cold boot starts Android from the beginning; a quick boot loads a saved
+   state and is faster.
+3. Drag and drop the file onto the emulator; `adb install`.
+4. The emulator with the state `device`.
+5. No emulator or phone is connected (for example the emulator is closed).
+6. For example rotation, battery, location, network speed and delay.
+7. To be sure the steps make the bug happen again.
+8. The lines around the error, with the time.
+9. Title, build, device and OS, steps, expected, actual, attachments.
+10. So that each bug can be fixed, tested and closed alone.
+:::

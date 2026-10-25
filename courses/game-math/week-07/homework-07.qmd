@@ -1,0 +1,48 @@
+---
+title: "Homework 7: The robot arm and the turning tower"
+description: "Build a 3 × 3 transformation matrix for a robot arm, and turn a 3D tower with a yaw. About 10 minutes."
+homework: 7
+due: "before lecture 15"
+marks: 5
+ilos: [C1]
+toc-title: "In this homework"
+format: lesson-html   # the PDF is made by printing this page (homework_pdf.py)
+---
+
+**How to submit:** Write on paper and show your steps. Upload a clear photo to the university e-learning platform. Due: **before lecture 15**.
+
+Use these values: cos 90° = 0, sin 90° = 1, cos 180° = −1, sin 180° = 0.
+
+## Task 1 · The robot arm (3 marks)
+
+In a factory game, a robot arm holds a gripper at G = (3, 0) in the arm's
+local space. The arm stands at (4, 2) in the world and is turned by 90°.
+
+a) Write the 3 × 3 matrix M = T(4, 2) × R(90°). (1 mark)
+
+{{< answer-space lines=3 >}}
+
+b) Use M to find the gripper (3, 0, 1) in the world. (1 mark)
+
+{{< answer-space lines=3 >}}
+
+c) The gripper pushes along the local direction (1, 0). Use w = 0 to find
+the direction in the world. Why does the move (4, 2) not change it?
+(1 mark)
+
+{{< answer-space lines=3 >}}
+
+## Task 2 · The turning tower (2 marks)
+
+A tower in a 3D game stands at (5, 0, 5). Its cannon is at (0, 3, 2) in the
+tower's local space (y is up, z is forward).
+
+a) The tower turns with a yaw of 90°. Compute R_y(90°) × (0, 3, 2).
+(1 mark)
+
+{{< answer-space lines=3 >}}
+
+b) Where is the cannon in the world after the yaw of 90°? And after a yaw of
+180°? (1 mark)
+
+{{< answer-space lines=3 >}}

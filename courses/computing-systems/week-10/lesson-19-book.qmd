@@ -1,0 +1,243 @@
+---
+title: "Networking Concepts: LAN, the Internet and Protocols"
+description: "Lesson notes · What a network is, the devices of a LAN and the way to the Internet, IP and MAC addresses and the DNS, packets and protocols in four layers with TCP and UDP, and the network quality that an online game needs."
+lesson: 19
+ilos: [A2]
+format: lesson-typst
+---
+
+::: {.lead}
+*Pocket Quest 1.1* gets an online mode: two players race on the same
+island, and a leaderboard shows the best times. Now every match depends on
+the **network**: Rami's test phone must send its position to the game
+server many times per second, and a purchase of gems must never get lost.
+Byte Bay also moves into a new office and needs a network for its PCs and
+test phones. In this lesson you learn what a network is made of, how
+devices find each other with addresses and names, how data travels in
+packets with protocols, and which network quality a game needs. Every
+section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary computer-network lan wan internet router network-switch access-point ip-address mac-address dns network-packet network-protocol tcp udp network-latency >}}
+
+## 19.1 Networks: from the LAN to the Internet
+
+A **network** connects devices so that they can exchange data. The office
+of Byte Bay has a small network of its own, and through it, the whole
+Internet (@fig-lan).
+
+::: {.callout-important title="Definition 19.1 — LAN, WAN, Internet and their devices"}
+- A **LAN** (local area network) covers one place: an office, a lab, a
+  home. A **WAN** connects places far apart. The **Internet** is the
+  worldwide network of networks.
+- A **switch** connects the wired devices of a LAN.
+- A **wireless access point** connects Wi-Fi devices to the LAN.
+- A **router** connects the LAN to other networks; through the **ISP**
+  (Internet service provider) it reaches the Internet. At home, one box is
+  often router, switch, access point and modem together.
+:::
+
+![The network of Byte Bay.](images/lan-map.png){#fig-lan width=94%}
+
+::: {.callout-note title="Example 19.1 — The new office"}
+1. Four PCs and the printer are cabled to a **switch**.
+2. An **access point** on the switch gives Wi-Fi to the test phones P5 and
+   P8.
+3. A **router** connects the switch to the ISP and the Internet, where the
+   game server *play.example.net* runs.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"The Wi-Fi is the Internet." Wi-Fi only connects the phone to the access
+point in the same room. Behind it are the LAN, the router, the ISP and
+many networks.
+:::
+
+::: {.callout-note title="Do it · Your network"}
+Draw the network at your home or in your lab: the devices, the box (or
+boxes) that act as router and access point, and the way to the Internet.
+
+*Your result:* a drawing with at least five labelled parts.
+:::
+
+## 19.2 Addresses: IP, MAC and the DNS
+
+A packet needs an address, like a letter. Networks use numbers, and the
+DNS turns names into numbers (@fig-addr).
+
+::: {.callout-important title="Definition 19.2 — IP address, MAC address, DNS"}
+- An **IP address** identifies a device on a network, such as
+  192.168.1.23 (IPv4: four numbers from 0 to 255). Addresses that start
+  with 192.168, 10 or 172.16–31 are **private**: they work only inside a
+  LAN. The router has a **public** address on the Internet. IPv6 uses
+  longer addresses.
+- A **MAC address** is the fixed address of a network card, used inside one
+  LAN.
+- The **DNS** (Domain Name System) turns a name such as play.example.net
+  into an IP address.
+:::
+
+![IP and MAC addresses, and a DNS question.](images/addresses.png){#fig-addr width=94%}
+
+::: {.callout-note title="Example 19.2 — The phone finds the server"}
+1. The game knows only the name *play.example.net*.
+2. The phone asks the DNS server: the answer is **198.51.100.7**.
+3. The phone sends its packets to 198.51.100.7, through its **default
+   gateway**, the router 192.168.1.1.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Writing a private address such as 192.168.1.23 in the game as the server
+address. Players outside the office cannot reach it. A server on the
+Internet needs a public address, and the game should use its name.
+:::
+
+::: {.callout-note title="Do it · Find your address"}
+On a phone: Settings › Wi-Fi › the network › details. On a PC: run
+`ipconfig` (Windows) or `ip a` (Linux). Write your IP address and your
+gateway. Is the address private?
+
+*Your result:* two addresses and one answer.
+:::
+
+## 19.3 Packets and protocols
+
+Data does not travel as one big piece. It is cut into **packets**, and
+every device on the way follows the same **protocols** (@fig-layers).
+
+::: {.callout-important title="Definition 19.3 — Packets and protocols in four layers"}
+A **packet** is a small piece of data with the addresses of the sender and
+the receiver. A **protocol** is a set of rules for exchanging data. The
+**TCP/IP model** has four layers:
+
+1. **Application:** what the app wants to say (HTTPS for web services, DNS
+   for names, the game's own messages).
+2. **Transport:** TCP or UDP, with a port number for the app.
+3. **Internet:** IP addresses; routers forward each packet.
+4. **Link:** the next step on a cable (Ethernet) or by radio (Wi-Fi).
+:::
+
+![The four layers.](images/layers.png){#fig-layers width=94%}
+
+The two transport protocols suit different game data (@fig-tcpudp).
+
+::: {.callout-important title="Definition 19.4 — TCP and UDP"}
+**TCP** checks that every packet arrives, in order, and sends lost
+packets again: it is reliable but can wait. **UDP** sends packets without
+checking: it is fast, and lost packets stay lost.
+:::
+
+![TCP and UDP with one lost packet.](images/tcp-udp.png){#fig-tcpudp width=94%}
+
+::: {.callout-note title="Example 19.3 — Two kinds of data in Pocket Quest"}
+1. **Positions** in a race: 30 per second over **UDP**. If one is lost, the
+   next one is newer anyway; waiting would make the game lag.
+2. **A purchase** of 100 gems: over **HTTPS**, which uses TCP. Every byte
+   must arrive, and nobody may read or change it.
+3. The leaderboard and the save game also use HTTPS over TCP.
+:::
+
+{{< sim file="sims/packet-journey.html" poster="sims/packet-journey.png" title="Packet Journey: TCP or UDP?" height="720" >}}
+
+::: {.callout-warning title="Common mistake"}
+"UDP is bad because it loses packets." For live positions and voice, UDP
+is the right choice: a late packet is worse than a lost one.
+:::
+
+::: {.callout-note title="Do it · TCP or UDP?"}
+1. In **Packet Journey**, send 10 packets with TCP and with UDP, both with
+   20 % loss. Compare the missing packets and the time.
+2. Choose TCP or UDP for: a chat message, voice chat, a download of a new
+   level.
+
+*Your result:* two results and three choices.
+:::
+
+## 19.4 Network quality for games
+
+A fast connection for videos is not always good for games. Games need low
+and steady delays (@fig-quality).
+
+::: {.callout-important title="Definition 19.5 — Latency, jitter, packet loss, bandwidth"}
+- **Latency** (ping): the time a packet needs to go and come back, in
+  milliseconds.
+- **Jitter:** how much the latency changes from packet to packet.
+- **Packet loss:** the share of packets that never arrive.
+- **Bandwidth:** the amount of data per second, in Mbit/s.
+
+An action game needs low latency, low jitter and almost no loss; it needs
+little bandwidth.
+:::
+
+![Network quality for an online game.](images/net-quality.png){#fig-quality width=94%}
+
+::: {.callout-note title="Example 19.4 — Rami tests the race"}
+1. At the desk, on cable: ping 22 ms, no loss. The race runs smoothly.
+2. On Wi-Fi, two rooms away: ping 30–180 ms, 5 % loss. The other car jumps
+   on the screen.
+3. On 4G in the bus: ping 60 ms, steady. The race is playable, with a small
+   delay.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Buying more bandwidth to fix lag. 100 Mbit/s does not help when the Wi-Fi
+signal is weak and packets get lost.
+:::
+
+::: {.callout-note title="Do it · Compare"}
+Play an online game (or open a speed test) twice: on Wi-Fi near the router,
+then far from it or on mobile data. Write the ping both times.
+
+*Your result:* two ping values and one sentence.
+:::
+
+## Case study: Net Fixer
+
+Byte Bay moves into a new office and Rami sets up the network for testing:
+the PCs need a device that joins their cables, the test phones need Wi-Fi,
+the LAN needs a way to the Internet, the phone must find
+*play.example.net*, a PC needs an address, and the game must send
+positions and purchases with the right protocol. The Game challenge of the
+interactive lesson uses this office. In the mini-game below you choose the
+right device, address or protocol for each job.
+
+{{< sim file="sims/net-fixer.html" poster="sims/net-fixer.png" title="Net Fixer: a network for Byte Bay" kind="game" height="620" >}}
+
+## Further reading
+
+Kurose and Ross, *Computer Networking: A Top-Down Approach*, 8th ed.,
+Chapter 1 (the Internet, packets, delay and loss) and Sections 2.4 (DNS)
+and 3.3 (UDP). Glazer and Madhav, *Multiplayer Game Programming* (2015),
+Chapter 2.
+
+## Exercises
+
+1. What is the difference between a LAN and the Internet?
+2. Which device connects the wired PCs of an office?
+3. Which device connects the LAN to the ISP?
+4. Is 192.168.0.15 a private or a public address?
+5. What does the DNS do?
+6. What is a packet?
+7. Name the four layers of the TCP/IP model.
+8. Why do games send live positions over UDP?
+9. Which protocol does a purchase use?
+10. A player has 200 Mbit/s but 8 % packet loss. Is the game smooth?
+
+## Answers to the exercises
+
+::: {.answers}
+1. A LAN covers one place; the Internet is the worldwide network of
+   networks.
+2. A switch.
+3. A router.
+4. Private.
+5. It turns a name such as play.example.net into an IP address.
+6. A small piece of data with the addresses of the sender and the
+   receiver.
+7. Application, transport, Internet, link.
+8. They are fast, and a lost position is replaced by the next one.
+9. HTTPS over TCP.
+10. No: the lost packets make players jump, whatever the bandwidth.
+:::

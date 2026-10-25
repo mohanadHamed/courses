@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Effects Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar > span.l { min-width: 84px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Effects Lab: slow motion, colour and titles</h1>
+  <p class="hint">Tariq polishes one shot of the <i>Rooftop Rescue</i> trailer: a slow-motion jump, a clip whose colours do not match the shot before it (left), and a title.</p>
+  <div class="bar"><span class="l">Recorded at</span><span id="src" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Speed</span><span id="spd" style="display:contents"></span></div>
+  <div class="bar" id="col"></div>
+  <div class="bar" id="ttl"></div>
+  <label class="bar"><input type="checkbox" id="safe" checked> Show the title safe area</label>
+  <canvas id="c" aria-label="The shot before (left) and the shot that is being edited (right)"></canvas>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="../../week-10/sims/scene.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const s = { src: 30, spd: 50, exp: -40, temp: -30, ty: 92 };
+  const TASKS = [
+    { q: "Task 1: The jump plays at 50 % and stutters. Which recording gives smooth slow motion?", ok: () => s.spd === 50 && s.src / (100 / s.spd) >= 30 },
+    { q: "Task 2: Match the colours: move exposure and temperature until the right shot looks like the left one.", ok: () => Math.abs(s.exp) <= 5 && Math.abs(s.temp) <= 5 },
+    { q: "Task 3: Move the title “Play free now” inside the title safe area (yellow).", ok: () => s.ty >= 12 && s.ty <= 86 },
+  ];
+  let ti = 0, ready = false;
+  function tabs(id, items, key, fmt) { Kit.buttons($(id), items.map((k) => ({ k: String(k), label: fmt(k) })), (k) => { s[key] = +k; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", +b.dataset.k === s[key])); }
+  const sl = {};
+  sl.exp = Kit.slider($("col"), "Exposure", -60, 60, 5, s.exp, (v) => { s.exp = v; if (ready) upd(); }, (v) => (v > 0 ? "+" : "") + v);
+  sl.temp = Kit.slider($("col"), "Temperature", -60, 60, 5, s.temp, (v) => { s.temp = v; if (ready) upd(); }, (v) => (v > 0 ? "warm +" + v : v < 0 ? "cool " + v : "0"));
+  sl.ty = Kit.slider($("ttl"), "Title height", 4, 96, 2, s.ty, (v) => { s.ty = v; if (ready) upd(); }, (v) => v + " %");
+  function upd() {
+    tabs("src", [30, 60, 120], "src", (k) => k + " fps"); tabs("spd", [100, 50, 25], "spd", (k) => k + " %");
+    const real = s.src * s.spd / 100;
+    $("calc").textContent = `new frames per second in the 30 fps trailer: ${Math.min(30, real)}${real < 30 ? " (each frame is shown " + Kit.fmt(30 / real, 0) + " times)" : ""}`;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: smooth slow motion, matching colours, and a title that every screen shows.";
+    m += real < 30 ? "The slow motion stutters: there are not enough recorded frames." : Math.abs(s.exp) > 5 || Math.abs(s.temp) > 5 ? "The two shots do not match yet: the cut between them would jump in colour." : s.ty < 12 || s.ty > 86 ? "The title is outside the safe area: some screens cut it off." : "The shot is ready.";
+    $("msg").textContent = m;
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.min(220, (W - 16) / 2 * 9 / 16 + 20));
+  let lastFrame = 0, shown = 0;
+  Kit.loop((now) => {
+    const c = cv.ctx, W = cv.W, H = cv.H, w = (W - 16) / 2, h = w * 9 / 16, y = 18;
+    const real = s.src * s.spd / 100, fps = Math.min(30, real);
+    if (now - lastFrame >= 1000 / fps) { lastFrame = now; shown = now; }
+    const t = shown / 1000 * (s.spd / 100) * 2;
+    c.clearRect(0, 0, W, H);
+    Kit.text(c, "the shot before", w / 2, 12, 11, "#868e96");
+    Kit.text(c, "the shot you edit", w + 16 + w / 2, 12, 11, "#868e96");
+    RS.draw(c, 0, y, w, h, now / 500, {});
+    const tint = `rgba(${s.temp > 0 ? "255,146,43" : "28,61,107"},${Math.abs(s.temp) / 140})`;
+    RS.draw(c, w + 16, y, w, h, t, { tint });
+    c.fillStyle = s.exp < 0 ? `rgba(0,0,0,${-s.exp / 120})` : `rgba(255,255,255,${s.exp / 120})`; c.fillRect(w + 16, y, w, h);
+    if ($("safe").checked) { c.strokeStyle = "#ffd43b"; c.setLineDash([5, 4]); c.lineWidth = 1.5; c.strokeRect(w + 16 + w * 0.1, y + h * 0.1, w * 0.8, h * 0.8); c.setLineDash([]); }
+    c.save(); c.beginPath(); c.rect(w + 16, y, w, h); c.clip();
+    Kit.text(c, "Play free now", w + 16 + w / 2, y + h * s.ty / 100 + 5, Math.max(11, w / 14), "#ffffff");
+    c.restore();
+  });
+  window.EF = { set: (o) => { Object.entries(o).forEach(([k, v]) => { if (sl[k]) { sl[k].value = v; s[k] = v; sl[k].dispatchEvent(new Event("input")); } else s[k] = v; }); upd(); } };
+  ready = true; upd();
+})();
+</script>
+</body>
+</html>

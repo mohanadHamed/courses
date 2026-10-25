@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Heading Slides</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .apps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 560px) { .sim .apps { grid-template-columns: 1fr; } }
+    .sim .app { border: 2px solid #ced4da; border-radius: 10px; overflow: hidden; background: #fff; }
+    .sim .app .bar { color: #fff; font-weight: 800; padding: 4px 10px; font-size: .9rem; }
+    .sim .app .body { padding: 6px 10px; }
+    .sim .wd .bar { background: #2b579a; } .sim .pp .bar { background: #c43e1c; }
+    .sim .ln { border-bottom: 1px solid #f1f3f5; padding: 4px 0; }
+    .sim .ln .txt { font-weight: 700; }
+    .sim .ln .txt.h1 { color: #2b579a; font-weight: 800; font-size: 1.05rem; } .sim .ln .txt.h2 { padding-left: 14px; } .sim .ln .txt.n { color: #868e96; font-weight: 600; }
+    .sim .ln .st { display: flex; gap: 4px; margin-top: 2px; }
+    .sim .ln .st button { padding: 2px 8px; font-size: .78rem; }
+    .sim .ln .st button.on { background: #2b579a; color: #fff; border-color: #2b579a; }
+    .sim .slide { border: 2px solid #c43e1c; border-radius: 8px; padding: 6px 10px; margin: 6px 0; }
+    .sim .slide .tt { color: #c43e1c; font-weight: 800; }
+    .sim .slide ul { margin: 2px 0 0; padding-left: 18px; font-weight: 700; font-size: .9rem; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Heading Slides: Word headings to slides</h1>
+  <p class="hint">Huda wants slides from the Word report. In PowerPoint, <b>Home › New Slide › Slides from Outline</b> reads the headings: each <b>Heading 1</b> becomes a slide title, each <b>Heading 2</b> a bullet. Normal text does not go on the slides. Give each line a style.</p>
+  <div class="apps">
+    <div class="app wd"><div class="bar">Word: report.docx</div><div class="body" id="wd"></div></div>
+    <div class="app pp"><div class="bar">PowerPoint: Slides from Outline</div><div class="body" id="pp"></div></div>
+  </div>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const L = ["March sales", "Total: 355 JD", "Paper sold the most", "The best week", "Third week: 112 JD", "Rana thanks the staff for a good month."];
+  const ST = { h1: "Heading 1", h2: "Heading 2", n: "Normal" };
+  const s = { st: L.map(() => "n") };
+  function slides() {
+    const out = [];
+    s.st.forEach((st, i) => { if (st === "h1") out.push({ t: L[i], b: [] }); else if (st === "h2") { if (!out.length) out.push({ t: "(no title)", b: [] }); out[out.length - 1].b.push(L[i]); } });
+    return out;
+  }
+  const sig = () => JSON.stringify(slides());
+  const T1 = JSON.stringify([{ t: L[0], b: [L[1], L[2]] }, { t: L[3], b: [L[4]] }]);
+  const TASKS = [
+    { q: "Task 1: Make two slides: \"March sales\" with two bullets and \"The best week\" with one bullet.", ok: () => sig() === T1 },
+    { q: "Task 2: Put the thanks on a third slide of its own, as its title. How many slides are there now?", ok: () => sig() === JSON.stringify([...JSON.parse(T1), { t: L[5], b: [] }]) },
+  ];
+  let ti = 0;
+  function upd(m) {
+    $("wd").innerHTML = "";
+    L.forEach((t, i) => {
+      const ln = Kit.el("div", { class: "ln" }), st = Kit.el("div", { class: "st" });
+      ln.append(Kit.el("div", { class: "txt " + s.st[i] }, t), st);
+      Kit.buttons(st, Object.keys(ST).map((k) => ({ k, label: ST[k] })), (k) => { s.st[i] = k; upd(); });
+      st.querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.st[i]));
+      $("wd").appendChild(ln);
+    });
+    const sl = slides();
+    $("pp").innerHTML = sl.length ? sl.map((x, k) => `<div class="slide"><div class="tag" style="font-size:.75rem;font-weight:800;color:#868e96">slide ${k + 1}</div><div class="tt">${x.t}</div>${x.b.length ? "<ul>" + x.b.map((b) => `<li>${b}</li>`).join("") + "</ul>" : ""}</div>`).join("") : "<p style=\"font-weight:700;color:#868e96\">No slides: there is no Heading 1 yet.</p>";
+    let done = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; done = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: three slides. Good headings in Word give good slides in PowerPoint.";
+    $("msg").textContent = done + (m || `${sl.length} slide${sl.length === 1 ? "" : "s"}. Heading 1 starts a new slide.`);
+  }
+  window.OL = { set: (arr) => { s.st = arr.slice(); upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

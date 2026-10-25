@@ -1,0 +1,218 @@
+---
+title: "Music and Sound-Effects Production for Games"
+description: "Lesson notes · What music does in a game (loops, adaptive layers and stingers), tempo, bars and the length of a loop, where sound effects come from (recording, synthesis, libraries), and layering and variation of effects."
+lesson: 15
+ilos: [C2]
+format: lesson-typst
+---
+
+::: {.lead}
+In the flood level of *Rooftop Rescue*, Nour rows through quiet streets for
+as long as the player likes. Then a wave comes, and the danger rises; at
+last the player catches Pasha the cat with the net. A film knows how long
+each scene lasts; a game does not. So game music is built differently: from
+**loops** that repeat without a gap, **layers** that come and go with the
+game, and short **stingers** for events. Sound effects must sound fresh
+the hundredth time too. In lectures 13 and 14 you recorded and cleaned one
+sound. In this lesson you see how a studio produces the music and the
+effects of a whole level. Every section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary seamless-loop adaptive-music music-layer stinger tempo music-bar foley sound-layering sound-variation step-sequencer >}}
+
+## 15.1 What music does in a game
+
+Music tells the player how to feel: calm, danger, success. In a game it
+must follow the player, not a clock (@fig-music).
+
+::: {.callout-important title="Definition 15.1 — Loops, layers and stingers"}
+- A **seamless loop** is music that repeats with no gap and no click. It
+  plays as long as the player stays.
+- **Adaptive music** changes with the game state: **layers** (stems) such
+  as drums or strings fade in and out, always in time with the loop.
+- A **stinger** is a short phrase (1–3 s) that marks one event: a success,
+  a danger, a secret found.
+:::
+
+![The flood level: a loop that never stops, a drum layer for danger, a stinger for Pasha.](images/music-in-game.png){#fig-music width=94%}
+
+::: {.callout-note title="Example 15.1 — The music plan of the flood level"}
+1. Rowing (calm): an 8-bar loop with melody and bass.
+2. A wave comes (danger): the drum layer fades in on the next bar.
+3. Pasha caught: a 2-second stinger over the loop, in the same key.
+4. Back to calm: the drum layer fades out; the loop never stopped.
+:::
+
+{{< sim file="sims/loop-builder.html" poster="sims/loop-builder.png" title="Loop Builder: a game-music loop in 16 steps" height="760" >}}
+
+::: {.callout-warning title="Common mistake"}
+Using a normal song of 3 minutes. When it ends, the player hears silence,
+or the song starts again from its intro. Game music needs loops.
+:::
+
+::: {.callout-note title="Do it · Calm and chase"}
+1. In **Loop Builder**, play the example loop. Switch the game state
+   between calm and chase while it plays.
+2. What changes, and what stays the same?
+
+*Your result:* two sentences.
+:::
+
+## 15.2 Tempo, bars and the length of a loop
+
+A loop must end exactly where a bar ends; otherwise the beat stumbles at
+every repeat. So a sound designer counts in beats and bars (@fig-tempo).
+
+::: {.callout-important title="Definition 15.2 — Tempo and bars"}
+The **tempo** is the number of beats per minute (**BPM**). One beat lasts
+$60 \div \text{BPM}$ seconds. A **bar** has (usually) 4 beats. A loop is a
+whole number of bars:
+$$\text{loop length} = \text{bars} \times 4 \times \frac{60}{\text{BPM}}.$$
+:::
+
+![Beats and bars at 120 BPM.](images/tempo-bars.png){#fig-tempo width=94%}
+
+::: {.callout-note title="Example 15.2 — Two loops"}
+1. Chase loop at 120 BPM: one beat 0.5 s, one bar 2 s, **8 bars = 16 s**.
+2. Rowing loop at 100 BPM: one beat 0.6 s, one bar 2.4 s, **8 bars =
+   19.2 s**.
+3. A loop of 7.5 bars would stumble: half a bar is missing at each repeat.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Cutting a loop "by ear" at a round time, such as 15 seconds. At 100 BPM, 15
+s is 6.25 bars: the beat jumps at the loop point.
+:::
+
+::: {.callout-note title="Do it · Count the loops"}
+1. How long is an 8-bar loop at 90 BPM? And at 150 BPM?
+2. In **Loop Builder**, set 90 BPM and read the bar length. Does it match
+   your calculation?
+
+*Your result:* two lengths and one check.
+:::
+
+## 15.3 Where sound effects come from
+
+A level needs dozens of effects: steps, splashes, swishes, button clicks.
+A studio gets them in three ways (@fig-sources).
+
+::: {.callout-important title="Definition 15.3 — Three sources of effects"}
+- **Record (foley):** perform the action with real objects in front of a
+  microphone: a towel shaken for a cat's jump, a hand in a bucket for a
+  splash.
+- **Make (synthesis):** build the sound from tones and noise, for beeps,
+  lasers and interface clicks.
+- **Use a library:** take a ready sound from a sound library, and check its
+  licence (lectures 23–26).
+:::
+
+![Record, make or use.](images/sfx-sources.png){#fig-sources width=94%}
+
+::: {.callout-note title="Example 15.3 — Yara's list"}
+1. Pasha's meow: recorded (lecture 14).
+2. Nour's steps on wet tiles: foley, wet shoes on a tiled floor.
+3. The coin and menu sounds: synthesis, short tones.
+4. Thunder: a library sound with a free licence, credited in the game.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Downloading a sound from any website "because it is free to listen to".
+Listening for free is not permission to use it in a game: check the licence.
+:::
+
+::: {.callout-note title="Do it · Foley at home"}
+Choose one effect of a game you know (a step, a door, a jump). Which object
+in your home could make it? Record one take with your phone.
+
+*Your result:* one sentence and one take.
+:::
+
+## 15.4 Layering and variation
+
+One recording of a splash often sounds thin, and one sound repeated 200
+times sounds like a machine. Two tricks solve both problems (@fig-layer).
+
+::: {.callout-important title="Definition 15.4 — Layering and variation"}
+**Sound layering** builds one effect from several sounds played together:
+an **attack** (a short low thump), a **body** (the main sound) and a
+**tail** (small drops, an echo). **Sound variation** makes an effect a
+little different each time: several takes chosen at random, and a small
+random change of pitch and volume (for example ±5 %).
+:::
+
+![Three sounds make one full splash.](images/layering.png){#fig-layer width=94%}
+
+::: {.callout-note title="Example 15.4 — The net swish"}
+1. Yara records 3 takes of a stick swung through the air.
+2. In the game, each swish picks one take at random.
+3. The game changes its pitch by a random −5 % to +5 %. The player hears
+   no repetition, although only 3 files exist.
+:::
+
+::: {.callout-caution title="In game code"}
+```csharp
+audioSource.pitch = Random.Range(0.95f, 1.05f);         // ±5 %
+audioSource.PlayOneShot(swishes[Random.Range(0, swishes.Length)]);
+```
+:::
+
+::: {.callout-warning title="Common mistake"}
+Layering sounds that all start at a different time. The attack of every
+layer must start together, or the effect sounds like two events.
+:::
+
+::: {.callout-note title="Do it · Three takes, one effect"}
+Record three takes of your foley sound from 15.3. Play them one after the
+other: do they sound like one effect with variation?
+
+*Your result:* three takes and one sentence.
+:::
+
+## Case study: Score the Scene
+
+Yara plans the audio of the flood level of *Rooftop Rescue*: the quiet
+rowing that can last minutes, the wave that brings danger, the moment the
+player catches Pasha, the net swish that plays every few seconds, the thin
+splash when Pasha falls into the water, and the length of an 8-bar loop at
+120 BPM. The Game challenge of the interactive lesson uses these moments.
+In the mini-game below you choose the audio decision for each one.
+
+{{< sim file="sims/score-the-scene.html" poster="sims/score-the-scene.png" title="Score the Scene: audio decisions for a level" kind="game" height="580" >}}
+
+## Further reading
+
+Collins, *Game Sound* (2008), Chapter 8 (dynamic and adaptive audio).
+Schell, *The Art of Game Design*, 3rd ed., Chapter 13 (the aesthetics of
+sound). Audacity Manual, "Looping".
+
+## Exercises
+
+1. Why does a game use loops instead of normal songs?
+2. What is adaptive music? Give an example.
+3. What is a stinger?
+4. How long is one beat at 120 BPM?
+5. How long is an 8-bar loop at 120 BPM? At 100 BPM?
+6. Why must a loop be a whole number of bars?
+7. Name the three sources of sound effects.
+8. What is foley? Give an example.
+9. Which three parts does a layered effect have?
+10. How does a game make one swish sound different each time?
+
+## Answers to the exercises
+
+::: {.answers}
+1. The player decides how long a moment lasts; a loop plays as long as
+   needed.
+2. Music that changes with the game state, such as a drum layer for danger.
+3. A short musical phrase (1–3 s) for one event.
+4. 0.5 s.
+5. 16 s; 19.2 s.
+6. Otherwise the beat stumbles at every repeat.
+7. Recording (foley), synthesis, a library.
+8. Sounds performed with real objects, such as a towel for a cat's jump.
+9. Attack, body, tail.
+10. A random take and a small random pitch change.
+:::

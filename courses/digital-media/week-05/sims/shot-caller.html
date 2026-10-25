@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Shot Caller</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Shot Caller</h1>
+  <p class="hint">You draw the storyboard of the opening of <i>Rooftop Rescue</i> for <b>Night Owl Games</b>. For each panel, choose the shot that shows the player what matters.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="rooftop-scene.js"></script>
+<script>
+(() => {
+  const S = RS.SHOTS;
+  const third = (k) => ({ cx: 26 + (0.5 - k) * 9 * 16 / 9, cy: 36, vh: 9 });   // Nour at 1/3, 1/2 or 2/3 of the width
+  const rounds = [
+    { goal: "Panel 1: the player must see <b>where</b> the scene happens: the flooded street at dusk.", answer: "wide",
+      choices: [{ k: "wide", label: "wide shot" }, { k: "medium", label: "medium shot of Nour" }, { k: "close", label: "close-up of Nour" }],
+      cams: { wide: S.wideStreet, medium: S.medNour, close: S.closeNour },
+      good: "A wide (establishing) shot shows the place first: the street, the water, the roof.",
+      why: { medium: "The player does not know yet where Nour is: show the place first.", close: "A face without a place: the player does not know where the scene happens." } },
+    { goal: "Panel 2: Nour <b>rows</b> towards the roof. Show what she does.", answer: "medium",
+      choices: [{ k: "wide", label: "wide shot" }, { k: "medium", label: "medium shot of Nour" }, { k: "close", label: "close-up of Nour" }],
+      cams: { wide: S.wideStreet, medium: S.medNour, close: S.closeNour }, arrow: true,
+      good: "A medium shot shows Nour's body, the boat and the action of rowing.",
+      why: { wide: "Nour is too small to see the action.", close: "A close-up shows her face, but not the boat and the rowing." } },
+    { goal: "Panel 3: Salma says “I won't leave without my cat.” The player must <b>feel her fear</b>.", answer: "close",
+      choices: [{ k: "wide", label: "wide shot of the roof" }, { k: "medium", label: "medium shot of Salma" }, { k: "close", label: "close-up of Salma" }],
+      cams: { wide: S.wideRoof, medium: S.medSalma, close: S.closeSalma },
+      good: "A close-up shows the feeling on Salma's face: this line is about fear.",
+      why: { wide: "Salma is small: the player cannot see her face.", medium: "Good for the cat, but the line is about her fear: come closer." } },
+    { goal: "Panel 4: Nour rows to the <b>right</b>. Where do you put her in the frame?", answer: "left",
+      choices: [{ k: "left", label: "on the left third" }, { k: "centre", label: "in the centre" }, { k: "right", label: "on the right third" }],
+      cams: { left: third(1 / 3), centre: third(1 / 2), right: third(2 / 3) }, arrow: true, thirds: true,
+      good: "On the left third, Nour has lead room: empty space in front of her, where she goes.",
+      why: { centre: "The centre is static: use a third line.", right: "Now she rows into the edge of the frame: no lead room." } },
+    { goal: "Panel 5: in panel 2, Nour rowed left to right. Which camera keeps the <b>screen direction</b>?", answer: "same",
+      choices: [{ k: "same", label: "the same side of the line" }, { k: "other", label: "the other side of the line" }],
+      cams: { same: S.medNour, other: Object.assign({}, S.medNour, { flip: true }) }, arrow: true,
+      good: "The 180-degree rule: the camera stays on one side, so Nour still rows left to right.",
+      why: { other: "From the other side, Nour suddenly rows right to left: the player thinks she turned back." } },
+  ];
+  Kit.game({
+    rounds, still: true, cols: 3, colsPhone: 1, animMs: 700,
+    intro: "Round 1 is the story of the lesson: the first panel of the Rooftop Rescue board.",
+    canvas: (W) => Math.round(Math.min(W, 560) * 9 / 16) + 10,
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const w = Math.min(W, 560), h = Math.round(w * 9 / 16), x = (W - w) / 2;
+      const cam = st.pick ? r.cams[st.pick] : (r.cams.wide || RS.SHOTS.wideStreet);
+      RS.draw(c, x, 4, w, h, cam, { thirds: r.thirds && !!st.pick, arrow: r.arrow && st.pick ? [24, 33, 30, 33] : null });
+      Kit.text(c, st.pick ? "your shot" : "the scene", x + 10, 24, 13, "#fff", "left");
+    },
+  });
+})();
+</script>
+</body>
+</html>

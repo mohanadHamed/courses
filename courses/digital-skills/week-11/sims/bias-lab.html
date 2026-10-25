@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Bias Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .prompt { font: 600 .9rem ui-monospace, Consolas, monospace; background: #1e1e2e; color: #e9ecef; border-radius: 10px; padding: 8px 10px; margin: 6px 0; }
+    .sim .out { background: #fff; border: 1.5px solid #ced4da; border-radius: 10px; padding: 10px 12px; line-height: 1.6; }
+    .sim .out mark { background: #ffe3e3; color: #c92a2a; font-weight: 700; border-radius: 4px; padding: 0 2px; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Bias Lab: who does the AI show, and how?</h1>
+  <p class="hint">Huda wants short texts for the staff newsletter of Sunrise Company. Choose a request, read the AI answer (red: stereotypes or one-sided parts), then add instructions to the prompt and compare.</p>
+  <div class="bar" id="req"></div>
+  <div class="bar" id="add"></div>
+  <div class="prompt" id="prompt"></div>
+  <div class="out" id="out"></div>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const ADD = ["use neutral language; do not assume gender or age", "show different people", "give both sides with reasons"];
+  const REQ = {
+    "Describe a doctor and a nurse.": { need: [0], bad: "The doctor, <mark>a confident man</mark>, gives orders, while the nurse, <mark>a kind young woman</mark>, helps <mark>him</mark>.", good: "The doctor examines patients and decides on the treatment. The nurse cares for patients, gives the medicine and watches for changes. Both work as one team." },
+    "Write about our new IT trainee and our accountant.": { need: [0, 1], bad: "The IT trainee is <mark>a young man who loves games</mark>. The accountant is <mark>an older lady who is careful with money</mark>.", good: "Our new IT trainee sets up the laptops and helps colleagues with passwords. Our accountant checks the invoices and plans the budget. Say hello to both in the kitchen!" },
+    "Is working from home good for our office?": { need: [2], bad: "<mark>Working from home is always better: people are happier and work more. There are no problems.</mark>", good: "For: less travel time, fewer interruptions, more quiet work. Against: fewer quick talks, harder teamwork, a home may be noisy. A mix of office and home days may suit many teams." },
+  };
+  const s = { req: "Describe a doctor and a nurse.", on: [] };
+  const fixed = {};
+  const TASKS = Object.keys(REQ).map((k, i) => ({ q: `Task ${i + 1}: “${k}” Add the instruction(s) that remove the red parts.`, ok: () => fixed[k] }));
+  let ti = 0;
+  function upd() {
+    Kit.buttons($("req"), Object.keys(REQ).map((k) => ({ k, label: k })), (k) => { s.req = k; s.on = []; upd(); });
+    $("req").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.req));
+    Kit.buttons($("add"), ADD.map((k, i) => ({ k: String(i), label: "+ " + k })), (k) => { const i = +k; s.on = s.on.includes(i) ? s.on.filter((x) => x !== i) : s.on.concat(i); upd(); });
+    $("add").querySelectorAll("button").forEach((b) => b.classList.toggle("on", s.on.includes(+b.dataset.k)));
+    const R = REQ[s.req], ok = R.need.every((i) => s.on.includes(i));
+    $("prompt").textContent = s.req + (s.on.length ? " " + s.on.map((i) => ADD[i][0].toUpperCase() + ADD[i].slice(1) + ".").join(" ") : "");
+    $("out").innerHTML = "<b>AI:</b> " + (ok ? R.good : R.bad);
+    if (ok) fixed[s.req] = true;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a clear prompt helps, and you still read the answer with care.";
+    $("msg").textContent = m + (ok ? "Better. Still read it: who is shown, who is missing, and is anything one-sided?" : "The red parts repeat stereotypes or show only one side.");
+    $("msg").classList.toggle("bad", !ok);
+  }
+  window.BL = { req: (k) => { s.req = k; s.on = []; upd(); }, on: (arr) => { s.on = arr; upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

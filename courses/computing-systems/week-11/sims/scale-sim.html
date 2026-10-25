@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Launch Day Scaling</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Launch Day Scaling: enough servers, not too many</h1>
+  <p class="hint">The online races of <i>Pocket Quest</i> go live. One race server holds 1,000 players and costs $0.10 per hour (an example price). Choose fixed servers or auto-scaling, then play the day.</p>
+  <div class="bar" id="mode"></div>
+  <div class="bar" id="sl"></div>
+  <div class="bar"><button type="button" id="play">Play the day ▶</button></div>
+  <canvas id="c" aria-label="Players and servers over one day"></canvas>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const players = (t) => Math.round(1000 * (1.2 + 7.5 * Math.exp(-(((t - 19) / 3.2) ** 2)) + 1.5 * Math.exp(-(((t - 9) / 2) ** 2))));
+  const s = { mode: "Fixed servers", fixed: 5, t: 24, playing: false, t0: 0, runs: [] };
+  const TASKS = [
+    { q: "Task 1: Play the day with 5 fixed servers. How many players were turned away at the peak?", ok: () => s.runs.some((r) => r.mode === "Fixed servers" && r.fixed === 5) },
+    { q: "Task 2: Find the smallest number of fixed servers that turns nobody away. What does the day cost?", ok: () => s.runs.some((r) => r.mode === "Fixed servers" && r.lost === 0) },
+    { q: "Task 3: Play the day with auto-scaling. Compare the cost and the lost players.", ok: () => s.runs.some((r) => r.mode === "Auto-scaling") },
+  ];
+  let ti = 0;
+  const servers = (t) => (s.mode === "Fixed servers" ? s.fixed : Math.max(2, Math.ceil(players(Math.max(0, t - 0.25)) / 1000 * 1.1)));
+  function day(tEnd) {
+    let lost = 0, hours = 0, peakLost = 0;
+    for (let t = 0; t < tEnd; t += 0.25) { const cap = servers(t) * 1000, p = players(t), l = Math.max(0, p - cap); lost += l * 0.25 / 2; peakLost = Math.max(peakLost, l); hours += servers(t) * 0.25; }
+    return { lost: Math.round(lost), peakLost, hours, cost: hours * 0.1 };
+  }
+  function tabs() { Kit.buttons($("mode"), ["Fixed servers", "Auto-scaling"].map((k) => ({ k, label: k })), (k) => { s.mode = k; s.t = 24; tabs(); upd(); }); $("mode").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.mode)); }
+  let ready = false;
+  const fx = Kit.slider($("sl"), "Fixed servers", 1, 12, 1, s.fixed, (v) => { s.fixed = v; s.t = 24; if (ready) upd(); });
+  function upd() {
+    fx.disabled = s.mode !== "Fixed servers";
+    const d = day(s.t);
+    $("calc").textContent = `by ${String(Math.floor(s.t % 24)).padStart(2, "0")}:00 · server hours ${Math.round(d.hours)} · cost $${d.cost.toFixed(2)} · players turned away at the worst moment: ${d.peakLost.toLocaleString("en")}`;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: auto-scaling follows the players and pays only for what is used.";
+    if (!s.playing) m += s.mode === "Auto-scaling" ? "Auto-scaling adds servers when the players come and removes them at night." : d.peakLost ? "Too few servers at the peak: new players cannot join a race." : "Nobody is turned away, but at night most servers do nothing and still cost money.";
+    $("msg").textContent = m;
+  }
+  $("play").addEventListener("click", () => { s.playing = true; s.t0 = performance.now(); });
+  const cv = Kit.canvas($("c"), (W) => Math.min(260, W * 0.5));
+  Kit.loop((now) => {
+    if (s.playing) { s.t = Math.min(24, (now - s.t0) / 3500 * 24); if (s.t >= 24) { s.playing = false; const d = day(24); s.runs.push({ mode: s.mode, fixed: s.fixed, lost: d.peakLost }); upd(); } else if (Math.floor(s.t * 4) % 8 === 0) upd(); }
+    const c = cv.ctx, W = cv.W, H = cv.H, x0 = 40, x1 = W - 10, y0 = 10, y1 = H - 22, X = (t) => x0 + (x1 - x0) * t / 24, Y = (v) => y1 - (y1 - y0) * v / 12000;
+    c.clearRect(0, 0, W, H);
+    c.strokeStyle = "#adb5bd"; c.lineWidth = 1.5; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0, y1); c.lineTo(x1, y1); c.stroke();
+    [0, 6, 12, 18, 24].forEach((t) => Kit.text(c, String(t % 24).padStart(2, "0") + ":00", X(t), y1 + 15, 10, "#868e96"));
+    [0, 4000, 8000, 12000].forEach((v) => Kit.text(c, v / 1000 + "k", x0 - 6, Y(v) + 4, 10, "#868e96", "right", 700));
+    c.fillStyle = "rgba(255,224,102,.55)"; c.beginPath(); c.moveTo(X(0), Y(0));
+    for (let t = 0; t <= s.t; t += 0.25) c.lineTo(X(t), Y(servers(t) * 1000));
+    c.lineTo(X(s.t), Y(0)); c.closePath(); c.fill();
+    c.strokeStyle = "#1c7ed6"; c.lineWidth = 2.4; c.beginPath();
+    for (let t = 0; t <= s.t; t += 0.25) { const p = players(t); t ? c.lineTo(X(t), Y(p)) : c.moveTo(X(t), Y(p)); } c.stroke();
+    c.fillStyle = "rgba(224,49,49,.5)";
+    for (let t = 0; t <= s.t; t += 0.25) { const p = players(t), cap = servers(t) * 1000; if (p > cap) c.fillRect(X(t), Y(p), (x1 - x0) / 96, Y(cap) - Y(p)); }
+    Kit.text(c, "players", x0 + 8, y0 + 12, 11, "#1c7ed6", "left"); Kit.text(c, "server capacity", x0 + 70, y0 + 12, 11, "#a37400", "left"); Kit.text(c, "turned away", x0 + 180, y0 + 12, 11, "#c92a2a", "left");
+  });
+  window.SC = { mode: (k) => { s.mode = k; tabs(); upd(); }, fixed: (v) => { fx.value = v; fx.dispatchEvent(new Event("input")); }, play: () => $("play").click() };
+  ready = true; tabs(); upd();
+})();
+</script>
+</body>
+</html>

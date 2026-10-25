@@ -1,0 +1,222 @@
+---
+title: "Digital Audio Basics: Sound, Formats and Recording"
+description: "What a sound wave is (frequency and amplitude), how a computer turns it into numbers (sample rate, bit depth, mono and stereo), the audio formats of a game, and how to record a clean take."
+lesson: 13
+ilos: [C2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game studio. Then it explains the idea behind it.
+It ends with a **Do it** task and one set of questions. The full
+explanations, examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary sound-wave frequency amplitude decibel sample-rate bit-depth mono-stereo uncompressed-audio lossy-compression clipping input-level take >}}
+
+## 13.1 What a sound is: a wave
+
+- A **sound wave** is a vibration of the air.
+- **Frequency** (Hz): vibrations per second, the **pitch**. People hear
+  about 20 Hz to 20 000 Hz.
+- **Amplitude**: the size of the vibration, the **loudness**, in **dB**. In
+  an audio program 0 dB is the top; quieter levels are negative.
+- Pasha's meow: 500–800 Hz. Thunder: below 100 Hz. A bell: above 2000 Hz.
+
+![Frequency and amplitude.](images/sound-wave.png){width=90%}
+
+{{< sim file="sims/waveform-lab.html" poster="sims/waveform-lab.png" title="Wave Lab: from a sound wave to numbers" height="900" >}}
+
+::: {.callout-warning title="Watch out!"}
+High is not loud: pitch and loudness change separately.
+:::
+
+::: {.callout-note title="Do it · Hear the two numbers"}
+In **Wave Lab**, play 220 Hz and 880 Hz. Then set the amplitude to 0.4 and
+0.8 and read the loudness in dB.
+:::
+
+::: {.callout-tip title="Try it 1 · The wave"}
+Choose the right answer.
+
+::: {.match extra="the colour|the length of the file"}
+What does the frequency of a sound give?
+:   the pitch
+
+What does the amplitude of a sound give?
+:   the loudness
+
+Which is the loudest level a sound file can hold?
+:   0 dB
+
+Which sound has the lowest frequency?
+:   thunder
+:::
+:::
+
+## 13.2 From a wave to numbers: sampling
+
+- A **sample** is one measure of the wave. **Sample rate**: samples per
+  second, 44.1 kHz or 48 kHz for games.
+- **Bit depth**: bits per sample. 16-bit = 65 536 levels; 24-bit in the
+  studio.
+- **Mono**: one channel. **Stereo**: two channels, twice the size.
+- 48 kHz, 16-bit, stereo: 48 000 × 2 × 2 = 192 000 bytes per second, about
+  **11 MB per minute**.
+
+![Samples on levels.](images/sampling.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+One source (a cat, a step, a voice) is recorded in mono.
+:::
+
+::: {.callout-note title="Do it · Count the size"}
+In **Wave Lab**, compare 8 kHz 4-bit with 48 kHz 16-bit. Then compute the
+size of 10 seconds of the meow at 48 kHz, 16-bit, mono.
+:::
+
+::: {.callout-tip title="Try it 2 · Samples"}
+Choose the right answer.
+
+::: {.match extra="8 kHz|256"}
+Which sample rate do games use?
+:   48 kHz
+
+How many levels does 16-bit audio have?
+:   65 536
+
+How many bytes is one second of 48 kHz, 16-bit, mono?
+:   96 000
+
+Which needs twice the size: mono or stereo?
+:   stereo
+:::
+:::
+
+## 13.3 Audio formats for games
+
+- **WAV**: uncompressed, every sample, big, plays at once.
+- **FLAC**: lossless, about half the size.
+- **OGG, MP3**: **lossy compression**, about 10 times smaller.
+- Short effects → WAV. Music and long loops → OGG. Raw takes → 24-bit WAV
+  in the archive.
+
+![Four formats for the same music.](images/audio-formats.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Edit the WAV; make the MP3 or OGG only at the end.
+:::
+
+::: {.callout-note title="Do it · Look at real files"}
+Compare the size per minute of one WAV and one MP3 file. Which format would
+you use for a 2-minute menu music?
+:::
+
+::: {.callout-tip title="Try it 3 · Formats"}
+Choose the right format. You can use an answer more than once.
+
+::: {.match extra="a video file|TXT"}
+Nour's footsteps, short and played often?
+:   WAV
+
+The 3-minute music of the flood level?
+:   OGG
+
+The rain over the city, a long loop?
+:   OGG
+
+The raw takes, kept in the archive?
+:   WAV
+:::
+:::
+
+## 13.4 Recording a clean take
+
+- **Room:** quiet, with soft things that stop echoes.
+- **Distance:** 15–30 cm from the microphone.
+- **Input level:** peaks near **−6 dB**; at 0 dB the wave is cut flat:
+  **clipping**.
+- Record **three takes** and keep the best.
+
+![The room, the distance and the meter.](images/recording-setup.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+"We fix it later" does not work for clipping, echo and loud noise.
+:::
+
+::: {.callout-note title="Do it · Three takes"}
+Record one short sound three times: too far, too close and loud, and well
+placed. Which take is best, and why?
+:::
+
+::: {.callout-tip title="Try it 4 · The take"}
+Choose the right answer.
+
+::: {.match extra="0 dB|−40 dB"}
+Where should the peaks of a good take be?
+:   near −6 dB
+
+The tops of the wave are flat. What is it?
+:   clipping
+
+How far from the microphone should the sound be?
+:   15–30 cm
+
+How many takes does a sound designer record?
+:   about three, then keeps the best
+:::
+:::
+
+## Game challenge: Sound Booth {.challenge}
+
+Work alone. Use every section of today.
+
+Yara records the sounds of **Rooftop Rescue**: **Pasha's meow**, **Nour's
+footsteps** and the **3-minute music** of the flood level. Help her choose
+the settings, fix two bad takes, and choose the formats.
+
+{{< sim file="sims/sound-booth.html" poster="sims/sound-booth.png" title="Sound Booth: the settings of a game sound" kind="game" height="600" >}}
+
+::: {.callout-tip title="Try it 5 · Yara's settings"}
+Choose the right answer.
+
+::: {.match extra="8 kHz, 4-bit|5.1 surround"}
+Which settings for the meow?
+:   48 kHz, 16-bit, mono
+
+The meter hits 0 dB. What does Yara do?
+:   lower the input level and record again
+
+Take 2 is quiet with a hum. What does Yara do?
+:   move closer and turn off the fridge
+
+Which format for the footsteps?
+:   WAV
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Sizes (harder)"}
+48 kHz, 16-bit. Choose the right answer.
+
+::: {.match extra="66 MB|1 MB"}
+How big is 1 minute in stereo?
+:   about 11 MB
+
+How big is 1 minute in mono?
+:   about 5.5 MB
+
+How big is the 3-minute music as a stereo WAV?
+:   about 33 MB
+
+How big is the same music as OGG?
+:   about 3 MB
+:::
+:::
+
+## Summary {.summary}
+
+- Frequency gives the pitch, amplitude the loudness (dB; 0 dB is the top).
+- A computer keeps samples: 48 kHz, 16-bit; mono for one source.
+- WAV for short effects, OGG or MP3 for music; edit the WAV.
+- A clean take: a quiet room, 15–30 cm, peaks near −6 dB, three takes.

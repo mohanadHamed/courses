@@ -1,0 +1,143 @@
+---
+title: "Cloud Computing: Models and Services"
+subtitle: "Lecture 21"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary cloud-computing data-centre virtual-machine iaas paas saas baas hybrid-cloud scalability >}}
+
+## 21.1 What is the cloud?
+
+:::: {.columns}
+::: {.column width="50%"}
+- The cloud rents computing power and storage over the Internet.
+- We pay for what we use, per hour or per gigabyte.
+- Providers run data centres in regions around the world.
+- **Do it:** List three cloud services you used today. Which one is a game service?
+:::
+::: {.column width="50%"}
+![](images/own-or-cloud.png)
+:::
+::::
+
+## Try it 1 · The cloud
+
+a) What is a building with thousands of servers called?
+b) What is a computer made in software called?
+c) How do we pay for cloud services?
+
+::: {.answer}
+a) a data centre
+b) a virtual machine
+c) for what we use (pay-as-you-go)
+:::
+
+## 21.2 Service models
+
+:::: {.columns}
+::: {.column width="50%"}
+- With IaaS, we rent virtual machines and manage the OS.
+- With PaaS, we upload only our code.
+- With SaaS, we use a finished app, and BaaS gives ready game services.
+- **Do it:** Set the layers of PaaS in Cloud Stack. Which layers do you manage?
+:::
+::: {.column width="50%"}
+![](images/service-models.png)
+:::
+::::
+
+## Live demo · Cloud Stack
+
+{{< sim file="sims/cloud-stack.html" poster="sims/cloud-stack.png" title="Cloud Stack: who manages what?" task="**Show:** set IaaS with one wrong layer and check, fix it, then PaaS. **Ask:** what does Byte Bay still manage with SaaS?" >}}
+
+## Example · Four ways to run the leaderboard
+
+Byte Bay needs a leaderboard for the online races of Pocket Quest.
+**How does the work change with each model?**
+
+::: {.reveal}
+1. With **IaaS**, Rami installs the OS updates, the database and the code.
+2. With **PaaS**, Rami uploads only the leaderboard code.
+3. With **BaaS**, the game uses a ready leaderboard service, with no server code.
+:::
+
+## Try it 2 · Models
+
+a) Which model rents a VM where we install everything?
+b) Which model runs our uploaded code without OS work?
+c) Which model gives accounts and cloud saves through an SDK?
+
+::: {.answer}
+a) IaaS
+b) PaaS
+c) BaaS
+:::
+
+## 21.3 Kinds of cloud
+
+:::: {.columns}
+::: {.column width="50%"}
+- A public cloud serves many customers.
+- A private cloud serves only one organization.
+- A hybrid cloud joins own servers and a public cloud.
+- **Do it:** Choose the kind of cloud for a student team. Which is it?
+:::
+::: {.column width="50%"}
+![](images/deployment.png)
+:::
+::::
+
+## 21.4 Scaling, cost and risks
+
+:::: {.columns}
+::: {.column width="50%"}
+- Auto-scaling adds servers when players come and removes them later.
+- Quiet hours cost less with pay-as-you-go.
+- Risks are costs, outages, vendor lock-in and data laws.
+- **Do it:** Find the smallest number of fixed servers for launch day. What does it cost?
+:::
+::: {.column width="50%"}
+![](images/scaling.png)
+:::
+::::
+
+## Live demo · Launch Day Scaling
+
+{{< sim file="sims/scale-sim.html" poster="sims/scale-sim.png" title="Launch Day Scaling: enough servers, not too many" task="**Show:** play the day with 5 fixed servers, then with auto-scaling. **Ask:** why is auto-scaling cheaper and still enough at 19:00?" >}}
+
+## Example · Launch day
+
+On launch day about 8,700 players race at 19:00, and one server holds 1,000.
+**What happens with fixed servers and with auto-scaling?**
+
+::: {.reveal}
+1. With **5 fixed servers**, about 3,700 players cannot join at the peak.
+2. With **9 fixed servers**, nobody is turned away, but most servers idle at night.
+3. With **auto-scaling**, the servers follow the players and the day costs less.
+:::
+
+## Game challenge · Cloud Match
+
+{{< sim file="sims/cloud-match.html" poster="sims/cloud-match.png" title="Cloud Match: the right cloud for each job" kind="game" task="**The story:** Byte Bay and its partners have six jobs that need computing. **Play:** match each job with the right cloud model or kind of cloud." >}}
+
+## Try it 3 · Risks (harder)
+
+a) Which risk is it when a bug starts 300 servers?
+b) Which risk makes moving to another provider very hard?
+c) Which kind of cloud fits office servers plus cloud for launch peaks?
+
+::: {.answer}
+a) growing costs
+b) vendor lock-in
+c) a hybrid cloud
+:::
+
+## Summary
+
+- The cloud rents computing over the Internet, paid by use.
+- IaaS, PaaS, SaaS and BaaS differ in who manages what.
+- Public, private and hybrid clouds differ in who shares them.
+- Auto-scaling follows the players, and limits keep the costs safe.
+- The risks are costs, outages, vendor lock-in and data laws.

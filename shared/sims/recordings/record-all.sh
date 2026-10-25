@@ -105,6 +105,9 @@ packet-journey|courses/computing-systems/week-10/sims/packet-journey.html|15|cou
 net-fixer|courses/computing-systems/week-10/sims/net-fixer.html|8|courses/computing-systems/week-10/sims/net-fixer.gif
 terminal-lab|courses/computing-systems/week-10/sims/terminal-lab.html|10|courses/computing-systems/week-10/sims/terminal-lab.gif
 lag-detective|courses/computing-systems/week-10/sims/lag-detective.html|8|courses/computing-systems/week-10/sims/lag-detective.gif
+cloud-stack|courses/computing-systems/week-11/sims/cloud-stack.html|9|courses/computing-systems/week-11/sims/cloud-stack.gif
+scale-sim|courses/computing-systems/week-11/sims/scale-sim.html|11|courses/computing-systems/week-11/sims/scale-sim.gif
+cloud-match|courses/computing-systems/week-11/sims/cloud-match.html|8|courses/computing-systems/week-11/sims/cloud-match.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
 ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif

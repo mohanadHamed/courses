@@ -1,0 +1,223 @@
+---
+title: "Cloud Computing: Models and Services"
+description: "Lesson notes · What cloud computing is and how it differs from own servers, the service models IaaS, PaaS, SaaS and BaaS, public, private and hybrid clouds, auto-scaling and pay-as-you-go, and the benefits and risks of the cloud for a game studio."
+lesson: 21
+ilos: [A2]
+format: lesson-typst
+---
+
+::: {.lead}
+The online races of *Pocket Quest* need servers: for the races, for the
+leaderboard, for the saved progress of every player. Byte Bay could buy
+servers and put them in a cupboard of the office. But on launch day ten
+times more players come than on a normal day, and at night almost nobody
+plays. In lectures 19 and 20 you saw how devices reach a server over the
+Internet. In this lesson you learn where such servers live today: in the
+**cloud**. You learn the service models, the kinds of cloud, how the cloud
+grows with the players, and what can go wrong. Every section ends with a
+short task.
+:::
+
+## Key terms
+
+{{< glossary cloud-computing data-centre cloud-region virtual-machine iaas paas saas baas public-cloud private-cloud hybrid-cloud scalability pay-as-you-go vendor-lock-in >}}
+
+## 21.1 What is the cloud?
+
+The cloud is not in the sky: it is other people's computers, in big
+buildings, rented over the Internet (@fig-own).
+
+::: {.callout-important title="Definition 21.1 — Cloud computing"}
+**Cloud computing** means using computing power, storage and software from
+a provider over the Internet, **when you need it**, and paying for what you
+use (**pay-as-you-go**). The provider runs **data centres** with thousands
+of servers in **regions** around the world. One real server runs many
+**virtual machines**.
+:::
+
+![Own servers or the cloud.](images/own-or-cloud.png){#fig-own width=94%}
+
+::: {.callout-note title="Example 21.1 — Two ways to run the races"}
+1. **Own servers:** Byte Bay buys 10 servers for the launch peak. They cost
+   money every day, also at night, and a broken disk is Byte Bay's problem.
+2. **Cloud:** Byte Bay rents race servers by the hour, in a region near its
+   players, and gives them back when the players leave.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"The cloud is free and always online." Cloud services cost money per use,
+and providers also have outages. Plan for both.
+:::
+
+::: {.callout-note title="Do it · Cloud in your day"}
+List three cloud services you used today (for example e-mail, an online
+office app, a game with cloud saves, a video service).
+
+*Your result:* a list of three.
+:::
+
+## 21.2 Service models: IaaS, PaaS, SaaS and BaaS
+
+The models differ in **who manages what** (@fig-models).
+
+::: {.callout-important title="Definition 21.2 — The service models"}
+- **IaaS** (Infrastructure as a Service): you rent virtual machines,
+  storage and networks; you manage the operating system and the software.
+- **PaaS** (Platform as a Service): you upload your code and data; the
+  provider runs the operating system and the runtime.
+- **SaaS** (Software as a Service): you use a finished application, for
+  example an online office suite.
+- **BaaS** (Backend as a Service): ready services for apps and games, such
+  as player accounts, cloud saves and leaderboards, used through an SDK.
+:::
+
+![Who manages what in each model.](images/service-models.png){#fig-models width=94%}
+
+::: {.callout-note title="Example 21.2 — Four ways to run the leaderboard"}
+1. **IaaS:** a rented virtual machine; Rami installs the OS updates, the
+   database and the code.
+2. **PaaS:** Rami uploads only the leaderboard code; the platform runs it.
+3. **BaaS:** the game uses the leaderboard service of a game back end; no
+   server code at all.
+4. More control means more work: IaaS gives the most control, BaaS the
+   least work.
+:::
+
+{{< sim file="sims/cloud-stack.html" poster="sims/cloud-stack.png" title="Cloud Stack: who manages what?" height="680" >}}
+
+::: {.callout-warning title="Common mistake"}
+Thinking that with SaaS or BaaS the studio has no responsibility. It still
+decides which player data it stores, who can see it, and how long it keeps
+it.
+:::
+
+::: {.callout-note title="Do it · Who manages it?"}
+1. In **Cloud Stack**, set the layers right for IaaS, PaaS and SaaS.
+2. For each, write one thing that Byte Bay still manages.
+
+*Your result:* three correct stacks and three sentences.
+:::
+
+## 21.3 Public, private and hybrid cloud
+
+Besides the model, a cloud differs in **who shares it** (@fig-deploy).
+
+::: {.callout-important title="Definition 21.3 — Kinds of cloud"}
+- **Public cloud:** a provider sells services to many customers over the
+  Internet.
+- **Private cloud:** cloud technology for one organization only, in its own
+  or a rented data centre.
+- **Hybrid cloud:** own servers or a private cloud work together with a
+  public cloud.
+:::
+
+![Public, private and hybrid cloud.](images/deployment.png){#fig-deploy width=94%}
+
+::: {.callout-note title="Example 21.3 — Three choices"}
+1. Byte Bay uses a **public cloud** for the races: cheap and fast to start.
+2. A partner bank keeps payment data in a **private cloud**.
+3. Byte Bay keeps its build PCs in the office and adds public cloud servers
+   for launch peaks: a **hybrid cloud**.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"Private cloud means more secure, always." Security depends on the people
+and the settings; a small private cloud with weak settings is less safe
+than a well-run public cloud.
+:::
+
+::: {.callout-note title="Do it · Choose the kind"}
+Which kind fits? (a) a student team with no money for servers; (b) a
+ministry that must keep data inside the country, on its own servers; (c) a
+studio with office servers that needs extra power once a month.
+
+*Your result:* three answers.
+:::
+
+## 21.4 Scaling, cost and risks
+
+The biggest strength of the cloud is that it can grow and shrink with the
+players (@fig-scale). It also has risks (@fig-pros).
+
+::: {.callout-important title="Definition 21.4 — Scalability, and the risks"}
+**Scalability** is the ability to add or remove servers as the number of
+users changes; **auto-scaling** does it by itself, by rules such as "add a
+server when 80 % are busy". With pay-as-you-go, quiet hours cost less. The
+risks: costs that grow with use, **outages** of the provider, **vendor
+lock-in** (special services make moving hard), and data laws about where
+player data may be stored.
+:::
+
+![Launch day with fixed servers and with auto-scaling.](images/scaling.png){#fig-scale width=94%}
+
+![Benefits and risks.](images/cloud-pros-cons.png){#fig-pros width=94%}
+
+::: {.callout-note title="Example 21.4 — Launch day"}
+1. With 5 fixed servers, about 3,700 players cannot join at 19:00.
+2. With 9 fixed servers, nobody is turned away, but most servers do nothing
+   from midnight to noon.
+3. With auto-scaling, the servers follow the players: nobody is turned away,
+   and the day costs less than with 9 fixed servers.
+:::
+
+{{< sim file="sims/scale-sim.html" poster="sims/scale-sim.png" title="Launch Day Scaling: enough servers, not too many" height="680" >}}
+
+::: {.callout-warning title="Common mistake"}
+Auto-scaling with no upper limit and no budget alert. A bug or an attack
+can start hundreds of servers. Set a maximum and a cost alarm.
+:::
+
+::: {.callout-note title="Do it · Play the day"}
+In **Launch Day Scaling**, find the smallest number of fixed servers that
+turns nobody away, and compare its cost with auto-scaling.
+
+*Your result:* two costs and one sentence.
+:::
+
+## Case study: Cloud Match
+
+Byte Bay and its partners have six jobs: a race server that needs a special
+OS setting; a small leaderboard program; shared documents for the team;
+accounts, cloud saves and a leaderboard through an SDK; payment data of a
+bank that must stay in its own data centre; and build PCs in the office with
+extra cloud servers for launch peaks. The Game challenge of the interactive
+lesson uses these jobs. In the mini-game below you match each job with the
+right model or kind of cloud.
+
+{{< sim file="sims/cloud-match.html" poster="sims/cloud-match.png" title="Cloud Match: the right cloud for each job" kind="game" height="460" >}}
+
+## Further reading
+
+Mell and Grance, *The NIST Definition of Cloud Computing*, NIST Special
+Publication 800-145 (2011). Erl, Mahmood and Puttini, *Cloud Computing:
+Concepts, Technology & Architecture* (2013), Chapters 3–4.
+
+## Exercises
+
+1. Explain cloud computing in one sentence.
+2. What is a data centre?
+3. What is a virtual machine?
+4. In IaaS, who installs the operating system updates?
+5. In PaaS, what does the studio upload?
+6. Give one example of SaaS.
+7. What does BaaS offer a game?
+8. What is the difference between a public and a private cloud?
+9. What is auto-scaling?
+10. Name two risks of the cloud.
+
+## Answers to the exercises
+
+::: {.answers}
+1. Using computing power, storage and software from a provider over the
+   Internet, when needed, and paying for the use.
+2. A building with many servers, power, cooling and network links.
+3. A computer made in software on a real server.
+4. The customer (the studio).
+5. Its code and data.
+6. For example an online office suite or web e-mail.
+7. Ready services such as accounts, cloud saves and leaderboards.
+8. A public cloud serves many customers; a private cloud serves one
+   organization.
+9. Adding and removing servers by itself when the load changes.
+10. For example costs, outages, vendor lock-in, data laws.
+:::

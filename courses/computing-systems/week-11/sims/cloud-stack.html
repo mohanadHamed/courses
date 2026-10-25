@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Cloud Stack</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .stack { display: grid; gap: 5px; margin: 8px 0; }
+    .sim .stack button { text-align: left; font-weight: 800; padding: 9px 12px; border-radius: 8px; border: 2px solid transparent; }
+    .sim .stack button.you { background: #ffe066; color: #5c4813; }
+    .sim .stack button.prov { background: #a5d8ff; color: #1864ab; }
+    .sim .stack button.bad { border-color: #e03131; }
+    .sim .stack button span { float: right; font-weight: 700; }
+    .sim .ex { font-weight: 700; color: #495057; margin: 4px 0; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Cloud Stack: who manages what?</h1>
+  <p class="hint">Byte Bay compares ways to run the leaderboard of <i>Pocket Quest</i>. Choose a model, then tap each layer to say who manages it: <b>you</b> (yellow) or <b>the provider</b> (blue). Then press Check.</p>
+  <div class="bar" id="models"></div>
+  <p class="ex" id="ex"></p>
+  <div class="stack" id="stack"></div>
+  <div class="bar"><button type="button" id="check">Check</button></div>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const LAYERS = ["application (the leaderboard code)", "data (the scores)", "runtime (the language and libraries)", "operating system", "virtual machines", "servers, storage, network", "building, power, cooling"];
+  const MODELS = { "Own servers": 7, "IaaS": 4, "PaaS": 2, "SaaS": 0 };
+  const EX = { "Own servers": "Byte Bay buys a server and puts it in the office.", "IaaS": "Byte Bay rents a virtual machine and installs everything on it.", "PaaS": "Byte Bay uploads only the leaderboard code; the platform runs it.", "SaaS": "Byte Bay uses a finished online leaderboard app and only types settings." };
+  let model = "IaaS";
+  const mine = {}; Object.keys(MODELS).forEach((m) => (mine[m] = LAYERS.map(() => "you")));
+  const right = {};
+  const TASKS = [
+    { q: "Task 1: Set the seven layers right for IaaS and press Check.", ok: () => right["IaaS"] },
+    { q: "Task 2: Now PaaS. Which layers move to the provider?", ok: () => right["PaaS"] },
+    { q: "Task 3: Now SaaS. What does Byte Bay still decide about its data?", ok: () => right["SaaS"] },
+  ];
+  let ti = 0, shown = false;
+  function draw() {
+    Kit.buttons($("models"), Object.keys(MODELS).map((k) => ({ k, label: k })), (k) => { model = k; shown = false; draw(); });
+    $("models").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === model));
+    $("ex").textContent = EX[model];
+    const want = MODELS[model];
+    $("stack").innerHTML = LAYERS.map((l, i) => { const v = mine[model][i], bad = shown && (v === "you") !== (i < want); return `<button type="button" class="${v === "you" ? "you" : "prov"}${bad ? " bad" : ""}" data-i="${i}">${l}<span>${v === "you" ? "you" : "provider"}</span></button>`; }).join("");
+    $("stack").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.i; mine[model][i] = mine[model][i] === "you" ? "prov" : "you"; shown = false; draw(); }));
+  }
+  function check() {
+    const want = MODELS[model], wrong = mine[model].filter((v, i) => (v === "you") !== (i < want)).length;
+    shown = true; if (!wrong) right[model] = true;
+    draw();
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the higher the model, the less you manage, and the less you control.";
+    $("msg").textContent = m + (wrong ? `${wrong} layer(s) are wrong (red border).` : model === "SaaS" ? "Right. Even with SaaS, Byte Bay decides which data it puts in and who may see it." : `Right: with ${model}, Byte Bay manages ${want} of 7 layers.`);
+    $("msg").classList.toggle("bad", !!wrong);
+  }
+  $("check").addEventListener("click", check);
+  window.CS = { model: (k) => { model = k; shown = false; draw(); }, set: (arr) => { mine[model] = arr.slice(); draw(); }, check };
+  draw(); $("task").textContent = TASKS[0].q;
+})();
+</script>
+</body>
+</html>

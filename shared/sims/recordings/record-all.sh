@@ -147,6 +147,7 @@ shop-week|courses/digital-skills/week-06/sims/shop-week.html|8|courses/digital-s
 table-lab|courses/digital-skills/week-07/sims/table-lab.html|9|courses/digital-skills/week-07/sims/table-lab.gif
 chart-lab|courses/digital-skills/week-07/sims/chart-lab.html|10|courses/digital-skills/week-07/sims/chart-lab.gif
 ranas-questions|courses/digital-skills/week-07/sims/ranas-questions.html|8|courses/digital-skills/week-07/sims/ranas-questions.gif
+huda-day|courses/digital-skills/week-08/sims/huda-day.html|8|courses/digital-skills/week-08/sims/huda-day.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

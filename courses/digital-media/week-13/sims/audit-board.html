@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Audit Board</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim table.au { border-collapse: collapse; width: 100%; margin: 6px 0; }
+    .sim table.au td, .sim table.au th { border: 1px solid #dee2e6; padding: 4px 6px; font-weight: 700; font-size: .84rem; vertical-align: middle; }
+    .sim table.au th { background: #f8f0fc; color: #862e9c; text-align: left; }
+    .sim table.au td.st { white-space: nowrap; }
+    .sim table.au td.st button { padding: 3px 7px; font-size: .78rem; margin: 1px; }
+    .sim table.au td.st button.on.g { background: #2b8a3e; color: #fff; border-color: #2b8a3e; }
+    .sim table.au td.st button.on.y { background: #f59f00; color: #fff; border-color: #f59f00; }
+    .sim table.au td.st button.on.r { background: #c92a2a; color: #fff; border-color: #c92a2a; }
+    .sim table.au tr.bad td { background: #fff5f5; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+    @media (max-width: 520px) { .sim table.au td.st { white-space: normal; } }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Audit Board: the assets of Rooftop Rescue</h1>
+  <p class="hint">Salma's inventory lists eight assets with what the team found. Give each one a status: <b>cleared</b> (all is fine), <b>to fix</b> (allowed, but something is missing) or <b>replace</b> (not allowed or unknown). Then press <b>Check the audit</b>.</p>
+  <table class="au" id="tbl"></table>
+  <div class="bar"><button type="button" id="check">Check the audit</button></div>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const ROWS = [
+    ["pasha_idle.png", "drawn by Nour (employee)", "cleared", "Work for hire: Night Owl owns it."],
+    ["night_rain.ogg", "CC BY 4.0, no credit line yet", "to fix", "Allowed for sale; write the TASL credit."],
+    ["roof_sans.ttf", "SIL OFL 1.1, credit written", "cleared", "The OFL allows embedding; the credit is there."],
+    ["theme.ogg", "freelancer, contract signed", "cleared", "The contract gives Night Owl the rights."],
+    ["cat_sticker.png", "art site, CC BY-NC", "replace", "NC: not allowed in a game for sale."],
+    ["poster_bg.jpg", "image search, source unknown", "replace", "Unknown owner and licence: replace it."],
+    ["physics.dll", "code library, MIT, notice missing", "to fix", "MIT allows it; add the copyright notice."],
+    ["roof_tiles.png", "CC BY-SA 4.0, recoloured, credit written", "cleared", "Credit written; the recoloured tiles are shared as CC BY-SA."],
+  ];
+  const S = { cleared: "g", "to fix": "y", replace: "r" };
+  const s = { pick: {}, checked: false, perfect: false };
+  const TASKS = [
+    { q: "Task 1: Give every asset a status, then check the audit.", ok: () => s.checked && Object.keys(s.pick).length === ROWS.length },
+    { q: "Task 2: Correct the audit until all eight statuses are right.", ok: () => s.perfect },
+  ];
+  let ti = 0;
+  function render() {
+    $("tbl").innerHTML = "<tr><th>asset</th><th>what the team found</th><th>status</th></tr>" + ROWS.map(([a, f], i) => `<tr class="${s.checked && s.pick[i] && s.pick[i] !== ROWS[i][2] ? "bad" : ""}"><td>${a}</td><td>${f}</td><td class="st" data-i="${i}"></td></tr>`).join("");
+    $("tbl").querySelectorAll("td.st").forEach((td) => {
+      const i = +td.dataset.i;
+      Kit.buttons(td, Object.keys(S).map((k) => ({ k, label: k })), (k) => { s.pick[i] = k; s.checked = false; render(); upd(); });
+      td.querySelectorAll("button").forEach((b) => { b.classList.add(S[b.dataset.k]); b.classList.toggle("on", s.pick[i] === b.dataset.k); });
+    });
+  }
+  function check() {
+    s.checked = true;
+    const wrong = ROWS.map((r, i) => i).filter((i) => s.pick[i] !== ROWS[i][2]);
+    s.perfect = wrong.length === 0;
+    render();
+    const cnt = (k) => Object.values(s.pick).filter((v) => v === k).length;
+    $("calc").textContent = `Your audit: ${cnt("cleared")} cleared, ${cnt("to fix")} to fix, ${cnt("replace")} to replace. ${s.perfect ? "All correct." : wrong.length + " status(es) need another look (red rows)."}`;
+    upd(wrong.length ? ROWS[wrong[0]][0] + ": " + (s.pick[wrong[0]] ? "check the licence again." : "no status yet.") : "Report: 4 cleared, 2 to fix (a credit, a notice), 2 to replace (NC sticker, unknown photo).");
+  }
+  function upd(note) {
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the audit report can go to Salma.";
+    $("msg").textContent = m + (note || "");
+  }
+  $("check").addEventListener("click", check);
+  window.AB = { set: (i, k) => { s.pick[i] = k; s.checked = false; render(); upd(); }, solve: () => { ROWS.forEach((r, i) => (s.pick[i] = r[2])); render(); }, check };
+  render(); upd();
+})();
+</script>
+</body>
+</html>

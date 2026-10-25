@@ -181,6 +181,10 @@ pd-clock|courses/digital-media/week-12/sims/pd-clock.html|8|courses/digital-medi
 can-we-use-it|courses/digital-media/week-12/sims/can-we-use-it.html|8|courses/digital-media/week-12/sims/can-we-use-it.gif
 rights-check|courses/digital-media/week-12/sims/rights-check.html|9|courses/digital-media/week-12/sims/rights-check.gif
 ip-desk|courses/digital-media/week-12/sims/ip-desk.html|8|courses/digital-media/week-12/sims/ip-desk.gif
+credit-builder|courses/digital-media/week-13/sims/credit-builder.html|9|courses/digital-media/week-13/sims/credit-builder.gif
+asset-shopping|courses/digital-media/week-13/sims/asset-shopping.html|8|courses/digital-media/week-13/sims/asset-shopping.gif
+audit-board|courses/digital-media/week-13/sims/audit-board.html|8|courses/digital-media/week-13/sims/audit-board.gif
+audit-fixes|courses/digital-media/week-13/sims/audit-fixes.html|8|courses/digital-media/week-13/sims/audit-fixes.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

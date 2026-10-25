@@ -1,2 +1,5 @@
-// Paste Lab: paste as a picture and change Excel, then paste as a link and update.
-await wait(900); PL.paste("pic"); await wait(1200); PL.change(); await wait(1700); PL.paste("link"); await wait(1000); PL.update(); await wait(1900);
+// Paste Lab: copy in Excel, paste in Word, then try the Paste Options.
+await wait(800); click("#copy"); await wait(900); click("#paste"); await wait(1200);
+click('#opts [data-o="pic"]'); await wait(1300);
+click('#opts [data-o="dest"]'); await wait(1600);
+click('#opts [data-o="keep"]'); await wait(1600);

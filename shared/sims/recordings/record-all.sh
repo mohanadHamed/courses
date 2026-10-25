@@ -130,7 +130,7 @@ cloud-planner|courses/computing-systems/week-11/sims/cloud-planner.html|8|course
 platform-profiles|courses/computing-systems/week-12/sims/platform-profiles.html|8|courses/computing-systems/week-12/sims/platform-profiles.gif
 cloud-gaming-lab|courses/computing-systems/week-12/sims/cloud-gaming-lab.html|10|courses/computing-systems/week-12/sims/cloud-gaming-lab.gif
 platform-match|courses/computing-systems/week-12/sims/platform-match.html|8|courses/computing-systems/week-12/sims/platform-match.gif
-spec-check|courses/computing-systems/week-12/sims/spec-check.html|9|courses/computing-systems/week-12/sims/spec-check.gif
+spec-compare|courses/computing-systems/week-12/sims/spec-compare.html|9|courses/computing-systems/week-12/sims/spec-compare.gif
 decision-matrix|courses/computing-systems/week-12/sims/decision-matrix.html|8|courses/computing-systems/week-12/sims/decision-matrix.gif
 port-planner|courses/computing-systems/week-12/sims/port-planner.html|8|courses/computing-systems/week-12/sims/port-planner.gif
 avd-builder|courses/computing-systems/week-13/sims/avd-builder.html|11|courses/computing-systems/week-13/sims/avd-builder.gif
@@ -168,7 +168,7 @@ animatic-player|courses/digital-media/week-06/sims/animatic-player.html|10|cours
 cut-or-play|courses/digital-media/week-06/sims/cut-or-play.html|9|courses/digital-media/week-06/sims/cut-or-play.gif
 panel-composer|courses/digital-media/week-06/sims/panel-composer.html|9|courses/digital-media/week-06/sims/panel-composer.gif
 cat-catch|courses/digital-media/week-06/sims/cat-catch.html|9|courses/digital-media/week-06/sims/cat-catch.gif
-wave-lab|courses/digital-media/week-07/sims/wave-lab.html|10|courses/digital-media/week-07/sims/wave-lab.gif
+waveform-lab|courses/digital-media/week-07/sims/waveform-lab.html|10|courses/digital-media/week-07/sims/waveform-lab.gif
 sound-booth|courses/digital-media/week-07/sims/sound-booth.html|8|courses/digital-media/week-07/sims/sound-booth.gif
 wave-editor|courses/digital-media/week-07/sims/wave-editor.html|9|courses/digital-media/week-07/sims/wave-editor.gif
 clean-take|courses/digital-media/week-07/sims/clean-take.html|9|courses/digital-media/week-07/sims/clean-take.gif
@@ -251,9 +251,9 @@ statement-builder|courses/digital-skills/week-12/sims/statement-builder.html|8|c
 responsible-or-not|courses/digital-skills/week-12/sims/responsible-or-not.html|8|courses/digital-skills/week-12/sims/responsible-or-not.gif
 pivot-lab|courses/digital-skills/week-13/sims/pivot-lab.html|8|courses/digital-skills/week-13/sims/pivot-lab.gif
 summary-check|courses/digital-skills/week-13/sims/summary-check.html|9|courses/digital-skills/week-13/sims/summary-check.gif
-right-tool|courses/digital-skills/week-13/sims/right-tool.html|8|courses/digital-skills/week-13/sims/right-tool.gif
-paste-lab|courses/digital-skills/week-14/sims/paste-lab.html|8|courses/digital-skills/week-14/sims/paste-lab.gif
-outline-lab|courses/digital-skills/week-14/sims/outline-lab.html|7|courses/digital-skills/week-14/sims/outline-lab.gif
+summary-tool|courses/digital-skills/week-13/sims/summary-tool.html|8|courses/digital-skills/week-13/sims/summary-tool.gif
+link-lab|courses/digital-skills/week-14/sims/link-lab.html|8|courses/digital-skills/week-14/sims/link-lab.gif
+heading-slides|courses/digital-skills/week-14/sims/heading-slides.html|7|courses/digital-skills/week-14/sims/heading-slides.gif
 office-relay|courses/digital-skills/week-14/sims/office-relay.html|8|courses/digital-skills/week-14/sims/office-relay.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do

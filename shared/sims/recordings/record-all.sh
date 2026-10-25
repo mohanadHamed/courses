@@ -87,6 +87,10 @@ frame-lab|courses/digital-media/week-05/sims/frame-lab.html|9|courses/digital-me
 shot-caller|courses/digital-media/week-05/sims/shot-caller.html|9|courses/digital-media/week-05/sims/shot-caller.gif
 board-builder|courses/digital-media/week-05/sims/board-builder.html|10|courses/digital-media/week-05/sims/board-builder.gif
 board-fixer|courses/digital-media/week-05/sims/board-fixer.html|9|courses/digital-media/week-05/sims/board-fixer.gif
+animatic-player|courses/digital-media/week-06/sims/animatic-player.html|10|courses/digital-media/week-06/sims/animatic-player.gif
+cut-or-play|courses/digital-media/week-06/sims/cut-or-play.html|9|courses/digital-media/week-06/sims/cut-or-play.gif
+panel-composer|courses/digital-media/week-06/sims/panel-composer.html|9|courses/digital-media/week-06/sims/panel-composer.gif
+cat-catch|courses/digital-media/week-06/sims/cat-catch.html|9|courses/digital-media/week-06/sims/cat-catch.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

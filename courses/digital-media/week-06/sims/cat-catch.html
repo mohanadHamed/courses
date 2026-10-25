@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Cat Catch</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Cat Catch (Rooftop Rescue, level 1)</h1>
+  <p class="hint">Pasha the cat jumps from the roof. Tap <b>Catch</b> (or the picture, or press Space) when the cat is inside the <b>yellow ring</b> above Nour's net. Five cats, three hearts. Play it, then storyboard it.</p>
+  <canvas id="c" aria-label="Nour in a boat with a net, and a cat falling from a roof"></canvas>
+  <div class="controls"><button type="button" id="catch">Catch!</button><button type="button" class="ghost" id="again">Start again</button><button type="button" class="ghost" id="sound">Sound: on</button></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="gameplay-overlay.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const Y0 = 0.22, ZT = 0.52, ZB = 0.70, WATER = 0.8;     // heights as parts of the canvas
+  let lives = 3, score = 0, n = 0, cat = null, fb = null, over = false, timer = null;
+  const G = [0.55, 0.7, 0.85, 1.0, 1.15];                  // falling speed of each cat
+  const yAt = (now) => cat ? Y0 + 0.5 * G[n % 5] * Math.pow(Math.max(0, now - cat.t0) / 1000, 2) * 1.2 : Y0;
+  function next() {
+    if (over) return;
+    if (n >= 5 || lives <= 0) { end(); return; }
+    cat = { t0: performance.now() + 900, done: false };
+    $("msg").textContent = `Cat ${n + 1} of 5: watch the yellow ring…`; $("msg").className = "message";
+    const tLand = Math.sqrt((WATER - Y0) / (0.6 * G[n % 5])) * 1000 + 900;
+    clearTimeout(timer); timer = setTimeout(() => { if (cat && !cat.done) miss("Too late: Pasha fell into the water."); }, tLand);
+  }
+  function miss(why) {
+    cat.done = true; lives--; fb = { kind: "splash", t: performance.now() };
+    $("msg").textContent = "✗ " + why + " One heart lost."; $("msg").className = "message bad"; Kit.bad();
+    n++; setTimeout(next, 1500);
+  }
+  function tap() {
+    if (over) { $("msg").textContent = "The game is over. Press Start again."; return; }
+    if (!cat || cat.done || performance.now() < cat.t0) { $("msg").textContent = "Wait until Pasha jumps."; return; }
+    const y = yAt(performance.now());
+    if (y >= ZT && y <= ZB) { cat.done = true; score += 100; fb = { kind: "+100", t: performance.now() }; $("msg").textContent = "✓ Caught! +100"; $("msg").className = "message good"; Kit.good(); n++; clearTimeout(timer); setTimeout(next, 1300); }
+    else { clearTimeout(timer); miss(y < ZT ? "Too early: the net closed before Pasha arrived." : "Too late: Pasha fell past the net."); }
+  }
+  function end() { over = true; cat = null; $("msg").textContent = `🎉 Game over: ${score / 100} of 5 cats caught, ${lives} hearts left. Now storyboard this level!`; $("msg").className = "message good"; }
+  function start() { lives = 3; score = 0; n = 0; over = false; fb = null; next(); }
+  $("catch").addEventListener("click", tap);
+  $("c").addEventListener("pointerdown", tap);
+  window.addEventListener("keydown", (e) => { if (e.code === "Space") tap(); });
+  $("again").addEventListener("click", () => { clearTimeout(timer); start(); });
+  $("sound").addEventListener("click", () => { Kit.sound = !Kit.sound; $("sound").textContent = "Sound: " + (Kit.sound ? "on" : "off"); });
+  const cv = Kit.canvas($("c"), (W) => Math.round(Math.min(W, 640) * 9 / 16));
+  Kit.loop((now) => {
+    const c = cv.ctx, W = cv.W, H = cv.H;
+    const sky = c.createLinearGradient(0, 0, 0, H); sky.addColorStop(0, "#5f3dc4"); sky.addColorStop(1, "#ffa94d");
+    c.fillStyle = sky; c.fillRect(0, 0, W, H);
+    c.fillStyle = "#862e9c"; c.fillRect(W * 0.62, H * Y0, W * 0.3, H * (WATER - Y0));
+    c.fillStyle = "#5f3dc4"; c.fillRect(W * 0.6, H * Y0 - 4, W * 0.34, 8);
+    c.fillStyle = "#4dabf7"; c.fillRect(0, H * WATER, W, H);
+    const cx = W * 0.5;
+    // Nour and the boat
+    c.fillStyle = "#a0522d"; c.beginPath(); c.moveTo(cx - 70, H * 0.8); c.lineTo(cx + 70, H * 0.8); c.lineTo(cx + 54, H * 0.87); c.lineTo(cx - 54, H * 0.87); c.closePath(); c.fill();
+    c.fillStyle = "#1c7ed6"; Kit.rrect(c, cx - 30, H * 0.69, 20, H * 0.11, 6, "#1c7ed6");
+    c.fillStyle = "#f3c9a0"; c.beginPath(); c.arc(cx - 20, H * 0.66, 10, 0, 7); c.fill();
+    c.strokeStyle = "#495057"; c.lineWidth = 3; c.beginPath(); c.moveTo(cx - 10, H * 0.72); c.lineTo(cx + 2, H * 0.66); c.stroke();
+    c.strokeStyle = "#ffd43b"; c.lineWidth = 3; c.setLineDash([6, 4]); c.beginPath(); c.ellipse(cx + 8, H * (ZT + ZB) / 2, 26, H * (ZB - ZT) / 2, 0, 0, 7); c.stroke(); c.setLineDash([]);
+    // the cat
+    if (!over) {
+      const y = cat && !cat.done ? yAt(now) : Y0;
+      if (!(cat && cat.done)) {
+        const x = cat && now > cat.t0 ? cx + 8 : W * 0.7;
+        c.fillStyle = "#212529"; c.beginPath(); c.ellipse(x, H * y, 13, 8, 0, 0, 7); c.fill(); c.beginPath(); c.arc(x + 11, H * y - 7, 7, 0, 7); c.fill();
+      }
+    }
+    GO.hud(c, 0, 0, W, H, { lives, score });
+    if (fb && now - fb.t < 900) GO.feedback(c, cx + 8, H * 0.5, fb.kind, Math.max(0.7, W / 520));
+  });
+  window.CC = { tap, start, y: () => (cat && !cat.done && performance.now() > cat.t0 ? yAt(performance.now()) : 0), ZT, ZB };
+  start();
+})();
+</script>
+</body>
+</html>

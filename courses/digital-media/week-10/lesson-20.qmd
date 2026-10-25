@@ -1,0 +1,206 @@
+---
+title: "Video-Editing Tool Tour"
+description: "A hands-on tour of a video editor: a new project with the right settings, the media pool, the viewer, the inspector and the timeline with its tracks, the four basic edits (split, trim, ripple delete, move), and a first export from the Deliver page."
+lesson: 20
+ilos: [C3]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+is one step of the seminar. It ends with a **Do it** task and one set of
+questions. The full explanations, examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary video-editor media-pool timeline playhead video-track video-clip split-clip trim-clip inspector export-preset >}}
+
+## 20.1 A new project and the media pool
+
+- A video editor never changes the source files; the **project** keeps the
+  edits.
+- First set the **resolution** and the **frame rate** (File › Project
+  Settings): 1920 × 1080, 30 fps.
+- **Import** the clips (File › Import › Media, or drag): they appear in the
+  **media pool**.
+
+![From a new project to an exported file.](images/workflow.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Moving the source files after the import gives "media offline".
+:::
+
+::: {.callout-note title="Do it · Your project"}
+Make a project (1920 × 1080, 30 fps) and import three short clips of your
+own or of a game you play.
+:::
+
+::: {.callout-tip title="Try it 1 · The project"}
+Choose the right answer.
+
+::: {.match extra="the Deliver page|the clip's name"}
+where the imported clips appear
+:   the media pool
+
+what you set first in a new project
+:   the resolution and the frame rate
+
+what happens to the source files when you edit
+:   nothing
+
+why the editor shows "media offline"
+:   the source files were moved
+:::
+:::
+
+## 20.2 Viewer, inspector and timeline
+
+- **Viewer:** the frame at the **playhead**. **Inspector:** settings of
+  the selected clip.
+- **Timeline:** time from left to right, on **tracks**.
+- **V2** covers **V1**: a title on V2 is over the gameplay. Audio tracks
+  play together.
+
+![The Edit page.](images/editor-window.png){width=94%}
+
+![Tracks on the timeline.](images/tracks.png){width=94%}
+
+{{< sim file="sims/timeline-lab.html" poster="sims/timeline-lab.png" title="Timeline Lab: a first cut of the teaser" height="860" >}}
+
+::: {.callout-warning title="Watch out!"}
+A title on V1 after the clips plays on black, not over the picture.
+:::
+
+::: {.callout-note title="Do it · Build the order"}
+Put three clips on V1, a title on V2 at the start, and check it in the
+viewer.
+:::
+
+::: {.callout-tip title="Try it 2 · The panels"}
+Use Timeline Lab. Choose the right answer.
+
+::: {.match extra="the media pool|A1"}
+shows the frame at the playhead
+:   the viewer
+
+changes the size of the title
+:   the inspector
+
+the track for a title over the gameplay
+:   V2
+
+the line that marks the time in the viewer
+:   the playhead
+:::
+:::
+
+## 20.3 The four basic edits
+
+- **Split** at the playhead (Blade **B**, or **Ctrl+B**).
+- **Trim:** drag the start or the end of a clip.
+- **Ripple delete:** delete and close the gap (Shift+Delete).
+- **Move:** drag to another time or track. **Ctrl+Z** undoes.
+
+![Four basic edits.](images/edit-tools.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+A normal delete leaves a black gap.
+:::
+
+::: {.callout-note title="Do it · Cut and tighten"}
+Split a clip twice, ripple delete the middle, add music and trim it to the
+end of the video.
+:::
+
+::: {.callout-tip title="Try it 3 · Edits"}
+Use Timeline Lab. Choose the edit.
+
+::: {.match extra="export|import"}
+cut a clip in two at 0:12
+:   split
+
+remove a part and close the gap
+:   ripple delete
+
+make the music end with the video
+:   trim
+
+put a clip on another track
+:   move
+:::
+:::
+
+## 20.4 A first export
+
+- The project is not a video: **export** it (Deliver page, or File ›
+  Export).
+- **MP4**, **H.264**, the project's resolution and frame rate, a quality,
+  a clear name with a version.
+- Render, then watch the whole file once.
+
+![The export settings.](images/export-settings.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Send the MP4, never the project file.
+:::
+
+::: {.callout-note title="Do it · Export"}
+Export `yourname-teaser-v1.mp4` (H.264, 1920 × 1080, 30 fps). Write its
+length and size.
+:::
+
+::: {.callout-tip title="Try it 4 · Export"}
+Choose the right answer.
+
+::: {.match extra="the project file|a GIF"}
+the page that makes the video file
+:   Deliver
+
+the codec for a teaser for players
+:   H.264
+
+a good file name
+:   rooftop-teaser-v1.mp4
+
+after the render
+:   watch the whole file once
+:::
+:::
+
+## Game challenge: Editor Tour {.challenge}
+
+Work alone. Use every section of today.
+
+The trainee asks seven questions: where the **imported clips** are, how to
+**order** them, how to **cut** at 0:12, how to keep the **title over** the
+gameplay, where to **resize** it, how to **remove a boring middle**, and
+how to make an **MP4**.
+
+{{< sim file="sims/editor-tour.html" poster="sims/editor-tour.png" title="Editor Tour: the right panel for each job" kind="game" height="600" >}}
+
+::: {.callout-tip title="Try it 5 · The trainee's questions"}
+Choose the right answer.
+
+::: {.match extra="rename the files|lower the volume"}
+Where are the clips I just imported?
+:   the media pool
+
+How do I cut the boat clip at 0:12?
+:   playhead to 0:12, then split
+
+How do I keep the title over the gameplay?
+:   put it on V2
+
+How do I remove the boring middle without a gap?
+:   ripple delete
+:::
+:::
+
+## Summary {.summary}
+
+- Set the resolution and frame rate first; imported clips go to the media
+  pool.
+- The viewer shows the playhead's frame; the inspector shows the selected
+  clip.
+- Higher video tracks cover lower ones; audio tracks play together.
+- Split, trim, ripple delete and move build the edit.
+- Export an MP4 with H.264, then watch it once.

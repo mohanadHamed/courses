@@ -121,6 +121,10 @@ clean-take|courses/digital-media/week-07/sims/clean-take.html|9|courses/digital-
 loop-builder|courses/digital-media/week-08/sims/loop-builder.html|10|courses/digital-media/week-08/sims/loop-builder.gif
 score-the-scene|courses/digital-media/week-08/sims/score-the-scene.html|8|courses/digital-media/week-08/sims/score-the-scene.gif
 loop-doctor|courses/digital-media/week-08/sims/loop-doctor.html|8|courses/digital-media/week-08/sims/loop-doctor.gif
+mix-desk|courses/digital-media/week-09/sims/mix-desk.html|9|courses/digital-media/week-09/sims/mix-desk.gif
+sound-check|courses/digital-media/week-09/sims/sound-check.html|8|courses/digital-media/week-09/sims/sound-check.gif
+critique-builder|courses/digital-media/week-09/sims/critique-builder.html|8|courses/digital-media/week-09/sims/critique-builder.gif
+critics-choice|courses/digital-media/week-09/sims/critics-choice.html|8|courses/digital-media/week-09/sims/critics-choice.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Critic's Choice</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Critic's Choice</h1>
+  <p class="hint">In the critique session of Night Owl Games, the team listens to the audio of three levels. For each moment, choose the most useful feedback.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { goal: "The rain ambience of the flood level is much louder than the steps.", choices: C(["“At the start, the rain covers Nour's steps; lower the rain by 4–6 dB so players hear where she walks.”", "“The rain is bad.”", "“I prefer sunny levels.”", "“Make it better.”"]), answer: "“At the start, the rain covers Nour's steps; lower the rain by 4–6 dB so players hear where she walks.”",
+      good: "Specific (moment and sound), why it matters, and a suggestion.", why: {} },
+    { goal: "The coin sound in Lantern Keeper is the same every time and gets annoying.", choices: C(["“The coin sound repeats exactly 50 times a minute; add 3 takes and a ±5 % pitch change.”", "“Coins are boring.”", "“Who made this sound?”", "“Remove all sounds.”"]), answer: "“The coin sound repeats exactly 50 times a minute; add 3 takes and a ±5 % pitch change.”",
+      good: "Evidence (how often) and a concrete fix (variation, lecture 15).", why: {} },
+    { goal: "The boss music of Ember Trail starts with a hard cut.", choices: C(["“When the boss appears, the calm loop stops at once; start the boss layer on the next bar instead.”", "“The music is wrong.”", "“It is fine, nobody notices.”", "“Use a famous song.”"]), answer: "“When the boss appears, the calm loop stops at once; start the boss layer on the next bar instead.”",
+      good: "It names the moment and suggests an adaptive change in time (lecture 15).", why: { "“Use a famous song.”": "A famous song needs a licence, and does not solve the cut." } },
+    { goal: "A teammate says: “Your mix is terrible.” How do you answer?", choices: C(["“Which moment did you hear it, and what did you miss?”", "“Your music is worse.”", "“I will not change anything.”", "say nothing"]), answer: "“Which moment did you hear it, and what did you miss?”",
+      good: "Ask for the moment and the problem: vague feedback becomes useful.", why: {} },
+    { goal: "After the critique, Yara has ten notes. What does she do first?", choices: C(["sort them: problems that hide game information first", "do them in the order they came", "ignore the short ones", "start a new mix from zero"]), answer: "sort them: problems that hide game information first",
+      good: "Fix first what the player needs to play (voice, warnings, cues), then taste.", why: {} },
+  ];
+  Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: the first moment of the session." });
+})();
+</script>
+</body>
+</html>

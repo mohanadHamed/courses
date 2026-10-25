@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Sound Check</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Sound Check</h1>
+  <p class="hint">Night Owl Games puts all the sounds of <i>Rooftop Rescue</i> into the game. The testers report six problems. Choose the fix for each one.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { tag: "mix", goal: "“When Nour speaks, I cannot understand her: the music is too loud.” Fix?", choices: C(["duck the music while she speaks", "make everything louder", "remove the voice", "add reverb to the voice"]), answer: "duck the music while she speaks",
+      good: "Ducking lowers the music by some dB while the voice plays, then brings it back.", why: { "make everything louder": "Louder for all keeps the same balance, and may clip." } },
+    { tag: "mix", goal: "“The master meter goes red in the big wave scene, and the sound crackles.” Fix?", choices: C(["lower the loudest groups until the master stays below 0 dB", "raise the master", "export at a higher sample rate", "add more effects"]), answer: "lower the loudest groups until the master stays below 0 dB",
+      good: "Above 0 dB the master clips. Lower the groups (or add a limiter), never raise the master.", why: {} },
+    { tag: "space", goal: "“Pasha meows on the left of the screen, but I hear him in the middle.” Fix?", choices: C(["pan the meow to the left (or use a 3D sound source)", "make it louder", "make it shorter", "play it twice"]), answer: "pan the meow to the left (or use a 3D sound source)",
+      good: "Panning places a sound left or right; a 3D source does it by itself from the position of the object.", why: {} },
+    { tag: "space", goal: "“The boat engine sounds the same when the boat is far away.” Fix?", choices: C(["a 3D source with distance falloff", "a louder engine", "a stereo file", "a fade-out"]), answer: "a 3D source with distance falloff",
+      good: "With falloff, the volume drops with the distance between the sound source and the listener (the camera).", why: {} },
+    { tag: "engine", goal: "“The game takes 4 seconds longer to start since the music was added.” Fix?", choices: C(["stream the long music instead of loading it all at start", "use WAV for the music", "remove the effects", "use a bigger phone"]), answer: "stream the long music instead of loading it all at start",
+      good: "Long music is streamed (read while it plays, compressed); short effects are loaded in memory.", why: { "use WAV for the music": "WAV makes the file even bigger." } },
+    { tag: "access", goal: "“I play on the bus without sound and miss that a wave is coming.” Fix?", choices: C(["a visual cue and subtitles for important sounds", "louder music", "a sound only", "vibration only, no picture"]), answer: "a visual cue and subtitles for important sounds",
+      good: "Important sounds need a visual cue too, and players need separate volume sliders: accessibility.", why: {} },
+  ];
+  Kit.game({
+    rounds, cols: 1, colsPhone: 1, animMs: 600, still: true,
+    intro: "Round 1 is the story of the lesson: the first tester report.",
+    canvas: () => 64,
+    draw(c, W, H, now, r) {
+      c.fillStyle = "#f8f0fc"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const T = ["mix", "space", "engine", "access"], w = (W - 20) / T.length;
+      T.forEach((t, i) => { const on = t === r.tag; Kit.rrect(c, 10 + i * w + 3, 14, w - 6, 36, 10, on ? "#9C36B5" : "#fff", "#9C36B5", 2); Kit.text(c, t, 10 + i * w + w / 2, 37, 12.5, on ? "#fff" : "#5f3dc4"); });
+    },
+  });
+})();
+</script>
+</body>
+</html>

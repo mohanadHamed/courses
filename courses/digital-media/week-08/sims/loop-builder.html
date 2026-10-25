@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Loop Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .grid { display: grid; grid-template-columns: 74px repeat(16, minmax(0, 1fr)); gap: 3px; margin: 8px 0; }
+    .sim .grid .name { font-weight: 800; font-size: .8rem; align-self: center; }
+    .sim .grid .name small { display: block; font-weight: 600; color: var(--sim-muted); }
+    .sim .grid button.c { padding: 0; height: 30px; border-radius: 5px; border: 1.5px solid #e5dbff; background: #faf7ff; font-size: .7rem; font-weight: 800; }
+    .sim .grid button.c.beat { border-color: #d0bfff; background: #f3edff; }
+    .sim .grid button.c.on { background: #9C36B5; color: #fff; border-color: #9C36B5; }
+    .sim .grid button.c.now { outline: 3px solid #fab005; outline-offset: -2px; }
+    .sim .tabs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; font-weight: 700; }
+    .sim .tabs button.on { background: var(--sim-accent); color: #fff; }
+    .sim .out { font-weight: 700; font-variant-numeric: tabular-nums; }
+    @media (max-width: 520px) { .sim .grid { grid-template-columns: 52px repeat(16, minmax(0, 1fr)); gap: 2px; } .sim .grid button.c { height: 24px; font-size: .6rem; } }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Loop Builder: a game-music loop in 16 steps</h1>
+  <p class="hint">One row per sound, 16 steps per bar (4 beats of 4 steps). Tap the cells, set the tempo, and press Play. The melody and bass cells change their note each time you tap them. <b>Game state</b> shows adaptive music: in “calm” the drum layers are muted.</p>
+  <div class="grid" id="grid"></div>
+  <div class="controls" id="sl"></div>
+  <div class="tabs">Game state: <span id="state"></span></div>
+  <div class="tabs"><button type="button" id="play">▶ Play</button><button type="button" class="ghost" id="clear">Clear</button><button type="button" class="ghost" id="demo">Example loop</button><button type="button" class="ghost" id="wav">Download WAV (4 loops)</button></div>
+  <p class="out" id="out"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const NOTES = ["C", "D", "E", "G", "A"], FREQ = { C: 261.6, D: 293.7, E: 329.6, G: 392, A: 440 };
+  const ROWS = [["melody", "notes", true, false], ["bass", "notes", true, false], ["hat", "drum", false, true], ["snare", "drum", false, true], ["kick", "drum", false, true]];
+  const s = { bpm: 110, cells: ROWS.map(() => Array(16).fill(null)), state: "chase", playing: false, step: -1 };
+  let t0 = 0, ac = null, nextT = 0, nextStep = 0;
+  function voice(ctx, row, val, t, out) {
+    const g = ctx.createGain(); g.connect(out);
+    if (row === 4) { const o = ctx.createOscillator(); o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.15); g.gain.setValueAtTime(0.9, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.25); o.connect(g); o.start(t); o.stop(t + 0.26); return; }
+    if (row === 2 || row === 3) { const len = row === 2 ? 0.05 : 0.18, b = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * len), ctx.sampleRate), d = b.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; const src = ctx.createBufferSource(); src.buffer = b;
+      const f = ctx.createBiquadFilter(); f.type = "highpass"; f.frequency.value = row === 2 ? 7000 : 1500; src.connect(f); f.connect(g);
+      g.gain.setValueAtTime(row === 2 ? 0.25 : 0.45, t); g.gain.exponentialRampToValueAtTime(0.001, t + len); src.start(t); return; }
+    const o = ctx.createOscillator(); o.type = row === 0 ? "square" : "triangle"; o.frequency.value = FREQ[val] / (row === 1 ? 4 : 1);
+    const len = (60 / s.bpm) / 4 * 0.9; g.gain.setValueAtTime(row === 0 ? 0.12 : 0.5, t); g.gain.setValueAtTime(row === 0 ? 0.12 : 0.5, t + len * 0.7); g.gain.linearRampToValueAtTime(0.0001, t + len); o.connect(g); o.start(t); o.stop(t + len + 0.01);
+  }
+  const muted = (r) => s.state === "calm" && ROWS[r][3];
+  function grid() {
+    $("grid").innerHTML = ROWS.map(([n, sub], r) => `<div class="name">${n}<small>${sub}</small></div>` + s.cells[r].map((v, i) =>
+      `<button type="button" class="c ${i % 4 === 0 ? "beat" : ""} ${v ? "on" : ""} ${i === s.step ? "now" : ""}" data-r="${r}" data-i="${i}">${v && ROWS[r][2] ? v : ""}</button>`).join("")).join("");
+    $("grid").querySelectorAll("button.c").forEach((b) => { if (muted(+b.dataset.r)) b.style.opacity = 0.35; });
+  }
+  function info() {
+    const bar = 4 * 60 / s.bpm, n = s.cells.flat().filter(Boolean).length;
+    $("out").textContent = `Tempo ${s.bpm} BPM · one beat ${Kit.fmt(60 / s.bpm, 2)} s · one bar (the loop) ${Kit.fmt(bar, 2)} s · 4 loops ${Kit.fmt(4 * bar, 1)} s · ${n} notes`;
+  }
+  $("grid").addEventListener("click", (e) => {
+    const b = e.target.closest("button.c"); if (!b) return;
+    const r = +b.dataset.r, i = +b.dataset.i, v = s.cells[r][i];
+    s.cells[r][i] = ROWS[r][2] ? (v === null ? NOTES[0] : NOTES.indexOf(v) < NOTES.length - 1 ? NOTES[NOTES.indexOf(v) + 1] : null) : (v ? null : "x");
+    grid(); info();
+  });
+  Kit.slider($("sl"), "tempo", 60, 160, 5, s.bpm, (v) => { s.bpm = v; info(); }, (v) => v + " BPM");
+  function stateTabs() { Kit.buttons($("state"), [{ k: "calm", label: "calm (melody + bass)" }, { k: "chase", label: "chase (all layers)" }], (k) => { s.state = k; stateTabs(); grid(); $("msg").textContent = k === "calm" ? "Calm: the drums are muted. In a game, the same loop plays on; only layers come and go." : "Chase: the drum layers join in, at the next beat, so the music stays in time."; });
+    $("state").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.state)); }
+  function tick() {
+    if (!s.playing) return;
+    const stepDur = 60 / s.bpm / 4, el = (performance.now() - t0) / 1000, st = Math.floor(el / stepDur) % 16;
+    if (st !== s.step) { s.step = st; grid(); }
+    if (ac && ac.state === "running") {
+      while (nextT < ac.currentTime + 0.12) { s.cells.forEach((row, r) => { if (row[nextStep] && !muted(r)) voice(ac, r, row[nextStep], nextT, ac.destination); }); nextT += stepDur; nextStep = (nextStep + 1) % 16; }
+    }
+    requestAnimationFrame(tick);
+  }
+  function play() {
+    s.playing = !s.playing; $("play").textContent = s.playing ? "■ Stop" : "▶ Play";
+    if (s.playing) { try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); ac.resume && ac.resume(); nextT = ac.currentTime + 0.05; } catch (_) {} nextStep = 0; t0 = performance.now(); tick(); }
+    else { s.step = -1; grid(); }
+  }
+  function demo() {
+    const m = ["E", null, "G", null, "A", null, "G", "E", "D", null, "E", null, "C", null, null, null];
+    const b = ["C", null, null, null, "C", null, null, null, "A", null, null, null, "G", null, null, null];
+    s.cells = [m, b, Array(16).fill(0).map((_, i) => (i % 2 === 0 ? "x" : null)), Array(16).fill(0).map((_, i) => (i === 4 || i === 12 ? "x" : null)), Array(16).fill(0).map((_, i) => (i % 8 === 0 || i === 10 ? "x" : null))];
+    grid(); info(); $("msg").textContent = "An example: kick on beats 1 and 3 (and one extra), snare on 2 and 4, hat on every eighth, a five-note melody.";
+  }
+  async function wav() {
+    const SR = 44100, stepDur = 60 / s.bpm / 4, total = 16 * 4 * stepDur, ctx = new OfflineAudioContext(1, Math.ceil(SR * total), SR);
+    for (let k = 0; k < 64; k++) s.cells.forEach((row, r) => { const v = row[k % 16]; if (v && !muted(r)) voice(ctx, r, v, k * stepDur, ctx.destination); });
+    const buf = await ctx.startRendering(), d = buf.getChannelData(0), n = d.length, ab = new ArrayBuffer(44 + n * 2), dv = new DataView(ab);
+    const W = (o, str) => [...str].forEach((ch, i) => dv.setUint8(o + i, ch.charCodeAt(0)));
+    W(0, "RIFF"); dv.setUint32(4, 36 + n * 2, true); W(8, "WAVE"); W(12, "fmt "); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+    dv.setUint32(24, SR, true); dv.setUint32(28, SR * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); W(36, "data"); dv.setUint32(40, n * 2, true);
+    for (let i = 0; i < n; i++) dv.setInt16(44 + i * 2, Math.max(-1, Math.min(1, d[i] * 0.8)) * 32767, true);
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([ab], { type: "audio/wav" })); a.download = `mus_loop_${s.bpm}bpm.wav`; a.click();
+    $("msg").textContent = `Downloaded: 4 loops, ${Kit.fmt(total, 1)} s, 44.1 kHz, 16-bit, mono, about ${Math.round(n * 2 / 1024)} KB.`;
+  }
+  $("play").addEventListener("click", play);
+  $("clear").addEventListener("click", () => { s.cells = ROWS.map(() => Array(16).fill(null)); grid(); info(); });
+  $("demo").addEventListener("click", demo);
+  $("wav").addEventListener("click", () => wav().catch(() => { $("msg").textContent = "This browser cannot make the file. Play the loop and record it in Audacity instead."; }));
+  window.LB = { demo, play, set: (o) => { if (o.bpm) { const i = document.querySelector("#sl input"); i.value = o.bpm; i.dispatchEvent(new Event("input")); } if (o.state) { s.state = o.state; stateTabs(); grid(); } }, cell: (r, i) => $("grid").querySelector(`button[data-r="${r}"][data-i="${i}"]`).click() };
+  stateTabs(); demo();
+})();
+</script>
+</body>
+</html>

@@ -166,6 +166,9 @@ effects-lab|courses/digital-media/week-11/sims/effects-lab.html|8|courses/digita
 edit-doctor|courses/digital-media/week-11/sims/edit-doctor.html|8|courses/digital-media/week-11/sims/edit-doctor.gif
 promo-builder|courses/digital-media/week-11/sims/promo-builder.html|8|courses/digital-media/week-11/sims/promo-builder.gif
 promo-judge|courses/digital-media/week-11/sims/promo-judge.html|8|courses/digital-media/week-11/sims/promo-judge.gif
+licence-lab|courses/digital-media/week-12/sims/licence-lab.html|9|courses/digital-media/week-12/sims/licence-lab.gif
+pd-clock|courses/digital-media/week-12/sims/pd-clock.html|8|courses/digital-media/week-12/sims/pd-clock.gif
+can-we-use-it|courses/digital-media/week-12/sims/can-we-use-it.html|8|courses/digital-media/week-12/sims/can-we-use-it.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

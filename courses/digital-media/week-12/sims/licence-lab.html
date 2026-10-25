@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Licence Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .lic { font-size: 1.5rem; font-weight: 800; color: var(--sim-accent); margin: 6px 0 2px; }
+    .sim .mean { font-weight: 700; margin: 0 0 6px; }
+    .sim table.uses { border-collapse: collapse; width: 100%; margin: 6px 0; }
+    .sim table.uses td { border: 1px solid #dee2e6; padding: 4px 8px; font-weight: 700; font-size: .9rem; }
+    .sim table.uses td.ok { background: #d3f9d8; } .sim table.uses td.no { background: #ffe3e3; } .sim table.uses td.cond { background: #fff3bf; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Licence Lab: what may Night Owl do?</h1>
+  <p class="hint">An artist shares a drawing of a rooftop under a Creative Commons licence. Switch the conditions on and off and see what Night Owl Games may do with it in <i>Rooftop Rescue</i>, a game it sells.</p>
+  <div class="bar" id="parts"></div>
+  <p class="lic" id="lic"></p>
+  <p class="mean" id="mean"></p>
+  <table class="uses" id="uses"></table>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const s = { cc0: false, sa: false, nc: false, nd: false };
+  const name = () => (s.cc0 ? "CC0 (public domain)" : "CC BY" + (s.nc ? "-NC" : "") + (s.nd ? "-ND" : "") + (s.sa ? "-SA" : ""));
+  const TASKS = [
+    { q: "Task 1: Build CC BY-NC. May Night Owl use the drawing in the game it sells?", ok: () => !s.cc0 && s.nc && !s.sa && !s.nd },
+    { q: "Task 2: Build the licence that lets Night Owl change the drawing and sell the game, with only a credit as the condition.", ok: () => !s.cc0 && !s.nc && !s.sa && !s.nd },
+    { q: "Task 3: Build CC BY-ND. What may Nour do with the drawing, and what not?", ok: () => !s.cc0 && s.nd && !s.nc },
+    { q: "Task 4: Build CC BY-SA. What must Night Owl do with its changed version?", ok: () => !s.cc0 && s.sa && !s.nc && !s.nd },
+    { q: "Task 5: Choose CC0. Which conditions are left? What is still kind to do?", ok: () => s.cc0 },
+  ];
+  let ti = 0;
+  function uses() {
+    if (s.cc0) return [["use it in the game that Night Owl sells", "ok", "yes"], ["change the colours and the size", "ok", "yes"], ["use it unchanged in the trailer", "ok", "yes"], ["a credit in the game", "ok", "not required, but kind"]];
+    const sell = s.nc ? ["no", "no: NC means non-commercial only"] : ["ok", "yes, with a credit"];
+    const change = s.nd ? ["no", "no: ND means no changes"] : s.nc ? ["no", "only in a non-commercial project"] : s.sa ? ["cond", "yes, but the changed drawing must be shared under CC BY-SA too"] : ["ok", "yes, with a credit"];
+    const trailer = s.nc ? ["no", "no: a trailer advertises a product for sale"] : ["ok", "yes, with a credit"];
+    return [["use it in the game that Night Owl sells", ...sell], ["change the colours and the size", ...change], ["use it unchanged in the trailer", ...trailer], ["a credit in the game", "cond", "required: creator, title, source, licence"]];
+  }
+  function upd() {
+    const items = [{ k: "cc0", label: "CC0: no conditions" }, { k: "nc", label: "NC: non-commercial" }, { k: "nd", label: "ND: no changes" }, { k: "sa", label: "SA: share alike" }];
+    Kit.buttons($("parts"), items, (k) => { s[k] = !s[k]; if (k === "nd" && s.nd) s.sa = false; if (k === "sa" && s.sa) s.nd = false; if (k !== "cc0" && s[k]) s.cc0 = false; if (k === "cc0" && s.cc0) { s.nc = s.nd = s.sa = false; } upd(); });
+    $("parts").querySelectorAll("button").forEach((b) => b.classList.toggle("on", s[b.dataset.k]));
+    $("lic").textContent = name();
+    $("mean").textContent = s.cc0 ? "The creator gave up all rights: anyone may use it for anything." : "BY: give credit." + (s.nc ? " NC: no commercial use." : "") + (s.nd ? " ND: share only unchanged copies." : "") + (s.sa ? " SA: share changed versions under the same licence." : "");
+    $("uses").innerHTML = uses().map(([u, c, t]) => `<tr><td>${u}</td><td class="${c}">${t}</td></tr>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: read every part of the licence before you use an asset, and save the licence text.";
+    $("msg").textContent = m + "SA and ND cannot be combined: you cannot share changed versions of a work that may not be changed.";
+  }
+  window.LL = { set: (o) => { Object.assign(s, { cc0: false, sa: false, nc: false, nd: false }, o); upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

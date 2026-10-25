@@ -58,11 +58,12 @@
     Kit.buttons($(id), items.map((k) => ({ k: String(k), label: num ? k + " fps" : k })), (k) => { s[key] = num ? +k : k; upd(); });
     $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === String(s[key])));
   }
-  const brIn = Kit.slider($("sl"), "Bitrate", 1, 50, 1, s.br, (v) => { s.br = v; upd(); }, (v) => v + " Mbit/s");
-  const lenIn = Kit.slider($("sl"), "Length", 5, 120, 5, s.len, (v) => { s.len = v; upd(); }, (v) => v + " s");
+  let ready = false;
+  const brIn = Kit.slider($("sl"), "Bitrate", 1, 50, 1, s.br, (v) => { s.br = v; if (ready) upd(); }, (v) => v + " Mbit/s");
+  const lenIn = Kit.slider($("sl"), "Length", 5, 120, 5, s.len, (v) => { s.len = v; if (ready) upd(); }, (v) => v + " s");
   function upd() {
     tabs("tg", Object.keys(TARGETS), "tg"); tabs("res", Object.keys(RES), "res"); tabs("fps", [24, 30, 60], "fps", true); tabs("codec", Object.keys(CODECS), "codec");
-    brIn.disabled = s.codec === "ProRes in MOV";
+    ready = true; brIn.disabled = s.codec === "ProRes in MOV";
     const br = s.codec === "ProRes in MOV" ? proresBr() : s.br;
     $("calc").textContent = `${RES[s.res].join(" × ")} · ${s.fps} fps · ${br} Mbit/s × ${s.len} s ÷ 8 = ${Kit.fmt(size(), 1)} MB · quality: ${quality()}`;
     const items = TARGETS[s.tg]();

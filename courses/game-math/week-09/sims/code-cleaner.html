@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Code Cleaner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { font-family: ui-monospace, Consolas, monospace; text-align: left; } .sim .code { font: 700 1rem ui-monospace, Consolas, monospace; background: #1e1e2e; color: #e9ecef; padding: 10px 12px; border-radius: 10px; margin: 6px 0; }</style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Code Cleaner</h1>
+  <p class="hint">The code of <i>Star Dock</i> has long, hard conditions. Replace each one with the <b>simplest equivalent</b> condition: the same value in every case, fewer operators.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="logic.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { long: "!(!hasPass)", ans: "hasPass", choices: C(["hasPass", "!hasPass", "true", "hasPass && hasPass"]), law: "double negation: ¬¬p = p" },
+    { long: "!(shieldsUp && engineOn)", ans: "!shieldsUp || !engineOn", choices: C(["!shieldsUp || !engineOn", "!shieldsUp && !engineOn", "shieldsUp || engineOn", "!shieldsUp && engineOn"]), law: "De Morgan: ¬(p ∧ q) = ¬p ∨ ¬q" },
+    { long: "!(alarm || docked)", ans: "!alarm && !docked", choices: C(["!alarm && !docked", "!alarm || !docked", "alarm && docked", "!alarm || docked"]), law: "De Morgan: ¬(p ∨ q) = ¬p ∧ ¬q" },
+    { long: "hasPass && true", ans: "hasPass", choices: C(["hasPass", "true", "false", "!hasPass"]), law: "identity: p ∧ T = p" },
+    { long: "docked || (docked && alarm)", ans: "docked", choices: C(["docked", "docked && alarm", "alarm", "docked || alarm"]), law: "absorption: p ∨ (p ∧ q) = p" },
+    { long: "(hasPass && shieldsUp) || (hasPass && engineOn)", ans: "hasPass && (shieldsUp || engineOn)", choices: C(["hasPass && (shieldsUp || engineOn)", "hasPass || (shieldsUp && engineOn)", "shieldsUp || engineOn", "hasPass && shieldsUp && engineOn"]), law: "distributive: (p ∧ q) ∨ (p ∧ r) = p ∧ (q ∨ r)" },
+  ];
+  const short = (s) => s.replace(/hasPass/g, "p").replace(/shieldsUp|alarm/g, "q").replace(/engineOn|docked/g, "r").replace(/\btrue\b/g, "(p || !p)").replace(/\bfalse\b/g, "(p && !p)");
+  rounds.forEach((r) => {
+    r.answer = r.ans; r.goal = "Which condition is the simplest equivalent?"; r.good = "Equivalent in every row, and shorter. The law: " + r.law + ".";
+    const L = LG.parse(short(r.long)); r.why = {};
+    r.choices.forEach((c) => { if (c.k === r.ans) return; const f = LG.parse(short(c.k)), vars = [...new Set([...L.vars, ...f.vars])].sort(), bad = LG.rows(vars).find((x) => f.eval(x) !== L.eval(x));
+      r.why[c.k] = bad ? "Not equivalent: it differs in at least one case." : "Equivalent, but not the simplest."; });
+  });
+  const g = Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: a strange line in the door code." });
+  const box = Kit.el("div", { class: "code", id: "code" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { if (g.st.i !== last && !g.st.over) { last = g.st.i; box.textContent = "if (" + g.cur().long + ")"; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

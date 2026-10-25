@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Truth Table Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
+    .sim input[type=text] { font: 600 1rem ui-monospace, Consolas, monospace; padding: 6px 8px; border-radius: 8px; border: 1.5px solid #ced4da; flex: 1; min-width: 200px; }
+    .sim table.tt { border-collapse: collapse; margin-top: 8px; font-variant-numeric: tabular-nums; }
+    .sim table.tt th, .sim table.tt td { border: 1px solid #dee2e6; padding: 5px 10px; text-align: center; font-weight: 800; }
+    .sim table.tt th { background: #ebfbee; color: #2b8a3e; font-family: ui-monospace, Consolas, monospace; font-size: .85rem; }
+    .sim table.tt td.T { background: #ebfbee; color: #2b8a3e; }
+    .sim table.tt td.F { background: #fff5f5; color: #c92a2a; }
+    .sim table.tt td.ask { background: #fff9db; color: #a37400; cursor: pointer; min-width: 44px; }
+    .sim table.tt td.bad { outline: 3px solid #e03131; outline-offset: -3px; }
+    .sim .ex button { font-family: ui-monospace, Consolas, monospace; font-size: .85rem; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Truth Table Lab: every case of a condition</h1>
+  <p class="hint">Type a condition with p, q and r, and the operators ! (NOT), &amp;&amp; (AND), || (OR), ^ (XOR) and -&gt; (IF–THEN). In <b>Quiz</b> mode, tap the yellow cells to give your answer, then press Check.</p>
+  <div class="bar"><input type="text" id="expr" value="p && (q || r)" aria-label="the condition"><button type="button" id="go">Make the table</button></div>
+  <div class="bar ex" id="ex"></div>
+  <div class="bar"><button type="button" class="ghost" id="mode">Mode: show the answers</button><button type="button" id="check" hidden>Check</button></div>
+  <div style="overflow-x:auto"><table class="tt" id="tt"></table></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="logic.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  let quiz = false, e = null, rows = [], guess = [];
+  const EX = ["p && (q || r)", "!p || q", "p -> q", "p ^ q", "(p || q) && !(p && q)", "p && q || r"];
+  Kit.buttons($("ex"), EX.map((k) => ({ k, label: k })), (k) => { $("expr").value = k; build(); });
+  function build() {
+    try { e = LG.parse($("expr").value); } catch (err) { $("msg").textContent = "Check the condition: " + err.message + "."; $("msg").classList.add("bad"); return; }
+    rows = LG.rows(e.vars); guess = rows.map(() => null);
+    $("msg").classList.remove("bad");
+    $("msg").textContent = `${e.vars.length} variable${e.vars.length > 1 ? "s" : ""}: 2^${e.vars.length} = ${rows.length} rows. ` + (quiz ? "Tap the yellow cells: T or F?" : `True in ${rows.filter((r) => e.eval(r)).length} of ${rows.length} rows.`);
+    draw();
+  }
+  function draw(checked) {
+    const head = e.vars.map((v) => `<th>${v}</th>`).join("") + `<th>${$("expr").value.replace(/</g, "&lt;")}</th>`;
+    $("tt").innerHTML = `<tr>${head}</tr>` + rows.map((r, k) => {
+      const v = e.eval(r), cells = e.vars.map((x) => `<td class="${r[x] ? "T" : "F"}">${LG.TF(r[x])}</td>`).join("");
+      const out = quiz ? `<td class="ask ${checked && guess[k] !== v ? "bad" : ""}" data-k="${k}">${guess[k] === null ? "?" : LG.TF(guess[k])}</td>` : `<td class="${v ? "T" : "F"}">${LG.TF(v)}</td>`;
+      return `<tr>${cells}${out}</tr>`;
+    }).join("");
+    $("check").hidden = !quiz;
+  }
+  $("tt").addEventListener("click", (ev) => { const td = ev.target.closest("td.ask"); if (!td) return; const k = +td.dataset.k; guess[k] = guess[k] === null ? true : guess[k] ? false : null; draw(); });
+  $("check").addEventListener("click", () => {
+    const wrong = rows.filter((r, k) => guess[k] !== e.eval(r)).length;
+    draw(true);
+    $("msg").textContent = wrong ? `${wrong} cell${wrong > 1 ? "s are" : " is"} wrong or empty (red). Work it out part by part, then check again.` : "✓ All rows are right.";
+    $("msg").classList.toggle("bad", !!wrong); wrong ? Kit.bad() : Kit.good();
+  });
+  $("mode").addEventListener("click", () => { quiz = !quiz; $("mode").textContent = quiz ? "Mode: quiz" : "Mode: show the answers"; build(); });
+  $("go").addEventListener("click", build);
+  $("expr").addEventListener("keydown", (ev) => { if (ev.key === "Enter") build(); });
+  window.TT = { set: (x) => { $("expr").value = x; build(); }, quiz: (q) => { if (quiz !== q) $("mode").click(); }, guess: (arr) => { guess = arr; draw(); }, check: () => $("check").click() };
+  build();
+})();
+</script>
+</body>
+</html>

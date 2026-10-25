@@ -48,6 +48,10 @@ lighthouse|courses/game-math/week-07/sims/lighthouse.html|10|courses/game-math/w
 island-quest|courses/game-math/week-08/sims/island-quest.html|8|courses/game-math/week-08/sims/island-quest.gif
 logic-lab|courses/game-math/week-08/sims/logic-lab.html|9|courses/game-math/week-08/sims/logic-lab.gif
 door-logic|courses/game-math/week-08/sims/door-logic.html|9|courses/game-math/week-08/sims/door-logic.gif
+truth-table-lab|courses/game-math/week-09/sims/truth-table-lab.html|9|courses/game-math/week-09/sims/truth-table-lab.gif
+rule-detective|courses/game-math/week-09/sims/rule-detective.html|8|courses/game-math/week-09/sims/rule-detective.gif
+equivalence-lab|courses/game-math/week-09/sims/equivalence-lab.html|9|courses/game-math/week-09/sims/equivalence-lab.gif
+code-cleaner|courses/game-math/week-09/sims/code-cleaner.html|8|courses/game-math/week-09/sims/code-cleaner.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif

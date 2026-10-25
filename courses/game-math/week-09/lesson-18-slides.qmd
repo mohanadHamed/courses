@@ -1,0 +1,224 @@
+---
+title: "Boolean Algebra and Decision Conditions"
+subtitle: "Lecture 18"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary boolean-algebra logical-equivalence de-morgan-laws distributive-law absorption-law guard-clause >}}
+
+## 18.1 Calculating with 1 and 0
+
+:::: {.columns}
+::: {.column width="50%"}
+- In Boolean algebra, true is 1 and false is 0.
+- AND works like multiplication, and NOT p is 1 − p.
+- OR works like addition, but 1 + 1 stays 1.
+- **Do it:** With p = 1, q = 0 and r = 0, what is (p ∨ q) ∧ r?
+:::
+::: {.column width="50%"}
+![](images/bool-arith.png)
+:::
+::::
+
+## Example · The dock door in numbers
+
+The pass is 1, the shields are 0 and the officer is 1, and the door is p ∧ (q ∨ r).
+**Does the door open?**
+
+::: {.reveal}
+1. q ∨ r = 0 + 1 = 1.
+2. p ∧ 1 = 1 × 1 = **1**, so the door opens.
+3. With p = 0, the product is **0** whatever q and r are.
+:::
+
+## Try it 1 · Numbers
+
+The facts are p = 1, q = 0 and r = 0.
+
+a) What is p ∨ (q ∧ r)?
+b) What is (p ∨ q) ∧ r?
+c) What is ¬p ∨ ¬q?
+
+::: {.answer}
+a) 1
+b) 0
+c) 1
+:::
+
+## 18.2 The laws
+
+:::: {.columns}
+::: {.column width="50%"}
+- Each law is an equivalence that holds for every value.
+- p ∧ T is p, and p ∨ ¬p is always T.
+- The absorption law turns p ∨ (p ∧ q) into p.
+- **Do it:** Check the distributive law in Equivalence Lab. Is it true?
+:::
+::: {.column width="50%"}
+![](images/bool-laws.png)
+:::
+::::
+
+## Example · Checking absorption
+
+The code says docked || (docked && alarm).
+**Why is this the same as docked?**
+
+::: {.reveal}
+1. If docked is true, the OR is **true**.
+2. If docked is false, docked && alarm is false, so the OR is **false**.
+3. The value is always the value of docked: **p ∨ (p ∧ q) ≡ p**.
+:::
+
+## Live demo · Equivalence Lab
+
+{{< sim file="sims/equivalence-lab.html" poster="sims/equivalence-lab.png" title="Equivalence Lab: are two conditions the same?" task="**Show:** check both De Morgan laws, then the wrong De Morgan, then the distributive law. **Ask:** which row shows that the wrong De Morgan is wrong?" >}}
+
+## Try it 2 · Laws
+
+a) What is p ∧ T?
+b) What is p ∧ ¬p?
+c) What is p ∨ (p ∧ q)?
+
+::: {.answer}
+a) p
+b) F
+c) p
+:::
+
+## 18.3 De Morgan's laws
+
+:::: {.columns}
+::: {.column width="50%"}
+- ¬(p ∧ q) is equivalent to ¬p ∨ ¬q.
+- ¬(p ∨ q) is equivalent to ¬p ∧ ¬q.
+- The NOT goes into the brackets, and AND and OR swap.
+- **Do it:** Rewrite !(isDay || isLit) without brackets. What do you get?
+:::
+::: {.column width="50%"}
+![](images/de-morgan.png)
+:::
+::::
+
+## Example · When can the ship not dock?
+
+A ship can dock when hasPass && shieldsUp.
+**When can it not dock?**
+
+::: {.reveal}
+1. It cannot dock when **!(hasPass && shieldsUp)** is true.
+2. De Morgan turns this into **!hasPass || !shieldsUp**.
+3. So one missing thing is enough: no pass, **or** shields down.
+:::
+
+## Try it 3 · De Morgan
+
+a) Which condition is equivalent to !(hasPass && shieldsUp)?
+b) Which condition is equivalent to !(isDay || isLit)?
+c) Which condition is equivalent to !(!a || !b)?
+
+::: {.answer}
+a) !hasPass || !shieldsUp
+b) !isDay && !isLit
+c) a && b
+:::
+
+## 18.4 Simplifying a condition
+
+:::: {.columns}
+::: {.column width="50%"}
+- We apply one law at a time and write its name.
+- The value of the condition never changes.
+- At the end, we check the result with a truth table.
+- **Do it:** Simplify p ∧ (p ∨ q) step by step. Which law did you use?
+:::
+::: {.column width="50%"}
+![](images/simplify-steps.png)
+:::
+::::
+
+## Example · A long door rule
+
+The code says (hasPass && shieldsUp) || (hasPass && !shieldsUp).
+**What is the simplest equivalent condition?**
+
+::: {.reveal}
+1. The distributive law gives hasPass ∧ (shieldsUp ∨ ¬shieldsUp).
+2. The complement law gives hasPass ∧ T.
+3. The identity law gives **hasPass**, because the shields never mattered.
+:::
+
+## Try it 4 · Simplify
+
+a) What is the simplest form of ¬(¬p ∧ ¬q)?
+b) What is the simplest form of (p ∨ q) ∧ (p ∨ ¬q)?
+c) What is the simplest form of ¬(¬p ∨ q)?
+
+::: {.answer}
+a) p ∨ q
+b) p
+c) p ∧ ¬q
+:::
+
+## 18.5 Decision conditions in code
+
+:::: {.columns}
+::: {.column width="50%"}
+- A guard clause checks a condition and leaves the function early.
+- Guard clauses replace deep nested ifs.
+- A named bool makes a long rule easy to read.
+- **Do it:** Rewrite the Fire() code with guard clauses. How many lines is it?
+:::
+::: {.column width="50%"}
+![](images/guard-clauses.png)
+:::
+::::
+
+## Example · The dock decision
+
+The nested code is if (hasPass) { if (!alarmOn) { if (shieldsUp || officer) Open(); } }.
+**How do we write it with guard clauses?**
+
+::: {.reveal}
+1. The first guard is **if (!hasPass) return;**
+2. The second guard is **if (alarmOn) return;**
+3. Then **if (shieldsUp || officer) Open();** finishes the decision.
+:::
+
+## Try it 5 · Code
+
+a) Which guard starts a function that needs a living player?
+b) Which single condition does the nested code with a, b and !c check?
+c) What is the simplest form of !(isDead || !hasAmmo)?
+
+::: {.answer}
+a) if (!isAlive) return;
+b) a && b && !c
+c) !isDead && hasAmmo
+:::
+
+## Game challenge · Code Cleaner
+
+{{< sim file="sims/code-cleaner.html" poster="sims/code-cleaner.png" title="Code Cleaner: the simplest equivalent condition" kind="game" task="**The story:** the door code of Star Dock has six strange conditions from many versions. **Play:** replace each one with its simplest equivalent condition." >}}
+
+## Try it 6 · Name the law (harder)
+
+a) Which law turns !(a && b) into !a || !b?
+b) Which law turns docked || (docked && alarm) into docked?
+c) Which law turns !(!hasPass) into hasPass?
+
+::: {.answer}
+a) De Morgan
+b) absorption
+c) double negation
+:::
+
+## Summary
+
+- True is 1 and false is 0, and AND and OR work like × and +.
+- The laws of Boolean algebra rewrite a condition without changing it.
+- De Morgan moves a NOT into brackets and swaps AND and OR.
+- We simplify one law at a time and check with a truth table.
+- Guard clauses and named conditions keep game decisions clear.

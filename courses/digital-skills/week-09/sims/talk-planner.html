@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Talk Planner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .cards { display: grid; gap: 8px; margin: 8px 0; }
+    .sim .card { display: grid; grid-template-columns: 34px 1fr 110px; gap: 8px; align-items: start; border: 1.5px solid #ffd8a8; background: #fff9f2; border-radius: 12px; padding: 8px; }
+    @media (max-width: 560px) { .sim .card { grid-template-columns: 30px 1fr; } .sim .card .tm { grid-column: 2; } }
+    .sim .card .n { font-weight: 800; color: #D9480F; font-size: 1.2rem; text-align: center; }
+    .sim .card .ttl { font-weight: 800; }
+    .sim .card textarea { width: 100%; box-sizing: border-box; font: inherit; font-size: .88rem; height: 52px; border-radius: 8px; border: 1.5px solid #ced4da; padding: 4px 6px; }
+    .sim .card .mv { display: flex; gap: 4px; } .sim .card .mv button { padding: 2px 8px; }
+    .sim .card select { font: inherit; width: 100%; padding: 3px; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Talk Planner: a five-slide talk</h1>
+  <p class="note">Sami, a student, must give a three-minute talk about the new library hours. Put his five slides in a good order, write a speaker note for each, and give each slide its time.</p>
+  <div class="cards" id="cards"></div>
+  <ul class="chk" id="chk"></ul>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const RIGHT = ["Title", "The problem", "The idea", "An example", "Thank you and questions"];
+  const SUB = { "Title": "Library hours: open in the evening", "The problem": "Students work until 4 pm; the library closes at 3 pm", "The idea": "Open until 7 pm, three days a week", "An example": "Sami's class: 20 students would come", "Thank you and questions": "Thank you! Questions?" };
+  let order = ["The idea", "Title", "An example", "Thank you and questions", "The problem"];
+  const notes = {}, secs = {};
+  RIGHT.forEach((k) => { notes[k] = ""; secs[k] = 30; });
+  function draw() {
+    $("cards").innerHTML = order.map((k, i) => `<div class="card"><div class="n">${i + 1}<div class="mv"><button type="button" class="ghost" data-up="${i}" aria-label="move up">▲</button></div></div>
+      <div><div class="ttl">${k}</div><div class="note" style="margin:0">${SUB[k]}</div><textarea data-k="${k}" placeholder="Speaker notes: what Sami says">${notes[k]}</textarea></div>
+      <div class="tm"><select data-t="${k}">${[15, 30, 45, 60, 90].map((v) => `<option ${v === secs[k] ? "selected" : ""}>${v}</option>`).join("")}</select><div class="note" style="margin:2px 0 0">seconds</div></div></div>`).join("");
+    $("cards").querySelectorAll("[data-up]").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.up; if (i > 0) { [order[i - 1], order[i]] = [order[i], order[i - 1]]; draw(); } }));
+    $("cards").querySelectorAll("textarea").forEach((t) => t.addEventListener("input", () => { notes[t.dataset.k] = t.value; check(); }));
+    $("cards").querySelectorAll("select").forEach((t) => t.addEventListener("change", () => { secs[t.dataset.t] = +t.value; check(); }));
+    check();
+  }
+  function check() {
+    const total = RIGHT.reduce((a, k) => a + secs[k], 0), words = (t) => t.trim().split(/\s+/).filter(Boolean).length;
+    const items = [
+      [order.join() === RIGHT.join(), "Order: title, problem, idea, example, thank you"],
+      [RIGHT.every((k) => words(notes[k]) >= 5), "A speaker note of at least 5 words on every slide"],
+      [total >= 150 && total <= 210, `About three minutes in total (now ${Math.floor(total / 60)} min ${total % 60} s)`],
+      [secs["Thank you and questions"] <= 30, "A short last slide (at most 30 s), then questions"],
+    ];
+    $("chk").innerHTML = items.map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    const n = items.filter((x) => x[0]).length;
+    $("msg").textContent = n === items.length ? "Ready to rehearse: Sami opens Presenter View and practises with the timer." : "Use ▲ to move a slide up, write the notes and choose the times.";
+    if (n === items.length) Kit.good();
+  }
+  window.TP = { order: (o) => { order = o; draw(); }, note: (k, t) => { notes[k] = t; draw(); }, time: (k, v) => { secs[k] = v; draw(); } };
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -160,6 +160,8 @@ table-lab|courses/digital-skills/week-07/sims/table-lab.html|9|courses/digital-s
 chart-lab|courses/digital-skills/week-07/sims/chart-lab.html|10|courses/digital-skills/week-07/sims/chart-lab.gif
 ranas-questions|courses/digital-skills/week-07/sims/ranas-questions.html|8|courses/digital-skills/week-07/sims/ranas-questions.gif
 huda-day|courses/digital-skills/week-08/sims/huda-day.html|8|courses/digital-skills/week-08/sims/huda-day.gif
+slide-builder|courses/digital-skills/week-09/sims/slide-builder.html|9|courses/digital-skills/week-09/sims/slide-builder.gif
+slide-doctor|courses/digital-skills/week-09/sims/slide-doctor.html|8|courses/digital-skills/week-09/sims/slide-doctor.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

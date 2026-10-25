@@ -66,6 +66,9 @@ seed-detective|courses/game-math/week-11/sims/seed-detective.html|8|courses/game
 loot-table-lab|courses/game-math/week-12/sims/loot-table-lab.html|8|courses/game-math/week-12/sims/loot-table-lab.gif
 shape-lab|courses/game-math/week-12/sims/shape-lab.html|9|courses/game-math/week-12/sims/shape-lab.gif
 loot-forge|courses/game-math/week-12/sims/loot-forge.html|8|courses/game-math/week-12/sims/loot-forge.gif
+drop-rate-lab|courses/game-math/week-12/sims/drop-rate-lab.html|8|courses/game-math/week-12/sims/drop-rate-lab.gif
+difficulty-tuner|courses/game-math/week-12/sims/difficulty-tuner.html|9|courses/game-math/week-12/sims/difficulty-tuner.gif
+balance-board|courses/game-math/week-12/sims/balance-board.html|9|courses/game-math/week-12/sims/balance-board.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif

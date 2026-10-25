@@ -1,0 +1,187 @@
+---
+title: "AI with Excel: Formulas, Clean Data and the Right Chart"
+description: "Online activity · Ask an AI tool for an Excel formula and test it, clean a messy list with AI advice and your own checks, and choose the right chart for a question. About 60 minutes."
+lesson: 14
+online: true
+due: "before lecture 15"
+marks: 6
+ilos: [C2, C4, B1]
+toc-title: "In this activity"
+format: lesson-html   # online activity: the tasks PDF is made by printing this page (homework_pdf.py)
+---
+
+## Before you start {.study}
+
+- **What you need:** Excel (the desktop app, Excel on the web at
+  `office.com`, or the free phone app) and a free AI chat tool (for example
+  Microsoft Copilot with your university account, ChatGPT or Gemini).
+- **Time:** about 60 minutes. Work alone, at your own speed.
+- **How it works:** do Steps 1–3 on this page. Each step has a short text, a
+  simulator and a self-check. Then do the **Tasks to submit**.
+- **What you submit:** one Excel file and three short answers, on the
+  university e-learning platform, before lecture 15.
+- **You need lectures 9, 11 and 13:** prompts, formulas, sort, filter and
+  charts.
+- **Never type personal data into an AI tool.** Use only the made-up shop
+  data of this page.
+
+## Key terms {.study}
+
+{{< glossary prompt sumif countif data-cleaning duplicate-row chart check-ai-output hallucination >}}
+
+## Step 1 · Ask an AI for a formula, then test it {.study}
+
+- An AI tool can write a formula for you. Tell it three things: **where**
+  the data is, **which column** holds what, and **what** you want.
+- Example prompt: "My data is in A1:E11. Column C is the Type, column E is
+  the Total in JD. Write one formula for the total of the Drinks."
+- The answer: `=SUMIF(C2:C11,"Drinks",E2:E11)`. **SUMIF** adds only the
+  rows that match. **COUNTIF** counts them: `=COUNTIF(E2:E11,">20")`.
+- **Test every formula.** Check one small result by hand. An AI can use a
+  wrong column, and the number still looks normal.
+
+![A clear prompt for a formula.](images/ai-formula.png){width=100%}
+
+{{< sim file="sims/ai-formula-lab.html" poster="sims/ai-formula-lab.png" title="AI Formula Lab: ask for a formula, then test it" height="900" >}}
+
+::: {.callout-tip title="Try it 1 · Formulas from an AI"}
+Use AI Formula Lab. Choose the right answer.
+
+::: {.match extra="=SUM(Drinks)|the AI is always right"}
+What must a prompt for a formula say?
+:   where the data is, which columns, and what you want
+
+What does =SUMIF(C2:C11,"Drinks",E2:E11) give?
+:   50
+
+What does =COUNTIF(E2:E11,">20") give?
+:   3
+
+What was wrong in the AI answer of Job 3?
+:   it used column D instead of E
+
+How do you check a formula from an AI?
+:   compute one small result by hand
+:::
+:::
+
+## Step 2 · Clean the data with AI advice {.study}
+
+- Data from paper or from many people is often **messy**: empty rows, rows
+  typed twice, extra spaces, "drinks" and "Drinks", "12 JD" as text.
+- Messy data gives wrong results: a filter misses rows, and SUM skips text.
+- An AI tool can list the steps. **You** check each step before you do it.
+- The tools: delete empty rows; **Data › Remove Duplicates**; `=TRIM(B3)`
+  for spaces; **Find and Replace** for spellings; type numbers without
+  "JD".
+- Never delete real rows just because an AI says so.
+
+![Clean the data before you count or chart it.](images/clean-data.png){width=100%}
+
+{{< sim file="sims/clean-data-lab.html" poster="sims/clean-data-lab.png" title="Clean Data Lab: tidy the sales list with AI advice" height="860" >}}
+
+::: {.callout-tip title="Try it 2 · Clean data"}
+Use Clean Data Lab. Choose the right answer.
+
+::: {.match extra="Data › Sort|keep them"}
+Which tool removes rows typed twice?
+:   Data › Remove Duplicates
+
+Which function removes extra spaces?
+:   TRIM
+
+What do you do with "12 JD" in a Total cell?
+:   type 12 and keep JD in the heading
+
+Which AI step was a bad idea?
+:   delete the totals under 12
+
+What is the SUM of the clean list?
+:   185 JD
+:::
+:::
+
+## Step 3 · The right chart for the question {.study}
+
+- First ask: what is the **question**? Then choose the chart.
+- **Compare** amounts → column chart. **Change over time** → line chart.
+  **Parts of one whole** → pie chart.
+- You can ask an AI: "I want to show the sales of 5 days. Which chart?" It
+  should say a line chart. If it says a pie, think again.
+- Always write a **title** that says what the chart shows.
+
+![The right chart for the question.](images/chart-types.png){width=100%}
+
+{{< sim file="sims/chart-lab.html" poster="sims/chart-lab.png" title="Chart Lab: the right chart for the question" height="640" >}}
+
+::: {.callout-tip title="Try it 3 · Which chart?"}
+Choose the right chart. You can use an answer more than once.
+
+::: {.match extra="a table|no chart"}
+The sales of each day of one week?
+:   a line chart
+
+Compare the sales of three types?
+:   a column chart
+
+The part of each type in the total?
+:   a pie chart
+
+The number of students in four classes?
+:   a column chart
+:::
+:::
+
+## Tasks to submit {.tasks}
+
+Do the tasks alone. Your teacher marks them (6 marks). Use only this made-up
+data.
+
+Type this list into a new Excel workbook, **with its mistakes** (it comes
+from a paper notebook of the Sunrise shop):
+
+| Day | Item | Type | Qty | Total |
+|---|---|---|---|---|
+| Sun | Notebook | Paper | 12 | 24 |
+| Sun | Juice | drinks | 20 | 10 |
+| Mon | Pen | PAPER | 40 | 20 |
+| Mon | Water | Drinks | 30 | 15 |
+| Tue | Bag | Bags | 3 | 36 |
+| Tue | Bag | Bags | 3 | 36 |
+| Tue | Juice | Drinks | 24 | 12 JD |
+| Wed | Notebook | Paper | 8 | 16 |
+
+### Task 1 · Clean the list (2 marks)
+
+1. Ask an AI tool how to clean this list. Copy its steps into your answer
+   sheet (a second sheet named *AI steps*).
+2. Clean the list in Excel: one duplicate row, two spellings of the Type,
+   and one total as text. Do not delete real sales.
+3. Save it as `sales_clean.xlsx`.
+
+### Task 2 · Two formulas from AI (2 marks)
+
+1. Ask an AI tool for a formula for the total of the **Drinks**, and one
+   for the **number of totals greater than 15**. Tell it where your data is.
+2. Put the formulas under the list, with a label next to each.
+3. Check each result by hand. The right results are 37 JD and 4 sales.
+
+### Task 3 · A chart and short answers (2 marks)
+
+1. Make a small table *Type / Sales* from the clean list, and a **column
+   chart** of it with a real title.
+
+a) Write your prompt for Task 2 and say if the first AI answer was right.
+
+{{< answer-space lines=3 >}}
+
+b) Which AI step did you **not** follow, or change, and why? If all steps
+were good, say how you checked them.
+
+{{< answer-space lines=3 >}}
+
+## How to submit
+
+Upload `sales_clean.xlsx` (with the sheets *Sales* and *AI steps*) and your
+answers to Task 3 to the university e-learning platform, **before
+lecture 15**.

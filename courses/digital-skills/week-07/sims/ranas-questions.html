@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Rana's Questions</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Rana's Questions</h1>
+  <p class="hint">Rana has the sales of the <b>Sunrise</b> shop for one week in Excel (Day, Item, Type, Qty, Total). The manager, Huda, asks her questions. Choose the Excel tool that answers each one fastest.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const T = ["Sort by Total, largest first", "Filter the column Type", "Conditional formatting", "a line chart", "a column chart", "a pie chart"];
+  const pick = (ans, others) => C([ans, ...others]);
+  const rounds = [
+    { goal: "Huda asks: “Which sale was the <b>biggest</b> this week?”", choices: pick(T[0], [T[1], T[5], "type the numbers again"]), answer: T[0],
+      good: "Sort largest first: the biggest sale (the bag, 36 JD) is at the top.", why: { [T[1]]: "A filter hides rows; it does not put them in order." } },
+    { goal: "“Show me <b>only the drinks</b>.”", choices: pick(T[1], [T[0], T[2], "delete the other rows"]), answer: T[1],
+      good: "Filter Type = Drinks: four rows stay; the others are hidden, not deleted.", why: { "delete the other rows": "Then the other sales are lost. A filter only hides them." } },
+    { goal: "“Make every total <b>above 20 JD green</b>, also next week.”", choices: pick(T[2], ["colour the cells by hand", T[0], T[4]]), answer: T[2],
+      good: "A rule (Highlight Cells › Greater Than 20) colours the cells by itself, also when numbers change.", why: { "colour the cells by hand": "Next week Rana must colour everything again." } },
+    { goal: "“How did the sales <b>change from Sunday to Thursday</b>?”", choices: pick(T[3], [T[5], T[1], "a table of the types"]), answer: T[3],
+      good: "A line chart shows a change over time: up on Tuesday, down on Thursday.", why: { [T[5]]: "A pie shows parts of a whole, not a change." } },
+    { goal: "“<b>Compare</b> the three types: Paper, Drinks and Bags.”", choices: pick(T[4], [T[3], T[2], "Sort by Day"]), answer: T[4],
+      good: "A column chart compares amounts: Paper 75, Bags 60, Drinks 50 JD.", why: { [T[3]]: "The types have no order in time; a line would suggest one." } },
+    { goal: "“What <b>part of the week's 185 JD</b> came from each type?”", choices: pick(T[5], [T[3], T[0], "conditional formatting"]), answer: T[5],
+      good: "A pie shows the parts of one whole: Paper about 41 %, Bags 32 %, Drinks 27 %.", why: { [T[3]]: "A line shows a change over time, not parts." } },
+  ];
+  Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: Huda's first question." });
+})();
+</script>
+</body>
+</html>

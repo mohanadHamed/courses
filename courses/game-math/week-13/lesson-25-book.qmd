@@ -1,0 +1,357 @@
+---
+title: "Randomness and Fairness: The Player's Perception"
+description: "Lesson notes · Why real randomness has long streaks, the gambler's fallacy and the hot hand, how players feel high and low chances, controlled randomness with shuffle bags and pseudo-random distribution, input and output randomness, and honest odds."
+lesson: 25
+ilos: [C2]
+format: lesson-typst
+---
+
+::: {.lead}
+After the update of *Torch Hall*, the forum is full of angry posts. "My hit
+chance is 70 % and I missed three times in a row: the game cheats!" "I
+waited 20 attacks for a critical hit!" "I got two golden torches in a row,
+the drop is broken!" The team checks the code: the random numbers are
+fine. The problem is not the mathematics but the **feeling** of the
+players. People expect random results to alternate, they feel 90 % as
+"sure", and they remember the unlucky streaks. In lectures 20–24 you
+computed probabilities, drew random numbers and balanced drop rates. In
+this lesson you learn how players **perceive** randomness, and how
+designers keep a game fair *and* feeling fair: shuffle bags, pseudo-random
+distribution, the right kind of randomness and honest odds. Every section
+ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary streak gamblers-fallacy hot-hand-fallacy perceived-probability independent-events critical-hit drought shuffle-bag prd input-randomness output-randomness >}}
+
+## 25.1 Real randomness is streaky
+
+Ask a person to write 50 "random" coin flips, and the result changes from
+heads to tails much too often. Real randomness has **long streaks**
+(@fig-streaks).
+
+::: {.callout-important title="Definition 25.1 — Streaks in independent tries"}
+A **streak** (or run) is a series of equal results in a row. For independent
+tries with probability $p$ of a result, the chance of $k$ of them in a row
+**at one given place** is $p^k$. But in a long sequence there are many
+places where a streak can start, so **some** long streak is very likely.
+In 100 fair coin flips, the longest run is about 7 on average, and a run of
+5 or more appears in about 97 % of the sequences.
+:::
+
+![A person's sequence and a real coin.](images/streaks.png){#fig-streaks width=94%}
+
+::: {.callout-note title="Example 25.1 — Three misses in a row"}
+The guard hits with $p = 0.7$, so a miss has probability 0.3.
+
+1. Three misses at one given place: $0.3^3 = 0.027$, about 2.7 %.
+2. In a fight of 100 attacks there are almost 100 places to start, so a
+   run of 3 misses somewhere is almost certain, and a run of 4 or more
+   happens in about 43 % of the fights (by simulation).
+3. So the angry post describes something normal: rare at one place, common
+   in a long game.
+:::
+
+{{< sim file="sims/streak-lab.html" poster="sims/streak-lab.png" title="Streak Lab: does random look random?" height="660" >}}
+
+::: {.callout-warning title="Common mistake"}
+"A run of 5 tails means the coin is not fair." In 100 flips a run of 5 is
+expected. Judge fairness by many tries (the share of heads), not by one
+streak.
+:::
+
+::: {.callout-note title="Do it · Streaks"}
+1. Write 50 "random" H and T on paper without a coin. Find your longest
+   run.
+2. In **Streak Lab**, run 100 attacks at 50 % five times. Compare the
+   longest runs with yours.
+
+*Your result:* your longest run and five computer runs.
+:::
+
+## 25.2 The gambler's fallacy and the hot hand
+
+Players often believe that the past changes the next random result
+(@fig-memory).
+
+::: {.callout-important title="Definition 25.2 — Two fallacies"}
+For **independent events**, $P(A \mid \text{any past results}) = P(A)$.
+
+- The **gambler's fallacy:** "Tails came 4 times, so heads is **due**."
+  Wrong: $P(\text{heads}) = \frac{1}{2}$ on every flip.
+- The **hot-hand fallacy:** "I hit twice, so I am lucky now and will hit
+  again." Wrong for independent tries.
+
+Do not mix up the chance of a **whole sequence** with the chance of the
+**next** result: $P(\text{TTTTH}) = \left(\frac{1}{2}\right)^5 = \frac{1}{32}$,
+but $P(\text{H} \mid \text{TTTT}) = \frac{1}{2}$.
+:::
+
+![The coin has no memory.](images/no-memory.png){#fig-memory width=94%}
+
+::: {.callout-note title="Example 25.2 — Two golden torches"}
+The golden torch drops with $p = 0.05$ per bat.
+
+1. A player gets the torch from bat 7 and then again from bat 8. The post
+   says: "Two in a row! The drop is broken."
+2. Two drops in a row at one place: $0.05^2 = 0.0025$. With 10,000 players
+   who kill many bats, this happens to many of them every day.
+3. After a drop, the next bat still has $p = 0.05$: the code has no memory,
+   unless the designers add one (sections 25.4 and 25.5).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Coding the gambler's fallacy by accident: "if the player missed, roll
+again" changes the real chance. If you want memory, design it on purpose
+and compute the new probabilities.
+:::
+
+::: {.callout-note title="Do it · Due or not?"}
+For each sentence, say "fallacy" or "correct" and give the probability:
+(a) "After 3 misses at 70 %, the next attack is sure to hit."
+(b) "The chance of 3 misses in a row at 70 % is less than 3 %."
+(c) "I got a crit, so the next one will be a crit too."
+
+*Your result:* three answers with probabilities.
+:::
+
+## 25.3 How players feel probabilities
+
+The chance on the screen and the chance in the player's head are often
+different (@fig-felt).
+
+::: {.callout-important title="Definition 25.3 — Perceived probability"}
+The **perceived probability** is how likely a result feels. Studies of
+players and the experience of designers show:
+
+- High chances feel **sure**: a miss at 90 % feels like a bug.
+- Players remember **bad streaks** more than good ones.
+- Over many tries, rare results become likely:
+  $P(\text{at least one miss in } n) = 1 - p^n$ for hit chance $p$.
+
+Designers therefore test how a chance **feels** in a real fight, not only
+the formula.
+:::
+
+![A high chance still misses.](images/felt-chance.png){#fig-felt width=94%}
+
+::: {.callout-note title="Example 25.3 — The 90 % miss"}
+1. The player attacks 10 times per fight with $p = 0.9$.
+2. $P(\text{no miss}) = 0.9^{10} \approx 0.35$, so
+   $P(\text{at least one miss}) \approx 0.65$.
+3. In 65 % of the fights the player sees a "90 % miss". Some strategy games
+   secretly raise high chances for the player; *Torch Hall* chooses an
+   honest way instead: it shows the last attacks and uses a shuffle bag
+   for crits.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking "the numbers are right, so the players are wrong". A game is made
+for people: if a fair rule feels unfair, the rule or the way you show it
+needs work.
+:::
+
+::: {.callout-note title="Do it · Feel the chance"}
+Compute $P(\text{at least one miss})$ for $p = 0.95$ in 5, 10 and 20
+attacks. Would a player feel 95 % as "sure"?
+
+*Your result:* three probabilities and one sentence.
+:::
+
+## 25.4 Shuffle bags
+
+A **shuffle bag** turns "25 % on average" into "exactly 1 in every 4"
+(@fig-bag).
+
+::: {.callout-important title="Definition 25.4 — Shuffle bag"}
+Put a fixed set of results into a bag, for example 1 crit and 3 normal
+hits. Draw them in a **shuffled** order **without putting them back**. When
+the bag is empty, refill and shuffle it again. The share of each result is
+exact for every full bag, and the longest drought is limited: with 1 crit
+in a bag of $n$, at most $2(n - 1)$ attacks in a row are without a crit.
+The draws are **not independent** any more: that is the point.
+:::
+
+![A shuffle bag.](images/shuffle-bag.png){#fig-bag width=94%}
+
+::: {.callout-note title="Example 25.4 — The crit bag"}
+1. Bag of 4: 1 crit, 3 normal. In 100 attacks: exactly 25 crits.
+2. The worst case: the crit is first in one bag and last in the next, so 6
+   normal hits come between them.
+3. With pure random 25 %, a drought of 12 or more attacks appears in about
+   half of the 100-attack fights (by simulation).
+:::
+
+::: {.callout-caution title="In game code"}
+```csharp
+List<bool> bag = new List<bool>();
+bool NextIsCrit() {
+    if (bag.Count == 0) {
+        bag.AddRange(new[] { true, false, false, false });
+        for (int i = bag.Count - 1; i > 0; i--) {      // Fisher–Yates shuffle
+            int j = Random.Range(0, i + 1);
+            (bag[i], bag[j]) = (bag[j], bag[i]);
+        }
+    }
+    bool crit = bag[bag.Count - 1];
+    bag.RemoveAt(bag.Count - 1);
+    return crit;
+}
+```
+:::
+
+{{< sim file="sims/bag-lab.html" poster="sims/bag-lab.png" title="Bag Lab: pure random, shuffle bag or PRD?" height="660" >}}
+
+::: {.callout-warning title="Common mistake"}
+A bag that is too predictable. With a bag of 4, a careful player knows that
+after a crit at the end of a bag, the next one comes within 4 attacks.
+Larger bags (for example 2 crits in 8) feel more random but allow longer
+droughts.
+:::
+
+::: {.callout-note title="Do it · Bags"}
+1. In **Bag Lab**, compare pure random and the shuffle bag over 1000
+   players: the crit rate and the worst drought.
+2. Compute the longest drought for a bag of 8 with 2 crits.
+
+*Your result:* four numbers from the lab and one computed drought.
+:::
+
+## 25.5 Pseudo-random distribution (PRD)
+
+A **pseudo-random distribution** keeps each attack random, but adds a
+memory: the chance grows after every miss (@fig-prd).
+
+::: {.callout-important title="Definition 25.5 — PRD"}
+Let $N$ be the number of attacks since the last crit (the first attack after
+a crit has $N = 1$). The crit chance is
+$$P(N) = \min(1,\ C \cdot N).$$
+After a crit, $N$ starts again at 1. The constant $C$ is chosen so that the
+**average** rate equals the wanted rate; for 25 %, $C \approx 0.085$. The
+longest drought is limited: $P(N) = 1$ when $C \cdot N \ge 1$.
+:::
+
+![Pseudo-random distribution with C = 0.085.](images/prd.png){#fig-prd width=94%}
+
+::: {.callout-note title="Example 25.5 — PRD for 25 %"}
+With $C = 0.085$:
+
+1. First attack after a crit: 8.5 %; fifth: $5 \cdot 0.085 = 42.5$ %.
+2. Twelfth: $12 \cdot 0.085 = 1.02$, so a sure crit: at most 11 attacks
+   without a crit, then the crit.
+3. A simulation gives an average rate of about 25 %, the same as pure
+   random, but no long droughts and fewer crits in a row.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Using $C = 0.25$ "because the rate is 25 %". Then the second attack already
+has 50 % and the average rate is far above 25 %. $C$ must be computed (or
+found by simulation) for the wanted average.
+:::
+
+::: {.callout-note title="Do it · PRD"}
+1. In **Bag Lab**, run PRD for 1000 players. Compare the average rate and
+   the worst drought with pure random.
+2. Compute $P(N)$ for $N = 1, 4, 8$ with $C = 0.085$.
+
+*Your result:* two numbers from the lab and three probabilities.
+:::
+
+## 25.6 Input or output randomness, and honest odds
+
+**When** the luck happens, and **what the player is told**, change how fair
+a game feels (@fig-io).
+
+::: {.callout-important title="Definition 25.6 — Kinds of randomness and honesty"}
+- **Input randomness** happens **before** the player decides: a random
+  map, the cards in hand, the next falling piece. The player can plan
+  around it.
+- **Output randomness** decides the result **after** the decision: a hit
+  roll, a random reward. It creates excitement, but a bad roll can erase a
+  good decision.
+- **Honest odds:** the probabilities shown to the player must be the real
+  ones. Many stores require shown odds for paid random items.
+:::
+
+![Input and output randomness.](images/input-output.png){#fig-io width=94%}
+
+::: {.callout-note title="Example 25.6 — Two changes for Torch Hall"}
+1. The rooms of each floor are now random at the start (input): the player
+   sees the map and plans a route.
+2. The hit roll (output) stays, but crits use a shuffle bag and the screen
+   shows the last five attacks.
+3. The chest screen shows the true drop rates (lecture 24): golden torch
+   5 %, as in the code.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Only output randomness in a skill game. If every result is decided by a
+roll after the choice, good players feel that skill does not matter.
+:::
+
+::: {.callout-note title="Do it · Input or output?"}
+Sort these into input or output randomness: a random dungeon map; the
+damage roll of an attack; the cards dealt at the start; a random reward
+after a level; the weather shown before a race.
+
+*Your result:* two lists.
+:::
+
+## Case study: Fair or Frustrating?
+
+The *Torch Hall* team reads six messages: three misses in a row at 70 %, a
+player who thinks heads is "due", a miss at 90 %, crits that do not come for
+20 attacks, the longest wait with PRD, and a store page whose odds do not
+match the code. The Game challenge of the interactive lesson uses these
+messages. In the mini-game below you answer each one with probability and
+the tools of today.
+
+{{< sim file="sims/fair-or-frustrating.html" poster="sims/fair-or-frustrating.png" title="Fair or Frustrating? Messages about luck" kind="game" height="440" >}}
+
+## Further reading
+
+Schreiber and Romero, *Game Balance* (2021), the chapters on probability and
+human intuition. Sid Meier, "The Psychology of Game Design (Everything You
+Know Is Wrong)", talk at the Game Developers Conference 2010.
+
+## Exercises
+
+1. What is a streak? Give a game example.
+2. With hit chance 0.8, what is the probability of 3 misses at one given
+   place?
+3. Why is a run of 5 tails in 100 flips not a sign of an unfair coin?
+4. Explain the gambler's fallacy in one sentence.
+5. $P(\text{TTTTH})$ for a fair coin? $P(\text{H} \mid \text{TTTT})$?
+6. With $p = 0.9$, what is $P(\text{at least one miss in } 5)$?
+7. Why does a miss at 90 % feel unfair?
+8. A bag holds 1 crit and 4 normal hits. What is the crit rate? What is the
+   longest drought?
+9. A bag holds 2 crits and 6 normal hits. What is the longest drought?
+10. Why are the draws from a shuffle bag not independent?
+11. With PRD and $C = 0.085$, what is $P(N)$ for $N = 6$?
+12. With PRD and $C = 0.2$, after how many attacks is a crit sure?
+13. Is a random map input or output randomness? And a hit roll?
+14. Why must the shown odds be the true odds?
+
+## Answers to the exercises
+
+::: {.answers}
+1. Several equal results in a row, for example four misses one after
+   another.
+2. $0.2^3 = 0.008$.
+3. In 100 flips there are many places for a run to start; a run of 5 or more
+   appears in about 97 % of the sequences.
+4. The wrong belief that a result is "due" after it has not come for a while.
+5. $\frac{1}{32}$; $\frac{1}{2}$.
+6. $1 - 0.9^5 \approx 1 - 0.59 = 0.41$.
+7. Players feel 90 % as "sure" and remember bad results.
+8. 20 %; at most $2 \cdot 4 = 8$ attacks without a crit.
+9. 12 (the two crits first in one bag, last in the next: 6 + 6).
+10. Each draw changes what is left in the bag.
+11. $6 \cdot 0.085 = 0.51$.
+12. $5 \cdot 0.2 = 1$: at the fifth attack.
+13. A random map is input randomness; a hit roll is output randomness.
+14. Players decide (and may pay) based on them; false odds are dishonest
+    and often against store rules.
+:::

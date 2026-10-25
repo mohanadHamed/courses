@@ -1,0 +1,285 @@
+---
+title: "Randomness and Fairness: The Player's Perception"
+description: "Why real randomness has long streaks, the gambler's fallacy and the hot hand, how players feel high and low chances, controlled randomness with shuffle bags and pseudo-random distribution, input and output randomness, and honest odds."
+lesson: 25
+ilos: [C2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+has a short summary, a picture, a **Do it** task and one set of questions.
+The full explanations, examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary streak gamblers-fallacy hot-hand-fallacy perceived-probability independent-events critical-hit drought shuffle-bag prd input-randomness output-randomness >}}
+
+## 25.1 Real randomness is streaky
+
+- k equal results **at one given place**: p^k^.
+- In a long sequence, **some** long streak is very likely.
+- 100 fair flips: the longest run is about 7; a run of 5+ in about 97 %.
+
+![A person's sequence and a real coin.](images/streaks.png){width=94%}
+
+{{< sim file="sims/streak-lab.html" poster="sims/streak-lab.png" title="Streak Lab: does random look random?" height="660" >}}
+
+::: {.callout-warning title="Watch out!"}
+One streak does not prove an unfair coin: look at many tries.
+:::
+
+::: {.callout-note title="Do it · Streaks"}
+Write 50 "random" H and T by hand; find your longest run. Then run Streak
+Lab at 50 % five times and compare.
+:::
+
+::: {.callout-tip title="Try it 1 · Streaks"}
+Use Streak Lab. Choose the right answer.
+
+::: {.match extra="0 %|100 %"}
+3 misses at one place, hit chance 0.7
+:   0.3³ = 2.7 %
+
+the usual longest run in 100 fair flips
+:   about 7
+
+a run of 5+ in 100 fair flips
+:   about 97 % of the sequences
+
+a run of 4+ misses in 100 attacks at 70 %
+:   about 43 % of the fights
+:::
+:::
+
+## 25.2 The gambler's fallacy and the hot hand
+
+- Independent events: P(A | the past) = P(A).
+- **Gambler's fallacy:** "heads is due". **Hot hand:** "I hit, so I will
+  hit again".
+- P(TTTTH) = 1/32, but P(H | TTTT) = 1/2.
+
+![The coin has no memory.](images/no-memory.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+"If the player missed, roll again" changes the real chance.
+:::
+
+::: {.callout-note title="Do it · Due or not?"}
+After 3 misses at 70 %, is a hit sure? Is P(3 misses) under 3 %? Is a crit
+after a crit more likely?
+:::
+
+::: {.callout-tip title="Try it 2 · Fallacies"}
+Choose the right answer.
+
+::: {.match extra="0|1"}
+P(heads) after four tails
+:   1/2
+
+P(TTTTH) for a fair coin
+:   1/32
+
+"heads is due after many tails"
+:   the gambler's fallacy
+
+"I hit twice, so I will hit again"
+:   the hot-hand fallacy
+:::
+:::
+
+## 25.3 How players feel probabilities
+
+- High chances feel **sure**; bad streaks are remembered.
+- P(at least one miss in n) = 1 − p^n^.
+- Test how a chance **feels**, not only the formula.
+
+![A high chance still misses.](images/felt-chance.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+If a fair rule feels unfair, the rule or the way you show it needs work.
+:::
+
+::: {.callout-note title="Do it · Feel the chance"}
+p = 0.95: P(at least one miss) in 5, 10 and 20 attacks?
+:::
+
+::: {.callout-tip title="Try it 3 · At least one miss"}
+Choose the right answer.
+
+::: {.match extra="0.9|99 %"}
+p = 0.9, at least one miss in 10
+:   about 65 %
+
+p = 0.9, at least one miss in 5
+:   about 41 %
+
+p = 0.95, at least one miss in 10
+:   about 40 %
+
+p = 0.7, at least one miss in 5
+:   about 83 %
+:::
+:::
+
+## 25.4 Shuffle bags
+
+- A fixed set of results, shuffled, drawn **without putting back**; refill
+  when empty.
+- Exact share per bag; longest drought with 1 crit in n: **2(n − 1)**.
+- The draws are not independent: on purpose.
+
+![A shuffle bag.](images/shuffle-bag.png){width=94%}
+
+{{< sim file="sims/bag-lab.html" poster="sims/bag-lab.png" title="Bag Lab: pure random, shuffle bag or PRD?" height="660" >}}
+
+::: {.callout-warning title="Watch out!"}
+Small bags are predictable; big bags allow longer droughts.
+:::
+
+::: {.callout-note title="Do it · Bags"}
+In **Bag Lab**, compare pure random and the shuffle bag over 1000 players.
+Then compute the longest drought for 2 crits in a bag of 8.
+:::
+
+::: {.callout-tip title="Try it 4 · Bags"}
+Use Bag Lab. Choose the right answer.
+
+::: {.match extra="25|no limit"}
+crits in 100 attacks, bag of 4 with 1 crit
+:   exactly 25
+
+the longest drought, bag of 4 with 1 crit
+:   6
+
+the longest drought, bag of 5 with 1 crit
+:   8
+
+the longest drought, bag of 8 with 2 crits
+:   12
+:::
+:::
+
+## 25.5 Pseudo-random distribution (PRD)
+
+- **P(N) = min(1, C · N)**, N = attacks since the last crit.
+- C is chosen for the wanted average: C ≈ 0.085 for 25 %.
+- A sure crit when C · N ≥ 1.
+
+![PRD with C = 0.085.](images/prd.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+C = 0.25 does not give 25 %: compute or simulate C.
+:::
+
+::: {.callout-note title="Do it · PRD"}
+Run PRD in **Bag Lab** for 1000 players; compute P(N) for N = 1, 4, 8 with
+C = 0.085.
+:::
+
+::: {.callout-tip title="Try it 5 · PRD"}
+Choose the right answer (C = 0.085 unless given).
+
+::: {.match extra="25 %|0 %"}
+P(1)
+:   8.5 %
+
+P(8)
+:   68 %
+
+the attack with a sure crit
+:   the 12th
+
+C = 0.2: the attack with a sure crit
+:   the 5th
+:::
+:::
+
+## 25.6 Input or output randomness, and honest odds
+
+- **Input randomness:** before the decision (map, cards); the player plans.
+- **Output randomness:** after the decision (hit roll); exciting, can feel
+  unfair.
+- **Honest odds:** the shown chance is the real chance.
+
+![Input and output randomness.](images/input-output.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Only output randomness makes skill feel unimportant.
+:::
+
+::: {.callout-note title="Do it · Input or output?"}
+Sort: a random map, a damage roll, the cards dealt, a random reward after a
+level, the weather shown before a race.
+:::
+
+::: {.callout-tip title="Try it 6 · Kinds of randomness"}
+Choose the kind.
+
+::: {.match extra="a seed|a matrix"}
+a random dungeon map at the start
+:   input randomness
+
+the hit roll after an attack
+:   output randomness
+
+the cards dealt before the turn
+:   input randomness
+
+a random reward after a level
+:   output randomness
+:::
+:::
+
+## Game challenge: Fair or Frustrating? {.challenge}
+
+Work alone. Use every section of today.
+
+Six messages: **3 misses** at 70 %, **heads is due**, a **90 % miss**, crits
+that **do not come**, the **sure crit** with PRD, and **odds** that do not
+match the code.
+
+{{< sim file="sims/fair-or-frustrating.html" poster="sims/fair-or-frustrating.png" title="Fair or Frustrating? Messages about luck" kind="game" height="440" >}}
+
+::: {.callout-tip title="Try it 7 · The messages"}
+Choose the right answer.
+
+::: {.match extra="100 %|it is a bug"}
+P(3 misses in a row) at 70 %
+:   2.7 %
+
+P(heads) after 4 tails
+:   50 %
+
+crits at 25 % with no long droughts
+:   a shuffle bag or PRD
+
+shown 5 %, code 1 %
+:   dishonest: show the true odds
+:::
+:::
+
+::: {.callout-tip title="Try it 8 · Compute (harder)"}
+Choose the right answer.
+
+::: {.match extra="0.5|1/16"}
+0.2³ (3 misses at hit chance 0.8)
+:   0.008
+
+1 − 0.9⁵
+:   about 0.41
+
+PRD, C = 0.085, N = 6
+:   0.51
+
+the crit rate of a bag with 1 crit in 5
+:   20 %
+:::
+:::
+
+## Summary {.summary}
+
+- Real randomness is streaky; one streak proves nothing.
+- Independent tries have no memory: no "due" results.
+- Players feel high chances as sure; compute 1 − p^n^ for many tries.
+- Shuffle bags and PRD keep the rate and limit droughts.
+- Prefer input randomness for skill; always show honest odds.

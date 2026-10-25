@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Event Deck</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .rooms { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; margin: 8px 0; }
+    .sim .rooms div { border-radius: 8px; padding: 8px 2px; text-align: center; font-weight: 800; font-size: .78rem; color: #fff; min-height: 2.6em; display: flex; align-items: center; justify-content: center; }
+    .sim table.st { border-collapse: collapse; width: 100%; margin: 6px 0; font-variant-numeric: tabular-nums; }
+    .sim table.st td, .sim table.st th { border: 1px solid #dee2e6; padding: 3px 6px; font-weight: 700; font-size: .86rem; text-align: center; }
+    .sim table.st th { background: #ebfbee; color: #2b8a3e; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+    @media (max-width: 520px) { .sim .rooms { grid-template-columns: repeat(4, 1fr); } }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Event Deck: what is in each room?</h1>
+  <p class="hint">Each floor of <i>Torch Hall</i> has 8 rooms. The event table: empty 50, chest 25 (+20 coins), bats 20 (−5 health), golden torch 5 (+100 coins). Roll each room on its own, or deal the rooms from a <b>shuffle bag</b> of 20 cards (10 empty, 5 chests, 4 bats, 1 torch).</p>
+  <div class="bar"><span>Method</span><span id="mode" style="display:contents"></span></div>
+  <div class="bar"><button type="button" id="floor">Next floor ▶</button><button type="button" class="ghost" id="test">Test 1000 floors</button></div>
+  <div class="rooms" id="rooms"></div>
+  <p class="calc" id="calc"></p>
+  <table class="st" id="tbl"></table>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const EV = { empty: { w: 50, coins: 0, col: "#adb5bd" }, chest: { w: 25, coins: 20, col: "#f59f00" }, bats: { w: 20, coins: 0, col: "#7048e8" }, torch: { w: 5, coins: 100, col: "#e8590c" } };
+  const BAG = [...Array(10).fill("empty"), ...Array(5).fill("chest"), ...Array(4).fill("bats"), "torch"];
+  const s = { mode: "roll each room", floor: null, floors: 0, bag: [], res: {} };
+  const TASKS = [
+    { q: "Task 1: Roll five floors, one room at a time. Did every floor have a chest? What are the coins of each floor?", ok: () => s.floors >= 5 },
+    { q: "Task 2: Test 1000 floors with \"roll each room\". What are the average coins, and how many floors have no chest?", ok: () => s.res["roll each room"] },
+    { q: "Task 3: Switch to the shuffle bag and test 1000 floors. Compare the average and the floors without a chest.", ok: () => s.res["shuffle bag"] },
+  ];
+  let ti = 0;
+  function roll() { let r = Math.random() * 100; for (const [k, e] of Object.entries(EV)) { if (r < e.w) return k; r -= e.w; } return "empty"; }
+  function deal() { if (!s.bag.length) { s.bag = BAG.slice(); for (let i = s.bag.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [s.bag[i], s.bag[j]] = [s.bag[j], s.bag[i]]; } } return s.bag.pop(); }
+  const floor = () => Array.from({ length: 8 }, () => (s.mode === "shuffle bag" ? deal() : roll()));
+  const coins = (F) => F.reduce((a, k) => a + EV[k].coins, 0);
+  function test() {
+    s.bag = []; let sum = 0, noChest = 0, worst = 1e9;
+    for (let i = 0; i < 1000; i++) { const F = floor(), c = coins(F); sum += c; worst = Math.min(worst, c); if (!F.includes("chest")) noChest++; }
+    s.res[s.mode] = { avg: sum / 1000, noChest, worst }; s.bag = []; upd();
+  }
+  function tabs() { Kit.buttons($("mode"), ["roll each room", "shuffle bag"].map((k) => ({ k, label: k })), (k) => { s.mode = k; s.bag = []; upd(); }); $("mode").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.mode)); }
+  function upd() {
+    tabs();
+    $("rooms").innerHTML = (s.floor || Array(8).fill(null)).map((k) => `<div style="background:${k ? EV[k].col : "#e9ecef"}">${k || "?"}</div>`).join("");
+    $("calc").textContent = s.floor ? `This floor: ${coins(s.floor)} coins, ${s.floor.filter((k) => k === "chest").length} chests, ${s.floor.filter((k) => k === "bats").length} bats. Expected per floor: 8 × 10 = 80 coins.` : "Press \"Next floor\".";
+    $("tbl").innerHTML = "<tr><th>1000 floors</th><th>average coins</th><th>floors without a chest</th><th>poorest floor</th></tr>" + ["roll each room", "shuffle bag"].map((m) => { const r = s.res[m]; return `<tr><td>${m}</td><td>${r ? r.avg.toFixed(1) : "–"}</td><td>${r ? r.noChest : "–"}</td><td>${r ? r.worst : "–"}</td></tr>`; }).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the same average, but the bag spreads the chests more evenly.";
+    $("msg").textContent = m + (s.mode === "shuffle bag" ? `Cards left in the bag: ${s.bag.length}.` : "Each room is rolled on its own: any floor can be unlucky.");
+  }
+  $("floor").addEventListener("click", () => { s.floor = floor(); s.floors++; upd(); });
+  $("test").addEventListener("click", test);
+  window.ED = { mode: (k) => { s.mode = k; s.bag = []; upd(); }, floor: () => $("floor").click(), test };
+  upd();
+})();
+</script>
+</body>
+</html>

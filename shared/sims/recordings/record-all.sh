@@ -77,6 +77,9 @@ star-dock-missions|courses/game-math/week-13/sims/star-dock-missions.html|8|cour
 move-lab|courses/game-math/week-14/sims/move-lab.html|10|courses/game-math/week-14/sims/move-lab.gif
 bounce-lab|courses/game-math/week-14/sims/bounce-lab.html|9|courses/game-math/week-14/sims/bounce-lab.gif
 pilot-check|courses/game-math/week-14/sims/pilot-check.html|8|courses/game-math/week-14/sims/pilot-check.gif
+cave-gen|courses/game-math/week-14/sims/cave-gen.html|10|courses/game-math/week-14/sims/cave-gen.gif
+event-deck|courses/game-math/week-14/sims/event-deck.html|8|courses/game-math/week-14/sims/event-deck.gif
+generator-doctor|courses/game-math/week-14/sims/generator-doctor.html|8|courses/game-math/week-14/sims/generator-doctor.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif

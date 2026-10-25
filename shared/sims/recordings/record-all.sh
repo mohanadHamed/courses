@@ -72,6 +72,8 @@ balance-board|courses/game-math/week-12/sims/balance-board.html|9|courses/game-m
 streak-lab|courses/game-math/week-13/sims/streak-lab.html|10|courses/game-math/week-13/sims/streak-lab.gif
 bag-lab|courses/game-math/week-13/sims/bag-lab.html|10|courses/game-math/week-13/sims/bag-lab.gif
 fair-or-frustrating|courses/game-math/week-13/sims/fair-or-frustrating.html|8|courses/game-math/week-13/sims/fair-or-frustrating.gif
+problem-drill|courses/game-math/week-13/sims/problem-drill.html|12|courses/game-math/week-13/sims/problem-drill.gif
+star-dock-missions|courses/game-math/week-13/sims/star-dock-missions.html|8|courses/game-math/week-13/sims/star-dock-missions.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif

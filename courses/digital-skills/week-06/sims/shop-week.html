@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: The Shop's Week</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>The Shop's Week</h1>
+  <p class="hint">Rana keeps the sales of the <b>Sunrise shop</b> in Excel. Before she presses Enter, she wants to know the result. What will each cell show?</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: String(t), label: String(t) }));
+  // grid: rows of cells (row 1 = headers); hl: the cell with the formula; show: the formula
+  const DAYS = [["", "A", "B"], ["1", "Day", "Sales (JD)"], ["2", "Sun", "10"], ["3", "Mon", "20"], ["4", "Tue", "30"], ["5", "Wed", "40"], ["6", "Thu", "50"], ["7", "Total", "?"]];
+  const rounds = [
+    { grid: [["", "A", "B", "C", "D"], ["1", "Item", "Price", "Qty", "Total"], ["2", "Tea", "3", "4", "?"]], hl: "D2", show: "=B2*C2",
+      goal: "D2 has <b>=B2*C2</b>. What does D2 show?", choices: C([12, 7, "B2*C2", 34]), answer: "12", good: "3 × 4 = 12. The cell shows the result; the formula bar shows the formula.",
+      why: { "7": "* means multiply, not add.", "B2*C2": "Without = it would be text; with = Excel computes it." } },
+    { grid: DAYS, hl: "B7", show: "=SUM(B2:B6)", goal: "B7 has <b>=SUM(B2:B6)</b>. What does B7 show?", choices: C([150, 50, 30, 5]), answer: "150",
+      good: "10 + 20 + 30 + 40 + 50 = 150.", why: { "5": "SUM adds the values; COUNT would count them." } },
+    { grid: DAYS, hl: "B7", show: "=AVERAGE(B2:B6)", goal: "Now B7 has <b>=AVERAGE(B2:B6)</b>. What does B7 show?", choices: C([30, 150, 50, 10]), answer: "30",
+      good: "150 ÷ 5 = 30 JD per day.", why: { "150": "That is SUM. AVERAGE divides the sum by the number of values." } },
+    { grid: [["", "A", "B", "C", "D"], ["1", "Item", "Price", "Qty", "Total"], ["2", "Tea", "3", "4", "=B2*C2"], ["3", "Rice", "5", "2", "?"]], hl: "D3", show: "copy of D2",
+      goal: "Rana copies D2 (<b>=B2*C2</b>) to D3. Which formula is in D3?", choices: C(["=B3*C3", "=B2*C2", "=B3*C2", "=C3*D3"]), answer: "=B3*C3",
+      good: "Relative references move with the row: B2 → B3, C2 → C3. D3 shows 10.", why: { "=B2*C2": "Without $, references change when you copy." } },
+    { grid: [["", "C", "D", "E", "F"], ["1", "Total", "Discount", "", "0.1"], ["2", "50", "=C2*$F$1", "", ""], ["3", "80", "?", "", ""]], hl: "D3", show: "copy of D2",
+      goal: "D2 has <b>=C2*$F$1</b> (the rate is in F1). Rana copies D2 to D3. Which formula is in D3?", choices: C(["=C3*$F$1", "=C3*$F$2", "=C2*$F$1", "=C3*F2"]), answer: "=C3*$F$1",
+      good: "C2 is relative and moves to C3; $F$1 is absolute and stays. D3 shows 8.", why: { "=C3*$F$2": "The $ before 1 keeps the row: $F$1 stays $F$1." } },
+    { grid: [["", "A", "B", "C"], ["1", "Sales", "Days", "Per day"], ["2", "120", "", "?"]], hl: "C2", show: "=A2/B2",
+      goal: "C2 has <b>=A2/B2</b>, but B2 is empty. What does C2 show?", choices: C(["#DIV/0!", "120", "0", "#NAME?"]), answer: "#DIV/0!",
+      good: "An empty cell counts as 0, and nothing can be divided by 0. Type the number of days in B2.", why: { "#NAME?": "#NAME? means Excel does not know a word, for example SUMM." } },
+  ];
+  Kit.game({
+    rounds, still: true, cols: 2, colsPhone: 2, animMs: 600,
+    intro: "Round 1 is the story of the lesson: Rana's first formula.",
+    canvas: (W) => 40 + 26 * 8,
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      Kit.rrect(c, 8, 6, W - 16, 26, 6, "#f1f8f3", "#c3d9c7", 1);
+      Kit.text(c, `${r.hl}   fx   ${r.show}`, 18, 24, 13, "#217346", "left");
+      const cols = r.grid[0].length, cw = Math.min(110, (W - 50) / (cols - 1)), x0 = 8, y0 = 40, rh = 25;
+      r.grid.forEach((row, i) => row.forEach((v, j) => {
+        const x = j === 0 ? x0 : x0 + 30 + (j - 1) * cw, w = j === 0 ? 30 : cw, head = i === 0 || j === 0;
+        const addr = r.grid[0][j] + r.grid[i][0], hl = addr === r.hl;
+        c.fillStyle = head ? "#f1f3f5" : hl ? "#fff3bf" : "#fff"; c.fillRect(x, y0 + i * rh, w, rh);
+        c.strokeStyle = hl ? "#217346" : "#dee2e6"; c.lineWidth = hl ? 2.5 : 1; c.strokeRect(x, y0 + i * rh, w, rh);
+        let t = v; if (hl && st.done && st.ok) t = r.answer;
+        Kit.text(c, t, x + w / 2, y0 + i * rh + 17, 12, head ? "#495057" : hl ? "#c92a2a" : "#2a211c", "center", head ? 700 : 800);
+      }));
+    },
+  });
+})();
+</script>
+</body>
+</html>

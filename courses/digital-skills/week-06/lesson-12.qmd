@@ -1,0 +1,177 @@
+---
+title: "A Monthly Budget Sheet"
+description: "Online activity · Plan a monthly budget in Excel: income and expenses, totals with SUM, what is left, the part of each expense with an absolute reference, and number formats. About 60 minutes."
+lesson: 12
+online: true
+due: "before lecture 13"
+marks: 6
+ilos: [C2]
+toc-title: "In this activity"
+format: lesson-html   # online activity: the tasks PDF is made by printing this page (homework_pdf.py)
+---
+
+## Before you start {.study}
+
+- **What you need:** Excel (the desktop app, Excel on the web at
+  `office.com`, or the free phone app; a computer is easier).
+- **Time:** about 60 minutes. Work alone, at your own speed.
+- **How it works:** do Steps 1–3 on this page. Each step has a short text, a
+  simulator and a self-check. Then do the **Tasks to submit**.
+- **What you submit:** one Excel file and two short answers, on the
+  university e-learning platform, before lecture 13.
+- **You need lecture 11:** formulas, SUM, copying with the fill handle and
+  `$` references.
+- **Use made-up numbers.** Your real money is private; a practice budget
+  works as well.
+
+## Key terms {.study}
+
+{{< glossary budget worksheet formula function cell-range absolute-reference fill-handle number-format autosum >}}
+
+## Step 1 · The layout: income and expenses {.study}
+
+- A **budget** plans the money of one month: what comes in (**income**) and
+  what goes out (**expenses**).
+- Make two blocks on one sheet: **Income** at the top, **Expenses** below,
+  each with a **Total** line. Leave one empty row between them.
+- Column A: the names (Allowance, Transport, Phone, Food …). Column B: the
+  amounts in JD. Column C: the part of the income (later, in %).
+- Sami's month (made up): Allowance 150 and Part-time job 100; Transport 40,
+  Phone 15, Food 90, Books 20, Fun 30.
+- Write "JD" in the heading, not in the cells: the cells hold only numbers.
+
+![A monthly budget sheet with two blocks.](images/budget-layout.png){width=100%}
+
+{{< sim file="sims/budget-builder.html" poster="sims/budget-builder.png" title="Budget Builder: Sami's month" height="760" >}}
+
+::: {.callout-tip title="Try it 1 · The layout"}
+Choose the right answer.
+
+::: {.match extra="the colour of the sheet|in every cell"}
+What is income?
+:   the money that comes in
+
+What is an expense?
+:   money that goes out
+
+Where do you write "JD"?
+:   in the heading of the column
+
+What does each block end with?
+:   a Total line
+
+Why use made-up numbers in this activity?
+:   your real money is private
+:::
+:::
+
+## Step 2 · The formulas: totals, what is left, and the parts {.study}
+
+- **Total income** in B4: `=SUM(B2:B3)` = 250. **Total expenses** in B12:
+  `=SUM(B7:B11)` = 195. (Or click the cell and use AutoSum, Σ.)
+- **Left (saving)** in B14: `=B4-B12` = 55.
+- **The part of the income** for each expense, in column C: in C7 write
+  `=B7/$B$4` and copy it down to C11 with the fill handle. B7 moves to B8,
+  B9 …; `$B$4` (the total income) stays.
+- Food: 90 ÷ 250 = 0.36. Transport: 40 ÷ 250 = 0.16.
+- If an amount changes, every total and every part changes by itself.
+
+![The formulas of the budget.](images/budget-formulas.png){width=100%}
+
+::: {.callout-tip title="Try it 2 · The formulas"}
+Use Sami's month: income 150 + 100, expenses 40, 15, 90, 20, 30. Choose the
+right answer.
+
+::: {.match extra="=B4+B12|0.9"}
+Which formula gives the total income in B4?
+:   `=SUM(B2:B3)`
+
+What is the total of the expenses?
+:   195
+
+Which formula gives what is left in B14?
+:   `=B4-B12`
+
+What does `=B9/$B$4` give for food?
+:   0.36
+
+Why is there a `$` in `$B$4`?
+:   the total income stays the same in every row
+:::
+:::
+
+## Step 3 · Make it readable: number formats {.study}
+
+- A **number format** changes how a number looks, not the number itself.
+  Home › Number (or right-click › Format Cells).
+- The parts in column C: **Percentage** (0.36 looks like 36%).
+- The money in column B: **Currency** or Number with 2 decimals (55 looks
+  like 55.00).
+- Make the Total lines **bold**, and widen a column that shows ####.
+- The formula bar always shows the real value (0.36), so the formulas still
+  work.
+
+![The same value in four formats.](images/number-formats.png){width=100%}
+
+{{< sim file="sims/format-lab.html" poster="sims/format-lab.png" title="Number Format Lab: the same number, another look" height="420" >}}
+
+::: {.callout-tip title="Try it 3 · Formats"}
+Choose the right answer.
+
+::: {.match extra="0.36%|36.00"}
+0.36 in the Percentage format looks like …
+:   36%
+
+55 in Currency format with 2 decimals looks like …
+:   55.00 JD
+
+Does a number format change the value in the formula bar?
+:   no, only the look
+
+A cell shows ####. What do you do?
+:   make the column wider
+
+Where are the number formats in Excel?
+:   Home › Number
+:::
+:::
+
+## Tasks to submit {.tasks}
+
+Do the tasks alone. Your teacher marks them (6 marks). Use made-up numbers.
+
+### Task 1 · Your budget sheet (3 marks)
+
+1. In Excel, make a budget for one month of a student: two sources of
+   income and at least five expenses (made-up numbers).
+2. Add the totals with SUM, and *Left (saving)* with a formula
+   (total income − total expenses).
+3. In column C, show the part of the income of each expense with
+   `=B…/$B$…`, copied down with the fill handle.
+4. Format column C as Percentage and the money as 2 decimals; make the
+   Total lines bold. Save it as `budget.xlsx`.
+
+### Task 2 · What if? (1 mark)
+
+1. Make a copy of the sheet (right-click the sheet tab › Move or Copy ›
+   Create a copy) and name it *What if*.
+2. On the copy, raise one expense by 20 JD. Do not change any formula.
+
+*Submit:* the file `budget.xlsx` with both sheets.
+
+### Task 3 · Short answers (2 marks)
+
+a) Write the formula in your cell C8, and say which part of it did not change
+when you copied it, and why.
+
+{{< answer-space lines=3 >}}
+
+b) On the *What if* sheet, how much is left now? Which cells changed by
+themselves?
+
+{{< answer-space lines=3 >}}
+
+## How to submit
+
+Upload `budget.xlsx` and your answers to Task 3 to the university e-learning
+platform, **before lecture 13**.

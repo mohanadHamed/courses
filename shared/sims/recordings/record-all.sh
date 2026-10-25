@@ -127,6 +127,9 @@ platform-match|courses/computing-systems/week-12/sims/platform-match.html|8|cour
 spec-check|courses/computing-systems/week-12/sims/spec-check.html|9|courses/computing-systems/week-12/sims/spec-check.gif
 decision-matrix|courses/computing-systems/week-12/sims/decision-matrix.html|8|courses/computing-systems/week-12/sims/decision-matrix.gif
 port-planner|courses/computing-systems/week-12/sims/port-planner.html|8|courses/computing-systems/week-12/sims/port-planner.gif
+avd-builder|courses/computing-systems/week-13/sims/avd-builder.html|11|courses/computing-systems/week-13/sims/avd-builder.gif
+matrix-builder|courses/computing-systems/week-13/sims/matrix-builder.html|9|courses/computing-systems/week-13/sims/matrix-builder.gif
+emulator-or-real|courses/computing-systems/week-13/sims/emulator-or-real.html|8|courses/computing-systems/week-13/sims/emulator-or-real.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
 ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif

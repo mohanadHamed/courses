@@ -152,6 +152,8 @@ editor-tour|courses/digital-media/week-10/sims/editor-tour.html|8|courses/digita
 cut-lab|courses/digital-media/week-11/sims/cut-lab.html|10|courses/digital-media/week-11/sims/cut-lab.gif
 effects-lab|courses/digital-media/week-11/sims/effects-lab.html|8|courses/digital-media/week-11/sims/effects-lab.gif
 edit-doctor|courses/digital-media/week-11/sims/edit-doctor.html|8|courses/digital-media/week-11/sims/edit-doctor.gif
+promo-builder|courses/digital-media/week-11/sims/promo-builder.html|8|courses/digital-media/week-11/sims/promo-builder.gif
+promo-judge|courses/digital-media/week-11/sims/promo-judge.html|8|courses/digital-media/week-11/sims/promo-judge.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

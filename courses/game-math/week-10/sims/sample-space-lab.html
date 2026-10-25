@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Sample Space Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .92rem; }
+    .sim .bar > span { min-width: 92px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .bar.b button.on { background: #e8590c; }
+    .sim .calc { font-size: 1.05rem; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Sample Space Lab: count the outcomes</h1>
+  <p class="hint">Choose an experiment, an event A (and an event B), and what to show. The coloured outcomes are in the event; P = their number ÷ all outcomes.</p>
+  <div class="bar"><span>Experiment</span><span id="ex" style="display:contents"></span></div>
+  <div class="bar"><span>Event A</span><span id="ea" style="display:contents"></span></div>
+  <div class="bar b"><span>Event B</span><span id="eb" style="display:contents"></span></div>
+  <div class="bar"><span>Show</span><span id="op" style="display:contents"></span></div>
+  <canvas id="c" aria-label="The sample space with the event coloured"></canvas>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="dice.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const D6 = [1, 2, 3, 4, 5, 6];
+  const EXP = {
+    "One die": { S: D6.map((a) => ({ a })), ev: { "even": (o) => o.a % 2 === 0, "a 6": (o) => o.a === 6, "more than 4": (o) => o.a > 4, "less than 3": (o) => o.a < 3 } },
+    "Two coins": { S: ["HH", "HT", "TH", "TT"].map((t) => ({ t })), ev: { "two heads": (o) => o.t === "HH", "at least one head": (o) => o.t.includes("H"), "exactly one head": (o) => o.t === "HT" || o.t === "TH", "first is heads": (o) => o.t[0] === "H" } },
+    "Two dice": { S: D6.flatMap((a) => D6.map((b) => ({ a, b }))), ev: { "sum 7": (o) => o.a + o.b === 7, "at least one 6": (o) => o.a === 6 || o.b === 6, "a double": (o) => o.a === o.b, "sum more than 9": (o) => o.a + o.b > 9, "first die is 1": (o) => o.a === 1 } },
+  };
+  const OPS = ["A", "not A", "A or B", "A and B"];
+  const s = { ex: "One die", a: "a 6", b: "more than 4", op: "A" };
+  const TASKS = [
+    { q: "Task 1: One die, A = even, show A. What is P(A)?", ok: () => s.ex === "One die" && s.a === "even" && s.op === "A" },
+    { q: "Task 2: One die, A = even, B = more than 4. Show A or B: which outcome is in both?", ok: () => s.ex === "One die" && s.a === "even" && s.b === "more than 4" && s.op === "A or B" },
+    { q: "Task 3: Two dice, A = at least one 6. Show not A: how many cells have no 6?", ok: () => s.ex === "Two dice" && s.a === "at least one 6" && s.op === "not A" },
+    { q: "Task 4: Two dice, A = sum 7, B = first die is 1. Show A and B.", ok: () => s.ex === "Two dice" && s.a === "sum 7" && s.b === "first die is 1" && s.op === "A and B" },
+  ];
+  let ti = 0;
+  const inSet = (o) => { const E = EXP[s.ex].ev, A = E[s.a](o), B = E[s.b](o); return s.op === "A" ? A : s.op === "not A" ? !A : s.op === "A or B" ? A || B : A && B; };
+  function tabs(id, items, key, after) {
+    Kit.buttons($(id), items.map((k) => ({ k, label: k })), (k) => { s[key] = k; if (after) after(); upd(); });
+    $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key]));
+  }
+  function upd() {
+    const ex = EXP[s.ex], names = Object.keys(ex.ev);
+    if (!names.includes(s.a)) s.a = names[0];
+    if (!names.includes(s.b)) s.b = names[1];
+    tabs("ex", Object.keys(EXP), "ex"); tabs("ea", names, "a"); tabs("eb", names, "b"); tabs("op", OPS, "op");
+    const n = ex.S.length, cnt = (f) => ex.S.filter(f).length;
+    const kA = cnt(ex.ev[s.a]), kB = cnt(ex.ev[s.b]), kAB = cnt((o) => ex.ev[s.a](o) && ex.ev[s.b](o)), k = cnt(inSet);
+    const P = (x) => DC.frac(x, n);
+    let line = "";
+    if (s.op === "A") line = `P(A) = ${P(kA)}`;
+    else if (s.op === "not A") line = `P(not A) = 1 − ${kA}/${n} = ${P(k)}`;
+    else if (s.op === "A or B") line = `P(A or B) = ${kA}/${n} + ${kB}/${n} − ${kAB}/${n} = ${P(k)}`;
+    else line = `P(A and B) = ${P(k)}`;
+    $("calc").textContent = line + "  ≈ " + (k / n).toFixed(3);
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: count the event, divide by all outcomes, and mind the overlap.";
+    if (!m) m = s.op === "A or B" && kAB ? `${kAB} outcome(s) are in A and in B. Without “− ${kAB}/${n}” they would count twice.` : s.op === "A or B" ? "A and B have no outcome in common (mutually exclusive): just add." : s.op === "not A" ? "not A = every outcome that is not in A. Sometimes it is easier to count." : s.op === "A and B" ? "A and B = only the outcomes that are in both." : `A has ${kA} of the ${n} equally likely outcomes.`;
+    $("msg").textContent = m;
+    paint();
+  }
+  const cv = Kit.canvas($("c"), (W) => (s.ex === "Two dice" ? Math.min(330, W * 0.62) : Math.min(140, W * 0.3)));
+  function paint() {
+    cv.resize();
+    const c = cv.ctx, W = cv.W, H = cv.H, ex = EXP[s.ex];
+    c.clearRect(0, 0, W, H);
+    const on = s.op === "A" || s.op === "not A" ? "#ffd8a8" : s.op === "A or B" ? "#d0ebff" : "#b2f2bb";
+    if (s.ex === "Two dice") {
+      const cell = Math.min((W - 40) / 6, (H - 26) / 6), x0 = (W - cell * 6) / 2 + 10, y0 = 20;
+      D6.forEach((a) => { Kit.text(c, a, x0 - 12, y0 + (a - 0.5) * cell + 5, 12, "#2F9E44"); Kit.text(c, a, x0 + (a - 0.5) * cell, y0 - 6, 12, "#2F9E44"); });
+      ex.S.forEach((o) => {
+        const x = x0 + (o.b - 1) * cell, y = y0 + (o.a - 1) * cell, hit = inSet(o);
+        Kit.rrect(c, x + 1, y + 1, cell - 2, cell - 2, 4, hit ? on : "#fff", "#ced4da", 1);
+        Kit.text(c, `${o.a},${o.b}`, x + cell / 2, y + cell / 2 + 2, Math.min(13, cell * 0.28), hit ? "#2a2f2c" : "#adb5bd", "center", hit ? 800 : 600);
+        Kit.text(c, "Σ" + (o.a + o.b), x + cell / 2, y + cell / 2 + cell * 0.3, Math.min(10, cell * 0.2), hit ? "#495057" : "#ced4da", "center", 700);
+      });
+    } else if (s.ex === "One die") {
+      const sz = Math.min(64, (W - 70) / 6), gap = (W - sz * 6) / 7;
+      ex.S.forEach((o, i) => { const x = gap + i * (sz + gap), y = (H - sz) / 2; if (inSet(o)) Kit.rrect(c, x - 6, y - 6, sz + 12, sz + 12, 12, on); DC.die(c, x, y, sz, o.a); });
+    } else {
+      const bw = Math.min(130, (W - 50) / 4), gap = (W - bw * 4) / 5;
+      ex.S.forEach((o, i) => { const x = gap + i * (bw + gap), y = H / 2; if (inSet(o)) Kit.rrect(c, x, y - 34, bw, 68, 12, on); DC.coin(c, x + bw * 0.3, y, 20, o.t[0]); DC.coin(c, x + bw * 0.7, y, 20, o.t[1]); });
+    }
+  }
+  window.addEventListener("resize", () => setTimeout(paint, 60));
+  window.SS = { set: (o) => { Object.assign(s, o); upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

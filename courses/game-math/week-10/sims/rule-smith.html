@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Rule Smith</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { font-family: ui-monospace, Consolas, monospace; text-align: left; } .sim .code { font: 700 .98rem ui-monospace, Consolas, monospace; background: #1e1e2e; color: #e9ecef; padding: 10px 12px; border-radius: 10px; margin: 6px 0; white-space: pre-wrap; } .sim .code .say { font-family: Nunito, system-ui, sans-serif; color: #ffd43b; }</style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Rule Smith</h1>
+  <p class="hint">The designer of <i>Torch Hall</i> writes the rules in words. You turn them into exact conditions, find what they tell you, and find the bugs in the code.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { box: "<span class=say>“The chest opens if the player has the key and no skeleton is near, or the player is a thief.”</span>\nk: key   s: skeleton near   t: thief",
+      goal: "Which condition is the rule?", ans: "(k && !s) || t", choices: C(["(k && !s) || t", "k && (!s || t)", "k && !s && t", "(k || t) && !s"]),
+      good: "“, or the player is a thief” is a second way in: (k ∧ ¬s) ∨ t. A thief opens it even with a skeleton near.",
+      why: { "k && (!s || t)": "Here a thief without a key cannot open it.", "k && !s && t": "This needs all three: only a thief with a key.", "(k || t) && !s": "Here a thief cannot open it when a skeleton is near." } },
+    { box: "<span class=say>“The bridge stays up unless the lever is pulled.”</span>\nl: the lever is pulled",
+      goal: "When is the bridge up?", ans: "bridgeUp = !l", choices: C(["bridgeUp = !l", "bridgeUp = l", "bridgeUp = true", "bridgeUp = l || !l"]),
+      good: "“Unless l” means “if not l”: the bridge is up exactly when the lever is not pulled.",
+      why: { "bridgeUp = l": "This is the opposite: up only when the lever is pulled.", "bridgeUp = l || !l": "This is a tautology: always up." } },
+    { box: "<span class=say>“The player may enter the boss room only if all three torches are lit.”</span>\nA tester is in the boss room.",
+      goal: "What do we know for sure?", ans: "all three torches are lit", choices: C(["all three torches are lit", "the tester has the key", "nothing", "the torches are out"]),
+      good: "“Enter only if lit” is enter → lit. Lit torches are necessary: whoever is inside, the torches are lit.",
+      why: { "nothing": "We know something: enter → lit, and the tester entered." } },
+    { box: "<span class=say>“If the player holds the crown, the gate is open.”</span>\nThe gate is shut.",
+      goal: "What follows?", ans: "the player does not hold the crown", choices: C(["the player does not hold the crown", "the player holds the crown", "the gate will open soon", "nothing at all"]),
+      good: "The contrapositive: ¬open → ¬crown. It is always equivalent to crown → open.",
+      why: { "nothing at all": "The contrapositive gives an answer: shut gate → no crown." } },
+    { box: "if (s) Chase();\nelse if (s && n) Attack();\nelse if (w) Flee();\nelse Patrol();",
+      goal: "Which rule never runs?", ans: "Attack()", choices: C(["Attack()", "Chase()", "Flee()", "Patrol()"]),
+      good: "Every case with s is caught by Chase first, so Attack is unreachable. Put the special rule first.",
+      why: { "Flee()": "Flee runs when s is false and w is true." } },
+    { box: "Rule: the guard flees when health < 30.\nCode: if (health <= 30) Flee();",
+      goal: "Which test finds the bug?", ans: "health = 30", choices: C(["health = 30", "health = 10", "health = 80", "health = 29"]),
+      good: "At the border: the rule says fight, the code says flee. Always test the edge cases.",
+      why: { "health = 29": "29 < 30 and 29 <= 30: both say Flee. No difference here." } },
+  ];
+  rounds.forEach((r) => { r.answer = r.ans; r.why = r.why || {}; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: the chest rule of Torch Hall." });
+  const box = Kit.el("div", { class: "code", id: "code" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { if (g.st.i !== last && !g.st.over) { last = g.st.i; box.innerHTML = g.cur().box; } if (g.st.over) box.innerHTML = "All rules are done."; requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

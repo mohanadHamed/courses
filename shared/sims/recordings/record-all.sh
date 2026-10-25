@@ -52,6 +52,11 @@ truth-table-lab|courses/game-math/week-09/sims/truth-table-lab.html|9|courses/ga
 rule-detective|courses/game-math/week-09/sims/rule-detective.html|8|courses/game-math/week-09/sims/rule-detective.gif
 equivalence-lab|courses/game-math/week-09/sims/equivalence-lab.html|9|courses/game-math/week-09/sims/equivalence-lab.gif
 code-cleaner|courses/game-math/week-09/sims/code-cleaner.html|8|courses/game-math/week-09/sims/code-cleaner.gif
+guard-brain|courses/game-math/week-10/sims/guard-brain.html|9|courses/game-math/week-10/sims/guard-brain.gif
+rule-smith|courses/game-math/week-10/sims/rule-smith.html|8|courses/game-math/week-10/sims/rule-smith.gif
+sample-space-lab|courses/game-math/week-10/sims/sample-space-lab.html|9|courses/game-math/week-10/sims/sample-space-lab.gif
+roll-lab|courses/game-math/week-10/sims/roll-lab.html|9|courses/game-math/week-10/sims/roll-lab.gif
+raft-odds|courses/game-math/week-10/sims/raft-odds.html|8|courses/game-math/week-10/sims/raft-odds.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif

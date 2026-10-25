@@ -627,6 +627,106 @@ guard-clause:
   ar: شرط الحماية
   def: A check at the start of a function that leaves the function early when a condition fails, so the rest of the code needs fewer nested conditions.
 
+sufficient-condition:
+  en: sufficient condition
+  ar: الشرط الكافي
+  def: A condition p is sufficient for q when p → q is always true; if p happens, q surely happens.
+
+necessary-condition:
+  en: necessary condition
+  ar: الشرط الضروري
+  def: A condition q is necessary for p when p → q is always true; without q, p cannot happen.
+
+contrapositive:
+  en: contrapositive
+  ar: العكس النقيض
+  def: The contrapositive of p → q is ¬q → ¬p; it is always equivalent to p → q.
+
+decision-table:
+  en: decision table
+  ar: جدول القرار
+  def: A table with one row for each combination of conditions and the action the game takes in that case.
+
+else-if-chain:
+  en: else-if chain
+  ar: سلسلة الشروط المتتالية (else if)
+  def: A list of if and else if rules that are checked from the top; only the first rule whose condition is true runs.
+
+unreachable-rule:
+  en: unreachable rule
+  ar: قاعدة غير قابلة للوصول
+  def: A rule in an else-if chain that never runs, because the rules above it always catch its cases first.
+
+state-machine:
+  en: state machine
+  ar: آلة الحالات
+  def: A model of a game character with a few states, such as Patrol or Chase, and conditions that move it from one state to another.
+
+edge-case:
+  en: edge case
+  ar: حالة حدّية
+  def: A test case at the border of a rule, such as health exactly 30 when the rule says health < 30.
+
+probability:
+  en: probability
+  ar: الاحتمال
+  def: A number from 0 to 1 that says how likely an event is; 0 means impossible and 1 means certain.
+
+random-experiment:
+  en: random experiment
+  ar: التجربة العشوائية
+  def: An action whose result we cannot know in advance, such as rolling a die or opening a loot crate.
+
+outcome:
+  en: outcome
+  ar: النتيجة (الناتج)
+  def: One possible result of a random experiment, such as rolling a 4.
+
+sample-space:
+  en: sample space
+  ar: فضاء العينة
+  def: The set S of all possible outcomes of a random experiment; for one die S = {1, 2, 3, 4, 5, 6}.
+
+event:
+  en: event
+  ar: الحدث
+  def: A set of outcomes of a random experiment, such as rolling an even number = {2, 4, 6}.
+
+equally-likely-outcomes:
+  en: equally likely outcomes
+  ar: النتائج متساوية الاحتمال
+  def: Outcomes that all have the same chance; then P(A) is the number of outcomes in A divided by the number in S.
+
+complement-event:
+  en: complement of an event
+  ar: الحدث المتمم
+  def: The event not A, made of all outcomes that are not in A; P(not A) = 1 − P(A).
+
+mutually-exclusive-events:
+  en: mutually exclusive events
+  ar: الأحداث المتنافية
+  def: Events that cannot happen together, because they have no outcome in common.
+
+independent-events:
+  en: independent events
+  ar: الأحداث المستقلة
+  def: Events where the result of one does not change the chance of the other; then P(A and B) = P(A) × P(B).
+
+tree-diagram:
+  en: tree diagram
+  ar: المخطط الشجري
+  def: A diagram that shows the outcomes of an experiment in steps, with one branch for each outcome of each step.
+
+relative-frequency:
+  en: relative frequency
+  ar: التكرار النسبي
+  def: The number of times an event happened divided by the number of trials; an estimate of its probability.
+
+law-of-large-numbers:
+  en: law of large numbers
+  ar: قانون الأعداد الكبيرة
+  def: The rule that the relative frequency of an event comes closer to its probability when the number of trials grows.
+
 # -------------------------------------------------------- computing-systems
 
 computing-system:

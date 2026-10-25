@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Multiply Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .wrap { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .sim .eq { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; font-weight: 800; }
+    .sim .mat { display: inline-grid; grid-template-columns: repeat(2, auto); gap: 4px 14px; padding: 4px 8px; border-left: 3px solid #2a211c; border-right: 3px solid #2a211c; border-radius: 6px; }
+    .sim .vecm { grid-template-columns: auto; }
+    .sim .cell { display: flex; align-items: center; gap: 2px; }
+    .sim .cell b { min-width: 1.9em; text-align: center; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+    .sim .cell button { padding: 0 7px; font-size: 0.9rem; line-height: 1.5; }
+    .sim .v { min-width: 2.2em; text-align: center; font-size: 1.05rem; padding: 3px; font-variant-numeric: tabular-nums; }
+    .sim .rows { font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.6; }
+    .sim .rows .r1 { color: #1c7ed6; } .sim .rows .r2 { color: #e8590c; }
+    .sim #presets button { padding: 6px 10px; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Multiply Lab</h1>
+  <p class="hint">Change the entries of the matrix M with − and +. Drag the point P on the grid. The green house is the start; the orange house is every point multiplied by M.</p>
+  <div class="controls" id="presets"></div>
+  <div class="wrap">
+    <div class="eq"><span>M =</span><div class="mat" id="mat"></div><span>P =</span><div class="mat vecm" id="pv"></div><span>MP =</span><div class="mat vecm" id="mp"></div></div>
+    <div class="rows" id="rows"></div>
+    <canvas id="c" aria-label="A grid with the point P, the point MP and a house shape before and after the matrix"></canvas>
+  </div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  let m = [[2, 0], [0, 1]], P = [2, 1];
+  const $ = (id) => document.getElementById(id), f = (v) => Kit.fmt(v, 2);
+  const HOUSE = [[0, 0], [2, 0], [2, 2], [1, 3], [0, 2]];
+  const PRESETS = [
+    { k: "I", label: "Identity", m: [[1, 0], [0, 1]], say: "The identity matrix: every point stays where it is." },
+    { k: "S", label: "Scale 2", m: [[2, 0], [0, 2]], say: "Scale by 2: every coordinate is doubled." },
+    { k: "F", label: "Flip x", m: [[-1, 0], [0, 1]], say: "Flip: x changes its sign, the house is mirrored." },
+    { k: "R", label: "Turn 90°", m: [[0, -1], [1, 0]], say: "Turn 90° anticlockwise: (x, y) becomes (−y, x)." },
+    { k: "Q", label: "Squash", m: [[1, 2], [1, 2]], say: "det = 1 × 2 − 2 × 1 = 0: the house is squashed onto a line. No inverse can bring it back." },
+  ];
+  const mul = (a, p) => [a[0][0] * p[0] + a[0][1] * p[1], a[1][0] * p[0] + a[1][1] * p[1]];
+  const det = () => m[0][0] * m[1][1] - m[0][1] * m[1][0];
+  function build() {
+    const box = $("mat"); box.innerHTML = "";
+    m.forEach((row, i) => row.forEach((v, j) => {
+      const cell = Kit.el("div", { class: "cell" });
+      const minus = Kit.el("button", { type: "button", class: "ghost", "aria-label": "minus" }, "−");
+      const plus = Kit.el("button", { type: "button", class: "ghost", "aria-label": "plus" }, "+");
+      const b = Kit.el("b", {}, f(v));
+      minus.addEventListener("click", () => { if (m[i][j] <= -3) { $("msg").textContent = "The lab keeps entries from −3 to 3."; return; } m[i][j]--; update(""); });
+      plus.addEventListener("click", () => { if (m[i][j] >= 3) { $("msg").textContent = "The lab keeps entries from −3 to 3."; return; } m[i][j]++; update(""); });
+      cell.append(minus, b, plus); box.appendChild(cell);
+    }));
+  }
+  function update(say) {
+    build();
+    const q = mul(m, P);
+    $("pv").innerHTML = `<span class="v">${f(P[0])}</span><span class="v">${f(P[1])}</span>`;
+    $("mp").innerHTML = `<span class="v">${f(q[0])}</span><span class="v">${f(q[1])}</span>`;
+    $("rows").innerHTML = `<span class="r1">row 1: ${f(m[0][0])} × ${f(P[0])} + ${f(m[0][1])} × ${f(P[1])} = ${f(q[0])}</span><br><span class="r2">row 2: ${f(m[1][0])} × ${f(P[0])} + ${f(m[1][1])} × ${f(P[1])} = ${f(q[1])}</span><br>det M = ${f(m[0][0])} × ${f(m[1][1])} − ${f(m[0][1])} × ${f(m[1][0])} = <b>${f(det())}</b>${det() === 0 ? " (no inverse)" : ""}`;
+    $("msg").textContent = say || (det() === 0 ? "det = 0: M squashes the plane. It has no inverse." : "MP = (" + f(q[0]) + ", " + f(q[1]) + ").");
+    $("msg").className = "message" + (det() === 0 ? " bad" : "");
+  }
+  Kit.buttons($("presets"), PRESETS, (k) => { const p = PRESETS.find((x) => x.k === k); m = p.m.map((r) => r.slice()); update(p.say); Kit.beep(520, 0.1); });
+  const cv = Kit.canvas($("c"), (W) => Math.min(380, W * 0.75));
+  let G = null, dragging = false;
+  function toWorld(e) { const r = $("c").getBoundingClientRect(); return [Math.round((e.clientX - r.left - G.X(0)) / G.u), Math.round((G.Y(0) - (e.clientY - r.top)) / G.u)]; }
+  $("c").addEventListener("pointerdown", (e) => { dragging = true; $("c").setPointerCapture(e.pointerId); move(e); });
+  $("c").addEventListener("pointermove", (e) => { if (dragging) move(e); });
+  $("c").addEventListener("pointerup", () => (dragging = false));
+  function move(e) { if (!G) return; const w = toWorld(e); w[0] = Math.max(-4, Math.min(4, w[0])); w[1] = Math.max(-3, Math.min(3, w[1])); if (w[0] !== P[0] || w[1] !== P[1]) { P = w; update(""); } }
+  Kit.loop(() => {
+    const c = cv.ctx, W = cv.W, H = cv.H;
+    G = Kit.grid(c, W, H, -8, 8, -6, 6, { step: 2 });
+    const shape = (pts, fill, stroke) => { c.beginPath(); pts.forEach((p, i) => (i ? c.lineTo(G.X(p[0]), G.Y(p[1])) : c.moveTo(G.X(p[0]), G.Y(p[1])))); c.closePath(); c.fillStyle = fill; c.fill(); c.strokeStyle = stroke; c.lineWidth = 2; c.stroke(); };
+    shape(HOUSE, "rgba(47,158,68,0.18)", "#2F9E44");
+    shape(HOUSE.map((p) => mul(m, p)), "rgba(232,89,12,0.18)", "#e8590c");
+    const q = mul(m, P);
+    Kit.arrow(c, G.X(0), G.Y(0), G.X(P[0]), G.Y(P[1]), "#1c7ed6", 2.5, 10);
+    Kit.arrow(c, G.X(0), G.Y(0), G.X(q[0]), G.Y(q[1]), "#e8590c", 2.5, 10);
+    c.fillStyle = "#1c7ed6"; c.beginPath(); c.arc(G.X(P[0]), G.Y(P[1]), 7, 0, 7); c.fill();
+    Kit.text(c, "P", G.X(P[0]) + 12, G.Y(P[1]) - 8, 13, "#1c7ed6", "left");
+    Kit.text(c, "MP", G.X(q[0]) + 12, G.Y(q[1]) + 16, 13, "#e8590c", "left");
+  });
+  update("Start: M doubles x. Try the buttons above, or change the entries.");
+})();
+</script>
+</body>
+</html>

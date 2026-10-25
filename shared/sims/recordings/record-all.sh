@@ -33,6 +33,10 @@ drone-drop|courses/game-math/week-04/sims/drone-drop.html|8|courses/game-math/we
 turn-lab|courses/game-math/week-04/sims/turn-lab.html|9|courses/game-math/week-04/sims/turn-lab.gif
 wave-lab|courses/game-math/week-04/sims/wave-lab.html|9|courses/game-math/week-04/sims/wave-lab.gif
 sky-lift|courses/game-math/week-04/sims/sky-lift.html|8|courses/game-math/week-04/sims/sky-lift.gif
+gem-grid|courses/game-math/week-05/sims/gem-grid.html|9|courses/game-math/week-05/sims/gem-grid.gif
+matrix-lab|courses/game-math/week-05/sims/matrix-lab.html|9|courses/game-math/week-05/sims/matrix-lab.gif
+multiply-lab|courses/game-math/week-05/sims/multiply-lab.html|9|courses/game-math/week-05/sims/multiply-lab.gif
+crystal-spells|courses/game-math/week-05/sims/crystal-spells.html|10|courses/game-math/week-05/sims/crystal-spells.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif

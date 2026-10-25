@@ -214,6 +214,9 @@ ai-deck-check|courses/digital-skills/week-10/sims/ai-deck-check.html|8|courses/d
 fact-check-lab|courses/digital-skills/week-11/sims/fact-check-lab.html|9|courses/digital-skills/week-11/sims/fact-check-lab.gif
 bias-lab|courses/digital-skills/week-11/sims/bias-lab.html|8|courses/digital-skills/week-11/sims/bias-lab.gif
 claim-court|courses/digital-skills/week-11/sims/claim-court.html|8|courses/digital-skills/week-11/sims/claim-court.gif
+prompt-cleaner|courses/digital-skills/week-12/sims/prompt-cleaner.html|10|courses/digital-skills/week-12/sims/prompt-cleaner.gif
+statement-builder|courses/digital-skills/week-12/sims/statement-builder.html|8|courses/digital-skills/week-12/sims/statement-builder.gif
+responsible-or-not|courses/digital-skills/week-12/sims/responsible-or-not.html|8|courses/digital-skills/week-12/sims/responsible-or-not.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

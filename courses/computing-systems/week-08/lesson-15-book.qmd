@@ -1,0 +1,222 @@
+---
+title: "Mobile Platforms Compared: Android vs iOS"
+description: "Lesson notes · Android and iOS compared for a game studio: the players and devices each one reaches, the tools and test phones each one needs, the accounts, reviews and fees of publishing, and how open each system is and how it is updated."
+lesson: 15
+ilos: [B1]
+format: lesson-typst
+---
+
+::: {.lead}
+*Byte Bay* must decide how to launch *Pocket Quest*: on Android, on iOS, or
+on both. In lectures 13 and 14 you saw how the two systems are built and
+how their settings differ. Now you compare them as a studio does: Which
+players can we reach? What do we need to build and test? What does
+publishing cost? How free are we, and how fast do players get updates? In
+this lesson you compare the two platforms in four steps, with facts that a
+studio can check. Every section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary market-share fragmentation developer-account app-review sideloading app-store cross-platform test-device >}}
+
+## 15.1 Players and devices
+
+The first question of a studio is: who can play our game? Android and iOS
+reach different numbers of players and very different devices
+(@fig-reach).
+
+::: {.callout-important title="Definition 15.1 — Market share and fragmentation"}
+The **market share** of a platform is the part of all phones that use it,
+in a region and a month. Worldwide, about **seven in ten** phones run
+Android and about **three in ten** run iOS; in some countries iPhones are
+more common. **Fragmentation** (lecture 2) means that Android runs on many
+makers, screens, chips and versions; iOS runs on a few iPhone models.
+:::
+
+![Players and devices of Android and iOS. Round numbers.](images/reach-devices.png){#fig-reach width=94%}
+
+::: {.callout-note title="Example 15.1 — Two launches"}
+1. Pocket Quest on Android: most phones worldwide, from cheap to
+   expensive, but the game must run on weak phones too (lecture 8).
+2. Pocket Quest on iOS: fewer phones, few models to test, and players who
+   often spend more on games.
+3. Both: almost every smartphone, with twice the work.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Using one worldwide number for every country. In one country most players
+may have iPhones, in another almost all have budget Android phones. Look
+at the share in the country of your players, with its date.
+:::
+
+::: {.callout-note title="Do it · Your class"}
+1. Count the Android phones and the iPhones in your class (or in your
+   family).
+2. Is the share near 70 / 30? Why might it be different?
+
+*Your result:* two numbers and one sentence.
+:::
+
+## 15.2 Building and testing
+
+To make a build, a studio needs the right tool on the right computer; to
+test it, it needs the right phones (@fig-build).
+
+::: {.callout-important title="Definition 15.2 — Tools and test devices"}
+- **Android:** Android Studio runs on Windows, macOS and Linux; the
+  Android Emulator gives virtual phones. Because of fragmentation, test on
+  several real phones (weak, typical, strong).
+- **iOS:** Xcode runs only on macOS, so an iOS build needs a **Mac**; the
+  iOS Simulator runs on the Mac. A few real iPhones (an older and a newer
+  one) cover most players.
+- **Unity** builds Android on any PC; for iOS it makes an Xcode project
+  that a Mac turns into the app.
+:::
+
+![The tools and test phones of each platform.](images/build-test.png){#fig-build width=94%}
+
+::: {.callout-note title="Example 15.2 — Byte Bay's computers"}
+Byte Bay has five Windows PCs and no Mac.
+
+1. Android build: possible today, on any of the PCs.
+2. iOS build: not possible until the studio buys or rents a Mac.
+3. Test phones: P5, P6 and P7 for Android (lecture 8); P8 and one older
+   iPhone for iOS.
+:::
+
+{{< sim file="sims/launch-planner.html" poster="sims/launch-planner.png" title="Launch Planner: Android, iOS or both?" height="560" >}}
+
+::: {.callout-warning title="Common mistake"}
+Testing only on the emulator or simulator. A virtual phone does not heat
+up, has no real battery and has the PC's power: test on real phones too
+(lecture 6).
+:::
+
+::: {.callout-note title="Do it · Plan the launch"}
+1. In **Launch Planner**, choose "Android and iOS" with "only Windows
+   PCs". What problem does the planner show?
+2. How many test phones does the launch need?
+
+*Your result:* one problem and one number.
+:::
+
+## 15.3 Publishing: accounts, reviews and fees
+
+Before players can download the game, the studio needs a **developer
+account**, and the store checks the game (@fig-pub).
+
+::: {.callout-important title="Definition 15.3 — Developer account and app review"}
+A **developer account** lets a studio publish in a store: Google Play
+Console (a one-time fee of about 25 USD) or the Apple Developer Program
+(about 99 USD every year). Each store makes an **app review** before a game
+or an update goes live; both keep a share of the sales (often 15–30 %).
+:::
+
+![Publishing on Google Play and on the App Store. Round numbers checked in 2026.](images/publishing.png){#fig-pub width=94%}
+
+::: {.callout-note title="Example 15.3 — The first year"}
+1. Android only: 25 USD once.
+2. iOS only: 99 USD, and 99 USD again next year.
+3. A game sells for 2 USD with a store share of 30 %: the studio gets
+   1.40 USD per sale on either store.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Planning the launch day without the review time. An update with a bug fix
+also waits for the review: plan a few days before an important date.
+:::
+
+::: {.callout-note title="Do it · The costs"}
+Byte Bay publishes on both stores for three years. How much do the two
+developer accounts cost in total?
+
+*Your result:* one amount, with the calculation.
+:::
+
+## 15.4 Openness and updates
+
+Android and iOS differ in how much freedom they give, and in how fast
+players get a new version of the system (@fig-open).
+
+::: {.callout-important title="Definition 15.4 — Open and closed platforms"}
+- **Android** is **open**: apps come from Google Play, other stores or an
+  `.apk` file (**sideloading**); phone makers change the system; updates
+  come from each maker, late or never.
+- **iOS** is **closed**: apps come from the App Store (other stores only in
+  some regions); only Apple changes the system; Apple updates all supported
+  iPhones at the same time.
+:::
+
+![Openness, installing and updates.](images/openness.png){#fig-open width=94%}
+
+::: {.callout-note title="Example 15.4 — An old version"}
+A bug in Pocket Quest appears only on Android 11.
+
+1. Many players still use Android 11: their makers never sent a newer
+   version. Byte Bay must fix it.
+2. On iOS, most players use one of the last two versions, so the test plan
+   can stay smaller.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"Open means unsafe" or "closed means safe". Both systems get security
+updates; the risk is installing apps from unknown sources and never
+updating.
+:::
+
+::: {.callout-note title="Do it · Your phone's updates"}
+1. When did your phone get its last system update (Settings › About, or
+   Software update)?
+2. Ask a classmate with the other system the same. Which one is newer?
+
+*Your result:* two dates.
+:::
+
+## Case study: Platform Pick
+
+The producer of Byte Bay asks six questions before the launch of Pocket
+Quest: which platform the studio can build this week with only Windows
+PCs; which platform reaches the most phones worldwide; why Android needs
+more test phones; which developer account costs money every year; why an
+old Android version still matters; and where a tester can install the game
+from a file. The Game challenge of the interactive lesson uses these
+questions. In the mini-game below you answer them.
+
+{{< sim file="sims/platform-pick.html" poster="sims/platform-pick.png" title="Platform Pick: Android or iOS for the launch?" kind="game" height="560" >}}
+
+## Further reading
+
+Android Developers, "Test your app on Android devices"; Apple Developer,
+"Choosing a membership"; Google Play Console Help, "Get started with Play
+Console". Check the date on each page: fees and shares change.
+
+## Exercises
+
+1. About how many phones in ten run Android worldwide?
+2. Why can the share in your country be different?
+3. On which computers does Android Studio run? And Xcode?
+4. Why does an Android launch need more test phones?
+5. How much does each developer account cost?
+6. What is an app review?
+7. A game sells for 5 USD and the store keeps 30 %. How much does the
+   studio get?
+8. What is sideloading? On which platform is it simple?
+9. Who sends the system updates on Android? On iOS?
+10. Byte Bay has only Windows PCs. Which platform should it launch first,
+    and why?
+
+## Answers to the exercises
+
+::: {.answers}
+1. About seven.
+2. Prices, shops and habits differ from country to country.
+3. Android Studio: Windows, macOS, Linux. Xcode: only macOS.
+4. Fragmentation: many makers, screens, chips and versions.
+5. Google Play: about 25 USD once. Apple: about 99 USD every year.
+6. The store's check of a game or an update before it goes live.
+7. 5 × 0.7 = 3.50 USD.
+8. Installing an app from a file or another source; simple on Android.
+9. Android: each phone maker. iOS: Apple.
+10. Android: it builds on any PC; iOS needs a Mac.
+:::

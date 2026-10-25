@@ -1,0 +1,273 @@
+---
+title: "Rotation in 2D"
+description: "Turning a point around the origin, the rotation matrix and its columns, turning about a pivot, what a rotation keeps and how to undo it, and rotation in every frame of a game."
+lesson: 12
+ilos: [C1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. The full explanations,
+examples and exercises are in the notes.
+
+## Key terms
+
+{{< glossary rotation rotation-matrix angle radian pivot transformation inverse-matrix angular-speed matrix-multiplication unit-circle >}}
+
+## 12.1 Turn a point around the origin
+
+- A **rotation** by θ around the origin:
+  **x' = x cos θ − y sin θ**, **y' = x sin θ + y cos θ**.
+- A positive θ turns anticlockwise. The distance from the origin stays the
+  same.
+- Blade tip (4, 0), 30° (cos 0.87, sin 0.5): (3.46, 2).
+- (3, 1) by 90° (cos 0, sin 1): (−1, 3), the spell Turn of lecture 10.
+
+![Rotating a point around the origin.](images/rotate-point.png){width=92%}
+
+{{< sim file="sims/rotate-lab.html" poster="sims/rotate-lab.png" title="Rotate Lab: R(θ) and the pivot" height="760" >}}
+
+::: {.callout-warning title="Watch out!"}
+The minus sign is in x'. Without it the point turns clockwise.
+:::
+
+::: {.callout-note title="Do it · Rotate by hand, check in the lab"}
+On paper, rotate (2, 2) by 90° and by 180° around the origin. Then check both
+in **Rotate Lab** with the pivot at the origin.
+:::
+
+::: {.callout-tip title="Try it 1 · Rotate a point"}
+Choose the right answer.
+
+::: {.match extra="(2, 4.35)|(1, −3)"}
+Rotate (5, 0) by 30° (cos 0.87, sin 0.5).
+:   (4.35, 2.5)
+
+Rotate (3, 1) by 180°.
+:   (−3, −1)
+
+Rotate (0, 2) by 90°.
+:   (−2, 0)
+
+Rotate (3, 1) by 90°.
+:   (−1, 3)
+
+What stays the same in a rotation around the origin?
+:   the distance from the origin
+:::
+:::
+
+## 12.2 The rotation matrix
+
+- **R(θ) = rows (cos θ, −sin θ) and (sin θ, cos θ)**.
+- R(θ) × (x, y) gives the formulas of 12.1.
+- Its columns: (1, 0) goes to (cos θ, sin θ); (0, 1) goes to
+  (−sin θ, cos θ).
+- R(90°) = rows (0, −1), (1, 0). R(180°) = rows (−1, 0), (0, −1).
+  R(30°) = rows (0.87, −0.5), (0.5, 0.87).
+- R(30°) × (2, 2) = (1.74 − 1, 1 + 1.74) = (0.74, 2.74).
+
+![The columns of R(θ).](images/rotation-matrix.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+−sin θ is in row 1, column 2. Check: R(90°) must send (1, 0) to (0, 1).
+:::
+
+::: {.callout-note title="Do it · Build R(45°)"}
+cos 45° = sin 45° = 0.71. Write R(45°) and multiply it by (2, 0). Is the
+length still 2?
+:::
+
+::: {.callout-tip title="Try it 2 · The matrix"}
+Choose the right answer.
+
+::: {.match extra="rows (0, 1) and (1, 0)|rows (1, 0) and (0, 1)"}
+Which matrix is R(90°)?
+:   rows (0, −1) and (1, 0)
+
+Which matrix is R(180°)?
+:   rows (−1, 0) and (0, −1)
+
+Where does R(θ) send (1, 0)?
+:   (cos θ, sin θ)
+
+What is R(90°) × (2, −1)?
+:   (1, 2)
+
+Where is −sin θ in R(θ)?
+:   row 1, column 2
+:::
+:::
+
+## 12.3 Turn the drawbridge: rotation about a pivot
+
+- About the pivot C: **P' = C + R(θ) (P − C)**: move by −C, rotate, move
+  back.
+- The drawbridge: hinge H = (2, 1), end E = (6, 1). E − H = (4, 0).
+- 90°: (0, 4) + H = **(2, 5)**. 30°: (3.46, 2) + H = **(5.46, 3)**.
+- Rotating E itself around the origin gives (−1, 6): the bridge flies away.
+
+![The drawbridge turns about its hinge.](images/rotate-pivot.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+Subtract the pivot first, and add it back at the end.
+:::
+
+::: {.callout-note title="Do it · A pivot in Rotate Lab"}
+Tap the grid at (1, 0) to move the pivot. Set θ = 90° and read P' for
+P = (2, 2). Check by hand: P − C, R(90°), + C.
+:::
+
+::: {.callout-tip title="Try it 3 · About a pivot"}
+Choose the right answer.
+
+::: {.match extra="(−2, 5)|(5, 0)"}
+Rotate (5, 2) by 90° about (3, 2).
+:   (3, 4)
+
+A door: hinge (1, 1), handle (1, 3). Turn by −90° about the hinge.
+:   (3, 1)
+
+The drawbridge (H = (2, 1), E = (6, 1)) turns 90°. Where is the end?
+:   (2, 5)
+
+What is step 1 of a rotation about a pivot C?
+:   subtract C
+:::
+:::
+
+## 12.4 What a rotation keeps, and how to undo it
+
+- A rotation keeps every **length** and every **angle**. Only directions
+  change.
+- **Undo: R(θ)^−1^ = R(−θ)**: turn back by the same angle.
+- R(−θ) is the transpose of R(θ): rows become columns.
+  R(−30°) = rows (0.87, 0.5), (−0.5, 0.87).
+- det R(θ) = cos²θ + sin²θ = 1: no squashing, always an inverse.
+
+![A rotation keeps lengths and angles.](images/rotate-keeps.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+To undo 30°, turn −30°, not another 30°.
+:::
+
+::: {.callout-note title="Do it · Lengths stay"}
+Rotate the triangle (1, 1), (4, 1), (1, 3) by 90°. Compute the length of the
+side from (1, 1) to (4, 1) before and after.
+:::
+
+::: {.callout-tip title="Try it 4 · Keep and undo"}
+Choose the right answer.
+
+::: {.match extra="R(30°)|2"}
+Which matrix undoes R(30°)?
+:   R(−30°)
+
+What is the determinant of a rotation matrix?
+:   1
+
+What does a rotation change?
+:   the direction
+
+Which matrix is R(−90°)?
+:   rows (0, 1) and (−1, 0)
+
+A gun of length 2 turns by 45°. How long is it now?
+:   still 2
+:::
+:::
+
+## 12.5 A little turn every frame
+
+- Turn per frame: **Δθ = ω × Δt** (angular speed × frame time, lecture 8).
+- Windmill 180°/s at 60 fps: 3° per frame; after 30 frames, 90°. At 30 fps:
+  6° per frame, the same speed.
+- Unity: `transform.Rotate(0, 0, 180 * Time.deltaTime);`
+- `Quaternion.Euler(0, 0, 30) * new Vector3(4, 0, 0)` gives (3.46, 2, 0). A
+  positive angle around z turns anticlockwise in 2D.
+
+![A little rotation every frame.](images/spin-frame.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+"3° every frame" without Δt makes the windmill turn twice as fast at 120 fps.
+:::
+
+::: {.callout-note title="Do it · The turret"}
+A turret turns at 90°/s, at 30 fps. How many degrees per frame, and how many
+frames for a quarter turn? Where is the gun tip (2, 0) after the quarter
+turn?
+:::
+
+::: {.callout-tip title="Try it 5 · Every frame"}
+Choose the right answer. You can use an answer more than once.
+
+::: {.match extra="60°|2°"}
+A wheel turns at 360°/s. How many degrees per frame at 60 fps?
+:   6°
+
+A windmill turns at 180°/s. How many degrees per frame at 30 fps?
+:   6°
+
+Why multiply by Time.deltaTime?
+:   the speed does not depend on the frame rate
+
+A turret at 90°/s, 30 fps. How many frames for a quarter turn?
+:   30
+:::
+:::
+
+## Game challenge: Drawbridge {.challenge}
+
+Work alone. Use every section of today.
+
+**Drawbridge** is a castle game. The bridge turns around its hinge
+**H = (2, 1)**; it is 4 units long; lying flat, its end is at **E = (6, 1)**.
+A ship needs the end at (2, 5); a knight needs it on the ledge at
+(5.46, 3).
+
+{{< sim file="sims/drawbridge.html" poster="sims/drawbridge.png" title="Drawbridge: turn the bridge about its hinge" kind="game" height="720" >}}
+
+::: {.callout-tip title="Try it 6 · The bridge"}
+H = (2, 1), E = (6, 1), so E − H = (4, 0). Choose the right answer.
+
+::: {.match extra="45°|−90°"}
+Which turn puts the end at (2, 5)?
+:   90°
+
+Which turn puts the end at (5.46, 3)?
+:   30°
+
+Where is the end at 180°?
+:   (−2, 1)
+
+Where is the end at −90°?
+:   (2, −3)
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · Back down (harder)"}
+H = (2, 1), the bridge is 4 long. Choose the right answer.
+
+::: {.match extra="60°|(6, 5)"}
+The bridge stands at 60°. Which turn brings it back flat?
+:   −60°
+
+The bridge goes up at 45°/s at 60 fps. How many degrees per frame?
+:   0.75°
+
+At 60°, where is the end? (cos 60° = 0.5, sin 60° = 0.87)
+:   (4, 4.48)
+
+A player turns the bridge by 90° around the origin by mistake. Where does the end (6, 1) go?
+:   (−1, 6)
+:::
+:::
+
+## Summary {.summary}
+
+- A rotation by θ: x' = x cos θ − y sin θ, y' = x sin θ + y cos θ.
+- R(θ) = rows (cos θ, −sin θ), (sin θ, cos θ); its columns are the turned axes.
+- About a pivot: P' = C + R(θ)(P − C).
+- A rotation keeps lengths and angles; R(−θ) undoes it.
+- In the game loop, turn by ω × Δt each frame.

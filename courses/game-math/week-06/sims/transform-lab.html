@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Transform Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .out { font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 8px; line-height: 1.5; }
+    .sim .controls label { min-width: 46%; }
+    .sim .controls input[type="range"] { flex: 1; min-width: 90px; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Transform Lab: translate, scale, mirror</h1>
+  <p class="hint">The green house is the start. The blue house is the result. Choose the pivot (the point that stays still when you scale) and the order.</p>
+  <canvas id="c" aria-label="A grid with a house before and after the transformation"></canvas>
+  <div class="controls" id="sl"></div>
+  <div class="controls" id="opt"></div>
+  <p class="out" id="out"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const HOUSE = [[0, 0], [2, 0], [2, 2], [1, 3], [0, 2]];
+  const PIVOTS = { origin: [0, 0], feet: [1, 0], centre: [1, 1.5] };
+  const s = { tx: 3, ty: 1, sx: 1, sy: 1, pivot: "origin", order: "scale" };
+  const $ = (id) => document.getElementById(id), f = (v) => Kit.fmt(v, 2);
+  const scale = (p) => { const c = PIVOTS[s.pivot]; return [c[0] + (p[0] - c[0]) * s.sx, c[1] + (p[1] - c[1]) * s.sy]; };
+  const move = (p) => [p[0] + s.tx, p[1] + s.ty];
+  const T = (p) => s.order === "scale" ? move(scale(p)) : scale(move(p));
+  Kit.slider($("sl"), "tx", -4, 4, 1, s.tx, (v) => { s.tx = v; out(); }, f);
+  Kit.slider($("sl"), "ty", -4, 4, 1, s.ty, (v) => { s.ty = v; out(); }, f);
+  Kit.slider($("sl"), "sx", -2, 3, 0.5, s.sx, (v) => { s.sx = v; out(); }, f);
+  Kit.slider($("sl"), "sy", -2, 3, 0.5, s.sy, (v) => { s.sy = v; out(); }, f);
+  function opts() {
+    Kit.buttons($("opt"), [{ k: "origin", label: "pivot: origin" }, { k: "feet", label: "pivot: feet (1, 0)" }, { k: "centre", label: "pivot: centre (1, 1.5)" }, { k: "order", label: s.order === "scale" ? "order: scale, then move" : "order: move, then scale" }], (k) => {
+      if (k === "order") s.order = s.order === "scale" ? "move" : "scale"; else s.pivot = k;
+      opts(); out(); Kit.beep(500, 0.06);
+    });
+    $("opt").querySelectorAll("button").forEach((b) => (b.className = b.dataset.k === s.pivot || b.dataset.k === "order" ? "" : "ghost"));
+  }
+  function out() {
+    const p = [2, 2], q = T(p);
+    const note = s.sx < 0 || s.sy < 0 ? " A negative factor mirrors the house." : s.sx === s.sy ? " Same factor on x and y: uniform scaling." : " Different factors: the house is stretched.";
+    $("out").innerHTML = `The corner (2, 2) goes to (${f(q[0])}, ${f(q[1])}).${note}<br>` +
+      (s.order === "scale" ? `First scale by (${f(s.sx)}, ${f(s.sy)}) about the pivot, then move by (${f(s.tx)}, ${f(s.ty)}).` : `First move by (${f(s.tx)}, ${f(s.ty)}), then scale by (${f(s.sx)}, ${f(s.sy)}) about the pivot.`);
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.min(380, W * 0.72));
+  window.TL = { s, out, opts };
+  Kit.loop(() => {
+    const c = cv.ctx, G = Kit.grid(c, cv.W, cv.H, -8, 8, -6, 7, { step: 2 });
+    const draw = (pts, fill, stroke, dash) => { c.beginPath(); pts.forEach((p, i) => (i ? c.lineTo(G.X(p[0]), G.Y(p[1])) : c.moveTo(G.X(p[0]), G.Y(p[1])))); c.closePath(); c.fillStyle = fill; c.fill(); c.setLineDash(dash || []); c.strokeStyle = stroke; c.lineWidth = 2.2; c.stroke(); c.setLineDash([]); };
+    draw(HOUSE, "rgba(47,158,68,0.2)", "#2F9E44");
+    draw(HOUSE.map(T), "rgba(28,126,214,0.2)", "#1c7ed6", [6, 4]);
+    const pv = PIVOTS[s.pivot];
+    c.fillStyle = "#e8590c"; c.beginPath(); c.arc(G.X(pv[0]), G.Y(pv[1]), 6, 0, 7); c.fill();
+    Kit.text(c, "pivot", G.X(pv[0]) + 8, G.Y(pv[1]) + 16, 11, "#e8590c", "left");
+    const q = T([2, 2]);
+    c.fillStyle = "#1c7ed6"; c.beginPath(); c.arc(G.X(q[0]), G.Y(q[1]), 5, 0, 7); c.fill();
+  });
+  opts(); out();
+})();
+</script>
+</body>
+</html>

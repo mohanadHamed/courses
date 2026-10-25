@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Decision Matrix</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; margin: 4px 0; font-weight: 700; font-size: .9rem; }
+    .sim table.dm { border-collapse: collapse; width: 100%; margin: 6px 0; font-variant-numeric: tabular-nums; }
+    .sim table.dm td, .sim table.dm th { border: 1px solid #dee2e6; padding: 3px 6px; font-weight: 700; font-size: .88rem; text-align: center; }
+    .sim table.dm td:first-child { text-align: left; }
+    .sim table.dm th { background: #fff9db; color: #A86700; }
+    .sim table.dm tr.tot td { background: #f8f9fa; font-weight: 800; }
+    .sim table.dm td.win { background: #ffe066; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Decision Matrix: the next platform for Pocket Quest</h1>
+  <p class="hint">Byte Bay compares three platforms. The scores from 1 to 5 (5 = best) are <b>example scores</b> from the team's research. Set the weight of each criterion (0 = does not matter, 3 = very important) and watch the totals: score × weight, added up.</p>
+  <div class="bar" id="sl"></div>
+  <table class="dm" id="tbl"></table>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const CR = ["reach", "fit for the game", "cost and time", "performance", "testing"];
+  const OPT = { "PC": [4, 4, 4, 3, 2], "console": [3, 4, 2, 5, 5], "cloud": [2, 3, 3, 4, 4] };
+  const w = [1, 1, 1, 1, 1];
+  const tot = (o) => OPT[o].reduce((a, v, i) => a + v * w[i], 0);
+  const winner = () => Object.keys(OPT).sort((a, b) => tot(b) - tot(a))[0];
+  const same = (arr) => arr.every((v, i) => w[i] === v);
+  const TASKS = [
+    { q: "Task 1: With equal weights, the console wins. Now set the Byte Bay weights: reach 3, fit 3, cost 2, performance 1, testing 1. Which platform wins?", ok: () => same([3, 3, 2, 1, 1]) },
+    { q: "Task 2: Byte Bay has very little money. Raise cost and time to 3. Does the winner change? By how much does PC lead?", ok: () => same([3, 3, 3, 1, 1]) },
+    { q: "Task 3: A publisher pays for a console port and wants very few bugs. Keep reach at 2 or more and find weights where the console wins.", ok: () => w[0] >= 2 && winner() === "console" },
+    { q: "Task 4: Set a weight to 0. What does it mean, and when is that honest?", ok: () => w.some((v) => v === 0) },
+  ];
+  let ti = 0, ready = false;
+  const sl = CR.map((c, i) => Kit.slider($("sl"), c, 0, 3, 1, w[i], (v) => { w[i] = v; if (ready) upd(); }));
+  function upd() {
+    const win = winner(), T = Object.fromEntries(Object.keys(OPT).map((o) => [o, tot(o)]));
+    const max = 5 * w.reduce((a, b) => a + b, 0);
+    $("tbl").innerHTML = "<tr><th>criterion</th><th>weight</th>" + Object.keys(OPT).map((o) => `<th>${o}</th>`).join("") + "</tr>" +
+      CR.map((c, i) => `<tr><td>${c}</td><td>${w[i]}</td>` + Object.keys(OPT).map((o) => `<td>${OPT[o][i]} × ${w[i]} = ${OPT[o][i] * w[i]}</td>`).join("") + "</tr>").join("") +
+      `<tr class="tot"><td>total (of ${max})</td><td></td>` + Object.keys(OPT).map((o) => `<td class="${o === win ? "win" : ""}">${T[o]}</td>`).join("") + "</tr>";
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the weights say what matters; write them down before you score, and explain them in the report.";
+    const sorted = Object.keys(OPT).sort((a, b) => T[b] - T[a]);
+    $("msg").textContent = m + (T[sorted[0]] === T[sorted[1]] ? `A tie between ${sorted[0]} and ${sorted[1]}: look again at the weights.` : `The winner: ${win} with ${T[win]}, ${T[sorted[0]] - T[sorted[1]]} points ahead of ${sorted[1]}.`);
+  }
+  window.DMX = { setW: (arr) => { arr.forEach((v, i) => { w[i] = v; sl[i].value = v; sl[i].dispatchEvent(new Event("input")); }); upd(); } };
+  ready = true; upd();
+})();
+</script>
+</body>
+</html>

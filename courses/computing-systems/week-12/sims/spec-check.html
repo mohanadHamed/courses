@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Spec Check</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; }
+    .sim .bar .lab { min-width: 70px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .req { border: 1.5px solid #A86700; background: #fff9db; border-radius: 10px; padding: 6px 10px; font-weight: 700; font-size: .88rem; margin: 6px 0; line-height: 1.45; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Spec Check: will Pocket Quest run well?</h1>
+  <p class="hint">The PC version of <i>Pocket Quest</i> has four graphics settings. Choose a device and a setting and watch the frame rate. GPU power is given in <b>example points</b>; the target is 60 fps.</p>
+  <div class="req" id="req"></div>
+  <div class="bar"><span class="lab">Device</span><span id="dev" style="display:contents"></span></div>
+  <div class="bar"><span class="lab">Setting</span><span id="set" style="display:contents"></span></div>
+  <canvas id="c" aria-label="The race at the chosen frame rate"></canvas>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const DEV = { "old laptop": { gpu: 2, ram: 4 }, "office PC": { gpu: 4, ram: 8 }, "handheld PC": { gpu: 6, ram: 16 }, "gaming PC": { gpu: 12, ram: 16 } };
+  const SET = { low: { cost: 1.5, ram: 4 }, medium: { cost: 3, ram: 6 }, high: { cost: 6, ram: 8 }, ultra: { cost: 10, ram: 12 } };
+  const s = { dev: "office PC", set: "ultra" };
+  const fpsOf = (d, k) => { let f = Math.min(144, Math.round(60 * DEV[d].gpu / SET[k].cost)); if (DEV[d].ram < SET[k].ram) f = Math.round(f / 2); return f; };
+  const TASKS = [
+    { q: "Task 1: Choose the old laptop. Find the best setting that still gives at least 60 fps.", ok: () => s.dev === "old laptop" && s.set === "low" },
+    { q: "Task 2: Choose the handheld PC. Which is the highest setting with 60 fps?", ok: () => s.dev === "handheld PC" && s.set === "high" },
+    { q: "Task 3: Choose the office PC on high. Why does it not reach 60 fps? Which part is the bottleneck?", ok: () => s.dev === "office PC" && s.set === "high" },
+    { q: "Task 4: Which device runs ultra at 60 fps or more?", ok: () => s.dev === "gaming PC" && s.set === "ultra" },
+  ];
+  let ti = 0, lastDraw = 0, pos = 0;
+  const cv = Kit.canvas($("c"), (W) => Math.min(170, W * 0.36));
+  Kit.loop((now) => {
+    const f = fpsOf(s.dev, s.set);
+    if (now - lastDraw < 1000 / f) return;
+    lastDraw = now;
+    const c = cv.ctx, W = cv.W, H = cv.H;
+    pos = (now / 6) % (W + 120);
+    c.fillStyle = "#69db7c"; c.fillRect(0, 0, W, H);
+    c.fillStyle = "#495057"; c.fillRect(0, H * 0.35, W, H * 0.4);
+    c.fillStyle = "#fff"; for (let x = -((now / 3) % 60); x < W; x += 60) c.fillRect(x, H * 0.55 - 2, 30, 4);
+    const x = pos - 60, y = H * 0.47;
+    Kit.rrect(c, x, y, 70, 30, 8, "#e03131"); c.fillStyle = "#a5d8ff"; c.fillRect(x + 40, y + 5, 18, 10);
+    c.fillStyle = "#212529"; c.fillRect(x + 8, y + 26, 14, 8); c.fillRect(x + 48, y + 26, 14, 8);
+    Kit.rrect(c, 8, 8, 120, 30, 8, "rgba(255,255,255,.9)");
+    Kit.text(c, `${f} fps`, 68, 29, 17, f >= 60 ? "#2b8a3e" : f >= 30 ? "#e8590c" : "#c92a2a", "center", 800);
+  });
+  function tabs(id, items, key) { Kit.buttons($(id), Object.keys(items).map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }
+  function upd() {
+    tabs("dev", DEV, "dev"); tabs("set", SET, "set");
+    const d = DEV[s.dev], k = SET[s.set], f = fpsOf(s.dev, s.set);
+    $("req").innerHTML = "Minimum: GPU 2 points, 4 GB RAM (low, 60 fps)<br>Recommended: GPU 6 points, 8 GB RAM (high, 60 fps)";
+    $("chk").innerHTML = [[60 * d.gpu / k.cost >= 60, `GPU: ${d.gpu} points; ${s.set} needs about ${k.cost} for 60 fps`], [d.ram >= k.ram, `memory: ${d.ram} GB; ${s.set} needs ${k.ram} GB${d.ram < k.ram ? " (not enough: the game stutters)" : ""}`], [f >= 60, `frame rate: ${f} fps (target 60)`]]
+      .map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the weakest device sets the minimum requirements, and settings let every PC reach its best.";
+    const best = Object.keys(SET).filter((x) => fpsOf(s.dev, x) >= 60).pop();
+    $("msg").textContent = m + (best ? `On the ${s.dev}, the highest setting with 60 fps is ${best}.` : `The ${s.dev} cannot reach 60 fps.`);
+  }
+  window.SPC = { pick: (dev, set) => { if (dev) s.dev = dev; if (set) s.set = set; upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

@@ -255,6 +255,7 @@ summary-tool|courses/digital-skills/week-13/sims/summary-tool.html|8|courses/dig
 link-lab|courses/digital-skills/week-14/sims/link-lab.html|8|courses/digital-skills/week-14/sims/link-lab.gif
 heading-slides|courses/digital-skills/week-14/sims/heading-slides.html|7|courses/digital-skills/week-14/sims/heading-slides.gif
 office-relay|courses/digital-skills/week-14/sims/office-relay.html|8|courses/digital-skills/week-14/sims/office-relay.gif
+plan-checker|courses/digital-skills/week-14/sims/plan-checker.html|7|courses/digital-skills/week-14/sims/plan-checker.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

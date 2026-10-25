@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Claim Court</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #fff4e6; border: 1.5px solid #D9480F; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Claim Court</h1>
+  <p class="hint">Colleagues at Sunrise Company bring AI answers to you before they use them. For each one, choose the right judgement and action.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { card: "AI: “The brain uses 50 % of the body's energy.” A university page and a science magazine both say about 20 %.", answer: "wrong: correct it to about 20 %", choices: C(["wrong: correct it to about 20 %", "true: keep it", "average them: 35 %", "remove the whole text"]), good: "Two reliable sources agree; the AI number was wrong." },
+    { card: "AI cites “Miller & Hart (2019), Journal of Student Sleep”. No search finds the article or the journal.", answer: "a made-up source: delete it", choices: C(["a made-up source: delete it", "keep it: it looks scientific", "change the year", "add a second fake source"]), good: "AI tools can invent sources. If you cannot find it, do not use it." },
+    { card: "AI: “The newest office laptop model is the X200.” The AI's knowledge ends two years ago.", answer: "maybe outdated: check a current source", choices: C(["maybe outdated: check a current source", "true: AI knows everything", "false: delete all laptops", "ask the same AI again"]), good: "After the knowledge cutoff, the AI may not know newer facts." },
+    { card: "AI text for a job ad: “We need a strong young man for the warehouse.”", answer: "bias: use neutral words about the job", choices: C(["bias: use neutral words about the job", "keep it: it is short", "add “and pretty”", "only change the font"]), good: "Describe the job (lifting up to 15 kg), not the gender or age of the person." },
+    { card: "AI: “Remote work is always better. There are no problems.”", answer: "one-sided: ask for both sides", choices: C(["one-sided: ask for both sides", "true: it sounds sure", "remove the word “always” only", "add more exclamation marks"]), good: "A fair text gives reasons for and against." },
+    { card: "AI table: Paper 75 + Drinks 50 + Bags 60 = 195 JD total.", answer: "wrong sum: compute it yourself (185)", choices: C(["wrong sum: compute it yourself (185)", "true: AI is good at maths", "round it to 200", "delete the table"]), good: "AI tools make arithmetic mistakes; use Excel or a calculator." },
+  ];
+  rounds.forEach((r) => { r.goal = "Your judgement?"; r.why = {}; });
+  const g = Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: the claim about the brain." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "Court closed: every claim was checked." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

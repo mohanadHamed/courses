@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Fact-Check Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .doc { background: #fff; border: 1.5px solid #ced4da; border-radius: 10px; padding: 10px 12px; line-height: 1.8; font-size: .98rem; }
+    .sim .doc .cl { border-radius: 5px; padding: 1px 3px; cursor: pointer; background: #fff3bf; border-bottom: 2px solid #fab005; }
+    .sim .doc .cl.sel { outline: 2px solid #D9480F; }
+    .sim .doc .cl.true { background: #d3f9d8; border-color: #2b8a3e; }
+    .sim .doc .cl.fixed { background: #d0ebff; border-color: #1c7ed6; }
+    .sim .doc .cl.gone { background: #f1f3f5; color: #adb5bd; text-decoration: line-through; border-color: #ced4da; }
+    .sim .res { margin: 8px 0; border: 1.5px solid #dee2e6; border-radius: 10px; padding: 8px 10px; background: #f8f9fa; font-size: .9rem; }
+    .sim .res .r { margin: 4px 0; } .sim .res .r b { color: #1c7ed6; } .sim .res .r i { color: #868e96; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Fact-Check Lab: Sami's AI draft</h1>
+  <p class="hint">Sami, a student, asked an AI tool for a short text on sleep and exams. Tap each yellow claim, read the search results (made-up sites for this lab), and decide: keep, correct, or remove.</p>
+  <div class="doc" id="doc"></div>
+  <div class="res" id="res">Tap a yellow claim to check it.</div>
+  <div class="bar" id="acts"></div>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const CL = [
+    { t: "Adults need at least 7 hours of sleep a night.", v: "keep", res: [["health.example.org", "a national health office (reliable)", "Adults should sleep 7 hours or more."], ["sleepbook.example.net", "an encyclopedia (reliable)", "Most adults need 7–9 hours."], ["napfan.example.com", "a personal blog", "I only need 5 hours!"]] },
+    { t: "The brain uses 50 % of the body's energy.", v: "correct", fix: "The brain uses about 20 % of the body's energy.", res: [["biology.example.edu", "a university course page (reliable)", "The brain uses about 20 % of the body's energy at rest."], ["sciencemag.example.org", "a science magazine (reliable)", "about one fifth of our energy"], ["facts4u.example.com", "a list site with no author", "the brain uses half your energy"]] },
+    { t: "Students who sleep 8 hours get 25 % better marks (Miller & Hart, 2019).", v: "remove", res: [["scholar search", "searching the title and the authors", "No article found."], ["journals.example.org", "list of journals", "No journal called “Journal of Student Sleep”."]] },
+    { t: "Our college library opens at 7:00.", v: "correct", fix: "Our college library opens at 8:00.", res: [["college.example.edu/library", "the college website (reliable, local)", "Opening hours: Sun–Thu 8:00–20:00"]] },
+    { t: "Einstein said: “Sleep is the best study.”", v: "remove", res: [["quotes.example.com", "a quote site, no source", "“Sleep is the best study.” – Einstein"], ["archive.example.org", "an archive of his writings (reliable)", "No such sentence found."]] },
+    { t: "A short nap of about 20 minutes can help attention.", v: "keep", res: [["health.example.org", "a national health office (reliable)", "Short naps (10–30 min) can improve alertness."], ["sleepbook.example.net", "an encyclopedia (reliable)", "Short naps help many adults."]] },
+  ];
+  const st = CL.map(() => null);
+  let sel = -1;
+  const TASKS = [
+    { q: "Task 1: Check the claim about the brain. What do the reliable sources say?", ok: () => st[1] !== null },
+    { q: "Task 2: Check the study of Miller & Hart. Does it exist?", ok: () => st[2] !== null },
+    { q: "Task 3: Decide about all six claims, and get every decision right.", ok: () => st.every((x, i) => x === CL[i].v) },
+  ];
+  let ti = 0;
+  function draw() {
+    $("doc").innerHTML = "<b>Sleep and exams</b><br>Sleep matters before an exam. " + CL.map((c, i) => { const s = st[i], cls = s === "keep" ? "true" : s === "correct" ? "fixed" : s === "remove" ? "gone" : ""; return `<span class="cl ${cls}${i === sel ? " sel" : ""}" data-i="${i}">${s === "correct" ? c.fix || c.t : c.t}</span>`; }).join(" ") + " So plan your sleep like you plan your study.";
+    $("doc").querySelectorAll(".cl").forEach((e) => e.addEventListener("click", () => { sel = +e.dataset.i; draw(); }));
+    if (sel >= 0) {
+      const c = CL[sel];
+      $("res").innerHTML = `<b>Checking:</b> “${c.t}”` + c.res.map(([site, who, says]) => `<div class="r"><b>${site}</b> <i>(${who})</i>: ${says}</div>`).join("");
+      Kit.buttons($("acts"), [{ k: "keep", label: "✓ true: keep it" }, { k: "correct", label: "✗ wrong: correct it" }, { k: "remove", label: "? not real or cannot check: remove it" }], (k) => decide(k));
+    }
+    const done = st.filter((x) => x !== null).length, right = st.filter((x, i) => x === CL[i].v).length;
+    $("calc").textContent = `checked ${done} of 6 · right decisions ${right}`;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: two claims kept, two corrected, two removed.";
+    return m;
+  }
+  function decide(k) {
+    st[sel] = k;
+    const c = CL[sel], good = k === c.v;
+    const why = good ? (k === "keep" ? "Right: reliable sources agree." : k === "correct" ? "Right: the reliable sources give another number." : "Right: the source or the quote cannot be found, so it goes.") :
+      c.v === "keep" ? "Look again: two reliable sources agree with the claim. A blog does not count." : c.v === "correct" ? "Look again: the reliable sources say something else; correct it with their value." : "Look again: nothing reliable shows that this exists.";
+    const m = draw();
+    $("msg").textContent = m + why; $("msg").classList.toggle("bad", !good);
+  }
+  window.FC = { pick: (i) => { sel = i; draw(); }, decide };
+  draw();
+})();
+</script>
+</body>
+</html>

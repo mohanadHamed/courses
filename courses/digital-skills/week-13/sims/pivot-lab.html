@@ -49,7 +49,7 @@
   let ti = 0;
   function pivot() {
     const g = {};
-    MONTH.forEach((r) => { const k = (s.row === "Week" ? "Week " : "") + r[F[s.row]]; (g[k] = g[k] || []).push(r[4]); });
+    MONTH.forEach((r) => { const k = s.row === "Week" ? ["1st", "2nd", "3rd", "4th"][r[0] - 1] + " week" : r[F[s.row]]; (g[k] = g[k] || []).push(r[4]); });
     const keys = Object.keys(g).sort();
     const f = (a) => (s.val === "Sum of Total" ? a.reduce((x, y) => x + y, 0) : s.val === "Count of sales" ? a.length : a.reduce((x, y) => x + y, 0) / a.length);
     const all = MONTH.map((r) => r[4]);
@@ -64,7 +64,7 @@
       const h = (H - 56) * v / mx, x = 10 + i * bw;
       Kit.rrect(c, x + bw * 0.15, H - 30 - h, bw * 0.7, h, 3, "#217346");
       Kit.text(c, fmt(v), x + bw / 2, H - 34 - h, 11, "#2a2f2c", "center", 800);
-      Kit.text(c, k.replace("Week ", "W"), x + bw / 2, n > 6 && i % 2 ? H - 3 : H - 16, n > 6 ? 10 : 11, "#6b726e", "center", 700);
+      Kit.text(c, k.replace(" week", ""), x + bw / 2, n > 6 && i % 2 ? H - 3 : H - 16, n > 6 ? 10 : 11, "#6b726e", "center", 700);
     });
   }
   function tabs(id, list, key) { Kit.buttons($(id), list.map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }

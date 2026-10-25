@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Lucky Raft Finals</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #e7f5ff; border: 1.5px solid #1C7ED6; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Lucky Raft Finals</h1>
+  <p class="hint">The raft sails past eight islands, one for each idea of lectures 16–28: logic, De Morgan, dice, conditions, expected value, generators, drop rates and fairness. Choose the right answer on each island.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { card: "The dock gate opens when key ∧ ¬alarm. The player has the key, and the alarm is on.", goal: "Does the gate open?", answer: "no: ¬alarm is false", choices: C(["no: ¬alarm is false", "yes: the key is true", "yes: one of them is true", "no: the key is false"]), good: "T ∧ ¬T = T ∧ F = F.", why: { "yes: one of them is true": "That is OR; AND needs both parts true." } },
+    { card: "The raft may sail when ¬(storm ∨ night).", goal: "Which condition is the same?", answer: "¬storm ∧ ¬night", choices: C(["¬storm ∧ ¬night", "¬storm ∨ ¬night", "storm ∧ night", "¬storm ∨ night"]), good: "De Morgan: the NOT goes in, and OR becomes AND.", why: { "¬storm ∨ ¬night": "With De Morgan the operator also swaps: OR becomes AND." } },
+    { card: "Two fair dice decide the wind. The raft reaches the island on a sum of 7.", goal: "What is P(sum = 7)?", answer: "1/6", choices: C(["1/6", "1/12", "7/36", "1/11"]), good: "6 of 36 pairs give 7: (1, 6), (2, 5), …, (6, 1).", why: { "1/11": "The 11 sums 2–12 are not equally likely." } },
+    { card: "The first die shows 6. The bonus needs a sum of 10 or more.", goal: "What is P(sum ≥ 10 | first is 6)?", answer: "1/2", choices: C(["1/2", "1/6", "6/36", "1/12"]), good: "Inside \"first is 6\", the second die needs 4, 5 or 6: 3 of 6.", why: { "6/36": "6/36 = 1/6 is P(sum ≥ 10) for all pairs; here we know the first die." } },
+    { card: "A crate gives 10 coins with probability 0.7 and 50 coins with probability 0.3.", goal: "What is the expected number of coins?", answer: "22", choices: C(["22", "30", "60", "15"]), good: "E = 10 × 0.7 + 50 × 0.3 = 7 + 15 = 22.", why: { "30": "(10 + 50) ÷ 2 ignores the probabilities." } },
+    { card: "An LCG computes x₁ = (5 · x₀ + 1) mod 8, with the seed x₀ = 3.", goal: "What is x₁?", answer: "0", choices: C(["0", "16", "2", "1"]), good: "5 · 3 + 1 = 16, and 16 mod 8 = 0.", why: { "16": "Take the remainder after dividing by 8." } },
+    { card: "A pearl drops with p = 0.1 on each dive. The player dives twice.", goal: "What is P(at least one pearl)?", answer: "0.19", choices: C(["0.19", "0.2", "0.01", "0.81"]), good: "1 − (1 − 0.1)² = 1 − 0.81 = 0.19.", why: { "0.2": "Adding 0.1 + 0.1 counts the case of two pearls twice.", "0.81": "0.81 is the chance of no pearl." } },
+    { card: "A 50 % shot missed four times in a row. The shots are independent.", goal: "What is the chance of a hit on the next shot?", answer: "50 %", choices: C(["50 %", "more than 50 %: it is due", "less than 50 %: bad luck", "100 %"]), good: "Independent tries have no memory: the gambler's fallacy.", why: { "more than 50 %: it is due": "That is the gambler's fallacy; only a pity timer or a bag changes it." } },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Island 1 is logic: the dock gate." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "The raft has reached every island." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

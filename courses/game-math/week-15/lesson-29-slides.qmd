@@ -1,0 +1,221 @@
+---
+title: "Course Revision"
+subtitle: "Lecture 29"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary truth-table de-morgan-laws conditional-probability expected-value seed weighted-random drop-rate shuffle-bag >}}
+
+## Six parts of the second half
+
+![](images/course-map-2.png)
+
+## 29.1 Logic and truth tables
+
+:::: {.columns}
+::: {.column width="50%"}
+- NOT, AND, OR, XOR and IF–THEN join propositions.
+- NOT comes first, then AND, then OR.
+- A truth table with n variables has 2^n^ rows.
+- **Do it:** Build the tables of p → q and ¬p ∨ q. Are they equivalent?
+:::
+::: {.column width="50%"}
+![](../week-09/images/tt-steps.png)
+:::
+::::
+
+## Example · The chest of Torch Hall
+
+The chest opens when (k ∨ c) ∧ ¬t: the key or the code, and no trap.
+**Does it open with k = F, c = T, t = F, and how many rows are true?**
+
+::: {.reveal}
+1. (F ∨ T) ∧ ¬F = T ∧ T = **T**: the chest opens.
+2. The table has 2^3^ = 8 rows.
+3. **Three rows** are true: (k, c) = (T, T), (T, F), (F, T), with t = F.
+:::
+
+## Live demo · Truth Table Lab
+
+{{< sim file="../week-09/sims/truth-table-lab.html" poster="../week-09/sims/truth-table-lab.png" title="Truth Table Lab: every case of a condition" task="**Show:** fill the table of a condition with three variables, column by column. **Ask:** which rows are the test cases that must open the door?" >}}
+
+## 29.2 Boolean algebra and rules
+
+:::: {.columns}
+::: {.column width="50%"}
+- De Morgan moves a NOT inside and swaps AND and OR.
+- Laws such as absorption make long conditions short.
+- In an else-if chain, the first true rule wins.
+- **Do it:** Simplify ¬(p ∧ ¬q). Which laws did you use?
+:::
+::: {.column width="50%"}
+![](../week-09/images/de-morgan.png)
+:::
+::::
+
+## Try it 1 · Logic and rules
+
+a) How does p ∧ q ∨ r group?
+b) What is ¬(a ∧ b) after De Morgan?
+c) Which rule is unreachable: if hp < 30, else if hp < 10?
+
+::: {.answer}
+a) (p ∧ q) ∨ r
+b) ¬a ∨ ¬b
+c) the rule hp < 10
+:::
+
+## 29.3 Probability and expected value
+
+:::: {.columns}
+::: {.column width="50%"}
+- P(A) is the number of outcomes in A over the number in S.
+- P(A | B) counts only inside B.
+- E(X) adds each value times its probability.
+- **Do it:** Find P(sum ≥ 10) with two dice. What is P(double | sum ≥ 10)?
+:::
+::: {.column width="50%"}
+![](../week-10/images/tree.png)
+:::
+::::
+
+## Example · Tokens and a dice stand
+
+Two tokens are drawn from 2 gold and 3 wood, and a dice stand costs 2 coins.
+**What is P(both gold), and is the stand fair if a 6 wins 6 coins?**
+
+::: {.reveal}
+1. P(both gold) = 2/5 × 1/4 = **1/10**.
+2. E(win) = 6 × 1/6 = 1 coin, so the gain is **−1 coin**.
+3. The stand is not fair; a fair price is **1 coin**.
+:::
+
+## 29.4 Random numbers and distributions
+
+:::: {.columns}
+::: {.column width="50%"}
+- An LCG computes each new number from the one before.
+- The same seed gives the same level.
+- A weight over the sum of all weights is a probability.
+- **Do it:** Find the item for r = 81 with weights 50, 30, 15, 5. Which is it?
+:::
+::: {.column width="50%"}
+![](../week-12/images/weighted.png)
+:::
+::::
+
+## Example · The daily cave and the loot
+
+An LCG has a = 5, c = 3, m = 16 and the seed 7, and the loot weights are 70, 25 and 5.
+**What are the first numbers, and which item does r = 93.4 give?**
+
+::: {.reveal}
+1. x~1~ = 38 mod 16 = **6**, then x~2~ = **1** and x~3~ = **8**.
+2. The cumulative weights are 70, 95 and 100.
+3. r = 93.4 lies between 70 and 95, so the item is **rare**.
+:::
+
+## Try it 2 · Chance and generators
+
+a) What is (5 · 7 + 3) mod 16?
+b) Which values does Random.Range(0, 4) give?
+c) What is the expected coins of a crate with 10 (0.7) or 50 (0.3)?
+
+::: {.answer}
+a) 6
+b) 0, 1, 2, 3
+c) 22
+:::
+
+## 29.5 Balance, fairness and generation
+
+:::: {.columns}
+::: {.column width="50%"}
+- At least one drop in n tries is 1 − (1 − p)^n^.
+- Independent tries have streaks and no memory.
+- Pity timers, shuffle bags and PRD limit the droughts.
+- **Do it:** Find P(at least one in 5 tries) for p = 0.2. Is it more than 0.5?
+:::
+::: {.column width="50%"}
+![](../week-12/images/at-least-one.png)
+:::
+::::
+
+## Live demo · Bag Lab
+
+{{< sim file="../week-13/sims/bag-lab.html" poster="../week-13/sims/bag-lab.png" title="Bag Lab: pure random, shuffle bag or PRD?" task="**Show:** run pure random, then a shuffle bag, and read the longest drought. **Ask:** why is the drought of the bag limited?" >}}
+
+## Example · A rare pearl
+
+A pearl drops with p = 0.05 in each dive.
+**What is P(at least one pearl in 20 dives)?**
+
+::: {.reveal}
+1. P(no pearl in 20 dives) = 0.95^20^ ≈ **0.36**.
+2. P(at least one) = 1 − 0.36 = **0.64**, not 100 %.
+3. A shuffle bag of 1 in 20 gives every player **one pearl per bag**.
+:::
+
+## 29.6 Solving and presenting a problem
+
+:::: {.columns}
+::: {.column width="50%"}
+- We solve in five steps: read, draw, tool, compute, check.
+- We present the problem, sketch, tool, steps and answer.
+- The answer is a sentence about the game.
+- **Do it:** Present the expected coins of weights 6, 3, 1 and values 10, 40, 200. What is the answer?
+:::
+::: {.column width="50%"}
+![](images/present-solution.png)
+:::
+::::
+
+## Try it 3 · Balance
+
+a) What is P(at least one drop) in 5 tries when p = 0.2?
+b) What is the longest drought of a shuffle bag with 1 crit in 4?
+c) How many draws does rejection sampling need when a quarter of the tiles are free?
+
+::: {.answer}
+a) about 0.67
+b) 6 attacks
+c) 4
+:::
+
+## Example · The pearl, presented
+
+A student presents the problem: p = 0.1 per dive, and 90 % of the players should have a pearl.
+**What does the student say in each part?**
+
+::: {.reveal}
+1. *Problem and tool:* how many dives for 90 %? The formula **1 − (1 − p)^n^**.
+2. *Steps:* n ≥ ln 0.1 / ln 0.9 ≈ 21.9, so **n = 22**.
+3. *Check and answer:* 1 − 0.9^22^ ≈ 0.90, so **nine of ten players** have a pearl after 22 dives.
+:::
+
+## Game challenge · Lucky Raft Finals
+
+{{< sim file="sims/raft-finals.html" poster="sims/raft-finals.png" title="Lucky Raft Finals: eight islands, eight ideas" kind="game" task="**The story:** the raft sails past eight islands, one for each idea of lectures 16–28. **Play:** solve the problem on each island to sail on." >}}
+
+## Try it 4 · Mixed (harder)
+
+a) The first die is a 6. What is P(sum ≥ 10)?
+b) How many dives give 90 % of the players a pearl when p = 0.1?
+c) A 25 % crit missed five times. What is the next chance?
+
+::: {.answer}
+a) 1/2
+b) 22
+c) 25 %
+:::
+
+## Summary
+
+- Logic and truth tables check every case of a rule.
+- De Morgan and the laws make conditions short and clear.
+- Probability and expected value measure chance and reward.
+- Seeds and weights control random numbers.
+- At least once, pity, bags and PRD balance the game.
+- A solution is presented in five parts, with the answer in game words.

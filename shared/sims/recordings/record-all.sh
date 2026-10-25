@@ -80,6 +80,7 @@ pilot-check|courses/game-math/week-14/sims/pilot-check.html|8|courses/game-math/
 cave-gen|courses/game-math/week-14/sims/cave-gen.html|10|courses/game-math/week-14/sims/cave-gen.gif
 event-deck|courses/game-math/week-14/sims/event-deck.html|8|courses/game-math/week-14/sims/event-deck.gif
 generator-doctor|courses/game-math/week-14/sims/generator-doctor.html|8|courses/game-math/week-14/sims/generator-doctor.gif
+raft-finals|courses/game-math/week-15/sims/raft-finals.html|8|courses/game-math/week-15/sims/raft-finals.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif

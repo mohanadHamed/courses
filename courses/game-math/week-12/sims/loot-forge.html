@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Loot Forge</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #ebfbee; border: 1.5px solid #2F9E44; border-radius: 10px; padding: 8px 12px; margin: 6px 0; } .sim .card code { font-size: .95rem; }</style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Loot Forge</h1>
+  <p class="hint">The loot designer of <i>Torch Hall</i> builds the random parts of the game. Answer each question of the forge.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { card: "Loot table: common 60, rare 30, epic 9, legendary 1.", goal: "P(epic)?", answer: "9 %", choices: C(["9 %", "9/60", "1/4", "90 %"]), good: "9 ÷ (60 + 30 + 9 + 1) = 9/100 = 9 %." },
+    { card: "Weights: sword 3, shield 1. (They do not add up to 100.)", goal: "P(shield)?", answer: "1/4", choices: C(["1/4", "1 %", "1/3", "3/4"]), good: "1 ÷ (3 + 1) = 1/4. Only the share of the sum counts." },
+    { card: "Cumulative weights: common 60, rare 90, epic 99, legendary 100. The random number is r = 93.5.", goal: "Which item drops?", answer: "epic", choices: C(["epic", "rare", "legendary", "common"]), good: "93.5 is from 90 to 99: epic." },
+    { card: "Damage should be 3 … 18 with most hits near 10, not wild swings.", goal: "Which formula?", answer: "the sum of three dice", choices: C(["the sum of three dice", "Random.Range(3, 19)", "one die × 3", "18 × Random.value"]), good: "A sum of dice is bell-shaped: middle values are common." },
+    { card: "Coins are scattered in a round room with radius = R · Random.value. Testers say they all lie near the centre.", goal: "The fix?", answer: "radius = R · √(Random.value)", choices: C(["radius = R · √(Random.value)", "radius = R · Random.value²", "a bigger room", "fewer coins"]), good: "The outer rings have more area, so they need more points: √r spreads them evenly." },
+    { card: "A weighted pick: r = Random.value * sum, then the code checks the items in order with r < cumulative.", goal: "What does an item with weight 0 do?", answer: "it never drops", choices: C(["it never drops", "it drops once", "it drops most often", "the game crashes"]), good: "Its part of the bar has length 0: no r falls into it." },
+  ];
+  rounds.forEach((r) => { r.why = {}; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: the chest loot table." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "The forge is cold: all loot is ready." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

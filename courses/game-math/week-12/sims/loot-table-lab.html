@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Loot Table Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim table.lt { border-collapse: collapse; width: 100%; margin: 6px 0; font-variant-numeric: tabular-nums; }
+    .sim table.lt td, .sim table.lt th { border: 1px solid #dee2e6; padding: 3px 6px; font-weight: 700; font-size: .9rem; }
+    .sim table.lt th { background: #ebfbee; color: #2b8a3e; }
+    .sim table.lt input[type=range] { width: 100%; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Loot Table Lab: weights and chances</h1>
+  <p class="hint">The chests of <i>Torch Hall</i> use a loot table. Change the weights; the bar shows where a random number from 0 to the sum of the weights lands. Then open many chests and compare.</p>
+  <table class="lt" id="tbl"></table>
+  <canvas id="c" aria-label="The cumulative bar and the counts of opened chests"></canvas>
+  <div class="bar" id="go"></div>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const IT = [{ n: "common", w: 60, col: "#2b8a3e" }, { n: "rare", w: 30, col: "#1c7ed6" }, { n: "epic", w: 9, col: "#7048e8" }, { n: "legendary", w: 1, col: "#e8590c" }];
+  let counts = IT.map(() => 0), opened = 0, lastR = null;
+  const sum = () => IT.reduce((a, x) => a + x.w, 0);
+  const TASKS = [
+    { q: "Task 1: Open 1000 chests with the weights 60, 30, 9, 1. Are the counts close to 600, 300, 90 and 10?", ok: () => opened >= 1000 && IT.map((x) => x.w).join() === "60,30,9,1" },
+    { q: "Task 2: The designer wants epic items in 5 % of the chests, with a sum of weights of 100. Change the weights.", ok: () => sum() > 0 && Math.abs(IT[2].w / sum() - 0.05) < 0.001 },
+    { q: "Task 3: Set the weight of legendary to 0. What is its probability now? Open 100 chests.", ok: () => IT[3].w === 0 && opened >= 100 },
+  ];
+  let ti = 0;
+  function pick() {
+    const r = Math.random() * sum(); lastR = r;
+    let acc = 0;
+    for (let i = 0; i < IT.length; i++) { acc += IT[i].w; if (r < acc) return i; }
+    return IT.length - 1;
+  }
+  function open(n) { if (!sum()) return; for (let k = 0; k < n; k++) counts[pick()]++; opened += n; upd(); }
+  function reset() { counts = IT.map(() => 0); opened = 0; lastR = null; }
+  function table() {
+    let acc = 0;
+    $("tbl").innerHTML = "<tr><th>item</th><th>weight</th><th>probability</th><th>cumulative</th></tr>" + IT.map((x, i) => { acc += x.w; return `<tr><td style="color:${x.col}">${x.n}</td><td><input type="range" min="0" max="100" value="${x.w}" data-i="${i}" aria-label="weight of ${x.n}"> ${x.w}</td><td>${sum() ? Kit.fmt(x.w / sum() * 100, 1) + " %" : "—"}</td><td>${acc}</td></tr>`; }).join("") + `<tr><td>sum</td><td>${sum()}</td><td>100 %</td><td></td></tr>`;
+    $("tbl").querySelectorAll("input").forEach((inp) => inp.addEventListener("change", () => { IT[+inp.dataset.i].w = +inp.value; reset(); upd(); }));
+  }
+  Kit.buttons($("go"), [1, 100, 1000].map((k) => ({ k, label: "Open ×" + k })).concat([{ k: "r", label: "Reset" }]), (k) => (k === "r" ? (reset(), upd()) : open(+k)));
+  function upd() {
+    table();
+    $("calc").textContent = `chests opened: ${opened}` + (opened ? " · counts: " + IT.map((x, i) => `${x.n} ${counts[i]} (expected ${Math.round(opened * x.w / (sum() || 1))})`).join(", ") : "");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: probability = weight ÷ sum of the weights.";
+    $("msg").textContent = m + (IT[3].w === 0 ? "A weight of 0 means the item can never drop." : "The weights do not have to add up to 100: only the share of the sum counts.");
+    paint();
+  }
+  const cv = Kit.canvas($("c"), (W) => 150);
+  function paint() {
+    const c = cv.ctx, W = cv.W, H = cv.H, x0 = 10, x1 = W - 10, S = sum() || 1;
+    c.clearRect(0, 0, W, H);
+    let acc = 0;
+    IT.forEach((x) => { const a = x0 + (x1 - x0) * acc / S, b = x0 + (x1 - x0) * (acc + x.w) / S; c.fillStyle = x.col; c.fillRect(a, 14, b - a, 28); if (b - a > 44) Kit.text(c, x.n, (a + b) / 2, 33, 11, "#fff"); acc += x.w; });
+    Kit.text(c, "0", x0, 56, 10, "#868e96", "left", 700); Kit.text(c, String(sum()), x1, 56, 10, "#868e96", "right", 700);
+    if (lastR !== null) { const X = x0 + (x1 - x0) * lastR / S; c.fillStyle = "#c92a2a"; c.beginPath(); c.moveTo(X - 6, 4); c.lineTo(X + 6, 4); c.lineTo(X, 13); c.fill(); Kit.text(c, "r = " + Kit.fmt(lastR, 1), X, 56, 11, "#c92a2a"); }
+    const bw = (x1 - x0) / IT.length, max = Math.max(1, ...counts, ...IT.map((x) => opened * x.w / S));
+    IT.forEach((x, i) => { const h = 70 * counts[i] / max, e = 70 * opened * x.w / S / max, bx = x0 + i * bw; c.fillStyle = x.col; c.fillRect(bx + bw * 0.25, H - 8 - h, bw * 0.5, h); c.strokeStyle = "#c92a2a"; c.setLineDash([4, 3]); c.beginPath(); c.moveTo(bx + bw * 0.15, H - 8 - e); c.lineTo(bx + bw * 0.85, H - 8 - e); c.stroke(); c.setLineDash([]); });
+  }
+  window.addEventListener("resize", () => setTimeout(paint, 60));
+  window.LT = { open, set: (ws) => { ws.forEach((w, i) => (IT[i].w = w)); reset(); upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

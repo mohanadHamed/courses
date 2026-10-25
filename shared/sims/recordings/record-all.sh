@@ -71,6 +71,10 @@ block-lab|courses/computing-systems/week-06/sims/block-lab.html|9|courses/comput
 disk-doctor|courses/computing-systems/week-06/sims/disk-doctor.html|9|courses/computing-systems/week-06/sims/disk-doctor.gif
 name-checker|courses/computing-systems/week-06/sims/name-checker.html|8|courses/computing-systems/week-06/sims/name-checker.gif
 test-day|courses/computing-systems/week-06/sims/test-day.html|8|courses/computing-systems/week-06/sims/test-day.gif
+stack-builder|courses/computing-systems/week-07/sims/stack-builder.html|9|courses/computing-systems/week-07/sims/stack-builder.gif
+pause-please|courses/computing-systems/week-07/sims/pause-please.html|8|courses/computing-systems/week-07/sims/pause-please.gif
+power-lab|courses/computing-systems/week-07/sims/power-lab.html|10|courses/computing-systems/week-07/sims/power-lab.gif
+two-phones|courses/computing-systems/week-07/sims/two-phones.html|8|courses/computing-systems/week-07/sims/two-phones.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
 ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif

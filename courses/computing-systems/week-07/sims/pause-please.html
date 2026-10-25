@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Pause, Please!</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Pause, Please!</h1>
+  <p class="hint">Rami tests <i>Pocket Quest 1.2</i> on phone <b>P5</b> (Android) and on <b>P8</b> (an iPhone). Things happen during the test. Say what the OS does with the game, and what the game must do.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const S = ["not running", "foreground", "background", "suspended", "ended"];
+  const rounds = [
+    { from: 0, to: 1, ev: "Rami taps the icon", goal: "Rami taps the <b>Pocket Quest</b> icon on P5. In which state is the game now?",
+      choices: C(["foreground: on the screen, running", "background: running, not seen", "suspended: in RAM, no CPU time", "ended: not in RAM"]), answer: "foreground: on the screen, running",
+      good: "The OS loads the game into RAM and gives it the screen: it is the foreground app (lecture 9).", why: { "background: running, not seen": "He can see it and play it: it is in the foreground." } },
+    { from: 1, to: 2, ev: "a call arrives", goal: "A <b>call</b> arrives in the middle of level 3. What must the game do first?",
+      choices: C(["pause and save the progress", "keep running at full speed", "delete its cache", "ask for the microphone"]), answer: "pause and save the progress",
+      good: "The OS tells the game it is leaving the foreground (Android: onPause; iOS: will resign active). The game pauses and saves.", why: { "keep running at full speed": "The player cannot see the game; the enemies would win while he talks." } },
+    { from: 2, to: 3, ev: "a few seconds pass", goal: "On <b>P8 (iPhone)</b>, the game stays in the background for a few seconds. What does iOS do with it?",
+      choices: C(["suspends it: it stays in RAM but gets no CPU time", "gives it more CPU time", "moves it to the cloud", "shows it on top of the call"]), answer: "suspends it: it stays in RAM but gets no CPU time",
+      good: "iOS suspends most apps soon after they leave the screen. This saves battery and CPU. Android also stops games that are not seen.", why: { "gives it more CPU time": "Background apps get less CPU time, not more." } },
+    { from: 3, to: 4, ev: "RAM is low", goal: "Rami opens 10 other apps on P5 (4 GB RAM). <b>RAM is low.</b> What may the OS do to the game?",
+      choices: C(["end it to free its RAM", "add more RAM", "move the game to the foreground", "nothing, a game is never ended"]), answer: "end it to free its RAM",
+      good: "When RAM is low, the OS ends background apps (Android: the low-memory killer). Only the saved progress survives.", why: { "add more RAM": "The RAM of a phone is fixed (lecture 7)." } },
+    { from: 4, to: 1, ev: "Rami opens the game again", goal: "Rami opens the game again after it was ended. What does he see if the game <b>saved in round 2</b>?",
+      choices: C(["level 3 from the saved point", "the error 'out of memory'", "the game still running in level 3 without a restart", "a new phone"]), answer: "level 3 from the saved point",
+      good: "The game starts again (a cold start) and loads the saved progress. Saving on pause is the rule on both platforms.", why: { "the game still running in level 3 without a restart": "The game was ended: it starts again and loads its save." } },
+  ];
+  Kit.game({
+    rounds, cols: 1, colsPhone: 1, animMs: 800, still: true,
+    intro: "Round 1 is the story of the lesson: the test of Pocket Quest begins.",
+    canvas: (W) => (W < 460 ? 120 : 110),
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fffdf5"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const cur = st.done && st.ok ? r.to : r.from, w = (W - 20) / 5;
+      S.forEach((s, i) => {
+        const x = 10 + i * w, on = i === cur;
+        Kit.rrect(c, x + 3, 30, w - 6, 44, 10, on ? "#A86700" : "#fff9db", "#A86700", 2);
+        Kit.text(c, s, x + w / 2, 57, W < 460 ? 10 : 13, on ? "#fff" : "#7a5a00");
+      });
+      Kit.text(c, "event: " + r.ev, W / 2, 18, 12, "#7a6a60");
+      Kit.text(c, st.done && st.ok ? "Pocket Quest is now: " + S[r.to] : "Pocket Quest is: " + S[r.from], W / 2, 96, 13, "#2a211c");
+    },
+  });
+})();
+</script>
+</body>
+</html>

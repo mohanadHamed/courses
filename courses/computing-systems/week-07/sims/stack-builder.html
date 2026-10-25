@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Stack Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .wrap2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+    @media (max-width: 560px) { .sim .wrap2 { grid-template-columns: 1fr; } }
+    .sim .stack { display: flex; flex-direction: column-reverse; gap: 5px; min-height: 280px; padding: 8px; border: 2px dashed var(--sim-border); border-radius: 12px; background: #fffdf5; }
+    .sim .layer { padding: 8px 10px; border-radius: 9px; color: #fff; font-weight: 800; line-height: 1.25; }
+    .sim .layer small { display: block; font-weight: 600; opacity: .92; }
+    .sim .hw { background: #495057; }
+    .sim .pool { display: flex; flex-direction: column; gap: 6px; }
+    .sim .pool button { text-align: left; }
+    .sim .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .sim .tabs button.on { background: var(--sim-accent); color: #fff; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Stack Builder: the layers of Android and iOS</h1>
+  <p class="hint">A mobile OS is built in layers, from the hardware up to the apps. Pick a phone, then click the layers from the <b>bottom</b> (next to the hardware) to the <b>top</b> (the apps).</p>
+  <div class="tabs" id="tabs"></div>
+  <div class="wrap2">
+    <div><b>Your stack</b> (bottom → top)<div class="stack" id="stack"></div></div>
+    <div><b>Layers to place</b><div class="pool" id="pool"></div></div>
+  </div>
+  <p class="message" id="msg"></p>
+  <div class="row"><button type="button" id="reset" class="ghost">Start again</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const OS = {
+    android: { name: "Android (phone P5)", col: ["#2b8a3e", "#2f9e44", "#37b24d", "#40c057", "#51cf66"], layers: [
+      ["Linux kernel", "processes, memory, drivers, power"],
+      ["Hardware abstraction layer (HAL)", "one standard way to reach the camera, sensors, audio"],
+      ["Native libraries and Android Runtime (ART)", "graphics (OpenGL ES, Vulkan), media; ART runs the app code"],
+      ["Java/Kotlin API framework", "activities, notifications, permissions, the window manager"],
+      ["Apps", "Pocket Quest, the camera app, the settings app"]] },
+    ios: { name: "iOS (phone P8, an iPhone)", col: ["#1864ab", "#1971c2", "#1c7ed6", "#228be6", "#339af0"], layers: [
+      ["Core OS (XNU kernel)", "processes, memory, drivers, security"],
+      ["Core Services", "files, network, iCloud, location"],
+      ["Media", "graphics with Metal, audio, video"],
+      ["Cocoa Touch (UIKit)", "touch, screens, notifications, permissions"],
+      ["Apps", "Pocket Quest, the camera app, the settings app"]] },
+  };
+  const $ = (id) => document.getElementById(id);
+  let os = "android", placed = [];
+  const order = [2, 4, 0, 3, 1];          // the pool is shown in a mixed order
+  function tabs() {
+    Kit.buttons($("tabs"), Object.keys(OS).map((k) => ({ k, label: OS[k].name })), (k) => { os = k; placed = []; draw(); }, "ghost");
+    document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.k === os));
+  }
+  function draw() {
+    tabs();
+    const L = OS[os].layers;
+    $("stack").innerHTML = '<div class="layer hw">Hardware<small>the SoC, RAM, storage, screen, sensors</small></div>' +
+      placed.map((i) => `<div class="layer" style="background:${OS[os].col[i]}">${L[i][0]}<small>${L[i][1]}</small></div>`).join("");
+    Kit.buttons($("pool"), order.filter((i) => !placed.includes(i)).map((i) => ({ k: String(i), label: L[i][0] })), (k) => pick(+k));
+    if (!placed.length) say("Which layer sits right on the hardware?");
+  }
+  function say(t, bad) { $("msg").textContent = t; $("msg").classList.toggle("bad", !!bad); }
+  function pick(i) {
+    const L = OS[os].layers;
+    if (i !== placed.length) { Kit.bad(); say(`Not yet: “${L[i][0]}” needs the layer below it first. Which layer comes next above “${placed.length ? L[placed.length - 1][0] : "Hardware"}”?`, true); return; }
+    placed.push(i); Kit.good(); draw();
+    say(placed.length === L.length ? `Done: this is the ${os === "android" ? "Android" : "iOS"} stack. Each layer uses only the layer below it. Now try the other phone.` : `Right: ${L[i][0]} — ${L[i][1]}.`);
+  }
+  window.SB = { os: (k) => { os = k; placed = []; draw(); }, pick: (name) => pick(OS[os].layers.findIndex((l) => l[0] === name)) };
+  $("reset").addEventListener("click", () => { placed = []; draw(); });
+  draw();
+})();
+</script>
+</body>
+</html>

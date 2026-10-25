@@ -1,0 +1,139 @@
+---
+title: "File Systems, Resources and Device Management"
+subtitle: "Lecture 11"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary file-system file-path file-metadata storage-block size-on-disk file-system-format device-driver system-resources >}}
+
+## 11.1 Where a game keeps its files
+
+:::: {.columns}
+::: {.column width="50%"}
+- The file system keeps files and folders with their names, paths, sizes and dates.
+- The game folder holds the program and the packs of levels and music.
+- The player's save file is in the user's own folder, so it stays after an update.
+- **Do it:** Open one folder in C:\\Program Files. What is the path of its biggest file?
+:::
+::: {.column width="50%"}
+![](images/game-files.png)
+:::
+::::
+
+## Try it 1 · Files and paths
+
+a) Where is the save file slot1.sav of Omar?
+b) What does the extension .pak tell about a file?
+c) Why is the save file outside the game folder?
+
+::: {.answer}
+a) C:\\Users\\Omar\\Documents\\PocketQuest\\Saves
+b) It is a pack of game data.
+c) so that it stays after an update
+:::
+
+## 11.2 Blocks and formats
+
+:::: {.columns}
+::: {.column width="50%"}
+- A drive is divided into blocks, and a file always uses whole blocks.
+- A file of 1 KB takes 4 KB on disk when the blocks are 4 KB.
+- FAT32 refuses any file of 4 GB or more, but exFAT does not.
+- **Do it:** Make a one-line text file. What are its size and its size on disk?
+:::
+::: {.column width="50%"}
+![](images/blocks.png)
+:::
+::::
+
+## Example · Many small files
+
+An old version had 10 000 files of 1 KB, and the blocks are 4 KB.
+**How much space did they take on disk, and how much as one pack?**
+
+::: {.reveal}
+1. The data is 10 000 × 1 KB = 10 000 KB, about 10 MB.
+2. On disk, each file takes a block: 10 000 × 4 KB, about **39 MB**.
+3. As one pack of 10 000 KB, they take only about **10 MB**.
+:::
+
+## Live demo · Block Lab
+
+{{< sim file="sims/block-lab.html" poster="sims/block-lab.png" title="Block Lab: size and size on disk" task="**Show:** save a note, a picture and ten small files, then pack them. **Ask:** how many blocks did the pack save?" >}}
+
+## Try it 2 · Blocks and formats
+
+a) A file has 6 KB, and the blocks are 4 KB. What is its size on disk?
+b) Why does a 5 GB file not copy to a FAT32 stick with 16 GB free?
+c) Which format fits a USB stick for Windows and Mac?
+
+::: {.answer}
+a) 8 KB
+b) FAT32 allows no file of 4 GB or more.
+c) exFAT
+:::
+
+## 11.3 Devices and resources
+
+:::: {.columns}
+::: {.column width="50%"}
+- The OS finds a new device and loads its driver by itself: plug and play.
+- It shares the CPU, memory, storage, battery, network and devices between apps.
+- A phone on a USB cable asks what the cable may do.
+- **Do it:** Connect your phone by USB and choose file transfer. Where are your photos?
+:::
+::: {.column width="50%"}
+![](images/device-management.png)
+:::
+::::
+
+## Example · A new gamepad
+
+Ali connects a new gamepad, and the game does not see it.
+**Where does he look, and what is the fix?**
+
+::: {.reveal}
+1. He opens Device Manager and finds the gamepad with a yellow sign.
+2. The sign means that the driver is missing or does not work.
+3. He installs the driver, and the game reads the buttons.
+:::
+
+## Try it 3 · Devices
+
+a) The phone charges, but the PC shows no files. What do you change?
+b) What does the OS do in plug and play?
+c) Which system resources do apps share?
+
+::: {.answer}
+a) the USB mode to file transfer
+b) It finds the device and loads its driver.
+c) CPU time, memory, storage, battery, network and devices
+:::
+
+## Game challenge · Disk Doctor
+
+{{< sim file="sims/disk-doctor.html" poster="sims/disk-doctor.png" title="Disk Doctor: file and device problems of a game" kind="game" task="**The story:** the Byte Bay team collects file and device problems of Pocket Quest: a FAT32 stick, a lost save, small files, a gamepad. **Play:** find the cause or the fix of each problem." >}}
+
+## Try it 4 · The cases (harder)
+
+The facts: FAT32 allows no file of 4 GB or more, and the blocks are 4 KB. Ali's gamepad shows a yellow sign.
+
+a) Why does the 5 GB levels.pak not copy to Omar's FAT32 stick?
+b) How many blocks does a pack of 10 000 KB need?
+c) What is the fix for Ali's gamepad?
+
+::: {.answer}
+a) The file is 4 GB or more.
+b) 2 500 blocks
+c) Install or update the driver.
+:::
+
+## Summary
+
+- The file system keeps files with their paths, sizes and dates.
+- The save files of a player sit in the user's folders, not in the game folder.
+- A file uses whole blocks, so its size on disk is rounded up.
+- The format matters, because FAT32 refuses files of 4 GB or more.
+- The OS finds devices, loads drivers and shares every resource between apps.

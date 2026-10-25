@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Seed Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .92rem; }
+    .sim .bar input[type=number] { width: 110px; font: inherit; padding: 4px 6px; border-radius: 8px; border: 1.5px solid #ced4da; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Seed Lab: the same seed, the same level</h1>
+  <p class="hint">The cave levels of <i>Torch Hall</i> are made by a generator with a seed: walls, coins and bats. Type a seed and build the level. Try the daily challenge, and a common bug.</p>
+  <div class="bar"><label>Seed <input type="number" id="seed" value="42" min="0"></label><button type="button" id="build">Build level</button><button type="button" class="ghost" id="daily">Daily challenge</button><button type="button" class="ghost" id="rnd">A new random seed</button></div>
+  <label class="bar"><input type="checkbox" id="bug"> Bug: every bat makes its own generator with the time as the seed</label>
+  <canvas id="c" aria-label="The cave level"></canvas>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  // mulberry32: a small, good generator; the same seed gives the same numbers.
+  function gen(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const COLS = 16, ROWS = 9;
+  let level = null;
+  const builds = [];
+  const TASKS = [
+    { q: "Task 1: Build the level with seed 42 two times. Is it the same?", ok: () => builds.filter((b) => b.seed === 42 && !b.bug).length >= 2 },
+    { q: "Task 2: Build seed 43. How much of the level changes for a seed that is only one bigger?", ok: () => builds.some((b) => b.seed === 43) },
+    { q: "Task 3: Press Daily challenge. Why do all players get the same cave today?", ok: () => builds.some((b) => b.daily) },
+    { q: "Task 4: Switch on the bug and build. What is wrong with the bats?", ok: () => builds.some((b) => b.bug) },
+  ];
+  let ti = 0;
+  function build(seed, opts = {}) {
+    const R = gen(seed), cells = [];
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) { const edge = r === 0 || c === 0 || r === ROWS - 1 || c === COLS - 1; cells.push(edge || R() < 0.22 ? "wall" : R() < 0.08 ? "coin" : "floor"); }
+    const bats = [], fakeTime = 1730000000;
+    for (let i = 0; i < 5; i++) {
+      const Rb = opts.bug ? gen(fakeTime) : R;   // the bug: every bat seeds its own generator with the same time
+      let k; do { k = Math.floor(Rb() * cells.length); } while (cells[k] === "wall" && !opts.bug);
+      bats.push({ k, hp: 5 + Math.floor(Rb() * 6) });
+    }
+    level = { seed, cells, bats, bug: !!opts.bug };
+    builds.push({ seed, daily: !!opts.daily, bug: !!opts.bug });
+    upd(opts);
+  }
+  function upd(opts = {}) {
+    const coins = level.cells.filter((x) => x === "coin").length, walls = level.cells.filter((x) => x === "wall").length;
+    $("calc").textContent = `seed ${level.seed} · walls ${walls} · coins ${coins} · bats: ${level.bats.map((b) => "hp " + b.hp).join(", ")}`;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: one generator, seeded once; the same seed for a shared or repeated level.";
+    m += level.bug ? "All five bats are in the same place with the same health: each got a new generator with the same time, so each got the same numbers. Seed one generator once." : opts.daily ? "The seed comes from today's date, so every player builds the same cave today, and a new one tomorrow." : "The level depends only on the seed: share the seed and you share the level.";
+    $("msg").textContent = m;
+    paint();
+  }
+  const cv = Kit.canvas($("c"), (W) => W * ROWS / COLS);
+  function paint() {
+    if (!level) return;
+    const c = cv.ctx, W = cv.W, H = cv.H, w = W / COLS, h = H / ROWS;
+    level.cells.forEach((t, i) => { const x = (i % COLS) * w, y = Math.floor(i / COLS) * h; c.fillStyle = t === "wall" ? "#495057" : "#e9ecef"; c.fillRect(x, y, w + 0.5, h + 0.5); if (t === "coin") { c.fillStyle = "#fab005"; c.beginPath(); c.arc(x + w / 2, y + h / 2, Math.min(w, h) * 0.22, 0, 7); c.fill(); } });
+    level.bats.forEach((b, i) => { const x = (b.k % COLS) * w + w / 2 + (level.bug ? i * 2 : 0), y = Math.floor(b.k / COLS) * h + h / 2; c.fillStyle = "#7048e8"; c.beginPath(); c.ellipse(x, y, w * 0.38, h * 0.22, 0, 0, 7); c.fill(); });
+  }
+  window.addEventListener("resize", () => setTimeout(paint, 60));
+  const dateSeed = () => { const d = new Date(); return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); };
+  $("build").addEventListener("click", () => build(+$("seed").value || 0, { bug: $("bug").checked }));
+  $("daily").addEventListener("click", () => { const sd = dateSeed(); $("seed").value = sd; build(sd, { daily: true, bug: $("bug").checked }); });
+  $("rnd").addEventListener("click", () => { const sd = Math.floor(Math.random() * 1e6); $("seed").value = sd; build(sd, { bug: $("bug").checked }); });
+  window.SD = { build: (sd, bug) => { $("seed").value = sd; $("bug").checked = !!bug; build(sd, { bug: !!bug }); }, daily: () => $("daily").click() };
+  build(42);
+  builds.length = 0;
+})();
+</script>
+</body>
+</html>

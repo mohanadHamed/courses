@@ -60,6 +60,9 @@ raft-odds|courses/game-math/week-10/sims/raft-odds.html|8|courses/game-math/week
 conditional-lab|courses/game-math/week-11/sims/conditional-lab.html|8|courses/game-math/week-11/sims/conditional-lab.gif
 crate-lab|courses/game-math/week-11/sims/crate-lab.html|10|courses/game-math/week-11/sims/crate-lab.gif
 treasure-odds|courses/game-math/week-11/sims/treasure-odds.html|11|courses/game-math/week-11/sims/treasure-odds.gif
+lcg-lab|courses/game-math/week-11/sims/lcg-lab.html|8|courses/game-math/week-11/sims/lcg-lab.gif
+seed-lab|courses/game-math/week-11/sims/seed-lab.html|8|courses/game-math/week-11/sims/seed-lab.gif
+seed-detective|courses/game-math/week-11/sims/seed-detective.html|8|courses/game-math/week-11/sims/seed-detective.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif

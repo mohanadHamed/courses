@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Video Settings Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar > span.l { min-width: 88px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Video Settings Lab: export the trailer</h1>
+  <p class="hint">Night Owl Games exports videos of <i>Rooftop Rescue</i> for three targets. Choose the target, then the settings. The preview shows the motion and the compression; the list shows if the file fits the target.</p>
+  <div class="bar"><span class="l">Target</span><span id="tg" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Resolution</span><span id="res" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Frame rate</span><span id="fps" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Codec</span><span id="codec" style="display:contents"></span></div>
+  <div class="bar" id="sl"></div>
+  <canvas id="c" aria-label="A preview of the exported video"></canvas>
+  <p class="calc" id="calc"></p>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="scene.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const RES = { "1280 × 720": [1280, 720], "1920 × 1080": [1920, 1080], "3840 × 2160": [3840, 2160], "1080 × 1920 (tall)": [1080, 1920] };
+  const CODECS = { "H.264 in MP4": 1, "H.265 in MP4": 1.5, "ProRes in MOV": 3 };
+  const s = { tg: "Store trailer", res: "1280 × 720", fps: 60, codec: "ProRes in MOV", br: 4, len: 45 };
+  const size = () => (s.codec === "ProRes in MOV" ? proresBr() : s.br) * s.len / 8;
+  const proresBr = () => { const [w, h] = RES[s.res]; return Math.round(147 * (w * h) / (1920 * 1080) * s.fps / 30); };
+  const bpp = () => { const [w, h] = RES[s.res]; return (s.codec === "ProRes in MOV" ? 10 : s.br * CODECS[s.codec]) * 1e6 / (w * h * s.fps); };
+  const quality = () => (bpp() >= 0.1 ? "good" : bpp() >= 0.06 ? "a little blocky in fast action" : "blocky");
+  const TARGETS = {
+    "Store trailer": () => [[s.res === "1920 × 1080", "1920 × 1080, wide (16:9)"], [s.fps === 30, "30 fps"], [s.codec === "H.264 in MP4", "H.264 in MP4: plays everywhere"], [s.len <= 30, "30 s or shorter"], [quality() === "good", "good quality (no blocks)"], [size() <= 100, "file under 100 MB"]],
+    "Social clip": () => [[s.res === "1080 × 1920 (tall)", "1080 × 1920, tall (9:16)"], [s.fps === 30, "30 fps"], [s.codec === "H.264 in MP4", "H.264 in MP4"], [s.len >= 15 && s.len <= 30, "15–30 s"], [quality() === "good", "good quality"], [size() <= 60, "file under 60 MB"]],
+    "Edit master": () => [[s.res === "1920 × 1080" || s.res === "3840 × 2160", "1920 × 1080 or more"], [s.fps === 60, "60 fps, as recorded"], [s.codec === "ProRes in MOV", "ProRes: best for further editing"], [s.len >= 60, "the whole capture (60 s or more)"]],
+  };
+  const done = {};
+  const TASKS = [
+    { q: "Task 1: Make the store trailer pass all six checks.", ok: () => done["Store trailer"] },
+    { q: "Task 2: Choose the social clip and make it pass. What changes?", ok: () => done["Social clip"] },
+    { q: "Task 3: Choose the edit master. How big is the file now?", ok: () => done["Edit master"] },
+  ];
+  let ti = 0;
+  function tabs(id, items, key, num) {
+    Kit.buttons($(id), items.map((k) => ({ k: String(k), label: num ? k + " fps" : k })), (k) => { s[key] = num ? +k : k; upd(); });
+    $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === String(s[key])));
+  }
+  const brIn = Kit.slider($("sl"), "Bitrate", 1, 50, 1, s.br, (v) => { s.br = v; upd(); }, (v) => v + " Mbit/s");
+  const lenIn = Kit.slider($("sl"), "Length", 5, 120, 5, s.len, (v) => { s.len = v; upd(); }, (v) => v + " s");
+  function upd() {
+    tabs("tg", Object.keys(TARGETS), "tg"); tabs("res", Object.keys(RES), "res"); tabs("fps", [24, 30, 60], "fps", true); tabs("codec", Object.keys(CODECS), "codec");
+    brIn.disabled = s.codec === "ProRes in MOV";
+    const br = s.codec === "ProRes in MOV" ? proresBr() : s.br;
+    $("calc").textContent = `${RES[s.res].join(" × ")} · ${s.fps} fps · ${br} Mbit/s × ${s.len} s ÷ 8 = ${Kit.fmt(size(), 1)} MB · quality: ${quality()}`;
+    const items = TARGETS[s.tg]();
+    $("chk").innerHTML = items.map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    if (items.every((x) => x[0])) done[s.tg] = true;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the target decides the settings.";
+    if (!m) m = s.codec === "ProRes in MOV" ? "ProRes keeps almost all the detail, so the files are very big: good for editing, not for players." : quality() === "blocky" ? "Too few bits for so many pixels per second: the action turns into blocks. Raise the bitrate, or lower the resolution or the frame rate." : size() > 100 ? "The file is big. Shorter, or a lower bitrate." : "";
+    $("msg").textContent = m;
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.min(250, W * 0.42));
+  let lastDraw = 0;
+  Kit.loop((now) => {
+    const c = cv.ctx, W = cv.W, H = cv.H, [rw, rh] = RES[s.res];
+    if (now - lastDraw < 1000 / s.fps) return;   // the preview updates only s.fps times per second
+    lastDraw = now;
+    c.fillStyle = "#212529"; c.fillRect(0, 0, W, H);
+    const k = Math.min((W - 20) / rw, (H - 20) / rh), w = rw * k, h = rh * k;
+    const q = bpp(), block = q >= 0.1 ? 0 : q >= 0.06 ? 4 : q >= 0.03 ? 8 : 13;
+    const t = Math.floor(now / 1000 * s.fps) / s.fps;
+    RS.draw(c, (W - w) / 2, (H - h) / 2, w, h, t * 2.2, { block });
+    Kit.text(c, `${s.fps} fps`, 12, 18, 12, "#e9ecef", "left");
+  });
+  window.VS = { set: (o) => { Object.assign(s, o); if (o.br) { brIn.value = o.br; brIn.dispatchEvent(new Event("input")); } if (o.len) { lenIn.value = o.len; lenIn.dispatchEvent(new Event("input")); } upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

@@ -134,6 +134,10 @@ mix-desk|courses/digital-media/week-09/sims/mix-desk.html|9|courses/digital-medi
 sound-check|courses/digital-media/week-09/sims/sound-check.html|8|courses/digital-media/week-09/sims/sound-check.gif
 critique-builder|courses/digital-media/week-09/sims/critique-builder.html|8|courses/digital-media/week-09/sims/critique-builder.gif
 critics-choice|courses/digital-media/week-09/sims/critics-choice.html|8|courses/digital-media/week-09/sims/critics-choice.gif
+video-settings-lab|courses/digital-media/week-10/sims/video-settings-lab.html|9|courses/digital-media/week-10/sims/video-settings-lab.gif
+export-desk|courses/digital-media/week-10/sims/export-desk.html|10|courses/digital-media/week-10/sims/export-desk.gif
+timeline-lab|courses/digital-media/week-10/sims/timeline-lab.html|11|courses/digital-media/week-10/sims/timeline-lab.gif
+editor-tour|courses/digital-media/week-10/sims/editor-tour.html|8|courses/digital-media/week-10/sims/editor-tour.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

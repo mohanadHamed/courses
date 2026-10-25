@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Wave Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .controls label { min-width: 45%; }
+    .sim .controls input[type="range"] { flex: 1; min-width: 80px; }
+    .sim .out { font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.5; }
+    .sim .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .sim .tabs button.on { background: var(--sim-accent); color: #fff; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Wave Lab: from a sound wave to numbers</h1>
+  <p class="hint">A sound is a wave. Its <b>frequency</b> (Hz) is the pitch, its <b>amplitude</b> is the loudness. A computer measures the wave many times per second (the <b>sample rate</b>) and keeps each measure with a number of bits (the <b>bit depth</b>). Tap <b>Play</b> to hear the tone.</p>
+  <canvas id="c" aria-label="A sound wave with its samples"></canvas>
+  <div class="controls" id="sl"></div>
+  <div class="tabs" id="wave"></div>
+  <div class="tabs" id="rate"></div>
+  <div class="tabs" id="bits"></div>
+  <div class="tabs" id="ch"></div>
+  <div class="row"><button type="button" id="play">▶ Play the tone</button></div>
+  <p class="out" id="out"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const s = { f: 440, a: 0.8, wave: "sine", rate: 8000, bits: 4, ch: 1 };
+  const $ = (id) => document.getElementById(id);
+  const FREQS = [110, 220, 440, 880, 1760];
+  const shape = (w, t) => w === "sine" ? Math.sin(2 * Math.PI * t) : w === "square" ? (t % 1 < 0.5 ? 1 : -1) : 2 * (t % 1) - 1;
+  function tabs(id, items, key, label) {
+    Kit.buttons($(id), items.map((v) => ({ k: String(v), label: label(v) })), (k) => { s[key] = isNaN(+k) ? k : +k; tabs(id, items, key, label); show(); });
+    $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === String(s[key])));
+  }
+  function show() {
+    const bytes = s.rate * (s.bits / 8) * s.ch, perMin = bytes * 60 / (1024 * 1024);
+    const db = 20 * Math.log10(s.a);
+    $("out").innerHTML = `Pitch ${s.f} Hz · loudness ${s.a > 0 ? Kit.fmt(db, 1) : "−∞"} dB (0 dB = the top) · ${s.rate} samples per second, ${2 ** s.bits} levels<br>` +
+      `Size: ${s.rate} × ${s.bits / 8} byte × ${s.ch} = ${bytes.toLocaleString("en")} bytes per second, about ${Kit.fmt(perMin, 1)} MB per minute`;
+  }
+  Kit.slider($("sl"), "frequency", 0, 4, 1, 2, (i) => { s.f = FREQS[i]; show(); }, (i) => FREQS[i] + " Hz");
+  Kit.slider($("sl"), "amplitude", 0, 1, 0.1, s.a, (v) => { s.a = v; show(); }, (v) => Kit.fmt(v, 1));
+  tabs("wave", ["sine", "square", "sawtooth"], "wave", (v) => v);
+  tabs("rate", [8000, 22050, 44100, 48000], "rate", (v) => (v / 1000) + " kHz");
+  tabs("bits", [4, 8, 16, 24], "bits", (v) => v + "-bit");
+  tabs("ch", [1, 2], "ch", (v) => (v === 1 ? "mono" : "stereo"));
+  let audio = null;
+  $("play").addEventListener("click", () => {
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain();
+      o.type = s.wave; o.frequency.value = s.f; g.gain.value = 0.15 * s.a;
+      o.connect(g); g.connect(audio.destination);
+      g.gain.setValueAtTime(0.15 * s.a, audio.currentTime + 0.6); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.8);
+      o.start(); o.stop(audio.currentTime + 0.8);
+    } catch (_) {}
+  });
+  window.WL = { set: (o) => { Object.assign(s, o); const ins = document.querySelectorAll("#sl input"); ins[0].value = FREQS.indexOf(s.f); ins[1].value = s.a; ins.forEach((i) => i.dispatchEvent(new Event("input")));
+    tabs("wave", ["sine", "square", "sawtooth"], "wave", (v) => v); tabs("rate", [8000, 22050, 44100, 48000], "rate", (v) => (v / 1000) + " kHz"); tabs("bits", [4, 8, 16, 24], "bits", (v) => v + "-bit"); tabs("ch", [1, 2], "ch", (v) => (v === 1 ? "mono" : "stereo")); show(); } };
+  const cv = Kit.canvas($("c"), (W) => Math.min(260, W * 0.5));
+  let last = "";
+  Kit.loop(() => {
+    const k = JSON.stringify(s) + cv.W + cv.H; if (k === last) return; last = k;
+    const c = cv.ctx, W = cv.W, H = cv.H, mid = H / 2, A = H * 0.42;
+    c.fillStyle = "#fbf8ff"; c.fillRect(0, 0, W, H);
+    c.strokeStyle = "#e5dbff"; c.lineWidth = 1;
+    for (const y of [mid - A, mid, mid + A]) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); }
+    Kit.text(c, "0 dB", 26, mid - A - 4, 11, "#9C36B5"); Kit.text(c, "time →", W - 34, mid + A + 16, 11, "#7a6a80");
+    const dur = 2 / 440;                       // the window shows two waves of 440 Hz (about 4.5 ms)
+    const X = (t) => (t / dur) * W;
+    c.strokeStyle = "#9C36B5"; c.lineWidth = 2.2; c.beginPath();
+    for (let px = 0; px <= W; px++) { const t = (px / W) * dur, y = mid - A * s.a * shape(s.wave, t * s.f); px ? c.lineTo(px, y) : c.moveTo(px, y); }
+    c.stroke();
+    const n = Math.round(dur * s.rate), L = 2 ** s.bits;
+    const q = (v) => Math.round(((v + 1) / 2) * (L - 1)) / (L - 1) * 2 - 1;
+    c.strokeStyle = "#e8590c"; c.lineWidth = 1.6; c.beginPath();
+    let py = null;
+    for (let i = 0; i <= n; i++) {
+      const t = i / s.rate, x = X(t), y = mid - A * q(s.a * shape(s.wave, t * s.f));
+      if (py === null) c.moveTo(x, y); else { c.lineTo(x, py); c.lineTo(x, y); }
+      py = y;
+    }
+    c.stroke();
+    if (n <= 120) { c.fillStyle = "#e8590c"; for (let i = 0; i <= n; i++) { const t = i / s.rate; c.beginPath(); c.arc(X(t), mid - A * q(s.a * shape(s.wave, t * s.f)), 3, 0, 7); c.fill(); } }
+    Kit.text(c, "purple: the sound wave · orange: the samples the computer keeps", W / 2, 14, 11.5, "#5f3dc4");
+  });
+  show();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Clean Take</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Clean Take</h1>
+  <p class="hint">Yara edits the takes for <i>Rooftop Rescue</i> before she exports them. Look at each waveform and choose the right edit.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="take.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { take: { lead: 0.9, gain: 0.7 }, fix: { lead: 0.08, gain: 0.7 }, goal: "Pasha's meow starts almost <b>one second late</b>. In the game, the cat would meow after the jump. What does Yara do?",
+      choices: C(["trim the silence at the start", "fade in for one second", "amplify by 20 dB", "export it as it is"]), answer: "trim the silence at the start",
+      good: "Select the silence before the meow and delete it; leave a few milliseconds so that it does not start with a click.", why: { "fade in for one second": "The silence stays; it only gets a fade." } },
+    { take: { gain: 0.7, click: true }, fix: { gain: 0.7 }, goal: "There is a <b>click</b> at the very end of the take. What removes it?",
+      choices: C(["a short fade-out at the end", "Normalize", "a higher sample rate", "stereo"]), answer: "a short fade-out at the end",
+      good: "A fade-out of 0.1–0.2 s takes the end smoothly to zero; the click is gone.", why: { Normalize: "Normalize makes the click louder too." } },
+    { take: { gain: 0.7, hum: 0.08 }, fix: { gain: 0.7 }, goal: "A low <b>hum</b> runs under the whole take. Which tool?",
+      choices: C(["Noise Reduction with a noise profile", "Trim", "Fade in", "Change the name"]), answer: "Noise Reduction with a noise profile",
+      good: "Select a part with only the hum, get the noise profile, then apply Noise Reduction to the whole take.", why: { Trim: "The hum is under the meow too; trimming cannot remove it." } },
+    { take: { gain: 0.2 }, fix: { gain: 0.89 }, goal: "The clean take is <b>too quiet</b>: its loudest peak is about −14 dB. What now?",
+      choices: C(["Normalize the peak to −1 dB", "Amplify by +20 dB", "record in stereo", "add a fade-out"]), answer: "Normalize the peak to −1 dB",
+      good: "Normalize raises the whole take until the loudest peak is at −1 dB: loud, but no clipping.", why: { "Amplify by +20 dB": "+20 dB is 10 times louder: the peaks would hit 0 dB and clip." } },
+    { take: { gain: 1, clip: true }, fix: { gain: 1, clip: true }, goal: "This take is <b>clipped</b>: the tops are flat (red marks). Which is the best fix?",
+      choices: C(["record it again at a lower level", "Normalize it to −1 dB", "fade it out", "Noise Reduction"]), answer: "record it again at a lower level",
+      good: "Clipped tops are lost: no edit brings them back. Record again with the peaks near −6 dB.", why: { "Normalize it to −1 dB": "Lowering it keeps the flat tops; the sound stays broken." } },
+    { take: { gain: 0.89 }, fix: { gain: 0.89 }, goal: "The take is clean. Which <b>file name</b> fits the game's sound folder?",
+      choices: C(["sfx_pasha_meow_01.wav", "meow final NEW.wav", "Recording 3.wav", "cat.mp3.wav"]), answer: "sfx_pasha_meow_01.wav",
+      good: "Type, what, version, and the format: the programmer finds it at once.", why: { "Recording 3.wav": "It says nothing about the sound." } },
+  ];
+  Kit.game({
+    rounds, cols: 1, colsPhone: 1, animMs: 800, still: true,
+    intro: "Round 1 is the story of the lesson: Pasha's meow from the morning session.",
+    canvas: (W) => Math.min(120, W * 0.3),
+    draw(c, W, H, now, r, st) {
+      c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const fixed = st.done && st.ok;
+      const d = fixed ? (r.d2 || (r.d2 = TK.make(r.fix))) : (r.d1 || (r.d1 = TK.make(r.take)));
+      TK.draw(c, 0, 0, W, H, d, { color: fixed ? "#2b8a3e" : "#9C36B5" });
+    },
+  });
+})();
+</script>
+</body>
+</html>

@@ -99,6 +99,10 @@ animatic-player|courses/digital-media/week-06/sims/animatic-player.html|10|cours
 cut-or-play|courses/digital-media/week-06/sims/cut-or-play.html|9|courses/digital-media/week-06/sims/cut-or-play.gif
 panel-composer|courses/digital-media/week-06/sims/panel-composer.html|9|courses/digital-media/week-06/sims/panel-composer.gif
 cat-catch|courses/digital-media/week-06/sims/cat-catch.html|9|courses/digital-media/week-06/sims/cat-catch.gif
+wave-lab|courses/digital-media/week-07/sims/wave-lab.html|10|courses/digital-media/week-07/sims/wave-lab.gif
+sound-booth|courses/digital-media/week-07/sims/sound-booth.html|8|courses/digital-media/week-07/sims/sound-booth.gif
+wave-editor|courses/digital-media/week-07/sims/wave-editor.html|9|courses/digital-media/week-07/sims/wave-editor.gif
+clean-take|courses/digital-media/week-07/sims/clean-take.html|9|courses/digital-media/week-07/sims/clean-take.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

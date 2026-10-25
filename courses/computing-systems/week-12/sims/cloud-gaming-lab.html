@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Cloud Gaming Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin: 5px 0; font-weight: 700; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim ul.chk { list-style: none; padding: 0; margin: 6px 0; font-weight: 700; line-height: 1.6; } .sim ul.chk li.ok { color: #2b8a3e; } .sim ul.chk li.no { color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Cloud Gaming Lab: is the network good enough?</h1>
+  <p class="hint">In cloud gaming, <i>Pocket Quest</i> runs on a server and the player sees a video stream. Change the player's network and the stream quality. The needs are <b>example values</b>: 720p about 10 Mbps, 1080p about 20 Mbps, 4K about 40 Mbps; the stream adds about 40 ms to the ping.</p>
+  <div class="bar"><span>Stream quality</span><span id="res" style="display:contents"></span></div>
+  <div class="bar" id="sl"></div>
+  <canvas id="c" aria-label="The race as the player sees it"></canvas>
+  <ul class="chk" id="chk"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const NEED = { "720p": 10, "1080p": 20, "4K": 40 };
+  const s = { res: "720p", bw: 8, ping: 60 };
+  const total = () => s.ping + 40;
+  const sharp = () => s.bw >= NEED[s.res];
+  const TASKS = [
+    { q: "Task 1: The 720p picture is blocky. Raise the bandwidth until it is sharp. How many Mbps are needed?", ok: () => s.res === "720p" && sharp() },
+    { q: "Task 2: Switch to 1080p and find the bandwidth for a sharp picture.", ok: () => s.res === "1080p" && sharp() },
+    { q: "Task 3: The total delay is too long for racing. Lower the ping until the race feels good (total under 80 ms). Which ping is enough?", ok: () => total() <= 80 && sharp() },
+    { q: "Task 4: Try 4K with a home line of 25 Mbps. What happens to the picture?", ok: () => s.res === "4K" && s.bw >= 20 && s.bw <= 30 },
+  ];
+  let ti = 0, ready = false;
+  const sl = {};
+  sl.bw = Kit.slider($("sl"), "Bandwidth", 2, 60, 1, s.bw, (v) => { s.bw = v; if (ready) upd(); }, (v) => v + " Mbps");
+  sl.ping = Kit.slider($("sl"), "Ping to the server", 5, 150, 5, s.ping, (v) => { s.ping = v; if (ready) upd(); }, (v) => v + " ms");
+  const cv = Kit.canvas($("c"), (W) => Math.min(260, W * 0.5));
+  const off = document.createElement("canvas"), oc = off.getContext("2d");
+  const steer = (t) => Math.sin(t / 900) * 0.8 + Math.sin(t / 370) * 0.2;
+  function scene(c, W, H, now) {
+    c.fillStyle = "#74c0fc"; c.fillRect(0, 0, W, H * 0.35);
+    c.fillStyle = "#69db7c"; c.fillRect(0, H * 0.35, W, H);
+    const rw = W * 0.5, rx = W / 2 - rw / 2;
+    c.fillStyle = "#495057"; c.beginPath(); c.moveTo(W / 2 - 10, H * 0.35); c.lineTo(W / 2 + 10, H * 0.35); c.lineTo(rx + rw, H); c.lineTo(rx, H); c.closePath(); c.fill();
+    c.fillStyle = "#fff";
+    for (let k = 0; k < 8; k++) { const p = ((k / 8 + now / 1600) % 1), y = H * 0.35 + (H * 0.65) * p * p; c.fillRect(W / 2 - 1.5 - p * 3, y, 3 + p * 6, 6 + p * 16); }
+    const shown = steer(now - total()), cx = W / 2 + shown * rw * 0.32, cy = H * 0.8;
+    Kit.rrect(c, cx - 26, cy - 20, 52, 40, 8, "#e03131");
+    c.fillStyle = "#212529"; c.fillRect(cx - 30, cy - 14, 6, 12); c.fillRect(cx + 24, cy - 14, 6, 12); c.fillRect(cx - 30, cy + 6, 6, 12); c.fillRect(cx + 24, cy + 6, 6, 12);
+    c.fillStyle = "#a5d8ff"; c.fillRect(cx - 16, cy - 14, 32, 10);
+  }
+  Kit.loop((now) => {
+    const c = cv.ctx, W = cv.W, H = cv.H;
+    const q = sharp() ? 1 : Math.max(0.06, (s.bw / NEED[s.res]) ** 2 * 0.35);
+    const w = Math.max(16, Math.round(W * q)), h = Math.max(10, Math.round(H * q));
+    off.width = w; off.height = h;
+    oc.setTransform(w / W, 0, 0, h / H, 0, 0);
+    scene(oc, W, H, now);
+    c.imageSmoothingEnabled = false;
+    c.clearRect(0, 0, W, H);
+    c.drawImage(off, 0, 0, W, H);
+    const rw = W * 0.5, ix = W / 2 + steer(now) * rw * 0.32;
+    c.strokeStyle = "#ffe066"; c.lineWidth = 4; c.setLineDash([6, 5]);
+    c.beginPath(); c.moveTo(ix, H * 0.62); c.lineTo(ix, H * 0.97); c.stroke(); c.setLineDash([]);
+    Kit.rrect(c, 8, 8, 196, 48, 8, "rgba(255,255,255,.88)");
+    Kit.text(c, "yellow line: your steering now", 106, 27, 11.5, "#a86700", "center", 800);
+    Kit.text(c, `the car on screen: ${total()} ms late`, 106, 46, 11.5, "#c92a2a", "center", 800);
+  });
+  function tabs() { Kit.buttons($("res"), Object.keys(NEED).map((k) => ({ k, label: k })), (k) => { s.res = k; upd(); }); $("res").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.res)); }
+  function upd() {
+    tabs();
+    const T = total(), feel = T <= 80 ? "good for racing" : T <= 120 ? "fine for slow games, late for racing" : "too late for most games";
+    $("chk").innerHTML = [[sharp(), `picture: ${sharp() ? "sharp" : "blocky"} (${s.res} needs about ${NEED[s.res]} Mbps, the line has ${s.bw})`], [T <= 80, `total delay: ${s.ping} + 40 = ${T} ms, ${feel}`]]
+      .map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: cloud gaming needs enough bandwidth for the picture and a low ping for the controls.";
+    $("msg").textContent = m + "Cloud gaming moves the work to the server, but the network becomes part of the platform.";
+  }
+  window.CG = { set: (o) => { Object.entries(o).forEach(([k, v]) => { if (sl[k]) { sl[k].value = v; s[k] = v; sl[k].dispatchEvent(new Event("input")); } else s[k] = v; }); upd(); } };
+  ready = true; upd();
+})();
+</script>
+</body>
+</html>

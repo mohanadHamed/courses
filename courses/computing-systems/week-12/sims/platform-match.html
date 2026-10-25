@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Platform Match</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #fff9db; border: 1.5px solid #A86700; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Platform Match</h1>
+  <p class="hint">Byte Bay's team reads six notes about platforms. For each note, choose the platform or the word that fits.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { card: "Every player has the same GPU and memory. To make a game, the studio needs a dev kit, and the game must pass certification.", goal: "Which platform is it?", answer: "console", choices: C(["console", "gaming PC", "mobile", "cloud gaming"]), good: "Fixed hardware, a dev kit and certification: a console.", why: { "gaming PC": "PC players have very different hardware, and no dev kit is needed." } },
+    { card: "Players have anything from an old laptop to a strong desktop, so the game needs a settings menu with low, medium and high.", goal: "Which platform is it?", answer: "gaming PC", choices: C(["gaming PC", "console", "cloud gaming", "mobile"]), good: "Many configurations: the PC needs graphics settings and much testing." },
+    { card: "Touch controls, short sessions on the bus, battery and heat limits; most games are free-to-play.", goal: "Which platform is it?", answer: "mobile", choices: C(["mobile", "console", "gaming PC", "cloud gaming"]), good: "Touch, battery and short sessions: mobile." },
+    { card: "A cheap TV stick plays a big game: the game runs on a server and the stick shows a video stream. A slow network spoils it.", goal: "Which platform is it?", answer: "cloud gaming", choices: C(["cloud gaming", "console", "mobile", "gaming PC"]), good: "The server does the work; the network becomes part of the platform.", why: { "console": "A console runs the game itself, without a stream." } },
+    { card: "A player on PC and a friend on a console want to race in the same match.", goal: "Which feature do they need?", answer: "cross-play", choices: C(["cross-play", "cross-save", "porting", "certification"]), good: "Cross-play: players on different platforms play together.", why: { "cross-save": "Cross-save shares progress, not the match." } },
+    { card: "Byte Bay adapts the mobile version of Pocket Quest for the PC: new controls, new menus and graphics settings.", goal: "What is this work called?", answer: "porting", choices: C(["porting", "cross-play", "streaming", "free-to-play"]), good: "Porting: adapting a game to run well on another platform." },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the first note of the lesson: a console." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "All notes are matched." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Platform Profiles</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; }
+    .sim .bar .lab { min-width: 92px; }
+    .sim .bar button.on.a { background: #1c7ed6; color: #fff; }
+    .sim .bar button.on.b { background: #e8590c; color: #fff; }
+    .sim .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0; }
+    .sim .facts div { border: 2px solid #dee2e6; border-radius: 10px; padding: 6px 10px; font-size: .88rem; font-weight: 600; line-height: 1.4; }
+    .sim .facts div.a { border-color: #1c7ed6; } .sim .facts div.b { border-color: #e8590c; }
+    .sim .facts b { display: block; font-size: 1rem; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+    @media (max-width: 520px) { .sim .facts { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Platform Profiles: compare two platforms</h1>
+  <p class="hint">Byte Bay wants to bring <i>Pocket Quest</i> to more players. Choose platform A (blue) and platform B (orange) and compare them. The ratings from 1 to 5 are <b>typical examples</b>; real devices differ.</p>
+  <div class="bar"><span class="lab">Platform A</span><span id="pa" style="display:contents"></span></div>
+  <div class="bar"><span class="lab">Platform B</span><span id="pb" style="display:contents"></span></div>
+  <canvas id="c" aria-label="Ratings of the two platforms"></canvas>
+  <div class="facts"><div class="a" id="fa"></div><div class="b" id="fb"></div></div>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const AX = ["same hardware for all", "player reach", "graphics power", "portability", "needs a fast network"];
+  const P = {
+    "Console": { r: [5, 3, 5, 2, 2], input: "controller (handhelds: built-in controls)", way: "dev kit from the maker, certification before release", money: "premium games, also free-to-play", limit: "dev kit and certification take time and money" },
+    "Gaming PC": { r: [1, 4, 5, 1, 2], input: "keyboard and mouse, or a controller", way: "open PC stores; no dev kit needed", money: "premium games, free-to-play, subscriptions", limit: "many configurations: settings menus and much testing" },
+    "Mobile": { r: [1, 5, 2, 5, 2], input: "touch screen, sensors", way: "app stores with a review of each update", money: "mostly free-to-play with purchases or ads", limit: "battery, heat, small screen, weak phones" },
+    "Cloud gaming": { r: [5, 3, 4, 4, 5], input: "controller, touch or keyboard on any screen", way: "a cloud gaming service runs the game on its servers", money: "subscriptions or bought games", limit: "needs a fast, stable network; latency" },
+  };
+  const s = { a: "Console", b: "Mobile", seen: new Set() };
+  const TASKS = [
+    { q: "Task 1: Compare the console (A) and the gaming PC (B). Which one has the same hardware for all players?", ok: () => pair("Console", "Gaming PC") },
+    { q: "Task 2: Compare mobile and console. Which one reaches more players? Which one has more graphics power?", ok: () => pair("Mobile", "Console") },
+    { q: "Task 3: Choose cloud gaming. What does it need most, and why can a weak device play?", ok: () => s.a === "Cloud gaming" || s.b === "Cloud gaming" },
+    { q: "Task 4: Compare the gaming PC and mobile. Which one is easier to carry, and which one needs more testing?", ok: () => pair("Gaming PC", "Mobile") },
+  ];
+  const pair = (x, y) => (s.a === x && s.b === y) || (s.a === y && s.b === x);
+  let ti = 0;
+  const cv = Kit.canvas($("c"), (W) => (W < 520 ? 300 : 250));
+  function row(id, key, cls) {
+    Kit.buttons($(id), Object.keys(P).map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); });
+    $(id).querySelectorAll("button").forEach((b) => { b.classList.toggle("on", b.dataset.k === s[key]); b.classList.add(cls); });
+  }
+  function fact(k) { const p = P[k]; return `<b>${k}</b>Input: ${p.input}<br>Getting in: ${p.way}<br>Money: ${p.money}<br>Main limit: ${p.limit}`; }
+  function draw() {
+    const c = cv.ctx, W = cv.W, H = cv.H;
+    c.clearRect(0, 0, W, H);
+    const lw = W < 520 ? 120 : 170, x0 = lw + 10, bw = W - x0 - 30, rh = (H - 20) / AX.length;
+    AX.forEach((ax, i) => {
+      const y = 10 + i * rh;
+      Kit.wrap(c, ax, 0, y + rh / 2 - 6, lw, 12.5, "#2a2f2c", "left", 800);
+      [["a", "#1c7ed6"], ["b", "#e8590c"]].forEach(([k, col], j) => {
+        const v = P[s[k]].r[i], yy = y + 6 + j * (rh / 2 - 4);
+        Kit.rrect(c, x0, yy, bw, rh / 2 - 8, 4, "#f1f3f5");
+        Kit.rrect(c, x0, yy, bw * v / 5, rh / 2 - 8, 4, col);
+        Kit.text(c, String(v), x0 + bw * v / 5 + 12, yy + (rh / 2 - 8) / 2 + 4, 12, col, "center", 800);
+      });
+    });
+  }
+  function upd() {
+    row("pa", "a", "a"); row("pb", "b", "b");
+    $("fa").innerHTML = fact(s.a); $("fb").innerHTML = fact(s.b);
+    draw();
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: each platform has strengths and limits; the game decides which ones matter.";
+    const d = AX.map((ax, i) => [ax, P[s.a].r[i] - P[s.b].r[i]]).sort((x, y) => Math.abs(y[1]) - Math.abs(x[1]))[0];
+    $("msg").textContent = m + (s.a === s.b ? "Choose two different platforms." : `The biggest difference: ${d[0]} (${s.a} ${P[s.a].r[AX.indexOf(d[0])]}, ${s.b} ${P[s.b].r[AX.indexOf(d[0])]}).`);
+  }
+  window.addEventListener("resize", draw);
+  window.PP = { pick: (a, b) => { if (a) s.a = a; if (b) s.b = b; upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

@@ -116,6 +116,9 @@ scale-sim|courses/computing-systems/week-11/sims/scale-sim.html|11|courses/compu
 cloud-match|courses/computing-systems/week-11/sims/cloud-match.html|8|courses/computing-systems/week-11/sims/cloud-match.gif
 cloud-cost|courses/computing-systems/week-11/sims/cloud-cost.html|8|courses/computing-systems/week-11/sims/cloud-cost.gif
 cloud-planner|courses/computing-systems/week-11/sims/cloud-planner.html|8|courses/computing-systems/week-11/sims/cloud-planner.gif
+platform-profiles|courses/computing-systems/week-12/sims/platform-profiles.html|8|courses/computing-systems/week-12/sims/platform-profiles.gif
+cloud-gaming-lab|courses/computing-systems/week-12/sims/cloud-gaming-lab.html|10|courses/computing-systems/week-12/sims/cloud-gaming-lab.gif
+platform-match|courses/computing-systems/week-12/sims/platform-match.html|8|courses/computing-systems/week-12/sims/platform-match.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
 ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif

@@ -1,0 +1,228 @@
+---
+title: "Mathematical Logic: Propositions and Logical Operators"
+subtitle: "Lecture 16"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary proposition truth-value boolean-variable negation conjunction disjunction exclusive-or implication operator-precedence >}}
+
+## 16.1 Propositions
+
+:::: {.columns}
+::: {.column width="50%"}
+- A proposition is a statement that is either true or false.
+- In game code, a proposition is a bool such as hasKey.
+- Orders, questions and opinions are not propositions.
+- **Do it:** Write three propositions about a racing game. Which one is true now?
+:::
+::: {.column width="50%"}
+![](images/propositions.png)
+:::
+::::
+
+## Try it 1 · Propositions
+
+a) Is "The player has the key." a proposition?
+b) Is "Open the door!" a proposition?
+c) Is "3 > 5" a proposition, and what is its value?
+
+::: {.answer}
+a) Yes, it is true or false.
+b) No, it is an order.
+c) Yes, and it is false.
+:::
+
+## 16.2 NOT, AND and OR
+
+:::: {.columns}
+::: {.column width="50%"}
+- NOT p is true when p is false, and in C# it is !p.
+- p AND q is true only when both are true: p && q.
+- p OR q is true when at least one is true: p || q.
+- **Do it:** Try the four cases in Logic Lab. When is p AND q true?
+:::
+::: {.column width="50%"}
+![](images/not-and-or.png)
+:::
+::::
+
+## Example · Two doors
+
+The player has the key (p = T) but no torch (q = F).
+**Which doors open, and does the trap fire?**
+
+::: {.reveal}
+1. The iron door needs p ∧ q: T ∧ F = **F**, so it stays shut.
+2. The wooden door needs p ∨ q: T ∨ F = **T**, so it opens.
+3. The trap fires on ¬q: ¬F = **T**, so it fires.
+:::
+
+## Live demo · Logic Lab
+
+{{< sim file="sims/logic-lab.html" poster="sims/logic-lab.png" title="Logic Lab: NOT, AND, OR, XOR and IF–THEN" task="**Show:** go through the four cases of p and q and read every row. **Ask:** in which single case is IF p THEN q false?" >}}
+
+## Try it 2 · NOT, AND, OR
+
+a) p = T and q = F. What is p ∧ q?
+b) p = T and q = F. What is p ∨ q?
+c) p = F and q = F. What is p ∨ q?
+
+::: {.answer}
+a) false
+b) true
+c) false
+:::
+
+## 16.3 XOR: exactly one
+
+:::: {.columns}
+::: {.column width="50%"}
+- p XOR q is true when exactly one of the two is true.
+- When both are true or both are false, XOR is false.
+- In C#, XOR of two bools is p ^ q.
+- **Do it:** Is "a sword or a bow, one at a time" OR or XOR? Why?
+:::
+::: {.column width="50%"}
+![](images/xor-implies.png)
+:::
+::::
+
+## Try it 3 · XOR
+
+a) p = T and q = T. What is p XOR q?
+b) p = F and q = T. What is p XOR q?
+c) Which operator does the rule "the alarm rings when a door or a window opens" need?
+
+::: {.answer}
+a) false
+b) true
+c) OR
+:::
+
+## 16.4 IF–THEN
+
+:::: {.columns}
+::: {.column width="50%"}
+- p → q is false only when p is true and q is false.
+- It has the same value as ¬p ∨ q.
+- When p is false, the rule says nothing, so p → q is true.
+- **Do it:** Which case breaks "if the level is finished, all coins are collected"?
+:::
+::: {.column width="50%"}
+![](images/xor-implies.png)
+:::
+::::
+
+## Example · Checking the crown rule
+
+The rule says: "If the player has the crown, then the boss is defeated."
+**Which case is a bug, and how does the code find it?**
+
+::: {.reveal}
+1. Crown and boss defeated: T → T = T, so the rule is kept.
+2. Crown and boss alive: T → F = **F**, so this is the bug.
+3. The code checks **hasCrown && !bossDead** and reports the bug.
+:::
+
+## Try it 4 · IF–THEN
+
+a) When is p → q false?
+b) p = F and q = F. What is p → q?
+c) Which expression has the same value as p → q?
+
+::: {.answer}
+a) when p is true and q is false
+b) true
+c) ¬p ∨ q
+:::
+
+## 16.5 Brackets and order
+
+:::: {.columns}
+::: {.column width="50%"}
+- The order is NOT first, then AND, then OR.
+- Brackets are always computed first.
+- So p ∧ q ∨ r means (p ∧ q) ∨ r.
+- **Do it:** p = T, q = F, r = T. What is (p ∨ q) ∧ r?
+:::
+::: {.column width="50%"}
+![](images/precedence.png)
+:::
+::::
+
+## Example · The last gate
+
+The boss is alive (F), the player has no key (F), but a torch (T).
+**Does the gate open with and without brackets?**
+
+::: {.reveal}
+1. With brackets: F ∧ (F ∨ T) = F ∧ T = **F**, so the gate stays shut.
+2. Without brackets: (F ∧ F) ∨ T = F ∨ T = **T**, so the gate opens.
+3. The second one is a bug, so the rule needs the brackets.
+:::
+
+## Try it 5 · Brackets
+
+The facts are p = T, q = F and r = T.
+
+a) What is p ∨ q ∧ r?
+b) What is ¬p ∨ ¬q?
+c) Which operator is computed first, AND or OR?
+
+::: {.answer}
+a) true
+b) true
+c) AND
+:::
+
+## 16.6 Logic in game code
+
+:::: {.columns}
+::: {.column width="50%"}
+- Every if and while in a game checks a condition.
+- && and || stop early when the result is already known.
+- So enemy != null && enemy.isAlive never crashes without an enemy.
+- **Do it:** Write the condition "jump when on the ground and not stunned".
+:::
+::: {.column width="50%"}
+![](images/logic-code.png)
+:::
+::::
+
+## Try it 6 · Code
+
+a) Which condition means "jump when on the ground and not stunned"?
+b) Which condition means "warn when the health is below 20 or the time below 10"?
+c) Why must enemy != null come first in the condition?
+
+::: {.answer}
+a) onGround && !stunned
+b) health < 20 || time < 10
+c) && stops early, so isAlive is never read without an enemy.
+:::
+
+## Game challenge · Door Logic
+
+{{< sim file="sims/door-logic.html" poster="sims/door-logic.png" title="Door Logic: the condition for each door" kind="game" task="**The story:** in the dungeon of Torch Hall, every door, trap and lever has a rule in words. **Play:** choose the condition that the game code must check." >}}
+
+## Try it 7 · The last gate (harder)
+
+a) Which condition opens the gate for a defeated boss and the key or a torch?
+b) Which condition checks that the crown rule is kept?
+c) Which operator does the lever with "exactly one switch up" need?
+
+::: {.answer}
+a) bossDead && (hasKey || hasTorch)
+b) !hasCrown || bossDead
+c) XOR, written left ^ right
+:::
+
+## Summary
+
+- A proposition is true or false, and in code it is a bool.
+- AND needs both, OR at least one, and XOR exactly one.
+- p → q is false only when p is true and q is false.
+- NOT comes first, then AND, then OR, and brackets change the order.
+- In code, && and || stop early, so the safety check goes first.

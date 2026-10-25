@@ -196,7 +196,12 @@
     });
     snd.addEventListener("click", () => { Kit.sound = !Kit.sound; snd.textContent = "Sound: " + (Kit.sound ? "on" : "off"); });
     start();
-    if (cv && o.draw) Kit.loop((now) => { const c = cv.ctx; c.clearRect(0, 0, cv.W, cv.H); o.draw(c, cv.W, cv.H, now, st.over ? null : cur(), st); });
+    // o.still: the picture changes only with the round and the answer, so it is drawn only then.
+    let last = "";
+    if (cv && o.draw) Kit.loop((now) => {
+      if (o.still) { const k = [st.i, st.over, st.pick, st.done, st.ok, cv.W, cv.H].join("|"); if (k === last) return; last = k; }
+      const c = cv.ctx; c.clearRect(0, 0, cv.W, cv.H); o.draw(c, cv.W, cv.H, now, st.over ? null : cur(), st);
+    });
     return { st, cur, start, cv };
   };
 

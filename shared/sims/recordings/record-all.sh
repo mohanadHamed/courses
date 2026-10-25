@@ -75,6 +75,10 @@ dialogue-doctor|courses/digital-media/week-04/sims/dialogue-doctor.html|9|course
 rooftop-rescue|courses/digital-media/week-04/sims/rooftop-rescue.html|11|courses/digital-media/week-04/sims/rooftop-rescue.gif
 voice-match|courses/digital-media/week-04/sims/voice-match.html|8|courses/digital-media/week-04/sims/voice-match.gif
 scene-cutter|courses/digital-media/week-04/sims/scene-cutter.html|10|courses/digital-media/week-04/sims/scene-cutter.gif
+frame-lab|courses/digital-media/week-05/sims/frame-lab.html|9|courses/digital-media/week-05/sims/frame-lab.gif
+shot-caller|courses/digital-media/week-05/sims/shot-caller.html|9|courses/digital-media/week-05/sims/shot-caller.gif
+board-builder|courses/digital-media/week-05/sims/board-builder.html|10|courses/digital-media/week-05/sims/board-builder.gif
+board-fixer|courses/digital-media/week-05/sims/board-fixer.html|9|courses/digital-media/week-05/sims/board-fixer.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

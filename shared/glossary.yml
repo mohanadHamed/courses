@@ -487,6 +487,41 @@ rotation-matrix:
   ar: مصفوفة الدوران
   def: The 2 × 2 matrix with the rows (cos θ, −sin θ) and (sin θ, cos θ); multiplying a point by it turns the point by θ around the origin.
 
+homogeneous-coordinates:
+  en: homogeneous coordinates
+  ar: الإحداثيات المتجانسة
+  def: Coordinates with one extra number w, (x, y, 1) in 2D or (x, y, z, 1) in 3D, so that a translation can be written as a matrix.
+
+translation-matrix:
+  en: translation matrix
+  ar: مصفوفة الإزاحة
+  def: The 3 × 3 (2D) or 4 × 4 (3D) matrix with 1 on the main diagonal and the move (tx, ty) in the last column.
+
+local-space:
+  en: local space (object space)
+  ar: الفضاء المحلي (فضاء الجسم)
+  def: Coordinates measured from an object's own origin and axes, for example a cannon at (2, 1) on its ship.
+
+camera-space:
+  en: camera space (view space)
+  ar: فضاء الكاميرا
+  def: Coordinates measured from the camera, so that the camera is at the origin and looks along one axis.
+
+transform-hierarchy:
+  en: parent and child (hierarchy)
+  ar: التسلسل الهرمي (الأب والابن)
+  def: Objects attached to other objects; a child's world matrix is its parent's matrix times its own local matrix.
+
+trs-matrix:
+  en: TRS matrix
+  ar: مصفوفة TRS
+  def: The one matrix of an object made from its translation, rotation and scale, M = T × R × S; the scale acts first.
+
+rotation-axis:
+  en: rotation axis (yaw, pitch, roll)
+  ar: محور الدوران
+  def: The line that a 3D object turns around; turning around y is yaw (left and right), around x pitch (up and down), around z roll.
+
 # -------------------------------------------------------- computing-systems
 
 computing-system:

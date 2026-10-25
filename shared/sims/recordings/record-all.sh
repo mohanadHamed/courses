@@ -41,6 +41,10 @@ transform-lab|courses/game-math/week-06/sims/transform-lab.html|9|courses/game-m
 sky-steps|courses/game-math/week-06/sims/sky-steps.html|10|courses/game-math/week-06/sims/sky-steps.gif
 rotate-lab|courses/game-math/week-06/sims/rotate-lab.html|9|courses/game-math/week-06/sims/rotate-lab.gif
 drawbridge|courses/game-math/week-06/sims/drawbridge.html|10|courses/game-math/week-06/sims/drawbridge.gif
+matrix-chain|courses/game-math/week-07/sims/matrix-chain.html|8|courses/game-math/week-07/sims/matrix-chain.gif
+cannon-cove|courses/game-math/week-07/sims/cannon-cove.html|8|courses/game-math/week-07/sims/cannon-cove.gif
+yaw-lab|courses/game-math/week-07/sims/yaw-lab.html|9|courses/game-math/week-07/sims/yaw-lab.gif
+lighthouse|courses/game-math/week-07/sims/lighthouse.html|10|courses/game-math/week-07/sims/lighthouse.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
 lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif

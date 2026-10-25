@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="320" viewBox="0 0 680 320" font-family="Helvetica, Arial, sans-serif" font-weight="600">
+<rect width="680" height="320" fill="#ffffff"/>
+<text x="20" y="30" font-size="17" fill="#2a2f2c" text-anchor="start" font-weight="800" xml:space="preserve">A transform hierarchy: the child&#x27;s world matrix = parent × child</text>
+<rect x="40" y="60" width="250" height="56" rx="10" fill="#2F9E4418" stroke="#2F9E44" stroke-width="1.8"/>
+<text x="54" y="84" font-size="15" fill="#2F9E44" text-anchor="start" font-weight="800" xml:space="preserve">Tank</text>
+<text x="54" y="104" font-size="12" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">position (10, 0, 5), yaw 90°</text>
+<rect x="70" y="140" width="250" height="56" rx="10" fill="#1c7ed618" stroke="#1c7ed6" stroke-width="1.8"/>
+<text x="84" y="164" font-size="15" fill="#1c7ed6" text-anchor="start" font-weight="800" xml:space="preserve">Turret</text>
+<text x="84" y="184" font-size="12" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">local position (0, 1, 0)</text>
+<line x1="56" y1="116" x2="56" y2="168" stroke="#adb5bd" stroke-width="2" stroke-linecap="round"/>
+<line x1="56" y1="168" x2="62.8" y2="168" stroke="#adb5bd" stroke-width="2" stroke-linecap="round"/>
+<polygon points="70,168 62,172 62,164" fill="#adb5bd"/>
+<rect x="100" y="220" width="250" height="56" rx="10" fill="#e8590c18" stroke="#e8590c" stroke-width="1.8"/>
+<text x="114" y="244" font-size="15" fill="#e8590c" text-anchor="start" font-weight="800" xml:space="preserve">Barrel tip</text>
+<text x="114" y="264" font-size="12" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">local position (0, 0, 2)</text>
+<line x1="86" y1="196" x2="86" y2="248" stroke="#adb5bd" stroke-width="2" stroke-linecap="round"/>
+<line x1="86" y1="248" x2="92.8" y2="248" stroke="#adb5bd" stroke-width="2" stroke-linecap="round"/>
+<polygon points="100,248 92,252 92,244" fill="#adb5bd"/>
+<rect x="350" y="60" width="316" height="196" rx="12" fill="#f8f9fa" stroke="#2a2f2c" stroke-width="1.8"/>
+<text x="364" y="84" font-size="15" fill="#2a2f2c" text-anchor="start" font-weight="800" xml:space="preserve">The barrel tip in the world</text>
+<text x="366" y="106" font-size="13" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">1. In the tank: (0, 1, 0) + (0, 0, 2) = (0, 1,</text>
+<text x="366" y="122.9" font-size="13" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">2).</text>
+<text x="366" y="160" font-size="13" fill="#2a2f2c" text-anchor="start" font-weight="700" xml:space="preserve">2. Yaw 90°: R_y × (0, 1, 2) = (2, 1, 0).</text>
+<text x="366" y="200" font-size="13" fill="#e8590c" text-anchor="start" font-weight="800" xml:space="preserve">3. + tank position: (12, 1, 5).</text>
+<text x="340" y="306" font-size="13" fill="#6b726e" text-anchor="middle" font-weight="700" xml:space="preserve">Move the tank and every child moves with it.</text>
+</svg>

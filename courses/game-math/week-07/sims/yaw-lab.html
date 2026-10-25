@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Yaw Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <script type="importmap">
+    { "imports": { "three": "../../../../shared/sims/vendor/three.module.min.js" } }
+  </script>
+  <style>
+    .sim .m { display: inline-grid; grid-template-columns: repeat(3, auto); gap: 1px 10px; padding: 3px 8px; border-left: 2.5px solid #2a211c; border-right: 2.5px solid #2a211c; border-radius: 5px; font-variant-numeric: tabular-nums; text-align: right; font-weight: 800; }
+    .sim .row3 { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 8px; font-weight: 700; }
+  </style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Yaw Lab: turning around the y-axis in 3D</h1>
+  <p class="hint">The tank stands at the origin and looks along +z (forward). Turn it around the y-axis (yaw). Drag the picture to look from another side. Unity: a positive yaw turns to the right, seen from above.</p>
+  <div id="view" class="view3d" aria-label="A tank on a ground grid that turns around the y-axis"></div>
+  <div class="controls" id="sl"></div>
+  <div class="row3"><span>R<sub>y</sub>(θ) =</span><span class="m" id="m"></span><span id="fwd"></span></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script type="module">
+import { createViewer } from "../../../../shared/sims/viewer3d.js";
+const $ = (id) => document.getElementById(id), f = (v) => Kit.fmt(v, 2);
+const v = createViewer($("view"));
+v.view([7, 8, -9], [0, 0.5, 0]);
+const T = v.THREE;
+// a ground grid around the origin and the three axes
+const grid = new T.GridHelper(12, 12, "#9bb8a0", "#d6e6d8"); v.scene.add(grid);
+v.arrow([0, 0, 0], [5, 0, 0], "#c0392b"); v.arrow([0, 0, 0], [0, 3, 0], "#27ae60"); v.arrow([0, 0, 0], [0, 0, 5], "#2471a3");
+v.label("x", [5.6, 0, 0], { color: "#c0392b" }); v.label("y", [0, 3.5, 0], { color: "#27ae60" }); v.label("z (forward)", [0, 0, 6], { color: "#2471a3" });
+// the tank: a body, a turret and a barrel that points along local +z (three.js −z)
+const tank = new T.Group();
+const mat = new T.MeshStandardMaterial({ color: "#2F9E44", roughness: 0.5 });
+const body = new T.Mesh(new T.BoxGeometry(1.4, 0.5, 2), mat); body.position.y = 0.25; tank.add(body);
+const top = new T.Mesh(new T.CylinderGeometry(0.45, 0.5, 0.35, 24), new T.MeshStandardMaterial({ color: "#2b8a3e" })); top.position.y = 0.67; tank.add(top);
+const barrel = new T.Mesh(new T.CylinderGeometry(0.1, 0.1, 1.6, 12), new T.MeshStandardMaterial({ color: "#495057" }));
+barrel.rotation.x = Math.PI / 2; barrel.position.set(0, 0.67, -0.9); tank.add(barrel);
+v.scene.add(tank);
+const fwdLine = new T.ArrowHelper(new T.Vector3(0, 0, -1), new T.Vector3(0, 0.67, 0), 3.4, "#e8590c", 0.4, 0.25); v.scene.add(fwdLine);
+let th = 0;
+function show() {
+  const a = th * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+  tank.rotation.y = -a;                                  // Unity yaw θ = three.js rotation −θ
+  fwdLine.setDirection(new T.Vector3(s, 0, -c));
+  $("m").innerHTML = [c, 0, s, 0, 1, 0, -s, 0, c].map((x) => `<span>${f(x)}</span>`).join("");
+  $("fwd").innerHTML = `forward = R<sub>y</sub>(θ) × (0, 0, 1) = (${f(s)}, 0, ${f(c)})`;
+  $("msg").textContent = th === 90 ? "90°: the tank looks along +x (to the right)." : th === -90 ? "−90°: the tank looks along −x (to the left)." : Math.abs(th) === 180 ? "180°: the tank looks back, along −z." : "y stays 0: a yaw never tilts the tank up or down.";
+}
+Kit.slider($("sl"), "θ (yaw)", -180, 180, 15, 0, (x) => { th = x; show(); }, (x) => Kit.fmt(x, 0) + "°");
+window.YL = { set: (x) => { const i = document.querySelector("#sl input"); i.value = x; i.dispatchEvent(new Event("input")); } };
+show();
+</script>
+</body>
+</html>

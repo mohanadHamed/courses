@@ -1,0 +1,241 @@
+---
+title: "Working Across Office Apps with AI"
+description: "Lesson notes · One job in three apps: Excel for the numbers, Word for the report, PowerPoint for the talk; pasting an Excel table into Word (keep formatting, picture, link) and updating a link; making slides from Word headings with Slides from Outline; and using AI across the apps, with a check after every AI step and an AI-use statement."
+lesson: 27
+ilos: [A1, A3, C4]
+format: lesson-typst
+---
+
+::: {.lead}
+At the end of every month, Huda writes a short report for the managers of
+*Sunrise Company*. The numbers come from Rana's sales sheet in Excel. The
+report is a Word document. On Monday, Huda shows the main points in a short
+PowerPoint talk. Last month Huda typed the numbers three times, and one
+number was wrong on a slide. In this lesson you learn to let the content
+**move between the apps**: from Excel to Word, from Word to PowerPoint, with
+AI help at each step and a check after it. In lecture 28 you start your
+course project, which uses all three apps. Every section ends with a lab
+task.
+:::
+
+## Key terms
+
+{{< glossary office-suite office-workflow paste-options linked-object update-link heading-style slides-from-outline check-ai-output ai-use-statement >}}
+
+## 27.1 One job, three apps
+
+Each Office app has its own job (@fig-apps).
+
+::: {.callout-important title="Definition 27.1 — Which app for which job"}
+- **Excel** is for **numbers**: the data, formulas, totals and charts.
+- **Word** is for **words**: a report or a letter, with headings, tables and
+  pictures.
+- **PowerPoint** is for **showing**: a talk with a few words and big
+  pictures on each slide.
+
+A **workflow across apps** is the order of the steps: the numbers are made
+once in Excel, then they move to Word and PowerPoint. You do not type them
+again.
+:::
+
+![One job, three apps.](images/three-apps.png){#fig-apps width=100%}
+
+::: {.callout-note title="Example 27.1 — Huda's monthly report"}
+1. Excel: `sales.xlsx` has the 24 sales, a summary table and a chart
+   (lecture 25).
+2. Word: `report.docx` has two pages, with the summary table and the chart.
+3. PowerPoint: `talk.pptx` has three slides for the Monday meeting.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Doing the numbers in Word or on a slide with a calculator. Then the numbers
+are not checked, and a change means typing them again. Do the numbers once,
+in Excel.
+:::
+
+::: {.callout-note title="Lab task · Plan the three files"}
+1. Open `march.xlsx` from lecture 25 (or the sales in **Paste Lab**).
+2. Write down what goes into each file: the Excel sheet, the Word report and
+   three slides.
+
+*Your result:* a plan of three lines, one for each app.
+:::
+
+## 27.2 From Excel to Word: paste options
+
+When you paste an Excel table into Word, Word shows **Paste Options**
+(@fig-paste).
+
+::: {.callout-important title="Definition 27.2 — Three ways to paste"}
+Copy the table in Excel (Ctrl + C). In Word, click **Home › Paste** and
+choose:
+
+- **Keep Source Formatting:** a Word table that you can edit; it does not
+  change when Excel changes.
+- **Picture:** an image of the table; you cannot edit the numbers.
+- **Link & Keep Source Formatting:** a **linked table**. When the Excel
+  numbers change, right-click the table and choose **Update Link**.
+
+Charts have the same choices.
+:::
+
+![Three paste options.](images/paste-options.png){#fig-paste width=100%}
+
+::: {.callout-note title="Example 27.2 — A missing sale"}
+1. Huda pastes the summary table into the report as a link.
+2. Rana finds a missing sale of bags: Bags changes from 78 to 98 JD in
+   Excel.
+3. Huda right-clicks the table in Word and chooses Update Link. The report
+   now shows Bags 98 and a total of 375 JD.
+:::
+
+{{< sim file="sims/paste-lab.html" poster="sims/paste-lab.png" title="Paste Lab: from Excel into Word" height="560" >}}
+
+::: {.callout-warning title="Common mistake"}
+Sending a report with a linked table to someone without the Excel file. The
+link cannot update for that person. For the final copy, paste the table as
+a normal table or a picture.
+:::
+
+::: {.callout-note title="Lab task · Paste the table"}
+1. In **Paste Lab**, do the two tasks.
+2. Copy your summary table and your chart from `march.xlsx` into a new
+   Word file `report.docx`, as a link. Change one number in Excel and
+   update the link.
+
+*Your result:* `report.docx` with a linked table and chart.
+:::
+
+## 27.3 From Word to PowerPoint: Slides from Outline
+
+PowerPoint can make slides from the **headings** of a Word file
+(@fig-outline).
+
+::: {.callout-important title="Definition 27.3 — Slides from Outline"}
+1. In Word, give the main points **heading styles** (lecture 7):
+   **Heading 1** for each slide title, **Heading 2** for each bullet.
+   Normal text does not go on the slides.
+2. Save the Word file and close it.
+3. In PowerPoint, click **Home › New Slide › Slides from Outline** and
+   choose the Word file.
+4. Choose a design, and add a picture or the chart to each slide.
+:::
+
+![Word headings become slides.](images/outline-slides.png){#fig-outline width=100%}
+
+::: {.callout-note title="Example 27.3 — Two slides from the report"}
+1. Huda makes "March sales" and "The best week" Heading 1.
+2. "Total: 355 JD", "Paper sold the most" and "Third week: 112 JD" become
+   Heading 2.
+3. Slides from Outline makes two slides with three bullets in total. The
+   long paragraphs stay in the report.
+:::
+
+{{< sim file="sims/outline-lab.html" poster="sims/outline-lab.png" title="Outline Lab: Word headings to slides" height="660" >}}
+
+::: {.callout-warning title="Common mistake"}
+Making text big and bold instead of using a heading style. It looks like a
+heading, but PowerPoint does not see it as one, so no slide is made.
+:::
+
+::: {.callout-note title="Lab task · Slides from the report"}
+1. In **Outline Lab**, do the two tasks.
+2. In `report.docx`, add two or three Heading 1 lines with Heading 2
+   points. Make `talk.pptx` with Slides from Outline.
+
+*Your result:* `talk.pptx` with two or three slides.
+:::
+
+## 27.4 AI across the apps
+
+AI tools can help at each step. You check after every AI step
+(@fig-workflow).
+
+::: {.callout-important title="Definition 27.4 — Draft, check, move on"}
+1. **Excel → AI:** ask for sentences about the checked totals (no personal
+   data, lecture 23). Check every number with Excel.
+2. **AI → Word:** paste only the checked sentences into the report, and
+   edit them in your own words.
+3. **Word → AI → PowerPoint:** ask for a short outline of three slides from
+   the report, or use Copilot in PowerPoint ("create a presentation from a
+   file"), if your account has it. Check every slide again.
+4. At the end, add an **AI-use statement**: one line that says where AI
+   helped.
+:::
+
+![AI across the apps: draft, check, then move on.](images/ai-workflow.png){#fig-workflow width=100%}
+
+::: {.callout-note title="Example 27.4 — A good prompt and a check"}
+1. Huda writes: "Here are our sales totals by type and by week. Write
+   three short sentences for a monthly report. Use only these numbers."
+2. The AI writes: "Sales grew every week." The weekly totals are 87, 63,
+   112, 93: this is wrong, and Huda deletes it.
+3. At the end of the report Huda writes: "The first draft of the summary
+   and of the slide outline was made with AI help; all numbers were
+   checked in Excel."
+:::
+
+::: {.callout-warning title="Common mistake"}
+Checking only the first AI answer. Each new AI step can add a new mistake,
+for example a rounded number on a slide. Check again after each step.
+:::
+
+::: {.callout-note title="Lab task · AI help, checked"}
+1. Ask an AI tool for three sentences about your totals (no personal
+   data). Mark each sentence "true" or "wrong" with your Excel sheet.
+2. Put the true sentences into `report.docx`, and add your AI-use
+   statement.
+
+*Your result:* a report with checked sentences and an AI-use statement.
+:::
+
+## Case study: Office Relay
+
+Huda's report passes from Excel to Word to PowerPoint. There are six jobs:
+the total of the month, a table that must follow Excel, slides from the
+report, an AI number to check, a report for a manager without the Excel
+file, and an AI-use statement. The Game challenge of the interactive lesson
+uses these jobs. In the mini-game below you choose the best way each time.
+
+{{< sim file="sims/office-relay.html" poster="sims/office-relay.png" title="Office Relay: six jobs in three apps" kind="game" height="460" >}}
+
+::: {.callout-note title="Lab task · Upload"}
+Upload `march.xlsx`, `report.docx` and `talk.pptx` to the e-learning
+platform.
+
+*Your result:* three files that belong together.
+:::
+
+## Further reading
+
+Microsoft Support, "Insert an Excel worksheet into a Word document" and
+"Create a presentation from a Word outline" (support.microsoft.com).
+Microsoft Support, "Create a new presentation with Copilot in PowerPoint".
+
+## Exercises
+
+1. Which app is best for numbers, for a report, and for a talk?
+2. Why do you make the numbers only once, in Excel?
+3. Name the three paste options of this lesson.
+4. Which paste option follows the Excel file?
+5. How do you show the new Excel numbers in a linked table?
+6. Why can a linked table be a problem in an email?
+7. What does Heading 1 become in Slides from Outline?
+8. What happens to Normal text in Slides from Outline?
+9. When do you check AI output in a workflow across apps?
+10. What does an AI-use statement say?
+
+## Answers to the exercises
+
+::: {.answers}
+1. Excel, Word, PowerPoint.
+2. So that the numbers are checked once and are the same everywhere.
+3. Keep Source Formatting, Picture, Link & Keep Source Formatting.
+4. Link & Keep Source Formatting.
+5. Right-click the table and choose Update Link.
+6. The other person does not have the Excel file, so it cannot update.
+7. A slide title.
+8. It does not go on the slides.
+9. After every AI step.
+10. Where AI helped, for example "the first draft was made with AI help".
+:::

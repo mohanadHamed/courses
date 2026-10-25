@@ -252,6 +252,9 @@ responsible-or-not|courses/digital-skills/week-12/sims/responsible-or-not.html|8
 pivot-lab|courses/digital-skills/week-13/sims/pivot-lab.html|8|courses/digital-skills/week-13/sims/pivot-lab.gif
 summary-check|courses/digital-skills/week-13/sims/summary-check.html|9|courses/digital-skills/week-13/sims/summary-check.gif
 right-tool|courses/digital-skills/week-13/sims/right-tool.html|8|courses/digital-skills/week-13/sims/right-tool.gif
+paste-lab|courses/digital-skills/week-14/sims/paste-lab.html|8|courses/digital-skills/week-14/sims/paste-lab.gif
+outline-lab|courses/digital-skills/week-14/sims/outline-lab.html|7|courses/digital-skills/week-14/sims/outline-lab.gif
+office-relay|courses/digital-skills/week-14/sims/office-relay.html|8|courses/digital-skills/week-14/sims/office-relay.gif
 "
 echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue

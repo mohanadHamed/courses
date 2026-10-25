@@ -141,6 +141,9 @@ report-doctor|courses/computing-systems/week-13/sims/report-doctor.html|8|course
 perf-lab|courses/computing-systems/week-14/sims/perf-lab.html|8|courses/computing-systems/week-14/sims/perf-lab.gif
 compat-lab|courses/computing-systems/week-14/sims/compat-lab.html|7|courses/computing-systems/week-14/sims/compat-lab.gif
 perf-detective|courses/computing-systems/week-14/sims/perf-detective.html|8|courses/computing-systems/week-14/sims/perf-detective.gif
+slide-sorter|courses/computing-systems/week-14/sims/slide-sorter.html|8|courses/computing-systems/week-14/sims/slide-sorter.gif
+project-check|courses/computing-systems/week-14/sims/project-check.html|8|courses/computing-systems/week-14/sims/project-check.gif
+talk-doctor|courses/computing-systems/week-14/sims/talk-doctor.html|8|courses/computing-systems/week-14/sims/talk-doctor.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
 ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif

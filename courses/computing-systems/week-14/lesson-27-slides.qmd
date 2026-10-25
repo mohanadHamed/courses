@@ -1,0 +1,131 @@
+---
+title: "Platform Performance and Compatibility: Case Studies"
+subtitle: "Lecture 27"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary frame-time stutter one-percent-low thermal-throttling frame-rate-cap graphics-api compatibility-matrix release-notes >}}
+
+## 27.1 Measuring performance
+
+:::: {.columns}
+::: {.column width="50%"}
+- A frame at 60 fps takes about 16.7 ms.
+- The 1 % low shows the slowest frames.
+- Stutters hide in the average frame rate.
+- **Do it:** Compute the frame time of 120 fps. How many milliseconds is it?
+:::
+::: {.column width="50%"}
+![](images/frame-times.png)
+:::
+::::
+
+## Example · It jerks every few seconds
+
+The fps counter of Pocket Quest shows 57 fps on average.
+**Why do players still complain?**
+
+::: {.reveal}
+1. The frame-time graph shows **four frames of about 50 ms**.
+2. The 1 % low is only about **20 fps**.
+3. The game loaded a track piece in those frames, so the team loads it **earlier**.
+:::
+
+## 27.2 Heat, throttling and a cap
+
+:::: {.columns}
+::: {.column width="50%"}
+- A long, heavy load makes the chip hot.
+- A hot chip slows down, so the frame rate falls.
+- A frame-rate cap keeps the race steady and cooler.
+- **Do it:** Play 20 minutes on the P5 with and without a cap. Which feels better?
+:::
+::: {.column width="50%"}
+![](images/thermal.png)
+:::
+::::
+
+## Live demo · Performance Lab
+
+{{< sim file="sims/perf-lab.html" poster="sims/perf-lab.png" title="Performance Lab: a 20-minute race" task="**Show:** the P5 uncapped, then capped at 30 fps, then low graphics with a 60 cap. **Ask:** which setting would you make the default for weak phones?" >}}
+
+## Try it 1 · Performance
+
+a) What is the frame time at 30 fps?
+b) What happens to a hot chip in a long race?
+c) Which two settings keep the race steady on a weak phone?
+
+::: {.answer}
+a) about 33.3 ms
+b) It throttles and slows down.
+c) a frame-rate cap and lower graphics settings
+:::
+
+## 27.3 Compatibility
+
+:::: {.columns}
+::: {.column width="50%"}
+- A build for Android 11 does not start on Android 8.
+- A GPU without Vulkan needs another graphics API.
+- Menus need anchors for every screen shape.
+- **Do it:** Make every row green in Compatibility Lab. What does it cost?
+:::
+::: {.column width="50%"}
+![](images/compat-matrix.png)
+:::
+::::
+
+## Live demo · Compatibility Lab
+
+{{< sim file="sims/compat-lab.html" poster="sims/compat-lab.png" title="Compatibility Lab: build 43 for every device" task="**Show:** fix the minimum Android, add OpenGL ES 3, anchor the menu. **Ask:** is it always worth supporting the oldest phones?" >}}
+
+## Example · Build 43
+
+Build 42 failed on three test devices.
+**What changes in build 43?**
+
+::: {.reveal}
+1. The minimum is now **Android 8**, so the old AVD starts the game.
+2. **OpenGL ES 3** next to Vulkan gives the old phone a picture.
+3. A menu anchored to the **safe area** fits the tablet and the notch phone.
+:::
+
+## 27.4 Reliable sources
+
+:::: {.columns}
+::: {.column width="50%"}
+- Release notes list the changes of a new OS version.
+- Official documents and our own tests are reliable.
+- Forum claims and ads are only claims to check.
+- **Do it:** Find two changes in the newest release notes. What is their date?
+:::
+::: {.column width="50%"}
+![](images/sources.png)
+:::
+::::
+
+## Game challenge · Performance Detective
+
+{{< sim file="sims/perf-detective.html" poster="sims/perf-detective.png" title="Performance Detective: six player reports" kind="game" task="**The story:** players of Pocket Quest send six reports about performance and compatibility. **Play:** find the cause or the best fix for each report." >}}
+
+## Try it 2 · Reports (harder)
+
+a) Which number shows the jerks of a 58 fps race?
+b) What is a likely cause of a black screen on an old phone?
+c) What does Rami do with a forum claim about an OS update?
+
+::: {.answer}
+a) the 1 % low
+b) The GPU does not support the graphics API.
+c) Read the release notes and test it.
+:::
+
+## Summary
+
+- We measure frame times and the 1 % low.
+- Heat makes phones throttle, and a cap keeps the race steady.
+- Builds fail by OS version, graphics API or screen shape.
+- A compatibility matrix records every device.
+- Reliable sources and our own tests follow the platform changes.

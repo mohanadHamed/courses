@@ -138,6 +138,9 @@ matrix-builder|courses/computing-systems/week-13/sims/matrix-builder.html|9|cour
 emulator-or-real|courses/computing-systems/week-13/sims/emulator-or-real.html|8|courses/computing-systems/week-13/sims/emulator-or-real.gif
 adb-lab|courses/computing-systems/week-13/sims/adb-lab.html|11|courses/computing-systems/week-13/sims/adb-lab.gif
 report-doctor|courses/computing-systems/week-13/sims/report-doctor.html|8|courses/computing-systems/week-13/sims/report-doctor.gif
+perf-lab|courses/computing-systems/week-14/sims/perf-lab.html|8|courses/computing-systems/week-14/sims/perf-lab.gif
+compat-lab|courses/computing-systems/week-14/sims/compat-lab.html|7|courses/computing-systems/week-14/sims/compat-lab.gif
+perf-detective|courses/computing-systems/week-14/sims/perf-detective.html|8|courses/computing-systems/week-14/sims/perf-detective.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
 ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif

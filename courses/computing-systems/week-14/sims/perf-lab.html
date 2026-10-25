@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Performance Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar .lab { min-width: 74px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Performance Lab: a 20-minute race</h1>
+  <p class="hint">Rami tests <i>Pocket Quest</i> in a long race. Choose the phone, the graphics and the frame-rate cap, then play 20 minutes (fast forward). The lab shows the frame rate, the 1 % low, the temperature and the battery. All numbers are <b>example values</b> from a simple model.</p>
+  <div class="bar"><span class="lab">Phone</span><span id="dev" style="display:contents"></span></div>
+  <div class="bar"><span class="lab">Graphics</span><span id="gfx" style="display:contents"></span></div>
+  <div class="bar"><span class="lab">Cap</span><span id="cap" style="display:contents"></span></div>
+  <div class="bar"><button type="button" id="play">Play 20 minutes ▶</button></div>
+  <canvas id="c" aria-label="Frame rate and temperature over 20 minutes"></canvas>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const DEV = { P5: 1.0, P6: 1.8, P8: 2.0 }, GFX = { high: 1.0, low: 0.6 }, CAP = { none: 120, "60 fps": 60, "30 fps": 30 };
+  const s = { dev: "P5", gfx: "high", cap: "none", run: null, t: 0, runs: [] };
+  const TASKS = [
+    { q: "Task 1: Play 20 minutes on the P5 with high graphics and no cap. What is the frame rate at the end, and the 1 % low?", ok: () => s.runs.some((r) => r.dev === "P5" && r.gfx === "high" && r.cap === "none") },
+    { q: "Task 2: Cap the P5 at 30 fps. Is the race steady now? How much battery does it use?", ok: () => s.runs.some((r) => r.dev === "P5" && r.cap === "30 fps") },
+    { q: "Task 3: Find a setting on the P5 that keeps the 1 % low at 30 fps or more for the whole race, with at least 40 fps on average.", ok: () => s.runs.some((r) => r.dev === "P5" && r.low >= 30 && r.avg >= 40) },
+    { q: "Task 4: Play the same race on the P6 with high graphics and a 60 fps cap. Why is it steady?", ok: () => s.runs.some((r) => r.dev === "P6" && r.gfx === "high" && r.cap === "60 fps") },
+  ];
+  let ti = 0;
+  function simulate() {
+    const P = DEV[s.dev], cost = GFX[s.gfx], cap = CAP[s.cap], pts = [];
+    let temp = 30, bat = 0;
+    for (let m = 0; m <= 20; m += 0.25) {
+      const thr = Math.max(0.55, 1 - Math.max(0, temp - 40) * 0.045);
+      const U = Math.min(120, P * 60 / cost) * thr, fps = Math.min(cap, U), load = fps / (P * 60 / cost);
+      const target = 30 + 16 * load * cost + 4 * cost;
+      temp += (target - temp) * 0.06;
+      const low = fps * (U < cap ? (thr < 0.95 ? 0.55 : 0.8) : (U >= cap * 1.15 ? 0.98 : 0.85));
+      bat += (1.2 + 3.2 * load * cost) * 0.25 / 5;
+      pts.push({ m, fps, temp, low });
+    }
+    const avg = pts.reduce((a, p) => a + p.fps, 0) / pts.length, low = Math.min(...pts.map((p) => p.low));
+    return { dev: s.dev, gfx: s.gfx, cap: s.cap, pts, avg, low, end: pts[pts.length - 1].fps, temp: Math.max(...pts.map((p) => p.temp)), bat: Math.round(bat) };
+  }
+  const cv = Kit.canvas($("c"), 220);
+  function draw() {
+    const c = cv.ctx, W = cv.W, H = cv.H, x0 = 40, w = W - 90, y0 = 14, h = H - 44;
+    c.clearRect(0, 0, W, H);
+    c.strokeStyle = "#adb5bd"; c.lineWidth = 1.2; c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0, y0 + h); c.lineTo(x0 + w, y0 + h); c.stroke();
+    [0, 30, 60, 90, 120].forEach((v) => Kit.text(c, String(v), x0 - 6, y0 + h - h * v / 120 + 4, 10, "#6b726e", "right", 700));
+    [0, 5, 10, 15, 20].forEach((m) => Kit.text(c, m + " min", x0 + w * m / 20, H - 12, 10, "#6b726e", "center", 700));
+    if (!s.run) { Kit.text(c, "Press \"Play 20 minutes\".", W / 2, H / 2, 13, "#6b726e"); return; }
+    const vis = s.run.pts.filter((p) => p.m <= s.t);
+    const line = (key, col, scale) => { c.strokeStyle = col; c.lineWidth = 2.4; c.beginPath(); vis.forEach((p, i) => { const x = x0 + w * p.m / 20, y = y0 + h - h * p[key] / scale; i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.stroke(); };
+    line("fps", "#1c7ed6", 120); line("low", "#74c0fc", 120); line("temp", "#e03131", 120);
+    const lp = vis[vis.length - 1];
+    if (lp) { Kit.text(c, Math.round(lp.fps) + " fps", x0 + w * lp.m / 20 + 6, y0 + h - h * lp.fps / 120 + 4, 11, "#1c7ed6", "left", 800); Kit.text(c, Math.round(lp.temp) + " °C", x0 + w * lp.m / 20 + 6, y0 + h - h * lp.temp / 120 + 4, 11, "#e03131", "left", 800); }
+  }
+  let t0 = 0;
+  Kit.loop((now) => { if (s.run && s.t < 20) { s.t = Math.min(20, (now - t0) / 1000 * 8); if (s.t >= 20) finish(); } draw(); });
+  function finish() { s.runs.push(s.run); upd(); }
+  function tabs(id, obj, key) { Kit.buttons($(id), Object.keys(obj).map((k) => ({ k, label: k })), (k) => { s[key] = k; s.run = null; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }
+  function upd() {
+    tabs("dev", DEV, "dev"); tabs("gfx", GFX, "gfx"); tabs("cap", CAP, "cap");
+    const R = s.run && s.t >= 20 ? s.run : null;
+    $("calc").textContent = R ? `${R.dev}, ${R.gfx}, cap ${R.cap}: average ${Math.round(R.avg)} fps, at the end ${Math.round(R.end)} fps, 1 % low ${Math.round(R.low)} fps, up to ${Math.round(R.temp)} °C, battery −${R.bat} %.` : "Blue: frame rate. Light blue: 1 % low. Red: temperature (°C).";
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a steady, capped frame rate often feels better than a high one that falls and stutters.";
+    $("msg").textContent = m;
+  }
+  $("play").addEventListener("click", () => { s.run = simulate(); s.t = 0; t0 = performance.now(); upd(); });
+  window.PL = { set: (o) => { Object.assign(s, o); s.run = null; upd(); }, play: () => $("play").click() };
+  upd();
+})();
+</script>
+</body>
+</html>

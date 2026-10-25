@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Production Planner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim table.pp { border-collapse: collapse; width: 100%; margin: 6px 0; }
+    .sim table.pp td, .sim table.pp th { border: 1px solid #dee2e6; padding: 4px 6px; font-weight: 700; font-size: .86rem; }
+    .sim table.pp th { background: #f8f0fc; color: #862e9c; text-align: left; }
+    .sim table.pp td.sl { white-space: nowrap; }
+    .sim table.pp td.sl button { padding: 3px 8px; font-size: .8rem; margin: 1px; }
+    .sim table.pp td.sl button.on { background: var(--sim-accent); color: #fff; }
+    .sim table.pp tr.bad td { background: #fff5f5; }
+    .sim ul.cf { margin: 4px 0; padding-left: 1.2em; font-weight: 700; color: #c92a2a; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Production Planner: two sessions, eight tasks</h1>
+  <p class="hint">Plan the production of the "Storm Night" media package. Put each task into one of four slots (two halves of two workshop sessions). A task can only start when the work it needs is finished in an earlier slot. The review is the last step for everyone.</p>
+  <table class="pp" id="tbl"></table>
+  <ul class="cf" id="cf"></ul>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const SLOTS = ["1a", "1b", "2a", "2b"];
+  // [task, role, needs]; a need must be in an earlier slot, except "≤" needs, which may share the slot.
+  const T = [
+    ["storyboard and shot list", "artist", []], ["capture gameplay", "editor", ["storyboard and shot list"]],
+    ["sound effects", "sound", []], ["music loop", "sound", []], ["cut and titles", "editor", ["capture gameplay", "music loop"]],
+    ["credits file", "producer", []], ["mix and export", "sound + editor", ["cut and titles", "sound effects", "credits file"]], ["quality review", "everyone", ["≤mix and export"]],
+  ];
+  const s = { slot: { "storyboard and shot list": 0, "capture gameplay": 0, "sound effects": 0, "music loop": 2, "cut and titles": 2, "credits file": 3, "mix and export": 3, "quality review": 3 } };
+  const late = (t, n) => (n[0] === "≤" ? s.slot[n.slice(1)] > s.slot[t] : s.slot[n] >= s.slot[t]);
+  const conflicts = () => {
+    const out = [];
+    T.forEach(([t, , needs]) => needs.forEach((n) => { if (late(t, n)) out.push(`"${t}" needs "${n.replace("≤", "")}" ${n[0] === "≤" ? "in the same or an earlier" : "in an earlier"} slot.`); }));
+    if (s.slot["quality review"] !== 3) out.push("The quality review must be in the last slot.");
+    return out;
+  };
+  const TASKS = [
+    { q: "Task 1: The plan has conflicts (red). Move tasks until there are none.", ok: () => conflicts().length === 0 },
+    { q: "Task 2: Why must the credits file be ready before the export? Check that your plan does this.", ok: () => conflicts().length === 0 && s.slot["credits file"] < s.slot["mix and export"] },
+  ];
+  let ti = 0;
+  function render() {
+    const bad = new Set();
+    T.forEach(([t, , needs]) => needs.forEach((n) => { if (late(t, n)) bad.add(t); }));
+    $("tbl").innerHTML = "<tr><th>task</th><th>role</th><th>slot</th></tr>" + T.map(([t, r]) => `<tr class="${bad.has(t) ? "bad" : ""}"><td>${t}</td><td>${r}</td><td class="sl" data-t="${t}"></td></tr>`).join("");
+    $("tbl").querySelectorAll("td.sl").forEach((td) => {
+      const t = td.dataset.t;
+      Kit.buttons(td, SLOTS.map((k, i) => ({ k: String(i), label: k })), (k) => { s.slot[t] = +k; render(); upd(); });
+      td.querySelectorAll("button").forEach((b) => b.classList.toggle("on", +b.dataset.k === s.slot[t]));
+    });
+  }
+  function upd() {
+    const c = conflicts();
+    $("cf").innerHTML = c.map((x) => `<li>${x}</li>`).join("");
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: every handoff happens in time, and the review comes last.";
+    $("msg").textContent = m + (c.length ? `${c.length} conflict(s).` : "No conflicts: the plan works.");
+  }
+  window.PP = { set: (t, i) => { s.slot[t] = i; render(); upd(); } };
+  render(); upd();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Package Checker</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim table.pk { border-collapse: collapse; width: 100%; margin: 6px 0; }
+    .sim table.pk td, .sim table.pk th { border: 1px solid #dee2e6; padding: 4px 6px; font-weight: 700; font-size: .85rem; vertical-align: middle; }
+    .sim table.pk th { background: #f8f0fc; color: #862e9c; text-align: left; }
+    .sim table.pk td button { padding: 3px 8px; font-size: .8rem; margin: 1px; }
+    .sim table.pk td button.on.p { background: #2b8a3e; color: #fff; border-color: #2b8a3e; }
+    .sim table.pk td button.on.f { background: #c92a2a; color: #fff; border-color: #c92a2a; }
+    .sim table.pk tr.wrong td { background: #fff5f5; }
+    .sim table.pk tr.fixed td { background: #ebfbee; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Package Checker: does it meet the brief?</h1>
+  <p class="hint">The first version of the "Storm Night" package is in the folder. Compare each measured value with the brief and mark it <b>pass</b> or <b>fail</b>. Then check, and fix what fails.</p>
+  <table class="pk" id="tbl"></table>
+  <div class="bar"><button type="button" id="check">Check my marks</button></div>
+  <p class="calc" id="calc"></p>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  // [item, brief, measured, ok, fixed value, fix]
+  const R = [
+    ["storyboard", "6 panels", "6 panels", true],
+    ["promo length", "30 s", "41 s", false, "30 s", "cut the slow intro shot"],
+    ["promo shape", "16:9, 1920 × 1080", "9:16, 1080 × 1920", false, "16:9, 1920 × 1080", "export with the 16:9 preset"],
+    ["loudest peak", "−1 dB or lower", "0 dB (clipping)", false, "−1.2 dB", "lower the master and export again"],
+    ["music loop", "loops without a click", "loops without a click", true],
+    ["credits file", "every asset", "2 sounds missing", false, "every asset", "add the TASL lines of the two sounds"],
+  ];
+  const s = { mark: {}, checked: false, fixed: new Set() };
+  const right = () => R.every((r, i) => s.mark[i] === r[3]);
+  const TASKS = [
+    { q: "Task 1: Mark every row pass or fail and check your marks.", ok: () => s.checked && Object.keys(s.mark).length === R.length },
+    { q: "Task 2: Correct your marks until all six are right.", ok: () => s.checked && right() },
+    { q: "Task 3: Fix every failing row. Which fix belongs to which role?", ok: () => R.every((r, i) => r[3] || s.fixed.has(i)) },
+  ];
+  let ti = 0;
+  function render() {
+    $("tbl").innerHTML = "<tr><th>item</th><th>brief</th><th>measured</th><th>your mark</th><th>fix</th></tr>" + R.map((r, i) => {
+      const val = s.fixed.has(i) ? r[4] : r[2], cls = s.fixed.has(i) ? "fixed" : s.checked && s.mark[i] !== undefined && s.mark[i] !== r[3] ? "wrong" : "";
+      return `<tr class="${cls}"><td>${r[0]}</td><td>${r[1]}</td><td>${val}</td><td class="mk" data-i="${i}"></td><td class="fx" data-i="${i}"></td></tr>`;
+    }).join("");
+    $("tbl").querySelectorAll("td.mk").forEach((td) => {
+      const i = +td.dataset.i;
+      Kit.buttons(td, [{ k: "p", label: "pass" }, { k: "f", label: "fail" }], (k) => { s.mark[i] = k === "p"; s.checked = false; render(); upd(); });
+      td.querySelectorAll("button").forEach((b) => { b.classList.add(b.dataset.k); b.classList.toggle("on", s.mark[i] !== undefined && (b.dataset.k === "p") === s.mark[i]); });
+    });
+    $("tbl").querySelectorAll("td.fx").forEach((td) => {
+      const i = +td.dataset.i, r = R[i];
+      if (r[3]) { td.textContent = "–"; return; }
+      if (s.fixed.has(i)) { td.textContent = "fixed: " + r[5]; return; }
+      if (s.checked && right()) { const b = Kit.el("button", { type: "button", class: "ghost" }, r[5]); b.addEventListener("click", () => { s.fixed.add(i); render(); upd(); }); td.appendChild(b); }
+      else td.textContent = "(check the marks first)";
+    });
+  }
+  function upd() {
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: version 2 of the package meets the brief.";
+    $("msg").textContent = m;
+  }
+  $("check").addEventListener("click", () => { s.checked = true; const n = R.filter((r, i) => s.mark[i] === r[3]).length; $("calc").textContent = `${n} of 6 marks are right.`; render(); upd(); });
+  window.PK = { mark: (i, v) => { s.mark[i] = v; s.checked = false; render(); upd(); }, check: () => $("check").click(), fixAll: () => { R.forEach((r, i) => { if (!r[3]) s.fixed.add(i); }); render(); upd(); } };
+  render(); upd();
+})();
+</script>
+</body>
+</html>

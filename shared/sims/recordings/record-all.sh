@@ -197,6 +197,9 @@ credit-builder|courses/digital-media/week-13/sims/credit-builder.html|9|courses/
 asset-shopping|courses/digital-media/week-13/sims/asset-shopping.html|8|courses/digital-media/week-13/sims/asset-shopping.gif
 audit-board|courses/digital-media/week-13/sims/audit-board.html|8|courses/digital-media/week-13/sims/audit-board.gif
 audit-fixes|courses/digital-media/week-13/sims/audit-fixes.html|8|courses/digital-media/week-13/sims/audit-fixes.gif
+production-planner|courses/digital-media/week-14/sims/production-planner.html|7|courses/digital-media/week-14/sims/production-planner.gif
+package-checker|courses/digital-media/week-14/sims/package-checker.html|9|courses/digital-media/week-14/sims/package-checker.gif
+workshop-day|courses/digital-media/week-14/sims/workshop-day.html|8|courses/digital-media/week-14/sims/workshop-day.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

@@ -95,6 +95,10 @@ listing-builder|courses/computing-systems/week-09/sims/listing-builder.html|9|co
 launch-day|courses/computing-systems/week-09/sims/launch-day.html|8|courses/computing-systems/week-09/sims/launch-day.gif
 guideline-sorter|courses/computing-systems/week-09/sims/guideline-sorter.html|8|courses/computing-systems/week-09/sims/guideline-sorter.gif
 review-board|courses/computing-systems/week-09/sims/review-board.html|8|courses/computing-systems/week-09/sims/review-board.gif
+packet-journey|courses/computing-systems/week-10/sims/packet-journey.html|15|courses/computing-systems/week-10/sims/packet-journey.gif
+net-fixer|courses/computing-systems/week-10/sims/net-fixer.html|8|courses/computing-systems/week-10/sims/net-fixer.gif
+terminal-lab|courses/computing-systems/week-10/sims/terminal-lab.html|10|courses/computing-systems/week-10/sims/terminal-lab.gif
+lag-detective|courses/computing-systems/week-10/sims/lag-detective.html|8|courses/computing-systems/week-10/sims/lag-detective.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
 ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif

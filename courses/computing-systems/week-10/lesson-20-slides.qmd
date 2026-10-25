@@ -1,0 +1,125 @@
+---
+title: "Networking Tools Demonstration"
+subtitle: "Lecture 20 · Seminar"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary ipconfig default-gateway ping-tool jitter packet-loss traceroute nslookup speed-test >}}
+
+## 20.1 The tools and your address
+
+:::: {.columns}
+::: {.column width="50%"}
+- Each network tool answers one question.
+- ipconfig shows the IP address and the default gateway.
+- An address 169.254.x.x means no address from the router.
+- **Do it:** Run ipconfig on your computer. What is your gateway?
+:::
+::: {.column width="50%"}
+![](images/tools.png)
+:::
+::::
+
+## Live demo · Terminal Lab
+
+{{< sim file="sims/terminal-lab.html" poster="sims/terminal-lab.png" title="Terminal Lab: network tools on Rami's laptop" task="**Show:** ipconfig and ping in the office, then ping the gateway in the café, then nslookup and ping by IP in the hotel. **Ask:** where is the problem in each place?" >}}
+
+## Try it 1 · The tools
+
+a) Which tool shows the default gateway?
+b) Which tool shows the routers on the way?
+c) Which tool gives the IP address of a name?
+
+::: {.answer}
+a) ipconfig
+b) tracert
+c) nslookup
+:::
+
+## 20.2 ping and tracert
+
+:::: {.columns}
+::: {.column width="50%"}
+- In ping, time= is the latency of one packet.
+- "Request timed out" is a lost packet.
+- In tracert, the delay starts where the time jumps.
+- **Do it:** Ping your gateway and example.com. Which is faster?
+:::
+::: {.column width="50%"}
+![](images/tracert.png)
+:::
+::::
+
+## Example · The café and the evening
+
+Two players complain about lag, one in a café and one at home in the evening.
+**What do ping and tracert show?**
+
+::: {.reveal}
+1. In the café, the **gateway** ping jumps from 6 to 160 ms, so the Wi-Fi is the problem.
+2. At home, tracert shows **2, 8, 12, 98 ms**, so the delay starts at hop 4.
+3. The café player sits **near the router**, and Byte Bay adds a **closer server region**.
+:::
+
+## Try it 2 · Read the output
+
+a) What is the loss when 4 packets are sent and 3 come back?
+b) Where is the problem when the gateway ping already jumps?
+c) Why do we ping the gateway before the server?
+
+::: {.answer}
+a) 25 %
+b) in the LAN or the Wi-Fi
+c) to see if the problem is near or far
+:::
+
+## 20.3 A diagnosis from near to far
+
+:::: {.columns}
+::: {.column width="50%"}
+- We check the address, the gateway, the server, the name and the speed.
+- The first "no" shows where the problem is.
+- Good ping and low FPS point to the device.
+- **Do it:** Write your network report. Is your connection good for a race?
+:::
+::: {.column width="50%"}
+![](images/diagnosis.png)
+:::
+::::
+
+## Example · Server not found in the hotel
+
+ipconfig and the pings in the hotel are fine, but the game cannot find play.example.net.
+**Where is the problem?**
+
+::: {.reveal}
+1. ping to **198.51.100.7** gives 29 ms with no loss, so the Internet works.
+2. nslookup play.example.net **times out**.
+3. The problem is the **DNS**, so we choose another DNS server.
+:::
+
+## Game challenge · Lag Detective
+
+{{< sim file="sims/lag-detective.html" poster="sims/lag-detective.png" title="Lag Detective: read the tools, find the problem" kind="game" task="**The story:** six players write to Byte Bay that the game lags. **Play:** read the tool outputs and find the problem of each player." >}}
+
+## Try it 3 · The inbox (harder)
+
+a) Which tool comes first for "I cannot connect at all"?
+b) What is the problem when 1.2 Mbit/s is shared with three video streams?
+c) What is the problem when the ping is 24 ms with no loss, but the game shows 18 FPS?
+
+::: {.answer}
+a) ipconfig
+b) too little bandwidth
+c) The device is too slow.
+:::
+
+## Summary
+
+- ipconfig shows the address and the default gateway.
+- ping shows the latency, the jitter and the lost packets.
+- tracert shows where on the route the delay starts.
+- nslookup checks the DNS, and a speed test checks the bandwidth.
+- We diagnose from near to far, and the device can be the problem too.

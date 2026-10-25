@@ -1,0 +1,219 @@
+---
+title: "Cloud Services for Games: Storage and Hosting"
+description: "Lesson notes · A seminar on the cloud services of a mobile game: cloud saves and other back-end services, object storage and a CDN for downloads, dedicated game servers in regions near the players, keeping secrets on the server, and a monthly cost estimate with example prices."
+lesson: 22
+ilos: [A2, C2]
+format: lesson-typst
+---
+
+::: {.lead}
+After launch day, the inbox of Byte Bay is full again: "I lost my phone and
+my progress!", "The level pack downloads so slowly!", "Cars jump in the
+races!", and one strange message: "Somebody wins every race in 3 seconds."
+At the same time, the first cloud bill arrives, and it is twice as high as
+planned. In lecture 21 you learned the cloud models. In this seminar you
+**plan** the cloud of a real game: which services it needs, where they run,
+how they stay safe, and what they cost. Every section ends with a task, and
+at the end you have a one-page cloud plan for a mobile game.
+:::
+
+## Key terms
+
+{{< glossary baas cloud-save leaderboard object-storage cdn dedicated-server cloud-region data-egress pay-as-you-go >}}
+
+## 22.1 The services of an online game
+
+An online game uses several cloud services at once (@fig-gamecloud).
+
+::: {.callout-important title="Definition 22.1 — The cloud of a game"}
+- **Back-end services (BaaS):** player accounts, **cloud saves**,
+  **leaderboards**, often also friends, chat and purchases checks.
+- **Object storage + CDN:** files that players download, such as level
+  packs, art and videos.
+- **Dedicated game servers:** run the live matches in regions near the
+  players.
+- **Analytics:** crashes, sessions and what players do.
+:::
+
+![The cloud services of Pocket Quest.](images/game-cloud.png){#fig-gamecloud width=94%}
+
+::: {.callout-note title="Example 22.1 — Pocket Quest after the update"}
+1. Login and cloud save through a game back-end service.
+2. Level pack 3 (80 MB) in object storage, delivered by a CDN.
+3. The live races on dedicated servers; the leaderboard in the back end.
+4. Crash reports in analytics show which phones have problems.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Building everything yourself on a rented VM "because it is cheaper". For a
+small studio, ready back-end services are usually faster, safer and
+cheaper to run.
+:::
+
+::: {.callout-note title="Do it · A map of services"}
+Choose a mobile game you know with online features. Draw its cloud map:
+which of the four kinds of services does it use, and for what?
+
+*Your result:* a map with at least three services.
+:::
+
+## 22.2 Saves, files and downloads
+
+Players expect their progress to be safe and their downloads to be fast
+(@fig-save, @fig-cdn).
+
+::: {.callout-important title="Definition 22.2 — Cloud save, object storage, CDN"}
+- A **cloud save** stores a small file of each player's progress (a few KB)
+  on a server, at checkpoints. After a login, any device can load it. When
+  two devices disagree, the newest save wins, or the game asks the player.
+- **Object storage** keeps files (objects) with a web address.
+- A **CDN** keeps copies of these files on **edge servers** around the
+  world: each player downloads from a near copy, which is faster and often
+  cheaper.
+:::
+
+![Cloud save: the progress follows the player.](images/cloud-save.png){#fig-save width=94%}
+
+![A CDN: copies of the files near the players.](images/cdn.png){#fig-cdn width=94%}
+
+::: {.callout-note title="Example 22.2 — The lost phone"}
+1. A player saves at level 12 with 840 coins; the cloud save stores it.
+2. The phone is lost. On the new phone the player logs in with the same
+   account.
+3. The game loads level 12 and 840 coins. Without a cloud save, the progress
+   would be gone.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Putting big level packs inside the app package. The download from the store
+becomes huge, and every small change needs a new app version. Keep big,
+changing content in object storage.
+:::
+
+::: {.callout-note title="Do it · Find the cloud save"}
+Open the settings of a game on your phone. Does it have a cloud save or an
+account link? What happens to your progress if you change phone?
+
+*Your result:* two short answers.
+:::
+
+## 22.3 Game servers, regions and safety
+
+Live matches need servers that decide what happens, close to the players
+(@fig-regions).
+
+::: {.callout-important title="Definition 22.3 — Dedicated servers, regions, secrets"}
+- A **dedicated game server** runs a match and decides what really happens.
+  It is **authoritative**: a cheating phone cannot simply say "I won".
+- Choose **regions** near most players: lower latency (lecture 19). Add
+  regions only when many players live far away.
+- **Secrets stay on the server.** Keys for payments or admin tools never go
+  into the game app: anyone can unpack an app.
+:::
+
+![Latency from three cities to three regions (example values).](images/regions.png){#fig-regions width=94%}
+
+::: {.callout-note title="Example 22.3 — The 3-second winner"}
+1. In the first version, each phone sends "my race time" to the leaderboard.
+2. A cheater changes the app and sends 3 seconds.
+3. Fix: the race runs on a dedicated server, which measures the time itself
+   and writes it to the leaderboard. The phone only sends its inputs.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Choosing the region by the lowest price only. A cheap region far from the
+players gives every race 60 ms more latency.
+:::
+
+::: {.callout-note title="Do it · Choose regions"}
+Most players of a game live in Jordan and Saudi Arabia; 10 % live in
+Germany. Use @fig-regions to choose the region for the races, and say
+whether a second region is worth it.
+
+*Your result:* a region and one sentence.
+:::
+
+## 22.4 What does it cost?
+
+A cloud plan is not finished without a cost estimate (@fig-cost).
+
+::: {.callout-important title="Definition 22.4 — A monthly cost estimate"}
+List every service with its **use per month** and its **price** from the
+provider's price page, and multiply. Often the biggest costs are **data
+transfer out** (downloads, **egress**) and **server hours**, not storage.
+Ways to save: a CDN, smaller files, servers only when players play
+(auto-scaling), free tiers, and a budget alarm.
+:::
+
+![A monthly cost estimate with example prices.](images/cloud-cost.png){#fig-cost width=94%}
+
+::: {.callout-note title="Example 22.4 — The bill that doubled"}
+1. 50,000 players, half of them download the 80 MB pack: 2,000 GB.
+2. Direct from storage at $0.09/GB: $180; through a CDN at $0.05/GB: $100.
+3. 4 race servers for 24 hours a day: $288. Only 8 hours a day (16:00–24:00,
+   when the players race): $96.
+4. With the CDN and 8-hour servers, the month costs about $196 instead of
+   $468 (example prices).
+:::
+
+{{< sim file="sims/cloud-cost.html" poster="sims/cloud-cost.png" title="Cloud Cost Planner: one month of Pocket Quest" height="760" >}}
+
+::: {.callout-warning title="Common mistake"}
+Copying prices from an old blog post. Prices change and differ by region:
+always use the provider's current price page, and write the date.
+:::
+
+::: {.callout-note title="Do it · Your cloud plan"}
+1. In **Cloud Cost Planner**, make a plan under $300 with the race region
+   near the players.
+2. Write a one-page cloud plan for Pocket Quest: the services, the region,
+   the safety rule, and the monthly cost estimate.
+
+*Your result:* a one-page plan.
+:::
+
+## Case study: Cloud Planner
+
+The inbox of Byte Bay: a player who lost a phone, slow downloads in Amman,
+jumping cars with a ping of 90 ms, impossible race times, a teammate who
+wants to put a secret key in the app, and a bill that doubled because of
+"data transfer out". The Game challenge of the interactive lesson uses
+these messages. In the mini-game below you choose the service or the
+setting that solves each one.
+
+{{< sim file="sims/cloud-planner.html" poster="sims/cloud-planner.png" title="Cloud Planner: the right service for each problem" kind="game" height="520" >}}
+
+## Further reading
+
+Unity Gaming Services documentation, "Cloud Save" and "Leaderboards"
+(docs.unity.com). Glazer and Madhav, *Multiplayer Game Programming* (2015),
+Chapter 13 (cloud hosting of dedicated servers).
+
+## Exercises
+
+1. Name the four kinds of cloud services of an online game.
+2. What does a cloud save store, and when?
+3. Why put level packs in object storage and not in the app?
+4. What does a CDN do?
+5. What does "authoritative server" mean?
+6. Why choose a region near the players?
+7. Where do secret keys belong?
+8. What is egress, and why does it matter?
+9. Name two ways to lower the cloud bill.
+10. Why must a cost estimate say the date of the prices?
+
+## Answers to the exercises
+
+::: {.answers}
+1. Back-end services (accounts, saves, leaderboards), object storage with a
+   CDN, dedicated game servers, analytics.
+2. A small file with the player's progress, at checkpoints.
+3. The app stays small and the content can change without a new app version.
+4. It keeps copies of files near the players, for faster downloads.
+5. The server decides what really happens in a match, not the phones.
+6. Lower latency for the races.
+7. On the server (in the back end), never in the app.
+8. Data sent from the cloud to the players; it is often the biggest cost.
+9. For example a CDN, smaller files, auto-scaling, free tiers.
+10. Prices change; the estimate is valid only for those prices.
+:::

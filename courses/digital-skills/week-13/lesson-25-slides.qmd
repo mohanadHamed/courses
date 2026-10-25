@@ -1,0 +1,142 @@
+---
+title: "Excel (3): Summarizing Data with AI Help"
+subtitle: "Lecture 25 · Lab session"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary excel-table total-row averageif pivottable row-field value-field data-insight >}}
+
+## 25.1 Make the list a table
+
+:::: {.columns}
+::: {.column width="50%"}
+- Format as Table turns a list into an Excel table.
+- The table gets a name, filter buttons and a total row.
+- New rows join the table by themselves.
+- **Lab task:** Make the March sales a table with a total row. What is the total?
+:::
+::: {.column width="50%"}
+![](images/format-table.png)
+:::
+::::
+
+## Try it 1 · Tables
+
+a) Which shortcut makes a list a table?
+b) Where do we give the table a name?
+c) Why must the list have no empty rows?
+
+::: {.answer}
+a) Ctrl + T
+b) Table Design › Table Name
+c) Excel stops the table at an empty row.
+:::
+
+## 25.2 Summary formulas
+
+:::: {.columns}
+::: {.column width="50%"}
+- SUMIF adds only the rows that match a condition.
+- COUNTIF counts them, and AVERAGEIF averages them.
+- MAX gives the biggest value.
+- **Lab task:** Make a summary table for Paper, Drinks and Bags. Which type has the biggest total?
+:::
+::: {.column width="50%"}
+![](images/summary-formulas.png)
+:::
+::::
+
+## Example · The answers in one cell each
+
+Huda wants single numbers for the newsletter.
+**Which formulas give them?**
+
+::: {.reveal}
+1. SUMIF for Paper gives **206 JD**, and COUNTIF for Bags gives **4**.
+2. AVERAGEIF for Drinks gives **7.1 JD**.
+3. MAX of the totals gives **60 JD**.
+:::
+
+## 25.3 PivotTables
+
+:::: {.columns}
+::: {.column width="50%"}
+- Insert › PivotTable builds a summary table.
+- One field goes to Rows, and the Total goes to Values.
+- Value Field Settings changes Sum to Count or Average.
+- **Lab task:** Make a PivotTable by Week. Which week was the best?
+:::
+::: {.column width="50%"}
+![](images/pivot.png)
+:::
+::::
+
+## Live demo · Pivot Lab
+
+{{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" task="**Show:** Rows Type with Sum, then Rows Week, then Average by Type. **Ask:** why is Drinks the lowest average but not the lowest count?" >}}
+
+## Try it 2 · PivotTables
+
+a) Which type sold the most in March?
+b) Which week was the best?
+c) What do we press after the data changes?
+
+::: {.answer}
+a) Paper (206 JD)
+b) week 3 (112 JD)
+c) Refresh
+:::
+
+## 25.4 AI help: summarize and check
+
+:::: {.columns}
+::: {.column width="50%"}
+- We give the AI data without personal details.
+- We ask for a summary with numbers.
+- We check every number with the PivotTable.
+- **Lab task:** Mark the six AI sentences in Summary Check. How many are wrong?
+:::
+::: {.column width="50%"}
+![](images/ai-summary.png)
+:::
+::::
+
+## Live demo · Summary Check
+
+{{< sim file="sims/summary-check.html" poster="sims/summary-check.png" title="Summary Check: is the AI right?" task="**Show:** mark \"Bags sold the most\" as true, then correct it. **Ask:** which wrong sentence sounds most believable, and why?" >}}
+
+## Example · Two wrong sentences
+
+The AI summary of March has two wrong sentences.
+**How does Rana find them?**
+
+::: {.reveal}
+1. "Bags sold the most" is wrong, because **Paper** has 206 JD.
+2. "Sales grew every week" is wrong, because the weeks are **87, 63, 112, 93**.
+3. Rana keeps the true sentences and adds that AI helped and the numbers were **checked**.
+:::
+
+## Game challenge · The Right Tool
+
+{{< sim file="sims/right-tool.html" poster="sims/right-tool.png" title="The Right Tool: six questions about the month" kind="game" task="**The story:** Huda and Rana have six questions about the month of sales. **Play:** choose the quickest right tool for each question." >}}
+
+## Try it 3 · Tools (harder)
+
+a) Which tool gives every week and every type at once?
+b) Which formula gives the average Drinks sale?
+c) What must happen before an AI summary goes into the newsletter?
+
+::: {.answer}
+a) a PivotTable
+b) AVERAGEIF
+c) Every number is checked.
+:::
+
+## Summary
+
+- An Excel table keeps the list tidy and gives a total row.
+- Summary formulas answer single questions.
+- A PivotTable summarizes by any field in a few clicks.
+- An AI summary helps only after every number is checked.

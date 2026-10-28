@@ -1,14 +1,16 @@
 ---
 # Online activity of a blended course (AUTHORING.md, "Blended courses").
-# Copy to courses/<slug>/week-PP/lesson-NN.qmd, where NN is the even lecture
-# of the week (the online lecture after face-to-face lecture NN-1).
+# Copy to courses/<slug>/week-WW/online-NN.qmd: Online activity NN, in the
+# folder of its unit (WW = the syllabus week). It practises its unit and never
+# repeats the face-to-face lecture.
 # On paper only the tasks are printed: sections marked {.study} stay on the
-# screen. homework_pdf.py prints the page as <prefix>_lectureNN_tasks.pdf.
-# Model answers and marking notes: courses-private, week-PP/lesson-NN-solutions.md.
+# screen. homework_pdf.py prints the page as <prefix>_onlineN_tasks.pdf.
+# The Steps teach: every Try it question has a "Why:", every step that asks
+# for a result has a ::: {.check}. The Tasks to submit stay unanswered.
+# Model answers and marking notes: courses-private, week-WW/online-NN-solutions.md.
 title: "Short title from schedule.yml"
 description: "Online activity · One short line. About 60 minutes."
-lesson: 2
-online: true
+online: 1          # the number of the online activity
 due: "before lecture 3"   # the next face-to-face lecture, never a week or a date
 marks: 6
 ilos: [A1]
@@ -43,6 +45,8 @@ Choose the right answer.
 ::: {.match extra="wrong answer"}
 A question?
 :   its answer
+
+    Why: one sentence, in the words of the step.
 :::
 :::
 

@@ -271,6 +271,15 @@ main h2 .header-section-number { color: var(--accent); }
 .match-feedback { min-height: 1.4em; margin: 0.5rem 0 0.1rem; font-weight: 800; }
 .match-feedback.good { color: #2b8a3e; }
 .match-feedback.bad { color: #c92a2a; }
+.match-feedback.shown { color: #a3500b; }
+/* The reason ("Why:"), shown under a question once it is answered. */
+.match-why {
+  flex: 1 0 100%; padding: 0.3rem 0 0.1rem 1.4rem;
+  font-size: 0.92rem; color: #3d4a40;
+}
+.match-why::before { content: "Why: "; font-weight: 800; color: var(--accent-ink); }
+.match-q.is-shown { border-color: #f0b37a; background: #fffaf3; }
+.match-q.is-shown .match-slot { border-color: #d9480f; background: #d9480f; }
 .match-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 0.9rem; }
 .match-score { font-weight: 800; color: var(--accent-ink); }
 .match-reset {
@@ -299,6 +308,40 @@ main h2 .header-section-number { color: var(--accent); }
 }
 .callout-note.do-it .callout-title-container { color: var(--accent-ink); font-weight: 800; }
 .callout-note.do-it .callout-title-container::before { content: "✍️ "; }
+
+/* "Check your result" (::: {.check}, match.lua): closed until opened. */
+details.check {
+  margin: 0.6rem 0 0.2rem; padding: 0.15rem 0.8rem;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 35%, #fff); border-radius: 10px; background: #fff;
+}
+details.check > summary { cursor: pointer; padding: 0.3rem 0; font-weight: 800; color: var(--accent-ink); }
+details.check > summary::marker { color: var(--accent); }
+details.check[open] { background: color-mix(in srgb, var(--accent2) 7%, #fff); }
+details.check .check-body { padding: 0.1rem 0 0.4rem; }
+details.check .check-body > :last-child { margin-bottom: 0; }
+
+/* "Task with AI" (lesson-script.html adds .ai-task): a harder task done with an
+   AI assistant, a starter prompt (div.prompt) and a check step. */
+.callout.callout-note.ai-task {
+  border: 1.5px solid #b197fc !important;
+  border-left: 6px solid #7048e8 !important;
+  background: #f8f5ff;
+}
+.callout-note.ai-task .callout-title-container { color: #5f3dc4; font-weight: 800; }
+.callout-note.ai-task .callout-title-container::before { content: "🤖 "; }
+div.prompt {
+  position: relative; margin: 0.5rem 0; padding: 0.6rem 0.8rem 2.6rem;
+  border: 1.5px dashed #b197fc; border-radius: 10px; background: #fff;
+  font-family: var(--bs-font-monospace, monospace); font-size: 0.9rem;
+}
+div.prompt > p:last-of-type { margin-bottom: 0; }
+.copy-prompt {
+  position: absolute; right: 0.6rem; bottom: 0.5rem;
+  padding: 0.25rem 0.8rem; border: 1.5px solid #7048e8; border-radius: 999px;
+  background: #fff; color: #5f3dc4; font: inherit; font-family: var(--bs-body-font-family, sans-serif);
+  font-weight: 800; font-size: 0.85rem; cursor: pointer;
+}
+.copy-prompt:hover { background: #f3f0ff; }
 
 /* ---------- Game challenge and summary ---------- */
 section.challenge,
@@ -399,7 +442,7 @@ button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
   a { color: inherit !important; text-decoration: none !important; }
   /* Online activity: on paper only the tasks (the study steps, simulators
      and self-checks stay on the screen). */
-  section.study, .online-print-hide, iframe { display: none !important; }
+  section.study, .online-print-hide, iframe, details.check, .copy-prompt { display: none !important; }
   section.tasks h3 { break-after: avoid; margin: 0.45rem 0 0.15rem !important; font-size: 1rem !important; }
 }
 
@@ -444,4 +487,11 @@ button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
 .sl.is-soon .sl-tag { background: #f1f1ef; color: #a6aaa7; }
 .sl-due { font-size: 0.78rem; font-weight: 700; color: #6b6f6c; align-self: center; }
 .sl.is-exam .sl-num { color: #9b6b00; }
+/* Units (schedule.yml `units:`): every session has its label above the title. */
+.sw-unit .sl { grid-template-columns: 1fr; }
+.sl-kind { font-size: 0.74rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #b0b3b1; }
+.sl.is-ready .sl-kind { color: var(--accent); }
+.sl-seminar.is-ready .sl-kind, .sl-practice.is-ready .sl-kind { color: #a3500b; }
+.sl-seminar, .sl-practice { border-left: 3px solid color-mix(in srgb, var(--accent2) 60%, #fff); padding-left: 0.5rem; }
+.sl-tag.sl-flex { background: #fff4e6; color: #a3500b; }
 .sl.is-exam .sl-title { color: #6d5a2c; font-style: italic; }

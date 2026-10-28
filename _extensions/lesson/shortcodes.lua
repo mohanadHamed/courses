@@ -23,14 +23,17 @@
 --     recording="sims/other.gif" (made by shared/sims/recordings/).
 --
 --   {{< schedule >}}
---     Course page: every lecture from courses/<slug>/schedule.yml, in pairs,
---     each pair with its homework. A ready lecture (its .qmd exists, no `draft: true`) is bright and
---     links its page, PDF and slides; the others are faded ("coming soon").
---     The review profile shows drafts as ready.
---     Blended course: a lecture with `online: true` (schedule.yml or its
---     front matter) is an online activity: it is tagged "Online", links its
---     page and its tasks PDF (<prefix>_lectureN_tasks.pdf), and shows its due
---     lecture and marks.
+--     Course page: every session from courses/<slug>/schedule.yml, grouped
+--     by unit (one unit = one week of the official syllabus; `units:`), each
+--     unit with its homework. Every session is labelled "Lecture N",
+--     "Seminar N", "Practice N" or "Online activity N"; a flexible seminar or
+--     practice session (`core: false`) is tagged "Flexible". A ready session
+--     (its .qmd exists, no `draft: true`) is bright and links its page, PDF
+--     and slides; the others are faded ("coming soon"). The review profile
+--     shows drafts as ready. Files of a unit are in week-WW (WW = its
+--     syllabus week): lesson-NN, seminar-NN, practice-NN, online-NN and
+--     homework-UU (UU = the unit).
+--     Older schedules (`lectures:`, before units) are shown in pairs.
 
 local str = pandoc.utils.stringify
 
@@ -356,10 +359,88 @@ local function file_prefix(meta)
   return (str(course.slug or "course"):gsub("%-", "_"))
 end
 
--- Folder of lecture n (or homework k = pair k): week-01 for lectures 1-2,
--- week-02 for 3-4, ... The name is internal and never shown.
+-- Folder of a unit: week-WW, WW = its syllabus week (older schedules: the
+-- pair of lectures). The name is internal and never shown.
 local function pair_dir(pair)
   return string.format("week-%02d", pair)
+end
+
+-- One session of a unit: { stem, link text, file names, label }.
+local SESSION = {
+  lecture = { stem = "lesson", go = "Open lecture →", label = "Lecture", file = "lecture", pdf = "PDF" },
+  seminar = { stem = "seminar", go = "Open seminar →", label = "Seminar", file = "seminar", pdf = "Worksheet" },
+  practice = { stem = "practice", go = "Open practice →", label = "Practice", file = "practice", pdf = "Worksheet" },
+  online = { stem = "online", go = "Open activity →", label = "Online activity", file = "online" },
+}
+
+local function session_row(dir, wdir, prefix, slides_public, x)
+  local kind = str(x.kind or "lecture")
+  local s = SESSION[kind]
+  if not s then error("schedule.yml: unknown kind '" .. kind .. "' (lecture, seminar, practice, online)") end
+  local n = tonumber(str(x.n))
+  local stem = string.format("%s-%02d", s.stem, n)
+  local base = pandoc.path.join({ dir, wdir, stem })
+  local fm = front_matter(base .. ".qmd")
+  local ok = ready(fm)
+  local flexible = kind ~= "lecture" and kind ~= "online" and (x.core == false or str(x.core or "") == "false")
+  local file = string.format("%s/%s_%s%d", wdir, prefix, s.file, n)
+  local links
+  if ok then
+    local parts = { string.format('<a class="sl-go" href="%s/%s.html">%s</a>', wdir, stem, s.go) }
+    if kind == "online" then
+      table.insert(parts, string.format('<a class="sl-file" href="%s_tasks.pdf">Tasks PDF</a>', file))
+      local bits = {}
+      if fm.marks then table.insert(bits, str(fm.marks) .. " marks") end
+      if fm.due then table.insert(bits, "due " .. str(fm.due)) end
+      if #bits > 0 then
+        table.insert(parts, '<span class="sl-due">' .. html_attr(table.concat(bits, " · ")) .. "</span>")
+      end
+    else
+      if file_exists(base .. "-book.qmd") then
+        table.insert(parts, string.format('<a class="sl-file" href="%s.pdf">%s</a>', file, s.pdf))
+      end
+      if slides_public and file_exists(base .. "-slides.qmd") then
+        table.insert(parts, string.format('<a class="sl-file" href="%s_slides.pptx">Slides</a>', file))
+      end
+    end
+    links = '<span class="sl-links">' .. table.concat(parts, "") .. "</span>"
+  else
+    links = '<span class="sl-soon">Coming soon</span>'
+  end
+  local tags = ""
+  if flexible then tags = tags .. ' <span class="sl-tag sl-flex">Flexible</span>' end
+  if kind == "online" then tags = tags .. ' <span class="sl-tag">💻 Online</span>' end
+  return string.format(
+    '<div class="sl sl-%s %s"><span class="sl-kind">%s %d</span><span class="sl-title">%s%s</span>%s</div>',
+    kind, ok and "is-ready" or "is-soon", s.label, n, html_attr(str(x.title)), tags, links), ok
+end
+
+local function schedule_units(dir, prefix, slides_public, units)
+  local out = { '<div class="schedule">' }
+  for _, u in ipairs(units) do
+    local unit = tonumber(str(u.unit))
+    local wdir = pair_dir(tonumber(str(u.week)))
+    local rows, any_ready = {}, false
+    for _, x in ipairs(u.sessions or {}) do
+      local row, ok = session_row(dir, wdir, prefix, slides_public, x)
+      table.insert(rows, row)
+      any_ready = any_ready or ok
+    end
+    local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", unit) }))
+    local hw_html = ""
+    if ready(hw) then
+      local bits = {}
+      if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
+      if hw.due then table.insert(bits, "due " .. str(hw.due)) end
+      hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
+        wdir, unit, unit, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
+    end
+    table.insert(out, string.format(
+      '<section class="sw sw-unit %s"><header class="sw-head"><span class="sw-week">Unit %d</span>%s</header>%s</section>',
+      any_ready and "has-ready" or "", unit, hw_html, table.concat(rows, "")))
+  end
+  table.insert(out, "</div>")
+  return pandoc.RawBlock("html", table.concat(out, "\n"))
 end
 
 local function schedule(meta)
@@ -369,6 +450,7 @@ local function schedule(meta)
   local data = read_yaml(pandoc.path.join({ dir, "schedule.yml" }))
   local config = read_yaml(pandoc.path.join({ project_dir(), "_quarto.yml" }))
   local slides_public = config["slides-public"] == true
+  if data.units then return schedule_units(dir, prefix, slides_public, data.units) end
   local lectures = data.lectures or {}
   local out = { '<div class="schedule">' }
   -- Two lectures, then their homework: one section per pair.

@@ -13,7 +13,11 @@ Quarto (pandoc) makes plain slides. This project post-render step adds:
   and a fade between slides;
 - text that fits its box: long text is made smaller (PowerPoint autofit
   values), and on a "Comparison" slide (the `task` line of a simulator above
-  its recording and QR code) the line gets the room it needs.
+  its recording and QR code) the line gets the room it needs;
+- seminar and practice decks (seminar-NN-slides, practice-NN-slides): a
+  "SEMINAR" (or "PRACTICE") mark on every slide, so a teacher sees at once that
+  the session is activity-based, and coloured "Recall", "Activity N",
+  "Check N" and "Wrap-up" labels.
 
 Only the Python standard library is used. The script runs on every render
 (local, preview and CI) and skips files it already finished.
@@ -178,7 +182,25 @@ def finish_theme(xml, pal):
     return s.encode("utf-8")
 
 
-def finish_master(xml, pal, course):
+def session_mark(path):
+    """'SEMINAR' or 'PRACTICE' for a seminar or practice deck, else ''."""
+    name = os.path.basename(path).lower()
+    if re.search(r"(^|_)seminar[-_]?\d+", name):
+        return "SEMINAR"
+    if re.search(r"(^|_)practice[-_]?\d+", name):
+        return "PRACTICE"
+    return ""
+
+
+def mark_shape(text, pal):
+    """The seminar mark at the bottom right, above the band."""
+    w, h = 1250000, 250000
+    return shape(9007, "deco-session-mark", SLIDE_W - MARGIN_X - w, 4775000, w, h, "roundRect", solid(pal["accent"]),
+                 text=text_para(text + " · activities", 900, "FFFFFF", bold=True, algn="ctr"),
+                 body_pr='<a:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr"/>')
+
+
+def finish_master(xml, pal, course, mark=""):
     root = parse(xml)
     csld = root.find(P + "cSld")
     bg = csld.find(P + "bg")
@@ -204,6 +226,7 @@ def finish_master(xml, pal, course):
         shape(9006, "deco-footer", MARGIN_X, 4790000, 7000000, 230000, "rect", "<a:noFill/>",
               text=text_para(footer, 900, pal["muted"]),
               body_pr='<a:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr"/>'),
+        mark_shape(mark, pal) if mark else "",
     ])
     insert_back(sptree, deco)
 
@@ -389,8 +412,9 @@ def style_runs_one(r, size, color, bold):
     rpr.insert(0, frag(solid(color))[0])
 
 
-LABEL = re.compile(r"^(Try it \d+(?:[–-]\d+)?|Try it|Think|Quick check|Your turn|Example|Watch out|Game challenge)\s*([·:—-])?\s*")
-NOT_QUESTION = ("Example", "Watch out", "Game challenge")   # coloured label, but no "?"
+LABEL = re.compile(r"^(Try it \d+(?:[–-]\d+)?|Try it|Think|Quick check|Your turn|Example|Watch out|Game challenge"
+                   r"|Recall|Activity \d+|Check \d+|Wrap-up)\s*([·:—-])?\s*")
+NOT_QUESTION = ("Example", "Watch out", "Game challenge", "Wrap-up")   # coloured label, but no "?"
 
 
 def finish_title_label(sptree, pal):
@@ -877,7 +901,7 @@ def finish(path, project_dir):
             title_layouts.add(name.rsplit("/", 1)[1])
             files[name] = finish_title_layout(files[name])
     files["ppt/theme/theme1.xml"] = finish_theme(files["ppt/theme/theme1.xml"], pal)
-    files["ppt/slideMasters/slideMaster1.xml"] = finish_master(master, pal, course)
+    files["ppt/slideMasters/slideMaster1.xml"] = finish_master(master, pal, course, session_mark(path))
     for name in order:
         if not re.match(r"ppt/slides/slide\d+\.xml$", name):
             continue

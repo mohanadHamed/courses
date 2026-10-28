@@ -1,0 +1,162 @@
+---
+title: "Where Mathematics Appears in a Mobile Game"
+subtitle: "Seminar 1 · practises Lecture 1"
+format: lesson-pptx
+---
+
+## Recall · Lecture 1
+
+a) In which quadrant is the point (−2, −6)?
+b) What is the vector from A = (1, 1) to B = (4, 3)?
+c) With y up, which number of (7, 2, 9) is the height?
+
+::: {.answer}
+a) quadrant III
+b) (3, 2)
+c) 2, the middle number
+:::
+
+## Activity 1 · The mathematics in a game · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Every moving thing in a game is computed with numbers.
+- **Do it:** Play a game for two minutes. Which four things does it compute, and with which mathematics?
+- Your product is a table with four rows: game thing, mathematics.
+:::
+::: {.column width="50%"}
+![](images/game-loop.png)
+:::
+::::
+
+## Check 1 · The mathematics in a game
+
+What does a good table look like?
+
+::: {.reveal}
+1. "Where my car is" needs coordinates, and "the car moves" needs vectors.
+2. "A box gives a random prize" needs probability.
+3. "The gate opens only with a key" needs logic.
+:::
+
+## Activity 2 · A level in numbers · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The well is the origin. The barn is 4 left and 1 up, and the gate is 6 right on the ground.
+- The tractor is 2 right and 3 down, and the scarecrow is 5 left and 2 down.
+- **Do it:** Write the coordinates and the quadrant of each object, then draw them in GeoGebra.
+:::
+::: {.column width="50%"}
+![](images/quadrants.png)
+:::
+::::
+
+## Check 2 · A level in numbers
+
+What are the coordinates and the quadrants?
+
+::: {.reveal}
+1. The barn is at (−4, 1), in quadrant II.
+2. The gate is at (6, 0), on the x-axis.
+3. The tractor is at (2, −3), in quadrant IV.
+4. The scarecrow is at (−5, −2), in quadrant III.
+:::
+
+## Activity 3 · Scalars and vectors · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A scalar is one number; a vector also has a direction.
+- **Do it:** Write three scalars and three vectors from a game you play.
+- Then write the joystick vector for fully up, fully left and let go.
+:::
+::: {.column width="50%"}
+![](images/scalar-vector.png)
+:::
+::::
+
+## Check 3 · Scalars and vectors
+
+Which joystick vectors did you write?
+
+::: {.reveal}
+1. Fully up gives (0, 1).
+2. Fully left gives (−1, 0).
+3. Let go gives (0, 0), the zero vector.
+:::
+
+## Activity 4 · Chase and run away · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The guard is at G = (−4, 3), the player at P = (2, −1) and a painting at A = (5, 4).
+- **Do it:** Find the vector from the guard to the player and from the player to the painting.
+- Then find the vector that takes the guard from P back to G.
+:::
+::: {.column width="50%"}
+![](images/displacement.png)
+:::
+::::
+
+## Check 4 · Chase and run away
+
+Which vectors did you find?
+
+::: {.reveal}
+1. Guard to player: P − G = (6, −4).
+2. Player to painting: A − P = (3, 5).
+3. Back to the post: G − P = (−6, 4), the opposite of the first vector.
+:::
+
+## Activity 5 · A drone in 3D · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A drone flies from A = (1, 0, 2) to a roof at B = (5, 6, −1), and y is up.
+- **Do it:** Find the displacement and split it into a vertical part and a horizontal part.
+- Then make the same move in the 3D viewer.
+:::
+::: {.column width="50%"}
+![](images/drone-3d.png)
+:::
+::::
+
+## Live demo · Move the player in 3D
+
+{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" task="**Show:** move the player from (1, 0, 2) to (5, 6, −1). **Ask:** which slider changes the height?" >}}
+
+## Check 5 · A drone in 3D
+
+What are the three vectors of the delivery?
+
+::: {.reveal}
+1. The displacement is B − A = (4, 6, −3).
+2. The vertical part is (0, 6, 0), so the drone climbs 6 units.
+3. The horizontal part is (4, 0, −3), the move over the ground.
+:::
+
+## Game challenge · Harbor Guard
+
+{{< sim file="sims/harbor-guard.html" poster="sims/harbor-guard.png" title="Harbor Guard: build towers at the right coordinates" kind="game" task="The radar reports where each ship is, and you build a tower at that point. **Play:** stop as many ships as you can on your phone." >}}
+
+## Try it · Harbor Guard (harder)
+
+The facts: the dock is at (0, −6), the lighthouse at (−4, 5) and the gate at (3, 2). A ship enters at (5, 8).
+
+a) Which displacement takes the ship from where it enters to the dock?
+b) The ship sails from (5, 8) to the gate in 2 frames. What is its velocity?
+c) Where is the dock: in a quadrant or on an axis?
+
+::: {.answer}
+a) (−5, −14)
+b) (−1, −3)
+c) on the y-axis
+:::
+
+## Wrap-up
+
+- You can find the mathematics behind what a game computes.
+- You can turn a level description into coordinates and quadrants.
+- You can find the vector from one object to another, and its opposite.
+- You can split a 3D move into a vertical part and a horizontal part.

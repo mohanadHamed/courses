@@ -1,0 +1,235 @@
+---
+title: "Where Mathematics Appears in a Mobile Game"
+description: "Seminar worksheet · The mathematics in a game, a level in numbers, scalars and vectors, chase vectors and a 3D delivery."
+seminar: 1
+ilos: [A1]
+format: lesson-typst
+---
+
+::: {.lead}
+Today there are no new ideas. You use what Lecture 1 taught (the game loop,
+coordinates in 2D and 3D, vectors and displacement) on real game problems:
+you find the mathematics in a game you play, turn a level description into
+numbers, and move guards, players and drones with vectors. Do each activity
+alone. The results of the activities are at the end of this worksheet: try
+first, then compare.
+:::
+
+## Recall
+
+- A game repeats the **game loop**: read the input, change the numbers, draw.
+  One pass makes one frame.
+- A 2D point is $(x, y)$; the signs decide the quadrant: I $(+, +)$, II
+  $(-, +)$, III $(-, -)$, IV $(+, -)$. A point with a 0 is on an axis.
+- With $y$ up, a 3D point $(x, y, z)$ has its height in the middle.
+- A **vector** has a size and a direction; its components are head − tail.
+- From $A$ to $B$: $B - A$. Every frame: position + velocity.
+
+::: {.callout-tip title="Try it · Recall"}
+Choose the right answer.
+
+::: {.match extra="quadrant I|(3, 2)"}
+In which quadrant is (−2, −6)?
+:   quadrant III
+
+The vector from A = (1, 1) to B = (4, 3).
+:   (3, 2)
+
+With y up, which number of (7, 2, 9) is the height?
+:   2
+:::
+:::
+
+## Activity 1 · Find the mathematics in a game
+
+Every moving thing in a phone game is computed with numbers, and each needs
+a kind of mathematics (@tbl-map).
+
+| What the game does | Mathematics |
+|---|---|
+| know where every object is; move it | coordinates, vectors |
+| aim a turret; make an object bob up and down | trigonometry |
+| move, turn and resize models | matrices |
+| decide if a door opens or an enemy attacks | logic |
+| loot, critical hits, random levels | probability |
+
+: Mathematics behind common game tasks. {#tbl-map}
+
+::: {.callout-note title="Activity 1 · Find the mathematics · 10 min"}
+1. Play a game on your phone for two minutes.
+2. Write four things it must compute with numbers (for example "the position
+   of my car", "the chance of a rare item").
+3. Next to each, write the mathematics from @tbl-map.
+
+*Your product:* a table with four rows: game thing, mathematics.
+
+::: {.check}
+A good answer looks like this: "where my car is: coordinates", "the car
+moves forward: vectors", "a box gives a random prize: probability", "the
+gate opens only with a key: logic". Check: four different things the game
+computes; one kind of mathematics in each row; at least one row that is not
+about position.
+:::
+:::
+
+## Activity 2 · A level from a description
+
+A designer describes a farm level in words. The origin is the well in the
+centre; $x$ goes right and $y$ goes up. The barn is 4 units left of the well
+and 1 unit up. The gate is 6 units right of the well, on the ground line
+($y = 0$). The tractor is 2 units right and 3 units down. The scarecrow is 5
+units left and 2 units down.
+
+::: {.callout-note title="Activity 2 · A level in numbers · 12 min"}
+1. Write the coordinates of the well, the barn, the gate, the tractor and the
+   scarecrow.
+2. Write the quadrant (or the axis) of each one.
+3. Type them in geogebra.org/calculator and check the picture against the
+   description.
+
+*Your product:* a table with five rows: object, coordinates, quadrant.
+
+::: {.check}
+Well $(0, 0)$: the origin. Barn $(-4, 1)$: quadrant II. Gate $(6, 0)$: on
+the x-axis. Tractor $(2, -3)$: quadrant IV. Scarecrow $(-5, -2)$: quadrant
+III. Left and down are minus; a 0 puts the point on an axis.
+:::
+:::
+
+::: {.callout-note .ai-task title="Task with AI · Your own level in numbers"}
+**Goal:** a level of 8 objects and 2 moving enemies, described in words and
+turned into numbers and a GeoGebra picture. By hand this is long; an AI
+assistant does the typing, and you check it.
+
+1. **Do it yourself:** write a short description of your own level: 8
+   objects ("the castle is 5 units left of the centre and 2 up …") and 2
+   enemies, each with a start and a velocity per frame.
+2. **Ask the AI:** paste your description after this prompt.
+
+   ::: {.prompt}
+   The origin is the centre of a 2D game level; x goes right and y goes up.
+   Turn the description below into a table: object, coordinates, quadrant.
+   Then write GeoGebra commands that draw every object, and the positions of
+   each enemy after 1, 2 and 3 frames. Description:
+   :::
+
+3. **Check:** draw the commands in GeoGebra. For each object, check that it
+   is where your words say. Work out one enemy after 3 frames by hand
+   (start + 3 × velocity) and compare.
+
+*Your product:* the table, the picture, and one sentence on any mistake the
+AI made and how you corrected it.
+
+::: {.check}
+A good product has 8 objects that match their words in GeoGebra (left =
+minus $x$, down = minus $y$), quadrants that fit the signs ("on an axis" for
+a 0), and one enemy worked by hand that matches the picture. AI tools often
+swap $x$ and $y$ or forget a minus sign: look for these first.
+:::
+:::
+
+## Activity 3 · Scalars and vectors in your game
+
+A game shows many numbers. Some need only a size: they are scalars. Others
+also need a direction: they are vectors. A virtual joystick gives a vector
+every frame: pushed fully right it gives $(1, 0)$; let go, it gives $(0, 0)$.
+
+::: {.callout-note title="Activity 3 · Scalars and vectors · 10 min"}
+1. Play a game for one minute.
+2. Write three scalars (for example "coins: 250") and three vectors, each
+   with its direction (for example "the ball flies up and to the left").
+3. Write the joystick vector for: fully up; fully left; let go.
+
+*Your product:* a list of three scalars, three vectors and three joystick
+vectors.
+
+::: {.check}
+Joystick: fully up $(0, 1)$; fully left $(-1, 0)$; let go $(0, 0)$. Each
+scalar is one number with no direction (time, coins, health); each vector
+says which way (up, left, towards the enemy). A speed alone is a scalar; a
+speed with a direction is a vector.
+:::
+:::
+
+## Activity 4 · Chase and run away
+
+A guard patrols a museum level. The guard is at $G = (-4, 3)$, the player at
+$P = (2, -1)$, and a painting at $A = (5, 4)$.
+
+::: {.callout-note title="Activity 4 · Chase and run away · 12 min"}
+1. Find the vector that takes the guard to the player.
+2. Find the vector that takes the player to the painting.
+3. The guard reaches the player, then walks back to its post at $G$. Which
+   vector takes it from $P$ back to $G$? Compare it with your answer 1.
+4. Check all three in GeoGebra with `Vector(G, P)` and so on.
+
+*Your product:* three vectors, each with "from … to …".
+
+::: {.check}
+Guard → player: $P - G = (6, -4)$. Player → painting: $A - P = (3, 5)$.
+Back to the post: $G - P = (-6, 4)$, the opposite of answer 1: the same size,
+the other way.
+:::
+:::
+
+## Activity 5 · A drone in 3D
+
+A delivery drone flies in a world with $y$ up. It starts at $A = (1, 0, 2)$
+on the ground and delivers a parcel on a roof at $B = (5, 6, -1)$. The move
+has a **vertical part** $(0, v_y, 0)$, which changes the height, and a
+**horizontal part** $(v_x, 0, v_z)$, which moves along the ground.
+
+{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" height="640" >}}
+
+::: {.callout-note title="Activity 5 · A 3D delivery · 12 min"}
+1. Find the displacement from $A$ to $B$.
+2. Split it into its vertical part and its horizontal part.
+3. In the 3D viewer, put the player at $(1, 0, 2)$ and move it to
+   $(5, 6, -1)$. Which sliders did you move?
+
+*Your product:* three vectors and the sliders.
+
+::: {.check}
+$B - A = (4, 6, -3)$. Vertical part $(0, 6, 0)$: the drone climbs 6 units.
+Horizontal part $(4, 0, -3)$. All three sliders move: $x$ by $+4$, $y$ by
+$+6$, $z$ by $-3$.
+:::
+:::
+
+## Case study: Harbor Guard
+
+*Harbor Guard* is a made-up tower-defence game for phones. It runs at 60
+fps. The origin of the harbour level is in its centre: the dock is at
+$(0, -6)$, the lighthouse at $(-4, 5)$ and the gate at $(3, 2)$. A ship
+enters at $(5, 8)$. The radar reports a ship's coordinates, and you build a
+tower at that point. In the 3D version, a patrol drone hovers at
+$(-2, 9, 6)$ with $y$ up. The Game challenge of the interactive page uses
+these numbers, and the mini-game below is a playable version of the harbour.
+
+{{< sim file="sims/harbor-guard.html" poster="sims/harbor-guard.png" title="Harbor Guard: build towers at the right coordinates" kind="game" height="720" >}}
+
+## Exercises
+
+1. Which mathematics does each game task need: (a) a turret turns to a
+   ship; (b) a door opens only with a key; (c) a random level?
+2. In the farm level, a fence post is 3 units right of the barn $(-4, 1)$
+   and 4 units down. Where is it, and in which quadrant?
+3. Scalar or vector? (a) the time left; (b) knockback away from an enemy;
+   (c) the wind from the west.
+4. A guard at $(0, 5)$ chases a player at $(-3, 1)$. Find the vector from the
+   guard to the player and its opposite.
+5. A drone flies from $(2, 4, 0)$ to $(2, 1, 6)$ ($y$ up). Find the
+   displacement, its vertical part and its horizontal part.
+6. *Harbor Guard*: a ship at $(5, 8)$ sails to the lighthouse in 3 frames.
+   Find its velocity per frame.
+
+## Answers to the exercises
+
+::: {.answers}
+1. (a) trigonometry; (b) logic; (c) probability.
+2. (−1, −3), quadrant III.
+3. (a) scalar; (b) vector; (c) vector.
+4. (−3, −4); its opposite (3, 4).
+5. (0, −3, 6); vertical (0, −3, 0); horizontal (0, 0, 6).
+6. (−4, 5) − (5, 8) = (−9, −3); velocity (−3, −1).
+:::

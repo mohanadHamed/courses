@@ -16,7 +16,7 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
 | Part | Minutes | Notes (PDF) | Page | Slides |
 |---|---|---|---|---|
 | Key terms | 5 | glossary 10–14 terms | glossary | Keywords |
-| 5–7 sections | ~60 | definition, figure, 1–2 worked examples, common mistake, code where useful | summary, figure, one Try it (4–6 varied questions), simulator / mini-game | Think → concept (picture) → Example → Try it |
+| 5–7 sections | ~60 | definition, figure, 1–2 worked examples, common mistake, code where useful | summary, figure, one Try it (4–6 varied questions, each with `Why:`), simulator / mini-game | concept (picture) → Example → Try it |
 | Case study / Game challenge | ~20 | case study + illustration | 2 Try it on the whole lesson | story + one slide per Try it |
 | Summary | 5 | exercises + answers | Summary | Summary |
 
@@ -27,6 +27,23 @@ discrete grids, reading short game code, several frames in one question.
 
 Mathematics: LaTeX math (`$…$`) in the notes; plain text with
 `x~s~` subscripts on the page and slides (no MathJax needed).
+
+## Units and seminars (2026-10-28)
+
+- 15 units = syllabus weeks 1–15: 19 lectures (core) and 10 seminars
+  (flexible). In a week with two lectures (units 2, 3, 4, 11, 15) the
+  syllabus seminar topic is the Game challenge of the second lecture; in a
+  week with one merged lecture the second 90-min session is a seminar with
+  the syllabus seminar title. Unit 8 is the revision seminar (Seminar 5).
+- A 90-min seminar: Recall, 4–6 activities, the Game challenge, a Wrap-up.
+  Seminars hold the second examples that the merged lectures gave up
+  (Multiply Lab, Asteroid Beam, Lighthouse, Problem Drill, Star Dock
+  Missions move there).
+- Tasks with AI fit here when the AI does the long part and the student
+  checks it: a sheet of 1000 loot rolls against the expected value,
+  GeoGebra commands for a path or a chain of transformations checked at two
+  points by hand, a truth table for a door with four conditions. Never trust
+  AI arithmetic without a check.
 
 ## Lessons learned
 
@@ -53,3 +70,13 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   fingers (the middle finger is not a polite gesture to ask for in class).
   It is the curl rule: the fingers point along +x and bend towards +y; the
   thumb shows +z. Use this wording in every lesson.
+- 2026-10-28 (plan v2): 29 lectures became 19 lectures and 10 seminars.
+  Cut as beyond the ILOs: transpose and the engine's 4 × 4 matrix, the
+  general inverse formula, reflection, Rᵀ = R⁻¹ and the determinant proof,
+  formal logic (contrapositive, iff), the state machine and its code,
+  short-circuit evaluation, bell-shaped distributions, logarithms in drop
+  rates, PRD, flood fill (BFS), acceleration and damping, geometric
+  probability, √2 ≈ 1.41-style arithmetic, `Rad2Deg`, `DeltaAngle`,
+  `sqrMagnitude`, and Unity code that no task needs. Case studies get new
+  numbers (they reused the worked examples, so the notes held the Game
+  challenge answers). Fix: Turn Lab's target (6, 1) is at 9.5°, not 10°.

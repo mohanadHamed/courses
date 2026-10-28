@@ -1,47 +1,93 @@
-# The lectures of the course in teaching order (titles from the course
-# syllabus v2, 2026-10-23). Students and the teacher count lectures, not
-# weeks: a missed or late week moves every course differently, so the site
-# never shows weeks. Exams are not listed: the university sets them.
+# The sessions of the course, grouped in units (AUTHORING.md, "Units and
+# sessions"). One unit = one week of the official syllabus: `week` is that
+# syllabus week (a week with only an exam has no unit), `slot` names the
+# syllabus column(s) the session covers (tools/course_package.py). Units and
+# sessions are numbered in teaching order; the site never shows a week.
 #
-# Blended course: each pair is one week. The odd lecture is face-to-face in
-# the computer lab (a full lesson: notes, page, slides). The even lecture is
-# an online activity (`online: true`): digital content with simulators and
-# tasks that the students submit on the e-learning platform. It replaces the
-# homework of the other courses.
+# kind: lecture (always core), practice (hands-on work on earlier lectures,
+# face-to-face) or online (the online activity of the unit, always kept)
+# n: the number of the session within its kind ("Lecture 4", "Practice 2").
+# core: false = flexible: taught when time allows, else studied at home
+# (every answer is on its page). practises: the lectures it applies.
 #
-# Files: lecture n is lesson-NN.qmd (NN = n) in the folder week-PP, where
-# PP = (n + 1) / 2 rounded down: lectures 1-2 are in week-01, 3-4 in week-02,
-# and so on. The folder name is internal (it keeps old links and QR codes
-# working) and is never shown. A lecture is ready (bright, with links) when
-# its lesson-NN.qmd exists and has no `draft: true`; otherwise it is faded.
-lectures:
-  - {n: 1, title: "Digital Skills and the Apps That Make Us Productive", ilos: [A1]}
-  - {n: 2, title: "Your University Account, Cloud Storage and Files", ilos: [A1], online: true}
-  - {n: 3, title: "Generative AI Tools: What They Do Well and Where They Fail", ilos: [A1, C4]}
-  - {n: 4, title: "Writing Clear Prompts and Improving the Answer", ilos: [C4], online: true}
-  - {n: 5, title: "Microsoft Office: Concepts, Terms and Common Features", ilos: [A2, A3]}
-  - {n: 6, title: "Office on the Computer, the Web and the Phone", ilos: [A3], online: true}
-  - {n: 7, title: "Word (1): Formatting, Styles, Lists, Tables and Pictures", ilos: [C1]}
-  - {n: 8, title: "Word (2): Page Layout, Headers and a Table of Contents", ilos: [C1], online: true}
-  - {n: 9, title: "AI with Word: Draft, Summarize, Rewrite and Translate", ilos: [C1, C4, B1]}
-  - {n: 10, title: "A Formal Letter and a CV with AI Help", ilos: [C4, B1], online: true}
-  - {n: 11, title: "Excel (1): Cells, Formulas, References and Basic Functions", ilos: [C2]}
-  - {n: 12, title: "A Monthly Budget Sheet", ilos: [C2], online: true}
-  - {n: 13, title: "Excel (2): Sorting, Filtering, Conditional Formatting and Charts", ilos: [C2]}
-  - {n: 14, title: "AI with Excel: Formulas, Clean Data and the Right Chart", ilos: [C2, C4, B1], online: true}
-  - {n: 15, title: "Review of Lectures 1–14", ilos: [A1, A2, A3, B1, C1, C2, C4]}
-  - {n: 16, title: "Review Activity: Practice Questions", ilos: [A1, A2, A3, B1, C1, C2, C4], online: true}
-  - {n: 17, title: "PowerPoint (1): Slides, Layouts, Themes, Pictures and Designer", ilos: [C3]}
-  - {n: 18, title: "PowerPoint (2): Transitions, Speaker Notes and a Five-Slide Talk", ilos: [C3], online: true}
-  - {n: 19, title: "AI with PowerPoint: Outline, Slides and Pictures", ilos: [C3, C4, B1]}
-  - {n: 20, title: "A Short Presentation with AI Help", ilos: [C4, B1], online: true}
-  - {n: 21, title: "Checking AI Output: Wrong Facts, Made-up Sources and Bias", ilos: [B1]}
-  - {n: 22, title: "Fact-Checking an AI-Written Document", ilos: [B1], online: true}
-  - {n: 23, title: "Responsible AI: Personal Data, Copyright and Honesty", ilos: [D1]}
-  - {n: 24, title: "Safe Prompts and an AI-Use Statement", ilos: [D1], online: true}
-  - {n: 25, title: "Excel (3): Summarizing Data with AI Help", ilos: [C2, C4, B1]}
-  - {n: 26, title: "Analyzing a Small Dataset and Charting It", ilos: [C2, C4], online: true}
-  - {n: 27, title: "Working Across Office Apps with AI", ilos: [A1, A3, C4]}
-  - {n: 28, title: "Course Project (1): Plan, Data Sheet and First Draft", ilos: [C4], online: true}
-  - {n: 29, title: "Course Project Presentations", ilos: [C3, C4, B1]}
-  - {n: 30, title: "Course Project (2): Final Report, Data Sheet and Presentation", ilos: [B1, C1, C2, C3, C4, D1], online: true}
+# Files of a unit are in week-WW (WW = `week`): lesson-NN (lecture),
+# practice-NN (practice session), online-NN (online activity). No homework:
+# the online activities replace it. A session is ready (bright, with links)
+# when its .qmd exists and has no `draft: true`.
+
+units:
+  - unit: 1
+    week: 1
+    sessions:
+      - {kind: lecture, n: 1, slot: "Lecture 1 (face-to-face, computer lab)", title: "Digital Skills and the Apps That Make Us Productive", ilos: [A1]}
+      - {kind: online, n: 1, slot: "Lecture 2 (online activity)", title: "Your University Account, Cloud Storage and Files", ilos: [A1]}
+  - unit: 2
+    week: 2
+    sessions:
+      - {kind: lecture, n: 2, slot: "Lecture 1 (face-to-face, computer lab)", title: "Generative AI Tools: What They Do Well and Where They Fail", ilos: [A1, C4]}
+      - {kind: online, n: 2, slot: "Lecture 2 (online activity)", title: "Writing Clear Prompts", ilos: [A1, C4]}
+  - unit: 3
+    week: 3
+    sessions:
+      - {kind: lecture, n: 3, slot: "Lecture 1 (face-to-face, computer lab)", title: "Microsoft Office: Concepts, Terms and Common Features", ilos: [A2, A3]}
+      - {kind: online, n: 3, slot: "Lecture 2 (online activity)", title: "Office on the Computer, the Web and the Phone", ilos: [A2, A3]}
+  - unit: 4
+    week: 4
+    sessions:
+      - {kind: lecture, n: 4, slot: "Lecture 1 (face-to-face, computer lab)", title: "Word (1): Formatting, Styles, Lists, Tables and Pictures", ilos: [C1]}
+      - {kind: online, n: 4, slot: "Lecture 2 (online activity)", title: "Word (2): Page Layout, Headers and a Table of Contents", ilos: [C1]}
+  - unit: 5
+    week: 5
+    sessions:
+      - {kind: lecture, n: 5, slot: "Lecture 1 (face-to-face, computer lab)", title: "AI with Word: Draft, Summarize, Rewrite and Translate", ilos: [C1, C4, B1]}
+      - {kind: online, n: 5, slot: "Lecture 2 (online activity)", title: "A Formal Letter and a CV with AI Help", ilos: [C1, C4, B1]}
+  - unit: 6
+    week: 6
+    sessions:
+      - {kind: lecture, n: 6, slot: "Lecture 1 (face-to-face, computer lab)", title: "Excel (1): Cells, Formulas, References and Basic Functions", ilos: [C2]}
+      - {kind: online, n: 6, slot: "Lecture 2 (online activity)", title: "A Monthly Budget Sheet", ilos: [C2]}
+  - unit: 7
+    week: 7
+    sessions:
+      - {kind: lecture, n: 7, slot: "Lecture 1 (face-to-face, computer lab)", title: "Excel (2): Sorting, Filtering, Conditional Formatting and Charts", ilos: [C2, C4, B1]}
+      - {kind: online, n: 7, slot: "Lecture 2 (online activity)", title: "AI with Excel: Formulas, Clean Data and the Right Chart", ilos: [C2, C4, B1]}
+  - unit: 8
+    week: 8
+    sessions:
+      - {kind: practice, n: 1, slot: "Lecture 1 (face-to-face, computer lab)", title: "Review of Lectures 1–7", ilos: [A1, A2, A3, B1, C1, C2, C4], practises: [1, 2, 3, 4, 5, 6, 7], core: false}
+      - {kind: online, n: 8, slot: "Lecture 2 (online activity)", title: "Review Activity: Practice Questions", ilos: [A1, A2, A3, B1, C1, C2, C4]}
+  - unit: 9
+    week: 9
+    sessions:
+      - {kind: lecture, n: 8, slot: "Lecture 1 (face-to-face, computer lab)", title: "PowerPoint: Slides, Layouts, Themes, Transitions, Animations and Notes", ilos: [C3]}
+      - {kind: online, n: 9, slot: "Lecture 2 (online activity)", title: "A Five-Slide Talk", ilos: [C3]}
+  - unit: 10
+    week: 10
+    sessions:
+      - {kind: practice, n: 2, slot: "Lecture 1 (face-to-face, computer lab)", title: "AI with PowerPoint: Outline, Slides and Pictures", ilos: [C3, C4, B1], practises: [2, 8], core: false}
+      - {kind: online, n: 10, slot: "Lecture 2 (online activity)", title: "A Short Presentation with AI Help", ilos: [C3, C4, B1]}
+  - unit: 11
+    week: 11
+    sessions:
+      - {kind: lecture, n: 9, slot: "Lecture 1 (face-to-face, computer lab)", title: "Checking AI Output and Using AI Responsibly", ilos: [B1, D1]}
+      - {kind: online, n: 11, slot: "Lecture 2 (online activity)", title: "Fact-Checking an AI-Written Document", ilos: [B1, D1]}
+  - unit: 12
+    week: 12
+    sessions:
+      - {kind: practice, n: 3, slot: "Lecture 1 (face-to-face, computer lab)", title: "Responsible AI in Practice: Personal Data, Copyright and Honesty", ilos: [D1], practises: [9], core: false}
+      - {kind: online, n: 12, slot: "Lecture 2 (online activity)", title: "Safe Prompts and an AI-Use Statement", ilos: [D1]}
+  - unit: 13
+    week: 13
+    sessions:
+      - {kind: practice, n: 4, slot: "Lecture 1 (face-to-face, computer lab)", title: "Excel (3): Summarizing Data with AI Help", ilos: [C2, C4, B1], practises: [6, 7], core: false}
+      - {kind: online, n: 13, slot: "Lecture 2 (online activity)", title: "Analyzing a Small Dataset and Charting It", ilos: [C2, C4, B1]}
+  - unit: 14
+    week: 14
+    sessions:
+      - {kind: practice, n: 5, slot: "Lecture 1 (face-to-face, computer lab)", title: "Working Across Office Apps with AI", ilos: [A1, A3, C4], practises: [4, 6, 8], core: false}
+      - {kind: online, n: 14, slot: "Lecture 2 (online activity)", title: "Course Project (1): Plan, Data Sheet and First Draft", ilos: [A1, A3, C4]}
+  - unit: 15
+    week: 15
+    sessions:
+      - {kind: lecture, n: 10, slot: "Lecture 1 (face-to-face, computer lab)", title: "Course Project Presentations", ilos: [B1, C1, C2, C3, C4, D1]}
+      - {kind: online, n: 15, slot: "Lecture 2 (online activity)", title: "Course Project (2): Final Report, Data Sheet and Presentation", ilos: [B1, C1, C2, C3, C4, D1]}

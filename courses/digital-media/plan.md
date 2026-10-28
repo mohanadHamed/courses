@@ -1,9 +1,7 @@
-# Digital Media Technologies and Creative Production for Games (13411134) — 16-week plan
+# Digital Media Technologies and Creative Production for Games (13411134) — unit plan
 
-Status: draft for approval, 2026-10-19. Source: official syllabus (2026-2027, Drive) and the ILO–PLO matrix v4.
-The weekly map below follows the syllabus weeks; the site shows only the lecture numbers (no weeks, no exams; AUTHORING.md, "Lectures, not weeks"). If they differ, `schedule.yml` wins.
-
-Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each lesson has notes (PDF), an interactive page and slides (see AUTHORING.md).
+Status: approved on 2026-10-28 (`plans/restructure-19-lectures.md`, version 2). Source: the official syllabus (2026-2027, Drive) and the ILO–PLO matrix.
+One unit = one week of the syllabus (AUTHORING.md, "Units and sessions"). `schedule.yml` holds the same map for the site and the course package; if they differ, `schedule.yml` wins. "From" names the old lectures and sections that each session is built from.
 
 ## Course ILOs
 
@@ -18,58 +16,50 @@ Per week (as taught): 2 × 60 min → 2 lessons (A = Lecture, B = Seminar). Each
 | C3 | Process video clips (editing and exporting) to produce promotional and cinematic content for a game. (PLO 2, 3) |
 | D1 | Work within a production team and respect intellectual property rights in the content produced. (PLO 2, 4) |
 
-## Weekly map
+## Units: 14 units, 14 lectures + 14 seminars (60 min each)
 
-| Week | Lecture | Title | Lesson ILOs | Week ILOs | PLOs |
-|---|---|---|---|---|---|
-| 01 | 01 | Digital Media and Creative Production in Games | A1 | A1 | 2 |
-| 01 | 02 | Analyzing the Media of a Game | A1 |  |  |
-| 02 | 03 | Story Fundamentals: Character, Setting, Conflict and Structure | A1 | A1, B1 | 2 |
-| 02 | 04 | Analyzing the Story Structure of a Mobile Game | A1, B1 |  |  |
-| 03 | 05 | Narrative in Games: Linear, Branching and Environmental Storytelling | A1 | A1, B1 | 2 |
-| 03 | 06 | Drafting a Story Premise | A1, B1 |  |  |
-| 04 | 07 | Screenwriting: Format, Scenes and Dialogue | A1 | A1, B1 | 2 |
-| 04 | 08 | Writing a Scene and Its Dialogue | A1, B1 |  |  |
-| 05 | 09 | Storyboarding: Shots, Composition and Flow | C1 | C1 | 2 |
-| 05 | 10 | Drawing a Storyboard from a Scene | C1 |  |  |
-| 06 | 11 | Storyboards for Gameplay and Cutscenes; Storyboard Tools | C1 | C1 | 2 |
-| 06 | 12 | Storyboard Workshop | C1 |  |  |
-| 07 | 13 | Digital Audio Basics: Sound, Formats and Recording | C2 | C2 | 2 |
-| 07 | 14 | Recording and Editing a Sound Sample | C2 |  |  |
-| 08 | — | *Midterm exam · Midterm discussion — no lesson* | | A1, B1, C1 | 2 |
-| 09 | 15 | Music and Sound-Effects Production for Games | C2 | C2 | 2 |
-| 09 | 16 | Producing a Short Music or Sound-Effect Loop | C2 |  |  |
-| 10 | 17 | Audio Design: Mixing, Implementation and Quality Evaluation | B2, C2 | B2, C2 | 2, 4 |
-| 10 | 18 | Mixing and Critique Session | B2, C2 |  |  |
-| 11 | 19 | Digital Video Basics: Formats, Resolution and Codecs | C3 | C3 | 2, 3 |
-| 11 | 20 | Video-Editing Tool Tour | C3 |  |  |
-| 12 | 21 | Video Processing: Editing, Transitions, Effects and Export | C3 | C3 | 2, 3 |
-| 12 | 22 | Editing a Promotional Clip | C3 |  |  |
-| 13 | 23 | Intellectual Property: Copyright, Licensing and Fair Use | A2 | A2, D1 | 2, 4 |
-| 13 | 24 | Case Study: Intellectual-Property Issues in Game Content | A2, D1 |  |  |
-| 14 | 25 | Using Licensed and Open Assets; Credits and Attribution | A2 | A2, D1 | 2, 4 |
-| 14 | 26 | Auditing the Licenses of a Game's Assets | A2, D1 |  |  |
-| 15 | 27 | Integrated Media Production: Team Workshop | B2, C1, C2, C3 | B2, C1, C2, C3, D1 | 2, 3, 4 |
-| 15 | 28 | Team Presentation of a Media Package | B2, D1 |  |  |
-| 16 | — | *Final exam — no lesson* | | All | 2, 3, 4 |
+| Unit (week) | Lecture (core) | From | Seminar | From | Seminar core? | ILOs |
+|---|---|---|---|---|---|---|
+| 1 (1) | **Lecture 1** Digital Media and Creative Production in Games | 1 + essentials of 2 | **Seminar 1** Analyzing the Media of a Favorite Game | 2 | flexible | A1 |
+| 2 (2) | **Lecture 2** Story Fundamentals: Character, Setting, Conflict and Structure | 3 | **Seminar 2** Analyzing the Story Structure of a Mobile Game | 4 | core | A1 B1 |
+| 3 (3) | **Lecture 3** Narrative in Games: Linear, Branching and Environmental Storytelling | 5 | **Seminar 3** Drafting a Story Premise | 6 | core | A1 B1 |
+| 4 (4) | **Lecture 4** Screenwriting: Format, Scenes and Dialogue | 7 + essentials of 8 | **Seminar 4** Writing a Scene and Its Dialogue | 8 | flexible | A1 B1 |
+| 5 (5) | **Lecture 5** Storyboarding: Shots, Composition and Flow | 9 + essentials of 10 | **Seminar 5** Drawing a Storyboard from a Scene | 10 | flexible | C1 |
+| 6 (6) | **Lecture 6** Storyboards for Gameplay and Cutscenes; Storyboard Tools | 11 + essentials of 12 | **Seminar 6** Storyboard Workshop | 12 | flexible | C1 |
+| 7 (7) | **Lecture 7** Digital Audio Basics: Sound, Formats and Recording | 13.1–13.4 + essentials of 14 | **Seminar 7** Recording and Editing a Sound Sample | 14 | flexible | C2 |
+| 8 (9) | **Lecture 8** Music and Sound-Effects Production for Games | 15 | **Seminar 8** Producing a Short Music or Sound-Effect Loop | 16 | core | C2 |
+| 9 (10) | **Lecture 9** Audio Design: Mixing, Implementation and Quality Evaluation | 17 + essentials of 18 | **Seminar 9** Mixing and Critique Session | 18 | flexible | B2 C2 |
+| 10 (11) | **Lecture 10** Digital Video Basics: Formats, Resolution and Codecs | 19 + essentials of 20 | **Seminar 10** Video-Editing Tool Tour | 20 | flexible | C3 |
+| 11 (12) | **Lecture 11** Video Processing: Editing, Transitions, Effects and Export | 21 | **Seminar 11** Editing a Promotional Clip | 22 | core | C3 |
+| 12 (13) | **Lecture 12** Intellectual Property: Copyright, Licensing and Fair Use | 23 + 24.1, 24.3 | **Seminar 12** Case Study: Intellectual-Property Issues in Game Content | 24 | flexible | A2 D1 |
+| 13 (14) | **Lecture 13** Using Licensed and Open Assets; Credits and Attribution | 25.1–25.3 + 24.2 | **Seminar 13** Auditing the Licenses of a Game's Assets | 26 | flexible | A2 D1 |
+| 14 (15) | **Lecture 14** Integrated Media Production: Team Workshop (team activity) | 27 | **Seminar 14** Team Presentation of a Media Package (team activity) | 28 | core | B2 C1 C2 C3 D1 |
 
-## ILO coverage
+- Core: 14 lectures + Seminars 2, 3, 8, 11, 14 = **19**. Flexible: 9 seminars.
+- **Cut (beyond the ILOs):**
+  - raster/vector and the formats-and-tools table in lecture 1 (open decision;
+    the plan keeps one line);
+  - the spatial/meta classification;
+  - scene-doubling sums;
+  - Courier and line IDs;
+  - the 180-degree rule with a camera map;
+  - 65,536 levels and file-size sums;
+  - the BPM formula;
+  - the Unity Audio Mixer interface and code (`AUTHORING.md` forbids engine
+    interfaces);
+  - 370 MB/s and the bitrate formula;
+  - patents, trade secrets and "life + 70" sums;
+  - code licences (MIT/BSD/GPL).
+- **Homework:** 13, one per unit; the project instead of homework in unit 14.
+  `plan.md`: the team activity is in Lecture 14 and Seminar 14.
 
-| ILO | Lessons |
-|---|---|
-| A1 | L01, L02, L03, L04, L05, L06, L07, L08 |
-| A2 | L23, L24, L25, L26 |
-| B1 | L04, L06, L08 |
-| B2 | L17, L18, L27, L28 |
-| C1 | L09, L10, L11, L12, L27 |
-| C2 | L13, L14, L15, L16, L17, L18, L27 |
-| C3 | L19, L20, L21, L22, L27 |
-| D1 | L24, L26, L28 |
+## Tasks with AI (ideas)
+
+a branching story with three endings, edited by the student and drawn as a storyboard; a scene drafted with AI and rewritten in screenplay format; a credits list and licence audit of 20 assets, each licence checked at its source. Never AI images, sound or video as the student's media product (unclear rights; it skips the production ILOs); it is a case in the IP sessions.
 
 ## Notes
 
-- **Independent study first.** Pages, slides and homework never require classmates; seminars are analyses or production exercises a student can do alone.
-- **Team activity (D1, work within a production team): lessons 27–28 only.** The team workshop and team presentation are described in the notes (PDF) of lessons 27 and 28 as one team activity (roles in a small production team, one media package, one presentation), each with an individual alternative (the student takes every role in turn and keeps a production log). No other lesson has team work.
-- Intellectual property (D1) in weeks 13–14 is practised individually: a credits and licences file for every asset.
-- Week 8: midterm exam and midterm discussion (no lessons). Week 16: final exam.
-- One homework per week (1–2 simple tasks, under 10 minutes); week 15: the project instead (syllabus).
+- **Independent study first.** Pages, slides and homework never require classmates.
+- **Team activity (D1):** only in the notes of Lecture 14 and Seminar 14 (integrated media production, team presentation), each with an individual alternative.
+- Reversed earlier decision (plan, "Open decisions"; cut as planned): raster vs vector and the Paint/PowerPoint task leave Lecture 1; one line stays.
+- Homework: one per unit (13); unit 14: the project instead (syllabus).

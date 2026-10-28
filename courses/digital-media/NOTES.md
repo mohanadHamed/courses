@@ -37,3 +37,17 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   "what makes game media special" section and the evaluation criteria
   (ILO B2, a later week) were removed; story as an element of the tetrad is
   stressed for ILO A1.
+- 2026-10-28 (plan v2): 14 units (weeks 1–7 and 9–15), each with a core
+  lecture and a seminar; Seminars 2, 3, 8, 11 and 14 are core, the others
+  flexible. Raster vs vector left Lecture 1 (one line stays), reversing the
+  week-1 decision as the plan proposed. Also cut: the spatial/meta
+  classification, scene-doubling sums, Courier and line IDs, the 180-degree
+  rule with a camera map, 65,536 levels and file-size sums, the BPM formula,
+  the Unity Audio Mixer, 370 MB/s and the bitrate formula, patents, trade
+  secrets and "life + 70" sums, code licences, logline and on-the-nose.
+  Fixes: the diegetic rule no longer says "what changes is diegetic" (wind
+  does not change but is diegetic); lecture 19's reference points to the
+  right lecture. Tasks with AI: a branching story with three endings edited
+  by the student and drawn as a storyboard, a scene drafted with AI and
+  rewritten in screenplay format, a licence audit of 20 assets checked at
+  their sources. Never AI images, sound or video as the student's product.

@@ -33,21 +33,28 @@ management, medical sterilization, facility assessment). So this course is
 
 ## Timing and textbook: a blended course
 
-- 2 credit hours, **blended**: each week one face-to-face lecture (60 min,
-  computer lab) and one online activity (asynchronous, about 60 min of work,
-  on the university e-learning platform). `course.blended: true` in
-  `_metadata.yml`; the online lectures have `online: true` in
-  `schedule.yml`.
-- **Face-to-face lecture (odd number):** a full lesson like the other
-  courses: notes (PDF), interactive page, slides; size for **60 minutes**
-  (3–4 sections), a Lab task in every section, a ~10-min Game challenge set
-  in an ordinary workplace or a student's study work.
-- **Online activity (even number):** `lesson-NN.qmd` with `online: true`,
-  `due:` ("before lecture 2k+1") and `marks:`; no notes and no slides. Start
-  from `shared/templates/online-template.qmd`. It has:
+- 2 credit hours, **blended**: each unit (one syllabus week) has one
+  face-to-face session (60 min) and one online activity (asynchronous, about
+  60 min of work, on the university e-learning platform).
+  `course.blended: true` in `_metadata.yml`; `schedule.yml` has 15 units:
+  Lectures 1–10 (core), Practice 1–5 (flexible) and Online activities 1–15
+  (always kept: holidays cancel only face-to-face sessions).
+- **Face-to-face lecture:** a full lesson like the other courses: notes
+  (PDF), interactive page, slides; size for **60 minutes** (3–4 sections), a
+  Lab task in every section, a ~10-min Game challenge set in an ordinary
+  workplace or a student's study work.
+- **Practice session** (`practice-NN*`, flexible): hands-on work on earlier
+  lectures in Word, Excel, PowerPoint or an AI tool, in the seminar format
+  (AUTHORING.md, "What a seminar looks like"); every answer on its page.
+- **Online activity:** `online-NN.qmd` with `online: N`, `due:` ("before
+  lecture N", the next face-to-face lecture) and `marks:`; no notes and no
+  slides. It **practises its unit** and never repeats the face-to-face
+  lecture; in units 10 and 12 (a flexible practice face to face) it carries
+  the core idea. Start from `shared/templates/online-template.qmd`. It has:
   1. "Before you start": what you need, about how long, what you submit;
   2. two or three short **Steps** (`{.study}`): plain explanation, a figure,
-     a simulator to try at once, one "Try it" self-check (instant feedback);
+     a simulator to try at once, one "Try it" self-check with `Why:`
+     reasons, and a `.check` where a step asks for a result;
      where the teacher has a video, the e-learning platform links it;
   3. **Tasks to submit** (`{.tasks}`): 2–4 tasks with marks, each with a
      concrete product (a file with a given name, a screenshot, a short
@@ -55,9 +62,9 @@ management, medical sterilization, facility assessment). So this course is
   4. **How to submit**: one short line (the e-learning platform, file names).
   The Steps are hidden on paper: "Print tasks" and "Download tasks (PDF)"
   give only the tasks (`homework_pdf.py` prints the page).
-- The online activity **replaces the homework**: no `homework-KK.qmd` in
+- The online activity **replaces the homework**: no `homework-UU.qmd` in
   this course. Model answers and marking notes go to `courses-private`
-  (`courses/digital-skills/week-PP/lesson-NN-solutions.md`).
+  (`courses/digital-skills/week-WW/online-NN-solutions.md`).
 - Textbook: Evans, Martin and Poatsy, *Technology in Action*, Global Edition,
   18th ed. References: Lambert and Frye, *Microsoft Office Step by Step
   (Office 2021 and Microsoft 365)*, 2022; Microsoft 365 Training
@@ -91,8 +98,7 @@ real tool.
   account has it"; the tasks also work by copying from an AI chat.
 - Never ask students to type real personal data (ID numbers, phone numbers,
   addresses, grades) into an AI tool: use made-up details.
-- Every task done with AI ends with checking the output and, from lecture
-  23 on, an AI-use statement.
+- Every task done with AI ends with checking the output and, from unit 11 on, an AI-use statement.
 - AI is a tool for documents, data and presentations here; how AI works is
   the subject of *AI Applications* (01101153). Keep to what a user needs.
 
@@ -146,3 +152,12 @@ real tool.
   Lecture 1 is now about the apps that make us productive (AI assistants
   included) and lecture 2 (accounts, files, cloud) became the first online
   activity.
+- 2026-10-28 (plan v2, `plans/restructure-19-lectures.md`): 15 units with
+  10 core lectures, 5 flexible practice sessions and all 15 online
+  activities. Each online activity now practises its unit instead of
+  copying the lecture (old 20, 22, 24 and 26 copied 19, 21, 23 and 25), old
+  lecture 27 no longer repeats lecture 6, and the course project has no peer
+  feedback (it needed classmates). Cut: how AI works (next-word
+  probabilities; *AI Applications* teaches it), SUMIF/COUNTIF, the
+  know/have/are factors, the 3-2-1 rule and data classes. Lecture 8 adds the
+  animations that the syllabus names. The AI-use statement starts in unit 11.

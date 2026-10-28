@@ -43,3 +43,17 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   instead of 1000, like Digital Skills, so students of both courses learn one
   rule. 1024 × 1024 bytes = 1 MB makes the texture example exact (4 MB);
   the Try it asks 2 GB = 2048 MB.
+- 2026-10-28 (plan v2): 14 units (weeks 1–7 and 9–15), each with a core
+  lecture and a seminar; Seminars 2, 3, 4, 13 and 14 are core, the others
+  flexible. Two earlier decisions were reversed as the plan proposed: cloud
+  gaming and latency (Lag Lab) left unit 1 and stay, short, in Lecture 12;
+  the texture-memory sums are cut (sizes still count in 1024). Also cut:
+  process states, time-slice sums, virtual memory, block details, HAL / ART
+  / XNU (generic layers stay), exact store limits, signing keys, IPv6, MAC,
+  the four-layer model, nslookup, tracert, price sums, the weighted decision
+  matrix, the NPU and brand lists. Fixes: the cloud-gaming delay matches Lag
+  Lab, Parts Finder's table has 7 rows, "Ask a classmate" became "check the
+  maker's update page". Tasks with AI: an AI-drafted comparison table of five
+  devices with three numbers checked on the makers' pages, a test plan for
+  four devices, a store-listing checklist checked against the official
+  guidelines.

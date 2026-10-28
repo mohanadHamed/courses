@@ -1,40 +1,87 @@
-# The lectures of the course in teaching order (titles from the official
-# syllabus). Students and the teacher count lectures, not weeks: a missed or
-# late week moves every course differently, so the site never shows weeks.
-# Exams are not listed: the university sets them.
+# The sessions of the course, grouped in units (AUTHORING.md, "Units and
+# sessions"). One unit = one week of the official syllabus: `week` is that
+# syllabus week (a week with only an exam has no unit), `slot` names the
+# syllabus column(s) the session covers (tools/course_package.py). Units and
+# sessions are numbered in teaching order; the site never shows a week.
 #
-# Files: lecture n is lesson-NN.qmd (NN = n) in the folder week-PP, where
-# PP = (n + 1) / 2 rounded down: lectures 1-2 are in week-01, 3-4 in week-02,
-# and so on. The folder name is internal (it keeps old links and QR codes
-# working) and is never shown. Homework k (homework-0k.qmd, in week-0k)
-# follows lectures 2k-1 and 2k. A lecture is ready (bright, with links) when
-# its lesson-NN.qmd exists and has no `draft: true`; otherwise it is faded.
-lectures:
-  - {n: 1, title: "Digital Media and Creative Production in Games", ilos: [A1]}
-  - {n: 2, title: "Analyzing the Media of a Game", ilos: [A1]}
-  - {n: 3, title: "Story Fundamentals: Character, Setting, Conflict and Structure", ilos: [A1]}
-  - {n: 4, title: "Analyzing the Story Structure of a Mobile Game", ilos: [A1, B1]}
-  - {n: 5, title: "Narrative in Games: Linear, Branching and Environmental Storytelling", ilos: [A1]}
-  - {n: 6, title: "Drafting a Story Premise", ilos: [A1, B1]}
-  - {n: 7, title: "Screenwriting: Format, Scenes and Dialogue", ilos: [A1]}
-  - {n: 8, title: "Writing a Scene and Its Dialogue", ilos: [A1, B1]}
-  - {n: 9, title: "Storyboarding: Shots, Composition and Flow", ilos: [C1]}
-  - {n: 10, title: "Drawing a Storyboard from a Scene", ilos: [C1]}
-  - {n: 11, title: "Storyboards for Gameplay and Cutscenes; Storyboard Tools", ilos: [C1]}
-  - {n: 12, title: "Storyboard Workshop", ilos: [C1]}
-  - {n: 13, title: "Digital Audio Basics: Sound, Formats and Recording", ilos: [C2]}
-  - {n: 14, title: "Recording and Editing a Sound Sample", ilos: [C2]}
-  - {n: 15, title: "Music and Sound-Effects Production for Games", ilos: [C2]}
-  - {n: 16, title: "Producing a Short Music or Sound-Effect Loop", ilos: [C2]}
-  - {n: 17, title: "Audio Design: Mixing, Implementation and Quality Evaluation", ilos: [B2, C2]}
-  - {n: 18, title: "Mixing and Critique Session", ilos: [B2, C2]}
-  - {n: 19, title: "Digital Video Basics: Formats, Resolution and Codecs", ilos: [C3]}
-  - {n: 20, title: "Video-Editing Tool Tour", ilos: [C3]}
-  - {n: 21, title: "Video Processing: Editing, Transitions, Effects and Export", ilos: [C3]}
-  - {n: 22, title: "Editing a Promotional Clip", ilos: [C3]}
-  - {n: 23, title: "Intellectual Property: Copyright, Licensing and Fair Use", ilos: [A2]}
-  - {n: 24, title: "Case Study: Intellectual-Property Issues in Game Content", ilos: [A2, D1]}
-  - {n: 25, title: "Using Licensed and Open Assets; Credits and Attribution", ilos: [A2]}
-  - {n: 26, title: "Auditing the Licenses of a Game's Assets", ilos: [A2, D1]}
-  - {n: 27, title: "Integrated Media Production: Team Workshop", ilos: [B2, C1, C2, C3]}
-  - {n: 28, title: "Team Presentation of a Media Package", ilos: [B2, D1]}
+# kind: lecture (always core), seminar (an activity session on earlier lectures)
+# n: the number of the session within its kind ("Lecture 4", "Seminar 2").
+# core: false = flexible: taught when time allows, else studied at home
+# (every answer is on its page). practises: the lectures it applies.
+#
+# Files of a unit are in week-WW (WW = `week`): lesson-NN (lecture),
+# seminar-NN (seminar), homework-UU (UU = the unit; unit 14 has the project
+# instead). A session is ready (bright, with links) when its .qmd exists and
+# has no `draft: true`.
+
+units:
+  - unit: 1
+    week: 1
+    sessions:
+      - {kind: lecture, n: 1, slot: "Lecture", title: "Digital Media and Creative Production in Games", ilos: [A1]}
+      - {kind: seminar, n: 1, slot: "Seminar", title: "Analyzing the Media of a Favorite Game", ilos: [A1], practises: [1], core: false}
+  - unit: 2
+    week: 2
+    sessions:
+      - {kind: lecture, n: 2, slot: "Lecture", title: "Story Fundamentals: Character, Setting, Conflict and Structure", ilos: [A1, B1]}
+      - {kind: seminar, n: 2, slot: "Seminar", title: "Analyzing the Story Structure of a Mobile Game", ilos: [A1, B1], practises: [2], core: true}
+  - unit: 3
+    week: 3
+    sessions:
+      - {kind: lecture, n: 3, slot: "Lecture", title: "Narrative in Games: Linear, Branching and Environmental Storytelling", ilos: [A1, B1]}
+      - {kind: seminar, n: 3, slot: "Seminar", title: "Drafting a Story Premise", ilos: [A1, B1], practises: [3], core: true}
+  - unit: 4
+    week: 4
+    sessions:
+      - {kind: lecture, n: 4, slot: "Lecture", title: "Screenwriting: Format, Scenes and Dialogue", ilos: [A1, B1]}
+      - {kind: seminar, n: 4, slot: "Seminar", title: "Writing a Scene and Its Dialogue", ilos: [A1, B1], practises: [4], core: false}
+  - unit: 5
+    week: 5
+    sessions:
+      - {kind: lecture, n: 5, slot: "Lecture", title: "Storyboarding: Shots, Composition and Flow", ilos: [C1]}
+      - {kind: seminar, n: 5, slot: "Seminar", title: "Drawing a Storyboard from a Scene", ilos: [C1], practises: [5], core: false}
+  - unit: 6
+    week: 6
+    sessions:
+      - {kind: lecture, n: 6, slot: "Lecture", title: "Storyboards for Gameplay and Cutscenes; Storyboard Tools", ilos: [C1]}
+      - {kind: seminar, n: 6, slot: "Seminar", title: "Storyboard Workshop", ilos: [C1], practises: [6], core: false}
+  - unit: 7
+    week: 7
+    sessions:
+      - {kind: lecture, n: 7, slot: "Lecture", title: "Digital Audio Basics: Sound, Formats and Recording", ilos: [C2]}
+      - {kind: seminar, n: 7, slot: "Seminar", title: "Recording and Editing a Sound Sample", ilos: [C2], practises: [7], core: false}
+  - unit: 8
+    week: 9
+    sessions:
+      - {kind: lecture, n: 8, slot: "Lecture", title: "Music and Sound-Effects Production for Games", ilos: [C2]}
+      - {kind: seminar, n: 8, slot: "Seminar", title: "Producing a Short Music or Sound-Effect Loop", ilos: [C2], practises: [8], core: true}
+  - unit: 9
+    week: 10
+    sessions:
+      - {kind: lecture, n: 9, slot: "Lecture", title: "Audio Design: Mixing, Implementation and Quality Evaluation", ilos: [B2, C2]}
+      - {kind: seminar, n: 9, slot: "Seminar", title: "Mixing and Critique Session", ilos: [B2, C2], practises: [9], core: false}
+  - unit: 10
+    week: 11
+    sessions:
+      - {kind: lecture, n: 10, slot: "Lecture", title: "Digital Video Basics: Formats, Resolution and Codecs", ilos: [C3]}
+      - {kind: seminar, n: 10, slot: "Seminar", title: "Video-Editing Tool Tour", ilos: [C3], practises: [10], core: false}
+  - unit: 11
+    week: 12
+    sessions:
+      - {kind: lecture, n: 11, slot: "Lecture", title: "Video Processing: Editing, Transitions, Effects and Export", ilos: [C3]}
+      - {kind: seminar, n: 11, slot: "Seminar", title: "Editing a Promotional Clip", ilos: [C3], practises: [11], core: true}
+  - unit: 12
+    week: 13
+    sessions:
+      - {kind: lecture, n: 12, slot: "Lecture", title: "Intellectual Property: Copyright, Licensing and Fair Use", ilos: [A2, D1]}
+      - {kind: seminar, n: 12, slot: "Seminar", title: "Case Study: Intellectual-Property Issues in Game Content", ilos: [A2, D1], practises: [12], core: false}
+  - unit: 13
+    week: 14
+    sessions:
+      - {kind: lecture, n: 13, slot: "Lecture", title: "Using Licensed and Open Assets; Credits and Attribution", ilos: [A2, D1]}
+      - {kind: seminar, n: 13, slot: "Seminar", title: "Auditing the Licenses of a Game's Assets", ilos: [A2, D1], practises: [13], core: false}
+  - unit: 14
+    week: 15
+    sessions:
+      - {kind: lecture, n: 14, slot: "Lecture", title: "Integrated Media Production: Team Workshop", ilos: [B2, C1, C2, C3, D1]}
+      - {kind: seminar, n: 14, slot: "Seminar", title: "Team Presentation of a Media Package", ilos: [B2, C1, C2, C3, D1], practises: [14], core: true}

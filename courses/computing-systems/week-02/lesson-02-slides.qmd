@@ -1,14 +1,14 @@
 ---
 title: "Computer Components: CPU, Memory and Storage"
-subtitle: "Lecture 3"
+subtitle: "Lecture 2"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary cpu-core clock-rate thread memory-hierarchy cache byte texture ssd app-storage >}}
+{{< glossary cpu-core clock-rate thread memory-hierarchy cache byte app-package process ssd app-storage >}}
 
-## 3.1 Cores and threads
+## 2.1 Cores and threads
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -49,7 +49,7 @@ b) an efficiency core
 c) 3 GHz
 :::
 
-## 3.2 The memory hierarchy
+## 2.2 The memory hierarchy
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -82,46 +82,44 @@ b) in the cache
 c) in storage
 :::
 
-## 3.3 What a game keeps in memory
+## 2.3 Why the game shows a loading screen
 
 :::: {.columns}
 ::: {.column width="50%"}
-- RAM holds the code, the assets and the state of the game.
-- Textures are the biggest part of the memory.
-- A texture needs width × height × 4 bytes.
-- Each unit is 1024 times the one before: KB, MB, GB, TB.
+- Installing copies the app package into storage.
+- Launching creates a process and loads code and assets into RAM.
+- The speed of storage sets the loading time.
 - **Do it:** In Task Manager → Processes, sort by Memory. Which app uses the most?
 :::
 ::: {.column width="50%"}
-![](images/game-ram.png)
+![](../week-01/images/launch.png)
 :::
 ::::
 
-## Example · The memory of one texture
+## Example · Cheap phone, slow loading
 
-A texture has 1024 × 1024 pixels and 4 bytes per pixel.
-**How much memory does it need, before and after compression?**
+A level needs 1500 MB of assets. Phone A reads 1500 MB per second, and phone B reads 150 MB per second.
+**How long does the level load on each phone?**
 
 ::: {.reveal}
-1. 1024 × 1024 bytes = **1 MB**.
-2. With 4 bytes per pixel: 4 × 1 MB = **4 MB**.
-3. Compressed to 1 byte per pixel, it needs **1 MB**.
-4. So 40 textures need 160 MB, or only 40 MB when compressed.
+1. Phone A needs 1500 ÷ 1500 = **1 second**.
+2. Phone B needs 1500 ÷ 150 = **10 seconds**.
+3. The game is the same; only the **speed of storage** is different.
 :::
 
-## Try it 3 · Memory sizes
+## Try it 3 · Install, launch, load
 
-a) How much memory does a 1024 × 1024 texture need when it is compressed to 1 byte per pixel?
-b) A game is almost out of memory. What should the team compress first?
+a) What does a player fill when installing a game?
+b) How long do 900 MB of assets load at 300 MB per second?
 c) A game update is 2 GB. How many MB is that?
 
 ::: {.answer}
-a) 1 MB
-b) the textures
+a) storage
+b) 3 seconds
 c) 2048 MB (2 × 1024)
 :::
 
-## 3.4 Storage
+## 2.4 Storage
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -149,20 +147,20 @@ c) No. The maker counts in 1000, Windows in 1024.
 
 ## Game challenge · Pocket Pets support desk
 
-{{< sim file="sims/pocket-pets.html" poster="sims/pocket-pets.png" title="Pocket Pets: answer the support desk" kind="game" task="**The story:** players of Pocket Pets 2.0 send five messages to support. **Play:** answer each message." >}}
+{{< sim file="sims/pocket-pets.html" poster="sims/pocket-pets.png" title="Pocket Pets: answer the support desk" kind="game" task="Players of Pocket Pets 2.0 send messages to the support desk about cores, memory and storage. **Play:** send each message to the right part of the device on your phone." >}}
 
-## Try it 5 · Answer the players (harder)
+## Try it · Answer the players (harder)
 
-The facts: the new island has 40 textures of 1024 × 1024, at 1 byte per pixel.
+The facts: the new island of Pocket Pets 2.0 has 900 MB. A cheap phone reads 180 MB per second.
 
 a) The island needs 1.6 GB, and a phone has 1.2 GB free. How much more space is needed?
 b) A player pressed Clear storage, and the pets are gone. Which part was deleted?
-c) How much memory do the 40 textures of the island need?
+c) How long does the island take to load on the cheap phone?
 
 ::: {.answer}
 a) 0.4 GB
 b) the user data
-c) 40 MB
+c) 5 seconds (900 ÷ 180)
 :::
 
 ## Summary
@@ -170,5 +168,5 @@ c) 40 MB
 - A core runs one thread, so 8 cores do not make a game 8 times faster.
 - Memory has levels: cache, RAM and storage, from fast to slow.
 - The cache keeps the data that the game uses again and again.
-- RAM holds code, assets and state; a texture needs width × height × 4 bytes.
+- Launching loads the game into RAM, and the speed of storage sets the loading time.
 - Storage holds the app, the user data and the cache.

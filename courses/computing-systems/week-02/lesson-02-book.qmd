@@ -1,7 +1,7 @@
 ---
 title: "Computer Components: CPU, Memory and Storage"
-description: "Lesson notes · Cores and threads, the memory hierarchy and the cache, what a game keeps in memory, and what a game keeps in storage."
-lesson: 3
+description: "Lesson notes · Cores and threads, the memory hierarchy and the cache, launching a game from storage into memory, and what a game keeps in storage."
+lesson: 2
 ilos: [A1]
 format: lesson-typst
 ---
@@ -10,7 +10,8 @@ format: lesson-typst
 *Pocket Pets* is a mobile game made by a small studio. After version 2.0,
 many players write to the support team. One player asks why only one core
 of the phone is busy. Another player cannot download the new island. A third
-player pressed a button in the settings and lost all the pets. Each question
+player pressed a button in the settings and lost all the pets. A fourth
+player asks why the new island loads so slowly. Each question
 is about one of three parts of the device: the **processor (CPU)**, the
 **memory (RAM)** or the **storage**. In lecture 1 you met these parts. In this
 lesson you look inside them and learn what each part does in a game. Every
@@ -20,9 +21,9 @@ or in a simulator.
 
 ## Key terms
 
-{{< glossary cpu cpu-core clock-rate thread memory-hierarchy cache memory byte texture storage ssd app-storage >}}
+{{< glossary cpu cpu-core clock-rate thread memory-hierarchy cache memory byte app-package process loading storage ssd app-storage >}}
 
-## 3.1 Why eight cores do not make a game eight times faster
+## 2.1 Why eight cores do not make a game eight times faster
 
 Phone adverts often say "octa-core, 3 GHz". What do these two numbers mean
 for a game?
@@ -41,7 +42,7 @@ gigahertz (GHz): 3 GHz means 3 billion clock ticks per second.
 
 ![A phone CPU with two performance cores and six efficiency cores. The operating system puts each thread of the game on a core.](images/cpu-cores.png){#fig-cores width=94%}
 
-::: {.callout-important title="Definition 3.1 — Core and thread"}
+::: {.callout-important title="Definition 2.1 — Core and thread"}
 A **core** is a processing unit inside the CPU. It runs one list of
 instructions at a time. A **thread** is one such list inside a program. The
 operating system decides which thread runs on which core.
@@ -53,7 +54,7 @@ the score. Each step needs the result of the step before it, so only one core
 can do this work. Other work, such as physics, loading and sound, runs on
 **worker threads**. Worker threads can use the other cores.
 
-::: {.callout-note title="Example 3.1 — Splitting one frame across cores"}
+::: {.callout-note title="Example 2.1 — Splitting one frame across cores"}
 On one core, a frame needs 16 ms: 10 ms of game logic on the main thread, and
 6 ms of physics that can be shared equally among cores.
 
@@ -64,7 +65,7 @@ On one core, a frame needs 16 ms: 10 ms of game logic on the main thread, and
    the main thread always stay on one core.
 :::
 
-![Time per frame in Example 3.1 with one, two and six cores. The main-thread part does not get shorter.](images/frame-split.png){#fig-split width=86%}
+![Time per frame in Example 2.1 with one, two and six cores. The main-thread part does not get shorter.](images/frame-split.png){#fig-split width=86%}
 
 ::: {.callout-warning title="Common mistake"}
 "Eight cores at 3 GHz make 24 GHz." This is wrong. Each core works on its
@@ -85,9 +86,15 @@ On a lab computer (Windows):
 *Your result:* the number of cores and of logical processors. Both numbers
 are under the graphs. Add one sentence: is one graph very busy, or are all
 graphs busy?
+
+::: {.check}
+A typical lab computer shows 4 to 8 cores (8 to 16 logical processors). While
+the simulator runs, one graph is often much busier than the others: the main
+thread of a program runs on one core at a time.
+:::
 :::
 
-## 3.2 Why the processor keeps a small memory next to it
+## 2.2 Why the processor keeps a small memory next to it
 
 The CPU is very fast. Main memory (RAM) is much slower. When the CPU asks RAM
 for a value, it waits about 100 nanoseconds (ns). In that time, one core
@@ -96,7 +103,7 @@ levels. This is called the **memory hierarchy** (@fig-hierarchy).
 
 ![The memory hierarchy. Each level is bigger and slower than the level above it. The times are typical values.](images/memory-hierarchy.png){#fig-hierarchy width=92%}
 
-::: {.callout-important title="Definition 3.2 — Memory hierarchy and cache"}
+::: {.callout-important title="Definition 2.2 — Memory hierarchy and cache"}
 The **memory hierarchy** puts the memories of a computer in levels. Near the
 core, memory is small and very fast. Far from the core, memory is big and
 slow. The **cache** is a small, very fast memory next to the cores. It keeps
@@ -117,7 +124,7 @@ For example, in every frame, the movement code, the camera and the collision
 check all read the player's position. After the first read, the position is in
 the cache, and the next reads are fast.
 
-::: {.callout-note title="Example 3.2 — The hierarchy on a human scale"}
+::: {.callout-note title="Example 2.2 — The hierarchy on a human scale"}
 Imagine that one nanosecond lasts one second.
 
 1. A read from the cache (1 ns) takes **1 second**: you look at your desk.
@@ -138,9 +145,54 @@ Open the **Data Trip** simulator above (or scan its QR code).
 
 *Your result:* the table, and one sentence in your own words: what does the
 cache do?
+
+::: {.check}
+Cache about 1 ns (1 second on the human scale), RAM about 100 ns (about 2
+minutes), flash storage about 100 000 ns (about a day). The cache keeps
+copies of data used a short time ago next to the core, so the core waits
+less.
+:::
 :::
 
-## 3.3 What a game keeps in memory while you play
+## 2.3 Why the game shows a loading screen
+
+A mobile game comes as one file, an **app package**. It holds the game's code
+and its **assets**: pictures, 3D models, sounds and levels. On Android, the
+package that the phone downloads is called an APK. On iPhone, it is called
+an IPA.
+
+**Installing** copies the package into the phone's storage. The game does not
+run yet: it uses storage, but no memory.
+
+When the player taps the icon, the operating system **launches** the game
+(@fig-launch):
+
+1. it creates a **process**: a running program with its own part of memory;
+2. it **loads** the game's code from storage into memory (RAM);
+3. the game loads the assets of the first scene;
+4. the game starts, and the first frame appears.
+
+![Launching a game: the operating system creates a process and copies code and assets from storage into memory.](../week-01/images/launch.png){#fig-launch width=88%}
+
+Why is there a loading screen? Because storage is much slower than memory.
+Phone storage reads from about 100 MB per second in cheap phones to more than
+1000 MB per second in expensive phones.
+
+::: {.callout-note title="Example 2.3 — Why loading is slower on a cheap phone"}
+The first level of a game needs 1500 MB of assets. Phone A reads 1500 MB per
+second. Phone B reads 150 MB per second.
+
+1. Phone A: $1500 / 1500 = 1$ second.
+2. Phone B: $1500 / 150 = 10$ seconds.
+3. Same game, same level: ten times slower, only because of the storage
+   speed.
+:::
+
+Memory is limited too. When the player switches to another app, the game
+waits in the background. If memory gets full, the operating system closes
+background games to free memory. This is why a game sometimes starts again
+from its title screen when the player comes back. Good games save the
+player's progress when they go to the background.
 
 Main memory (RAM) holds everything that the game needs *now* (@fig-ram):
 
@@ -156,7 +208,7 @@ game gets only a part of it.
 
 We measure the size of data in **bytes**.
 
-::: {.callout-important title="Definition 3.3 — The byte and its multiples"}
+::: {.callout-important title="Definition 2.3 — The byte and its multiples"}
 A **byte** is 8 bits. It can hold one number from 0 to 255, for example the
 amount of red in one pixel. Each bigger unit is 1024 times the unit before
 it: 1 KB (kilobyte) = 1024 bytes, 1 MB (megabyte) = 1024 KB,
@@ -166,29 +218,13 @@ it: 1 KB (kilobyte) = 1024 bytes, 1 MB (megabyte) = 1024 KB,
 Windows counts in this way, and this course does too. So
 1 MB = 1024 × 1024 bytes.
 
-A **texture** is an image on the surface of an object in a game, for example
-the fur of a pet. Textures usually take the biggest part of a game's memory.
-Each pixel usually needs 4 bytes: red, green, blue and transparency. So:
-
-$$\text{memory of a texture} = \text{width} \times \text{height} \times 4 \text{ bytes}$$
-
-::: {.callout-note title="Example 3.4 — The memory of one texture"}
-A texture has 1024 × 1024 pixels.
-
-1. Pixels: $1024 \times 1024$, about 1 million.
-2. Memory: $1024 \times 1024 \times 4$ bytes. $1024 \times 1024$ bytes is
-   1 MB, so the texture needs **4 MB**.
-3. Phones can use *compressed* texture formats, with about 1 byte per
-   pixel. Then the texture needs **1 MB**.
-4. For 40 textures: 160 MB without compression, and 40 MB with
-   compression.
-:::
+Files and memory are measured in the same units. A game of 1.5 GB is
+1.5 × 1024 = 1536 MB, and a 2 GB update is 2048 MB.
 
 ::: {.callout-warning title="Common mistake"}
-"The PNG file is 1 MB, so the texture uses 1 MB of memory." This is wrong. A
-PNG file is compressed only for storage. Before the game can draw it, the
-image is opened into pixels: 4 MB for 1024 × 1024. The size of the file does
-not tell you the size in memory.
+"A phone with more storage starts games faster." No: the *size* of storage
+decides how many games fit. The *speed* of storage decides how fast they load.
+The size of *memory* decides how much can stay loaded at once.
 :::
 
 ::: {.callout-note title="Do it · Watch the memory fill"}
@@ -202,9 +238,14 @@ On a lab computer:
 
 *Your result:* the two numbers, and one sentence: what does the extra memory
 hold?
+
+::: {.check}
+The browser's memory grows, for example from 400 MB to 900 MB. The extra
+memory holds the open pages: their pictures, code and data.
+:::
 :::
 
-## 3.4 Where the game lives when it is not running
+## 2.4 Where the game lives when it is not running
 
 When you switch the phone off, the game, its downloaded levels and your
 progress must not be lost. They are kept in **storage**. Storage keeps its
@@ -222,7 +263,7 @@ There are two kinds of storage (@fig-storage):
 
 A phone shows each game in storage as three parts.
 
-::: {.callout-important title="Definition 3.4 — App size, user data and cache"}
+::: {.callout-important title="Definition 2.4 — App size, user data and cache"}
 The **app size** is the installed game: its code and its built-in assets. The
 **user data** is what the game creates for this player: saved progress,
 settings and downloaded levels. The **cache** is a set of temporary files that
@@ -231,7 +272,7 @@ processor cache of section 3.2. The idea is the same: both keep copies to save
 time.)
 :::
 
-::: {.callout-note title="Example 3.5 — Pocket Pets in storage"}
+::: {.callout-note title="Example 2.4 — Pocket Pets in storage"}
 On one phone, *Pocket Pets* uses: app 1.1 GB, downloaded islands 2.4 GB,
 saved progress 2 MB, cache 300 MB (about 0.3 GB).
 
@@ -265,23 +306,28 @@ Do **not** press Clear storage, Offload App or Delete App.
 
 *Your result:* the size of each part, and one answer: which part would grow
 if you downloaded a new level?
+
+::: {.check}
+A good answer lists the app size, the user data (documents and data) and
+the cache, for example 1.1 GB, 2.4 GB and 0.3 GB. A new level makes the
+user data grow, because downloaded levels are user data.
+:::
 :::
 
 ## Case study: the Pocket Pets support desk
 
-*Pocket Pets* is a made-up mobile game. Version 2.0 adds a new island with 40
-textures of 1024 × 1024 pixels in a compressed format (1 byte per pixel). In
-the first week, the support team receives five messages:
+*Pocket Pets* is a made-up mobile game. Version 2.0 adds a new island of
+900 MB. In the first week, the support team receives five messages:
 
 1. "My phone has eight cores, but only one is really busy."
 2. "The island download needs 1.6 GB, and my phone has 1.2 GB free."
 3. "I pressed Clear storage, and my pets are gone."
 4. "My new 1 TB laptop SSD shows only 931 GB."
-5. "When I enter the island, the pets look blurry for a second."
+5. "My cheap phone reads 180 MB per second. The island takes long to load."
 
 Each message is about one component and what it does. In the Game challenge
-of the interactive lesson, you answer these players, and in the mini-game below you sort ten such
-messages.
+of the interactive page, you answer these players, and in the mini-game
+below you sort ten such messages.
 
 {{< sim file="sims/pocket-pets.html" poster="sims/pocket-pets.png" title="Pocket Pets: answer the support desk" kind="game" height="560" >}}
 
@@ -302,13 +348,11 @@ solid-state disks).
 4. Put in order from fastest to slowest: RAM, cache, hard disk, flash storage.
 5. The player's position is read many times in every frame. Why is the game
    faster when the position is in the cache?
-6. A texture has 512 × 512 pixels and 4 bytes per pixel. How much memory
-   does it need? (Hint: 512 × 512 × 4 = 1024 × 1024.)
-7. A player says: "The PNG file is 1 MB, so the texture uses 1 MB of memory."
-   What is wrong?
-8. What does a player lose with Clear cache? And with Clear storage?
-9. Message 5 of the case study: which two components take part, and what
-   happens between them during the blurry second?
+6. What does installing a game fill, and what does launching it fill?
+7. A level needs 600 MB. The phone reads 200 MB per second. How long does it
+   load?
+8. How many MB is a 3 GB update?
+9. What does a player lose with Clear cache? And with Clear storage?
 
 ## Answers to the exercises
 
@@ -318,8 +362,8 @@ solid-state disks).
 3. Efficiency cores do light work with little energy, so the battery lasts longer.
 4. Cache, RAM, flash storage, hard disk.
 5. The cache is next to the core and very fast (about 1 ns). After the first read, the core finds the position there and does not wait for RAM (about 100 ns).
-6. 512 × 512 × 4 bytes = 1024 × 1024 bytes = 1 MB.
-7. The PNG is compressed only for storage. In memory, the texture is opened into pixels: 4 bytes per pixel.
-8. Clear cache: nothing important (temporary files). Clear storage: the user data (progress and downloaded levels).
-9. Storage and memory (RAM). The island's textures are still being copied from storage into RAM, so the game first shows simple, blurry versions.
+6. Installing fills storage; launching loads the game into memory (RAM).
+7. 600 ÷ 200 = 3 seconds.
+8. 3 × 1024 = 3072 MB.
+9. Clear cache: nothing important (temporary files). Clear storage: the user data (progress and downloaded levels).
 :::

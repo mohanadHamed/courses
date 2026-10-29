@@ -10,7 +10,7 @@
 <body class="theme-arcade">
 <main class="sim">
   <h1>Treasure Odds</h1>
-  <p class="hint">The last island of <i>Lucky Raft</i> has treasure rooms. Each room has a rule with chance. Use what you already know, and the expected value, to choose well.</p>
+  <p class="hint">The dungeon of <i>Lucky Raft</i> has loot drops and critical hits. Each room has a rule with chance. Use what you already know, and the expected value, to choose well.</p>
 </main>
 
 <script src="../../../../shared/sims/sim-base.js"></script>
@@ -19,25 +19,25 @@
 (() => {
   const C = (list) => list.map((t) => ({ k: t, label: t }));
   const rounds = [
-    { card: "Two dice. The first die already shows a 6. The door opens with a sum of 10 or more.", goal: "P(the door opens | first die is 6)?", answer: "1/2", choices: C(["1/2", "1/6", "3/36", "1/3"]),
-      good: "Only 6 cases are left (6,1 … 6,6); 3 of them make 10 or more: 3/6 = 1/2.", why: { "1/6": "That is P(sum ≥ 10) without the condition." } },
-    { card: "12 event cards, 3 storms. Draw two, without putting the first back.", goal: "P(two storms)?", answer: "1/22", choices: C(["1/22", "1/16", "6/12", "1/4"]),
-      good: "3/12 × 2/11 = 6/132 = 1/22. After one storm, 2 storms of 11 cards are left.", why: { "1/16": "That is with the card put back. Here it stays out." } },
-    { card: "A crate: gold 100 coins (1/10), silver 20 coins (3/10), wood 5 coins (6/10).", goal: "Expected coins per crate?", answer: "19", choices: C(["19", "125", "41.7", "100"]),
-      good: "100·0.1 + 20·0.3 + 5·0.6 = 10 + 6 + 3 = 19.", why: { "41.7": "That is the plain average of 100, 20 and 5: the probabilities are missing.", "125": "That is the sum of the values, not the expected value." } },
-    { card: "A dice game: pay 2 coins, roll one die, a 6 wins 10 coins.", goal: "Expected gain per game?", answer: "about −0.33 coins", choices: C(["about −0.33 coins", "+8 coins", "0 coins", "about +1.67 coins"]),
-      good: "E(win) = 10/6 ≈ 1.67; gain = 1.67 − 2 ≈ −0.33. Not fair for the player.", why: { "about +1.67 coins": "That is E(win). Take away the price of 2 coins." } },
-    { card: "The golden key drops from a crate with probability 1/20.", goal: "How many crates on average for one key?", answer: "20", choices: C(["20", "10", "1", "19"]),
-      good: "On average 1/p = 20 crates. Some players need many more." },
-    { card: "Choose: the safe chest gives 50 coins; the risky chest gives 120 coins with probability 1/2, else 0.", goal: "Which chest has the higher expected value?", answer: "the risky chest (60)", choices: C(["the risky chest (60)", "the safe chest (50)", "both are the same", "you cannot know"]),
-      good: "E(risky) = 120 · 1/2 = 60 > 50. But half of the players get nothing." },
+    { card: "A critical hit needs a sum of 11 or more on two dice. The first die already shows a 5.", goal: "P(critical hit | first die is 5)?", answer: "1/6", choices: C(["1/6", "1/12", "3/36", "1/2"]),
+      good: "Only 6 cases are left (5,1 … 5,6); only (5,6) makes 11 or more: 1/6.", why: { "1/12": "That is P(sum ≥ 11) without the condition: 3/36.", "3/36": "That is P(sum ≥ 11) without the condition." } },
+    { card: "A chest holds 8 items, 2 of them rare. The hero takes two items, one after the other.", goal: "P(two rare items)?", answer: "1/28", choices: C(["1/28", "1/16", "2/8", "4/8"]),
+      good: "2/8 × 1/7 = 2/56 = 1/28. After one rare item, 1 rare of 7 items is left.", why: { "1/16": "That is with the item put back. Here it stays out." } },
+    { card: "An enemy drops 50 coins (1/10), 10 coins (4/10) or nothing (5/10).", goal: "Expected coins per enemy?", answer: "9", choices: C(["9", "20", "60", "50"]),
+      good: "50·0.1 + 10·0.4 + 0·0.5 = 5 + 4 + 0 = 9.", why: { "20": "That is the plain average of 50, 10 and 0: the probabilities are missing.", "60": "That is the sum of the values, not the expected value." } },
+    { card: "A normal hit does 10 damage. A critical hit (probability 1/4) does 30 damage.", goal: "Expected damage per hit?", answer: "15", choices: C(["15", "20", "40", "30"]),
+      good: "10·3/4 + 30·1/4 = 7.5 + 7.5 = 15.", why: { "20": "That is the plain average of 10 and 30: a critical hit is rarer." } },
+    { card: "A lucky wheel: pay 3 coins, spin 10 equal parts, one part wins 20 coins.", goal: "Expected gain per spin?", answer: "−1 coin", choices: C(["−1 coin", "+17 coins", "0 coins", "+2 coins"]),
+      good: "E(win) = 20/10 = 2; gain = 2 − 3 = −1. Not fair for the player: a fair price is 2 coins.", why: { "+2 coins": "That is E(win). Take away the price of 3 coins." } },
+    { card: "A rare pet drops from an enemy with probability 1/25.", goal: "How many enemies on average for one pet?", answer: "25", choices: C(["25", "12", "1", "24"]),
+      good: "On average 1/p = 25 enemies. Some players need many more." },
   ];
   rounds.forEach((r) => { r.why = r.why || {}; });
-  const g = Kit.game({ rounds, cols: 2, colsPhone: 2, animMs: 700, intro: "Round 1 is the story of the lesson: the first die is already a 6." });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 2, animMs: 700, intro: "Round 1 is the story of the lesson: the first die is already a 5." });
   const box = Kit.el("div", { class: "card", id: "card" });
   document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
   let last = -1;
-  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "All treasure rooms are open!" : g.cur().card; } requestAnimationFrame(upd); })();
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "All rooms are done: you know the odds of the loot and the hits!" : g.cur().card; } requestAnimationFrame(upd); })();
 })();
 </script>
 </body>

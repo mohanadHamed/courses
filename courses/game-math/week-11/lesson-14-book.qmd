@@ -1,33 +1,33 @@
 ---
 title: "Conditional Probability and Expected Value"
-description: "Lesson notes · Conditional probability on a smaller sample space, the multiplication rule for dependent events, a test for independence, random variables and the expected value, fair games and the average number of tries, and decisions with expected value."
-lesson: 21
+description: "Lesson notes · Conditional probability on a smaller sample space, the multiplication rule for dependent events, random variables and the expected value, fair games and the average number of tries, with loot drops and critical hits."
+lesson: 14
 ilos: [A2, B2]
 format: lesson-typst
 ---
 
 ::: {.lead}
-The last island of *Lucky Raft* has treasure rooms. A door opens with a sum
-of 10 or more, but the first die already shows a 6: are the chances still
-1/6? Two storm cards in a row are rarer when the first card stays out of
-the deck. A loot crate gives 100, 20 or 5 coins: what is it worth "on
-average", and is a price of 25 coins fair? In lecture 20 you computed
-probabilities by counting. In this lesson you use what you **already know**
-(conditional probability), you multiply along branches that change, and you
-compute the **expected value**, the most important number for the balance of
-a game with chance. Every section ends with a short task.
+The dungeon of *Lucky Raft* has doors with dice, loot drops and critical
+hits. A door opens with a sum of 10 or more, but the first die already shows
+a 6: are the chances still 1/6? Two storm cards in a row are rarer when the
+first card stays out of the deck. A loot crate gives 100, 20 or 5 coins: what
+is it worth "on average", and is a price of 25 coins fair? In lecture 13 you
+computed probabilities by counting. In this lesson you use what you
+**already know** (conditional probability), you multiply along branches that
+change, and you compute the **expected value**, the most important number for
+the balance of a game with chance. Every section ends with a short task.
 :::
 
 ## Key terms
 
 {{< glossary conditional-probability dependent-events independent-events multiplication-rule tree-diagram random-variable expected-value fair-game >}}
 
-## 21.1 Conditional probability
+## 14.1 Conditional probability
 
 Sometimes part of the result is already known. Then the sample space gets
 smaller (@fig-cond).
 
-::: {.callout-important title="Definition 21.1 — Conditional probability"}
+::: {.callout-important title="Definition 14.1 — Conditional probability"}
 The probability of A when we know that B happened is
 $$P(A \mid B) = \frac{P(A \text{ and } B)}{P(B)}.$$
 With equally likely outcomes: count the outcomes of A **only inside B**,
@@ -36,7 +36,7 @@ and divide by the number of outcomes of B.
 
 ![P(A | B): count only inside B.](images/conditional-grid.png){#fig-cond width=94%}
 
-::: {.callout-note title="Example 21.1 — The first die is a 6"}
+::: {.callout-note title="Example 14.1 — The first die is a 6"}
 The door opens with a sum of 10 or more (A). Before the roll, P(A) = 6/36 =
 1/6.
 
@@ -45,7 +45,7 @@ The door opens with a sum of 10 or more (A). Before the roll, P(A) = 6/36 =
 3. P(A | B) = 3/6 = **1/2**. Knowing B made A three times more likely.
 :::
 
-::: {.callout-note title="Example 21.2 — At least one 6, and a double"}
+::: {.callout-note title="Example 14.2 — At least one 6, and a double"}
 B = at least one 6: 11 outcomes. A = a double: inside B only (6,6).
 P(A | B) = 1/11, while P(A) = 6/36 = 1/6.
 :::
@@ -63,14 +63,21 @@ even); (c) P(sum 10 or more | at least one 6). Check one in **Conditional
 Lab**.
 
 *Your result:* three probabilities.
+
+::: {.check}
+(a) Inside B (6 outcomes) only (1, 6): 1/6. (b) An even sum has 18
+outcomes; 6 of them are doubles: 6/18 = 1/3. (c) At least one 6: 11
+outcomes; sums of 10 or more among them: (4,6), (5,6), (6,4), (6,5), (6,6):
+5/11.
+:::
 :::
 
-## 21.2 Dependent events and the multiplication rule
+## 14.2 Dependent events and the multiplication rule
 
-In lecture 20 two draws were independent because the card went back. When
+In lecture 13 two draws were independent because the card went back. When
 it stays out, the second branch changes (@fig-tree).
 
-::: {.callout-important title="Definition 21.2 — The multiplication rule"}
+::: {.callout-important title="Definition 14.2 — The multiplication rule"}
 For any two events,
 $$P(A \text{ and } B) = P(A) \times P(B \mid A).$$
 Events are **dependent** when the first result changes the chances of the
@@ -80,7 +87,7 @@ the first step has a **conditional** probability.
 
 ![Two cards without putting the first back.](images/tree-no-return.png){#fig-tree width=94%}
 
-::: {.callout-note title="Example 21.3 — Two storms in a row"}
+::: {.callout-note title="Example 14.3 — Two storms in a row"}
 12 event cards, 3 storms. A player draws two cards and keeps the first.
 
 1. P(first storm) = 3/12.
@@ -95,52 +102,29 @@ Using 3/12 again for the second card. Without putting back, both the number
 of storms and the number of cards change.
 :::
 
+Two events are **independent** when knowing one does not change the
+other: P(A | B) = P(A). Two dice are independent, so the past of a die never
+changes its next roll; cards drawn without putting back are dependent.
+
 ::: {.callout-note title="Do it · A deck of quests"}
 A deck has 10 quest cards: 4 easy, 6 hard. Draw two without putting back.
 Find P(two easy) and P(one easy, then one hard).
 
 *Your result:* two probabilities.
+
+::: {.check}
+P(two easy) = 4/10 × 3/9 = 12/90 = 2/15. P(easy, then hard) = 4/10 × 6/9 =
+24/90 = 4/15.
+:::
 :::
 
-## 21.3 Independent or not?
-
-Knowing B can change A, or not. This gives a clear test for independence.
-
-::: {.callout-important title="Definition 21.3 — Independence"}
-A and B are **independent** when
-$$P(A \mid B) = P(A),$$
-that is, when knowing B does not change A. Then P(A and B) = P(A) × P(B).
-:::
-
-::: {.callout-note title="Example 21.4 — Two tests"}
-1. A = second die is 6, B = first die is 6: P(A | B) = 1/6 = P(A).
-   **Independent:** the dice do not talk to each other.
-2. A = sum 10 or more, B = first die is 6: P(A | B) = 1/2 ≠ 1/6.
-   **Dependent.**
-3. Storm cards without putting back: P(2nd storm | 1st storm) = 2/11 ≠ 3/12.
-   **Dependent.**
-:::
-
-::: {.callout-warning title="Common mistake"}
-"After three misses, a hit must come." For independent events, like rolls
-of a die, the past does not change the next roll. (In lecture 25 you see
-how games handle this feeling.)
-:::
-
-::: {.callout-note title="Do it · Test"}
-Two dice. Are these independent? (a) A = a double, B = first die is 1;
-(b) A = sum 7, B = first die is 6; (c) A = sum 12, B = first die is 6.
-
-*Your result:* three answers with P(A | B) and P(A).
-:::
-
-## 21.4 Random variables and the expected value
+## 14.3 Random variables and the expected value
 
 Games give rewards: coins, damage, points. A number that depends on chance
 is a **random variable**, and its long-run average is the **expected value**
 (@fig-ev).
 
-::: {.callout-important title="Definition 21.4 — Expected value"}
+::: {.callout-important title="Definition 14.3 — Expected value"}
 A **random variable** X takes the values x₁, x₂, … with the probabilities
 p₁, p₂, … Its **expected value** is
 $$E(X) = x_1 p_1 + x_2 p_2 + \dots$$
@@ -150,7 +134,7 @@ different value.
 
 ![The expected value of a loot crate.](images/expected-value.png){#fig-ev width=94%}
 
-::: {.callout-note title="Example 21.5 — The loot crate"}
+::: {.callout-note title="Example 14.4 — The loot crate"}
 Gold 100 coins (1/10), silver 20 coins (3/10), wood 5 coins (6/10):
 
 1. E = 100 · 0.1 + 20 · 0.3 + 5 · 0.6 = 10 + 6 + 3 = **19 coins**.
@@ -159,7 +143,7 @@ Gold 100 coins (1/10), silver 20 coins (3/10), wood 5 coins (6/10):
 3. A player who opens 100 crates gets about 1900 coins.
 :::
 
-::: {.callout-note title="Example 21.6 — Damage of a sword"}
+::: {.callout-note title="Example 14.5 — Damage of a sword"}
 A hit does 10 damage; with probability 0.2 it is a critical hit of 25.
 E = 10 · 0.8 + 25 · 0.2 = 8 + 5 = 13 damage per hit.
 :::
@@ -187,14 +171,19 @@ outcome is missing or counted twice.
    (5/10).
 
 *Your result:* an average and one E.
+
+::: {.check}
+Crate Lab: after 1000 crates the average is close to 19 (for example 18
+to 20). E = 50 × 0.2 + 20 × 0.3 + 0 × 0.5 = 10 + 6 + 0 = 16 coins.
+:::
 :::
 
-## 21.5 Fair games and the number of tries
+## 14.4 Fair games and the number of tries
 
 The expected value tells a designer whether a game of chance takes or
 gives coins, and how long players wait for a rare item (@fig-fair).
 
-::: {.callout-important title="Definition 21.5 — Fair game and expected tries"}
+::: {.callout-important title="Definition 14.4 — Fair game and expected tries"}
 The **expected gain** of a game is E(win) − price. A game is **fair** when
 the expected gain is 0. If one try succeeds with probability p, the
 **average number of tries** until the first success is **1/p**.
@@ -202,7 +191,7 @@ the expected gain is 0. If one try succeeds with probability p, the
 
 ![A fair price and the average number of tries.](images/fair-game.png){#fig-fair width=94%}
 
-::: {.callout-note title="Example 21.7 — The dice stand"}
+::: {.callout-note title="Example 14.6 — The dice stand"}
 Pay 2 coins, roll a die, a 6 wins 10 coins.
 
 1. E(win) = 10 · 1/6 ≈ 1.67 coins.
@@ -211,7 +200,7 @@ Pay 2 coins, roll a die, a 6 wins 10 coins.
 3. A fair price would be 10/6 ≈ 1.67 coins.
 :::
 
-::: {.callout-note title="Example 21.8 — Waiting for gold"}
+::: {.callout-note title="Example 14.7 — Waiting for gold"}
 Gold comes with p = 1/10: on average 10 crates. With p = 1/50 it is 50
 crates; many players will need 100 or more, and some will give up. This is
 why designers check both E and 1/p.
@@ -228,50 +217,24 @@ A spinner has 8 equal parts; one part wins 20 coins. A spin costs 3 coins.
 a win?
 
 *Your result:* three answers.
+
+::: {.check}
+(a) E(win) = 20 × 1/8 = 2.5 coins; gain = 2.5 − 3 = −0.5: not fair.
+(b) 2.5 coins. (c) 1/p = 8 spins on average.
 :::
-
-## 21.6 Decisions with expected value
-
-Players and designers compare choices by their expected values, and also
-by their risk (@fig-choice).
-
-::: {.callout-important title="Definition 21.6 — Choosing with E"}
-To compare choices, compute E for each one. A higher E is better **on
-average**. The **risk** is how far single results are from E: a choice with
-the same E but more extreme results is riskier.
-:::
-
-![Two chests with different expected values and risks.](images/ev-choice.png){#fig-choice width=94%}
-
-::: {.callout-note title="Example 21.9 — The safe and the risky chest"}
-1. Safe chest: always 50 coins, E = 50.
-2. Risky chest: 120 coins with probability 1/2, else 0: E = 60.
-3. The risky chest is better on average, but half of the players get
-   nothing. A designer might add a small prize (20 coins) instead of 0 so
-   that no player leaves with nothing: E = 120 · 0.5 + 20 · 0.5 = 70.
-:::
-
-::: {.callout-warning title="Common mistake"}
-Looking only at the best result ("120 coins!"). Compare the expected values,
-and then think about the risk for the player.
-:::
-
-::: {.callout-note title="Do it · Choose"}
-Option A: 30 coins for sure. Option B: 100 coins with probability 0.25, else
-10 coins. Compute both E and say which one you would put in a game for new
-players, and why.
-
-*Your result:* two expected values and one sentence.
 :::
 
 ## Case study: Treasure Odds
 
-The treasure rooms of *Lucky Raft*: a door when the first die is already a
-6, two storm cards without putting back, a loot crate with gold, silver and
-wood, a dice game with a price of 2 coins, a golden key with a drop chance of
-1/20, and a choice between a safe and a risky chest. The Game challenge of
-the interactive lesson uses these rooms. In the mini-game below you choose
-the right probability or expected value in each room.
+The designer of *Lucky Raft* tunes the loot drops and the critical hits of
+its dungeon. A critical hit needs a sum of 11 or more on two dice, and the
+first die already shows a 5. A chest holds 8 items, 2 of them rare, and the
+hero takes two. An enemy drops 50 coins (1/10), 10 coins (4/10) or nothing
+(5/10). A normal hit does 10 damage, and a critical hit (probability 1/4)
+does 30. A lucky wheel costs 3 coins and one of its 10 equal parts wins 20
+coins. A rare pet drops with probability 1/25. The Game challenge of the
+interactive page uses these rooms. In the mini-game below you choose the
+right probability or expected value in each room.
 
 {{< sim file="sims/treasure-odds.html" poster="sims/treasure-odds.png" title="Treasure Odds: knowledge and averages" kind="game" height="460" >}}
 
@@ -297,12 +260,8 @@ design).
 10. Why is the plain average of the values not the expected value?
 11. Pay 5 coins; win 30 coins with p = 1/8. Expected gain?
 12. Which price makes the game of exercise 11 fair?
-13. A rare pet drops with p = 1/25. How many tries on average?
+13. A rare mount drops with p = 1/40. How many tries on average?
 14. With p = 1/10, what part of the players has no gold after 10 crates?
-15. Safe: 40 coins. Risky: 100 coins with p = 0.3, else 10. Which has the
-    higher E?
-16. Why may a designer not choose the option with the highest E for new
-    players?
 
 ## Answers to the exercises
 
@@ -319,8 +278,6 @@ design).
 10. The values have different probabilities.
 11. 30/8 − 5 = 3.75 − 5 = −1.25 coins.
 12. 3.75 coins.
-13. 25.
+13. 40.
 14. 0.9¹⁰ ≈ 0.35, about 35 %.
-15. Risky: 100 · 0.3 + 10 · 0.7 = 37 < 40, so the safe one.
-16. A high E with a high risk can leave many new players with nothing.
 :::

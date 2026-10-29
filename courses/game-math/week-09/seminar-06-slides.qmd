@@ -1,0 +1,138 @@
+---
+title: "Logic Exercises: Game States and Conditions"
+subtitle: "Seminar 6 · practises Lecture 11"
+format: lesson-pptx
+---
+
+## Recall · Lecture 11
+
+a) How many rows has the truth table of 3 variables?
+b) Which C# condition means "exactly one of p and q"?
+c) When is the rule p → q broken?
+
+::: {.answer}
+a) 8
+b) p ^ q
+c) when p is true and q is false
+:::
+
+## Activity 1 · Words to code · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A farm game has the states isDay, inFight, hasSeeds, hasWater and isRaining.
+- **Do it:** Write the rule "plant when there are seeds and water or rain" as a C# condition.
+- Then write "a crop grows with rain or water, but not both".
+:::
+::: {.column width="50%"}
+![](images/not-and-or.png)
+:::
+::::
+
+## Check 1 · Words to code
+
+Which conditions are right?
+
+::: {.reveal}
+1. Planting needs hasSeeds && (hasWater || isRaining), with the brackets.
+2. Without brackets, rain alone would allow planting without seeds.
+3. "Rain or water, but not both" is isRaining ^ hasWater.
+:::
+
+## Activity 2 · Table to condition · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Write one AND for each true row, with ¬ for each variable that is F.
+- **Do it:** A lock opens only in the rows (T, F) and (F, T). Write its condition.
+- Then a door opens only in (T, T) and (F, F). What does it check?
+:::
+::: {.column width="50%"}
+![](images/table-to-rule.png)
+:::
+::::
+
+## Live demo · Truth Table Lab
+
+{{< sim file="sims/truth-table-lab.html" poster="sims/truth-table-lab.png" title="Truth Table Lab: every case of a condition" task="**Show:** type (p ∧ ¬q) ∨ (¬p ∧ q) and read its true rows. **Ask:** which single operator has the same table?" >}}
+
+## Check 2 · Table to condition
+
+What are the two conditions?
+
+::: {.reveal}
+1. The lock is (p ∧ ¬q) ∨ (¬p ∧ q), which is p XOR q.
+2. The door is (p ∧ q) ∨ (¬p ∧ ¬q).
+3. The door opens when p and q have the same value.
+:::
+
+## Activity 3 · Find the bug · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The dock door rule is p ∧ (q ∨ r), but the code is hasPass && shieldsUp || officer.
+- **Do it:** Test the row (F, F, T). What does the table say, and what does the code do?
+- Then write four test cases for the repair bay (d ∧ ¬e) ∨ o.
+:::
+::: {.column width="50%"}
+![](images/test-cases.png)
+:::
+::::
+
+## Check 3 · Find the bug
+
+What did the test find?
+
+::: {.reveal}
+1. The table says the door stays shut for (F, F, T).
+2. The code opens it, because && is computed before ||.
+3. The fix is hasPass && (shieldsUp || officer).
+:::
+
+## Activity 4 · Rules in a quest · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Rule 1 is "if the player has the map, then the cave is shown".
+- Rule 2 is "if the dragon is awake, then the music is loud".
+- **Do it:** For the states B (map, no cave, dragon awake, loud music) and C (no map, cave, dragon awake, quiet music), which rule is broken?
+:::
+::: {.column width="50%"}
+![](images/xor-implies.png)
+:::
+::::
+
+## Check 4 · Rules in a quest
+
+Which rules are broken?
+
+::: {.reveal}
+1. In state B, rule 1 is broken: the map is there, but no cave.
+2. In state C, rule 2 is broken: the dragon is awake, but the music is quiet.
+3. The code hasMap && !caveShown finds a broken rule 1.
+:::
+
+## Game challenge · Door Logic
+
+{{< sim file="sims/door-logic.html" poster="sims/door-logic.png" title="Door Logic: the condition for each door" kind="game" task="In the dungeon of Torch Hall, every door, trap and lever has a rule in words. **Play:** choose the condition for each door on your phone, and think about its truth table." >}}
+
+## Try it · Test the doors (harder)
+
+The facts: the wooden door needs the key or a torch, and the last gate needs the defeated boss and the key or a torch.
+
+a) In how many of the 4 cases of key and torch does the wooden door open?
+b) In how many of the 8 cases of boss, key and torch does the last gate open?
+c) Which condition finds a bug in the rule "if crown, then boss defeated"?
+
+::: {.answer}
+a) 3
+b) 3
+c) hasCrown && !bossDead
+:::
+
+## Wrap-up
+
+- You can turn game rules in words into C# conditions with the right brackets.
+- You can write a condition from the true rows of a truth table.
+- You can use the rows of a truth table as test cases and find a bug.
+- You can say which game states break an IF–THEN rule.

@@ -1,14 +1,14 @@
 ---
-title: "Homogeneous Coordinates and Transformation Matrices"
-subtitle: "Lecture 13"
+title: "Homogeneous Coordinates and 3D Transformations"
+subtitle: "Lecture 10"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary homogeneous-coordinates translation-matrix transformation-matrix trs-matrix local-space world-space camera-space direction >}}
+{{< glossary homogeneous-coordinates translation-matrix trs-matrix 3d scaling rotation-axis rotation-matrix forward-vector >}}
 
-## 13.1 Why a 2 × 2 matrix cannot move
+## 10.1 Why a 2 × 2 matrix cannot move
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -45,7 +45,7 @@ b) It keeps it at (0, 0).
 c) (0, 0, 1)
 :::
 
-## 13.2 The translation matrix
+## 10.2 The translation matrix
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -82,7 +82,7 @@ b) T(−4, 1)
 c) in the last column
 :::
 
-## 13.3 Scaling and rotation in 3 × 3
+## 10.3 Scaling and rotation in 3 × 3
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -104,22 +104,10 @@ R(90°) has the rows (0, −1, 0), (1, 0, 0) and (0, 0, 1), and the cannon is at
 ::: {.reveal}
 1. Row 1: 0 × 2 + (−1) × 1 + 0 × 1 = −1.
 2. Row 2: 1 × 2 + 0 × 1 + 0 × 1 = 2.
-3. The cannon turns to **(−1, 2, 1)**, as in lecture 12.
+3. The cannon turns to **(−1, 2, 1)**, as in Lecture 9.
 :::
 
-## Try it 3 · Scale and turn in 3 × 3
-
-a) What is S(3, 1) × (1, 2, 1)?
-b) What is R(180°) × (1, 2, 1)?
-c) What does the last column (0, 0, 1) of S and R mean?
-
-::: {.answer}
-a) (3, 2, 1)
-b) (−1, −2, 1)
-c) There is no move.
-:::
-
-## 13.4 One matrix: M = T × R × S
+## 10.3 One matrix: M = T × R × S
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -148,7 +136,7 @@ The boat is scaled by 2, turned by 90° and moved by (5, 1).
 
 {{< sim file="sims/matrix-chain.html" poster="sims/matrix-chain.png" title="Matrix Chain: M = T × R × S" task="**Show:** set scale 2, θ = 90° and the move (5, 1), then compare M with the example. **Ask:** why does the orange direction arrow turn but never move?" >}}
 
-## Try it 4 · The TRS matrix
+## Try it 3 · The TRS matrix
 
 M has the rows (0, −2, 5), (2, 0, 1) and (0, 0, 1).
 
@@ -162,104 +150,131 @@ b) S
 c) (0, 3)
 :::
 
-## 13.5 Points and directions
+## 10.4 From 3 × 3 to 4 × 4
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A point has w = 1, so the move in the last column is added.
-- A direction has w = 0, so the move is multiplied by 0 and only the turn acts.
-- In Unity, MultiplyPoint3x4 uses w = 1 and MultiplyVector uses w = 0.
-- **Do it:** Apply T(5, 1) × R(90°) to the point (2, 0, 1) and the direction (2, 0, 0).
+- In 3D, a point becomes (x, y, z, 1) and a direction becomes (x, y, z, 0).
+- The translation matrix T(tx, ty, tz) is 4 × 4, with the move in the last column.
+- T(−tx, −ty, −tz) moves the point back again.
+- **Do it:** Write T(1, 2, 3). Where does it send the point (4, 0, 0, 1)?
 :::
 ::: {.column width="50%"}
-![](images/point-direction.png)
+![](images/translate-4x4.png)
 :::
 ::::
 
-## Example · The cannon fires
+## Example · Moving a crate
 
-M = T(5, 1) × R(90°) has the rows (0, −1, 5), (1, 0, 1) and (0, 0, 1).
-**Where does M send the point (1, 1, 1) and the direction (2, 0, 0)?**
+A crate stands at (1, 0, 2), and it slides by (3, 0, 4).
+**Where is the crate after T(3, 0, 4)?**
 
 ::: {.reveal}
-1. The point: (0 − 1 + 5, 1 + 0 + 1) = **(4, 2)**.
-2. The direction: (0, 2), because the 5 and the 1 are multiplied by 0.
-3. The cannon now stands at (4, 2) and fires **straight up**.
+1. Row 1: 1 + 3 × 1 = 4, and row 2: 0 + 0 = 0.
+2. Row 3: 2 + 4 × 1 = 6.
+3. The crate is at **(4, 0, 6)**, and T(−3, 0, −4) brings it back.
 :::
 
-## Try it 5 · w = 1 or w = 0
+## Try it 4 · Translation in 3D
 
-M = T(5, 1) × R(90°) has the rows (0, −1, 5), (1, 0, 1) and (0, 0, 1).
-
-a) Where does M send the point (2, 0, 1)?
-b) Where does M send the direction (0, 3, 0)?
-c) Which value of w does a direction have?
+a) What is T(1, 2, 3) × (4, 0, 0, 1)?
+b) What is T(1, 2, 3) × (4, 0, 0, 0)?
+c) Which matrix undoes T(1, 2, 3)?
 
 ::: {.answer}
-a) (5, 3, 1)
-b) (−3, 0, 0)
-c) w = 0
+a) (5, 2, 3, 1)
+b) (4, 0, 0, 0), because a direction does not move.
+c) T(−1, −2, −3)
 :::
 
-## 13.6 Local, world and camera space
+## 10.4 Scaling in 3D
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Local space measures from the object's own pivot, for example on the ship.
-- The object's matrix takes local space to world space.
-- Camera space measures from the camera, with the inverse of its matrix.
-- **Do it:** A ship at (6, 3) carries a flag at (1, 2). Where is the flag in the world?
+- S(sx, sy, sz) has the three factors on the main diagonal.
+- It multiplies x by sx, y by sy and z by sz.
+- A uniform scale of 2 makes the volume 8 times bigger.
+- **Do it:** Which scaling turns the unit cube into a pillar 4 units tall?
 :::
 ::: {.column width="50%"}
-![](images/spaces.png)
+![](images/scale-3d.png)
 :::
 ::::
 
-## Example · From the ship to the camera
+## Example · A tall box
 
-The cannon is at (2, 1) on a ship at (10, 4) that is turned by 90°, and the camera stands at (8, 3).
-**Where is the cannon in the world, and in camera space?**
+The unit cube has a corner at (1, 1, 1), and it gets S(2, 3, 1).
+**Where does the corner go, and what is the size of the box?**
 
 ::: {.reveal}
-1. R(90°) × (2, 1) = (−1, 2), and + (10, 4) gives **(9, 6)** in the world.
-2. Camera space subtracts the camera: (9, 6) − (8, 3) = **(1, 3)**.
-3. So the cannon is 1 unit right of the camera and 3 units above it.
+1. x: 2 × 1 = 2, y: 3 × 1 = 3 and z: 1 × 1 = 1.
+2. The corner goes to **(2, 3, 1)**.
+3. The box is 2 wide, 3 tall and 1 deep.
 :::
 
-## Try it 6 · Three spaces
+## 10.5 Yaw: turning around the y-axis
 
-a) A ship at (6, 3), not turned, has a flag at (1, 2). Where is the flag in the world?
-b) The camera stands at (5, 0). Where is the world point (7, 5) in camera space?
-c) Which space measures from the object's own pivot?
+:::: {.columns}
+::: {.column width="50%"}
+- R_y(θ) has the rows (cos θ, 0, sin θ), (0, 1, 0) and (−sin θ, 0, cos θ).
+- The y coordinate stays, and x and z mix like x and y in 2D.
+- Forward (0, 0, 1) goes to (sin θ, 0, cos θ), so a positive yaw turns right.
+- **Do it:** Compute R_y(180°) × (0, 0, 1). Does Yaw Lab agree?
+:::
+::: {.column width="50%"}
+![](images/yaw.png)
+:::
+::::
 
-::: {.answer}
-a) (7, 5)
-b) (2, 5)
-c) local space
+## Example · The beam at 90°
+
+The lamp looks forward along (0, 0, 1) and turns by 90° (cos 0, sin 1).
+**Where does the beam point now?**
+
+::: {.reveal}
+1. Row 1: 0 × 0 + 0 × 0 + 1 × 1 = 1.
+2. Row 2 gives 0, and row 3: −1 × 0 + 0 × 1 = 0.
+3. The beam points along **(1, 0, 0)**, to the right.
 :::
 
-## Game challenge · Cannon Cove
+## Live demo · Yaw Lab
 
-{{< sim file="sims/cannon-cove.html" poster="sims/cannon-cove.png" title="Cannon Cove: local, world and camera space" kind="game" task="**The story:** the cannon sits at (2, 1) on a pirate ship that enters the harbour at (10, 4) and turns by 90°. **Play:** find the cannon in the world and in camera space, and say which way it fires." >}}
+{{< sim file="sims/yaw-lab.html" poster="sims/yaw-lab.png" title="Yaw Lab: turning around the y-axis in 3D" task="**Show:** turn the tank to 90°, −90° and 180°, and drag the picture to look from above. **Ask:** why does the middle row of the matrix never change?" >}}
 
-## Try it 7 · New orders (harder)
+## Try it 5 · Yaw
 
-The facts: the cannon is at (2, 1) on the ship, the ship is at (10, 4), and the camera is at (8, 3).
-
-a) The ship turns by 180°. Where is the cannon in the world?
-b) The ship turns by −90°. Where is the cannon in the world?
-c) Which matrix puts the ship turned by 90° into the world?
+a) What is R_y(180°) × (3, 2, 1)?
+b) A player has a yaw of 30°. What is the forward vector?
+c) What is R_y(−90°) × (0, 0, 1)?
 
 ::: {.answer}
-a) (8, 3)
-b) (11, 2)
-c) the rows (0, −1, 10), (1, 0, 4) and (0, 0, 1)
+a) (−3, 2, −1)
+b) (0.5, 0, 0.87)
+c) (−1, 0, 0)
+:::
+
+## Game challenge · Lighthouse
+
+{{< sim file="sims/lighthouse.html" poster="sims/lighthouse.png" title="Lighthouse: light up the ships with a yaw" kind="game" task="**The story:** a lighthouse at the origin turns its lamp around the y-axis to find ships 10 units away. **Play:** choose the yaw for each ship, using the beam (sin θ, 0, cos θ)." >}}
+
+## Try it 6 · A busy night (harder)
+
+The facts: at the yaw θ, the beam points along (sin θ, 0, cos θ), and ships are 10 units away.
+
+a) Which yaw lights a ship at (−7.1, 0, 7.1)?
+b) The lamp points at 90°. Which turn reaches a ship at (−10, 0, 0)?
+c) Where does a beam of length 10 end at a yaw of 60°?
+
+::: {.answer}
+a) −45°
+b) 180°
+c) (8.7, 0, 5)
 :::
 
 ## Summary
 
-- Homogeneous coordinates write the point (x, y) as (x, y, 1).
+- Homogeneous coordinates add w = 1, so a 3 × 3 matrix can move a point.
 - The translation matrix has the move in its last column.
-- M = T × R × S scales, then rotates, then translates in one matrix.
-- Points have w = 1 and move, while directions have w = 0 and only turn.
-- The object's matrix takes local space to world space.
+- The TRS matrix M = T × R × S scales first, then turns, then moves.
+- In 3D, a point is (x, y, z, 1) and every transformation is a 4 × 4 matrix.
+- The yaw keeps y and sends forward to (sin θ, 0, cos θ).

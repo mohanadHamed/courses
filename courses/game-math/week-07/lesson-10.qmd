@@ -1,0 +1,375 @@
+---
+title: "Homogeneous Coordinates and 3D Transformations"
+description: "Why a 2 × 2 matrix cannot move a shape, the third coordinate, the translation matrix, one matrix M = T × R × S, moving and scaling in 3D, and turning around the y-axis."
+lesson: 10
+ilos: [C1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check.
+
+## Key terms
+
+{{< glossary homogeneous-coordinates translation-matrix transformation-matrix composite-transformation trs-matrix 3d scaling rotation-axis rotation-matrix forward-vector >}}
+
+## 10.1 Why a 2 × 2 matrix cannot move a shape
+
+- Every 2 × 2 matrix sends (0, 0) to (0, 0): it can scale and turn, but
+  never move.
+- **Homogeneous coordinates:** the point (x, y) becomes **(x, y, 1)**.
+- Transformations then become 3 × 3 matrices; their last row is always
+  (0, 0, 1).
+- To read the point again, drop the last 1: (7, 3, 1) is (7, 3).
+
+![A 3 × 3 matrix can move the origin.](images/homogeneous.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+A point needs w = 1, not 0. With w = 0 the move is lost.
+:::
+
+::: {.callout-note title="Do it · Add the third coordinate"}
+Write (4, −2), (0, 3) and (0, 0) in homogeneous coordinates. Then multiply
+any 2 × 2 matrix by (0, 0). What do you always get?
+
+::: {.check}
+(4, −2, 1), (0, 3, 1), (0, 0, 1). Any 2 × 2 matrix × (0, 0) = (0, 0): it
+cannot move the origin.
+:::
+:::
+
+::: {.callout-tip title="Try it 1 · Three coordinates"}
+Choose the right answer.
+
+::: {.match extra="(2, 1, 0)|(1, 2, 1)"}
+How do you write the point (2, 1) in homogeneous coordinates?
+:   (2, 1, 1)
+
+    Why: a point gets w = 1.
+
+Which 2D point is (7, 3, 1)?
+:   (7, 3)
+
+    Why: drop the last 1.
+
+What does any 2 × 2 matrix do to (0, 0)?
+:   it keeps it at (0, 0)
+
+    Why: every row times (0, 0) gives 0.
+
+What is the last row of a 3 × 3 transformation matrix?
+:   (0, 0, 1)
+
+    Why: it keeps w = 1.
+:::
+:::
+
+## 10.2 The translation matrix
+
+- **T(tx, ty) = rows (1, 0, tx), (0, 1, ty), (0, 0, 1)**: the move is in the
+  last column.
+- T(5, 2) × (2, 1, 1) = (7, 3, 1): the same as (2, 1) + (5, 2).
+- Undo it with T(−tx, −ty).
+
+![The translation matrix T(tx, ty).](images/translate-matrix.png){width=92%}
+
+::: {.callout-warning title="Watch out!"}
+tx and ty go into the last column, not the last row.
+:::
+
+::: {.callout-note title="Do it · Build T(−3, 4)"}
+Write T(−3, 4) and multiply it by (5, 1, 1). Check with an addition.
+
+::: {.check}
+T(−3, 4) = rows (1, 0, −3), (0, 1, 4), (0, 0, 1); × (5, 1, 1) = (2, 5, 1). Check:
+(5 − 3, 1 + 4).
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · The translation matrix"}
+Choose the right answer.
+
+::: {.match extra="(4, −1, 1)|T(1, 4)"}
+What is T(4, −1) × (2, 5, 1)?
+:   (6, 4, 1)
+
+    Why: (2 + 4, 5 − 1, 1).
+
+Which matrix undoes T(4, −1)?
+:   T(−4, 1)
+
+    Why: move back by the opposite vector.
+
+Where is the move in T(tx, ty)?
+:   in the last column
+
+    Why: the 1 of the point picks up the last column.
+
+What is T(−3, 4) × (5, 1, 1)?
+:   (2, 5, 1)
+
+    Why: (5 − 3, 1 + 4, 1).
+:::
+:::
+
+## 10.3 Scale, turn and move in one matrix
+
+- Scale and turn become 3 × 3 too: the 2 × 2 matrix in the top-left corner;
+  the last column and row are (0, 0, 1). S(2) = rows (2, 0, 0), (0, 2, 0),
+  (0, 0, 1); R(90°) = rows (0, −1, 0), (1, 0, 0), (0, 0, 1).
+- The **TRS matrix** M = T × R × S: first scale, then rotate, then translate
+  (read from right to left).
+- S(2), R(90°), T(5, 1): **M = rows (0, −2, 5), (2, 0, 1), (0, 0, 1)**.
+- M × (1, 0, 1) = (5, 3). Step by step: (2, 0), (0, 2), (5, 3).
+- The order matters: for (1, 0), T(2, 0) × R(90°) gives (2, 1), but
+  R(90°) × T(2, 0) gives (0, 3).
+
+![Scaling and rotation in 3 × 3.](images/scale-rotate-3x3.png){width=86%}
+
+![M = T × R × S.](images/trs-chain.png){width=86%}
+
+{{< sim file="sims/matrix-chain.html" poster="sims/matrix-chain.png" title="Matrix Chain: M = T × R × S" height="820" >}}
+
+::: {.callout-warning title="Watch out!"}
+In M = T × R × S, S acts first, although it is written last. And the
+bottom-right corner is always 1, never 0.
+:::
+
+::: {.callout-note title="Do it · Build M in Matrix Chain"}
+Set scale 2, θ = 90°, tx = 5, ty = 1 and compare M with the bullet above.
+Then set θ = 180°. Where does the nose (2, 0.3) go?
+
+::: {.check}
+θ = 90°: rows (0, −2, 5), (2, 0, 1), (0, 0, 1). θ = 180°: rows (−2, 0, 5),
+(0, −2, 1), (0, 0, 1); the nose goes to (−4 + 5, −0.6 + 1) = (1, 0.4).
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Scale, turn and TRS"}
+M = T(5, 1) × R(90°) × S(2) = rows (0, −2, 5), (2, 0, 1), (0, 0, 1). Choose
+the right answer.
+
+::: {.match extra="(2, 5)|T first|(3, 2, 3)"}
+What is S(3, 1) × (1, 2, 1)?
+:   (3, 2, 1)
+
+    Why: (3 × 1, 1 × 2, 1).
+
+What is R(90°) × (2, 1, 1)?
+:   (−1, 2, 1)
+
+    Why: (−y, x) = (−1, 2); w stays 1.
+
+Where does M send the point (1, 0)?
+:   (5, 3)
+
+    Why: (0 − 0 + 5, 2 + 0 + 1).
+
+Where does M send the point (0, 1)?
+:   (3, 1)
+
+    Why: (0 − 2 + 5, 0 + 0 + 1).
+
+Which matrix acts first in T × R × S?
+:   S
+
+    Why: read from right to left: S is next to the point.
+
+What does R(90°) × T(2, 0) do to (1, 0)?
+:   (0, 3)
+
+    Why: move first: (3, 0); then turn: (0, 3).
+:::
+:::
+
+## 10.4 Move and scale in 3D: 4 × 4 matrices
+
+- A 3D point becomes **(x, y, z, 1)**; a direction (the way a cannon fires)
+  is (x, y, z, 0): it is not moved.
+- **T(tx, ty, tz)**: the 4 × 4 identity with (tx, ty, tz) in the last
+  column. The crate (1, 0, 2) with T(3, 0, 4): (4, 0, 6).
+- **S(sx, sy, sz)**: sx, sy, sz on the main diagonal, then 1.
+  S(2, 3, 1) × (1, 1, 1) = (2, 3, 1).
+- A uniform scale of 2 doubles each side, so the volume is 8 times bigger.
+
+![The 4 × 4 translation matrix.](images/translate-4x4.png){width=86%}
+
+![Scaling in 3D.](images/scale-3d.png){width=86%}
+
+::: {.callout-warning title="Watch out!"}
+A 4 × 4 matrix needs four coordinates: w = 1 for a point, w = 0 for a
+direction.
+:::
+
+::: {.callout-note title="Do it · A pillar"}
+Which scaling turns the unit cube into a pillar 1 wide, 4 tall and 1 deep?
+Where does the corner (1, 1, 1) go? Then apply T(1, 2, 3) to the point
+(4, 0, 0, 1) and to the direction (4, 0, 0, 0).
+
+::: {.check}
+S(1, 4, 1): (1, 1, 1) → (1, 4, 1). The point → (5, 2, 3, 1); the direction
+stays (4, 0, 0, 0).
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Move and scale in 3D"}
+Choose the right answer.
+
+::: {.match extra="(4, 0, 0, 1)|2 times|(3, 1, 6)"}
+What is T(1, 2, 3) × (4, 0, 0, 1)?
+:   (5, 2, 3, 1)
+
+    Why: a point (w = 1) is moved: (4 + 1, 0 + 2, 0 + 3).
+
+What is T(1, 2, 3) × (4, 0, 0, 0)?
+:   (4, 0, 0, 0)
+
+    Why: a direction (w = 0) is not moved.
+
+Which matrix undoes T(1, 2, 3)?
+:   T(−1, −2, −3)
+
+    Why: move back by (−1, −2, −3).
+
+What is S(2, 2, 2) × (1, −1, 3)?
+:   (2, −2, 6)
+
+    Why: every coordinate × 2.
+
+A cube gets a uniform scale of 2. How much bigger is its volume?
+:   8 times
+
+    Why: 2 × 2 × 2 = 8.
+:::
+:::
+
+## 10.5 Yaw: turning around the y-axis
+
+- **R_y(θ) = rows (cos θ, 0, sin θ), (0, 1, 0), (−sin θ, 0, cos θ)**. y
+  stays.
+- Forward (0, 0, 1) goes to **(sin θ, 0, cos θ)**. A positive yaw turns to
+  the right (seen from above).
+- 90°: forward → (1, 0, 0). The right side (2, 0, 0) → (0, 0, −2).
+
+![The yaw seen from above.](images/yaw.png){width=92%}
+
+{{< sim file="sims/yaw-lab.html" poster="sims/yaw-lab.png" title="Yaw Lab: turning around the y-axis in 3D" height="820" >}}
+
+::: {.callout-warning title="Watch out!"}
+Around y, the minus sign is in row 3. Check: R_y(90°) sends (0, 0, 1) to
+(1, 0, 0).
+:::
+
+::: {.callout-note title="Do it · Yaw by hand, check in Yaw Lab"}
+Compute R_y(180°) × (0, 0, 1) and R_y(−90°) × (0, 0, 1). Then set the same
+angles in **Yaw Lab** and compare.
+
+::: {.check}
+R_y(180°) × (0, 0, 1) = (0, 0, −1): backwards. R_y(−90°) × (0, 0, 1) =
+(−1, 0, 0): to the left. Yaw Lab shows the same.
+:::
+:::
+
+::: {.callout-tip title="Try it 5 · Yaw"}
+Choose the right answer.
+
+::: {.match extra="(0, 1, 0)|(1, 0, 1)"}
+What is R_y(90°) × (0, 0, 1)?
+:   (1, 0, 0)
+
+    Why: (sin 90°, 0, cos 90°) = (1, 0, 0).
+
+What is R_y(180°) × (3, 2, 1)?
+:   (−3, 2, −1)
+
+    Why: cos 180° = −1, sin 180° = 0: x and z change sign; y stays.
+
+What is R_y(90°) × (2, 0, 0)?
+:   (0, 0, −2)
+
+    Why: row 1: 0; row 3: −1 × 2 = −2.
+
+A player has a yaw of 30°. What is the forward vector?
+:   (0.5, 0, 0.87)
+
+    Why: (sin 30°, 0, cos 30°).
+
+What is R_y(−90°) × (0, 0, 1)?
+:   (−1, 0, 0)
+
+    Why: (sin(−90°), 0, cos(−90°)) = (−1, 0, 0).
+:::
+:::
+
+## Game challenge: Lighthouse {.challenge}
+
+Work alone. Use every section of today.
+
+**Lighthouse** is a night game. The lighthouse stands at the origin. At the
+yaw θ the beam points along **(sin θ, 0, cos θ)**. Ships wait 10 units away:
+at (10, 0, 0), at (0, 0, −10), at (5, 0, 8.7) and at (−7.1, 0, 7.1).
+
+{{< sim file="sims/lighthouse.html" poster="sims/lighthouse.png" title="Lighthouse: light up the ships with a yaw" kind="game" height="820" >}}
+
+::: {.callout-tip title="Try it 6 · Light the ships"}
+The beam points along (sin θ, 0, cos θ). sin 30° = 0.5, cos 30° = 0.87.
+Choose the yaw for each ship.
+
+::: {.match extra="45°|0°"}
+Which yaw lights a ship at (10, 0, 0)?
+:   90°
+
+    Why: (sin 90°, 0, cos 90°) = (1, 0, 0).
+
+Which yaw lights a ship at (0, 0, −10)?
+:   180°
+
+    Why: (sin 180°, 0, cos 180°) = (0, 0, −1).
+
+Which yaw lights a ship at (5, 0, 8.7)?
+:   30°
+
+    Why: (sin 30°, 0, cos 30°) = (0.5, 0, 0.87).
+
+Which yaw lights a ship at (−7.1, 0, 7.1)?
+:   −45°
+
+    Why: sin is negative and cos positive: −45°.
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · A busy night (harder)"}
+Choose the right answer.
+
+::: {.match extra="(5, 0, 8.7)|90° only"}
+The lamp points at 90°. Which turn reaches a ship at (−10, 0, 0)?
+:   180°
+
+    Why: from (1, 0, 0) to (−1, 0, 0) is half a turn.
+
+The beam is 10 long at a yaw of 60°. Where does it end?
+:   (8.7, 0, 5)
+
+    Why: 10 × (sin 60°, 0, cos 60°) = 10 × (0.87, 0, 0.5).
+
+The lighthouse stands at (20, 0, 0). Which yaw lights a ship at (30, 0, 0)?
+:   90°
+
+    Why: the ship is 10 units in +x from the lighthouse.
+
+Which yaw points the beam straight back, along (0, 0, −1)?
+:   180°, the same as −180°
+
+    Why: (sin 180°, 0, cos 180°) = (0, 0, −1).
+:::
+:::
+
+## Summary {.summary}
+
+- Homogeneous coordinates: (x, y) → (x, y, 1); a 3 × 3 matrix can then move.
+- T(tx, ty) has the move in its last column.
+- M = T × R × S: scale first, then turn, then move.
+- In 3D: (x, y, z, 1) for a point, (x, y, z, 0) for a direction; 4 × 4 matrices.
+- Yaw R_y(θ) turns around y: forward (0, 0, 1) → (sin θ, 0, cos θ).

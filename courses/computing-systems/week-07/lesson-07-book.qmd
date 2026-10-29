@@ -1,0 +1,255 @@
+---
+title: "Mobile Operating Systems: Android and iOS Architecture"
+description: "Lesson notes · The layers of a mobile OS from the kernel to the apps, how Android and iOS build these layers, the sandbox of every app, and the life cycle of a game from the foreground to the background and back."
+lesson: 7
+ilos: [A2]
+format: lesson-typst
+---
+
+::: {.lead}
+*Byte Bay* now tests *Pocket Quest 1.2* on two kinds of phones: phone P5
+runs **Android**, and the new test phone P8 is an **iPhone** with **iOS**.
+Both phones have an SoC, RAM, storage and a touch screen (lecture 4), and
+both operating systems do the jobs of lecture 5: they run processes, manage
+memory and talk to the hardware. But they are built differently, and a game
+must follow the rules of each. In this lesson you see the **layers** of a
+mobile OS, how Android and iOS fill them, why every app lives in its own
+**sandbox**, and what happens to a game when a call arrives. Every section
+ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary operating-system kernel software-stack app-framework sandbox app-permission app-lifecycle foreground-app background-app >}}
+
+## 7.1 A mobile OS is built in layers
+
+When Pocket Quest shows a picture, it does not talk to the GPU itself. It
+asks a layer of software, which asks the layer below, down to the hardware.
+A mobile OS is such a **software stack** (@fig-stack).
+
+::: {.callout-important title="Definition 7.1 — Software stack and kernel"}
+A **software stack** is the layers of software between the hardware and
+the apps; each layer uses only the services of the layer below it. The
+lowest layer is the **kernel**: it runs directly on the hardware and
+manages processes, memory, drivers and power. The top layer is the apps.
+:::
+
+![The layers of Android and iOS. Both start with a kernel on the hardware and end with the apps.](images/os-stack.png){#fig-stack width=94%}
+
+::: {.callout-note title="Example 7.1 — Rami takes a screenshot"}
+1. **App:** Rami presses the buttons for a screenshot.
+2. **Framework:** the system saves the picture of the screen as a file.
+3. **Libraries:** the picture is made into a PNG file.
+4. **Kernel:** the storage driver writes the file to the flash storage.
+5. **Hardware:** the storage chip keeps it.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that a game talks to the hardware directly. A game only calls the
+layers above the kernel; the OS decides what reaches the hardware.
+:::
+
+{{< sim file="sims/stack-builder.html" poster="sims/stack-builder.png" title="Stack Builder: the layers of Android and iOS" height="600" >}}
+
+::: {.callout-note title="Do it · Build both stacks"}
+1. In **Stack Builder**, build the Android stack from the bottom up.
+2. Build the iOS stack. Which layer of iOS does the job of the Android
+   Linux kernel?
+
+*Your result:* the two stacks (a screenshot) and one answer.
+
+::: {.check}
+Android from the bottom: Linux kernel, libraries, app framework, apps. iOS:
+Apple's kernel, libraries, app framework, apps. In iOS the kernel layer does
+the job of the Linux kernel: processes, memory, drivers and power.
+:::
+:::
+
+## 7.2 Android and iOS: two ways to build the stack
+
+Both systems fill the same layers, but with different parts, and they are
+made in different ways (@fig-cmp).
+
+::: {.callout-important title="Definition 7.2 — The Android and iOS stacks"}
+- **Android** (Google, on phones of many makers): the **Linux kernel**;
+  the **libraries** (graphics with Vulkan or OpenGL ES, sound, data); the
+  **app framework** (screens, touch, notifications); the apps.
+- **iOS** (Apple, only on Apple's phones): its own **kernel**; the
+  **libraries** (graphics with Metal, sound, files, network); the **app
+  framework** (touch, screens, notifications); the apps.
+
+The **OS version** is in Settings › About (Android: About phone, also with
+the **security patch**; iPhone: General › About).
+:::
+
+![Android and iOS compared.](images/android-ios.png){#fig-cmp width=94%}
+
+::: {.callout-note title="Example 7.2 — One game, two builds"}
+Byte Bay makes Pocket Quest in Unity, then builds it twice (lecture 1):
+
+1. For **P5 (Android)**: a package `PocketQuest_1.2_android.apk` (Google
+   Play wants an `.aab`). Unity draws with Vulkan or OpenGL ES.
+2. For **P8 (iOS)**: a package `.ipa`, built on a Mac. Unity draws with
+   Metal.
+3. The game code is the same; each build talks to the layers of its own OS.
+:::
+
+::: {.callout-warning title="Common mistake"}
+"An Android build runs on an iPhone." The `.apk` package is made for the
+Android stack; an iPhone cannot install it. Each platform needs its own
+build.
+:::
+
+::: {.callout-note title="Do it · Your phone's stack"}
+1. Which OS does your phone run? Who made the phone, and who made the OS?
+2. Find two lines of @fig-cmp that are different for your phone and for a
+   phone of the other OS.
+
+*Your result:* three short answers.
+
+::: {.check}
+A good answer: "Android 14 on a Samsung phone: Samsung made the phone,
+Google made Android" (or "iOS 17 on an iPhone: Apple made both"), and two
+differences, for example the kernel (Linux or Apple's own) and the package
+(.apk or .ipa).
+:::
+:::
+
+## 7.3 Every app in its own sandbox
+
+Pocket Quest must not read your messages, and a messages app must not
+change the saved game. Both OSs put every app in a closed box: a
+**sandbox** (@fig-sand, Seminar 5).
+
+::: {.callout-important title="Definition 7.3 — Sandbox and permissions"}
+A **sandbox** gives each app its own files and its own memory. An app
+cannot read the files of another app, and it reaches the camera, the
+microphone, the location or the contacts only through the OS, after the
+user gives a **permission**.
+:::
+
+![Every app has its own box; the OS checks every request for the hardware.](images/sandbox.png){#fig-sand width=94%}
+
+::: {.callout-note title="Example 7.4 — Pocket Quest wants a photo"}
+The game has a new feature: a photo of the player as an avatar.
+
+1. Pocket Quest asks the OS for the camera.
+2. The OS shows the permission question to Rami (Seminar 7).
+3. If he allows it, the OS gives the game the picture; it never gives the
+   game the other photos of the phone.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that a game can save its progress in any folder of the phone. A
+game saves in its own sandbox; on both systems this is the app's data,
+which "Clear storage" or deleting the app removes (Seminar 5).
+:::
+
+::: {.callout-note title="Do it · Look at the sandbox"}
+1. On your phone, open the settings of one game (Android: Settings › Apps;
+   iPhone: Settings › the game).
+2. Write down how much storage its data uses and which permissions it has.
+
+*Your result:* one size and a list of permissions.
+
+::: {.check}
+A good answer gives the size of the game's data (for example 850 MB) and its
+permissions (for example Storage allowed, Microphone not allowed). The data
+lives only in the game's own sandbox.
+:::
+:::
+
+## 7.4 The life cycle of a game
+
+On a phone, the user can leave a game at any moment: a call arrives, a
+message pops up, the user goes to the home screen. The OS moves the game
+through the states of its **life cycle** (@fig-life).
+
+::: {.callout-important title="Definition 7.4 — App life cycle"}
+The **app life cycle** is the states of an app and the events between
+them: **not running**; **foreground** (on the screen, running); **background**
+(not seen, little or no CPU time); **suspended** (in RAM, no CPU time);
+**ended** (removed from RAM, often when RAM is low). The OS tells the app
+before it leaves the foreground, so that the app can **pause and save**.
+:::
+
+![The states of a game and the events between them.](images/app-lifecycle.png){#fig-life width=94%}
+
+::: {.callout-note title="Example 7.5 — A message in level 2"}
+1. Sara plays level 2 of a puzzle game: the game is in the **foreground**.
+2. A message arrives, and she opens it. The OS tells the game; the game
+   stops the timer and saves the level. It is now in the **background**.
+3. She opens many other apps. RAM gets low, so the OS **ends** the game.
+4. She taps the icon again: the game starts again and loads the save. She
+   is back in level 2.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Saving only when the player presses "Quit". On a phone, a game is often
+ended by the OS without warning; only what was saved at the pause survives.
+:::
+
+::: {.callout-note title="Do it · Watch the life cycle"}
+1. Start a game on your phone and play for a moment.
+2. Go to the home screen, wait one minute, and open the game again. Did it
+   continue or start again?
+3. Now open many other apps and come back. What happened?
+
+*Your result:* two observations.
+
+::: {.check}
+After one minute at home, most games continue where you left them (the game
+was in the background or suspended). After many other apps, many games start
+again from the title or loading screen: the OS ended them to free RAM, and a
+good game loads its saved progress.
+:::
+:::
+
+## Case study: Pause, Please!
+
+Rami tests *Pocket Quest 1.2* on P5 (Android, 4 GB RAM) and on P8 (an
+iPhone). He starts the game, and a call arrives in the middle of level 3.
+On P8 the game stays in the background for a few seconds. On P5 he opens
+ten other apps and RAM gets low. At the end he opens the game again. The
+Game challenge of the interactive lesson uses this story. In the mini-game
+below you follow the game through its life cycle.
+
+{{< sim file="sims/pause-please.html" poster="sims/pause-please.png" title="Pause, Please!: a game through its life cycle" kind="game" height="560" >}}
+
+## Further reading
+
+Android Developers, "Platform architecture" and "The activity lifecycle";
+Apple Developer, "Managing your app's life cycle". Silberschatz, Galvin and
+Gagne, *Operating System Concepts*, 10th ed., Chapter 2 (mobile operating
+systems).
+
+## Exercises
+
+1. What is a software stack?
+2. Which layer of a mobile OS runs directly on the hardware?
+3. Name the four layers of a mobile OS from the bottom.
+4. Which kernel does Android use?
+5. Who makes the phones that run iOS? And Android?
+6. Which package does an Android build use, and which an iOS build?
+7. Which graphics interface does a game use on an iPhone?
+8. What can an app in a sandbox not do?
+9. A call arrives during a game. What must the game do?
+10. RAM is low. What may the OS do to a game in the background?
+
+## Answers to the exercises
+
+::: {.answers}
+1. The layers of software between the hardware and the apps; each uses the
+   layer below.
+2. The kernel.
+3. The kernel, the libraries, the app framework, the apps.
+4. The Linux kernel.
+5. iOS: only Apple. Android: Google's system on the phones of many makers.
+6. Android: `.apk` (or `.aab` for Google Play). iOS: `.ipa`.
+7. Metal.
+8. Read the files of other apps, or use the camera, microphone or location
+   without a permission.
+9. Pause and save the progress.
+10. End it, to free its RAM.
+:::

@@ -1,0 +1,234 @@
+---
+title: "File Systems, Resources and Device Management"
+description: "Lesson notes · Where a game keeps its files, how the operating system manages devices and resources, and how a tester makes a device ready for a test."
+lesson: 6
+ilos: [A2, C1]
+format: lesson-typst
+---
+
+::: {.lead}
+Omar wants to copy the levels of *Pocket Quest* to a USB stick, and Windows
+says "File too large". The stick has 16 GB free, and the file is only 5 GB.
+Another player has a new gamepad that the game does not see. Both problems
+come from a part of the operating system that most players never see: the
+**file system** and the management of **devices**. In lecture 5 you saw how
+the OS shares the CPU and the RAM. In this lesson you see how it keeps files
+on a drive, how it manages devices and the other resources that games
+share, and how a tester makes a phone ready for a test. Every section ends
+with a short task.
+:::
+
+## Key terms
+
+{{< glossary file-system file-path file-extension file-metadata file-system-format system-resources device-driver plug-and-play usb-mode >}}
+
+## 6.1 Where does a game keep its files?
+
+A game is not one file. *Pocket Quest* on Windows has a program file, packs
+of levels and music, and the save files of the player. The **file system**
+keeps all of them in folders, and finds them by their **path** (@fig-files).
+
+::: {.callout-important title="Definition 6.1 — File system"}
+The **file system** is the part of the OS that keeps files and folders on a
+drive: their names, their places (paths), their sizes and their dates. The
+data about a file (name, type, size, dates, permissions) is its
+**metadata**.
+:::
+
+![The files of Pocket Quest on a Windows PC: the game folder, and the save files in the player's Documents.](images/game-files.png){#fig-files width=96%}
+
+The **file extension** (.exe, .pak, .sav, .png) tells the OS and the player
+what kind of file it is. A path like
+`C:\Games\PocketQuest\Data\levels.pak` goes from the drive (C:) one folder
+deeper at every `\`. Android and macOS write `/` instead of `\`.
+
+::: {.callout-note title="Example 6.1 — Game files and player files"}
+1. The game folder `C:\Games\PocketQuest` holds the program (80 MB) and the
+   packs `levels.pak` (1.2 GB) and `music.pak` (320 MB). They are the same
+   for every player.
+2. The save file `slot1.sav` (2 KB) is in the player's own folder
+   `C:\Users\Omar\Documents\PocketQuest\Saves`. It is different for every
+   player.
+3. When Omar reinstalls the game, the game folder is new, but his save file
+   stays.
+:::
+
+::: {.callout-note title="Example 6.2 — The same game on a phone"}
+On a phone, each app has its own folder in its sandbox (Seminar 5). The
+player cannot open it; Settings shows only the size: app, user data and
+cache (lecture 2).
+:::
+
+::: {.callout-warning title="Common mistake"}
+"The stick has 16 GB free, so the 5 GB file fits." Not on a stick formatted
+**FAT32**: it refuses any file of 4 GB or more. A stick formatted **exFAT**
+takes big files and works on Windows and Mac.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Looking for the save file in the game folder. Many PC games keep the
+player's files in Documents or in a hidden AppData folder, so that they stay
+when the game is updated.
+:::
+
+::: {.callout-note title="Do it · The files of an app"}
+On the lab computer, open File Explorer and go to `C:\Program Files`.
+
+1. Open the folder of one program. Write the path, and the name and size of
+   its biggest file.
+2. Right-click the file › Properties. Write three items of its metadata.
+
+*Your result:* one path, one file with its size, and three items of metadata.
+
+::: {.check}
+A good answer: "C:\Program Files\Mozilla Firefox, biggest file xul.dll
+(140 MB)", with three items of metadata from Properties, for example the
+type, the size and the date it was created.
+:::
+:::
+
+## 6.2 Sharing the hardware: devices and resources
+
+A gamepad, a headset, a camera and a USB cable are **devices**. The OS finds
+them, loads their **drivers**, shares them between apps and checks
+permissions. It also shares the other **resources**: CPU time, memory,
+storage, battery and network (@fig-devices).
+
+::: {.callout-important title="Definition 6.2 — Device management"}
+**Device management** is the job of the OS that finds connected devices
+(**plug and play**), loads a **driver** for each one, gives apps access to
+them in turn, and checks their permissions. The **system resources** that
+the OS shares are CPU time, memory, storage, battery, network and devices.
+:::
+
+![A new gamepad: connect, detect, driver, ready. A phone asks what its USB cable may do.](images/device-management.png){#fig-devices width=96%}
+
+::: {.callout-note title="Example 6.3 — A new gamepad"}
+1. Ali connects the gamepad by USB. Windows detects it and loads a driver.
+2. Device Manager shows it under Human Interface Devices. If it has a yellow
+   warning sign, the driver is missing.
+3. With a working driver, the game reads the buttons through the OS.
+:::
+
+::: {.callout-note title="Example 6.4 — A phone on a USB cable"}
+1. A phone connected to a PC charges, but the PC shows no files.
+2. The phone shows a USB mode: charging only, file transfer or photos.
+3. Choosing **file transfer** lets the PC see the phone's folders. An iPhone
+   asks "Trust this computer?" first.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Blaming the game when a device does not work. If the OS does not see the
+device, no game can use it: check the connection, the driver and the
+permission first.
+:::
+
+::: {.callout-note title="Do it · Connect your phone"}
+Connect your phone to the lab computer with a USB cable.
+
+1. What does the PC show? Change the USB mode on the phone to file transfer
+   (iPhone: tap Trust).
+2. In File Explorer, find the phone's folder of photos (Android: DCIM).
+
+*Your result:* the USB modes your phone offers and the path of the photos.
+
+::: {.check}
+After you choose file transfer (or tap Trust), the phone appears in File
+Explorer under This PC. The photos are in the DCIM folder.
+:::
+:::
+
+## 6.3 Making a device ready for a test
+
+A test shows how the game runs. If the phone is full, low on battery or busy
+with other apps, the test shows those problems instead. So a tester checks
+the device first (@fig-check).
+
+::: {.callout-important title="Definition 6.3 — The device check"}
+Before a test, check the **resources** of the **test device**: at least 2 GB
+free storage; battery above 50 % or charging; only the game open; Do not
+disturb on; and the OS version written in the report.
+:::
+
+![The device check, with the state of phone P5 before the test.](images/device-check.png){#fig-check width=96%}
+
+::: {.callout-note title="Example 6.5 — Freeing space on Lina's phone"}
+Lina's test phone has 1.4 GB free; the test needs 2 GB.
+
+1. She deletes two old videos (1.0 GB) after copying them to the PC.
+2. She clears the cache of two apps (0.5 GB). She does **not** clear their
+   storage (data): that would delete their logins and progress (lecture 2).
+3. Free now: 1.4 + 1.0 + 0.5 = 2.9 GB.
+:::
+
+::: {.callout-note title="Example 6.6 — Battery and apps"}
+1. The battery shows 40 %. Many phones save power below about 20 %, and the
+   game slows down. Lina charges to 60 % first.
+2. Six apps are open. They use RAM and CPU (lecture 5). She closes them.
+3. She turns on Do not disturb, so no call stops the test.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Testing with the best phone, fully charged, on the desk only. A device check
+makes a test fair; it does not hide the weak phones (Seminar 4).
+:::
+
+::: {.callout-note title="Do it · Your phone's resources"}
+Fill the five lines of the device check (@fig-check) for your own phone.
+
+1. Write the value of each line now.
+2. Fix one line that is "not ready" (for example clear one cache or close
+   the open apps), and write the new value.
+
+*Your result:* a filled device check with one fixed line.
+
+::: {.check}
+A good answer has the value of each line, for example "12 GB free, 46 %, 7
+apps open, Do not disturb off, Android 14", and one fixed line with its new
+value, for example "closed the apps: only the game is open".
+:::
+:::
+
+## Case study: Disk Doctor at Byte Bay
+
+The team of *Byte Bay* collects problems of *Pocket Quest*: Omar's FAT32
+stick refuses the 5 GB `levels.pak`; Omar cannot find `slot1.sav`; Lina's
+phone charges but shows no files on the PC; a test phone has 0.8 GB free;
+Ali's gamepad shows a yellow sign; a 6 GB build must go on a stick for
+Windows and Mac. The Game challenge of the interactive page uses these
+problems. In the mini-game below you choose the fix for each one.
+
+{{< sim file="sims/disk-doctor.html" poster="sims/disk-doctor.png" title="Disk Doctor: file and device problems of a game" kind="game" height="520" >}}
+
+## Further reading
+
+Silberschatz, Galvin and Gagne, *Operating System Concepts*, 10th ed.,
+Chapter 13 (file-system interface) and Chapter 12 (I/O systems). Microsoft
+Support, "Update drivers manually in Windows".
+
+## Exercises
+
+1. What does a file system do? What is the metadata of a file?
+2. Write the path of `slot1.sav` in Omar's Documents folder.
+3. Why does a PC game keep the save file outside the game folder?
+4. Why can a FAT32 stick not take a 5 GB file? Which format can?
+5. What is a device driver? What does a yellow sign in Device Manager mean?
+6. A phone charges on the PC, but the PC shows no files. What do you change?
+7. Name four system resources that the OS shares between apps.
+8. Name the five lines of the device check.
+9. A phone has 1.2 GB free, old videos of 0.6 GB and caches of 0.3 GB. Is it
+   ready after deleting the videos and clearing the caches?
+
+## Answers to the exercises
+
+::: {.answers}
+1. It keeps files and folders on a drive with their names, paths, sizes and dates; metadata is data about a file (name, type, size, dates, permissions).
+2. `C:\Users\Omar\Documents\PocketQuest\Saves\slot1.sav`.
+3. So that it stays when the game is updated or reinstalled.
+4. FAT32 allows no file of 4 GB or more; exFAT can.
+5. A small program that lets the OS control one kind of hardware; the driver is missing or does not work.
+6. The USB mode on the phone: file transfer.
+7. For example CPU time, memory, storage, battery, network, devices.
+8. 2 GB free; battery above 50 % or charging; only the game open; Do not disturb; the OS version in the report.
+9. 1.2 + 0.6 + 0.3 = 2.1 GB: yes, more than 2 GB.
+:::

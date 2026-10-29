@@ -1,0 +1,136 @@
+---
+title: "File Systems, Resources and Device Management"
+subtitle: "Lecture 6"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary file-system file-path file-extension file-metadata system-resources device-driver plug-and-play usb-mode >}}
+
+## 6.1 Where a game keeps its files
+
+:::: {.columns}
+::: {.column width="50%"}
+- The file system keeps files and folders with their names, paths, sizes and dates.
+- The game folder holds the program and the packs of levels and music.
+- The player's save file is in the user's own folder, so it stays after an update.
+- A FAT32 stick refuses any file of 4 GB or more.
+- **Do it:** Open one folder in C:\\Program Files. What is the path of its biggest file?
+:::
+::: {.column width="50%"}
+![](images/game-files.png)
+:::
+::::
+
+## Try it 1 · Files and paths
+
+a) What does the extension .sav tell about a file?
+b) Why is the save file outside the game folder?
+c) Why does a 4.5 GB video not copy to a FAT32 stick with 20 GB free?
+
+::: {.answer}
+a) It is a save file.
+b) so that it stays after an update
+c) FAT32 allows no file of 4 GB or more.
+:::
+
+## 6.2 Devices and resources
+
+:::: {.columns}
+::: {.column width="50%"}
+- The OS finds a new device and loads its driver by itself: plug and play.
+- It shares the CPU, memory, storage, battery, network and devices between apps.
+- A phone on a USB cable asks what the cable may do.
+- **Do it:** Connect your phone by USB and choose file transfer. Where are your photos?
+:::
+::: {.column width="50%"}
+![](images/device-management.png)
+:::
+::::
+
+## Example · A new gamepad
+
+Ali connects a new gamepad, and the game does not see it.
+**Where does he look, and what is the fix?**
+
+::: {.reveal}
+1. He opens Device Manager and finds the gamepad with a yellow sign.
+2. The sign means that the driver is missing or does not work.
+3. He installs the driver, and the game reads the buttons.
+:::
+
+## Try it 2 · Devices
+
+a) The phone charges, but the PC shows no files. What do you change?
+b) What does the OS do in plug and play?
+c) Which system resources do apps share?
+
+::: {.answer}
+a) the USB mode to file transfer
+b) It finds the device and loads its driver.
+c) CPU time, memory, storage, battery, network and devices
+:::
+
+## 6.3 Make the device ready
+
+:::: {.columns}
+::: {.column width="50%"}
+- A test phone needs at least 2 GB free and a battery above 50 %.
+- Only the game is open, and Do not disturb is on.
+- The tester writes the OS version in the report.
+- **Do it:** Fill the device check for your own phone. Which line is not ready?
+:::
+::: {.column width="50%"}
+![](images/device-check.png)
+:::
+::::
+
+## Example · Freeing space on Lina's phone
+
+Lina's phone has 1.4 GB free, old videos take 1.0 GB, and caches take 0.5 GB.
+**How much is free after she deletes the videos and clears the caches?**
+
+::: {.reveal}
+1. She copies the videos to the PC first, then deletes them: + 1.0 GB.
+2. She clears the caches, not the app data: + 0.5 GB.
+3. Free now: 1.4 + 1.0 + 0.5 = **2.9 GB**.
+:::
+
+## Try it 3 · The device check
+
+a) Why does Lina clear caches and not the app storage?
+b) Why does she close the other apps before the test?
+c) How does she keep calls from stopping the test?
+
+::: {.answer}
+a) The storage holds logins and progress.
+b) They use RAM and CPU.
+c) She turns on Do not disturb.
+:::
+
+## Game challenge · Disk Doctor
+
+{{< sim file="sims/disk-doctor.html" poster="sims/disk-doctor.png" title="Disk Doctor: file and device problems of a game" kind="game" task="The Byte Bay team collects file and device problems of Pocket Quest: a FAT32 stick, a lost save, a phone on USB, a full test phone, a gamepad. **Play:** find the cause or the fix of each problem on your phone." >}}
+
+## Try it · The cases (harder)
+
+The facts: FAT32 allows no file of 4 GB or more. Ali's gamepad shows a yellow sign. A test phone has 0.8 GB free, old videos of 1 GB and caches of 0.5 GB.
+
+a) Why does the 5 GB levels.pak not copy to Omar's FAT32 stick?
+b) What is the fix for Ali's gamepad?
+c) How much is free after the tester deletes the videos and clears the caches?
+
+::: {.answer}
+a) The file is 4 GB or more.
+b) Install or update the driver.
+c) 2.3 GB
+:::
+
+## Summary
+
+- The file system keeps files with their paths, extensions, sizes and dates.
+- A save file sits outside the game folder, and FAT32 refuses files of 4 GB or more.
+- The OS finds devices, loads their drivers and shares the resources between apps.
+- A phone on USB needs the file transfer mode.
+- Before a test, the phone needs 2 GB free, a battery above 50 % and only the game open.

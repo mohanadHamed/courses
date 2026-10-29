@@ -14,8 +14,7 @@
 <body class="theme-arcade">
 <main class="sim">
   <h1>Cave Generator: one seed, one level</h1>
-  <p class="hint">The generator of <i>Torch Hall</i> builds a floor from a <b>seed</b>. Choose the method, then check the level: flood fill colours every tile that the player can reach from the start (green circle). The exit (red) must be reached, and the chest is placed at least 6 steps from the start by drawing again.</p>
-  <div class="bar"><span>Method</span><span id="mode" style="display:contents"></span></div>
+  <p class="hint">The generator of <i>Torch Hall</i> builds a floor from a <b>seed</b>. A walker digs the cave: in each step it moves to a random neighbour tile. Green tiles can be reached from the start (green circle); the exit (red) is the farthest tile, and the chest is placed at least 6 steps from the start by drawing again.</p>
   <div class="bar" id="sl"></div>
   <div class="bar"><button type="button" class="ghost" id="prev">◀ seed − 1</button><button type="button" class="ghost" id="next">seed + 1 ▶</button><button type="button" id="test">Test 100 seeds</button></div>
   <canvas id="c" aria-label="The generated floor"></canvas>
@@ -34,8 +33,8 @@
   const s = { mode: "random walk", seed: 42, steps: 160, fill: 55, seen: {}, test: null };
   const TASKS = [
     { q: "Task 1: Go to seed 43 and back to seed 42. Is the cave the same as before?", ok: () => s.seen.back },
-    { q: "Task 2: Switch to \"random tiles\". Find a seed where the exit cannot be reached.", ok: () => s.seen.invalid },
-    { q: "Task 3: Test 100 seeds with each method. Which method gives more valid levels?", ok: () => s.seen.testWalk && s.seen.testTiles },
+    { q: "Task 2: Look at five different seeds. Is the exit always reached? Why?", ok: () => Object.keys(s.seen.seeds || {}).length >= 5 },
+    { q: "Task 3: Test 100 seeds. What is the average path from the start to the exit?", ok: () => s.seen.testWalk },
   ];
   let ti = 0, ready = false, history = [];
   function gen(seed) {
@@ -78,20 +77,18 @@
     if (s.mode === "random walk") s.seen.testWalk = true; else s.seen.testTiles = true;
     upd();
   }
-  function tabs() { Kit.buttons($("mode"), ["random walk", "random tiles"].map((k) => ({ k, label: k })), (k) => { s.mode = k; s.test = null; upd(); }); $("mode").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s.mode)); }
   const sl = Kit.slider($("sl"), "Seed", 1, 99, 1, s.seed, (v) => { s.seed = v; if (ready) upd(); });
   function upd() {
-    tabs();
     const L = gen(s.seed);
+    (s.seen.seeds = s.seen.seeds || {})[s.seed] = true;
     draw(L);
     if (history[history.length - 1] !== s.seed) history.push(s.seed); if (history.length > 3) history.shift();
     if (history.join(",") === "42,43,42") s.seen.back = true;
-    if (s.mode === "random tiles" && !L.valid) s.seen.invalid = true;
     const filled = L.g.flat().filter(Boolean).length;
     $("calc").textContent = `Seed ${s.seed} · ${s.mode} · floor ${Math.round(filled / (NX * NY) * 100)} % · exit ${L.valid ? "reached in " + L.path + " steps" : "NOT reachable: reject this seed"} · chest after ${L.tries} ${L.tries === 1 ? "try" : "tries"}` + (s.test ? ` · test of 100 seeds (${s.test.mode}): ${s.test.ok} valid, average path ${Math.round(s.test.avg)}` : "");
     let m = "";
     while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
-    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: seeds repeat levels, flood fill rejects broken ones, and tests over many seeds show the quality of a generator.";
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: seeds repeat levels, a random walk always connects its cave, and tests over many seeds show the quality of a generator.";
     $("msg").textContent = m + "Green: reachable. Pink: floor that the player cannot reach.";
   }
   const setSeed = (v) => { s.seed = Math.max(1, Math.min(99, v)); sl.value = s.seed; sl.dispatchEvent(new Event("input")); upd(); };
@@ -99,7 +96,7 @@
   $("next").addEventListener("click", () => setSeed(s.seed + 1));
   $("test").addEventListener("click", test);
   window.addEventListener("resize", upd);
-  window.CG = { seed: setSeed, mode: (k) => { s.mode = k; s.test = null; upd(); }, test };
+  window.CG = { seed: setSeed, test };
   ready = true; upd();
 })();
 </script>

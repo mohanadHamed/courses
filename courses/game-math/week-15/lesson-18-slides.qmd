@@ -1,14 +1,14 @@
 ---
 title: "Case Study: Random Level and Event Generation"
-subtitle: "Lecture 28"
+subtitle: "Lecture 18"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary level-generator seed random-walk rejection-sampling flood-fill event-table shuffle-bag generator-test >}}
+{{< glossary procedural-generation level-generator seed prng random-walk rejection-sampling event-table weighted-random shuffle-bag expected-value generator-test >}}
 
-## 28.1 Seeds
+## 18.1 Seeds
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -33,13 +33,25 @@ A tester finds a wall without collision on floor 3 of endless mode.
 3. The developer starts floor 3 with that seed and sees **the same wall**.
 :::
 
-## 28.2 A random-walk cave
+## Try it 1 · Seeds
+
+a) How do all players get the same floor today?
+b) How does the game make a new floor every time?
+c) Why does the level have its own PRNG?
+
+::: {.answer}
+a) with a shared daily seed
+b) with a new seed, for example from the time
+c) so that the actions of the player do not change it
+:::
+
+## 18.2 A random-walk cave
 
 :::: {.columns}
 ::: {.column width="50%"}
 - A walker moves one random step at a time and digs floor.
 - More steps give a bigger cave.
-- The cave is always connected.
+- The cave is always connected, and the exit goes on the farthest tile.
 - **Do it:** Dig a cave on paper with 12 die rolls. How many tiles are floor?
 :::
 ::: {.column width="50%"}
@@ -49,21 +61,21 @@ A tester finds a wall without collision on floor 3 of endless mode.
 
 ## Live demo · Cave Generator
 
-{{< sim file="sims/cave-gen.html" poster="sims/cave-gen.png" title="Cave Generator: one seed, one level" task="**Show:** seeds 42, 43 and 42 again, then random tiles and a test of 100 seeds. **Ask:** why are all walk caves valid, but not all tile caves?" >}}
+{{< sim file="sims/cave-gen.html" poster="sims/cave-gen.png" title="Cave Generator: one seed, one level" task="**Show:** seeds 42, 43 and 42 again, then three more seeds and a test of 100 seeds. **Ask:** why is every walk cave connected?" >}}
 
-## Try it 1 · Seeds and walks
+## Try it 2 · Random walks
 
-a) What does a tester need to repeat a floor?
-b) Why is a random-walk cave always connected?
-c) Why do 160 steps not give 160 floor tiles?
+a) Why is a random-walk cave always connected?
+b) Why do 160 steps not give 160 floor tiles?
+c) At most how many new floor tiles do 20 steps dig?
 
 ::: {.answer}
-a) the seed of the floor
-b) The walker only moves to neighbours.
-c) The walker steps on many tiles twice.
+a) The walker only moves to neighbours.
+b) The walker steps on many tiles twice.
+c) 20
 :::
 
-## 28.3 Rejection sampling
+## 18.3 Rejection sampling
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -88,44 +100,19 @@ The chest must be at least 6 steps from the start, and 40 % of the tiles are all
 3. A maximum of **200** draws stops an endless loop.
 :::
 
-## Try it 2 · Draws
+## Try it 3 · Draws
 
-a) How many draws are expected for p = 0.8?
-b) How many draws are expected for p = 0.05?
+a) What is the expected number of draws for p = 0.5?
+b) What is the expected number of draws for p = 0.1?
 c) Why does a rejection loop need a maximum?
 
 ::: {.answer}
-a) 1.25
-b) 20
-c) If no place fits, the loop never ends.
+a) 2
+b) 10
+c) If no place keeps the rules, the loop never ends.
 :::
 
-## 28.4 Flood fill
-
-:::: {.columns}
-::: {.column width="50%"}
-- Flood fill visits every tile reachable from the start.
-- An exit that is not reached makes the level invalid.
-- With a valid share q we try 1/q seeds on average.
-- **Do it:** Find a random-tiles seed with an unreachable exit. Which seed is it?
-:::
-::: {.column width="50%"}
-![](images/flood-fill.png)
-:::
-::::
-
-## Example · Random tiles
-
-Each tile is floor with 55 % probability.
-**What does the generator do with the islands?**
-
-::: {.reveal}
-1. Flood fill marks the reachable tiles from the start.
-2. On some seeds the exit is **not reached**, so the seed is rejected.
-3. With 60 % valid seeds, the game tries about **1.7** seeds per floor.
-:::
-
-## 28.5 Events
+## 18.4 Events
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -151,27 +138,27 @@ A room gives a chest with 25 % (20 coins) or a torch with 5 % (100 coins).
 ::: {.reveal}
 1. Each room gives 0.25 × 20 + 0.05 × 100 = **10** coins on average.
 2. A floor gives **80** coins on average.
-3. P(no chest) = 0.75⁸ ≈ **10 %**, so one floor in ten has none.
+3. Event Deck shows that about **one floor in ten** has no chest.
 :::
 
-## Try it 3 · Events
+## Try it 4 · Events
 
-a) What are the expected coins for a floor of 8 rooms?
-b) What is P(at least one torch in 8 rooms) with p = 0.05?
+a) What are the expected coins per room for empty 60, chest 30 (+10) and torch 10 (+50)?
+b) What is P(no chest in 2 rooms) with p = 0.3 per room?
 c) What does a shuffle bag keep the same?
 
 ::: {.answer}
-a) 80
-b) about 34 %
+a) 8
+b) 0.49
 c) the shares of the events
 :::
 
-## 28.6 Testing the generator
+## 18.5 Testing the generator
 
 :::: {.columns}
 ::: {.column width="50%"}
 - We run the generator with 1000 seeds or more.
-- We measure the valid share, the paths and the rewards.
+- We measure the paths, the chests and the coins.
 - We change one rule and test again.
 - **Do it:** Write a test plan with three numbers to measure. Which number matters most?
 :::
@@ -191,27 +178,40 @@ The designers try 120 walk steps instead of 160 for shorter floors.
 3. A new rule asks for an exit at least **15 steps** away.
 :::
 
-## Game challenge · Generator Doctor
+## Try it 5 · Tests
 
-{{< sim file="sims/generator-doctor.html" poster="sims/generator-doctor.png" title="Generator Doctor: six reports about the generator" kind="game" task="**The story:** the testers of Torch Hall report six problems with the generator. **Play:** choose the fix or the number for each report." >}}
-
-## Try it 4 · Compute (harder)
-
-a) What are the coins per room for chest 30 % (+10) and torch 10 % (+50)?
-b) What is P(no chest in 6 rooms) with p = 0.3?
-c) How often does a 0.5 % problem appear in 1000 seeds?
+a) How often does a problem on 0.5 % of the seeds show up in 1000 seeds?
+b) What do we do after a rule change?
+c) What do we look at besides the average?
 
 ::: {.answer}
-a) 8
-b) about 0.118
-c) about 5 times
+a) about 5 times
+b) We test again and compare.
+c) the extremes
+:::
+
+## Game challenge · Generator Doctor
+
+{{< sim file="sims/generator-doctor.html" poster="sims/generator-doctor.png" title="Generator Doctor: six reports about the generator" kind="game" task="The testers of Torch Hall send six reports about seeds, the cave, a monster, the rooms and a new rule. **Play:** choose the fix or the number for each report on your phone." >}}
+
+## Try it · A floor of 10 rooms (harder)
+
+The facts: a room holds a chest with 20 % (+30 coins) or a gem with 10 % (+50 coins). A floor has 10 rooms.
+
+a) What are the expected coins per floor?
+b) How many chests does a floor have on average?
+c) How many gem cards does a bag of 10 cards with the same shares hold?
+
+::: {.answer}
+a) 110
+b) 2
+c) 1
 :::
 
 ## Summary
 
-- A seed repeats a level, so the level gets its own PRNG.
+- The same seed and code build the same level, so we save and share the seed.
 - A random walk digs a connected cave.
-- Rejection sampling needs 1/p draws on average.
-- Flood fill rejects levels with an unreachable exit.
-- Event tables and shuffle bags plan the rewards.
-- Many seeds test the generator.
+- Rejection sampling needs 1/p draws on average and a maximum.
+- An event table gives the expected reward, and a shuffle bag spreads it evenly.
+- We test a generator with many seeds and look at the average and the extremes.

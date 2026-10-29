@@ -10,7 +10,7 @@
 <body class="theme-arcade">
 <main class="sim">
   <h1>Lucky Raft Finals</h1>
-  <p class="hint">The raft sails past eight islands, one for each idea of lectures 16–28: logic, De Morgan, dice, conditions, expected value, generators, drop rates and fairness. Choose the right answer on each island.</p>
+  <p class="hint">The raft sails past eight islands, one for each part of the course: vectors, the dot product, transformations, logic, De Morgan, dice, expected value and drop rates. Choose the right answer on each island.</p>
 </main>
 
 <script src="../../../../shared/sims/sim-base.js"></script>
@@ -19,17 +19,17 @@
 (() => {
   const C = (list) => list.map((t) => ({ k: t, label: t }));
   const rounds = [
-    { card: "The dock gate opens when key ∧ ¬alarm. The player has the key, and the alarm is on.", goal: "Does the gate open?", answer: "no: ¬alarm is false", choices: C(["no: ¬alarm is false", "yes: the key is true", "yes: one of them is true", "no: the key is false"]), good: "T ∧ ¬T = T ∧ F = F.", why: { "yes: one of them is true": "That is OR; AND needs both parts true." } },
-    { card: "The raft may sail when ¬(storm ∨ night).", goal: "Which condition is the same?", answer: "¬storm ∧ ¬night", choices: C(["¬storm ∧ ¬night", "¬storm ∨ ¬night", "storm ∧ night", "¬storm ∨ night"]), good: "De Morgan: the NOT goes in, and OR becomes AND.", why: { "¬storm ∨ ¬night": "With De Morgan the operator also swaps: OR becomes AND." } },
-    { card: "Two fair dice decide the wind. The raft reaches the island on a sum of 7.", goal: "What is P(sum = 7)?", answer: "1/6", choices: C(["1/6", "1/12", "7/36", "1/11"]), good: "6 of 36 pairs give 7: (1, 6), (2, 5), …, (6, 1).", why: { "1/11": "The 11 sums 2–12 are not equally likely." } },
-    { card: "The first die shows 6. The bonus needs a sum of 10 or more.", goal: "What is P(sum ≥ 10 | first is 6)?", answer: "1/2", choices: C(["1/2", "1/6", "6/36", "1/12"]), good: "Inside \"first is 6\", the second die needs 4, 5 or 6: 3 of 6.", why: { "6/36": "6/36 = 1/6 is P(sum ≥ 10) for all pairs; here we know the first die." } },
-    { card: "A crate gives 10 coins with probability 0.7 and 50 coins with probability 0.3.", goal: "What is the expected number of coins?", answer: "22", choices: C(["22", "30", "60", "15"]), good: "E = 10 × 0.7 + 50 × 0.3 = 7 + 15 = 22.", why: { "30": "(10 + 50) ÷ 2 ignores the probabilities." } },
-    { card: "An LCG computes x₁ = (5 · x₀ + 1) mod 8, with the seed x₀ = 3.", goal: "What is x₁?", answer: "0", choices: C(["0", "16", "2", "1"]), good: "5 · 3 + 1 = 16, and 16 mod 8 = 0.", why: { "16": "Take the remainder after dividing by 8." } },
-    { card: "A pearl drops with p = 0.1 on each dive. The player dives twice.", goal: "What is P(at least one pearl)?", answer: "0.19", choices: C(["0.19", "0.2", "0.01", "0.81"]), good: "1 − (1 − 0.1)² = 1 − 0.81 = 0.19.", why: { "0.2": "Adding 0.1 + 0.1 counts the case of two pearls twice.", "0.81": "0.81 is the chance of no pearl." } },
-    { card: "A 50 % shot missed four times in a row. The shots are independent.", goal: "What is the chance of a hit on the next shot?", answer: "50 %", choices: C(["50 %", "more than 50 %: it is due", "less than 50 %: bad luck", "100 %"]), good: "Independent tries have no memory: the gambler's fallacy.", why: { "more than 50 %: it is due": "That is the gambler's fallacy; only a pity timer or a bag changes it." } },
+    { card: "The raft sails from the beach (1, 2) to the island (7, 10).", goal: "How far does it sail?", answer: "10", choices: C(["10", "14", "(6, 8)", "100"]), good: "The step is (6, 8); its length is √(36 + 64) = 10.", why: { "14": "6 + 8 is not the length; use the square root of 6² + 8².", "(6, 8)": "That is the step. The question asks for its length." } },
+    { card: "The lighthouse looks along f = (1, 0). The raft is at d = (−3, 4) from it.", goal: "Is the raft in front of the lighthouse or behind it?", answer: "behind: f · d = −3", choices: C(["behind: f · d = −3", "in front: f · d = 4", "beside: f · d = 0", "in front: |d| = 5"]), good: "f · d = 1 × (−3) + 0 × 4 = −3, a negative number: behind." },
+    { card: "The flag at (3, 1) turns by 90° counterclockwise about the mast at (1, 1).", goal: "Where is the flag now?", answer: "(1, 3)", choices: C(["(1, 3)", "(−1, 3)", "(3, 3)", "(1, −1)"]), good: "(3, 1) − (1, 1) = (2, 0); R(90°) gives (0, 2); + (1, 1) = (1, 3).", why: { "(−1, 3)": "That is a turn about the origin. Subtract the mast first." } },
+    { card: "The dock gate opens when key ∧ ¬alarm. The player has the key, and the alarm is on.", goal: "Does the gate open?", answer: "no: ¬alarm is false", choices: C(["no: ¬alarm is false", "yes: the key is true", "yes: one of them is true", "no: the key is false"]), good: "key = T, ¬alarm = F, and T ∧ F = F: the gate stays shut." },
+    { card: "The raft may sail when ¬(storm ∨ night).", goal: "Which condition is the same?", answer: "¬storm ∧ ¬night", choices: C(["¬storm ∧ ¬night", "¬storm ∨ ¬night", "storm ∧ night", "¬storm ∨ night"]), good: "De Morgan: the NOT goes into the brackets, and OR becomes AND.", why: { "¬storm ∨ ¬night": "The operator must change too: OR becomes AND." } },
+    { card: "Two fair dice decide the wind. The raft reaches the island on a sum of 7.", goal: "What is P(sum = 7)?", answer: "1/6", choices: C(["1/6", "1/12", "7/36", "1/11"]), good: "6 of 36 pairs give 7: (1, 6), (2, 5), …, (6, 1).", why: { "1/11": "The 11 sums are not equally likely; the 36 pairs are." } },
+    { card: "A crate gives 10 coins with probability 0.7 and 50 coins with probability 0.3.", goal: "What is the expected number of coins?", answer: "22", choices: C(["22", "30", "60", "15"]), good: "E = 10 × 0.7 + 50 × 0.3 = 7 + 15 = 22.", why: { "30": "That is the plain average of 10 and 50: the probabilities are missing." } },
+    { card: "A pearl drops with p = 0.1 on each dive. The player dives twice.", goal: "What is P(at least one pearl)?", answer: "0.19", choices: C(["0.19", "0.2", "0.01", "0.81"]), good: "1 − (1 − 0.1)² = 1 − 0.81 = 0.19.", why: { "0.2": "Adding 0.1 + 0.1 counts the case of two pearls twice.", "0.81": "That is P(no pearl)." } },
   ];
   rounds.forEach((r) => { r.why = r.why || {}; });
-  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Island 1 is logic: the dock gate." });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Island 1 is vectors: how far to the island?" });
   const box = Kit.el("div", { class: "card", id: "card" });
   document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
   let last = -1;

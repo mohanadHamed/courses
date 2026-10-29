@@ -1,14 +1,14 @@
 ---
 title: "Input/Output Devices, the GPU and Graphics Hardware"
-subtitle: "Lecture 5"
+subtitle: "Lecture 3"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary input-device output-device analog-input haptic-feedback parallel-processing video-memory integrated-gpu graphics-settings >}}
+{{< glossary input-device output-device analog-input haptic-feedback parallel-processing frame-rate refresh-rate thermal-throttling video-memory integrated-gpu >}}
 
-## 5.1 Input devices
+## 3.1 Input devices
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -40,13 +40,13 @@ b) 40 × 0.5 = 20°
 c) the touch screen
 :::
 
-## 5.2 Output devices
+## 3.2 Output devices
 
 :::: {.columns}
 ::: {.column width="50%"}
 - An output device turns data into an image, a sound or a vibration.
 - The vibration of a phone or a gamepad is called haptic feedback.
-- A touch screen, a gamepad with vibration and a headset are both input and output.
+- The screen shows at most its refresh rate: a 60 Hz screen shows 60 new pictures per second.
 - **Do it:** List the input and output devices of your phone. Which ones are both?
 :::
 ::: {.column width="50%"}
@@ -58,21 +58,22 @@ c) the touch screen
 
 a) Is a monitor without touch an input device, an output device or both?
 b) Is a gamepad with a vibration motor an input device, an output device or both?
-c) What do we call it when the phone shakes after a crash?
+c) A game runs at 70 fps on a 60 Hz screen. How many new pictures per second does the player see?
 
 ::: {.answer}
 a) output
 b) both
-c) haptic feedback
+c) 60
 :::
 
-## 5.3 Why games need a GPU
+## 3.3 Why games need a GPU
 
 :::: {.columns}
 ::: {.column width="50%"}
 - One 1920 × 1080 frame has about 2 million pixels.
 - A CPU has a few strong cores for long, different steps.
 - A GPU has thousands of small cores that colour pixels at the same time.
+- The slower of CPU and GPU sets the frame rate, and a hot phone slows down.
 - **Do it:** In Paint Race, start the race. How long does each processor need?
 :::
 ::: {.column width="50%"}
@@ -107,7 +108,7 @@ b) the CPU
 c) parallel processing
 :::
 
-## 5.4 Video memory and settings
+## 3.4 Video memory and settings
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -121,15 +122,15 @@ c) parallel processing
 :::
 ::::
 
-## Example · Settings for Laptop L1
+## Example · Settings for a tablet
 
-Neon Drift runs at 120 fps on Laptop L1 at 720p with shadows off. L1 has 2 GB of video memory.
+A puzzle game runs at 150 fps on a tablet at 720p with shadows off. The tablet has 1 GB of video memory.
 **Which settings keep 60 fps or more?**
 
 ::: {.reveal}
-1. At 1080p the pixels double, so the game runs at about 120 ÷ 2 = **60 fps**.
-2. With shadows on as well, it drops to 60 ÷ 1.5 = **40 fps**, which is too slow.
-3. High textures need 4 GB and do not fit, but Medium textures need 2 GB and fit.
+1. At 1080p the pixels double, so the game runs at about 150 ÷ 2 = **75 fps**.
+2. With shadows on as well, it drops to 75 ÷ 1.5 = **50 fps**, which is too slow.
+3. Medium textures need 2 GB and do not fit, but Low textures need 1 GB and fit.
 :::
 
 ## Try it 4 · Video memory
@@ -148,7 +149,7 @@ c) about 60 fps
 
 {{< sim file="sims/settings-tuner.html" poster="sims/settings-tuner.png" title="Settings Tuner: Neon Drift on three devices" kind="game" task="**The story:** Byte Bay's racing game must run at 60 fps on a laptop, a phone and a desktop. **Play:** choose the resolution, the textures and the shadows for each device, then test." >}}
 
-## Try it 5 · Three devices (harder)
+## Try it · Three devices (harder)
 
 The facts: 1080p halves the frame rate, and shadows divide it by 1.5. Phone P1 has 2 GB and runs at 90 fps at 720p with shadows off. Desktop D1 has a graphics card with 8 GB and runs at 300 fps.
 

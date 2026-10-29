@@ -1,0 +1,134 @@
+---
+title: "Comparing Device Specifications for Gaming"
+subtitle: "Seminar 3 · practises Lectures 2–3"
+format: lesson-pptx
+---
+
+## Recall · Lectures 2–3
+
+a) Which part colours the pixels of a frame?
+b) A game runs at 120 fps at 720p. About how fast does it run at 1080p?
+c) Where does an integrated GPU keep its textures?
+
+::: {.answer}
+a) the GPU
+b) about 60 fps
+c) in the main RAM
+:::
+
+## Activity 1 · Requirements · 8 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A store page lists the minimum and the recommended requirements of a game.
+- At the minimum, the game runs only at low settings.
+- **Do it:** Open the store page of a game you play. Which OS version does it require, and how big is it?
+:::
+::: {.column width="50%"}
+![](images/requirements.png)
+:::
+::::
+
+## Check 1 · Requirements
+
+What does a good answer show?
+
+::: {.reveal}
+1. Google Play shows the version under "Requires Android", for example 8.0 and up.
+2. The App Store shows it under "Compatibility", for example iOS 15.0 or later.
+3. The OS version on your phone must be the same or newer.
+:::
+
+## Activity 2 · Does it run here? · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- We compare each line of the requirements with the same line of the spec sheet.
+- The weakest line decides the level of the whole device.
+- **Do it:** Enter the lab computer in Spec Check on your phone. Which level does it reach, and which line is the weakest?
+:::
+::: {.column width="50%"}
+![](images/compare-lines.png)
+:::
+::::
+
+## Check 2 · Does it run here?
+
+What does the comparison show?
+
+::: {.reveal}
+1. Laptop L1 reaches only the minimum, because its 2 GB GPU is its weakest line.
+2. Old PC O1 is below the minimum, because it has only 4 GB of RAM.
+3. Many lab computers reach the minimum because of an integrated GPU.
+:::
+
+## Activity 3 · Which problem? · 8 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A compatibility problem stops the game from installing or starting.
+- A performance problem makes the game slow, and the weakest part is the bottleneck.
+- **Do it:** Compare your phone with your game. Is there a compatibility problem?
+:::
+::: {.column width="50%"}
+![](images/two-problems.png)
+:::
+::::
+
+## Check 3 · Which problem?
+
+How do we tell the two problems apart?
+
+::: {.reveal}
+1. Android 9 cannot install a game that needs Android 10: a compatibility problem.
+2. A game that runs at 25 fps has a performance problem.
+3. A weak GPU is helped by a lower resolution and fewer shadows.
+:::
+
+## Activity 4 · Five devices · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- 1080p halves the frame rate, and shadows divide it by 1.5.
+- Five devices run at 60, 90, 120, 180 and 300 fps at 720p with shadows off.
+- **Do it:** Find the best settings that keep 60 fps on each device.
+:::
+::: {.column width="50%"}
+![](images/gpu-memory.png)
+:::
+::::
+
+## Check 4 · Five devices
+
+Which settings keep 60 fps?
+
+::: {.reveal}
+1. Device A stays at 720p with shadows off, and device B turns shadows on at 720p.
+2. Device C can use 1080p with shadows off.
+3. Devices D and E can use 1080p with shadows on.
+:::
+
+## Game challenge · Test devices for Neon Drift
+
+{{< sim file="sims/spec-match.html" poster="sims/spec-match.png" title="Spec Match: test devices for Neon Drift" kind="game" task="Byte Bay needs one test device for each level of Neon Drift. **Play:** match Laptop L1, Desktop D1 and Old PC O1 to the levels on your phone." >}}
+
+## Try it · Sort the devices (harder)
+
+The facts: Neon Drift needs 8 GB of RAM and 2 GB of video memory at the minimum, and 16 GB and a 6 GB graphics card for the recommended level.
+
+a) Desktop D1 has 16 GB and an 8 GB graphics card. Which level does it reach?
+b) Laptop L1 has 16 GB and a 2 GB GPU inside the processor. Which level does it reach?
+c) What would bring Old PC O1, with 4 GB of RAM, to the minimum?
+
+::: {.answer}
+a) recommended
+b) minimum
+c) 8 GB of RAM or more
+:::
+
+## Wrap-up
+
+- You can read the minimum and the recommended requirements of a game.
+- You can compare a device with them line by line and find the weakest line.
+- You can tell a compatibility problem from a performance problem.
+- You can choose graphics settings that keep a frame rate.

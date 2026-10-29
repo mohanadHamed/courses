@@ -1,7 +1,7 @@
 ---
 title: "Input/Output Devices, the GPU and Graphics Hardware"
 description: "Input devices and the numbers they send, output devices, why games need a GPU, and video memory and graphics settings."
-lesson: 5
+lesson: 3
 ilos: [A1]
 format: lesson-html
 ---
@@ -14,9 +14,9 @@ exercises are in the notes.
 
 ## Key terms
 
-{{< glossary input-device output-device analog-input haptic-feedback gpu parallel-processing video-memory integrated-gpu graphics-card graphics-settings resolution >}}
+{{< glossary input-device output-device analog-input haptic-feedback gpu parallel-processing frame-rate refresh-rate thermal-throttling video-memory integrated-gpu graphics-card resolution >}}
 
-## 5.1 How the player's action gets into the game
+## 3.1 How the player's action gets into the game
 
 - An **input device** turns an action into numbers. The game reads them in
   every frame.
@@ -44,6 +44,12 @@ triggers are analog.
 Open **Input Lab** on your phone. How many fingers does your phone follow at
 once? Drag the stick half way right and read "stick x". Press A and read
 "button A". Which control is analog?
+
+::: {.check}
+A key gives only 0 or 1, so the car turns fully (40° per second) or not at
+all. The stick gives values between −1 and 1, so the car can turn a little:
+half way gives 20° per second.
+:::
 :::
 
 ::: {.callout-tip title="Try it 1 · Input"}
@@ -53,21 +59,31 @@ Choose the right answer.
 Which device sends the position of several fingers?
 :   the touch screen
 
+    Why: A touch screen reports every finger at once.
+
 A key is down. Which value does the game read?
 :   1
+
+    Why: A key is digital: down is 1, up is 0.
 
 A stick is pushed fully to the left. Which value does the game read?
 :   −1
 
+    Why: An analog stick gives −1 to 1; full left is −1.
+
 The stick is pushed half way. The car turns 40° per second times the input. How far per second?
 :   20°
 
+    Why: 40° × 0.5 = 20° per second.
+
 Which control can turn the car only a little?
 :   an analog stick
+
+    Why: An analog stick gives values between −1 and 1.
 :::
 :::
 
-## 5.2 How the game talks back: output devices
+## 3.2 How the game talks back: output devices
 
 - An **output device** turns data into an image, a sound or a vibration.
 - **Display:** the picture. **Speakers, headphones:** the sound.
@@ -75,6 +91,9 @@ Which control can turn the car only a little?
 - Some devices are **both**: a touch screen, a gamepad with vibration, a
   headset with a microphone.
 - Devices connect by cable (USB, HDMI) or without one (Bluetooth).
+- A display has a **refresh rate** (Hz): pictures per second. The game makes
+  **frames** (fps). The player sees only as many new pictures as the slower
+  of the two.
 
 ::: {.callout-warning title="Watch out!"}
 A normal monitor is output only. Its cable carries the picture out to the
@@ -86,6 +105,12 @@ Open **Settings → Bluetooth & devices** on the lab computer and the
 Bluetooth and sound settings on your phone (Android: **Sound and
 vibration**; iPhone: **Sounds & Haptics**). List every input and output
 device, built-in ones too. Mark each "input", "output" or "both".
+
+::: {.check}
+A good list has every device with its kind, for example: keyboard (input),
+mouse (input), monitor (output), headset with microphone (both), phone touch
+screen (both), phone speaker (output), vibration motor (output).
+:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Input, output or both?"}
@@ -95,21 +120,31 @@ Choose the right answer. You can use an answer more than once.
 A monitor without touch.
 :   output
 
+    Why: It only shows the picture.
+
 A keyboard.
 :   input
+
+    Why: It only sends key presses into the computer.
 
 A gamepad with a vibration motor.
 :   both
 
-A headset with a microphone.
-:   both
+    Why: Buttons are input; the vibration is output.
 
 The phone shakes when the car crashes. What is it called?
 :   haptic feedback
+
+    Why: A vibration you feel is haptic feedback.
+
+A 60 Hz screen and a game at 70 fps. New pictures per second?
+:   60
+
+    Why: The screen shows at most 60 pictures per second.
 :::
 :::
 
-## 5.3 Why games need a GPU
+## 3.3 Why games need a GPU
 
 - One 1920 × 1080 frame has about **2 million** pixels. At 60 fps: about
   **120 million** colours each second.
@@ -119,6 +154,10 @@ The phone shakes when the car crashes. What is it called?
   at the same time on different pixels: **parallel processing**.
 - Paint race (144 pixels): CPU with 4 cores 2.88 s, GPU with 144 cores
   0.32 s.
+- CPU and GPU work at the same time on two frames: the slower one sets the
+  frame rate.
+- No fan in a phone: after some minutes the chip gets hot and slows down
+  (**thermal throttling**).
 
 ![A few strong CPU cores and many small GPU cores.](images/cpu-gpu-cores.png){width=90%}
 
@@ -132,6 +171,12 @@ the work splits into many similar pieces, like pixels.
 ::: {.callout-note title="Do it · Paint Race"}
 In **Paint Race**, press **Start the race** and write the two times. Why does
 the GPU win, although each of its cores is slower?
+
+::: {.check}
+The CPU (4 cores) takes about 2.88 s, the GPU (144 cores) about 0.32 s. The
+GPU wins because all its small cores colour different pixels at the same
+time.
+:::
 :::
 
 ::: {.callout-tip title="Try it 3 · CPU or GPU?"}
@@ -141,21 +186,36 @@ Choose the right answer.
 About how many pixels has one 1920 × 1080 frame?
 :   2 million
 
+    Why: 1920 × 1080 is about 2 million.
+
 Which processor computes the colours of the pixels?
 :   the GPU
+
+    Why: The GPU draws the picture.
 
 Which processor runs the rules of the game?
 :   the CPU
 
+    Why: The game logic runs on the CPU.
+
 Many small cores work at the same time. What is it called?
 :   parallel processing
 
+    Why: That is parallel processing.
+
 Is one GPU core faster than one CPU core?
 :   no, it is slower
+
+    Why: Each GPU core is slower; there are just many of them.
+
+A phone game drops from 60 to 40 fps after 20 minutes. Why?
+:   thermal throttling
+
+    Why: A hot chip slows down to protect itself.
 :::
 :::
 
-## 5.4 Video memory and graphics settings
+## 3.4 Video memory and graphics settings
 
 - The GPU keeps textures and frames in **video memory** (VRAM).
 - **Integrated GPU** (most laptops, all phones): part of the processor
@@ -173,6 +233,12 @@ Is one GPU core faster than one CPU core?
 Open **Task Manager → Performance → GPU 0**. Write the name of the GPU, the
 **Dedicated GPU memory** and the **Shared GPU memory**. Is it an integrated
 GPU or a graphics card? Why?
+
+::: {.check}
+A typical lab computer shows an Intel or AMD GPU with a small dedicated
+memory and a large shared memory: an integrated GPU, because it shares the
+main RAM. A graphics card shows several GB of dedicated GPU memory.
+:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Video memory"}
@@ -182,17 +248,22 @@ Choose the right answer.
 Where does an integrated GPU keep its textures?
 :   in the main RAM
 
-Which has its own fast video memory?
-:   a graphics card
+    Why: An integrated GPU shares the main RAM.
 
 The textures need 4 GB, but the GPU has 2 GB. What happens?
 :   the game stutters
 
+    Why: Textures that do not fit must be swapped: the game stutters.
+
 A game runs at 120 fps at 720p. About how fast at 1080p?
 :   about 60 fps
 
+    Why: 1080p has about twice the pixels: about half the fps.
+
 Which setting needs more video memory?
 :   higher texture quality
+
+    Why: Bigger textures need more video memory.
 :::
 :::
 
@@ -220,14 +291,22 @@ halves the fps; shadows divide it by 1.5. Choose the right answer.
 L1 at 1080p, shadows off. How many fps?
 :   60 fps
 
+    Why: 120 ÷ 2 = 60.
+
 L1 at 720p, shadows on. How many fps?
 :   80 fps
+
+    Why: 120 ÷ 1.5 = 80.
 
 L1 at 1080p, shadows on. How many fps?
 :   40 fps
 
+    Why: 120 ÷ 2 ÷ 1.5 = 40.
+
 Which texture quality is the highest that fits on L1?
 :   Medium (2 GB)
+
+    Why: L1 has 2 GB: Medium needs 2 GB, High 4 GB.
 :::
 :::
 
@@ -239,21 +318,29 @@ L1: 2 GB, 120 fps. P1: 2 GB, 90 fps. D1: graphics card 8 GB, 300 fps (all at
 Phone P1 at 1080p, shadows off. How many fps?
 :   45 fps, too slow
 
+    Why: 90 ÷ 2 = 45, below 60.
+
 Phone P1 at 720p, shadows on. Is it enough?
 :   yes, exactly 60 fps
+
+    Why: 90 ÷ 1.5 = 60.
 
 Which device can use High textures (4 GB)?
 :   Desktop D1
 
+    Why: Only D1 has more than 4 GB of video memory.
+
 Desktop D1 at 1080p, shadows on. How many fps?
 :   100 fps
+
+    Why: 300 ÷ 2 ÷ 1.5 = 100.
 :::
 :::
 
 ## Summary {.summary}
 
 - Input devices turn actions into numbers; keys are digital, sticks are analog.
-- Output devices give an image, a sound or a vibration; some devices are both.
-- The GPU uses thousands of small cores in parallel to colour millions of pixels.
+- Output devices give an image, a sound or a vibration; the screen shows at most its refresh rate.
+- The GPU uses thousands of small cores in parallel; the slower of CPU and GPU sets the frame rate.
 - An integrated GPU shares the RAM; a graphics card has its own VRAM.
 - Resolution, textures and shadows change the work of the GPU and the frame rate.

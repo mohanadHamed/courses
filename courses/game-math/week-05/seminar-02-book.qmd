@@ -1,0 +1,347 @@
+---
+title: "Matrix Exercises"
+description: "Seminar worksheet · Read and change game tables, move many enemies at once, cast spells on points and combine two spells into one."
+seminar: 2
+ilos: [A1, C1]
+format: lesson-typst
+---
+
+::: {.lead}
+Today there are no new ideas. You use what Lecture 8 taught (matrices, adding
+and scaling them, a matrix times a vector and times a matrix, the order of a
+product and the inverse) on game problems. Do each activity alone. The
+results of the activities are at the end of this worksheet: try first, then
+compare.
+:::
+
+## Recall
+
+- A matrix has the size rows × columns; the entry a~ij~ is in row i,
+  column j.
+- Matrices of the same size are added entry by entry; k × A multiplies every
+  entry by k.
+- Matrix × vector: each row times the vector gives one coordinate.
+- Matrix × matrix: entry (i, j) = row i · column j. In AB**v**, B acts first.
+- The identity I changes nothing; the inverse undoes a matrix.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="4 × 2|(4, 1)"}
+What is the size of a matrix with 2 rows and 4 columns?
+:   2 × 4
+
+    Why: rows first, then columns.
+
+The rows (2, 0) and (0, 1) times the vector (3, 5).
+:   (6, 5)
+
+    Why: row 1: 2 × 3 + 0 × 5 = 6; row 2: 0 × 3 + 1 × 5 = 5.
+
+In AB**v**, which matrix acts first on **v**?
+:   B
+
+    Why: the matrix next to the vector acts first.
+:::
+:::
+
+## Activity 1 · The enemy table
+
+An RPG keeps its enemies in a matrix E. Row 1 is the slime, row 2 the troll;
+the columns are HP, damage and speed:
+
+| | HP | damage | speed |
+|---|---|---|---|
+| slime (row 1) | 40 | 10 | 4 |
+| troll (row 2) | 60 | 20 | 2 |
+
+![Hard mode multiplies every entry of the stats matrix by 1.5.](images/matrix-scale.png){width=80%}
+
+::: {.callout-note title="Activity 1 · Read and change the table · 10 min"}
+1. Write the size of E and the entries e~13~ and e~22~. What does each mean?
+2. A bat joins the game: HP 20, damage 5, speed 8. Write the new matrix and
+   its size.
+3. Hard mode is 1.5 × E. Write the hard-mode stats of the troll.
+
+*Your product:* the size, two entries with their meaning, the new matrix
+and the troll's hard-mode row.
+
+::: {.check}
+E is 2 × 3. e~13~ = 4: the speed of the slime. e~22~ = 20: the damage of the
+troll. With the bat as row 3 the matrix is 3 × 3. Hard-mode troll:
+1.5 × (60, 20, 2) = (90, 30, 3).
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · The table"}
+E has the rows slime (40, 10, 4) and troll (60, 20, 2); the columns are HP,
+damage and speed. Choose the right answer.
+
+::: {.match extra="e~31~|2 × 4"}
+Which entry is the HP of the troll?
+:   e~21~
+
+    Why: the troll is row 2 and HP is column 1.
+
+What is the size of E with a third enemy?
+:   3 × 3
+
+    Why: one more row; the columns stay HP, damage and speed.
+
+What is the slime's damage in hard mode (1.5 × E)?
+:   15
+
+    Why: 1.5 × 10 = 15.
+:::
+:::
+
+## Activity 2 · Three enemies at once
+
+Three enemies stand at (2, 1), (5, 3) and (0, 4). The game keeps them as the
+columns of one matrix P. In this frame they take the steps (1, 0), (−1, 0)
+and (0, −2): the columns of D.
+
+$$P = \begin{bmatrix} 2 & 5 & 0 \\ 1 & 3 & 4 \end{bmatrix}, \quad D = \begin{bmatrix} 1 & -1 & 0 \\ 0 & 0 & -2 \end{bmatrix}$$
+
+{{< sim file="sims/matrix-lab.html" poster="sims/matrix-lab.png" title="Matrix Lab: add, subtract and multiply by a number" height="560" >}}
+
+::: {.callout-note title="Activity 2 · Move them all · 12 min"}
+1. Compute P + D. Where is each enemy now?
+2. The next frame has the same steps. Compute P + 2D.
+3. Check one column in **Matrix Lab** (enter P and D as A and B).
+
+*Your product:* the two matrices and the three new positions.
+
+::: {.check}
+P + D has the rows (3, 4, 0) and (1, 3, 2): the enemies are at (3, 1), (4, 3)
+and (0, 2). P + 2D has the rows (4, 3, 0) and (1, 3, 0): (4, 1), (3, 3) and
+(0, 0). Each column is a vector addition, done for all enemies at once.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Many at once"}
+P has the columns (2, 1), (5, 3), (0, 4); D has the columns (1, 0), (−1, 0),
+(0, −2). Choose the right answer.
+
+::: {.match extra="(3, 3)|(0, 6)"}
+Where is enemy 1 after P + D?
+:   (3, 1)
+
+    Why: (2, 1) + (1, 0).
+
+Where is enemy 3 after P + D?
+:   (0, 2)
+
+    Why: (0, 4) + (0, −2).
+
+Why can the game add P and D?
+:   they have the same size
+
+    Why: both are 2 × 3, so every entry has a partner.
+:::
+:::
+
+## Activity 3 · Spells on points
+
+A crystal puzzle uses spells. **Stretch** has the rows (2, 0) and (0, 3);
+**Turn** has the rows (0, −1) and (1, 0); **Mirror** has the rows (1, 0) and
+(0, −1).
+
+![Each row of the matrix times the vector gives one coordinate.](images/matrix-vector.png){width=82%}
+
+{{< sim file="sims/multiply-lab.html" poster="sims/multiply-lab.png" title="Multiply Lab: a 2 × 2 matrix moves a point and a shape" height="760" >}}
+
+::: {.callout-note title="Activity 3 · Cast and check · 12 min"}
+1. On paper, cast Stretch, Turn and Mirror on the point (3, −1). Write both
+   rows of each calculation.
+2. In **Multiply Lab**, enter each matrix, put P at (3, −1) and compare.
+3. Which spell turns the house upside down?
+
+*Your product:* three points with their calculations, and one sentence.
+
+::: {.check}
+Stretch: (2 × 3 + 0, 0 + 3 × (−1)) = (6, −3). Turn: (0 + 1, 3 + 0) = (1, 3).
+Mirror: (3, 1). Mirror changes the sign of y, so the house is upside down.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Spells"}
+Stretch = rows (2, 0), (0, 3); Turn = rows (0, −1), (1, 0); Mirror = rows
+(1, 0), (0, −1). Choose the right answer.
+
+::: {.match extra="(−3, 1)|(3, −2)"}
+Stretch on (1, 2).
+:   (2, 6)
+
+    Why: (2 × 1, 3 × 2).
+
+Turn on (4, 2).
+:   (−2, 4)
+
+    Why: Turn sends (x, y) to (−y, x).
+
+Mirror on (5, 2).
+:   (5, −2)
+
+    Why: Mirror keeps x and changes the sign of y.
+:::
+:::
+
+## Activity 4 · Which products exist?
+
+Before the game multiplies two matrices, it must check the sizes: AB exists
+when A has as many columns as B has rows. (m × **n**) times (**n** × p) gives
+m × p.
+
+![Row i of A times column j of B.](images/matrix-matrix.png){width=82%}
+
+::: {.callout-note title="Activity 4 · Sizes and a product · 12 min"}
+1. Does each product exist? If yes, what is its size? (2 × 3)(3 × 4);
+   (2 × 2)(2 × 1); (2 × 3)(2 × 3); (3 × 1)(1 × 3).
+2. A has the rows (2, 1) and (0, 3); B has the rows (1, 0) and (4, 2).
+   Compute AB, writing each entry as a dot product.
+
+*Your product:* four answers about sizes and the matrix AB.
+
+::: {.check}
+2 × 4; 2 × 1; no (3 and 2 differ); 3 × 3. AB: row 1 · column 1 = 2 × 1 + 1 × 4
+= 6; row 1 · column 2 = 2 × 0 + 1 × 2 = 2; row 2 · column 1 = 0 + 3 × 4 = 12;
+row 2 · column 2 = 0 + 3 × 2 = 6. AB has the rows (6, 2) and (12, 6).
+:::
+:::
+
+::: {.callout-tip title="Try it 5 · Products"}
+Choose the right answer.
+
+::: {.match extra="2 × 3|no product"}
+(3 × 2) times (2 × 4). The size?
+:   3 × 4
+
+    Why: the inner 2s match; the outer numbers give the size.
+
+(2 × 3) times (2 × 3). The size?
+:   it does not exist
+
+    Why: A has 3 columns but B has 2 rows.
+
+A = rows (2, 1), (0, 3); B = rows (1, 0), (4, 2). Row 1 of AB?
+:   (6, 2)
+
+    Why: (2, 1) · (1, 4) = 6 and (2, 1) · (0, 2) = 2.
+:::
+:::
+
+::: {.callout-note .ai-task title="Task with AI · A spell on a whole sprite"}
+**Goal:** a spreadsheet that applies a spell matrix to all 8 corner points of
+a sprite at once and draws the sprite before and after. By hand that is 16
+dot products; with an AI assistant it takes a few minutes.
+
+1. **Do it yourself:** draw a small sprite (an arrow, a house) on squared
+   paper with 8 corner points and write their coordinates.
+2. **Ask the AI:** start with this prompt and add your points.
+
+   ::: {.prompt}
+   I have a 2 × 2 matrix with the rows (a, b) and (c, d) in the cells B1, C1,
+   B2, C2 of a spreadsheet, and 8 points (x, y) in the columns E and F, rows
+   1 to 8. Write the formulas for the new points (ax + by, cx + dy) in the
+   columns G and H, and tell me how to draw both sets of points as a scatter
+   chart. My points are:
+   :::
+
+3. **Check:** put Turn (rows (0, −1) and (1, 0)) in the matrix cells. Work out
+   two of the new points by hand and compare with the sheet. Then try Stretch
+   and Mirror.
+
+*Your product:* the sheet with its chart, your two hand checks, and one
+sentence on what you had to correct (or "nothing").
+
+::: {.check}
+A good sheet: with Turn, every point (x, y) becomes (−y, x), and the chart
+shows the sprite turned by 90° anticlockwise around the origin; with the
+identity (rows (1, 0), (0, 1)) nothing moves. AI formulas often mix up the
+cells b and c (using cx + by): check one point where x and y are different,
+for example (2, 1) → (−1, 2) with Turn.
+:::
+:::
+
+## Activity 5 · One spell from two
+
+The game casts Grow (rows (2, 0), (0, 2)) and Turn (rows (0, −1), (1, 0)) on
+every point of a model. It multiplies the two matrices once and uses the
+result for every point. Flip has the rows (−1, 0) and (0, 1).
+
+![Stretch then turn, and turn then stretch, give different shapes.](images/order-matters.png){width=82%}
+
+::: {.callout-note title="Activity 5 · Combine and compare · 12 min"}
+1. Compute Grow × Turn. Check it on (1, 0).
+2. Take the point (4, −1). Apply Flip then Turn, and Turn then Flip.
+3. Which spell undoes Grow × Turn? Describe it in words.
+
+*Your product:* the matrix Grow × Turn, two end points, and one sentence.
+
+::: {.check}
+Grow × Turn has the rows (0, −2) and (2, 0); on (1, 0) it gives (0, 2): turned
+by 90° and twice as far. Flip then Turn: (4, −1) → (−4, −1) → (1, −4). Turn
+then Flip: (4, −1) → (1, 4) → (−1, 4). To undo Grow × Turn, turn back by 90°
+(clockwise) and halve the distance.
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Two spells"}
+Grow = rows (2, 0), (0, 2); Turn = rows (0, −1), (1, 0); Flip = rows
+(−1, 0), (0, 1). Choose the right answer.
+
+::: {.match extra="(4, 1)|rows (2, 0) and (0, −2)"}
+Grow × Turn as one matrix.
+:   rows (0, −2) and (2, 0)
+
+    Why: row (2, 0) · the columns (0, 1) and (−1, 0) gives 0 and −2; row (0, 2) gives 2 and 0.
+
+From (4, −1), Flip then Turn.
+:   (1, −4)
+
+    Why: Flip: (−4, −1); Turn: (−y, x) = (1, −4).
+
+From (4, −1), Turn then Flip.
+:   (−1, 4)
+
+    Why: Turn: (1, 4); Flip: (−1, 4).
+:::
+:::
+
+## Case study: Crystal Spells
+
+*Crystal Spells* is a made-up puzzle game. The crystal starts at (2, 1). Each
+spell is a 2 × 2 matrix: **Grow** = rows (2, 0), (0, 2); **Shrink** = rows
+(0.5, 0), (0, 0.5); **Turn** = rows (0, −1), (1, 0); **Flip** = rows (−1, 0),
+(0, 1); **Stay** = the identity. The Game challenge of the interactive page
+asks harder puzzles with these spells: two spells in a row, a spell cast
+twice, and the spell that undoes another.
+
+{{< sim file="sims/crystal-spells.html" poster="sims/crystal-spells.png" title="Crystal Spells: cast the right matrix" kind="game" height="720" >}}
+
+## Exercises
+
+1. The enemy table has the rows (40, 10, 4) and (60, 20, 2). Write 2 × the
+   table.
+2. Two coins at (1, 3) and (4, 0) fall by 2 units. Write the position matrix,
+   the step matrix and their sum.
+3. Stretch = rows (2, 0), (0, 3). Where does it send (−1, 2)?
+4. Does (1 × 2)(2 × 3) exist? What is its size?
+5. Compute AB for A = rows (1, 0), (2, 1) and B = rows (3, 1), (0, 2).
+6. From (1, 3), cast Turn, then Flip. Where does the point land?
+7. Which spell undoes Shrink?
+8. Why does Turn × Flip differ from Flip × Turn? Check on (1, 0).
+
+## Answers to the exercises
+
+::: {.answers}
+1. Rows (80, 20, 8) and (120, 40, 4).
+2. Columns (1, 3) and (4, 0), plus columns (0, −2) and (0, −2): columns (1, 1) and (4, −2).
+3. (−2, 6).
+4. Yes, 1 × 3.
+5. Rows (3, 1) and (6, 4).
+6. Turn: (−3, 1); Flip: (3, 1).
+7. Grow.
+8. On (1, 0): Flip then Turn gives (0, −1); Turn then Flip gives (0, 1). The order matters.
+:::

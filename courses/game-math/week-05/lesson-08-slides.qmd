@@ -1,14 +1,82 @@
 ---
-title: "Matrix Multiplication, the Identity and the Inverse"
-subtitle: "Lecture 10"
+title: "Matrices: Operations, Multiplication, Identity and Inverse"
+subtitle: "Lecture 8"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary matrix-multiplication commutative identity-matrix inverse-matrix determinant transformation dot-product column-vector >}}
+{{< glossary matrix matrix-size matrix-entry matrix-addition matrix-multiplication commutative identity-matrix inverse-matrix >}}
 
-## 10.1 A matrix times a vector
+## 8.1 The mine map: what a matrix is
+
+:::: {.columns}
+::: {.column width="50%"}
+- A matrix is a table of numbers in rows and columns.
+- Its size is rows × columns, so the mine map M is a 3 × 4 matrix.
+- The entry m~23~ is in row 2 and column 3, and the row always comes first.
+- **Do it:** Draw a level of 3 × 3 tiles with coins and write it as a matrix L. Are l~32~ and l~23~ the same tile?
+:::
+::: {.column width="50%"}
+![](images/matrix-map.png)
+:::
+::::
+
+## Example · Reading the mine map
+
+The mine map M has the rows (2, 0, 5, 1), (4, 3, 0, 6) and (1, 7, 2, 0).
+**What is its size, and what are m~32~ and m~23~?**
+
+::: {.reveal}
+1. M has 3 rows and 4 columns, so its size is **3 × 4**.
+2. m~32~ is in row 3, column 2, so it is **7**.
+3. m~23~ is in row 2, column 3, so it is **0**: swapping the numbers gives another tile.
+:::
+
+## Try it 1 · Size and entries
+
+a) What is the size of a matrix with 2 rows and 5 columns?
+b) How many gems are in m~14~ of the mine map M?
+c) The enemy table E has the rows (40, 10, 4) and (60, 20, 2). Which entry is the troll's damage?
+
+::: {.answer}
+a) 2 × 5
+b) 1
+c) e~22~ = 20
+:::
+
+## 8.2 Adding and scaling matrices
+
+:::: {.columns}
+::: {.column width="50%"}
+- Two matrices of the same size are added entry by entry.
+- Each entry of the sum is a~ij~ + b~ij~, and the size stays the same.
+- Matrices of different sizes cannot be added.
+- A number k times a matrix multiplies every entry by k.
+- **Do it:** In Matrix Lab, choose A + B and tap three entries of the result. What are the sums?
+:::
+::: {.column width="50%"}
+![](images/matrix-add.png)
+:::
+::::
+
+## Live demo · Matrix Lab
+
+{{< sim file="sims/matrix-lab.html" poster="sims/matrix-lab.png" title="Matrix Lab: add, subtract and multiply by a number" task="**Show:** A + B, tap one entry of the result, then make B a 3 × 2 matrix. **Ask:** why is there no result now?" >}}
+
+## Try it 2 · Adding and scaling
+
+a) What is row 1 of the sum of the rows (3, 1), (0, 2) and the rows (1, 1), (4, −2)?
+b) Can a 2 × 3 matrix and a 3 × 2 matrix be added?
+c) Hard mode multiplies the stats by 1.5. What is the new HP of a slime with 40 HP?
+
+::: {.answer}
+a) (4, 2)
+b) No: the sizes are different.
+c) 60
+:::
+
+## 8.3 A matrix times a vector
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -37,7 +105,7 @@ Turn has the rows (0, −1) and (1, 0), and the crystal stands at (3, 2).
 
 {{< sim file="sims/multiply-lab.html" poster="sims/multiply-lab.png" title="Multiply Lab: a 2 × 2 matrix moves a point and a shape" task="**Show:** press Scale 2, Turn 90°, Flip x and Squash, and drag P. **Ask:** which matrix leaves the house flat on a line?" >}}
 
-## Try it 1 · Matrix × vector
+## Try it 3 · Matrix × vector
 
 a) What is the matrix with the rows (3, 0) and (0, 1) times (2, 5)?
 b) What is the matrix with the rows (1, 2) and (0, 1) times (1, 3)?
@@ -49,7 +117,7 @@ b) (7, 3)
 c) (0, 4)
 :::
 
-## 10.2 A matrix times a matrix
+## 8.3 A matrix times a matrix
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -74,7 +142,7 @@ A has the rows (1, 2) and (3, 0), and B has the rows (4, 1) and (0, 2).
 3. AB has the rows **(4, 5)** and **(12, 3)**.
 :::
 
-## Try it 2 · Matrix × matrix
+## Try it 4 · Matrix × matrix
 
 a) A has the rows (1, 1) and (0, 2), and B has the rows (3, 0) and (1, 1). What is AB?
 b) A is 3 × 2 and B is 2 × 5. What is the size of AB?
@@ -86,7 +154,7 @@ b) 3 × 5
 c) No, because 3 and 2 are different.
 :::
 
-## 10.3 The order matters
+## 8.4 The order matters
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -100,18 +168,18 @@ c) No, because 3 and 2 are different.
 :::
 ::::
 
-## Example · Flip and Turn on one point
+## Example · AB and BA
 
-Flip has the rows (−1, 0) and (0, 1), Turn has the rows (0, −1) and (1, 0), and the point is (2, 1).
-**Where does the point go in each order?**
+A has the rows (1, 2) and (3, 0), and B has the rows (4, 1) and (0, 2).
+**Is AB the same as BA?**
 
 ::: {.reveal}
-1. Flip first gives (−2, 1), and then Turn gives **(−1, −2)**.
-2. Turn first gives (−1, 2), and then Flip gives **(1, 2)**.
-3. The two orders give different points.
+1. AB has the rows (4, 5) and (12, 3).
+2. BA has the rows (7, 8) and (6, 0).
+3. They are different, so **the order matters**.
 :::
 
-## Try it 3 · The order
+## Try it 5 · The order
 
 a) Is AB always equal to BA?
 b) In AB**v**, which matrix acts first?
@@ -123,7 +191,7 @@ b) B
 c) rows (7, 8) and (6, 0)
 :::
 
-## 10.4 The identity matrix
+## 8.5 The identity matrix
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -148,7 +216,7 @@ The identity I has the rows (1, 0) and (0, 1), and the point is (5, −2).
 3. The point stays at **(5, −2)**: the identity changes nothing.
 :::
 
-## Try it 4 · The identity
+## Try it 6 · The identity
 
 a) What is I × (7, −3)?
 b) Which matrix is the 2 × 2 identity?
@@ -160,48 +228,48 @@ b) rows (1, 0) and (0, 1)
 c) (3, 3), so it is not the identity.
 :::
 
-## 10.5 Undo: the inverse matrix
+## 8.6 Undo: the inverse matrix
 
 :::: {.columns}
 ::: {.column width="50%"}
 - The inverse A^−1^ undoes A, so A A^−1^ is the identity.
-- For the rows (a, b) and (c, d), the determinant is ad − bc.
-- The inverse is 1 ÷ det times the rows (d, −b) and (−c, a), and det = 0 means no inverse.
-- **Do it:** Compute the determinant of the rows (3, 6) and (1, 2). Can this matrix be undone?
+- Grow doubles x and y, so its inverse Shrink halves them.
+- Squash sends two points to the same place, so it has no inverse.
+- **Do it:** In Multiply Lab, apply Grow to (2, 1) and then Shrink. Where does the point end?
 :::
 ::: {.column width="50%"}
 ![](images/inverse.png)
 :::
 ::::
 
-## Example · An inverse with the formula
+## Example · Undo Grow
 
-A has the rows (2, 1) and (1, 1).
-**What is the inverse of A?**
+Grow has the rows (2, 0) and (0, 2), and the crystal jumped from (3, 2) to (6, 4).
+**Which spell brings it back?**
 
 ::: {.reveal}
-1. det = 2 × 1 − 1 × 1 = 1.
-2. The inverse has the rows **(1, −1)** and **(−1, 2)**.
-3. Check: row 1 · column 1 of A A^−1^ is 2 × 1 + 1 × (−1) = 1.
+1. Grow doubles x and y, so the undo must halve them.
+2. Shrink has the rows (0.5, 0) and (0, 0.5).
+3. Shrink × (6, 4) = **(3, 2)**: the crystal is back.
 :::
 
-## Try it 5 · Determinant and inverse
+## Try it 7 · Undo
 
-a) What is the determinant of the rows (5, 2) and (2, 1)?
-b) What is the inverse of Grow, with the rows (2, 0) and (0, 2)?
-c) Why has the matrix with the rows (2, 4) and (1, 2) no inverse?
+a) Which matrix undoes Grow3, with the rows (3, 0) and (0, 3)?
+b) What is A × A^−1^?
+c) Why has Squash no inverse?
 
 ::: {.answer}
-a) 5 × 1 − 2 × 2 = 1
-b) rows (0.5, 0) and (0, 0.5)
-c) Its determinant is 2 × 2 − 4 × 1 = 0.
+a) the rows (1/3, 0) and (0, 1/3)
+b) the identity I
+c) It sends two points to the same place.
 :::
 
 ## Game challenge · Crystal Spells
 
 {{< sim file="sims/crystal-spells.html" poster="sims/crystal-spells.png" title="Crystal Spells: cast the right matrix" kind="game" task="**The story:** a crystal at (2, 1) moves with spells that are 2 × 2 matrices: Grow, Shrink, Turn, Flip and Stay. **Play:** predict where it lands, and choose the spell for each gate." >}}
 
-## Try it 6 · Spells in a row (harder)
+## Try it 8 · Spells in a row (harder)
 
 The facts: Grow has the rows (2, 0) and (0, 2). Turn has the rows (0, −1) and (1, 0). Flip has the rows (−1, 0) and (0, 1).
 
@@ -217,8 +285,8 @@ c) (−4, 2)
 
 ## Summary
 
+- A matrix is a table in rows × columns, and the row comes first.
+- Matrices of the same size are added entry by entry, and k × A multiplies every entry.
 - Each row of a matrix times a vector gives one new coordinate.
-- Each entry of AB is a row of A times a column of B.
 - AB is usually not BA, and in AB**v** the matrix B acts first.
-- The identity matrix changes nothing.
-- The inverse undoes a matrix, and a matrix with determinant 0 has no inverse.
+- The identity changes nothing, and the inverse undoes a matrix.

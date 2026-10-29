@@ -1,6 +1,6 @@
 ---
-title: "The Cross Product: Direction and Surface Normals"
-description: "Left or right with the 2D cross product, the 3D cross product, the order of the vectors, the normal of a triangle, and front or back faces."
+title: "Distance, Projection and Direction in Game Worlds"
+description: "The nearest target, how far along a direction, the parts along and across, sliding along a wall, and whether a shot hits."
 lesson: 5
 ilos: [B1]
 format: lesson-html
@@ -8,289 +8,334 @@ format: lesson-html
 
 This page is the interactive version of the lesson notes (PDF). Each section
 starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. The full explanations,
-examples and exercises are in the notes.
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check.
 
 ## Key terms
 
-{{< glossary cross-product surface-normal triangle-mesh winding-order back-face-culling handedness perpendicular dot-product unit-vector forward-vector >}}
+{{< glossary distance projection perpendicular-part ray dot-product unit-vector magnitude surface-normal cross-product >}}
 
-## 5.1 Left or right? The cross product in 2D
+## 5.1 Which target is nearest?
 
-- A tower must turn to a drone. The dot product says *in front* or
-  *behind*, but not *left* or *right*.
-- The **cross product** of two 2D vectors is one number:
-  f × d = f~x~ d~y~ − f~y~ d~x~.
-- **Positive:** d is to the left (turn anticlockwise).
-- **Negative:** d is to the right (turn clockwise).
-- **Zero:** d is on the same line: straight ahead or straight behind. The dot
-  product tells which.
-- This works when the y-axis points up.
+- The **distance** between two points is |B − A|: the magnitude of the
+  vector from A to B.
+- To find the nearest target, compare the squares x² + y². A bigger
+  distance always has a bigger square, so the game skips the square roots.
+- Tower T = (2, 2). E1 (5, 6): d = (3, 4), square 25. E2 (6, 2): d = (4, 0),
+  square 16. E3 (−1, −2): d = (−3, −4), square 25. The nearest is **E2**.
+- In 3D, add the z-part.
 
-![f = (2, 1): the cross product with three vectors.](images/cross-sign.png){width=90%}
+![The distances from the tower to three enemies.](images/nearest.png){width=90%}
 
 ::: {.callout-warning title="Watch out!"}
-The order matters: d × f has the opposite sign. Always put the forward
-vector first.
+Do not compare one coordinate only, and start at the tower, not at the
+origin.
 :::
 
-::: {.callout-note title="Do it · Left or right on paper"}
-On squared paper, draw f = (2, 1) and the vectors (1, 3), (3, −1) and
-(−1, 2) from the same point. Compute f × d for each one. Mark it "left" or
-"right" and check with your drawing.
+::: {.callout-note title="Do it · Distances in GeoGebra"}
+At geogebra.org/calculator, type `T = (2, 2)`, `E1 = (5, 6)`, `E2 = (6, 2)`,
+`E3 = (-1, -2)` and `Distance(T, E1)` (and the same for E2 and E3). Which
+enemy is nearest? Check one distance by hand.
+
+::: {.check}
+5, 4 and 5: E2 is nearest. By hand: (6, 2) − (2, 2) = (4, 0), length 4.
+:::
 :::
 
-::: {.callout-tip title="Try it 1 · Left or right?"}
+::: {.callout-tip title="Try it 1 · Nearest"}
 Choose the right answer.
 
-::: {.match extra="behind|7"}
-A tower faces (1, 0). The drone is in the direction (3, 2). Which way?
-:   left
+::: {.match extra="7|E3"}
+The distance between (1, 2) and (4, 6).
+:   5
 
-A tower faces (1, 0). The drone is in the direction (2, −3). Which way?
-:   right
+    Why: (3, 4) has the length √(9 + 16) = 5.
 
-A kart faces (3, 4). The checkpoint is in the direction (4, 3). What is f × d?
-:   −7
+A tower at (2, 2). Which enemy is nearest: E1 (5, 6), E2 (6, 2) or E3 (−1, −2)?
+:   E2
 
-A tower faces (1, 0). The drone is in the direction (5, 0). What is f × d?
+    Why: the squares are 25, 16 and 25: 16 is the smallest.
+
+The distance between (1, 2, 1) and (3, 3, 3).
+:   3
+
+    Why: (2, 1, 2): √(4 + 1 + 4) = √9 = 3.
+
+A tower at (0, 0). The squares to three enemies are 100, 50 and 81. Which distance is the smallest?
+:   the one with the square 50
+
+    Why: the smallest square belongs to the smallest distance.
+
+Why can the game compare the squares instead of the distances?
+:   a bigger distance always has a bigger square
+
+    Why: squaring keeps the order of positive numbers.
+:::
+:::
+
+## 5.2 How far along the road?
+
+- A road starts at S and goes along the unit vector û.
+- How far along the road is a car at P? The **projection**:
+  along = v · û, with v = P − S.
+- It is the length of the car's "shadow" on the road. The part to the side
+  does not count.
+- It is negative when the car is behind the start.
+- Road along (0.6, 0.8), car at (5, 5): 5 × 0.6 + 5 × 0.8 = 3 + 4 = **7**.
+
+![The car at (5, 5) is 7 units along the road.](images/projection.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Normalize the direction first. With (3, 4) instead of (0.6, 0.8), the car
+gives 35: five times too much.
+:::
+
+{{< sim file="sims/projection-lab.html" poster="sims/projection-lab.png" title="Projection Lab: along, across and slide" height="700" >}}
+
+::: {.callout-note title="Do it · Along the road in Projection Lab"}
+In **Projection Lab**, choose û = (0.6, 0.8). Drag the tip of v to (5, 5),
+(3, 4) and (−3, −4). Write the value "along" each time. When is it negative?
+
+::: {.check}
+(5, 5): 7. (3, 4): 5. (−3, −4): −5. Negative when v points behind the start.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Along the road"}
+Choose the right answer.
+
+::: {.match extra="5|35"}
+A road along (1, 0) from (0, 0). How far along is a car at (7, 2)?
+:   7
+
+    Why: (7, 2) · (1, 0) = 7; the 2 to the side does not count.
+
+A road along (1, 0) from (0, 0). A car is at (−3, 1). What is "along"?
+:   −3, behind the start
+
+    Why: (−3, 1) · (1, 0) = −3: negative means behind.
+
+A road along (0.6, 0.8) from (0, 0). How far along is a car at (5, 5)?
+:   7
+
+    Why: 5 × 0.6 + 5 × 0.8 = 3 + 4 = 7.
+
+A road along (0, 1) from (0, 0). How far along is a car at (2, 9)?
+:   9
+
+    Why: (2, 9) · (0, 1) = 9.
+
+Why must û be a unit vector?
+:   otherwise the result is too big
+
+    Why: a longer direction multiplies the result by its length.
+:::
+:::
+
+## 5.3 Along and across: splitting a vector
+
+- A wind w blows on a plane that flies along û. Part of the wind pushes
+  the plane forward, part pushes it off course.
+- **Along** (a vector): (v · û) û.
+- **Across** (the **perpendicular part**): v − along.
+- along + across = v, and across · û = 0.
+- Plane along (1, 0), wind (3, 4): along (3, 0), across (0, 4).
+- The same split stops a player sinking into a floor: remove the part
+  **into** the floor and keep the rest: slide = v − (v · n̂) n̂, when
+  v · n̂ < 0 (n̂ = the unit normal of the floor, Lecture 4).
+- Floor n̂ = (0, 1), v = (3, −4): v · n̂ = −4, slide = (3, −4) + (0, 4) =
+  **(3, 0)**: the player slides along the floor.
+
+![v = (5, 0) split along (0.6, 0.8) and across it.](images/along-across.png){width=88%}
+
+![The game removes the part into the floor, and the player slides.](images/wall-slide.png){width=80%}
+
+::: {.callout-warning title="Watch out!"}
+v · û = 3 is only the length. The part along is the vector 3 × û. And in a
+slide, minus a negative number adds: (3, −4) − (−4)(0, 1) = (3, 0), not
+(3, −8).
+:::
+
+::: {.callout-note title="Do it · Split a vector"}
+In **Projection Lab**, choose û = (0.8, 0.6) and drag v to (5, 0). Write the
+part along and the part across. Add them on paper. Do you get (5, 0)?
+
+::: {.check}
+v · û = 4; along (3.2, 2.4); across (1.8, −2.4). Their sum is (5, 0).
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Split it and slide"}
+Choose the right answer.
+
+::: {.match extra="(3, 4)|(3, −8)"}
+A plane flies along (1, 0). The wind is (3, 4). The part along?
+:   (3, 0)
+
+    Why: (3, 4) · (1, 0) = 3, and 3 × (1, 0) = (3, 0).
+
+A plane flies along (1, 0). The wind is (3, 4). The part across?
+:   (0, 4)
+
+    Why: across = v − along = (3, 4) − (3, 0).
+
+v = (4, 6), û = (0, 1). The part along?
+:   (0, 6)
+
+    Why: v · û = 6, so along = 6 × (0, 1).
+
+What is the dot product of the part across and û?
 :   0
 
-f × d = 0 and f · d = 5. What must the tower do?
-:   fire straight ahead
+    Why: the part across is at a right angle to û.
+
+Floor n̂ = (0, 1), v = (4, −2). The slide?
+:   (4, 0)
+
+    Why: v · n̂ = −2; (4, −2) − (−2)(0, 1) = (4, 0).
+
+Floor n̂ = (0, 1), v = (2, 5). What does the game do?
+:   nothing, the player moves away
+
+    Why: v · n̂ = 5 is positive: not into the floor.
 :::
 :::
 
-## 5.2 A vector at a right angle to two vectors
+## 5.4 Will the shot hit?
 
-- In 3D, the cross product of two vectors is a **vector**:
-  a × b = (a~y~ b~z~ − a~z~ b~y~, a~z~ b~x~ − a~x~ b~z~, a~x~ b~y~ − a~y~ b~x~).
-- Each part uses the two **other** axes.
-- The result is **perpendicular** to a and to b.
-- Check every result: its dot product with a and with b must be 0.
-- Example: (1, 0, 0) × (0, 1, 0) = (0, 0, 1).
+- A laser goes along a **ray**: from a point, in one direction û.
+- For the vector d from the turret to the enemy, check three things:
+  1. in front: along = d · û > 0;
+  2. in range: along ≤ the range;
+  3. close to the line: across ≤ the radius of the enemy.
+- In 2D: across = |û~x~ d~y~ − û~y~ d~x~|, the 2D cross product without its
+  sign.
+- Turret (0, 0) along (1, 0), range 10, radius 1: E1 (6, 1) along 6, across
+  1: hit. E2 (4, 3): across 3: miss. E3 (−5, 0): behind: miss.
 
-![The three parts of (2, 1, 0) × (0, 3, 1).](images/cross-steps.png){width=88%}
+![A ray, its range, and three enemies.](images/ray-hit.png){width=90%}
 
 ::: {.callout-warning title="Watch out!"}
-Do not multiply matching parts (a~x~ b~x~ …): that is the dot product. The
-cross product always mixes two different axes.
+A near enemy is not always hit. It can be too far to the side.
 :::
 
-::: {.callout-note title="Do it · The cross product in GeoGebra 3D"}
-At geogebra.org/3d, type `u = Vector((2, 1, 0))`, `v = Vector((0, 3, 1))`
-and `w = Cross(u, v)`. Turn the view. Then type `w * u` and `w * v`. What
-are the two dot products?
-:::
+::: {.callout-note title="Do it · Hit or miss on paper"}
+A turret at (0, 0) fires along (1, 0), range 8, radius 1. The enemies are at
+(5, 0), (3, 2), (9, 0) and (−2, 1). Find "along" and "across" for each. Hit
+or miss? Why?
 
-::: {.callout-tip title="Try it 2 · Compute it"}
-Choose the right answer.
-
-::: {.match extra="(2, 3, 0)|(0, 0, −1)|a number"}
-(1, 0, 0) × (0, 1, 0)
-:   (0, 0, 1)
-
-(2, 1, 0) × (0, 3, 1)
-:   (1, −2, 6)
-
-(0, 1, 0) × (0, 0, 1)
-:   (1, 0, 0)
-
-What kind of result does the 3D cross product give?
-:   a vector
-
-(1, −2, 6) · (2, 1, 0) = 0. What does this check show?
-:   the result is perpendicular to (2, 1, 0)
+::: {.check}
+(5, 0): along 5, across 0: hit. (3, 2): across 2: miss (to the side).
+(9, 0): along 9 > 8: miss (out of range). (−2, 1): along −2: miss (behind).
 :::
 :::
 
-## 5.3 Which way does it point? The order and the hand rule
+::: {.callout-tip title="Try it 5 · Hit or miss?"}
+A turret at (0, 0) fires along (1, 0). Range 8, radius 1. Choose the right
+answer. You can use an answer more than once.
 
-- Two vectors on a floor have two directions at a right angle: up and down.
-- The **order** decides: b × a = −(a × b).
-- **Curl rule:** fingers along a, curl them towards b, the thumb shows
-  a × b.
-- Use the hand of the tool: the **left** hand in Unity, the **right** hand
-  in GeoGebra and Blender. The numbers are the same.
-- Two vectors on one line give the zero vector.
+::: {.match extra="hit, but too far"}
+An enemy at (5, 0).
+:   hit
 
-![Swapping the order turns the result around (Unity axes: left hand).](images/curl-rule.png){width=88%}
+    Why: along 5 (in front, in range), across 0.
 
-{{< sim file="sims/normal-lab.html" poster="sims/normal-lab.png" title="Normal Lab: the normal of a triangle" height="720" >}}
+An enemy at (3, 2).
+:   miss: too far to the side
 
-::: {.callout-note title="Do it · The curl rule in Normal Lab"}
-In **Normal Lab** (Unity axes), curl the fingers of your left hand from the
-purple edge (0, 0, 2) to the blue edge (2, 0, 0). Where does your thumb
-point? Compare with the green arrow. Press **Swap B and C** and do it again.
-:::
+    Why: across 2 is more than the radius 1.
 
-::: {.callout-tip title="Try it 3 · Order and hand"}
-Choose the right answer.
+An enemy at (9, 0).
+:   miss: out of range
 
-::: {.match extra="(2, 1, 4)|the right hand"}
-a × b = (2, −1, 4). What is b × a?
-:   (−2, 1, −4)
+    Why: along 9 is more than the range 8.
 
-A ship flies forward f = (0, 0, 1). Its right wing is r = (1, 0, 0). What is f × r?
-:   (0, 1, 0)
+An enemy at (−2, 1).
+:   miss: behind
 
-Which hand do you use for the curl rule in Unity?
-:   the left hand
+    Why: along −2 is negative: behind the turret.
 
-(1, 2, 0) × (2, 4, 0). What is the result?
-:   (0, 0, 0)
+An enemy at (7, 1).
+:   hit
 
-Why is (1, 2, 0) × (2, 4, 0) the zero vector?
-:   the two vectors lie on one line
+    Why: along 7 ≤ 8 and across 1 ≤ 1.
 :::
 :::
 
-## 5.4 Which way does a surface face? The normal of a triangle
-
-- A 3D model is a **triangle mesh**: many small, flat triangles.
-- The **normal** is a unit vector at a right angle to the surface. It points
-  out of the front side.
-- For a triangle A, B, C: n = (B − A) × (C − A), then normalize.
-- The **winding order** (the order of the corners) decides the front.
-  A, C, B turns the normal around.
-- Floor A = (0, 0, 0), B = (0, 0, 2), C = (2, 0, 0): n = (0, 4, 0), unit
-  normal (0, 1, 0): up.
-- Ramp with C = (2, 2, 0): n = (−4, 4, 0), unit normal about
-  (−0.71, 0.71, 0).
-
-![The same triangle with two winding orders.](images/normal.png){width=88%}
-
-::: {.callout-warning title="Watch out!"}
-Use the **edges** B − A and C − A, not the corners B and C.
-:::
-
-::: {.callout-note title="Do it · Lift the corner"}
-In **Normal Lab**, move **height of C** to 1, then to 2. Each time, write
-the second edge C − A and the normal n. Check one normal on paper.
-:::
-
-::: {.callout-tip title="Try it 4 · Normals"}
-Choose the right answer.
-
-::: {.match extra="(0, 0, 2)|(4, 0, 0)"}
-A = (0, 0, 0), B = (0, 0, 2), C = (2, 0, 0). What is n = (B − A) × (C − A)?
-:   (0, 4, 0)
-
-The same triangle listed as A, C, B. What is n?
-:   (0, −4, 0)
-
-A = (0, 0, 0), B = (0, 0, 3), C = (3, 0, 0). Which way does the triangle face?
-:   up
-
-What decides the front side of a triangle?
-:   the winding order
-
-n = (0, 4, 0). What is the unit normal?
-:   (0, 1, 0)
-:::
-:::
-
-## 5.5 Facing the camera, facing the light
-
-- Both uses of the normal need the dot product (lecture 4).
-- **Back-face culling:** v goes from the triangle to the camera.
-  n · v > 0: the camera sees the front, the game draws it.
-  n · v < 0: the camera sees the back, the game skips it.
-- **Light:** brightness = n̂ · l̂ (l̂ points towards the light). 1 is fully
-  lit; 0 or less is dark.
-- Floor n̂ = (0, 1, 0), light from above l̂ = (0, 1, 0): 100 %. Ramp
-  (−0.71, 0.71, 0): about 71 %.
-
-![Front or back, bright or dark.](images/facing.png){width=90%}
-
-::: {.callout-warning title="Watch out!"}
-A wrong winding order makes a normal point inwards. The game skips the
-triangle, and the player sees a hole in the model.
-:::
-
-::: {.callout-note title="Do it · Look from below"}
-In **Normal Lab**, press **View from below**, then **View from above**. Read
-the message each time. What happens to the green triangle, and why?
-:::
-
-::: {.callout-tip title="Try it 5 · Draw it or skip it?"}
-A floor triangle at P = (1, 0, 1) has n = (0, 1, 0). Choose the right
-answer.
-
-::: {.match extra="50 %|draw it, n · v = −3"}
-The camera is at (1, 5, −4), so v = (0, 5, −5). What does the game do?
-:   draw it, n · v = 5
-
-The camera is at (1, −3, 1), so v = (0, −3, 0). What does the game do?
-:   skip it, n · v = −3
-
-Light from above, l̂ = (0, 1, 0). How bright is the floor?
-:   100 %
-
-Light from above. How bright is a wall with n̂ = (1, 0, 0)?
-:   0 %, dark
-
-Light from above. How bright is a surface with n̂ = (0, 0.6, 0.8)?
-:   60 %
-:::
-:::
-
-## Game challenge: Turret Turn {.challenge}
+## Game challenge: Asteroid Beam {.challenge}
 
 Work alone. Use every section of today.
 
-**Turret Turn** is a tower-defence game. The tower stands at T = (4, 4) and
-looks along f = (1, 0). Four drones fly in: A at (7, 6), B at (6, 1), C at
-(1, 4) and D at (9, 4). For each drone the tower must turn left, turn right,
-fire straight ahead or turn around. Later the tower looks up: f = (0, 1).
+**Asteroid Beam** is a mining game. A station at S = (1, 1) fires a beam
+along û = (0.6, 0.8). The beam is 10 units long, and each asteroid has the
+radius 1. Asteroid A is at (4, 5), B at (5, 4) and C at (7, 9). The beam
+stops at the first asteroid that it hits.
 
-{{< sim file="sims/turret-turn.html" poster="sims/turret-turn.png" title="Turret Turn: left, right, fire or turn around" kind="game" height="700" >}}
+{{< sim file="sims/asteroid-beam.html" poster="sims/asteroid-beam.png" title="Asteroid Beam: which asteroid does the beam hit first?" kind="game" height="760" >}}
 
-::: {.callout-tip title="Try it 6 · The tower looks right"}
-Turret Turn: T = (4, 4), f = (1, 0). Drones A (7, 6), B (6, 1), C (1, 4),
-D (9, 4). Choose the right answer.
+::: {.callout-tip title="Try it 6 · Along the beam"}
+Asteroid Beam: S = (1, 1), û = (0.6, 0.8), range 10, radius 1. A (4, 5),
+B (5, 4), C (7, 9). Choose the right answer.
 
-::: {.match extra="(3, −2)|turn right"}
-The vector d from the tower to drone A.
-:   (3, 2)
+::: {.match extra="(5, 4)|7"}
+The vector d from the station to A.
+:   (3, 4)
 
-f × d for drone B, with d = (2, −3).
-:   −3
+    Why: A − S = (4 − 1, 5 − 1).
 
-What must the tower do for drone C, with d = (−3, 0)?
-:   turn around
+"Along" for asteroid A, with d = (3, 4).
+:   5
 
-What must the tower do for drone D, with d = (5, 0)?
-:   fire straight ahead
+    Why: 3 × 0.6 + 4 × 0.8 = 1.8 + 3.2 = 5.
+
+"Along" for asteroid B, with d = (4, 3).
+:   4.8
+
+    Why: 4 × 0.6 + 3 × 0.8 = 2.4 + 2.4 = 4.8.
+
+"Along" for asteroid C, with d = (6, 8).
+:   10
+
+    Why: 6 × 0.6 + 8 × 0.8 = 3.6 + 6.4 = 10.
 :::
 :::
 
-::: {.callout-tip title="Try it 7 · The tower looks up (harder)"}
-Turret Turn: T = (4, 4), now f = (0, 1). Drone A (7, 6), drone E (2, 7),
-drone F (4, 8). Choose the right answer.
+::: {.callout-tip title="Try it 7 · Which one is hit? (harder)"}
+Asteroid Beam: S = (1, 1), û = (0.6, 0.8), range 10, radius 1. A (4, 5):
+along 5. B (5, 4): along 4.8. C (7, 9): along 10. Choose the right answer.
 
-::: {.match extra="2|turn around"}
-f × d for drone A, with d = (3, 2).
-:   −3
+::: {.match extra="B, it is nearest|0.6"}
+"Across" for asteroid B, with d = (4, 3).
+:   1.4
 
-What must the tower do for drone A now?
-:   turn right
+    Why: |0.6 × 3 − 0.8 × 4| = |1.8 − 3.2| = 1.4.
 
-What must the tower do for drone E, with d = (−2, 3)?
-:   turn left
+"Across" for asteroid A, with d = (3, 4).
+:   0
 
-What must the tower do for drone F, with d = (0, 4)?
-:   fire straight ahead
+    Why: |0.6 × 4 − 0.8 × 3| = |2.4 − 2.4| = 0: on the line.
 
-The tower's right is (1, 0) and its forward is (0, 1). In 3D, (1, 0, 0) × (0, 1, 0) is…
-:   (0, 0, 1)
+Which asteroid does the beam hit first?
+:   A
+
+    Why: A is on the line (across 0), and along 5 is less than C's 10.
+
+Why does the beam not hit B?
+:   B is 1.4 units to the side
+
+    Why: across 1.4 is more than the radius 1.
+
+C is on the line too. Why is it not hit?
+:   the beam stops at A first
+
+    Why: the beam stops at the first hit: A, at along 5.
 :::
 :::
 
 ## Summary {.summary}
 
-- 2D: f × d = f~x~ d~y~ − f~y~ d~x~. Positive: left. Negative: right. Zero: on the same line.
-- 3D: a × b is a vector at a right angle to a and b. Check it with two dot products.
-- The order matters: b × a = −(a × b). Curl rule: left hand in Unity.
-- Triangle normal: n = (B − A) × (C − A), normalized. The winding order decides the front.
-- n · v < 0: back face, skipped. n̂ · l̂: the brightness.
+- Distance = |B − A|; to find the nearest, compare the squares.
+- Along a direction: v · û (û a unit vector); negative means behind.
+- along = (v · û) û and across = v − along; they are at a right angle.
+- Slide along a floor: v − (v · n̂) n̂ when v · n̂ < 0.
+- A ray hits when 0 < along ≤ range and across ≤ radius.

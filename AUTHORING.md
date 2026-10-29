@@ -848,9 +848,10 @@ homework and its solution together.
   pasted into an AI and answered without learning, prefer one Task with AI
   at a higher level, which asks for the AI-use statement. The page says:
   "You may use AI where a task says so. Check its work and say how you used
-  it."
-- Size: **1–2 short, simple tasks, under 10 minutes**, in all courses; a
-  Task with AI may replace one of them and take about 20 minutes. A
+  it." The homework stays light: students who finish it quickly do it.
+- Size: **1–2 short, simple tasks, about 10 minutes, never more than 15**,
+  in all courses, a Task with AI included (at most one per homework, small).
+  Shorter is better: never make a homework longer than it is. A
   student who has read the notes or gone through the interactive page must be
   able to answer at once; no research, no long calculations. Short homework that students finish is better than long homework
   they skip. I may make it longer later in the course, if the students do it well;

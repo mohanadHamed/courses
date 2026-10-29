@@ -548,7 +548,9 @@ A good sheet … (on the page; in the PDF at the end)
   seminar activity, the Game challenge, or a homework task. Not on the
   slides (home or seminar work).
 - Homework: where a short question could be pasted into an AI, prefer one
-  Task with AI at a higher level, with the AI-use statement. The homework
+  small Task with AI, with the AI-use statement. The whole homework takes
+  about 10 minutes, never more than 15, and never gets longer than it is
+  (the teacher's rule, 2026-10-29). The homework
   page says: "You may use AI where a task says so. Check its work and say
   how you used it."
 - Ideas per course:

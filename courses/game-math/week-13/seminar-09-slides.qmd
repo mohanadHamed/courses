@@ -1,0 +1,156 @@
+---
+title: "Game Balancing Exercise"
+subtitle: "Seminar 9 · practises Lecture 16"
+format: lesson-pptx
+---
+
+## Recall · Lecture 16
+
+a) What is P(at least one drop in 2 tries) with p = 0.5?
+b) How many tries are needed on average with p = 0.1?
+c) What is E for a chest with 50 % 2 coins and 50 % 8 coins?
+
+::: {.answer}
+a) 3/4
+b) 10
+c) 5
+:::
+
+## Activity 1 · Expected attacks · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Hits needed are health ÷ damage, rounded up, and expected attacks are hits ÷ hit chance.
+- The player has 50 health, 10 damage and 0.5 hit chance, and the goblin has 30 health, 10 damage and 0.5 hit chance.
+- **Do it:** Compute the expected attacks of both. Who usually wins?
+:::
+::: {.column width="50%"}
+![](images/difficulty.png)
+:::
+::::
+
+## Check 1 · Expected attacks
+
+Who needs fewer attacks?
+
+::: {.reveal}
+1. The player needs 3 hits ÷ 0.5 = 6 attacks.
+2. The goblin needs 5 hits ÷ 0.5 = 10 attacks, so the player usually wins.
+3. With 25 damage, the goblin needs only 4 attacks, so the player is in danger.
+:::
+
+## Activity 2 · Tune an enemy · 12 min
+
+- A normal enemy is beaten in 70 to 85 % of the fights, and a boss in 30 to 45 %.
+- **Do it:** Simulate the skeleton in Difficulty Tuner. Then change one value so that it becomes a normal enemy.
+
+## Live demo · Difficulty Tuner
+
+{{< sim file="sims/difficulty-tuner.html" poster="sims/difficulty-tuner.png" title="Difficulty Tuner: how hard is the skeleton?" task="**Show:** simulate the skeleton with 40 health, 12 damage and 60 % hit, then change the damage to 16. **Ask:** is the skeleton now a normal enemy?" >}}
+
+## Check 2 · Tune an enemy
+
+What did the simulation show?
+
+::: {.reveal}
+1. The skeleton is beaten in about 88 % of the fights, which is too easy.
+2. With 16 damage, the player wins about 73 %, so it is a normal enemy.
+3. We change one value at a time and simulate after each change.
+:::
+
+## Activity 3 · Simulate 1000 players · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A rare hammer drops with p = 2 %.
+- **Do it:** Compute the average number of tries. Then simulate 1000 players in Drop Rate Lab, with and without a pity timer at 60.
+- What happens to the longest wait?
+:::
+::: {.column width="50%"}
+![](images/pity-timer.png)
+:::
+::::
+
+## Live demo · Drop Rate Lab
+
+{{< sim file="sims/drop-rate-lab.html" poster="sims/drop-rate-lab.png" title="Drop Rate Lab: how long do players wait?" task="**Show:** 1000 players with p = 2 %, then a pity timer at 60. **Ask:** what happens to the average and to the longest wait?" >}}
+
+## Check 3 · Simulate 1000 players
+
+What do the numbers show?
+
+::: {.reveal}
+1. The average is 1/0.02 = 50 tries.
+2. Without the timer, the longest wait is often 200 tries or more.
+3. With the timer at 60, nobody waits more than 60 tries.
+:::
+
+## Activity 4 · Input or output? · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Input randomness happens before the player decides, and output randomness decides the result after it.
+- **Do it:** Sort the map, the damage roll, the first cards, the reward after a level and the weather before a race.
+:::
+::: {.column width="50%"}
+![](images/input-output.png)
+:::
+::::
+
+## Check 4 · Input or output?
+
+Which kind of randomness is each one?
+
+::: {.reveal}
+1. The map, the first cards and the weather before the race are input.
+2. The damage roll and the reward after the level are output.
+3. More input randomness lets skill matter more.
+:::
+
+## Activity 5 · Honest odds · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A chest has the weights 80, 15 and 5, and an epic is guaranteed after 30 chests without one.
+- The store page says "epic 10 %".
+- **Do it:** Is the page honest? Write the odds that the screen must show.
+:::
+::: {.column width="50%"}
+![](../week-12/images/weighted.png)
+:::
+::::
+
+## Check 5 · Honest odds
+
+What must the team show?
+
+::: {.reveal}
+1. The real chance of an epic is 5 %, so the page is not honest.
+2. The screen must show 80 %, 15 % and 5 %.
+3. The team also tells the players about the pity timer at 30.
+:::
+
+## Game challenge · Fair or Frustrating?
+
+{{< sim file="sims/fair-or-frustrating.html" poster="sims/fair-or-frustrating.png" title="Fair or Frustrating? Messages about luck" kind="game" task="Players of Torch Hall send six messages about misses, dice, keys, crits and chests. **Play:** answer each message on your phone, then balance the game with harder questions." >}}
+
+## Try it · Balance the messages (harder)
+
+The facts: a player hits with 80 %. A key drops with 50 %. A chest gives 10 coins (80 %) or 50 coins (20 %).
+
+a) About how many of 1000 players have no key after 3 tries?
+b) How many attacks are expected for 4 hits with the hit chance 80 %?
+c) Is the hit roll of 80 % input or output randomness?
+
+::: {.answer}
+a) 125
+b) 5
+c) output
+:::
+
+## Wrap-up
+
+- You can compute the expected attacks of a fight and say who usually wins.
+- You can tune an enemy and a drop rate with simulations of many players.
+- You can sort input and output randomness and suggest a fairer change.
+- You can write the honest odds of a chest.

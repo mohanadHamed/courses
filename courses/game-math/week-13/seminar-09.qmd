@@ -1,0 +1,355 @@
+---
+title: "Game Balancing Exercise"
+description: "Seminar · Compute the expected attacks of a fight, tune an enemy and a drop rate with simulations of many players, sort input and output randomness, and write honest odds."
+seminar: 9
+ilos: [C2]
+format: lesson-html
+---
+
+No new ideas today: you balance one game with what you learned in Lecture
+16. Do each activity alone, then open "Check your result". Every question on
+this page has its answer: try first, then check.
+
+## Recall
+
+- P(at least one drop in n tries) = 1 − (1 − p)ⁿ; the average is 1/p tries.
+- A pity timer limits the longest wait.
+- The expected reward E = Σ value × probability; chests for an item ≈
+  price ÷ E.
+- Independent tries have no memory; a shuffle bag gives exact shares.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="2|100 %"}
+p = 0.5. P(at least one drop in 2 tries)?
+:   3/4
+
+    Why: 1 − (1/2)².
+
+p = 0.1. How many tries on average?
+:   10
+
+    Why: 1/p.
+
+A chest: 50 % 2 coins, 50 % 8 coins. E?
+:   5
+
+    Why: 1 + 4.
+:::
+:::
+
+## Activity 1 · How many attacks to win?
+
+*Mole Keep* is a small fighting game. The **hits needed** are health ÷
+damage, rounded up. With hit chance h, the **expected attacks** are hits ÷ h.
+The side that needs fewer attacks usually wins.
+
+![Expected attacks for three enemies.](images/difficulty.png){width=86%}
+
+::: {.callout-note title="Activity 1 · Expected attacks · 10 min"}
+The player has 50 health, 10 damage and the hit chance 0.5. A goblin has 30
+health, 10 damage and the hit chance 0.5.
+
+1. How many hits does the player need to beat the goblin? How many attacks
+   on average?
+2. How many attacks does the goblin need to beat the player?
+3. The designer gives the goblin 25 damage. Who is in danger now?
+
+*Your product:* four numbers and one sentence.
+
+::: {.check}
+1. 30 ÷ 10 = 3 hits; 3 ÷ 0.5 = **6 attacks**. 2. 50 ÷ 10 = 5 hits; 5 ÷ 0.5 =
+**10 attacks**: the player usually wins. 3. 50 ÷ 25 = 2 hits; 2 ÷ 0.5 = **4
+attacks**: now the goblin needs fewer attacks than the player (6), so the
+player is in danger.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Attacks"}
+Choose the right answer.
+
+::: {.match extra="2|12"}
+Health 40, damage 15. How many hits?
+:   3
+
+    Why: 40 ÷ 15 = 2.7, rounded up.
+
+4 hits needed, hit chance 0.5. Expected attacks?
+:   8
+
+    Why: 4 ÷ 0.5.
+
+5 hits needed, hit chance 1. Expected attacks?
+:   5
+
+    Why: every attack hits.
+:::
+:::
+
+## Activity 2 · Tune an enemy
+
+A normal enemy should be beaten in **70–85 %** of the fights, a boss in
+**30–45 %**. **Difficulty Tuner** simulates 1000 fights.
+
+{{< sim file="sims/difficulty-tuner.html" poster="sims/difficulty-tuner.png" title="Difficulty Tuner: how hard is the skeleton?" height="560" >}}
+
+::: {.callout-note title="Activity 2 · Normal enemy and boss · 12 min"}
+1. Simulate the skeleton (40 health, 12 damage, 60 % hit). What is the
+   player's win rate? Is it a normal enemy?
+2. Change **one** value so that the skeleton is a normal enemy. Write it.
+3. Change values until it is a boss. Write them.
+
+*Your product:* one win rate and two sets of values with their win rates.
+
+::: {.check}
+1. About 88 %: too easy for a normal enemy. 2. For example damage 16: about
+73 %. 3. A good answer has a win rate from 30 to 45 %, for example more
+health and more damage. Check: you changed one value at a time and
+simulated after each change.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Tuning"}
+Choose the right answer.
+
+::: {.match extra="change all values at once|95 %"}
+Which win rate fits a normal enemy?
+:   78 %
+
+    Why: it is inside 70–85 %.
+
+Which win rate fits a boss?
+:   40 %
+
+    Why: it is inside 30–45 %.
+
+How should a designer change the numbers?
+:   one value at a time, then simulate
+
+    Why: then you know what made the difference.
+:::
+:::
+
+## Activity 3 · Simulate 1000 players
+
+A formula gives the average; a simulation also shows the unlucky players.
+**Drop Rate Lab** lets 1000 players hunt a rare item.
+
+![A pity timer.](images/pity-timer.png){width=80%}
+
+{{< sim file="sims/drop-rate-lab.html" poster="sims/drop-rate-lab.png" title="Drop Rate Lab: how long do players wait?" height="680" >}}
+
+::: {.callout-note title="Activity 3 · The rare hammer · 12 min"}
+A rare hammer drops with p = 2 %.
+
+1. What is the average number of tries? Compute it, then check in the lab.
+2. Simulate 1000 players without a pity timer. What is the longest wait?
+3. Add a pity timer at 60. What are the average and the longest wait now?
+
+*Your product:* one computed and three simulated numbers, and one sentence:
+would you keep the timer?
+
+::: {.check}
+1. 1/0.02 = **50 tries**. 2. The longest wait is often 200 or more: some
+players wait very long. 3. The average falls a little (to about 40), and
+the longest wait is **60**. A good sentence: keep the timer, because it
+ends the endless waits but keeps early lucky drops.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Simulations"}
+Choose the right answer.
+
+::: {.match extra="the average only|0"}
+p = 2 %. The average number of tries?
+:   50
+
+    Why: 1/p = 1 ÷ 0.02.
+
+Pity timer at 60. The longest wait?
+:   60
+
+    Why: try 60 always gives the item.
+
+What does a simulation show that the formula 1/p does not?
+:   the unlucky players
+
+    Why: it shows the whole spread of waits, not only the average.
+:::
+:::
+
+## Activity 4 · Input or output randomness?
+
+**Input randomness** happens before the player decides (a random map, the
+cards in hand); the player can plan around it. **Output randomness** decides
+the result after the decision (a hit roll, a random reward).
+
+![Input and output randomness.](images/input-output.png){width=86%}
+
+::: {.callout-note title="Activity 4 · Sort the luck · 10 min"}
+1. Sort into input or output: a random dungeon map; the damage roll of an
+   attack; the cards dealt at the start; a random reward after a level; the
+   weather shown before a race.
+2. *Mole Keep* decides every fight with one roll after the player attacks.
+   Players say "skill does not matter". Suggest one change to input
+   randomness.
+
+*Your product:* two lists and one change.
+
+::: {.check}
+1. Input: the map, the cards at the start, the weather before the race.
+Output: the damage roll, the reward after the level. 2. A good change moves
+luck before the decision, for example random enemy positions that the
+player sees before choosing a path; the fight itself depends more on the
+player's choices.
+:::
+:::
+
+::: {.callout-tip title="Try it 5 · Input or output?"}
+Choose the right answer. You can use an answer more than once.
+
+::: {.match extra="neither"}
+The tiles of a puzzle before the player moves.
+:   input
+
+    Why: the player sees them and plans.
+
+The roll that decides if an attack hits.
+:   output
+
+    Why: it decides the result after the choice.
+
+A random prize after the level.
+:   output
+
+    Why: it comes after the player's decisions.
+:::
+:::
+
+## Activity 5 · Honest odds
+
+A chest of *Mole Keep* uses the weights common 80, rare 15, epic 5, and an
+epic is guaranteed after 30 chests without one. The store page says "epic
+10 %".
+
+![The chances of a chest.](../week-12/images/weighted.png){width=80%}
+
+::: {.callout-note title="Activity 5 · The chest screen · 10 min"}
+1. What is the real chance of an epic in one chest? Is the store page
+   honest?
+2. Write the three odds the chest screen must show.
+3. Write one sentence that tells players about the pity timer.
+
+*Your product:* one answer, three odds and one sentence.
+
+::: {.check}
+1. 5/100 = **5 %**: the page says 10 %, so it is not honest. 2. Common 80 %,
+rare 15 %, epic 5 %. 3. For example: "If you open 30 chests without an epic,
+the next one is an epic."
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Honest odds"}
+Weights 80, 15, 5. Choose the right answer.
+
+::: {.match extra="20 %|10 %"}
+What must the screen show for rare?
+:   15 %
+
+    Why: 15 ÷ 100.
+
+The code uses 5 % for epic, the page says 10 %. What is this?
+:   dishonest odds
+
+    Why: shown odds must be the real odds.
+
+Why tell players about a pity timer?
+:   so they know the real rule
+
+    Why: honest odds include how drops really work.
+:::
+:::
+
+::: {.callout-note .ai-task title="Task with AI · Simulate 1000 hunters"}
+**Goal:** a spreadsheet that lets 1000 players hunt the rare hammer (p = 2 %)
+and shows the average and the longest wait. It is far beyond hand work; an
+AI assistant writes the formulas, and you check them with what you know.
+
+1. **Ask the AI:** start with this prompt.
+
+   ::: {.prompt}
+   I use a spreadsheet (Excel or Google Sheets). Each row is one player who
+   tries again and again until a rare item drops, with the chance 2 % per
+   try. Write one formula that gives the number of tries for one player,
+   using a random number. Then write formulas for the average and the
+   largest value of 1000 rows.
+   :::
+
+2. **Do it yourself:** fill 1000 rows and read the average and the largest
+   value. Then change 2 % to 5 %.
+3. **Check:** the average must be close to 1/p (50 tries, then 20). Compare
+   the largest value with Drop Rate Lab. A value of 0 tries, or an average
+   far from 1/p, means a wrong formula.
+
+*Your product:* the sheet, the averages for 2 % and 5 %, and one sentence
+on what the AI got wrong or what you changed.
+
+::: {.check}
+A good sheet: 1000 rows; the average near 50 (2 %) and near 20 (5 %); the
+largest value often over 200 for 2 %; no row with 0 tries. AI formulas often
+forget to round up (and give 0 tries) or use the chance of a miss and of a
+drop the wrong way round: look for both.
+:::
+:::
+
+## Game challenge: Fair or Frustrating? {.challenge}
+
+Work alone. Use every activity of today.
+
+The *Torch Hall* team reads six messages. A player hits with **80 %** and
+missed **two times in a row**. Another rolled **no 6 in five rolls**. A key
+drops with **50 %**, and a player tried **three times**. Crits come with
+**20 %** from a **shuffle bag with 1 crit and 4 normal hits**. A chest gives
+**10 coins (80 %) or 50 coins (20 %)**, and a bow costs **180 coins**.
+
+{{< sim file="sims/fair-or-frustrating.html" poster="sims/fair-or-frustrating.png" title="Fair or Frustrating? Messages about luck" kind="game" height="440" >}}
+
+::: {.callout-tip title="Try it 7 · Balance the messages (harder)"}
+Hit 80 %; key 50 %; bag 1 crit + 4 normal; chest 10 (80 %) or 50 (20 %),
+bow 180. Choose the right answer.
+
+::: {.match extra="input|250"}
+Is the hit roll of 80 % input or output randomness?
+:   output
+
+    Why: it decides the result after the attack.
+
+1000 players try for the key 3 times. About how many have none?
+:   125
+
+    Why: (1/2)³ = 1/8 of 1000.
+
+The key gets a pity timer at try 3. The longest wait?
+:   3 tries
+
+    Why: try 3 always gives the key.
+
+4 hits needed with the hit chance 80 %. Expected attacks?
+:   5
+
+    Why: 4 ÷ 0.8.
+
+What must the chest screen show?
+:   80 % and 20 %
+
+    Why: honest odds are the real ones.
+:::
+:::
+
+## Wrap-up {.summary}
+
+- You can compute the expected attacks of a fight and say who usually wins.
+- You can tune an enemy and a drop rate with simulations of many players.
+- You can sort input and output randomness and suggest a fairer change.
+- You can write the honest odds of a chest.

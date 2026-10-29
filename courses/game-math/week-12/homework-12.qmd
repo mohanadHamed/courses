@@ -1,49 +1,44 @@
 ---
-title: "Homework 12: The fishing pond"
-description: "Build a weighted loot table for a fishing pond, compute its expected value, and choose a drop rate and a pity timer for a rare fish. About 10 minutes."
+title: "Homework 12: The seed and the prize table"
+description: "Run a small random number generator by hand, say what a seed does, find a range bug and read a weighted prize table. About 10 minutes."
 homework: 12
-due: "before lecture 25"
+due: "before lecture 16"
 marks: 5
 ilos: [C2]
 toc-title: "In this homework"
 format: lesson-html   # the PDF is made by printing this page (homework_pdf.py)
 ---
 
-**How to submit:** Write on paper and show your steps. Upload a clear photo to the university e-learning platform. Due: **before lecture 25**.
+**How to submit:** Write on paper and show your steps. Upload a clear photo to the university e-learning platform. Due: **before lecture 16**.
+You may use AI where a task says so. Check its work and say how you used it.
 
-In a small game, a player fishes in a pond. Each cast gives one of these:
+## Task 1 · A generator by hand (2 marks)
 
-| catch | weight | coins |
-|---|---|---|
-| old boot | 50 | 0 |
-| small fish | 35 | 4 |
-| big fish | 14 | 15 |
-| golden fish | 1 | 200 |
-
-## Task 1 · The loot table (3 marks)
-
-a) Write the probability of each catch and the cumulative weights. (1 mark)
-
-{{< answer-space lines=4 >}}
-
-b) Which catch does the random number r = 97.5 (from 0 to 100) give? And
-r = 99.2? (1 mark)
+a) Compute the next three numbers of x(n+1) = (5·x(n) + 1) mod 8 with the
+seed 3. (1 mark)
 
 {{< answer-space lines=2 >}}
 
-c) Compute the expected coins per cast. How many casts does a player need on
-average for a fishing rod of 300 coins? (1 mark)
-
-{{< answer-space lines=3 >}}
-
-## Task 2 · The golden fish (2 marks)
-
-a) The golden fish has p = 0.01. What is the chance to catch at least one in
-100 casts? (Use 0.99¹⁰⁰ ≈ 0.37.) (1 mark)
+b) A tester finds a bug in a level and notes its seed. Why does the seed
+help the team to find the bug? (1 mark)
 
 {{< answer-space lines=2 >}}
 
-b) Players complain. Propose a pity timer (after how many casts?) and say in
-one sentence what it changes for the players. (1 mark)
+## Task 2 · Random calls and a prize table (3 marks)
 
-{{< answer-space lines=3 >}}
+a) A game computes a prize lane with `int lane = Random.Range(1, 3);` and the
+level has lanes 1, 2 and 3. Which lane never gets a prize? Write the fix.
+(1 mark)
+
+{{< answer-space lines=2 >}}
+
+b) A chest has the weights potion 70, shield 25, crown 5. Write the
+cumulative weights. Which item does r = 96 give, and what is P(crown)?
+(1 mark)
+
+{{< answer-space lines=2 >}}
+
+c) Write the condition for a critical hit with the probability 0.1, using
+`Random.value`. (1 mark)
+
+{{< answer-space lines=1 >}}

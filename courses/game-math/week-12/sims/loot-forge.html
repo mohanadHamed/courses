@@ -19,11 +19,11 @@
 (() => {
   const C = (list) => list.map((t) => ({ k: t, label: t }));
   const rounds = [
-    { card: "Loot table: common 60, rare 30, epic 9, legendary 1.", goal: "P(epic)?", answer: "9 %", choices: C(["9 %", "9/60", "1/4", "90 %"]), good: "9 ÷ (60 + 30 + 9 + 1) = 9/100 = 9 %." },
-    { card: "Weights: sword 3, shield 1. (They do not add up to 100.)", goal: "P(shield)?", answer: "1/4", choices: C(["1/4", "1 %", "1/3", "3/4"]), good: "1 ÷ (3 + 1) = 1/4. Only the share of the sum counts." },
-    { card: "Cumulative weights: common 60, rare 90, epic 99, legendary 100. The random number is r = 93.5.", goal: "Which item drops?", answer: "epic", choices: C(["epic", "rare", "legendary", "common"]), good: "93.5 is from 90 to 99: epic." },
-    { card: "Damage should be 3 … 18 with most hits near 10, not wild swings.", goal: "Which formula?", answer: "the sum of three dice", choices: C(["the sum of three dice", "Random.Range(3, 19)", "one die × 3", "18 × Random.value"]), good: "A sum of dice is bell-shaped: middle values are common." },
-    { card: "Coins are scattered in a round room with radius = R · Random.value. Testers say they all lie near the centre.", goal: "The fix?", answer: "radius = R · √(Random.value)", choices: C(["radius = R · √(Random.value)", "radius = R · Random.value²", "a bigger room", "fewer coins"]), good: "The outer rings have more area, so they need more points: √r spreads them evenly." },
+    { card: "Loot table: common 50, rare 35, epic 12, legendary 3.", goal: "P(epic)?", answer: "12 %", choices: C(["12 %", "12/50", "1/4", "88 %"]), good: "12 ÷ (50 + 35 + 12 + 3) = 12/100 = 12 %." },
+    { card: "A rack: bow with weight 2, axe with weight 3. (They do not add up to 100.)", goal: "P(axe)?", answer: "3/5", choices: C(["3/5", "3 %", "1/2", "2/3"]), good: "3 ÷ (2 + 3) = 3/5. Only the share of the sum counts." },
+    { card: "Cumulative weights: common 50, rare 85, epic 97, legendary 100. The random number is r = 90.", goal: "Which item drops?", answer: "epic", choices: C(["epic", "rare", "legendary", "common"]), good: "90 is from 85 to 97: epic." },
+    { card: "A critical hit should come with 15 %. The code uses Random.value (0 to 1).", goal: "Which condition?", answer: "Random.value < 0.15f", choices: C(["Random.value < 0.15f", "Random.value < 15", "Random.value > 0.15f", "Random.Range(0, 15) == 1"]), good: "Random.value is below 0.15 in 15 % of the cases." },
+    { card: "The daily cave must be the same for every player today. The code seeds with the time in every frame.", goal: "The fix?", answer: "seed once, with the date", choices: C(["seed once, with the date", "seed with the time", "seed in every frame", "no seed at all"]), good: "The same seed gives the same cave; the date changes only tomorrow. Seed once, when the level starts." },
     { card: "A weighted pick: r = Random.value * sum, then the code checks the items in order with r < cumulative.", goal: "What does an item with weight 0 do?", answer: "it never drops", choices: C(["it never drops", "it drops once", "it drops most often", "the game crashes"]), good: "Its part of the bar has length 0: no r falls into it." },
   ];
   rounds.forEach((r) => { r.why = {}; });

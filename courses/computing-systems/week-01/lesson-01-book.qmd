@@ -1,6 +1,6 @@
 ---
 title: "Computing Systems and Digital Platforms in the Games Industry"
-description: "Lesson notes · The four jobs of a computing system, how the CPU runs a game, and digital platforms."
+description: "Lesson notes · The four jobs of a computing system, how the CPU runs a game, digital platforms, and the device classes on which people play."
 lesson: 1
 ilos: [A1]
 format: lesson-typst
@@ -13,13 +13,13 @@ on iPhones and on Windows PCs. To do this, the team must know what happens
 inside a device when the player taps, how the processor runs the game, and who
 sells the game to the players. In this lesson you learn the main parts of a
 computing system and what each part does in a game. You also learn what a
-digital platform is. Every section ends with a short task that you do on
+digital platform is, and on which classes of devices people play. Every section ends with a short task that you do on
 your phone, on the lab computer or in a mini-game.
 :::
 
 ## Key terms
 
-{{< glossary computing-system hardware software cpu memory storage input output instruction-cycle clock-rate digital-platform >}}
+{{< glossary computing-system hardware software cpu memory storage input output instruction-cycle clock-rate digital-platform cloud-gaming >}}
 
 ## 1.1 What a game needs from a computer
 
@@ -79,6 +79,13 @@ Choose a game on your phone and play it for one minute.
    "Input: I swiped left."
 
 *Your result:* the table with four game events.
+
+::: {.check}
+A good table has one real thing from your game in each row, for example:
+input: a tap or a swipe; processing: the game decides if you hit an enemy;
+output: the picture and the sound; storage: your level or best score after a
+restart.
+:::
 :::
 
 ## 1.2 How the CPU runs a game
@@ -118,6 +125,11 @@ motion.
 
 *Your result:* the list of parts in order, and one sentence: which part
 decides that the character jumps?
+
+::: {.check}
+The touch screen (input), then the CPU, then the screen (output). The CPU
+decides that the character jumps: it runs the game's instructions.
+:::
 :::
 
 ## 1.3 Digital platforms: where games run and are sold
@@ -184,6 +196,56 @@ family's), for example a phone, a laptop and a console.
 
 *Your result:* the table, and one sentence: which platform is the most common
 in your table?
+
+::: {.check}
+A good table has three rows, for example: phone, Android, Android, Google
+Play; laptop, PC, Windows, Steam; console, PlayStation, the console's
+system, PlayStation Store. For most students the phone is the most common.
+:::
+:::
+
+## 1.4 Device classes for gaming
+
+Students play on very different devices (@fig-devices). @tbl-devices compares
+them on the things that matter for a game designer.
+
+![The five device classes on which students play.](images/devices.png){#fig-devices width=92%}
+
+| Property | Smartphone | Tablet | PC / laptop | Console | Cloud gaming |
+|---|---|---|---|---|---|
+| Input | touch, sensors | touch, sensors | keyboard, mouse, gamepad | gamepad | depends on the device |
+| Screen | small | medium | large | TV | any |
+| Power | battery, no fan | battery, no fan | mains, fans | mains, fans | the server |
+| Play time | short, anywhere | short to medium | long, at a desk | long, at home | needs a fast network |
+
+: Device classes compared for gaming. {#tbl-devices}
+
+A game made for one class must change for another. A touch interface does not
+work with a gamepad. A long open-world game does not fit a five-minute bus
+ride. A game that needs a fan cannot keep its frame rate on a phone. So the
+first question in planning a game, and in testing it, is: *on which devices
+will people play it?*
+
+::: {.callout-warning title="Common mistake"}
+"A fast phone can run any PC game." Even a fast phone has a small touch
+screen, a battery and no fan. The game must still be changed for the phone.
+:::
+
+::: {.callout-note title="Do it · The right device for a game"}
+Choose one game that you know well.
+
+1. Write the input it needs (touch, buttons, keyboard…), the screen it needs
+   (small or large) and the length of one session (minutes).
+2. Choose the device class where it works best, and give one reason.
+
+*Your result:* the three facts, the device class and the reason.
+
+::: {.check}
+A good answer names the input (touch, buttons, keyboard), the screen (small
+or large) and a session length, then one device class with a reason that
+uses them, for example "a 5-minute puzzle game with touch: a smartphone,
+because it is played anywhere in short sessions".
+:::
 :::
 
 ## Case study: Tap Runner
@@ -216,6 +278,9 @@ zoo".
 7. Why does a game need one build for Android phones and another build for
    Windows PCs?
 8. Why must an Android game be tested on many phones?
+9. A game needs a gamepad and a TV and is played for two hours. Which device
+   class fits it best?
+10. Name two things that change when a phone game moves to a console.
 
 ## Answers to the exercises
 
@@ -228,4 +293,6 @@ zoo".
 6. A family of devices, an operating system, development tools, and a store with its rules.
 7. The platforms are different (system, store, and the processor: ARM in phones, x86 in most PCs), so the engine makes a separate build for each.
 8. Android runs on thousands of phone models with different processors and screens.
+9. A console.
+10. For example the input (gamepad instead of touch) and the screen layout (a large TV).
 :::

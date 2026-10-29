@@ -1,0 +1,255 @@
+---
+title: "Boolean Algebra and Decision Conditions"
+subtitle: "Lecture 12"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary tautology contradiction logical-equivalence boolean-algebra de-morgan-laws distributive-law absorption-law decision-table else-if-chain unreachable-rule >}}
+
+## 12.1 Always, never and the same
+
+:::: {.columns}
+::: {.column width="50%"}
+- A tautology is true in every row, such as p ∨ ¬p.
+- A contradiction is false in every row, such as p ∧ ¬p.
+- Two conditions with the same last column are equivalent.
+- **Do it:** Compare the tables of p → q and q → p. Are they the same?
+:::
+::: {.column width="50%"}
+![](images/taut-equiv.png)
+:::
+::::
+
+## Example · A door that never opens
+
+The designer writes "open when the alarm is on and the alarm is off".
+**When does this door open?**
+
+::: {.reveal}
+1. The condition is alarm ∧ ¬alarm.
+2. Its column is F when the alarm is on and F when it is off.
+3. It is a contradiction, so the door **never opens**, and the table finds the bug.
+:::
+
+## Try it 1 · Always, never, same
+
+a) Is p ∨ ¬p a tautology, a contradiction or neither?
+b) Are p → q and ¬p ∨ q equivalent?
+c) Are p → q and q → p equivalent?
+
+::: {.answer}
+a) a tautology
+b) yes, they are equivalent
+c) no, the rows (T, F) and (F, T) differ
+:::
+
+## 12.2 The laws of Boolean algebra
+
+:::: {.columns}
+::: {.column width="50%"}
+- Each law is an equivalence that holds for every value.
+- p ∧ T is p, and p ∨ T is always T.
+- The distributive law turns p ∧ (q ∨ r) into (p ∧ q) ∨ (p ∧ r).
+- **Do it:** Check the absorption law p ∨ (p ∧ q) ≡ p in Equivalence Lab. Is it true?
+:::
+::: {.column width="50%"}
+![](images/bool-laws.png)
+:::
+::::
+
+## Live demo · Equivalence Lab
+
+{{< sim file="sims/equivalence-lab.html" poster="sims/equivalence-lab.png" title="Equivalence Lab: are two conditions the same?" task="**Show:** check the distributive law, then the absorption law, then the wrong De Morgan. **Ask:** which row shows that the wrong De Morgan is wrong?" >}}
+
+## Try it 2 · Laws
+
+a) What is p ∧ T?
+b) What is p ∧ ¬p?
+c) What is p ∨ (p ∧ q)?
+
+::: {.answer}
+a) p
+b) F
+c) p
+:::
+
+## 12.3 De Morgan's laws
+
+:::: {.columns}
+::: {.column width="50%"}
+- ¬(p ∧ q) is equivalent to ¬p ∨ ¬q.
+- ¬(p ∨ q) is equivalent to ¬p ∧ ¬q.
+- The NOT goes into the brackets, and AND and OR swap.
+- **Do it:** Rewrite !(isDay || isLit) without a NOT in front of the brackets. What do you get?
+:::
+::: {.column width="50%"}
+![](images/de-morgan.png)
+:::
+::::
+
+## Example · When can the ship not dock?
+
+The ship docks with hasPass && shieldsUp.
+**How do we write "the ship cannot dock" without brackets?**
+
+::: {.reveal}
+1. "Cannot dock" is !(hasPass && shieldsUp).
+2. De Morgan puts the NOT on each part and turns && into ||.
+3. The result is **!hasPass || !shieldsUp**: no pass, or no shields.
+:::
+
+## Try it 3 · De Morgan
+
+a) Which condition is equivalent to !(isDay || isLit)?
+b) Which condition is equivalent to !(hasKey && !doorLocked)?
+c) Which condition is equivalent to !(!a || !b)?
+
+::: {.answer}
+a) !isDay && !isLit
+b) !hasKey || doorLocked
+c) a && b
+:::
+
+## 12.4 Simplifying a condition
+
+:::: {.columns}
+::: {.column width="50%"}
+- We apply one law at a time and write its name.
+- The value of the condition never changes.
+- At the end, we check the result with a truth table.
+- **Do it:** Simplify p ∧ (p ∨ q) step by step. Which law did you use?
+:::
+::: {.column width="50%"}
+![](images/simplify-steps.png)
+:::
+::::
+
+## Example · A long door rule
+
+The code says (hasPass && shieldsUp) || (hasPass && !shieldsUp).
+**What is the simplest equivalent condition?**
+
+::: {.reveal}
+1. The distributive law gives hasPass ∧ (shieldsUp ∨ ¬shieldsUp).
+2. The complement law gives hasPass ∧ T.
+3. The identity law gives **hasPass**, because the shields never mattered.
+:::
+
+## Try it 4 · Simplify
+
+a) What is the simplest form of ¬(¬p ∧ ¬q)?
+b) What is the simplest form of (p ∨ q) ∧ (p ∨ ¬q)?
+c) What is the simplest form of ¬(¬p ∨ q)?
+
+::: {.answer}
+a) p ∨ q
+b) p
+c) p ∧ ¬q
+:::
+
+## 12.5 From words to conditions
+
+:::: {.columns}
+::: {.column width="50%"}
+- We give each fact a letter first.
+- And, or and not become &&, || and !.
+- "But not both" is XOR, and "unless p" means "if not p".
+- **Do it:** Translate "the alarm rings unless the guard is asleep". What do you get?
+:::
+::: {.column width="50%"}
+![](images/rule-words.png)
+:::
+::::
+
+## Example · The vault of the bank
+
+The vault opens if the player has the code and no alarm is on, or the player is the owner.
+**Which condition is this rule?**
+
+::: {.reveal}
+1. The letters are c (code), a (alarm on) and o (owner).
+2. The comma before "or" splits it: **(code and no alarm) or owner**.
+3. The condition is **(c ∧ ¬a) ∨ o**, so the owner opens it even with an alarm on.
+:::
+
+## Try it 5 · Words to logic
+
+a) Which condition is "plate pressed and not flying"?
+b) Which condition is "the red key or the blue key, but not both"?
+c) Which condition is "the alarm rings unless the guard is asleep"?
+
+::: {.answer}
+a) p && !f
+b) r ^ b
+c) alarm = !a
+:::
+
+## 12.6 Decision tables and else-if chains
+
+:::: {.columns}
+::: {.column width="50%"}
+- A decision table has one column per condition, 2^n rows and one action in each row.
+- In an else-if chain, only the first true rule runs.
+- A rule is unreachable when the rules above it catch all its cases.
+- **Do it:** Fix the order of the rules in Guard Brain. Which rule comes first?
+:::
+::: {.column width="50%"}
+![](images/decision-table.png)
+:::
+::::
+
+## Example · The guard in code
+
+The code is if (s) Chase(); else if (s && n) Attack(); else if (w) Flee(); else Patrol();
+**What is wrong, and how do we fix it?**
+
+::: {.reveal}
+1. Every case with s is caught by Chase, so **Attack never runs**.
+2. A weak guard that sees the player **chases** instead of fleeing.
+3. The fix is **Flee if w, then Attack if s && n, then Chase if s, then Patrol**.
+:::
+
+## Live demo · Guard Brain
+
+{{< sim file="sims/guard-brain.html" poster="sims/guard-brain.png" title="Guard Brain: rules, order and the decision table" task="**Show:** switch on s and n with the first order, then move Attack up, then Flee to the top. **Ask:** why does the order of the rules change the table?" >}}
+
+## Try it 6 · Tables and chains
+
+a) Which action does the guard take for s = T, n = T, w = T?
+b) Which rule runs when two conditions of a chain are true?
+c) How many rows does a table with 4 conditions have?
+
+::: {.answer}
+a) Flee
+b) the first true rule from the top
+c) 16
+:::
+
+## Game challenge · Rule Smith
+
+{{< sim file="sims/rule-smith.html" poster="sims/rule-smith.png" title="Rule Smith: exact rules, no bugs" kind="game" task="The designer of Torch Hall gives six rules in words: a chest, a bridge, a door with two keys, a guard, a shop and a torch. **Play:** forge the exact condition for each rule on your phone." >}}
+
+## Try it · Count and clean (harder)
+
+The facts: the chest opens with (k ∧ ¬s) ∨ t. The shop code is if (gold > 0) Sell(); else if (gold > 50) Discount();.
+
+a) In how many of the 8 rows does the chest open?
+b) Which rule of the shop never runs?
+c) What is a shorter condition for lit || (lit && windy)?
+
+::: {.answer}
+a) 5
+b) Discount()
+c) lit
+:::
+
+## Summary
+
+- A tautology is always true, and a contradiction is always false.
+- Equivalent conditions have the same truth table.
+- The laws of Boolean algebra make a condition shorter, one step at a time.
+- De Morgan puts the NOT into the brackets and swaps AND and OR.
+- We translate rule words with letters, and "unless" means "if not".
+- In an else-if chain, the first true rule wins, so the order matters.

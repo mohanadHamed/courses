@@ -1,0 +1,134 @@
+---
+title: "Designing a Rule Set for a Simple Game"
+subtitle: "Seminar 7 · practises Lecture 12"
+format: lesson-pptx
+---
+
+## Recall · Lecture 12
+
+a) Which condition is the same as !(p && q)?
+b) How many rows does a decision table with 4 conditions have?
+c) Which rule runs when two rules of an else-if chain are true?
+
+::: {.answer}
+a) !p || !q
+b) 16
+c) the first one from the top
+:::
+
+## Activity 1 · Words to conditions · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Harvest Bot is a farm robot with the facts b (battery low), f (basket full), p (ripe crop), d (dry soil), r (rain) and n (night).
+- **Do it:** Write "the bot waters when the soil is dry and it is not raining" and "the bot picks a ripe crop, unless it is night".
+- Then write !(d && !r) without a NOT in front of the brackets.
+:::
+::: {.column width="50%"}
+![](images/rule-words.png)
+:::
+::::
+
+## Check 1 · Words to conditions
+
+Which conditions are right?
+
+::: {.reveal}
+1. The bot waters with d && !r.
+2. The bot picks with p && !n, because "unless n" means "if not n".
+3. De Morgan turns !(d && !r) into !d || r.
+:::
+
+## Activity 2 · The decision table · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The designer says: home if b, otherwise pick if p, otherwise water if d, otherwise wait.
+- **Do it:** Make the 8-row table of b, p and d with the action of each row.
+- How many rows has each action, and is the table complete?
+:::
+::: {.column width="50%"}
+![](images/decision-table.png)
+:::
+::::
+
+## Check 2 · The decision table
+
+How many rows has each action?
+
+::: {.reveal}
+1. The bot goes home in the 4 rows with b = T.
+2. With b = F, it picks in 2 rows, waters in 1 row and waits in 1 row.
+3. Every row has one action, so the table is complete and has no conflict.
+:::
+
+## Activity 3 · Order and clean · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The code is if (p) Pick(); else if (b) Home(); else if (d && !b) Water(); else Wait();
+- **Do it:** Test the row b = T, p = T, d = F. What does the chain do, and what does the designer want?
+- Then write the chain in the right order.
+:::
+::: {.column width="50%"}
+![](images/rule-order.png)
+:::
+::::
+
+## Check 3 · Order and clean
+
+What is wrong, and what is the fix?
+
+::: {.reveal}
+1. The chain picks, but the designer wants Home, because the battery is low.
+2. The right chain starts with if (b) Home(), then Pick, Water and Wait.
+3. The Water rule then needs only d, because b is always false there.
+:::
+
+## Activity 4 · Edge cases · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The rule says the battery is low under 20 %, but the code says battery <= 20.
+- **Do it:** Which value of the battery finds the bug?
+- Then write four edge-case tests for "sell with at least 50 apples and fewer than 3 trips".
+:::
+::: {.column width="50%"}
+![](images/edge-cases.png)
+:::
+::::
+
+## Check 4 · Edge cases
+
+Which tests find the bugs?
+
+::: {.reveal}
+1. Battery = 20 finds the bug, and the fix is battery < 20.
+2. The sell rule is apples >= 50 && trips < 3.
+3. Good tests are (50, 2) sell, (49, 2) no, (50, 3) no and (51, 2) sell.
+:::
+
+## Game challenge · The guard of Torch Hall
+
+{{< sim file="sims/guard-brain.html" poster="sims/guard-brain.png" title="Guard Brain: rules, order and the decision table" task="The designer of Torch Hall adds an alarm rule to the guard: it runs to the bell when it hears the alarm, unless it is weak. **Show:** the 8 rows without the alarm in Guard Brain. **Ask:** where does the new rule go in the chain?" >}}
+
+## Try it · The new rule set (harder)
+
+The facts: the guard flees when weak (health under 30). It runs to the bell when it hears the alarm, unless it is weak. The alarm beats the player.
+
+a) How many rows does the new decision table have?
+b) Where does the bell rule go in the chain?
+c) Which health value finds the bug in the code health <= 30?
+
+::: {.answer}
+a) 16
+b) after Flee, before Attack
+c) health = 30
+:::
+
+## Wrap-up
+
+- You can write the rules of a game in words as conditions.
+- You can make the decision table of a rule set and check that it is complete.
+- You can put the rules of an else-if chain in the right order.
+- You can test a number rule at its border with edge cases.

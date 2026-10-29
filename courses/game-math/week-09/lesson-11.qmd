@@ -396,12 +396,12 @@ Which condition checks that the crown rule is kept?
 Boss alive, no key, torch: what is bossDead && hasKey || hasTorch?
 :   true, a bug
 
-    Why: hasTorch? || && first: F && F = F; then F || T = T: the gate opens by mistake.
+    Why: && first: F && F = F; then F || T = T: the gate opens by mistake.
 
 Boss alive, no key, torch: what is bossDead && (hasKey || hasTorch)?
 :   false
 
-    Why: hasTorch)? || F && (F || T) = F && T = F.
+    Why: F && (F || T) = F && T = F.
 :::
 :::
 

@@ -1,0 +1,165 @@
+---
+title: "Composing 2D Transformations"
+subtitle: "Seminar 3 · practises Lecture 9"
+format: lesson-pptx
+---
+
+## Recall · Lecture 9
+
+a) What is (2, 3) translated by (1, −1)?
+b) Where does a turn of 90° around the origin send (2, 0)?
+c) Which rotation undoes R(45°)?
+
+::: {.answer}
+a) (3, 2)
+b) (0, 2)
+c) R(−45°)
+:::
+
+## Activity 1 · A stretched tree · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A tree sprite has its top at (1, 2).
+- **Do it:** Scale it with (1, 3) and with (0.5, 0.5). Where does the top go each time?
+- Then say which scaling is uniform, and check one in Transform Lab.
+:::
+::: {.column width="50%"}
+![](images/scale-matrix.png)
+:::
+::::
+
+## Live demo · Transform Lab
+
+{{< sim file="sims/transform-lab.html" poster="sims/transform-lab.png" title="Transform Lab: translate, scale and mirror a shape" task="**Show:** set sx = 1 and sy = 3, then sx = −1 with the pivot at the feet. **Ask:** which point stays still?" >}}
+
+## Check 1 · A stretched tree
+
+Where does the top go, and which scaling is uniform?
+
+::: {.reveal}
+1. With (1, 3) the top goes to (1, 6): tall and thin, not uniform.
+2. With (0.5, 0.5) the top goes to (0.5, 1): half as big, uniform.
+3. A scaling is uniform only when s~x~ = s~y~.
+:::
+
+## Activity 2 · Grow from the feet · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A hero has the feet at (1, 0) and the head at (1, 3).
+- **Do it:** Scale the head by 1.5 about the feet, and then about the origin. Where is it each time?
+- Then choose the pivot for the game and give a reason.
+:::
+::: {.column width="50%"}
+![](images/pivot-scale.png)
+:::
+::::
+
+## Check 2 · Grow from the feet
+
+Where is the head, and which pivot is right?
+
+::: {.reveal}
+1. About the feet: (0, 3) × 1.5 = (0, 4.5), and + (1, 0) gives (1, 4.5).
+2. About the origin the head goes to (1.5, 4.5), and the feet slide to (1.5, 0).
+3. The feet are the right pivot, because they stay on the ground.
+:::
+
+## Activity 3 · Turn the enemy round · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A flag stands on its pole at (5, 0), and its tip is at (7, 2).
+- **Do it:** Mirror the tip with (−1, 1) about the pole, and then about the origin.
+- Which pivot keeps the flag at its pole?
+:::
+::: {.column width="50%"}
+![](images/reflect.png)
+:::
+::::
+
+## Check 3 · Turn the enemy round
+
+Where is the tip in each case?
+
+::: {.reveal}
+1. About the pole: (2, 2) becomes (−2, 2), and + (5, 0) gives (3, 2).
+2. About the origin the tip goes to (−7, 2), far from the pole.
+3. The pole is the right pivot.
+:::
+
+## Activity 4 · Two steps in order · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A coin is at (2, 1).
+- **Do it:** Scale by 3 and then move (1, 0); then move first and scale after. Where is the coin each time?
+- Then find two steps that make the unit block the block (3, 1)–(5, 3).
+:::
+::: {.column width="50%"}
+![](images/compose-order.png)
+:::
+::::
+
+## Check 4 · Two steps in order
+
+What are the results of Activity 4?
+
+::: {.reveal}
+1. Scale then move gives (7, 3).
+2. Move then scale gives (9, 3), because the move is tripled too.
+3. The block needs scale 2, then move (3, 1).
+:::
+
+## Activity 5 · Rotation matrices · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A gun tip is at (2, 0), and a blade tip at (2, 2).
+- **Do it:** Turn the gun tip with R(45°) and the blade tip with R(30°).
+- Then turn the blade back with R(−30°) in Rotate Lab.
+:::
+::: {.column width="50%"}
+![](images/rotation-matrix.png)
+:::
+::::
+
+## Live demo · Rotate Lab
+
+{{< sim file="sims/rotate-lab.html" poster="sims/rotate-lab.png" title="Rotate Lab: R(θ) and the pivot" task="**Show:** turn the point (2, 2) by 30°, then by −30°. **Ask:** why is the point back where it started?" >}}
+
+## Check 5 · Rotation matrices at work
+
+Where do the tips go?
+
+::: {.reveal}
+1. R(45°) sends the gun tip to (1.42, 1.42), and the gun is still 2 long.
+2. R(30°) sends the blade tip to (0.74, 2.74).
+3. R(−30°) brings it back to about (2, 2).
+:::
+
+## Game challenge · Sky Steps
+
+{{< sim file="sims/sky-steps.html" poster="sims/sky-steps.png" title="Sky Steps: choose the transformation for each piece" kind="game" task="The designer builds a level from small pieces that must land on their outlines. **Play:** choose the transformation for each piece on your phone." >}}
+
+## Try it · Sky Steps (harder)
+
+The facts: the platform (1, 1)–(3, 2) must land at (3, 6)–(5, 7). The crate (1, 1)–(3, 3) must grow to (0, 0)–(4, 4) in place. A unit block must become the step (2, 1)–(5, 4).
+
+a) Which move puts the platform on its outline?
+b) Which pivot makes the crate grow in place?
+c) Which two steps make the unit block the step?
+
+::: {.answer}
+a) move (2, 5)
+b) its centre (2, 2)
+c) scale 3, then move (2, 1)
+:::
+
+## Wrap-up
+
+- You can stretch or grow a sprite and choose the pivot that keeps it in place.
+- You can mirror a sprite about its own pivot with the factors (−1, 1).
+- You can combine scaling and moving in the right order.
+- You can build a rotation matrix, turn a point and turn it back.

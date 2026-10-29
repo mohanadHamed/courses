@@ -1,363 +1,313 @@
 ---
-title: "Trigonometry: Sine, Cosine, Tangent and the Unit Circle"
-description: "Lesson notes · Angles in game maths, sine, cosine and tangent in a right triangle, the unit circle, from an angle to a velocity, and radians in game code."
+title: "Applied Trigonometry: Angles, Rotation and Oscillating Motion"
+description: "Lesson notes · The angle to a target with atan2, turning the short way, moving in a circle, bobbing up and down with sine, and a searchlight that sweeps."
 lesson: 7
-ilos: [A2]
+ilos: [A2, B1]
 format: lesson-typst
 ---
 
 ::: {.lead}
-A delivery drone waits at the depot. The player taps on the compass and
-chooses "fly at 30°". The game must now move the drone: so many units along
-x and so many along y, in every frame. How does it turn an angle into a
-movement? The answer is **trigonometry**: sine, cosine and tangent. In
-lectures 2 to 6 you described directions with vectors. In this lesson you
-describe them with an angle, and you change between the two. You will meet
-the right triangle, the **unit circle**, and the **radians** that game code
-uses. Every section ends with a short task.
+A hero waits on a cliff. Beside the cliff, a magic lift floats up and down,
+again and again. When can the hero step on? Games are full of motion like
+this: turrets that turn towards the player, shields that circle a hero,
+coins that bob in the air, searchlights that sweep a yard. In Lecture 6 you
+learned sine, cosine and the unit circle. In this lesson you use them to
+solve these motion problems: you find the angle to a target, turn the short
+way, move an object in a circle, and describe motion that goes back and
+forth. Every section ends with a short task.
 :::
 
 ## Key terms
 
-{{< glossary angle degree right-triangle hypotenuse sine cosine tangent unit-circle radian unit-vector velocity quadrant >}}
+{{< glossary atan2 angle tangent unit-circle angular-speed oscillation amplitude period sine cosine >}}
 
-## 7.1 Which way is the drone facing? Angles
+## 7.1 Which angle is the target at?
 
-The compass in the corner of the screen shows the heading of the drone:
-"90°". Which way is that? Games need one rule for angles, so that 90°
-means the same direction for the artist, the designer and the code.
+A turret stands at the origin. A drone hovers at $(4, 4)$. To turn the
+turret, the game needs the *angle* of the drone, not only the vector
+$\mathbf{d} = (4, 4)$ to it. In Lecture 6 you went from an angle to a
+direction. Now you go back: from a direction to an angle.
 
-::: {.callout-important title="Definition 7.1 — Angle of a direction"}
-The **angle** of a direction is the amount of turn from the positive
-x-axis to that direction. It is measured in **degrees** (°). A full turn is
-360°. A positive angle turns **anticlockwise**; a negative angle turns
-clockwise.
+The tangent helps first: $\tan\theta = d_y \div d_x = 4 \div 4 = 1$, and
+tan 45° = 1, so the drone is at 45°. But there is a problem (@fig-atan2).
+A drone at $(-4, -4)$ gives $(-4) \div (-4) = 1$ too. Yet it is behind the
+turret, at −135°. The division loses the signs.
+
+::: {.callout-important title="Definition 7.1 — atan2"}
+**atan2(y, x)** gives the angle of the vector $(x, y)$ from the positive
+x-axis. It looks at the signs of both parts, so it gives the right angle in
+every quadrant, from −180° to 180°.
 :::
 
-So 0° points along +x (to the right), 90° along +y (up), 180° along −x and
-270° along −y (@fig-dial). Unity uses the same rule for the rotation of a 2D
-object around z: a positive angle turns it anticlockwise.
+![A and C have the same slope, but not the same angle. atan2 uses the signs of x and y.](images/atan2.png){#fig-atan2 width=94%}
 
-![Angles in game maths. A negative angle turns clockwise: −45° is the same direction as 315°.](images/angle-dial.png){#fig-dial width=92%}
+::: {.callout-note title="Example 7.1 — Four drones"}
+The turret is at (0, 0).
 
-Two angles show the same direction when they differ by a full turn:
-370° = 370° − 360° = 10°, and −90° = −90° + 360° = 270°.
-
-::: {.callout-note title="Example 7.1 — The four main directions"}
-1. A drone with the heading 0° flies to the right (+x).
-2. With 90° it flies up (+y); with 180° to the left (−x).
-3. With 270° it flies down (−y). The same heading is also written −90°.
-:::
-
-::: {.callout-note title="Example 7.2 — Turning past a full turn"}
-A turret faces 350°. It turns 20° anticlockwise.
-
-1. The new angle is 350° + 20° = 370°.
-2. 370° − 360° = 10°. The turret faces 10°, a little above +x.
-3. Another turret faces 0° and turns 45° clockwise: 0° − 45° = −45°, the
-   same as 315°.
+1. A at $(4, 4)$: atan2(4, 4) = **45°**.
+2. B at $(-4, 4)$: atan2(4, −4) = **135°**. tan alone would say −45°.
+3. C at $(-4, -4)$: atan2(−4, −4) = **−135°** (the same direction as 225°).
+4. E at $(0, -3)$: straight down, atan2(−3, 0) = **−90°**.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Using the compass of a map. On a map, 0° is north (up) and angles turn
-clockwise. In game maths, 0° is +x (right) and angles turn anticlockwise.
-A map heading of 90° (east) is 0° in game maths.
+Swapping the order. atan2 takes **y first**: atan2(y, x). With x first, a
+drone at $(4, 0)$ comes out at 90° instead of 0°.
 :::
 
-::: {.callout-note title="Do it · Draw five headings"}
-On squared paper, draw the x-axis and the y-axis.
+{{< sim file="sims/turn-lab.html" poster="sims/turn-lab.png" title="Turn Lab: the angle to a target and the short turn" height="760" >}}
 
-1. Draw an arrow from the origin for 0°, 90°, 135°, 225° and −45°. For 45°
-   angles, follow the diagonal of the squares.
-2. Write the second name of each angle: for example 270° is also −90°.
+::: {.callout-note title="Do it · Angles in Turn Lab"}
+Open the **Turn Lab** simulator above (or scan its QR code).
 
-*Your result:* the drawing with five labelled arrows.
+1. Tap the targets $(5, 0)$, $(0, 4)$, $(-3, 3)$ and $(-3, -3)$.
+2. Each time, write the vector d and the angle from atan2.
+
+*Your result:* a table with four rows, and the quadrant of each target.
+
+::: {.check}
+$(5, 0)$: 0° (on the x-axis). $(0, 4)$: 90° (on the y-axis). $(-3, 3)$:
+135° (quadrant II). $(-3, -3)$: −135°, the same as 225° (quadrant III).
+:::
 :::
 
-## 7.2 How high is the ramp? Sine, cosine and tangent
+## 7.2 Turning the short way
 
-A skate game has a ramp that is 10 m long and rises at 30°. The level
-designer must know two numbers: how high the ramp goes, and how far forward
-it reaches. The ramp, the floor and the height make a **right triangle**:
-a triangle with one angle of 90° (@fig-tri).
+The turret faces 350°. The drone flies to 10°. If the turret turns from 350°
+to 10° by subtracting, it turns −340°: almost a full turn clockwise, and the
+drone escapes. The short way is only 20° anticlockwise (@fig-turn).
 
-For one angle θ (the Greek letter "theta") of a right triangle, the three
-sides have names:
+The game finds the short turn in two steps:
 
-- the **hypotenuse**: the longest side, opposite the right angle (the ramp);
-- the **opposite** side: across from θ (the height);
-- the **adjacent** side: next to θ, but not the hypotenuse (the floor).
+1. difference = target angle − facing angle;
+2. if the difference is more than 180°, subtract 360°; if it is less than
+   −180°, add 360°.
 
-::: {.callout-important title="Definition 7.2 — Sine, cosine and tangent"}
-For an angle θ of a right triangle:
-$$\sin\theta = \frac{\text{opposite}}{\text{hypotenuse}}, \qquad \cos\theta = \frac{\text{adjacent}}{\text{hypotenuse}}, \qquad \tan\theta = \frac{\text{opposite}}{\text{adjacent}}.$$
-:::
+The result is from −180° to 180°. Positive means turn left
+(anticlockwise); negative means turn right (clockwise).
 
-![The ramp as a right triangle. With the hypotenuse 10 and θ = 30°, the height is 5 and the floor part is 8.7.](images/right-triangle.png){#fig-tri width=94%}
+![From 350° to 10°: the short turn is +20°, not −340°.](images/shortest-turn.png){#fig-turn width=94%}
 
-The three values depend only on the angle, not on the size of the
-triangle. A calculator gives them; for the angles that games use most, learn
-@tbl-trig (values to two decimals).
+A turret also has a **turning speed**: for example 90° per second. The time
+of a turn is the size of the turn divided by this speed.
 
-| θ | 0° | 30° | 45° | 60° | 90° |
-|---|---|---|---|---|---|
-| sin θ | 0 | 0.5 | 0.71 | 0.87 | 1 |
-| cos θ | 1 | 0.87 | 0.71 | 0.5 | 0 |
-| tan θ | 0 | 0.58 | 1 | 1.73 | — |
+::: {.callout-note title="Example 7.2 — Three turns"}
+The turret turns at 90° per second.
 
-: Sine, cosine and tangent of the common angles. At 90°, tan does not exist. {#tbl-trig}
-
-From the definition, each side follows from the hypotenuse:
-opposite = hypotenuse × sin θ, and adjacent = hypotenuse × cos θ.
-
-::: {.callout-note title="Example 7.3 — The skate ramp"}
-The ramp is 10 m long and rises at 30°. How high is it, and how far forward
-does it reach?
-
-1. Height (opposite) = 10 × sin 30° = 10 × 0.5 = **5 m**.
-2. Forward (adjacent) = 10 × cos 30° = 10 × 0.87 = **8.7 m**.
-:::
-
-::: {.callout-note title="Example 7.4 — A hill in a racing game"}
-A hill rises 3 m over 4 m forward. The slope itself is 5 m long (3, 4, 5:
-lecture 3).
-
-1. sin θ = 3 ÷ 5 = 0.6 and cos θ = 4 ÷ 5 = 0.8.
-2. tan θ = 3 ÷ 4 = 0.75. The tangent is the **slope**: 0.75 m up for every
-   1 m forward.
-3. 0.75 is between tan 30° = 0.58 and tan 45° = 1, so the hill rises at an
-   angle between 30° and 45° (about 37°).
+1. Facing 30°, target 120°: 120° − 30° = **+90°**. Turn left, 1 second.
+2. Facing 350°, target 10°: 10° − 350° = −340°. Less than −180°, so add
+   360°: **+20°**. Turn left, about 0.2 seconds.
+3. Facing 0°, target −135°: **−135°**. Turn right, 1.5 seconds.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Mixing up the opposite and the adjacent side. They depend on the angle you
-look from. For the other sharp angle of the ramp (60°, at the top), the
-height is the *adjacent* side.
+Turning by the plain difference. Without step 2, an enemy turns almost a
+full circle for a target that is just behind its shoulder. The player sees
+a slow, silly spin.
 :::
 
-::: {.callout-note title="Do it · The calculator of your phone"}
-Open the calculator of your phone or of the lab computer in scientific mode
-(Android: tap the arrow or turn the phone; iPhone: turn the phone, or choose
-Scientific; Windows: the menu → Scientific). Check that it shows **DEG**,
-not RAD.
+::: {.callout-note title="Do it · The short turn in Turn Lab"}
+In **Turn Lab**, choose **Facing 350°** and tap the target $(6, 1)$: it is
+at about 9.5°. Read the short turn and press **Turn**. Then choose **Facing
+170°** and tap $(-6, -1)$: it is at about −170.5°.
 
-1. Compute sin 30°, cos 30° and tan 45°. Compare with @tbl-trig.
-2. A ramp is 10 m long and rises at 20°. Compute its height: 10 × sin 20°.
+*Your result:* the two short turns (left or right, how many degrees) and
+their times.
 
-*Your result:* three values and the height of the ramp.
+::: {.check}
+Facing 350°, target at 9.5°: 9.5° − 350° = −340.5°; + 360° = about +19.5°:
+Turn Lab shows 19° left, about 0.2 s. Facing 170°, target at −170.5°:
+−340.5° + 360° = about +19.5°: 19° left again, about 0.2 s.
+:::
 :::
 
-## 7.3 Every angle at once: the unit circle
+## 7.3 Moving in a circle
 
-The drone can fly at 120° or 250° too. But a right triangle has no angle
-bigger than 90°. The **unit circle** gives sine and cosine for *every*
-angle (@fig-unit).
+A magic orb circles the hero to protect her. A moon goes around a planet. A
+saw blade spins around a pole. All of them move in a circle at a steady
+speed. The unit circle of Lecture 6 gives the position: the point at the
+angle θ on a circle with the radius r around the centre C is
+$C + r(\cos\theta, \sin\theta)$ (@fig-orbit).
 
-::: {.callout-important title="Definition 7.3 — The unit circle"}
-The **unit circle** is the circle with the radius 1 around the origin. The
-point on it at the angle θ is
-$$(\cos\theta,\ \sin\theta).$$
-So cos θ is the x-coordinate of the point, and sin θ is its y-coordinate.
+The angle grows at a steady rate. This rate is the **angular speed** ω (the
+Greek letter "omega"), in degrees per second:
+$$\theta = \omega \times t.$$
+
+::: {.callout-important title="Definition 7.2 — Circular motion"}
+An object that moves in a circle with the centre C and the radius r, at the
+angular speed ω, starting at 0°, is at
+$$P(t) = C + r\,(\cos(\omega t),\ \sin(\omega t)).$$
+One full turn takes the **period** $T = 360° \div \omega$.
 :::
 
-For angles from 0° to 90°, this is the triangle of section 7.2 with the
-hypotenuse 1. For larger angles, the same numbers come back, but with signs:
-on the left side of the circle x is negative, below the x-axis y is
-negative.
+![The orb circles C = (5, 5) with the radius 2, at 90° per second.](images/orbit.png){#fig-orbit width=94%}
 
-![The unit circle. The points at 30°, 150°, 210° and 330° have the same numbers with different signs.](images/unit-circle.png){#fig-unit width=94%}
+::: {.callout-note title="Example 7.3 — The orb"}
+C = (5, 5), r = 2, ω = 90° per second.
 
-::: {.callout-note title="Example 7.5 — The four main directions"}
-1. 0°: the point (1, 0), so cos 0° = 1 and sin 0° = 0.
-2. 90°: (0, 1). 180°: (−1, 0). 270°: (0, −1).
-3. At 90° and 270° cos θ = 0. So tan θ = sin θ ÷ cos θ does not exist there.
-:::
-
-::: {.callout-note title="Example 7.6 — Mirror angles"}
-At 30° the point is (0.87, 0.5) (@fig-unit).
-
-1. 150° is the mirror image across the y-axis: (−0.87, 0.5).
-2. 210° is half a turn from 30°: (−0.87, −0.5).
-3. 330° is the mirror image across the x-axis: (0.87, −0.5).
-:::
-
-Every point of the unit circle is 1 unit from the origin. With the
-Pythagorean theorem (lecture 3): $\cos^2\theta + \sin^2\theta = 1$. For
-example $0.6^2 + 0.8^2 = 0.36 + 0.64 = 1$. So **(cos θ, sin θ) is always a
-unit vector**.
-
-::: {.callout-warning title="Common mistake"}
-Writing the point as (sin θ, cos θ). The x-coordinate comes first, and it is
-the **cosine**. At 90° the point is (0, 1), not (1, 0).
-:::
-
-{{< sim file="sims/unit-circle-lab.html" poster="sims/unit-circle-lab.png" title="Unit Circle Lab: cos, sin and tan for every angle" height="720" >}}
-
-::: {.callout-note title="Do it · Four points in Unit Circle Lab"}
-Open the **Unit Circle Lab** simulator above (or scan its QR code).
-
-1. Put the point at 30°, 150°, 210° and 330°.
-2. Each time, write cos θ and sin θ.
-
-*Your result:* a table with four rows, and one sentence: what changes from
-one row to the next, and what stays the same?
-:::
-
-## 7.4 From an angle to a movement
-
-The player sets the heading of the drone to 30° and the speed to 10 units
-per second. In lecture 3 you learned: velocity = direction × speed, where
-the direction is a unit vector. The unit circle gives this unit vector
-directly: it is (cos θ, sin θ).
-
-::: {.callout-important title="Definition 7.4 — Velocity from an angle"}
-An object that moves at the angle θ with the speed s has the velocity
-$$\mathbf{v} = s\,(\cos\theta,\ \sin\theta) = (s\cos\theta,\ s\sin\theta).$$
-:::
-
-![The drone flies at 30° with the speed 10: 8.7 units along x and 5 along y in one second.](images/angle-velocity.png){#fig-vel width=94%}
-
-::: {.callout-note title="Example 7.7 — The drone at 30°"}
-The heading is 30°, and the speed is 10 (@fig-vel).
-
-1. The direction is (cos 30°, sin 30°) = (0.87, 0.5).
-2. The velocity is 10 × (0.87, 0.5) = **(8.7, 5)** units per second.
-3. After 1 second the drone is at (8.7, 5); after 2 seconds at (17.4, 10).
-:::
-
-::: {.callout-note title="Example 7.8 — A ball kicked backwards"}
-A ball is kicked at 135° with the speed 4.
-
-1. 135° is in the second quadrant: x negative, y positive. The direction is
-   (cos 135°, sin 135°) = (−0.71, 0.71).
-2. The velocity is 4 × (−0.71, 0.71) = (−2.84, 2.84), about **(−2.8, 2.8)**.
-3. The ball moves to the left and up, at the same speed in both parts.
+1. t = 0: θ = 0°, $P = (5, 5) + 2 \times (1, 0) = (7, 5)$.
+2. t = 1 s: θ = 90°, $P = (5, 5) + 2 \times (0, 1) = (5, 7)$.
+3. t = 2 s: θ = 180°, $P = (3, 5)$; t = 3 s: θ = 270°, $P = (5, 3)$.
+4. The period is 360° ÷ 90° = **4 s**: at t = 4 s the orb is back at (7, 5).
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Multiplying the speed by the angle: "10 × 30 = 300". The angle only chooses
-the direction. Multiply the speed by cos θ and by sin θ.
+Forgetting the radius or the centre. (cos θ, sin θ) is on a circle of
+radius 1 around (0, 0). Multiply by r, then add C.
 :::
 
-::: {.callout-note title="Do it · Velocity from the unit circle"}
-A boat sails at 60° with the speed 6.
+{{< sim file="sims/wave-lab.html" poster="sims/wave-lab.png" title="Wave Lab: circle, bob and sweep" height="760" >}}
 
-1. In **Unit Circle Lab**, put the point at 60°. Read cos 60° and sin 60°.
-2. Multiply both by 6 on paper. Check the length of your vector with the
-   Pythagorean theorem: is it about 6?
+::: {.callout-note title="Do it · An orbit in Wave Lab"}
+Open the **Wave Lab** simulator above. Choose the mode **Orbit**, the
+amplitude 2 (the radius) and the period 4 s.
 
-*Your result:* the velocity of the boat and your check.
+1. Step to 0 s, 1 s, 2 s and 3 s. Write the position each time.
+2. Change the period to 8 s. What is the angular speed now?
+
+*Your result:* four positions and the new angular speed.
+
+::: {.check}
+Wave Lab circles the centre (0, 2): 0 s: (2, 2); 1 s: (0, 4); 2 s: (−2, 2);
+3 s: (0, 0). Period 8 s: ω = 360° ÷ 8 = 45° per second.
+:::
 :::
 
-## 7.5 What game code uses: radians
+## 7.4 Bobbing up and down: oscillating motion
 
-A student writes `Mathf.Sin(30)` in Unity and gets −0.99, not 0.5. Why?
-Game code does not measure angles in degrees. It uses **radians**.
+A coin floats in the air and bobs gently, so that the player notices it. A
+lift goes up and down beside a cliff. Such motion goes back and forth around
+a middle position and repeats: an **oscillation**. Look at the orb of
+section 7.3 from the side: its height goes up and down. Its height is the
+sine of the angle. So the sine gives the bobbing (@fig-wave):
 
-::: {.callout-important title="Definition 7.5 — Radian"}
-One **radian** is the angle at which the arc of the unit circle is exactly
-1 long. A full turn is 2π radians (π ≈ 3.14), so
-$$180° = \pi \text{ rad} \approx 3.14 \text{ rad}, \qquad \text{radians} = \text{degrees} \times \frac{\pi}{180}.$$
+::: {.callout-important title="Definition 7.3 — Oscillation with sine"}
+A value that bobs around the middle c, with the **amplitude** A and the
+**period** T, is
+$$y(t) = c + A\sin\!\left(360° \times \frac{t}{T}\right).$$
+A is the largest distance from the middle. T is the time of one full up and
+down.
 :::
 
-![One radian is about 57°. The common angles in degrees and in radians.](images/radians.png){#fig-rad width=94%}
+![A bobbing value: middle 2, amplitude 3, period 4 s. It is at the top at 1 s and at the bottom at 3 s.](images/sine-wave.png){#fig-wave width=94%}
 
-`Mathf.Sin(30)` reads 30 as 30 radians: almost five full turns. Its sine
-is −0.99. The right call converts first: `Mathf.Sin(30 * Mathf.Deg2Rad)`.
+At a quarter of the period, the angle is 90° and sin = 1: the top, c + A.
+At three quarters, the angle is 270° and sin = −1: the bottom, c − A. At 0,
+half and the full period, sin = 0: the middle.
 
-::: {.callout-note title="Example 7.9 — Converting angles"}
-1. 180° = π ≈ **3.14** rad. 90° is half of it: ≈ **1.57** rad.
-2. 360° = 2π ≈ **6.28** rad.
-3. 1 rad = 180° ÷ π ≈ **57°**.
-:::
+::: {.callout-note title="Example 7.4 — A bobbing coin"}
+A coin has the middle 4, the amplitude 1 and the period 2 s:
+$y(t) = 4 + 1 \times \sin(360° \times t \div 2)$.
 
-::: {.callout-caution title="In game code"}
-```csharp
-float angle = 30 * Mathf.Deg2Rad;                    // 30° → 0.52 rad
-Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-Vector2 velocity = 10 * dir;                         // (8.7, 5)
-```
-`Mathf.Deg2Rad` is π ÷ 180 ≈ 0.01745. `Mathf.Cos` and `Mathf.Sin` take
-radians and give the cosine and the sine.
-:::
-
-::: {.callout-note title="Example 7.10 — Reading the code"}
-1. Line 1 turns 30° into 0.52 rad.
-2. Line 2 makes the unit vector (cos 30°, sin 30°) = (0.87, 0.5).
-3. Line 3 gives the velocity (8.7, 5): the drone of Example 7.7.
+1. t = 0: sin 0° = 0, y = 4 (the middle).
+2. t = 0.5 s: the angle is 360° × 0.5 ÷ 2 = 90°, y = 4 + 1 = **5** (the top).
+3. t = 1.5 s: the angle is 270°, y = 4 − 1 = **3** (the bottom).
+4. The coin moves between 3 and 5: 2 units from bottom to top, which is
+   2 × A.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-A calculator in RAD mode. Then sin 30 gives −0.99. Check that the
-calculator shows DEG when you work in degrees.
+Reading the amplitude as the whole movement. With A = 3, a value moves from
+c − 3 to c + 3: 6 units from bottom to top, twice the amplitude.
 :::
 
-::: {.callout-note title="Do it · DEG and RAD"}
-On the calculator of section 7.2:
+::: {.callout-note title="Do it · The lift in Wave Lab"}
+In **Wave Lab**, choose the mode **Bob**, the amplitude 3 and the period 4 s.
 
-1. In DEG mode, compute sin 90. Switch to RAD and compute sin 90 again.
-2. Still in RAD mode, compute sin 1.57.
+1. Step to 0 s, 1 s, 2 s, 3 s and 4 s. Write the height each time.
+2. Change the period to 8 s. When is the lift at the top now?
 
-*Your result:* the three values, and one sentence: why is the last one 1?
+*Your result:* five heights and the new time of the top.
+
+::: {.check}
+The middle is 2: 0 s: 2; 1 s: 5; 2 s: 2; 3 s: −1; 4 s: 2. With the period
+8 s the top comes at a quarter of it: 2 s.
+:::
 :::
 
-## Case study: Drone Drop
+### Sweeping back and forth
 
-*Drone Drop* is a made-up delivery game. The depot is at (0, 0). The drone
-always flies at the speed 10 units per second, for exactly 1 second, and
-then drops the parcel. The player only chooses the heading. Three customers
-wait: Ana at (8.7, 5), Ben at (0, 10) and Cara at (−7.1, 7.1). Each house is
-10 units from the depot, so each heading must point straight at a house.
-The Game challenge of the interactive lesson uses these numbers. In the
-mini-game below you deliver five parcels.
+The same sine can make an *angle* swing. In a stealth game, a searchlight on a tower sweeps the yard: left, right,
+left. Here the *angle* oscillates, not the height. The tower faces +x, and
+its light swings 45° to each side, with the period 4 s (@fig-sweep):
+$$\text{angle}(t) = 45° \times \sin(360° \times t \div 4).$$
+At each moment, the beam points in the direction
+(cos angle, sin angle), as in Lecture 6.
 
-{{< sim file="sims/drone-drop.html" poster="sims/drone-drop.png" title="Drone Drop: choose the heading to each house" kind="game" height="780" >}}
+![A searchlight sweeps from −45° to 45° and back in 4 seconds.](images/searchlight.png){#fig-sweep width=92%}
+
+::: {.callout-note title="Example 7.5 — The searchlight"}
+1. t = 0: angle 0°, the beam points along (1, 0).
+2. t = 1 s: angle 45° × sin 90° = 45°; the beam points along
+   (0.71, 0.71).
+3. t = 3 s: angle 45° × sin 270° = −45°; the beam points along
+   (0.71, −0.71).
+4. It covers 90° in all: 45° to each side.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Mixing up the two oscillations. For the lift the *position* bobs; for the
+searchlight the *angle* swings, and the beam still starts at the tower. Use the angle
+to make the direction (cos, sin).
+:::
+
+## Case study: Sky Lift
+
+*Sky Lift* is a made-up platform game. A hero waits on a cliff at the height
+5. Beside the cliff, a lift floats up and down:
+$y(t) = 3 + 2\sin(360° \times t \div 8)$: the middle 3, the amplitude 2, the
+period 8 s. The clock starts when the lift is at the middle, going up. The
+hero can step on only when the lift is level with the cliff. Lower down
+there is a second ledge at the height 1. The Game challenge of the
+interactive lesson uses these numbers. In the mini-game below you choose the
+moment to jump, in five rounds, one of them on a wheel.
+
+{{< sim file="sims/sky-lift.html" poster="sims/sky-lift.png" title="Sky Lift: when is the lift level with the ledge?" kind="game" height="760" >}}
 
 ## Further reading
 
 Dunn and Parberry, *3D Math Primer for Graphics and Game Development*,
-2nd ed., Chapter 1 (section on trigonometry): angles, degrees and radians,
-the unit circle, and the trigonometric functions.
+2nd ed., Chapter 1 (trigonometry: the inverse functions and atan2) and
+Chapter 8 (orientation in 2D as an angle).
 
 ## Exercises
 
-1. Which direction is 180°? And −90°?
-2. A turret faces 340° and turns 30° anticlockwise. Which angle does it face
-   now?
-3. A ramp is 8 m long and rises at 30°. How high is it?
-4. A ladder is 10 m long and leans at 60° to the floor. How far is its foot
-   from the wall?
-5. A hill rises 6 m over 8 m forward. Find sin θ, cos θ and tan θ.
-6. What are the coordinates of the point at 90° on the unit circle? At 180°?
-7. The point at 60° is (0.5, 0.87). Write the points at 120°, 240° and
-   300°.
-8. Why does tan 90° not exist?
-9. Show that (0.6, 0.8) is on the unit circle.
-10. A car drives at 0° with the speed 12. What is its velocity?
-11. A drone flies at 45° with the speed 10. What is its velocity?
-12. A ball is thrown at 150° with the speed 2. What is its velocity? Which
-    way does it go?
-13. Change 90° and 360° into radians. About how many degrees is 2 rad?
-14. What does `Mathf.Sin(90 * Mathf.Deg2Rad)` give? And `Mathf.Cos(0)`?
-15. *Drone Drop*: which heading reaches Cara at (−7.1, 7.1)? Where does the
-    parcel fall with the heading 210°?
+1. Find the angle of the vectors $(5, 5)$, $(-5, 5)$ and $(0, -2)$ with
+   atan2.
+2. Why does $\tan\theta = y \div x$ not tell the difference between
+   $(2, 2)$ and $(-2, -2)$?
+3. Facing 20°, target 110°. Find the short turn and its time at 90° per
+   second.
+4. Facing 10°, target 340°. Find the short turn. Left or right?
+5. Facing 160°, target −160°. Find the short turn.
+6. An orb circles $C = (2, 3)$ with the radius 3, at 90° per second,
+   starting at 0°. Where is it at 1 s and at 2 s?
+7. A moon circles $(0, 0)$ with the radius 6, at 45° per second. What is
+   its period?
+8. A wheel cabin turns at 30° per second. After how many seconds is it at
+    90°?
+9. $y = 1 + 2\sin(360° \times t \div 8)$. Find y at 0 s, 2 s, 4 s and 6 s.
+10. A coin bobs between 3 and 5. What are its middle and its amplitude?
+11. A lift has the period 6 s. When is it at the top for the first time?
+12. A searchlight sweeps with angle = 30° × sin(360° × t ÷ 4). What is the
+    angle at 1 s, and in which direction does the beam point then?
+13. *Sky Lift*: when is the lift level with the cliff (height 5), and when
+    with the low ledge (height 1)? Where is the lift at 4 s?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. 180°: to the left (−x). −90°: down (−y), the same as 270°.
-2. 340° + 30° = 370°, which is 10°.
-3. 8 × sin 30° = 8 × 0.5 = 4 m.
-4. The floor part is adjacent: 10 × cos 60° = 10 × 0.5 = 5 m.
-5. The slope is 10 m (6, 8, 10). sin θ = 0.6, cos θ = 0.8, tan θ = 0.75.
-6. (0, 1) and (−1, 0).
-7. 120°: (−0.5, 0.87); 240°: (−0.5, −0.87); 300°: (0.5, −0.87).
-8. tan θ = sin θ ÷ cos θ, and cos 90° = 0: you cannot divide by 0.
-9. 0.6² + 0.8² = 0.36 + 0.64 = 1, so the point is 1 unit from the origin.
-10. 12 × (1, 0) = (12, 0).
-11. 10 × (0.71, 0.71) = (7.1, 7.1).
-12. 2 × (−0.87, 0.5) = (−1.74, 1): to the left and a little up.
-13. 90° ≈ 1.57 rad; 360° ≈ 6.28 rad. 2 rad ≈ 2 × 57° = 114°.
-14. sin 90° = 1. cos 0 = 1 (0 rad is 0°).
-15. 135°. 210° gives 10 × (−0.87, −0.5) = (−8.7, −5): no house is there.
+1. 45°, 135° and −90°.
+2. (−2) ÷ (−2) = 2 ÷ 2 = 1: the signs cancel. atan2 looks at the signs and gives 45° and −135°.
+3. 110° − 20° = +90°: left, 1 second.
+4. 340° − 10° = 330°; more than 180°, so 330° − 360° = −30°: 30° right.
+5. −160° − 160° = −320°; +360° = +40°: 40° left.
+6. 1 s: (2, 3) + 3 × (0, 1) = (2, 6). 2 s: (2, 3) + 3 × (−1, 0) = (−1, 3).
+7. 360° ÷ 45° = 8 s.
+8. 90° ÷ 30° = 3 s.
+9. 1, 3, 1, −1 (the angles are 0°, 90°, 180°, 270°).
+10. Middle 4, amplitude 1.
+11. At a quarter of the period: 1.5 s.
+12. 30° × sin 90° = 30°; the beam points along (0.87, 0.5).
+13. At 2 s (y = 3 + 2 = 5) and at 6 s (y = 3 − 2 = 1); the next time at the cliff is 10 s. At 4 s the lift is at the middle, y = 3.
 :::

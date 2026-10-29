@@ -1,0 +1,218 @@
+---
+title: "Trigonometry: Sine, Cosine, Tangent and the Unit Circle"
+subtitle: "Lecture 6"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary angle right-triangle hypotenuse sine cosine tangent unit-circle >}}
+
+## 6.1 Which way is the drone facing?
+
+:::: {.columns}
+::: {.column width="50%"}
+- An angle is the turn from the +x axis, measured in degrees.
+- 0° points right, 90° up, 180° left and 270° down.
+- A positive angle turns anticlockwise, and a full turn is 360°.
+- **Do it:** On squared paper, draw arrows for 0°, 90°, 135°, 225° and −45°. What is the second name of −45°?
+:::
+::: {.column width="50%"}
+![](images/angle-dial.png)
+:::
+::::
+
+## Example · Turning past a full turn
+
+A turret faces 350°, and it turns 20° anticlockwise.
+**Which angle does the turret face now?**
+
+::: {.reveal}
+1. The new angle is 350° + 20° = 370°.
+2. A full turn is 360°, so 370° − 360° = 10°.
+3. The turret faces **10°**, a little above the +x axis.
+:::
+
+## Try it 1 · Headings
+
+a) A drone has the heading 180°. Which way does it fly?
+b) Which angle is the same direction as −90°?
+c) On a map, east is 90°. Which angle is east in game maths?
+
+::: {.answer}
+a) to the left (−x)
+b) 270°
+c) 0°
+:::
+
+## 6.2 Sine, cosine and tangent
+
+:::: {.columns}
+::: {.column width="50%"}
+- A right triangle has one angle of 90°, and its longest side is the hypotenuse.
+- sin θ is the opposite side divided by the hypotenuse.
+- cos θ is the adjacent side divided by the hypotenuse, and tan θ is opposite ÷ adjacent.
+- **Do it:** On your phone's calculator in DEG mode, compute sin 30° and cos 30°. What do you get?
+:::
+::: {.column width="50%"}
+![](images/right-triangle.png)
+:::
+::::
+
+## The common values
+
+| θ | 0° | 30° | 45° | 60° | 90° |
+|---|---|---|---|---|---|
+| sin θ | 0 | 0.5 | 0.71 | 0.87 | 1 |
+| cos θ | 1 | 0.87 | 0.71 | 0.5 | 0 |
+| tan θ | 0 | 0.58 | 1 | 1.73 | — |
+
+## Example · The skate ramp
+
+A ramp in a skate game is 10 m long, and it rises at 30°.
+**How high is the ramp, and how far forward does it reach?**
+
+::: {.reveal}
+1. The height is the opposite side: 10 × sin 30° = 10 × 0.5 = **5 m**.
+2. The forward part is the adjacent side: 10 × cos 30° = 10 × 0.87 = **8.7 m**.
+3. The level designer places the top of the ramp 5 m high and 8.7 m forward.
+:::
+
+## Try it 2 · The right triangle
+
+a) A ramp is 8 m long and rises at 30°. How high is it?
+b) A hill rises 3 m over 4 m forward. What is tan θ?
+c) Which side of a right triangle is the longest?
+
+::: {.answer}
+a) 8 × 0.5 = 4 m
+b) 3 ÷ 4 = 0.75
+c) the hypotenuse
+:::
+
+## 6.3 The unit circle
+
+:::: {.columns}
+::: {.column width="50%"}
+- The unit circle has the radius 1 and its centre at the origin.
+- The point at the angle θ is (cos θ, sin θ), so cos is x and sin is y.
+- Larger angles give the same numbers with other signs, for example 150° gives (−0.87, 0.5).
+- **Do it:** In Unit Circle Lab, put the point at 30°, 150°, 210° and 330°. What changes?
+:::
+::: {.column width="50%"}
+![](images/unit-circle.png)
+:::
+::::
+
+## Example · Mirror angles
+
+The point at 30° on the unit circle is (0.87, 0.5).
+**What are the points at 150°, 210° and 330°?**
+
+::: {.reveal}
+1. 150° is the mirror image across the y-axis, so the point is **(−0.87, 0.5)**.
+2. 210° is half a turn from 30°, so the point is **(−0.87, −0.5)**.
+3. 330° is the mirror image across the x-axis, so the point is **(0.87, −0.5)**.
+:::
+
+## Live demo · Unit Circle Lab
+
+{{< sim file="sims/unit-circle-lab.html" poster="sims/unit-circle-lab.png" title="Unit Circle Lab: cos, sin and tan for every angle" task="**Show:** drag the point from 0° to 360° and stop at 90° and 180°. **Ask:** in which quadrants is cos θ negative?" >}}
+
+## Try it 3 · On the circle
+
+a) What is the point on the unit circle at 180°?
+b) At 210°, which signs do cos θ and sin θ have?
+c) Why is (0.6, 0.8) on the unit circle?
+
+::: {.answer}
+a) (−1, 0)
+b) Both are negative.
+c) 0.6² + 0.8² = 0.36 + 0.64 = 1
+:::
+
+## 6.4 From an angle to a movement
+
+:::: {.columns}
+::: {.column width="50%"}
+- The direction at the angle θ is the unit vector (cos θ, sin θ).
+- The velocity is the speed times this direction.
+- A drone at 30° with the speed 10 has the velocity (8.7, 5).
+- **Do it:** A boat sails at 60° with the speed 6. What is its velocity?
+:::
+::: {.column width="50%"}
+![](images/angle-velocity.png)
+:::
+::::
+
+## Example · The drone at 30°
+
+The heading is 30°, and the speed is 10.
+**Which velocity does the drone get?**
+
+::: {.reveal}
+1. The direction is (cos 30°, sin 30°) = (0.87, 0.5).
+2. The velocity is 10 × (0.87, 0.5) = **(8.7, 5)**.
+3. After 1 second the drone is at (8.7, 5).
+:::
+
+## Example · A ball kicked backwards
+
+A ball is kicked at 135° with the speed 4.
+**What is the velocity of the ball?**
+
+::: {.reveal}
+1. 135° is in the second quadrant, so x is negative and y is positive.
+2. The direction is (cos 135°, sin 135°) = (−0.71, 0.71).
+3. The velocity is 4 × (−0.71, 0.71), about **(−2.8, 2.8)**: left and up.
+:::
+
+## Try it 4 · Velocity
+
+a) A car drives at 0° with the speed 12. What is its velocity?
+b) A drone flies at 45° with the speed 10. What is its velocity?
+c) A drone flies at 90° with the speed 3. What is its velocity?
+
+::: {.answer}
+a) (12, 0)
+b) (7.1, 7.1)
+c) (0, 3)
+:::
+
+## Try it 5 · Which heading?
+
+The facts: the depot is at (0, 0). The drone flies at the speed 10 for 1 second. Ana lives at (5, 8.7) and Ben at (0, 10).
+
+a) Which heading reaches Ana?
+b) Which heading reaches Ben?
+
+::: {.answer}
+a) 60°, because 10 × (cos 60°, sin 60°) = (5, 8.7)
+b) 90°
+:::
+
+## Game challenge · Drone Drop
+
+{{< sim file="sims/drone-drop.html" poster="sims/drone-drop.png" title="Drone Drop: choose the heading to each house" kind="game" task="**The story:** a drone flies from the depot at the speed 10 for 1 second, to Ana, Ben and Cara. **Play:** in each round, choose the heading that brings the parcel to the house." >}}
+
+## Try it 6 · New customers (harder)
+
+The facts: the depot is at (0, 0). The drone flies at the speed 10 for 1 second. cos 30° = 0.87 and sin 30° = 0.5.
+
+a) Which heading reaches Cara at (−7.1, 7.1)?
+b) The drone flies at 210°. Where does the parcel fall?
+c) A customer lives at (0, −10). Which heading reaches the customer?
+
+::: {.answer}
+a) 135°
+b) (−8.7, −5)
+c) 270° (or −90°)
+:::
+
+## Summary
+
+- An angle is the turn from the +x axis, and positive angles turn anticlockwise.
+- Sine, cosine and tangent compare the sides of a right triangle.
+- The point at the angle θ on the unit circle is (cos θ, sin θ).
+- An object at the angle θ with the speed s moves with s (cos θ, sin θ).
+- Game code turns degrees into radians before it computes a sine or a cosine.

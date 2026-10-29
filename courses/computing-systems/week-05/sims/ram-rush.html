@@ -34,16 +34,11 @@
       choices: o(["Music and Chat", "Music only", "Chat only", "Pocket Quest"]), answer: "Music and Chat", closeOk: ["Music", "Chat"],
       good: "In use: 1.5 + 2.3 + 0.4 + 0.3 = 4.5 GB. Closing Music (used 20 min ago) frees 0.3 GB, not enough; Chat goes too.",
       why: { "Music only": "Without Music: 4.2 GB. Still more than 4 GB.", "Chat only": "Without Chat: 4.1 GB, still too much; and Music was used longest ago.", "Pocket Quest": "The game is on the screen: the OS keeps it." } },
-    { ram: 8, pc: true, apps: [["OS", 2, ""], ["Game", 6, "fg"], ["Browser", 3, "bg", 2]],
-      goal: "A <b>PC</b> with 8 GB RAM: OS 2 GB, game 6 GB, browser 3 GB = 11 GB. What does Windows do?",
-      choices: o(["uses the page file", "closes the game", "closes the browser", "deletes files"]), answer: "uses the page file",
-      good: "Windows moves memory that is not used now to the page file on the drive. Nothing closes, but the PC gets slower.",
-      why: { "closes the game": "A PC OS does not close the app on the screen.", "closes the browser": "Windows does not close apps to free RAM: it uses virtual memory.", "deletes files": "Memory is not files: nothing is deleted." } },
     { ram: 4, apps: [["OS", 1.5, ""], ["Camera", 0.9, "fg"]], closed: true,
       goal: "The OS closed Pocket Quest in the background. The player comes back. How does the game keep the progress?",
-      choices: o(["it saved when it went to the background", "it asks for more RAM", "it uses the page file", "it closes the camera"]), answer: "it saved when it went to the background",
+      choices: o(["it saved when it went to the background", "it asks for more RAM", "it restarts the phone", "it closes the camera"]), answer: "it saved when it went to the background",
       good: "A mobile game saves its state when it goes to the background: after a restart it continues from there.",
-      why: { "it asks for more RAM": "A closed app cannot ask for anything.", "it uses the page file": "Phones do not swap apps to a page file like a PC.", "it closes the camera": "Apps cannot close other apps: the OS decides." } },
+      why: { "it asks for more RAM": "A closed app cannot ask for anything.", "it restarts the phone": "A game cannot restart the phone, and that would not bring the progress back.", "it closes the camera": "Apps cannot close other apps: the OS decides." } },
   ];
   Kit.game({
     rounds, cols: 2, colsPhone: 1, animMs: 900,

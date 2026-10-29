@@ -1,21 +1,46 @@
 ---
 title: "Operating-System Tour on PC and Mobile"
-description: "Where a game developer finds the OS version, the processes, the storage, the devices and the permissions on a Windows PC and on a phone, and how the two operating systems treat a game differently."
-lesson: 10
+description: "Seminar · Find four facts with the tools of Windows, tour the Settings of your phone, and compare what the two operating systems do with a game in the background."
+seminar: 5
 ilos: [A2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem at a game studio. Then it shows where to look in the
-operating system. It ends with a **Do it** task and one set of questions.
-The full explanations, examples and exercises are in the notes.
+No new ideas today: you visit the operating systems of the lab computer and
+of your phone with what you learned in Lecture 5. Do each activity alone,
+then open "Check your result". Every question on this page has its answer:
+try first, then check.
 
-## Key terms
+## Recall
 
-{{< glossary operating-system system-settings task-manager device-driver app-permission sandbox app-storage foreground-app background-app process >}}
+- The OS gives services to every app: processes, memory, files, devices and
+  permissions.
+- The scheduler shares the cores; the app on the screen gets the most time.
+- When the RAM of a phone is full, the OS closes background apps, so a game
+  saves its state.
 
-## 10.1 A tour of the PC: four tools of Windows
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right service.
+
+::: {.match extra="the GPU"}
+The game asks to use the microphone. Which service decides?
+:   permissions
+
+    Why: the player allows or refuses the microphone.
+
+The game saves the progress to storage. Which service?
+:   files
+
+    Why: the OS keeps the files in storage.
+
+The game gets time on a CPU core. Which service?
+:   processes
+
+    Why: the scheduler shares the cores between processes.
+:::
+:::
+
+## Activity 1 · A tour of the PC: four tools of Windows
 
 | Tool (shortcut) | What it shows |
 |---|---|
@@ -38,34 +63,46 @@ Do not restart the game again and again. Look in Task Manager and Device
 Manager first.
 :::
 
-::: {.callout-note title="Do it · Four facts about the lab computer"}
+::: {.callout-note title="Activity 1 · Four facts about the lab computer · 12 min"}
 Write the Windows version and the RAM (About), the process with the most CPU
 (Task Manager), the free space of C: (File Explorer) and the graphics card
 (Device Manager › Display adapters).
+
+*Your product:* four facts with the tool for each.
+
+::: {.check}
+A good answer: "Windows 11, 16 GB RAM (About); the browser has the most CPU
+(Task Manager); C: has 180 GB free (File Explorer); Intel UHD Graphics
+(Device Manager › Display adapters)". Your values may differ, but each fact
+must come from the right tool.
+:::
 :::
 
-::: {.callout-tip title="Try it 1 · Which Windows tool?"}
+::: {.callout-tip title="Try it 2 · Which Windows tool?"}
 Choose the right tool. You can use an answer more than once.
 
 ::: {.match extra="Settings › Battery"}
 Which program uses most of the CPU now?
 :   Task Manager
 
+    Why: Task Manager shows the CPU % of each process.
+
 Is the driver of the graphics card working?
 :   Device Manager
+
+    Why: Device Manager shows each device and its driver.
 
 How much RAM does the PC have, and which Windows version?
 :   Settings › About
 
+    Why: Settings › System › About shows them.
+
 How much free space has drive C:?
 :   File Explorer
 
-How much memory does the game use now?
-:   Task Manager
-:::
-:::
+    Why: File Explorer shows the drives and their free space.
 
-## 10.2 A tour of the phone: Settings
+## Activity 2 · A tour of the phone: Settings
 
 | Place in Settings | What it shows |
 |---|---|
@@ -77,7 +114,7 @@ How much memory does the game use now?
 - Each app runs in its own **sandbox**: it cannot read the files of other
   apps. For the camera, the microphone or the location, it needs an
   **app permission**.
-- Pocket Quest takes 3.2 GB: app 2.1 GB, user data 0.9 GB, cache 0.2 GB.
+- A puzzle game takes 1.5 GB: app 1.0 GB, user data 0.4 GB, cache 0.1 GB.
 - Lina's voice chat is silent: the microphone permission is "Not allowed".
 
 ![Four places in a phone's Settings.](images/phone-tour.png){width=92%}
@@ -89,40 +126,53 @@ How much memory does the game use now?
 first.
 :::
 
-::: {.callout-note title="Do it · The tour of your phone"}
+::: {.callout-note title="Activity 2 · The tour of your phone · 12 min"}
 On your phone (or first in **Settings Explorer**): write the OS version; the
 storage and permissions of one big app; and the app that used the most
 battery today.
+
+*Your product:* three facts from your phone.
+
+::: {.check}
+A good answer: "Android 14 (About phone); a game of 3 GB with the
+permissions Microphone not allowed, Storage allowed; the app with the most
+battery today: the video app". Each fact comes from About, Apps › the app,
+and Battery.
+:::
 :::
 
-::: {.callout-tip title="Try it 2 · Where in Settings?"}
+::: {.callout-tip title="Try it 3 · Where in Settings?"}
 Choose the right answer.
 
 ::: {.match extra="Display|Clear storage"}
 Where does the phone show the Android or iOS version?
 :   About phone
 
+    Why: About phone (iPhone: General › About) shows the OS version.
+
 Voice chat is silent. Where do you look?
 :   Apps › the game › Permissions
 
-The update needs 5 GB. Where do you see the free space?
-:   Storage
+    Why: The microphone is an app permission.
 
-Pocket Quest: app 2.1 GB, user data 0.9 GB, cache 0.2 GB. What does Clear cache free?
-:   0.2 GB
+The puzzle game: app 1.0 GB, user data 0.4 GB, cache 0.1 GB. What does Clear cache free?
+:   0.1 GB
+
+    Why: Clear cache deletes only the cache: 0.1 GB.
 
 Why can a game not read the files of the gallery app?
 :   each app has its own sandbox
+
+    Why: Each app runs in its own sandbox.
 :::
 :::
 
-## 10.3 The same game on a PC and on a phone
+## Activity 3 · The same game on a PC and on a phone
 
 | | PC (Windows) | Phone (Android, iOS) |
 |---|---|---|
 | Input | mouse, keyboard, gamepad | touch, sensors |
 | In the background | keeps running | paused, may be closed |
-| Memory full | page file (slow) | closes background apps |
 | Installing | store or installer | app store (Android: also APK) |
 | Files | many folders | its own sandbox |
 | Permissions | few prompts | asks for camera, microphone, location |
@@ -137,36 +187,44 @@ Why can a game not read the files of the gallery app?
 Test a mobile game for calls, app switches and refused permissions.
 :::
 
-::: {.callout-note title="Do it · PC or phone?"}
+::: {.callout-note title="Activity 3 · PC or phone? · 8 min"}
 Start a game or a video on your phone and on the lab computer. Switch to
 another app for one minute. What did each one do: keep running, pause or
 start again?
+
+*Your product:* two short answers.
+
+::: {.check}
+On the lab computer the game or video usually keeps running in the
+background. On the phone it pauses, and after a long time or with many apps
+it may start again, because the OS closed it.
+:::
 :::
 
-::: {.callout-tip title="Try it 3 · PC or phone?"}
+::: {.callout-tip title="Try it 4 · PC or phone?"}
 Choose the right answer. You can use an answer more than once.
 
 ::: {.match extra="both"}
 Which OS pauses a game in the background?
 :   the phone OS
 
-Which OS uses a page file when the RAM is full?
-:   Windows
-
-On which device does a game run in a sandbox?
-:   the phone
+    Why: A phone OS pauses background apps and may close them.
 
 On which device does an online match go on after Alt + Tab?
 :   the PC
 
+    Why: On a PC, a game keeps running in the background.
+
 Which OS asks the player before a game uses the microphone?
 :   the phone OS
+
+    Why: A phone OS asks for each permission.
 :::
 :::
 
 ## Game challenge: the support desk of Byte Bay {.challenge}
 
-Work alone. Use every section of today.
+Work alone. Use every activity of today.
 
 Six tickets about *Pocket Quest*: **Lina** (phone): "Microphone not allowed".
 **Omar** (PC): the game stutters. **Sara** (phone): "Not enough space".
@@ -175,7 +233,7 @@ have Android 12 or newer? **Yousef** (phone): empty after one hour of play.
 
 {{< sim file="sims/help-ticket.html" poster="sims/help-ticket.png" title="Help Ticket: send each player to the right place of the OS" kind="game" height="560" >}}
 
-::: {.callout-tip title="Try it 4 · The tickets"}
+::: {.callout-tip title="Try it 5 · The tickets"}
 Lina: microphone not allowed (phone). Omar: stutters (PC). Sara: not enough
 space (phone). Ali: gamepad (PC). Choose the right place.
 
@@ -183,41 +241,45 @@ space (phone). Ali: gamepad (PC). Choose the right place.
 Where does Lina look?
 :   Apps › Pocket Quest › Permissions
 
+    Why: The microphone is a permission of the app.
+
 Where does Omar look?
 :   Task Manager
 
-Where does Sara look?
-:   Settings › Storage
+    Why: Task Manager shows the program that takes the CPU.
 
 Where does Ali look?
 :   Device Manager
+
+    Why: Device Manager shows a missing driver with a warning sign.
 :::
 :::
 
-::: {.callout-tip title="Try it 5 · The harder tickets (harder)"}
+::: {.callout-tip title="Try it 6 · The harder tickets (harder)"}
 Maya (phone) asks about Android 12. Yousef's phone is empty after one hour.
 Sara's Pocket Quest: app 2.1 GB, user data 0.9 GB, cache 0.2 GB. Choose the
 right answer.
 
 ::: {.match extra="Task Manager|1.1 GB"}
-Where does Maya find the Android version?
-:   Settings › About phone
-
 Where does Yousef see which app used the battery?
 :   Settings › Battery
+
+    Why: Settings › Battery lists the apps by battery use.
 
 Sara clears the cache. How much space does she get?
 :   0.2 GB
 
+    Why: Her cache is 0.2 GB.
+
 Why should Sara not press "Clear storage"?
 :   she would lose her progress
+
+    Why: Clear storage deletes the user data too.
 :::
 :::
 
-## Summary {.summary}
+## Wrap-up {.summary}
 
-- Windows: About (version, RAM), Task Manager (processes), File Explorer (files), Device Manager (drivers).
-- A phone shows the same services in Settings: About, Battery, Storage, Apps › permissions.
-- Each mobile app runs in a sandbox and needs permissions for the camera, microphone and location.
-- A phone OS pauses or closes a game in the background; Windows keeps it running.
-- Clear the cache, not the storage, to free space without losing progress.
+- You can find facts about a PC with Settings, Task Manager, File Explorer and Device Manager.
+- You can find the OS version, the storage, the permissions and the battery use in a phone's Settings.
+- You can say what a PC and a phone do with a game in the background.

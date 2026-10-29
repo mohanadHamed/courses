@@ -1,6 +1,6 @@
 ---
 title: "Operating Systems: Functions, Processes and Memory Management"
-subtitle: "Lecture 9"
+subtitle: "Lecture 5"
 format: lesson-pptx
 ---
 
@@ -8,7 +8,7 @@ format: lesson-pptx
 
 {{< glossary operating-system os-services process scheduler time-slice process-state background-app memory-management >}}
 
-## 9.1 What the OS does for a game
+## 5.1 What the OS does for a game
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -45,13 +45,13 @@ b) files
 c) devices
 :::
 
-## 9.2 Processes and the scheduler
+## 5.2 Processes and the scheduler
 
 :::: {.columns}
 ::: {.column width="50%"}
 - A process is a running program with its own memory.
 - The scheduler gives each process a time slice of a few ms on a core.
-- A process is running, ready or waiting.
+- The app on the screen gets the most time.
 - **Do it:** Open Task Manager with Ctrl + Shift + Esc. Which three processes use the most memory?
 :::
 ::: {.column width="50%"}
@@ -61,27 +61,27 @@ c) devices
 
 ## Live demo · Scheduler Lab
 
-{{< sim file="sims/scheduler-lab.html" poster="sims/scheduler-lab.png" title="Scheduler Lab: one core, many processes" task="**Show:** open Download and Chat sync, then let the game load a file. **Ask:** why does the game get no slices while it waits?" >}}
+{{< sim file="sims/scheduler-lab.html" poster="sims/scheduler-lab.png" title="Scheduler Lab: one core, many processes" task="**Show:** open Download and Chat sync, then close Download. **Ask:** why does the game get more slices now?" >}}
 
 ## Try it 2 · Processes
 
-a) The game waits for a level file from storage. What is its state?
-b) All cores are busy, but the game could run. What is its state?
-c) One core has slices of 4 ms, and the game and three other apps are ready. How long does the game run in every 16 ms?
+a) What does the scheduler decide?
+b) A phone has 8 cores and 40 apps open. Can they all run?
+c) The player closes a download. What happens to the game?
 
 ::: {.answer}
-a) waiting
-b) ready
-c) 4 ms
+a) which process runs on a core, and for how long
+b) Yes, the scheduler switches between them very fast.
+c) It gets more time on the core.
 :::
 
-## 9.3 Sharing the RAM
+## 5.3 Sharing the RAM
 
 :::: {.columns}
 ::: {.column width="50%"}
 - The OS gives each process its own part of the RAM.
 - When the RAM of a phone is full, the OS closes background apps.
-- When the RAM of a PC is full, Windows uses the slow page file on the drive.
+- A good mobile game saves its state when it goes to the background.
 - **Do it:** In Task Manager › Performance › Memory, how much RAM is in use?
 :::
 ::: {.column width="50%"}
@@ -89,26 +89,26 @@ c) 4 ms
 :::
 ::::
 
-## Example · Pocket Quest and the camera
+## Example · A puzzle game and a video call
 
-A phone has 4 GB of RAM. The OS uses 1.5 GB, Pocket Quest 1.8 GB, and the camera needs 0.9 GB.
-**What does the OS do when the player opens the camera?**
+A phone has 6 GB of RAM. The OS uses 2 GB, a puzzle game 3 GB, and a video call needs 1.5 GB.
+**What does the OS do when the call comes?**
 
 ::: {.reveal}
-1. In use before: 1.5 + 1.8 = 3.3 GB, so 0.7 GB is free.
-2. With the camera: 3.3 + 0.9 = 4.2 GB, which is more than 4 GB.
-3. The OS closes **Pocket Quest** in the background, and the camera keeps running.
+1. In use before: 2 + 3 = 5 GB, so 1 GB is free.
+2. With the call: 5 + 1.5 = 6.5 GB, which is more than 6 GB.
+3. The OS closes the **game** in the background, and the call keeps running.
 :::
 
 ## Try it 3 · Memory
 
-a) A phone has 6 GB. The OS uses 2 GB and a game 2.5 GB. How much RAM is free?
-b) What does Windows do when the RAM is full?
+a) A phone has 8 GB. The OS uses 2.5 GB and a game 3 GB. How much RAM is free?
+b) A game starts again from its title screen after a call. Did it crash?
 c) What should a mobile game do when it goes to the background?
 
 ::: {.answer}
-a) 1.5 GB
-b) It uses the page file on the drive.
+a) 2.5 GB
+b) No, the OS closed it to free RAM.
 c) It should save its state.
 :::
 
@@ -116,7 +116,7 @@ c) It should save its state.
 
 {{< sim file="sims/ram-rush.html" poster="sims/ram-rush.png" title="RAM Rush: you are the operating system of a phone" kind="game" task="**The story:** Pocket Quest runs on a 4 GB phone next to the camera, Chat and Music. **Play:** you are the OS; in each round, decide what fits and which app must close." >}}
 
-## Try it 4 · The big level (harder)
+## Try it · The big level (harder)
 
 The facts: the phone has 4 GB of RAM. The OS uses 1.5 GB and Pocket Quest 2.3 GB. Chat (0.4 GB) was used 1 minute ago, and Music (0.3 GB) 20 minutes ago.
 
@@ -134,6 +134,6 @@ c) Music and Chat
 
 - The OS manages the hardware and gives services to all apps.
 - The scheduler shares the CPU cores between processes in short time slices.
-- A process is running, ready or waiting.
+- The app on the screen gets the most time.
 - The OS gives each process its own part of the RAM.
-- A full RAM makes a phone close background apps and a PC use the slow page file.
+- A full RAM makes a phone close background apps, so a game saves its state.

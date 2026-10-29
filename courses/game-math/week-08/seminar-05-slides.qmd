@@ -1,0 +1,184 @@
+---
+title: "Revision of Lectures 1–10"
+subtitle: "Seminar 5 · practises Lectures 1–10"
+format: lesson-pptx
+---
+
+## Recall · Lectures 1–10
+
+a) How long is the vector (6, 8)?
+b) What is (2, 3) · (−3, 2)?
+c) What is R(90°) × (1, 0)?
+
+::: {.answer}
+a) 10
+b) 0, so the vectors are perpendicular
+c) (0, 1)
+:::
+
+## Activity 1 · A ship's trip · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A ship sails from (−2, 3) to (4, −5) at 2 units per second.
+- **Do it:** Find the step, its length, the unit direction and the velocity.
+- How long does the trip take?
+:::
+::: {.column width="50%"}
+![](../week-02/images/vector-add.png)
+:::
+::::
+
+## Check 1 · A ship's trip
+
+What are the step, the length and the time?
+
+::: {.reveal}
+1. The step is (6, −8), and its length is √(36 + 64) = 10.
+2. The unit direction is (0.6, −0.8), so the velocity is (1.2, −1.6).
+3. The trip takes 10 ÷ 2 = 5 seconds.
+:::
+
+## Activity 2 · The guard and the turret · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A guard looks along f = (1, 0). Players stand at (3, 4), (−3, 4) and (2, −1).
+- **Do it:** Compute the dot product and the 2D cross product of f with each d.
+- Is each player in front or behind, to the left or to the right?
+:::
+::: {.column width="50%"}
+![](../week-02/images/dot-sign.png)
+:::
+::::
+
+## Check 2 · The guard and the turret
+
+Where is each player?
+
+::: {.reveal}
+1. (3, 4): f · d = 3 and f × d = 4, so in front and to the left.
+2. (−3, 4): −3 and 4, so behind and to the left.
+3. (2, −1): 2 and −1, so in front and to the right.
+:::
+
+## Activity 3 · Nearest and along · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A tower stands at (0, 0), with enemies at (3, 4), (−5, 1) and (2, −2).
+- **Do it:** Find the nearest enemy by comparing the squares.
+- Then find how far along the beam û = (0.6, 0.8) each enemy is.
+:::
+::: {.column width="50%"}
+![](../week-03/images/projection.png)
+:::
+::::
+
+## Check 3 · Nearest and along
+
+Which enemy is nearest, and how far along the beam is each?
+
+::: {.reveal}
+1. The squares are 25, 26 and 8, so (2, −2) is nearest.
+2. Along the beam: 5, −2.2 and −0.4.
+3. A negative value means the enemy is behind the start of the beam.
+:::
+
+## Activity 4 · Aim and fire · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A cannon fires at 60° with the speed 20 (cos 60° = 0.5, sin 60° = 0.87).
+- **Do it:** Find the velocity, and the angle of an enemy at (−4, 4) with atan2.
+- A turret faces 350° and must face 10°: what is the short turn?
+:::
+::: {.column width="50%"}
+![](../week-04/images/unit-circle.png)
+:::
+::::
+
+## Check 4 · Aim and fire
+
+What are the velocity, the angle and the turn?
+
+::: {.reveal}
+1. The velocity is 20 × (0.5, 0.87) = (10, 17.4).
+2. atan2(4, −4) = 135°, in quadrant II.
+3. The short turn is −340° + 360° = +20°, to the left.
+:::
+
+## Activity 5 · Spells and their undo · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A has the rows (1, 2) and (0, 1), and B has the rows (3, 0) and (1, 1).
+- **Do it:** Compute AB and BA. Are they equal?
+- Which matrix undoes Grow, with the rows (2, 0) and (0, 2)?
+:::
+::: {.column width="50%"}
+![](../week-05/images/matrix-vector.png)
+:::
+::::
+
+## Check 5 · Spells and their undo
+
+What are the products and the undo?
+
+::: {.reveal}
+1. AB has the rows (5, 2) and (1, 1).
+2. BA has the rows (3, 6) and (1, 3), so AB is not BA.
+3. Shrink, with the rows (0.5, 0) and (0, 0.5), undoes Grow.
+:::
+
+## Activity 6 · One matrix for the move · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A flag sits at (1, 0), is turned by 180° and moved by (2, 3).
+- **Do it:** Write M = T(2, 3) × R(180°). Where do the point (1, 0, 1) and the direction (1, 0, 0) go?
+- Then rotate the handle (2, 0) by 90° about the hinge (1, 1).
+:::
+::: {.column width="50%"}
+![](../week-07/images/trs-chain.png)
+:::
+::::
+
+## Live demo · Matrix Chain
+
+{{< sim file="../week-07/sims/matrix-chain.html" poster="../week-07/sims/matrix-chain.png" title="Matrix Chain: M = T × R × S" task="**Show:** set scale 1, θ = 180°, tx = 2 and ty = 3. **Ask:** where does the point (1, 0) go?" >}}
+
+## Check 6 · One matrix for the move
+
+What are the three results?
+
+::: {.reveal}
+1. M has the rows (−1, 0, 2), (0, −1, 3) and (0, 0, 1), so the flag goes to (1, 3).
+2. The direction only turns: (1, 0, 0) goes to (−1, 0, 0).
+3. The handle goes to (2, 2).
+:::
+
+## Game challenge · Island Quest
+
+{{< sim file="sims/island-quest.html" poster="sims/island-quest.png" title="Island Quest: one problem on each island" kind="game" task="A boat sails around six islands, one for each part of Lectures 1–10. **Play:** solve the problem on each island on your phone." >}}
+
+## Try it · Mixed (harder)
+
+The facts: M = T(5, 1) × R(90°). A drone at (1, 2) flies the step (3, 4).
+
+a) Where does M send the point (1, 1, 1)?
+b) Where does M send the direction (1, 0, 0)?
+c) Where is the drone, and how far did it fly?
+
+::: {.answer}
+a) (4, 2, 1)
+b) (0, 1, 0)
+c) (4, 6), 5 units
+:::
+
+## Wrap-up
+
+- You can find steps, lengths, unit directions and velocities.
+- You can decide front, back, left and right with the two products.
+- You can turn an angle into a velocity and find the angle of a vector.
+- You can multiply matrices, undo a spell and build M = T × R × S.

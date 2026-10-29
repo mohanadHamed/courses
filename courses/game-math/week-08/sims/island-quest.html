@@ -9,7 +9,7 @@
 <body class="theme-arcade">
 <main class="sim">
   <h1>Island Quest</h1>
-  <p class="hint">Sail around six islands, one for each part of lectures 1–14. On each island, one problem from a game. Solve it to sail on.</p>
+  <p class="hint">Sail around six islands, one for each part of Lectures 1–10. On each island, one problem from a game. Solve it to sail on.</p>
 </main>
 
 <script src="../../../../shared/sims/sim-base.js"></script>
@@ -31,8 +31,8 @@
       good: "(10 cos 30°, 10 sin 30°) = (8.7, 5).", why: { "(5, 8.7)": "cos goes with x, sin with y." } },
     { isl: 3, goal: "An enemy is at <b>(−4, 4)</b> from the turret. Which angle does atan2(4, −4) give?", choices: C(["135°", "45°", "−45°", "225°"]), answer: "135°",
       good: "Left and up: the second quadrant. atan2 gives 135°; plain atan(4 / −4) would give −45°.", why: { "−45°": "That is atan(−1); atan2 also looks at the signs." } },
-    { isl: 4, goal: "M has the rows <b>(2, 1)</b> and <b>(1, 1)</b>. Which matrix is its inverse?", choices: C(["rows (1, −1) and (−1, 2)", "rows (1, 1) and (1, 2)", "rows (2, −1) and (−1, 1)", "it has no inverse"]), answer: "rows (1, −1) and (−1, 2)",
-      good: "det = 2 × 1 − 1 × 1 = 1; swap a and d, change the signs of b and c: rows (1, −1) and (−1, 2).", why: { "it has no inverse": "det = 1, not 0." } },
+    { isl: 4, goal: "Grow has the rows <b>(2, 0)</b> and <b>(0, 2)</b>: it doubles x and y. Which matrix undoes it?", choices: C(["rows (0.5, 0) and (0, 0.5)", "rows (2, 0) and (0, 2)", "rows (−2, 0) and (0, −2)", "it has no inverse"]), answer: "rows (0.5, 0) and (0, 0.5)",
+      good: "Grow doubles x and y, so its inverse halves them: Shrink × Grow = I.", why: { "rows (2, 0) and (0, 2)": "That is Grow again: the crystal would go even further.", "rows (−2, 0) and (0, −2)": "This turns the point around and doubles it.", "it has no inverse": "Grow sends different points to different places, so it can be undone." } },
     { isl: 5, goal: "M = T(5, 1) × R(90°). Where does the point (1, 1, 1) go, and the direction (1, 0, 0)?", choices: C(["(4, 2, 1) and (0, 1, 0)", "(6, 2, 1) and (6, 1, 0)", "(4, 2, 1) and (5, 2, 0)", "(1, 1, 1) and (1, 0, 0)"]), answer: "(4, 2, 1) and (0, 1, 0)",
       good: "R(90°) × (1, 1) = (−1, 1), + (5, 1) = (4, 2). The direction (w = 0) only turns: (0, 1).", why: { "(4, 2, 1) and (5, 2, 0)": "A direction has w = 0: the move is not added." } },
   ];

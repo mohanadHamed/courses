@@ -1,0 +1,344 @@
+---
+title: "Revision of Lectures 1–10"
+description: "Seminar worksheet · One revision activity for each part of the course so far: vectors, the dot and cross products, distance and projection, trigonometry, matrices and transformations."
+seminar: 5
+ilos: [A1, A2, B1, C1]
+format: lesson-typst
+---
+
+::: {.lead}
+Today there are no new ideas. You revise Lectures 1–10 by solving one game
+problem from each part of the course: vectors, the two products, distance
+and projection, trigonometry, matrices and transformations. Do each activity
+alone. The results of the activities are at the end of this worksheet: try
+first, then compare.
+:::
+
+## Recall
+
+![Lectures 1–10 in six parts.](images/course-map.png){width=88%}
+
+- **Vectors (Lectures 1–2):** a step is B − A; length |v| = √(x² + y²);
+  unit vector v ÷ |v|; velocity = speed × unit direction.
+- **Two products (Lectures 3–4):** a · b = a~x~ b~x~ + a~y~ b~y~ (in front or
+  behind); 2D a × b = a~x~ b~y~ − a~y~ b~x~ (left or right).
+- **Distance and projection (Lecture 5):** distance |B − A|; along = v · û.
+- **Trigonometry (Lectures 6–7):** the direction at θ is (cos θ, sin θ);
+  atan2(y, x) gives the angle of a vector.
+- **Matrices (Lecture 8):** rows times columns; I changes nothing; the
+  inverse undoes.
+- **Transformations (Lectures 9–10):** T, S, R; about a pivot: −C,
+  transform, +C; M = T × R × S; points w = 1, directions w = 0.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="14|(1, 0)"}
+How long is (6, 8)?
+:   10
+
+    Why: √(36 + 64) = √100 = 10, not 6 + 8.
+
+What is (2, 3) · (−3, 2)?
+:   0
+
+    Why: −6 + 6 = 0: the vectors are perpendicular.
+
+What is R(90°) × (1, 0)?
+:   (0, 1)
+
+    Why: (−y, x) = (0, 1).
+:::
+:::
+
+## Activity 1 · A ship's trip
+
+A ship sails from (−2, 3) to (4, −5) at 2 units per second.
+
+![Adding vectors head to tail.](../week-02/images/vector-add.png){width=78%}
+
+::: {.callout-note title="Activity 1 · Step, length, time · 10 min"}
+1. Find the step from start to end and its length.
+2. Find the unit direction and the velocity at 2 units per second.
+3. How long does the trip take?
+
+*Your product:* the step, its length, the unit direction, the velocity and
+the time.
+
+::: {.check}
+Step (6, −8); length √(36 + 64) = 10; unit direction (0.6, −0.8); velocity
+2 × (0.6, −0.8) = (1.2, −1.6); time 10 ÷ 2 = 5 seconds.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Vectors"}
+Choose the right answer.
+
+::: {.match extra="(6, 8)|7 s"}
+Normalize (0, −4).
+:   (0, −1)
+
+    Why: its length is 4; (0 ÷ 4, −4 ÷ 4).
+
+A drone flies (6, 8) at 5 units per second. Its velocity?
+:   (3, 4)
+
+    Why: unit direction (0.6, 0.8) × 5.
+
+A trip of 10 units at 2 units per second takes…
+:   5 s
+
+    Why: time = distance ÷ speed.
+:::
+:::
+
+## Activity 2 · The guard and the turret
+
+A guard looks along f = (1, 0). Three players stand at d = (3, 4), (−3, 4)
+and (2, −1) from the guard.
+
+![The sign of the dot product.](../week-02/images/dot-sign.png){width=78%}
+
+{{< sim file="../week-02/sims/dot-lab.html" poster="../week-02/sims/dot-lab.png" title="Dot Lab: two vectors, one number" height="640" >}}
+
+::: {.callout-note title="Activity 2 · Front, back, left, right · 12 min"}
+1. For each player, compute f · d. In front or behind?
+2. For each player, compute the 2D cross product f × d. Left or right?
+3. Check one player in **Dot Lab**.
+
+*Your product:* a table with three rows: d, f · d, front or behind, f × d,
+left or right.
+
+::: {.check}
+(3, 4): f · d = 3, in front; f × d = 4, left. (−3, 4): −3, behind; 4, left.
+(2, −1): 2, in front; −1, right.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Two products"}
+The guard looks along f = (1, 0). Choose the right answer.
+
+::: {.match extra="in front|right"}
+A player at d = (−3, 4). In front or behind?
+:   behind
+
+    Why: f · d = −3 is negative.
+
+A player at d = (2, −1). Left or right?
+:   to the right
+
+    Why: f × d = 1 × (−1) − 0 × 2 = −1: negative.
+
+What is (1, 0, 0) × (0, 1, 0)?
+:   (0, 0, 1)
+
+    Why: the x-axis × the y-axis gives the z-axis.
+:::
+:::
+
+## Activity 3 · The nearest enemy and the beam
+
+A tower stands at (0, 0). Enemies are at (3, 4), (−5, 1) and (2, −2). A beam
+from the tower goes along û = (0.6, 0.8).
+
+![The car's shadow on the road: the projection.](../week-03/images/projection.png){width=78%}
+
+::: {.callout-note title="Activity 3 · Nearest and along · 10 min"}
+1. Which enemy is nearest? Compare the squares.
+2. How far along the beam is each enemy (v · û)?
+3. Which enemy is behind the tower, seen from the beam?
+
+*Your product:* three squares, three "along" values and one answer.
+
+::: {.check}
+Squares 25, 26, 8: (2, −2) is nearest. Along: (3, 4): 1.8 + 3.2 = 5;
+(−5, 1): −3 + 0.8 = −2.2; (2, −2): 1.2 − 1.6 = −0.4. (−5, 1) and (2, −2) give a
+negative value: both are behind the start of the beam.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Distance and projection"}
+Choose the right answer.
+
+::: {.match extra="(3, 4)|7"}
+Which enemy is nearest to (0, 0): (3, 4), (−5, 1) or (2, −2)?
+:   (2, −2)
+
+    Why: its square 4 + 4 = 8 is the smallest.
+
+The distance between (1, 1) and (4, 5).
+:   5
+
+    Why: (3, 4) has the length 5.
+
+v = (3, −2) hits a floor with the normal (0, 1). The slide?
+:   (3, 0)
+
+    Why: remove the part into the floor: (3, −2) − (−2)(0, 1).
+:::
+:::
+
+## Activity 4 · Aim and fire
+
+A cannon fires at 60° with the speed 20 (cos 60° = 0.5, sin 60° = 0.87). A
+turret faces 350° and must aim at an enemy at (−4, 4).
+
+![The unit circle.](../week-04/images/unit-circle.png){width=78%}
+
+::: {.callout-note title="Activity 4 · Angles · 12 min"}
+1. Find the velocity of the cannon ball.
+2. Find the angle of the enemy with atan2(4, −4).
+3. The turret faces 350° and must face 10°. What is the short turn?
+
+*Your product:* one velocity, one angle and one turn.
+
+::: {.check}
+Velocity 20 × (0.5, 0.87) = (10, 17.4). atan2(4, −4) = 135° (quadrant II).
+Short turn: 10° − 350° = −340°; + 360° = +20°, to the left.
+:::
+:::
+
+::: {.callout-tip title="Try it 5 · Angles"}
+Choose the right answer.
+
+::: {.match extra="(17.4, 10)|45°"}
+A cannon fires at 60° with the speed 20. The velocity?
+:   (10, 17.4)
+
+    Why: 20 × (cos 60°, sin 60°).
+
+Which angle does atan2(−3, −3) give?
+:   −135°
+
+    Why: both parts negative: quadrant III.
+
+Facing 350°, target 10°. The short turn?
+:   +20°
+
+    Why: −340° + 360°.
+:::
+:::
+
+## Activity 5 · Spells and their undo
+
+Two spells: A has the rows (1, 2) and (0, 1); B has the rows (3, 0) and
+(1, 1). Grow has the rows (2, 0) and (0, 2).
+
+![A matrix times a vector.](../week-05/images/matrix-vector.png){width=78%}
+
+::: {.callout-note title="Activity 5 · Matrices · 10 min"}
+1. Compute AB and BA. Are they equal?
+2. Compute A × (1, 1).
+3. Which matrix undoes Grow? Check it on (3, 2).
+
+*Your product:* two matrices, one point and one inverse with its check.
+
+::: {.check}
+AB = rows (5, 2) and (1, 1). BA = rows (3, 6) and (1, 3). Not equal: the order
+matters. A × (1, 1) = (3, 1). Shrink, rows (0.5, 0) and (0, 0.5): Grow sends
+(3, 2) to (6, 4), and Shrink brings it back to (3, 2).
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Matrices"}
+Choose the right answer.
+
+::: {.match extra="rows (3, 0), (0, 1)|(4, 6)"}
+Rows (1, 2), (0, 1) times rows (3, 0), (1, 1).
+:   rows (5, 2), (1, 1)
+
+    Why: row 1 · columns: 3 + 2 = 5, 0 + 2 = 2; row 2: 1, 1.
+
+Rows (1, 2), (3, 4) times (1, 1).
+:   (3, 7)
+
+    Why: 1 + 2 = 3 and 3 + 4 = 7.
+
+Which matrix undoes Grow, rows (2, 0), (0, 2)?
+:   rows (0.5, 0), (0, 0.5)
+
+    Why: Grow doubles; halving undoes it.
+:::
+:::
+
+## Activity 6 · One matrix for the move
+
+A flag sits at (1, 0) in its own space. It is turned by 180° and moved by
+(2, 3). A door turns about its hinge (1, 1).
+
+![The TRS matrix.](../week-07/images/trs-chain.png){width=78%}
+
+{{< sim file="../week-07/sims/matrix-chain.html" poster="../week-07/sims/matrix-chain.png" title="Matrix Chain: M = T × R × S" height="820" >}}
+
+::: {.callout-note title="Activity 6 · Transformations · 12 min"}
+1. Write M = T(2, 3) × R(180°) as a 3 × 3 matrix. Where does the flag
+   (1, 0, 1) go? Check in **Matrix Chain**.
+2. Where does the direction (1, 0, 0) go with M?
+3. Rotate the door handle (2, 0) by 90° about the hinge (1, 1).
+
+*Your product:* one matrix and three results.
+
+::: {.check}
+M = rows (−1, 0, 2), (0, −1, 3), (0, 0, 1). The flag goes to (1, 3). The
+direction goes to (−1, 0): only turned. The handle: (2, 0) − (1, 1) =
+(1, −1); R(90°) gives (1, 1); + (1, 1) = (2, 2).
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · Transformations"}
+Choose the right answer.
+
+::: {.match extra="(0, 2)|(4, 4)"}
+Rotate (2, 0) by 90° about the pivot (1, 1).
+:   (2, 2)
+
+    Why: (1, −1) → (1, 1); + (1, 1).
+
+Apply T(−1, 2) to (4, 4, 1).
+:   (3, 6, 1)
+
+    Why: (4 − 1, 4 + 2, 1).
+
+A tank has a yaw of 90°. Its forward vector?
+:   (1, 0, 0)
+
+    Why: (sin 90°, 0, cos 90°).
+:::
+:::
+
+## Case study: Island Quest
+
+*Island Quest* is a made-up revision game. A boat sails around six islands,
+one for each part of Lectures 1–10, and on each island the player solves one
+problem from a game: a drone's flight, a guard's view, a ball on a floor, a
+cannon's aim, a spell and its undo, and a flag moved by one matrix. The Game
+challenge of the interactive page asks these questions.
+
+{{< sim file="sims/island-quest.html" poster="sims/island-quest.png" title="Island Quest: one problem on each island" kind="game" height="640" >}}
+
+## Exercises
+
+1. A ship sails from (1, −1) to (4, 3). Find the step, its length and the
+   unit direction.
+2. A guard looks along (0, 1). Is a player at d = (2, −3) in front or behind?
+   Left or right?
+3. Enemies at (6, 8) and (−7, 1) from a tower. Which is nearer?
+4. A ball flies at 30° with the speed 4 (cos 30° = 0.87, sin 30° = 0.5).
+   Find its velocity.
+5. Facing 20°, target 340°. Find the short turn.
+6. Compute rows (2, 0), (1, 1) times (3, 4).
+7. Rotate (3, 1) by 180° about the pivot (1, 1).
+8. M = T(1, 2) × R(90°). Where does the point (2, 0, 1) go?
+
+## Answers to the exercises
+
+::: {.answers}
+1. (3, 4); 5; (0.6, 0.8).
+2. f · d = −3: behind. f × d = 0 × (−3) − 1 × 2 = −2: to the right.
+3. Squares 100 and 50: (−7, 1) is nearer.
+4. (3.48, 2).
+5. 340° − 20° = 320°; − 360° = −40°: 40° to the right.
+6. (6, 7).
+7. (3, 1) − (1, 1) = (2, 0); R(180°) gives (−2, 0); + (1, 1) = (−1, 1).
+8. R(90°) × (2, 0) = (0, 2); + (1, 2) = (1, 4).
+:::

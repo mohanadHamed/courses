@@ -1,0 +1,108 @@
+---
+title: "Analyzing a Smartphone Specification Sheet"
+subtitle: "Seminar 4 · practises Lecture 4"
+format: lesson-pptx
+---
+
+## Recall · Lecture 4
+
+a) A game steers by turning the phone. Which sensor does it need?
+b) Which line of a phone sheet holds the CPU cores and the GPU?
+c) A phone has 5000 mAh, and a game draws 500 mA. About how long can the player play?
+
+::: {.answer}
+a) the gyroscope
+b) the Chipset line
+c) 10 hours
+:::
+
+## Activity 1 · Your phone's sheet · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A phone sheet has the lines Chipset, RAM, Storage and OS.
+- The capacity is not the free space.
+- **Do it:** Write a spec sheet of your phone with four lines: model, RAM, storage with the free space, and OS.
+:::
+::: {.column width="50%"}
+![](../week-02/images/spec-phones.png)
+:::
+::::
+
+## Check 1 · Your phone's sheet
+
+What does a good sheet show?
+
+::: {.reveal}
+1. It names the model, for example Galaxy A35 or iPhone 13.
+2. It gives the RAM, or "not given" for an iPhone.
+3. It gives the capacity and the free space, which is always less.
+:::
+
+## Activity 2 · Lines that matter · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A developer reads the chipset, the RAM, the display, the touch rate, the battery, the OS, the storage and the sensors.
+- **Do it:** Copy six lines of your phone from the maker's site. Which line does not matter for most games?
+:::
+::: {.column width="50%"}
+![](images/phone-sheet.png)
+:::
+::::
+
+## Check 2 · Lines that matter
+
+Which lines matter for a game?
+
+::: {.reveal}
+1. The chipset tells how fast the CPU and the GPU are.
+2. The touch sampling rate tells how fast taps reach the game.
+3. The camera, the weight and the colour rarely matter.
+:::
+
+## Activity 3 · Three games · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- P5 has no gyroscope, 4 GB of RAM and 20 GB free. P7 has the smallest battery, 4500 mAh.
+- **Do it:** Choose the phone that shows the problems of a glider game that steers by turning, a 2-hour runner and a game that needs 6 GB of RAM.
+:::
+::: {.column width="50%"}
+![](images/game-needs.png)
+:::
+::::
+
+## Check 3 · Three games
+
+Which phone shows each problem first?
+
+::: {.reveal}
+1. The glider game cannot run on P5, because it has no gyroscope.
+2. The 2-hour runner empties P7 first, because its battery is the smallest.
+3. The game that needs 6 GB of RAM is too big for P5.
+:::
+
+## Game challenge · Beat Lane
+
+{{< sim file="sims/phone-picker.html" poster="sims/phone-picker.png" title="Phone Picker: which phone, and which line decides?" kind="game" task="Byte Bay tests Beat Lane, a rhythm game with 30-minute matches, on the phones P5, P6 and P7. **Play:** choose the phone and the line that decides for each game on your phone." >}}
+
+## Try it · Beat Lane (harder)
+
+The facts: P5 has 60 Hz and touch 120 Hz. P7 has touch 480 Hz and 4500 mAh. Beat Lane draws 900 mA.
+
+a) On which phone do taps reach Beat Lane latest?
+b) How long does P7 last in Beat Lane?
+c) Which line does not matter for Beat Lane?
+
+::: {.answer}
+a) P5
+b) about 5 hours (4500 ÷ 900)
+c) the main camera
+:::
+
+## Wrap-up
+
+- You can write the spec sheet of your phone and tell capacity from free space.
+- You can find the lines of a phone sheet that matter for a game.
+- You can choose the test phone that shows the problems of a game.

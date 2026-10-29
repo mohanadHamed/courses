@@ -1,6 +1,6 @@
 ---
 title: "Smartphone Architecture: SoC, Sensors, Touch Screen and Battery"
-subtitle: "Lecture 7"
+subtitle: "Lecture 4"
 format: lesson-pptx
 ---
 
@@ -8,12 +8,12 @@ format: lesson-pptx
 
 {{< glossary soc sensor accelerometer gyroscope capacitive-touch-screen touch-sampling-rate battery-capacity thermal-throttling >}}
 
-## 7.1 One main chip: the SoC
+## 4.1 One main chip: the SoC
 
 :::: {.columns}
 ::: {.column width="50%"}
 - A phone puts its main parts on one chip, the system on a chip (SoC).
-- The SoC holds the CPU cores, the GPU, the NPU, the modem and more.
+- The SoC holds the CPU cores, the GPU, the modem and more.
 - The CPU and the GPU share the RAM, so a phone has no separate video memory.
 - **Do it:** Find the model of your phone in Settings. Which SoC does it have?
 :::
@@ -38,7 +38,7 @@ b) the modem
 c) in the RAM that it shares with the CPU
 :::
 
-## 7.2 Sensors feel the player
+## 4.2 Sensors feel the player
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -68,7 +68,7 @@ b) the gyroscope
 c) the gyroscope
 :::
 
-## 7.3 How the screen feels a finger
+## 4.3 How the screen feels a finger
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -94,7 +94,7 @@ b) about every 4 ms
 c) The picture changes 60 times per second; touches are checked 120 times per second.
 :::
 
-## 7.4 Battery and heat
+## 4.4 Battery and heat
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -111,11 +111,11 @@ c) The picture changes 60 times per second; touches are checked 120 times per se
 ## Example · Play time
 
 The test phone has a 5000 mAh battery.
-**How long can the player play at 1000 mA, and at 800 mA?**
+**How long can the player play at 1000 mA, and at 500 mA?**
 
 ::: {.reveal}
 1. At 1000 mA the play time is 5000 ÷ 1000 = **5 hours**.
-2. At 800 mA, with a darker screen, it is 5000 ÷ 800, about **6 hours**.
+2. At 500 mA, with a darker screen, it is 5000 ÷ 500 = **10 hours**.
 3. A battery saver mode at 30 fps also keeps the phone cooler.
 :::
 
@@ -145,17 +145,17 @@ The facts: Marble Peak reads the accelerometer. On T1 (5000 mAh) it draws 1000 m
 
 a) Why does the game fall to 45 fps after 20 minutes?
 b) A tester's phone has no gyroscope. Can the tester play Marble Peak?
-c) In battery saver mode the game draws 800 mA. How long does T1 last?
+c) In battery saver mode the game draws 500 mA. How long does T1 last?
 
 ::: {.answer}
 a) The hot SoC slows down (thermal throttling).
 b) Yes: the game uses the accelerometer.
-c) about 6 hours (5000 ÷ 800)
+c) 10 hours (5000 ÷ 500)
 :::
 
 ## Summary
 
-- The SoC holds the CPU cores, the GPU, the NPU and the modem, and it shares the RAM.
+- The SoC holds the CPU cores, the GPU and the modem, and it shares the RAM.
 - The accelerometer shows the tilt, and the gyroscope shows the turning.
 - A capacitive touch screen finds the charge of a finger.
 - The play time is about the battery capacity divided by the current.

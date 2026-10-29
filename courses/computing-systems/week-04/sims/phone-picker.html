@@ -40,11 +40,11 @@
 <script>
 (() => {
   const PHONES = {
-    P5: { chip: "8 cores, up to 2.2 GHz, basic GPU", ram: "4 GB", storage: "64 GB (20 GB free)", display: "60 Hz, touch 120 Hz", battery: "5000 mAh", sensors: "accelerometer, GPS (no gyroscope)", bench: "500 → 450 after 20 min" },
-    P6: { chip: "8 cores, up to 2.8 GHz, mid-range GPU", ram: "8 GB", storage: "256 GB (90 GB free)", display: "120 Hz, touch 240 Hz", battery: "5000 mAh", sensors: "accelerometer, gyroscope, compass, GPS", bench: "1000 → 800 after 20 min" },
-    P7: { chip: "8 cores, up to 3.3 GHz, top GPU", ram: "12 GB", storage: "512 GB (300 GB free)", display: "120 Hz, touch 480 Hz", battery: "4500 mAh", sensors: "accelerometer, gyroscope, compass, GPS", bench: "1400 → 840 after 20 min" },
+    P5: { chip: "8 cores, up to 2.2 GHz, basic GPU", ram: "4 GB", storage: "64 GB (20 GB free)", display: "60 Hz, touch 120 Hz", battery: "5000 mAh", sensors: "accelerometer, GPS (no gyroscope)" },
+    P6: { chip: "8 cores, up to 2.8 GHz, mid-range GPU", ram: "8 GB", storage: "256 GB (90 GB free)", display: "120 Hz, touch 240 Hz", battery: "5000 mAh", sensors: "accelerometer, gyroscope, compass, GPS" },
+    P7: { chip: "8 cores, up to 3.3 GHz, top GPU", ram: "12 GB", storage: "512 GB (300 GB free)", display: "120 Hz, touch 480 Hz", battery: "4500 mAh", sensors: "accelerometer, gyroscope, compass, GPS" },
   };
-  const NAMES = { chip: "Chipset", ram: "RAM", storage: "Storage", display: "Display and touch", battery: "Battery", sensors: "Sensors", bench: "Benchmark score" };
+  const NAMES = { chip: "Chipset", ram: "RAM", storage: "Storage", display: "Display and touch", battery: "Battery", sensors: "Sensors" };
   const ROUNDS = [
     { brief: "Beat Lane, a rhythm game: every tap must count at once. On which phone do taps reach the game latest?", phone: "P5", line: "display", lines: ["display", "ram", "battery", "storage"],
       why: "P5 checks for touches only 120 times per second and shows 60 frames: a tap can wait twice as long as on P6." },
@@ -52,8 +52,6 @@
       why: "P5 has no gyroscope. This is a compatibility problem: the store does not offer the game for it." },
     { brief: "Storm Realm, a big 3D world, needs 8 GB of RAM and 12 GB of free storage. Which phone does not meet the RAM line?", phone: "P5", line: "ram", lines: ["ram", "storage", "battery", "display"],
       why: "P5 has only 4 GB of RAM. Its 20 GB of free storage would be enough." },
-    { brief: "A ranked match lasts 30 minutes. Which phone is still the fastest after 20 minutes of play?", phone: "P7", line: "bench", lines: ["bench", "chip", "ram", "battery"],
-      why: "P7 drops from 1400 to 840, P6 from 1000 to 800. P7 loses more, but it stays a little faster." },
     { brief: "City Quest, a walking map game, draws 900 mA on every phone. Which phone runs out of battery first?", phone: "P7", line: "battery", lines: ["battery", "sensors", "chip", "storage"],
       why: "4500 mAh ÷ 900 mA = 5 hours on P7; 5000 mAh ÷ 900 mA is more than 5.5 hours on P5 and P6." },
   ];

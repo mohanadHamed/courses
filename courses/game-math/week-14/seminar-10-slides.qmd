@@ -1,0 +1,153 @@
+---
+title: "Applied Problem Set: Vectors, Transformations and Probability"
+subtitle: "Seminar 10 · practises Lectures 1–16"
+format: lesson-pptx
+---
+
+## Recall · Lectures 1–16
+
+a) Which tool says if a target is in front of a turret?
+b) How do we rotate a point about a pivot?
+c) What is P(at least one hit in n shots)?
+
+::: {.answer}
+a) the sign of the dot product
+b) subtract the pivot, turn, add the pivot
+c) 1 − (1 − p)ⁿ
+:::
+
+## Activity 1 · The rescue pod · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A rescue pod at (−3, 2) flies to a ship at (9, 7) at 2.6 units per second.
+- **Do it:** Find the distance, the flight time and the velocity.
+- Then check that the velocity times the time gives the step.
+:::
+::: {.column width="50%"}
+![](../week-02/images/unit-vector.png)
+:::
+::::
+
+## Check 1 · The rescue pod
+
+What are the results?
+
+::: {.reveal}
+1. The step is (12, 5), and its length is 13.
+2. The flight time is 13 ÷ 2.6 = 5 seconds.
+3. The velocity is (2.4, 1), and 5 × (2.4, 1) gives (12, 5).
+:::
+
+## Activity 2 · See and turn · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A turret at T (1, 1) faces (1, 0) with the range 10.
+- Two targets appear at E₁ (1, 7) and E₂ (−3, 1).
+- **Do it:** Is each target in front, beside or behind? How far must the turret turn?
+:::
+::: {.column width="50%"}
+![](../week-02/images/dot-sign.png)
+:::
+::::
+
+## Check 2 · See and turn
+
+Where are the targets?
+
+::: {.reveal}
+1. E₁ − T = (0, 6) gives the dot product 0, so E₁ is beside, to the left.
+2. E₂ − T = (−4, 0) gives the dot product −4, so E₂ is behind.
+3. The turret turns 90° to E₁ and 180° to E₂.
+:::
+
+## Activity 3 · The crane arm · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A crane arm has its pivot at P (−1, 2) and its tip at A (2, 6).
+- **Do it:** Rotate the tip 90° counterclockwise about P.
+- Then scale the new tip by 0.5 about P.
+:::
+::: {.column width="50%"}
+![](../week-06/images/rotate-pivot.png)
+:::
+::::
+
+## Check 3 · The crane arm
+
+Where is the tip?
+
+::: {.reveal}
+1. A − P = (3, 4) turns into (−4, 3), and + P gives (−5, 5).
+2. Half of (−4, 3) is (−2, 1.5), and + P gives (−3, 3.5).
+3. The arm was 5 long and is now 2.5 long.
+:::
+
+## Activity 4 · Shots and crystals · 10 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A turret hits with p = 0.5 and fires 3 shots.
+- A drone visits 40 asteroids, and each holds a crystal with p = 0.2.
+- **Do it:** Find P(at least one hit), the expected hits and the expected crystals.
+:::
+::: {.column width="50%"}
+![](../week-11/images/tree.png)
+:::
+::::
+
+## Check 4 · Shots and crystals
+
+What are the chances?
+
+::: {.reveal}
+1. P(no hit) is 0.5³ = 1/8, so P(at least one hit) is 7/8.
+2. The expected number of hits is 3 × 0.5 = 1.5.
+3. The expected number of crystals is 40 × 0.2 = 8.
+:::
+
+## Activity 5 · The mission · 15 min
+
+- A drone at (2, 1) faces (1, 0) and flies to an asteroid at (−3, 13) at 2.6 units per second.
+- **Do it:** Find the flight time. Is the asteroid in front of the drone? What is P(at least one crystal in 3 asteroids) with p = 0.5?
+
+## Live demo · Problem Drill
+
+{{< sim file="sims/problem-drill.html" poster="sims/problem-drill.png" title="Problem Drill: Star Dock" task="**Show:** one problem of each topic, with the steps after each answer. **Ask:** which of the five steps catches most mistakes?" >}}
+
+## Check 5 · The mission
+
+What are the results?
+
+::: {.reveal}
+1. The step (−5, 12) has the length 13, so the flight takes 5 seconds.
+2. (1, 0) · (−5, 12) = −5, so the asteroid is behind the drone.
+3. P(at least one crystal) is 1 − (1/2)³ = 7/8.
+:::
+
+## Game challenge · Star Dock Missions
+
+{{< sim file="sims/star-dock-missions.html" poster="sims/star-dock-missions.png" title="Star Dock Missions: one tool for each problem" kind="game" task="The control room of Star Dock sends six missions about a shuttle, a turret, an arm, crystals and shots. **Play:** choose the right result for each mission on your phone." >}}
+
+## Try it · The missions (harder)
+
+The facts: the shuttle flies from S (2, 1) to D (14, 10) at 3 units per second and 60 fps. The arm has its pivot at P (3, 2) and its tip at A (7, 2). The turret hits with p = 0.6.
+
+a) What is the shuttle's step in one frame?
+b) Where is the arm's tip after a turn of 180° about P?
+c) What is P(no hit) in 3 shots?
+
+::: {.answer}
+a) (0.04, 0.03)
+b) (−1, 2)
+c) 0.064
+:::
+
+## Wrap-up
+
+- You can solve a game problem with the five steps.
+- You can find a flight time, a velocity and a step per frame.
+- You can decide if a target is in front and in range, and how to turn.
+- You can turn and scale about a pivot, and compute chances of shots and drops.

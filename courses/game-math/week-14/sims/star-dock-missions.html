@@ -21,13 +21,13 @@
   const rounds = [
     { card: "The shuttle at S (2, 1) flies to the dock D (14, 10) at 3 units per second.", goal: "How long is the flight?", answer: "5 s", choices: C(["5 s", "15 s", "7 s", "45 s"]), good: "D − S = (12, 9), length 15; 15 ÷ 3 = 5 s.", why: { "7 s": "12 + 9 = 21 is not the length; use the square root of 12² + 9²." } },
     { card: "Same shuttle: direction (0.8, 0.6), speed 3 units per second.", goal: "What is its velocity?", answer: "(2.4, 1.8)", choices: C(["(2.4, 1.8)", "(12, 9)", "(0.8, 0.6)", "(3, 3)"]), good: "Velocity = speed × unit direction = 3 × (0.8, 0.6)." },
-    { card: "The turret at T (4, 2) faces (0, 1) and has a 90° field of view and range 6. A target is at E (7, 6).", goal: "Can the turret see it?", answer: "yes: 0.8 ≥ 0.707 and 5 ≤ 6", choices: C(["yes: 0.8 ≥ 0.707 and 5 ≤ 6", "no: 0.6 < 0.707", "no: the distance is 7", "yes: every target is seen"]), good: "Unit vector to E: (0.6, 0.8); dot with (0, 1) = 0.8; distance 5.", why: { "no: 0.6 < 0.707": "0.6 is the x part; the facing is (0, 1), so the dot product is the y part." } },
+    { card: "The turret at T (4, 2) faces (0, 1) and has the range 6. A target is at E (7, 6).", goal: "Can the turret see it?", answer: "yes: in front and 5 ≤ 6", choices: C(["yes: in front and 5 ≤ 6", "no: it is behind", "no: the distance is 7", "yes: every target is seen"]), good: "E − T = (3, 4). The facing · (3, 4) = 4 > 0: in front. The distance 5 ≤ 6: in range.", why: { "no: the distance is 7": "3 + 4 = 7 is not the length; √(9 + 16) = 5." } },
     { card: "The docking arm turns 90° counterclockwise about P (3, 2). Its tip is at A (7, 2).", goal: "Where is the tip now?", answer: "(3, 6)", choices: C(["(3, 6)", "(−2, 7)", "(7, 6)", "(3, −2)"]), good: "A − P = (4, 0) → (0, 4); P + (0, 4) = (3, 6).", why: { "(−2, 7)": "That is a rotation about the origin; move P to the origin first." } },
-    { card: "Asteroids appear at random in a 20 × 10 rectangle. The dock's shield is a circle of radius 3.", goal: "P(an asteroid appears inside the shield)?", answer: "about 0.14", choices: C(["about 0.14", "about 0.3", "0.015", "0.5"]), good: "π · 3² ≈ 28.3; 28.3 ÷ 200 ≈ 0.14.", why: { "about 0.3": "3 ÷ 10 compares lengths, not areas." } },
+    { card: "Each asteroid holds a crystal with p = 0.25. A drone mines 20 asteroids.", goal: "How many crystals on average?", answer: "5", choices: C(["5", "0.25", "20", "80"]), good: "Expected number = n × p = 20 × 0.25 = 5.", why: { "80": "Multiply 20 by 0.25, do not divide by it." } },
     { card: "The turret fires 3 shots at a target and hits with p = 0.6 per shot.", goal: "P(at least one hit)?", answer: "0.936", choices: C(["0.936", "1.8", "0.216", "0.6"]), good: "1 − 0.4³ = 1 − 0.064 = 0.936.", why: { "1.8": "1.8 is the expected number of hits, not a probability.", "0.216": "0.6³ is the chance that all three hit." } },
   ];
   rounds.forEach((r) => { r.why = r.why || {}; });
-  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is Problem A of the lesson: the shuttle." });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the first mission: the shuttle flies to the dock." });
   const box = Kit.el("div", { class: "card", id: "card" });
   document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
   let last = -1;

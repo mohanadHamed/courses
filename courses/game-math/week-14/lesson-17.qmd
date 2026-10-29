@@ -1,0 +1,344 @@
+---
+title: "Case Study: Movement of a 2D Object"
+description: "A case study that builds the movement of a 2D shuttle step by step: motion and turning per frame with Δt, normalized input, facing the velocity with atan2, bouncing with the reflected velocity, and drawing the sprite with a TRS transform."
+lesson: 17
+ilos: [B1, C1, D1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check. The team activity is in the notes.
+
+## Key terms
+
+{{< glossary game-loop delta-time frame-rate-independence input-vector unit-vector velocity angular-speed atan2 surface-normal reflection-vector trs-matrix team-roles >}}
+
+## 17.1 Motion per frame with Δt
+
+- **position += velocity × Δt** in every frame.
+- 60 fps: Δt = 1/60 s; the same distance per second at any frame rate.
+- Speed 6: a step of 0.1 at 60 fps, 0.2 at 30 fps.
+- Turning: **Δθ = ω × Δt** per frame (180°/s at 60 fps: 3° per frame).
+
+![The same second at 30 and 60 fps.](images/frame-steps.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+A fixed step per frame makes the game speed depend on the computer.
+:::
+
+::: {.callout-note title="Do it · Δt"}
+A meteor at 12 units per second: the step at 30, 60 and 120 fps. A turret
+at 90° per second and 30 fps: the turn per frame.
+
+::: {.check}
+0.4, 0.2 and 0.1 (each × fps = 12). The turret: 90 × 1/30 = 3°.
+:::
+:::
+
+::: {.callout-tip title="Try it 1 · Steps"}
+Choose the right answer.
+
+::: {.match extra="12|0.5"}
+Speed 9, 30 fps. The step per frame?
+:   0.3
+
+    Why: 9 × 1/30.
+
+Speed 10, 50 fps. The step per frame?
+:   0.2
+
+    Why: 10 × 1/50.
+
+30 fps, a fixed step of 0.1 (no Δt). The distance per second?
+:   3
+
+    Why: 30 steps of 0.1: the slow computer moves less.
+
+A wheel at 240° per second, 60 fps. The turn per frame?
+:   4°
+
+    Why: Δθ = 240 × 1/60.
+:::
+:::
+
+## 17.2 Input and diagonal movement
+
+- Keys give an **input vector**: right (1, 0), up (0, 1), right + up (1, 1).
+- (1, 1) is longer than 1: **normalize** the input when its length is more
+  than 1.
+- velocity = speed × normalized input. A stick (3, 4) → (0.6, 0.8).
+
+![Diagonal input.](images/diagonal.png){width=94%}
+
+{{< sim file="sims/move-lab.html" poster="sims/move-lab.png" title="Move Lab: fly the shuttle of Star Dock" height="820" >}}
+
+::: {.callout-warning title="Watch out!"}
+Never normalize (0, 0): it has no direction. Check the length first.
+:::
+
+::: {.callout-note title="Do it · Diagonals"}
+In **Move Lab**, fly ↗ with "normalize input" off and on. Then the raw
+stick input (−3, 4), speed 10, normalized: the velocity?
+
+::: {.check}
+Off: about 7 (too fast); on: 5. (−3, 4) has length 5, so (−0.6, 0.8) × 10 =
+(−6, 8).
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Diagonals"}
+Use Move Lab. Choose the right answer.
+
+::: {.match extra="10|(1, 1)"}
+Speed 5, input (1, 1), normalized. The speed?
+:   5
+
+    Why: the normalized input has length 1.
+
+The stick input (0, −2), normalized?
+:   (0, −1)
+
+    Why: divide by its length 2.
+
+Speed 10, raw input (3, 4), normalized. The velocity?
+:   (6, 8)
+
+    Why: (0.6, 0.8) × 10.
+
+Speed 5, input (1, 1), not normalized. Too fast or too slow?
+:   too fast, about 7
+
+    Why: (5, 5) is longer than 5.
+:::
+:::
+
+## 17.3 Facing the velocity
+
+- **θ = atan2(v~y~, v~x~)** for a sprite drawn facing +x.
+- (5, 5) → 45°; (0, 5) → 90°; (−5, 0) → 180°.
+- Turn only when the speed is not 0.
+
+![Face the velocity.](images/facing.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+atan2(x, y) instead of atan2(y, x) measures from the y-axis.
+:::
+
+::: {.callout-note title="Do it · Facing"}
+The facing angle for (0, −2), (4, −4) and (−3, −3).
+
+::: {.check}
+−90°; −45°; −135° (or 270°, 315°, 225°).
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Facing"}
+Choose the angle.
+
+::: {.match extra="0°|60°"}
+v = (6, 6)
+:   45°
+
+    Why: equal parts, up and to the right.
+
+v = (0, 7)
+:   90°
+
+    Why: straight up.
+
+v = (3, −3)
+:   −45°
+
+    Why: down and to the right.
+
+v = (−2, 2)
+:   135°
+
+    Why: up and to the left: quadrant II.
+
+v = (−7, 0)
+:   180°
+
+    Why: straight to the left.
+:::
+:::
+
+## 17.4 Bouncing off walls
+
+- **v' = v − 2(v · n)n**, n the unit normal of the wall.
+- The part along the wall stays; the part into the wall turns around.
+- Floor n = (0, 1): (4, −3) → (4, 3).
+
+![A bounce.](images/bounce.png){width=94%}
+
+{{< sim file="sims/bounce-lab.html" poster="sims/bounce-lab.png" title="Bounce Lab: reflect the velocity" height="680" >}}
+
+::: {.callout-warning title="Watch out!"}
+(4, −3) → (−4, 3) is wrong: only the part along the normal changes.
+:::
+
+::: {.callout-note title="Do it · Bounces"}
+Check (4, −3) on the floor in **Bounce Lab**; reflect (−2, 5) on the ceiling
+n = (0, −1).
+
+::: {.check}
+(4, 3). Ceiling: v · n = −5; (−2, 5) − 2(−5)(0, −1) = (−2, −5).
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Bounces"}
+Use Bounce Lab. Choose the right answer.
+
+::: {.match extra="(−3, −2)|(2, −3)"}
+v = (3, −2) on the floor n = (0, 1)?
+:   (3, 2)
+
+    Why: v · n = −2; only y turns.
+
+v = (−5, 1) on the left wall n = (1, 0)?
+:   (5, 1)
+
+    Why: v · n = −5; only x turns.
+
+v = (2, 6) on the ceiling n = (0, −1)?
+:   (2, −6)
+
+    Why: v · n = −6; only y turns.
+
+What is v · n for v = (4, −3) on the floor?
+:   −3
+
+    Why: 4 × 0 + (−3) × 1.
+:::
+:::
+
+## 17.5 Drawing the sprite: local to world
+
+- World corner = **T · R · S · local corner**: scale, rotate, then move.
+- Scale 2, 90°, position (5, 3): nose (1, 0) → (2, 0) → (0, 2) → (5, 5).
+- One 3 × 3 matrix in homogeneous coordinates.
+
+![Local corners to world.](images/sprite-trs.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Translating before rotating makes the shuttle circle around the origin.
+:::
+
+::: {.callout-note title="Do it · World corners"}
+Scale 1, angle 180°, position (2, 4): the corners (1, 0), (−0.5, 0.5),
+(−0.5, −0.5)?
+
+::: {.check}
+(1, 4), (2.5, 3.5) and (2.5, 4.5): R(180°) turns (x, y) into (−x, −y), then
++ (2, 4).
+:::
+:::
+
+::: {.callout-tip title="Try it 5 · Local to world"}
+Choose the world point.
+
+::: {.match extra="(4, 3)|(0, 0)"}
+Nose (1, 0); scale 1, 90°, position (3, 3).
+:   (3, 4)
+
+    Why: (1, 0) → (0, 1) → (3, 4).
+
+Nose (1, 0); scale 2, 0°, position (1, 1).
+:   (3, 1)
+
+    Why: (2, 0) + (1, 1).
+
+Nose (1, 0); scale 1, 180°, position (5, 5).
+:   (4, 5)
+
+    Why: (−1, 0) + (5, 5).
+
+Which comes first: rotate or translate?
+:   rotate, then translate
+
+    Why: T · R · S: the object turns on the spot first.
+:::
+:::
+
+## Game challenge: Pilot Check {.challenge}
+
+Work alone. Use every section of today.
+
+Before the shuttle may fly, the test pilots check six numbers of its
+movement code: the step at **30 fps with the speed 6**; what the code must
+do with the input **(1, 1)**; the facing angle of **(−4, 4)**; the turn per
+frame of a turret at **120° per second and 60 fps**; the bounce of
+**(−3, 2) on the left wall**; and the world position of a sprite corner
+**(1, 0) with scale 3, a turn of 90° and the position (4, 1)**.
+
+{{< sim file="sims/pilot-check.html" poster="sims/pilot-check.png" title="Pilot Check: six numbers of the movement code" kind="game" height="440" >}}
+
+::: {.callout-tip title="Try it 6 · The checks"}
+Speed 6 at 30 fps; v = (−4, 4); turret 120°/s at 60 fps; (−3, 2) on the left
+wall n = (1, 0); corner (1, 0), scale 3, 90°, position (4, 1). Choose the
+right answer.
+
+::: {.match extra="0.1|(−3, −2)"}
+The step per frame?
+:   0.2
+
+    Why: 6 × 1/30.
+
+The facing angle?
+:   135°
+
+    Why: atan2(4, −4): quadrant II.
+
+The turret's turn per frame?
+:   2°
+
+    Why: 120 × 1/60.
+
+The velocity after the bounce?
+:   (3, 2)
+
+    Why: only the part into the wall turns.
+
+The corner in the world?
+:   (4, 4)
+
+    Why: (3, 0) → (0, 3) → + (4, 1).
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · A full frame (harder)"}
+A drone at (2, 1) flies with speed 4 straight up (input (0, 1)), at 60 fps,
+with a sprite of scale 1.5. Choose the right answer.
+
+::: {.match extra="(2, 5)|0°"}
+Where is it after 2 seconds?
+:   (2, 9)
+
+    Why: (2, 1) + (0, 4) × 2.
+
+Its facing angle?
+:   90°
+
+    Why: atan2(4, 0): straight up.
+
+It hits the ceiling n = (0, −1). The new velocity?
+:   (0, −4)
+
+    Why: v · n = −4; the part into the ceiling turns.
+
+Its nose (1, 0) in the world at the start?
+:   (2, 2.5)
+
+    Why: (1.5, 0) → R(90°) → (0, 1.5) → + (2, 1).
+:::
+:::
+
+## Summary {.summary}
+
+- position += velocity × Δt, and Δθ = ω × Δt: the same speed at every frame rate.
+- Normalize the input so diagonals are not faster.
+- Face the velocity with atan2(v~y~, v~x~).
+- Bounce: v' = v − 2(v · n)n.
+- Draw the sprite with T · R · S: scale, rotate, then move.

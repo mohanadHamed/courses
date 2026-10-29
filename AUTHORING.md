@@ -295,7 +295,7 @@ the notes or on the Game challenge slide.
 
 | | 60-min lesson | 90-min lesson (`game-math`) |
 |---|---|---|
-| Notes: numbered sections (`## 1.1`) | 3–4 | 5–7 |
+| Notes: numbered sections (`## 1.1`) | 3–4 | 4–7 |
 | Notes: words (without exercises and answers), at most | 3 500 | 6 000 |
 | Notes: worked examples | 2+ | 4+ |
 | Notes: exercises (with short answers at the end) | 6–10 | 10–16 |

@@ -74,7 +74,7 @@ SIZES = {
         "slides": (10, 16),
     },
     90: {
-        "book_sections": (5, 7),
+        "book_sections": (4, 7),
         "words": (0, 6000),
         "examples": (4, None),
         "exercises": (10, 16),

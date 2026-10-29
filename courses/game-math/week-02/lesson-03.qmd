@@ -1,6 +1,6 @@
 ---
-title: "Vector Operations: Addition, Scaling, Magnitude and Normalization"
-description: "Adding moves, scaling a velocity, the length of a vector, unit vectors, and moving at the same speed in every direction."
+title: "The Dot Product and the Angle Between Vectors"
+description: "The dot product, in front or behind, the angle between two vectors and the vision cone of a guard."
 lesson: 3
 ilos: [A1, B1]
 format: lesson-html
@@ -8,280 +8,325 @@ format: lesson-html
 
 This page is the interactive version of the lesson notes (PDF). Each section
 starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. The full explanations,
-examples and exercises are in the notes.
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check.
 
 ## Key terms
 
-{{< glossary vector-addition resultant-vector scalar-multiplication magnitude pythagorean-theorem unit-vector normalization speed velocity opposite-vector >}}
+{{< glossary dot-product perpendicular angle-between-vectors forward-vector field-of-view unit-vector normalization magnitude vector component >}}
 
-## 3.1 Two moves at once: adding vectors
+## 3.1 One number from two vectors: the dot product
 
-- A raft paddles across a river, and the river pushes it. The raft makes two
-  moves in every frame.
-- Draw the second arrow from the head of the first: **head to tail**.
-- The arrow from the first tail to the last head is the **sum** (the
-  **resultant**).
-- Rule: add the x-parts, and add the y-parts:
-  a + b = (a~x~ + b~x~, a~y~ + b~y~).
-- The order does not matter: a + b = b + a.
-- Reverse question: the move you need = the move you want − the move you
-  have.
+- Does the wind help a boat, or slow it down? The game needs one number.
+- The **dot product** multiplies the matching components and adds them:
+  a · b = a~x~ b~x~ + a~y~ b~y~. In 3D, add a~z~ b~z~ too.
+- The result is a **number** (a scalar), not a vector. The order does not
+  matter.
+- A boat moves (1, 0) and the wind is (3, 1): (1, 0) · (3, 1) = 3. Positive,
+  so the wind helps the boat.
 
-![Paddle (0, 3) + current (2, 0) = real move (2, 3).](images/vector-add.png){width=72%}
+![(1, 0) · (3, 1) = 1 × 3 + 0 × 1 = 3.](images/dot-steps.png){width=80%}
 
 ::: {.callout-warning title="Watch out!"}
-(2, 0) + (0, 3) is **not** 5. The sum of two vectors is a vector: (2, 3).
+The products (3 and 0) are only a middle step. The dot product is their sum:
+**3**, not (3, 0).
 :::
 
-::: {.callout-note title="Do it · Head to tail in GeoGebra"}
-At geogebra.org/calculator, type `u = Vector((3, 1))`, `v = Vector((1, 2))`
-and `w = Vector((3, 1), (4, 3))`. Then type `u + v`. Does it end where w
-ends? Write the components of u + v.
+::: {.callout-note title="Do it · The dot product in GeoGebra"}
+At geogebra.org/calculator, type `u = Vector((2, 3))`, `v = Vector((4, -1))`
+and then `u * v`. Calculate (2, 3) · (4, −1) by hand. Do the two numbers
+agree?
+
+::: {.check}
+2 × 4 + 3 × (−1) = 8 − 3 = 5. GeoGebra shows 5 too.
+:::
 :::
 
-::: {.callout-tip title="Try it 1 · Adding moves"}
+::: {.callout-tip title="Try it 1 · Compute it"}
 Choose the right answer.
 
-::: {.match extra="(2, 2)|5|(4, 3)"}
-A raft paddles (0, 3). The current is (2, 0). The real move per frame?
-:   (2, 3)
+::: {.match extra="(3, 0)|(8, −3)|−1"}
+The boat moves (1, 0). The wind is (3, 1). The dot product?
+:   3
 
-In one frame a character walks (3, 0), the wind pushes (−1, 0) and a jump lifts (0, 4). The total move?
-:   (2, 4)
+    Why: 1 × 3 + 0 × 1 = 3.
 
-What is (1, 0, 2) + (0, 4, −1)?
-:   (1, 4, 1)
-
-The current is (2, 0). Which paddle vector gives the move (0, 3)?
-:   (−2, 3)
-
-What is (−3, 2) + (3, −2)?
-:   (0, 0)
-:::
-:::
-
-## 3.2 Faster, slower, backwards: scaling a vector
-
-- To scale a vector by a number k, multiply **both** components by k:
-  k v = (k v~x~, k v~y~).
-- k > 1: a longer arrow (a dash power-up, × 2).
-- 0 < k < 1: a shorter arrow (slow motion, × 0.5).
-- k = −1: the same length, the opposite direction (a ball bounces back).
-- After n frames, an object has moved n × v: the velocity scaled by n.
-
-![v = (2, 1) scaled by 2, by 0.5 and by −1.](images/scaling.png){width=80%}
-
-{{< sim file="sims/vector-lab.html" poster="sims/vector-lab.png" title="Vector Lab: scale, measure and normalize a vector" height="640" >}}
-
-::: {.callout-note title="Do it · Scale it in Vector Lab"}
-In **Vector Lab**, drag the arrow to v = (2, 1). Set k to 3, then 0.5, then
-−2. Write down k v each time. Which values of k reverse the arrow?
-:::
-
-::: {.callout-tip title="Try it 2 · Scaling"}
-A character runs with v = (3, 1) per frame. Choose the right answer.
-
-::: {.match extra="(6, 1)|(3, −1)|(−6, −2)"}
-A dash power-up doubles the velocity. The new velocity?
-:   (6, 2)
-
-Slow motion halves the velocity. The new velocity?
-:   (1.5, 0.5)
-
-A wall throws the character straight back (× −1). The new velocity?
-:   (−3, −1)
-
-Which number k makes the arrow shorter, in the same direction?
-:   k = 0.5
-
-The game is paused. It scales every velocity by…
-:   0
-:::
-:::
-
-## 3.3 How far away is it? The magnitude
-
-- A guard attacks when the player is at most 5 units away. The game needs
-  the **length** of the vector from the guard to the player.
-- The components and the arrow make a right-angled triangle.
-- **Pythagorean theorem:** |v| = √(v~x~² + v~y~²).
-- In 3D: |v| = √(v~x~² + v~y~² + v~z~²).
-- (−3)² = 9, so (3, 4), (−3, 4) and (3, −4) all have the length 5.
-- Faster in games: compare the squares. In range if v~x~² + v~y~² ≤ 5².
-
-![(3, 4) is 5 units long: 3² + 4² = 25 = 5².](images/magnitude.png){width=56%}
-
-::: {.callout-warning title="Watch out!"}
-|(3, 4)| is **not** 3 + 4 = 7. The arrow goes straight across the triangle:
-5.
-:::
-
-::: {.callout-note title="Do it · Measure an arrow on paper"}
-On squared paper (1 cm = 1 unit), draw the vector (6, 8). Measure it with a
-ruler. Then calculate √(6² + 8²). Why is the arrow shorter than 6 + 8?
-:::
-
-::: {.callout-tip title="Try it 3 · How far?"}
-Choose the right answer.
-
-::: {.match extra="7|25|−9"}
-The magnitude of (3, −4).
+(2, 3) · (4, −1)
 :   5
 
-The magnitude of (0, −9).
-:   9
+    Why: 8 + (−3) = 5.
 
-The magnitude of (−5, 12).
-:   13
-
-Guard G = (1, 1), player P = (4, 5). The guard attacks at 5 units or less. Does it attack?
-:   yes, the distance is 5
-
-A drone flies (2, 3, 6). How far?
-:   7
-:::
-:::
-
-## 3.4 Only the direction: unit vectors
-
-- An arrow on the screen points to the goal. It always has the same size.
-  The game needs only the **direction**.
-- A **unit vector** has the length 1. It shows only a direction.
-- **Normalize** = divide by the magnitude: v̂ = v ÷ |v|.
-- Example: (6, 8) ÷ 10 = (0.6, 0.8).
-- Easy ones: (1, 0) right, (0, 1) up, (0, −7) → (0, −1).
-- The zero vector (0, 0) has no direction. It cannot be normalized.
-
-![(6, 8) and its unit vector (0.6, 0.8) on the circle of radius 1.](images/unit-vector.png){width=64%}
-
-::: {.callout-note title="Do it · Normalize in Vector Lab"}
-In **Vector Lab**, switch on **Show unit vector**. Drag the arrow to (6, 8),
-(0, −5) and (5, 12). Write the magnitude and the unit vector each time.
-:::
-
-::: {.callout-tip title="Try it 4 · Unit vectors"}
-Choose the right answer.
-
-::: {.match extra="(0, 7)|10|(1, 1)"}
-Normalize (6, 8).
-:   (0.6, 0.8)
-
-Normalize (0, −7).
-:   (0, −1)
-
-Scale the unit vector (0.6, 0.8) back to the length 10.
-:   (6, 8)
-
-What is the magnitude of every unit vector?
+(1, 2, 3) · (4, 0, −1)
 :   1
 
-The player stands on the goal. Why can the game not normalize the vector to the goal?
-:   it is the zero vector
+    Why: 4 + 0 − 3 = 1: in 3D, add three products.
+
+(−2, 5) · (3, 1)
+:   −1
+
+    Why: −6 + 5 = −1.
+
+What kind of result does a dot product give?
+:   one number
+
+    Why: the products are added into one scalar.
 :::
 :::
 
-## 3.5 Same speed in every direction: direction times speed
+## 3.2 In front or behind? The sign of the dot product
 
-- A top-down game: right = (1, 0), up = (0, 1), right + up = (1, 1).
-- |(1, 1)| = √2 ≈ 1.41, so the diagonal move is about 41 % faster: a bug.
-- The fix: velocity = speed × unit direction: v = s × d̂.
-- The **speed** is the magnitude of the velocity: a scalar.
-- Homing missile: direction = target − missile, normalize, then × speed.
+- A guard's **forward vector** f shows where it looks.
+- The vector from the guard to the cat: d = C − D.
+- f · d **positive**: the angle is less than 90°. The cat is in front.
+- f · d **zero**: exactly 90°. The cat is exactly to the side: d is
+  **perpendicular** to f.
+- f · d **negative**: more than 90°. The cat is behind.
+- The same test with the velocity: positive = moving towards the goal.
 
-![Without normalizing, the diagonal reaches farther. With normalizing, all directions reach the same circle.](images/diagonal.png){width=88%}
+![The sign of f · d: in front, to the side, behind.](images/dot-sign.png){width=84%}
 
-{{< sim file="sims/fair-speed.html" poster="sims/fair-speed.png" title="Fair Speed: the diagonal bug" kind="game" height="640" >}}
+{{< sim file="sims/dot-lab.html" poster="sims/dot-lab.png" title="Dot Lab: two vectors, one number" height="640" >}}
+
+::: {.callout-note title="Do it · Dot Lab"}
+In **Dot Lab**, drag the orange arrow until the dot product is positive,
+then zero, then negative. Write the two vectors and the dot product each
+time. Where is the orange arrow when the result is zero?
+
+::: {.check}
+Positive: in front (less than 90°). Zero: exactly at a right angle, to the
+side. Negative: behind (more than 90°).
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · In front or behind?"}
+A guard dog at D = (2, 2) faces f = (1, 0). Choose the right answer.
+
+::: {.match extra="far away|above the dog"}
+A cat at (5, 3). Where is it?
+:   in front
+
+    Why: d = (3, 1), f · d = 3: positive.
+
+A cat at (0, 4). Where is it?
+:   behind
+
+    Why: d = (−2, 2), f · d = −2: negative.
+
+A cat at (2, 6). Where is it?
+:   exactly to the side
+
+    Why: d = (0, 4), f · d = 0: a right angle.
+
+The dot product of two vectors is negative. The angle between them is…
+:   more than 90°
+
+    Why: a negative sign means the arrows point more away than together.
+
+A player at (1, 1) moves (−1, 2). The treasure is at (4, 5). Is the player moving towards it?
+:   yes, the dot product is 5
+
+    Why: to the treasure (3, 4); (−1, 2) · (3, 4) = −3 + 8 = 5.
+
+Are (4, 6) and (−3, 2) perpendicular?
+:   yes, the dot product is 0
+
+    Why: −12 + 12 = 0 means a right angle.
+:::
+:::
+
+## 3.3 How big is the angle?
+
+- The dot product grows with the lengths. So first **normalize** both
+  vectors.
+- For two unit vectors, â · b̂ is a number from −1 to 1. It depends only on
+  the angle.
+- For any vectors: a · b ÷ (|a| × |b|).
+- This number is the **cosine** of the angle (Lecture 6). For now, use the
+  table:
+
+| â · b̂ | 1 | 0.87 | 0.71 | 0.5 | 0 | −0.5 | −0.71 | −1 |
+|---|---|---|---|---|---|---|---|---|
+| angle | 0° | 30° | 45° | 60° | 90° | 120° | 135° | 180° |
+
+![b̂ at four angles to â, with the value of â · b̂.](images/dot-angles.png){width=82%}
 
 ::: {.callout-warning title="Watch out!"}
-Speed × (target − missile) without normalizing is far too fast: 5 × (6, 8) =
-(30, 40), a speed of 50.
+(3, 0) · (2, 0) = 6, but the angle is 0°. Divide first: 6 ÷ (3 × 2) = 1, so
+0°.
 :::
 
-::: {.callout-note title="Do it · Fair Speed"}
-In **Fair Speed**, race the right runner and the diagonal runner with
-**Normalize: off**, then with **Normalize: on**. Write down the four
-distances. Explain the difference in one sentence.
-:::
+::: {.callout-note title="Do it · Find the angle in Dot Lab"}
+In **Dot Lab**, switch on **Unit vectors**. Make the angle 0°, 60°, 90° and
+180°. Write â · b̂ each time and compare with the table.
 
-::: {.callout-tip title="Try it 5 · Fair speed"}
-Use √2 ≈ 1.41 and 1 ÷ √2 ≈ 0.71. Choose the right answer.
-
-::: {.match extra="(4, 4)|4|(6, 8)"}
-The speed is 4. Input (1, 1) without the fix. About how fast does the player move?
-:   about 5.6
-
-The same input (1, 1), normalized. About which unit vector?
-:   (0.71, 0.71)
-
-A missile at (2, 1) flies to (8, 9) with the speed 5. Its velocity?
-:   (3, 4)
-
-A missile uses 5 × (6, 8) without normalizing. What is its speed?
-:   50
-
-The speed of the velocity (3, 4).
-:   5
+::: {.check}
+0° → 1; 60° → 0.5; 90° → 0; 180° → −1, as in the table.
 :::
 :::
 
-## Game challenge: Raft Rush {.challenge}
+::: {.callout-tip title="Try it 3 · The angle"}
+Use the table above. Choose the right answer.
+
+::: {.match extra="6°|0.5°|30°"}
+Two unit vectors have the dot product 0.5. The angle?
+:   60°
+
+    Why: the table gives 0.5 → 60°.
+
+Two unit vectors have the dot product −1. The angle?
+:   180°
+
+    Why: −1 means exactly opposite directions.
+
+The angle between (2, 0) and (0, 7).
+:   90°
+
+    Why: the dot product is 0 + 0 = 0, so a right angle.
+
+A guard faces (1, 0). The cat is in the direction (3, 4), so â · b̂ = 0.6. The angle?
+:   between 45° and 60°
+
+    Why: 0.6 is between 0.5 (60°) and 0.71 (45°).
+
+(3, 0) · (2, 0) = 6. What is the angle?
+:   0°
+
+    Why: 6 ÷ (3 × 2) = 1, and 1 means 0°.
+:::
+:::
+
+## 3.4 Can the guard see me? The vision cone
+
+- A guard sees only a cone in front of it: its **field of view**.
+- Example: 60° to each side of f, and 5 units deep.
+- 60° gives the value 0.5 in the table. A smaller angle gives a bigger
+  value.
+- Seen when **both** are true: f̂ · d̂ ≥ 0.5 **and** |d| ≤ 5.
+
+![The vision cone of a guard dog.](images/vision-cone.png){width=80%}
+
+::: {.callout-warning title="Watch out!"}
+A cat 50 units straight ahead has f̂ · d̂ = 1, but the dog does not see it.
+Always check the distance too.
+:::
+
+::: {.callout-note title="Do it · Draw a vision cone"}
+On squared paper, mark a guard at (4, 4) facing (1, 0), and the points
+(8, 7), (7, 8), (4, 9) and (1, 0). For each point, find d, |d| and f̂ · d̂.
+Which points are seen (60° to each side, 5 units deep)?
+
+::: {.check}
+(8, 7): d = (4, 3), 5, 0.8: seen. (7, 8): d = (3, 4), 5, 0.6: seen. (4, 9):
+d = (0, 5), 0: not seen. (1, 0): d = (−3, −4), −0.6: not seen.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Seen or not?"}
+A guard at (1, 1) faces f = (1, 0). It sees 60° to each side and 5 units
+deep. Choose the right answer. You can use an answer more than once.
+
+::: {.match extra="behind, but seen"}
+A thief at (5, 4): d = (4, 3), f̂ · d̂ = 0.8.
+:   seen
+
+    Why: 0.8 ≥ 0.5 and |d| = 5 ≤ 5.
+
+A thief at (1, 6): d = (0, 5), f̂ · d̂ = 0.
+:   not seen: too far to the side
+
+    Why: 0 is less than 0.5: the thief is at 90°.
+
+A thief at (−3, −2): d = (−4, −3), f̂ · d̂ = −0.8.
+:   not seen: behind
+
+    Why: a negative value means behind.
+
+A thief at (11, 1): d = (10, 0), f̂ · d̂ = 1.
+:   not seen: too far away
+
+    Why: straight ahead, but 10 units is more than 5.
+
+A thief at (4, −3): d = (3, −4), f̂ · d̂ = 0.6.
+:   seen
+
+    Why: 0.6 ≥ 0.5 and |d| = 5 ≤ 5.
+:::
+:::
+
+## Game challenge: Shadow Cat {.challenge}
 
 Work alone. Use every section of today.
 
-**Raft Rush** is a river game. The river is 8 units wide. The current pushes
-the raft c = (3, 0) per frame. The player chooses one paddle vector before
-the raft starts, with a magnitude of **at most 5**. In every frame the raft
-moves by paddle + current. In round 1 the jetty is at (4, 0), the dock is
-straight across at (4, 8), and the raft must arrive in 2 frames.
+**Shadow Cat** is a stealth game. A guard dog is at D = (6, 4) and looks
+right: f = (1, 0). It sees a point at most 60° to the side (f̂ · d̂ ≥ 0.5)
+and at most 5 units away. Bush A is at (10, 7), bush B at (9, 8) and bush C
+at (6, 9). The fish is at (2, 1). The cat can hide only where the dog cannot
+see it. Later the dog turns and looks up: f = (0, 1).
 
-{{< sim file="sims/raft-rush.html" poster="sims/raft-rush.png" title="Raft Rush: paddle + current" kind="game" height="700" >}}
+{{< sim file="sims/shadow-cat.html" poster="sims/shadow-cat.png" title="Shadow Cat: find the bush the dog cannot see" kind="game" height="680" >}}
 
-::: {.callout-tip title="Try it 6 · Round 1"}
-Raft Rush: current (3, 0), paddle at most 5, jetty (4, 0), dock (4, 8),
-2 frames. Choose the right answer.
+::: {.callout-tip title="Try it 5 · The dog looks right"}
+Shadow Cat: dog D = (6, 4), f = (1, 0), 60° to each side, 5 units deep.
+Bushes A (10, 7), B (9, 8), C (6, 9). Choose the right answer.
 
-::: {.match extra="(0, 4)|(4, 8)|3"}
-The player paddles (0, 4). The real move per frame?
-:   (3, 4)
+::: {.match extra="(3, 4)|A|0.6"}
+The vector from the dog to bush A.
+:   (4, 3)
 
-The real speed of that move.
-:   5
+    Why: A − D = (10 − 6, 7 − 4).
 
-With paddle (0, 4), where is the raft after 2 frames?
-:   (10, 8)
+f · d for bush B, with d = (3, 4).
+:   3
 
-Which real move per frame reaches the dock in 2 frames?
-:   (0, 4) per frame
+    Why: 1 × 3 + 0 × 4 = 3.
+
+Which bush is safe for the cat?
+:   C
+
+    Why: C has d = (0, 5): f̂ · d̂ = 0, less than 0.5. A (0.8) and B (0.6) are seen.
+
+The cat goes for the fish at (2, 1). Is it in front of the dog?
+:   no, behind
+
+    Why: d = (−4, −3), f · d = −4: negative.
 :::
 :::
 
-::: {.callout-tip title="Try it 7 · Plan the crossing (harder)"}
-Raft Rush: current (3, 0), paddle at most 5, jetty (4, 0), dock (4, 8),
-2 frames. Choose the right answer.
+::: {.callout-tip title="Try it 6 · The dog turns (harder)"}
+Shadow Cat: dog D = (6, 4), now f = (0, 1). Bushes A (10, 7), B (9, 8),
+C (6, 9). Fish (2, 1). Choose the right answer.
 
-::: {.match extra="(3, 4)|(−6, 4)|about 4.5"}
-Which paddle vector takes the raft straight to the dock in 2 frames?
-:   (−3, 4)
+::: {.match extra="(0, −1)|−0.8|0"}
+The value f̂ · d̂ for bush C, with d̂ = (0, 1).
+:   1
 
-The magnitude of that paddle vector. Is it allowed?
-:   5, allowed
+    Why: (0, 1) · (0, 1) = 1: C is straight ahead now.
 
-The unit vector of the paddle (−3, 4).
-:   (−0.6, 0.8)
+The value f̂ · d̂ for bush A, with d̂ = (0.8, 0.6).
+:   0.6
 
-A faster river has the current (4, 0). The paddle for (0, 4) is (−4, 4). Is it allowed?
-:   no, about 5.7 is more than 5
+    Why: 0 × 0.8 + 1 × 0.6 = 0.6.
 
-A turbo doubles the paddle (−3, 4). The new real move with the current (3, 0)?
-:   (−3, 8)
+Is any bush safe now?
+:   no, all three are seen
+
+    Why: A 0.6, B 0.8, C 1: all ≥ 0.5, all 5 units away.
+
+The value f̂ · d̂ for the fish, with d̂ = (−0.8, −0.6).
+:   −0.6
+
+    Why: 0 × (−0.8) + 1 × (−0.6) = −0.6: behind the dog.
+
+Which vector is perpendicular to the new f = (0, 1)?
+:   (−1, 0)
+
+    Why: (0, 1) · (−1, 0) = 0.
 :::
 :::
 
 ## Summary {.summary}
 
-- Add vectors component by component: head to tail.
-- Scale a vector by k: both components × k; a negative k reverses it.
-- The magnitude is the length: √(x² + y²) (+ z² in 3D).
-- A unit vector has length 1: normalize = divide by the magnitude.
-- Velocity = speed × unit direction: the same speed in every direction.
+- The dot product a · b = a~x~ b~x~ + a~y~ b~y~ is one number.
+- Positive: in front (less than 90°). Zero: perpendicular (90°). Negative: behind.
+- For unit vectors, â · b̂ gives the angle (table: 0.5 → 60°, 0 → 90°).
+- Vision cone: f̂ · d̂ ≥ 0.5 and |d| ≤ 5.

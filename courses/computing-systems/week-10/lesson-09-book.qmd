@@ -1,0 +1,268 @@
+---
+title: "App Stores and Publishing Requirements"
+description: "Lesson notes · The steps from a build to the store with the developer accounts, the store listing, version numbers, age ratings and privacy, and the review, testing tracks and staged release of a game."
+lesson: 9
+ilos: [C2]
+format: lesson-typst
+---
+
+::: {.lead}
+*Pocket Quest 1.0* is finished and tested. Now *Byte Bay* must bring it to
+the players, through Google Play and the App Store. A store is not a shelf
+where anyone puts anything: it asks for an account, a package with a new
+build number, a listing with pictures and texts, an age rating, a privacy
+policy, and a review before the game goes live. In lecture 8 you compared
+the two platforms. In this lesson you follow the whole road from a build to
+the players, and you learn what each store requires at each step. Every
+section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary app-store developer-account store-listing build-number age-rating privacy-policy app-review staged-rollout >}}
+
+## 9.1 The road to the store
+
+Publishing has six steps, and each one can stop the launch (@fig-road). The
+first step costs money: each store asks for a **developer account**
+(@fig-pub).
+
+::: {.callout-important title="Definition 9.1 — The publishing steps"}
+1. **Account:** a developer account in each store: Google Play Console
+   (about 25 USD once) or the Apple Developer Program (about 99 USD every
+   year).
+2. **Build:** the package (`.aab` for Google Play, `.ipa` for the App
+   Store) with a new build number.
+3. **Listing:** the **store listing**: name, icon, screenshots, texts,
+   category.
+4. **Rating and privacy:** the age-rating questionnaire, a privacy policy
+   and a form about the collected data.
+5. **Review:** the store checks the game.
+6. **Release:** to all players, or step by step.
+
+Both stores keep a share of each sale (often 15–30 %).
+:::
+
+![The road from a build to the store.](images/road-to-store.png){#fig-road width=94%}
+
+![Accounts, review and the store's share. Round numbers checked in 2026.](images/publishing.png){#fig-pub width=94%}
+
+::: {.callout-note title="Example 9.1 — Byte Bay's plan"}
+1. Three weeks before the launch: the accounts are opened (the identity
+   check can take some days).
+2. Two weeks before: the final build, screenshots and texts; the rating and
+   privacy forms.
+3. In the last week: the review (hours to a few days); the release on the
+   day of the launch post.
+:::
+
+::: {.callout-note title="Example 9.2 — The accounts for one year"}
+1. Android only: 25 USD, once.
+2. iOS only: 99 USD, and 99 USD again every year.
+3. Both stores in the first year: 25 + 99 = **124 USD**.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Opening the accounts one day before the launch. Identity checks and the
+first review can take days: start weeks before.
+:::
+
+::: {.callout-note title="Do it · Plan the road"}
+Write the six steps for your own small game, with one thing you must
+prepare for each step.
+
+*Your result:* a list of six steps.
+
+::: {.check}
+A good answer looks like: "1. Account: a Google Play account (25 USD). 2.
+Build: the .aab with a new build number. 3. Listing: a short name, an icon,
+four screenshots of the real game. 4. Rating and privacy: the questionnaire
+and a privacy policy page. 5. Review: send it two weeks before the launch.
+6. Release: first to a small part of the players." Check: six steps in this
+order, and one real thing to prepare for each.
+:::
+:::
+
+## 9.2 The store listing
+
+The listing is the shop window of the game. Each store asks for the same
+parts, with its own names and limits (@fig-listing).
+
+::: {.callout-important title="Definition 9.2 — Store listing"}
+A **store listing** has: an **app name** (short: each store has a limit);
+a short text (Google Play: short description; App Store: subtitle); a long
+description; an **icon**; **screenshots** of the real game; a category and
+contact details. The store's form shows the limits of each part, and its
+help pages list them: check them before a launch, because they change.
+:::
+
+![A store listing and its parts.](images/listing-parts.png){#fig-listing width=94%}
+
+::: {.callout-note title="Example 9.3 — A name that is too long"}
+The studio types "Bee Farm: Grow and Sell the Biggest Vegetables" (46
+characters). The store refuses it: the name is over the limit. The studio
+writes "Bee Farm" (8 characters) and moves the rest to the short text:
+"Grow and sell the biggest vegetables!"
+:::
+
+{{< sim file="sims/listing-builder.html" poster="sims/listing-builder.png" title="Store Listing Builder: is Pocket Quest ready?" height="780" >}}
+
+::: {.callout-warning title="Common mistake"}
+Screenshots of a better-looking game, or of features that do not exist. A
+misleading listing is one of the most common reasons for a rejection.
+:::
+
+::: {.callout-note title="Do it · Make the listing ready"}
+1. In **Store Listing Builder**, fix every problem for Google Play.
+2. Switch to the App Store. Which line becomes a problem, and why?
+
+*Your result:* two ready checklists and one answer.
+
+::: {.check}
+For Google Play: a short name such as "Pocket Quest", the icon the form asks
+for (512 × 512), 2 or more screenshots, the questionnaire done, a privacy
+link and a higher build number. On the App Store the **icon** becomes a
+problem: Apple asks for a bigger icon (1024 × 1024). Each store has its own
+limits: read them in its form.
+:::
+:::
+
+## 9.3 Versions, age rating and privacy
+
+Behind the listing, the store checks which version the build is, who may
+play the game, and which data it collects (@fig-ver).
+
+::: {.callout-important title="Definition 9.3 — Build number, rating, privacy"}
+- **Build number** (Android: version code): it must grow with every upload.
+  Players see a **version name** such as 1.0.1.
+- **Age rating:** the studio answers a questionnaire (violence, language,
+  purchases, chat); the rating follows from the answers.
+- **Privacy:** a link to a **privacy policy**, and a form about the data
+  (Google Play: Data safety; App Store: privacy labels).
+:::
+
+![The version name and the build number.](images/version-numbers.png){#fig-ver width=94%}
+
+::: {.callout-note title="Example 9.4 — Version 1.4.1 of Bee Farm"}
+1. The studio fixes a bug: the version name goes from 1.4 to **1.4.1**.
+2. The build number goes from 27 to **28**. With 27 again, the upload
+   fails.
+3. The game still collects no personal data, so the privacy form stays the
+   same.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Answering the age-rating questions with "no" to get a lower age. A wrong
+rating can remove the game from the store later.
+:::
+
+::: {.callout-note title="Do it · Rate a game"}
+Choose a game you know. Answer for it: Does it have violence? Bad language?
+Purchases? Chat with strangers? Which age group would you expect?
+
+*Your result:* four answers and an age group.
+
+::: {.check}
+A good answer looks like: "Cartoon fights: yes; bad language: no;
+purchases: yes (gems); chat with strangers: no. I expect a rating for about
+12 and older." Check: four yes-or-no answers, and an age group that fits
+them (more violence or open chat gives a higher age).
+:::
+:::
+
+## 9.4 Review and release
+
+Before the game goes live, the store checks it. Before and after the
+review, a studio gives the game to players in steps, so that few players
+meet a bug (@fig-release).
+
+::: {.callout-important title="Definition 9.4 — Review, testing tracks, staged rollout"}
+The **app review** checks every new game and update against the store's
+**guidelines**. Most rejections come from a few problems: crashes, an
+incomplete build ("coming soon"), a misleading listing, or a missing
+privacy policy. Before the public launch, **testing tracks** give builds to
+small groups (internal, closed and open tests; on iOS, TestFlight). After
+approval, a **staged rollout** gives a new version to a small part of the
+players first, then to more, then to all.
+:::
+
+![Testing tracks and a staged rollout.](images/release-tracks.png){#fig-release width=94%}
+
+::: {.callout-note title="Example 9.5 — Version 1.5 of Bee Farm"}
+1. Closed test: 20 testers play version 1.5 for one week.
+2. Review: approved in one day.
+3. Staged rollout: a small part of the players gets 1.5 first. The game
+   crashes on phones with 3 GB of RAM: the studio stops the rollout, fixes
+   the bug and sends 1.5.1.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Releasing an update to all players at once on a Friday night. If there is a
+bug, everyone meets it, and nobody is there to fix it.
+:::
+
+::: {.callout-note title="Do it · A release plan"}
+Write a release plan for version 1.2 of Pocket Quest: which testing track,
+how long, and which steps of the release.
+
+*Your result:* a plan of three to five lines.
+
+::: {.check}
+A good plan looks like: "1. Closed test with 20 testers for one week. 2.
+Review, sent on Monday. 3. Staged rollout: a small part of the players
+first. 4. If the crash rate stays low, more players, then all. 5. If it
+rises: stop, fix, send 1.2.1." Check: a testing track with a time, the
+review, a release in steps, and what to do if a bug appears.
+:::
+:::
+
+## Case study: Launch Day
+
+Byte Bay publishes *Pocket Quest 1.0* on Google Play and the App Store. On
+launch day it needs a developer account first; then the upload fails
+because the version code 12 was used before; the store refuses the app name
+"Pocket Quest: The Lost Island of the Seven Golden Keys" (54 characters);
+the listing shows screenshots of a different art style; the age rating
+must be decided; the review rejects the game for a missing privacy policy;
+and version 1.1 needs a safe release. The Game challenge of the interactive
+lesson uses this day. In the mini-game below you solve each problem.
+
+{{< sim file="sims/launch-day.html" poster="sims/launch-day.png" title="Launch Day: from the build to the players" kind="game" height="560" >}}
+
+## Further reading
+
+Google Play Console Help, "Create and set up your app" and "Prepare your
+app for review"; Apple Developer, "App Store Connect Help: Submit an app"
+and "Choosing a membership". Check the date on each page: fees and limits
+change.
+
+## Exercises
+
+1. Name the six steps of publishing a game.
+2. How much does each developer account cost?
+3. Which package does each store want?
+4. What does each store ask for in a listing? Name four parts.
+5. Why must screenshots show the real game?
+6. Version 1.4 had the build number 27. Which number does 1.4.1 need?
+7. Who decides the age rating, and how?
+8. Which two things about privacy does each store ask for?
+9. Name three common reasons for a rejection.
+10. What is a staged rollout?
+
+## Answers to the exercises
+
+::: {.answers}
+1. Account, build, listing, rating and privacy, review, release.
+2. Google Play: about 25 USD once. Apple: about 99 USD every year.
+3. Google Play: .aab. App Store: .ipa.
+4. For example the app name, a short text, the icon, screenshots (also the
+   long description, category, contact).
+5. A misleading listing is rejected.
+6. A higher one, for example 28.
+7. The studio answers the store's questionnaire; the rating follows from
+   the answers.
+8. A privacy policy link and a form about the collected data.
+9. For example crashes, an incomplete build, a misleading listing, a
+   missing privacy policy.
+10. A release to a small part of the players first, then to more.
+:::

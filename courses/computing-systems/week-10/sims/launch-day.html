@@ -23,9 +23,9 @@
     { s: 0, goal: "Byte Bay wants to upload the game to Google Play today. What does it need first?", choices: C(["a Google Play developer account", "a website", "a Mac", "1000 players"]), answer: "a Google Play developer account",
       good: "Without a developer account (25 USD once, with an identity check) there is no upload.", why: { "a Mac": "A Mac is needed for iOS builds, not for Google Play." } },
     { s: 1, goal: "The upload fails: “version code 12 has already been used”. What is wrong?", choices: C(["the new build needs a higher version code", "the game is too small", "the icon is wrong", "the store is closed"]), answer: "the new build needs a higher version code",
-      good: "Every upload needs a higher build number (Android: versionCode; iOS: build number). Players see the version name, such as 1.0.1.", why: {} },
-    { s: 1, goal: "Rami lost the file with the <b>upload key</b> that signed version 1.0. Why is this a problem?", choices: C(["the store accepts updates only from the right key", "the game gets slower", "players lose their progress", "nothing, keys are not needed"]), answer: "the store accepts updates only from the right key",
-      good: "Builds are signed so that only the studio can update the game. Keep the keys safe, with a backup (Google Play can reset an upload key, after a request).", why: {} },
+      good: "Every upload needs a higher build number (Android: version code). Players see the version name, such as 1.0.1.", why: {} },
+    { s: 2, goal: "The store refuses the app name <b>“Pocket Quest: The Lost Island of the Seven Golden Keys”</b> (54 characters). What does Rami do?", choices: C(["a short name, and the rest in the short text", "a smaller font for the name", "the same name in two lines", "a new store"]), answer: "a short name, and the rest in the short text",
+      good: "The app name has a limit in both stores. “Pocket Quest” fits; “Find the seven golden keys!” goes into the short text.", why: { "a smaller font for the name": "The store counts characters, not the size of the letters." } },
     { s: 2, goal: "The listing shows screenshots of a <b>different game</b>, made with a nicer art style. What will the review say?", choices: C(["misleading listing: show the real game", "approved: nice pictures sell", "add more screenshots", "remove the icon"]), answer: "misleading listing: show the real game",
       good: "Screenshots and descriptions must show the real game. Misleading listings are a common reason for rejection.", why: { "approved: nice pictures sell": "Both stores forbid listings that do not match the app." } },
     { s: 3, goal: "Pocket Quest has cartoon fights. Who decides its <b>age rating</b>?", choices: C(["the studio answers the store's questionnaire", "the players vote", "the studio picks any age", "no rating is needed"]), answer: "the studio answers the store's questionnaire",
@@ -33,7 +33,7 @@
     { s: 4, goal: "The review rejects the game: it collects e-mail addresses but has <b>no privacy policy</b>. Fix?", choices: C(["add a privacy policy link and the data form, then submit again", "remove the e-mail field silently and wait", "publish on a website instead", "change the game's name"]), answer: "add a privacy policy link and the data form, then submit again",
       good: "Both stores ask for a privacy policy and a form about the data the game collects (Google: Data safety; Apple: privacy labels).", why: {} },
     { s: 5, goal: "Version 1.1 is approved. Byte Bay fears a hidden bug. How can it release safely?", choices: C(["a staged rollout: first to a small part of the players", "release to everyone at midnight", "delete version 1.0 first", "release without a review"]), answer: "a staged rollout: first to a small part of the players",
-      good: "A staged (phased) release goes to a few percent of players first; if the crash rate rises, the studio stops it.", why: {} },
+      good: "A staged release goes to a small part of the players first; if the crash rate rises, the studio stops it and fixes the bug.", why: {} },
   ];
   Kit.game({
     rounds, cols: 1, colsPhone: 1, animMs: 600, still: true,

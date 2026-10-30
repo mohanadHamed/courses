@@ -1,0 +1,165 @@
+---
+title: "App Stores and Publishing Requirements"
+subtitle: "Lecture 9"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary app-store developer-account store-listing build-number age-rating privacy-policy app-review staged-rollout >}}
+
+## 9.1 The road to the store
+
+:::: {.columns}
+::: {.column width="50%"}
+- Publishing has six steps: account, build, listing, rating and privacy, review, release.
+- Google Play asks about 25 USD once, and Apple about 99 USD every year.
+- Each step can stop the launch, so the studio starts weeks before.
+- **Do it:** Write the six steps for your own game, with one thing to prepare for each.
+:::
+::: {.column width="50%"}
+![](images/road-to-store.png)
+:::
+::::
+
+## Example · The accounts for one year
+
+Byte Bay wants Pocket Quest on Google Play and on the App Store.
+**What do the developer accounts cost in the first year?**
+
+::: {.reveal}
+1. The Google Play account costs **25 USD**, only once.
+2. The Apple Developer Program costs **99 USD**, again every year.
+3. Both stores in the first year cost 25 + 99 = **124 USD**.
+:::
+
+## Try it 1 · The steps
+
+a) What is the first step of publishing a game?
+b) Which step comes right before the release?
+c) Which package does Google Play want, and which the App Store?
+
+::: {.answer}
+a) a developer account
+b) the review
+c) an .aab for Google Play, an .ipa for the App Store
+:::
+
+## 9.2 The store listing
+
+:::: {.columns}
+::: {.column width="50%"}
+- A listing has a name, a short text, an icon, screenshots and a category.
+- Each store has limits for the texts and the pictures, shown in its form.
+- The screenshots must show the real game.
+- **Do it:** Make the listing ready in Store Listing Builder. Which line fails on the App Store?
+:::
+::: {.column width="50%"}
+![](images/listing-parts.png)
+:::
+::::
+
+## Live demo · Store Listing Builder
+
+{{< sim file="sims/listing-builder.html" poster="sims/listing-builder.png" title="Store Listing Builder: is Pocket Quest ready?" task="**Show:** shorten the name, choose the icon, screenshots, rating, privacy link and a higher build number, then switch to the App Store. **Ask:** which line fails now, and why?" >}}
+
+## Try it 2 · The listing
+
+a) The store refuses a long app name. What is the fix?
+b) What must the screenshots of a game show?
+c) What does the App Store call the short text?
+
+::: {.answer}
+a) a shorter name, and the rest in the short text
+b) the real game
+c) the subtitle
+:::
+
+## 9.3 Versions, rating and privacy
+
+:::: {.columns}
+::: {.column width="50%"}
+- The build number must grow with every upload.
+- Players see the version name, such as 1.4.1.
+- The studio answers a questionnaire, and the age rating follows from it.
+- **Do it:** Answer the four rating questions for a game you know. Which age group do you expect?
+:::
+::: {.column width="50%"}
+![](images/version-numbers.png)
+:::
+::::
+
+## Example · Version 1.4.1 of Bee Farm
+
+The Bee Farm team fixes a bug in version 1.4, whose build number is 27.
+**Which numbers does the new build get?**
+
+::: {.reveal}
+1. The version name goes from 1.4 to **1.4.1**, and players see it.
+2. The build number goes from 27 to **28**.
+3. With 27 again, the upload **fails**.
+:::
+
+## Try it 3 · Behind the listing
+
+a) Who answers the age-rating questionnaire?
+b) Which two things about privacy do both stores ask for?
+c) Why does an upload with an old build number fail?
+
+::: {.answer}
+a) the studio
+b) a privacy policy link and a data form
+c) The build number must grow with every upload.
+:::
+
+## 9.4 Review and release
+
+:::: {.columns}
+::: {.column width="50%"}
+- The store reviews every game and update against its guidelines.
+- Crashes, "coming soon" buttons and missing privacy policies are common reasons for a rejection.
+- Testers get builds first, and a staged rollout reaches a small part of the players first.
+- **Do it:** Write a release plan for version 1.2: which test, how long, which steps?
+:::
+::: {.column width="50%"}
+![](images/release-tracks.png)
+:::
+::::
+
+## Try it 4 · Review and release
+
+a) The crash rate rises in a staged rollout. What does the studio do?
+b) Which iOS app gives test builds to testers?
+c) Why is a "Clans (coming soon)" button a problem in the review?
+
+::: {.answer}
+a) It stops the rollout and fixes the bug.
+b) TestFlight
+c) The build is incomplete.
+:::
+
+## Game challenge · Launch Day
+
+{{< sim file="sims/launch-day.html" poster="sims/launch-day.png" title="Launch Day: from the build to the players" kind="game" task="**The story:** Byte Bay publishes Pocket Quest 1.0, and on launch day one problem follows the other. **Play:** choose the right step for each problem on your phone." >}}
+
+## Try it 5 · Launch day (harder)
+
+The facts: the upload of Pocket Quest 1.0 fails because version code 12 was used before. The review rejects the game because it collects e-mail addresses without a privacy policy.
+
+a) What does Byte Bay change for the upload?
+b) What does it add before it submits again?
+c) How does it release version 1.1 safely?
+
+::: {.answer}
+a) a higher version code, for example 13
+b) a privacy policy link and the data form
+c) with a staged rollout to a small part of the players first
+:::
+
+## Summary
+
+- Publishing has six steps, from the account to the release.
+- Google Play costs about 25 USD once, and Apple about 99 USD every year.
+- The listing shows the real game, within the limits of each store.
+- The build number grows with every upload, and the rating and privacy forms are honest.
+- The studio tests in tracks and releases step by step.

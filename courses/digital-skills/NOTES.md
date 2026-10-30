@@ -33,24 +33,29 @@ management, medical sterilization, facility assessment). So this course is
 
 ## Timing and textbook: a blended course
 
-- 2 credit hours, **blended**: each unit (one syllabus week) has one
-  face-to-face session (60 min) and one online activity (asynchronous, about
-  60 min of work, on the university e-learning platform).
-  `course.blended: true` in `_metadata.yml`; `schedule.yml` has 15 units:
-  Lectures 1–10 (core), Practice 1–5 (flexible) and Online activities 1–15
-  (always kept: holidays cancel only face-to-face sessions).
+- 2 credit hours, **fully practical** (the study plan: 2 hours in the
+  computer lab) and **blended**: every week has one face-to-face lab session
+  (60 min) and one online activity (asynchronous, about 60 min of work, on
+  the university e-learning platform: an interactive lesson with
+  simulators, or a video, and practical tasks to submit). No seminars.
+  `course.blended: true` in `_metadata.yml`; `schedule.yml` has 15 weeks:
+  10 units (core: Lecture N and its online activity) and 5 practice weeks
+  (flexible: Practice N in the lab and an online practice activity, no new
+  ideas). Online activities are numbered 1–15 in teaching order.
 - **Face-to-face lecture:** a full lesson like the other courses: notes
   (PDF), interactive page, slides; size for **60 minutes** (3–4 sections), a
   Lab task in every section, a ~10-min Game challenge set in an ordinary
   workplace or a student's study work.
-- **Practice session** (`practice-NN*`, flexible): hands-on work on earlier
-  lectures in Word, Excel, PowerPoint or an AI tool, in the seminar format
-  (AUTHORING.md, "What a seminar looks like"); every answer on its page.
+- **Practice session** (`practice-NN*`, flexible, in a practice week):
+  hands-on work on earlier lectures in Word, Excel, PowerPoint or an AI
+  tool, in the seminar format (AUTHORING.md, "What a seminar looks like");
+  no new ideas; every answer on its page.
 - **Online activity:** `online-NN.qmd` with `online: N`, `due:` ("before
   lecture N", the next face-to-face lecture) and `marks:`; no notes and no
   slides. It **practises its unit** and never repeats the face-to-face
-  lecture; in units 10 and 12 (a flexible practice face to face) it carries
-  the core idea. Start from `shared/templates/online-template.qmd`. It has:
+  lecture; in a unit it may add a skill of the unit's syllabus row (Online
+  activity 9: an AI outline turned into slides); in a practice week it adds
+  nothing new. Start from `shared/templates/online-template.qmd`. It has:
   1. "Before you start": what you need, about how long, what you submit;
   2. two or three short **Steps** (`{.study}`): plain explanation, a figure,
      a simulator to try at once, one "Try it" self-check with `Why:`
@@ -98,7 +103,7 @@ real tool.
   account has it"; the tasks also work by copying from an AI chat.
 - Never ask students to type real personal data (ID numbers, phone numbers,
   addresses, grades) into an AI tool: use made-up details.
-- Every task done with AI ends with checking the output and, from unit 11 on, an AI-use statement.
+- Every task done with AI ends with checking the output and, from unit 9 (Lecture 9) on, an AI-use statement.
 - AI is a tool for documents, data and presentations here; how AI works is
   the subject of *AI Applications* (01101153). Keep to what a user needs.
 
@@ -182,3 +187,16 @@ real tool.
   first draft), Lecture 10 (five slides, four checks, a three-minute talk)
   and Online activity 15 (the final files with a table of contents, page
   numbers and one AI-use statement).
+- 2026-10-31 (plan v3): the teacher confirmed that the course is fully
+  practical and blended, without seminars, with 10–12 core weeks and
+  filling weeks without new content. Now 10 units (Lectures 1–10 with their
+  online activities) and 5 practice weeks (Practice 1–5 with Online
+  activities 8, 10, 12, 14 and 15). Old Practice 4 (PivotTables, new
+  content in a flexible session) became Lecture 10 "Excel (3): Summarizing
+  Data with AI Help" (week 13: a PivotTable, other questions, an AI summary
+  checked number by number); Online activities 9 and 10 swapped places (the
+  AI outline in the PowerPoint unit, the five-slide talk in the practice
+  week); old Lecture 10 (project presentations) became Practice 5 and old
+  Practice 5 became Practice 4. Online activity 13 is due one week after
+  Lecture 10, Online activity 14 before Practice 5. Removed: Presentation
+  Day and one unused figure.

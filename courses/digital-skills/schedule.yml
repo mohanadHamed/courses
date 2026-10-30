@@ -1,19 +1,19 @@
-# The sessions of the course, grouped in units (AUTHORING.md, "Units and
-# sessions"). One unit = one week of the official syllabus: `week` is that
-# syllabus week (a week with only an exam has no unit), `slot` names the
-# syllabus column(s) the session covers (tools/course_package.py). Units and
-# sessions are numbered in teaching order; the site never shows a week.
+# The 15 weeks of the course in teaching order (AUTHORING.md, "Units and
+# sessions"; "Blended courses"): 10 core weeks (units) and 5 practice weeks
+# (filling weeks). The course is practical and blended: every week has a
+# face-to-face lab session (60 min) and an online activity (asynchronous, on
+# the e-learning platform, with tasks to submit).
 #
-# kind: lecture (always core), practice (hands-on work on earlier lectures,
-# face-to-face) or online (the online activity of the unit, always kept)
-# n: the number of the session within its kind ("Lecture 4", "Practice 2").
-# core: false = flexible: taught when time allows, else studied at home
-# (every answer is on its page). practises: the lectures it applies.
+# A unit is a core week: Lecture N (face-to-face, new ideas) and its online
+# activity, which practises the unit. A practice week (`filling: true`) has
+# no new ideas: Practice N in the lab (hands-on work on earlier lectures)
+# and an online practice activity. It is taught when time allows. Online
+# activities are numbered 1-15 in teaching order (one per week of the
+# platform). Exams are not here.
 #
-# Files of a unit are in week-WW (WW = `week`): lesson-NN (lecture),
-# practice-NN (practice session), online-NN (online activity). No homework:
-# the online activities replace it. A session is ready (bright, with links)
-# when its .qmd exists and has no `draft: true`.
+# `week` is the syllabus week whose row the week covers (folder week-WW,
+# tools/course_package.py); `slot` names the syllabus columns. kind:
+# lecture | online | practice; practises: the lectures it applies.
 
 units:
   - unit: 1
@@ -51,43 +51,43 @@ units:
     sessions:
       - {kind: lecture, n: 7, slot: "Lecture 1 (face-to-face, computer lab)", title: "Excel (2): Sorting, Filtering, Conditional Formatting and Charts", ilos: [C2, C4, B1]}
       - {kind: online, n: 7, slot: "Lecture 2 (online activity)", title: "AI with Excel: Formulas, Clean Data and the Right Chart", ilos: [C2, C4, B1]}
-  - unit: 8
+  - filling: true
     week: 8
     sessions:
-      - {kind: practice, n: 1, slot: "Lecture 1 (face-to-face, computer lab)", title: "Review of Lectures 1–7", ilos: [A1, A2, A3, B1, C1, C2, C4], practises: [1, 2, 3, 4, 5, 6, 7], core: false}
+      - {kind: practice, n: 1, slot: "Lecture 1 (face-to-face, computer lab)", title: "Review of Lectures 1–7", ilos: [A1, A2, A3, B1, C1, C2, C4], practises: [1, 2, 3, 4, 5, 6, 7]}
       - {kind: online, n: 8, slot: "Lecture 2 (online activity)", title: "Review Activity: Practice Questions", ilos: [A1, A2, A3, B1, C1, C2, C4]}
-  - unit: 9
+  - unit: 8
     week: 9
     sessions:
       - {kind: lecture, n: 8, slot: "Lecture 1 (face-to-face, computer lab)", title: "PowerPoint: Slides, Layouts, Themes, Transitions, Animations and Notes", ilos: [C3]}
-      - {kind: online, n: 9, slot: "Lecture 2 (online activity)", title: "A Five-Slide Talk", ilos: [C3]}
-  - unit: 10
+      - {kind: online, n: 9, slot: "Lecture 2 (online activity)", title: "A Short Presentation with AI Help", ilos: [C3, C4, B1]}
+  - filling: true
     week: 10
     sessions:
-      - {kind: practice, n: 2, slot: "Lecture 1 (face-to-face, computer lab)", title: "AI with PowerPoint: Outline, Slides and Pictures", ilos: [C3, C4, B1], practises: [2, 8], core: false}
-      - {kind: online, n: 10, slot: "Lecture 2 (online activity)", title: "A Short Presentation with AI Help", ilos: [C3, C4, B1]}
-  - unit: 11
+      - {kind: practice, n: 2, slot: "Lecture 1 (face-to-face, computer lab)", title: "AI with PowerPoint: Outline, Slides and Pictures", ilos: [C3, C4, B1], practises: [2, 8]}
+      - {kind: online, n: 10, slot: "Lecture 2 (online activity)", title: "A Five-Slide Talk", ilos: [C3]}
+  - unit: 9
     week: 11
     sessions:
       - {kind: lecture, n: 9, slot: "Lecture 1 (face-to-face, computer lab)", title: "Checking AI Output and Using AI Responsibly", ilos: [B1, D1]}
       - {kind: online, n: 11, slot: "Lecture 2 (online activity)", title: "Fact-Checking an AI-Written Document", ilos: [B1, D1]}
-  - unit: 12
+  - filling: true
     week: 12
     sessions:
-      - {kind: practice, n: 3, slot: "Lecture 1 (face-to-face, computer lab)", title: "Responsible AI in Practice: Personal Data, Copyright and Honesty", ilos: [D1], practises: [9], core: false}
+      - {kind: practice, n: 3, slot: "Lecture 1 (face-to-face, computer lab)", title: "Responsible AI in Practice: Personal Data, Copyright and Honesty", ilos: [D1], practises: [9]}
       - {kind: online, n: 12, slot: "Lecture 2 (online activity)", title: "Safe Prompts and an AI-Use Statement", ilos: [D1]}
-  - unit: 13
+  - unit: 10
     week: 13
     sessions:
-      - {kind: practice, n: 4, slot: "Lecture 1 (face-to-face, computer lab)", title: "Excel (3): Summarizing Data with AI Help", ilos: [C2, C4, B1], practises: [6, 7], core: false}
+      - {kind: lecture, n: 10, slot: "Lecture 1 (face-to-face, computer lab)", title: "Excel (3): Summarizing Data with AI Help", ilos: [C2, C4, B1]}
       - {kind: online, n: 13, slot: "Lecture 2 (online activity)", title: "Analyzing a Small Dataset and Charting It", ilos: [C2, C4, B1]}
-  - unit: 14
+  - filling: true
     week: 14
     sessions:
-      - {kind: practice, n: 5, slot: "Lecture 1 (face-to-face, computer lab)", title: "Working Across Office Apps with AI", ilos: [A1, A3, C4], practises: [4, 6, 8], core: false}
+      - {kind: practice, n: 4, slot: "Lecture 1 (face-to-face, computer lab)", title: "Working Across Office Apps with AI", ilos: [A1, A3, C4], practises: [4, 6, 8]}
       - {kind: online, n: 14, slot: "Lecture 2 (online activity)", title: "Course Project (1): Plan, Data Sheet and First Draft", ilos: [A1, A3, C4]}
-  - unit: 15
+  - filling: true
     week: 15
     sessions:
-      - {kind: lecture, n: 10, slot: "Lecture 1 (face-to-face, computer lab)", title: "Course Project Presentations", ilos: [B1, C1, C2, C3, C4, D1]}
+      - {kind: practice, n: 5, slot: "Lecture 1 (face-to-face, computer lab)", title: "Course Project Presentations", ilos: [B1, C1, C2, C3, C4, D1], practises: [4, 5, 6, 7, 8, 9, 10]}
       - {kind: online, n: 15, slot: "Lecture 2 (online activity)", title: "Course Project (2): Final Report, Data Sheet and Presentation", ilos: [B1, C1, C2, C3, C4, D1]}

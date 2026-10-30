@@ -1,4 +1,4 @@
-// The sales of the Sunrise shop in one month (made up), for the Excel simulators of Practice 4 and Online activity 13.
+// The sales of the Sunrise shop in one month (made up), for the Excel simulators of Lecture 10 and Online activity 13.
 window.MONTH = [
   [1, "Coffee", "Drinks", 6, 6], [1, "Pen", "Paper", 16, 8], [1, "Juice", "Drinks", 4, 2], [1, "Notebook", "Paper", 30, 60], [1, "Water", "Drinks", 10, 5], [1, "Folder", "Paper", 4, 6],
   [2, "Pen", "Paper", 30, 15], [2, "Juice", "Drinks", 20, 10], [2, "Bag", "Bags", 1, 12], [2, "Notebook", "Paper", 6, 12], [2, "Lunch box", "Bags", 2, 12], [2, "Water", "Drinks", 4, 2],

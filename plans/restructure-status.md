@@ -147,16 +147,27 @@ The teacher's notes:
   Workshop Day and unused figures removed; `schedule.yml`, `plan.md`,
   `NOTES.md`, `index.qmd`. `check_size.py`: no warning.
 
+- Digital Skills (plan v3 done): new Lecture 10 "Excel (3): Summarizing
+  Data with AI Help" in week-13 (three sections: totals by group with a
+  PivotTable, other questions with weeks, averages and a chart, an AI
+  summary checked number by number; Pivot Lab and Summary Check; Huda's
+  April meeting as the Game challenge; notes, page and 14 slides); old
+  Practice 4 removed (its content is Lecture 10); Online activities 9 and
+  10 swapped with their sims and figures (Outline Lab and Image Prompt Lab
+  to week-09, Talk Planner and Rehearsal Lab to week-10; Rehearsal Lab loads
+  `slide-kit.js` from week-09); old Lecture 10 rewritten as Practice 5 (five
+  slides and four checks with Deck Checker; rehearse with Rehearsal Lab);
+  old Practice 5 renamed Practice 4; dues of Online activities 13–15 and
+  the project figure updated; Presentation Day and one figure removed;
+  `schedule.yml` (10 units, 5 practice weeks), `plan.md`, `NOTES.md`,
+  `index.qmd`. `check_size.py --all`: no warning in any course.
+
 ### Still to do (in this order)
 
 1. **Game Math:** done (see above).
 2. **Computing Systems:** done (see above).
 3. **Digital Media:** done (see above).
-4. **Digital Skills** (design above): swap Online activities 9 and 10 (files,
-   sims, figures, dues), new Lecture 10 from Practice 4 + Online activity
-   13 (notes, page, slides), Online activity 13 practises it, old Lecture
-   10 → Practice 5, old Practice 5 → Practice 4, `schedule.yml`, `plan.md`,
-   `NOTES.md`, `index.qmd`, sim comments (`month-data.js`).
+4. **Digital Skills:** done (see above).
 5. **Rules:** `AUTHORING.md` ("Units and sessions", seminars, practice
    weeks, homework, the mapping of syllabus weeks, a lessons-learned entry),
    the templates, CI output check.

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Claim Finder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .doc { border: 1.5px solid #ffd8a8; border-radius: 12px; background: #fffaf3; padding: 10px 12px; line-height: 1.9; }
+    .sim .doc h2 { font-size: 1rem; margin: 0 0 4px; }
+    .sim .s { cursor: pointer; border-radius: 6px; padding: 2px 3px; border-bottom: 2px dotted #ffc078; }
+    .sim .s.on { background: #ffe066; border-bottom-color: #f08c00; }
+    .sim .s.ok { box-shadow: inset 0 -3px 0 #2b8a3e; }
+    .sim .s.no { box-shadow: inset 0 -3px 0 #c92a2a; }
+    .sim .why { margin: 8px 0 0; padding-left: 1.2em; font-size: .92rem; font-weight: 700; }
+    .sim .why .ok { color: #2b8a3e; } .sim .why .no { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Claim Finder: which sentences can be checked?</h1>
+  <p class="note">A practice model with a prepared AI text. Tap every sentence that is a <b>claim</b>: a number, a date, a name, a price, "a study shows", "experts say". Leave the opinions. Then press <b>Check</b>.</p>
+  <div class="doc" id="doc"></div>
+  <div class="controls"><button type="button" id="check">Check</button><button type="button" id="again" class="ghost">Start again</button></div>
+  <ol class="why" id="why"></ol>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  // An AI text for the shop's notice board: [sentence, is it a claim?, why].
+  const S = [
+    ["Green tea is the best drink for the morning.", false, "nobody can check “the best”"],
+    ["A cup of green tea has about 30 mg of caffeine.", true, "a number: it can be checked"],
+    ["Tea tastes better with fresh mint.", false, "a matter of taste"],
+    ["A 2019 study of 2,000 people shows that tea drinkers sleep two hours more.", true, "a study, a year and numbers: check them"],
+    ["Tea came to Europe from China in the 1600s.", true, "a date and places: they can be checked"],
+    ["Experts say that three cups a day are enough.", true, "“experts say”: which experts? check it"],
+    ["A warm cup on a cold evening is a lovely thing.", false, "“lovely” cannot be checked"],
+    ["Our shop sells green tea for 2.50 JD a box.", true, "a price: check it in the shop's records"],
+  ];
+  const st = { on: new Set(), checked: false };
+  function draw() {
+    $("doc").innerHTML = "<h2>Tea time at Sunrise (an AI draft)</h2>" + S.map(([t, c], i) => {
+      let cls = "s" + (st.on.has(i) ? " on" : "");
+      if (st.checked) cls += (st.on.has(i) === c ? " ok" : " no");
+      return `<span class="${cls}" data-i="${i}" role="button" tabindex="0">${t}</span>`;
+    }).join(" ");
+    $("doc").querySelectorAll(".s").forEach((el) => {
+      const go = () => { if (st.checked) return; const i = +el.dataset.i; st.on.has(i) ? st.on.delete(i) : st.on.add(i); draw(); };
+      el.addEventListener("click", go);
+      el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    });
+  }
+  function say(t, cls) { $("msg").textContent = t; $("msg").className = "message " + (cls || ""); }
+  $("check").addEventListener("click", () => {
+    if (st.checked) { say("Press Start again to try once more."); return; }
+    if (!st.on.size) { say("Tap the sentences that are claims first.", "bad"); return; }
+    st.checked = true; draw();
+    const right = S.filter(([, c], i) => st.on.has(i) === c).length;
+    $("why").innerHTML = S.map(([t, c, w], i) => `<li class="${st.on.has(i) === c ? "ok" : "no"}">${st.on.has(i) === c ? "✓" : "✗"} ${c ? "Claim" : "Opinion"}: ${w}.</li>`).join("");
+    if (right === S.length) { say("✓ All 8 right: five claims to check, three opinions to leave. Now check each claim in two reliable sources.", "good"); Kit.good(); }
+    else say(`${right} of 8 right. A claim can be checked: a number, a date, a name, a price, a study. Look at the red lines.`, "bad");
+  });
+  $("again").addEventListener("click", () => { st.on.clear(); st.checked = false; $("why").innerHTML = ""; draw(); say("Tap every sentence that can be checked."); });
+  window.CF = { tap: (i) => { if (!st.checked) { st.on.has(i) ? st.on.delete(i) : st.on.add(i); draw(); } }, check: () => $("check").click(), again: () => $("again").click() };
+  draw(); say("Tap every sentence that can be checked.");
+})();
+</script>
+</body>
+</html>

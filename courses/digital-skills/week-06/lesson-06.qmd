@@ -1,21 +1,21 @@
 ---
 title: "Excel (1): Cells, Formulas, References and Basic Functions"
 description: "The parts of a worksheet, formulas that compute by themselves, copying a formula with relative and absolute references, and the functions SUM, AVERAGE, MAX and MIN."
-lesson: 11
+lesson: 6
 ilos: [C2]
 format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem at work. Then it shows one Excel skill. It ends with a
-**Lab task** and one set of questions. The full explanations, examples and
-exercises are in the notes.
+starts with a problem at study or at work. Then it explains one idea. It
+ends with a **Lab task** and one set of questions. Every question on this
+page has its answer: try first, then check.
 
 ## Key terms
 
 {{< glossary workbook worksheet cell cell-address cell-range formula formula-bar relative-reference absolute-reference fill-handle function autosum >}}
 
-## 11.1 The grid: cells and ranges
+## 6.1 The grid: cells and ranges
 
 - Columns have letters; rows have numbers. The **cell address** is both:
   **B3** = column B, row 3.
@@ -35,6 +35,11 @@ heading.
 1. Open Excel and type the shop list in A1:C4.
 2. Click B3. What does the Name Box show?
 3. Save as `shop.xlsx`.
+
+::: {.check}
+The Name Box shows **B3**: the price of the pen, 0.5. The numbers sit on
+the right of their cells, the words on the left.
+:::
 :::
 
 ::: {.callout-tip title="Try it 1 · Cells"}
@@ -44,21 +49,31 @@ Choose the right answer.
 What is cell C4?
 :   column C, row 4
 
+    Why: The letter is the column, and the number is the row.
+
 Which range holds A2, A3, A4, A5 and A6?
 :   A2:A6
+
+    Why: A range is the first cell, a colon and the last cell.
 
 Where does a number sit in a cell?
 :   on the right
 
+    Why: Numbers sit on the right; text sits on the left.
+
 What shows what is really in a cell?
 :   the formula bar
 
+    Why: The cell shows the result; the formula bar shows what is really in it.
+
 You type "2 JD" in a cell. What is it for Excel?
 :   text
+
+    Why: With "JD" in it, it is not a number, so Excel cannot compute with it.
 :::
 :::
 
-## 11.2 Let Excel calculate: formulas
+## 6.2 Let Excel calculate: formulas
 
 - A **formula** starts with **=**: **=B2\*C2**.
 - Signs: + add, − subtract, * multiply, / divide, ( ) first.
@@ -77,6 +92,11 @@ No =, no formula. And use addresses (=B2\*C2), not numbers (=2\*10).
 ::: {.callout-note title="Lab task · A formula"}
 1. Type *Total (JD)* in D1 and **=B2\*C2** in D2.
 2. Change the price in B2. What happens to D2?
+
+::: {.check}
+D2 shows 20 (2 × 10). When you change the price in B2, for example to 3,
+D2 changes to 30 by itself: the formula uses the address B2.
+:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Formulas"}
@@ -86,21 +106,31 @@ Choose the right answer.
 B2 = 6 and C2 = 5. What does =B2\*C2 show?
 :   30
 
+    Why: =B2\*C2 multiplies: 6 × 5 = 30.
+
 What does =2+3\*4 give?
 :   14
+
+    Why: Excel multiplies first: 3 × 4 = 12, then 2 + 12 = 14.
 
 What does =(2+3)\*4 give?
 :   20
 
+    Why: The brackets come first: 2 + 3 = 5, then 5 × 4 = 20.
+
 Why should a formula use B2, not the number 6?
 :   it changes when B2 changes
 
+    Why: A formula with addresses computes again by itself.
+
 What must every formula start with?
 :   =
+
+    Why: Without =, Excel takes it as text.
 :::
 :::
 
-## 11.3 Copy a formula: relative and absolute references
+## 6.3 Copy a formula: relative and absolute references
 
 - Copy a formula with the **fill handle** (the small square; drag it or
   double-click it).
@@ -124,6 +154,12 @@ A rate or a total that every row needs must have $ signs.
 1. Copy D2 down to D4.
 2. Type 10% in F1; in E2 write =D2\*\$F\$1 and copy it down.
 3. Click E4: which formula does the formula bar show?
+
+::: {.check}
+With the notebook at 2 JD: D3 shows 20 and D4 shows 36. E2 and E3 show 2,
+and E4 shows 3.6. The formula bar of E4 shows =D4\*\$F\$1: D4 moved, and
+\$F\$1 stayed.
+:::
 :::
 
 ::: {.callout-tip title="Try it 3 · References"}
@@ -133,21 +169,31 @@ Choose the right answer.
 You copy =B2\*C2 from D2 to D5. What is in D5?
 :   =B5\*C5
 
+    Why: The relative references move down with the copy: B2 and C2 become B5 and C5.
+
 You copy =B2\*\$F\$1 from C2 to C4. What is in C4?
 :   =B4\*\$F\$1
+
+    Why: B2 moves two rows down; \$F\$1 stays.
 
 You copy =B2\*F1 down. Why do the next rows show 0?
 :   F1 moved to the empty cells F2, F3
 
+    Why: Without \$, the rate cell moves too, and empty cells count as 0.
+
 Which key adds the $ signs?
 :   F4
 
+    Why: F4 adds the \$ signs to the address.
+
 Which kind of reference stays the same when you copy?
 :   absolute (\$F\$1)
+
+    Why: The \$ signs keep the address when you copy.
 :::
 :::
 
-## 11.4 Ready formulas: SUM, AVERAGE, MAX, MIN
+## 6.4 Ready formulas: SUM, AVERAGE, MAX, MIN
 
 - A **function** is a ready formula with a name, used on a range.
 - Sales 10, 20, 30, 40, 50 in B2:B6: **=SUM(B2:B6)** = 150;
@@ -165,6 +211,11 @@ Which kind of reference stays the same when you copy?
 ::: {.callout-note title="Lab task · The functions"}
 1. Under column D, use AutoSum for the total.
 2. Add =AVERAGE(B2:B4) and =MAX(B2:B4) for the prices.
+
+::: {.check}
+With the notebook at 2 JD: the AutoSum under column D gives =SUM(D2:D4),
+76. =AVERAGE(B2:B4) gives about 4.83, and =MAX(B2:B4) gives 12.
+:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Functions"}
@@ -174,17 +225,27 @@ Sales 5, 10, 15, 20 in B2:B5. Choose the right answer.
 What does =SUM(B2:B5) give?
 :   50
 
+    Why: 5 + 10 + 15 + 20 = 50.
+
 What does =AVERAGE(B2:B5) give?
 :   12.5
+
+    Why: 50 ÷ 4 = 12.5.
 
 What does =MAX(B2:B5) give?
 :   20
 
+    Why: MAX gives the highest value.
+
 A cell shows #NAME?. Why?
 :   the function name is wrong
 
+    Why: #NAME? means that Excel does not know the name, for example =SUMM.
+
 What does the Σ button write?
 :   a SUM formula
+
+    Why: AutoSum writes =SUM( ) for the cells above.
 :::
 :::
 
@@ -199,39 +260,34 @@ Enter, she predicts each cell: tea for 3 JD × 4 packs (=B2\*C2); the week of
 
 {{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" height="560" >}}
 
-::: {.callout-tip title="Try it 5 · Rana's cells"}
-Tea 3 JD × 4 packs. Sales of the week: 10, 20, 30, 40, 50 JD. Choose the right answer.
+::: {.callout-tip title="Try it 5 · Rana's cells (harder)"}
+Rana predicts each cell before she presses Enter. Choose the right answer.
 
-::: {.match extra="7|50"}
-=B2\*C2 for the tea?
+::: {.match extra="=B2\*C2|=C3\*\$F\$2|7"}
+Tea: 3 JD in B2 and 4 packs in C2. What does =B2\*C2 show?
 :   12
 
-=SUM of the week?
-:   150
+    Why: 3 × 4 = 12.
 
-=AVERAGE of the week?
-:   30
-
-=MIN of the week?
-:   10
-:::
-:::
-
-::: {.callout-tip title="Try it 6 · Copy and errors (harder)"}
-Choose the right answer.
-
-::: {.match extra="=B2\*C2|=C3\*\$F\$2"}
 D2 has =B2\*C2. Rana copies it to D3. Which formula is in D3?
 :   =B3\*C3
+
+    Why: The relative references move one row down.
 
 D2 has =C2\*\$F\$1. Rana copies it to D3. Which formula is in D3?
 :   =C3\*\$F\$1
 
-=A2/B2 and B2 is empty. What does the cell show?
+    Why: C2 becomes C3; \$F\$1 stays.
+
+A2 has 50, and B2 is empty. What does =A2/B2 show?
 :   #DIV/0!
+
+    Why: An empty cell counts as 0, and Excel cannot divide by 0.
 
 The column shows ####. What do you do?
 :   make the column wider
+
+    Why: #### means that the number does not fit in the column.
 :::
 :::
 

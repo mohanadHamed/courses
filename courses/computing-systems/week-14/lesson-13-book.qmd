@@ -1,7 +1,7 @@
 ---
 title: "Setting Up Test Environments: Emulators and Real Devices"
-description: "Lesson notes · What a test environment is, emulators and simulators and what they can and cannot show, building an Android Virtual Device, preparing real Android and iOS devices for testing, and choosing a device matrix with emulators, real phones and a device farm."
-lesson: 25
+description: "Lesson notes · The parts of a test environment, emulators and the iOS Simulator, preparing real devices with developer options, and a device matrix that says which test runs where."
+lesson: 13
 ilos: [C1]
 format: lesson-typst
 ---
@@ -11,9 +11,9 @@ format: lesson-typst
 option and support for Android 8. Rami, the tester of Byte Bay, has only
 two phones on the desk: the P5 (Android, 4 GB) and the P8 (an iPhone). How
 can Rami test six screen sizes, five Android versions, a tablet, the heat of
-a long race and the gyroscope, without buying twenty phones? In lectures
-13–16 you met the mobile operating systems and the tools for developers. In
-this lesson you set up a **test environment**: **emulators** for many
+a long race and the gyroscope, without buying twenty phones? In lectures 7
+and 8 you met the mobile operating systems and the tools of each platform.
+In this lesson you set up a **test environment**: **emulators** for many
 versions and sizes, **real devices** for speed, heat and sensors, and a
 **device matrix** that says which test runs where. Every section ends with
 a short task.
@@ -23,31 +23,33 @@ a short task.
 
 {{< glossary test-environment emulator ios-simulator android-studio avd system-image test-device developer-options usb-debugging adb device-farm device-matrix >}}
 
-## 25.1 What is a test environment?
+## 13.1 What is a test environment?
 
 A test is only useful if somebody else can repeat it on the same setup
 (@fig-env).
 
-::: {.callout-important title="Definition 25.1 — Test environment"}
+::: {.callout-important title="Definition 13.1 — Test environment"}
 A **test environment** is everything a team needs to test a game:
 
 - **the build:** one exact version, for example `PocketQuest_1.3` as an
   `.apk` for Android and an `.ipa` for iOS;
 - **the devices:** emulators and real **test devices**, each with a known
   OS version;
-- **the tools:** Android Studio, adb and Logcat for Android; Xcode for iOS;
+- **the tools:** Android Studio, adb and Logcat (the log of the device) for
+  Android; Xcode for iOS;
 - **the test plan:** which test runs on which device;
 - **the bug report:** what happened, written so that others can repeat it.
 :::
 
 ![A test environment.](images/test-environment.png){#fig-env width=94%}
 
-::: {.callout-note title="Example 25.1 — Rami's plan for 1.3"}
-1. *Build:* `PocketQuest_1.3`, build 42, for Android and iOS.
-2. *Tests:* the menus on six screen sizes; the start on Android 8; a
-   20-minute race (heat and frame rate); tilt steering; the tablet layout.
-3. *Environment:* emulators for the sizes and versions, the P5 for heat
-   and tilt, the P8 and the iOS Simulator for iOS.
+::: {.callout-note title="Example 13.1 — A plan for Star Garden 2.0"}
+1. *Build:* `StarGarden_2.0`, build 17, for Android and iOS.
+2. *Tests:* the garden on a tablet screen; the start on Android 9; the
+   watering reminders (notifications); the iPhone version.
+3. *Environment:* a tablet emulator and an emulator with Android 9; the
+   team's Android phone for the reminders; the iOS Simulator on a borrowed
+   Mac.
 :::
 
 ::: {.callout-warning title="Common mistake"}
@@ -56,18 +58,25 @@ version, nobody can repeat the test or know which players are affected.
 :::
 
 ::: {.callout-note title="Do it · Your test setup"}
-Write the test environment for one game on your own phone: the build
-(the version number in the store), the device, the OS version, and two
-tests you would run.
+Write the test environment for one game on your own phone: the build (the
+version number in the store), the device, the OS version, and two tests you
+would run.
 
 *Your result:* four lines.
+
+::: {.check}
+A good answer looks like: "Build: version 3.2.1 (from the store page).
+Device: Samsung A35. OS: Android 14. Tests: the first level on mobile data;
+the settings menu in landscape." Check: an exact version, a device, an OS
+version and two tests that someone else could repeat.
+:::
 :::
 
-## 25.2 Emulators and simulators
+## 13.2 Emulators and simulators
 
 An emulator brings many devices into one computer (@fig-evr).
 
-::: {.callout-important title="Definition 25.2 — Emulator and simulator"}
+::: {.callout-important title="Definition 13.2 — Emulator and simulator"}
 - An **emulator** copies the hardware and the operating system of a
   device, so the **real app** runs on the computer. The Android Emulator in
   **Android Studio** runs **Android Virtual Devices (AVDs)**: a device
@@ -85,14 +94,13 @@ An emulator brings many devices into one computer (@fig-evr).
 
 ![An Android Virtual Device.](images/avd.png){#fig-avd width=94%}
 
-::: {.callout-note title="Example 25.2 — The P5 twin"}
+::: {.callout-note title="Example 13.2 — The P5 twin"}
 1. In the Device Manager, Rami creates an AVD with a 720 × 1600 screen,
    4 GB RAM and the system image Android 11 (API 30): the "P5 twin".
 2. A second AVD uses API 26 (Android 8), the oldest version that *Pocket
    Quest* supports; a third is a tablet with API 33.
-3. The emulator uses the computer's GPU (hardware graphics). It needs
-   **virtualization** switched on in the computer's BIOS; without it, the
-   emulator is very slow or does not start.
+3. The emulator needs **virtualization** switched on in the computer's
+   BIOS; without it, the emulator is very slow or does not start.
 :::
 
 {{< sim file="sims/avd-builder.html" poster="sims/avd-builder.png" title="AVD Builder: virtual devices for Pocket Quest" height="840" >}}
@@ -108,17 +116,25 @@ computer's much stronger CPU and GPU. Performance needs a real device.
 2. Write one thing each AVD can test and one thing it cannot.
 
 *Your result:* three AVD names and six short lines.
+
+::: {.check}
+P5 twin (720 × 1600, 4 GB, API 30): the layout and the menus of the P5 /
+not its speed or heat. Oldest phone (API 26): does the game start on
+Android 8? / not the real speed. Tablet (API 33): the tablet layout / not
+touch on a real 10-inch screen, nor the battery.
+:::
 :::
 
-## 25.3 Real devices
+## 13.3 Real devices
 
-Real devices show what players really feel (@fig-real).
+Real devices show what players really feel: the speed, the heat of a long
+race (lecture 3), the battery and the sensors (@fig-real).
 
-::: {.callout-important title="Definition 25.3 — Preparing a real device"}
+::: {.callout-important title="Definition 13.3 — Preparing a real device"}
 **Android:** switch on **developer options** (tap the build number seven
-times), switch on **USB debugging**, connect the cable, and allow the
-computer on the phone. Then `adb devices` lists the phone, and the build
-can be installed with `adb install`.
+times in About phone), switch on **USB debugging**, connect the cable, and
+allow the computer on the phone. Then `adb devices` lists the phone, and
+the build can be installed with `adb install`.
 
 **iPhone:** a Mac with Xcode and the phone registered as a development
 device, or a **beta build** through TestFlight.
@@ -129,18 +145,19 @@ by the hour.
 
 ![Preparing a real Android device.](images/real-device-setup.png){#fig-real width=94%}
 
-::: {.callout-note title="Example 25.3 — The P5 on the cable"}
+::: {.callout-note title="Example 13.3 — The P5 on the cable"}
 1. Rami switches on USB debugging on the P5 and connects it.
 2. `adb devices` shows the P5 as `unauthorized`: the phone has not
    allowed the computer yet. Rami taps "Allow" on the phone.
 3. Now `adb devices` shows `device`. Rami installs the build and races for
-   20 minutes: the frame rate drops from 60 to 41 fps as the phone gets
-   hot. The emulator never showed this.
+   20 minutes: the phone gets hot and the frame rate drops. The emulator
+   never showed this.
 :::
 
 ::: {.callout-warning title="Common mistake"}
 Leaving USB debugging on a personal phone for ever. Switch it off after
-testing: any computer the phone trusts can install apps on it.
+testing: any computer the phone trusts can install apps on it. Install
+builds only from your studio.
 :::
 
 ::: {.callout-note title="Do it · Prepare a phone"}
@@ -149,14 +166,22 @@ developer options, and find the USB debugging switch. Do not change other
 developer settings. On an iPhone, find the iOS version in Settings.
 
 *Your result:* the path to each setting and the OS version.
+
+::: {.check}
+Android: Settings › About phone › (Software information) › Build number,
+tapped seven times: "You are now a developer". Then Settings › System ›
+Developer options › USB debugging (on Samsung: Settings › Developer
+options). iPhone: Settings › General › About › iOS version. Switch
+developer options off again on a personal phone.
+:::
 :::
 
-## 25.4 Choosing a device matrix
+## 13.4 Choosing a device matrix
 
 Nobody can test on every device. A **device matrix** chooses a few that
 cover the most important differences (@fig-matrix).
 
-::: {.callout-important title="Definition 25.4 — Device matrix"}
+::: {.callout-important title="Definition 13.4 — Device matrix"}
 A **device matrix** is the table of test setups for one release. It should
 cover:
 
@@ -172,12 +197,12 @@ the final check on many models.
 
 ![A device matrix (example).](images/device-matrix.png){#fig-matrix width=94%}
 
-::: {.callout-note title="Example 25.4 — A matrix for $300"}
+::: {.callout-note title="Example 13.4 — A matrix for a small budget"}
 1. Free: the AVDs for API 26 and API 34, and the iOS Simulator on the
    office Mac.
-2. Real: the P5 ($150, example price), the weakest supported phone.
-3. Rented: 10 hours on a device farm ($60), with real iPhones and tablets.
-4. Total $210: every row of the checklist is covered.
+2. Real: the P5, the weakest supported phone.
+3. Rented: a few hours on a device farm, with real iPhones and tablets.
+4. Every row of the checklist is covered, within the budget of $300.
 :::
 
 {{< sim file="sims/matrix-builder.html" poster="sims/matrix-builder.png" title="Matrix Builder: which devices for the test?" height="720" >}}
@@ -194,6 +219,14 @@ device.
    OS, why.
 
 *Your result:* a cost and a matrix.
+
+::: {.check}
+In Matrix Builder: the free AVDs (API 26, API 34, tablet), the real P5 and
+a few device-farm hours cover every row for less than $300. A good matrix
+of five rows has the oldest and the newest OS, the weakest real phone, a
+tablet or a big screen, and an iPhone (real, farm or Simulator), each with
+a reason.
+:::
 :::
 
 ## Case study: Emulator or Real?
@@ -235,7 +268,7 @@ app in Simulator or on a device" (developer.apple.com).
 3. A device profile and a system image.
 4. For example speed, heat, battery, camera, sensors, the feel of touch.
 5. To run the virtual device fast with the processor's help.
-6. Tap the build number seven times.
+6. Tap the build number seven times in About phone.
 7. The phone has not allowed this computer yet.
 8. A cloud service with many real devices to rent for tests.
 9. For example the oldest and newest OS, the weakest device, screen sizes,

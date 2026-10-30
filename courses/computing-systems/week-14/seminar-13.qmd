@@ -1,0 +1,311 @@
+---
+title: "Hands-on: Running a Sample App on an Emulator"
+description: "Seminar · Create and start an Android Virtual Device, install a build with adb, run a test case and collect the evidence, and write a bug report that a developer can repeat."
+seminar: 13
+ilos: [C1]
+format: lesson-html
+---
+
+No new ideas today: you set up a test environment and run a real test, with
+what you learned in Lecture 13. Work on a lab computer with Android Studio,
+or in **Emulator Lab** below. Do each activity alone, then open "Check your
+result". Every question on this page has its answer: try first, then
+check.
+
+## Recall
+
+- An **AVD** is a device profile (screen, RAM) plus a **system image** (one
+  Android version, for example API 30); it runs in the Android Emulator.
+- **adb** talks to the emulator or the phone: `adb devices`, `adb install`,
+  `adb logcat`.
+- An emulator is good for versions and sizes, not for speed, heat or
+  sensors.
+- A test result names the build, the device and the OS version.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="a USB cable|the Play Store"}
+What gives an AVD its Android version?
+:   the system image
+
+    Why: One system image is one Android version.
+
+Which command lists the connected devices and emulators?
+:   adb devices
+
+    Why: adb talks to every connected device.
+
+What can an emulator not test well?
+:   the heat of a long race
+
+    Why: It runs on the computer, not on a phone.
+:::
+:::
+
+## Activity 1 · Create and start the virtual device
+
+Each student gets the same build, `PocketQuest_1.3.apk`, and the same test
+plan with eight test cases. Steps 1–3 happen in Android Studio:
+
+1. **Device Manager** › **Create device**.
+2. Choose the device profile and the **system image** (downloaded once);
+   name the AVD, for example `P5_API_30`.
+3. Press **Start**. The first start (a **cold boot**) takes longer; later
+   starts use a saved state (**quick boot**). From a terminal:
+   `emulator -list-avds` lists the AVDs, `emulator -avd P5_API_30` starts
+   one.
+
+![The steps of the seminar.](images/seminar-steps.png){width=90%}
+
+{{< sim file="sims/adb-lab.html" poster="sims/adb-lab.png" title="Emulator Lab: run Pocket Quest 1.3" height="720" >}}
+
+::: {.callout-warning title="Watch out!"}
+If the emulator does not start, virtualization may be off in the BIOS, or
+the computer has too little free RAM. Close other programs, and ask the lab
+technician.
+:::
+
+::: {.callout-note title="Activity 1 · Start P5_API_30 · 10 min"}
+On the lab computer (or in **Emulator Lab**, Task 1), create and start
+`P5_API_30`: 720 × 1600, 4 GB, Android 11. Write how long the first boot
+took.
+
+*Your product:* a running emulator and one time.
+
+::: {.check}
+The emulator shows the home screen of Android 11. A first (cold) boot takes
+about 15–60 seconds on a lab PC; the next starts are faster (quick boot).
+In Emulator Lab, Task 1 is done when `emulator -list-avds` shows
+`P5_API_30` and the AVD has started.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Steps 1–3"}
+Choose the right answer.
+
+::: {.match extra="the Play Store|a USB cable"}
+Where do you create an AVD in Android Studio?
+:   the Device Manager
+
+    Why: The Device Manager creates, starts and deletes AVDs.
+
+What is the slow first start of an AVD called?
+:   a cold boot
+
+    Why: Later starts use a saved state: a quick boot.
+
+Which command lists the AVDs?
+:   emulator -list-avds
+
+    Why: It prints the names of all AVDs.
+:::
+:::
+
+## Activity 2 · Install the build
+
+Step 4 puts the build on the emulator. Two ways:
+
+- **Drag and drop** the `.apk` file onto the emulator window.
+- **adb:** `adb devices` must list the emulator (for example
+  `emulator-5554 device`); then `adb install PocketQuest_1.3.apk`. `adb
+  uninstall` with the package name removes the app.
+- `adb: no devices/emulators found` means the emulator is not running.
+  `failed to stat … No such file` means adb is in the wrong folder.
+
+![Commands of the seminar.](images/adb-commands.png){width=90%}
+
+::: {.callout-note title="Activity 2 · Two installs · 8 min"}
+Install the build twice: once by drag and drop, once with `adb install`
+(uninstall it in between). In Emulator Lab, do Tasks 2 and 3. Copy the
+output of `adb devices`.
+
+*Your product:* two installs and one line of output.
+
+::: {.check}
+`adb devices` shows `List of devices attached` and `emulator-5554
+device`. `adb install PocketQuest_1.3.apk` prints `Success`, and the Pocket
+Quest icon appears. If you see `no devices/emulators found`, start the
+emulator first.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Installing"}
+Use Emulator Lab. Choose the right answer.
+
+::: {.match extra="Restart the router|Buy a phone"}
+adb: no devices/emulators found. What do you do?
+:   start the emulator first
+
+    Why: adb can install only on a running device.
+
+What does adb print after a good install?
+:   Success
+
+    Why: Then the game's icon appears on the emulator.
+
+failed to stat … No such file. What is wrong?
+:   adb is in the wrong folder
+
+    Why: Run adb in the folder of the APK, or write the full path.
+:::
+:::
+
+## Activity 3 · Run the test case and collect evidence
+
+Steps 5 and 6: test, and keep the proof.
+
+- Follow the test plan **in order**, and mark each case pass or fail.
+- The emulator's **extended controls** change the device: rotation, the
+  battery, the location, the network speed and delay, a phone call.
+- Keep the **evidence**: a **screenshot** of the problem and the lines of
+  **Logcat** (`adb logcat`) around the moment it happened.
+- Repeat a failed case once, to be sure that the steps make it happen
+  again.
+
+::: {.callout-warning title="Watch out!"}
+Do not copy the whole log: copy the lines around the error, with the time.
+:::
+
+::: {.callout-note title="Activity 3 · Test case 7 · 12 min"}
+Test case 7: "Start a race, then turn the device to landscape."
+
+1. Run it in Emulator Lab (Tasks 4 and 5) or on your AVD.
+2. Read the log, take a screenshot, and repeat the case once.
+
+*Your product:* a screenshot, the error line, and pass or fail.
+
+::: {.check}
+The race freezes when the device turns to landscape; after a few seconds
+Android says *Pocket Quest isn't responding*. The log shows `E/Unity:
+NullReferenceException: RaceHud.OnScreenRotate () (at RaceHud.cs:118)`.
+The case **fails**, and it fails again when repeated.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Test case 7"}
+Use Emulator Lab. Choose the right answer.
+
+::: {.match extra="the battery|the font"}
+What freezes the race?
+:   turning to landscape
+
+    Why: The error comes from OnScreenRotate.
+
+Which file does the error name, and at which line?
+:   RaceHud.cs, line 118
+
+    Why: The log line shows the file and the line.
+
+Why do you repeat a failed case?
+:   to be sure it happens again
+
+    Why: A bug that the steps repeat can be fixed.
+:::
+:::
+
+## Activity 4 · Write the bug report
+
+Step 7: a developer must be able to repeat the bug from the report alone.
+
+- **Title:** what goes wrong, in one line.
+- **Build:** the version and the build number. **Device:** the AVD or phone
+  and its OS version.
+- **Steps:** numbered, from the start. **Expected** and **actual** result.
+- **Attached:** the screenshot and the lines of the log. One bug per
+  report.
+- Facts, not opinions: "the race freezes", not "the HUD code is bad".
+
+![A good bug report.](images/bug-report.png){width=90%}
+
+::: {.callout-note title="Activity 4 · Your bug report · 10 min"}
+Write the bug report of test case 7 with all its parts.
+
+*Your product:* one complete bug report.
+
+::: {.check}
+A good report: **Title:** The race freezes when the device turns to
+landscape. **Build:** PocketQuest_1.3, build 42. **Device:** AVD
+P5_API_30, Android 11. **Steps:** 1. Start a race. 2. Turn the device to
+landscape. **Expected:** the race goes on in landscape. **Actual:** the race
+freezes; "Pocket Quest isn't responding" after a few seconds.
+**Attached:** the screenshot and the log line with RaceHud.cs:118.
+:::
+:::
+
+::: {.callout-note .ai-task title="Task with AI · A test plan for four setups"}
+**Goal:** a test plan of 12 test cases for *Pocket Quest 1.3* on four
+setups: the AVD P5_API_30, an AVD with API 26, a tablet AVD and the real P5.
+By hand this takes long; the AI drafts, and you check and run.
+
+1. **Ask the AI:** start with this prompt.
+
+   ::: {.prompt}
+   Write 12 test cases for a mobile racing game on Android, for these
+   setups: an emulator with Android 11, an emulator with Android 8, a tablet
+   emulator, and a real phone with 4 GB of RAM. For each test case give:
+   the setup, numbered steps, and the expected result. Include tests of
+   rotation, a phone call during a race, a slow network and a 20-minute
+   race.
+   :::
+
+2. **Do it yourself:** check that each case has one clear setup, steps that
+   someone else can follow, and an expected result you can see. Move the
+   20-minute race and the tilt tests to the real phone.
+3. **Check:** run two of the AI's cases in Emulator Lab or on your AVD. If a
+   step cannot be done there, correct it.
+
+*Your product:* the checked plan of 12 cases, and one sentence on what the
+AI got wrong or what you changed.
+
+::: {.check}
+A good plan has 12 numbered cases, each with a setup, steps and an expected
+result; the speed, heat and sensor tests are on the real P5; two cases were
+run, with pass or fail. A typical change: "The AI put the 20-minute heat
+test on the emulator, so I moved it to the real P5."
+:::
+:::
+
+## Game challenge: Report Doctor {.challenge}
+
+Work alone. Use every activity of today.
+
+After the emulator session, **six bug reports** reach Byte Bay's
+developers: one **without the device**, one **without steps**, one that says
+only "**looks bad**", one **without a build number**, one with **three bugs**
+at once, and one **without a log or a screenshot**.
+
+{{< sim file="sims/report-doctor.html" poster="sims/report-doctor.png" title="Report Doctor: fix the bug reports" kind="game" height="520" >}}
+
+::: {.callout-tip title="Try it 5 · The reports (harder)"}
+Choose what must be fixed.
+
+::: {.match extra="a longer title|a nicer font"}
+"Race freezes", without the device.
+:   add the device and its OS version
+
+    Why: The developer must use the same setup.
+
+"Crash", without steps.
+:   add numbered steps
+
+    Why: The developer must be able to repeat it.
+
+"Looks bad."
+:   write the expected and the actual result
+
+    Why: Facts show what is wrong; an opinion does not.
+
+A freeze, wrong coins and a small font in one report.
+:   one bug per report
+
+    Why: Each bug is fixed and checked on its own.
+:::
+:::
+
+## Wrap-up {.summary}
+
+- You can create and start an Android Virtual Device.
+- You can install a build with adb and solve the common install errors.
+- You can run a test case, collect a screenshot and the log, and repeat it.
+- You can write a bug report that a developer can repeat.

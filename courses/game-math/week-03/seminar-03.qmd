@@ -1,0 +1,163 @@
+---
+title: "Solving Movement and Aiming Problems"
+description: "Seminar · Decide which asteroid a mining beam hits with distances, the part along and the part across, then find the normal of a floor and the slide of a player."
+seminar: 3
+ilos: [B1]
+format: lesson-html
+---
+
+No new ideas today: two short problems on Lecture 3. Do each one alone,
+then open "Check your result". Every question on this page has its answer:
+try first, then check.
+
+## Recall
+
+- 2D cross product: f × d = f~x~ d~y~ − f~y~ d~x~. Positive: left;
+  negative: right; zero: on the same line.
+- 3D: the normal of a triangle is (B − A) × (C − A); the order of the
+  corners decides which way it faces.
+- Distance = |B − A|. Along a unit vector û: v · û. Across = v − along.
+  A floor removes only the part into it: the player slides.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="(0, 4)|left"}
+A tower faces (1, 0). Is a drone in the direction (2, −3) to the left or to the right?
+:   right
+
+    Why: 1 × (−3) − 0 × 2 = −3: negative.
+
+A car is at (5, 5), and the road goes along (0.6, 0.8) from (0, 0). How far along the road is it?
+:   7
+
+    Why: 5 × 0.6 + 5 × 0.8 = 3 + 4.
+
+What happens to the normal when two corners of a triangle swap?
+:   it points the other way
+
+    Why: b × a = −(a × b).
+:::
+:::
+
+## Activity 1 · Which asteroid does the beam hit?
+
+In *Asteroid Beam*, a station at S = (0, 0) fires a mining beam along
+û = (0.6, 0.8). The beam is 10 units long, and each asteroid has the
+radius 1. The beam hits an asteroid when it is in front (along > 0), in
+range (along ≤ 10) and close to the line (across ≤ 1). It stops at the
+first asteroid it hits. Four asteroids float near it: A (3, 4), B (7, 1),
+C (6, 8) and D (−3, −4).
+
+![The beam goes along one direction: an asteroid can be hit, too far to the side or behind.](images/ray-hit.png){width=86%}
+
+{{< sim file="sims/asteroid-beam.html" poster="sims/asteroid-beam.png" title="Asteroid Beam: which asteroid does the beam hit first?" kind="game" height="760" >}}
+
+::: {.callout-note title="Activity 1 · Hit or miss · 25 min"}
+1. Which asteroids are nearest to the station? Compare the squares of the
+   distances.
+2. For each asteroid, compute "along" = d · û.
+3. Split d: the part along is (along) × û, and the part across is d minus
+   it. How long is the part across?
+4. Is B to the left or to the right of the beam? Use û × d.
+5. Which asteroid does the beam hit first? Then play the rounds of
+   **Asteroid Beam**.
+
+*Your product:* a table with four rows (along, across, hit or miss) and
+the asteroid that the beam hits first.
+
+::: {.check}
+Squares: A 25, B 50, C 100, D 25: A and D are nearest, but D is behind.
+A: along 1.8 + 3.2 = 5, part along (3, 4), across (0, 0): hit. B: along
+4.2 + 0.8 = 5, part along (3, 4), across (4, −3) with the length 5: miss,
+far to the side. C: along 3.6 + 6.4 = 10, across 0: on the line, but
+farther. D: along −5: behind, miss. B: 0.6 × 1 − 0.8 × 7 = −5, so B is to
+the right. The beam hits **A** first.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · The beam"}
+The station is at (0, 0) and fires along û = (0.6, 0.8), 10 units long,
+radius 1. Choose the right answer.
+
+::: {.match extra="15|in front"}
+An asteroid at (−6, −8). What is "along"?
+:   −10
+
+    Why: −3.6 − 6.4 = −10: negative, so behind.
+
+An asteroid at (9, 12). Is it hit?
+:   no, out of range
+
+    Why: along = 5.4 + 9.6 = 15, more than 10.
+
+An asteroid at (6, 8) and one at (3, 4) are both on the line. Which one stops the beam?
+:   (3, 4)
+
+    Why: along 5 is less than along 10: it comes first.
+:::
+:::
+
+## Activity 2 · Land on a floor
+
+A level has a floor triangle with the corners A = (0, 0, 0),
+B = (0, 0, 2) and C = (2, 0, 0). In the side view, a player falls onto it
+with the velocity v = (3, −4), and the floor has the unit normal
+n̂ = (0, 1). Later the player runs into a wall on the right with the unit
+normal n̂ = (−1, 0) and the velocity (2, 3).
+
+![The game removes the part of the movement into the floor, and the player slides.](images/wall-slide.png){width=84%}
+
+{{< sim file="sims/normal-lab.html" poster="sims/normal-lab.png" title="Normal Lab: the normal of a triangle" height="720" >}}
+
+::: {.callout-note title="Activity 2 · Normal and slide · 25 min"}
+1. Compute the normal (B − A) × (C − A). Does it face up or down?
+2. The corners are listed as A, C, B. Compute the normal again. Check both
+   in **Normal Lab** with **Swap B and C**.
+3. The player falls with v = (3, −4) onto the floor. Compute v · n̂. Is the
+   player moving into the floor? Find the slide v − (v · n̂) n̂.
+4. Find the slide at the wall: v = (2, 3), n̂ = (−1, 0).
+
+*Your product:* two normals and two slides, with one sentence: why does the
+player not stop at the floor?
+
+::: {.check}
+1. (0, 0, 2) × (2, 0, 0) = (0 × 0 − 2 × 0, 2 × 2 − 0 × 0, 0 × 0 − 0 × 2) =
+   (0, 4, 0): up.
+2. (2, 0, 0) × (0, 0, 2) = (0, −4, 0): down. The order decides the front.
+3. v · n̂ = −4: into the floor. Slide = (3, −4) − (−4) × (0, 1) = (3, 0).
+4. v · n̂ = −2; slide = (2, 3) − (−2) × (−1, 0) = (2, 3) − (2, 0) = (0, 3):
+   the player slides up the wall.
+
+The game removes only the part into the floor; the part along the floor
+stays, so the player keeps moving.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Normal and slide"}
+Choose the right answer.
+
+::: {.match extra="(0, −3)|(0, 0, 9)"}
+A player moves (5, −2) onto a floor with n̂ = (0, 1). What is the slide?
+:   (5, 0)
+
+    Why: v · n̂ = −2; (5, −2) − (−2)(0, 1) = (5, 0).
+
+A player moves (4, 3) above a floor with n̂ = (0, 1). Does the game change the movement?
+:   no
+
+    Why: v · n̂ = 3 > 0: the player moves away from the floor.
+
+What is (0, 0, 3) × (3, 0, 0)?
+:   (0, 9, 0)
+
+    Why: (0 × 0 − 3 × 0, 3 × 3 − 0 × 0, 0 × 0 − 0 × 3).
+:::
+:::
+
+## Wrap-up {.summary}
+
+- You can find the nearest target and the part of a vector along and across
+  a direction.
+- You can decide with "along" and "across" what a beam or a shot hits.
+- You can find the normal of a floor and make a player slide along it.

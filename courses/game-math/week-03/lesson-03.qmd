@@ -1,7 +1,7 @@
 ---
-title: "The Cross Product: Direction and Surface Normals"
-description: "Left or right with the 2D cross product, the 3D cross product, the order of the vectors, the normal of a triangle, and back-face culling."
-lesson: 4
+title: "The Cross Product, Distance and Projection"
+description: "Left or right with the 2D cross product, the 3D cross product and its order, the normal of a triangle, the nearest target, how far along a direction, and the parts along and across."
+lesson: 3
 ilos: [B1]
 format: lesson-html
 ---
@@ -13,9 +13,9 @@ has its answer: try first, then check.
 
 ## Key terms
 
-{{< glossary cross-product surface-normal triangle-mesh winding-order back-face-culling handedness perpendicular dot-product unit-vector forward-vector >}}
+{{< glossary cross-product surface-normal triangle-mesh winding-order handedness perpendicular distance projection perpendicular-part dot-product unit-vector magnitude forward-vector >}}
 
-## 4.1 Left or right? The cross product in 2D
+## 3.1 Left or right? The cross product in 2D
 
 - A tower must turn to a drone. The dot product says *in front* or
   *behind*, but not *left* or *right*.
@@ -76,7 +76,7 @@ f × d = 0 and f · d = 5. What must the tower do?
 :::
 :::
 
-## 4.2 A vector at a right angle to two vectors
+## 3.2 A vector at a right angle to two vectors
 
 - In 3D, the cross product of two vectors is a **vector**:
   a × b = (a~y~ b~z~ − a~z~ b~y~, a~z~ b~x~ − a~x~ b~z~, a~x~ b~y~ − a~y~ b~x~).
@@ -133,7 +133,7 @@ What kind of result does the 3D cross product give?
 :::
 :::
 
-## 4.3 Which way does it point? The order and the hand rule
+## 3.3 Which way does it point? The order and the hand rule
 
 - Two vectors on a floor have two directions at a right angle: up and down.
 - The **order** decides: b × a = −(a × b).
@@ -189,7 +189,7 @@ Why is (1, 2, 0) × (2, 4, 0) the zero vector?
 :::
 :::
 
-## 4.4 Which way does a surface face? The normal of a triangle
+## 3.4 Which way does a surface face? The normal of a triangle
 
 - A 3D model is a **triangle mesh**: many small, flat triangles.
 - The **normal** is a unit vector at a right angle to the surface. It points
@@ -248,56 +248,189 @@ n = (0, 4, 0). What is the unit normal?
 :::
 :::
 
-## 4.5 Facing the camera: back-face culling
+## 3.5 Which target is nearest?
 
-- The normal tells which side of a triangle the camera sees. It uses the
-  dot product (Lecture 3).
-- v goes from the triangle to the camera.
-- n · v > 0: the camera sees the front, the game draws the triangle.
-- n · v < 0: the camera sees the back, the game skips it. This is
-  **back-face culling**: the hidden back of a model is not drawn.
+- The **distance** between two points is |B − A|: the magnitude of the
+  vector from A to B.
+- To find the nearest target, compare the squares x² + y². A bigger
+  distance always has a bigger square, so the game skips the square roots.
+- Tower T = (2, 2). E1 (5, 6): d = (3, 4), square 25. E2 (6, 2): d = (4, 0),
+  square 16. E3 (−1, −2): d = (−3, −4), square 25. The nearest is **E2**.
+- In 3D, add the z-part.
 
-![The camera above sees the front; the camera below sees the back.](images/culling.png){width=46%}
+![The distances from the tower to three enemies.](images/nearest.png){width=90%}
 
 ::: {.callout-warning title="Watch out!"}
-A wrong winding order makes a normal point inwards. The game skips the
-triangle, and the player sees a hole in the model.
+Do not compare one coordinate only, and start at the tower, not at the
+origin.
 :::
 
-::: {.callout-note title="Do it · Look from below"}
-In **Normal Lab**, press **View from below**, then **View from above**. Read
-the message each time. What happens to the green triangle, and why?
+::: {.callout-note title="Do it · Distances in GeoGebra"}
+At geogebra.org/calculator, type `T = (2, 2)`, `E1 = (5, 6)`, `E2 = (6, 2)`,
+`E3 = (-1, -2)` and `Distance(T, E1)` (and the same for E2 and E3). Which
+enemy is nearest? Check one distance by hand.
 
 ::: {.check}
-From below: "back", and the triangle is not drawn. From above: "front", and
-it is drawn. The camera below sees the back side (n · v < 0).
+5, 4 and 5: E2 is nearest. By hand: (6, 2) − (2, 2) = (4, 0), length 4.
 :::
 :::
 
-::: {.callout-tip title="Try it 5 · Draw it or skip it?"}
-A floor triangle at P = (1, 0, 1) has n = (0, 1, 0). Choose the right
-answer.
+::: {.callout-tip title="Try it 5 · Nearest"}
+Choose the right answer.
 
-::: {.match extra="draw it, n · v = −3|the camera is too far"}
-The camera is at (1, 5, −4), so v = (0, 5, −5). What does the game do?
-:   draw it, n · v = 5
+::: {.match extra="7|E3"}
+The distance between (1, 2) and (4, 6).
+:   5
 
-    Why: (0, 1, 0) · (0, 5, −5) = 5: positive, the front is seen.
+    Why: (3, 4) has the length √(9 + 16) = 5.
 
-The camera is at (1, −3, 1), so v = (0, −3, 0). What does the game do?
-:   skip it, n · v = −3
+A tower at (2, 2). Which enemy is nearest: E1 (5, 6), E2 (6, 2) or E3 (−1, −2)?
+:   E2
 
-    Why: negative: the camera is under the floor and sees its back.
+    Why: the squares are 25, 16 and 25: 16 is the smallest.
 
-Why does a game skip back faces?
-:   they are hidden, so it saves work
+The distance between (1, 2, 1) and (3, 3, 3).
+:   3
 
-    Why: the back of a closed model is never seen.
+    Why: (2, 1, 2): √(4 + 1 + 4) = √9 = 3.
 
-A model was made with the wrong winding order. What does the player see?
-:   holes in the model
+A tower at (0, 0). The squares to three enemies are 100, 50 and 81. Which distance is the smallest?
+:   the one with the square 50
 
-    Why: its normals point inwards, so the game skips faces that should be seen.
+    Why: the smallest square belongs to the smallest distance.
+
+Why can the game compare the squares instead of the distances?
+:   a bigger distance always has a bigger square
+
+    Why: squaring keeps the order of positive numbers.
+:::
+:::
+
+## 3.6 How far along the road?
+
+- A road starts at S and goes along the unit vector û.
+- How far along the road is a car at P? The **projection**:
+  along = v · û, with v = P − S.
+- It is the length of the car's "shadow" on the road. The part to the side
+  does not count.
+- It is negative when the car is behind the start.
+- Road along (0.6, 0.8), car at (5, 5): 5 × 0.6 + 5 × 0.8 = 3 + 4 = **7**.
+
+![The car at (5, 5) is 7 units along the road.](images/projection.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Normalize the direction first. With (3, 4) instead of (0.6, 0.8), the car
+gives 35: five times too much.
+:::
+
+{{< sim file="sims/projection-lab.html" poster="sims/projection-lab.png" title="Projection Lab: along, across and slide" height="700" >}}
+
+::: {.callout-note title="Do it · Along the road in Projection Lab"}
+In **Projection Lab**, choose û = (0.6, 0.8). Drag the tip of v to (5, 5),
+(3, 4) and (−3, −4). Write the value "along" each time. When is it negative?
+
+::: {.check}
+(5, 5): 7. (3, 4): 5. (−3, −4): −5. Negative when v points behind the start.
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Along the road"}
+Choose the right answer. You can use an answer more than once.
+
+::: {.match extra="5|35"}
+A road along (1, 0) from (0, 0). How far along is a car at (7, 2)?
+:   7
+
+    Why: (7, 2) · (1, 0) = 7; the 2 to the side does not count.
+
+A road along (1, 0) from (0, 0). A car is at (−3, 1). What is "along"?
+:   −3, behind the start
+
+    Why: (−3, 1) · (1, 0) = −3: negative means behind.
+
+A road along (0.6, 0.8) from (0, 0). How far along is a car at (5, 5)?
+:   7
+
+    Why: 5 × 0.6 + 5 × 0.8 = 3 + 4 = 7.
+
+A road along (0, 1) from (0, 0). How far along is a car at (2, 9)?
+:   9
+
+    Why: (2, 9) · (0, 1) = 9.
+
+Why must û be a unit vector?
+:   otherwise the result is too big
+
+    Why: a longer direction multiplies the result by its length.
+:::
+:::
+
+## 3.7 Along and across: splitting a vector
+
+- A wind w blows on a plane that flies along û. Part of the wind pushes
+  the plane forward, part pushes it off course.
+- **Along** (a vector): (v · û) û.
+- **Across** (the **perpendicular part**): v − along.
+- along + across = v, and across · û = 0.
+- Plane along (1, 0), wind (3, 4): along (3, 0), across (0, 4).
+- The same split stops a player sinking into a floor: remove the part
+  **into** the floor and keep the rest: slide = v − (v · n̂) n̂, when
+  v · n̂ < 0 (n̂ = the unit normal of the floor, section 3.4).
+- Floor n̂ = (0, 1), v = (3, −4): v · n̂ = −4, slide = (3, −4) + (0, 4) =
+  **(3, 0)**: the player slides along the floor.
+
+![v = (5, 0) split along (0.6, 0.8) and across it.](images/along-across.png){width=88%}
+
+![The game removes the part into the floor, and the player slides.](images/wall-slide.png){width=80%}
+
+::: {.callout-warning title="Watch out!"}
+v · û = 3 is only the length. The part along is the vector 3 × û. And in a
+slide, minus a negative number adds: (3, −4) − (−4)(0, 1) = (3, 0), not
+(3, −8).
+:::
+
+::: {.callout-note title="Do it · Split a vector"}
+In **Projection Lab**, choose û = (0.8, 0.6) and drag v to (5, 0). Write the
+part along and the part across. Add them on paper. Do you get (5, 0)?
+
+::: {.check}
+v · û = 4; along (3.2, 2.4); across (1.8, −2.4). Their sum is (5, 0).
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · Split it and slide"}
+Choose the right answer.
+
+::: {.match extra="(3, 4)|(3, −8)"}
+A plane flies along (1, 0). The wind is (3, 4). The part along?
+:   (3, 0)
+
+    Why: (3, 4) · (1, 0) = 3, and 3 × (1, 0) = (3, 0).
+
+A plane flies along (1, 0). The wind is (3, 4). The part across?
+:   (0, 4)
+
+    Why: across = v − along = (3, 4) − (3, 0).
+
+v = (4, 6), û = (0, 1). The part along?
+:   (0, 6)
+
+    Why: v · û = 6, so along = 6 × (0, 1).
+
+What is the dot product of the part across and û?
+:   0
+
+    Why: the part across is at a right angle to û.
+
+Floor n̂ = (0, 1), v = (4, −2). The slide?
+:   (4, 0)
+
+    Why: v · n̂ = −2; (4, −2) − (−2)(0, 1) = (4, 0).
+
+Floor n̂ = (0, 1), v = (2, 5). What does the game do?
+:   nothing, the player moves away
+
+    Why: v · n̂ = 5 is positive: not into the floor.
 :::
 :::
 
@@ -312,7 +445,7 @@ fire straight ahead or turn around. Later the tower looks up: f = (0, 1).
 
 {{< sim file="sims/turret-turn.html" poster="sims/turret-turn.png" title="Turret Turn: left, right, fire or turn around" kind="game" height="700" >}}
 
-::: {.callout-tip title="Try it 6 · The tower looks right"}
+::: {.callout-tip title="Try it 8 · The tower looks right"}
 Turret Turn: T = (4, 4), f = (1, 0). Drones A (7, 6), B (6, 1), C (1, 4),
 D (9, 4). Choose the right answer.
 
@@ -339,7 +472,7 @@ What must the tower do for drone D, with d = (5, 0)?
 :::
 :::
 
-::: {.callout-tip title="Try it 7 · The tower looks up (harder)"}
+::: {.callout-tip title="Try it 9 · The tower looks up (harder)"}
 Turret Turn: T = (4, 4), now f = (0, 1). Drone A (7, 6), drone E (2, 7),
 drone F (4, 8). Choose the right answer.
 
@@ -374,7 +507,8 @@ The tower's right is (1, 0) and its forward is (0, 1). In 3D, (1, 0, 0) × (0, 1
 ## Summary {.summary}
 
 - 2D: f × d = f~x~ d~y~ − f~y~ d~x~. Positive: left. Negative: right. Zero: on the same line.
-- 3D: a × b is a vector at a right angle to a and b. Check it with two dot products.
-- The order matters: b × a = −(a × b). Curl rule: left hand in Unity.
-- Triangle normal: n = (B − A) × (C − A), normalized. The winding order decides the front.
-- n · v < 0: the camera sees the back face, and the game skips it.
+- 3D: a × b is a vector at a right angle to a and b. The order matters: b × a = −(a × b).
+- Triangle normal: n = (B − A) × (C − A). The winding order decides the front.
+- Distance = |B − A|. To find the nearest target, compare the squares.
+- Along a direction û: v · û (û a unit vector). Across = v − along.
+- A floor removes only the part into it: the player slides.

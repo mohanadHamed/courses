@@ -89,11 +89,16 @@ The teacher's notes:
   the Game challenge story and the seminar), new Seminar 2 "Vector Exercises
   in Game Scenarios" (Raft Rush crossing; a guard's vision cone with Dot
   Lab), Homework 2 unchanged.
+- Game Math unit 3: Lecture 3 "The Cross Product, Distance and Projection"
+  (old 4.1–4.4 and 5.1–5.3 with the wall slide; culling and rays cut from
+  the lecture), new Seminar 3 "Solving Movement and Aiming Problems"
+  (Asteroid Beam with along and across; a floor normal and the slide with
+  Normal Lab), Homework 3 unchanged.
 
 ### Still to do (in this order)
 
 1. **Game Math**
-   - Units 3 and 4: merge the two lectures of the week and write the new seminar.
+   - Unit 4: merge the two lectures of the week and write the new seminar.
    - Lecture 10 (week-11): merge old 13 + 14 (see the design).
    - Seminar 10 "Probability in Loot Drops and Critical Hits" (week-11):
      three short activities: theory and experiment with Roll Lab (old 13.6),

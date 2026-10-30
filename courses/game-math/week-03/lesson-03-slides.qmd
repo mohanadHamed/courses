@@ -1,14 +1,14 @@
 ---
-title: "The Cross Product: Direction and Surface Normals"
-subtitle: "Lecture 4"
+title: "The Cross Product, Distance and Projection"
+subtitle: "Lecture 3"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary cross-product surface-normal triangle-mesh winding-order back-face-culling handedness perpendicular >}}
+{{< glossary cross-product surface-normal winding-order handedness distance projection perpendicular-part >}}
 
-## 4.1 Left or right?
+## 3.1 Left or right?
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -45,7 +45,7 @@ b) to the right
 c) Turn around: f × d = 0 and f · d = −3.
 :::
 
-## 4.2 A vector at a right angle to two vectors
+## 3.2 A vector at a right angle to two vectors
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -82,7 +82,7 @@ b) (1, 0, 0)
 c) a vector
 :::
 
-## 4.3 The order and the hand rule
+## 3.3 The order and the hand rule
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -95,17 +95,6 @@ c) a vector
 ![](images/curl-rule.png)
 :::
 ::::
-
-## Example · The up direction of a spaceship
-
-A spaceship flies forward along f = (0, 0, 1), and its right wing points along r = (1, 0, 0).
-**Which vector points up from the ship?**
-
-::: {.reveal}
-1. The parts of f × r are 0 × 0 − 1 × 0, then 1 × 1 − 0 × 0, then 0 × 0 − 0 × 1.
-2. So f × r = **(0, 1, 0)**, which points up.
-3. In the other order, r × f = (0, −1, 0) points down.
-:::
 
 ## Live demo · Normal Lab
 
@@ -123,7 +112,7 @@ b) the left hand
 c) The two vectors lie on one line.
 :::
 
-## 4.4 The normal of a triangle
+## 3.4 The normal of a triangle
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -160,50 +149,116 @@ b) (0, −9, 0)
 c) the edges B − A and C − A
 :::
 
-## 4.5 Facing the camera
+## 3.5 Which target is nearest?
 
 :::: {.columns}
 ::: {.column width="50%"}
-- The game draws a triangle only when the dot product of n and v is positive. The vector v points to the camera.
-- Skipping the back sides is called back-face culling.
-- A wrong winding order makes normals point inwards, so the player sees holes.
-- **Do it:** In Normal Lab, press View from below. What does the message say?
+- The distance between two points is the magnitude of the vector between them.
+- To find the nearest target, the game compares the squares x² + y².
+- A bigger distance always has a bigger square, so no square root is needed.
+- **Do it:** In GeoGebra, type Distance(T, E1) for T = (2, 2) and E1 = (5, 6). What is the distance?
 :::
 ::: {.column width="50%"}
-![](images/culling.png)
+![](images/nearest.png)
 :::
 ::::
 
-## Example · Draw it or skip it?
+## Example · The nearest enemy
 
-A floor triangle at P = (1, 0, 1) has n = (0, 1, 0).
-**Does the game draw it for a camera at (1, 5, −4) and for a camera at (1, −3, 1)?**
+A tower stands at T = (2, 2). The enemies are E1 at (5, 6), E2 at (6, 2) and E3 at (−1, −2).
+**Which enemy does the tower aim at?**
 
 ::: {.reveal}
-1. For the first camera, v = (0, 5, −5) and n · v = 5. The game **draws** it.
-2. For the second camera, v = (0, −3, 0) and n · v = −3. The game **skips** it.
-3. The second camera is under the floor, so it sees the back side.
+1. E1 gives d = (3, 4), and the square is 9 + 16 = 25.
+2. E2 gives d = (4, 0), and the square is 16.
+3. E3 gives d = (−3, −4), and the square is 25.
+4. The smallest square is 16, so the tower aims at **E2**.
 :::
 
-## Try it 5 · Draw it or skip it?
+## Try it 5 · Nearest
 
-The facts: a floor triangle has the normal n = (0, 1, 0).
-
-a) The vector to the camera is v = (0, 2, 3). Does the game draw the triangle?
-b) Why does a game skip back faces?
-c) Why does a wrong winding order make holes in a model?
+a) What is the distance between (1, 2) and (4, 6)?
+b) What is the distance between (1, 2, 1) and (3, 3, 3)?
+c) Why can the game compare the squares instead of the distances?
 
 ::: {.answer}
-a) Yes: n · v = 2 is positive.
-b) They are hidden, so skipping them saves work.
-c) The normals point inwards, so the game skips those triangles.
+a) 5
+b) 3
+c) A bigger distance always has a bigger square.
+:::
+
+## 3.6 How far along the road?
+
+:::: {.columns}
+::: {.column width="50%"}
+- A road goes from S in the direction of the unit vector û.
+- The dot product of v and û tells how far along the road a car is.
+- It is the length of the car's shadow on the road, and it is negative behind the start.
+- **Do it:** In Projection Lab, choose û = (0.6, 0.8) and drag v to (5, 5). What does "along" say?
+:::
+::: {.column width="50%"}
+![](images/projection.png)
+:::
+::::
+
+## Live demo · Projection Lab
+
+{{< sim file="sims/projection-lab.html" poster="sims/projection-lab.png" title="Projection Lab: along, across and slide" task="**Show:** drag v around a fixed û, then switch to Wall slide. **Ask:** when does the green part point backwards?" >}}
+
+## Try it 6 · Along the road
+
+a) A road goes along (1, 0) from (0, 0). How far along is a car at (7, 2)?
+b) The same road. What does "along" say for a car at (−3, 1)?
+c) Why must the direction of the road be a unit vector?
+
+::: {.answer}
+a) 7
+b) −3: the car is behind the start.
+c) Otherwise the result is too big.
+:::
+
+## 3.7 Along and across
+
+:::: {.columns}
+::: {.column width="50%"}
+- The part along is the unit vector û, scaled by the dot product of v and û.
+- The part across is v minus the part along, and it is at a right angle to û.
+- The two parts add up to the vector v.
+- **Do it:** In Projection Lab, choose û = (0.8, 0.6) and v = (5, 0). Do the two parts add up to v?
+:::
+::: {.column width="50%"}
+![](images/along-across.png)
+:::
+::::
+
+## Example · Wind on a plane
+
+A plane flies along û = (1, 0). The wind is w = (3, 4).
+**Which part of the wind pushes the plane forward, and which part pushes it off course?**
+
+::: {.reveal}
+1. The dot product is w · û = 3, so the part along is **(3, 0)**.
+2. The part across is (3, 4) − (3, 0) = **(0, 4)**.
+3. The pilot must steer against (0, 4) to stay on course.
+:::
+
+## Try it 7 · Split it
+
+a) The vector is v = (4, 6), and û = (0, 1). What is the part along?
+b) What is the part across for the same vectors?
+c) What is the dot product of the part across and û?
+
+::: {.answer}
+a) (0, 6)
+b) (4, 0)
+c) 0
 :::
 
 ## Game challenge · Turret Turn
 
 {{< sim file="sims/turret-turn.html" poster="sims/turret-turn.png" title="Turret Turn: left, right, fire or turn around" kind="game" task="**The story:** a defence tower at (4, 4) looks along (1, 0) as four drones fly in. **Play:** for each drone, choose turn left, turn right, fire or turn around." >}}
 
-## Try it 6 · The tower turns (harder)
+## Try it 8 · The tower turns (harder)
 
 The facts: the tower stands at (4, 4). Drone A is at (7, 6), drone C at (1, 4) and drone E at (2, 7).
 
@@ -219,8 +274,9 @@ c) to the left: f × d = 2
 
 ## Summary
 
-- The 2D cross product is one number, and its sign shows left or right.
-- The 3D cross product is a vector at a right angle to both vectors.
-- Swapping the order turns the result around, and Unity uses the left hand.
-- The normal of a triangle is the cross product of two edges, normalized.
-- The game skips a triangle when the dot product of its normal and the camera vector is negative.
+- The 2D cross product tells left (positive) from right (negative).
+- The 3D cross product gives a vector at a right angle to two vectors, and its order matters.
+- The normal of a triangle is (B − A) × (C − A), and the winding order decides the front.
+- The distance is the magnitude of B − A, and the squares are enough to compare.
+- The dot product with a unit vector gives the part along a direction.
+- The part across is the vector minus the part along.

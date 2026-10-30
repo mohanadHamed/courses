@@ -1,0 +1,81 @@
+---
+title: "Solving Movement and Aiming Problems"
+subtitle: "Seminar 3 · practises Lecture 3"
+format: lesson-pptx
+---
+
+## Recall · Lecture 3
+
+a) A tower faces (1, 0). Is a drone in the direction (2, −3) to the left or to the right?
+b) A car is at (5, 5), and the road goes along (0.6, 0.8) from (0, 0). How far along the road is it?
+c) What happens to the normal when two corners of a triangle swap?
+
+::: {.answer}
+a) to the right
+b) 7
+c) It points the other way.
+:::
+
+## Activity 1 · Hit or miss · 25 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A station at (0, 0) fires a beam along û = (0.6, 0.8), 10 units long, at asteroids with the radius 1.
+- The asteroids are A (3, 4), B (7, 1), C (6, 8) and D (−3, −4).
+- **Do it:** Find "along" and "across" for each asteroid. Is B left or right of the beam? Which asteroid does the beam hit first?
+- Your product is a table with four rows.
+:::
+::: {.column width="50%"}
+![](images/ray-hit.png)
+:::
+::::
+
+## Live demo · Asteroid Beam
+
+{{< sim file="sims/asteroid-beam.html" poster="sims/asteroid-beam.png" title="Asteroid Beam: which asteroid does the beam hit first?" kind="game" task="**Show:** play the first round and tap the asteroid that the beam hits first. **Ask:** why is the nearest asteroid not always the one that is hit?" >}}
+
+## Check 1 · Hit or miss
+
+Which asteroid does the beam hit first?
+
+::: {.reveal}
+1. A has along 5 and across 0, so the beam hits it.
+2. B has along 5 and across (4, −3) with the length 5, so it is far to the side, on the right.
+3. C has along 10 and across 0, so it is on the line but farther away.
+4. D has along −5, so it is behind the station. The beam hits **A** first.
+:::
+
+## Activity 2 · Normal and slide · 25 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A floor triangle has the corners A = (0, 0, 0), B = (0, 0, 2) and C = (2, 0, 0).
+- A player falls onto the floor with v = (3, −4), and the floor has n̂ = (0, 1).
+- **Do it:** Find the normal for A, B, C and for A, C, B. Find the slide of the player.
+- Your product is two normals and two slides.
+:::
+::: {.column width="50%"}
+![](images/wall-slide.png)
+:::
+::::
+
+## Live demo · Normal Lab
+
+{{< sim file="sims/normal-lab.html" poster="sims/normal-lab.png" title="Normal Lab: the normal of a triangle" task="**Show:** press Swap B and C, then View from below. **Ask:** why does the normal turn around when two corners swap?" >}}
+
+## Check 2 · Normal and slide
+
+What are the normals and the slides?
+
+::: {.reveal}
+1. (0, 0, 2) × (2, 0, 0) = (0, 4, 0), so the floor faces up.
+2. In the order A, C, B, the normal is (0, −4, 0), so it faces down.
+3. On the floor, v · n̂ = −4, so the slide is (3, −4) + (0, 4) = (3, 0).
+4. At the wall with n̂ = (−1, 0), the player with (2, 3) slides up with (0, 3).
+:::
+
+## Wrap-up
+
+- You can find the nearest target and the parts of a vector along and across a direction.
+- You can decide with "along" and "across" what a beam or a shot hits.
+- You can find the normal of a floor and make a player slide along it.

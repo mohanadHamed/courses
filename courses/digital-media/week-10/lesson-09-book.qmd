@@ -1,7 +1,7 @@
 ---
 title: "Audio Design: Mixing, Implementation and Quality Evaluation"
 description: "Lesson notes · Mixing the groups of a game (levels, priorities, the master, ducking), placing sounds in space (panning, 3D sound and falloff), putting sounds into a game engine (events, sources, groups, loading), and evaluating the audio of a level with clear criteria."
-lesson: 17
+lesson: 9
 ilos: [B2, C2]
 format: lesson-typst
 ---
@@ -14,7 +14,7 @@ mess: the music covers Nour's words, the master meter turns red in the big
 wave, and the boat engine sounds the same near and far. Good sounds are
 not enough; they must be **mixed**, placed in **space**, and
 **implemented** in the game, and the result must be **evaluated**. In
-lectures 13–16 you made sounds and loops. In this lesson you put them
+Lectures 7 and 8 you made sounds and loops. In this lesson you put them
 together. Every section ends with a short task.
 :::
 
@@ -22,16 +22,16 @@ together. Every section ends with a short task.
 
 {{< glossary audio-mix mixer-group master-level ducking panning spatial-audio distance-falloff audio-streaming clipping visual-cue >}}
 
-## 17.1 Mixing: levels, groups and priorities
+## 9.1 Mixing: levels, groups and priorities
 
 A game plays many sounds at once. Mixing decides how loud each one is, so
 that the player hears what matters most (@fig-groups).
 
-::: {.callout-important title="Definition 17.1 — Mix, groups, master and ducking"}
+::: {.callout-important title="Definition 9.1 — Mix, groups, master and ducking"}
 A **mix** is the balance of all sounds that play at once. Sounds are sent
 to **mixer groups**: voice, effects, music, interface. All groups meet in
 the **master**, which must stay **below 0 dB** (or the sound clips,
-lecture 13). The most important group comes first: usually the voice, then
+Lecture 7). The most important group comes first: usually the voice, then
 the effects that carry game information, then the music. **Ducking**
 lowers the music while a voice plays.
 :::
@@ -40,7 +40,7 @@ lowers the music while a voice plays.
 
 ![Ducking: the music steps back while Nour speaks.](images/ducking.png){#fig-duck width=94%}
 
-::: {.callout-note title="Example 17.1 — Mixing the flood level"}
+::: {.callout-note title="Example 9.1 — Mixing the flood level"}
 1. Nour's voice is 4 dB **below** the music: her words are lost.
 2. Yara turns on ducking (−8 dB) and raises the voice by 2 dB: now the
    voice is 6 dB above the music.
@@ -60,14 +60,20 @@ too loud first; raise only when nothing else helps.
 2. Write your fader values and say which change helped most.
 
 *Your result:* four values and one sentence.
+
+::: {.check}
+A typical way: duck the music under the voice, lower the music group, and
+lower the master below 0 dB. Ducking helps most: Nour's lines become clear
+without making anything louder.
+:::
 :::
 
-## 17.2 Space: panning and 3D sound
+## 9.2 Space: panning and 3D sound
 
 Players use their ears to find things: a cat on the left, an engine far
 away. The mix places sounds in space (@fig-space).
 
-::: {.callout-important title="Definition 17.2 — Panning, 3D sound and falloff"}
+::: {.callout-important title="Definition 9.2 — Panning, 3D sound and falloff"}
 **Panning** places a sound between the left (−1) and the right (+1)
 speaker. With **3D sound** (spatial audio), the game engine does this by
 itself from the positions of the sound **source** and the **listener**
@@ -77,7 +83,7 @@ distance grows.
 
 ![Panning, and 3D sound with distance falloff.](images/space.png){#fig-space width=94%}
 
-::: {.callout-note title="Example 17.2 — The engine and the meow"}
+::: {.callout-note title="Example 9.2 — The engine and the meow"}
 1. Pasha meows on a roof on the left: his source is on the left of the
    camera, so the meow comes from the left speaker.
 2. The rescue boat moves away: with falloff, its engine gets quieter; at 30
@@ -95,14 +101,20 @@ For a game you know, list four sounds and say for each one: 2D or 3D?
 Why?
 
 *Your result:* four sounds with 2D or 3D.
+
+::: {.check}
+A good answer looks like: "The music: 2D, it is not in the world. The menu
+click: 2D. A car that passes: 3D, it moves. A bird in a tree: 3D, it comes
+from one place."
+:::
 :::
 
-## 17.3 Implementation: from an event to a sound
+## 9.3 Implementation: from an event to a sound
 
 **Implementation** is putting the sounds into the game: when to play
 them, through which group, and how to load them (@fig-impl).
 
-::: {.callout-important title="Definition 17.3 — Implementation"}
+::: {.callout-important title="Definition 9.3 — Implementation"}
 A game **event** (Pasha is caught) starts a sound on an **audio source**;
 the source sends it to its **mixer group**, then to the master. Each sound
 is loaded in the right way: short effects **into memory** (they play at
@@ -112,23 +124,10 @@ lines compressed and loaded when needed.
 
 ![From a game event to a sound, and how sounds are loaded.](images/implementation.png){#fig-impl width=94%}
 
-::: {.callout-note title="Example 17.3 — A slow start"}
+::: {.callout-note title="Example 9.3 — A slow start"}
 The game needed 4 seconds more to start after the music was added: the
 3-minute music was loaded into memory as WAV. Yara sets it to **streaming**
 as OGG. The start time is normal again, and the memory use drops.
-:::
-
-::: {.callout-caution title="In game code"}
-```csharp
-public AudioSource netSource;   // its output is the "Effects" mixer group
-public AudioClip netCatch;
-void OnPashaCaught() {
-    netSource.PlayOneShot(netCatch);
-}
-```
-In Unity, the mixer groups are made in an Audio Mixer; the loading way is
-set on each clip (Load Type: Decompress On Load, Compressed In Memory,
-Streaming).
 :::
 
 ::: {.callout-warning title="Common mistake"}
@@ -141,14 +140,20 @@ For the sounds of Rooftop Rescue (meow, steps, rain, rowing music, Nour's
 lines, menu click), write the load type of each one.
 
 *Your result:* six sounds with a load type.
+
+::: {.check}
+Meow, steps and menu click: into memory (short, play at once). Rain and
+rowing music: streamed (long). Nour's lines: compressed, loaded when
+needed.
+:::
 :::
 
-## 17.4 Evaluating the audio of a level
+## 9.4 Evaluating the audio of a level
 
 When is the audio good enough? A team needs the same criteria, so that
 evaluation is not only taste (@fig-rubric).
 
-::: {.callout-important title="Definition 17.4 — Audio evaluation criteria"}
+::: {.callout-important title="Definition 9.4 — Audio evaluation criteria"}
 Evaluate a level with seven criteria: **clarity** (important cues are
 heard), **balance**, **consistency** (one style), **repetition**,
 **technical** quality (no clipping, clicks or gaps), **accessibility**
@@ -158,10 +163,16 @@ start time). Give each a score (1–3) with one note of evidence.
 
 ![Seven criteria for the audio of a level.](images/quality-rubric.png){#fig-rubric width=94%}
 
-::: {.callout-note title="Example 17.4 — Scoring the flood level"}
+An evaluation ends with **feedback** for the sound designer, in three
+parts: **I hear …** (what and when), **it matters because …** (the
+criterion, the player), **try …** (one change). "I hear that Nour's line is
+lost under the music in the wave; it matters because the player misses the
+warning; try ducking the music by 8 dB." 
+
+::: {.callout-note title="Example 9.4 — Scoring the flood level"}
 1. Clarity 3: the voice is clear after ducking.
 2. Repetition 1: the net swish sounds the same every time (add variation,
-   lecture 15).
+   Lecture 8).
 3. Accessibility 1: the wave warning is only a sound. Fix: a red arrow on
    the screen and a subtitle "Wave!".
 :::
@@ -176,6 +187,12 @@ Play one level of a mobile game for five minutes. Score it with the seven
 criteria, with one note for each.
 
 *Your result:* seven scores with notes.
+
+::: {.check}
+A good answer has seven scores (1–3), each with one moment as evidence,
+for example "Repetition 1: the coin sound is the same every time" or
+"Accessibility 3: every warning also shows an icon".
+:::
 :::
 
 ## Case study: Sound Check
@@ -193,9 +210,8 @@ choose the fixes.
 
 ## Further reading
 
-Collins, *Game Sound* (2008), Chapter 5 (implementation). Unity Manual,
-"Audio Mixer", "Audio Source" (3D sound settings) and "Audio Clip" (load
-types).
+Collins, *Game Sound* (2008), Chapter 5 (implementation). Schell, *The Art
+of Game Design*, 3rd ed., Chapter 13 (the aesthetics of sound).
 
 ## Exercises
 

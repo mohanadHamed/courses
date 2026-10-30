@@ -146,7 +146,6 @@ loop-doctor|courses/digital-media/week-09/sims/loop-doctor.html|8|courses/digita
 mix-desk|courses/digital-media/week-10/sims/mix-desk.html|9|courses/digital-media/week-10/sims/mix-desk.gif
 sound-check|courses/digital-media/week-10/sims/sound-check.html|8|courses/digital-media/week-10/sims/sound-check.gif
 critique-builder|courses/digital-media/week-10/sims/critique-builder.html|8|courses/digital-media/week-10/sims/critique-builder.gif
-critics-choice|courses/digital-media/week-10/sims/critics-choice.html|8|courses/digital-media/week-10/sims/critics-choice.gif
 video-settings-lab|courses/digital-media/week-11/sims/video-settings-lab.html|9|courses/digital-media/week-11/sims/video-settings-lab.gif
 export-desk|courses/digital-media/week-11/sims/export-desk.html|10|courses/digital-media/week-11/sims/export-desk.gif
 timeline-lab|courses/digital-media/week-11/sims/timeline-lab.html|11|courses/digital-media/week-11/sims/timeline-lab.gif

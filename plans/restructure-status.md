@@ -53,11 +53,16 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
   inside/outside the world; GM expected attacks and input/output randomness.
 - `record-all.sh`: stale paths fixed (11 moved sims); deleted sims and their
   scenarios removed.
+- **Digital Media units 5–8** done (Lectures 5–8, Seminars 5–8, homework
+  5–8; solutions of homework 7 and 8 rewritten in courses-private). Cut as
+  planned: the 180-degree rule and camera map, 65 536 levels and file-size
+  sums, the BPM formula, Unity code. Homework 7 and 8 now practise their
+  lecture only.
 
 ## Still to do
 
-1. **Digital Media units 5–14** (week-05 … week-07, week-09 … week-15: old
-   lessons 9–28 still there): Lecture N from the first old lesson (+
+1. **Digital Media units 9–14** (week-10 … week-15: old lessons 17–28
+   still there): Lecture N from the first old lesson (+
    essentials of the second), Seminar N from the second in the short format,
    homework due "before lecture N+1"; fix: L19 reference; cut list in
    `plan.md`. Then **Digital Skills** (15 units: Lectures 1–10, Practice 1–5,

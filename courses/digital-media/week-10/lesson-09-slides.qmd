@@ -1,6 +1,6 @@
 ---
 title: "Audio Design: Mixing, Implementation and Quality Evaluation"
-subtitle: "Lecture 17"
+subtitle: "Lecture 9"
 format: lesson-pptx
 ---
 
@@ -8,7 +8,7 @@ format: lesson-pptx
 
 {{< glossary audio-mix mixer-group master-level ducking panning spatial-audio distance-falloff audio-streaming >}}
 
-## 17.1 Mixing
+## 9.1 Mixing
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -49,7 +49,7 @@ b) The sound clips.
 c) ducking
 :::
 
-## 17.2 Space
+## 9.2 Space
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -75,7 +75,7 @@ b) 3D
 c) because of distance falloff
 :::
 
-## 17.3 Implementation
+## 9.3 Implementation
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -112,13 +112,14 @@ b) streamed
 c) Then they cannot be mixed by group.
 :::
 
-## 17.4 Evaluating the audio
+## 9.4 Evaluating the audio
 
 :::: {.columns}
 ::: {.column width="50%"}
 - Seven criteria make an evaluation fair, not only taste.
 - Each criterion gets a score from 1 to 3 with evidence.
 - We test on phone speakers and with the sound off.
+- Feedback has three parts: I hear, it matters because, and try.
 - **Do it:** Score a level of a mobile game. Which criterion was weakest?
 :::
 ::: {.column width="50%"}
@@ -142,16 +143,18 @@ c) technical
 
 {{< sim file="sims/sound-check.html" poster="sims/sound-check.png" title="Sound Check: fix the tester reports" kind="game" task="**The story:** Night Owl Games puts all the sounds of Rooftop Rescue into the game, and the testers report six problems. **Play:** choose the fix for each report." >}}
 
-## Try it 5 · Numbers (harder)
+## Try it 5 · Levels and feedback (harder)
 
-a) The music is at −8 dB, and ducking lowers it by 8 dB. Where is it then?
-b) The voice is 4 dB below the music. How much ducking makes it 6 dB above?
-c) Where do we hear a sound that is panned to −1?
+The facts: the music is at −8 dB, and the voice is at −10 dB.
+
+a) Ducking lowers the music by 8 dB. Where is the music then?
+b) How far above the ducked music is the voice?
+c) Which three parts does useful feedback have?
 
 ::: {.answer}
 a) −16 dB
-b) 10 dB
-c) only on the left
+b) 6 dB
+c) I hear, it matters because, and try
 :::
 
 ## Summary
@@ -159,4 +162,4 @@ c) only on the left
 - We mix by groups, with the voice first and the master below 0 dB.
 - Panning and 3D sound with falloff place sounds in space.
 - Events play sounds through groups, and long sounds are streamed.
-- Seven criteria with evidence make the evaluation fair.
+- Seven criteria with evidence make the evaluation fair, and feedback has three parts.

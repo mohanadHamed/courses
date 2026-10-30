@@ -40,35 +40,46 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
      optional "At home" part; `check_size.py` counts the planned time.
 - **Digital Media Seminar 4** and homework 4 done (unit 4 complete);
   **Digital Media Seminars 1–3 shortened** to the new format.
+- **All finished seminars shortened** (Computing Systems 1–14, Game Math
+  1–10): two problems in 60 min (35–38 min planned), three in 90 min
+  (50–59 min planned); worksheets made from the pages with
+  `mkbook.py` (below) plus 4–5 exercises; seminar games that only served a
+  Game challenge removed (Test Lab, Spec Match, Phone Picker, Help Ticket,
+  Power Lab, Two Phones, Port Planner, Report Doctor, Talk Doctor; Harbor
+  Guard, Sky Steps, Cannon Cove, Island Quest, Difficulty Tuner, Problem
+  Drill, Star Dock Missions; DM Sound Stage, Ember Trail, Curve Builder,
+  Premise Doctor, Voice Match) and the figures no session uses.
+  New ideas that seminars had added were cut: DM channels and
+  inside/outside the world; GM expected attacks and input/output randomness.
+- `record-all.sh`: stale paths fixed (11 moved sims); deleted sims and their
+  scenarios removed.
 
 ## Still to do
 
-0. **Shorten the finished seminars** to the new format: Computing Systems
-   1–14, Game Math 1–10 (`check_size.py` warns about each).
-
-1. **Digital Media: Seminar 4** (from old `lesson-08*` in week-04, still there;
-   Task with AI: a scene drafted with AI, rewritten in screenplay format) and
-   homework 4 (due before lecture 5, Lecture 4 only); then **units 5–14**
-   (same pattern; fix: L19 reference) and **Digital Skills** (15 units: Lectures 1–10, Practice 1–5,
+1. **Digital Media units 5–14** (week-05 … week-07, week-09 … week-15: old
+   lessons 9–28 still there): Lecture N from the first old lesson (+
+   essentials of the second), Seminar N from the second in the short format,
+   homework due "before lecture N+1"; fix: L19 reference; cut list in
+   `plan.md`. Then **Digital Skills** (15 units: Lectures 1–10, Practice 1–5,
    Online activities 1–15 that practise their unit; see its NOTES.md).
+   New work at the simplest level (A2–B1 notes, A2 page and slides).
+   Lectures finished before 2026-10-30 were not simplified again.
 2. Every page: `Why:` under every Try it answer, `::: {.check}` in every
    Do it / Lab task / Activity; seminars in the seminar format (templates in
    `shared/templates/seminar-*`); case studies must not repeat the numbers
    of worked examples (change the sim or the example).
 3. **GIFs and posters** for changed sims: run
-   `sh shared/sims/recordings/record-all.sh <name>`. First fix the stale
-   paths in `record-all.sh` (many sims moved folders). Changed sims:
-   game-math week-04 drone-drop, sky-lift; week-06 sky-steps, drawbridge
-   (posters too); week-08 island-quest; week-10 rule-smith; week-11
-   treasure-odds; week-12 loot-forge; week-13 fair-or-frustrating, bag-lab;
-   week-14 pilot-check, move-lab, bounce-lab, star-dock-missions,
-   problem-drill; week-15 cave-gen, generator-doctor, raft-finals;
-   computing-systems week-04 phone-picker, soc-explorer; week-05 ram-rush;
-   week-06 disk-doctor; week-07 stack-builder (poster too: it shows the old
-   layers), two-phones (new rounds 2–3); week-09 launch-planner,
-   source-check, platform-pick, fact-or-myth; week-10 launch-day; week-11
-   terminal-lab, lag-detective, net-fixer; week-12 cloud-planner; week-13
-   lag-lab (labels), week-15 slide-sorter. Posters of Kit games show round 1
+   `sh shared/sims/recordings/record-all.sh <name>` (paths fixed). Changed
+   sims: game-math week-04 drone-drop, sky-lift; week-06 drawbridge (poster
+   too); week-10 rule-smith; week-11 treasure-odds; week-12 loot-forge;
+   week-13 fair-or-frustrating, bag-lab; week-14 pilot-check, move-lab,
+   bounce-lab; week-15 cave-gen, generator-doctor, raft-finals;
+   computing-systems week-04 soc-explorer; week-05 ram-rush; week-06
+   disk-doctor, test-day (text); week-07 stack-builder (poster too: it shows
+   the old layers), pause-please (text); week-09 launch-planner,
+   source-check, platform-pick, fact-or-myth; week-10 launch-day,
+   review-board (text); week-11 terminal-lab, lag-detective, net-fixer;
+   week-12 cloud-planner; week-13 lag-lab (labels), week-15 slide-sorter. Posters of Kit games show round 1
    in the written order; the page now mixes it (only cosmetic).
    Test each sim inside its page in the browser
    (no JS syntax check was possible).
@@ -92,4 +103,8 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
   `    Why: reason` under each matching answer.
 - add_check.py FILE MAP: MAP blocks "=== Box title" + text; adds a `.check`
   at the end of that box.
+- mkbook.py PAGE SPEC: makes `seminar-NN-book.qmd` from the page (Recall and
+  the activities without `Why:` lines and without "At home"), with a lead
+  and exercises from SPEC ("lead text", "===", then "1. exercise | answer"
+  lines).
 - Check sizes: `python3 _extensions/lesson/check_size.py --all | grep <path>`.

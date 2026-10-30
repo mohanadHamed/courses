@@ -128,7 +128,6 @@ lag-detective|courses/computing-systems/week-11/sims/lag-detective.html|8|course
 cloud-stack|courses/computing-systems/week-12/sims/cloud-stack.html|9|courses/computing-systems/week-12/sims/cloud-stack.gif
 scale-sim|courses/computing-systems/week-12/sims/scale-sim.html|11|courses/computing-systems/week-12/sims/scale-sim.gif
 cloud-match|courses/computing-systems/week-12/sims/cloud-match.html|8|courses/computing-systems/week-12/sims/cloud-match.gif
-cloud-cost|courses/computing-systems/week-12/sims/cloud-cost.html|8|courses/computing-systems/week-12/sims/cloud-cost.gif
 cloud-planner|courses/computing-systems/week-12/sims/cloud-planner.html|8|courses/computing-systems/week-12/sims/cloud-planner.gif
 platform-profiles|courses/computing-systems/week-13/sims/platform-profiles.html|8|courses/computing-systems/week-13/sims/platform-profiles.gif
 cloud-gaming-lab|courses/computing-systems/week-13/sims/cloud-gaming-lab.html|10|courses/computing-systems/week-13/sims/cloud-gaming-lab.gif

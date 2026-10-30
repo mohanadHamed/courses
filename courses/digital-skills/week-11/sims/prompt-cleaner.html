@@ -20,7 +20,7 @@
 <body class="theme-workshop">
 <main class="sim">
   <h1>Prompt Cleaner: no personal data in the chat</h1>
-  <p class="hint">Three people at Sunrise Company want to paste a prompt into a free AI chat tool. Click every part that is <b>personal, sensitive or confidential</b> to replace it with a placeholder. Parts the AI really needs can stay.</p>
+  <p class="hint">Five people at Sunrise Company and the college want to paste a prompt into a free AI chat tool. Click every part that is <b>personal, sensitive or confidential</b> to replace it with a placeholder. Parts the AI really needs can stay.</p>
   <div class="bar" id="pick"></div>
   <p class="who" id="who"></p>
   <div class="doc" id="doc"></div>
@@ -47,6 +47,14 @@
       ["Write an e-mail to my teacher, "], ["Ms Reem Odeh", "[teacher]", "a name: personal data"], [". I missed the lab on "], ["Monday", null, "a day is fine and the AI needs it"],
       [" because of "], ["a kidney infection, diagnosis code N10", "[an illness]", "health: sensitive data"], [". My student number is "], ["20231234", "[student number]", "an ID number: personal data"],
       [" and my password is "], ["Sami2024!", "[never share a password]", "a password: never in any prompt"], [". Ask how I can make up the lab."]] },
+    "Mona's table": { who: "Mona, office assistant: a table of sick days", parts: [
+      ["Make a table of the sick days in March. "], ["Ali Saeed", "[employee 1]", "a name: personal data"], [": "], ["4 days", null, "the table needs the number of days"],
+      [", "], ["diabetes", "[no illness]", "health: sensitive data, and the table does not need it"], [". "], ["Dana Fayez", "[employee 2]", "a name: personal data"], [": "],
+      ["2 days", null, "the table needs the number of days"], [", "], ["back pain", "[no illness]", "health: sensitive data, and the table does not need it"], [". Add a total row."]] },
+    "Omar's contract": { who: "Omar, sales: a short summary of a contract", parts: [
+      ["Sum up this contract in 5 points. Sunrise Company sells "], ["300 tea sets", null, "the AI needs what is sold to sum it up"], [" to "],
+      ["Green Hotel", "[the customer]", "the customer of a secret deal: confidential"], [" for "], ["9,000 JD", "[price]", "the price of a secret deal: confidential"],
+      [". Payment to the account "], ["JO12 3456 7890 1234 5678", "[bank account]", "bank details: sensitive"], [". The deal is secret until June."]] },
   };
   const s = { k: "Huda's reminder", clean: {}, kept: {} };
   Object.keys(P).forEach((k) => { s.clean[k] = new Set(); s.kept[k] = new Set(); });
@@ -56,6 +64,8 @@
     { q: "Task 1: Clean Huda's reminder. Which parts must go, and which may stay?", ok: () => doneP("Huda's reminder") },
     { q: "Task 2: Clean Rana's prompt. Can the AI still suggest good gifts?", ok: () => doneP("Rana's customer") },
     { q: "Task 3: Clean Sami's e-mail. Which part is sensitive data, and which part must never be in any prompt?", ok: () => doneP("Sami's e-mail") },
+    { q: "Task 4: Clean Mona's table. Can the table still count the sick days?", ok: () => doneP("Mona's table") },
+    { q: "Task 5: Clean Omar's contract. Which parts are confidential?", ok: () => doneP("Omar's contract") },
   ];
   let ti = 0, note = "";
   function upd() {

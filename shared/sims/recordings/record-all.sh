@@ -158,7 +158,6 @@ pitch-room|courses/digital-media/week-03/sims/pitch-room.html|8|courses/digital-
 script-formatter|courses/digital-media/week-04/sims/script-formatter.html|9|courses/digital-media/week-04/sims/script-formatter.gif
 dialogue-doctor|courses/digital-media/week-04/sims/dialogue-doctor.html|9|courses/digital-media/week-04/sims/dialogue-doctor.gif
 rooftop-rescue|courses/digital-media/week-04/sims/rooftop-rescue.html|11|courses/digital-media/week-04/sims/rooftop-rescue.gif
-voice-match|courses/digital-media/week-04/sims/voice-match.html|8|courses/digital-media/week-04/sims/voice-match.gif
 scene-cutter|courses/digital-media/week-04/sims/scene-cutter.html|10|courses/digital-media/week-04/sims/scene-cutter.gif
 frame-lab|courses/digital-media/week-05/sims/frame-lab.html|9|courses/digital-media/week-05/sims/frame-lab.gif
 shot-caller|courses/digital-media/week-05/sims/shot-caller.html|9|courses/digital-media/week-05/sims/shot-caller.gif

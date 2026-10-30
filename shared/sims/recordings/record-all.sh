@@ -139,7 +139,6 @@ matrix-builder|courses/computing-systems/week-14/sims/matrix-builder.html|9|cour
 emulator-or-real|courses/computing-systems/week-14/sims/emulator-or-real.html|8|courses/computing-systems/week-14/sims/emulator-or-real.gif
 adb-lab|courses/computing-systems/week-14/sims/adb-lab.html|11|courses/computing-systems/week-14/sims/adb-lab.gif
 report-doctor|courses/computing-systems/week-14/sims/report-doctor.html|8|courses/computing-systems/week-14/sims/report-doctor.gif
-perf-lab|courses/computing-systems/week-15/sims/perf-lab.html|8|courses/computing-systems/week-15/sims/perf-lab.gif
 compat-lab|courses/computing-systems/week-15/sims/compat-lab.html|7|courses/computing-systems/week-15/sims/compat-lab.gif
 perf-detective|courses/computing-systems/week-15/sims/perf-detective.html|8|courses/computing-systems/week-15/sims/perf-detective.gif
 slide-sorter|courses/computing-systems/week-15/sims/slide-sorter.html|8|courses/computing-systems/week-15/sims/slide-sorter.gif

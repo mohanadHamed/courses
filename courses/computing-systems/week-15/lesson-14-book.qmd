@@ -1,0 +1,214 @@
+---
+title: "Platform Performance and Compatibility: Case Studies"
+description: "Lesson notes · Real cases of performance and compatibility: how to measure smoothness with frame times and the 1 % low, why a build fails on some devices, and how to follow new platform versions with reliable sources."
+lesson: 14
+ilos: [B2, C1, D1]
+format: lesson-typst
+---
+
+::: {.lead}
+*Pocket Quest 1.3* is in the stores, and the reviews arrive: "Smooth on my
+new phone!", "It jerks every few seconds", "It closes at once on my old
+phone", "The Start button is cut off on my tablet". Some players use phones
+that Byte Bay never tested, and a new OS update is coming. In lecture 13
+you set up a test environment. In this lesson you study **real cases** of
+performance and compatibility: how to measure smoothness, why a build fails
+on some devices, and how to follow new platform versions with **reliable
+sources**. Every section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary frame-rate frame-time stutter one-percent-low thermal-throttling frame-rate-cap compatibility api-level graphics-api compatibility-matrix release-notes reliable-source >}}
+
+## 14.1 Measuring performance
+
+The average frame rate is not the whole story (@fig-frames).
+
+::: {.callout-important title="Definition 14.1 — Measures of performance"}
+- **Frame time:** the time of one frame in milliseconds; 60 fps ≈ 16.7 ms,
+  30 fps ≈ 33.3 ms.
+- **Average fps:** frames per second over a whole race.
+- **1 % low:** the frame rate of the slowest 1 % of frames. A low 1 % low
+  means **stutters**: single long frames that the player feels as jerks.
+- **Load time, battery use and temperature** complete the picture.
+
+Measure on real devices, with the same test each time, as long as players
+play: after some minutes a hot chip slows down (**thermal throttling**,
+lecture 3). A **frame-rate cap** (for example 30 fps) or lower settings keep
+the game steady.
+:::
+
+![Frame times of one race (example values).](images/frame-times.png){#fig-frames width=94%}
+
+::: {.callout-note title="Example 14.1 — The jerk of Star Garden"}
+1. The counter shows 59 fps on average while a player waters the garden.
+2. The frame-time graph shows one frame of 70 ms every 10 seconds: a
+   stutter.
+3. The developers find that the game saves to the cloud in that frame.
+   They save in the background, and the stutter is gone.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Reporting only the average fps. A game with a high average and many
+stutters feels worse than a steady 30 fps.
+:::
+
+::: {.callout-note title="Do it · Frame times"}
+Compute the frame time of 30, 60 and 120 fps (1000 ms ÷ fps). A frame takes
+50 ms: what frame rate would that be if all frames took that long?
+
+*Your result:* four numbers.
+
+::: {.check}
+30 fps: 1000 ÷ 30 ≈ 33.3 ms. 60 fps: ≈ 16.7 ms. 120 fps: ≈ 8.3 ms. A
+50 ms frame: 1000 ÷ 50 = 20 fps. One such frame in a 60 fps race is a
+stutter that the player feels.
+:::
+:::
+
+## 14.2 Compatibility
+
+A build can fail on some devices even when it runs well on others
+(@fig-compat).
+
+::: {.callout-important title="Definition 14.2 — Three causes of incompatibility"}
+- **Minimum OS version:** a build made for Android 11 (API 30) cannot start
+  on Android 8.
+- **Graphics API:** the game talks to the GPU through a **graphics API**
+  (Vulkan, OpenGL ES, Metal). An old GPU without Vulkan shows a black screen
+  if the build has no other path.
+- **Screen shapes:** 20:9 phones with notches, 16:9 phones and 4:3 tablets
+  need layouts anchored in the **safe area** (@fig-aspect).
+
+A **compatibility matrix** records each test device and each check.
+:::
+
+![A compatibility matrix (example).](images/compat-matrix.png){#fig-compat width=94%}
+
+![One menu, three screen shapes.](images/aspect.png){#fig-aspect width=94%}
+
+::: {.callout-note title="Example 14.2 — Star Garden 2.0 on three devices"}
+1. A phone with Android 7 cannot install it: the minimum is Android 8 (API
+   26), so the store does not offer it on that phone.
+2. An old tablet without Vulkan uses the OpenGL ES path of the build: the
+   garden appears.
+3. A 21:9 phone with a camera hole: the watering button sits inside the safe
+   area and stays fully visible.
+:::
+
+{{< sim file="sims/compat-lab.html" poster="sims/compat-lab.png" title="Compatibility Lab: build 43 for every device" height="580" >}}
+
+::: {.callout-warning title="Common mistake"}
+Supporting every old device "for more players" without counting the cost.
+Each older version and each graphics path adds testing; check how many
+players really use them (market share, lecture 8).
+:::
+
+::: {.callout-note title="Do it · The matrix"}
+In **Compatibility Lab**, make every row green. Write the cost of each
+setting you changed.
+
+*Your result:* three settings and their costs.
+
+::: {.check}
+Minimum Android 8 (API 26): the game must be tested on Android 8 too, and
+avoid newer features. Vulkan + OpenGL ES: a second graphics path to test.
+Menu anchored to the safe area: one more layout check per screen shape.
+Then every row of build 43 is green.
+:::
+:::
+
+## 14.3 Following developments with reliable sources
+
+Platforms change every year. A tester must follow the changes
+(@fig-sources).
+
+::: {.callout-important title="Definition 14.3 — Following platform changes"}
+- Read the **release notes** of new OS and engine versions: they list
+  behaviour changes that can break a game.
+- Prefer **reliable sources**: official documentation, release notes,
+  benchmarks that explain their method, and your own written tests.
+- Treat ads, forum rumours and undated posts as claims to check.
+- After an update, run the test plan again on at least one updated device.
+:::
+
+![Where do performance facts come from?](images/sources.png){#fig-sources width=94%}
+
+::: {.callout-note title="Example 14.3 — \"Twice the frame rate on old phones\""}
+1. A video says that the new version of the game engine doubles the frame
+   rate on old phones.
+2. Rami reads the official release notes of the engine: they mention a
+   faster loading of scenes, but no general speed-up.
+3. Rami tests the new version on the P5 with the same race: the levels load
+   2 seconds faster, the frame rate is the same. Rami writes the result in
+   the test log, with the date.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Copying a number from a video into a report without its source and date.
+A reliable report says where each number comes from.
+:::
+
+::: {.callout-note title="Do it · A release note"}
+Find the release notes of the newest Android or iOS version on the official
+developer site. Write two changes that could affect a game, with the source
+and the date.
+
+*Your result:* two changes with source and date.
+
+::: {.check}
+A good answer looks like: "developer.android.com, Android 16 behaviour
+changes (read on 30 October 2026): 1. on tablets the system can ignore a
+game that locks the screen to portrait, so the game must also work in
+landscape; 2. background work has new limits, so the cloud save in the
+background must be tested again." Check: an official page, the date you read
+it, and two changes, each with what it means for a game.
+:::
+:::
+
+## Case study: Performance Detective
+
+Players of *Pocket Quest* send six reports: a race that jerks at 58 fps, a
+hot phone that slows down after 15 minutes, a crash on Android 8, a black
+screen on an old phone, a Start button cut off on a tablet, and a forum
+claim about an OS update. The Game challenge of the interactive lesson uses
+these reports. In the mini-game below you find the cause or the best fix
+for each one.
+
+{{< sim file="sims/perf-detective.html" poster="sims/perf-detective.png" title="Performance Detective: six player reports" kind="game" height="460" >}}
+
+## Further reading
+
+Android Developers, "Behavior changes" (for each Android version) and
+"Support different screen sizes"; Apple Developer, "Human Interface
+Guidelines: Layout". Check the date on each page.
+
+## Exercises
+
+1. What is the frame time of 60 fps?
+2. Why is the 1 % low important, when the average is high?
+3. Why must a performance test last as long as players play?
+4. What does a frame-rate cap do?
+5. Name the three causes of incompatibility of this lesson.
+6. An old phone shows a black screen. What is a likely cause, and a fix?
+7. What is a compatibility matrix?
+8. Name two reliable sources for platform changes.
+9. A forum says a new update makes every game faster. What do you do?
+10. Why run the test plan again after an OS update?
+
+## Answers to the exercises
+
+::: {.answers}
+1. About 16.7 ms.
+2. It shows the stutters that the player feels.
+3. A hot chip slows down after some minutes (thermal throttling).
+4. It limits the frame rate, so the load stays steady and the phone cooler.
+5. The minimum OS version, the graphics API, the screen shapes.
+6. The GPU does not support the graphics API (Vulkan); add an OpenGL ES
+   path.
+7. A table of test devices and checks, each marked pass or fail.
+8. For example official release notes and developer documentation.
+9. Read the official release notes and test it yourself.
+10. The update can change behaviour that the game depends on.
+:::

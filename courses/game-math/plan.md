@@ -29,9 +29,9 @@ title.
 | 2 (2) | **Lecture 2** Vector Operations: Addition, Scaling, Magnitude and Normalization | 3.1–3.5 | A1 B1 |
 | | **Lecture 3** The Dot Product and the Angle Between Vectors (Game challenge = "Vector exercises in game scenarios") | 4.1, 4.2 (+ 4.3 in one line), 4.4, 4.5 | A1 B1 |
 | 3 (3) | **Lecture 4** The Cross Product: Direction and Surface Normals | 5.1–5.4, 5.5 (culling only) | B1 |
-| | **Lecture 5** Distance, Projection and Direction (Game challenge = "Solving movement and aiming problems") | 6.1, 6.2, 6.3 (+ 6.4 as one example), 6.5 | B1 |
+| | **Lecture 5** Distance, Projection and Direction in Game Worlds (Game challenge = "Solving movement and aiming problems") | 6.1, 6.2, 6.3 (+ 6.4 as one example), 6.5 | B1 |
 | 4 (4) | **Lecture 6** Trigonometry: Sine, Cosine, Tangent and the Unit Circle | 7.1–7.4, 7.5 (short code box) | A2 |
-| | **Lecture 7** Applied Trigonometry: Angles, Rotation and Oscillation (Game challenge = "Trigonometry in game motion") | 8.1–8.4 (+ 8.5 as one example) | A2 B1 |
+| | **Lecture 7** Applied Trigonometry: Angles, Rotation and Oscillating Motion (Game challenge = "Trigonometry in game motion") | 8.1–8.4 (+ 8.5 as one example) | A2 B1 |
 | 5 (5) | **Lecture 8** Matrices: Operations, Multiplication, Identity and Inverse | 9.1, 9.3 + 9.4, 10.1 + 10.2, 10.3, 10.4, 10.5 ("undo" in words) | A1 C1 |
 | | **Seminar 2** Matrix Exercises | second examples of 9–10, Multiply Lab | A1 C1 |
 | 6 (6) | **Lecture 9** Translation, Scaling and Rotation in 2D | 11.1–11.3, 12.1 + 12.2, 12.3 (undo) | C1 |

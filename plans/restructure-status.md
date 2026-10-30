@@ -1,4 +1,4 @@
-# Restructure (plan v2): status on 2026-10-30 (end of the third session)
+# Restructure (plan v2): status on 2026-10-30 (end of the fourth session)
 
 Branch `restructure-units` (signed commits, one per unit). Plan:
 `plans/restructure-19-lectures.md`. Rules: `AUTHORING.md` and each course's
@@ -61,49 +61,57 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
   (not in Lecture 16). Old lecture numbers removed from several sims.
 - `record-all.sh`: stale paths fixed, deleted sims and their scenarios
   removed.
-- `check_size.py --all`: no warnings outside Digital Skills (87 warnings
-  there, all from the old structure). `check_figures.py`: no warnings.
+- **Digital Skills: all 15 units** (Lectures 1–10, Practice 1–5 in the short
+  seminar format, Online activities 1–15 as `online-NN.qmd`), one commit per
+  unit. Details and the lists of removed and new simulators, cut concepts and
+  the course project: the lessons-learned entry of 2026-10-30 in
+  `courses/digital-skills/NOTES.md`. Unused sims and figures removed (also
+  `pictures` of week 9 and `format-table` of week 13).
+- **Course pages** (`index.qmd` of the four courses) describe units, not
+  weeks or pairs of lectures; the CI output check knows the new file names
+  (seminar, practice and online PDFs).
+- **GIFs and posters (step 2):** all 43 sims of the old list and the changed
+  Digital Skills sims recorded again (Rehearsal Lab got a scenario; Link Lab's
+  was removed); posters of Drawbridge and Stack Builder made again. Recorded
+  in the cloud with Playwright and PIL, the same scenarios and settings as
+  `record-all.sh` (600 px, `?fixed-order`, 560 px GIF); running
+  `record-all.sh` on the Mac makes them again the usual way (Deno, Swift).
+- **Browser check:** all 154 session pages of the rendered site opened in
+  Chromium (phone width) with their 240 simulators loaded: two problems,
+  both fixed (Digital Media Cut Lab and Effects Lab loaded `scene.js` from
+  week 10, where it no longer is; a `$` on Online activity 8 started a
+  formula). On six pages of the four courses: two wrong tries show the
+  right answer with its reason, a right answer shows its reason, and "Check
+  your result" opens.
+- **courses-private (step 3):** `online-NN-solutions.md` for Online activities
+  1–15 (old `lesson-2W-solutions.md` renamed and updated where the tasks
+  changed: 7, 8, 9, 11, 14, 15; the stale homework-1 solution removed) and
+  `moodle/<slug>-weeks.md` for the four courses (the official map and the
+  Arabic texts: introduction, review before the midterm, midterm, catch-up
+  week, final review, final exam; no "lab" word in Digital Skills).
+  **Committed in the session's clone, not pushed yet** (pushing to `main`
+  of courses-private needs the teacher's permission in this environment).
+- **Render and package (step 4):** a full `quarto render` (Quarto 1.10.19,
+  cloud session): 360 files, 100 slide decks, 54 homework and online-task
+  PDFs, 254 renamed downloads, no errors. It showed 19 results in the Game
+  Math notes of Lectures 9–12 printed as text (no blank line before
+  `{.check}`; Lecture 9 had no results section): fixed, and `check_size.py`
+  now warns about a fenced div right after text. `tools/course_package.py`:
+  the four packages (week-01 … week-16, `index.html`, `index.pdf`), every
+  syllabus row with its material, no session left over. The task PDFs show
+  only the tasks, and no notes PDF or worksheet shows `Why:` or `:::`.
+- `check_size.py --all`: no warnings in any course. `check_figures.py`: no
+  warnings.
 
-## Still to do (in this order)
+## Still to do
 
-1. **Digital Skills, 15 units** (all still old `lesson-01 … lesson-30`):
-   map in the plan, Part 3 (Lectures 1–10 core, Practice 1–5 flexible in
-   the short seminar format `practice-NN*`, Online activities 1–15 as
-   `online-NN.qmd` that practise their unit and never repeat the lecture;
-   at least 2 sims each; AI-use statement from unit 11; the course's
-   NOTES.md: A2 English, general examples, never games). Model answers of
-   the online activities go to courses-private
-   (`courses/digital-skills/week-WW/online-NN-solutions.md`). Fix the sims
-   `office-relay.html` ("(lecture 23)") and `presentation-day.html`
-   ("lecture 30"). `schedule.yml` is already in the new format. Each
-   `week-WW` holds old `lesson-(2W−1)*` (the face-to-face lesson, three
-   files) and old `lesson-2W.qmd` (the online activity, `online: true`):
-   the first becomes `lesson-NN*` or `practice-NN*`, the second
-   `online-WW.qmd` (templates in `shared/templates/`).
-2. **GIFs and posters** for changed sims (`sh shared/sims/recordings/record-all.sh
-   <name>`; needs Quarto's Deno, not installed here): game-math week-04
-   drone-drop, sky-lift; week-06 drawbridge (poster too); week-10
-   rule-smith; week-11 treasure-odds; week-12 loot-forge; week-13
-   fair-or-frustrating, bag-lab; week-14 pilot-check, move-lab, bounce-lab;
-   week-15 cave-gen, generator-doctor, raft-finals; computing-systems
-   week-04 soc-explorer (text); week-05 ram-rush; week-06 disk-doctor,
-   test-day (text); week-07 stack-builder (poster too), pause-please
-   (text); week-09 launch-planner, source-check, platform-pick,
-   fact-or-myth; week-10 launch-day, review-board (text); week-11
-   terminal-lab, lag-detective, net-fixer; week-12 cloud-planner; week-13
-   lag-lab (labels); week-15 slide-sorter; digital-media week-05
-   shot-caller (last round); week-07 waveform-lab (readout); week-09
-   score-the-scene (tempo round), loop-doctor (text); week-11 export-desk
-   (bitrate round), video-settings-lab (readout), timeline-lab (end
-   message); week-14 asset-shopping, audit-board, audit-fixes (one round
-   or row each); week-15 workshop-day (the loop explanation). Test each
-   sim inside its page in the browser (no JS check was possible here).
-3. **courses-private**: the online-activity solutions of Digital Skills,
-   and `moodle/<slug>-weeks.md` (Arabic section texts; no "مختبر" for
-   Digital Skills).
-4. Full `quarto render`, `python3 tools/course_package.py`, then a PR into
-   main (signed commits, no co-author lines). In the PR description, list
-   the removed games and the cut concepts above for the teacher's review.
+1. Push the two courses-private commits to its `main` (they exist only in
+   the cloud session's clone).
+2. The pull request into `main` (signed commits, no co-author lines); its
+   description lists the removed games and the cut concepts for the
+   teacher's review.
+3. The teacher's review: one unit of each course in the browser
+   (`quarto preview`), the open decisions of the plan, and the GIFs.
 
 ## How a unit was converted (Digital Media; use the same way)
 
@@ -134,8 +142,13 @@ alternative and a `.check`.
    session uses (and their lines in `record-all.sh` and their scenarios).
 8. One unit per commit (signed; the message describes the change).
 
-## Tools on this Mac (2026-10-30)
+## Tools
 
-- Quarto is **not installed** locally (CI pins 1.10.19), so no render and
-  no GIF recordings. SVG figures can be exported to PNG with headless
-  Chrome (installed) at scale 200/96.
+- Mac: Quarto is not installed locally (CI pins 1.10.19).
+- Cloud session of 2026-10-30: Quarto 1.10.19 from the GitHub release;
+  packages.typst.org is blocked there, so the Typst package
+  `@preview/tiaoma:0.3.0` (QR codes) was copied from the typst/packages
+  repository into `~/.cache/typst/packages/preview/tiaoma/0.3.0`; Chrome for
+  the task PDFs and the package index: Playwright's `chrome-headless-shell`
+  (`CHROME=…`), because the full Chromium hangs on Google services there;
+  fonts: `fonts-noto-core`, as in CI.

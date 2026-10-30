@@ -80,7 +80,7 @@
     $("calc").textContent = `V1: ${s.v1.length} clip(s), video ${vlen()} s · V2: ${s.v2.length ? "title" : "—"} · A1: ${s.a1.length ? "music " + end(s.a1) + " s" : "—"}${s.sel ? " · selected: " + s.sel.name : ""}`;
     let m = "";
     while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done."; Kit.good(); }
-    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a first cut with a title and music. Next: transitions and export (lecture 21).";
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: a first cut with a title and music. Next: transitions and export.";
     if (m) msg(m); else if (!quiet) msg(s.a1.length && end(s.a1) > vlen() + 0.5 ? "The music is longer than the video: select it and trim its end." : "");
   }
   const cv = Kit.canvas($("c"), (W) => Math.min(380, W * 0.66));

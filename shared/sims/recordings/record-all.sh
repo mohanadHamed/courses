@@ -166,7 +166,6 @@ package-checker|courses/digital-media/week-15/sims/package-checker.html|9|course
 workshop-day|courses/digital-media/week-15/sims/workshop-day.html|8|courses/digital-media/week-15/sims/workshop-day.gif
 package-review|courses/digital-media/week-15/sims/package-review.html|8|courses/digital-media/week-15/sims/package-review.gif
 talk-planner|courses/digital-media/week-15/sims/talk-planner.html|6|courses/digital-media/week-15/sims/talk-planner.gif
-feedback-desk|courses/digital-media/week-15/sims/feedback-desk.html|8|courses/digital-media/week-15/sims/feedback-desk.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
 digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
 hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif

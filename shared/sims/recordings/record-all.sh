@@ -154,7 +154,6 @@ effects-lab|courses/digital-media/week-12/sims/effects-lab.html|8|courses/digita
 edit-doctor|courses/digital-media/week-12/sims/edit-doctor.html|8|courses/digital-media/week-12/sims/edit-doctor.gif
 promo-builder|courses/digital-media/week-12/sims/promo-builder.html|8|courses/digital-media/week-12/sims/promo-builder.gif
 licence-lab|courses/digital-media/week-13/sims/licence-lab.html|9|courses/digital-media/week-13/sims/licence-lab.gif
-pd-clock|courses/digital-media/week-13/sims/pd-clock.html|8|courses/digital-media/week-13/sims/pd-clock.gif
 can-we-use-it|courses/digital-media/week-13/sims/can-we-use-it.html|8|courses/digital-media/week-13/sims/can-we-use-it.gif
 rights-check|courses/digital-media/week-13/sims/rights-check.html|9|courses/digital-media/week-13/sims/rights-check.gif
 ip-desk|courses/digital-media/week-13/sims/ip-desk.html|8|courses/digital-media/week-13/sims/ip-desk.gif

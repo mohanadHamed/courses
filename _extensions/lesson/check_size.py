@@ -51,6 +51,11 @@ courses"): "Before you start", Steps marked {.study} with one "Try it" each,
 "Tasks to submit" ({.tasks}) with marks and answer space, "How to submit",
 `due:` and `marks:`, and at least ONLINE_MIN_SIMS simulators.
 
+In every file of a unit: a fenced div (`::: {...}`) needs a blank line before
+it when it follows text; otherwise pandoc prints the colons as text (a
+`{.check}` after "*Your result:*" then shows in the PDF and never reaches the
+results).
+
 It prints a warning when a number is outside the range for that lecture time.
 It never stops the render. Run it by hand for the full table:
 
@@ -636,6 +641,13 @@ def check(project_dir):
             if any(h.startswith(part) for h in page["headings"]):
                 warnings.append("%s: no \"%s\" in lessons (use a Game challenge)" % (rel, part.capitalize()))
         rows.append((rel, minutes, n))
+    for path in sorted(glob.glob(os.path.join(week, "*.qmd"))):
+        lines = read(path).split("\n")
+        for i in range(1, len(lines)):
+            prev = lines[i - 1].strip()
+            if re.match(r"\s*:{3,}\s*\{", lines[i]) and prev and not prev.startswith(":::"):
+                warnings.append("%s: a blank line is missing before \"%s\" (pandoc shows it as text)"
+                                % (os.path.relpath(path, project_dir), lines[i].strip()))
     return rows, warnings
 
 

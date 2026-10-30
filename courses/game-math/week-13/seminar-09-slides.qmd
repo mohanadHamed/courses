@@ -6,65 +6,23 @@ format: lesson-pptx
 
 ## Recall · Lecture 16
 
-a) What is P(at least one drop in 2 tries) with p = 0.5?
-b) How many tries are needed on average with p = 0.1?
-c) What is E for a chest with 50 % 2 coins and 50 % 8 coins?
+a) An item drops with p = 0.5. What is the chance of at least one drop in 2 tries?
+b) An item drops with p = 0.1. How many tries does a player need on average?
+c) A chest gives 2 coins (50 %) or 8 coins (50 %). What is its expected reward?
 
 ::: {.answer}
 a) 3/4
 b) 10
-c) 5
+c) 5 coins
 :::
 
-## Activity 1 · Expected attacks · 10 min
+## Activity 1 · Waits and a pity timer · 18 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Hits needed are health ÷ damage, rounded up, and expected attacks are hits ÷ hit chance.
-- The player has 50 health, 10 damage and 0.5 hit chance, and the goblin has 30 health, 10 damage and 0.5 hit chance.
-- **Do it:** Compute the expected attacks of both. Who usually wins?
-:::
-::: {.column width="50%"}
-![](images/difficulty.png)
-:::
-::::
-
-## Check 1 · Expected attacks
-
-Who needs fewer attacks?
-
-::: {.reveal}
-1. The player needs 3 hits ÷ 0.5 = 6 attacks.
-2. The goblin needs 5 hits ÷ 0.5 = 10 attacks, so the player usually wins.
-3. With 25 damage, the goblin needs only 4 attacks, so the player is in danger.
-:::
-
-## Activity 2 · Tune an enemy · 12 min
-
-- A normal enemy is beaten in 70 to 85 % of the fights, and a boss in 30 to 45 %.
-- **Do it:** Simulate the skeleton in Difficulty Tuner. Then change one value so that it becomes a normal enemy.
-
-## Live demo · Difficulty Tuner
-
-{{< sim file="sims/difficulty-tuner.html" poster="sims/difficulty-tuner.png" title="Difficulty Tuner: how hard is the skeleton?" task="**Show:** simulate the skeleton with 40 health, 12 damage and 60 % hit, then change the damage to 16. **Ask:** is the skeleton now a normal enemy?" >}}
-
-## Check 2 · Tune an enemy
-
-What did the simulation show?
-
-::: {.reveal}
-1. The skeleton is beaten in about 88 % of the fights, which is too easy.
-2. With 16 damage, the player wins about 73 %, so it is a normal enemy.
-3. We change one value at a time and simulate after each change.
-:::
-
-## Activity 3 · Simulate 1000 players · 12 min
-
-:::: {.columns}
-::: {.column width="50%"}
-- A rare hammer drops with p = 2 %.
-- **Do it:** Compute the average number of tries. Then simulate 1000 players in Drop Rate Lab, with and without a pity timer at 60.
-- What happens to the longest wait?
+- A rare hammer drops with p = 2 %, and Drop Rate Lab lets 1000 players hunt it.
+- **Do it:** Compute the average number of tries. Find the longest wait without a pity timer, then with a timer at 60. Would you keep the timer?
+- Your product is four numbers and one sentence.
 :::
 ::: {.column width="50%"}
 ![](images/pity-timer.png)
@@ -73,84 +31,69 @@ What did the simulation show?
 
 ## Live demo · Drop Rate Lab
 
-{{< sim file="sims/drop-rate-lab.html" poster="sims/drop-rate-lab.png" title="Drop Rate Lab: how long do players wait?" task="**Show:** 1000 players with p = 2 %, then a pity timer at 60. **Ask:** what happens to the average and to the longest wait?" >}}
+{{< sim file="sims/drop-rate-lab.html" poster="sims/drop-rate-lab.png" title="Drop Rate Lab: how long do players wait?" task="**Show:** 1000 players with p = 2 %, then add a pity timer at 60. **Ask:** what happens to the longest wait?" >}}
 
-## Check 3 · Simulate 1000 players
+## Check 1 · Waits and a pity timer
 
 What do the numbers show?
 
 ::: {.reveal}
 1. The average is 1/0.02 = 50 tries.
-2. Without the timer, the longest wait is often 200 tries or more.
-3. With the timer at 60, nobody waits more than 60 tries.
+2. Without a timer, the longest wait is often 200 tries or more.
+3. With a timer at 60, the longest wait is 60, and the average falls to about 40.
+4. The timer is worth keeping: it ends the endless waits but keeps the early lucky drops.
 :::
 
-## Activity 4 · Input or output? · 10 min
+## Activity 2 · Reward and odds · 15 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Input randomness happens before the player decides, and output randomness decides the result after it.
-- **Do it:** Sort the map, the damage roll, the first cards, the reward after a level and the weather before a race.
-:::
-::: {.column width="50%"}
-![](images/input-output.png)
-:::
-::::
-
-## Check 4 · Input or output?
-
-Which kind of randomness is each one?
-
-::: {.reveal}
-1. The map, the first cards and the weather before the race are input.
-2. The damage roll and the reward after the level are output.
-3. More input randomness lets skill matter more.
-:::
-
-## Activity 5 · Honest odds · 10 min
-
-:::: {.columns}
-::: {.column width="50%"}
-- A chest has the weights 80, 15 and 5, and an epic is guaranteed after 30 chests without one.
-- The store page says "epic 10 %".
-- **Do it:** Is the page honest? Write the odds that the screen must show.
+- A chest gives 10 coins with 80 % or 50 coins with 20 %, and a bow costs 180 coins.
+- **Do it:** Compute the expected reward of one chest and the chests for the bow. The store page says "big prize: 30 %". Is it honest?
+- Your product is two numbers, one answer and two odds.
 :::
 ::: {.column width="50%"}
 ![](../week-12/images/weighted.png)
 :::
 ::::
 
-## Check 5 · Honest odds
+## Check 2 · Reward and odds
 
-What must the team show?
+What are the expected reward and the honest odds?
 
 ::: {.reveal}
-1. The real chance of an epic is 5 %, so the page is not honest.
-2. The screen must show 80 %, 15 % and 5 %.
-3. The team also tells the players about the pity timer at 30.
+1. E = 10 × 0.8 + 50 × 0.2 = 8 + 10 = 18 coins.
+2. The bow needs about 180 ÷ 18 = 10 chests.
+3. The page is not honest: the big prize really comes with 20 %, not 30 %.
+4. The screen must show 10 coins at 80 % and 50 coins at 20 %.
 :::
 
-## Game challenge · Fair or Frustrating?
+## Activity 3 · Answer the players · 15 min
 
-{{< sim file="sims/fair-or-frustrating.html" poster="sims/fair-or-frustrating.png" title="Fair or Frustrating? Messages about luck" kind="game" task="Players of Torch Hall send six messages about misses, dice, keys, crits and chests. **Play:** answer each message on your phone, then balance the game with harder questions." >}}
+:::: {.columns}
+::: {.column width="50%"}
+- One player missed twice with a hit chance of 90 %, one expects heads after four tails, and one asks about a shuffle bag with 1 crit and 3 normal hits.
+- **Do it:** Write the chance of two misses in a row, P(heads) on the next flip, the share of crits and the longest run without a crit.
+- Your product is three short answers with numbers.
+:::
+::: {.column width="50%"}
+![](images/shuffle-bag.png)
+:::
+::::
 
-## Try it · Balance the messages (harder)
+## Check 3 · Answer the players
 
-The facts: a player hits with 80 %. A key drops with 50 %. A chest gives 10 coins (80 %) or 50 coins (20 %).
+What does each player need to hear?
 
-a) About how many of 1000 players have no key after 3 tries?
-b) How many attacks are expected for 4 hits with the hit chance 80 %?
-c) Is the hit roll of 80 % input or output randomness?
-
-::: {.answer}
-a) 125
-b) 5
-c) output
+::: {.reveal}
+1. Two misses in a row have the chance 0.1 × 0.1 = 1 %: rare, but it happens every day with many players.
+2. The coin has no memory, so P(heads) is still 1/2.
+3. The bag gives 1 crit in 4 hits: 25 %.
+4. The longest run without a crit is 6 normal hits, when the crit is first in one bag and last in the next.
 :::
 
 ## Wrap-up
 
-- You can compute the expected attacks of a fight and say who usually wins.
-- You can tune an enemy and a drop rate with simulations of many players.
-- You can sort input and output randomness and suggest a fairer change.
-- You can write the honest odds of a chest.
+- You can balance the wait for a rare item with the average and a pity timer.
+- You can compute the expected reward of a chest and check its odds.
+- You can answer players about streaks and shuffle bags with numbers.

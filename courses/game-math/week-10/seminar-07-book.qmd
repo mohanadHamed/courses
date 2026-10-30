@@ -1,25 +1,22 @@
 ---
 title: "Designing a Rule Set for a Simple Game"
-description: "Seminar worksheet · Write the rules of a farm robot as conditions, make its decision table, put the rules in the right order, clean the conditions and test them at the border."
+description: "Seminar worksheet · Write the rules of a farm robot as conditions, make their decision table and put the else-if chain in the right order, then test a number rule at its border."
 seminar: 7
 ilos: [B2]
 format: lesson-typst
 ---
 
 ::: {.lead}
-Today there are no new ideas. You use what Lecture 12 taught (De Morgan's
-laws, simplifying, rule words, decision tables and else-if chains) on the
-rule set of one simple game, a farm robot: you write its rules as
-conditions, make its decision table, put the rules in the right order, clean
-the conditions and test them at the border. Do each activity alone. The
-results of the activities are at the end of this worksheet: try first, then
-compare.
+In Lecture 12 you learned the laws of Boolean algebra, De Morgan's laws,
+simplifying a condition, rules from words, decision tables and else-if
+chains. Today you design the rule set of a farm robot. There are no new
+ideas: three short problems. Do each one alone. The results of the
+activities are at the end of this worksheet.
 :::
 
 ## Recall
 
 - De Morgan: `!(p && q)` = `!p || !q`, and `!(p || q)` = `!p && !q`.
-- Absorption `p || (p && q)` = `p`; complement `p && !p` = false.
 - "But not both" is `^`; "unless p" means "if not p".
 - A decision table has 2^n rows and one action in each row. In an else-if
   chain the first true rule wins.
@@ -31,17 +28,11 @@ Choose the right answer.
 Which condition is the same as `!(p && q)`?
 :   !p || !q
 
-    Why: De Morgan: NOT each part, and && becomes ||.
-
 How many rows has a decision table with 4 conditions?
 :   16
 
-    Why: 2^4 = 16.
-
 Two rules of an else-if chain are true. Which one runs?
 :   the first one from the top
-
-    Why: the chain stops at the first true rule.
 :::
 :::
 
@@ -54,7 +45,7 @@ raining) and n (it is night).
 
 ![Rule words and their logic.](images/rule-words.png){width=90%}
 
-::: {.callout-note title="Activity 1 · Words to conditions · 10 min"}
+::: {.callout-note title="Activity 1 · Words to conditions · 15 min"}
 Write each rule as a C# condition with the letters.
 
 1. The bot waters when the soil is dry and it is not raining.
@@ -79,238 +70,115 @@ n night. Choose the condition.
 The bot waters when the soil is dry and it is not raining.
 :   d && !r
 
-    Why: "and" is &&, "not" is !.
-
 The bot picks a crop when one is ripe, unless it is night.
 :   p && !n
 
-    Why: "unless n" means "if not n".
-
 The bot does not water: !(d && !r).
 :   !d || r
-
-    Why: De Morgan, then !!r is r.
 :::
 :::
 
-## Activity 2 · The decision table of the bot
+## Activity 2 · The decision table and the order of the rules
 
 The designer gives the order of the rules: "The bot goes home when the
 battery is low (b). Otherwise it picks when a ripe crop is near (p).
-Otherwise it waters when the soil is dry (d). Otherwise it waits."
-
-![A decision table: every case, one action.](images/decision-table.png){width=86%}
-
-::: {.callout-note title="Activity 2 · Make the table · 12 min"}
-1. Make the table of b, p and d with all 8 rows and the action of each row.
-2. In how many rows does the bot go home, pick, water and wait?
-3. Is the table complete? Does a row have two actions?
-
-*Your product:* an 8-row table, four counts and two answers.
-
-::: {.check}
-Home in the 4 rows with b = T. With b = F: Pick in 2 rows (p = T, d = T or
-F); Water in 1 row (p = F, d = T); Wait in 1 row (p = F, d = F). 4 + 2 + 1 + 1
-= 8. The table is complete (every row has an action) and has no conflict
-(one action in each row).
-:::
-:::
-
-::: {.callout-tip title="Try it 3 · The table"}
-Harvest Bot: home if b; otherwise pick if p; otherwise water if d; otherwise
-wait. Choose the action. You can use an answer more than once.
-
-::: {.match extra="Water"}
-b = F, p = T, d = T.
-:   Pick
-
-    Why: the battery is fine, and a ripe crop comes before the dry soil.
-
-b = T, p = T, d = T.
-:   Home
-
-    Why: a low battery comes first, in every row.
-
-b = F, p = F, d = F.
-:   Wait
-
-    Why: no rule is true, so the last action runs.
-
-In how many of the 8 rows does the bot go home?
-:   4
-
-    Why: half of the rows have b = T.
-:::
-:::
-
-## Activity 3 · Put the rules in order and clean them
-
-A programmer writes the rules of the bot like this:
+Otherwise it waters when the soil is dry (d). Otherwise it waits." A
+programmer writes:
 
 ```csharp
 if (p) Pick();
 else if (b) Home();
-else if (d && !b) Water();
+else if (d) Water();
 else Wait();
 ```
 
-![The same rules in a wrong and a right order.](images/rule-order.png){width=86%}
+![A decision table: every case, one action.](images/decision-table.png){width=86%}
 
-::: {.callout-note title="Activity 3 · Order and clean · 10 min"}
-1. Test the row b = T, p = T, d = F. What does the chain do? What does the
-   designer want?
-2. Write the chain in the right order.
-3. In your chain, `d && !b` can become `d`. Why?
-4. Another rule says `if (!(!b && !f)) Home();`. Write it without a NOT in
-   front of the brackets.
+::: {.callout-note title="Activity 2 · Table and chain · 18 min"}
+1. Make the table of b, p and d with all 8 rows and the designer's action
+   in each row. Count the rows of each action.
+2. Test the row b = T, p = T, d = F in the programmer's chain. What does
+   it do? Write the chain in the right order.
 
-*Your product:* one bug, one chain, one reason and one condition.
+*Your product:* an 8-row table with four counts, and one chain.
 
 ::: {.check}
-1. The chain picks, but the designer wants Home: the battery is low.
-2. `if (b) Home(); else if (p) Pick(); else if (d) Water(); else Wait();`
-3. The bot reaches the Water rule only when b is false, so `!b` is always
-   true there, and `d && true` is `d` (identity).
-4. De Morgan and double negation: `b || f`.
+Home in the 4 rows with b = T. With b = F: Pick in 2 rows (p = T), Water
+in 1 row (p = F, d = T), Wait in 1 row (p = F, d = F): 4 + 2 + 1 + 1 = 8.
+The programmer's chain picks in the row (T, T, F), but the designer wants
+Home. The right chain: `if (b) Home(); else if (p) Pick(); else if (d)
+Water(); else Wait();`
 :::
 :::
 
-::: {.callout-tip title="Try it 4 · Order and clean"}
-Choose the right answer.
+::: {.callout-tip title="Try it 3 · The table and the chain"}
+Harvest Bot: home if b; otherwise pick if p; otherwise water if d;
+otherwise wait. Choose the right answer.
 
-::: {.match extra="Pick()|b && f"}
-The chain `if (p) Pick(); else if (b) Home(); …` with b = T, p = T. What runs?
-:   Pick(), but the designer wants Home()
+::: {.match extra="Water|8"}
+b = F, p = T, d = T. What does the bot do?
+:   Pick
 
-    Why: the first true rule wins, and Pick is first.
+b = F, p = F, d = F. What does the bot do?
+:   Wait
+
+In how many of the 8 rows does the bot go home?
+:   4
 
 Which rule must come first in the bot's chain?
 :   if (b) Home();
-
-    Why: the designer says a low battery beats every other rule.
-
-What is `!(!b && !f)` without a NOT in front of the brackets?
-:   b || f
-
-    Why: De Morgan: !!b || !!f, then double negation.
 :::
 :::
 
-## Activity 4 · Test the rules at the border
+## Activity 3 · Test the rule at its border
 
-The designer says: "The battery is low when it is **under 20 %**." The code
-says `bool b = battery <= 20;`.
+The designer says: "The battery is low when it is **under 20 %**." The
+code says `bool b = battery <= 20;`. A border test uses the value where the
+rule changes.
 
-![Testing at the border of a rule.](images/edge-cases.png){width=86%}
+::: {.callout-note title="Activity 3 · Edge cases · 12 min"}
+1. Test battery = 10, 80 and 20. Which test finds the bug? Write the fix.
+2. A new rule: "The bot sells when it has **at least 50** apples." Write
+   the condition and two border tests with the expected result.
 
-::: {.callout-note title="Activity 4 · Edge cases · 12 min"}
-1. Test battery = 10 and battery = 80. Do the rule and the code agree?
-2. Which value of the battery finds the bug? Write the fix.
-3. A new rule: "The bot sells the apples when it has **at least 50**
-   apples and **fewer than 3** trips today." Write the condition and four
-   edge-case tests (apples, trips) with the expected result.
-
-*Your product:* one bug with its fix, one condition and four tests.
+*Your product:* one bug with its fix, one condition and two tests.
 
 ::: {.check}
-1. Yes: 10 is low in both, 80 is not low in both. These tests find nothing.
-2. Battery = 20: the rule says "not low", but the code says low. Fix:
-   `battery < 20`. 3. `apples >= 50 && trips < 3`. Tests, for example:
-   (50, 2) sell; (49, 2) no; (50, 3) no; (51, 2) sell.
+10 and 80 give the same result in the rule and the code. Battery = 20: the
+rule says "not low", but the code says low. Fix: `battery < 20`. The new
+rule: `apples >= 50`. Tests: 50 → sell; 49 → do not sell.
 :::
 :::
 
-::: {.callout-tip title="Try it 5 · Edge cases"}
+::: {.callout-tip title="Try it 4 · Edge cases"}
 Choose the right answer.
 
 ::: {.match extra="10|apples > 50"}
 The rule is battery < 20, the code is battery <= 20. Which test finds the bug?
 :   battery = 20
 
-    Why: only at the border do < and <= give different results.
-
-"At least 50 apples". The condition?
+"At least 50 apples". Which condition?
 :   apples >= 50
 
-    Why: "at least 50" includes 50.
-
-Sell when apples >= 50 && trips < 3. The test (50, 3)?
+Sell when apples >= 50 and trips < 3. What happens in the test (50, 3)?
 :   do not sell
-
-    Why: 3 trips is not fewer than 3.
 :::
 :::
-
-::: {.callout-note .ai-task title="Task with AI · The rule set of a boss"}
-**Goal:** a complete rule set with four conditions: a 16-row decision table
-and an else-if chain. That is long by hand; an AI assistant writes it, and
-you check it.
-
-1. **Do it yourself:** read the rules of the boss. "The boss heals when its
-   health is under 25 (h) and it has a potion (q). Otherwise it raises its
-   shield when the player charges (c). Otherwise it attacks when the player
-   is near (n). Otherwise it walks."
-2. **Ask the AI:** copy this prompt and add the rules.
-
-   ::: {.prompt}
-   Here are the rules of a game boss in words. Make the decision table with
-   all 16 rows of the conditions h, q, c, n (the first column 8 T, then 8 F)
-   and the action in each row. Count the rows of each action. Then write the
-   rules as one C# else-if chain in the right order, and give three
-   edge-case tests for "health under 25". Rules:
-   :::
-
-3. **Check:** are there exactly 16 different rows? Check three rows by hand.
-   Is the order of the chain the order of the designer? Do the edge-case
-   tests use 24, 25 and 26? Is the code `health < 25`, not `<= 25`?
-
-*Your product:* the table, the chain, your three hand checks and one
-sentence on a mistake you found (or "no mistake").
-
-::: {.check}
-Heal 4 rows (h and q true), Shield 6 rows, Attack 3 rows, Walk 3 rows:
-4 + 6 + 3 + 3 = 16. The chain: `if (h && q) Heal(); else if (c) Shield();
-else if (n) Attack(); else Walk();`. Tests: health 24 heals (with a potion),
-25 and 26 do not. AI tools often put Shield first, write `<= 25`, or repeat
-or forget a row: look for all three.
-:::
-:::
-
-## Case study: The guard of Torch Hall
-
-The guard of *Torch Hall* has three facts: s (it sees the player), n (the
-player is near) and w (it is weak: health under 30). A weak guard flees;
-otherwise it attacks a player it sees near; otherwise it chases a player it
-sees; otherwise it patrols. Now the designer adds a fourth fact, a (the
-guard hears the alarm): "the guard runs to the bell when it hears the alarm,
-unless it is weak. The alarm is more important than the player." The Game
-challenge of the interactive page asks where the new rule goes, how many
-rows the new table has and which test finds a bug at health 30. Check the
-first 8 rows (no alarm) in Guard Brain.
-
-{{< sim file="sims/guard-brain.html" poster="sims/guard-brain.png" title="Guard Brain: rules, order and the decision table" height="900" >}}
 
 ## Exercises
 
-1. Write in C#: "the gate opens when the player has the key or the code,
-   but not both, and it is day".
-2. Write `!(isWet || !isWarm)` without a NOT in front of the brackets.
-3. A lamp turns on when it is dark (k) and someone is near (m), unless the
-   power is off (o). In how many of the 8 rows does it turn on?
-4. The chain is `if (enemy) Fight(); else if (enemy && boss) Run(); else
-   Walk();`. Which rule never runs?
-5. The rule says "a bonus at 100 points or more"; the code says
-   `points > 100`. Which test finds the bug?
-6. The guard of Torch Hall gets the alarm rule. In how many of the 16 rows
-   does it flee?
+1. Write !(a
+2. Simplify p
+3. "The bot rests unless the battery is full (u)." Write the condition.
+4. A decision table has 3 conditions. How many rows does it have?
+5. The rule is "health under 30". Which value is the border test?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. `(hasKey ^ hasCode) && isDay`.
-2. `!isWet && isWarm` (De Morgan and double negation).
-3. 1 row: k = T, m = T, o = F.
-4. `Run()`: every case with enemy is caught by `Fight()` first.
-5. points = 100: the rule gives a bonus, the code does not.
-6. 8 rows: every row with w = T.
+1. | b) without a NOT in front of the brackets. | !a && !b.
+2. | (p && q). | p (absorption).
+3. !u.
+4. 8.
+5. 30 (and 29).
 :::

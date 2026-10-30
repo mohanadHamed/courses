@@ -65,13 +65,10 @@ loot-table-lab|courses/game-math/week-12/sims/loot-table-lab.html|8|courses/game
 shape-lab|courses/game-math/week-12/sims/shape-lab.html|9|courses/game-math/week-12/sims/shape-lab.gif
 loot-forge|courses/game-math/week-12/sims/loot-forge.html|8|courses/game-math/week-12/sims/loot-forge.gif
 drop-rate-lab|courses/game-math/week-12/sims/drop-rate-lab.html|8|courses/game-math/week-12/sims/drop-rate-lab.gif
-difficulty-tuner|courses/game-math/week-12/sims/difficulty-tuner.html|9|courses/game-math/week-12/sims/difficulty-tuner.gif
 balance-board|courses/game-math/week-12/sims/balance-board.html|9|courses/game-math/week-12/sims/balance-board.gif
 streak-lab|courses/game-math/week-13/sims/streak-lab.html|10|courses/game-math/week-13/sims/streak-lab.gif
 bag-lab|courses/game-math/week-13/sims/bag-lab.html|10|courses/game-math/week-13/sims/bag-lab.gif
 fair-or-frustrating|courses/game-math/week-13/sims/fair-or-frustrating.html|8|courses/game-math/week-13/sims/fair-or-frustrating.gif
-problem-drill|courses/game-math/week-13/sims/problem-drill.html|12|courses/game-math/week-13/sims/problem-drill.gif
-star-dock-missions|courses/game-math/week-13/sims/star-dock-missions.html|8|courses/game-math/week-13/sims/star-dock-missions.gif
 move-lab|courses/game-math/week-14/sims/move-lab.html|10|courses/game-math/week-14/sims/move-lab.gif
 bounce-lab|courses/game-math/week-14/sims/bounce-lab.html|9|courses/game-math/week-14/sims/bounce-lab.gif
 pilot-check|courses/game-math/week-14/sims/pilot-check.html|8|courses/game-math/week-14/sims/pilot-check.gif

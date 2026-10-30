@@ -23,16 +23,17 @@
 --     recording="sims/other.gif" (made by shared/sims/recordings/).
 --
 --   {{< schedule >}}
---     Course page: every session from courses/<slug>/schedule.yml, grouped
---     by unit (one unit = one week of the official syllabus; `units:`), each
---     unit with its homework. Every session is labelled "Lecture N",
---     "Seminar N", "Practice N" or "Online activity N"; a flexible seminar or
---     practice session (`core: false`) is tagged "Flexible". A ready session
---     (its .qmd exists, no `draft: true`) is bright and links its page, PDF
---     and slides; the others are faded ("coming soon"). The review profile
---     shows drafts as ready. Files of a unit are in week-WW (WW = its
---     syllabus week): lesson-NN, seminar-NN, practice-NN, online-NN and
---     homework-UU (UU = the unit).
+--     Course page: every week of courses/<slug>/schedule.yml (`units:`), in
+--     teaching order. A core week is a unit ("Unit N": Lecture N, Seminar N
+--     or Online activity N, and Homework N); a filling week (`filling: true`)
+--     is a "Practice week" with no new ideas, tagged "Flexible". Every
+--     session is labelled "Lecture N", "Seminar N", "Practice N" or "Online
+--     activity N"; practice sessions (and a seminar with `core: false`) are
+--     tagged "Flexible". A ready session (its .qmd exists, no `draft: true`)
+--     is bright and links its page, PDF and slides; the others are faded
+--     ("coming soon"). The review profile shows drafts as ready. Files of a
+--     week are in week-WW (WW = its syllabus week): lesson-NN, seminar-NN,
+--     practice-NN, online-NN and homework-UU (UU = the unit).
 --     Older schedules (`lectures:`, before units) are shown in pairs.
 
 local str = pandoc.utils.stringify
@@ -373,7 +374,17 @@ local SESSION = {
   online = { stem = "online", go = "Open activity →", label = "Online activity", file = "online" },
 }
 
-local function session_row(dir, wdir, prefix, slides_public, x)
+-- Practice sessions (filling weeks) are flexible unless `core: true`; a
+-- seminar is core unless `core: false`; lectures and online activities are core.
+local function is_flexible(kind, x)
+  local core = x.core
+  if core ~= nil then core = core == true or str(core) == "true" end
+  if kind == "practice" then return core ~= true end
+  if kind == "seminar" then return core == false end
+  return false
+end
+
+local function session_row(dir, wdir, prefix, slides_public, x, in_filling)
   local kind = str(x.kind or "lecture")
   local s = SESSION[kind]
   if not s then error("schedule.yml: unknown kind '" .. kind .. "' (lecture, seminar, practice, online)") end
@@ -382,7 +393,7 @@ local function session_row(dir, wdir, prefix, slides_public, x)
   local base = pandoc.path.join({ dir, wdir, stem })
   local fm = front_matter(base .. ".qmd")
   local ok = ready(fm)
-  local flexible = kind ~= "lecture" and kind ~= "online" and (x.core == false or str(x.core or "") == "false")
+  local flexible = is_flexible(kind, x) and not in_filling
   local file = string.format("%s/%s_%s%d", wdir, prefix, s.file, n)
   local links
   if ok then
@@ -418,26 +429,35 @@ end
 local function schedule_units(dir, prefix, slides_public, units)
   local out = { '<div class="schedule">' }
   for _, u in ipairs(units) do
-    local unit = tonumber(str(u.unit))
+    local filling = u.filling == true or str(u.filling or "") == "true"
+    local unit = tonumber(str(u.unit or ""))
     local wdir = pair_dir(tonumber(str(u.week)))
     local rows, any_ready = {}, false
     for _, x in ipairs(u.sessions or {}) do
-      local row, ok = session_row(dir, wdir, prefix, slides_public, x)
+      local row, ok = session_row(dir, wdir, prefix, slides_public, x, filling)
       table.insert(rows, row)
       any_ready = any_ready or ok
     end
-    local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", unit) }))
     local hw_html = ""
-    if ready(hw) then
-      local bits = {}
-      if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
-      if hw.due then table.insert(bits, "due " .. str(hw.due)) end
-      hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
-        wdir, unit, unit, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
+    if unit and not filling then
+      local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", unit) }))
+      if ready(hw) then
+        local bits = {}
+        if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
+        if hw.due then table.insert(bits, "due " .. str(hw.due)) end
+        hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
+          wdir, unit, unit, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
+      end
+    end
+    local head
+    if filling then
+      head = '<span class="sw-week">Practice week</span><span class="sl-tag sl-flex">Flexible</span>'
+    else
+      head = string.format('<span class="sw-week">Unit %d</span>', unit or 0)
     end
     table.insert(out, string.format(
-      '<section class="sw sw-unit %s"><header class="sw-head"><span class="sw-week">Unit %d</span>%s</header>%s</section>',
-      any_ready and "has-ready" or "", unit, hw_html, table.concat(rows, "")))
+      '<section class="sw sw-unit%s %s"><header class="sw-head">%s%s</header>%s</section>',
+      filling and " sw-filling" or "", any_ready and "has-ready" or "", head, hw_html, table.concat(rows, "")))
   end
   table.insert(out, "</div>")
   return pandoc.RawBlock("html", table.concat(out, "\n"))

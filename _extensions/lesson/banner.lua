@@ -139,7 +139,13 @@ local function schedule_info(sess)
       if kind == "lecture" then table.insert(lectures, number(x.n)) end
       if kind == sess.kind and number(x.n) == sess.n then
         found = true
-        out.core = not (x.core == false or str(x.core or "") == "false")
+        -- A practice session (a filling week) is flexible unless `core: true`;
+        -- a seminar is core unless `core: false`.
+        if kind == "practice" then
+          out.core = x.core == true or str(x.core or "") == "true"
+        else
+          out.core = not (x.core == false or str(x.core or "") == "false")
+        end
         local ps = {}
         for _, p in ipairs(x.practises or {}) do table.insert(ps, number(p)) end
         out.practises = lectures_text(ps)

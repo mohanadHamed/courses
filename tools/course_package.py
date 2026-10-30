@@ -9,8 +9,12 @@ organised by the official weekly plan of its syllabus. Run this after a full
 
 For each course it reads
 
-    courses/<slug>/schedule.yml             the units and their sessions
-                                            (`week:` = syllabus week, `slot:`)
+    courses/<slug>/schedule.yml             the weeks and their sessions:
+                                            units (core weeks) and practice
+                                            weeks (`filling: true`); `week:` =
+                                            syllabus week, `covers:` = other
+                                            syllabus weeks a merged unit
+                                            covers, `slot:`
     ../courses-private/courses/<slug>/syllabus-weeks.yml
                                             the weekly table of the syllabus,
                                             word for word (private)
@@ -27,8 +31,10 @@ and writes `_package/<slug>/` (not in git):
                           that cover each row
 
 It checks that every teaching row of the syllabus has its material and that
-every session belongs to exactly one row. Exam rows (`exam: true`) show the
-exam as the syllabus does.
+every session belongs to exactly one week of the schedule. A unit that
+covers two syllabus weeks (`covers:`) is listed in both rows; its files are
+in the folder of its `week:`. Exam rows (`exam: true`) show the exam as the
+syllabus does.
 
 syllabus-weeks.yml:
 
@@ -205,18 +211,21 @@ def materials(slug, unit, prefix):
     for s in unit.get("sessions") or []:
         kind, n = s.get("kind", "lecture"), s["n"]
         label = "%s %d" % (LABEL[kind], n)
-        if kind in ("seminar", "practice") and s.get("core") is False:
+        if (kind == "practice" and s.get("core") is not True) or (kind == "seminar" and s.get("core") is False):
             label += " (flexible)"
         labels.append(label)
         base = "%s_%s%d" % (prefix, FILE[kind], n)
         names = [base + "_tasks.pdf"] if kind == "online" else [base + ".pdf", base + "_slides.pptx"]
         files += [os.path.join(src, x) for x in names]
         pages.append((label, s.get("title", ""), url + "%s-%02d.html" % (STEM[kind], n)))
-    hw = os.path.join(src, "%s_homework%d.pdf" % (prefix, unit["unit"]))
-    if os.path.exists(os.path.join(ROOT, "courses", slug, wdir, "homework-%02d.qmd" % unit["unit"])):
-        labels.append("Homework %d" % unit["unit"])
+    u = unit.get("unit")
+    if u is None or unit.get("filling"):
+        return labels, files, pages
+    hw = os.path.join(src, "%s_homework%d.pdf" % (prefix, u))
+    if os.path.exists(os.path.join(ROOT, "courses", slug, wdir, "homework-%02d.qmd" % u)):
+        labels.append("Homework %d" % u)
         files.append(hw)
-        pages.append(("Homework %d" % unit["unit"], "", url + "homework-%02d.html" % unit["unit"]))
+        pages.append(("Homework %d" % u, "", url + "homework-%02d.html" % u))
     return labels, files, pages
 
 
@@ -291,8 +300,12 @@ def build(slug):
     row_mats, seen = {}, {}
     for u in units:
         w = u["week"]
-        if w not in rows:
-            problems.append("%s: unit %s is in syllabus week %s, which the syllabus table does not have" % (slug, u["unit"], w))
+        name = "practice week" if u.get("filling") else "unit %s" % u.get("unit")
+        covers = [w] + [c for c in (u.get("covers") or []) if c != w]
+        missing = [c for c in covers if c not in rows]
+        if missing:
+            problems.append("%s: %s is in syllabus week(s) %s, which the syllabus table does not have"
+                            % (slug, name, ", ".join(map(str, missing))))
             continue
         labels, files, pages = materials(slug, u, prefix)
         for s in u.get("sessions") or []:
@@ -300,17 +313,26 @@ def build(slug):
             if key in seen:
                 problems.append("%s: %s %d is in weeks %s and %s" % (slug, LABEL[key[0]], key[1], seen[key], w))
             seen[key] = w
-        row_mats.setdefault(w, []).extend(labels)
-        wdir = os.path.join(out_dir, "week-%02d" % w)
-        os.makedirs(wdir, exist_ok=True)
+        for c in covers:
+            row_mats.setdefault(c, []).extend(labels)
         for f in files:
-            if os.path.exists(f):
-                shutil.copy2(f, wdir)
-            else:
+            if not os.path.exists(f):
                 problems.append("%s: week %d: %s was not rendered" % (slug, w, os.path.relpath(f, ROOT)))
-        with open(os.path.join(wdir, "pages.html"), "w", encoding="utf-8") as fh:
-            fh.write("<!doctype html><meta charset=\"utf-8\"><title>Week %d</title><ul>%s</ul>" % (w, "".join(
-                '<li>%s %s: <a href="%s">%s</a></li>' % (html.escape(l), html.escape(t), u_, u_) for l, t, u_ in pages)))
+        for c in covers:
+            wdir = os.path.join(out_dir, "week-%02d" % c)
+            os.makedirs(wdir, exist_ok=True)
+            for f in files:
+                if os.path.exists(f):
+                    shutil.copy2(f, wdir)
+            pages_path = os.path.join(wdir, "pages.html")
+            old_items = ""
+            if os.path.exists(pages_path):
+                with open(pages_path, encoding="utf-8") as fh:
+                    m = re.search(r"<ul>(.*)</ul>", fh.read(), re.S)
+                    old_items = m.group(1) if m else ""
+            with open(pages_path, "w", encoding="utf-8") as fh:
+                fh.write("<!doctype html><meta charset=\"utf-8\"><title>Week %d</title><ul>%s%s</ul>" % (c, old_items, "".join(
+                    '<li>%s %s: <a href="%s">%s</a></li>' % (html.escape(l), html.escape(t), u_, u_) for l, t, u_ in pages)))
     for w, r in rows.items():
         os.makedirs(os.path.join(out_dir, "week-%02d" % w), exist_ok=True)
         if not r.get("exam") and not row_mats.get(w):

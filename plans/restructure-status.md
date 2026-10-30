@@ -1,10 +1,151 @@
-# Restructure (plan v2): status on 2026-10-30 (end of the fourth session)
+# Restructure: status
+
+Branch `restructure-units` (PR mohanadHamed/courses#25, signed commits). The
+newest plan is **plan v3** below; plan v2 (`plans/restructure-19-lectures.md`)
+and its history follow at the end of this file.
+
+## Plan v3 (teacher's request of 2026-10-31): core weeks and practice weeks
+
+The teacher's notes:
+
+1. **Every week is one lecture and one seminar** in Game Math, Computing
+   Systems and Digital Media (the study plan: Game Math 2 theory + 1
+   seminar, taught as 90 min + 90 min; the other two 1 theory + 1 seminar,
+   60 + 60). Order: Lecture 1, Seminar 1, Lecture 2, Seminar 2, … The
+   seminar of a week practises the lecture of the same week.
+2. **Digital Skills is fully practical and blended** (study plan: 2 hours
+   computer lab): every week a face-to-face lab lecture and a practical
+   online activity (an interactive lesson or video with tasks submitted on
+   the e-learning platform). It has no seminars.
+3. **10–12 core weeks** with new lectures and seminars, so that holidays and
+   absences leave room. The other weeks of the 15-week plan on the
+   e-learning platform are **filling weeks** (on the site: *practice
+   weeks*): revision, exams, an applied problem set, a case study, a
+   practical lab, project presentations. They have **no new content**, so
+   they can be skipped and nothing is missing for the students.
+
+### Design (decided 2026-10-31)
+
+- `schedule.yml`: `units:` lists the 15 weeks in teaching order. A core week
+  is a unit (`unit: N`: Lecture N, Seminar N or Online activity N, Homework
+  N). A filling week has `filling: true` and Practice N sessions (always
+  flexible); exam-only weeks are not listed. `covers:` lists the other
+  syllabus weeks of a merged unit (course package). Seminars are core.
+- Course page: "Unit N" cards and "Practice week" cards (dashed, tagged
+  Flexible). Banner: a practice session shows "Practice N · practises …" and
+  "Flexible". Course package: a merged unit is listed in every syllabus row
+  it covers; practice weeks fill their rows.
+- **Game Math: 12 core weeks.** The two lectures of syllabus weeks 2, 3, 4
+  and 11 are merged into one 90-min lecture (7 sections); the second
+  application moves to the seminar of the week. Practice weeks: 8
+  (Practice 1, revision of Lectures 1–7, before the midterm), 14 (Practice 2
+  applied problem set, Practice 3 case study: movement of a 2D object) and
+  15 (Practice 4 case study: random levels, Practice 5 course revision).
+  Old → new lectures: 1→1, 2+3→2, 4+5→3, 6+7→4, 8→5, 9→6, 10→7, 11→8,
+  12→9, 13+14→10, 15→11, 16→12, 17→Practice 3, 18→Practice 4, 19→Practice 5.
+  Old → new seminars: 1→1, 2→5, 3→6, 4→7, 5→Practice 1, 6→8, 7→9, 8→11,
+  9→12, 10→Practice 2; new Seminars 2, 3, 4 and 10. Homework 1–12 (old
+  9–13 → 8–12; old 14 removed: no homework in a practice week).
+- **Computing Systems: 12 core weeks.** Lectures 5 and 6 are merged
+  (operating systems: processes, memory, files and devices; unit 5 covers
+  syllabus weeks 5 and 6), Seminars 5 and 6 become one seminar with two
+  activities. Old 7–13 → 6–12. Practice weeks: the midterm week (no
+  session), Practice 1 (old Lecture 14: performance and compatibility case
+  studies) and Practice 2 (old Seminar 14: project presentations).
+  Homework 5 + 6 → 5; old 7–13 → 6–12.
+- **Digital Media: 12 core weeks.** Lectures 12 and 13 are merged
+  (intellectual property, licences, credits; unit 12 covers syllabus weeks
+  13 and 14), Seminars 12 and 13 become one seminar with two activities.
+  Practice weeks: the midterm week, Practice 1 (old Lecture 14: team
+  workshop) and Practice 2 (old Seminar 14: team presentation). Homework
+  12 + 13 → 12. D1 (team work) keeps a core part in the IP lecture and
+  seminar.
+- **Digital Skills: 10 core weeks** (Lectures 1–10, each with its online
+  activity) and 5 practice weeks (Practice 1–5, lab practice with no new
+  ideas, each with an online practice activity). Online activities keep
+  their numbers 1–15 (one per week of the platform). Changes: Online
+  activities 9 and 10 swap (the AI-with-PowerPoint activity goes to the
+  PowerPoint unit; the five-slide talk to the practice week); a new
+  Lecture 10 "Excel (3): Summarizing Data with AI Help" in week 13 from
+  Practice 4 and Online activity 13 (PivotTables are new content, so they
+  need a core lecture); old Lecture 10 (project presentations) becomes
+  Practice 5; old Practice 5 becomes Practice 4.
+- Helpers: `plans/helpers/qmd.py` (split a .qmd into level-2 blocks and
+  join them again; used for the merges) and `plans/helpers/renum.py`
+  (rename sessions with `git mv` and map "Lecture N", "Seminar N",
+  "Homework N" references). The files as they were before plan v3 are at
+  commit `0ae7d8d` (`git show 0ae7d8d:courses/…`).
+
+### Done
+
+- Pipeline: `shortcodes.lua` (course page: practice weeks), `banner.lua`
+  (practice sessions flexible), `lesson.css`, `tools/course_package.py`
+  (`filling`, `covers`).
+
+### Still to do (in this order)
+
+1. **Game Math**
+   - Renumber the sessions (`plans/helpers/renum.py`) and rewrite `schedule.yml`.
+   - Units 2, 3 and 4: merge the two lectures of the week and write the new seminar.
+   - Lecture 10 (week-11): merge old 13 + 14 (see the design).
+   - Seminar 10 "Probability in Loot Drops and Critical Hits" (week-11):
+     three short activities: theory and experiment with Roll Lab (old 13.6),
+     critical hits with Conditional Lab (condition, multiplication rule),
+     a crate's expected value and fair price with Crate Lab (1/p). Then
+     remove Raft Odds (sim, GIF, poster, scenario, `record-all.sh` line) and
+     the images no session uses (`large-numbers`?).
+   - Lecture 11 (week-12): "(lecture 10)" about many tries refers to
+     Seminar 10 now; check the references to old 13.6.
+   - Seminar 12 (week-13): add a short D1 part (present the solution of
+     the balancing problem in three sentences; the team box with an
+     individual alternative in the worksheet), as `schedule.yml` says.
+   - Practice 1 (week-08, old Seminar 5): "Lectures 1–7" text and
+     `practises`; check the old lecture numbers inside.
+   - Practice 2 (week-14, old Seminar 10): references to Lectures 1–12.
+   - Practices 3, 4, 5 (old Lectures 17, 18, 19, in lecture format): convert
+     to the practice format (Recall, 2–3 activities, Wrap-up; worksheet with
+     `mkbook.py`; Recall / Activity / Check slides), no new ideas. Keep the
+     team activity (D1) of old 17 in the worksheet of Practice 3.
+   - Course page text (`index.qmd`), `plan.md`, `NOTES.md`; check the
+     figures and sims that no session uses; `check_size.py --all` clean.
+2. **Computing Systems** (design above): merge Lectures 5 + 6 and Seminars
+   5 + 6 (week-05; move the needed figures and sims from week-06),
+   renumber 7–13 → 6–12, Lecture 14 → Practice 1 (practice format),
+   Seminar 14 → Practice 2, homework 5 + 6 → 5 and renumber, `schedule.yml`,
+   `plan.md`, `NOTES.md`, `index.qmd`.
+3. **Digital Media** (design above): merge Lectures 12 + 13 and Seminars
+   12 + 13 (week-13; move figures and sims from week-14), Lecture 14 →
+   Practice 1, Seminar 14 → Practice 2, homework 12 + 13 → 12,
+   `schedule.yml`, `plan.md`, `NOTES.md`, `index.qmd`.
+4. **Digital Skills** (design above): swap Online activities 9 and 10 (files,
+   sims, figures, dues), new Lecture 10 from Practice 4 + Online activity
+   13 (notes, page, slides), Online activity 13 practises it, old Lecture
+   10 → Practice 5, old Practice 5 → Practice 4, `schedule.yml`, `plan.md`,
+   `NOTES.md`, `index.qmd`, sim comments (`month-data.js`).
+5. **Rules:** `AUTHORING.md` ("Units and sessions", seminars, practice
+   weeks, homework, the mapping of syllabus weeks, a lessons-learned entry),
+   the templates, CI output check.
+6. **courses-private** (clone it next to this repo as `../courses-private`):
+   homework solutions renamed and merged (Game Math 9–13 → 8–12, 14
+   removed; Computing Systems 5 + 6 → 5, 7–13 → 6–12; Digital Media 12 +
+   13 → 12), Digital Skills online solutions 9 ↔ 10, `moodle/<slug>-weeks.md`
+   rewritten for the 15-week plan (core weeks and filling weeks). Commit on
+   `main` and push.
+7. **GIF recordings** for new or changed slides with a QR code (none new so
+   far: the seminars reuse sims that have GIFs).
+8. **Build and check:** full `quarto render` on the Mac (Quarto 1.10.20
+   is installed; CI pins 1.10.19), `tools/course_package.py`, then
+   `quarto preview` for the teacher's review on localhost.
+
+---
+
+## History: plan v2, status on 2026-10-30 (end of the fourth session)
 
 Branch `restructure-units` (signed commits, one per unit). Plan:
 `plans/restructure-19-lectures.md`. Rules: `AUTHORING.md` and each course's
 `NOTES.md` / `plan.md` / `schedule.yml`.
 
-## The teacher's notes of 2026-10-30 (now rules in AUTHORING.md)
+### The teacher's notes of 2026-10-30 (now rules in AUTHORING.md)
 
 1. **Lessons as simple as the outcomes allow**: the estimated limit (about
    30 % simpler than October 2026), only the simplest concepts that reach
@@ -22,7 +163,7 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
    (`SEMINAR_SIZES`, `SEMINAR_TIME`, `SEMINAR_FORBIDDEN`). Templates in
    `shared/templates/seminar-*` follow it.
 
-## Done
+### Done
 
 - Steps 1–2 of the plan (pipeline, rules, schedules, plans).
 - **Game Math: all 15 units**; **Computing Systems: all 14 units**
@@ -103,7 +244,7 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
 - `check_size.py --all`: no warnings in any course. `check_figures.py`: no
   warnings.
 
-## Still to do
+### Still to do
 
 1. Push the two courses-private commits to its `main` (they exist only in
    the cloud session's clone).
@@ -113,7 +254,7 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
 3. The teacher's review: one unit of each course in the browser
    (`quarto preview`), the open decisions of the plan, and the GIFs.
 
-## How a unit was converted (Digital Media; use the same way)
+### How a unit was converted (Digital Media; use the same way)
 
 For a team or project unit (D1), write the team activity box only in the
 notes of the lecture and in the worksheet of the seminar (add it by hand
@@ -142,7 +283,7 @@ alternative and a `.check`.
    session uses (and their lines in `record-all.sh` and their scenarios).
 8. One unit per commit (signed; the message describes the change).
 
-## Tools
+### Tools
 
 - Mac: Quarto is not installed locally (CI pins 1.10.19).
 - Cloud session of 2026-10-30: Quarto 1.10.19 from the GitHub release;

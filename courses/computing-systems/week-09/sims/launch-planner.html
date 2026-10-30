@@ -22,7 +22,7 @@
   <div class="tabs" id="mac"></div>
   <table class="p" id="t"></table>
   <p class="message" id="msg"></p>
-  <p class="note">Round numbers for a plan, checked in 2026; fees and shares change: always check the official pages.</p>
+  <p class="note">Round numbers for a plan, checked in 2026; shares change: always check a dated source.</p>
 </main>
 
 <script src="../../../../shared/sims/sim-base.js"></script>
@@ -32,8 +32,8 @@
   const $ = (id) => document.getElementById(id);
   const s = { plat: "android", mac: false };
   const P = {
-    android: { reach: 70, fee: "25 USD, once (Google Play)", devices: 3, build: "any PC (Windows, macOS or Linux)", review: "usually hours to a few days", pkg: ".aab for Google Play" },
-    ios: { reach: 30, fee: "99 USD every year (Apple Developer Program)", devices: 2, build: "a Mac with Xcode", review: "usually one to two days", pkg: ".ipa through App Store Connect" },
+    android: { reach: 70, devices: 3, build: "any PC (Windows, macOS or Linux)", pkg: ".apk or .aab", updates: "from each phone maker, often late" },
+    ios: { reach: 30, devices: 2, build: "a Mac with Xcode", pkg: ".ipa", updates: "from Apple, for all supported iPhones" },
   };
   function tabs(id, items, key) {
     Kit.buttons($(id), items.map(([k, label]) => ({ k, label })), (k) => { s[key] = k === "true" ? true : k === "false" ? false : k; tabs(id, items, key); show(); });
@@ -44,17 +44,16 @@
     const reach = L.reduce((a, k) => a + P[k].reach, 0);
     const rows = [
       ["Phones it can reach (worldwide)", `about ${reach} %`],
-      ["Developer account", L.map((k) => P[k].fee).join(" + ")],
       ["Build machine", L.map((k) => P[k].build).join(" and ")],
       ["Test phones (at least)", `${L.reduce((a, k) => a + P[k].devices, 0)} (${L.map((k) => (k === "android" ? "weak, typical, strong Android" : "an older and a newer iPhone")).join("; ")})`],
-      ["Store review", L.map((k) => (k === "android" ? "Google: " : "Apple: ") + P[k].review).join("; ")],
-      ["Package to upload", L.map((k) => P[k].pkg).join("; ")],
+      ["Package", L.map((k) => P[k].pkg).join("; ")],
+      ["System updates", L.map((k) => P[k].updates).join("; ")],
     ];
     $("t").innerHTML = rows.map(([a, b]) => `<tr><th>${a}</th><td>${b}</td></tr>`).join("");
     const needMac = L.includes("ios") && !s.mac;
     $("msg").textContent = needMac ? "Problem: an iOS build needs a Mac with Xcode. Byte Bay must buy or rent a Mac first." :
-      s.plat === "both" ? "Both: the most players, but two accounts, two builds, more test phones and two reviews." :
-      s.plat === "android" ? "Android only: most phones and a cheap account, but many devices to test." : "iOS only: fewer phones, but a small set of devices to test and players who often spend more in games.";
+      s.plat === "both" ? "Both: the most players, but two builds and more test phones." :
+      s.plat === "android" ? "Android only: most phones, but many devices to test." : "iOS only: fewer phones, but a small set of devices to test and players who often spend more in games.";
     $("msg").classList.toggle("bad", needMac);
   }
   tabs("plat", [["android", "Android only"], ["ios", "iOS only"], ["both", "Android and iOS"]], "plat");

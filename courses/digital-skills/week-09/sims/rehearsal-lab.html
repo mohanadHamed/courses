@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Rehearsal Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .pv { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; background: #343a40; border-radius: 12px; padding: 10px; color: #f8f9fa; }
+    @media (max-width: 520px) { .sim .pv { grid-template-columns: 1fr; } }
+    .sim .pv .lab { font-size: .78rem; font-weight: 800; color: #ced4da; margin-bottom: 3px; }
+    .sim .pv canvas { display: block; width: 100%; border-radius: 4px; background: #fff; }
+    .sim .clock { font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums; color: #ffd43b; }
+    .sim .notes { background: #fff; color: #212529; border-radius: 6px; padding: 6px 8px; font-size: .92rem; min-height: 3.2em; margin-top: 8px; }
+    .sim .times { margin: 8px 0 0; padding-left: 1.2em; font-weight: 700; font-size: .92rem; }
+    .sim .times .ok { color: #2b8a3e; } .sim .times .no { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Rehearsal Lab: Presenter View and the timer</h1>
+  <p class="note">A practice model of Presenter View. Sami rehearses a five-slide talk of about three minutes. The clock runs fast: 1 second here is 10 seconds of the real talk. Press <b>Next slide</b> when Sami has said the notes of the slide.</p>
+  <div class="pv">
+    <div>
+      <div class="lab">Current slide (the audience sees only this)</div>
+      <canvas id="cur" aria-label="The current slide"></canvas>
+      <div class="notes" id="notes"></div>
+    </div>
+    <div>
+      <div class="lab">Next slide</div>
+      <canvas id="nxt" aria-label="The next slide"></canvas>
+      <div class="lab" style="margin-top:8px">Timer</div>
+      <div class="clock" id="clock">0:00</div>
+      <div class="lab" id="plan"></div>
+    </div>
+  </div>
+  <div class="controls"><button type="button" id="start">Start the rehearsal</button><button type="button" id="next">Next slide ▶</button></div>
+  <ol class="times" id="times"></ol>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="slide-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const FAST = 10;   // seconds of the real talk per second here
+  // Sami's talk: the slide, the speaker notes and the planned time (seconds).
+  const T = [
+    { s: { layout: "Title Slide", theme: "Sunrise", title: "Library hours: open in the evening", body: ["Sami, first year"] }, notes: "Hello, I am Sami. My talk is about the library hours.", plan: 20, name: "the title" },
+    { s: { layout: "Title and Content", theme: "Sunrise", title: "The problem", body: ["Lessons end at 4 pm", "The library closes at 3 pm"] }, notes: "Many of us have lessons until 4 pm. Then the library is already closed.", plan: 45, name: "the problem" },
+    { s: { layout: "Title and Content", theme: "Sunrise", title: "The idea", body: ["Open until 7 pm", "Three days a week"] }, notes: "My idea: the library stays open until 7 pm, on three days of the week.", plan: 45, name: "the idea" },
+    { s: { layout: "Title and Content", theme: "Sunrise", title: "An example", body: ["My class: 25 students", "20 would come in the evening"] }, notes: "I asked my class. 20 of the 25 students would come in the evening.", plan: 45, name: "the example" },
+    { s: { layout: "Title Slide", theme: "Sunrise", title: "Thank you!", body: ["Questions?"] }, notes: "Thank you. Do you have questions?", plan: 25, name: "thank you" },
+  ];
+  const PLAN = T.reduce((a, x) => a + x.plan, 0);   // 180 s
+  // i: the slide (-1 before the start, T.length at the end); t0: start of the slide; spent: seconds per slide.
+  const st = { i: -1, t0: 0, spent: [], tries: 0 };
+  const mmss = (s) => Math.floor(s / 60) + ":" + String(Math.round(s % 60)).padStart(2, "0");
+  const now = () => (performance.now() - st.t0) / 1000 * FAST;
+  const cur = Kit.canvas($("cur"), (W) => W * 9 / 16), nxt = Kit.canvas($("nxt"), (W) => W * 9 / 16);
+  function say(t, cls) { $("msg").textContent = t; $("msg").className = "message " + (cls || ""); }
+  function judge(k) {
+    const d = st.spent[k] - T[k].plan;
+    return Math.abs(d) <= 10 ? ["ok", "about right"] : d < 0 ? ["no", "too short"] : ["no", "too long"];
+  }
+  function list() {
+    $("times").innerHTML = st.spent.map((s, k) => { const [c, w] = judge(k); return `<li class="${c}">Slide ${k + 1}, ${T[k].name}: ${mmss(s)} (plan ${mmss(T[k].plan)}), ${w}</li>`; }).join("");
+  }
+  function show() {
+    const i = Math.max(0, Math.min(st.i, T.length - 1));
+    $("notes").textContent = st.i < 0 ? "Speaker notes appear here: only Sami sees them." : st.i >= T.length ? "The talk is over." : T[i].notes;
+    $("plan").textContent = st.i >= 0 && st.i < T.length ? `Slide ${st.i + 1} of 5 · plan: ${mmss(T[st.i].plan)}` : `The plan: ${mmss(PLAN)} in all`;
+    list();
+  }
+  $("start").addEventListener("click", () => {
+    st.i = 0; st.spent = []; st.t0 = performance.now(); st.tries++;
+    say("The rehearsal runs. Read the notes, then press Next slide."); show();
+  });
+  $("next").addEventListener("click", () => {
+    if (st.i < 0 || st.i >= T.length) { say("Press Start the rehearsal first.", "bad"); return; }
+    st.spent.push(Math.round(now()));
+    st.i++; st.t0 = performance.now(); show();
+    if (st.i < T.length) return;
+    const total = st.spent.reduce((a, b) => a + b, 0);
+    const which = (w) => st.spent.map((_, k) => (judge(k)[1] === w ? T[k].name : null)).filter(Boolean);
+    const long = which("too long"), short = which("too short");
+    if (Math.abs(total - PLAN) <= 20 && !long.length && !short.length) { say(`✓ ${mmss(total)} in all: about three minutes, and every slide kept its time. Sami is ready.`, "good"); Kit.good(); }
+    else say(`${mmss(total)} in all (plan ${mmss(PLAN)}).` + (long.length ? ` Too long: ${long.join(", ")}: say less there.` : "") +
+      (short.length ? ` Too short: ${short.join(", ")}: say the notes fully.` : "") + " Then rehearse again.", "bad");
+  });
+  // The clock is a timer, not the drawing (a hidden tab still counts).
+  setInterval(() => { $("clock").textContent = st.i >= 0 && st.i < T.length ? mmss(now()) : st.i >= T.length ? mmss(st.spent.reduce((a, b) => a + b, 0)) : "0:00"; }, 100);
+  Kit.loop(() => {
+    const i = Math.max(0, Math.min(st.i, T.length - 1));
+    cur.ctx.fillStyle = "#fff"; cur.ctx.fillRect(0, 0, cur.W, cur.H);
+    SK.draw(cur.ctx, 0, 0, cur.W, st.i >= T.length ? { layout: "Title Slide", theme: "Plain", title: "End of the slide show", body: [] } : T[i].s);
+    nxt.ctx.fillStyle = "#fff"; nxt.ctx.fillRect(0, 0, nxt.W, nxt.H);
+    const n = st.i + 1;
+    if (n < T.length && st.i < T.length) SK.draw(nxt.ctx, 0, 0, nxt.W, T[n].s);
+    else { nxt.ctx.fillStyle = "#868e96"; nxt.ctx.font = "700 13px sans-serif"; nxt.ctx.textAlign = "center"; nxt.ctx.fillText("End of the show", nxt.W / 2, nxt.H / 2); }
+  });
+  window.RL = { start: () => $("start").click(), next: () => $("next").click(), state: st };
+  show(); say("Press Start the rehearsal. Keep each slide close to its planned time.");
+})();
+</script>
+</body>
+</html>

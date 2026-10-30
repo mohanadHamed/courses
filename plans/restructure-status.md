@@ -94,11 +94,15 @@ The teacher's notes:
   the lecture), new Seminar 3 "Solving Movement and Aiming Problems"
   (Asteroid Beam with along and across; a floor normal and the slide with
   Normal Lab), Homework 3 unchanged.
+- Game Math unit 4: Lecture 4 "Trigonometry: the Unit Circle, Rotation and
+  Oscillation" (old 6.1–6.4 and 7.1, 7.3, 7.4; Turn Lab replaced by a paper
+  task in 4.5; the short turn cut), new Seminar 4 "Trigonometry in Game
+  Motion" (aim with atan2 in Turn Lab; an orb and Sky Lift), Homework 4
+  unchanged.
 
 ### Still to do (in this order)
 
 1. **Game Math**
-   - Unit 4: merge the two lectures of the week and write the new seminar.
    - Lecture 10 (week-11): merge old 13 + 14 (see the design).
    - Seminar 10 "Probability in Loot Drops and Critical Hits" (week-11):
      three short activities: theory and experiment with Roll Lab (old 13.6),

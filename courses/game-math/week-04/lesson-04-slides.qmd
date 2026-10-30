@@ -1,14 +1,14 @@
 ---
-title: "Trigonometry: Sine, Cosine, Tangent and the Unit Circle"
-subtitle: "Lecture 6"
+title: "Trigonometry: the Unit Circle, Rotation and Oscillation"
+subtitle: "Lecture 4"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary angle right-triangle hypotenuse sine cosine tangent unit-circle >}}
+{{< glossary angle sine cosine tangent unit-circle atan2 angular-speed oscillation amplitude period >}}
 
-## 6.1 Which way is the drone facing?
+## 4.1 Which way is the drone facing?
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -22,17 +22,6 @@ format: lesson-pptx
 :::
 ::::
 
-## Example · Turning past a full turn
-
-A turret faces 350°, and it turns 20° anticlockwise.
-**Which angle does the turret face now?**
-
-::: {.reveal}
-1. The new angle is 350° + 20° = 370°.
-2. A full turn is 360°, so 370° − 360° = 10°.
-3. The turret faces **10°**, a little above the +x axis.
-:::
-
 ## Try it 1 · Headings
 
 a) A drone has the heading 180°. Which way does it fly?
@@ -45,7 +34,7 @@ b) 270°
 c) 0°
 :::
 
-## 6.2 Sine, cosine and tangent
+## 4.2 Sine, cosine and tangent
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -90,7 +79,7 @@ b) 3 ÷ 4 = 0.75
 c) the hypotenuse
 :::
 
-## 6.3 The unit circle
+## 4.3 The unit circle
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -103,17 +92,6 @@ c) the hypotenuse
 ![](images/unit-circle.png)
 :::
 ::::
-
-## Example · Mirror angles
-
-The point at 30° on the unit circle is (0.87, 0.5).
-**What are the points at 150°, 210° and 330°?**
-
-::: {.reveal}
-1. 150° is the mirror image across the y-axis, so the point is **(−0.87, 0.5)**.
-2. 210° is half a turn from 30°, so the point is **(−0.87, −0.5)**.
-3. 330° is the mirror image across the x-axis, so the point is **(0.87, −0.5)**.
-:::
 
 ## Live demo · Unit Circle Lab
 
@@ -131,7 +109,7 @@ b) Both are negative.
 c) 0.6² + 0.8² = 0.36 + 0.64 = 1
 :::
 
-## 6.4 From an angle to a movement
+## 4.4 From an angle to a movement
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -156,17 +134,6 @@ The heading is 30°, and the speed is 10.
 3. After 1 second the drone is at (8.7, 5).
 :::
 
-## Example · A ball kicked backwards
-
-A ball is kicked at 135° with the speed 4.
-**What is the velocity of the ball?**
-
-::: {.reveal}
-1. 135° is in the second quadrant, so x is negative and y is positive.
-2. The direction is (cos 135°, sin 135°) = (−0.71, 0.71).
-3. The velocity is 4 × (−0.71, 0.71), about **(−2.8, 2.8)**: left and up.
-:::
-
 ## Try it 4 · Velocity
 
 a) A car drives at 0° with the speed 12. What is its velocity?
@@ -179,23 +146,127 @@ b) (7.1, 7.1)
 c) (0, 3)
 :::
 
-## Try it 5 · Which heading?
+## 4.5 Which angle is the target at?
 
-The facts: the depot is at (0, 0). The drone flies at the speed 10 for 1 second. Ana lives at (5, 8.7) and Ben at (0, 10).
+:::: {.columns}
+::: {.column width="50%"}
+- A turret needs the angle of the vector d to its target.
+- tan θ = y ÷ x loses the signs, so (4, 4) and (−4, −4) both give 1.
+- atan2(y, x) uses the signs and gives the right angle in every quadrant.
+- **Do it:** Draw the target (−3, 3) on squared paper. Which quadrant is it in, and which angle does atan2 give?
+:::
+::: {.column width="50%"}
+![](images/atan2.png)
+:::
+::::
 
-a) Which heading reaches Ana?
-b) Which heading reaches Ben?
+## Example · Four drones
+
+A turret stands at (0, 0). Drones hover at A (4, 4), B (−4, 4), C (−4, −4) and E (0, −3).
+**At which angle is each drone?**
+
+::: {.reveal}
+1. A at (4, 4) is at **45°**.
+2. B at (−4, 4) is at **135°**, although tan alone would say −45°.
+3. C at (−4, −4) is at **−135°**, the same direction as 225°.
+4. E at (0, −3) is straight down, at **−90°**.
+:::
+
+## Try it 5 · The angle to a target
+
+a) A drone is at (5, 5) from the turret. At which angle is it?
+b) A drone is at (0, −3) from the turret. At which angle is it?
+c) Why is tan θ = y ÷ x not enough to find the angle?
 
 ::: {.answer}
-a) 60°, because 10 × (cos 60°, sin 60°) = (5, 8.7)
-b) 90°
+a) 45°
+b) −90°
+c) The division loses the signs of x and y.
+:::
+
+## 4.6 Moving in a circle
+
+:::: {.columns}
+::: {.column width="50%"}
+- An object on a circle is at C + r × (cos θ, sin θ).
+- The angle grows at the angular speed: θ = ω × t.
+- One full turn takes the period T = 360° ÷ ω.
+- **Do it:** In Wave Lab, choose Orbit with the radius 2 and the period 4 s. Where is the point at 1 s?
+:::
+::: {.column width="50%"}
+![](images/orbit.png)
+:::
+::::
+
+## Example · The orb
+
+An orb circles the hero at C = (5, 5) with the radius 2, at 90° per second, starting at 0°.
+**Where is the orb at 0 s, 1 s and 2 s?**
+
+::: {.reveal}
+1. At 0 s the angle is 0°, so the orb is at (5, 5) + 2 × (1, 0) = **(7, 5)**.
+2. At 1 s the angle is 90°, so the orb is at (5, 5) + 2 × (0, 1) = **(5, 7)**.
+3. At 2 s the angle is 180°, so the orb is at **(3, 5)**, and one turn takes 4 s.
+:::
+
+## Try it 6 · Orbits
+
+a) The same orb at 3 s: where is it?
+b) A moon turns at 30° per second. What is its period?
+c) A cabin turns at 30° per second. After how many seconds is it at 90°?
+
+::: {.answer}
+a) (5, 3)
+b) 12 s
+c) 3 s
+:::
+
+## 4.7 Bobbing up and down
+
+:::: {.columns}
+::: {.column width="50%"}
+- A value that goes up and down again and again is an oscillation.
+- y = c + A × sin(360° × t ÷ T), with the middle c, the amplitude A and the period T.
+- The value is at the top at a quarter of the period and at the bottom at three quarters.
+- **Do it:** In Wave Lab, choose Bob with A = 3 and T = 4 s. What is the height at 3 s?
+:::
+::: {.column width="50%"}
+![](images/sine-wave.png)
+:::
+::::
+
+## Example · A bobbing coin
+
+A coin moves by y = 4 + 1 × sin(360° × t ÷ 2).
+**Where is the coin at 0.5 s, 1 s and 1.5 s?**
+
+::: {.reveal}
+1. At 0.5 s the angle is 90°, sin 90° = 1, and the coin is at 4 + 1 = **5**.
+2. At 1 s the angle is 180°, sin 180° = 0, and the coin is at the middle, **4**.
+3. At 1.5 s the angle is 270°, sin 270° = −1, and the coin is at 4 − 1 = **3**.
+:::
+
+## Live demo · Wave Lab
+
+{{< sim file="sims/wave-lab.html" poster="sims/wave-lab.png" title="Wave Lab: circle, bob and sweep" task="**Show:** play the Bob mode, then switch to Orbit and Sweep. **Ask:** how does the circle on the left make the wave on the right?" >}}
+
+## Try it 7 · Bobbing
+
+a) A coin has the middle 2, the amplitude 0.5 and the period 2 s. How high is it at 0.5 s?
+b) A coin bobs between 3 and 5. What are its middle and its amplitude?
+c) A lift has the period 6 s. When is it at the top for the first time?
+
+::: {.answer}
+a) 2.5
+b) the middle 4 and the amplitude 1
+c) 1.5 s
 :::
 
 ## Game challenge · Drone Drop
 
 {{< sim file="sims/drone-drop.html" poster="sims/drone-drop.png" title="Drone Drop: choose the heading to each house" kind="game" task="**The story:** a drone flies from the depot at the speed 10 for 1 second, to Ana, Ben and Cara. **Play:** in each round, choose the heading that brings the parcel to the house." >}}
 
-## Try it 6 · New customers (harder)
+## Try it 8 · New customers (harder)
 
 The facts: the depot is at (0, 0). The drone flies at the speed 10 for 1 second. cos 30° = 0.87 and sin 30° = 0.5.
 
@@ -211,8 +282,9 @@ c) 270° (or −90°)
 
 ## Summary
 
-- An angle is the turn from the +x axis, and positive angles turn anticlockwise.
+- An angle starts at +x and grows anticlockwise, and 360° is a full turn.
 - Sine, cosine and tangent compare the sides of a right triangle.
 - The point at the angle θ on the unit circle is (cos θ, sin θ).
-- An object at the angle θ with the speed s moves with s (cos θ, sin θ).
-- Game code turns degrees into radians before it computes a sine or a cosine.
+- A velocity at the angle θ is speed × (cos θ, sin θ), and atan2 goes back from a vector to its angle.
+- An object in a circle is at C + r (cos ωt, sin ωt).
+- A bobbing value is c + A sin(360° × t ÷ T).

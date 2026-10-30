@@ -1,8 +1,8 @@
 ---
-title: "Trigonometry: Sine, Cosine, Tangent and the Unit Circle"
-description: "Angles in game maths, sine, cosine and tangent in a right triangle, the unit circle, and from an angle to a velocity."
-lesson: 6
-ilos: [A2]
+title: "Trigonometry: the Unit Circle, Rotation and Oscillation"
+description: "Angles and headings, sine, cosine and tangent, the unit circle, from an angle to a movement, the angle to a target with atan2, moving in a circle, and bobbing with sine."
+lesson: 4
+ilos: [A2, B1]
 format: lesson-html
 ---
 
@@ -13,9 +13,9 @@ has its answer: try first, then check.
 
 ## Key terms
 
-{{< glossary angle degree right-triangle hypotenuse sine cosine tangent unit-circle radian unit-vector velocity quadrant >}}
+{{< glossary angle degree right-triangle hypotenuse sine cosine tangent unit-circle quadrant atan2 angular-speed oscillation amplitude period >}}
 
-## 6.1 Which way is the drone facing? Angles
+## 4.1 Which way is the drone facing? Angles
 
 - The **angle** of a direction is the turn from the +x axis, in
   **degrees** (°).
@@ -75,7 +75,7 @@ On a map, east is 90°. Which angle is east in game maths?
 :::
 :::
 
-## 6.2 How high is the ramp? Sine, cosine and tangent
+## 4.2 How high is the ramp? Sine, cosine and tangent
 
 - A **right triangle** has one angle of 90°.
 - For the angle θ: the **hypotenuse** is the longest side, the
@@ -144,7 +144,7 @@ Which side of a right triangle is the longest?
 :::
 :::
 
-## 6.3 Every angle at once: the unit circle
+## 4.3 Every angle at once: the unit circle
 
 - The **unit circle** has the radius 1 and the centre (0, 0).
 - The point at the angle θ is **(cos θ, sin θ)**: cos is x, sin is y.
@@ -204,7 +204,7 @@ Why is (0.6, 0.8) on the unit circle?
 :::
 :::
 
-## 6.4 From an angle to a movement
+## 4.4 From an angle to a movement
 
 - The direction at the angle θ is the unit vector **(cos θ, sin θ)**.
 - Velocity = speed × direction (Lecture 2):
@@ -233,18 +233,13 @@ and sin 60°. Multiply both by 6. Check: is the length of your vector about
 :::
 
 ::: {.callout-tip title="Try it 4 · Velocity"}
-Use the table of section 6.2. Choose the right answer.
+Use the table of section 4.2. Choose the right answer.
 
 ::: {.match extra="(5, 8.7)|300"}
 A drone flies at 30° with the speed 10. Its velocity?
 :   (8.7, 5)
 
     Why: 10 × (0.87, 0.5) = (8.7, 5).
-
-A car drives at 0° with the speed 12. Its velocity?
-:   (12, 0)
-
-    Why: 12 × (cos 0°, sin 0°) = 12 × (1, 0).
 
 A drone flies at 45° with the speed 10. Its velocity?
 :   (7.1, 7.1)
@@ -268,6 +263,195 @@ A ball moves at 135°. Which way does it go?
 :::
 :::
 
+## 4.5 Which angle is the target at?
+
+- A turret at (0, 0) must face a drone at d = (4, 4). Which angle?
+- tan θ = d~y~ ÷ d~x~ = 1, so 45°. But (−4, −4) also gives 1: the
+  division loses the signs.
+- **atan2(y, x)** uses the signs of both parts. It gives the angle from
+  −180° to 180°, right in every quadrant.
+- (4, 4): 45°. (−4, 4): 135°. (−4, −4): −135°. (0, −3): −90°.
+
+![Same slope, different angle.](images/atan2.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+The order is (y, x). With (x, y), a drone at (4, 0) comes out at 90°
+instead of 0°.
+:::
+
+::: {.callout-note title="Do it · Angles on paper"}
+On squared paper, mark a turret at (0, 0) and the targets (5, 0), (0, 4),
+(−3, 3) and (−3, −3). Draw each vector d. Which quadrant is each target in,
+and which angle does atan2 give? Use the axes and the 45° diagonals.
+
+::: {.check}
+(5, 0): 0°, on the x-axis. (0, 4): 90°, on the y-axis. (−3, 3): 135°,
+quadrant II. (−3, −3): −135° (= 225°), quadrant III.
+:::
+:::
+
+::: {.callout-tip title="Try it 5 · The angle to a target"}
+The turret is at (0, 0). Choose the right answer.
+
+::: {.match extra="−45°|0°"}
+A drone at (5, 5). Its angle?
+:   45°
+
+    Why: both parts equal and positive: the diagonal of quadrant I.
+
+A drone at (−4, 4). Its angle?
+:   135°
+
+    Why: x minus, y plus: quadrant II, on the diagonal.
+
+A drone at (−4, −4). Its angle?
+:   −135°
+
+    Why: both minus: quadrant III; atan2 gives −135° (= 225°).
+
+A drone at (0, −3). Its angle?
+:   −90°
+
+    Why: straight down.
+
+Why is tan alone not enough?
+:   it loses the signs of x and y
+
+    Why: (4, 4) and (−4, −4) give the same y ÷ x = 1.
+:::
+:::
+
+## 4.6 Moving in a circle
+
+- An orb circles a hero; a moon circles a planet.
+- Position: **P(t) = C + r (cos θ, sin θ)**, with the centre C and the
+  radius r.
+- The angle grows at the **angular speed** ω: θ = ω × t.
+- **Period**: one full turn takes T = 360° ÷ ω.
+- C = (5, 5), r = 2, 90° per second: t = 0 (7, 5); 1 s (5, 7); 2 s (3, 5);
+  3 s (5, 3); period 4 s.
+
+![The orb circles C = (5, 5).](images/orbit.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Multiply (cos θ, sin θ) by the radius, then add the centre.
+:::
+
+{{< sim file="sims/wave-lab.html" poster="sims/wave-lab.png" title="Wave Lab: circle, bob and sweep" height="760" >}}
+
+::: {.callout-note title="Do it · An orbit in Wave Lab"}
+In **Wave Lab**, choose **Orbit**, the amplitude 2 (the radius) and the
+period 4 s. Step to 0, 1, 2 and 3 s and write the positions. Then set the
+period to 8 s: what is the angular speed?
+
+::: {.check}
+Wave Lab circles (0, 2): 0 s (2, 2); 1 s (0, 4); 2 s (−2, 2); 3 s (0, 0).
+Period 8 s: 360° ÷ 8 = 45° per second.
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Orbits"}
+Choose the right answer.
+
+::: {.match extra="(7, 5)|(5, 5)"}
+C = (5, 5), r = 2, 90° per second. Where is the orb at 1 s?
+:   (5, 7)
+
+    Why: θ = 90°: (5, 5) + 2 × (0, 1).
+
+The same orb at 2 s?
+:   (3, 5)
+
+    Why: θ = 180°: (5, 5) + 2 × (−1, 0).
+
+An orb turns at 90° per second. Its period?
+:   4 s
+
+    Why: 360° ÷ 90° = 4 s.
+
+A moon turns at 30° per second. Its period?
+:   12 s
+
+    Why: 360° ÷ 30° = 12 s.
+
+Centre (0, 0), r = 4, angle 90°. The position?
+:   (0, 4)
+
+    Why: 4 × (cos 90°, sin 90°) = 4 × (0, 1).
+:::
+:::
+
+## 4.7 Bobbing up and down: oscillating motion
+
+- A coin bobs; a lift goes up and down. This is an **oscillation**: back
+  and forth around a middle, again and again.
+- **y(t) = c + A sin(360° × t ÷ T)**: middle c, **amplitude** A,
+  **period** T.
+- At a quarter of T: the top, c + A. At three quarters: the bottom,
+  c − A. At 0, half and full T: the middle.
+- A coin: middle 4, A = 1, T = 2 s: 0.5 s → **5** (top); 1.5 s → **3**
+  (bottom).
+- The same sine can make an **angle** swing: a searchlight sweeps with
+  angle(t) = 45° × sin(360° × t ÷ 4), and the beam points along
+  (cos angle, sin angle). At 1 s: 45°; at 3 s: −45°.
+
+![A bobbing value: middle 2, amplitude 3, period 4 s.](images/sine-wave.png){width=90%}
+
+![A searchlight sweeps from −45° to 45°.](images/searchlight.png){width=80%}
+
+::: {.callout-warning title="Watch out!"}
+The amplitude is half of the whole movement: with A = 3, a value moves
+6 units from bottom to top.
+:::
+
+::: {.callout-note title="Do it · The lift in Wave Lab"}
+In **Wave Lab**, choose **Bob**, the amplitude 3 and the period 4 s. Step to
+0, 1, 2, 3 and 4 s and write the heights. Then set the period to 8 s: when
+is the lift at the top?
+
+::: {.check}
+Middle 2: 0 s 2; 1 s 5; 2 s 2; 3 s −1; 4 s 2. With the period 8 s, the top
+comes at 2 s (a quarter of 8).
+:::
+:::
+
+::: {.callout-tip title="Try it 7 · Bobbing"}
+y = 2 + 3 sin(360° × t ÷ 4). Choose the right answer. You can use an answer
+more than once.
+
+::: {.match extra="3|8 s"}
+The height at 1 s.
+:   5
+
+    Why: the angle is 90°: 2 + 3 × 1.
+
+The height at 3 s.
+:   −1
+
+    Why: the angle is 270°: 2 + 3 × (−1).
+
+The period.
+:   4 s
+
+    Why: T is the number under the division: 4 s.
+
+How many units does the lift move from bottom to top?
+:   6
+
+    Why: from −1 to 5: twice the amplitude.
+
+A searchlight: angle = 45° × sin(360° × t ÷ 4). The angle at 1 s?
+:   45°
+
+    Why: 45° × sin 90° = 45° × 1.
+
+The same searchlight. How many degrees does the light cover in all?
+:   90°
+
+    Why: 45° to each side: from −45° to 45°.
+:::
+:::
+
 ## Game challenge: Drone Drop {.challenge}
 
 Work alone. Use every section of today.
@@ -279,7 +463,7 @@ only the heading. Ana lives at (5, 8.7), Ben at (0, 10) and Cara at
 
 {{< sim file="sims/drone-drop.html" poster="sims/drone-drop.png" title="Drone Drop: choose the heading to each house" kind="game" height="780" >}}
 
-::: {.callout-tip title="Try it 6 · Which heading?"}
+::: {.callout-tip title="Try it 8 · Which heading?"}
 Drone Drop: depot (0, 0), speed 10, 1 second. Ana (5, 8.7), Ben (0, 10),
 Cara (−7.1, 7.1). Choose the right answer.
 
@@ -306,7 +490,7 @@ What is the velocity with the heading 60°?
 :::
 :::
 
-::: {.callout-tip title="Try it 7 · New customers (harder)"}
+::: {.callout-tip title="Try it 9 · New customers (harder)"}
 Drone Drop: depot (0, 0), speed 10, 1 second. cos 30° = 0.87,
 sin 30° = 0.5. Choose the right answer.
 
@@ -340,8 +524,8 @@ In Unity, which line makes the heading 30° ready for `Mathf.Cos`?
 
 ## Summary {.summary}
 
-- An angle is the turn from +x, in degrees; positive angles turn anticlockwise.
-- sin = opposite ÷ hypotenuse, cos = adjacent ÷ hypotenuse, tan = opposite ÷ adjacent.
-- The point at θ on the unit circle is (cos θ, sin θ): a unit vector.
-- Velocity at the angle θ with the speed s: s (cos θ, sin θ).
-- Game code uses radians: convert degrees with `Mathf.Deg2Rad`.
+- Angles start at +x and grow anticlockwise; 360° is a full turn.
+- In a right triangle: sin = opposite ÷ hypotenuse, cos = adjacent ÷ hypotenuse, tan = opposite ÷ adjacent.
+- The point at θ on the unit circle is (cos θ, sin θ). Velocity = speed × (cos θ, sin θ).
+- atan2(y, x) gives the angle of a vector in every quadrant.
+- A circle: P = C + r (cos ωt, sin ωt). A bob: y = c + A sin(360° × t ÷ T).

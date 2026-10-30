@@ -10,33 +10,27 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
 - Step 2, rules, schedules, plans for all four courses.
 - **Game Math: all 15 units** (Lectures 1–19, Seminars 1–10, homework 1–14),
   `check_size.py` clean.
-- **Computing Systems units 1–7** (Lectures 1–7, Seminars 1–7, homework 1–7).
+- **Computing Systems: all 14 units** (Lectures 1–14, Seminars 1–14, homework
+  1–13; unit 14 has the project), in week-01 … week-07 and week-09 … week-15;
+  `check_size.py` clean.
 - Review of the finished units (2026-10-30): unclosed Try it boxes (Seminars 5, 6),
   ILOs and titles as in the syllabus, reuse notes, unit 7 figures and Stack Builder
   without HAL/ART/XNU; `game-kit.js` mixes the answer buttons (the right answer
   was always first); recordings open sims with `?fixed-order`.
 - courses-private (pushed on main): `syllabus-weeks.yml` ×4; solutions of Game
-  Math homework 1–14 and Computing Systems homework 1–7 match the new tasks.
+  Math homework 1–14 and Computing Systems homework 1–13 match the new tasks
+  (CS solutions in week-09 … week-14 since the shift).
 
 ## Still to do
 
-1. **Computing Systems units 8–14.** First shift the folders: units 8–14 live
-   in syllabus weeks 9–15, so `git mv week-14 week-15`, … , `week-08 week-09`
-   (from the top down). Old `lesson-02-old*.md` (old 2.3 cloud gaming, Lag Lab)
-   is stashed in week-13 for Lecture 12 (it moves to week-14 with the shift;
-   Lecture 12 belongs in week-13; also fix "cloud gaming adds about 50 ms" to
-   match Lag Lab +120/+220 ms). Lag Lab sim files are still in week-01/sims.
-   Per unit k: old lecture 2k−1 → Lecture k (plus the parts the plan names),
-   old 2k → Seminar k; cuts and fixes are listed in `plan.md` and in the plan
-   (L15 "Ask a classmate"). Unit 14: no homework (project).
-2. **Digital Media** (14 units, same pattern; fixes: L2 diegetic rule, L19
+1. **Digital Media** (14 units, same pattern; fixes: L2 diegetic rule, L19
    reference) and **Digital Skills** (15 units: Lectures 1–10, Practice 1–5,
    Online activities 1–15 that practise their unit; see its NOTES.md).
-3. Every page: `Why:` under every Try it answer, `::: {.check}` in every
+2. Every page: `Why:` under every Try it answer, `::: {.check}` in every
    Do it / Lab task / Activity; seminars in the seminar format (templates in
    `shared/templates/seminar-*`); case studies must not repeat the numbers
    of worked examples (change the sim or the example).
-4. **GIFs and posters** for changed sims: run
+3. **GIFs and posters** for changed sims: run
    `sh shared/sims/recordings/record-all.sh <name>`. First fix the stale
    paths in `record-all.sh` (many sims moved folders). Changed sims:
    game-math week-04 drone-drop, sky-lift; week-06 sky-steps, drawbridge
@@ -46,15 +40,18 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
    problem-drill; week-15 cave-gen, generator-doctor, raft-finals;
    computing-systems week-04 phone-picker, soc-explorer; week-05 ram-rush;
    week-06 disk-doctor; week-07 stack-builder (poster too: it shows the old
-   layers), two-phones (new rounds 2–3). Posters of Kit games show round 1
+   layers), two-phones (new rounds 2–3); week-09 launch-planner,
+   source-check, platform-pick, fact-or-myth; week-10 launch-day; week-11
+   terminal-lab, lag-detective, net-fixer; week-12 cloud-planner; week-13
+   lag-lab (labels), week-15 slide-sorter. Posters of Kit games show round 1
    in the written order; the page now mixes it (only cosmetic).
    Test each sim inside its page in the browser
    (no JS syntax check was possible).
-5. courses-private: renumber the remaining solutions (Computing Systems 7–13,
-   Digital Media, Digital Skills online activities) and write
+4. courses-private: renumber the remaining solutions (Digital Media,
+   Digital Skills online activities) and write
    `moodle/<slug>-weeks.md` (Arabic section texts; no "مختبر" for Digital
    Skills).
-6. Full `quarto render`, `python3 tools/course_package.py`, then a PR into
+5. Full `quarto render`, `python3 tools/course_package.py`, then a PR into
    main (no co-author lines; signed commits).
 
 ## Tools on this Mac (2026-10-30)

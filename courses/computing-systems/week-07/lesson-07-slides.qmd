@@ -1,21 +1,21 @@
 ---
 title: "Mobile Operating Systems: Android and iOS Architecture"
-subtitle: "Lecture 13"
+subtitle: "Lecture 7"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary kernel software-stack hal android-runtime app-framework sandbox app-lifecycle background-app >}}
+{{< glossary kernel software-stack app-framework sandbox app-permission app-lifecycle foreground-app background-app >}}
 
-## 13.1 A mobile OS is built in layers
+## 7.1 A mobile OS is built in layers
 
 :::: {.columns}
 ::: {.column width="50%"}
 - A mobile OS is a stack of layers between the hardware and the apps.
 - Each layer uses only the services of the layer below it.
 - The kernel runs on the hardware and manages processes, memory and drivers.
-- **Do it:** Build both stacks in Stack Builder. Which iOS layer has the kernel?
+- **Do it:** Build both stacks in Stack Builder. Which iOS layer does the job of the Linux kernel?
 :::
 ::: {.column width="50%"}
 ![](images/os-stack.png)
@@ -24,7 +24,7 @@ format: lesson-pptx
 
 ## Live demo · Stack Builder
 
-{{< sim file="sims/stack-builder.html" poster="sims/stack-builder.png" title="Stack Builder: the layers of Android and iOS" task="**Show:** build the Android stack, placing the framework too early once, then the iOS stack. **Ask:** why can the framework not sit right on the kernel?" >}}
+{{< sim file="sims/stack-builder.html" poster="sims/stack-builder.png" title="Stack Builder: the layers of Android and iOS" task="**Show:** build the Android stack, placing the app framework too early once, then the iOS stack. **Ask:** why can the app framework not sit right on the kernel?" >}}
 
 ## Try it 1 · Layers
 
@@ -38,13 +38,13 @@ b) only the layer below it
 c) It manages processes, memory, drivers and power.
 :::
 
-## 13.2 Android and iOS
+## 7.2 Android and iOS
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Android has the Linux kernel, the HAL, ART, the framework and the apps.
-- iOS has Core OS, Core Services, Media, Cocoa Touch and the apps.
-- The HAL lets Android use the hardware of many phone makers in one way.
+- Android has the Linux kernel, libraries, the app framework and the apps.
+- iOS has Apple's own kernel, libraries, the app framework and the apps.
+- Android runs on the phones of many makers, and iOS only on Apple's phones.
 - **Do it:** Which OS does your phone run? Who made the phone, and who made the OS?
 :::
 ::: {.column width="50%"}
@@ -75,14 +75,14 @@ b) iOS
 c) No, each platform needs its own build.
 :::
 
-## 13.3 Every app in its own sandbox
+## 7.3 Every app in its own sandbox
 
 :::: {.columns}
 ::: {.column width="50%"}
 - A sandbox gives each app its own files and its own memory.
 - An app cannot read the files of another app.
 - An app reaches the camera, microphone or location only with a permission.
-- **Do it:** Open the settings of a game. Which permissions does it have?
+- **Do it:** Open the settings of a game. How much data does it use, and which permissions does it have?
 :::
 ::: {.column width="50%"}
 ![](images/sandbox.png)
@@ -101,12 +101,12 @@ b) No, they are in another sandbox.
 c) clearing its storage or deleting the app
 :::
 
-## 13.4 The life cycle of a game
+## 7.4 The life cycle of a game
 
 :::: {.columns}
 ::: {.column width="50%"}
 - A game moves between foreground, background, suspended and ended.
-- The OS warns the game before it leaves the foreground, so it can pause and save.
+- The OS tells the game before it leaves the foreground, so it can pause and save.
 - When RAM is low, the OS ends apps in the background.
 - **Do it:** Leave a game for a minute and come back. Did it continue or start again?
 :::
@@ -115,15 +115,15 @@ c) clearing its storage or deleting the app
 :::
 ::::
 
-## Example · A call in level 3
+## Example · A message in level 2
 
-Rami plays level 3 on P5, a call arrives, and then he opens ten other apps.
-**What happens to the game, and what does Rami see at the end?**
+Sara plays level 2 of a puzzle game, opens a message, and then opens many other apps.
+**What happens to the game, and what does Sara see at the end?**
 
 ::: {.reveal}
-1. Android tells the game it leaves the foreground, and the game **saves** level 3.
-2. RAM gets low on P5, so Android **ends** the game in the background.
-3. Rami opens the game again, and it loads the save: he is **back in level 3**.
+1. The OS tells the game it leaves the foreground, and the game **stops the timer and saves**.
+2. RAM gets low, so the OS **ends** the game in the background.
+3. Sara taps the icon again, and the game loads the save: she is **back in level 2**.
 :::
 
 ## Try it 4 · States
@@ -140,18 +140,20 @@ c) pause and save
 
 ## Game challenge · Pause, Please!
 
-{{< sim file="sims/pause-please.html" poster="sims/pause-please.png" title="Pause, Please!: a game through its life cycle" kind="game" task="**The story:** Rami tests Pocket Quest on P5 and P8; a call arrives in level 3, and later RAM gets low. **Play:** say what the OS does with the game, and what the game must do." >}}
+{{< sim file="sims/pause-please.html" poster="sims/pause-please.png" title="Pause, Please!: a game through its life cycle" kind="game" task="**The story:** Rami tests Pocket Quest on P5 and P8; a call arrives in level 3, and later RAM gets low on P5. **Play:** say what the OS does with the game, and what the game must do." >}}
 
-## Try it 5 · Two builds (harder)
+## Try it 5 · Two phones (harder)
+
+The facts: Rami tests Pocket Quest 1.2 on P5 (Android, 4 GB RAM) and on P8 (an iPhone). A call arrives in level 3, and later he opens ten other apps on P5.
 
 a) Which package does Byte Bay build for the iPhone P8?
-b) Which layer lets the camera of P5 work like on other Android phones?
-c) Which Unity function is the right place to save on a phone?
+b) What does Android do with the game when RAM gets low on P5?
+c) What does Rami see when he opens the game again?
 
 ::: {.answer}
-a) .ipa
-b) the HAL
-c) OnApplicationPause
+a) an .ipa
+b) It ends the game in the background.
+c) level 3, loaded from the save
 :::
 
 ## Summary

@@ -36,22 +36,20 @@
 <script>
 (() => {
   const OS = {
-    android: { name: "Android (phone P5)", col: ["#2b8a3e", "#2f9e44", "#37b24d", "#40c057", "#51cf66"], layers: [
+    android: { name: "Android (phone P5)", col: ["#2b8a3e", "#37b24d", "#40c057", "#51cf66"], layers: [
       ["Linux kernel", "processes, memory, drivers, power"],
-      ["Hardware abstraction layer (HAL)", "one standard way to reach the camera, sensors, audio"],
-      ["Native libraries and Android Runtime (ART)", "graphics (OpenGL ES, Vulkan), media; ART runs the app code"],
-      ["Java/Kotlin API framework", "activities, notifications, permissions, the window manager"],
+      ["Libraries", "graphics with Vulkan or OpenGL ES, sound, data"],
+      ["App framework", "screens, touch, notifications, permissions"],
       ["Apps", "Pocket Quest, the camera app, the settings app"]] },
-    ios: { name: "iOS (phone P8, an iPhone)", col: ["#1864ab", "#1971c2", "#1c7ed6", "#228be6", "#339af0"], layers: [
-      ["Core OS (XNU kernel)", "processes, memory, drivers, security"],
-      ["Core Services", "files, network, iCloud, location"],
-      ["Media", "graphics with Metal, audio, video"],
-      ["Cocoa Touch (UIKit)", "touch, screens, notifications, permissions"],
+    ios: { name: "iOS (phone P8, an iPhone)", col: ["#1864ab", "#1c7ed6", "#228be6", "#339af0"], layers: [
+      ["Apple's kernel", "processes, memory, drivers, power"],
+      ["Libraries", "graphics with Metal, sound, files, network"],
+      ["App framework", "touch, screens, notifications, permissions"],
       ["Apps", "Pocket Quest, the camera app, the settings app"]] },
   };
   const $ = (id) => document.getElementById(id);
   let os = "android", placed = [];
-  const order = [2, 4, 0, 3, 1];          // the pool is shown in a mixed order
+  const order = [2, 0, 3, 1];             // the pool is shown in a mixed order
   function tabs() {
     Kit.buttons($("tabs"), Object.keys(OS).map((k) => ({ k, label: OS[k].name })), (k) => { os = k; placed = []; draw(); }, "ghost");
     document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.k === os));

@@ -25,7 +25,7 @@
       good: "The OS loads the game into RAM and gives it the screen: it is the foreground app (lecture 9).", why: { "background: running, not seen": "He can see it and play it: it is in the foreground." } },
     { from: 1, to: 2, ev: "a call arrives", goal: "A <b>call</b> arrives in the middle of level 3. What must the game do first?",
       choices: C(["pause and save the progress", "keep running at full speed", "delete its cache", "ask for the microphone"]), answer: "pause and save the progress",
-      good: "The OS tells the game it is leaving the foreground (Android: onPause; iOS: will resign active). The game pauses and saves.", why: { "keep running at full speed": "The player cannot see the game; the enemies would win while he talks." } },
+      good: "The OS tells the game it is leaving the foreground. The game pauses and saves.", why: { "keep running at full speed": "The player cannot see the game; the enemies would win while he talks." } },
     { from: 2, to: 3, ev: "a few seconds pass", goal: "On <b>P8 (iPhone)</b>, the game stays in the background for a few seconds. What does iOS do with it?",
       choices: C(["suspends it: it stays in RAM but gets no CPU time", "gives it more CPU time", "moves it to the cloud", "shows it on top of the call"]), answer: "suspends it: it stays in RAM but gets no CPU time",
       good: "iOS suspends most apps soon after they leave the screen. This saves battery and CPU. Android also stops games that are not seen.", why: { "gives it more CPU time": "Background apps get less CPU time, not more." } },

@@ -2,7 +2,7 @@
 title: "Mobile Operating Systems: Android and iOS Architecture"
 description: "Lesson notes · The layers of a mobile OS from the kernel to the apps, how Android and iOS build these layers, the sandbox of every app, and the life cycle of a game from the foreground to the background and back."
 lesson: 7
-ilos: [A2]
+ilos: [A2, B1]
 format: lesson-typst
 ---
 
@@ -131,7 +131,7 @@ user gives a **permission**.
 
 ![Every app has its own box; the OS checks every request for the hardware.](images/sandbox.png){#fig-sand width=94%}
 
-::: {.callout-note title="Example 7.4 — Pocket Quest wants a photo"}
+::: {.callout-note title="Example 7.3 — Pocket Quest wants a photo"}
 The game has a new feature: a photo of the player as an avatar.
 
 1. Pocket Quest asks the OS for the camera.
@@ -176,7 +176,7 @@ before it leaves the foreground, so that the app can **pause and save**.
 
 ![The states of a game and the events between them.](images/app-lifecycle.png){#fig-life width=94%}
 
-::: {.callout-note title="Example 7.5 — A message in level 2"}
+::: {.callout-note title="Example 7.4 — A message in level 2"}
 1. Sara plays level 2 of a puzzle game: the game is in the **foreground**.
 2. A message arrives, and she opens it. The OS tells the game; the game
    stops the timer and saves the level. It is now in the **background**.

@@ -133,7 +133,6 @@ rooftop-rescue|courses/digital-media/week-04/sims/rooftop-rescue.html|11|courses
 scene-cutter|courses/digital-media/week-04/sims/scene-cutter.html|10|courses/digital-media/week-04/sims/scene-cutter.gif
 frame-lab|courses/digital-media/week-05/sims/frame-lab.html|9|courses/digital-media/week-05/sims/frame-lab.gif
 shot-caller|courses/digital-media/week-05/sims/shot-caller.html|9|courses/digital-media/week-05/sims/shot-caller.gif
-board-builder|courses/digital-media/week-05/sims/board-builder.html|10|courses/digital-media/week-05/sims/board-builder.gif
 board-fixer|courses/digital-media/week-05/sims/board-fixer.html|9|courses/digital-media/week-05/sims/board-fixer.gif
 animatic-player|courses/digital-media/week-06/sims/animatic-player.html|10|courses/digital-media/week-06/sims/animatic-player.gif
 cut-or-play|courses/digital-media/week-06/sims/cut-or-play.html|9|courses/digital-media/week-06/sims/cut-or-play.gif

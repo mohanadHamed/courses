@@ -40,11 +40,11 @@
       cams: { left: third(1 / 3), centre: third(1 / 2), right: third(2 / 3) }, arrow: true, thirds: true,
       good: "On the left third, Nour has lead room: empty space in front of her, where she goes.",
       why: { centre: "The centre is static: use a third line.", right: "Now she rows into the edge of the frame: no lead room." } },
-    { goal: "Panel 5: in panel 2, Nour rowed left to right. Which camera keeps the <b>screen direction</b>?", answer: "same",
-      choices: [{ k: "same", label: "the same side of the line" }, { k: "other", label: "the other side of the line" }],
+    { goal: "Panel 5: in panel 2, Nour rowed left to right. Which panel keeps the <b>screen direction</b>?", answer: "same",
+      choices: [{ k: "same", label: "Nour rows left to right" }, { k: "other", label: "Nour rows right to left" }],
       cams: { same: S.medNour, other: Object.assign({}, S.medNour, { flip: true }) }, arrow: true,
-      good: "The 180-degree rule: the camera stays on one side, so Nour still rows left to right.",
-      why: { other: "From the other side, Nour suddenly rows right to left: the player thinks she turned back." } },
+      good: "The screen direction stays: Nour still rows left to right, so the player is not lost.",
+      why: { other: "Now Nour suddenly rows right to left: the player thinks she turned back." } },
   ];
   Kit.game({
     rounds, still: true, cols: 3, colsPhone: 1, animMs: 700,

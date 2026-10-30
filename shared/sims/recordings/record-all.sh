@@ -145,15 +145,11 @@ slide-sorter|courses/computing-systems/week-15/sims/slide-sorter.html|8|courses/
 project-check|courses/computing-systems/week-15/sims/project-check.html|8|courses/computing-systems/week-15/sims/project-check.gif
 talk-doctor|courses/computing-systems/week-15/sims/talk-doctor.html|8|courses/computing-systems/week-15/sims/talk-doctor.gif
 lantern-keeper|courses/digital-media/week-01/sims/lantern-keeper.html|10|courses/digital-media/week-01/sims/lantern-keeper.gif
-ember-trail|courses/digital-media/week-01/sims/ember-trail.html|10|courses/digital-media/week-01/sims/ember-trail.gif
 juice-it|courses/digital-media/week-01/sims/juice-it.html|8|courses/digital-media/week-01/sims/juice-it.gif
-sound-stage|courses/digital-media/week-01/sims/sound-stage.html|8|courses/digital-media/week-01/sims/sound-stage.gif
 story-sorter|courses/digital-media/week-02/sims/story-sorter.html|9|courses/digital-media/week-02/sims/story-sorter.gif
-curve-builder|courses/digital-media/week-02/sims/curve-builder.html|8|courses/digital-media/week-02/sims/curve-builder.gif
 stage-order|courses/digital-media/week-02/sims/stage-order.html|10|courses/digital-media/week-02/sims/stage-order.gif
 branch-builder|courses/digital-media/week-03/sims/branch-builder.html|8|courses/digital-media/week-03/sims/branch-builder.gif
 silent-station|courses/digital-media/week-03/sims/silent-station.html|10|courses/digital-media/week-03/sims/silent-station.gif
-premise-doctor|courses/digital-media/week-03/sims/premise-doctor.html|7|courses/digital-media/week-03/sims/premise-doctor.gif
 pitch-room|courses/digital-media/week-03/sims/pitch-room.html|8|courses/digital-media/week-03/sims/pitch-room.gif
 script-formatter|courses/digital-media/week-04/sims/script-formatter.html|9|courses/digital-media/week-04/sims/script-formatter.gif
 dialogue-doctor|courses/digital-media/week-04/sims/dialogue-doctor.html|9|courses/digital-media/week-04/sims/dialogue-doctor.gif

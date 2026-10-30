@@ -1,14 +1,14 @@
 ---
-title: "Probability Basics: Events and Sample Space"
-subtitle: "Lecture 13"
+title: "Probability: Events, Conditional Probability and Expected Value"
+subtitle: "Lecture 10"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary random-experiment sample-space event probability complement-event mutually-exclusive-events independent-events tree-diagram relative-frequency law-of-large-numbers >}}
+{{< glossary sample-space event probability complement-event independent-events conditional-probability expected-value fair-game >}}
 
-## 13.1 Sample spaces
+## 10.1 Sample spaces
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -45,7 +45,7 @@ b) 8
 c) 36
 :::
 
-## 13.2 The probability of an event
+## 10.2 The probability of an event
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -58,17 +58,6 @@ c) 36
 ![](images/event-prob.png)
 :::
 ::::
-
-## Example · The knight hits
-
-The knight hits with a 3 or more on one die.
-**What is the probability of a hit?**
-
-::: {.reveal}
-1. The event is **A = {3, 4, 5, 6}**, so |A| = 4 and |S| = 6.
-2. P(A) = 4/6 = **2/3**, which is about 67 %.
-3. So the knight hits in about **two attacks of three**.
-:::
 
 ## Live demo · Sample Space Lab
 
@@ -86,7 +75,7 @@ b) 1/5
 c) 0
 :::
 
-## 13.3 The complement
+## 10.3 The complement
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -123,7 +112,7 @@ b) 7/10
 c) 3/4
 :::
 
-## 13.4 Grids and trees
+## 10.4 Grids and trees
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -160,7 +149,7 @@ b) 1/6
 c) The 11 sums are not equally likely.
 :::
 
-## 13.5 OR and AND
+## 10.5 OR and AND
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -197,59 +186,107 @@ b) 2/6
 c) 1/4
 :::
 
-## 13.6 Theory and experiment
+## 10.6 Conditional probability
 
 :::: {.columns}
 ::: {.column width="50%"}
-- The relative frequency is hits divided by trials.
-- With many trials, it comes close to the probability.
-- With few trials, big differences are normal.
-- **Do it:** Roll 1000 times in Roll Lab. How close is the share of 6s to 1/6?
+- P(A | B) is the probability of A when we know B.
+- We count A only inside B.
+- We divide by the number of outcomes in B.
+- Without putting back, P(A and B) = P(A) × P(B | A).
+- **Do it:** Find P(sum 7 | first die is 1). What do you get?
 :::
 ::: {.column width="50%"}
-![](images/large-numbers.png)
+![](images/conditional-grid.png)
 :::
 ::::
 
-## Live demo · Roll Lab
+## Example · The first die is a 6
 
-{{< sim file="sims/roll-lab.html" poster="sims/roll-lab.png" title="Roll Lab: theory and experiment" task="**Show:** roll 1, 10, 100 and 1000 times, then switch to at least one 6 and roll 1000. **Ask:** why does the green line jump so much at the start?" >}}
+The door opens with a sum of 10 or more, and the first die already shows a 6.
+**What is the probability now?**
 
-## Try it 6 · Experiments
-
-a) What is the relative frequency of 142 sums of 8 in 1000 rolls?
-b) About how many 6s do we expect in 600 rolls?
-c) What may a share of 0.25 for the sum 8 after 1000 rolls show?
-
-::: {.answer}
-a) 0.142
-b) about 100
-c) a bug in the code
+::: {.reveal}
+1. Only **6 outcomes** are left: (6,1) to (6,6).
+2. Three of them, **(6,4), (6,5), (6,6)**, make 10 or more.
+3. P(A | B) = 3/6 = **1/2**, while P(A) was only 1/6.
 :::
 
-## Game challenge · Raft Odds
+## Live demo · Conditional Lab
 
-{{< sim file="sims/raft-odds.html" poster="sims/raft-odds.png" title="Raft Odds: the probability before each move" kind="game" task="A turn of Lucky Raft: the island with a 5 or a 6, a crate item that is not wood, the eagle with a sum of 7, a bonus with at least one 6 and two storms. **Play:** find the probability before each move on your phone." >}}
+{{< sim file="sims/conditional-lab.html" poster="sims/conditional-lab.png" title="Conditional Lab: what do we know already?" task="**Show:** sum 10 or more without a condition, then with the first die 6, then the second die 6. **Ask:** why does the condition change the first event but not the second?" >}}
 
-## Try it 7 · Three dice (harder)
+## Try it 6 · Conditions
 
-The facts: the Lucky Raft finale rolls three dice, and each die has 6 faces.
-
-a) How many outcomes do three dice have?
-b) What is P(no 6) with three dice?
-c) What is P(at least one 6) with three dice?
+a) Two dice, the first die is 6. What is P(sum ≥ 9)?
+b) Two dice, the sum is 4. What is P(a double)?
+c) Two dice, the first die is 4. What is P(sum ≥ 8)?
 
 ::: {.answer}
-a) 216
-b) 125/216
-c) 91/216
+a) 2/3
+b) 1/3
+c) 1/2
+:::
+
+## 10.7 The expected value
+
+:::: {.columns}
+::: {.column width="50%"}
+- A random variable is a number that depends on chance.
+- E = x₁p₁ + x₂p₂ + …, the long-run average.
+- A game is fair when its price equals E(win), and a success takes 1/p tries on average.
+- **Do it:** A spin costs 3 coins, and 1 of 8 parts wins 20 coins. Is the spin fair?
+:::
+::: {.column width="50%"}
+![](images/expected-value.png)
+:::
+::::
+
+## Example · The loot crate
+
+A crate gives 100 coins (1/10), 20 coins (3/10) or 5 coins (6/10).
+**What is it worth on average?**
+
+::: {.reveal}
+1. E = 100·0.1 + 20·0.3 + 5·0.6 = **10 + 6 + 3 = 19 coins**.
+2. The plain average of 41.7 is **wrong**, because wood comes most often.
+3. 100 crates give about **1900 coins**.
+:::
+
+## Try it 7 · Expected values
+
+a) What is E for 30 coins (0.5) or 10 coins (0.5)?
+b) What is E for 20 damage (0.6) or 5 damage (0.4)?
+c) What must the probabilities of all values add up to?
+
+::: {.answer}
+a) 20
+b) 14
+c) 1
+:::
+
+## Game challenge · Treasure Odds
+
+{{< sim file="sims/treasure-odds.html" poster="sims/treasure-odds.png" title="Treasure Odds: loot drops and critical hits" kind="game" task="The designer of Lucky Raft tunes the loot drops and the critical hits of its dungeon. **Play:** use conditions and expected values to choose well in each room on your phone." >}}
+
+## Try it · Tune the hits (harder)
+
+The facts: a normal hit does 10 damage, and a critical hit has the probability 1/4.
+
+a) A critical hit does 30 damage. What is E(damage) per hit?
+b) The designer wants E(damage) = 20. How much must a critical hit do?
+c) On average, how many hits come before the first critical hit, counting it?
+
+::: {.answer}
+a) 15
+b) 50
+c) 4
 :::
 
 ## Summary
 
-- A random experiment has a sample space of outcomes.
-- With equally likely outcomes, P(A) = |A| ÷ |S|.
-- P(not A) = 1 − P(A).
-- Grids and trees list the pairs of two steps.
-- OR adds and takes away the overlap, and AND multiplies.
-- Many trials bring the relative frequency close to the probability.
+- The probability of an event is its outcomes divided by all outcomes, when they are equally likely.
+- The complement gives P(not A) = 1 − P(A), and grids and trees list two-step experiments.
+- OR adds the probabilities without the overlap, and AND multiplies them for independent events.
+- A condition makes the sample space smaller: we count A only inside B.
+- The expected value is the long-run average, and a fair price equals E(win).

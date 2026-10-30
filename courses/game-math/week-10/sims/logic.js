@@ -1,4 +1,4 @@
-// A small parser for logical expressions, for the logic simulators of lectures 17-18.
+// A small parser for logical expressions, for the logic simulators of Lectures 8 and 9.
 // Variables: single small letters (p, q, r). Operators: ! (NOT), && (AND), ^ (XOR), || (OR),
 // -> (IF-THEN), brackets. The symbols ¬ ∧ ∨ ⊕ → are accepted too. Precedence: ! > && > ^ > || > ->.
 //   const e = LG.parse("p && (q || !r)"); e.vars -> ["p","q","r"]; e.eval({p:1,q:0,r:1}) -> true

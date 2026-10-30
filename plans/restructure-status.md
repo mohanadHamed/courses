@@ -99,19 +99,19 @@ The teacher's notes:
   task in 4.5; the short turn cut), new Seminar 4 "Trigonometry in Game
   Motion" (aim with atan2 in Turn Lab; an orb and Sky Lift), Homework 4
   unchanged.
+- Game Math unit 10: Lecture 10 "Probability: Events, Conditional
+  Probability and Expected Value" (old 13.1–13.5 with independence, 14.1
+  with the multiplication rule, 14.3 with fair games and 1/p; Treasure Odds
+  as the Game challenge), new Seminar 10 "Probability in Loot Drops and
+  Critical Hits" (three short activities: theory and many rolls in Roll Lab,
+  the old 13.6; a critical hit with a known first die and a chest, with
+  Conditional Lab; a crate's expected value and fair price in Crate Lab),
+  Homework 10 unchanged. Raft Odds and the figure `large-numbers` removed;
+  Lecture 11 refers to Seminar 10 for many tries.
 
 ### Still to do (in this order)
 
 1. **Game Math**
-   - Lecture 10 (week-11): merge old 13 + 14 (see the design).
-   - Seminar 10 "Probability in Loot Drops and Critical Hits" (week-11):
-     three short activities: theory and experiment with Roll Lab (old 13.6),
-     critical hits with Conditional Lab (condition, multiplication rule),
-     a crate's expected value and fair price with Crate Lab (1/p). Then
-     remove Raft Odds (sim, GIF, poster, scenario, `record-all.sh` line) and
-     the images no session uses (`large-numbers`?).
-   - Lecture 11 (week-12): "(lecture 10)" about many tries refers to
-     Seminar 10 now; check the references to old 13.6.
    - Seminar 12 (week-13): add a short D1 part (present the solution of
      the balancing problem in three sentences; the team box with an
      individual alternative in the worksheet), as `schedule.yml` says.

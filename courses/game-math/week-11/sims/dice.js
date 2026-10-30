@@ -1,4 +1,4 @@
-// Small drawing and counting helpers for the probability simulators of lecture 20.
+// Small drawing and counting helpers for the probability simulators of Lecture 10 and Seminar 10.
 //   DC.die(ctx, x, y, size, face, fill)   draws a die
 //   DC.coin(ctx, x, y, r, "H" | "T")      draws a coin
 //   DC.frac(k, n) -> "k/n (= a/b)" and DC.gcd(a, b)

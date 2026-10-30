@@ -1,26 +1,41 @@
 ---
 title: "Excel (2): Sorting, Filtering, Conditional Formatting and Charts"
 description: "Putting rows in order with Sort, showing only some rows with Filter, colouring cells by a rule with conditional formatting, and choosing and making the right chart with a good title."
-lesson: 13
+lesson: 7
 ilos: [C2]
 format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem at work. Then it shows one Excel skill. It ends with a
-**Lab task** and one set of questions. The full explanations, examples and
-exercises are in the notes.
+starts with a problem at study or at work. Then it explains one idea. It
+ends with a **Lab task** and one set of questions. Every question on this
+page has its answer: try first, then check.
 
 ## Key terms
 
 {{< glossary sort-data filter-data conditional-formatting chart column-chart line-chart pie-chart chart-title cell-range >}}
 
-## 13.1 Put the rows in order: Sort
+## 7.1 Put the rows in order: Sort
 
 - **Sort** puts the rows in order by one column. Each row moves as a whole.
 - Click **one cell** in the table › **Data › Sort** › choose the column and
   the order.
 - Quick buttons: **A→Z** (smallest first) and **Z→A** (largest first).
+- The sales of the Sunrise shop in one week:
+
+| Day | Item | Type | Qty | Total (JD) |
+|---|---|---|---|---|
+| Sun | Notebook | Paper | 12 | 24 |
+| Sun | Juice | Drinks | 20 | 10 |
+| Mon | Pen | Paper | 40 | 20 |
+| Mon | Water | Drinks | 30 | 15 |
+| Tue | Bag | Bags | 3 | 36 |
+| Tue | Juice | Drinks | 24 | 12 |
+| Wed | Notebook | Paper | 8 | 16 |
+| Wed | Bag | Bags | 2 | 24 |
+| Thu | Water | Drinks | 26 | 13 |
+| Thu | Pen | Paper | 30 | 15 |
+
 - Sorted by Total, largest first: the bag of Tuesday (36 JD) is on top.
 
 ![Sort by Total.](images/sort.png){width=100%}
@@ -33,8 +48,14 @@ table is wrong.
 :::
 
 ::: {.callout-note title="Lab task · Sort the week"}
-Type the 10 sales of Table Lab into `sales.xlsx`. Sort by Total, largest
+Type the 10 sales of the table into `sales.xlsx`. Sort by Total, largest
 first. Then sort by Day, A to Z: what is strange about the order?
+
+::: {.check}
+By Total, largest first: the bag of Tuesday (36 JD) is on top, and the
+juice of Sunday (10 JD) is at the bottom. By Day, A to Z, the order is Mon,
+Sun, Thu, Tue, Wed: Excel sorts the days as words, by their letters.
+:::
 :::
 
 ::: {.callout-tip title="Try it 1 · Sort"}
@@ -44,18 +65,26 @@ Choose the right answer.
 Where do you find Sort?
 :   Data › Sort
 
+    Why: Sort is on the Data tab.
+
 Which button puts the largest total on top?
 :   Z→A
+
+    Why: Z→A sorts from the largest to the smallest.
 
 What happens to each row when you sort?
 :   it moves as a whole
 
+    Why: Sort keeps each row together, so the table stays right.
+
 Which sale is on top after the sort, largest first?
 :   the bag of Tuesday, 36 JD
+
+    Why: 36 JD is the biggest total in the table.
 :::
 :::
 
-## 13.2 Show only some rows: Filter
+## 7.2 Show only some rows: Filter
 
 - A **filter** shows only the rows you choose. The others are **hidden, not
   deleted**.
@@ -73,27 +102,40 @@ Never delete rows to "hide" them. Use a filter.
 ::: {.callout-note title="Lab task · Filter the types"}
 In `sales.xlsx`, filter the Type to Paper. Select the totals: what does the
 status bar show? Then clear the filter.
+
+::: {.check}
+Paper has 4 rows: 24, 20, 16 and 15 JD. The status bar shows Sum: 75.
+After Clear Filter, all 10 rows come back.
+:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Filter"}
-Use Table Lab. Choose the right answer.
+Use the sales table of section 7.1. Choose the right answer.
 
 ::: {.match extra="they are deleted|10"}
 What happens to the rows a filter does not show?
 :   they are hidden
 
+    Why: A filter hides rows; it never deletes them.
+
 How many rows are Drinks?
 :   4
+
+    Why: Juice on Sunday and Tuesday, and Water on Monday and Thursday.
 
 What is the sum of the Drinks totals?
 :   50 JD
 
+    Why: 10 + 15 + 12 + 13 = 50 JD.
+
 How do you see all rows again?
 :   Clear Filter
+
+    Why: Clear Filter shows all the rows again.
 :::
 :::
 
-## 13.3 Colour by a rule: conditional formatting
+## 7.3 Colour by a rule: conditional formatting
 
 - **Conditional formatting** colours cells by a rule, by itself.
 - Select the totals › **Home › Conditional Formatting › Highlight Cells
@@ -111,27 +153,40 @@ Colours you add by hand do not change when the numbers change.
 ::: {.callout-note title="Lab task · The big sales"}
 In `sales.xlsx`, make the rule Greater Than 20 for the totals. Add Data
 Bars to the Qty column. Which item sold the most pieces?
+
+::: {.check}
+Three totals turn green: 24, 36 and 24; the 20 stays white. The longest
+data bar is in the pens of Monday: 40 pieces.
+:::
 :::
 
 ::: {.callout-tip title="Try it 3 · Rules"}
-Use Table Lab. Choose the right answer.
+Use the sales table of section 7.1. Choose the right answer.
 
 ::: {.match extra="Data › Sort|2"}
 Where is conditional formatting?
 :   Home › Conditional Formatting
 
+    Why: Conditional formatting is on the Home tab.
+
 How many totals are greater than 20?
 :   3
+
+    Why: 24, 36 and 24 are greater than 20.
 
 Is the total 20 coloured by the rule Greater Than 20?
 :   no
 
+    Why: 20 is not greater than 20.
+
 Juice changes from 12 to 22. What happens?
 :   it turns green by itself
+
+    Why: The rule checks the cells again when a number changes.
 :::
 :::
 
-## 13.4 Show it as a picture: charts
+## 7.4 Show it as a picture: charts
 
 - **Column chart:** compare amounts. **Line chart:** a change over time.
   **Pie chart:** the parts of one whole.
@@ -151,6 +206,12 @@ Juice changes from 12 to 22. What happens?
 ::: {.callout-note title="Lab task · Two charts"}
 Make the table *Type / Sales* (Paper 75, Drinks 50, Bags 60). Make a column
 chart with a real title, and a pie chart with data labels.
+
+::: {.check}
+A column chart with three columns (Paper 75, Drinks 50, Bags 60) and a
+real title, for example "Sales by type in one week (JD)". The pie chart
+shows the three parts of 185 JD, each with its label.
+:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Charts"}
@@ -160,14 +221,22 @@ Choose the right chart. You can use an answer more than once.
 Compare Paper, Drinks and Bags?
 :   a column chart
 
+    Why: Columns compare amounts side by side.
+
 The sales from Sunday to Thursday?
 :   a line chart
+
+    Why: A line shows a change over time.
 
 The part of each type in the 185 JD?
 :   a pie chart
 
+    Why: A pie shows the parts of one whole.
+
 The sales of five shops in one month?
 :   a column chart
+
+    Why: Five shops are amounts to compare.
 :::
 :::
 
@@ -181,39 +250,35 @@ types compared, and the part of each type in **185 JD**.
 
 {{< sim file="sims/ranas-questions.html" poster="sims/ranas-questions.png" title="Rana's Questions: the right Excel tool" kind="game" height="520" >}}
 
-::: {.callout-tip title="Try it 5 · Huda's questions"}
-Choose the right tool.
+::: {.callout-tip title="Try it 5 · Rana's answers (harder)"}
+The sales of the week are in the table of section 7.1: Paper, Drinks and
+Bags, 185 JD in all. Choose the right answer.
 
-::: {.match extra="type the numbers again|delete the other rows"}
-Which sale was the biggest?
+::: {.match extra="type the numbers again|delete the other rows|45 JD"}
+Which sale was the biggest? Which tool shows it fast?
 :   Sort by Total, largest first
 
-Show me only the drinks.
+    Why: Sort puts the biggest total on top.
+
+"Show me only the drinks." Which tool?
 :   Filter the column Type
 
-Make every total above 20 JD green.
+    Why: A filter shows only the rows of one type.
+
+"Make every total above 20 JD green, also next week." Which tool?
 :   Conditional formatting
 
-How did the sales change over the days?
-:   a line chart
-:::
-:::
+    Why: A rule colours the totals by itself, also next week.
 
-::: {.callout-tip title="Try it 6 · Numbers of the week (harder)"}
-Use the sales of the week. Choose the right answer.
-
-::: {.match extra="185 %|45 JD"}
 What is the total of the Paper sales?
 :   75 JD
+
+    Why: 24 + 20 + 16 + 15 = 75 JD.
 
 On which day were the sales highest?
 :   Tuesday, 48 JD
 
-What part of 185 JD are the Bags (60 JD)?
-:   about 32 %
-
-Which type is the shortest column?
-:   Drinks
+    Why: Tuesday: 36 + 12 = 48 JD, more than any other day.
 :::
 :::
 

@@ -42,27 +42,27 @@
   const data = {}, locked = [];
   ["A", "B", "C", "D", "E"].forEach((c, i) => { data[c + "1"] = SALES_HEAD[i]; locked.push(c + "1"); });
   SALES.forEach((r, k) => r.forEach((v, i) => { const a = "ABCDE"[i] + (k + 2); data[a] = v; locked.push(a); }));
-  Object.assign(data, { F1: "Question", G1: "Answer", F2: "Drinks total", F3: "Sales over 20 JD", F4: "Average Paper sale" });
+  Object.assign(data, { F1: "Question", G1: "Answer", F2: "Week total", F3: "Biggest sale", F4: "Average sale" });
   locked.push("F1", "G1", "F2", "F3", "F4");
   const JOBS = [
-    { k: "1", cell: "G2", prompt: "In Excel, my data is in A1:E11. Column C is the Type, column E is the Total in JD. Write one formula for the total of the rows where the Type is Drinks.",
-      ai: 'Use SUMIF: <code>=SUMIF(C2:C11,"Drinks",E2:E11)</code>. It adds the totals in E where C is “Drinks”.', f: '=SUMIF(C2:C11,"Drinks",E2:E11)' },
-    { k: "2", cell: "G3", prompt: "Same data. Write a formula that counts how many totals in E2:E11 are greater than 20.",
-      ai: 'Use COUNTIF: <code>=COUNTIF(E2:E11,">20")</code>. The rule ">20" is in quotes.', f: '=COUNTIF(E2:E11,">20")' },
-    { k: "3", cell: "G4", prompt: "Same data. Write a formula for the average Total of the rows where the Type is Paper.",
-      ai: 'Use AVERAGEIF: <code>=AVERAGEIF(C2:C11,"Paper",D2:D11)</code>. It finds the average of the Paper rows.', f: '=AVERAGEIF(C2:C11,"Paper",D2:D11)' },
+    { k: "1", cell: "G2", prompt: "In Excel, my data is in A1:E11. Column E is the Total in JD. Write one formula for the total of all the sales.",
+      ai: 'Use SUM: <code>=SUM(E2:E11)</code>. It adds the ten totals in column E.', f: "=SUM(E2:E11)" },
+    { k: "2", cell: "G3", prompt: "Same data. Write a formula for the biggest total in column E.",
+      ai: 'Use MAX: <code>=MAX(E2:E11)</code>. It finds the highest total.', f: "=MAX(E2:E11)" },
+    { k: "3", cell: "G4", prompt: "Same data. Write a formula for the average Total of the ten sales.",
+      ai: 'Use AVERAGE: <code>=AVERAGE(D2:D11)</code>. It finds the average of the sales.', f: "=AVERAGE(D2:D11)" },
   ];
   const f = (s, a) => (s.formula(a) || "").replace(/\s/g, "").toUpperCase();
   const tasks = [
-    { q: "Job 1: ask the AI for the Drinks total, paste the formula into G2, and check: is it 10 + 15 + 12 + 13?", check: (s) => f(s, "G2") === '=SUMIF(C2:C11,"DRINKS",E2:E11)', ok: "G2 = 50 JD. Check by hand: 10 + 15 + 12 + 13 = 50. The formula is right." },
-    { q: "Job 2: get the formula for the number of sales over 20 JD into G3. Count them yourself to check.", check: (s) => f(s, "G3") === '=COUNTIF(E2:E11,">20")', ok: "G3 = 3 (24, 36 and 24). 20 itself is not greater than 20." },
-    { q: "Job 3: get the formula for the average Paper sale into G4. Check it: (24 + 20 + 16 + 15) ÷ 4 = 18.75. Fix the formula if the result is different.", check: (s) => f(s, "G4") === '=AVERAGEIF(C2:C11,"PAPER",E2:E11)', ok: "Fixed: the AI used column D (Qty) instead of E (Total). Now G4 = 18.75 JD." },
+    { q: "Job 1: ask the AI for the total of the week, paste the formula into G2, and check: Paper 75 + Drinks 50 + Bags 60.", check: (s) => f(s, "G2") === "=SUM(E2:E11)", ok: "G2 = 185 JD. Check by hand: 75 + 50 + 60 = 185. The formula is right." },
+    { q: "Job 2: get the formula for the biggest sale into G3. Find the biggest total in column E yourself to check.", check: (s) => f(s, "G3") === "=MAX(E2:E11)", ok: "G3 = 36 JD: the bag of Tuesday is the biggest sale." },
+    { q: "Job 3: get the formula for the average sale into G4. Check it: 185 ÷ 10 = 18.5. Fix the formula if the result is different.", check: (s) => f(s, "G4") === "=AVERAGE(E2:E11)", ok: "Fixed: the AI used column D (Qty) instead of E (Total). Now G4 = 18.50 JD." },
   ];
   const sheet = MiniSheet.create($("sheet"), {
     rows: 11, cols: 7, data, locked, widths: { F: 130 }, select: "G2", bold: ["A1", "B1", "C1", "D1", "E1", "F1", "G1"],
     formats: { G4: "0.00" }, taskEl: $("task"), say, tasks,
     onTask: (t) => { say("✓ " + t.ok, "good"); Kit.good(); },
-    onChange: (s) => { if (s.sel === "G4" && /D2:D11/i.test(s.formula("G4") || "")) say("G4 shows 22.50, not 18.75. Which column does the formula average? Look at the last range.", "bad"); },
+    onChange: (s) => { if (s.sel === "G4" && /D2:D11/i.test(s.formula("G4") || "")) say("G4 shows 19.50, not 18.50. Which column does the formula average? Look at the range.", "bad"); },
   });
   let job = JOBS[0];
   function show(k) {

@@ -1,7 +1,7 @@
 ---
 title: "Excel (2): Sorting, Filtering, Conditional Formatting and Charts"
 description: "Lesson notes · Putting rows in order with Sort, showing only some rows with Filter, colouring cells by a rule with conditional formatting, and choosing and making the right chart with a good title."
-lesson: 13
+lesson: 7
 ilos: [C2]
 format: lesson-typst
 ---
@@ -11,7 +11,7 @@ Rana has the sales of the *Sunrise* shop for one week in Excel: the day,
 the item, the type, the quantity and the total. Huda, the manager, asks her
 questions: Which sale was the biggest? How much did we sell of drinks? Show
 me the big sales. How did the week go? Rana can answer every question in a
-few clicks. In lecture 11 you made Excel calculate. In this lesson you make
+few clicks. In Lecture 6 you made Excel calculate. In this lesson you make
 a table easy to read: you **sort** it, you **filter** it, you colour it
 with a rule, and you make a **chart**. Every section ends with a lab task.
 :::
@@ -20,12 +20,12 @@ with a rule, and you make a **chart**. Every section ends with a lab task.
 
 {{< glossary sort-data filter-data conditional-formatting chart column-chart line-chart pie-chart chart-title cell-range >}}
 
-## 13.1 Put the rows in order: Sort
+## 7.1 Put the rows in order: Sort
 
 Huda asks: "Which sale was the biggest?" Rana does not read all the rows.
 She **sorts** the table by the Total (@fig-sort).
 
-::: {.callout-important title="Definition 13.1 — Sort"}
+::: {.callout-important title="Definition 7.1 — Sort"}
 To **sort** is to put the rows in order by one column: A to Z or smallest
 to largest, or the other way. Each row moves as a whole.
 :::
@@ -36,7 +36,7 @@ to largest, or the other way. Each row moves as a whole.
 - **Data › Sort** › Sort by *Total* › Order *Largest to Smallest* › OK.
 - Quick buttons: **A→Z** and **Z→A** on the Data tab.
 
-::: {.callout-note title="Example 13.1 — The biggest sale"}
+::: {.callout-note title="Example 7.1 — The biggest sale"}
 1. Rana clicks a cell in the table, then Data › Sort.
 2. She chooses Total and Largest to Smallest.
 3. The bag of Tuesday (36 JD) is now on top; the juice of Sunday (10 JD) is
@@ -49,24 +49,45 @@ the days and the items stay: the table is wrong. Click one cell, and let
 Excel take the whole table.
 :::
 
+| Day | Item | Type | Qty | Total (JD) |
+|---|---|---|---|---|
+| Sun | Notebook | Paper | 12 | 24 |
+| Sun | Juice | Drinks | 20 | 10 |
+| Mon | Pen | Paper | 40 | 20 |
+| Mon | Water | Drinks | 30 | 15 |
+| Tue | Bag | Bags | 3 | 36 |
+| Tue | Juice | Drinks | 24 | 12 |
+| Wed | Notebook | Paper | 8 | 16 |
+| Wed | Bag | Bags | 2 | 24 |
+| Thu | Water | Drinks | 26 | 13 |
+| Thu | Pen | Paper | 30 | 15 |
+
+: The sales of the Sunrise shop in one week. {#tbl-sales}
+
 {{< sim file="sims/table-lab.html" poster="sims/table-lab.png" title="Table Lab: sort, filter and colour the Sunrise sales" height="680" >}}
 
 ::: {.callout-note title="Lab task · Sort the week"}
-1. Type the table of @fig-sort (all 10 sales, see Table Lab) in a new
-   workbook, and save it as `sales.xlsx`.
+1. Type the sales of @tbl-sales in a new workbook, and save it as
+   `sales.xlsx`.
 2. Sort it by Total, largest first. Which sale is on top?
 3. Sort it by Day, A to Z. What is strange about the order? (Hint: Mon
    comes before Sun.)
 
 *Your result:* `sales.xlsx`, sorted by Total.
+
+::: {.check}
+By Total, largest first: the bag of Tuesday (36 JD) is on top, and the
+juice of Sunday (10 JD) is at the bottom. By Day, A to Z, the order is Mon,
+Sun, Thu, Tue, Wed: Excel sorts the days as words, by their letters.
+:::
 :::
 
-## 13.2 Show only some rows: Filter
+## 7.2 Show only some rows: Filter
 
 Huda asks: "How much did we sell of drinks?" Rana shows only the drink
 rows with a **filter** (@fig-filter).
 
-::: {.callout-important title="Definition 13.2 — Filter"}
+::: {.callout-important title="Definition 7.2 — Filter"}
 A **filter** shows only the rows that match your choice. The other rows are
 **hidden, not deleted**.
 :::
@@ -78,7 +99,7 @@ A **filter** shows only the rows that match your choice. The other rows are
 - Click the arrow of *Type* › tick only **Drinks** › OK.
 - **Clear Filter** (Data tab) shows all the rows again.
 
-::: {.callout-note title="Example 13.2 — The drinks"}
+::: {.callout-note title="Example 7.2 — The drinks"}
 1. Rana filters the Type to Drinks: 4 rows stay.
 2. She selects the four totals: the status bar at the bottom of Excel
    shows **Sum: 50**.
@@ -96,14 +117,19 @@ only hides rows.
 3. Clear the filter.
 
 *Your result:* the sum of the Paper sales.
+
+::: {.check}
+Paper has 4 rows: 24, 20, 16 and 15 JD. The status bar shows Sum: 75.
+After Clear Filter, all 10 rows come back.
+:::
 :::
 
-## 13.3 Colour by a rule: conditional formatting
+## 7.3 Colour by a rule: conditional formatting
 
 Huda asks: "Show me the big sales, over 20 JD." Rana does not colour the
 cells by hand. She makes a rule (@fig-cf).
 
-::: {.callout-important title="Definition 13.3 — Conditional formatting"}
+::: {.callout-important title="Definition 7.3 — Conditional formatting"}
 **Conditional formatting** is a rule that colours cells by themselves when
 their value matches, for example *greater than 20*. When a number changes,
 the colour changes too.
@@ -118,7 +144,7 @@ the colour changes too.
 - Other rules: *Data Bars* (a small bar in each cell), *Top 10 Items*.
 - To remove: Conditional Formatting › **Clear Rules**.
 
-::: {.callout-note title="Example 13.3 — The big sales"}
+::: {.callout-note title="Example 7.3 — The big sales"}
 1. Rana selects D2:D11 and makes the rule Greater Than 20, green.
 2. Three cells are green: 24, 36 and 24. The pen sale of Monday (20) is not
    green: 20 is not greater than 20.
@@ -136,14 +162,19 @@ and the colours are wrong. A rule keeps them right.
 2. Add Data Bars to the Qty column. Which item sold the most pieces?
 
 *Your result:* green totals and data bars.
+
+::: {.check}
+Three totals turn green: 24, 36 and 24; the 20 stays white. The longest
+data bar is in the pens of Monday: 40 pieces.
+:::
 :::
 
-## 13.4 Show it as a picture: charts
+## 7.4 Show it as a picture: charts
 
 Huda asks: "How did the week go?" A **chart** shows the answer at once.
 But each question needs its own kind of chart (@fig-charts).
 
-::: {.callout-important title="Definition 13.4 — Three common charts"}
+::: {.callout-important title="Definition 7.4 — Three common charts"}
 - **Column chart:** compares amounts (Paper, Drinks, Bags).
 - **Line chart:** shows a change over time (Sunday to Thursday).
 - **Pie chart:** shows the parts of one whole (each type in the week).
@@ -157,7 +188,7 @@ But each question needs its own kind of chart (@fig-charts).
 - Click the **Chart Title** and type what the chart shows.
 - **Chart Elements** (the + next to the chart): add data labels.
 
-::: {.callout-note title="Example 13.4 — Three questions, three charts"}
+::: {.callout-note title="Example 7.4 — Three questions, three charts"}
 1. "Which type sells most?" A column chart: Paper 75 is the tallest.
 2. "How did the days go?" A line chart: up to 48 on Tuesday, down to 28 on
    Thursday.
@@ -179,6 +210,12 @@ write a real title, and choose the chart for the question.
 3. Make a pie chart from the same table. Add data labels.
 
 *Your result:* `sales.xlsx` with two charts.
+
+::: {.check}
+A column chart with three columns (Paper 75, Drinks 50, Bags 60) and a
+real title, for example "Sales by type in one week (JD)". The pie chart
+shows the three parts of 185 JD, each with its label.
+:::
 :::
 
 ## Case study: Rana's Questions
@@ -194,9 +231,15 @@ below you choose the right tool for each one.
 
 ::: {.callout-note title="Lab task · Answer Huda"}
 1. In `sales.xlsx`, answer Huda's six questions with the right tool.
-2. Save the file and upload it to the e-learning platform.
+2. Save the file.
 
 *Your result:* `sales.xlsx` with a sort, a filter, a rule and two charts.
+
+::: {.check}
+Sort by Total, largest first; filter the Type to Drinks; conditional
+formatting, Greater Than 20, for the totals; a line chart of the days; a
+column chart of the three types; a pie chart of the three types in 185 JD.
+:::
 :::
 
 ## Further reading

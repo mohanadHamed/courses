@@ -72,7 +72,7 @@
       q: "Where is a copy of the photo now?", opts: ["In the recycle bin", "Only on the USB stick at home", "Nowhere"], right: 1,
       why: "Only the backup has it: a separate copy that sync does not touch." },
     { text: "Copy the photo back from the USB stick.", act: "aUsb", q: null,
-      why: "Saved by the backup. Sync is not a backup. The 3-2-1 rule: 3 copies, on 2 kinds of storage, 1 copy in another place." },
+      why: "Saved by the backup. Sync is not a backup: a backup is a separate copy, and a mistake does not reach it." },
   ];
   const $ = (id) => document.getElementById(id);
   let files, usb, bin, m, waitingQ, busy, timers = [];

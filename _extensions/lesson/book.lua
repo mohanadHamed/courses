@@ -11,7 +11,8 @@
 --   ::: {.check}         The result of a Do it task or a seminar activity. The
 --   …                    notes are a self-test: the result is taken out of the
 --   :::                  lesson and printed at the end, in "Results of the Do it
---                        tasks" (a seminar or practice session: "Results of the
+--                        tasks" (Digital Skills: "Results of the Lab tasks"; a
+--                        seminar or practice session: "Results of the
 --                        activities"), under the title of its box.
 --
 --   ::: {.prompt}        A starter prompt of a "Task with AI" box: a dashed box.
@@ -23,6 +24,7 @@ local str = pandoc.utils.stringify
 local results = {}      -- { label = "1.2 · Do it · Add two arrows", blocks = {...} }
 local section = nil     -- "1.2" of the current ## heading
 local box = nil         -- title of the current callout
+local lab = false       -- a result of a "Lab task" box (Digital Skills)
 
 local function is_typst()
   return quarto.doc.is_format("typst")
@@ -37,6 +39,7 @@ end
 
 local function take_check(div)
   local label = (box or "Task"):gsub(" · %d+ min$", "")
+  if label:match("^Lab task") then lab = true end
   if section and not label:match("^Activity") then label = section .. " · " .. label end
   table.insert(results, { label = label, blocks = div.content })
   return {}
@@ -87,7 +90,8 @@ local append = {
     if not is_typst() or #results == 0 then return nil end
     local m = doc.meta
     local seminar = m.seminar or m.practice
-    doc.blocks:insert(pandoc.Header(2, seminar and "Results of the activities" or "Results of the Do it tasks"))
+    doc.blocks:insert(pandoc.Header(2, seminar and "Results of the activities"
+      or (lab and "Results of the Lab tasks" or "Results of the Do it tasks")))
     doc.blocks:insert(pandoc.Para({ pandoc.Emph({ pandoc.Str(seminar
       and "Do each activity first. Then compare your result with the one here."
       or "Do each task first. Then compare your result with the one here.") }) }))

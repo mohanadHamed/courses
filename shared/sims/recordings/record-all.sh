@@ -167,8 +167,6 @@ workshop-day|courses/digital-media/week-15/sims/workshop-day.html|8|courses/digi
 package-review|courses/digital-media/week-15/sims/package-review.html|8|courses/digital-media/week-15/sims/package-review.gif
 talk-planner|courses/digital-media/week-15/sims/talk-planner.html|6|courses/digital-media/week-15/sims/talk-planner.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif
-digcomp-check|courses/digital-skills/week-01/sims/digcomp-check.html|7|courses/digital-skills/week-01/sims/digcomp-check.gif
-hiring-desk|courses/digital-skills/week-01/sims/hiring-desk.html|10|courses/digital-skills/week-01/sims/hiring-desk.gif
 time-saver|courses/digital-skills/week-01/sims/time-saver.html|10|courses/digital-skills/week-01/sims/time-saver.gif
 app-launcher|courses/digital-skills/week-01/sims/app-launcher.html|10|courses/digital-skills/week-01/sims/app-launcher.gif
 ai-chat|courses/digital-skills/week-01/sims/ai-chat.html|10|courses/digital-skills/week-01/sims/ai-chat.gif

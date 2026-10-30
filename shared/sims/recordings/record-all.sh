@@ -21,7 +21,6 @@ grid-strike|courses/game-math/week-01/sims/grid-strike.html|8|courses/game-math/
 vector-dash|courses/game-math/week-01/sims/vector-dash.html|10|courses/game-math/week-01/sims/vector-dash.gif
 position-3d|courses/game-math/week-01/sims/position-3d.html|7|courses/game-math/week-01/sims/position-3d.gif|window
 vector-lab|courses/game-math/week-02/sims/vector-lab.html|9|courses/game-math/week-02/sims/vector-lab.gif
-fair-speed|courses/game-math/week-02/sims/fair-speed.html|8|courses/game-math/week-02/sims/fair-speed.gif
 raft-rush|courses/game-math/week-02/sims/raft-rush.html|10|courses/game-math/week-02/sims/raft-rush.gif
 dot-lab|courses/game-math/week-02/sims/dot-lab.html|8|courses/game-math/week-02/sims/dot-lab.gif
 shadow-cat|courses/game-math/week-02/sims/shadow-cat.html|8|courses/game-math/week-02/sims/shadow-cat.gif

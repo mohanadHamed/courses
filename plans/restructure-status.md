@@ -109,21 +109,20 @@ The teacher's notes:
   Homework 10 unchanged. Raft Odds and the figure `large-numbers` removed;
   Lecture 11 refers to Seminar 10 for many tries.
 
+- Game Math practice weeks and the rest of the course: Seminar 12 has a
+  D1 part (a reply to a player, presented alone, 18 min; 56 planned
+  minutes); Practices 1 and 2 relabelled; Practices 3, 4 and 5 (old
+  Lectures 17–19) rewritten in the practice format (three short activities
+  each, 59–60 planned minutes, worksheets made with `mkbook.py`, the team
+  activity in the worksheet of Practice 3); the course maps (`course-map`,
+  `course-map-all`) and the matrix figure show the new lecture numbers;
+  Fair Speed and the figures no session uses removed; `index.qmd`,
+  `plan.md` and `NOTES.md` describe the 12 units and 3 practice weeks.
+  `check_size.py` gives no warning for Game Math.
+
 ### Still to do (in this order)
 
-1. **Game Math**
-   - Seminar 12 (week-13): add a short D1 part (present the solution of
-     the balancing problem in three sentences; the team box with an
-     individual alternative in the worksheet), as `schedule.yml` says.
-   - Practice 1 (week-08, old Seminar 5): "Lectures 1–7" text and
-     `practises`; check the old lecture numbers inside.
-   - Practice 2 (week-14, old Seminar 10): references to Lectures 1–12.
-   - Practices 3, 4, 5 (old Lectures 17, 18, 19, in lecture format): convert
-     to the practice format (Recall, 2–3 activities, Wrap-up; worksheet with
-     `mkbook.py`; Recall / Activity / Check slides), no new ideas. Keep the
-     team activity (D1) of old 17 in the worksheet of Practice 3.
-   - Course page text (`index.qmd`), `plan.md`, `NOTES.md`; check the
-     figures and sims that no session uses; `check_size.py --all` clean.
+1. **Game Math:** done (see above).
 2. **Computing Systems** (design above): merge Lectures 5 + 6 and Seminars
    5 + 6 (week-05; move the needed figures and sims from week-06),
    renumber 7–13 → 6–12, Lecture 14 → Practice 1 (practice format),

@@ -1,296 +1,200 @@
 ---
 title: "Case Study: Random Level and Event Generation"
-description: "Lesson notes · A case study of a level generator for Torch Hall: seeds that repeat a level, random-walk caves, placing items by rejection sampling, weighted event tables and shuffle bags for the rooms, and testing a generator with many seeds."
+description: "Practice worksheet · Repeat a cave with its seed, place a monster and fill the rooms with an event table and a shuffle bag, then answer the reports of the testers of Torch Hall."
 practice: 4
 ilos: [B2, C2]
 format: lesson-typst
 ---
 
 ::: {.lead}
-*Torch Hall* gets an endless mode: every floor is new, built by a
-**level generator** from random numbers. The first tests are exciting and
-worrying at the same time. One tester finds a bug but cannot show it again,
-because the next floor is different. A chest stands right next to the
-start. Some floors have three golden torches, others no chest at all. In
-lectures 10–12 you learned probability, random numbers and seeds, weighted
-choices, balance and fair randomness. In this case study you **combine**
-them into one generator: seeds, a random-walk cave, placing items by rules,
-random events, and testing the generator with many seeds. Every section
-ends with a short task.
+This practice session is a case study: the level generator of a game, built
+from Lectures 10, 11 and 12. You repeat a cave with its seed, place a
+monster and fill the rooms with an event table and a shuffle bag, and answer
+the reports of the testers. There are no new ideas: three short problems. Do
+each one alone. The results of the activities are at the end of this
+worksheet.
 :::
 
-## Key terms
+## Recall
 
-{{< glossary procedural-generation level-generator seed prng random-walk rejection-sampling event-table weighted-random shuffle-bag expected-value generator-test >}}
+- The same seed gives the same random numbers (Lecture 11). A success with
+  probability p takes 1/p tries on average (Lecture 10).
+- E = x₁p₁ + x₂p₂ + …: the long-run average per try (Lecture 10).
+- A shuffle bag keeps the shares and spreads the results evenly
+  (Lecture 12).
 
-## 18.1 Seeds: the same seed, the same level
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
 
-A generator uses a pseudo-random number generator (PRNG). Its **seed**
-decides every number that follows (lecture 11; @fig-seeds).
+::: {.match extra="a new seed|20"}
+A tester wants to see the same random numbers again. What does the tester need?
+:   the same seed
 
-::: {.callout-important title="Definition 18.1 — Seeded generation"}
-A **level generator** builds a level from a PRNG and rules. With the same
-**seed** and the same code, it builds the **same level** again. Save the
-seed of every level; show it in bug reports; use a new seed (for example
-from the time) for a new level, or a shared seed for a "daily challenge"
-that all players play.
+A rule allows 50 % of the tiles. How many draws are needed on average?
+:   2
+
+A room gives 10 coins with p = 0.3, else nothing. What is E per room?
+:   3
+:::
 :::
 
-![The same seed gives the same level.](images/seeds.png){#fig-seeds width=94%}
+## Activity 1 · The same seed, the same cave
 
-::: {.callout-note title="Example 18.1 — The bug on floor 3"}
-1. A tester finds a wall without collision on floor 3 of endless mode.
-2. The game shows "seed 48213" in the pause menu; the tester writes it in
-   the report.
-3. The developer starts floor 3 with seed 48213 and sees the same wall.
-:::
+*Torch Hall* makes a new cave for every floor. It starts with walls
+everywhere. A walker starts in the middle and moves one random step at a
+time; every tile it steps on becomes floor. The exit goes on the floor tile
+farthest from the start. All its random numbers come from one seed.
 
-::: {.callout-caution title="In game code"}
-```csharp
-var rng = new System.Random(seed);       // one PRNG per level
-int roomType = rng.Next(0, 4);           // the same numbers for the same seed
-```
-:::
+![The same seed gives the same level.](images/seeds.png){width=86%}
 
-::: {.callout-warning title="Common mistake"}
-Using the same PRNG for the level and for things that change while
-playing (particles, enemy hits). Then the level changes when the player
-does something different. Use a separate PRNG for the level.
-:::
+{{< sim file="sims/cave-gen.html" poster="sims/cave-gen.png" title="Cave Generator: one seed, one level" >}}
 
-::: {.callout-note title="Do it · Same seed"}
-In **Cave Generator**, go to seed 43 and back to 42. Write what stays the
-same. Why is that useful for a daily challenge?
+::: {.callout-note title="Activity 1 · Seeds and steps · 15 min"}
+1. In **Cave Generator**, write where the chest is with seed 42. Go to seed
+   43, then back to 42. What stays the same?
+2. A tester finds a bug on one floor. What must the tester write in the
+   report? How can all players get the same floor today?
+3. The walker makes 20 steps. At most how many new floor tiles can it make?
+   Why are there often fewer?
 
-*Your result:* two sentences.
+*Your product:* three short answers, each with a reason.
 
 ::: {.check}
-Seed 42 builds exactly the same cave every time: the same walls, start, exit
-and chest. For a daily challenge, all players get the same seed, so they
-all play the same floor and can compare their results.
+1. Everything stays the same with seed 42: the walls, the start, the exit
+   and the chest.
+2. The seed of the floor: with it the team makes the same floor again. A
+   shared daily seed gives every player the same floor.
+3. At most 20; often fewer, because the walker steps on some tiles again.
 :::
 :::
 
-## 18.2 A random-walk cave
+::: {.callout-tip title="Try it 2 · Seeds and steps"}
+Choose the right answer.
 
-A simple way to dig a cave is a **random walk** (@fig-walk).
+::: {.match extra="a faster CPU|0"}
+How does the game make a new floor every time?
+:   a new seed, for example from the time
 
-::: {.callout-important title="Definition 18.2 — Random walk"}
-Start with a grid of walls. A walker starts in the middle; in each step it
-moves one tile in a random direction (up, down, left or right, inside the
-border) and makes that tile floor. More steps give a bigger cave. Because
-the walker only moves to neighbours, **every floor tile is connected** to
-the start.
+Why is a walker cave always one connected piece?
+:   the walker moves only to a neighbour tile
+
+The walker makes 30 steps. At most how many new floor tiles does it make?
+:   30
+:::
 :::
 
-![A random walk digs a cave.](images/random-walk.png){#fig-walk width=94%}
+## Activity 2 · A monster and the rooms
 
-::: {.callout-note title="Example 18.2 — Size of the cave"}
-1. A 24 × 14 grid has 336 tiles.
-2. With 160 steps the walker visits many tiles more than once; the cave is
-   about a quarter of the grid.
-3. The exit is placed on the floor tile farthest from the start, so the
-   player crosses the whole cave.
-:::
+A monster must not stand within 3 steps of the start, so the game draws a
+random floor tile and draws again when the rule fails; 80 % of the tiles
+are allowed. Each room gets an event from a table: a chest with 25 %
+(+20 coins), a torch with 5 % (+100 coins), and nothing with 70 %. A floor
+has 8 rooms. The team compares the table with a shuffle bag of the same
+shares.
 
-{{< sim file="sims/cave-gen.html" poster="sims/cave-gen.png" title="Cave Generator: one seed, one level" height="760" >}}
+![An event table: each event with its probability and its reward.](images/event-table.png){width=86%}
 
-::: {.callout-warning title="Common mistake"}
-Expecting 160 steps to give 160 floor tiles. The walker often steps on
-tiles that are already floor; measure the fill on many seeds.
-:::
+{{< sim file="sims/event-deck.html" poster="sims/event-deck.png" title="Event Deck: what is in each room?" >}}
 
-::: {.callout-note title="Do it · Walk on paper"}
-On a 7 × 7 grid, start in the middle. Roll a die 12 times: 1–2 right,
-3 left, 4 up, 5–6 down (stay inside). Colour each tile you visit.
+::: {.callout-note title="Activity 2 · Draws, coins and a bag · 20 min"}
+1. How many draws does the monster need on average?
+2. Find the expected coins per room and per floor of 8 rooms.
+3. Find P(no chest in 2 rooms), with the table.
+4. In **Event Deck**, test 1000 floors with the table, then with the bag.
+   Compare the coins per floor and the floors without a chest.
 
-*Your result:* a small cave and its number of floor tiles.
+*Your product:* one number of draws, two expected values, one probability
+and one sentence on the bag.
 
 ::: {.check}
-A good cave is one connected piece of coloured tiles around the middle,
-with fewer than 13 tiles (12 steps and the start), because the walker often
-steps on a tile again.
+1. 1/0.8 = 1.25 draws.
+2. E = 20 × 0.25 + 100 × 0.05 + 0 = 5 + 5 = 10 coins per room; 80 coins
+   per floor.
+3. 0.75 × 0.75 = 0.5625, about 56 %.
+4. Both methods give about 80 coins per floor; the bag has far fewer floors
+   without a chest: it spreads the chests but keeps the shares.
 :::
 :::
 
-## 18.3 Placing items by rejection sampling
+::: {.callout-tip title="Try it 3 · Rooms"}
+Empty 60 %, chest 30 % (+10 coins), torch 10 % (+50 coins). Choose the
+right answer.
 
-Items need rules: a chest not next to the start, a monster not on the exit
-(@fig-reject).
+::: {.match extra="25|100"}
+What is the expected number of coins per room?
+:   8
 
-::: {.callout-important title="Definition 18.3 — Rejection sampling"}
-Draw a random candidate; if it breaks a rule, **reject** it and draw
-again. If a share $p$ of all candidates is allowed, each draw succeeds
-with probability $p$, and the **expected number of draws** is
-$$E[\text{draws}] = \frac{1}{p}$$
-(the waiting time of lecture 10). Always set a maximum number of draws.
+What is the expected number of coins for 6 rooms?
+:   48
+
+What does a shuffle bag change?
+:   fewer unlucky floors, the same shares
+:::
 :::
 
-![Place the chest by drawing again.](images/rejection.png){#fig-reject width=94%}
+## Activity 3 · The reports of the testers
 
-::: {.callout-note title="Example 18.3 — The chest"}
-1. Rule: the chest is on floor and at least 6 steps from the start.
-2. 40 % of the tiles are allowed: $E[\text{draws}] = 1/0.4 = 2.5$.
-3. If only 2 % are allowed: $1/0.02 = 50$ draws on average; the maximum of
-   200 draws protects the game from an endless loop.
-:::
+The testers of *Torch Hall* send six reports. A player wants a friend to play
+the same floor. A new monster rule allows 80 % of the tiles. A room holds a
+chest with 20 % (+30 coins) or a gem with 10 % (+50 coins); a floor has 10
+rooms, and some floors have no gem at all. A new rule puts the exit at least
+20 steps from the start.
 
-::: {.callout-warning title="Common mistake"}
-A `while` loop with no maximum. If no tile meets the rules, the game
-freezes. Stop after a maximum and use a fallback (the farthest tile).
-:::
+![Test a generator with many seeds: look at the average and at the extremes.](images/generator-test.png){width=86%}
 
-::: {.callout-note title="Do it · Expected draws"}
-Compute the expected number of draws for $p = 0.8$, $0.25$ and $0.05$.
-Which rule would you change if $p$ is 0.05?
+{{< sim file="sims/generator-doctor.html" poster="sims/generator-doctor.png" title="Generator Doctor: six reports about the generator" kind="game" >}}
 
-*Your result:* three numbers and one idea.
+::: {.callout-note title="Activity 3 · Answer the reports · 20 min"}
+1. What does the player share with the friend?
+2. Find the expected draws for the monster, and the expected coins per room
+   and per floor.
+3. P(no gem in a room) = 0.9; for 10 rooms it is 0.9¹⁰ ≈ 0.35. Which change
+   gives every floor gems at the same rate?
+4. After the exit rule changes, what does the team do? Then play
+   **Generator Doctor** and answer the six reports.
+
+*Your product:* four short answers and your score in Generator Doctor.
 
 ::: {.check}
-1/0.8 = 1.25; 1/0.25 = 4; 1/0.05 = 20. With p = 0.05 the rule is very
-strict: allow more tiles (for example at least 4 steps instead of 6), or
-keep a maximum and a fallback.
+1. The seed of the floor.
+2. 1/0.8 = 1.25 draws. E = 30 × 0.2 + 50 × 0.1 = 6 + 5 = 11 coins per room;
+   110 coins per floor.
+3. About 35 % of the floors have no gem. A shuffle bag with 1 gem in every 10
+   rooms gives each floor its gem and keeps the rate.
+4. Test again with 1000 seeds or more and compare the path lengths with the
+   old rule: the average and the extremes.
 :::
 :::
 
-## 18.4 Random events: tables and bags
+::: {.callout-tip title="Try it 4 · Reports"}
+Choose the right answer.
 
-Each room of a floor gets an event from an **event table** (lecture 11;
-@fig-events).
+::: {.match extra="1|never"}
+A problem appears on 0.5 % of the seeds. About how often in 1000 seeds?
+:   about 5 times
 
-::: {.callout-important title="Definition 18.4 — Events per room"}
-- An **event table** is a weighted random choice: probability = weight ÷
-  sum of the weights.
-- The **expected reward** per room is $\sum$ value × probability
-  (lecture 12); per floor, multiply by the number of rooms.
-- Rolling each room alone can give unlucky floors; a **shuffle bag** of
-  cards (lecture 12) keeps the shares and spreads them more evenly.
-:::
+About how many seeds does a good test need?
+:   1000 or more
 
-![An event table.](images/event-table.png){#fig-events width=94%}
-
-::: {.callout-note title="Example 18.4 — Coins on a floor"}
-1. Per room: $0.25 \cdot 20 + 0.05 \cdot 100 = 10$ coins; per floor of 8
-   rooms: 80 coins.
-2. $P(\text{no chest in 2 rooms}) = 0.75 \times 0.75 \approx 0.56$. On a floor
-   of 8 rooms, Event Deck shows that about one floor in ten has no chest.
-3. With a bag of 20 cards (5 chests, 1 torch), the average stays 80 coins,
-   and floors without a chest become about half as frequent (Event Deck).
-:::
-
-{{< sim file="sims/event-deck.html" poster="sims/event-deck.png" title="Event Deck: what is in each room?" height="560" >}}
-
-::: {.callout-warning title="Common mistake"}
-Giving every event the same probability "to be fair". Fair for the game
-means a planned share of rewards and dangers, set with weights.
-:::
-
-::: {.callout-note title="Do it · A floor of events"}
-1. In **Event Deck**, test 1000 floors with each method and compare.
-2. Compute the expected coins per floor if the chest gives 30 coins.
-
-*Your result:* a comparison and one number.
-
-::: {.check}
-Both methods give about 80 coins per floor; the bag has far fewer floors
-without a chest. With 30 coins: 0.25 × 30 + 0.05 × 100 = 12.5 coins per
-room, 8 × 12.5 = **100** coins per floor.
+Besides the average, what does the team look at?
+:   the extremes
 :::
 :::
-
-## 18.5 Testing the generator with many seeds
-
-One good floor proves nothing. A **generator test** runs many seeds
-(@fig-test).
-
-::: {.callout-important title="Definition 18.5 — Generator test"}
-Run the generator for many seeds (for example 1000) and measure: the
-share of levels that keep the rules, the **path length** from start to exit, the
-number of chests and enemies, the **coins** per floor. Look at the
-average and at the extremes, as in lecture 12. Change one rule, test
-again, compare.
-:::
-
-![Testing the generator with 1000 seeds.](images/generator-test.png){#fig-test width=94%}
-
-::: {.callout-note title="Example 18.5 — Fewer steps"}
-1. With 160 walk steps: every floor is connected, and the average path is
-   34 tiles.
-2. The designers want shorter floors and try 120 steps.
-3. The test of 1000 seeds shows: average path 27 tiles, but 4 % of the
-   floors have a path under 10 tiles: too easy. They add a rule: "exit at
-   least 15 steps away, else next seed".
-:::
-
-::: {.callout-warning title="Common mistake"}
-Testing with seed 1, 2 and 3 only. Rare problems need many seeds; a 1 %
-problem appears about 10 times in 1000 seeds.
-:::
-
-::: {.callout-note title="Do it · Test plan"}
-Write a test plan for the generator: three numbers to measure, the number
-of seeds, and one rule you would change if a number is bad.
-
-*Your result:* a short test plan.
-
-::: {.check}
-A good plan names three numbers (for example the path length, the chests
-and the coins per floor), many seeds (1000 or more), and one rule with a
-reason ("if 5 % of the floors have a path under 10 tiles, place the exit at
-least 15 steps away").
-:::
-:::
-
-## Case study: Generator Doctor
-
-The testers of *Torch Hall* send six reports. A player wants a friend to
-play the same floor. The walker of the cave makes 100 steps: is every tile
-connected? A monster must not stand within 3 steps of the start, and 80 %
-of the tiles are allowed. A room holds a chest with 20 % (+30 coins) or a
-gem with 10 % (+50 coins). Some floors have no gem. And a new rule puts the
-exit at least 20 steps from the start. The Game challenge of the
-interactive page uses these reports. In the mini-game below you choose the
-fix or the number that answers each report.
-
-{{< sim file="sims/generator-doctor.html" poster="sims/generator-doctor.png" title="Generator Doctor: six reports about the generator" kind="game" height="460" >}}
-
-## Further reading
-
-Shaker, Togelius and Nelson, *Procedural Content Generation in Games*
-(2016), Chapters 1–3 (free online). Short, "Procedural Generation in Game
-Design" (2017), the chapters on dungeons and on testing generators.
 
 ## Exercises
 
-1. Why does the same seed give the same level?
-2. Why should the level have its own PRNG?
-3. Describe one step of a random walk.
-4. Why is a random-walk cave always connected?
-5. A rule allows 50 % of the tiles. Expected draws?
-6. Why does a rejection loop need a maximum?
-7. An event table: empty 60, chest 30 (+10 coins), torch 10 (+50 coins).
-   Expected coins per room?
-8. In exercise 7, expected coins for a floor of 6 rooms?
-9. $P(\text{no chest in 2 rooms})$ with $p = 0.3$ per room?
-10. What does a shuffle bag change for the events of a floor?
-11. Name three numbers a generator test can measure.
-12. A problem happens on 0.5 % of the seeds. About how often in 1000
-    seeds?
+1. Why does a level generator use its own seed and random numbers?
+2. A rule allows 25 % of the tiles. How many draws does a chest need on average?
+3. A room has a chest with 40 % (+10 coins) and nothing otherwise. What are the expected coins per room and for 5 rooms?
+4. A chest comes with p = 0.5 per room. What is P(no chest in 3 rooms)?
+5. A problem appears on 1 % of the seeds. About how often does it appear in 1000 seeds?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. The PRNG gives the same sequence of numbers for the same seed.
-2. So that the actions of the player do not change the level.
-3. Move one tile in a random direction (inside the border) and make it
-   floor.
-4. The walker only moves to neighbouring tiles.
-5. $1/0.5 = 2$.
-6. If no candidate meets the rules, the loop never ends.
-7. $0.3 \cdot 10 + 0.1 \cdot 50 = 8$.
-8. 48.
-9. $0.7 \times 0.7 = 0.49$.
-10. The shares stay, but unlucky floors (no chest) become rarer.
-11. For example the path length, the chests, the coins per floor.
-12. About 5 times.
+1. So that the player's actions do not change the level: the same seed gives the same level.
+2. 1/0.25 = 4 draws.
+3. 4 coins per room; 20 coins for 5 rooms.
+4. 0.5 × 0.5 × 0.5 = 1/8.
+5. About 10 times.
 :::

@@ -4,9 +4,10 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
 
 ## Timing and textbook
 
-- 2 lectures × 90 min (3 credit hours). Lesson A = syllabus First Lecture,
-  Lesson B = Second Lecture; the syllabus seminar becomes the case study and
-  Game challenge of lesson A.
+- 3 credit hours (2 theory + 1 seminar), taught every week as one lecture
+  of 90 min and one seminar of 90 min. The lecture of a unit covers both
+  lecture columns of its syllabus week (First Lecture and Second Lecture);
+  the seminar does the syllabus seminar topic and practises that lecture.
 - Textbook: Dunn and Parberry, *3D Math Primer for Graphics and Game
   Development*, 2nd ed. (ch. 1 coordinate systems, ch. 2 vectors, …). Follow
   its order and rigour; never copy it.
@@ -28,18 +29,24 @@ discrete grids, reading short game code, several frames in one question.
 Mathematics: LaTeX math (`$…$`) in the notes; plain text with
 `x~s~` subscripts on the page and slides (no MathJax needed).
 
-## Units and seminars (2026-10-28)
+## Units, seminars and practice weeks (plan v3, 2026-10-31)
 
-- 15 units = syllabus weeks 1–15: 19 lectures (core) and 10 seminars
-  (flexible). In a week with two lectures (units 2, 3, 4, 11, 15) the
-  syllabus seminar topic is the Game challenge of the second lecture; in a
-  week with one merged lecture the second 90-min session is a seminar with
-  the syllabus seminar title. Unit 8 is the revision seminar (Seminar 5).
+- 15 weeks: 12 units (core: Lecture N, Seminar N, Homework N; syllabus
+  weeks 1–7 and 9–13) and 3 practice weeks (flexible: week 8, Practice 1,
+  revision of Lectures 1–7; week 14, Practice 2 applied problem set and
+  Practice 3 case study: movement of a 2D object; week 15, Practice 4 case
+  study: random levels and Practice 5 course revision). The syllabus weeks
+  with two lectures (2, 3, 4, 11) have one merged lecture of 7 sections; the
+  second application of each idea is in the seminar of the week.
+- D1 (present solutions, team work) has a core part in Seminar 12 (a reply
+  of three sentences, presented alone); the team activity is in the
+  worksheet of Practice 3, with an individual alternative, and Practice 5
+  presents a solution in five parts.
 - A 90-min seminar (since 2026-10-30): Recall, two short problems (three
   at most) that together use every concept of the lecture, about 60 of the
   90 minutes planned (the rest for explaining), a Wrap-up; no separate Game
   challenge. A game that the merged lectures gave up (Multiply Lab, Asteroid
-  Beam, Lighthouse, Problem Drill, Star Dock Missions) is the tool of an
+  Beam, Raft Rush, Sky Lift, Turn Lab, Roll Lab, Crate Lab) is the tool of an
   activity when it fits.
 - Tasks with AI fit here when the AI does the long part and the student
   checks it: a sheet of 1000 loot rolls against the expected value,
@@ -82,3 +89,11 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   `sqrMagnitude`, and Unity code that no task needs. Case studies get new
   numbers (they reused the worked examples, so the notes held the Game
   challenge answers). Fix: Turn Lab's target (6, 1) is at 9.5°, not 10°.
+- 2026-10-31 (plan v3): every week is one lecture and one seminar, and the
+  course has 12 core weeks and 3 practice weeks. Old Lectures 2+3, 4+5, 6+7
+  and 13+14 were merged (7 sections each). Cut from the lectures: the vision
+  cone as a section (it is in the Game challenge story and Seminar 2),
+  back-face culling and the ray test (the beam is a problem of Seminar 3),
+  turning the short way, and theory and experiment (now Seminar 10). Removed:
+  Fair Speed and Raft Odds. Old Lectures 17–19 became Practices 3–5 in the
+  practice format; Homework 14 was removed.

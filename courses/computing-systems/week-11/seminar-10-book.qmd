@@ -1,19 +1,17 @@
 ---
 title: "Networking Tools Demonstration"
-description: "Seminar worksheet · Run the network tools of every computer: ipconfig for your address, ping for latency and loss near and far, a speed test, and a diagnosis from near to far."
+description: "Seminar worksheet · Find your IP address and gateway with ipconfig and test your connection near and far with ping, then find the problem of six players from near to far."
 seminar: 10
 ilos: [A2]
 format: lesson-typst
 ---
 
 ::: {.lead}
-After the online mode of *Pocket Quest* goes live, the support inbox of Byte
-Bay fills up: "The game lags!", "Server not found!", "I cannot connect!".
-Today there are no new ideas: you use what Lecture 10 taught and run the
-network tools that every computer has, on a lab PC or in Terminal Lab. You
-find your address, measure the ping near and far, and find a problem step
-by step. Do each activity alone. The results of the activities are at the
-end of this worksheet: try first, then compare.
+In Lecture 10 you learned how networks connect, addresses and names, TCP
+and UDP, and the quality of a network for games. Today you use the network
+tools of every computer to find problems. There are no new ideas: two short
+problems. Do each one alone. The results of the activities are at the end
+of this worksheet.
 :::
 
 ## Recall
@@ -22,8 +20,8 @@ end of this worksheet: try first, then compare.
   gateway** is the router; the **DNS** turns names into addresses.
 - **Latency** (ping) is the time there and back; **jitter** is how much it
   changes; **packet loss** is the share of packets that never arrive.
-- **Bandwidth** is the data per second; an action game needs low latency
-  and no loss more than bandwidth.
+- **TCP** sends lost packets again; **UDP** does not, so it is faster for
+  live positions and voice.
 
 ::: {.callout-tip title="Try it 1 · Recall"}
 Choose the right answer.
@@ -32,224 +30,126 @@ Choose the right answer.
 Which device is the default gateway?
 :   the router
 
-    Why: Packets to other networks go to the router first.
-
 What turns play.example.net into an IP address?
 :   the DNS
 
-    Why: The DNS turns names into numbers.
-
 What do we call the time of a packet there and back?
 :   latency
-
-    Why: Latency, the ping, is measured in milliseconds.
 :::
 :::
 
-## Activity 1 · Your address: ipconfig
+## Activity 1 · Your address, near and far
 
-Rami's support inbox fills up: "The game lags!", "Server not found!", "I
-cannot connect!". He does not guess: he uses the tools that every computer
-has. Each tool answers one question.
+Rami's support inbox fills up: "The game lags!", "Server not found!". He
+does not guess: he uses the tools that every computer has.
 
-- **ipconfig** (Windows; open the Command Prompt: type `cmd` in the Start
-  menu): the IPv4 address, the default gateway and the DNS server.
-- **ping** *target*: is the target there, how fast, are packets lost?
-- A **speed test** (a website or an app): the bandwidth.
-- An address **169.254.x.x** with no gateway means: the computer got **no
-  address** from the router. Check the cable or the Wi-Fi first.
-
-![Three network tools.](images/tools.png){width=88%}
+- **ipconfig** (Windows: type `cmd` in the Start menu, then `ipconfig`):
+  the IPv4 address and the default gateway. An address **169.254.x.x** with
+  no gateway means: no address from the router.
+- **ping** *target*: the time of each reply, the **loss** and the
+  **average**. Ping the **gateway** first (near), then a **server** (far).
 
 ![ipconfig on Rami's laptop.](images/ipconfig.png){width=88%}
 
-{{< sim file="sims/terminal-lab.html" poster="sims/terminal-lab.png" title="Terminal Lab: network tools on Rami's laptop" height="820" >}}
+{{< sim file="sims/terminal-lab.html" poster="sims/terminal-lab.png" title="Terminal Lab: network tools on Rami's laptop" >}}
 
-::: {.callout-warning title="Watch out!"}
-Do not share the full output of network tools in a public forum: the names
-of your networks say where you are. Share only what a helper needs.
-:::
+::: {.callout-note title="Activity 1 · Address and ping · 15 min"}
+On the lab PC (or in **Terminal Lab**, Tasks 1–3):
 
-::: {.callout-note title="Activity 1 · Your address · 8 min"}
-1. Run `ipconfig` on the lab PC (or do Task 1 of **Terminal Lab**).
-2. Write the IPv4 address and the default gateway. Is the address private?
+1. Run `ipconfig`. Write the IPv4 address and the default gateway. Is the
+   address private?
+2. Ping your gateway, then a website (for example `ping example.com`).
+   Write both averages and the loss. Where is the delay: near or far?
 
-*Your product:* two addresses and one answer.
+*Your product:* two addresses, two averages and one sentence.
 
 ::: {.check}
-A good answer looks like: "IPv4 192.168.1.23, gateway 192.168.1.1: private,
-because it starts with 192.168." In Terminal Lab (office): the gateway is
-192.168.1.1. An address 169.254.x.x would mean no address from the router.
+A good answer: "IPv4 192.168.1.23, gateway 192.168.1.1: private, because it
+starts with 192.168. Gateway: average 3 ms, 0 % loss. example.com: average
+42 ms, 0 % loss. The LAN is fast; most of the time is on the way to the
+server."
 :::
 :::
 
-::: {.callout-tip title="Try it 2 · ipconfig"}
+::: {.callout-tip title="Try it 2 · ipconfig and ping"}
 Choose the right answer.
 
-::: {.match extra="the game server|nothing is wrong"}
-Which tool shows the default gateway?
-:   ipconfig
-
-    Why: ipconfig shows the address, the gateway and the DNS server.
-
+::: {.match extra="the game server|100 %"}
 ipconfig shows 169.254.10.4 and no gateway. What does it mean?
 :   no address from the router
 
-    Why: Without an address from the router, check the cable or the Wi-Fi.
-
-Is 192.168.1.23 private or public?
-:   private
-
-    Why: Addresses that start with 192.168 work only inside a LAN.
-:::
-:::
-
-## Activity 2 · ping: near and far
-
-**ping** sends a few packets and shows the time of each reply:
-
-- each line "time = …" is the latency of one packet; "Request timed out" is
-  a lost packet; the summary gives the **loss** and the **average**;
-- big differences between the times show **jitter**;
-- ping the **gateway** first (near), then the **server** (far): if the
-  gateway is already slow, the problem is in the room, not on the Internet.
-
-![ping to the game server.](images/ping.png){width=88%}
-
-::: {.callout-warning title="Watch out!"}
-Pinging only the game server is not enough: when it is slow, you do not
-know whether the problem is in your room or far away.
-:::
-
-::: {.callout-note title="Activity 2 · Near and far · 10 min"}
-1. Ping your gateway, then a website (for example `ping example.com`), or do
-   Tasks 2 and 3 of **Terminal Lab**.
-2. Write both averages and the loss. Where is the delay: near or far?
-
-*Your product:* two averages, the loss, and one sentence.
-
-::: {.check}
-A good answer looks like: "Gateway: average 3 ms, 0 % loss. example.com:
-average 42 ms, 0 % loss. The LAN is fast; most of the time is on the way to
-the server." In Terminal Lab, the café: already the gateway jumps between
-about 6 and 160 ms with lost packets: the problem is the café's Wi-Fi.
-:::
-:::
-
-::: {.callout-tip title="Try it 3 · Reading ping"}
-Choose the right answer.
-
-::: {.match extra="the DNS|100 %"}
-What does "Request timed out" mean?
+What does "Request timed out" mean in ping?
 :   a lost packet
 
-    Why: No reply came back in time.
-
-Times 20, 22, 21, 23 ms or 20, 150, 30, 200 ms: which has more jitter?
-:   the second one
-
-    Why: Its times change a lot from packet to packet.
-
-The ping to the café router jumps from 6 to 160 ms. Where is the problem?
-:   the café's Wi-Fi
-
-    Why: The gateway is near: the problem is before the Internet.
+Times 20, 150, 30, 200 ms. What does this show?
+:   big jitter
 :::
 :::
 
-## Activity 3 · A diagnosis from near to far
+## Activity 2 · Find the problem, from near to far
 
 The tools become a diagnosis when you use them in order. The first "no"
-shows where the problem is.
+shows where the problem is:
 
 1. **ipconfig:** an address? No → cable, Wi-Fi.
-2. **ping the gateway:** does the router answer? No → a LAN problem.
-3. **ping the server:** by its name and by its IP address. The name fails
+2. **ping the gateway:** does the router answer well? No → a LAN problem.
+3. **ping the server** by its name and by its IP address. The name fails,
    but the IP works → a **DNS** problem.
-4. **Speed test:** enough bandwidth? No → too many users (videos,
-   downloads).
+4. **Speed test:** enough bandwidth? No → too many users.
 
 If all four are fine but the game shows a low frame rate, the device is too
 slow, not the network.
 
 ![A diagnosis from near to far.](images/diagnosis.png){width=90%}
 
-::: {.callout-note title="Activity 3 · Your network report · 12 min"}
-Write a report of your own connection (lab PC or phone), six lines:
+{{< sim file="sims/lag-detective.html" poster="sims/lag-detective.png" title="Lag Detective: read the tools, find the problem" kind="game" >}}
 
-1. the IP address and its type (private or public);
-2. the ping to the gateway (average, loss);
-3. the ping to a website (average, loss);
-4. the jitter: small or big;
-5. the download speed of a speed test;
-6. one sentence: is the connection good for an online race? Why?
+::: {.callout-note title="Activity 2 · Six players · 15 min"}
+In **Lag Detective**, read the tool output of six players and find the
+problem of each one.
 
-*Your product:* a report of six lines.
+*Your product:* your score and the six problems in a list.
 
 ::: {.check}
-A good report looks like: "192.168.1.37, private. Gateway 3 ms, 0 % loss.
-example.com 41 ms, 0 % loss. Small jitter (38–45 ms). Download 52 Mbit/s.
-Good for a race: the ping is below 50 ms and nothing is lost."
-
-- ☐ Six lines, each with a measured value.
-- ☐ The last sentence uses latency and loss, not only the bandwidth.
+1. 169.254.10.4, no gateway → no address from the router. 2. The café
+router jumps from 8 to 171 ms with 25 % loss → the café's Wi-Fi. 3. "Server
+not found", the IP works → the DNS. 4. Router 3 ms, server 104 ms in the
+evening → outside the home, on the way to the server. 5. Three video
+streams, 1.2 Mbit/s → too little bandwidth. 6. Ping 24 ms, 0 % loss, but
+18 FPS in battles → not the network: the phone is too slow.
 :::
 :::
 
-::: {.callout-tip title="Try it 4 · From near to far"}
-Choose the step or the cause.
+::: {.callout-tip title="Try it 3 · The diagnosis"}
+Choose the right answer.
 
-::: {.match extra="buy a new phone|reinstall the game"}
+::: {.match extra="buy a new phone|TCP"}
 ping play.example.net fails, but ping 198.51.100.7 works. What is the problem?
 :   the DNS
-
-    Why: The server answers by its address; only the name does not work.
 
 Which step comes before pinging the server?
 :   ping the gateway
 
-    Why: The diagnosis goes from near to far.
-
 Ping 24 ms, 0 % loss, but 18 FPS in battles. What is the cause?
 :   the device is too slow
 
-    Why: The network is fine; the frame rate shows the device.
+A racing game sends the car positions many times per second. Which protocol fits?
+:   UDP
 :::
 :::
-
-## Case study: Lag Detective
-
-The support inbox of Byte Bay has six messages, each with the output of a
-tool: a player with 169.254.10.4 and no gateway; a player in a café whose
-router ping jumps from 8 to 171 ms with 25 % loss; a player whose game says
-"server not found"; a player with lag every evening (router 3 ms, server
-104 ms); a family with three video streams and 1.2 Mbit/s; and a player
-whose game stutters at 18 FPS in battles with a ping of 24 ms. The Game
-challenge of the interactive page uses these messages. In the mini-game
-below you read the tool outputs and find each problem.
-
-{{< sim file="sims/lag-detective.html" poster="sims/lag-detective.png" title="Lag Detective: read the tools, find the problem" kind="game" height="620" >}}
 
 ## Exercises
 
-1. Which tool shows the default gateway?
-2. What does "Request timed out" mean in ping?
-3. Why do you ping the gateway before the server?
-4. ipconfig shows 169.254.3.8. What does it mean?
-5. ping by the name fails, but ping by the IP address works. What is the
-   problem?
-6. A speed test shows 1 Mbit/s while others stream videos. What helps?
-7. Ping 25 ms, 0 % loss, but 15 FPS in battles. Is it the network?
+1. Which command shows the IP address and the default gateway on Windows?
+2. Why do you ping the gateway before the game server?
+3. The game says "server not found", but the IP address of the server answers. What is the problem?
+4. Does voice chat in a game use TCP or UDP?
 
 ## Answers to the exercises
 
 ::: {.answers}
 1. ipconfig.
-2. A lost packet: no reply came back in time.
-3. To see if the problem is near (LAN, Wi-Fi) or far (on the way to the
-   server).
-4. The computer got no address from the router.
-5. The DNS.
-6. Pause the streams and downloads, or get a faster plan.
-7. No, the device is too slow.
+2. If the gateway is already slow, the problem is near, in the room.
+3. The DNS.
+4. UDP.
 :::

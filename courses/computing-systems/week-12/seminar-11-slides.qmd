@@ -7,7 +7,7 @@ format: lesson-pptx
 ## Recall · Lecture 11
 
 a) Which service keeps the progress of a player on a server?
-b) What keeps copies of the downloads near the players?
+b) What keeps copies of downloads near the players?
 c) Which model gives ready accounts and leaderboards through an SDK?
 
 ::: {.answer}
@@ -16,95 +16,59 @@ b) a CDN
 c) BaaS
 :::
 
-## Activity 1 · A service for each need · 10 min
+## Activity 1 · Four needs · 15 min
 
 :::: {.columns}
 ::: {.column width="50%"}
 - Dune Duel needs accounts, progress on every phone, a 120 MB track pack and live duels.
-- Each need has a cloud service.
-- **Do it:** Fill the table with the service for each need and why.
+- **Do it:** Write the cloud service and the reason for each need. Does a game on your phone have a cloud save?
+- Your product is a table of four rows and one answer.
 :::
 ::: {.column width="50%"}
 ![](images/game-cloud.png)
 :::
 ::::
 
-## Check 1 · A service for each need
+## Check 1 · Four needs
 
 Which service fits each need of Dune Duel?
 
 ::: {.reveal}
-1. The accounts and the progress use a back end (BaaS) with cloud saves.
-2. The 120 MB track pack goes to object storage with a CDN, not into the app.
-3. The live duels run on dedicated game servers, which decide who wins.
+1. Accounts come from a game back end (BaaS) through an SDK.
+2. The progress on every phone is a cloud save that loads after the login.
+3. The 120 MB track pack goes to object storage with a CDN, outside the app.
+4. The live duels run on dedicated game servers, which decide who wins.
 :::
 
-## Activity 2 · Your game's save · 8 min
+## Activity 2 · Six problems · 15 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A cloud save keeps a small file of the progress on a server.
-- After a login, any phone loads it.
-- **Do it:** Does a game on your phone have a cloud save or an account link? What happens if you change phone?
+- After an online update, Pocket Quest has six problems, from a lost phone to a doubled bill.
+- **Do it:** Choose what solves each problem in Cloud Planner.
+- Your product is your score and six problems with their solutions.
 :::
 ::: {.column width="50%"}
-![](images/cloud-save.png)
+![](images/cdn.png)
 :::
 ::::
 
-## Check 2 · Your game's save
+## Live demo · Cloud Planner
 
-What does a good answer show?
+{{< sim file="sims/cloud-planner.html" poster="sims/cloud-planner.png" title="Cloud Planner: the right service for each problem" kind="game" task="**Show:** the lost phone with level 12 and 840 coins. **Ask:** which service brings the progress back?" >}}
 
-::: {.reveal}
-1. It says whether the game links to an account, for example Google Play Games or Game Center.
-2. With a link, the progress loads on a new phone after the login.
-3. Without a link, the progress is only on the phone, so a lost phone is lost progress.
-:::
+## Check 2 · Six problems
 
-## Activity 3 · A region and a rule · 12 min
-
-:::: {.columns}
-::: {.column width="50%"}
-- Most players of Dune Duel live in Jordan and Saudi Arabia, and 10 % in Germany.
-- The server decides the duel, and secrets stay on the server.
-- **Do it:** Choose the region from the table, and write one safety rule for the duels and one for the payment key.
-:::
-::: {.column width="50%"}
-![](images/regions.png)
-:::
-::::
-
-## Check 3 · A region and a rule
-
-Which region and rules fit Dune Duel?
+What solves each problem of Pocket Quest?
 
 ::: {.reveal}
-1. Bahrain fits, with about 35 ms from Amman and 20 ms from Riyadh.
-2. A second region is not worth it yet, because only 10 % live in Germany.
-3. The server measures the duel, and the payment key stays on the server.
-:::
-
-## Game challenge · Cloud Planner
-
-{{< sim file="sims/cloud-planner.html" poster="sims/cloud-planner.png" title="Cloud Planner: the right service for each problem" kind="game" task="**The story:** players of Pocket Quest send complaints after the online update, and the bill doubled. **Play:** choose the service or setting that solves each problem on your phone." >}}
-
-## Try it · Cloud Planner (harder)
-
-The facts: a player lost a phone with level 12 and 840 coins. Cars jump with a ping of 90 ms. A teammate wants to put the payment key into the app.
-
-a) Which service lets the player continue on a new phone?
-b) What lowers the ping of the races?
-c) What do you answer the teammate?
-
-::: {.answer}
-a) a cloud save, after the login
-b) race servers in a region near the players
-c) Never: secrets stay on the server.
+1. A cloud save brings back the progress of the lost phone.
+2. A CDN copy near Amman makes the downloads fast, and a near region stops the jumping cars.
+3. A dedicated server decides the race, so impossible times are stopped.
+4. The secret key stays on the server, and a CDN with smaller packs lowers the doubled bill.
 :::
 
 ## Wrap-up
 
 - You can choose a cloud service for each need of a game.
-- You can explain cloud saves and a CDN with a game you know.
-- You can choose a server region and keep the secrets on the server.
+- You can solve the cloud problems of an online game and keep its secrets safe.

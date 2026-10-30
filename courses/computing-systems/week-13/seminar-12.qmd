@@ -1,14 +1,14 @@
 ---
 title: "Case Study: Comparing Gaming Platforms"
-description: "Seminar · Check which settings run well on four PCs, compare three platforms for one game with three criteria, and write a recommendation with a port plan."
+description: "Seminar · Find the best setting of a game on four PCs and write its requirements, then compare three platforms for a small game with three criteria."
 seminar: 12
 ilos: [B1, B2]
 format: lesson-html
 ---
 
-No new ideas today: you compare gaming platforms for one game, with what you
-learned in Lecture 12. Do each activity alone, then open "Check your
-result". Every question on this page has its answer: try first, then check.
+No new ideas today: two short problems on Lecture 12. Do each one alone,
+then open "Check your result". Every question on this page has its answer:
+try first, then check.
 
 ## Recall
 
@@ -16,9 +16,7 @@ result". Every question on this page has its answer: try first, then check.
   has **varied hardware** (graphics settings, minimum and recommended
   requirements).
 - Cloud gaming: total delay = ping + about 40 ms; racing needs under about
-  80 ms.
-- A cross-platform game still needs **porting**; **cross-save** keeps one
-  progress.
+  80 ms. **Cross-save** keeps one progress on all platforms.
 - A comparison: three criteria chosen first, scores from 1 to 5 with
   reasons, totals.
 
@@ -43,33 +41,24 @@ Which feature lets a player continue on a new platform with one account?
 :::
 :::
 
-## Activity 1 · Will it run well? Specs and settings
+## Activity 1 · Will it run well on four PCs?
 
-The PC version of *Pocket Quest* must run on very different PCs. The **GPU**
-and the **memory** decide how fast each frame is drawn:
-
-- a higher setting costs more GPU work per frame: on a weak GPU the frame
-  rate falls;
-- if the memory is too small for a setting, the game stutters;
-- the weakest part is the **bottleneck**;
-- the **minimum** requirements come from the weakest supported PC (low
-  settings); the **recommended** ones from high settings.
+The PC version of *Pocket Quest* must run on very different PCs. A higher
+setting costs more GPU work per frame; if the memory is too small for a
+setting, the game stutters. The weakest part is the **bottleneck**. The
+**minimum** requirements come from the weakest supported PC at low
+settings.
 
 ![Pocket Quest: targets per platform (example values).](images/targets.png){width=90%}
 
 {{< sim file="sims/spec-compare.html" poster="sims/spec-compare.png" title="Spec Check: will Pocket Quest run well?" height="700" >}}
 
-::: {.callout-warning title="Watch out!"}
-Testing only on the team's strong PCs gives wrong requirements: test the
-minimum on the weakest supported PC.
-:::
-
-::: {.callout-note title="Activity 1 · Four PCs · 12 min"}
+::: {.callout-note title="Activity 1 · Four PCs · 15 min"}
 1. In **Spec Check**, find the highest setting that runs at 60 fps or more
    on each of the four devices.
-2. Write the minimum and the recommended requirements in your own words.
+2. Write the minimum requirements in your own words.
 
-*Your product:* a table of four devices and two requirement lines.
+*Your product:* a table of four devices and one requirement line.
 
 ::: {.check}
 | device | best setting at 60 fps or more |
@@ -80,72 +69,62 @@ minimum on the weakest supported PC.
 | gaming PC (GPU 12, 16 GB) | ultra: 72 fps |
 
 Minimum: a GPU of 2 points and 4 GB of RAM, for low at 60 fps.
-Recommended: a GPU of 6 points and 8 GB of RAM, for high at 60 fps.
 :::
 :::
 
 ::: {.callout-tip title="Try it 2 · Specs"}
 Use Spec Check (example points). Choose the right answer.
 
-::: {.match extra="ultra|4K"}
-The best 60 fps setting on the old laptop?
+::: {.match extra="ultra|the RAM"}
+What is the best 60 fps setting on the old laptop?
 :   low
 
     Why: Medium needs 6 GB of RAM; the laptop has 4 GB.
 
-The frame rate of the office PC on high?
+What is the frame rate of the office PC on high?
 :   40 fps
 
     Why: High needs 6 points for 60 fps; the office PC has 4.
 
-The bottleneck of the office PC on high?
+What is the bottleneck of the office PC on high?
 :   the GPU
 
     Why: Its 8 GB of RAM are enough; the GPU is too weak.
-
-Which device runs ultra at 60 fps or more?
-:   the gaming PC
-
-    Why: 12 points are more than the 10 that ultra needs.
 :::
 :::
 
-## Activity 2 · Three criteria for Star Garden
+## Activity 2 · Three platforms for Star Garden
 
 The two friends of *Star Garden*, a calm puzzle game with short sessions
 and no live matches, want **one** new platform: PC, console or cloud
 gaming. They have one Windows laptop and little money. Most of their
-players use phones or PCs.
-
-- Choose three criteria first: **reach**, **fit for the game**, **cost and
-  time**.
-- Score each platform from 1 to 5 (5 = best), with a reason for each score.
-- Add up; if two totals are close, say which criterion decides.
+players use phones or PCs. They compare with three criteria: **reach**,
+**fit for the game**, **cost and time**.
 
 ![A comparison table with three criteria (the Pocket Quest example).](images/platform-table.png){width=90%}
 
-::: {.callout-note title="Activity 2 · The table for Star Garden · 12 min"}
-Make the table for *Star Garden*: three criteria, three platforms, a score
-with a reason in every cell, and the totals.
+::: {.callout-note title="Activity 2 · The table and the advice · 15 min"}
+1. Make the table: three criteria, three platforms, a score from 1 to 5
+   with a reason in every cell, and the totals.
+2. Write one sentence of advice: which platform first, and why.
 
-*Your product:* a table with scores, reasons and totals.
+*Your product:* a table with scores, reasons and totals, and one sentence.
 
 ::: {.check}
-A good table looks like:
-
 | criterion | PC | console | cloud |
 |---|---|---|---|
-| reach | 4: many players have a PC | 2: few of its players have a console | 2: few use cloud gaming |
-| fit for the game | 4: a mouse works well for a puzzle | 3: a controller is slower | 5: the delay does not matter |
-| cost and time | 5: the laptop builds it, open store | 1: dev kit and certification | 3: a cloud partner is needed |
+| reach | 4: many players have a PC | 2: few have a console | 2: few use cloud gaming |
+| fit for the game | 4: a mouse works well | 3: a controller is slower | 5: the delay does not matter |
+| cost and time | 5: the laptop builds it | 1: dev kit and certification | 3: a cloud company must stream it |
 | total | **13** | 6 | 10 |
 
-Your scores may differ by one point; what matters is a reason in every
-cell. The PC wins clearly; cloud gaming comes second.
+Advice: "Port Star Garden to the PC first: the laptop already builds it,
+and many players have a PC." Your scores may differ by one point; what
+matters is a reason in every cell.
 :::
 :::
 
-::: {.callout-tip title="Try it 3 · The table"}
+::: {.callout-tip title="Try it 3 · The comparison"}
 Choose the right answer.
 
 ::: {.match extra="the console|the favourite of the team"}
@@ -159,129 +138,21 @@ Why does cloud gaming fit Star Garden well?
 
     Why: The delay of the stream matters only for fast games.
 
-PC 13, cloud 10. Which platform comes first?
+PC 13, cloud 10, console 6. Which platform comes first?
 :   the PC
 
     Why: It has the highest total.
-:::
-:::
 
-## Activity 3 · A recommendation with a port plan
-
-The friends want a short recommendation with a plan for the port:
-
-- **what** to do, **why** (two facts from the table) and **what would
-  change it**;
-- the **port plan**: controls, menus, graphics settings, accounts and
-  saves, store rules, testing on the weakest device.
-
-![What changes in a port?](images/port-checklist.png){width=90%}
-
-::: {.callout-warning title="Watch out!"}
-A recommendation without the port plan hides the biggest cost: list the
-work before the decision.
-:::
-
-::: {.callout-note title="Activity 3 · Advice and plan · 10 min"}
-Write three sentences of advice for *Star Garden* and a port plan of five
-points.
-
-*Your product:* the advice and the plan.
-
-::: {.check}
-A good answer looks like: "Port Star Garden to the PC first. The laptop
-already builds it and the PC store is open, and many of our players have a
-PC. Cloud gaming comes next if a partner offers it." Port plan: 1. mouse
-and keyboard; 2. menus for a bigger screen; 3. low, medium and high
-settings; 4. cross-save with the same account; 5. minimum and recommended
-requirements on the store page, tested on an old laptop.
-:::
-:::
-
-::: {.callout-tip title="Try it 4 · Advice and port"}
-Choose the right answer.
-
-::: {.match extra="a bigger logo|cross-play"}
-What must the PC store page show about hardware?
-:   minimum and recommended requirements
-
-    Why: Players check whether their PC is strong enough.
-
-A player continues the phone garden on the PC. Which feature?
-:   cross-save with one account
-
-    Why: One progress for all platforms.
-
-On which PC do you test the minimum requirements?
-:   the weakest supported PC
-
-    Why: The minimum must run there at 60 fps.
-:::
-:::
-
-## Game challenge: Port Planner {.challenge}
-
-Work alone. Use every activity of today.
-
-The first test builds of *Pocket Quest* bring **six reports**: **20 fps** on
-an old laptop with the only setting; a console menu that says "**Tap to
-start**"; a certification report about an **unplugged controller**; a PC
-store page **without hardware requirements**; a player who starts the PC
-version at **level 1** after level 12 on the phone; and cloud players at
-**70 ms ping** who feel the car react late.
-
-{{< sim file="sims/port-planner.html" poster="sims/port-planner.png" title="Port Planner: fix the test reports" kind="game" height="480" >}}
-
-::: {.callout-tip title="Try it 5 · The reports"}
-Choose the best fix.
-
-::: {.match extra="remove the PC version|a lower price"}
-20 fps on an old laptop with the only setting.
-:   add low, medium and high settings
-
-    Why: Weak PCs need a lower setting.
-
-The console menu says "Tap to start".
-:   controller prompts and bigger text
-
-    Why: A console has a controller and a TV far from the sofa.
-
-The game freezes when the controller is unplugged.
-:   pause with a message, then resubmit
-
-    Why: Certification checks such cases.
-
-A player starts the PC version at level 1.
-:   cross-save with one account
-
-    Why: The progress must follow the player.
-:::
-:::
-
-::: {.callout-tip title="Try it 6 · Cloud and store (harder)"}
-Cloud players have a ping of 70 ms; the PC store page shows no hardware.
-Choose the right answer.
-
-::: {.match extra="4K instead of 1080p|a longer trailer"}
-What is the total delay of the cloud players?
+Cloud players have a ping of 70 ms. What is their total delay?
 :   about 110 ms
 
-    Why: 70 + about 40 for the stream.
-
-What helps the cloud players most?
-:   servers in a region near the players
-
-    Why: A lower ping lowers the total delay.
-
-What is missing on the PC store page?
-:   minimum and recommended requirements
-
-    Why: Players need them to choose.
+    Why: 70 + about 40 for the stream = about 110 ms.
 :::
 :::
 
 ## Wrap-up {.summary}
 
-- You can find the best setting of a game on four PCs and write its requirements.
-- You can compare three platforms for one game with three criteria, scores and reasons.
-- You can write a recommendation with a port plan.
+- You can find the best setting of a game on four PCs and write its
+  minimum requirements.
+- You can compare three platforms for one game with three criteria, scores
+  and reasons.

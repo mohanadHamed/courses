@@ -1,26 +1,23 @@
 ---
 title: "Exploring Android and iOS Features"
-description: "Seminar worksheet · Find the version and the updates of your phone, answer the permission questions of a game on Android and iPhone, and set up power saving and Do not disturb for a fair test."
+description: "Seminar worksheet · Find the version and the updates of your phone and compare Android with iOS, then give a game only the permissions it needs."
 seminar: 7
 ilos: [A2, B1]
 format: lesson-typst
 ---
 
 ::: {.lead}
-Today there are no new ideas. You use what Lecture 7 taught about Android
-and iOS on your own phone: you find its version and its updates, you answer
-the permission questions of a game on both systems, and you prepare a phone
-for a fair test. In each activity you also compare the two systems. Do each
-activity alone. The results of the activities are at the end of this
-worksheet: try first, then compare.
+In Lecture 7 you learned how Android and iOS are built in layers, how each
+app lives in its own sandbox, and what happens when a game leaves the
+screen. Today you look at your own phone. There are no new ideas: two short
+problems. Do each one alone. The results of the activities are at the end
+of this worksheet.
 :::
 
 ## Recall
 
 - A mobile OS is a stack of layers: kernel, libraries, app framework, apps.
-  Android has the Linux kernel; iOS has Apple's own kernel.
-- Android runs on the phones of many makers; iOS only on Apple's phones. Each
-  platform needs its own build (`.apk`/`.aab` or `.ipa`).
+  Each platform needs its own build (`.apk`/`.aab` or `.ipa`).
 - Every app lives in its own **sandbox**. It reaches the camera, the
   microphone or the location only through the OS, with a **permission**.
 - A game pauses and saves when it leaves the foreground.
@@ -32,240 +29,122 @@ Choose the right answer.
 Which layer of a mobile OS runs directly on the hardware?
 :   the kernel
 
-    Why: The kernel is the lowest layer; it manages processes, memory and drivers.
-
 Which package does an iPhone install?
 :   .ipa
 
-    Why: An .apk is made for the Android stack; an iPhone needs its own .ipa build.
-
 A game wants the microphone. Who decides?
 :   the user, when the OS asks
-
-    Why: Apps reach the hardware only through the OS, after the user gives a permission.
 :::
 :::
 
 ## Activity 1 · Your phone's version and its updates
 
-A bug report always names the phone and its **OS version**: a bug may appear
-on Android 13 but not on Android 15. Phones also get **security updates**:
-fixes that close holes for harmful apps.
-
-- **Android:** Settings › About phone (Samsung: Software information) shows
-  the Android version, the **security patch** date and the model.
-- **iPhone:** Settings › General › About shows the iOS version and the model.
-- Android phones get their updates from the **maker of the phone**, often
-  later, and old models stop getting them. Apple updates **all supported
-  iPhones at the same time**.
-- The maker's update page says which models still get updates.
+A bug report always names the phone and its **OS version**: a bug may
+appear on Android 13 but not on Android 15. **Security updates** close holes
+for harmful apps. Android phones get their updates from the **maker of the
+phone**, often later, and old models stop getting them. Apple updates **all
+supported iPhones at the same time**.
 
 ![Version and updates on the two phones. Example values.](images/versions-updates.png){width=90%}
 
-::: {.callout-warning title="Watch out!"}
-Another phone is not a source for your phone: it may be another model, with
-other updates. Check the maker's own page.
-:::
-
-::: {.callout-note title="Activity 1 · Version, patch and updates · 10 min"}
-1. Find the OS version of your phone (on Android also the security patch
-   date). Write where you found it.
+::: {.callout-note title="Activity 1 · Version and updates · 15 min"}
+1. Find the OS version of your phone. **Android:** Settings › About phone
+   (also the security patch date). **iPhone:** Settings › General › About.
 2. Open the update page of your phone's maker (search for the maker's name
    and "security updates"). Does your model still get updates?
 
-*Your product:* three lines: the version, the patch date (Android) and what
-the maker's page says about your model.
+*Your product:* the version, the patch date (Android) and what the maker's
+page says about your model.
 
 ::: {.check}
-A good answer looks like: "Android 14, security patch 2026-08-01, in Settings
-› About phone › Software information. Samsung's security updates page lists
-my model (A35) with monthly updates." Or: "iOS 26.1, in Settings › General ›
-About. Apple's page lists 26.1 as the newest version: my iPhone is up to
-date." Check: the place in Settings and the version; on Android the patch
-date too; the update fact from the maker's page, not from another phone.
+A good answer: "Android 14, security patch 2026-08-01, in Settings › About
+phone. Samsung's security updates page lists my model (A35) with monthly
+updates." Or: "iOS 26.1, in Settings › General › About. Apple's page lists
+26.1 as the newest version: my iPhone is up to date." The update fact comes
+from the maker's page, not from another phone.
 :::
 :::
 
-::: {.callout-tip title="Try it 2 · Versions and updates"}
+::: {.callout-tip title="Try it 2 · Android and iOS"}
 Choose the right answer.
 
 ::: {.match extra="Settings › Battery|the box of the phone"}
 Where does an Android phone show its security patch date?
 :   Settings › About phone
 
-    Why: About phone shows the Android version, the patch date and the model.
-
 Where does an iPhone show its iOS version?
 :   Settings › General › About
 
-    Why: General › About shows the iOS version and the model.
-
 Which phones get their updates from one maker, for all models at the same time?
 :   iPhones
-
-    Why: Apple makes iOS and the iPhones, and updates all supported models together.
-
 :::
 :::
 
-## Activity 2 · Permissions: give only what the game needs
+## Activity 2 · Give a game only what it needs
 
-The new *Pocket Quest* has a map of real places and a voice chat. On the
-test day it asks for the location, the microphone, the notifications and
-the contacts. The test lasts one day, has no voice chat, and checks the
-daily reward message.
-
-- The app asks the first time it needs the camera, the microphone, the
-  location, the contacts or the notifications.
-- For the location both systems offer: while using the app; **only this
-  time** (iPhone: **Allow Once**); don't allow.
-- You can change every answer later: Android: Settings › Apps › the app ›
-  Permissions; iPhone: Settings › the app.
-- Give a game only what it needs. A game that asks for the contacts without
-  a reason is a warning sign.
+The new *Pocket Quest* has a map of real places and a voice chat. On a test
+day it asks for the location, the microphone, the notifications and the
+contacts. The test lasts one day, has **no voice chat**, and checks the
+daily reward message. For the location, Android offers **Only this time**;
+the iPhone calls it **Allow Once**.
 
 ![The location question on Android and on iPhone.](images/permission-dialog.png){width=90%}
 
-::: {.callout-note title="Activity 2 · Four permission questions · 12 min"}
-1. Copy the table. For each question, write the answer on P5 (Android) and
-   on P8 (iPhone), and a reason from the test.
+::: {.callout-note title="Activity 2 · Four questions · 15 min"}
+1. Copy the table. Write the answer and a reason for each question.
 
-   | Question | P5 (Android) | P8 (iPhone) | Reason |
-   |---|---|---|---|
-   | Location for the map | | | |
-   | Microphone | | | |
-   | Notifications | | | |
-   | Contacts | | | |
+   | Question | Answer | Reason |
+   |---|---|---|
+   | Location for the map | | |
+   | Microphone | | |
+   | Notifications | | |
+   | Contacts | | |
 
-2. On your phone, open the permissions of one game. Turn off one permission
-   it does not need. Does the game still work?
+2. On your phone, open the permissions of one game (Android: Settings ›
+   Apps › the game › Permissions; iPhone: Settings › the game). Turn off one
+   permission it does not need. Does the game still work?
 
 *Your product:* the filled table and one change on your phone.
 
 ::: {.check}
-Location: Only this time on P5, Allow Once on P8 (the map is needed for this
-one test). Microphone: Don't allow on both (no voice chat in the test).
-Notifications: Allow on both (the test checks the reward message). Contacts:
-Don't allow on both (the game does not need them). On your phone, a good
-change is for example "Microphone off for a puzzle game; the game still
-works".
+Location: Only this time (iPhone: Allow Once): the map is needed for this
+one test. Microphone: Don't allow: the test has no voice chat.
+Notifications: Allow: the test checks the reward message. Contacts: Don't
+allow: the game does not need them. On your phone, a good change is
+"Microphone off for a puzzle game; the game still works."
 :::
 :::
 
-::: {.callout-tip title="Try it 3 · Permissions"}
+::: {.callout-tip title="Try it 3 · Permissions and the sandbox"}
 Choose the right answer.
 
-::: {.match extra="Allow all the time|Settings › Battery"}
+::: {.match extra="Allow all the time|keep playing"}
 Which iPhone answer gives the location only now?
 :   Allow Once
-
-    Why: Allow Once gives the location now and asks again next time.
-
-Which Android answer gives the location only now?
-:   Only this time
-
-    Why: It is Android's name for the same answer as Allow Once.
 
 The test has no voice chat. What do you answer when the game asks for the microphone?
 :   Don't allow
 
-    Why: Give an app only what it needs for the test.
+Why can a game not read the photos of another app without asking?
+:   every app has its own sandbox
 
+A call comes during a match. What must the game do?
+:   pause and save
 :::
 :::
-
-## Activity 3 · Power saving and Do not disturb for a fair test
-
-A test must show the game as the players see it. In lecture 6 you saw that
-a phone saves power when the battery is low, and that Do not disturb stops
-calls during a test.
-
-- **Power-saving mode** (Android: Battery saver; iPhone: Low Power Mode)
-  makes the battery last longer: lower CPU speed, often 30 fps instead of
-  60, lower brightness, less background work. Phones offer it at about
-  20 %.
-- **Do not disturb** (iPhone: a Focus) stops calls and notifications.
-- A fair test: the phone charged above 50 %, power saving **off**, Do not
-  disturb **on**.
-
-![Normal mode and power-saving mode during a game. Round example numbers.](images/power-modes.png){width=90%}
-
-{{< sim file="sims/power-lab.html" poster="sims/power-lab.png" title="Power Lab: battery saver, Do not disturb and a game" height="620" >}}
-
-::: {.callout-note title="Activity 3 · The switches and Power Lab · 10 min"}
-1. Find the power-saving mode and Do not disturb on your phone (Android:
-   quick settings; iPhone: Control Centre). Write their names on your phone.
-2. In **Power Lab**, set the battery to 20 % with no apps in the background.
-   Write the frame rate and the play time with power saving off, then on.
-
-*Your product:* the names of the two switches, and four numbers from Power
-Lab.
-
-::: {.check}
-Android: "Battery saver" (or "Power saving") and "Do not disturb" in the
-quick settings. iPhone: "Low Power Mode" and "Focus › Do Not Disturb" in the
-Control Centre. In Power Lab at 20 %: power saving off, 60 fps and about
-48 min; power saving on, 30 fps and about 1 h 20 min. Power saving makes the
-battery last longer, but the game is slower.
-:::
-:::
-
-::: {.callout-tip title="Try it 4 · Power and focus"}
-Use Power Lab. Choose the right answer.
-
-::: {.match extra="120 fps|the battery runs out faster"}
-What is the frame rate in Power Lab with power saving on?
-:   30 fps
-
-    Why: Power saving caps the game at 30 fps instead of 60.
-
-What does power saving do to the play time?
-:   it gets longer
-
-    Why: The phone uses less battery per hour.
-
-Should a tester keep power saving on during a test?
-:   no, charge the phone instead
-
-    Why: The test would show a slower game than the players see.
-:::
-:::
-
-## Case study: Two Phones
-
-Rami prepares the test of *Pocket Quest 1.2* on P5 (Android) and P8 (an
-iPhone). The report needs the version of both phones, and the security patch
-of P5 is a year old. The game asks P8 for the microphone (no voice chat in
-the test) and P5 for the location for one test. Notifications must not
-appear during the 40-minute test, and at 18 % P8 asks to turn on Low Power
-Mode. The Game challenge of the interactive page asks for the right step on
-each phone.
-
-{{< sim file="sims/two-phones.html" poster="sims/two-phones.png" title="Two Phones: Android and iPhone side by side" kind="game" height="560" >}}
 
 ## Exercises
 
-1. Where does an Android phone show its security patch date? And an iPhone
-   its iOS version?
-2. Why should a tester check updates on the maker's page and not on another
-   phone?
+1. Why does a bug report name the OS version of the phone?
+2. Who sends the updates of an Android phone?
 3. A puzzle game asks for the contacts. What do you answer, and why?
-4. Which answer gives the location only now on Android, and which on iPhone?
-5. What does the power-saving mode do to a game?
-6. Why should a tester not use the power-saving mode during a test?
-7. Name two differences between Android and iOS that a tester sees in the
-   settings.
+4. What must a game do when it leaves the foreground?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. Android: Settings › About phone. iPhone: Settings › General › About.
-2. Another phone may be another model, with other updates.
-3. Don't allow: a puzzle game does not need the contacts.
-4. Android: Only this time. iPhone: Allow Once.
-5. It lowers the CPU speed and often the frame rate and the brightness.
-6. The test would show a slower game than the players see.
-7. For example: Android shows a security patch date, the iPhone shows its
-   iOS version; Battery saver or Low Power Mode; Only this time or Allow
-   Once; updates from the maker or from Apple for all models.
+1. A bug may appear on one version and not on another.
+2. The maker of the phone.
+3. Don't allow: a puzzle game does not need them.
+4. Pause and save.
 :::

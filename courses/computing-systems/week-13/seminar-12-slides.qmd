@@ -8,21 +8,21 @@ format: lesson-pptx
 
 a) Why does a PC game need graphics settings?
 b) What does a console studio need before release?
-c) The ping is 60 ms. What is the total delay of cloud gaming?
+c) Which feature lets a player continue on a new platform with one account?
 
 ::: {.answer}
-a) PC players have very different hardware.
-b) a dev kit and certification
-c) about 100 ms
+a) PC players have very different hardware
+b) certification
+c) cross-save
 :::
 
-## Activity 1 · Four PCs · 12 min
+## Activity 1 · Four PCs · 15 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A higher setting needs a stronger GPU, and too little memory makes the game stutter.
-- The minimum requirements come from the weakest supported PC.
-- **Do it:** In Spec Check, find the best setting at 60 fps for each of the four PCs, and write the minimum and recommended requirements.
+- A higher setting costs more GPU work, and too little memory makes the game stutter.
+- **Do it:** Find the highest setting at 60 fps on each of the four devices in Spec Check. Then write the minimum requirements.
+- Your product is a table of four devices and one line.
 :::
 ::: {.column width="50%"}
 ![](images/targets.png)
@@ -31,84 +31,44 @@ c) about 100 ms
 
 ## Live demo · Spec Check
 
-{{< sim file="sims/spec-compare.html" poster="sims/spec-compare.png" title="Spec Check: will Pocket Quest run well?" task="**Show:** the office PC on ultra, high and medium, then the old laptop on medium. **Ask:** which part is the bottleneck in each case?" >}}
+{{< sim file="sims/spec-compare.html" poster="sims/spec-compare.png" title="Spec Check: will Pocket Quest run well?" task="**Show:** the office PC on medium, then on high. **Ask:** which part holds it back on high?" >}}
 
 ## Check 1 · Four PCs
 
-Which setting runs at 60 fps or more on each PC?
+Which setting runs at 60 fps on each device?
 
 ::: {.reveal}
-1. The old laptop runs low at 80 fps, and the office PC runs medium at 80 fps.
-2. The handheld PC runs high at 60 fps, and the gaming PC runs ultra at 72 fps.
-3. The minimum is a GPU of 2 points with 4 GB, and the recommended is 6 points with 8 GB.
+1. The old laptop runs low at 80 fps, because medium needs more RAM.
+2. The office PC runs medium at 80 fps; high gives only 40 fps, because its GPU is too weak.
+3. The handheld PC runs high at 60 fps, and the gaming PC runs ultra at 72 fps.
+4. The minimum is a GPU of 2 points and 4 GB of RAM, for low at 60 fps.
 :::
 
-## Activity 2 · Star Garden's table · 12 min
+## Activity 2 · The table and the advice · 15 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Star Garden is a calm puzzle game of two friends with one Windows laptop and little money.
-- The criteria are reach, fit for the game, and cost and time.
-- **Do it:** Score the PC, the console and cloud gaming from 1 to 5 with a reason, and add up.
+- Star Garden is a calm puzzle game, and the studio has one laptop and little money.
+- **Do it:** Score PC, console and cloud from 1 to 5 for reach, fit for the game, and cost and time. Which platform comes first, and why?
+- Your product is a table with reasons and totals, and one sentence.
 :::
 ::: {.column width="50%"}
 ![](images/platform-table.png)
 :::
 ::::
 
-## Check 2 · Star Garden's table
+## Check 2 · The table and the advice
 
-What does a good table show?
-
-::: {.reveal}
-1. The PC gets 4, 4 and 5, so its total is 13.
-2. The console gets 2, 3 and 1, so its total is 6, and cloud gaming gets 2, 5 and 3, so 10.
-3. The PC wins clearly, and every score has a reason.
-:::
-
-## Activity 3 · Advice and plan · 10 min
-
-:::: {.columns}
-::: {.column width="50%"}
-- The advice says what to do, why, and what would change it.
-- The port plan lists controls, menus, settings, saves, the store page and testing.
-- **Do it:** Write three sentences of advice and a port plan of five points for Star Garden.
-:::
-::: {.column width="50%"}
-![](images/port-checklist.png)
-:::
-::::
-
-## Check 3 · Advice and plan
-
-What does good advice for Star Garden contain?
+Which platform wins for Star Garden, and why?
 
 ::: {.reveal}
-1. It says: port Star Garden to the PC first, because the laptop builds it and many players have a PC.
-2. The plan adds mouse and keyboard, menus, settings and cross-save.
-3. The store page shows the requirements, tested on an old laptop.
-:::
-
-## Game challenge · Port Planner
-
-{{< sim file="sims/port-planner.html" poster="sims/port-planner.png" title="Port Planner: fix the test reports" kind="game" task="**The story:** the first test builds of Pocket Quest on PC, console and cloud bring six reports. **Play:** choose the best fix for each report on your phone." >}}
-
-## Try it · Port Planner (harder)
-
-The facts: an old laptop runs the PC version at 20 fps with the only setting. A player starts the PC version at level 1 after level 12 on the phone. Cloud players have a ping of 70 ms.
-
-a) What is the best fix for the old laptop?
-b) Which feature does the player need?
-c) What is the total delay of the cloud players?
-
-::: {.answer}
-a) low, medium and high settings
-b) cross-save with one account
-c) about 110 ms
+1. The PC gets 13: many players have a PC, and the laptop already builds it.
+2. Cloud gets 10: the delay does not matter for a calm puzzle game, but a cloud company must stream it.
+3. The console gets 6: a dev kit and certification cost too much money and time.
+4. So the advice is to port Star Garden to the PC first.
 :::
 
 ## Wrap-up
 
-- You can find the best setting on four PCs and write the requirements.
-- You can compare three platforms with three criteria, scores and reasons.
-- You can write advice with a port plan.
+- You can find the best setting of a game on four PCs and write its minimum requirements.
+- You can compare three platforms for one game with three criteria, scores and reasons.

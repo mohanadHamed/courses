@@ -1,27 +1,27 @@
 ---
 title: "Analyzing a Smartphone Specification Sheet"
-description: "Seminar worksheet · Write the spec sheet of your phone, find the lines that matter for a game, and choose the test phone that each game needs."
+description: "Seminar worksheet · Write the spec sheet of your phone with the lines that matter for a game, then choose the test phone that shows the problems of three games first."
 seminar: 4
 ilos: [A1, B2]
 format: lesson-typst
 ---
 
 ::: {.lead}
-Today there are no new ideas. You use what Lecture 4 taught (the SoC, the
-shared RAM, the sensors and the battery) to read the spec sheets of real
-phones: you write the sheet of your own phone, find the lines that matter for
-a game, and choose the test phone that each game needs. Do each activity
-alone. The results of the activities are at the end of this worksheet: try
-first, then compare.
+In Lecture 4 you learned the SoC, the sensors, the touch screen and the
+battery of a phone. Today you read your own phone's spec sheet and choose
+test phones for three games. There are no new ideas: two short problems.
+Do each one alone. The results of the activities are at the end of this
+worksheet.
 :::
 
 ## Recall
 
-- A phone's main chip is the **SoC**: CPU cores, GPU, modem and more. On a
-  spec sheet it is the **Chipset** (or Chip) line.
-- The CPU and the GPU share the **RAM**; there is no separate video memory.
+- A phone's main chip is the **SoC**: CPU cores, GPU and more. On a spec
+  sheet it is the **Chipset** (or Chip) line.
 - Sensors: the **accelerometer** (tilt), the **gyroscope** (turning), the
-  **GPS** (position). Battery: play time ≈ mAh ÷ mA.
+  **GPS** (position). The **touch sampling rate** says how often the screen
+  checks for touches.
+- Battery: play time ≈ mAh ÷ mA. A hot chip slows down to protect itself.
 
 ::: {.callout-tip title="Try it 1 · Recall"}
 Choose the right answer.
@@ -30,212 +30,120 @@ Choose the right answer.
 A game steers by turning the phone. Which sensor does it need?
 :   the gyroscope
 
-    Why: the gyroscope measures turning.
-
 Which line of a phone sheet holds the CPU cores and the GPU?
 :   the Chipset
 
-    Why: the SoC is the Chipset line.
-
 5000 mAh and a game that draws 500 mA. About how long?
 :   10 hours
-
-    Why: 5000 ÷ 500.
 :::
 :::
 
-## Activity 1 · The spec sheet of your phone
-
-On a phone sheet, the processor line is often called **Chipset** or
-**Chip**. **RAM** and **Storage** are in GB; Apple does not print the RAM of
-an iPhone. The **OS** line gives the system and its version. The capacity is
-not the free space: the phone shows the free space in Settings → Storage.
-
-![The spec sheets of the test phones P1 and P2.](../week-02/images/spec-phones.png){width=86%}
-
-::: {.callout-note title="Activity 1 · Four lines · 10 min"}
-**Android:** Settings → About phone (model, Android version, RAM if shown),
-then Settings → Storage (capacity and free space). **iPhone:** Settings →
-General → About (model name, capacity, available, iOS version).
-
-Write a spec sheet of your phone with four lines: model, RAM (or "not
-given"), storage (capacity and free), OS.
-
-*Your product:* a spec sheet with four lines.
-
-::: {.check}
-A good sheet: "Model: Galaxy A35 · RAM: 6 GB · Storage: 128 GB (41 GB free)
-· OS: Android 14", or for an iPhone "Model: iPhone 13 · RAM: not given ·
-Storage: 128 GB (22 GB free) · OS: iOS 17". The free space is always less
-than the capacity.
-:::
-:::
-
-::: {.callout-tip title="Try it 2 · Two test phones"}
-P1: chipset 8 cores, up to 3.0 GHz; RAM 8 GB; storage 256 GB (40 GB free);
-Android 14. P2: chip 6 cores; RAM not given; storage 128 GB (3 GB free);
-iOS 17. Choose the right answer.
-
-::: {.match extra="P2, because it has 128 GB|4 GB"}
-A 5 GB update must be installed. On which phone does it fit?
-:   P1, it has 40 GB free
-
-    Why: P2 has only 3 GB free.
-
-Why is the RAM of P2 not on its sheet?
-:   Apple does not print it
-
-    Why: iPhone sheets leave the RAM out.
-
-P2 has 128 GB of storage. How much of it is free?
-:   3 GB
-
-    Why: the capacity is not the free space.
-:::
-:::
-
-## Activity 2 · The lines that matter for a game
+## Activity 1 · Your phone's sheet: the lines that matter
 
 An advert shows the camera and the screen size first. A developer reads the
 lines that change how a game runs: the **chipset**, the **RAM**, the
-**display** (refresh rate) and the **touch sampling rate**, the **battery**,
-the **OS**, the free **storage** and the **sensors**. The camera, the weight
-and the colour rarely matter.
+**display** (refresh rate, touch sampling rate), the **battery**, the
+**OS**, the free **storage** and the **sensors**. The capacity is not the
+free space: the phone shows the free space in Settings → Storage.
 
 ![The sheet of phone P6.](images/phone-sheet.png){width=84%}
 
-{{< sim file="sims/sheet-filter.html" poster="sims/sheet-filter.png" title="Sheet Filter: the lines that matter for a game" height="760" >}}
+{{< sim file="sims/sheet-filter.html" poster="sims/sheet-filter.png" title="Sheet Filter: the lines that matter for a game" >}}
 
-::: {.callout-note title="Activity 2 · Six lines · 10 min"}
+::: {.callout-note title="Activity 1 · Six lines · 15 min"}
 1. In **Sheet Filter**, keep only the lines that matter for a game.
-2. Search the web for "*your phone model* specifications" on the maker's
-   site. Copy six lines: chipset, RAM, display (with the refresh rate),
-   battery, OS and sensors.
-3. Mark one line of the full sheet that does not matter for most games.
+2. Write the sheet of your phone in six lines: chipset, RAM, storage
+   (capacity and free), display, battery, OS. **Android:** Settings → About
+   phone and Settings → Storage. **iPhone:** Settings → General → About;
+   the other lines are on the maker's page.
 
-*Your product:* six lines and one marked line.
+*Your product:* a sheet with six lines.
 
 ::: {.check}
-A good answer has the six lines from the maker's page, for example "Display:
-6.6 inches, 120 Hz · Battery: 5000 mAh · Sensors: accelerometer, gyroscope,
-compass", and marks the camera, the weight or the colours as not mattering.
+A good sheet: "Chipset: 8 cores, up to 2.4 GHz · RAM: 6 GB · Storage:
+128 GB (41 GB free) · Display: 6.6 inches, 120 Hz · Battery: 5000 mAh · OS:
+Android 14." Apple does not print the RAM of an iPhone: write "not given".
+The camera, the weight and the colours rarely matter for a game.
 :::
 :::
 
-::: {.callout-tip title="Try it 3 · Which lines matter?"}
+::: {.callout-tip title="Try it 2 · Which lines matter?"}
 Choose the right answer.
 
 ::: {.match extra="the colour|the weight"}
 Which line tells how fast the GPU is?
 :   the chipset
 
-    Why: the GPU is part of the SoC.
-
 Which line tells if a game can be installed at all?
 :   the OS version
 
-    Why: an old OS cannot install a game that needs a newer one.
-
-Which line tells how fast taps reach the game?
-:   the touch sampling rate
-
-    Why: it counts how often the screen checks for touches.
-
-For which games does the main camera matter?
-:   AR and photo games
-
-    Why: only they use the camera picture.
+A phone shows "128 GB" and Settings shows "3 GB free". How much can you install?
+:   3 GB
 :::
 :::
 
-## Activity 3 · Which phone for which game?
+## Activity 2 · Which phone for which game?
 
-Every game loads the phone in its own way. *Byte Bay* has three test phones:
+Every game loads the phone in its own way. *Byte Bay* has three test
+phones:
 
-- **P5:** 8 cores, 2.2 GHz, basic GPU; 4 GB; 20 GB free; 60 Hz, touch
-  120 Hz; 5000 mAh; accelerometer and GPS, **no gyroscope**.
-- **P6:** 8 cores, 2.8 GHz, mid-range GPU; 8 GB; 90 GB free; 120 Hz, touch
-  240 Hz; 5000 mAh; accelerometer, gyroscope, compass, GPS.
-- **P7:** 8 cores, 3.3 GHz, top GPU; 12 GB; 300 GB free; 120 Hz, touch
-  480 Hz; 4500 mAh; accelerometer, gyroscope, compass, GPS.
+- **P5:** basic GPU; 4 GB RAM; 20 GB free; touch 120 Hz; 5000 mAh;
+  accelerometer and GPS, **no gyroscope**.
+- **P6:** mid-range GPU; 8 GB; 90 GB free; touch 240 Hz; 5000 mAh;
+  accelerometer, gyroscope, GPS.
+- **P7:** top GPU; 12 GB; 300 GB free; touch 480 Hz; **4500 mAh**;
+  accelerometer, gyroscope, GPS.
 
 ![Different games need different lines.](images/game-needs.png){width=84%}
 
-::: {.callout-note title="Activity 3 · Three games · 12 min"}
-For each game, choose the phone that will show its problems first, and name
-the line that decides.
+::: {.callout-note title="Activity 2 · Three games · 15 min"}
+For each game, choose the phone that will show its problems first, and
+name the line that decides.
 
 1. *Sky Rider*: the player steers a glider by turning the phone.
-2. *Long Road*: an endless runner that players play for two hours; it draws
-   900 mA on every phone.
+2. *Long Road*: a runner that players play for hours; it draws 900 mA.
 3. *Castle Builder*: needs 6 GB of RAM and 30 GB of free storage.
 
 *Your product:* three phones, each with its deciding line.
 
 ::: {.check}
-1. P5: no gyroscope (it cannot run the game at all). 2. P7: the smallest
-battery (4500 ÷ 900 = 5 hours). 3. P5: 4 GB RAM and only 20 GB free (both
-lines are too small).
+1. P5: no gyroscope, so it cannot run the game at all. 2. P7: the smallest
+battery (4500 ÷ 900 = 5 hours). 3. P5: only 4 GB of RAM and 20 GB free;
+both lines are too small.
 :::
 :::
 
-::: {.callout-tip title="Try it 4 · Phone and game"}
+::: {.callout-tip title="Try it 3 · Phone and game"}
 Use the three test phones above. Choose the right answer. You can use an
 answer more than once.
 
-::: {.match extra="all three phones"}
+::: {.match extra="all three phones|P6"}
 A glider game steers by turning the phone. Which phone cannot run it?
 :   P5
 
-    Why: P5 has no gyroscope.
-
-Which phone has the smallest battery?
+On which phone do taps reach a rhythm game first?
 :   P7
 
-    Why: 4500 mAh, less than 5000.
+How long does P7 last in a game that draws 900 mA?
+:   about 5 hours
 
-Which phone has the fastest touch sampling rate?
-:   P7
-
-    Why: 480 Hz.
-
-A game needs 30 GB free. Which phone is below it?
-:   P5
-
-    Why: it has only 20 GB free.
+After 20 minutes P6 is hot, and the game gets slower. Why?
+:   the hot chip slows down to protect itself
 :::
 :::
-
-## Case study: test phones for Beat Lane
-
-*Byte Bay* will release *Beat Lane*, a rhythm game: the player taps notes to
-the music, and a match lasts 30 minutes. It needs a steady 60 fps and fast
-taps. The test phones: P5 (60 Hz, touch 120 Hz, 4 GB RAM, 5000 mAh), P6
-(120 Hz, touch 240 Hz, 8 GB, 5000 mAh) and P7 (120 Hz, touch 480 Hz, 12 GB,
-4500 mAh). Beat Lane draws 900 mA. The Game challenge of the interactive page
-asks on which phone taps arrive latest, which line is the reason, how long
-P7 lasts, and which line does not matter.
-
-{{< sim file="sims/phone-picker.html" poster="sims/phone-picker.png" title="Phone Picker: which phone, and which line decides?" kind="game" height="720" >}}
 
 ## Exercises
 
-1. A phone sheet says "Storage: 256 GB". Is that the free space?
-2. Which line of a phone sheet tells the Android version?
-3. Name two lines that rarely matter for a game.
-4. A game steers by tilting the phone. Which sensor must the phone have?
-5. A phone has 4000 mAh, and a game draws 800 mA. About how long can the
-   player play?
-6. A phone has 6 GB of RAM. A game needs 8 GB. Is this a compatibility or a
-   performance problem?
+1. Which line of a phone sheet holds the CPU and the GPU?
+2. Name two lines of a phone sheet that rarely matter for a game.
+3. A phone has a 4000 mAh battery, and a game draws 800 mA. About how long can a player play?
+4. A game steers a car by tilting the phone. Which sensor does it need?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. No: it is the capacity; the free space is shown in Settings → Storage.
-2. The OS line.
-3. For example the main camera and the colour (also the weight).
+1. The chipset (the SoC).
+2. For example the camera and the weight (or the colours).
+3. About 5 hours (4000 ÷ 800).
 4. The accelerometer.
-5. 4000 ÷ 800 = 5 hours.
-6. A performance problem: the game runs, but the RAM is the bottleneck.
 :::

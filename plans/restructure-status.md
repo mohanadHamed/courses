@@ -1,4 +1,4 @@
-# Restructure (plan v2): status on 2026-10-30
+# Restructure (plan v2): status on 2026-10-30 (second session)
 
 Branch `restructure-units` (signed commits, one per unit). Plan:
 `plans/restructure-19-lectures.md`. Rules: `AUTHORING.md` and each course's
@@ -29,7 +29,22 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
   repeated case numbers only in Game Math and Computing Systems.
 - Helper `conv.py` (scratchpad): renumber, fix_intro, add_whys, add_check.
 
+- **2026-10-30, the teacher's two notes** (rules in `AUTHORING.md`, checker
+  and templates updated, commit "Seminars: two short problems…"):
+  1. Lessons as simple as the outcomes allow (A2–B1 notes, A2 pages and
+     slides; only the simplest concepts that reach every ILO).
+  2. Seminars short: two problems (three at most) that together use every
+     concept of the lecture; planned time ≤ 40 of 60 min (60 of 90), the rest
+     for the teacher's explanations; no Game challenge or case study in a
+     seminar (a game is the tool of an activity); a Task with AI only as an
+     optional "At home" part; `check_size.py` counts the planned time.
+- **Digital Media Seminar 4** and homework 4 done (unit 4 complete);
+  **Digital Media Seminars 1–3 shortened** to the new format.
+
 ## Still to do
+
+0. **Shorten the finished seminars** to the new format: Computing Systems
+   1–14, Game Math 1–10 (`check_size.py` warns about each).
 
 1. **Digital Media: Seminar 4** (from old `lesson-08*` in week-04, still there;
    Task with AI: a scene drafted with AI, rewritten in screenplay format) and

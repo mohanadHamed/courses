@@ -6,23 +6,23 @@ format: lesson-pptx
 
 ## Recall · Lecture 10
 
-a) Which device is the default gateway of a laptop?
+a) Which device is the default gateway of a LAN?
 b) What turns play.example.net into an IP address?
 c) What do we call the time of a packet there and back?
 
 ::: {.answer}
 a) the router
 b) the DNS
-c) latency, the ping
+c) latency
 :::
 
-## Activity 1 · Your address · 8 min
+## Activity 1 · Address and ping · 15 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- ipconfig shows the IP address, the default gateway and the DNS server.
-- An address 169.254.x.x with no gateway means that the router gave no address.
-- **Do it:** Run ipconfig on the lab PC. What are your IP address and your gateway?
+- ipconfig shows the IP address and the gateway; ping shows the latency and the loss.
+- **Do it:** Run ipconfig on the lab PC. Then ping the gateway and a website. Where is the delay: near or far?
+- Your product is two addresses, two averages and one sentence.
 :::
 ::: {.column width="50%"}
 ![](images/ipconfig.png)
@@ -31,84 +31,43 @@ c) latency, the ping
 
 ## Live demo · Terminal Lab
 
-{{< sim file="sims/terminal-lab.html" poster="sims/terminal-lab.png" title="Terminal Lab: network tools on Rami's laptop" task="**Show:** run ipconfig and ping play.example.net in the office, then ping the gateway in the café, then ping by name and by IP in the hotel. **Ask:** where is the problem in each place?" >}}
+{{< sim file="sims/terminal-lab.html" poster="sims/terminal-lab.png" title="Terminal Lab: network tools on Rami's laptop" task="**Show:** run ipconfig, then ping the gateway in the café. **Ask:** is the problem near or far?" >}}
 
-## Check 1 · Your address
-
-What does a good answer show?
-
-::: {.reveal}
-1. The IPv4 address is written, for example 192.168.1.23.
-2. The gateway is written, for example 192.168.1.1, the router.
-3. The address is private, because it starts with 192.168.
-:::
-
-## Activity 2 · Near and far · 10 min
-
-:::: {.columns}
-::: {.column width="50%"}
-- Each reply of ping shows the latency of one packet.
-- "Request timed out" is a lost packet, and big changes in the times are jitter.
-- **Do it:** Ping your gateway, then example.com. Where is the delay, near or far?
-:::
-::: {.column width="50%"}
-![](images/ping.png)
-:::
-::::
-
-## Check 2 · Near and far
+## Check 1 · Address and ping
 
 What does a good answer show?
 
 ::: {.reveal}
-1. The gateway answers fast, for example 3 ms with no loss.
-2. The website answers slower, for example 42 ms with no loss.
-3. So the LAN is fine, and most of the time is on the way to the server.
+1. The address 192.168.1.23 is private, because it starts with 192.168.
+2. The gateway is 192.168.1.1, and its ping is about 3 ms with 0 % loss.
+3. The website answers in about 42 ms, so most of the time is on the way to the server.
 :::
 
-## Activity 3 · A diagnosis · 12 min
+## Activity 2 · Six players · 15 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- We check from near to far: the address, the gateway, the server and the bandwidth.
-- The first "no" shows where the problem is.
-- **Do it:** Write a six-line report of your connection. Is it good for an online race?
+- A diagnosis goes from near to far: ipconfig, the gateway, the server, then a speed test.
+- **Do it:** Find the problem of each of the six players in Lag Detective.
+- Your product is your score and a list of six problems.
 :::
 ::: {.column width="50%"}
 ![](images/diagnosis.png)
 :::
 ::::
 
-## Check 3 · A diagnosis
+## Check 2 · Six players
 
-What does a good report show?
+What is the problem of each player?
 
 ::: {.reveal}
-1. It gives the address type, the ping to the gateway and the ping to a website.
-2. It gives the jitter, the loss and the download speed.
-3. It judges the race by latency and loss, for example: "41 ms and no loss, so it is good."
-:::
-
-## Game challenge · Lag Detective
-
-{{< sim file="sims/lag-detective.html" poster="sims/lag-detective.png" title="Lag Detective: read the tools, find the problem" kind="game" task="**The story:** six players of Pocket Quest send the output of a network tool. **Play:** read each output and find the problem on your phone." >}}
-
-## Try it · Lag Detective (harder)
-
-The facts: one player's router answers in 3 ms, but the server needs 104 ms every evening. Another player's game says "server not found": ping by the name fails, and ping by the IP address works.
-
-a) Where does the evening delay start?
-b) What helps the evening player?
-c) What is the problem of "server not found"?
-
-::: {.answer}
-a) outside the home, on the way to the server
-b) a server region closer to the player
-c) the DNS
+1. An address 169.254.10.4 means no address from the router, and a slow café router means bad Wi-Fi.
+2. When the name fails but the IP works, the DNS is the problem.
+3. A fast router with a slow server in the evening means the delay is on the way to the server.
+4. Three videos at 1.2 Mbit/s are too little bandwidth, and 18 FPS with a good ping means a slow phone.
 :::
 
 ## Wrap-up
 
-- You can find your IP address and gateway with ipconfig.
-- You can read ping near and far: the latency, the jitter and the loss.
+- You can find your IP address and gateway, and read ping near and far.
 - You can find a network problem from near to far, and tell it from a slow device.

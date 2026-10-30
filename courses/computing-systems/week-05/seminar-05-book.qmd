@@ -1,25 +1,25 @@
 ---
 title: "Operating-System Tour on PC and Mobile"
-description: "Seminar worksheet · Find four facts with the tools of Windows, tour the Settings of your phone, and compare what the two operating systems do with a game in the background."
+description: "Seminar worksheet · Find four facts about the lab computer with the Windows tools, then find two facts in your phone's Settings and see what the phone does with a game in the background."
 seminar: 5
 ilos: [A2]
 format: lesson-typst
 ---
 
 ::: {.lead}
-Today there are no new ideas. You use what Lecture 5 taught (the services of
-the OS, processes and memory) to visit two operating systems: you find four
-facts with the tools of Windows, tour the Settings of your phone, and compare
-what a PC and a phone do with a game in the background. Do each activity
-alone. The results of the activities are at the end of this worksheet: try
-first, then compare.
+In Lecture 5 you learned what an operating system does for a game: its
+services, the scheduler and memory management. Today you see them on the
+lab computer and on your phone. There are no new ideas: two short problems.
+Do each one alone. The results of the activities are at the end of this
+worksheet.
 :::
 
 ## Recall
 
 - The OS gives services to every app: processes, memory, files, devices and
   permissions.
-- The scheduler shares the cores; the app on the screen gets the most time.
+- The **scheduler** shares the cores; the app on the screen gets the most
+  time.
 - When the RAM of a phone is full, the OS closes background apps, so a game
   saves its state.
 
@@ -30,17 +30,11 @@ Choose the right service.
 The game asks to use the microphone. Which service decides?
 :   permissions
 
-    Why: the player allows or refuses the microphone.
-
 The game saves the progress to storage. Which service?
 :   files
 
-    Why: the OS keeps the files in storage.
-
 The game gets time on a CPU core. Which service?
 :   processes
-
-    Why: the scheduler shares the cores between processes.
 :::
 :::
 
@@ -49,33 +43,27 @@ The game gets time on a CPU core. Which service?
 | Tool (shortcut) | What it shows |
 |---|---|
 | Settings › System › About (Win + I) | Windows version, CPU, RAM |
-| Task Manager (Ctrl + Shift + Esc) | processes, CPU %, memory, disk, GPU |
+| Task Manager (Ctrl + Shift + Esc) | processes, CPU %, memory |
 | File Explorer (Win + E) | drives, free space, folders |
 | Device Manager (right-click Start) | devices and their drivers |
 
-- A **device driver** is a small program that lets the OS control one kind of
-  hardware (a graphics card, a gamepad).
-- Omar's game stutters: Task Manager shows a video converter at 85 % CPU.
-  He closes it, and the game is smooth.
-- Ali's gamepad does nothing: Device Manager shows it with a yellow warning
-  sign, so the driver is missing.
+A **device driver** is a small program that lets the OS control one kind of
+hardware, such as a gamepad.
 
 ![The four tools of Windows.](images/pc-tour.png){width=92%}
 
-::: {.callout-warning title="Watch out!"}
-Do not restart the game again and again. Look in Task Manager and Device
-Manager first.
-:::
+::: {.callout-note title="Activity 1 · Four facts · 15 min"}
+On the lab computer, write four facts, each with its tool:
 
-::: {.callout-note title="Activity 1 · Four facts about the lab computer · 12 min"}
-Write the Windows version and the RAM (About), the process with the most CPU
-(Task Manager), the free space of C: (File Explorer) and the graphics card
-(Device Manager › Display adapters).
+1. the Windows version and the RAM;
+2. the process that uses the most CPU now;
+3. the free space of drive C:;
+4. the graphics card (Device Manager › Display adapters).
 
 *Your product:* four facts with the tool for each.
 
 ::: {.check}
-A good answer: "Windows 11, 16 GB RAM (About); the browser has the most CPU
+A good answer: "Windows 11, 16 GB RAM (About); the browser uses the most CPU
 (Task Manager); C: has 180 GB free (File Explorer); Intel UHD Graphics
 (Device Manager › Display adapters)". Your values may differ, but each fact
 must come from the right tool.
@@ -83,180 +71,76 @@ must come from the right tool.
 :::
 
 ::: {.callout-tip title="Try it 2 · Which Windows tool?"}
-Choose the right tool. You can use an answer more than once.
+Choose the right tool.
 
-::: {.match extra="Settings › Battery"}
-Which program uses most of the CPU now?
+::: {.match extra="Settings › Battery|File Explorer"}
+A game stutters. Which program uses most of the CPU now?
 :   Task Manager
 
-    Why: Task Manager shows the CPU % of each process.
-
-Is the driver of the graphics card working?
+A new gamepad does nothing. Is its driver working?
 :   Device Manager
 
-    Why: Device Manager shows each device and its driver.
-
-How much RAM does the PC have, and which Windows version?
+How much RAM does the PC have?
 :   Settings › About
-
-    Why: Settings › System › About shows them.
-
-How much free space has drive C:?
-:   File Explorer
-
-    Why: File Explorer shows the drives and their free space.
 :::
 :::
 
-## Activity 2 · A tour of the phone: Settings
+## Activity 2 · A tour of the phone and the background
 
-| Place in Settings | What it shows |
-|---|---|
-| About phone (iPhone: General › About) | OS version, model, storage |
-| Battery | battery used by each app |
-| Storage | free space, space of each app |
-| Apps › a game | permissions; Android: Force stop, Clear cache |
-
-- Each app runs in its own **sandbox**: it cannot read the files of other
-  apps. For the camera, the microphone or the location, it needs an
-  **app permission**.
-- A puzzle game takes 1.5 GB: app 1.0 GB, user data 0.4 GB, cache 0.1 GB.
-- Lina's voice chat is silent: the microphone permission is "Not allowed".
+In a phone's Settings, **About phone** (iPhone: General › About) shows the
+OS version, and **Apps › a game** shows its **permissions**. On a phone, a
+game in the background is paused, and the OS may close it when the RAM is
+full. On a PC, the game keeps running.
 
 ![Four places in a phone's Settings.](images/phone-tour.png){width=92%}
 
-{{< sim file="sims/settings-explorer.html" poster="sims/settings-explorer.png" title="Settings Explorer: find the answer in a phone's Settings" height="620" >}}
+{{< sim file="sims/settings-explorer.html" poster="sims/settings-explorer.png" title="Settings Explorer: find the answer in a phone's Settings" >}}
 
-::: {.callout-warning title="Watch out!"}
-"Clear storage" (or "Clear data") also deletes the progress. Clear the cache
-first.
-:::
+::: {.callout-note title="Activity 2 · Two facts and one test · 15 min"}
+1. On your phone (or first in **Settings Explorer**), write the OS version
+   and the permissions of one game.
+2. Start the game. Switch to another app for one minute, then go back.
+   Did the game keep running, pause, or start again? Write why.
 
-::: {.callout-note title="Activity 2 · The tour of your phone · 12 min"}
-On your phone (or first in **Settings Explorer**): write the OS version; the
-storage and permissions of one big app; and the app that used the most
-battery today.
-
-*Your product:* three facts from your phone.
+*Your product:* two facts and one sentence.
 
 ::: {.check}
-A good answer: "Android 14 (About phone); a game of 3 GB with the
-permissions Microphone not allowed, Storage allowed; the app with the most
-battery today: the video app". Each fact comes from About, Apps › the app,
-and Battery.
+A good answer: "Android 14 (About phone). The game: Microphone not allowed,
+Notifications allowed. The game was paused. After a long time, or with many
+apps open, it may start again, because the OS closed it to free RAM."
 :::
 :::
 
-::: {.callout-tip title="Try it 3 · Where in Settings?"}
+::: {.callout-tip title="Try it 3 · Phone and background"}
 Choose the right answer.
 
-::: {.match extra="Display|Clear storage"}
+::: {.match extra="Display|the PC"}
 Where does the phone show the Android or iOS version?
 :   About phone
 
-    Why: About phone (iPhone: General › About) shows the OS version.
-
-Voice chat is silent. Where do you look?
+Voice chat in a game is silent. Where do you look?
 :   Apps › the game › Permissions
 
-    Why: The microphone is an app permission.
-
-The puzzle game: app 1.0 GB, user data 0.4 GB, cache 0.1 GB. What does Clear cache free?
-:   0.1 GB
-
-    Why: Clear cache deletes only the cache: 0.1 GB.
-
-Why can a game not read the files of the gallery app?
-:   each app has its own sandbox
-
-    Why: Each app runs in its own sandbox.
-:::
-:::
-
-## Activity 3 · The same game on a PC and on a phone
-
-| | PC (Windows) | Phone (Android, iOS) |
-|---|---|---|
-| Input | mouse, keyboard, gamepad | touch, sensors |
-| In the background | keeps running | paused, may be closed |
-| Installing | store or installer | app store (Android: also APK) |
-| Files | many folders | its own sandbox |
-| Permissions | few prompts | asks for camera, microphone, location |
-
-- A call during a mobile match: the game goes to the background, the OS
-  pauses it, and it may close it. The game must pause and save.
-- Alt + Tab on a PC: the game keeps running, and an online match goes on.
-
-![The same game on a PC and on a phone.](images/pc-vs-mobile.png){width=92%}
-
-::: {.callout-warning title="Watch out!"}
-Test a mobile game for calls, app switches and refused permissions.
-:::
-
-::: {.callout-note title="Activity 3 · PC or phone? · 8 min"}
-Start a game or a video on your phone and on the lab computer. Switch to
-another app for one minute. What did each one do: keep running, pause or
-start again?
-
-*Your product:* two short answers.
-
-::: {.check}
-On the lab computer the game or video usually keeps running in the
-background. On the phone it pauses, and after a long time or with many apps
-it may start again, because the OS closed it.
-:::
-:::
-
-::: {.callout-tip title="Try it 4 · PC or phone?"}
-Choose the right answer. You can use an answer more than once.
-
-::: {.match extra="both"}
 Which OS pauses a game in the background?
 :   the phone OS
 
-    Why: A phone OS pauses background apps and may close them.
-
-On which device does an online match go on after Alt + Tab?
-:   the PC
-
-    Why: On a PC, a game keeps running in the background.
-
-Which OS asks the player before a game uses the microphone?
-:   the phone OS
-
-    Why: A phone OS asks for each permission.
+Why may a phone close a game in the background?
+:   its RAM is full
 :::
 :::
-
-## Case study: the support desk of Byte Bay
-
-Six tickets about *Pocket Quest* reach the support desk. Lina (phone):
-"Microphone not allowed". Omar (PC): the game stutters. Sara (phone): "Not
-enough space"; her Pocket Quest has app 2.1 GB, user data 0.9 GB, cache
-0.2 GB. Ali (PC): the new gamepad does not work. Maya (phone): does my phone
-have Android 12 or newer? Yousef (phone): empty after one hour of play. The
-Game challenge of the interactive page asks where each player looks.
-
-{{< sim file="sims/help-ticket.html" poster="sims/help-ticket.png" title="Help Ticket: send each player to the right place of the OS" kind="game" height="560" >}}
 
 ## Exercises
 
-1. Which Windows tool shows the processes and their CPU use?
-2. A device has a yellow warning sign in Device Manager. What is missing?
-3. Where does a phone show the free space?
-4. A game cannot use the camera. Where do you look on the phone?
-5. What does "Clear cache" delete? What does "Clear storage" delete?
-6. A player switches away from a game for one minute. What does a PC do with
-   the game, and what does a phone do?
+1. Which Windows tool shows the CPU % of each process?
+2. What is a device driver?
+3. Where does an Android phone show the permissions of a game?
+4. What may a phone do with a game in the background when its RAM is full?
 
 ## Answers to the exercises
 
 ::: {.answers}
 1. Task Manager.
-2. The driver of the device.
-3. Settings › Storage.
-4. Apps › the game › Permissions.
-5. Clear cache: temporary files. Clear storage: the user data too (the
-   progress).
-6. A PC keeps it running; a phone pauses it and may close it.
+2. A small program that lets the OS control one kind of hardware.
+3. Settings › Apps › the game › Permissions.
+4. Close it, so the game should save its state.
 :::

@@ -1,17 +1,17 @@
 ---
 title: "Hands-on: File and Resource Management"
-description: "Seminar worksheet · Build a test folder with clear file names, move files from the test phone to the PC, and free space safely before a test."
+description: "Seminar worksheet · Copy a screenshot from your phone into a test folder with a clear name, then make a phone ready for a test with the device check."
 seminar: 6
 ilos: [A2, C1]
 format: lesson-typst
 ---
 
 ::: {.lead}
-Today there are no new ideas. You use what Lecture 6 taught (files, paths,
-devices and resources) to prepare a real test: you build a test folder with
-clear file names, move a screenshot from your phone to the PC, and free space
-safely. Do each activity alone. The results of the activities are at the end
-of this worksheet: try first, then compare.
+In Lecture 6 you learned where a game keeps its files, how the OS shares
+the devices, and how to make a device ready for a test. Today you do both
+on the lab computer and on your phone. There are no new ideas: two short
+problems. Do each one alone. The results of the activities are at the end
+of this worksheet.
 :::
 
 ## Recall
@@ -20,8 +20,8 @@ of this worksheet: try first, then compare.
   every `\` (Android: `/`); the extension names the kind of file.
 - A phone on USB needs the **file transfer** mode (iPhone: Trust this
   computer).
-- The device check: 2 GB free, battery above 50 %, only the game open, Do not
-  disturb, the OS version in the report.
+- The device check: 2 GB free, battery above 50 %, only the game open, Do
+  not disturb, the OS version in the report.
 
 ::: {.callout-tip title="Try it 1 · Recall"}
 Choose the right answer.
@@ -30,210 +30,115 @@ Choose the right answer.
 Which extension has a save file?
 :   .sav
 
-    Why: the extension names the kind of file.
-
 How much free storage does the device check ask for?
 :   at least 2 GB
 
-    Why: the game needs room during the test.
-
 The phone charges, but the PC shows no files. What do you change?
 :   the USB mode to file transfer
-
-    Why: "charging only" does not share the files.
 :::
 :::
 
-## Activity 1 · Files that anyone can find: folders and names
+## Activity 1 · A screenshot in the test folder
 
-- One folder per **game build**, with subfolders **builds**, **screenshots**,
-  **reports**.
-- A good name says **what**, **which version or device**, **when**; no
-  spaces; the date first as year-month-day.
-- `PocketQuest_1.2_android.apk` · `2026-11-12_P5_level3.png` ·
-  `2026-11-12_P5_report.docx`.
-- Date first: `2026-10-13_…` comes before `2026-11-12_…`, so files sort in
-  time order.
+A test team keeps one folder per game build, with the subfolders
+**builds**, **screenshots** and **reports**. A good file name says **what**,
+**which device**, and **when**, with no spaces and the date first as
+year-month-day: `2026-11-12_P5_level3.png`. Then the files sort in time
+order.
 
 ![A test folder with clear names.](images/test-folder.png){width=92%}
 
-{{< sim file="sims/name-checker.html" poster="sims/name-checker.png" title="Name Checker: file names for a test" height="460" >}}
+{{< sim file="sims/name-checker.html" poster="sims/name-checker.png" title="Name Checker: file names for a test" >}}
 
-::: {.callout-warning title="Watch out!"}
-`final.apk`, `final_new.apk` and `IMG_4821.png` say nothing.
-:::
-
-::: {.callout-note title="Activity 1 · Build the test folder · 12 min"}
-In Documents, make `Tests\PocketQuest_1.2\builds`, `screenshots`,
-`reports`. Do the three tasks of **Name Checker**, and make an empty text
-file in `reports` with the third name.
-
-*Your product:* a folder with three subfolders and one named file.
-
-::: {.check}
-A good folder: `Documents\Tests\PocketQuest_1.2` with `builds`,
-`screenshots` and `reports`, and in `reports` a file like
-`2026-11-12_P5_report.txt`: date first (year-month-day), the device, what it
-is, no spaces.
-:::
-:::
-
-::: {.callout-tip title="Try it 2 · Names"}
-Choose the right answer.
-
-::: {.match extra="game final new.apk|P5.png"}
-The best name for the Android build of version 1.2?
-:   PocketQuest_1.2_android.apk
-
-    Why: It says what, which version and which platform, without spaces.
-
-The best name for a screenshot of level 3 on P5, 12 November 2026?
-:   2026-11-12_P5_level3.png
-
-    Why: The date first, then the device and what it shows.
-
-Why does the date come first, as year-month-day?
-:   the files sort in time order
-
-    Why: Year-month-day sorts the files in time order.
-
-What is wrong with IMG_4821.png?
-:   it says nothing about the test
-
-    Why: A camera name tells nothing about the test.
-:::
-:::
-
-## Activity 2 · Move files between the test phone and the PC
-
-- **USB cable:** set the USB mode to **file transfer** (iPhone: Trust this
-  computer), then copy in File Explorer. Fast, no Internet.
-- **Cloud:** upload on the phone, download on the PC. No cable, but it uses
-  the network.
-- Android keeps screenshots in `Pictures\Screenshots` and photos in `DCIM`.
-- A 300 MB bug video: seconds by USB; minutes and 300 MB of mobile data by
-  cloud.
-- **Copy** first, check on the PC, then delete from the phone.
-
-![USB or cloud.](images/phone-pc.png){width=90%}
-
-::: {.callout-warning title="Watch out!"}
-Do not move the only copy: copy, check, then delete.
-:::
-
-::: {.callout-note title="Activity 2 · From your phone to the folder · 10 min"}
-Take a screenshot on your phone. Copy it to
-`Tests\PocketQuest_1.2\screenshots` (USB or cloud), and rename it with the
-date, your phone and what it shows.
+::: {.callout-note title="Activity 1 · Copy and name · 15 min"}
+1. Do the three tasks of **Name Checker**.
+2. In Documents, make the folder `Tests\PocketQuest_1.2\screenshots`.
+3. Take a screenshot on your phone. Copy it into the folder (USB in file
+   transfer mode, or the cloud). Rename it with the date, your phone and
+   what it shows.
 
 *Your product:* one renamed screenshot in the right folder.
 
 ::: {.check}
-A good result: `Tests\PocketQuest_1.2\screenshots\2026-11-12_A35_home.png`
-(today's date, your phone, what it shows). By USB the phone must be in file
-transfer mode; the copy stays on the phone until you check it on the PC.
+A good result: `Documents\Tests\PocketQuest_1.2\screenshots\2026-11-12_A35_home.png`
+(today's date, your phone, what it shows, no spaces). Copy first, check the
+file on the PC, and only then delete it from the phone.
 :::
 :::
 
-::: {.callout-tip title="Try it 3 · Moving files"}
+::: {.callout-tip title="Try it 2 · Names and copies"}
 Choose the right answer.
 
-::: {.match extra="FAT32|the PC has no Wi-Fi"}
-The PC shows no files of the phone. What do you change?
-:   the USB mode to file transfer
+::: {.match extra="game final new.apk|delete it at once"}
+Which is the best name for the Android build of version 1.2?
+:   PocketQuest_1.2_android.apk
 
-    Why: "Charging only" does not share the files.
+What is wrong with IMG_4821.png?
+:   it says nothing about the test
 
-Which way is faster for a 300 MB video?
-:   the USB cable
-
-    Why: A cable copies it in seconds, without the network.
-
-Where are screenshots on an Android phone?
-:   Pictures\\Screenshots
-
-    Why: Android keeps screenshots in Pictures\\Screenshots.
-
-What do you do before you delete the files from the phone?
-:   check that the copies are on the PC
-
-    Why: Never delete the only copy.
+What do you do before you delete a file from the phone?
+:   check that the copy is on the PC
 :::
 :::
 
-## Activity 3 · Free space safely
+## Activity 2 · Make the phone ready for a test
 
-The device check needs at least 2 GB free. Clearing an app's **cache**
-frees space and keeps its logins and progress; clearing its **storage**
-(data) deletes them.
+Rami must test *Pocket Quest 1.2* on phone **P5** for 40 minutes. P5 has
+**1.1 GB** free, the battery shows **34 %**, and **9 apps** are open.
+Clearing an app's **cache** frees space and keeps its progress; clearing
+its **storage** (data) deletes the progress.
 
 ![The device check.](images/device-check.png){width=86%}
 
-::: {.callout-note title="Activity 3 · Two caches · 8 min"}
-1. Write the free space of your phone (Settings › Storage).
-2. Find two apps with a big cache (Android: Apps › an app › Storage; iPhone:
-   iPhone Storage shows "Documents & Data" only).
-3. Clear the cache of one of them (Android). Write the free space again.
+{{< sim file="sims/test-day.html" poster="sims/test-day.png" title="Test Day: prepare the phone and the files" kind="game" >}}
 
-*Your product:* the free space before and after, and the app you chose.
+::: {.callout-note title="Activity 2 · The device check · 15 min"}
+1. In **Test Day**, prepare Rami's phone P5 for the test.
+2. On your own phone, write the free space (Settings › Storage) and the
+   battery level. Does it pass the device check? If not, write what you do
+   first.
+
+*Your product:* your score and two short lines.
 
 ::: {.check}
-A good answer: "Before 9.4 GB free; I cleared the cache of the browser
-(0.6 GB); after 10.0 GB free." The app keeps its login. On an iPhone there
-is no Clear cache button: a good answer says so and names the app with the
-biggest "Documents & Data".
+Test Day: delete old videos and clear caches, charge above 50 %, close the
+other apps, set USB to file transfer, name the screenshot
+`2026-11-12_P5_level3.png`, and turn on Do not disturb. A good answer for
+your phone: "9.4 GB free, battery 72 %: it passes. I close the other apps
+and turn on Do not disturb before the test."
 :::
 :::
 
-::: {.callout-tip title="Try it 4 · Free space"}
+::: {.callout-tip title="Try it 3 · The device check"}
 Choose the right answer.
 
-::: {.match extra="Clear storage|format the phone"}
+::: {.match extra="Clear storage|test now"}
 Which button frees space and keeps the progress?
 :   Clear cache
-
-    Why: the cache holds only temporary files.
 
 A phone has 1.6 GB free and clears 0.6 GB of caches. Is it ready for the test?
 :   yes, 2.2 GB is more than 2 GB
 
-    Why: 1.6 + 0.6 = 2.2 GB.
+The battery shows 34 %. What do you do before a 40-minute test?
+:   charge it above 50 % first
 
-What does Clear storage delete?
-:   the logins and the progress too
-
-    Why: the storage holds the app's data.
+A call stopped the last test. What do you turn on?
+:   Do not disturb
 :::
 :::
-
-## Case study: Test Day at Byte Bay
-
-Rami prepares phone P5 to test *Pocket Quest 1.2* for 40 minutes. P5 has
-1.1 GB free (the test needs 2 GB), the battery shows 34 %, and 9 apps are
-open. The PC sees no files when P5 is connected. He must name the screenshot
-of level 3 of 12 November 2026, and stop calls. The Game challenge of the
-interactive page asks for the right step for each problem.
-
-{{< sim file="sims/test-day.html" poster="sims/test-day.png" title="Test Day: prepare the phone and the files" kind="game" height="600" >}}
 
 ## Exercises
 
-1. Give a good name for the iPhone build of version 2.0 of *Star Kart*.
-2. Why is `final_new.apk` a bad name?
-3. Where are the photos of an Android phone?
-4. A video of 500 MB must go from the phone to the PC. USB or the cloud?
-   Why?
-5. A phone has 1.3 GB free and clears 0.8 GB of caches. Is it ready for the
-   test?
-6. Why should the tester copy before deleting?
+1. Write a good name for the report of a test on phone P6 on 3 December 2026.
+2. Why does the date come first, as year-month-day?
+3. What is the difference between Clear cache and Clear storage?
+4. Name three steps of the device check.
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. For example `StarKart_2.0_ios.ipa`.
-2. It says nothing about the game, the version or the device.
-3. In the DCIM folder.
-4. USB: it is fast and uses no mobile data.
-5. Yes: 1.3 + 0.8 = 2.1 GB, more than 2 GB.
-6. So that the file is not lost if the copy fails.
+1. For example 2026-12-03_P6_report.docx.
+2. The files sort in time order.
+3. Clear cache keeps the progress; Clear storage deletes the progress and the logins too.
+4. For example: 2 GB free, battery above 50 %, only the game open, Do not disturb.
 :::

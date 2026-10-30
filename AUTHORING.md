@@ -154,24 +154,39 @@ is activity-based. Templates: `seminar-template.qmd`,
   is core come from `schedule.yml`. The banner shows "Seminar 2 · practises
   Lecture 8" and "Flexible"; a flexible page says in one line that it is
   studied at home when it is not held.
+- **Short, with room to explain.** Most students cannot solve a seminar
+  problem alone, even with its answer on the page: the teacher explains
+  almost every problem before and after the students try it. So a seminar
+  is **two short problems** (three only when two cannot hold the concepts),
+  each with little effort and little time, that **together use every
+  concept of the lecture(s) it practises**. The planned time (Recall and the
+  activity times) is about **40 minutes of a 60-min seminar** and about
+  **60 minutes of a 90-min seminar**; the rest is for the teacher's
+  explanations. A problem is short when it has one situation, two to four
+  steps and one small product; never a second problem on the same concept.
 - **Structure:**
-  1. **Recall** (about 5 min): 3–5 key ideas of the lectures it practises
-     and 2–3 recall questions with answers. No new terms and no glossary.
-  2. **Activities** (`## Activity N · title`): 3–4 in 60 min, 4–6 in 90 min.
-     Each has a game (or workplace) situation, an
-     `::: {.callout-note title="Activity N · title · 10 min"}` box with a
+  1. **Recall** (about 5 min): 3 key ideas of the lectures it practises
+     and one Try it with 2–3 questions. No new terms and no glossary.
+  2. **Activities** (`## Activity N · title`): 2 (at most 3). Each has a
+     short game (or workplace) situation, an
+     `::: {.callout-note title="Activity N · title · 15 min"}` box with a
      task for each student alone and a concrete product, its `.check`, and
-     one Try it (with `Why:`). Seminars are where the syllabus seminar titles
-     are done ("Matrix exercises", "Drawing a storyboard from a scene").
-  3. **Game challenge** as in a lecture (the unit's game, harder questions).
-  4. **Wrap-up** (`## Wrap-up {.summary}`): 3–4 lines, "what you can now do".
-- **Worksheet (PDF):** Recall, the activities, the case study, exercises;
+     one Try it with 2–3 questions (with `Why:`). Seminars are where the
+     syllabus seminar titles are done ("Matrix exercises", "Drawing a
+     storyboard from a scene"). The unit's mini-game, when it fits, is the
+     tool of an activity; a seminar has no separate Game challenge.
+  3. **At home** (optional, `## At home · Task with AI`): at most one Task
+     with AI, outside the planned time.
+  4. **Wrap-up** (`## Wrap-up {.summary}`): 2–3 lines, "what you can now do".
+- **Worksheet (PDF):** Recall, the activities, 3–5 short exercises;
   "Answers to the exercises" and "Results of the activities" at the end.
+  No case study.
 - **Slides teach by asking:** a Recall slide (questions on the earlier
   lectures, `.answer` cards); per activity a Task slide ("Activity 2 · …
-  · 10 min": the situation, the instruction, the product) and a Check slide
-  (the result, `.reveal` step by step); one Game challenge slide; a Wrap-up.
-  `pptx_finish.py` puts a "SEMINAR" (or "PRACTICE") mark on every slide.
+  · 15 min": the situation, the instruction, the product) and a Check slide
+  (the result, `.reveal` step by step); a Live demo slide for a simulator
+  the activities use; a Wrap-up. `pptx_finish.py` puts a "SEMINAR" (or
+  "PRACTICE") mark on every slide.
 - **Team work** stays only in the notes of the session that `plan.md` names,
   with an individual alternative.
 
@@ -319,14 +334,16 @@ mostly explanation) · Game challenge ~10 · summary and questions 10.
 **Time plan (60 min):** key terms 3 · sections ~42 · Game challenge ~8 ·
 summary 7.
 
-**Seminars and practice sessions:**
+**Seminars and practice sessions** (short, with room for the teacher's
+explanations; see "What a seminar looks like"):
 
 | | 60 min | 90 min |
 |---|---|---|
-| Activities (`## Activity N`) | 3–4 | 4–6 |
-| Try it questions | 10–20 | 15–30 |
-| Slides (title slide not counted) | 8–12 | 12–18 |
-| Worksheet words, at most | 2 000 | 3 000 |
+| Activities (`## Activity N`) | 2–3 | 2–3 |
+| Planned time: Recall 5 min + the activity times, at most | 40 min | 60 min |
+| Try it questions | 6–12 | 8–15 |
+| Slides (title slide not counted) | 5–9 | 6–10 |
+| Worksheet words, at most | 1 200 | 1 600 |
 
 `_extensions/lesson/check_size.py` (project pre-render) checks these numbers,
 that every section of the notes is on the page, the one-box-per-section rule,
@@ -437,8 +454,9 @@ A good sheet … (2–3 point self-check list)
 - On the page and in the notes the box has a `.check`. In graded work
   (homework, Tasks to submit) it has none and asks for the **AI-use
   statement** (which tool, what was asked, what the student changed).
-- **0–2 per session**, only where AI really lets students do more: often a
-  seminar activity, the Game challenge or a homework task. Not on the slides.
+- **0–2 per session**, only where AI really lets students do more: often
+  the Game challenge of a lecture, the "At home" part of a seminar (at most
+  one there) or a homework task. Not on the slides.
 - Free tools named generally (Microsoft Copilot with the university
   account, ChatGPT, Gemini); no task needs a paid plan. No personal data in
   a prompt.
@@ -489,13 +507,15 @@ ILO–PLO matrix). Use the newest version of each file.
 
 ### Level and language
 
-The students' starting level is very basic. The level is about 20 %
+The students' starting level is very basic. Since 2026-10-30 the lessons
+are **as simple as the outcomes allow**: the estimated limit, about 30 %
 simpler than the first applied version of the lessons (October 2026), which
-was already slightly easier than a first-year bachelor's course; the English
-is simple. The ILOs and PLOs stay exactly the same: a lesson is easier in
-*how* it teaches, never in *what* the ILO asks for. (The estimated limit is
-about 30 % simpler: beyond it, syllabus topics, the ILO verb or the practical
-tasks would be lost.)
+was already slightly easier than a first-year bachelor's course. Beyond it,
+syllabus topics, the ILO verb or the practical tasks would be lost. The ILOs
+and PLOs stay exactly the same: a lesson is easier in *how* it teaches,
+never in *what* the ILO asks for. Explain each idea in the simplest way, and
+teach only the simplest concepts that still reach every ILO at its Bloom
+level and serve the PLO behind it.
 
 - **Scope: only what the outcomes need.** A topic goes into a lesson only if
   the syllabus week names it, an ILO of the week asks for it, or an ILO of a
@@ -517,11 +537,13 @@ tasks would be lost.)
   sentences. Leave out details that the ILO and the tasks do not need
   (cache levels, standards, exceptions); one short sentence is enough when
   a student may meet the detail in practice.
-- **English (notes):** CEFR B1. Short sentences (about 20 words at most,
-  one idea each), common words, active voice ("the CPU reads the value",
-  not "the value is read"), no idioms. Explain every technical word in plain
-  words the first time it appears, then use the same word every time.
-- **English (page and slides):** A2–B1: even shorter sentences and lists.
+- **English (notes):** CEFR A2–B1. Short sentences (about 15 words at most,
+  one idea each), the most common words, active voice ("the CPU reads the
+  value", not "the value is read"), no idioms. Explain every technical word
+  in plain words the first time it appears, then use the same word every
+  time.
+- **English (page and slides):** A2: even shorter sentences (about 12
+  words) and lists.
 - Definitions stay precise, but in the same simple English.
 - No programming yet: *Programming Fundamentals (1)* (C#) is in semester 2.
   Code in semester-1 courses is a short C# example to read, never a task,
@@ -532,7 +554,7 @@ tasks would be lost.)
 
 ## Writing rules (always enforce)
 
-- **Notes:** simple English (B1, see "Level and language"): short
+- **Notes:** simple English (A2–B1, see "Level and language"): short
   paragraphs, direct steps. Precise
   definitions (`::: {.callout-important title="Definition 1.2 — …"}`), worked
   examples with numbered steps (`::: {.callout-note title="Example 1.3 — …"}`),
@@ -540,7 +562,7 @@ tasks would be lost.)
   (`::: {.callout-caution title="In game code"}`), figures with captions and
   `@fig-` references, tables with captions, `::: {.lead}` opening paragraph,
   `::: {.answers}` for the short answers.
-- **Page:** the same content, shorter and plainer (A2–B1): one idea per
+- **Page:** the same content, shorter and plainer (A2): one idea per
   sentence, but no baby talk. "Watch out!" boxes for common mistakes.
 - **Slides:** short, complete sentences and pictures; no paragraphs. See
   "Slides explain themselves".
@@ -1064,3 +1086,13 @@ do not add it. The draft mechanism still works (a draft lecture is faded,
   me" prompts, which every student can do alone). Rules above ("Units and
   sessions", "The page teaches, the notes test", "What a seminar looks
   like", "Tasks with AI", "The course package").
+- 2026-10-30 (teacher review of the first seminars): the seminars were too
+  long for the class. Most students cannot solve a seminar problem alone, so
+  the teacher explains almost every problem, and that takes time. A seminar
+  is now two short problems (three at most) that together use every concept
+  of the lecture it practises, planned for about 40 of 60 minutes (60 of 90),
+  with no separate Game challenge or case study; a Task with AI is an
+  optional "At home" part. The lessons are now as simple as the outcomes
+  allow (the estimated limit, about 30 % simpler than October 2026), with
+  A2–B1 English in the notes and A2 on the pages and slides. Rules above
+  ("What a seminar looks like", "Level and language").

@@ -35,10 +35,12 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   syllabus seminar topic is the Game challenge of the second lecture; in a
   week with one merged lecture the second 90-min session is a seminar with
   the syllabus seminar title. Unit 8 is the revision seminar (Seminar 5).
-- A 90-min seminar: Recall, 4–6 activities, the Game challenge, a Wrap-up.
-  Seminars hold the second examples that the merged lectures gave up
-  (Multiply Lab, Asteroid Beam, Lighthouse, Problem Drill, Star Dock
-  Missions move there).
+- A 90-min seminar (since 2026-10-30): Recall, two short problems (three
+  at most) that together use every concept of the lecture, about 60 of the
+  90 minutes planned (the rest for explaining), a Wrap-up; no separate Game
+  challenge. A game that the merged lectures gave up (Multiply Lab, Asteroid
+  Beam, Lighthouse, Problem Drill, Star Dock Missions) is the tool of an
+  activity when it fits.
 - Tasks with AI fit here when the AI does the long part and the student
   checks it: a sheet of 1000 loot rolls against the expected value,
   GeoGebra commands for a path or a chain of transformations checked at two

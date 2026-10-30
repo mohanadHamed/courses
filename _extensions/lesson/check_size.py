@@ -30,10 +30,13 @@ The game of the lesson: a mini-game in the page's Game challenge must also be
 in the notes (Case study, poster + QR) and on the Game challenge slide.
 
 Seminars and practice sessions (seminar-NN*.qmd, practice-NN*.qmd; AUTHORING.md,
-"What a seminar looks like") are checked with SEMINAR_SIZES: activities
-(## Activity N), Try it questions, slides and words of the worksheet, a Recall
-section, one "Check your result" ({.check}) in every activity, no new
-glossary terms, and Recall / Activity / Check slides.
+"What a seminar looks like") are short: two problems, with room for the
+teacher's explanations. They are checked with SEMINAR_SIZES: activities
+(## Activity N), Try it questions, slides and words of the worksheet; the
+planned time (Recall + the "· N min" of every Activity box) against
+SEMINAR_TIME; a Recall section, one "Check your result" ({.check}) in every
+activity, no new glossary terms, no separate Game challenge or case study, at
+most one Task with AI, and Recall / Activity / Check slides.
 
 On every page (AUTHORING.md, "The page teaches, the notes test"): every Do it,
 Lab task and Activity box has a {.check}, and every Try it question has a
@@ -86,11 +89,18 @@ SIZES = {
 }
 # Seminars and practice sessions (no new ideas: activities on earlier lectures).
 SEMINAR_SIZES = {
-    60: {"activities": (3, 4), "questions": (10, 20), "slides": (8, 12), "words": (0, 2000)},
-    90: {"activities": (4, 6), "questions": (15, 30), "slides": (12, 18), "words": (0, 3000)},
+    60: {"activities": (2, 3), "questions": (6, 12), "slides": (5, 9), "words": (0, 1200)},
+    90: {"activities": (2, 3), "questions": (8, 15), "slides": (6, 10), "words": (0, 1600)},
 }
+# Planned minutes of a seminar, at most: Recall (SEMINAR_RECALL_MIN) + the
+# activity times. The rest of the session is for the teacher's explanations.
+SEMINAR_TIME = {60: 40, 90: 60}
+SEMINAR_RECALL_MIN = 5
+SEMINAR_AI_MAX = 1
 SEMINAR_BOOK_REQUIRED = ["recall", "exercises", "answers to the exercises"]
-SEMINAR_PAGE_REQUIRED = ["recall", "game challenge", "wrap-up"]
+SEMINAR_PAGE_REQUIRED = ["recall", "wrap-up"]
+# A seminar is two short problems: no separate Game challenge or case study.
+SEMINAR_FORBIDDEN = ["game challenge", "case study"]
 # "Task with AI" boxes in one file, at most.
 AI_MAX = 2
 # Online activity (blended course): at least this many simulators, and
@@ -114,6 +124,7 @@ NAMES = {
     "sims": "simulators and mini-games",
     "slides": "slides",
     "activities": "activities",
+    "minutes": "planned minutes",
 }
 
 
@@ -463,6 +474,24 @@ def check_seminar(path, rel, minutes):
     for part in SEMINAR_PAGE_REQUIRED:
         if not any(h.startswith(part) for h in heads):
             out.append("%s: no \"%s\" section" % (rel, part.capitalize()))
+    for part in SEMINAR_FORBIDDEN:
+        if any(h.startswith(part) for h in heads):
+            out.append("%s: a seminar has no \"%s\" (two short problems; a game is the tool of an activity)" % (rel, part.capitalize()))
+    times = []
+    for title in re.findall(r'^:::+ *\{\.callout-note[^}\n]*title="(Activity [^"]*)"', body, re.M):
+        m = re.search(r"·\s*(\d+)\s*min\b", title)
+        if m:
+            times.append(int(m.group(1)))
+        else:
+            out.append('%s: "%s" has no time ("· 15 min")' % (rel, title))
+    n["minutes"] = SEMINAR_RECALL_MIN + sum(times)
+    if n["minutes"] > SEMINAR_TIME[minutes]:
+        out.append("%s: %d planned minutes (Recall %d + activities %s); a %d-min seminar plans at most %d, "
+                   "the rest is for explaining" % (rel, n["minutes"], SEMINAR_RECALL_MIN,
+                                                    " + ".join(map(str, times)), minutes, SEMINAR_TIME[minutes]))
+    n_ai = sum(1 for h, _ in boxes(body) if ".ai-task" in h or 'title="Task with AI' in h)
+    if n_ai > SEMINAR_AI_MAX:
+        out.append("%s: %d Task with AI boxes, a seminar has at most %d (in \"At home\")" % (rel, n_ai, SEMINAR_AI_MAX))
     if "{{< glossary" in body:
         out.append("%s: a seminar adds no new terms (no glossary; reuse the lectures' words)" % rel)
     acts = [p for p in re.split(r"^(?=## )", body, flags=re.M) if re.match(r"## Activity \d", p)]
@@ -614,8 +643,8 @@ def main():
     project_dir = os.environ.get("QUARTO_PROJECT_DIR") or os.getcwd()
     rows, warnings = check(project_dir)
     if "--all" in sys.argv:
-        cols = ["book_sections", "activities", "words", "examples", "exercises", "try_its", "questions", "sims", "slides"]
-        short = ["sect", "activ", "words", "exmpl", "exer", "try", "quest", "sims", "slides"]
+        cols = ["book_sections", "activities", "minutes", "words", "examples", "exercises", "try_its", "questions", "sims", "slides"]
+        short = ["sect", "activ", "plan", "words", "exmpl", "exer", "try", "quest", "sims", "slides"]
         print("%-44s %4s " % ("lesson", "min") + " ".join("%6s" % c for c in short))
         for rel, minutes, n in rows:
             print("%-44s %4d " % (rel, minutes) + " ".join("%6s" % (n.get(c, "-")) for c in cols))

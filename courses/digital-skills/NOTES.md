@@ -161,3 +161,24 @@ real tool.
   probabilities; *AI Applications* teaches it), SUMIF/COUNTIF, the
   know/have/are factors, the 3-2-1 rule and data classes. Lecture 8 adds the
   animations that the syllabus names. The AI-use statement starts in unit 11.
+- 2026-10-30 (plan v2 applied to all 15 units): Lectures 1–10, Practice 1–5
+  in the short seminar format (two problems, at most 40 planned minutes,
+  every answer on the page) and Online activities 1–15 (`online-NN.qmd`,
+  due "before lecture N"; Online activity 15 after Lecture 10). Every
+  question has a reason and every Lab task a result. The online activities
+  practise their unit with their own examples and simulators; Practice 2–5
+  and Online activities 10–14 overlap a little because a flexible practice
+  may be skipped. Removed: the DigComp self-check, Hiring Desk, Next Word,
+  The Right Tool (SUMIF/COUNTIF) and Link Lab, and the figures of how AI works, why AI
+  is wrong, summary formulas, the AI workflow, e-mail sharing and peer
+  feedback. New: Claim Finder (Online activity 11), Rehearsal Lab (Online
+  activity 9 and Lecture 10) and the figures "what AI does well" and
+  "animations step by step". Changed: Transition Lab (Appear, Fade, Spin),
+  Prompt Cleaner (two prompts for Online activity 12), AI Formula Lab (SUM,
+  MAX, AVERAGE), Office Relay (no link round), Presentation Day (no link or
+  peer-feedback round). Cut: SUMIF, COUNTIF and AVERAGEIF, linked tables and
+  charts (Paste Link, Update Link), sharing with classmates, peer feedback.
+  The course project runs through Online activity 14 (plan, data sheet,
+  first draft), Lecture 10 (five slides, four checks, a three-minute talk)
+  and Online activity 15 (the final files with a table of contents, page
+  numbers and one AI-use statement).

@@ -21,7 +21,9 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
   Math homework 1–14 and Computing Systems homework 1–13 match the new tasks
   (CS solutions in week-09 … week-14 since the shift).
 
-- **Digital Media units 1–3** (Lectures 1–3, Seminars 1–3, homework 1–3); units
+- **Digital Media units 1–3** (Lectures 1–3, Seminars 1–3, homework 1–3) and
+  **Lecture 4** (week-04: no Courier, line IDs or "on-the-nose"; voice and scene
+  card from old 8; Rooftop Rescue and the bark figure without IDs). Units
   8–14 already moved to week-09 … week-15 (both repos). DM keeps one running
   story per lecture (Skyward Kite, Silent Station, …): the audit flagged
   repeated case numbers only in Game Math and Computing Systems.
@@ -29,7 +31,10 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
 
 ## Still to do
 
-1. **Digital Media units 4–14** (same pattern; fix: L19 reference) and **Digital Skills** (15 units: Lectures 1–10, Practice 1–5,
+1. **Digital Media: Seminar 4** (from old `lesson-08*` in week-04, still there;
+   Task with AI: a scene drafted with AI, rewritten in screenplay format) and
+   homework 4 (due before lecture 5, Lecture 4 only); then **units 5–14**
+   (same pattern; fix: L19 reference) and **Digital Skills** (15 units: Lectures 1–10, Practice 1–5,
    Online activities 1–15 that practise their unit; see its NOTES.md).
 2. Every page: `Why:` under every Try it answer, `::: {.check}` in every
    Do it / Lab task / Activity; seminars in the seminar format (templates in

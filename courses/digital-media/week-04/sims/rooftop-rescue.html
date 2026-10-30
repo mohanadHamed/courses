@@ -31,7 +31,7 @@
   <div class="row"><button id="row" type="button">Row</button><button id="script" type="button" class="ghost">Show the opening script</button><button id="again" type="button" class="ghost">Play again</button></div>
   <div class="choice" id="choice"></div>
   <p id="msg" class="message">The opening: Nour jumps into the boat at the jetty.</p>
-  <div class="wrap"><table><thead><tr><th>line ID</th><th>character</th><th>line</th><th>trigger</th></tr></thead><tbody id="rows"></tbody></table></div>
+  <div class="wrap"><table><thead><tr><th>character</th><th>line</th><th>trigger</th></tr></thead><tbody id="rows"></tbody></table></div>
   <div class="page" id="page" hidden>
     <p>EXT. FLOODED STREET – DUSK</p>
     <p>Brown water fills the street up to the windows. A small rowing boat knocks against a broken jetty.</p>
@@ -49,7 +49,7 @@
     ["NOUR_01", "Nour", "Hold on, everyone. I'm coming.", "the scene starts", 0],
     ["NOUR_02", "Nour", "Car ahead! Around it.", "a floating car is in view", 28],
     ["FAM_01", "Family", "Over here! Please!", "the rooftop is in view", 55],
-    ["NOUR_03", "Nour", "I see you! Stay there.", "after FAM_01", 58],
+    ["NOUR_03", "Nour", "I see you! Stay there.", "after the family calls", 58],
     ["NOUR_04", "Nour", "Faster. The water's still rising.", "the water rises", 76],
     ["SALMA_01", "Salma", "I won't leave without my cat.", "the boat reaches the roof", 100],
   ];
@@ -59,14 +59,14 @@
   let W = 0, H = 0, p = 0, v = 0, played = [], bubble = null, lastT = 0, arrived = false, finished = false, water = 0, audio = null, t0 = performance.now();
 
   function rows() {
-    $("rows").innerHTML = LINES.map((l, i) => `<tr class="${bubble && bubble.i === i ? "now" : played.includes(i) ? "played" : ""}"><td>${l[0]}</td><td>${l[1]}</td><td>${l[2]}</td><td>${l[3]}</td></tr>`).join("");
+    $("rows").innerHTML = LINES.map((l, i) => `<tr class="${bubble && bubble.i === i ? "now" : played.includes(i) ? "played" : ""}"><td>${l[1]}</td><td>${l[2]}</td><td>${l[3]}</td></tr>`).join("");
     $("heard").textContent = `Lines heard: ${played.length} / ${LINES.length}`;
   }
   function blip(f) { try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); const o = audio.createOscillator(), g = audio.createGain(); o.type = "triangle"; o.frequency.value = f; g.gain.value = 0.05; o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.2); o.start(); o.stop(audio.currentTime + 0.2); } catch (_) {} }
   function play(i) {
     if (played.includes(i)) return;
     played.push(i); lastT = performance.now(); bubble = { i, t: lastT }; blip(i === 2 ? 700 : 520);
-    $("msg").textContent = `${LINES[i][0]} plays now: its trigger is "${LINES[i][3]}".`;
+    $("msg").textContent = `${LINES[i][1]}: "${LINES[i][2]}" plays now: its trigger is "${LINES[i][3]}".`;
     if (i === 4) water = 1;
     rows();
   }
@@ -74,16 +74,16 @@
     arrived = true; $("lvl").textContent = "Scene: Salma's roof";
     $("choice").className = "choice on"; $("choice").innerHTML = "";
     [["a", "Then bring the cat. Hurry."], ["b", "There's no time for a cat!"]].forEach(([k, t]) => {
-      const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.dataset.c = k; b.textContent = `NOUR_05${k}: "${t}"`;
+      const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.dataset.c = k; b.textContent = `Nour: "${t}"`;
       b.addEventListener("click", () => choose(k)); $("choice").appendChild(b);
     });
-    $("msg").textContent = "SALMA_01 plays. Choose Nour's answer: this line is a branch (lecture 5).";
+    $("msg").textContent = "Salma: \"I won't leave without my cat.\" Choose Nour's answer: this line is a branch (lecture 3).";
   }
   function choose(k) {
     if (finished) { $("msg").textContent = "The scene is over. Press Play again."; return; }
-    if (k === "b") { $("msg").textContent = "SALMA_02b: \"Then I stay.\" — Salma sits down again. This branch leads nowhere: try the other answer."; $("msg").className = "message"; return; }
+    if (k === "b") { $("msg").textContent = "Salma: \"Then I stay.\" — Salma sits down again. This branch leads nowhere: try the other answer."; $("msg").className = "message"; return; }
     finished = true; $("choice").className = "choice";
-    $("msg").textContent = "SALMA_02a: \"Thank you, child. But my house…\" The street scene ends: CUT TO: EXT. ROOFTOP – NIGHT (the next scene, in lecture 8). 🎉 Every line played on its trigger.";
+    $("msg").textContent = "Salma: \"Thank you, child. But my house…\" The street scene ends: CUT TO: EXT. ROOFTOP – NIGHT (the next scene, in Seminar 4). 🎉 Every line played on its trigger.";
     $("msg").className = "message good"; blip(880); setTimeout(() => blip(1100), 120);
   }
   function rowOnce() {

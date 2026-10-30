@@ -149,7 +149,6 @@ critique-builder|courses/digital-media/week-10/sims/critique-builder.html|8|cour
 video-settings-lab|courses/digital-media/week-11/sims/video-settings-lab.html|9|courses/digital-media/week-11/sims/video-settings-lab.gif
 export-desk|courses/digital-media/week-11/sims/export-desk.html|10|courses/digital-media/week-11/sims/export-desk.gif
 timeline-lab|courses/digital-media/week-11/sims/timeline-lab.html|11|courses/digital-media/week-11/sims/timeline-lab.gif
-editor-tour|courses/digital-media/week-11/sims/editor-tour.html|8|courses/digital-media/week-11/sims/editor-tour.gif
 cut-lab|courses/digital-media/week-12/sims/cut-lab.html|10|courses/digital-media/week-12/sims/cut-lab.gif
 effects-lab|courses/digital-media/week-12/sims/effects-lab.html|8|courses/digital-media/week-12/sims/effects-lab.gif
 edit-doctor|courses/digital-media/week-12/sims/edit-doctor.html|8|courses/digital-media/week-12/sims/edit-doctor.gif

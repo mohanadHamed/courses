@@ -65,7 +65,7 @@
     tabs("tg", Object.keys(TARGETS), "tg"); tabs("res", Object.keys(RES), "res"); tabs("fps", [24, 30, 60], "fps", true); tabs("codec", Object.keys(CODECS), "codec");
     ready = true; brIn.disabled = s.codec === "ProRes in MOV";
     const br = s.codec === "ProRes in MOV" ? proresBr() : s.br;
-    $("calc").textContent = `${RES[s.res].join(" × ")} · ${s.fps} fps · ${br} Mbit/s × ${s.len} s ÷ 8 = ${Kit.fmt(size(), 1)} MB · quality: ${quality()}`;
+    $("calc").textContent = `${RES[s.res].join(" × ")} · ${s.fps} fps · ${br} Mbit/s · ${s.len} s · file about ${Kit.fmt(size(), 1)} MB · quality: ${quality()}`;
     const items = TARGETS[s.tg]();
     $("chk").innerHTML = items.map(([ok, t]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✔" : "✘"} ${t}</li>`).join("");
     if (items.every((x) => x[0])) done[s.tg] = true;

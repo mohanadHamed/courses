@@ -21,8 +21,8 @@
   const rounds = [
     { ar: [16, 9], goal: "“A wide trailer in Full HD for the store page.” Which resolution?", answer: "1920 × 1080", choices: C(["1920 × 1080", "1080 × 1920", "1280 × 720", "3840 × 2160"]),
       good: "Full HD, wide: 1920 × 1080 (16:9).", why: { "1080 × 1920": "That is tall (9:16), for phones held upright.", "1280 × 720": "That is HD (720p), not Full HD." } },
-    { ar: [16, 9], goal: "“The trailer is 30 s at 10 Mbit/s. How big is the file?”", answer: "about 37.5 MB", choices: C(["about 37.5 MB", "about 300 MB", "about 3.75 MB", "about 10 MB"]),
-      good: "10 Mbit/s × 30 s = 300 Mbit; ÷ 8 = 37.5 MB.", why: { "about 300 MB": "300 is in megabits. Divide by 8 for megabytes." } },
+    { ar: [16, 9], goal: "“The trailer must be small enough for the store, and the chase must stay clean.” Which bitrate?", answer: "about 10 Mbit/s", choices: C(["about 10 Mbit/s", "240 Mbit/s", "1 Mbit/s", "the bitrate does not matter"]),
+      good: "About 10 Mbit/s keeps a fast chase clean, and the file stays small enough for a store page.", why: { "240 Mbit/s": "The file would be far too big for a store page.", "1 Mbit/s": "Too few bits: the fast chase turns into blocks." } },
     { ar: [16, 9], goal: "“It must play on every phone and in every browser.” Which file?", answer: "H.264 in MP4", choices: C(["H.264 in MP4", "ProRes in MOV", "AV1 in WebM", "uncompressed video"]),
       good: "H.264 in an MP4 container plays almost everywhere.", why: { "ProRes in MOV": "ProRes files are huge and made for editing, not for players.", "uncompressed video": "Far too big: gigabytes for a few seconds." } },
     { ar: [16, 9], block: 9, goal: "“The boat chase looks like blocks at 3 Mbit/s.” What helps most?", answer: "raise the bitrate to about 10 Mbit/s", choices: C(["raise the bitrate to about 10 Mbit/s", "change the container to MOV", "lower the frame rate to 10 fps", "add a title"]),

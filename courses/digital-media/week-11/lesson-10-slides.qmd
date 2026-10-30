@@ -1,6 +1,6 @@
 ---
 title: "Digital Video Basics: Formats, Resolution and Codecs"
-subtitle: "Lecture 19"
+subtitle: "Lecture 10"
 format: lesson-pptx
 ---
 
@@ -8,7 +8,7 @@ format: lesson-pptx
 
 {{< glossary frame video-frame-rate resolution aspect-ratio video-container video-codec bitrate key-frame >}}
 
-## 19.1 Frames and the frame rate
+## 10.1 Frames and the frame rate
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -34,7 +34,7 @@ b) 600
 c) 24 fps
 :::
 
-## 19.2 Resolution and aspect ratio
+## 10.2 Resolution and aspect ratio
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -59,14 +59,14 @@ Night Owl Games needs a store trailer and a clip for phones held upright.
 3. Tariq **crops** a tall part around Nour's boat and never stretches it.
 :::
 
-## 19.3 Containers, codecs and bitrate
+## 10.3 Containers, codecs and bitrate
 
 :::: {.columns}
 ::: {.column width="50%"}
 - The container (MP4, MOV) holds the tracks of a video.
 - The codec (H.264, ProRes) compresses each track.
-- The file size is about the bitrate times the seconds, divided by 8.
-- **Do it:** Compute the size of 45 s at 8 Mbit/s. How many MB is it?
+- The bitrate is the data per second: higher gives a better picture and a bigger file.
+- **Do it:** Lower the bitrate in Video Settings Lab until the trailer gets blocky. At which bitrate does it start?
 :::
 ::: {.column width="50%"}
 ![](images/compression.png)
@@ -79,28 +79,28 @@ Night Owl Games needs a store trailer and a clip for phones held upright.
 
 ## Example · The blocky trailer
 
-The first trailer is 900 MB, and the second is small but full of blocks.
+The first trailer has a huge file, and the second is small but full of blocks.
 **Which settings make a good trailer?**
 
 ::: {.reveal}
-1. 240 Mbit/s × 30 s ÷ 8 = **900 MB**, which is far too big.
+1. At **240 Mbit/s** the file is far too big for a store page.
 2. At **2 Mbit/s**, the fast boat chase gets too few bits and turns into blocks.
-3. H.264 at **10 Mbit/s** gives **37.5 MB** and a clean picture.
+3. H.264 at about **10 Mbit/s** gives a clean picture and a file small enough for the store.
 :::
 
 ## Try it 2 · Files
 
-a) How big is a 30 s video at 10 Mbit/s?
+a) The boat chase looks like blocks. What is too low?
 b) Which codec plays on almost every phone?
 c) What does a key frame store?
 
 ::: {.answer}
-a) 37.5 MB
+a) the bitrate
 b) H.264
 c) the whole picture
 :::
 
-## 19.4 Settings for each target
+## 10.4 Settings for each target
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -135,5 +135,5 @@ c) Every lossy export loses detail again.
 - A video is a series of frames, and the frame rate counts them per second.
 - The resolution is the size in pixels, and the aspect ratio is the shape.
 - The container holds the tracks, and the codec compresses them.
-- The file size is about the bitrate times the time, divided by 8.
+- A higher bitrate gives a better picture and a bigger file, and too little gives blocks.
 - The target decides the settings, and we keep an edit master.

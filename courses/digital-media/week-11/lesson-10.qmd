@@ -1,20 +1,21 @@
 ---
 title: "Digital Video Basics: Formats, Resolution and Codecs"
 description: "Video as a series of frames and the frame rate, resolution and aspect ratio, containers, codecs, compression and bitrate, and choosing the right export settings for a store trailer, a social clip and an edit master."
-lesson: 19
+lesson: 10
 ilos: [C3]
 format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-has a short summary, a picture, a **Do it** task and one set of questions.
-The full explanations, examples and exercises are in the notes.
+starts with a problem in a game studio. Then it explains one idea. It ends
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check.
 
 ## Key terms
 
 {{< glossary digital-video frame video-frame-rate resolution aspect-ratio video-container video-codec bitrate key-frame lossy-compression >}}
 
-## 19.1 Frames and the frame rate
+## 10.1 Frames and the frame rate
 
 - Video = a series of **frames** (still pictures), usually with audio.
 - **Frame rate:** frames per second. 24 fps: cinema look. 30 fps:
@@ -30,6 +31,11 @@ Choose the project's frame rate first; mixed frame rates stutter.
 ::: {.callout-note title="Do it · Count the frames"}
 Count the frames of a 30 s trailer at 30 fps, a 10 s clip at 60 fps, and a
 2-minute film at 24 fps.
+
+::: {.check}
+(a) 30 × 30 = 900 frames; (b) 10 × 60 = 600 frames; (c) 120 × 24 = 2880
+frames. Frames = seconds × frames per second.
+:::
 :::
 
 ::: {.callout-tip title="Try it 1 · Frames"}
@@ -39,18 +45,26 @@ Choose the right answer.
 frames in 1 s at 30 fps
 :   30
 
+    Why: 30 fps means 30 frames in each second.
+
 frames in 10 s at 60 fps
 :   600
+
+    Why: 10 × 60 = 600.
 
 the frame rate for a cinema look
 :   24 fps
 
+    Why: Cinema films use 24 frames per second.
+
 the frame rate for fast game action
 :   60 fps
+
+    Why: More frames make fast motion smooth.
 :::
 :::
 
-## 19.2 Resolution and aspect ratio
+## 10.2 Resolution and aspect ratio
 
 - **Resolution:** 1280 × 720 (720p), 1920 × 1080 (1080p), 3840 × 2160
   (4K).
@@ -66,6 +80,11 @@ A stretched picture makes Nour thin and tall.
 ::: {.callout-note title="Do it · Shapes"}
 Write the resolution and aspect ratio of one video on your phone and one on
 a store page.
+
+::: {.check}
+A typical answer: a phone video 1080 × 1920 (9:16, tall) and a store
+trailer 1920 × 1080 (16:9, wide). The shape tells where the video plays.
+:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Sizes and shapes"}
@@ -75,24 +94,33 @@ Choose the right answer.
 Full HD
 :   1920 × 1080
 
+    Why: Full HD is 1080p: 1920 × 1080.
+
 a phone held upright
 :   9:16
+
+    Why: A phone held upright is tall.
 
 a trailer for a monitor
 :   16:9
 
+    Why: A monitor is wide.
+
 4K
 :   3840 × 2160
+
+    Why: 4K is about 4000 pixels wide.
 :::
 :::
 
-## 19.3 Containers, codecs and bitrate
+## 10.3 Containers, codecs and bitrate
 
 - **Container:** MP4, MOV, WebM; it holds the tracks.
 - **Codec:** H.264 (plays everywhere), H.265, VP9, AV1; ProRes for editing;
   AAC for audio.
 - **Key frame:** a whole picture; the frames between store only changes.
-- **Bitrate:** data per second. **Size (MB) ≈ Mbit/s × s ÷ 8.**
+- **Bitrate:** data per second (Mbit/s). Higher: a better picture and a
+  bigger file.
 - Too low a bitrate for fast action: **blocks**.
 
 ![A container with coded tracks.](images/container-codec.png){width=94%}
@@ -105,30 +133,46 @@ a trailer for a monitor
 Renaming .mov to .mp4 converts nothing.
 :::
 
-::: {.callout-note title="Do it · Bitrate and size"}
-Compute 45 s at 8 Mbit/s and 15 s at 20 Mbit/s. In **Video Settings Lab**,
-find the bitrate where the trailer gets blocky.
+::: {.callout-note title="Do it · Bitrate and blocks"}
+In **Video Settings Lab**, lower the bitrate of the store trailer until it
+gets blocky. At which bitrate does it start? Raise it again: what happens
+to the file size?
+
+::: {.check}
+At 1920 × 1080 and 30 fps, the trailer is clean from about 7 Mbit/s. At
+6 Mbit/s and below it gets a little blocky in fast action, and at 3 Mbit/s
+it is blocky. With a higher bitrate the picture is clean again, and the
+file gets bigger.
+:::
 :::
 
 ::: {.callout-tip title="Try it 3 · Files"}
 Use Video Settings Lab. Choose the right answer.
 
 ::: {.match extra="the file name|GIF"}
-30 s at 10 Mbit/s
-:   37.5 MB
+The boat chase looks like blocks. What is too low?
+:   the bitrate
+
+    Why: Too few bits for fast motion make blocks.
 
 the container of trailer.mp4
 :   MP4
 
+    Why: The file extension names the container.
+
 plays on almost every phone
 :   H.264
 
+    Why: H.264 plays almost everywhere.
+
 the codec for an edit master
 :   ProRes
+
+    Why: ProRes keeps almost all the detail for editing.
 :::
 :::
 
-## 19.4 Settings for each target
+## 10.4 Settings for each target
 
 - **Store trailer:** 1920 × 1080, 30 fps, H.264 in MP4, short.
 - **Social clip:** 1080 × 1920 (9:16), 30 fps, H.264, 15–30 s.
@@ -144,6 +188,13 @@ Every new lossy export loses detail: export each target from the project.
 ::: {.callout-note title="Do it · Three targets"}
 In **Video Settings Lab**, make all three targets pass. Write their
 settings and file sizes.
+
+::: {.check}
+Store trailer: 1920 × 1080, 30 fps, H.264 in MP4, about 10 Mbit/s, 30 s.
+Social clip: 1080 × 1920, 30 fps, H.264 in MP4, 15–30 s. Edit master:
+1920 × 1080, 60 fps, ProRes in MOV: a very big file, kept on the studio
+drive.
+:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Targets"}
@@ -153,11 +204,17 @@ Choose the right settings.
 store trailer
 :   1920 × 1080, 30 fps, H.264
 
+    Why: Wide Full HD at 30 fps, and H.264 plays everywhere.
+
 social clip
 :   1080 × 1920, 30 fps, H.264
 
+    Why: Tall for phones, 30 fps, and it plays everywhere.
+
 edit master
 :   1920 × 1080, 60 fps, ProRes
+
+    Why: As recorded, with almost no loss of detail.
 :::
 :::
 
@@ -165,8 +222,8 @@ edit master
 
 Work alone. Use every section of today.
 
-Salma sends six requests: a **wide Full HD** trailer, the **size** of a
-30 s trailer, a file for **every phone**, a **blocky** boat chase, a
+Salma sends six requests: a **wide Full HD** trailer, a **bitrate** that
+keeps it small and clean, a file for **every phone**, a **blocky** boat chase, a
 **tall** clip, and a copy **for later editing**.
 
 {{< sim file="sims/export-desk.html" poster="sims/export-desk.png" title="Export Desk: the right settings for each request" kind="game" height="600" >}}
@@ -178,32 +235,48 @@ Choose the right answer.
 The boat chase is blocky at 3 Mbit/s.
 :   raise the bitrate to about 10 Mbit/s
 
+    Why: More bits keep the fast chase clean.
+
 It must play on every phone.
 :   H.264 in MP4
+
+    Why: H.264 in MP4 plays on almost every phone.
 
 A short clip for phones held upright.
 :   1080 × 1920
 
+    Why: Tall (9:16) for phones held upright.
+
 Keep the capture for more editing.
 :   ProRes, as recorded
+
+    Why: It keeps the detail for later edits.
 :::
 :::
 
-::: {.callout-tip title="Try it 6 · Numbers (harder)"}
+::: {.callout-tip title="Try it 6 · Check the files (harder)"}
 Choose the right answer.
 
-::: {.match extra="2 MB|half as many"}
-60 s at 6 Mbit/s
-:   45 MB
-
-30 s at 240 Mbit/s
-:   900 MB
-
-frames in 2 minutes at 60 fps
+::: {.match extra="half as many|it becomes an MP4"}
+How many frames has a 2-minute capture at 60 fps?
 :   7200
 
-pixels of 4K compared with 1080p
+    Why: 2 minutes = 120 s, and 120 × 60 = 7200.
+
+How many pixels has 4K compared with 1080p?
 :   4 times as many
+
+    Why: 4K is twice as wide and twice as high.
+
+Tariq renames `trailer.mov` to `trailer.mp4`. What changes?
+:   nothing: the codec inside stays the same
+
+    Why: Renaming converts nothing.
+
+Why export the social clip from the project, not from the trailer file?
+:   every new lossy export loses detail
+
+    Why: Export each target from the project or the master.
 :::
 :::
 
@@ -212,5 +285,5 @@ pixels of 4K compared with 1080p
 - Video is a series of frames; the frame rate is frames per second.
 - Resolution is the size in pixels; the aspect ratio is the shape.
 - The container holds the tracks; the codec compresses them.
-- Size ≈ bitrate × time ÷ 8; too little bitrate gives blocks.
+- A higher bitrate gives a better picture and a bigger file; too little gives blocks.
 - The target decides the settings; keep an edit master.

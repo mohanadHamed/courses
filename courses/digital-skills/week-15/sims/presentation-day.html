@@ -19,15 +19,15 @@
 (() => {
   const C = (list) => list.map((t) => ({ k: t, label: t }));
   const rounds = [
-    { card: "Before the talk, the linked chart on slide 3 still shows the old numbers.", answer: "update the link and check the numbers", choices: C(["update the link and check the numbers", "present it anyway", "delete the chart", "say the numbers are wrong"]), good: "A linked chart follows Excel after Update Link." },
+    { card: "Before the talk, you rehearse with a timer. The talk takes 4 minutes, but you have 3.", answer: "cut one sentence on each slide", choices: C(["cut one sentence on each slide", "speak very fast", "delete the chart", "add one more slide"]), good: "Cut words, not the chart or the numbers. Now it fits in 3 minutes." },
     { card: "Sami's slide 4 says: \"Everyone loves sandwiches.\"", answer: "change it to what the data shows", choices: C(["change it to what the data shows", "keep it: it sounds good", "add more slides", "make the text bigger"]), good: "\"Sandwiches earned the most: 138 JD.\" A claim needs data." },
     { card: "The talk is at 2:40, and two slides are left.", answer: "say the main insight and finish", choices: C(["say the main insight and finish", "speak very fast", "skip to the questions", "start again"]), good: "Three minutes: finish with the most important sentence." },
-    { card: "A classmate asks a question, and you do not know the answer.", answer: "say so and say how you could find out", choices: C(["say so and say how you could find out", "invent an answer", "ignore the question", "ask an AI tool on the projector"]), good: "An honest answer is better than a made-up one." },
+    { card: "Someone asks a question, and you do not know the answer.", answer: "say so and say how you could find out", choices: C(["say so and say how you could find out", "invent an answer", "ignore the question", "ask an AI tool on the projector"]), good: "An honest answer is better than a made-up one." },
     { card: "You notice that you read every word from the slides.", answer: "look at the class and use the notes", choices: C(["look at the class and use the notes", "read faster", "put more text on the slides", "turn away from the class"]), good: "Few words on the slide; you say the rest." },
-    { card: "After the talk, classmates give you feedback.", answer: "write it down for the final version", choices: C(["write it down for the final version", "argue with each comment", "forget it", "ask for marks only"]), good: "Peer feedback helps the final version in lecture 30." },
+    { card: "After the talk, the teacher asks: \"Did AI write your insights?\" An AI tool wrote the first draft.", answer: "say where AI helped and how you checked it", choices: C(["say where AI helped and how you checked it", "say no", "change the topic", "say that AI did all the work"]), good: "Honest AI use: say what the AI did, and what you checked and changed." },
   ];
   rounds.forEach((r) => { r.why = r.why || {}; r.goal = "What is the best thing to do?"; });
-  const g = Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is before the talk: an old chart." });
+  const g = Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is before the talk: the rehearsal." });
   const box = Kit.el("div", { class: "card", id: "card" });
   document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
   let last = -1;

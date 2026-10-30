@@ -202,6 +202,7 @@ slide-builder|courses/digital-skills/week-09/sims/slide-builder.html|9|courses/d
 slide-doctor|courses/digital-skills/week-09/sims/slide-doctor.html|8|courses/digital-skills/week-09/sims/slide-doctor.gif
 transition-lab|courses/digital-skills/week-09/sims/transition-lab.html|11|courses/digital-skills/week-09/sims/transition-lab.gif
 five-slide-talk|courses/digital-skills/week-09/sims/talk-planner.html|8|courses/digital-skills/week-09/sims/talk-planner.gif
+rehearsal-lab|courses/digital-skills/week-09/sims/rehearsal-lab.html|15|courses/digital-skills/week-09/sims/rehearsal-lab.gif
 outline-lab|courses/digital-skills/week-10/sims/outline-lab.html|9|courses/digital-skills/week-10/sims/outline-lab.gif
 image-prompt-lab|courses/digital-skills/week-10/sims/image-prompt-lab.html|9|courses/digital-skills/week-10/sims/image-prompt-lab.gif
 ai-deck-check|courses/digital-skills/week-10/sims/ai-deck-check.html|8|courses/digital-skills/week-10/sims/ai-deck-check.gif
@@ -213,7 +214,6 @@ statement-builder|courses/digital-skills/week-12/sims/statement-builder.html|8|c
 responsible-or-not|courses/digital-skills/week-11/sims/responsible-or-not.html|8|courses/digital-skills/week-11/sims/responsible-or-not.gif
 pivot-lab|courses/digital-skills/week-13/sims/pivot-lab.html|8|courses/digital-skills/week-13/sims/pivot-lab.gif
 summary-check|courses/digital-skills/week-13/sims/summary-check.html|9|courses/digital-skills/week-13/sims/summary-check.gif
-link-lab|courses/digital-skills/week-14/sims/link-lab.html|8|courses/digital-skills/week-14/sims/link-lab.gif
 heading-slides|courses/digital-skills/week-14/sims/heading-slides.html|7|courses/digital-skills/week-14/sims/heading-slides.gif
 office-relay|courses/digital-skills/week-14/sims/office-relay.html|8|courses/digital-skills/week-14/sims/office-relay.gif
 plan-checker|courses/digital-skills/week-14/sims/plan-checker.html|7|courses/digital-skills/week-14/sims/plan-checker.gif

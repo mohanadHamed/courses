@@ -46,7 +46,7 @@
   const right = () => D.filter((d, i) => s.m[i] === d[2]).length;
   const TASKS = [
     { q: "Task 1: Find the slide with a wrong number and the slide with a claim that the data does not show.", ok: () => s.m[2] === "num" && s.m[3] === "claim" },
-    { q: "Task 2: Mark all six slides correctly. How would you fix each problem?", ok: () => right() === D.length },
+    { q: "Task 2: Mark all five slides correctly. How would you fix each problem?", ok: () => right() === D.length },
   ];
   let ti = 0;
   function render() {

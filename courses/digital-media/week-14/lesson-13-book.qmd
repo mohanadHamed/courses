@@ -1,34 +1,33 @@
 ---
 title: "Using Licensed and Open Assets; Credits and Attribution"
 description: "Lesson notes · Where a game's assets can come from, how to read and save a licence page, how to write correct credits with TASL (title, author, source, licence) for the credits screen and the credits file, and the licences of code, fonts and tools."
-lesson: 25
+lesson: 13
 ilos: [A2]
 format: lesson-typst
 ---
 
 ::: {.lead}
-*Rooftop Rescue* needs more sounds, a pack of roof tiles, a pixel font and a
-small physics library, and the release is in three weeks. Nour cannot draw
+*Rooftop Rescue* needs more sounds, a pack of roof tiles and a pixel font,
+and the release is in three weeks. Nour cannot draw
 everything, and Yara cannot record every sound. Open and licensed assets
 save weeks of work, but only if the team chooses them well and gives
-correct credit. In lectures 23 and 24 you learned copyright, licences and
-the rights check. In this lesson you learn to **use** licensed and open
-assets: where to find them, how to read and keep their licences, how to
-write credits with **TASL**, and what the licences of code and fonts ask
-for. Every section ends with a short task, and you start your own
+correct credit. In Lecture 12 you learned copyright and licences. In this
+lesson you learn to **use** licensed and open assets: where to find them,
+how to read and keep their licences, how to write credits with **TASL**,
+and how to check every asset before the release. Every section ends with a short task, and you start your own
 **credits file**.
 :::
 
 ## Key terms
 
-{{< glossary open-asset asset-library licence creative-commons royalty-free attribution tasl credits-screen credits-file permissive-licence copyleft open-font-licence >}}
+{{< glossary open-asset asset-library licence creative-commons royalty-free attribution tasl credits-screen credits-file open-font-licence rights-clearance >}}
 
-## 25.1 Where can assets come from?
+## 13.1 Where can assets come from?
 
 A game's assets come from five kinds of sources, and each needs a different
 proof (@fig-sources).
 
-::: {.callout-important title="Definition 25.1 — Sources of assets"}
+::: {.callout-important title="Definition 13.1 — Sources of assets"}
 - **Own work:** made by the team (employees: work for hire).
 - **Open asset sites:** **open assets** under CC0, CC BY, CC BY-SA or the
   OFL.
@@ -43,11 +42,11 @@ the work or under which licence.
 
 ![Where assets can come from.](images/asset-sources.png){#fig-sources width=94%}
 
-::: {.callout-note title="Example 25.1 — Four new assets"}
+::: {.callout-note title="Example 13.1 — Four new assets"}
 1. A thunder sound from an open sound site, CC BY 4.0.
 2. A roof-tile pack from an art site, CC BY-SA 4.0.
 3. A pixel font from a font site, SIL Open Font License.
-4. A physics code library, MIT licence.
+4. Theme music from a freelancer, with a signed contract.
 
 For each, Salma saves the licence page in the project folder `licences/`.
 :::
@@ -64,13 +63,19 @@ and an image) that you may use in a game for sale. Write the site and the
 licence of each.
 
 *Your result:* two assets with their licences.
+
+::: {.check}
+A good answer looks like: "A rain sound on an open sound site, CC BY 4.0,
+by its author's page. A tree image on an art site, CC0." Both allow a game
+for sale; the page of each is saved.
+:::
 :::
 
-## 25.2 Read and save the licence
+## 13.2 Read and save the licence
 
 Before you download, read the licence page (@fig-page).
 
-::: {.callout-important title="Definition 25.2 — Reading a licence page"}
+::: {.callout-important title="Definition 13.2 — Reading a licence page"}
 Check five things:
 
 1. **The author** (a person or a studio, not the website).
@@ -86,7 +91,7 @@ you agreed to.
 
 ![Reading a licence page (example).](images/licence-page.png){#fig-page width=94%}
 
-::: {.callout-note title="Example 25.2 — Night Rain"}
+::: {.callout-note title="Example 13.2 — Night Rain"}
 1. Author: Lina Haddad. Licence: CC BY 4.0.
 2. Commercial use: yes. Changes: yes. Credit: yes.
 3. Yara shortens the loop to 20 s and saves the page as
@@ -99,17 +104,24 @@ use in a game for sale. The licence decides.
 :::
 
 ::: {.callout-note title="Do it · Read a licence page"}
-For one of your two assets, answer the five questions of Definition 25.2
+For one of your two assets, answer the five questions of Definition 13.2
 and save the licence page.
 
 *Your result:* five answers and a saved file.
+
+::: {.check}
+A good answer gives the author (a person), the exact licence with its
+version (CC BY 4.0), commercial use and changes (allowed or not), the
+credit asked for, and other limits; the page is saved as a PDF with the
+date.
+:::
 :::
 
-## 25.3 Credits with TASL
+## 13.3 Credits with TASL
 
 A correct credit has four parts: **TASL** (@fig-tasl).
 
-::: {.callout-important title="Definition 25.3 — TASL credits"}
+::: {.callout-important title="Definition 13.3 — TASL credits"}
 - **T**itle: the name of the work.
 - **A**uthor: the creator.
 - **S**ource: where it can be found (a link).
@@ -124,7 +136,7 @@ the project (@fig-credits).
 
 ![The credits screen and the credits file.](images/credits.png){#fig-credits width=94%}
 
-::: {.callout-note title="Example 25.3 — Three credits"}
+::: {.callout-note title="Example 13.3 — Three credits"}
 1. "Night Rain" by Lina Haddad, sounds.example.org/night-rain, CC BY 4.0,
    shortened to 20 s.
 2. "Roof Tiles Pack" by Karim Art, art.example.net/roof-tiles, CC BY-SA
@@ -145,47 +157,59 @@ licence. Every asset gets its own TASL line.
    source, licence, changes, saved licence file.
 
 *Your result:* a credits file with two entries.
+
+::: {.check}
+Credit Builder: "Night Rain" by Lina Haddad, sounds.example.org, CC BY 4.0,
+shortened to 20 s; "Roof Tiles Pack" by Karim Art, CC BY-SA 4.0,
+recoloured by Nour; "Roof Sans" by Omar Studio, SIL OFL 1.1. Your file has
+one TASL line for each of your two assets.
+:::
 :::
 
-## 25.4 Code, fonts and tools
+## 13.4 Check every asset before the release
 
-Games use code libraries, fonts and engines too, and they have licences
-(@fig-code).
+Before a game goes to the store, the team checks **every** asset, also the
+store page and the trailer (@fig-check).
 
-::: {.callout-important title="Definition 25.4 — Licences of code, fonts and tools"}
-- **Permissive licences** (MIT, BSD): use the code in any product, but
-  keep the **copyright notice**.
-- **Copyleft** (GPL; for media CC BY-SA): changed versions must be shared
-  under the same licence; for GPL code in a game this can mean sharing
-  your source code. Ask before you use it.
-- **SIL Open Font License (OFL):** embed the font in a game for free; do
-  not sell the font file by itself.
-- **Engine and tool terms:** read them for fees, splash screens and
-  limits.
+::: {.callout-important title="Definition 13.4 — The rights check"}
+Ask five questions for each asset: **1** Who made it? **2** Who owns it?
+**3** Which licence? **4** Does our use fit the licence? **5** Is the
+credit written? Then give the asset a **status**:
+
+- **cleared:** all five answers are "yes";
+- **to fix:** one thing is missing, such as a credit or a contract;
+- **replace:** the source is unknown, or the licence does not allow our
+  use.
 :::
 
-![Licences of code, fonts and tools.](images/code-font-licences.png){#fig-code width=94%}
+![A rights check.](../week-13/images/rights-check.png){#fig-check width=94%}
 
-::: {.callout-note title="Example 25.4 — The physics library"}
-1. The library has the MIT licence: Night Owl may use it in the game it
-   sells.
-2. The condition: the copyright and licence notice must stay with the
-   code. Salma adds it to the licence screen of the game.
-3. A second library is GPL: the developers choose another one, so that the
-   game's code can stay closed.
+::: {.callout-note title="Example 13.4 — Four assets of Rooftop Rescue"}
+1. The thunder sound: CC BY, the credit is written: **cleared**.
+2. The theme music: a freelancer, paid, but no contract: **to fix** (sign
+   a contract).
+3. A cloud photo from an image search, page unknown: **replace**.
+4. A pixel font under the SIL Open Font License, no credit yet: **to fix**
+   (write the credit).
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Thinking that code and fonts "do not count". A font or a library is a work
-with an author and a licence, like a picture.
+Checking only the game files. The store page, the trailer and the
+marketing images are public too: check them as well.
 :::
 
-::: {.callout-note title="Do it · Code and fonts"}
-Find one open font and one open-source code library (for example on a
-font site and a code site). Write their licences and what each one asks
-for.
+::: {.callout-note title="Do it · Give a status"}
+Give a status (cleared, to fix or replace) to four assets of your credits
+file or of a game you imagine, with a reason for each.
 
-*Your result:* two licences and two conditions.
+*Your result:* four statuses with reasons.
+
+::: {.check}
+A good answer: "a sound under CC BY with its credit: cleared; music from a
+freelancer without a contract: to fix (sign a contract); a photo from an
+image search: replace; a font under OFL without a credit: to fix (write
+the credit)." Each status has a reason.
+:::
 :::
 
 ## Case study: Asset Shopping
@@ -193,7 +217,8 @@ for.
 Yara and Nour found six assets for *Rooftop Rescue*: a thunder sound under
 CC BY, cloud sprites under CC0, a cat sprite "free for non-commercial
 projects", roof tiles under CC BY-SA that Nour wants to recolour, a pixel
-font under the OFL, and a physics library under MIT. The Game challenge of
+font under the OFL, and theme music from a freelancer with a signed
+contract. The Game challenge of
 the interactive lesson uses these assets. In the mini-game below you choose
 what Night Owl Games must do with each one.
 
@@ -203,7 +228,7 @@ what Night Owl Games must do with each one.
 
 Creative Commons, "Recommended practices for attribution"
 (wiki.creativecommons.org). SIL International, "SIL Open Font License"
-(openfontlicense.org). Open Source Initiative, "Licenses" (opensource.org).
+(openfontlicense.org).
 
 ## Exercises
 
@@ -215,8 +240,8 @@ Creative Commons, "Recommended practices for attribution"
 6. Write a TASL credit for a photo "Old Roofs" by Sara Nader,
    photos.example.org/old-roofs, CC BY 4.0.
 7. Where do the credits of a game go?
-8. What does the MIT licence ask for?
-9. What does copyleft mean?
+8. Name the five questions of the rights check.
+9. A sound has an unknown source. Which status does it get?
 10. What may you do with an OFL font, and what not?
 
 ## Answers to the exercises
@@ -232,8 +257,9 @@ Creative Commons, "Recommended practices for attribution"
 6. "Old Roofs" by Sara Nader, photos.example.org/old-roofs, CC BY 4.0.
 7. In the credits screen of the game and in the credits file of the
    project.
-8. To keep the copyright and licence notice with the code.
-9. Changed versions must be shared under the same licence.
+8. Who made it? Who owns it? Which licence? Does our use fit? Is the
+   credit written?
+9. Replace.
 10. Embed and use it in the game for free; not sell the font file by
     itself.
 :::

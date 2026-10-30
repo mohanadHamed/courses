@@ -1,21 +1,21 @@
 ---
 title: "Music and Sound-Effects Production for Games"
 description: "What music does in a game (loops, adaptive layers and stingers), tempo, bars and the length of a loop, where sound effects come from (recording, synthesis, libraries), and layering and variation of effects."
-lesson: 15
+lesson: 8
 ilos: [C2]
 format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game studio. Then it explains the idea behind it.
-It ends with a **Do it** task and one set of questions. The full
-explanations, examples and exercises are in the notes.
+starts with a problem in a game studio. Then it explains one idea. It ends
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check.
 
 ## Key terms
 
 {{< glossary seamless-loop adaptive-music music-layer stinger tempo music-bar foley sound-layering sound-variation step-sequencer >}}
 
-## 15.1 What music does in a game
+## 8.1 What music does in a game
 
 - A game does not know how long a moment lasts: its music is a **seamless
   loop**.
@@ -35,6 +35,12 @@ A 3-minute song ends with silence; a loop never does.
 ::: {.callout-note title="Do it · Calm and chase"}
 Play the example loop in **Loop Builder** and switch between calm and chase.
 What changes, and what stays the same?
+
+::: {.check}
+In chase, the drum layers join in; the loop, its melody and its tempo stay
+the same. The music changes with the game state, but it never stops: that
+is adaptive music.
+:::
 :::
 
 ::: {.callout-tip title="Try it 1 · Game music"}
@@ -44,60 +50,85 @@ Choose the right answer.
 The player rows for as long as they like. Which music?
 :   a seamless loop
 
+    Why: A loop plays as long as the player stays, with no gap.
+
 A wave comes. How does the music change?
 :   a drum layer fades in
+
+    Why: Adaptive music adds a layer on the same loop.
 
 The player catches Pasha. What plays?
 :   a short stinger
 
+    Why: A stinger is a short phrase for one event.
+
 What stays the same from calm to chase?
 :   the loop and its tempo
+
+    Why: Layers change, but the loop and its tempo go on.
 :::
 :::
 
-## 15.2 Tempo, bars and the length of a loop
+## 8.2 Tempo, bars and the loop point
 
-- **Tempo** in BPM; one beat = 60 ÷ BPM seconds; a **bar** = 4 beats.
-- Loop length = bars × 4 × 60 ÷ BPM.
-- 120 BPM: bar 2 s, 8 bars 16 s. 100 BPM: bar 2.4 s, 8 bars 19.2 s.
-- A loop is always a whole number of bars.
+- **Tempo**: beats per minute (**BPM**). A **bar** = 4 beats.
+- A loop is always a whole number of bars, so the beat goes on at the
+  **loop point**.
+- About 80 BPM feels calm; about 150 BPM feels like a chase.
+- Loop Builder shows the length of one bar for every tempo.
 
 ![Beats and bars.](images/tempo-bars.png){width=90%}
 
 ::: {.callout-warning title="Watch out!"}
-15 s at 100 BPM is 6.25 bars: the beat jumps at the loop point.
+A loop cut at a round time "by ear" ends in the middle of a bar: the beat
+jumps at the loop point.
 :::
 
-::: {.callout-note title="Do it · Count the loops"}
-How long is an 8-bar loop at 90 BPM, and at 150 BPM? Check the bar length
-in **Loop Builder**.
+::: {.callout-note title="Do it · Slow and fast"}
+In **Loop Builder**, play the loop at 80 BPM, then at 150 BPM. Which tempo
+fits a calm level, and which a chase? Read the length of one bar at each
+tempo.
+
+::: {.check}
+80 BPM fits a calm level, 150 BPM a chase. Loop Builder shows one bar of
+3 s at 80 BPM and 1.6 s at 150 BPM: the faster the tempo, the shorter the
+bar.
+:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Tempo"}
 Choose the right answer.
 
-::: {.match extra="2 s|30 s"}
-How long is one beat at 120 BPM?
-:   0.5 s
+::: {.match extra="8 beats|nothing happens"}
+What does BPM count?
+:   beats per minute
 
-How long is an 8-bar loop at 120 BPM?
-:   16 s
+    Why: BPM is the tempo: beats per minute.
 
-How long is an 8-bar loop at 150 BPM?
-:   12.8 s
+How many beats does a bar usually have?
+:   4
 
-How long is one bar at 60 BPM?
-:   4 seconds
+    Why: A bar usually has four beats.
+
+Which tempo fits a chase: 80 BPM or 150 BPM?
+:   150 BPM
+
+    Why: A fast tempo feels like a chase.
+
+A loop ends in the middle of a bar. What happens when it repeats?
+:   the beat jumps at the loop point
+
+    Why: A loop must be a whole number of bars.
 :::
 :::
 
-## 15.3 Where sound effects come from
+## 8.3 Where sound effects come from
 
 - **Record (foley):** real objects: a towel for a cat's jump, a bucket for
   a splash.
 - **Make (synthesis):** tones and noise for beeps, lasers, interface
   clicks.
-- **Use a library:** ready sounds; check the licence (lectures 23–26).
+- **Use a library:** ready sounds; check the licence (Lectures 12–13).
 
 ![Record, make or use.](images/sfx-sources.png){width=90%}
 
@@ -108,6 +139,12 @@ Free to listen is not free to use in a game.
 ::: {.callout-note title="Do it · Foley at home"}
 Which object at home could make the sound of a step, a door or a jump?
 Record one take with your phone.
+
+::: {.check}
+A good answer looks like: "A step: my shoe on a tiled floor. A door: a
+cupboard door. A jump: a towel shaken in the air." The take is short, with
+peaks near −6 dB.
+:::
 :::
 
 ::: {.callout-tip title="Try it 3 · Sources"}
@@ -117,24 +154,31 @@ Record, make or use? You can use an answer more than once.
 Nour's steps on wet tiles?
 :   record (foley)
 
+    Why: Foley records real objects: wet shoes on tiles.
+
 A menu click?
 :   make (synthesis)
+
+    Why: Short beeps and clicks are built from tones.
 
 Thunder from a sound library?
 :   use, and check the licence
 
+    Why: Free to listen is not free to use in a game.
+
 A laser in a space game?
 :   make (synthesis)
+
+    Why: Lasers do not exist, so they are made from tones and noise.
 :::
 :::
 
-## 15.4 Layering and variation
+## 8.4 Layering and variation
 
 - **Layering:** attack (a low thump) + body (the main sound) + tail (drops,
   echo), all starting together.
 - **Variation:** several takes at random, and a small random pitch change
   (±5 %).
-- Unity: `audioSource.pitch = Random.Range(0.95f, 1.05f);`
 
 ![Layering a splash.](images/layering.png){width=90%}
 
@@ -145,6 +189,12 @@ Layers that start at different times sound like two events.
 ::: {.callout-note title="Do it · Three takes, one effect"}
 Record three takes of your foley sound. Do they sound like one effect with
 variation?
+
+::: {.check}
+A good result: three takes that sound like the same action, but each a
+little different. Played one after the other, they do not sound like a
+machine.
+:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Layers and variation"}
@@ -154,14 +204,22 @@ Choose the right answer.
 The splash sounds thin. What helps?
 :   layer a thump, the splash and drops
 
+    Why: Attack, body and tail together make a full splash.
+
 The swish sounds the same every time. What helps?
 :   several takes and a random pitch
+
+    Why: Variation keeps a repeated sound fresh.
 
 Which part of a layered sound comes first?
 :   the attack
 
+    Why: The attack is the short thump at the start.
+
 How much pitch change is typical for variation?
 :   about ±5 %
+
+    Why: A small change is enough; a big one sounds wrong.
 :::
 :::
 
@@ -170,8 +228,8 @@ How much pitch change is typical for variation?
 Work alone. Use every section of today.
 
 Yara plans the audio of the **flood level**: the quiet rowing, the wave,
-Pasha caught, the net swish, the big splash, and the length of a loop at
-**120 BPM**.
+Pasha caught, the net swish, the big splash, and a chase loop that must
+end on a bar.
 
 {{< sim file="sims/score-the-scene.html" poster="sims/score-the-scene.png" title="Score the Scene: audio decisions for a level" kind="game" height="580" >}}
 
@@ -182,39 +240,56 @@ Choose the right decision.
 The quiet rowing?
 :   a calm 8-bar seamless loop
 
+    Why: The player can stay for minutes, so the music loops.
+
 The wave comes?
 :   drum layers fade in
+
+    Why: Danger adds a layer without a hard cut.
 
 Pasha caught?
 :   a 2-second stinger
 
+    Why: A short phrase over the loop says "well done".
+
 The net swish every few seconds?
 :   3 takes and a random pitch
+
+    Why: Random takes and pitch hide the repetition.
 :::
 :::
 
-::: {.callout-tip title="Try it 6 · Numbers (harder)"}
-Choose the right answer.
+::: {.callout-tip title="Try it 6 · Plan the sounds (harder)"}
+The flood level: calm rowing, a wave, Pasha caught, a net swish, a big
+splash. Choose the right answer.
 
-::: {.match extra="20 s|0.6 s"}
-How long is an 8-bar loop at 100 BPM?
-:   19.2 s
+::: {.match extra="a 3-minute song|record it in stereo"}
+The chase loop is 7.5 bars long. What do you change?
+:   make it exactly 8 bars
 
-How many bars are 15 s at 100 BPM?
-:   6.25 bars
+    Why: A loop must be a whole number of bars.
 
-How long is one beat at 80 BPM?
-:   0.75 s
+The thunder comes from a sound library. What must Yara check?
+:   its licence
 
-Which tempo gives a bar of exactly 3 s?
-:   80 BPM
+    Why: Free to listen is not free to use in a game.
+
+The big splash: which part of the layered sound starts first?
+:   the attack, a low thump
+
+    Why: The attack, the body and the tail start together, the thump first.
+
+The music stops for a second when the wave comes. What should happen instead?
+:   a layer fades in on the same loop
+
+    Why: Adaptive music changes without a hard cut.
 :::
 :::
 
 ## Summary {.summary}
 
 - Game music is made of seamless loops, adaptive layers and stingers.
-- One beat = 60 ÷ BPM; a loop is a whole number of 4-beat bars.
+- A loop is a whole number of 4-beat bars; the tempo (BPM) sets the mood.
 - Effects are recorded (foley), made (synthesis) or taken from a library
   with a licence.
 - Layering (attack, body, tail) makes effects full; variation keeps them

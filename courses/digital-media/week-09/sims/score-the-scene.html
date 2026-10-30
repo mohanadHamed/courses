@@ -34,9 +34,9 @@
     { m: "Big splash", goal: "Pasha falls into the water. The splash sounds thin. How does Yara make it full?",
       choices: C(["layer a deep thump, the splash and small drops", "make the splash longer", "add music", "record it in stereo"]), answer: "layer a deep thump, the splash and small drops",
       good: "Layering: a low attack (the thump), the body (the splash) and a tail (drops) make one rich sound.", why: { "record it in stereo": "Stereo changes the space, not the weight." } },
-    { m: "Tempo", goal: "The loop of the chase level is at <b>120 BPM</b>, 4 beats per bar. How long is a loop of <b>8 bars</b>?",
-      choices: C(["16 seconds", "8 seconds", "32 seconds", "120 seconds"]), answer: "16 seconds",
-      good: "One beat = 60 / 120 = 0.5 s; one bar = 4 × 0.5 = 2 s; 8 bars = 16 s.", why: { "8 seconds": "8 s would need bars of 1 s; here one bar is 4 beats of 0.5 s = 2 s." } },
+    { m: "Tempo", goal: "The chase loop is <b>7.5 bars</b> long. When it repeats, the beat jumps. What does Yara change?",
+      choices: C(["make it exactly 8 bars", "make it louder", "add a second song", "cut it at 15 seconds"]), answer: "make it exactly 8 bars",
+      good: "A loop is a whole number of bars, so the beat goes on at the loop point.", why: { "cut it at 15 seconds": "A round time can end in the middle of a bar: the beat still jumps." } },
   ];
   Kit.game({
     rounds, cols: 1, colsPhone: 1, animMs: 700, still: true,

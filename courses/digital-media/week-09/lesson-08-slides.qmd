@@ -1,6 +1,6 @@
 ---
 title: "Music and Sound-Effects Production for Games"
-subtitle: "Lecture 15"
+subtitle: "Lecture 8"
 format: lesson-pptx
 ---
 
@@ -8,7 +8,7 @@ format: lesson-pptx
 
 {{< glossary seamless-loop adaptive-music music-layer stinger tempo music-bar foley sound-layering >}}
 
-## 15.1 What music does in a game
+## 8.1 What music does in a game
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -38,44 +38,44 @@ b) A drum layer fades in on the same loop.
 c) a short stinger
 :::
 
-## 15.2 Tempo, bars and loops
+## 8.2 Tempo, bars and loops
 
 :::: {.columns}
 ::: {.column width="50%"}
-- The tempo in BPM gives one beat of 60 ÷ BPM seconds.
-- A bar has four beats, and a loop is a whole number of bars.
-- At 120 BPM, a bar lasts 2 s and 8 bars last 16 s.
-- **Do it:** How long is an 8-bar loop at 90 BPM?
+- The tempo in BPM counts the beats per minute, and a bar has four beats.
+- A loop is a whole number of bars, so the beat goes on at the loop point.
+- A slow tempo feels calm, and a fast tempo feels like a chase.
+- **Do it:** Play the loop at 80 BPM and at 150 BPM in Loop Builder. Which fits a chase?
 :::
 ::: {.column width="50%"}
 ![](images/tempo-bars.png)
 :::
 ::::
 
-## Example · Two loops
+## Example · Two loops of the level
 
-Yara makes a chase loop at 120 BPM and a rowing loop at 100 BPM, both 8 bars long.
-**How long is each loop?**
+Yara needs a rowing loop and a chase loop for the flood level.
+**Which tempo and which length does each loop get?**
 
 ::: {.reveal}
-1. At 120 BPM one beat is 0.5 s, one bar is 2 s, so 8 bars last **16 s**.
-2. At 100 BPM one beat is 0.6 s, one bar is 2.4 s, so 8 bars last **19.2 s**.
-3. A loop of 7.5 bars would **stumble** at every repeat.
+1. The rowing is calm, so its loop gets a slow tempo, about **100 BPM**.
+2. The chase is tense, so its loop gets a fast tempo, about **140 BPM**.
+3. Both loops are **8 bars** long, so the beat never jumps at the loop point.
 :::
 
 ## Try it 2 · Tempo
 
-a) How long is one beat at 120 BPM?
-b) How long is an 8-bar loop at 150 BPM?
-c) Which tempo gives a bar of exactly 3 s?
+a) How many beats does a bar usually have?
+b) Which tempo fits a chase: 80 BPM or 150 BPM?
+c) A loop ends in the middle of a bar. What happens when it repeats?
 
 ::: {.answer}
-a) 0.5 s
-b) 12.8 s
-c) 80 BPM
+a) 4
+b) 150 BPM
+c) The beat jumps at the loop point.
 :::
 
-## 15.3 Where sound effects come from
+## 8.3 Where sound effects come from
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -101,7 +101,7 @@ b) synthesis
 c) its licence
 :::
 
-## 15.4 Layering and variation
+## 8.4 Layering and variation
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -142,21 +142,23 @@ c) about ±5 %
 
 {{< sim file="sims/score-the-scene.html" poster="sims/score-the-scene.png" title="Score the Scene: audio decisions for a level" kind="game" task="**The story:** Yara plans the music and the effects of the flood level of Rooftop Rescue. **Play:** choose the best audio decision for each moment of the level." >}}
 
-## Try it 5 · Numbers (harder)
+## Try it 5 · Plan the sounds (harder)
 
-a) How long is an 8-bar loop at 100 BPM?
-b) How many bars are 15 s at 100 BPM?
-c) How long is one beat at 80 BPM?
+The facts: the flood level has calm rowing, a wave, Pasha caught, a net swish and a big splash.
+
+a) The chase loop is 7.5 bars long. What do you change?
+b) The thunder comes from a sound library. What must Yara check?
+c) The music stops for a second when the wave comes. What should happen instead?
 
 ::: {.answer}
-a) 19.2 s
-b) 6.25 bars
-c) 0.75 s
+a) Make it exactly 8 bars.
+b) its licence
+c) A layer fades in on the same loop.
 :::
 
 ## Summary
 
 - Game music uses seamless loops, adaptive layers and stingers.
-- One beat lasts 60 ÷ BPM seconds, and a loop is a whole number of bars.
+- A loop is a whole number of bars, and the tempo sets the mood.
 - Effects come from foley, synthesis or a library with a licence.
 - Layering makes effects full, and variation keeps them fresh.

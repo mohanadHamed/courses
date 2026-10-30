@@ -1,0 +1,148 @@
+---
+title: "Producing a Short Music or Sound-Effect Loop"
+description: "Seminar worksheet · Write the brief of a game-music loop and build it layer by layer, then fix six loops so that they repeat cleanly, and plan the effects of the level."
+seminar: 8
+ilos: [C2]
+format: lesson-typst
+---
+
+::: {.lead}
+In Lecture 8 you learned how a game uses music (loops, layers, stingers),
+tempo and bars, where sound effects come from, and layering and variation.
+Today you produce a short loop and plan the effects of a level. There are
+no new ideas: two short problems. Do each one alone. The results of the
+activities are at the end of this worksheet.
+:::
+
+## Recall
+
+- Game music is a **seamless loop**, with **layers** that fade in and out
+  with the game state and short **stingers** for events.
+- A loop is a whole number of 4-beat **bars**, so the beat goes on at the
+  **loop point**; the tempo (BPM) sets the mood.
+- Effects are recorded (foley), made (synthesis) or taken from a library
+  with a licence; layering and variation make them full and fresh.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="a 3-minute song|8 beats"}
+The player rows for as long as they like. Which music fits?
+:   a seamless loop
+
+How many beats does a bar usually have?
+:   4
+
+The player catches the cat. What plays at once?
+:   a short stinger
+:::
+:::
+
+## Activity 1 · Plan and build a loop
+
+Before the first note, a sound designer writes a **brief** of five lines:
+**mood**, **tempo**, **length** (whole bars), **layers**, **file**. For
+the rowing of *Rooftop Rescue*: calm with hope · 100 BPM · 8 bars · melody
+and bass, drums for danger · `mus_rowing_calm_loop.ogg`. Then the loop is
+built **layer by layer** in a step sequencer: rhythm (kick on beats 1 and
+3, snare on 2 and 4), bass (a few long notes), melody (a short phrase).
+
+![The brief of the rowing loop.](images/loop-brief.png){width=90%}
+
+{{< sim file="sims/loop-builder.html" poster="sims/loop-builder.png" title="Loop Builder: a game-music loop in 16 steps" >}}
+
+::: {.callout-note title="Activity 1 · Brief and loop · 18 min"}
+1. Choose one game moment (a menu, a calm level, a chase). Write the five
+   lines of its brief.
+2. Press Clear in **Loop Builder** and build your loop from the brief:
+   rhythm, bass, melody. Switch between calm and chase.
+
+*Your product:* a brief of five lines and a loop.
+
+::: {.check}
+A good brief for a menu: "Mood: friendly and calm · Tempo: 90 BPM ·
+Length: 8 bars · Layers: melody and bass; drums for the start of a match ·
+File: mus_menu_loop.ogg". A good loop has a simple rhythm, a few bass
+notes and a short melody, with empty steps; in chase the drums join in,
+and the loop and its tempo stay the same.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · The brief and the build"}
+Choose the right answer.
+
+::: {.match extra="on every step|the melody first"}
+Which line of the brief says how the player should feel?
+:   mood
+
+Where does the snare usually play in a 4-beat bar?
+:   on beats 2 and 4
+
+Which layer do you build first?
+:   the rhythm
+:::
+:::
+
+## Activity 2 · Fix the loops, plan the effects
+
+Students sent loops for *Rooftop Rescue*. Each one has one problem: a
+click at the loop point, a wrong length, a tail with silence, a busy calm
+loop, a loud loop, and a missing file name. A seamless loop has whole
+bars, no gap and no click; its peaks are near −6 dB, so the effects stay
+clear.
+
+![Gap, click and seamless.](images/seamless-loop.png){width=90%}
+
+{{< sim file="sims/loop-doctor.html" poster="sims/loop-doctor.png" title="Loop Doctor: fix the loops" kind="game" >}}
+
+::: {.callout-note title="Activity 2 · Loop Doctor and two effects · 15 min"}
+1. In **Loop Doctor**, fix the six loops.
+2. The level also needs the net swish, which plays every few seconds, and
+   a big splash. Write how you make the swish fresh and the splash full.
+
+*Your product:* your score and two sentences.
+
+::: {.check}
+Loop Doctor: the click → a very short fade, or a cut at zero; 7.5 bars →
+exactly 8 bars; the tail and silence → cut on the bar line and mix the
+tail into the start; the busy calm loop → fewer layers and a slower tempo;
+the loud loop → lower it to about −6 dB; the good loop →
+`mus_rowing_calm_loop_120bpm.ogg`. The swish: three takes chosen at random
+and a small random pitch change (about ±5 %). The splash: three layers
+that start together: a low thump, the splash, small drops.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Fixes"}
+Choose the right fix.
+
+::: {.match extra="make it louder|add more layers"}
+A click at the loop point?
+:   a very short fade, or a cut at zero
+
+The loop peaks at 0 dB, and the effects are lost under it?
+:   lower it to about −6 dB
+
+The splash sounds thin?
+:   layer a thump, the splash and drops
+
+The swish sounds the same every time?
+:   several takes and a random pitch
+:::
+:::
+
+## Exercises
+
+1. Name the five lines of the brief of a loop.
+2. A loop is cut at 15 seconds "by ear", and the beat jumps when it repeats. Why?
+3. Where do the kick and the snare usually play in a 4-beat bar?
+4. A coin sound plays 100 times in a level. How do you keep it fresh?
+
+## Answers to the exercises
+
+::: {.answers}
+1. Mood, tempo, length, layers, file.
+2. The cut is in the middle of a bar; a loop must be a whole number of bars.
+3. The kick on beats 1 and 3, the snare on 2 and 4.
+4. Several takes at random and a small random pitch change.
+:::

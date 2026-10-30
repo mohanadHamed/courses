@@ -85,7 +85,7 @@ generator-doctor|courses/game-math/week-14/sims/generator-doctor.html|8|courses/
 raft-finals|courses/game-math/week-15/sims/raft-finals.html|8|courses/game-math/week-15/sims/raft-finals.gif
 one-frame|courses/computing-systems/week-01/sims/one-frame.html|8|courses/computing-systems/week-01/sims/one-frame.gif
 one-frame-slow|courses/computing-systems/week-01/sims/one-frame.html|9|courses/computing-systems/week-01/sims/one-frame-slow.gif
-lag-lab|courses/computing-systems/week-01/sims/lag-lab.html|9|courses/computing-systems/week-01/sims/lag-lab.gif
+lag-lab|courses/computing-systems/week-13/sims/lag-lab.html|9|courses/computing-systems/week-13/sims/lag-lab.gif
 data-trip|courses/computing-systems/week-02/sims/data-trip.html|9|courses/computing-systems/week-02/sims/data-trip.gif
 pocket-pets|courses/computing-systems/week-02/sims/pocket-pets.html|10|courses/computing-systems/week-02/sims/pocket-pets.gif
 parts-finder|courses/computing-systems/week-02/sims/parts-finder.html|9|courses/computing-systems/week-02/sims/parts-finder.gif
@@ -133,7 +133,6 @@ platform-profiles|courses/computing-systems/week-13/sims/platform-profiles.html|
 cloud-gaming-lab|courses/computing-systems/week-13/sims/cloud-gaming-lab.html|10|courses/computing-systems/week-13/sims/cloud-gaming-lab.gif
 platform-match|courses/computing-systems/week-13/sims/platform-match.html|8|courses/computing-systems/week-13/sims/platform-match.gif
 spec-compare|courses/computing-systems/week-13/sims/spec-compare.html|9|courses/computing-systems/week-13/sims/spec-compare.gif
-decision-matrix|courses/computing-systems/week-13/sims/decision-matrix.html|8|courses/computing-systems/week-13/sims/decision-matrix.gif
 port-planner|courses/computing-systems/week-13/sims/port-planner.html|8|courses/computing-systems/week-13/sims/port-planner.gif
 avd-builder|courses/computing-systems/week-14/sims/avd-builder.html|11|courses/computing-systems/week-14/sims/avd-builder.gif
 matrix-builder|courses/computing-systems/week-14/sims/matrix-builder.html|9|courses/computing-systems/week-14/sims/matrix-builder.gif

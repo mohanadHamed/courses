@@ -13,6 +13,8 @@ TMP="${TMPDIR:-/tmp}/sim-recordings"
 BASE="http://localhost:4323"
 
 # name | page of the simulator | seconds | gif | window (3D scenes need a real window)
+# The page opens with ?fixed-order: the buttons of a mini-game keep the order of
+# its rounds, so the scenarios can click them by position.
 LIST="
 harbor-guard|courses/game-math/week-01/sims/harbor-guard.html|9|courses/game-math/week-01/sims/harbor-guard.gif
 comet-courier|courses/game-math/week-01/sims/comet-courier.html|11|courses/game-math/week-01/sims/comet-courier.gif
@@ -265,7 +267,7 @@ echo "$LIST" | while IFS='|' read -r name page secs gif mode; do
   [ -z "$name" ] && continue
   if [ $# -gt 0 ] && ! echo " $* " | grep -q " $name "; then continue; fi
   rm -rf "$TMP/$name"
-  HEADLESS=$([ "$mode" = window ] && echo 0 || echo 1) "$DENO" run -A shared/sims/recordings/record.ts "$BASE/$page" "$TMP/$name" \
+  HEADLESS=$([ "$mode" = window ] && echo 0 || echo 1) "$DENO" run -A shared/sims/recordings/record.ts "$BASE/$page?fixed-order" "$TMP/$name" \
     "shared/sims/recordings/scenarios/$name.js" "$secs" 600
   swift shared/sims/recordings/make-gif.swift "$TMP/$name" "$gif" 560
 done

@@ -136,6 +136,21 @@
 
     const R = o.rounds;
     const st = { i: 0, stars: 0, tries: 0, solved: false, over: false, busy: false, pick: null, t0: 0, done: false, ok: false };
+    // The buttons of a round in a mixed order, so that the right answer is not
+    // always the first one. The order is the same every time (a hash of the
+    // labels). Numbers and short labels (A, B, C) keep their natural order.
+    // o.keepOrder keeps the order of the rounds; recordings (?fixed-order) too.
+    const fixedOrder = o.keepOrder || /[?&]fixed-order\b/.test(location.search);
+    function mixed(choices, i) {
+      if (fixedOrder) return choices;
+      const lab = (c) => String(c.label).replace(/<[^>]*>/g, "").trim();
+      const num = (t) => { const m = t.replace("−", "-").match(/^-?\d+(\.\d+)?/); return m ? parseFloat(m[0]) : NaN; };
+      const list = choices.slice();
+      if (list.every((c) => !isNaN(num(lab(c))))) return list.sort((a, b) => num(lab(a)) - num(lab(b)));
+      if (list.every((c) => lab(c).length <= 2)) return list.sort((a, b) => lab(a).localeCompare(lab(b)));
+      const hash = (t) => { let x = 2166136261 ^ (i + 1); for (const ch of t) x = Math.imul(x ^ ch.codePointAt(0), 16777619); return x >>> 0; };
+      return list.sort((a, b) => hash(lab(a)) - hash(lab(b)));
+    }
     Kit.state = st;
     const cur = () => R[st.i];
 
@@ -153,7 +168,7 @@
       const r = cur();
       document.getElementById("lvl").textContent = `Round ${st.i + 1} / ${R.length}`;
       document.getElementById("goal").innerHTML = r.goal || "";
-      Kit.buttons(pad, r.choices, choose);
+      Kit.buttons(pad, mixed(r.choices, st.i), choose);
       calc.textContent = "";
       msg.textContent = st.i === 0 && o.intro ? o.intro : (r.hint || o.hint || "Choose an answer.");
       msg.className = "message";

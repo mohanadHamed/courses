@@ -1,22 +1,21 @@
 ---
 title: "Where Mathematics Appears in a Mobile Game"
-description: "Seminar · Find the mathematics in a game, place a level in numbers, and move enemies, players and drones with vectors."
+description: "Seminar · Find the mathematics in a game you play, place a level in numbers, and move a guard and a drone with vectors."
 seminar: 1
 ilos: [A1]
 format: lesson-html
 ---
 
-No new ideas today: you apply what you learned in Lecture 1. Do each
-activity alone, then open "Check your result". Every question on this page
-has its answer: try first, then check.
+No new ideas today: three short problems on Lecture 1. Do each one alone,
+then open "Check your result". Every question on this page has its answer:
+try first, then check.
 
 ## Recall
 
-- A game repeats the **game loop**: read the input, change the numbers, draw.
-  One pass makes one frame.
+- A game repeats the **game loop**: read the input, change the numbers,
+  draw. One pass makes one frame.
 - A 2D point is (x, y); the signs decide the quadrant. With y up, a 3D point
   (x, y, z) has its height in the middle.
-- A **vector** has a size and a direction; its components are head − tail.
 - From A to B: **B − A**. Every frame: position + velocity.
 
 ::: {.callout-tip title="Try it 1 · Recall"}
@@ -26,9 +25,9 @@ Choose the right answer.
 In which quadrant is (−2, −6)?
 :   quadrant III
 
-    Why: both signs are minus.
+    Why: Both signs are minus.
 
-The vector from A = (1, 1) to B = (4, 3).
+What is the vector from A = (1, 1) to B = (4, 3)?
 :   (3, 2)
 
     Why: B − A = (4 − 1, 3 − 1) = (3, 2).
@@ -36,14 +35,14 @@ The vector from A = (1, 1) to B = (4, 3).
 With y up, which number of (7, 2, 9) is the height?
 :   2
 
-    Why: the height is the middle number.
+    Why: The height is the middle number.
 :::
 :::
 
 ## Activity 1 · Find the mathematics in a game
 
-You play a game on your phone. Every moving thing in it is computed with
-numbers, and each needs a kind of mathematics.
+Every moving thing in a game is computed with numbers, and each needs a
+kind of mathematics.
 
 | What the game does | Mathematics |
 |---|---|
@@ -53,43 +52,36 @@ numbers, and each needs a kind of mathematics.
 | decide if a door opens or an enemy attacks | logic |
 | loot, critical hits, random levels | probability |
 
-::: {.callout-note title="Activity 1 · Find the mathematics · 10 min"}
+::: {.callout-note title="Activity 1 · Four things · 12 min"}
 1. Play a game on your phone for two minutes.
-2. Write four things it must compute with numbers (for example "the position
-   of my car", "the chance of a rare item").
-3. Next to each, write the mathematics from the table.
+2. Write four things it must compute with numbers, and the mathematics of
+   each one from the table.
 
 *Your product:* a table with four rows: game thing, mathematics.
 
 ::: {.check}
-A good answer looks like this: "where my car is: coordinates", "the car
-moves forward: vectors", "a box gives a random prize: probability", "the
-gate opens only with a key: logic".
+A good answer: "where my car is: coordinates", "the car moves forward:
+vectors", "a box gives a random prize: probability", "the gate opens only
+with a key: logic".
 
-- Four different things, each something the game computes.
-- Each row names one kind of mathematics from the table.
-- At least one row is not about position (logic or probability).
+- ☐ Four different things that the game computes.
+- ☐ At least one row is not about position (logic or probability).
 :::
 :::
 
 ::: {.callout-tip title="Try it 2 · Which mathematics?"}
-Choose the right answer. You can use an answer more than once.
+Choose the right answer.
 
 ::: {.match extra="matrices"}
 A boss attacks only when its health is below 50 and the player is near.
 :   logic
 
-    Why: "only when … and …" is a rule: logic.
+    Why: "Only when … and …" is a rule: logic.
 
 A coin floats up and down above a platform.
 :   trigonometry
 
-    Why: bobbing up and down is a wave: trigonometry.
-
-The game shows the arrow from the player to the next goal.
-:   coordinates, vectors
-
-    Why: goal − player is a displacement vector.
+    Why: Bobbing up and down is a wave: trigonometry.
 
 A chest gives a rare sword 1 time in 20.
 :   probability
@@ -110,14 +102,12 @@ centre; x goes right and y goes up.
 
 {{< sim file="sims/grid-strike.html" poster="sims/grid-strike.png" title="Grid Strike: hit the coordinates" kind="game" height="600" >}}
 
-::: {.callout-note title="Activity 2 · A level in numbers · 12 min"}
-1. Write the coordinates of the well, the barn, the gate, the tractor and the
-   scarecrow.
-2. Write the quadrant (or the axis) of each one.
-3. Type them in geogebra.org/calculator and check the picture against the
-   description. Then play stage 1 of **Grid Strike** above.
+::: {.callout-note title="Activity 2 · A level in numbers · 15 min"}
+1. Write the coordinates and the quadrant (or the axis) of the well, the
+   barn, the gate, the tractor and the scarecrow.
+2. Play stage 1 of **Grid Strike**.
 
-*Your product:* a table with five rows: object, coordinates, quadrant, and
+*Your product:* a table with five rows (object, coordinates, quadrant) and
 your Grid Strike score.
 
 ::: {.check}
@@ -135,24 +125,77 @@ the right answer.
 The tractor drives 3 units up. Where is it now?
 :   (2, 0)
 
-    Why: up changes y: −3 + 3 = 0.
+    Why: Up changes y: −3 + 3 = 0.
 
 Where is the tractor after that move?
 :   on the x-axis
 
     Why: y = 0 puts it on the x-axis.
 
-A pond is 1 unit right of the barn and 3 units up. Its position?
+A pond is 1 unit right of the barn and 3 units up. What is its position?
 :   (−3, 4)
 
     Why: (−4 + 1, 1 + 3) = (−3, 4).
 :::
 :::
 
+## Activity 3 · A guard in 2D and a drone in 3D
+
+A guard in a museum level is at G = (−4, 3), and the player at
+P = (2, −1). A delivery drone in a 3D world with y up flies from the ground
+at A = (1, 0, 2) to a roof at B = (5, 6, −1).
+
+![Left-handed and right-handed coordinate systems.](images/handedness.png){width=72%}
+
+::: {.callout-note title="Activity 3 · Two moves · 18 min"}
+1. Find the vector that takes the guard to the player.
+2. The guard gets there in 2 frames. Find its velocity per frame.
+3. Find the displacement of the drone from A to B. How many units does it
+   climb?
+
+*Your product:* three vectors and one height.
+
+::: {.check}
+1. P − G = (2 − (−4), −1 − 3) = (6, −4).
+2. (6, −4) ÷ 2 = (3, −2) per frame: (−4, 3) + (3, −2) = (−1, 1), then
+   (−1, 1) + (3, −2) = (2, −1). It arrives.
+3. B − A = (4, 6, −3). With y up, the drone climbs 6 units.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Moves and axes"}
+Guard G = (−4, 3), player P = (2, −1); drone A = (1, 0, 2), B = (5, 6, −1),
+y up. Choose the right answer.
+
+::: {.match extra="(6, −4)|towards you"}
+Which vector takes the player back to the guard?
+:   (−6, 4)
+
+    Why: G − P is the opposite of P − G: the same size, the other way.
+
+What is the way back of the drone, from B to A?
+:   (−4, −6, 3)
+
+    Why: A − B is the opposite: all three signs change.
+
+A character walks on flat ground. What is its v~y~?
+:   0
+
+    Why: Flat ground means no change in height.
+
+Unity is left-handed with y up. Where does +z point?
+:   into the screen
+
+    Why: The left-hand rule: fingers along +x, bent to +y, the thumb into the screen.
+:::
+:::
+
+## At home · Task with AI
+
 ::: {.callout-note .ai-task title="Task with AI · Your own level in numbers"}
 **Goal:** a level of 8 objects and 2 moving enemies, described in words and
-turned into numbers and a GeoGebra picture. By hand this is long; an AI
-assistant does the typing, and you check it.
+turned into numbers and a GeoGebra picture. The AI does the typing; you
+check it.
 
 1. **Do it yourself:** write a short description of your own level: 8
    objects ("the castle is 5 units left of the centre and 2 up …") and 2
@@ -166,216 +209,25 @@ assistant does the typing, and you check it.
    each enemy after 1, 2 and 3 frames. Description:
    :::
 
-3. **Check:** draw the commands in GeoGebra. For each object, check that it
-   is where your words say. Work out one enemy after 3 frames by hand
+3. **Check:** draw the commands in GeoGebra. Check that each object is
+   where your words say. Work out one enemy after 3 frames by hand
    (start + 3 × velocity) and compare.
 
 *Your product:* the table, the picture, and one sentence on any mistake the
 AI made and how you corrected it.
 
 ::: {.check}
-A good product:
-
-- has 8 objects, and each point in GeoGebra matches its words (left = minus
-  x, down = minus y);
-- every quadrant fits the signs; a point with a 0 is "on an axis";
-- your hand result for one enemy after 3 frames matches the picture. AI
-  tools often swap x and y or forget the minus sign for "left" or "down":
-  look for these first.
-:::
-:::
-
-## Activity 3 · Scalars and vectors in your game
-
-A game shows many numbers. Some need only a size; others also need a
-direction. A virtual joystick gives a vector every frame: pushed fully right
-it gives (1, 0); let go, it gives (0, 0).
-
-::: {.callout-note title="Activity 3 · Scalars and vectors · 10 min"}
-1. Play a game for one minute.
-2. Write three scalars (for example "coins: 250") and three vectors, each
-   with its direction (for example "the ball flies up and to the left").
-3. Write the joystick vector for: fully up; fully left; let go.
-
-*Your product:* a list of three scalars, three vectors and three joystick
-vectors.
-
-::: {.check}
-Joystick: fully up (0, 1); fully left (−1, 0); let go (0, 0).
-
-- Each scalar is one number with no direction (time, coins, health).
-- Each vector says "which way" (up, left, towards the enemy).
-- A speed alone ("90 km/h") is a scalar; "90 km/h to the north" is a vector.
-:::
-:::
-
-::: {.callout-tip title="Try it 4 · Scalar or vector?"}
-Choose the right answer. You can use an answer more than once.
-
-::: {.match extra="both|(1, 1)"}
-The music volume, 70 %.
-:   scalar
-
-    Why: one number, no direction.
-
-Gravity pulls everything down.
-:   vector
-
-    Why: it has a size and a direction (down).
-
-The joystick is pushed fully down.
-:   (0, −1)
-
-    Why: no change in x; down is minus y.
-
-A car moves at 3 units per frame to the right.
-:   vector
-
-    Why: "to the right" gives a direction: a velocity.
-:::
-:::
-
-## Activity 4 · Chase and run away
-
-A guard patrols a museum level. The guard is at G = (−4, 3), the player at
-P = (2, −1), and a painting at A = (5, 4).
-
-::: {.callout-note title="Activity 4 · Chase and run away · 12 min"}
-1. Find the vector that takes the guard to the player.
-2. Find the vector that takes the player to the painting.
-3. The guard reaches the player, then walks back to its post at G. Which
-   vector takes it from P back to G? Compare it with your answer 1.
-4. Check all three in GeoGebra with `Vector(G, P)` and so on.
-
-*Your product:* three vectors, each with "from … to …".
-
-::: {.check}
-1. Guard → player: P − G = (2 − (−4), −1 − 3) = (6, −4).
-2. Player → painting: A − P = (5 − 2, 4 − (−1)) = (3, 5).
-3. Back to the post: G − P = (−6, 4), the opposite of answer 1: the same
-   size, the other way.
-:::
-:::
-
-::: {.callout-tip title="Try it 5 · The museum"}
-Guard G = (−4, 3), player P = (2, −1), painting A = (5, 4). Choose the right
-answer.
-
-::: {.match extra="(−6, 4)|(3, 5)"}
-The vector from the painting to the guard.
-:   (−9, −1)
-
-    Why: G − A = (−4 − 5, 3 − 4) = (−9, −1).
-
-The guard stands on the painting. Painting − guard?
-:   (0, 0)
-
-    Why: a point minus itself is the zero vector.
-
-The vector from the guard to the painting.
-:   (9, 1)
-
-    Why: A − G = (5 − (−4), 4 − 3) = (9, 1).
-:::
-:::
-
-## Activity 5 · A drone in 3D
-
-A delivery drone flies in a world with y up. It starts at A = (1, 0, 2) on
-the ground and delivers a parcel on a roof at B = (5, 6, −1). The move has a
-**vertical part** (0, v~y~, 0), which changes the height, and a **horizontal
-part** (v~x~, 0, v~z~), which moves along the ground.
-
-{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Move the player in 3D" height="640" >}}
-
-::: {.callout-note title="Activity 5 · A 3D delivery · 12 min"}
-1. Find the displacement from A to B.
-2. Split it into its vertical part and its horizontal part.
-3. In the 3D viewer, put the player at (1, 0, 2) and move it to (5, 6, −1).
-   Which sliders did you move?
-
-*Your product:* three vectors and the sliders.
-
-::: {.check}
-B − A = (4, 6, −3). Vertical part (0, 6, 0): the drone climbs 6 units.
-Horizontal part (4, 0, −3). All three sliders move: x by +4, y by +6,
-z by −3.
-:::
-:::
-
-::: {.callout-tip title="Try it 6 · Up and across"}
-A = (1, 0, 2), B = (5, 6, −1), y is up. Choose the right answer.
-
-::: {.match extra="(4, 0, 0)|(0, 0, −3)"}
-The way back, from B to A.
-:   (−4, −6, 3)
-
-    Why: A − B is the opposite: all three signs change.
-
-A character walks on flat ground. Its v~y~ is…
-:   0
-
-    Why: flat ground means no change in height.
-
-A jump straight up by 3 units.
-:   (0, 3, 0)
-
-    Why: only the height changes.
-:::
-:::
-
-## Game challenge: Harbor Guard {.challenge}
-
-Work alone. Use every activity of today.
-
-**Harbor Guard** is a tower-defence game for phones. It runs at 60 fps. The
-origin of the harbour level is in its centre: the dock is at (0, −6), the
-lighthouse at (−4, 5) and the gate at (3, 2). A ship enters at (5, 8). The
-radar reports a ship's coordinates, and you build a tower at that point. In
-the 3D version, a patrol drone hovers at (−2, 9, 6) with y up.
-
-{{< sim file="sims/harbor-guard.html" poster="sims/harbor-guard.png" title="Harbor Guard: build towers at the right coordinates" kind="game" height="720" >}}
-
-::: {.callout-tip title="Try it 7 · The harbour (harder)"}
-Harbor Guard: 60 fps; dock (0, −6), lighthouse (−4, 5), gate (3, 2); a ship
-enters at (5, 8); drone (−2, 9, 6) with y up. Choose the right answer.
-
-::: {.match extra="quadrant I|(5, 14)|60 frames"}
-How many frames does the game make in 5 seconds?
-:   300 frames
-
-    Why: 60 × 5 = 300.
-
-The lighthouse at (−4, 5). Quadrant?
-:   quadrant II
-
-    Why: x minus, y plus.
-
-The dock at (0, −6). Where is it?
-:   on the y-axis
-
-    Why: x = 0.
-
-The displacement of the ship from where it enters to the dock.
-:   (−5, −14)
-
-    Why: dock − entry = (0 − 5, −6 − 8) = (−5, −14).
-
-The ship sails from (5, 8) to the gate in 2 frames. Velocity?
-:   (−1, −3)
-
-    Why: (3, 2) − (5, 8) = (−2, −6); ÷ 2 = (−1, −3).
-
-How high is the drone?
-:   9 units
-
-    Why: with y up, the height is the middle number.
+A good product has 8 objects that match their words (left = minus x, down =
+minus y), quadrants that fit the signs, and one enemy checked by hand after
+3 frames. AI tools often swap x and y or forget the minus sign for "left"
+or "down": look for these first.
 :::
 :::
 
 ## Wrap-up {.summary}
 
-- You can find where coordinates, vectors and other mathematics work in a game.
+- You can find where coordinates, vectors and other mathematics work in a
+  game.
 - You can turn a level description into coordinates and quadrants.
-- You can find the vector from one object to another, and its opposite.
-- You can split a 3D move into its height and its move over the ground.
+- You can find the vector from one object to another, its velocity per
+  frame, and a move in 3D.

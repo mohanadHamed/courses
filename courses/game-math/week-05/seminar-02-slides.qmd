@@ -7,72 +7,45 @@ format: lesson-pptx
 ## Recall · Lecture 8
 
 a) What is the size of a matrix with 2 rows and 4 columns?
-b) What is the matrix with the rows (2, 0) and (0, 1) times the vector (3, 5)?
+b) What are the rows (2, 0) and (0, 1) times the vector (3, 5)?
 c) In AB**v**, which matrix acts first on **v**?
 
 ::: {.answer}
 a) 2 × 4
 b) (6, 5)
-c) B, the matrix next to the vector
+c) B
 :::
 
-## Activity 1 · The enemy table · 10 min
+## Activity 1 · Read, add and scale · 15 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- The slime has the row (40, 10, 4) and the troll (60, 20, 2): HP, damage and speed.
-- **Do it:** Write the size of E and say what e~13~ and e~22~ mean.
-- Then add a bat (20, 5, 8) and write the troll's row in hard mode (1.5 × E).
+- E has the rows slime (40, 10, 4) and troll (60, 20, 2) for HP, damage and speed.
+- **Do it:** Write the size of E, e~13~ and e~22~. Add the patch with rows (10, 0, 0) and (0, 5, 1). Write the troll's row of 1.5 × E.
+- Your product is a size, two entries, the new E and one row.
 :::
 ::: {.column width="50%"}
-![](images/matrix-scale.png)
+![](images/matrix-vector.png)
 :::
 ::::
 
-## Check 1 · The enemy table
+## Check 1 · Read, add and scale
 
-What are the answers for the enemy table?
+What are the results for the enemy table?
 
 ::: {.reveal}
-1. E is 2 × 3; e~13~ = 4 is the slime's speed and e~22~ = 20 the troll's damage.
-2. With the bat as row 3, the matrix is 3 × 3.
-3. In hard mode the troll has 1.5 × (60, 20, 2) = (90, 30, 3).
+1. E is 2 × 3; e~13~ = 4 is the slime's speed, and e~22~ = 20 is the troll's damage.
+2. With the patch, E has the rows (50, 10, 4) and (60, 25, 3).
+3. In hard mode, the troll's row is 1.5 × (60, 20, 2) = (90, 30, 3).
 :::
 
-## Activity 2 · Three enemies at once · 12 min
+## Activity 2 · Cast and check · 15 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Three enemies stand at (2, 1), (5, 3) and (0, 4): the columns of P.
-- Their steps are (1, 0), (−1, 0) and (0, −2): the columns of D.
-- **Do it:** Compute P + D and P + 2D. Where is each enemy after each frame?
-:::
-::: {.column width="50%"}
-![](images/matrix-add.png)
-:::
-::::
-
-## Live demo · Matrix Lab
-
-{{< sim file="sims/matrix-lab.html" poster="sims/matrix-lab.png" title="Matrix Lab: add, subtract and multiply by a number" task="**Show:** enter P and D as A and B, and choose A + B. **Ask:** where is enemy 2 after one frame?" >}}
-
-## Check 2 · Three enemies at once
-
-Where are the enemies after one and after two frames?
-
-::: {.reveal}
-1. P + D gives the positions (3, 1), (4, 3) and (0, 2).
-2. P + 2D gives the positions (4, 1), (3, 3) and (0, 0).
-3. Each column is one vector addition, done for all enemies at once.
-:::
-
-## Activity 3 · Spells on points · 12 min
-
-:::: {.columns}
-::: {.column width="50%"}
-- Stretch has the rows (2, 0) and (0, 3), and Turn the rows (0, −1) and (1, 0).
-- Mirror has the rows (1, 0) and (0, −1).
-- **Do it:** Cast each spell on (3, −1) on paper, then check in Multiply Lab. Which spell turns the house upside down?
+- Stretch has the rows (2, 0) and (0, 3), Turn (0, −1) and (1, 0), and Mirror (1, 0) and (0, −1).
+- **Do it:** Cast the three spells on (3, −1) on paper. Check each one in Multiply Lab.
+- Your product is three points with their calculations.
 :::
 ::: {.column width="50%"}
 ![](images/matrix-vector.png)
@@ -81,85 +54,44 @@ Where are the enemies after one and after two frames?
 
 ## Live demo · Multiply Lab
 
-{{< sim file="sims/multiply-lab.html" poster="sims/multiply-lab.png" title="Multiply Lab: a 2 × 2 matrix moves a point and a shape" task="**Show:** enter Mirror and put P at (3, −1). **Ask:** why is the house now upside down?" >}}
+{{< sim file="sims/multiply-lab.html" poster="sims/multiply-lab.png" title="Multiply Lab: a 2 × 2 matrix moves a point and a shape" task="**Show:** enter Turn and put P at (3, −1). **Ask:** why does each row give one coordinate?" >}}
 
-## Check 3 · Spells on points
+## Check 2 · Cast and check
 
 Where do the three spells send (3, −1)?
 
 ::: {.reveal}
-1. Stretch gives (2 × 3, 3 × (−1)) = (6, −3).
-2. Turn gives (1, 3), because (x, y) becomes (−y, x).
-3. Mirror gives (3, 1): it changes the sign of y, so the house is upside down.
+1. Stretch: (2 × 3 + 0, 0 + 3 × (−1)) = (6, −3).
+2. Turn: (0 × 3 + (−1) × (−1), 1 × 3 + 0) = (1, 3).
+3. Mirror: (3, 1), because it changes the sign of y.
 :::
 
-## Activity 4 · Which products exist? · 12 min
+## Activity 3 · Combine and undo · 18 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- AB exists when A has as many columns as B has rows.
-- **Do it:** Which of (2 × 3)(3 × 4), (2 × 3)(2 × 3) and (3 × 1)(1 × 3) exist, and with which size?
-- Then compute AB for A = rows (2, 1), (0, 3) and B = rows (1, 0), (4, 2).
-:::
-::: {.column width="50%"}
-![](images/matrix-matrix.png)
-:::
-::::
-
-## Check 4 · Which products exist?
-
-What are the sizes, and what is AB?
-
-::: {.reveal}
-1. (2 × 3)(3 × 4) is 2 × 4, and (3 × 1)(1 × 3) is 3 × 3.
-2. (2 × 3)(2 × 3) does not exist, because 3 and 2 are different.
-3. AB has the rows (6, 2) and (12, 6).
-:::
-
-## Activity 5 · One spell from two · 12 min
-
-:::: {.columns}
-::: {.column width="50%"}
-- Grow has the rows (2, 0) and (0, 2), Turn the rows (0, −1) and (1, 0), and Flip the rows (−1, 0) and (0, 1).
-- **Do it:** Compute Grow × Turn and check it on (1, 0).
-- Then apply Flip and Turn to (4, −1) in both orders.
+- Grow has the rows (2, 0) and (0, 2); Flip has (−1, 0) and (0, 1); Shrink has (0.5, 0) and (0, 0.5).
+- **Do it:** Compute Grow × Turn. Apply Flip then Turn, and Turn then Flip, to (4, −1). Which spell undoes Grow?
+- Your product is one matrix, two points and two answers.
 :::
 ::: {.column width="50%"}
 ![](images/order-matters.png)
 :::
 ::::
 
-## Check 5 · One spell from two
+## Check 3 · Combine and undo
 
-What are the results of Activity 5?
+What do the two spells give, and how do we undo them?
 
 ::: {.reveal}
-1. Grow × Turn has the rows (0, −2) and (2, 0), and it sends (1, 0) to (0, 2).
-2. Flip then Turn sends (4, −1) to (1, −4).
-3. Turn then Flip sends (4, −1) to (−1, 4): the order matters.
-:::
-
-## Game challenge · Crystal Spells
-
-{{< sim file="sims/crystal-spells.html" poster="sims/crystal-spells.png" title="Crystal Spells: cast the right matrix" kind="game" task="The crystal at (2, 1) moves with the spells Grow, Shrink, Turn, Flip and Stay. **Play:** solve the puzzles on your phone, with two spells in a row." >}}
-
-## Try it · Crystal Spells (harder)
-
-The facts: the crystal is at (2, 1). Grow doubles x and y, Turn sends (x, y) to (−y, x), and Flip changes the sign of x.
-
-a) Where does the crystal land after Turn twice?
-b) Where does it land after Grow and then Turn?
-c) Which spell is the same as Flip twice?
-
-::: {.answer}
-a) (−2, −1)
-b) (−2, 4)
-c) Stay, the identity
+1. Grow × Turn has the rows (0, −2) and (2, 0), so (1, 0) goes to (0, 2).
+2. Flip then Turn gives (1, −4), but Turn then Flip gives (−1, 4): the order matters.
+3. Shrink undoes Grow, because it is its inverse.
+4. The identity, with the rows (1, 0) and (0, 1), changes nothing.
 :::
 
 ## Wrap-up
 
-- You can read, extend and scale a table of game data as a matrix.
-- You can move many objects at once by adding a matrix of steps.
-- You can cast a spell matrix on a point and check it in Multiply Lab.
-- You can check the sizes of a product and combine two spells in the right order.
+- You can read, add and scale a table of game data as a matrix.
+- You can cast a spell matrix on a point and check it.
+- You can combine two spells, see why the order matters, and undo a spell.

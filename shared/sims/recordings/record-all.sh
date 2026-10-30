@@ -16,7 +16,6 @@ BASE="http://localhost:4323"
 # The page opens with ?fixed-order: the buttons of a mini-game keep the order of
 # its rounds, so the scenarios can click them by position.
 LIST="
-harbor-guard|courses/game-math/week-01/sims/harbor-guard.html|9|courses/game-math/week-01/sims/harbor-guard.gif
 comet-courier|courses/game-math/week-01/sims/comet-courier.html|11|courses/game-math/week-01/sims/comet-courier.gif
 grid-strike|courses/game-math/week-01/sims/grid-strike.html|8|courses/game-math/week-01/sims/grid-strike.gif
 vector-dash|courses/game-math/week-01/sims/vector-dash.html|10|courses/game-math/week-01/sims/vector-dash.gif
@@ -40,14 +39,11 @@ matrix-lab|courses/game-math/week-05/sims/matrix-lab.html|9|courses/game-math/we
 multiply-lab|courses/game-math/week-05/sims/multiply-lab.html|9|courses/game-math/week-05/sims/multiply-lab.gif
 crystal-spells|courses/game-math/week-05/sims/crystal-spells.html|10|courses/game-math/week-05/sims/crystal-spells.gif
 transform-lab|courses/game-math/week-06/sims/transform-lab.html|9|courses/game-math/week-06/sims/transform-lab.gif
-sky-steps|courses/game-math/week-06/sims/sky-steps.html|10|courses/game-math/week-06/sims/sky-steps.gif
 rotate-lab|courses/game-math/week-06/sims/rotate-lab.html|9|courses/game-math/week-06/sims/rotate-lab.gif
 drawbridge|courses/game-math/week-06/sims/drawbridge.html|10|courses/game-math/week-06/sims/drawbridge.gif
 matrix-chain|courses/game-math/week-07/sims/matrix-chain.html|8|courses/game-math/week-07/sims/matrix-chain.gif
-cannon-cove|courses/game-math/week-07/sims/cannon-cove.html|8|courses/game-math/week-07/sims/cannon-cove.gif
 yaw-lab|courses/game-math/week-07/sims/yaw-lab.html|9|courses/game-math/week-07/sims/yaw-lab.gif
 lighthouse|courses/game-math/week-07/sims/lighthouse.html|10|courses/game-math/week-07/sims/lighthouse.gif
-island-quest|courses/game-math/week-08/sims/island-quest.html|8|courses/game-math/week-08/sims/island-quest.gif
 logic-lab|courses/game-math/week-08/sims/logic-lab.html|9|courses/game-math/week-08/sims/logic-lab.gif
 door-logic|courses/game-math/week-08/sims/door-logic.html|9|courses/game-math/week-08/sims/door-logic.gif
 truth-table-lab|courses/game-math/week-09/sims/truth-table-lab.html|9|courses/game-math/week-09/sims/truth-table-lab.gif

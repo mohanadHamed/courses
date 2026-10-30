@@ -1,0 +1,144 @@
+---
+title: "Excel (3): Summarizing Data with AI Help"
+description: "Practice · Summarize a month of sales by type and by week with a PivotTable, then check an AI summary of the month number by number."
+practice: 4
+ilos: [C2, C4, B1]
+format: lesson-html
+---
+
+No new ideas today: two short problems on Lectures 6 and 7, with one new
+button of Excel. Do each one alone, then open "Check your result". Every
+question on this page has its answer: try first, then check.
+
+## Recall
+
+- **Lecture 6:** SUM, AVERAGE and MAX work on a range, for example
+  `=MAX(E2:E25)`.
+- **Lecture 7:** a filter shows only some rows; a chart shows the answer
+  to one question.
+- **AI help:** an AI summary sounds sure, but its numbers can be wrong.
+  Check every number with the data (Lectures 2 and 9).
+
+![A PivotTable: the total of each type.](images/pivot.png){width=100%}
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="=SUM(E2)|a theme"}
+Which formula gives the biggest sale in E2:E25?
+:   =MAX(E2:E25)
+
+    Why: MAX gives the highest value of a range.
+
+You want to see only the rows of the type Paper. What do you use?
+:   a filter
+
+    Why: A filter shows only the rows that you choose.
+
+An AI summary gives a number. What do you do before you use it?
+:   check it with the data
+
+    Why: AI can write wrong numbers in a sure voice.
+:::
+:::
+
+## Activity 1 · Rana's month in a PivotTable
+
+Rana has the 24 sales of the Sunrise shop in March: the week, the item,
+the type (Paper, Drinks, Bags), the quantity and the total in JD. A
+**PivotTable** sums them by type or by week in a few clicks: **Insert ›
+PivotTable**, a field in **Rows**, the Total in **Values**.
+
+{{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" height="600" >}}
+
+::: {.callout-note title="Activity 1 · By type and by week · 15 min"}
+1. In **Pivot Lab**, choose Rows **Type** and Values **Sum of Total**.
+   Which type sold the most?
+2. Change the rows to **Week**. Which week was the best, and which the
+   weakest?
+3. Choose Rows **Type** and Values **Average of Total**. Which type has the
+   biggest average sale?
+
+*Your product:* three short answers, each with its number.
+
+::: {.check}
+1. Paper sold the most: 206 JD (Drinks 71, Bags 78; 355 JD in all).
+2. The third week was the best (112 JD); the second was the weakest
+   (63 JD).
+3. Paper has the biggest average sale: about 20.6 JD.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · The PivotTable"}
+Use Pivot Lab. Choose the right answer.
+
+::: {.match extra="Bags, 78 JD|the first week"}
+Rows Type, Values Sum of Total: which type sold the most?
+:   Paper, 206 JD
+
+    Why: Paper has the biggest sum of the three types.
+
+Rows Week, Values Sum of Total: which week was the weakest?
+:   the second week, 63 JD
+
+    Why: 63 JD is the smallest of the four weeks.
+
+You add new sales to the data. What must you do to the PivotTable?
+:   Refresh it
+
+    Why: A PivotTable does not update by itself.
+:::
+:::
+
+## Activity 2 · Is the AI summary right?
+
+Rana asked an AI tool for a short summary of March for the staff
+newsletter. Before she uses it, she checks every sentence with the facts
+of her PivotTable.
+
+![An AI summary, checked.](images/ai-summary.png){width=100%}
+
+{{< sim file="sims/summary-check.html" poster="sims/summary-check.png" title="Summary Check: is the AI right?" height="640" >}}
+
+::: {.callout-note title="Activity 2 · Check the summary · 12 min"}
+1. In **Summary Check**, mark each of the six sentences true or wrong.
+   Use the PivotTable facts at the top.
+2. Write a corrected summary of three true sentences, each with a number.
+
+*Your product:* six marks and a summary of three true sentences.
+
+::: {.check}
+True: the total of 355 JD; the third week was the best (112 JD); the
+average sale was about 15 JD. Wrong: "Bags sold the most" (Paper, 206
+JD); "sales grew every week" (the second week fell to 63 JD); "the
+biggest sale was a bag for 48 JD" (notebooks, 60 JD). A good summary:
+"March sales were 355 JD. Paper sold the most, 206 JD. The best week was
+the third, with 112 JD."
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · The AI summary"}
+Use Summary Check. Choose the right answer.
+
+::: {.match extra="Bags sold the most|yes, every week"}
+The AI says "Bags sold the most". The PivotTable says Bags 78 JD and Paper 206 JD. What is true?
+:   Paper sold the most
+
+    Why: 206 JD is more than 78 JD; the AI was wrong.
+
+The weeks were 87, 63, 112 and 93 JD. Did sales grow every week?
+:   no, the second week fell
+
+    Why: 63 JD is less than 87 JD.
+
+What do you add under an AI summary that you checked?
+:   a short AI-use statement
+
+    Why: It says honestly that AI helped and that you checked it.
+:::
+:::
+
+## Wrap-up {.summary}
+
+- You can summarize a list by type or by week with a PivotTable.
+- You can check an AI summary of data number by number, and correct it.

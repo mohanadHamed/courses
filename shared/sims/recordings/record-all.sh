@@ -213,7 +213,6 @@ statement-builder|courses/digital-skills/week-12/sims/statement-builder.html|8|c
 responsible-or-not|courses/digital-skills/week-11/sims/responsible-or-not.html|8|courses/digital-skills/week-11/sims/responsible-or-not.gif
 pivot-lab|courses/digital-skills/week-13/sims/pivot-lab.html|8|courses/digital-skills/week-13/sims/pivot-lab.gif
 summary-check|courses/digital-skills/week-13/sims/summary-check.html|9|courses/digital-skills/week-13/sims/summary-check.gif
-summary-tool|courses/digital-skills/week-13/sims/summary-tool.html|8|courses/digital-skills/week-13/sims/summary-tool.gif
 link-lab|courses/digital-skills/week-14/sims/link-lab.html|8|courses/digital-skills/week-14/sims/link-lab.gif
 heading-slides|courses/digital-skills/week-14/sims/heading-slides.html|7|courses/digital-skills/week-14/sims/heading-slides.gif
 office-relay|courses/digital-skills/week-14/sims/office-relay.html|8|courses/digital-skills/week-14/sims/office-relay.gif

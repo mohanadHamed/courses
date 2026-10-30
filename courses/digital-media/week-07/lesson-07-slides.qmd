@@ -1,6 +1,6 @@
 ---
 title: "Digital Audio Basics: Sound, Formats and Recording"
-subtitle: "Lecture 13"
+subtitle: "Lecture 7"
 format: lesson-pptx
 ---
 
@@ -8,7 +8,7 @@ format: lesson-pptx
 
 {{< glossary sound-wave frequency decibel sample-rate bit-depth mono-stereo lossy-compression clipping >}}
 
-## 13.1 What a sound is: a wave
+## 7.1 What a sound is: a wave
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -24,7 +24,7 @@ format: lesson-pptx
 
 ## Live demo · Wave Lab
 
-{{< sim file="sims/waveform-lab.html" poster="sims/waveform-lab.png" title="Wave Lab: from a sound wave to numbers" task="**Show:** play 440 Hz, then 880 Hz; lower the amplitude; then change 8 kHz 4-bit to 48 kHz 16-bit. **Ask:** what happens to the size per minute, and why?" >}}
+{{< sim file="sims/waveform-lab.html" poster="sims/waveform-lab.png" title="Wave Lab: from a sound wave to numbers" task="**Show:** play 440 Hz, then 880 Hz; lower the amplitude; then change 8 kHz 4-bit to 48 kHz 16-bit. **Ask:** why does the second setting sound clearer?" >}}
 
 ## Try it 1 · The wave
 
@@ -38,44 +38,33 @@ b) the loudness
 c) 0 dB
 :::
 
-## 13.2 From a wave to numbers
+## 7.2 From a wave to numbers
 
 :::: {.columns}
 ::: {.column width="50%"}
 - The computer measures the wave many times per second: the samples.
 - Games use a sample rate of 44.1 or 48 kHz and a bit depth of 16 bits.
 - Stereo has two channels and needs twice the size of mono.
-- **Do it:** Compute the size of 10 seconds of a meow at 48 kHz, 16-bit, mono.
+- **Do it:** Compare 8 kHz 4-bit with 48 kHz 16-bit in Wave Lab. What changes?
 :::
 ::: {.column width="50%"}
 ![](images/sampling.png)
 :::
 ::::
 
-## Example · How big is one minute?
-
-The music is recorded at 48 kHz, with 16 bits (2 bytes) and in stereo.
-**How big is one minute of it?**
-
-::: {.reveal}
-1. One second takes 48 000 × 2 × 2 = **192 000 bytes**.
-2. One minute takes 192 000 × 60 = 11 520 000 bytes, about **11 MB**.
-3. In mono it takes half, so about **5.5 MB** per minute.
-:::
-
 ## Try it 2 · Samples
 
 a) Which sample rate do games use?
-b) How many levels does 16-bit audio have?
+b) Which bit depth do games use?
 c) Why do we record a single cat in mono?
 
 ::: {.answer}
 a) 48 kHz (or 44.1 kHz)
-b) 65 536
+b) 16-bit
 c) It is one source, and the file is half the size.
 :::
 
-## 13.3 Audio formats for games
+## 7.3 Audio formats for games
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -101,13 +90,14 @@ b) OGG (or MP3)
 c) Each new MP3 save removes more details.
 :::
 
-## 13.4 Recording a clean take
+## 7.4 Recording a clean take
 
 :::: {.columns}
 ::: {.column width="50%"}
 - A good take needs a quiet room with soft things that stop echoes.
 - The sound stays 15 to 30 cm from the microphone.
 - The peaks stay near −6 dB, because at 0 dB the wave clips.
+- Then the best take is trimmed, faded out and normalized to −1 dB.
 - **Do it:** Record one sound three times. Which take is best, and why?
 :::
 ::: {.column width="50%"}
@@ -124,6 +114,7 @@ Yara records Pasha's meow three times and looks at the meter each time.
 1. Take 1 hits 0 dB and clips, so she **lowers the input level**.
 2. Take 2 peaks at −24 dB with a hum, so she **moves closer** and turns off the fridge.
 3. Take 3 peaks near −6 dB in a quiet room, so she **keeps take 3**.
+4. She trims and normalizes it, and exports **sfx_pasha_meow_01.wav**.
 :::
 
 ## Try it 4 · The take
@@ -142,18 +133,18 @@ c) about 15 to 30 cm
 
 {{< sim file="sims/sound-booth.html" poster="sims/sound-booth.png" title="Sound Booth: the settings of a game sound" kind="game" task="**The story:** Yara records Pasha's meow, Nour's footsteps and the music of Rooftop Rescue. **Play:** choose the settings, fix two bad takes and choose the formats." >}}
 
-## Try it 5 · Sizes (harder)
+## Try it 5 · Clean it (harder)
 
-The sound is recorded at 48 kHz and 16 bits.
+The facts: Yara keeps take 3 of the meow. It starts with a silence, ends with a click and peaks at −14 dB.
 
-a) How big is one minute in mono?
-b) How big is the 3-minute music as a stereo WAV?
-c) How big is the same music as an OGG file?
+a) What does Yara do with the silence at the start?
+b) What removes the click at the end?
+c) Which edit brings the loudest peak to −1 dB?
 
 ::: {.answer}
-a) about 5.5 MB
-b) about 33 MB
-c) about 3 MB
+a) She trims it.
+b) a short fade-out
+c) Normalize
 :::
 
 ## Summary
@@ -162,3 +153,4 @@ c) about 3 MB
 - Games keep sound at 48 kHz and 16 bits, in mono for one source.
 - Short effects use WAV, and music uses OGG or MP3.
 - A clean take needs a quiet room, the right distance and peaks near −6 dB.
+- The best take is trimmed, faded out, normalized to −1 dB and exported with a clear name.

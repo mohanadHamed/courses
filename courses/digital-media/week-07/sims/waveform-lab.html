@@ -42,8 +42,8 @@
   function show() {
     const bytes = s.rate * (s.bits / 8) * s.ch, perMin = bytes * 60 / (1024 * 1024);
     const db = 20 * Math.log10(s.a);
-    $("out").innerHTML = `Pitch ${s.f} Hz · loudness ${s.a > 0 ? Kit.fmt(db, 1) : "−∞"} dB (0 dB = the top) · ${s.rate} samples per second, ${2 ** s.bits} levels<br>` +
-      `Size: ${s.rate} × ${s.bits / 8} byte × ${s.ch} = ${bytes.toLocaleString("en")} bytes per second, about ${Kit.fmt(perMin, 1)} MB per minute`;
+    $("out").innerHTML = `Pitch ${s.f} Hz · loudness ${s.a > 0 ? Kit.fmt(db, 1) : "−∞"} dB (0 dB = the top) · ${s.rate} samples per second, ${s.bits}-bit<br>` +
+      `Size: about ${Kit.fmt(perMin, 1)} MB per minute`;
   }
   Kit.slider($("sl"), "frequency", 0, 4, 1, 2, (i) => { s.f = FREQS[i]; show(); }, (i) => FREQS[i] + " Hz");
   Kit.slider($("sl"), "amplitude", 0, 1, 0.1, s.a, (v) => { s.a = v; show(); }, (v) => Kit.fmt(v, 1));

@@ -140,7 +140,6 @@ cat-catch|courses/digital-media/week-06/sims/cat-catch.html|9|courses/digital-me
 waveform-lab|courses/digital-media/week-07/sims/waveform-lab.html|10|courses/digital-media/week-07/sims/waveform-lab.gif
 sound-booth|courses/digital-media/week-07/sims/sound-booth.html|8|courses/digital-media/week-07/sims/sound-booth.gif
 wave-editor|courses/digital-media/week-07/sims/wave-editor.html|9|courses/digital-media/week-07/sims/wave-editor.gif
-clean-take|courses/digital-media/week-07/sims/clean-take.html|9|courses/digital-media/week-07/sims/clean-take.gif
 loop-builder|courses/digital-media/week-09/sims/loop-builder.html|10|courses/digital-media/week-09/sims/loop-builder.gif
 score-the-scene|courses/digital-media/week-09/sims/score-the-scene.html|8|courses/digital-media/week-09/sims/score-the-scene.gif
 loop-doctor|courses/digital-media/week-09/sims/loop-doctor.html|8|courses/digital-media/week-09/sims/loop-doctor.gif

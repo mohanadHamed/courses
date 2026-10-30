@@ -1,21 +1,21 @@
 ---
 title: "Digital Audio Basics: Sound, Formats and Recording"
 description: "What a sound wave is (frequency and amplitude), how a computer turns it into numbers (sample rate, bit depth, mono and stereo), the audio formats of a game, and how to record a clean take."
-lesson: 13
+lesson: 7
 ilos: [C2]
 format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game studio. Then it explains the idea behind it.
-It ends with a **Do it** task and one set of questions. The full
-explanations, examples and exercises are in the notes.
+starts with a problem in a game studio. Then it explains one idea. It ends
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check.
 
 ## Key terms
 
 {{< glossary sound-wave frequency amplitude decibel sample-rate bit-depth mono-stereo uncompressed-audio lossy-compression clipping input-level take >}}
 
-## 13.1 What a sound is: a wave
+## 7.1 What a sound is: a wave
 
 - A **sound wave** is a vibration of the air.
 - **Frequency** (Hz): vibrations per second, the **pitch**. People hear
@@ -35,6 +35,12 @@ High is not loud: pitch and loudness change separately.
 ::: {.callout-note title="Do it · Hear the two numbers"}
 In **Wave Lab**, play 220 Hz and 880 Hz. Then set the amplitude to 0.4 and
 0.8 and read the loudness in dB.
+
+::: {.check}
+880 Hz sounds higher than 220 Hz: the frequency gives the pitch. The
+amplitude 0.4 reads about −8 dB and 0.8 about −2 dB: a bigger amplitude is
+louder, closer to 0 dB.
+:::
 :::
 
 ::: {.callout-tip title="Try it 1 · The wave"}
@@ -44,26 +50,32 @@ Choose the right answer.
 What does the frequency of a sound give?
 :   the pitch
 
+    Why: More vibrations per second sound higher.
+
 What does the amplitude of a sound give?
 :   the loudness
+
+    Why: A bigger vibration sounds louder.
 
 Which is the loudest level a sound file can hold?
 :   0 dB
 
+    Why: In an audio program, 0 dB is the top; quieter levels are negative.
+
 Which sound has the lowest frequency?
 :   thunder
+
+    Why: Thunder is below 100 Hz, the lowest of the three.
 :::
 :::
 
-## 13.2 From a wave to numbers: sampling
+## 7.2 From a wave to numbers: sampling
 
 - A **sample** is one measure of the wave. **Sample rate**: samples per
   second, 44.1 kHz or 48 kHz for games.
-- **Bit depth**: bits per sample. 16-bit = 65 536 levels; 24-bit in the
-  studio.
+- **Bit depth**: bits per sample. More bits, less hiss: 16-bit in games,
+  24-bit in the studio.
 - **Mono**: one channel. **Stereo**: two channels, twice the size.
-- 48 kHz, 16-bit, stereo: 48 000 × 2 × 2 = 192 000 bytes per second, about
-  **11 MB per minute**.
 
 ![Samples on levels.](images/sampling.png){width=90%}
 
@@ -71,30 +83,45 @@ Which sound has the lowest frequency?
 One source (a cat, a step, a voice) is recorded in mono.
 :::
 
-::: {.callout-note title="Do it · Count the size"}
-In **Wave Lab**, compare 8 kHz 4-bit with 48 kHz 16-bit. Then compute the
-size of 10 seconds of the meow at 48 kHz, 16-bit, mono.
+::: {.callout-note title="Do it · Hear the samples"}
+In **Wave Lab**, compare 8 kHz 4-bit with 48 kHz 16-bit. What changes?
+Then write the sample rate, the bit depth and the channels for a recording
+of one voice for a game.
+
+::: {.check}
+At 8 kHz and 4-bit the samples are few and on few levels: the sound is
+dull with a hiss. At 48 kHz and 16-bit it is clear. For one voice: 48 kHz,
+16-bit, mono.
+:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Samples"}
 Choose the right answer.
 
-::: {.match extra="8 kHz|256"}
+::: {.match extra="8 kHz|4-bit"}
 Which sample rate do games use?
 :   48 kHz
 
-How many levels does 16-bit audio have?
-:   65 536
+    Why: Games use 44.1 or 48 kHz.
 
-How many bytes is one second of 48 kHz, 16-bit, mono?
-:   96 000
+Which bit depth do games use?
+:   16-bit
+
+    Why: Studios record with 24-bit; games use 16-bit.
 
 Which needs twice the size: mono or stereo?
 :   stereo
+
+    Why: Stereo has two channels, so the file is twice as big.
+
+Pasha is one sound source. How do you record him?
+:   in mono
+
+    Why: One source is one channel; the engine places it left or right.
 :::
 :::
 
-## 13.3 Audio formats for games
+## 7.3 Audio formats for games
 
 - **WAV**: uncompressed, every sample, big, plays at once.
 - **FLAC**: lossless, about half the size.
@@ -111,6 +138,12 @@ Edit the WAV; make the MP3 or OGG only at the end.
 ::: {.callout-note title="Do it · Look at real files"}
 Compare the size per minute of one WAV and one MP3 file. Which format would
 you use for a 2-minute menu music?
+
+::: {.check}
+A typical result: the WAV is about 10 MB per minute and the MP3 about
+1 MB per minute. For a 2-minute menu music, use OGG or MP3: the file stays
+small.
+:::
 :::
 
 ::: {.callout-tip title="Try it 3 · Formats"}
@@ -120,24 +153,35 @@ Choose the right format. You can use an answer more than once.
 Nour's footsteps, short and played often?
 :   WAV
 
+    Why: A short effect plays often and must start at once.
+
 The 3-minute music of the flood level?
 :   OGG
+
+    Why: Long music is about 10 times smaller as OGG.
 
 The rain over the city, a long loop?
 :   OGG
 
+    Why: A long loop is music-like and long: OGG keeps it small.
+
 The raw takes, kept in the archive?
 :   WAV
+
+    Why: The archive keeps every sample for later edits.
 :::
 :::
 
-## 13.4 Recording a clean take
+## 7.4 Recording a clean take
 
 - **Room:** quiet, with soft things that stop echoes.
 - **Distance:** 15–30 cm from the microphone.
 - **Input level:** peaks near **−6 dB**; at 0 dB the wave is cut flat:
   **clipping**.
 - Record **three takes** and keep the best.
+- Then clean the best take: **trim** the silence, a short **fade-out**
+  against a click, **normalize** to −1 dB, and export a WAV with a clear
+  name: `sfx_pasha_meow_01.wav`.
 
 ![The room, the distance and the meter.](images/recording-setup.png){width=90%}
 
@@ -148,6 +192,12 @@ The raw takes, kept in the archive?
 ::: {.callout-note title="Do it · Three takes"}
 Record one short sound three times: too far, too close and loud, and well
 placed. Which take is best, and why?
+
+::: {.check}
+The well-placed take is best: the too-far take is quiet with room noise,
+and the too-close take is loud and may clip. A good take has peaks near
+−6 dB and a quiet background.
+:::
 :::
 
 ::: {.callout-tip title="Try it 4 · The take"}
@@ -157,14 +207,22 @@ Choose the right answer.
 Where should the peaks of a good take be?
 :   near −6 dB
 
+    Why: Then the loud parts still have room before 0 dB.
+
 The tops of the wave are flat. What is it?
 :   clipping
+
+    Why: At 0 dB the wave is cut flat.
 
 How far from the microphone should the sound be?
 :   15–30 cm
 
+    Why: Closer is too loud; farther brings the room in.
+
 How many takes does a sound designer record?
 :   about three, then keeps the best
+
+    Why: Yara chooses the best of three takes.
 :::
 :::
 
@@ -185,32 +243,48 @@ Choose the right answer.
 Which settings for the meow?
 :   48 kHz, 16-bit, mono
 
+    Why: Games use 48 kHz and 16-bit, and the meow is one source.
+
 The meter hits 0 dB. What does Yara do?
 :   lower the input level and record again
+
+    Why: A clipped take is lost: record again more quietly.
 
 Take 2 is quiet with a hum. What does Yara do?
 :   move closer and turn off the fridge
 
+    Why: Closer gives a louder sound; the hum must go away.
+
 Which format for the footsteps?
 :   WAV
+
+    Why: Footsteps are short and played often.
 :::
 :::
 
-::: {.callout-tip title="Try it 6 · Sizes (harder)"}
-48 kHz, 16-bit. Choose the right answer.
+::: {.callout-tip title="Try it 6 · Clean it (harder)"}
+Yara keeps take 3 of the meow and cleans it. Choose the right edit.
 
-::: {.match extra="66 MB|1 MB"}
-How big is 1 minute in stereo?
-:   about 11 MB
+::: {.match extra="Amplify +20 dB|Recording 3.wav"}
+The take starts with a long silence.
+:   trim
 
-How big is 1 minute in mono?
-:   about 5.5 MB
+    Why: Trim deletes the silence before and after the sound.
 
-How big is the 3-minute music as a stereo WAV?
-:   about 33 MB
+There is a click at the very end.
+:   a short fade-out
 
-How big is the same music as OGG?
-:   about 3 MB
+    Why: A fade-out lowers the very end softly, so the click goes.
+
+The loudest peak is at −14 dB.
+:   normalize to −1 dB
+
+    Why: Normalize brings the loudest peak to −1 dB without clipping.
+
+Which name fits the exported meow?
+:   sfx_pasha_meow_01.wav
+
+    Why: The name says the type, what it is and the version, with no spaces.
 :::
 :::
 
@@ -220,3 +294,5 @@ How big is the same music as OGG?
 - A computer keeps samples: 48 kHz, 16-bit; mono for one source.
 - WAV for short effects, OGG or MP3 for music; edit the WAV.
 - A clean take: a quiet room, 15–30 cm, peaks near −6 dB, three takes.
+- Clean it in order: trim, fade-out, normalize to −1 dB, export with a
+  clear name.

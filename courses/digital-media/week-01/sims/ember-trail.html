@@ -45,7 +45,7 @@
     bubble:  { x: 0.36, y: 0.42, r: 0.08, name: "the speech bubble", channel: "text and story", fn: "story", dieg: false },
     health:  { x: 0.13, y: 0.08, r: 0.07, name: "the health bar", channel: "interface", fn: "feedback", dieg: false },
     coins:   { x: 0.38, y: 0.08, r: 0.06, name: "the coin counter", channel: "interface", fn: "feedback", dieg: false },
-    plus10:  { x: 0.80, y: 0.50, r: 0.05, name: "the “+10” and its ting", channel: "interface", fn: "feedback", dieg: false, spatial: true, snd: "ting" },
+    plus10:  { x: 0.80, y: 0.50, r: 0.05, name: "the “+10” and its ting", channel: "interface", fn: "feedback", dieg: false, snd: "ting" },
     glow:    { x: 0.90, y: 0.68, r: 0.06, name: "the glowing path stone", channel: "visual", fn: "guidance", dieg: true },
     film:    { x: 0.62, y: 0.10, r: 0.05, name: "the cut-scene button", channel: "cinematic", fn: "story", dieg: false },
   };
@@ -58,7 +58,7 @@
     { text: "Tap an element that tells the <b>story</b>.", ok: (e) => e.fn === "story" },
     { text: "Tap a sound that the fox <b>could hear</b> (diegetic).", ok: (e) => e.channel === "audio" && e.dieg },
     { text: "Tap a sound that <b>only the player</b> hears (non-diegetic).", ok: (e) => !!e.snd && !e.dieg },
-    { text: "Tap a HUD element in the corner: <b>non-diegetic</b> interface.", ok: (e) => e.channel === "interface" && !e.dieg && !e.spatial },
+    { text: "Tap a HUD element in the corner: <b>non-diegetic</b> interface.", ok: (e) => e.channel === "interface" && !e.dieg && (e === EL.health || e === EL.coins) },
   ];
   let W = 0, H = 0, game = null, sound = true, audio = null, flash = null, t0 = performance.now();
 
@@ -143,11 +143,11 @@
     const r = canvas.getBoundingClientRect(), k = hitTest(e.clientX - r.left, e.clientY - r.top);
     if (!k) return;
     const el = EL[k]; play(el.snd);
-    if (!game || game.done || game.locked) { $("msg").textContent = `This is ${el.name}: ${el.channel} channel, job: ${el.fn}, ${el.spatial ? "spatial (placed in the world, but not part of the story)" : el.dieg ? "inside the game world" : "outside the game world"}.`; $("msg").className = "message"; return; }
+    if (!game || game.done || game.locked) { $("msg").textContent = `This is ${el.name}: ${el.channel} channel, job: ${el.fn}, ${el.dieg ? "inside the game world" : "outside the game world"}.`; $("msg").className = "message"; return; }
     const o = ORDERS[game.order[game.i - 1]], ok = o.ok(el);
     flash = { k, ok, t: performance.now() };
-    if (ok) { game.score += 10; $("msg").textContent = `✓ Yes: ${el.name} (${el.channel}, ${el.fn}, ${el.spatial ? "spatial" : el.dieg ? "diegetic" : "non-diegetic"}).`; $("msg").className = "message good"; }
-    else { $("msg").textContent = `✗ ${el.name[0].toUpperCase() + el.name.slice(1)}: ${el.channel} channel, job ${el.fn}, ${el.spatial ? "spatial" : el.dieg ? "diegetic" : "non-diegetic"}. Try the next order.`; $("msg").className = "message bad"; }
+    if (ok) { game.score += 10; $("msg").textContent = `✓ Yes: ${el.name} (${el.channel}, ${el.fn}, ${el.dieg ? "diegetic" : "non-diegetic"}).`; $("msg").className = "message good"; }
+    else { $("msg").textContent = `✗ ${el.name[0].toUpperCase() + el.name.slice(1)}: ${el.channel} channel, job ${el.fn}, ${el.dieg ? "diegetic" : "non-diegetic"}. Try the next order.`; $("msg").className = "message bad"; }
     $("score").textContent = `Score ${game.score}`; game.locked = true;
     const g = game; setTimeout(() => { if (g === game) next(); }, ok ? 900 : 1700);
   });

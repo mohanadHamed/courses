@@ -33,7 +33,7 @@
     <label><input type="checkbox" data-k="hud" checked> Health bar (HUD)</label>
     <label><input type="checkbox" data-k="tag" checked> Name tag</label>
   </div>
-  <p id="msg" class="message">Press “Sound on”, then walk. Which sounds change when the fox moves?</p>
+  <p id="msg" class="message">Press “Sound on”, then walk. Which sounds could the fox hear, and which only the player?</p>
 </main>
 
 <script src="../../../../shared/sims/sim-base.js"></script>
@@ -140,7 +140,7 @@
     if (on.steps && dir) label(ox, ground + 22, "footsteps · diegetic", "d");
     if (on.tag) {
       ctx.font = "800 12px Nunito, system-ui, sans-serif"; ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.fillText("Ember", ox, oy - 62);
-      label(ox, oy - 84, "name tag · spatial", "s");
+      label(ox, oy - 84, "name tag · non-diegetic", "n");
     }
     if (on.hud) {
       ctx.fillStyle = "rgba(0,0,0,.35)"; ctx.fillRect(14, 14, 120, 14); ctx.fillStyle = "#ff6b6b"; ctx.fillRect(15, 15, 80, 12);
@@ -170,7 +170,7 @@
   canvas.addEventListener("pointermove", (e) => { if (dragging) move(e); });
   ["pointerup", "pointercancel", "pointerleave"].forEach((ev) => canvas.addEventListener(ev, () => { dragging = false; dir = 0; }));
   function move(e) { const r = canvas.getBoundingClientRect(), x = (e.clientX - r.left) / r.width; dir = Math.abs(x - fox) < 0.02 ? 0 : Math.sign(x - fox); }
-  $("start").addEventListener("click", () => { startAudio(); $("msg").textContent = "Walk towards the fire and away from it. The crackle grows and moves from one ear to the other; the music never changes."; });
+  $("start").addEventListener("click", () => { startAudio(); $("msg").textContent = "Walk towards the fire and away from it. The crackle comes from the fire, so the fox could hear it; nobody in the forest plays the flute."; });
   $("labels").addEventListener("click", () => { labels = !labels; $("labels").textContent = labels ? "Hide labels" : "Show labels"; });
   document.querySelectorAll("#layers input").forEach((i) => i.addEventListener("change", () => { on[i.dataset.k] = i.checked; }));
   document.addEventListener("visibilitychange", () => { if (A) { if (document.hidden) A.suspend(); else A.resume(); } });

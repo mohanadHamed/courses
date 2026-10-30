@@ -1,115 +1,130 @@
-# Restructure (plan v2): status on 2026-10-30 (second session)
+# Restructure (plan v2): status on 2026-10-30 (end of the second session)
 
 Branch `restructure-units` (signed commits, one per unit). Plan:
 `plans/restructure-19-lectures.md`. Rules: `AUTHORING.md` and each course's
-`NOTES.md` / `plan.md` / `schedule.yml` (all already updated in step 2).
+`NOTES.md` / `plan.md` / `schedule.yml`.
+
+## The teacher's notes of 2026-10-30 (now rules in AUTHORING.md)
+
+1. **Lessons as simple as the outcomes allow**: the estimated limit (about
+   30 % simpler than October 2026), only the simplest concepts that reach
+   every ILO at its Bloom level; A2–B1 English in the notes, A2 on pages and
+   slides. Applied to all work done since; lectures finished before
+   2026-10-30 (Game Math, Computing Systems, Digital Media 1–4) were not
+   simplified again (a possible later pass).
+2. **Seminars short**: two short problems (three at most) that together use
+   every concept of the lecture they practise; planned time (Recall 5 min +
+   the "· N min" of the activity boxes) at most 40 of 60 min and 60 of 90
+   min, the rest for the teacher's explanations; no Game challenge or case
+   study in a seminar (a game is the tool of an activity); a Task with AI
+   only as an optional `## At home · Task with AI`; worksheet = Recall, the
+   activities, 3–5 exercises. `check_size.py` checks all of this
+   (`SEMINAR_SIZES`, `SEMINAR_TIME`, `SEMINAR_FORBIDDEN`). Templates in
+   `shared/templates/seminar-*` follow it.
 
 ## Done
 
-- Step 1, pipeline (filters, scripts, templates, `tools/course_package.py`).
-- Step 2, rules, schedules, plans for all four courses.
-- **Game Math: all 15 units** (Lectures 1–19, Seminars 1–10, homework 1–14),
-  `check_size.py` clean.
-- **Computing Systems: all 14 units** (Lectures 1–14, Seminars 1–14, homework
-  1–13; unit 14 has the project), in week-01 … week-07 and week-09 … week-15;
-  `check_size.py` clean.
-- Review of the finished units (2026-10-30): unclosed Try it boxes (Seminars 5, 6),
-  ILOs and titles as in the syllabus, reuse notes, unit 7 figures and Stack Builder
-  without HAL/ART/XNU; `game-kit.js` mixes the answer buttons (the right answer
-  was always first); recordings open sims with `?fixed-order`.
-- courses-private (pushed on main): `syllabus-weeks.yml` ×4; solutions of Game
-  Math homework 1–14 and Computing Systems homework 1–13 match the new tasks
-  (CS solutions in week-09 … week-14 since the shift).
+- Steps 1–2 of the plan (pipeline, rules, schedules, plans).
+- **Game Math: all 15 units**; **Computing Systems: all 14 units**
+  (lectures, seminars, homework); all their seminars **shortened** to the
+  new model (CS 35–38 min planned, GM 50–59 min).
+- **Digital Media units 1–13 done** (Lectures 1–13, Seminars 1–13, homework
+  1–13), in week-01 … week-07 and week-09 … week-14. Seminars 1–3 were
+  shortened; 4–13 written short. Cut as planned: channels and
+  inside/outside the world (Seminar 1 had added them), the 180-degree rule
+  and camera map, 65 536 levels and file-size sums, the BPM formula, Unity
+  code and the Audio Mixer, 370 MB/s and the bitrate formula, patents,
+  trade secrets and "life + 70" sums, code licences (MIT/GPL). Moved: the
+  editing basics of old 20 (tracks, split, trim, ripple delete) into
+  Lecture 11.1; the rights check of old 24.2 into Lecture 13.4; feedback in
+  three parts into Lecture 9.4; owners and "inspired or copied" into
+  Lecture 12. Homework 7, 8, 10, 11 and 13 rewritten so that they practise
+  their lecture only (solutions updated and pushed in courses-private).
+  The L19 reference (raster images = Lecture 1) is fixed.
+- Seminar-only games removed (their Game challenge is gone): CS Test Lab,
+  Spec Match, Phone Picker, Help Ticket, Power Lab, Two Phones, Port
+  Planner, Report Doctor, Talk Doctor; GM Harbor Guard, Sky Steps, Cannon
+  Cove, Island Quest, Difficulty Tuner, Problem Drill, Star Dock Missions;
+  DM Sound Stage, Ember Trail, Curve Builder, Premise Doctor, Voice Match,
+  Board Builder, Panel Composer, Clean Take, Critic's Choice, Editor Tour,
+  Promo Judge, Public Domain Clock; and the figures no session uses. GM
+  Seminar 9 no longer adds expected attacks or input/output randomness
+  (not in Lecture 16). Old lecture numbers removed from several sims.
+- `record-all.sh`: stale paths fixed, deleted sims and their scenarios
+  removed.
+- `check_size.py --all`: no warnings outside Digital Media week-15 and
+  Digital Skills (97 warnings there, all from the old structure).
 
-- **Digital Media units 1–3** (Lectures 1–3, Seminars 1–3, homework 1–3) and
-  **Lecture 4** (week-04: no Courier, line IDs or "on-the-nose"; voice and scene
-  card from old 8; Rooftop Rescue and the bark figure without IDs). Units
-  8–14 already moved to week-09 … week-15 (both repos). DM keeps one running
-  story per lecture (Skyward Kite, Silent Station, …): the audit flagged
-  repeated case numbers only in Game Math and Computing Systems.
-- Helper `conv.py` (scratchpad): renumber, fix_intro, add_whys, add_check.
+## Still to do (in this order)
 
-- **2026-10-30, the teacher's two notes** (rules in `AUTHORING.md`, checker
-  and templates updated, commit "Seminars: two short problems…"):
-  1. Lessons as simple as the outcomes allow (A2–B1 notes, A2 pages and
-     slides; only the simplest concepts that reach every ILO).
-  2. Seminars short: two problems (three at most) that together use every
-     concept of the lecture; planned time ≤ 40 of 60 min (60 of 90), the rest
-     for the teacher's explanations; no Game challenge or case study in a
-     seminar (a game is the tool of an activity); a Task with AI only as an
-     optional "At home" part; `check_size.py` counts the planned time.
-- **Digital Media Seminar 4** and homework 4 done (unit 4 complete);
-  **Digital Media Seminars 1–3 shortened** to the new format.
-- **All finished seminars shortened** (Computing Systems 1–14, Game Math
-  1–10): two problems in 60 min (35–38 min planned), three in 90 min
-  (50–59 min planned); worksheets made from the pages with
-  `mkbook.py` (below) plus 4–5 exercises; seminar games that only served a
-  Game challenge removed (Test Lab, Spec Match, Phone Picker, Help Ticket,
-  Power Lab, Two Phones, Port Planner, Report Doctor, Talk Doctor; Harbor
-  Guard, Sky Steps, Cannon Cove, Island Quest, Difficulty Tuner, Problem
-  Drill, Star Dock Missions; DM Sound Stage, Ember Trail, Curve Builder,
-  Premise Doctor, Voice Match) and the figures no session uses.
-  New ideas that seminars had added were cut: DM channels and
-  inside/outside the world; GM expected attacks and input/output randomness.
-- `record-all.sh`: stale paths fixed (11 moved sims); deleted sims and their
-  scenarios removed.
-- **Digital Media units 5–8** done (Lectures 5–8, Seminars 5–8, homework
-  5–8; solutions of homework 7 and 8 rewritten in courses-private). Cut as
-  planned: the 180-degree rule and camera map, 65 536 levels and file-size
-  sums, the BPM formula, Unity code. Homework 7 and 8 now practise their
-  lecture only.
-
-## Still to do
-
-1. **Digital Media units 9–14** (week-10 … week-15: old lessons 17–28
-   still there): Lecture N from the first old lesson (+
-   essentials of the second), Seminar N from the second in the short format,
-   homework due "before lecture N+1"; fix: L19 reference; cut list in
-   `plan.md`. Then **Digital Skills** (15 units: Lectures 1–10, Practice 1–5,
-   Online activities 1–15 that practise their unit; see its NOTES.md).
-   New work at the simplest level (A2–B1 notes, A2 page and slides).
-   Lectures finished before 2026-10-30 were not simplified again.
-2. Every page: `Why:` under every Try it answer, `::: {.check}` in every
-   Do it / Lab task / Activity; seminars in the seminar format (templates in
-   `shared/templates/seminar-*`); case studies must not repeat the numbers
-   of worked examples (change the sim or the example).
-3. **GIFs and posters** for changed sims: run
-   `sh shared/sims/recordings/record-all.sh <name>` (paths fixed). Changed
-   sims: game-math week-04 drone-drop, sky-lift; week-06 drawbridge (poster
-   too); week-10 rule-smith; week-11 treasure-odds; week-12 loot-forge;
-   week-13 fair-or-frustrating, bag-lab; week-14 pilot-check, move-lab,
-   bounce-lab; week-15 cave-gen, generator-doctor, raft-finals;
-   computing-systems week-04 soc-explorer; week-05 ram-rush; week-06
-   disk-doctor, test-day (text); week-07 stack-builder (poster too: it shows
-   the old layers), pause-please (text); week-09 launch-planner,
-   source-check, platform-pick, fact-or-myth; week-10 launch-day,
-   review-board (text); week-11 terminal-lab, lag-detective, net-fixer;
-   week-12 cloud-planner; week-13 lag-lab (labels), week-15 slide-sorter. Posters of Kit games show round 1
-   in the written order; the page now mixes it (only cosmetic).
-   Test each sim inside its page in the browser
-   (no JS syntax check was possible).
-4. courses-private: renumber the remaining solutions (Digital Media,
-   Digital Skills online activities) and write
-   `moodle/<slug>-weeks.md` (Arabic section texts; no "مختبر" for Digital
-   Skills).
+1. **Digital Media unit 14** (week-15; old `lesson-27*`, `lesson-28*`
+   still there): Lecture 14 "Integrated Media Production: Team Workshop"
+   from old 27 and core Seminar 14 "Team Presentation of a Media Package"
+   from old 28 (short format). The team activity (D1) stays only in the
+   notes of both, each with an individual alternative (plan.md). Unit 14
+   has the project instead of homework (no homework-14). Fix the old
+   references ("lectures 9–12", "lecture 28", …) and the sim
+   `workshop-day.html` ("(lecture 15)").
+2. **Digital Skills, 15 units** (all still old `lesson-01 … lesson-30`):
+   map in the plan, Part 3 (Lectures 1–10 core, Practice 1–5 flexible in
+   the short seminar format `practice-NN*`, Online activities 1–15 as
+   `online-NN.qmd` that practise their unit and never repeat the lecture;
+   at least 2 sims each; AI-use statement from unit 11; the course's
+   NOTES.md: A2 English, general examples, never games). Model answers of
+   the online activities go to courses-private
+   (`courses/digital-skills/week-WW/online-NN-solutions.md`). Fix the sims
+   `office-relay.html` ("(lecture 23)") and `presentation-day.html`
+   ("lecture 30").
+3. **GIFs and posters** for changed sims (`sh shared/sims/recordings/record-all.sh
+   <name>`; needs Quarto's Deno, not installed here): game-math week-04
+   drone-drop, sky-lift; week-06 drawbridge (poster too); week-10
+   rule-smith; week-11 treasure-odds; week-12 loot-forge; week-13
+   fair-or-frustrating, bag-lab; week-14 pilot-check, move-lab, bounce-lab;
+   week-15 cave-gen, generator-doctor, raft-finals; computing-systems
+   week-04 soc-explorer (text); week-05 ram-rush; week-06 disk-doctor,
+   test-day (text); week-07 stack-builder (poster too), pause-please
+   (text); week-09 launch-planner, source-check, platform-pick,
+   fact-or-myth; week-10 launch-day, review-board (text); week-11
+   terminal-lab, lag-detective, net-fixer; week-12 cloud-planner; week-13
+   lag-lab (labels); week-15 slide-sorter; digital-media week-05
+   shot-caller (last round); week-07 waveform-lab (readout); week-09
+   score-the-scene (tempo round), loop-doctor (text); week-11 export-desk
+   (bitrate round), video-settings-lab (readout); week-14 asset-shopping,
+   audit-board, audit-fixes (one round or row each). Test each sim inside
+   its page in the browser (no JS check was possible here).
+4. **courses-private**: the online-activity solutions of Digital Skills,
+   and `moodle/<slug>-weeks.md` (Arabic section texts; no "مختبر" for
+   Digital Skills).
 5. Full `quarto render`, `python3 tools/course_package.py`, then a PR into
-   main (no co-author lines; signed commits).
+   main (signed commits, no co-author lines). In the PR description, list
+   the removed games and the cut concepts above for the teacher's review.
+
+## How a unit was converted (Digital Media; use the same way)
+
+1. `git mv` the old files: the first old lesson → `lesson-NN*` (Lecture
+   N), the second → `seminar-NN*`.
+2. `python3 plans/helpers/conv.py renumber FILE OLD NEW` on the three
+   lecture files; `conv.py intro PAGE` on the page.
+3. Cut what the plan lists; fix old lecture numbers; put the essentials of
+   the second old lesson into the lecture where the homework or the next
+   lecture needs them.
+4. Reasons: `conv.py whys PAGE REASONS` (one line per `:   answer`, in
+   order); results: `conv.py checks FILE CHECKS` ("=== Do it · title" then
+   the text) on the page and on the notes.
+5. Seminar: write the page by hand (template), then
+   `python3 plans/helpers/mkbook.py PAGE SPEC` makes the worksheet (SPEC:
+   the lead, a line "===", then "1. exercise | answer" lines); write the
+   slides by hand.
+6. Homework: due "before lecture N+1", the line "You may use AI where a
+   task says so…", only the lecture of its unit; update the solution in
+   courses-private (commit on main, push).
+7. `python3 _extensions/lesson/check_size.py --all | grep week-WW`: no
+   warnings; check for missing figures; remove sims and figures that no
+   session uses (and their lines in `record-all.sh` and their scenarios).
+8. One unit per commit (signed; the message describes the change).
 
 ## Tools on this Mac (2026-10-30)
 
-- Quarto is **not installed** locally (CI pins 1.10.19), so no `quarto render`
-  or `quarto typst compile`: SVG figures were exported to PNG with headless
-  Chrome at scale 200/96 (same size as before). Deno (for `record.ts`) comes
-  with Quarto, so GIF recordings also need Quarto.
-
-## Helpers (recreate if the scratchpad is gone)
-
-- add_why.py FILE MAP: MAP lines "question start<TAB>reason"; inserts
-  `    Why: reason` under each matching answer.
-- add_check.py FILE MAP: MAP blocks "=== Box title" + text; adds a `.check`
-  at the end of that box.
-- mkbook.py PAGE SPEC: makes `seminar-NN-book.qmd` from the page (Recall and
-  the activities without `Why:` lines and without "At home"), with a lead
-  and exercises from SPEC ("lead text", "===", then "1. exercise | answer"
-  lines).
-- Check sizes: `python3 _extensions/lesson/check_size.py --all | grep <path>`.
+- Quarto is **not installed** locally (CI pins 1.10.19), so no render and
+  no GIF recordings. SVG figures can be exported to PNG with headless
+  Chrome (installed) at scale 200/96.

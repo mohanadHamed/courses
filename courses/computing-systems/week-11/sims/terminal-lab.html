@@ -18,7 +18,7 @@
 <body class="theme-circuit">
 <main class="sim">
   <h1>Terminal Lab: network tools on Rami's laptop</h1>
-  <p class="hint">Rami tests <i>Pocket Quest</i> in four places. Choose the place, then run the tools: tap a command or type it (ipconfig, ping, tracert, nslookup, speedtest). The game server is <b>play.example.net</b>.</p>
+  <p class="hint">Rami tests <i>Pocket Quest</i> in four places. Choose the place, then run the tools: tap a command or type it (ipconfig, ping, speedtest). The game server is <b>play.example.net</b>.</p>
   <div class="bar" id="place"></div>
   <div class="bar cmd" id="cmds"></div>
   <pre class="term" id="term" aria-live="polite"></pre>
@@ -33,12 +33,12 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const SRV = "198.51.100.7", GW = "192.168.1.1";
-  // Each place: the laptop's address, the ping times to the gateway and the server, the loss, the DNS, the route and the speed.
+  // Each place: the laptop's address, the ping times to the gateway and the server, the loss, the DNS and the speed.
   const PLACES = {
-    "Office (cable)": { ip: "192.168.1.23", gw: [1, 2], srv: [22, 26], loss: 0, dns: true, hops: [2, 9, 11, 21, 24], down: 94, up: 38, note: "Everything is fine: low ping, no loss." },
-    "Café (far from the Wi-Fi)": { ip: "192.168.8.41", gw: [6, 160], srv: [30, 210], loss: 25, dns: true, hops: [45, 60, 70, 80, 92], down: 6, up: 1.5, note: "The ping to the gateway is already slow and jumps: the problem is the Wi-Fi in the café." },
-    "Hotel (name problem)": { ip: "10.0.4.17", gw: [3, 4], srv: [28, 31], loss: 0, dns: false, hops: [3, 10, 14, 26, 29], down: 40, up: 12, note: "ping by IP works, but nslookup fails: a DNS problem." },
-    "Home in the evening (busy route)": { ip: "192.168.0.12", gw: [2, 3], srv: [95, 120], loss: 2, dns: true, hops: [2, 8, 12, 98, 104], down: 22, up: 5, note: "The LAN and the ISP are fast; the delay starts at hop 4, outside the home." },
+    "Office (cable)": { ip: "192.168.1.23", gw: [1, 2], srv: [22, 26], loss: 0, dns: true, down: 94, up: 38, note: "Everything is fine: low ping, no loss." },
+    "Café (far from the Wi-Fi)": { ip: "192.168.8.41", gw: [6, 160], srv: [30, 210], loss: 25, dns: true, down: 6, up: 1.5, note: "The ping to the gateway is already slow and jumps: the problem is the Wi-Fi in the café." },
+    "Hotel (name problem)": { ip: "10.0.4.17", gw: [3, 4], srv: [28, 31], loss: 0, dns: false, down: 40, up: 12, note: "ping by the name fails, but ping by the IP address works: a DNS problem." },
+    "Home in the evening (busy route)": { ip: "192.168.0.12", gw: [2, 3], srv: [95, 120], loss: 2, dns: true, down: 22, up: 5, note: "The gateway answers fast, but the server is slow: the delay is outside the home, on the way to the server." },
   };
   let place = "Office (cable)";
   const ran = {};
@@ -46,8 +46,8 @@
     { q: "Task 1: In the office, run ipconfig. What is the default gateway?", ok: () => ran["Office (cable)|ipconfig"] },
     { q: "Task 2: In the office, ping play.example.net. What is the average time?", ok: () => ran["Office (cable)|ping srv"] },
     { q: "Task 3: Go to the café. Ping the gateway and the server. How many packets are lost, and how much does the time jump?", ok: () => ran["Café (far from the Wi-Fi)|ping srv"] || ran["Café (far from the Wi-Fi)|ping gw"] },
-    { q: "Task 4: In the hotel, run nslookup play.example.net, then ping 198.51.100.7. What is the problem?", ok: () => ran["Hotel (name problem)|nslookup"] && ran["Hotel (name problem)|ping ip"] },
-    { q: "Task 5: At home in the evening, run tracert play.example.net. At which hop does the delay start?", ok: () => ran["Home in the evening (busy route)|tracert"] },
+    { q: "Task 4: In the hotel, ping play.example.net, then ping 198.51.100.7. What is the problem?", ok: () => ran["Hotel (name problem)|ping name"] && ran["Hotel (name problem)|ping ip"] },
+    { q: "Task 5: At home in the evening, ping the gateway, then the server. Is the delay inside the home or outside?", ok: () => ran["Home in the evening (busy route)|ping gw"] && (ran["Home in the evening (busy route)|ping srv"] || ran["Home in the evening (busy route)|ping ip"]) },
   ];
   let ti = 0;
   const R = (a, b) => Math.round(a + Math.random() * (b - a));
@@ -77,25 +77,14 @@
         key = isGw ? "ping gw" : isSrvIp ? "ping ip" : "ping srv";
       } else if (host === GW) lines.push("Request timed out.", "(This network does not use 192.168.1.1. Run ipconfig to find the gateway.)");
       else lines.push(`Ping request could not find host ${host}.`);
-    } else if (tool === "tracert" || tool === "traceroute") {
-      if (isSrvName && !P.dns) lines.push("Unable to resolve target system name play.example.net.");
-      else if (isSrvName || isSrvIp) {
-        const ips = [gwOf(P), "10.20.0.1", "203.0.113.9", "203.0.113.77", SRV], labels = ["(router)", "(ISP)", "", "", "(game server)"];
-        lines.push(`Tracing route to ${SRV} over a maximum of 30 hops`);
-        P.hops.forEach((t, i) => lines.push(`  ${i + 1}  ${String(t + R(0, 3)).padStart(4)} ms   ${ips[i].padEnd(15)} ${labels[i]}`));
-        key = "tracert";
-      } else lines.push("Write a target, for example: tracert play.example.net");
-    } else if (tool === "nslookup") {
-      if (isSrvName) { lines.push(`Server:  ${gwOf(P)}`); if (P.dns) lines.push("Name:    play.example.net", `Address: ${SRV}`); else lines.push("*** Request to " + gwOf(P) + " timed-out"); key = "nslookup"; }
-      else lines.push("Write a name, for example: nslookup play.example.net");
     } else if (tool === "speedtest") {
       lines.push(`Download: ${P.down} Mbit/s`, `Upload:   ${P.up} Mbit/s`, `Ping:     ${R(P.srv[0], P.srv[1])} ms`); key = "speedtest";
-    } else lines.push(`'${tool}' is not a command of this lab. Try ipconfig, ping, tracert, nslookup or speedtest.`);
+    } else lines.push(`'${tool}' is not a command of this lab. Try ipconfig, ping or speedtest.`);
     out(lines);
     if (key) ran[place + "|" + key] = true;
     let m = "";
     while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
-    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: from near (ipconfig, the gateway) to far (the server, the route).";
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: from near (ipconfig, the gateway) to far (the server).";
     $("msg").textContent = m + (key ? P.note : "");
   }
   function tabs() {
@@ -103,7 +92,7 @@
     $("place").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === place));
   }
   function cmds() {
-    const L = ["ipconfig", "ping " + gwOf(PLACES[place]), "ping play.example.net", "ping " + SRV, "tracert play.example.net", "nslookup play.example.net", "speedtest"];
+    const L = ["ipconfig", "ping " + gwOf(PLACES[place]), "ping play.example.net", "ping " + SRV, "speedtest"];
     Kit.buttons($("cmds"), L.map((k) => ({ k, label: k })), (k) => run(k));
   }
   $("run").addEventListener("click", () => { run($("cmd").value); $("cmd").value = ""; });

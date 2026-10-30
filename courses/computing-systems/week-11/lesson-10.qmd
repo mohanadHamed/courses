@@ -1,0 +1,320 @@
+---
+title: "Networking Concepts: LAN, the Internet and Protocols"
+description: "What a network is made of, how devices find each other with IP addresses and the DNS, how data travels in packets with TCP and UDP, and which network quality an online game needs."
+lesson: 10
+ilos: [A2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem of an online game. Then it explains the idea behind
+it. It ends with a **Do it** task and one set of questions. Every question
+on this page has its answer: try first, then check.
+
+## Key terms
+
+{{< glossary computer-network lan internet router network-switch access-point ip-address default-gateway dns network-packet network-protocol tcp udp network-latency >}}
+
+## 10.1 Networks: from the LAN to the Internet
+
+- A **LAN** covers one place (office, lab, home); the **Internet** is the
+  worldwide network of networks.
+- **Switch:** joins the wired devices. **Access point:** gives Wi-Fi.
+  **Router:** connects the LAN through the **ISP** to the Internet.
+- At home, one box is often router, switch and access point together.
+
+![A network from the LAN to the Internet.](images/lan-map.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Wi-Fi is not the Internet: it only connects your phone to the access point.
+:::
+
+::: {.callout-note title="Do it · Your network"}
+Draw the network at your home or in your lab: the devices, the router and
+access point, and the way to the Internet. Label at least five parts.
+
+::: {.check}
+A good drawing looks like: a PC (cable), two phones (Wi-Fi), the box
+labelled "router + switch + access point", a line to the ISP, and a cloud
+labelled "Internet".
+
+- ☐ Every device is connected to the box.
+- ☐ The box has its three jobs.
+- ☐ The way to the Internet goes through the ISP.
+:::
+:::
+
+::: {.callout-tip title="Try it 1 · The devices"}
+Choose the right answer.
+
+::: {.match extra="a printer|a monitor"}
+Which device joins the cables of the office PCs?
+:   a switch
+
+    Why: A switch connects the wired devices of a LAN.
+
+Which device gives Wi-Fi to the test phones?
+:   an access point
+
+    Why: An access point connects Wi-Fi devices to the LAN.
+
+Which device connects the LAN to the ISP?
+:   a router
+
+    Why: The router connects the LAN to other networks.
+
+What is the worldwide network of networks?
+:   the Internet
+
+    Why: A LAN covers one place; the Internet connects all of them.
+:::
+:::
+
+## 10.2 Addresses and names: IP and the DNS
+
+- **IP address:** the number of a device, such as 192.168.1.23 (four
+  numbers from 0 to 255).
+- **Private** addresses (192.168…, 10…) work only inside a LAN; the router
+  has a **public** address on the Internet.
+- **Default gateway:** the router; packets to other networks go there.
+- **DNS:** turns a name (video.example.org) into an IP address
+  (203.0.113.80).
+- `ipconfig` on a PC (or the Wi-Fi details on a phone) shows the address
+  and the gateway.
+
+![IP addresses and the DNS.](images/addresses.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Never write a private address in a game as the server address: players
+outside the LAN cannot reach it.
+:::
+
+::: {.callout-note title="Do it · Find your address"}
+Phone: Settings › Wi-Fi › the network › details. PC: `ipconfig` in the
+Command Prompt. Write your IP address and gateway. Is the address private?
+
+::: {.check}
+A good answer looks like: "IP address 192.168.1.37, gateway 192.168.1.1:
+private, because it starts with 192.168." On mobile data the phone may show
+an address that starts with 10: also private, inside the network of the
+mobile company.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Addresses"}
+Choose the right answer.
+
+::: {.match extra="the switch|300.1.2.3"}
+Which of these is a private IP address?
+:   192.168.1.23
+
+    Why: Addresses that start with 192.168 work only inside a LAN.
+
+What turns play.example.net into a number?
+:   the DNS
+
+    Why: The DNS turns names into IP addresses.
+
+What is the router, seen from the laptop?
+:   the default gateway
+
+    Why: Packets to other networks go to the gateway first.
+
+Which tool shows the address of a Windows PC?
+:   ipconfig
+
+    Why: ipconfig shows the IP address and the gateway.
+:::
+:::
+
+## 10.3 Packets and protocols: TCP and UDP
+
+- Data travels in **packets**: small pieces with the addresses of the sender
+  and the receiver.
+- A **protocol** is a set of rules, for example HTTPS for web pages and
+  purchases.
+- **TCP:** every packet arrives, in order; lost ones are sent again.
+  Reliable, but can wait.
+- **UDP:** no checks. Fast; lost packets stay lost.
+- Voice in a call: UDP. A text message: TCP.
+
+![TCP and UDP with one lost packet.](images/tcp-udp.png){width=90%}
+
+{{< sim file="sims/packet-journey.html" poster="sims/packet-journey.png" title="Packet Journey: TCP or UDP?" height="720" >}}
+
+::: {.callout-warning title="Watch out!"}
+UDP is not "bad": for live positions and voice, a late packet is worse than
+a lost one.
+:::
+
+::: {.callout-note title="Do it · TCP or UDP?"}
+In **Packet Journey**, send 10 packets with TCP and with UDP, both with
+20 % loss. Then choose TCP or UDP for: a chat message, voice chat, a
+download of a new level.
+
+::: {.check}
+TCP: all 10 packets arrive, in order, but it takes longer (the lost ones
+are sent again). UDP: about 2 of 10 packets are missing, but it is fast.
+Chat message: TCP. Voice chat: UDP. Download of a level: TCP (every byte
+must arrive).
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · TCP or UDP"}
+Use Packet Journey. Choose the protocol. You can use an answer more than
+once.
+
+::: {.match extra="DNS|Wi-Fi"}
+Player positions in a race, 30 per second.
+:   UDP
+
+    Why: The next position replaces a lost one; waiting would make the game lag.
+
+A purchase of gems.
+:   TCP
+
+    Why: Every byte of a purchase must arrive.
+
+Voice chat.
+:   UDP
+
+    Why: A late voice packet is worse than a lost one.
+
+A chat message.
+:   TCP
+
+    Why: Every letter must arrive, in the right order.
+:::
+:::
+
+## 10.4 Network quality for games
+
+- **Latency** (ping): the time there and back, in ms.
+- **Jitter:** how much the ping changes. **Packet loss:** packets that
+  never arrive. **Bandwidth:** data per second (Mbit/s).
+- An action game: ping below about 50 ms, little jitter, almost no loss; a
+  few Mbit/s is enough.
+- **ping** measures latency and loss: ping the gateway (near), then the
+  server (far).
+- Rami's race: cable 22 ms; Wi-Fi far away 30–180 ms with 5 % loss; 4G
+  60 ms, steady.
+
+![Network quality for an online game.](images/net-quality.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+More bandwidth does not fix lag from a weak Wi-Fi signal.
+:::
+
+::: {.callout-note title="Do it · Compare"}
+Check the ping of an online game (or a speed test) near the router and far
+from it (or on mobile data). Write both values.
+
+::: {.check}
+A good answer looks like: "Near the router: 18 ms. Far from it: 45–120 ms,
+and it jumps. The far place has a higher latency and more jitter, so the
+game would lag."
+
+- ☐ Two ping values.
+- ☐ One sentence about latency or jitter.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Quality"}
+Choose the right answer.
+
+::: {.match extra="the colour of the cable|1000 ms"}
+What is the time of a packet there and back?
+:   latency
+
+    Why: Latency, the ping, is measured in milliseconds.
+
+How much the ping changes from packet to packet?
+:   jitter
+
+    Why: A ping of 30, 180, 40 ms has high jitter.
+
+What is a good ping for an action game?
+:   below about 50 ms
+
+    Why: Low latency keeps the game responsive.
+
+Which connection usually has the lowest ping?
+:   a cable
+
+    Why: A cable has no radio signal that can get weak.
+:::
+:::
+
+## Game challenge: Net Fixer {.challenge}
+
+Work alone. Use every section of today.
+
+Byte Bay moves into a **new office**: **four PCs** with cables, test phones
+on **Wi-Fi**, a way to the **Internet**, a phone that must find
+**play.example.net**, a PC address, and a game that sends **30 positions
+per second** and **purchases** of gems.
+
+{{< sim file="sims/net-fixer.html" poster="sims/net-fixer.png" title="Net Fixer: a network for Byte Bay" kind="game" height="620" >}}
+
+::: {.callout-tip title="Try it 5 · The new office"}
+Four PCs, Wi-Fi phones, play.example.net, positions and purchases. Choose
+the right answer.
+
+::: {.match extra="a hard disk|Wi-Fi"}
+What joins the four PCs with cables?
+:   a switch
+
+    Why: A switch connects the wired devices of the LAN.
+
+What finds the IP address of play.example.net?
+:   the DNS
+
+    Why: The DNS turns the name into an address.
+
+What carries 30 positions per second?
+:   UDP
+
+    Why: Fast, and the next position replaces a lost one.
+
+What carries a purchase safely?
+:   HTTPS over TCP
+
+    Why: Every byte must arrive, and nobody may read it.
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Read the numbers (harder)"}
+Choose the right answer.
+
+::: {.match extra="public|0 %"}
+Is 10.0.4.17 public or private?
+:   private
+
+    Why: Addresses that start with 10 are private.
+
+Sent 8, received 6: what is the packet loss?
+:   25 %
+
+    Why: 2 lost of 8 is a quarter.
+
+Ping 30, 180, 40, 210 ms: what is the problem?
+:   high jitter
+
+    Why: The ping changes a lot from packet to packet.
+
+Ping 24 ms, 0 % loss: is the network good for a race?
+:   yes, good
+
+    Why: Low latency and no loss.
+:::
+:::
+
+## Summary {.summary}
+
+- A LAN joins the devices of one place; the router connects it to the
+  Internet through the ISP.
+- Devices have IP addresses (private in a LAN); the DNS turns names into
+  addresses.
+- Data travels in packets: TCP when every byte matters, UDP when speed
+  matters.
+- Games need low latency, low jitter and no loss more than bandwidth.

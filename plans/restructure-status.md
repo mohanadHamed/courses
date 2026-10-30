@@ -84,11 +84,16 @@ The teacher's notes:
 - Game Math renumbering: lectures, seminars, practice sessions and homework
   renamed and every reference mapped; `schedule.yml` rewritten (15 weeks:
   12 units + 3 practice weeks).
+- Game Math unit 2: Lecture 2 "Vector Operations and the Dot Product" (old
+  2 + 3; 7 sections; old 2.5 speed folded into 2.4, the vision cone left to
+  the Game challenge story and the seminar), new Seminar 2 "Vector Exercises
+  in Game Scenarios" (Raft Rush crossing; a guard's vision cone with Dot
+  Lab), Homework 2 unchanged.
 
 ### Still to do (in this order)
 
 1. **Game Math**
-   - Units 2, 3 and 4: merge the two lectures of the week and write the new seminar.
+   - Units 3 and 4: merge the two lectures of the week and write the new seminar.
    - Lecture 10 (week-11): merge old 13 + 14 (see the design).
    - Seminar 10 "Probability in Loot Drops and Critical Hits" (week-11):
      three short activities: theory and experiment with Roll Lab (old 13.6),

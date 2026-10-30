@@ -1,12 +1,12 @@
 ---
-title: "Vector Operations: Addition, Scaling, Magnitude and Normalization"
+title: "Vector Operations and the Dot Product"
 subtitle: "Lecture 2"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary vector-addition resultant-vector scalar-multiplication magnitude pythagorean-theorem unit-vector normalization speed >}}
+{{< glossary vector-addition scalar-multiplication magnitude unit-vector normalization dot-product perpendicular angle-between-vectors >}}
 
 ## 2.1 Two moves at once: adding vectors
 
@@ -58,17 +58,6 @@ c) (0, 0)
 ![](images/scaling.png)
 :::
 ::::
-
-## Example · Dash and slow motion
-
-A character runs with v = (3, 1) per frame.
-**What is its velocity with a dash (× 2) and in slow motion (× 0.5)?**
-
-::: {.reveal}
-1. Dash: 2 × (3, 1) = **(6, 2)**, the same direction.
-2. Slow motion: 0.5 × (3, 1) = **(1.5, 0.5)**.
-3. Thrown back by a wall: −1 × (3, 1) = **(−3, −1)**.
-:::
 
 ## Live demo · Vector Lab
 
@@ -132,47 +121,11 @@ c) 7
 - A unit vector has the length 1, so it shows only a direction.
 - To normalize a vector, divide it by its magnitude.
 - The zero vector has no direction, so it cannot be normalized.
+- A velocity is speed × unit direction, so every direction gets the same speed.
 - **Do it:** In Vector Lab, show the unit vector of (6, 8). What is it?
 :::
 ::: {.column width="50%"}
 ![](images/unit-vector.png)
-:::
-::::
-
-## Example · The arrow to the goal
-
-The player is at (2, 1), and the goal at (8, 9).
-**Which unit vector points to the goal?**
-
-::: {.reveal}
-1. The vector to the goal is (8, 9) − (2, 1) = (6, 8).
-2. Its magnitude is √(36 + 64) = 10.
-3. The unit vector is (6, 8) ÷ 10 = **(0.6, 0.8)**.
-:::
-
-## Try it 4 · Unit vectors
-
-a) What is the unit vector of (0, −7)?
-b) What is the magnitude of every unit vector?
-c) The player stands on the goal. Why can the game not normalize the vector to the goal?
-
-::: {.answer}
-a) (0, −1)
-b) 1
-c) It is the zero vector, which has no direction.
-:::
-
-## 2.5 Same speed in every direction
-
-:::: {.columns}
-::: {.column width="50%"}
-- The input (1, 1) is longer than 1, so diagonal moves are too fast.
-- The fix: velocity = speed × unit direction.
-- The speed is the magnitude of the velocity.
-- **Do it:** In Fair Speed, race with Normalize off and on. Which runner wins each time?
-:::
-::: {.column width="50%"}
-![](images/diagonal.png)
 :::
 ::::
 
@@ -187,44 +140,159 @@ A missile at (2, 1) flies to a target at (8, 9) with the speed 5.
 3. The velocity is 5 × (0.6, 0.8) = **(3, 4)**, and its speed is 5.
 :::
 
-## Live demo · Fair Speed
+## Try it 4 · Unit vectors
 
-{{< sim file="sims/fair-speed.html" poster="sims/fair-speed.png" title="Fair Speed: the diagonal bug" kind="game" task="**Show:** race the straight and the diagonal runner, first with Normalize off, then on. **Ask:** why does the diagonal runner win without normalizing?" >}}
-
-## Try it 5 · Fair speed
-
-a) The speed is 4 and the input is (1, 1), without the fix. Is the player faster or slower than 4?
-b) A missile uses 5 × (6, 8) without normalizing. What is its speed?
-c) What is the speed of the velocity (3, 4)?
+a) What is the unit vector of (0, −7)?
+b) What is the magnitude of every unit vector?
+c) The player stands on the goal. Why can the game not normalize the vector to the goal?
 
 ::: {.answer}
-a) faster, because (4, 4) is longer than 4
-b) 50
-c) 5
+a) (0, −1)
+b) 1
+c) It is the zero vector, which has no direction.
 :::
 
-## Game challenge · Raft Rush
+## 2.5 The dot product
 
-{{< sim file="sims/raft-rush.html" poster="sims/raft-rush.png" title="Raft Rush: paddle + current" kind="game" task="**The story:** a raft crosses a river that pushes it 3 units per frame. **Play:** choose one paddle vector of length 5 or less, and land on the dock." >}}
+:::: {.columns}
+::: {.column width="50%"}
+- The dot product turns two vectors into one number.
+- Multiply the x-parts, multiply the y-parts, and add the results.
+- In 3D, the game adds the product of the z-parts too.
+- **Do it:** In GeoGebra, type u = Vector((2, 3)), v = Vector((4, −1)) and u * v. What is the result?
+:::
+::: {.column width="50%"}
+![](images/dot-steps.png)
+:::
+::::
 
-## Try it 6 · Plan the crossing (harder)
+## Example · Does the wind help?
 
-The facts: the current is (3, 0) per frame, and the paddle can be at most 5 long. The jetty is at (4, 0), and the dock at (4, 8). The raft has 2 frames.
+A boat moves in the direction (1, 0). The wind is (3, 1).
+**What is the dot product, and does the wind help?**
 
-a) The player paddles (0, 4). What is the real move per frame?
-b) Which paddle vector takes the raft straight to the dock?
-c) Is that paddle vector allowed? What is its magnitude?
+::: {.reveal}
+1. The x-parts give 1 × 3 = 3.
+2. The y-parts give 0 × 1 = 0.
+3. The dot product is 3 + 0 = **3**. It is positive, so the wind helps.
+:::
+
+## Try it 5 · Compute it
+
+a) What is (2, 3) · (4, −1)?
+b) What is (1, 2, 3) · (4, 0, −1)?
+c) Is the result of a dot product a vector or a number?
 
 ::: {.answer}
-a) (3, 4)
-b) (−3, 4)
-c) Yes: its magnitude is 5.
+a) 5
+b) 1
+c) one number
+:::
+
+## 2.6 In front or behind?
+
+:::: {.columns}
+::: {.column width="50%"}
+- The forward vector f shows where a guard looks.
+- The vector from the guard to the cat is d = C − D.
+- A positive dot product of f and d means in front, and a negative one means behind.
+- Zero means exactly to the side: the vectors are perpendicular.
+- **Do it:** In Dot Lab, make the dot product zero. Where does the orange arrow point?
+:::
+::: {.column width="50%"}
+![](images/dot-sign.png)
+:::
+::::
+
+## Example · In front or behind?
+
+A dog at D = (2, 2) faces f = (1, 0).
+**Is a cat at (5, 3) in front of the dog, and is a cat at (0, 4)?**
+
+::: {.reveal}
+1. Cat at (5, 3): d = (3, 1), so f · d = 3. It is **in front**.
+2. Cat at (0, 4): d = (−2, 2), so f · d = −2. It is **behind**.
+3. A cat at (2, 6) gives 0: it is exactly to the side.
+:::
+
+## Live demo · Dot Lab
+
+{{< sim file="sims/dot-lab.html" poster="sims/dot-lab.png" title="Dot Lab: two vectors, one number" task="**Show:** turn the orange arrow slowly around the green one. **Ask:** when does the dot product change its sign?" >}}
+
+## Try it 6 · In front or behind?
+
+The facts: a guard dog at D = (2, 2) faces f = (1, 0).
+
+a) A cat is at (2, 6). Where is it?
+b) The dot product of two vectors is negative. Is the angle more or less than 90°?
+c) A player at (1, 1) moves (−1, 2) to the treasure at (4, 5). Is the player moving towards it?
+
+::: {.answer}
+a) exactly to the side
+b) more than 90°
+c) Yes: the dot product is 5.
+:::
+
+## 2.7 How big is the angle?
+
+:::: {.columns}
+::: {.column width="50%"}
+- First normalize both vectors.
+- For unit vectors, the dot product is a number between −1 and 1.
+- The table gives the angle: 1 is 0°, 0.5 is 60°, 0 is 90° and −1 is 180°.
+- **Do it:** In Dot Lab, show unit vectors and make 60°. What is the dot product?
+:::
+::: {.column width="50%"}
+![](images/dot-angles.png)
+:::
+::::
+
+## Example · Between two values
+
+A guard faces (1, 0). The cat is in the direction (3, 4).
+**About how big is the angle?**
+
+::: {.reveal}
+1. The unit vector to the cat is (3, 4) ÷ 5 = (0.6, 0.8).
+2. The dot product with (1, 0) is 0.6.
+3. 0.6 is between 0.5 (60°) and 0.71 (45°): **between 45° and 60°**.
+:::
+
+## Try it 7 · The angle
+
+a) Two unit vectors have the dot product 0.5. What is the angle between them?
+b) What is the angle between (2, 0) and (0, 7)?
+c) The dot product of two unit vectors is −1. What is the angle?
+
+::: {.answer}
+a) 60°
+b) 90°
+c) 180°
+:::
+
+## Game challenge · Shadow Cat
+
+{{< sim file="sims/shadow-cat.html" poster="sims/shadow-cat.png" title="Shadow Cat: find the bush the dog cannot see" kind="game" task="**The story:** a cat sneaks past a guard dog that sees 60° to each side and 5 units deep. **Play:** in each round, tap the bush the dog cannot see." >}}
+
+## Try it 8 · The dog turns (harder)
+
+The facts: the dog is at (6, 4). Bush A is at (10, 7), bush B at (9, 8) and bush C at (6, 9).
+
+a) The dog looks right, f = (1, 0). Which bush is safe?
+b) The dog turns and looks up, f = (0, 1). What is the dot product of the unit vectors for bush C?
+c) Is any bush safe after the turn?
+
+::: {.answer}
+a) C: its dot product is 0.
+b) 1
+c) No: all three are seen.
 :::
 
 ## Summary
 
-- The game adds vectors component by component, head to tail.
-- Scaling multiplies both components by k, and a negative k turns the arrow around.
+- The game adds vectors part by part and scales both parts by the same number.
 - The magnitude is the length of the arrow: √(x² + y²).
-- A unit vector has the length 1; normalizing divides a vector by its magnitude.
-- Velocity is speed × unit direction, so every direction has the same speed.
+- A unit vector has the length 1, and velocity is speed × unit direction.
+- The dot product multiplies matching parts and adds them into one number.
+- A positive dot product means in front, zero means to the side, and negative means behind.
+- For unit vectors, the dot product gives the angle from a table.

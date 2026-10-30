@@ -1,0 +1,153 @@
+---
+title: "Vector Exercises in Game Scenarios"
+description: "Seminar worksheet · Plan a raft crossing with addition, scaling, the magnitude and a unit vector, then decide what a guard sees with the dot product and the angle."
+seminar: 2
+ilos: [A1, B1]
+format: lesson-typst
+---
+
+::: {.lead}
+In Lecture 2 you learned to add, subtract and scale vectors, to find their
+magnitude, to make a unit vector and a velocity, and to use the dot product
+and the angle. Today you use them in two game problems: a raft crossing and
+a guard's vision cone. There are no new ideas: two short problems. Do each
+one alone. The results of the activities are at the end of this worksheet.
+:::
+
+## Recall
+
+- Add vectors part by part; subtract to find a missing move. Scaling
+  multiplies both parts by the same number.
+- The magnitude is the length: |(3, 4)| = 5. A unit vector has the length 1,
+  and velocity = speed × unit direction.
+- The dot product is one number: positive in front, zero to the side,
+  negative behind. For unit vectors, 0.5 means 60°.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="(4, 4)|7"}
+What is (1, 3) + (3, 1)?
+:   (4, 4)
+
+What is the magnitude of (6, 8)?
+:   10
+
+Two unit vectors have the dot product 0. What is the angle between them?
+:   90°
+:::
+:::
+
+## Activity 1 · Plan the raft crossing
+
+In *Raft Rush*, a river is 8 units wide. The current pushes the raft
+c = (3, 0) per frame. The player chooses one paddle vector, with a
+magnitude of **at most 5**. In each frame the raft moves by paddle +
+current. The jetty is at (4, 0). Dock 1 is straight across at (4, 8);
+dock 2 is at (10, 8). The raft has 2 frames.
+
+![Head to tail: the paddle and the current make the real move.](images/vector-add.png){width=78%}
+
+{{< sim file="sims/raft-rush.html" poster="sims/raft-rush.png" title="Raft Rush: paddle + current" kind="game" >}}
+
+::: {.callout-note title="Activity 1 · Two crossings · 25 min"}
+1. The player paddles (0, 4). Write the real move per frame and its speed.
+2. Which real move per frame takes the raft from the jetty to dock 1 in 2
+   frames? Which paddle vector gives it? Is it allowed?
+3. Do the same for dock 2.
+4. The player paddles at full speed 5 in the direction (0.6, 0.8). Write the
+   paddle vector and the real move.
+5. Check your plans in **Raft Rush**.
+
+*Your product:* two paddle vectors with their magnitudes, and one sentence:
+which dock is easier to reach?
+
+::: {.check}
+1. (0, 4) + (3, 0) = (3, 4); its speed is √(9 + 16) = 5.
+2. Dock 1 needs (0, 8) in 2 frames: (0, 4) per frame. Paddle = (0, 4) − (3, 0)
+   = (−3, 4); its magnitude is 5: allowed, just.
+3. Dock 2 needs (6, 8) in 2 frames: (3, 4) per frame. Paddle = (3, 4) − (3, 0)
+   = (0, 4); its magnitude is 4: allowed.
+4. Paddle 5 × (0.6, 0.8) = (3, 4); real move (3, 4) + (3, 0) = (6, 4).
+
+Dock 2 is easier: the current already helps the raft along x.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · The raft"}
+The current is (3, 0) per frame, and the paddle has a magnitude of at most 5.
+Choose the right answer.
+
+::: {.match extra="(3, 0)|(0, 8)"}
+The player paddles (0, 2). What is the real move per frame?
+:   (3, 2)
+
+The raft must move (0, 4) per frame. Which paddle vector does it need?
+:   (−3, 4)
+
+Is the paddle vector (−4, 4) allowed?
+:   no
+:::
+:::
+
+## Activity 2 · What does the guard see?
+
+A museum guard stands at G = (4, 4) and faces f = (1, 0). It sees a point
+when the point is at most 60° to the side (f̂ · d̂ ≥ 0.5) and at most 5 units
+away. Four visitors stand at (8, 7), (7, 8), (4, 9) and (1, 0).
+
+![The vision cone: 60° to each side of f, and at most 5 units away.](images/vision-cone.png){width=80%}
+
+{{< sim file="sims/dot-lab.html" poster="sims/dot-lab.png" title="Dot Lab: two vectors, one number" >}}
+
+::: {.callout-note title="Activity 2 · Seen or not? · 25 min"}
+1. For each visitor, write d = P − G and its magnitude.
+2. Normalize d and compute f̂ · d̂. Is the visitor in front, to the side or
+   behind?
+3. Decide: seen or not seen? Give the reason.
+4. Check one visitor in **Dot Lab**: draw f and d and read the dot product.
+
+*Your product:* a table with four rows: d, |d|, f̂ · d̂ and "seen" or "not
+seen".
+
+::: {.check}
+(8, 7): d = (4, 3), |d| = 5, d̂ = (0.8, 0.6), f̂ · d̂ = 0.8: in front, seen.
+(7, 8): d = (3, 4), |d| = 5, f̂ · d̂ = 0.6: seen. (4, 9): d = (0, 5),
+f̂ · d̂ = 0: exactly to the side, not seen. (1, 0): d = (−3, −4),
+f̂ · d̂ = −0.6: behind, not seen.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · The guard"}
+The guard is at (4, 4) and faces f = (1, 0). It sees 60° to each side
+(f̂ · d̂ ≥ 0.5) and 5 units deep. Choose the right answer.
+
+::: {.match extra="0.6|in front"}
+A visitor at (7, 4). What is f̂ · d̂?
+:   1
+
+A visitor at (2, 4). Is it in front or behind?
+:   behind
+
+A visitor at (10, 4). Is it seen?
+:   no, too far
+:::
+:::
+
+## Exercises
+
+1. A boat paddles (0, 3) per frame, and the river pushes it (2, 0) per frame. Where is it after 3 frames, from (0, 0)?
+2. The current is (−2, 0). Which paddle vector gives the real move (0, 5)? Is its magnitude more than 5?
+3. A missile at (0, 0) flies to a target at (6, 8) with the speed 5. What is its velocity?
+4. A guard at (0, 0) faces (0, 1). It sees 60° to each side and 5 units deep. Is a thief at (3, 4) seen?
+5. A guard faces (1, 0). The dot product of f and the vector to a visitor is −2. Where is the visitor?
+
+## Answers to the exercises
+
+::: {.answers}
+1. The real move is (2, 3) per frame; after 3 frames the boat is at (6, 9).
+2. (0, 5) − (−2, 0) = (2, 5); 4 + 25 = 29 is more than 25, so yes, the magnitude is more than 5.
+3. (6, 8) has the magnitude 10 and the unit vector (0.6, 0.8); the velocity is 5 × (0.6, 0.8) = (3, 4).
+4. d̂ = (0.6, 0.8); f̂ · d̂ = 0.8 ≥ 0.5 and |d| = 5: seen.
+5. Behind the guard: the dot product is negative.
+:::

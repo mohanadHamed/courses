@@ -1,61 +1,87 @@
 ---
 title: "Generative AI Tools: What They Do Well and Where They Fail"
-description: "How generative AI writes, the five weak spots of AI answers, and when to use an AI assistant, a search engine or a spreadsheet."
-lesson: 3
+description: "What generative AI does well, the five weak spots of AI answers, and when to use an AI assistant, a search engine or a spreadsheet."
+lesson: 2
 ilos: [A1, C4]
 format: lesson-html
 ---
 
-This page is the short, interactive version of the lesson notes (PDF). Each
-section has a **simulator** to try, a **Lab task** for the lab computer and
-one set of questions.
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem at study or at work. Then it explains one idea. It
+ends with a **Lab task** and one set of questions. Every question on this
+page has its answer: try first, then check.
 
 ## Key terms
 
-{{< glossary generative-ai prompt training-data hallucination knowledge-cutoff ai-bias search-engine >}}
+{{< glossary ai-assistant generative-ai prompt training-data hallucination knowledge-cutoff ai-bias search-engine >}}
 
-## 3.1 How generative AI writes
+## 2.1 What AI does well
 
 - An AI assistant learned from a huge amount of text: its **training data**.
-- It writes **one likely word after another**. It does not look up facts.
-- **Likely is not the same as true.**
-- Example: "The shop opens at …": "8" is 45% likely, "9" is 40%. The AI
-  writes "8 a.m.", but the shop opens at 9 a.m.
-- The AI does not always choose the most likely word. So the same prompt
-  can give a different answer each time.
-- Some AI assistants also search the web and show links. Open them.
+- It writes **likely words**. Likely is not always true, and the same prompt
+  can give a different answer.
+- Five good jobs for AI:
+  - **draft:** the first version of an e-mail, a letter, a notice;
+  - **summarize:** the main points of a long text;
+  - **ideas:** many ideas in seconds;
+  - **rewrite:** shorter, simpler or more polite;
+  - **translate:** a short text into another language.
+- Example: Omar sums up a report, drafts a notice and gets 5 titles. Ten
+  minutes instead of 40. He checks every answer.
 
-![How generative AI writes.](images/genai-how.png){width=100%}
+![What AI does well: five good jobs.](images/ai-good-jobs.png){width=100%}
 
-{{< sim file="sims/next-word.html" poster="sims/next-word.png" title="Next Word: how an AI writes a sentence" height="640" >}}
+::: {.callout-note title="Lab task · Two good jobs"}
+Ask an AI assistant: *Give me 5 ideas for a one-day class trip in Jordan.*
+Then ask: *Sum up this text in 3 points:* and paste one paragraph of a news
+page. Copy both answers into Word. Make the best idea **bold**.
 
-::: {.callout-note title="Lab task · Ask the same prompt twice"}
-Ask an AI assistant: *Write one sentence about the city of Amman.* Start a
-new chat and ask again. Copy both answers into Word. Are they the same?
+::: {.check}
+A good result looks like: five different places for one day, for example
+Jerash, Ajloun, the Dead Sea, Petra and Wadi Rum, and three short points.
+
+- ☐ Every point of the summary is really in the paragraph.
+- ☐ Your best idea is in bold.
+:::
 :::
 
-::: {.callout-tip title="Try it 1 · How AI writes"}
-Choose the right answer.
+::: {.callout-tip title="Try it 1 · Good jobs for AI"}
+Choose the right answer. You can use an answer more than once.
 
-::: {.match extra="it reads the shop's records|it always gives the same answer"}
+::: {.match extra="a search|a backup"}
+"Give me the main points of this 3-page report." Which good job is it?
+:   a summary
+
+    Why: A summary keeps the main points of a long text.
+
+"Write the first version of a thank-you letter." Which good job is it?
+:   a draft
+
+    Why: A draft is a first version that you check and change.
+
+"Give me 10 names for our new café." Which good job is it?
+:   ideas
+
+    Why: Many ideas in seconds is a good job for AI.
+
+"Make this e-mail shorter and more polite." Which good job is it?
+:   a rewrite
+
+    Why: The same text in other words is a rewrite.
+
 What does an AI assistant learn from?
 :   its training data
 
-How does an AI write a sentence?
-:   one likely word after another
+    Why: It learned from a huge amount of text: its training data.
 
-"9" is 40% likely and "8" is 45% likely. Which word is more likely?
-:   8
-
-You ask the same prompt again. What can happen?
+You ask the same prompt the next day. What can happen?
 :   a different answer
 
-Is a likely sentence always true?
-:   no, check it
+    Why: The AI writes likely words, not always the same ones.
 :::
 :::
 
-## 3.2 Five weak spots of AI answers
+## 2.2 Five weak spots of AI answers
 
 1. **Invented facts:** a book, a name, an award or a link that does not
    exist. This is a **hallucination**.
@@ -79,6 +105,12 @@ else, or it may not exist.
 Ask an AI assistant: *Give me 3 books about Microsoft Excel, with the author
 and the year.* Search for each title in a search engine. Write "found" or
 "not found" for each book.
+
+::: {.check}
+A typical result: one or two books are found, but often one book is not
+found, or it has another author or year. A book that no search finds is a
+hallucination: the AI invented it.
+:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Which weak spot?"}
@@ -88,24 +120,36 @@ Choose the weak spot. You can use an answer more than once.
 The AI names a book that no library or shop has. Which weak spot?
 :   an invented fact
 
+    Why: The book does not exist: the AI invented it.
+
 It is 2026. The AI says the newest version of an app is from 2021. Which weak spot?
 :   old information
+
+    Why: The AI learned from data up to a date: its knowledge cutoff.
 
 The AI says that 12 pens at 0.25 JD cost 3.50 JD. Which weak spot?
 :   a wrong number
 
+    Why: 12 × 0.25 = 3.00 JD, not 3.50 JD.
+
 The AI writes a job advert: "We need a nurse. She must be kind." Which weak spot?
 :   bias
+
+    Why: It repeats the unfair idea that every nurse is a woman.
 
 You ask for an e-mail about "the homework", but you do not say which homework. Which weak spot?
 :   missing context
 
+    Why: The AI does not know your class unless you tell it.
+
 What is the name for an answer that sounds sure but is invented?
 :   a hallucination
+
+    Why: A hallucination sounds sure, but it is invented or wrong.
 :::
 :::
 
-## 3.3 AI, search engine or spreadsheet?
+## 2.3 AI, search engine or spreadsheet?
 
 | Tool | Best for | Example |
 |---|---|---|
@@ -126,6 +170,12 @@ What is the name for an answer that sounds sure but is invented?
 Ask an AI assistant for the opening hours of the library of Al-Israa
 University. Then find them on the university website. Which answer do you
 trust, and why?
+
+::: {.check}
+A good answer: "I trust the university website. It is the official source,
+and it is up to date. The AI gave other hours: they may be old or
+invented."
+:::
 :::
 
 ::: {.callout-tip title="Try it 3 · Which tool?"}
@@ -135,17 +185,27 @@ Choose the best tool. You can use an answer more than once.
 Which tool is best for the last day to apply for a scholarship?
 :   a search engine
 
+    Why: A date that can change needs the official website of today.
+
 Which tool is best for the average of 30 test marks?
 :   a spreadsheet
+
+    Why: A spreadsheet calculates exactly.
 
 Which tool is best for 5 ideas for a class trip?
 :   an AI assistant
 
+    Why: Ideas are a good job for AI.
+
 Which tool is best for today's price of the dollar?
 :   a search engine
 
+    Why: AI may know only an old price.
+
 You have an AI draft. Which step comes after "read"?
 :   check
+
+    Why: The five steps are ask, read, check, edit, use.
 :::
 :::
 
@@ -172,24 +232,34 @@ Choose the right answer.
 The AI writes "a rise of 1 200 JD". What is the real rise?
 :   700 JD
 
+    Why: 4 200 − 3 500 = 700 JD.
+
 The AI writes "We won the Best Shop award in 2025." What should Omar do?
 :   delete the sentence
+
+    Why: The records show no award: the sentence is invented.
 
 The AI writes "The shop is open every day." Why is it wrong?
 :   it is closed on Friday
 
+    Why: The shop is open Saturday to Thursday only.
+
 "We welcome Lina and Sami." What should Omar do?
 :   keep it: it matches the records
 
+    Why: Lina and Sami are the new staff in the records.
+
 Which weak spot is the award sentence?
 :   an invented fact
+
+    Why: The award does not exist: it is a hallucination.
 :::
 :::
 
 ## Summary {.summary}
 
 - Generative AI learned from training data and writes likely words.
-- Likely is not true: the same prompt can give different answers.
+- AI does five jobs well: drafts, summaries, ideas, rewriting, translation.
 - Five weak spots: invented facts, old information, wrong numbers, bias, missing context.
 - Use AI for drafts and ideas, a search engine for current facts, a spreadsheet for numbers.
 - With AI: ask, read, check, edit, use. You are responsible for what you use.

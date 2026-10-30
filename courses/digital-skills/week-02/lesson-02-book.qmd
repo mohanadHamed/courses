@@ -1,7 +1,7 @@
 ---
 title: "Generative AI Tools: What They Do Well and Where They Fail"
-description: "Lesson notes · How generative AI writes, the five weak spots of AI answers, and when to use an AI assistant, a search engine or a spreadsheet."
-lesson: 3
+description: "Lesson notes · What generative AI does well, the five weak spots of AI answers, and when to use an AI assistant, a search engine or a spreadsheet."
+lesson: 2
 ilos: [A1, C4]
 format: lesson-typst
 ---
@@ -10,64 +10,75 @@ format: lesson-typst
 Omar works in the office of Sunrise Company. Every month he writes a short
 newsletter about the shop. This month he asks an AI assistant. In ten
 seconds, the AI writes a nice text. It looks perfect. But three sentences
-are wrong, and Omar does not see them. In this lesson you learn how these
-tools write, where they fail, and when another tool is better.
+are wrong, and Omar does not see them. In this lesson you learn what these
+tools do well, where they fail, and when another tool is better.
 :::
 
 ## Key terms
 
-{{< glossary generative-ai prompt training-data hallucination knowledge-cutoff ai-bias search-engine >}}
+{{< glossary ai-assistant generative-ai prompt training-data hallucination knowledge-cutoff ai-bias search-engine >}}
 
-## 3.1 How generative AI writes
+## 2.1 What AI does well
 
-Sara asks an AI assistant the same question two times. She gets two
-different answers. Why?
+Omar has a busy Monday. The manager sends a long report, and the shop needs
+a notice for the customers. An AI assistant can help with both jobs.
 
-An AI assistant learned from a huge amount of text: books, websites and
-articles. This text is its **training data**. From it, the AI learned which
-words often come together.
+How does it work? Two ideas are enough for this course:
 
-When you send a prompt, the AI writes **one likely word after another**
-(@fig-how). It does not look up a fact in a list. It chooses a word that
-often comes next. Often the likely word is also the true word. But not
-always.
+- An AI assistant learned from a huge amount of text: its **training
+  data**.
+- It writes **likely words**. A likely sentence often sounds right, but it
+  is not always true. The same prompt can also give a different answer.
 
-![How generative AI writes: one likely word after another.](images/genai-how.png){#fig-how width=100%}
-
-::: {.callout-important title="Definition 3.1 — Generative AI"}
-**Generative AI** makes new text or pictures from a prompt. It chooses
-likely words. Likely is not the same as true.
+::: {.callout-important title="Definition 2.1 — Generative AI"}
+**Generative AI** makes new text or pictures from a prompt. It writes a
+first version very fast. Likely is not the same as true, so you check it.
 :::
 
-The AI does not always choose the most likely word. So the same prompt can
-give a different answer each time. Some AI assistants also search the web
-and show links to their sources. Then you can open a link and read the real
-page.
+AI assistants do five jobs well (@fig-good):
 
-::: {.callout-note title="Example 3.1 — The shop opens at …"}
-The shop of Sunrise Company opens at 9 a.m. The AI does not read the shop's
-records.
+1. **Draft:** the first version of an e-mail, a letter or a notice.
+2. **Summarize:** the main points of a long text.
+3. **Ideas:** many ideas in seconds, for example titles for a poster.
+4. **Rewrite:** the same text, shorter, simpler or more polite.
+5. **Translate:** a short text into another language.
 
-1. The AI writes "The shop opens at" and looks for the next word.
-2. "8" is 45% likely, "9" is 40% likely, "10" is 15% likely.
-3. The AI chooses "8". The sentence "The shop opens at 8 a.m." sounds right,
-   but it is wrong.
+![What AI does well: five good jobs.](images/ai-good-jobs.png){#fig-good width=100%}
+
+::: {.callout-note title="Example 2.1 — Omar's Monday morning"}
+1. **Summarize.** Omar asks: "Give me the main points of this report in 3
+   bullet points." He gets them in seconds. He checks one number in the
+   report.
+2. **Draft.** He asks: "Write a short notice for customers: the shop is
+   closed on Saturday 5 December for a training day." He checks the day and
+   the date.
+3. **Ideas.** He asks: "Give me 5 titles for this notice." He chooses one
+   and changes one word.
+
+The three jobs take 10 minutes instead of 40. Omar read and checked every
+answer.
 :::
 
-{{< sim file="sims/next-word.html" poster="sims/next-word.png" title="Next Word: how an AI writes a sentence" height="640" >}}
-
-::: {.callout-note title="Lab task · Ask the same prompt twice"}
+::: {.callout-note title="Lab task · Two good jobs"}
 1. Open an AI assistant that the university allows, for example
    `copilot.microsoft.com`.
-2. Type: *Write one sentence about the city of Amman.*
-3. Start a new chat and type the same prompt again.
-4. Copy both answers into a Word document.
+2. Ask for ideas: *Give me 5 ideas for a one-day class trip in Jordan.*
+3. Ask for a summary: *Sum up this text in 3 points:* and paste one
+   paragraph of a news page.
+4. Copy both answers into Word. Make the best idea **bold**.
 
-*Your result:* two answers, and one sentence: are they the same or
-different?
+*Your result:* five ideas, one in bold, and a summary in three points.
+
+::: {.check}
+A good result looks like: five different places for one day, for example
+Jerash, Ajloun, the Dead Sea, Petra and Wadi Rum, and three short points.
+
+- ☐ Every point of the summary is really in the paragraph.
+- ☐ Your best idea is in bold.
+:::
 :::
 
-## 3.2 Five weak spots of AI answers
+## 2.2 Five weak spots of AI answers
 
 Omar's newsletter says that the shop "won the Best Shop award". It did not.
 AI answers sound sure, even when they are wrong. They have five weak spots
@@ -85,12 +96,12 @@ AI answers sound sure, even when they are wrong. They have five weak spots
 5. **Missing context.** The AI does not know your class, your job or your
    company, unless you tell it.
 
-::: {.callout-important title="Definition 3.2 — Hallucination"}
+::: {.callout-important title="Definition 2.2 — Hallucination"}
 A **hallucination** is an AI answer that sounds sure, but is invented or
 wrong.
 :::
 
-::: {.callout-note title="Example 3.2 — Twelve pens"}
+::: {.callout-note title="Example 2.2 — Twelve pens"}
 Omar asks: "How much are 12 pens at 0.25 JD each?" The AI answers: "12 pens
 cost 3.50 JD."
 
@@ -114,9 +125,15 @@ not say the same thing, or the page does not exist.
 3. For each book, write: found or not found.
 
 *Your result:* a list of three books, each with "found" or "not found".
+
+::: {.check}
+A typical result: one or two books are found, but often one book is not
+found, or it has another author or year. A book that no search finds is a
+hallucination: the AI invented it.
+:::
 :::
 
-## 3.3 AI, search engine or spreadsheet?
+## 2.3 AI, search engine or spreadsheet?
 
 Mona has three jobs: find the last day to pay the university fees, add up
 40 prices, and write a polite reminder e-mail. One tool is not best for all
@@ -137,7 +154,7 @@ source, for example the university website. When you use AI, follow five
 steps: **ask, read, check, edit, use**. You are responsible for the text
 that you use.
 
-::: {.callout-note title="Example 3.3 — Mona's three jobs"}
+::: {.callout-note title="Example 2.3 — Mona's three jobs"}
 1. The last day to pay the fees: a search engine, then the official
    university website. AI may know only an old date.
 2. The total of 40 prices: a spreadsheet with SUM. It adds exactly.
@@ -155,6 +172,12 @@ that you use.
 
 *Your result:* the two answers, and one sentence: which one do you trust,
 and why?
+
+::: {.check}
+A good answer: "I trust the university website. It is the official source,
+and it is up to date. The AI gave other hours: they may be old or
+invented."
+:::
 :::
 
 ## Case study: Omar's newsletter
@@ -183,6 +206,13 @@ Play **Newsletter Check** (above). Mark each sentence OK or Fix, choose the
 right fixes, and publish.
 
 *Your result:* your stars, and the three mistakes in your own words.
+
+::: {.check}
+The three mistakes: the rise is 700 JD, not 1 200 JD (a wrong number);
+the shop won no award (an invented fact); the shop is closed on Friday
+(not open every day). The other three sentences are OK. Three stars mean
+no slips.
+:::
 :::
 
 ## Further reading
@@ -195,24 +225,26 @@ and Research*, 2023.
 
 1. What is training data?
 2. Why can the same prompt give two different answers?
-3. Write the five weak spots of AI answers.
-4. What is a hallucination? Give one example.
-5. An AI says: "The newest version of the app is from 2021." Which weak spot
+3. Write three jobs that AI does well, each with one example.
+4. Write the five weak spots of AI answers.
+5. What is a hallucination? Give one example.
+6. An AI says: "The newest version of the app is from 2021." Which weak spot
    can this be?
-6. An AI says: "15% of 200 is 35." Is it right? Which weak spot is it?
-7. Which tool do you use for each job: today's price of gold, a summary of
+7. An AI says: "15% of 200 is 35." Is it right? Which weak spot is it?
+8. Which tool do you use for each job: today's price of gold, a summary of
    an article, the average of 25 marks?
-8. Write the five steps when you use AI.
+9. Write the five steps when you use AI.
 
 ## Answers to the exercises
 
 ::: {.answers}
 1. The huge amount of text and other data that an AI learned from.
-2. The AI chooses likely words, and not always the most likely one.
-3. Invented facts, old information, wrong numbers, bias, missing context.
-4. An answer that sounds sure but is invented or wrong; for example, a book that does not exist.
-5. Old information (its knowledge cutoff).
-6. No: 15% of 200 is 30. A wrong number.
-7. A search engine; an AI assistant; a spreadsheet.
-8. Ask, read, check, edit, use.
+2. The AI writes likely words, and not always the same ones.
+3. For example: a draft of a notice; a summary of a report in 3 points; 5 titles for a poster.
+4. Invented facts, old information, wrong numbers, bias, missing context.
+5. An answer that sounds sure but is invented or wrong; for example, a book that does not exist.
+6. Old information (its knowledge cutoff).
+7. No: 15% of 200 is 30. A wrong number.
+8. A search engine; an AI assistant; a spreadsheet.
+9. Ask, read, check, edit, use.
 :::

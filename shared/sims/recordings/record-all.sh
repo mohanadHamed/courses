@@ -136,7 +136,6 @@ shot-caller|courses/digital-media/week-05/sims/shot-caller.html|9|courses/digita
 board-fixer|courses/digital-media/week-05/sims/board-fixer.html|9|courses/digital-media/week-05/sims/board-fixer.gif
 animatic-player|courses/digital-media/week-06/sims/animatic-player.html|10|courses/digital-media/week-06/sims/animatic-player.gif
 cut-or-play|courses/digital-media/week-06/sims/cut-or-play.html|9|courses/digital-media/week-06/sims/cut-or-play.gif
-panel-composer|courses/digital-media/week-06/sims/panel-composer.html|9|courses/digital-media/week-06/sims/panel-composer.gif
 cat-catch|courses/digital-media/week-06/sims/cat-catch.html|9|courses/digital-media/week-06/sims/cat-catch.gif
 waveform-lab|courses/digital-media/week-07/sims/waveform-lab.html|10|courses/digital-media/week-07/sims/waveform-lab.gif
 sound-booth|courses/digital-media/week-07/sims/sound-booth.html|8|courses/digital-media/week-07/sims/sound-booth.gif

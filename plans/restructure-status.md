@@ -1,4 +1,4 @@
-# Restructure (plan v2): status on 2026-10-29
+# Restructure (plan v2): status on 2026-10-30
 
 Branch `restructure-units` (signed commits, one per unit). Plan:
 `plans/restructure-19-lectures.md`. Rules: `AUTHORING.md` and each course's
@@ -10,22 +10,13 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
 - Step 2, rules, schedules, plans for all four courses.
 - **Game Math: all 15 units** (Lectures 1–19, Seminars 1–10, homework 1–14),
   `check_size.py` clean.
-- **Computing Systems units 1–6** (Lectures 1–6, Seminars 1–6, homework 1–6).
+- **Computing Systems units 1–7** (Lectures 1–7, Seminars 1–7, homework 1–7).
+- Review of the finished units (2026-10-30): unclosed Try it boxes (Seminars 5, 6),
+  ILOs and titles as in the syllabus, reuse notes, unit 7 figures and Stack Builder
+  without HAL/ART/XNU; `game-kit.js` mixes the answer buttons (the right answer
+  was always first); recordings open sims with `?fixed-order`.
 - courses-private (pushed on main): `syllabus-weeks.yml` ×4; solutions of Game
-  Math homework 1–14 and Computing Systems homework 1–6 match the new tasks.
-
-## In progress: Computing Systems unit 7 (week-07)
-
-- Done: `lesson-07.qmd` and `lesson-07-book.qmd` (from old 13: HAL, ART, XNU
-  and Unity callbacks removed; the life-cycle example changed so it does not
-  repeat the Pause, Please! challenge).
-- To do: `lesson-07-slides.qmd` (from `lesson-13-slides.qmd`: subtitle
-  "Lecture 7", sections 13.x → 7.x, remove the HAL/ART/Core OS bullets and
-  the HAL and OnApplicationPause answers, replace "Example · A call in level 3"
-  with Sara's message in level 2); Seminar 7 (`seminar-07.qmd`, `-book`,
-  `-slides`) from old lecture 14 (fix the Do it "Compare with a classmate" →
-  "check the maker's update page"); homework 7 (due "before lecture 8", AI
-  line, Lecture 7 only); then delete `lesson-13*` and `lesson-14*` in week-07.
+  Math homework 1–14 and Computing Systems homework 1–7 match the new tasks.
 
 ## Still to do
 
@@ -54,7 +45,10 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
    week-14 pilot-check, move-lab, bounce-lab, star-dock-missions,
    problem-drill; week-15 cave-gen, generator-doctor, raft-finals;
    computing-systems week-04 phone-picker, soc-explorer; week-05 ram-rush;
-   week-06 disk-doctor. Test each sim inside its page in the browser
+   week-06 disk-doctor; week-07 stack-builder (poster too: it shows the old
+   layers), two-phones (new rounds 2–3). Posters of Kit games show round 1
+   in the written order; the page now mixes it (only cosmetic).
+   Test each sim inside its page in the browser
    (no JS syntax check was possible).
 5. courses-private: renumber the remaining solutions (Computing Systems 7–13,
    Digital Media, Digital Skills online activities) and write
@@ -62,6 +56,13 @@ Branch `restructure-units` (signed commits, one per unit). Plan:
    Skills).
 6. Full `quarto render`, `python3 tools/course_package.py`, then a PR into
    main (no co-author lines; signed commits).
+
+## Tools on this Mac (2026-10-30)
+
+- Quarto is **not installed** locally (CI pins 1.10.19), so no `quarto render`
+  or `quarto typst compile`: SVG figures were exported to PNG with headless
+  Chrome at scale 200/96 (same size as before). Deno (for `record.ts`) comes
+  with Quarto, so GIF recordings also need Quarto.
 
 ## Helpers (recreate if the scratchpad is gone)
 

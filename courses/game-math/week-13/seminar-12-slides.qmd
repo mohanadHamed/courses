@@ -1,0 +1,99 @@
+---
+title: "Game Balancing Exercise"
+subtitle: "Seminar 12 · practises Lecture 12"
+format: lesson-pptx
+---
+
+## Recall · Lecture 12
+
+a) An item drops with p = 0.5. What is the chance of at least one drop in 2 tries?
+b) An item drops with p = 0.1. How many tries does a player need on average?
+c) A chest gives 2 coins (50 %) or 8 coins (50 %). What is its expected reward?
+
+::: {.answer}
+a) 3/4
+b) 10
+c) 5 coins
+:::
+
+## Activity 1 · Waits and a pity timer · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A rare hammer drops with p = 2 %, and Drop Rate Lab lets 1000 players hunt it.
+- **Do it:** Compute the average number of tries. Find the longest wait without a pity timer, then with a timer at 60. Would you keep the timer?
+- Your product is four numbers and one sentence.
+:::
+::: {.column width="50%"}
+![](images/pity-timer.png)
+:::
+::::
+
+## Live demo · Drop Rate Lab
+
+{{< sim file="sims/drop-rate-lab.html" poster="sims/drop-rate-lab.png" title="Drop Rate Lab: how long do players wait?" task="**Show:** 1000 players with p = 2 %, then add a pity timer at 60. **Ask:** what happens to the longest wait?" >}}
+
+## Check 1 · Waits and a pity timer
+
+What do the numbers show?
+
+::: {.reveal}
+1. The average is 1/0.02 = 50 tries.
+2. Without a timer, the longest wait is often 200 tries or more.
+3. With a timer at 60, the longest wait is 60, and the average falls to about 40.
+4. The timer is worth keeping: it ends the endless waits but keeps the early lucky drops.
+:::
+
+## Activity 2 · Reward and odds · 15 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A chest gives 10 coins with 80 % or 50 coins with 20 %, and a bow costs 180 coins.
+- **Do it:** Compute the expected reward of one chest and the chests for the bow. The store page says "big prize: 30 %". Is it honest?
+- Your product is two numbers, one answer and two odds.
+:::
+::: {.column width="50%"}
+![](../week-12/images/weighted.png)
+:::
+::::
+
+## Check 2 · Reward and odds
+
+What are the expected reward and the honest odds?
+
+::: {.reveal}
+1. E = 10 × 0.8 + 50 × 0.2 = 8 + 10 = 18 coins.
+2. The bow needs about 180 ÷ 18 = 10 chests.
+3. The page is not honest: the big prize really comes with 20 %, not 30 %.
+4. The screen must show 10 coins at 80 % and 50 coins at 20 %.
+:::
+
+## Activity 3 · Answer the players · 15 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- One player missed twice with a hit chance of 90 %, one expects heads after four tails, and one asks about a shuffle bag with 1 crit and 3 normal hits.
+- **Do it:** Write the chance of two misses in a row, P(heads) on the next flip, the share of crits and the longest run without a crit.
+- Your product is three short answers with numbers.
+:::
+::: {.column width="50%"}
+![](images/shuffle-bag.png)
+:::
+::::
+
+## Check 3 · Answer the players
+
+What does each player need to hear?
+
+::: {.reveal}
+1. Two misses in a row have the chance 0.1 × 0.1 = 1 %: rare, but it happens every day with many players.
+2. The coin has no memory, so P(heads) is still 1/2.
+3. The bag gives 1 crit in 4 hits: 25 %.
+4. The longest run without a crit is 6 normal hits, when the crit is first in one bag and last in the next.
+:::
+
+## Wrap-up
+
+- You can balance the wait for a rare item with the average and a pity timer.
+- You can compute the expected reward of a chest and check its odds.
+- You can answer players about streaks and shuffle bags with numbers.

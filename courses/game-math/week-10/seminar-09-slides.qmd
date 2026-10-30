@@ -1,0 +1,94 @@
+---
+title: "Designing a Rule Set for a Simple Game"
+subtitle: "Seminar 9 · practises Lecture 9"
+format: lesson-pptx
+---
+
+## Recall · Lecture 9
+
+a) Which condition is the same as !(p && q)?
+b) How many rows has a decision table with 4 conditions?
+c) Two rules of an else-if chain are true. Which one runs?
+
+::: {.answer}
+a) !p || !q
+b) 16
+c) the first one from the top
+:::
+
+## Activity 1 · Words to conditions · 15 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Harvest Bot has the facts b battery low, f basket full, p ripe crop, d dry soil, r rain and n night.
+- **Do it:** Write the rules for watering, going home and picking as C# conditions. Write !(d && !r) without a NOT in front of the brackets.
+- Your product is four conditions.
+:::
+::: {.column width="50%"}
+![](images/rule-words.png)
+:::
+::::
+
+## Check 1 · Words to conditions
+
+Which conditions match the rules of the bot?
+
+::: {.reveal}
+1. The bot waters with d && !r, and goes home with b || f.
+2. It picks with p && !n, because "unless n" means "if not n".
+3. De Morgan turns !(d && !r) into !d || !!r.
+4. Double negation gives !d || r: the soil is not dry, or it rains.
+:::
+
+## Activity 2 · Table and chain · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The designer's order is: home if b, otherwise pick if p, otherwise water if d, otherwise wait.
+- **Do it:** Make the 8-row table of b, p and d and count each action. Test b = T, p = T, d = F in the chain that starts with if (p) Pick(). Write the right order.
+- Your product is a table and one chain.
+:::
+::: {.column width="50%"}
+![](images/decision-table.png)
+:::
+::::
+
+## Check 2 · Table and chain
+
+What do the table and the chain show?
+
+::: {.reveal}
+1. The bot goes home in 4 rows, picks in 2, waters in 1 and waits in 1: 8 rows in all.
+2. In the row b = T, p = T, d = F, the programmer's chain picks.
+3. The designer wants Home there, because a low battery beats every rule.
+4. The right chain starts with if (b) Home(), then Pick, then Water, then Wait.
+:::
+
+## Activity 3 · Edge cases · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The rule says the battery is low under 20 %, but the code says battery <= 20.
+- **Do it:** Test the battery at 10, 80 and 20. Which test finds the bug? Write the condition for "at least 50 apples" and two border tests.
+- Your product is a fix, a condition and two tests.
+:::
+::: {.column width="50%"}
+![](images/rule-order.png)
+:::
+::::
+
+## Check 3 · Edge cases
+
+Which test finds the bug, and what are good border tests?
+
+::: {.reveal}
+1. The values 10 and 80 give the same result in the rule and in the code.
+2. At 20 the rule says "not low", but the code says low, so the fix is battery < 20.
+3. "At least 50 apples" is apples >= 50, with the tests 50 (sell) and 49 (do not sell).
+:::
+
+## Wrap-up
+
+- You can write the rules of a game as conditions, also with De Morgan.
+- You can make a decision table and put an else-if chain in the right order.
+- You can test a number rule at its border.

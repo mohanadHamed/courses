@@ -81,11 +81,13 @@ The teacher's notes:
 - Pipeline: `shortcodes.lua` (course page: practice weeks), `banner.lua`
   (practice sessions flexible), `lesson.css`, `tools/course_package.py`
   (`filling`, `covers`).
+- Game Math renumbering: lectures, seminars, practice sessions and homework
+  renamed and every reference mapped; `schedule.yml` rewritten (15 weeks:
+  12 units + 3 practice weeks).
 
 ### Still to do (in this order)
 
 1. **Game Math**
-   - Renumber the sessions (`plans/helpers/renum.py`) and rewrite `schedule.yml`.
    - Units 2, 3 and 4: merge the two lectures of the week and write the new seminar.
    - Lecture 10 (week-11): merge old 13 + 14 (see the design).
    - Seminar 10 "Probability in Loot Drops and Critical Hits" (week-11):

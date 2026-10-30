@@ -1,0 +1,45 @@
+---
+title: "Homework 9: The vault and the trap room"
+description: "Rewrite and simplify the vault rule of a space station with Boolean algebra, and write the decision table and the else-if chain of a trap. About 10 minutes."
+homework: 9
+due: "before lecture 10"
+marks: 5
+ilos: [B2]
+toc-title: "In this homework"
+format: lesson-html   # the PDF is made by printing this page (homework_pdf.py)
+---
+
+**How to submit:** Write on paper and show your steps. Upload a clear photo to the university e-learning platform. Due: **before lecture 10**.
+You may use AI where a task says so. Check its work and say how you used it.
+
+## Task 1 · The vault of the space station (2 marks)
+
+The vault opens when (p ∨ q) ∧ ¬r, with p = "the player has the code card",
+q = "the player is a captain" and r = "the station is in alarm mode".
+
+a) The vault stays shut when ¬((p ∨ q) ∧ ¬r). Use De Morgan's laws to write
+this without a NOT in front of brackets. (1 mark)
+
+{{< answer-space lines=1 >}}
+
+b) Simplify (p ∧ ¬r) ∨ (q ∧ ¬r), and name the law you use. (1 mark)
+
+{{< answer-space lines=1 >}}
+
+## Task 2 · The trap room (3 marks)
+
+The designer writes: "The fire trap burns when the player steps on the
+plate, unless the player wears the fire cloak. A player with low health
+(less than 20) is pushed back instead, with or without the cloak."
+Letters: p = steps on the plate, c = wears the cloak, h = health < 20.
+Actions: **Push back**, **Burn**, **Nothing**.
+
+a) Make the decision table with 8 rows and one action in each row. (1 mark)
+
+{{< answer-space lines=6 >}}
+
+b) Write the rules as an else-if chain in the right order. Then give two
+edge-case tests for "health < 20" with the action for a player on the plate
+without the cloak. (2 marks)
+
+{{< answer-space lines=3 >}}

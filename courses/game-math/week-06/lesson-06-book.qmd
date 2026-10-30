@@ -1,0 +1,355 @@
+---
+title: "Translation, Scaling and Rotation in 2D"
+description: "Lesson notes · Moving a shape, scaling it, scaling about a pivot, rotating a point with the rotation matrix, rotating about a pivot and turning back."
+lesson: 6
+ilos: [C1]
+format: lesson-typst
+---
+
+::: {.lead}
+A level designer builds a level from a few pieces: a platform, a crate, a
+drawbridge. Every piece is the same small shape, placed somewhere, made
+bigger or smaller, or turned. The game does not store a new drawing for each
+copy. It stores one shape and a **transformation** for each copy. In Lecture
+8 you multiplied a matrix by a point. In this lesson you use three
+transformations: the **translation**, which moves a shape, the **scaling**,
+which changes its size, and the **rotation**, which turns it. You also
+choose the point that stays still: the **pivot**. Every section ends with a
+short task.
+:::
+
+## Key terms
+
+{{< glossary transformation translation scaling scale-factor uniform-scaling pivot vertex rotation rotation-matrix matrix inverse-matrix >}}
+
+## 6.1 Move the platform: translation
+
+A platform of a level is drawn with its corner at (1, 1). The designer
+needs it 4 units to the right and 3 units up. Every **vertex** (corner) of
+the shape moves by the same vector (@fig-move).
+
+::: {.callout-important title="Definition 6.1 — Translation"}
+A **translation** by the vector $(t_x, t_y)$ moves every point $(x, y)$ of a
+shape to
+$$(x + t_x,\ y + t_y).$$
+The shape keeps its size and its direction; only its place changes.
+:::
+
+![The house moves by (5, 2). Every vertex moves by the same arrow.](images/translate.png){#fig-move width=96%}
+
+A translation is the vector addition of Lecture 2, done for every vertex. A
+2 × 2 matrix **cannot** translate: $M \times (0, 0)$ is always $(0, 0)$, so
+the origin never moves. Lecture 7 solves this with one more coordinate.
+
+::: {.callout-note title="Example 6.1 — The house moves by (5, 2)"}
+1. (0, 0) → (0 + 5, 0 + 2) = (5, 2).
+2. (2, 2) → (7, 4).
+3. The roof (1, 3) → (6, 5). All five vertices move by the same (5, 2).
+:::
+
+::: {.callout-note title="Example 6.2 — Which move?"}
+A platform has its corner at (1, 1). It must have it at (5, 4).
+
+1. $t_x$ = 5 − 1 = 4 and $t_y$ = 4 − 1 = 3.
+2. The translation is by **(4, 3)**, not by (5, 4).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Using the target point as the move. To move a corner from (1, 1) to (5, 4),
+the move is the difference (4, 3).
+:::
+
+{{< sim file="sims/transform-lab.html" poster="sims/transform-lab.png" title="Transform Lab: translate, scale and mirror a shape" height="760" >}}
+
+::: {.callout-note title="Do it · Predict, then check"}
+Open **Transform Lab** (above, or scan the QR code). Keep sx = sy = 1.
+
+1. On paper: where does the corner (2, 2) go with the move (−3, 1)?
+2. Set tx = −3 and ty = 1 in the lab and compare.
+
+*Your result:* your point and the point of the lab.
+
+::: {.check}
+$(2 - 3,\ 2 + 1) = (-1, 3)$. The lab shows the same corner at $(-1, 3)$: every
+vertex moves by the same $(-3, 1)$.
+:::
+:::
+
+## 6.2 Bigger and smaller: scaling
+
+A crate in the level is too small. The designer makes it twice as big.
+This is a **scaling**, and a matrix can do it (@fig-scale).
+
+::: {.callout-important title="Definition 6.2 — Scaling matrix"}
+A **scaling** by the **scale factors** $s_x$ and $s_y$ multiplies the
+coordinates:
+$$S = \begin{bmatrix} s_x & 0 \\ 0 & s_y \end{bmatrix}, \qquad S \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} s_x x \\ s_y y \end{bmatrix}.$$
+With $s_x = s_y$ it is a **uniform scaling**: the shape keeps its
+proportions. A factor bigger than 1 makes the shape bigger; a factor between
+0 and 1 makes it smaller.
+:::
+
+![Uniform scaling by 2, and a stretch with sx = 2, sy = 1.](images/scale-matrix.png){#fig-scale width=96%}
+
+::: {.callout-note title="Example 6.3 — The house, twice as big"}
+$S$ = rows (2, 0) and (0, 2).
+
+1. The roof (1, 3) → (2 × 1, 2 × 3) = (2, 6).
+2. The corner (2, 0) → (4, 0). The house is 4 wide and 6 high: twice as big.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Adding the factor: (1, 3) + 2 = (3, 5). A scaling **multiplies** each
+coordinate by its factor.
+:::
+
+::: {.callout-note title="Do it · Uniform or stretched?"}
+In **Transform Lab**, set tx = ty = 0 and the pivot "origin".
+
+1. Set sx = sy = 2. Where does the corner (2, 2) go?
+2. Set sx = 2, sy = 1. Where does it go now? Which house keeps its shape?
+
+*Your result:* two points and one sentence.
+
+::: {.check}
+$(2, 2) \to (4, 4)$ with $(2, 2)$; $(2, 2) \to (4, 2)$ with $(2, 1)$. The uniform
+scaling keeps the shape of the house; the stretch makes it wide and flat.
+:::
+:::
+
+## 6.3 Grow in place: the pivot
+
+The designer scales a crate whose corners are (2, 2) and (4, 4). The crate
+grows, but it also jumps away from its place. A scaling with a matrix keeps
+only the **origin** still. To grow in place, the crate needs another fixed
+point, a **pivot** (@fig-pivot).
+
+::: {.callout-important title="Definition 6.3 — Scaling about a pivot"}
+To scale about the **pivot** C:
+
+1. move the shape by −C, so that the pivot is at the origin;
+2. scale;
+3. move it back by +C.
+
+For one point: $P' = C + S\,(P - C)$.
+:::
+
+![Scaling by 2 about the origin moves the crate away; about its centre (3, 3), it grows in place.](images/pivot-scale.png){#fig-pivot width=96%}
+
+::: {.callout-note title="Example 6.4 — The crate about its centre"}
+The crate has the corners (2, 2), (4, 2), (4, 4), (2, 4); its centre is
+C = (3, 3). Scale by 2.
+
+1. P = (4, 4): P − C = (1, 1).
+2. Scale: (2, 2).
+3. Back: (2, 2) + (3, 3) = **(5, 5)**. The other corners go to (1, 1),
+   (5, 1) and (1, 5). The centre stays at (3, 3).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Forgetting step 3. After "move to the origin and scale", the shape still
+sits around the origin; move it back by +C.
+:::
+
+::: {.callout-note title="Do it · Three pivots"}
+In **Transform Lab**, set tx = ty = 0 and sx = sy = 2.
+
+1. Try the three pivots: origin, feet (1, 0) and centre (1, 1.5).
+2. For each pivot, write which point of the house stays still.
+
+*Your result:* three pivots and the point that stays each time.
+
+::: {.check}
+Origin: the point (0, 0) stays (the house moves away from it). Feet (1, 0):
+the feet stay on the ground. Centre (1, 1.5): the centre stays and the house
+grows around it.
+:::
+:::
+
+## 6.4 Turn it: rotation and the rotation matrix
+
+The tip of a windmill blade is at P = (4, 0), and the windmill turns by 30°.
+Where is the tip now? It stays 4 units from the centre and moves on a circle
+(@fig-rot).
+
+::: {.callout-important title="Definition 6.4 — Rotation about the origin"}
+A **rotation** by the angle θ around the origin sends the point $(x, y)$ to
+$$x' = x\cos\theta - y\sin\theta, \qquad y' = x\sin\theta + y\cos\theta.$$
+A positive θ turns anticlockwise (Lecture 4).
+:::
+
+![The point (4, 0) turns by 30° to (3.46, 2). Its distance from the origin stays 4.](images/rotate-point.png){#fig-rot width=96%}
+
+::: {.callout-note title="Example 6.5 — The blade tip"}
+P = (4, 0), θ = 30°, cos 30° = 0.87, sin 30° = 0.5.
+
+1. x' = 4 × 0.87 − 0 × 0.5 = **3.46**.
+2. y' = 4 × 0.5 + 0 × 0.87 = **2**.
+3. Check: this is 4 × (cos 30°, sin 30°), as in Lecture 4.
+:::
+
+::: {.callout-note title="Example 6.6 — A quarter turn"}
+P = (3, 1), θ = 90°: cos 90° = 0 and sin 90° = 1.
+
+1. x' = 3 × 0 − 1 × 1 = −1.
+2. y' = 3 × 1 + 1 × 0 = 3.
+3. P' = **(−1, 3)**: (x, y) became (−y, x), the spell Turn of Lecture 5.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Forgetting the minus sign in x'. With "x cos θ + y sin θ", the point turns
+the wrong way (clockwise).
+:::
+
+{{< sim file="sims/rotate-lab.html" poster="sims/rotate-lab.png" title="Rotate Lab: R(θ) and the pivot" height="760" >}}
+
+::: {.callout-note title="Do it · Rotate by hand, check in the lab"}
+1. On paper, rotate (2, 2) by 90° and by 180° around the origin.
+2. Open **Rotate Lab** (pivot at the origin). Set θ = 90°, then 180°, and
+   read P'.
+
+*Your result:* two points from paper and the same two from the lab.
+
+::: {.check}
+90°: (2 × 0 − 2 × 1, 2 × 1 + 2 × 0) = (−2, 2). 180°: (−2, −2). The lab shows
+the same two points; the distance from the origin stays the same.
+:::
+:::
+
+### The rotation matrix
+
+The formulas above are a matrix times a vector (Lecture 5). Games keep the
+rotation as this 2 × 2 matrix (@fig-rmat).
+
+::: {.callout-important title="Definition 6.5 — Rotation matrix"}
+$$R(\theta) = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}, \qquad R(\theta)\begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} x\cos\theta - y\sin\theta \\ x\sin\theta + y\cos\theta \end{bmatrix}.$$
+Its first column is where (1, 0) goes; its second column is where (0, 1)
+goes.
+:::
+
+![The columns of R(θ) are the axis directions after the turn.](images/rotation-matrix.png){#fig-rmat width=96%}
+
+::: {.callout-note title="Example 6.7 — Three rotation matrices"}
+1. R(90°) = rows (0, −1) and (1, 0): the spell Turn.
+2. R(180°) = rows (−1, 0) and (0, −1): every point goes to the opposite side.
+3. R(30°) = rows (0.87, −0.5) and (0.5, 0.87).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Putting −sin θ in the second row. The minus sign is in row 1, column 2.
+Check with (1, 0): R(90°) must send it to (0, 1).
+:::
+
+## 6.5 Turn the drawbridge: rotation about a pivot, and back
+
+The drawbridge of a castle turns around its hinge H = (2, 1), not around
+the origin. Like a scaling (section 6.3), a rotation about a pivot needs
+three steps (@fig-hinge).
+
+::: {.callout-important title="Definition 6.6 — Rotation about a pivot"}
+To rotate a point P by θ about the pivot C: move by −C, rotate, move back by
++C:
+$$P' = C + R(\theta)\,(P - C).$$
+:::
+
+![The drawbridge turns about its hinge H = (2, 1). Its end goes from (6, 1) to (5.46, 3) at 30° and to (2, 5) at 90°.](images/rotate-pivot.png){#fig-hinge width=96%}
+
+::: {.callout-note title="Example 6.8 — The bridge goes up"}
+The end of the bridge is E = (6, 1). Turn by 90° about H = (2, 1).
+
+1. E − H = (4, 0).
+2. R(90°) × (4, 0) = (0, 4).
+3. (0, 4) + (2, 1) = **(2, 5)**: the bridge stands up.
+:::
+
+::: {.callout-note title="Example 6.9 — Halfway to the ledge"}
+Turn by 30° about H.
+
+1. R(30°) × (4, 0) = (3.46, 2).
+2. + H: **(5.46, 3)**. The end rests on the ledge at this point.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Rotating E itself around the origin: R(90°) × (6, 1) = (−1, 6). The bridge
+would fly away from its hinge. Subtract the pivot first.
+:::
+
+**Turning back.** A rotation keeps every length and every angle of a shape:
+only the direction changes. To undo a rotation by θ, turn back by the same
+angle the other way: the inverse of $R(\theta)$ is $R(-\theta)$. A bridge
+turned up by 60° comes back flat with −60°.
+
+::: {.callout-warning title="Common mistake"}
+Undoing a rotation by 30° with another 30°. That makes 60°. Turn by −30°.
+:::
+
+::: {.callout-note title="Do it · A pivot in Rotate Lab"}
+In **Rotate Lab**, tap the grid at (1, 0) to put the pivot there.
+
+1. Set θ = 90°. Read P' for P = (2, 2).
+2. Check by hand: P − C, R(90°), + C.
+
+*Your result:* P' from the lab and your three steps.
+
+::: {.check}
+P − C = (2, 2) − (1, 0) = (1, 2). R(90°) × (1, 2) = (−2, 1). Back: (−2, 1) +
+(1, 0) = (−1, 1). The lab shows P' = (−1, 1).
+:::
+:::
+
+## Case study: Drawbridge
+
+*Drawbridge* is a made-up castle game. Its bridge turns around its hinge
+H = (1, 1); it is 3 units long, and lying flat its end is at E = (4, 1). A
+ship needs the bridge up, with the end at (1, 4); a knight needs it to rest
+on the ledge at (3.6, 2.5). The player must also say where the end goes at
+180° and at −90°, and bring the bridge back flat from 60°. The Game challenge
+of the interactive lesson uses these numbers. In the mini-game below you turn
+the bridge.
+
+{{< sim file="sims/drawbridge.html" poster="sims/drawbridge.png" title="Drawbridge: turn the bridge about its hinge" kind="game" height="720" >}}
+
+## Further reading
+
+Dunn and Parberry, *3D Math Primer for Graphics and Game Development*,
+2nd ed., Chapter 5 (Matrices and Linear Transformations): scale and rotation
+in 2D, and the order of combined transformations.
+
+## Exercises
+
+1. Translate (3, −1) by (−2, 4).
+2. A corner must go from (2, 5) to (7, 1). What is the translation?
+3. Why can a 2 × 2 matrix not translate a shape?
+4. Write the scaling matrix with $s_x = 3$, $s_y = 0.5$. Where does (2, 4)
+   go?
+5. Is the scaling (2, 2) uniform? Is (2, 1)?
+6. Scale (5, 5) by 2 about the pivot (3, 3).
+7. Rotate (3, 1) by 180° around the origin.
+8. Rotate (0, 2) by 90° around the origin.
+9. Where does R(θ) send (1, 0)? And (0, 1)?
+10. Compute R(90°) × (2, −1).
+11. Rotate (5, 2) by 90° about the pivot (3, 2).
+12. A door has its hinge at (1, 1) and its handle at (1, 3). Turn it by −90°
+    about the hinge. Where is the handle?
+13. A shape was turned by 45°. Which rotation turns it back?
+14. *Drawbridge*: the hinge (1, 1), the flat end (4, 1). Where is the end at
+    90°? At 180°?
+
+## Answers to the exercises
+
+::: {.answers}
+1. (1, 3).
+2. (5, −4).
+3. M × (0, 0) is always (0, 0): the origin cannot move.
+4. Rows (3, 0) and (0, 0.5); (6, 2).
+5. (2, 2) yes; (2, 1) no, it stretches x only.
+6. (5, 5) − (3, 3) = (2, 2); × 2 = (4, 4); + (3, 3) = (7, 7).
+7. (−3, −1).
+8. (−2, 0).
+9. To (cos θ, sin θ) and to (−sin θ, cos θ): the two columns.
+10. (0 × 2 + (−1) × (−1), 1 × 2 + 0 × (−1)) = (1, 2).
+11. P − C = (2, 0); R(90°) gives (0, 2); + C = (3, 4).
+12. P − C = (0, 2); R(−90°) gives (2, 0); + C = (3, 1).
+13. R(−45°): turn back by 45° clockwise.
+14. 90°: (1, 4). 180°: (−2, 1).
+:::

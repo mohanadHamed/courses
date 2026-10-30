@@ -1,0 +1,421 @@
+---
+title: "Matrices: Operations, Multiplication, Identity and Inverse"
+description: "Lesson notes · Matrices as tables of game data, adding and scaling matrices, a matrix times a vector and times a matrix, the order of a product, the identity and the inverse."
+lesson: 5
+ilos: [A1, C1]
+format: lesson-typst
+---
+
+::: {.lead}
+A mining game stores its level as a table: in each tile, the number of gems.
+An RPG stores its enemies as a table: one row for each enemy, one column for
+each stat. A puzzle game moves a crystal with spells, and each spell is a
+small table of numbers. All these tables are **matrices**. In this lesson
+you learn to read a matrix, to add it and multiply it by a number, and to
+multiply it with a position: the first step towards the transformations of
+the next lectures. Every section ends with a short task.
+:::
+
+## Key terms
+
+{{< glossary matrix matrix-row matrix-column matrix-size matrix-entry matrix-addition column-vector matrix-multiplication commutative identity-matrix inverse-matrix square-matrix main-diagonal >}}
+
+## 5.1 The mine map: what a matrix is
+
+The level designer of a mining game draws a mine of 3 rows of 4 tiles. Each tile
+holds some gems. The programmer needs one name for the whole map, and a clear
+way to say "the tile in row 2, column 3". A matrix gives both (@fig-map).
+
+::: {.callout-important title="Definition 5.1 — Matrix, size and entry"}
+A **matrix** is a rectangular table of numbers in **rows** (across) and
+**columns** (down). Its **size** is "rows × columns": a matrix with 3 rows and
+4 columns is a 3 × 4 matrix. The number in row *i* and column *j* is the
+**entry** $a_{ij}$. The row number always comes first.
+:::
+
+![The gem map of a mining game as a 3 × 4 matrix M. The entry $m_{23}$ (row 2, column 3) is 0.](images/matrix-map.png){#fig-map width=96%}
+
+$$M = \begin{bmatrix} 2 & 0 & 5 & 1 \\ 4 & 3 & 0 & 6 \\ 1 & 7 & 2 & 0 \end{bmatrix}$$
+
+Matrices are written with a capital letter (M, A, B), and their entries with
+the small letter and two numbers: $m_{23}$ is "m two three", not "m
+twenty-three".
+
+::: {.callout-note title="Example 5.1 — Reading the mine map"}
+1. M has 3 rows and 4 columns, so its size is **3 × 4**. It has 3 × 4 = 12
+   entries.
+2. $m_{14}$ is in row 1, column 4: **1** gem.
+3. $m_{32}$ is in row 3, column 2: **7** gems. $m_{23}$ is in row 2, column 3:
+   **0** gems. Swapping the two numbers gives another tile.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Writing the size as "columns × rows". The size of M is 3 × 4, not 4 × 3. A
+spreadsheet makes this mistake easy: the cell C2 is column C, row 2, but the
+entry $a_{23}$ is row 2, column 3.
+:::
+
+::: {.callout-note title="Do it · Your own level as a matrix"}
+On squared paper, draw a small level of 3 rows and 3 tiles. Write a number of
+coins in each tile.
+
+1. Write the level as a matrix L. What is its size?
+2. Circle $l_{32}$ and $l_{23}$. Are they the same tile?
+
+*Your result:* the matrix L, its size, and the two circled entries.
+
+::: {.check}
+L is a 3 × 3 matrix. $l_{32}$ is row 3, column 2 and $l_{23}$ is row 2,
+column 3: two different tiles (unless their numbers happen to be equal).
+:::
+:::
+
+## 5.2 Two rounds, one total: adding and scaling matrices
+
+A puzzle game shows the points of two players (rows) in three levels
+(columns). Round 1 gives one matrix of points, the bonus round another. The
+total of each player in each level is the sum of two entries in the same
+place (@fig-add).
+
+::: {.callout-important title="Definition 5.2 — Matrix addition and subtraction"}
+Two matrices of the **same size** are added entry by entry:
+$(A + B)_{ij} = a_{ij} + b_{ij}$. Subtraction works the same way:
+$(A - B)_{ij} = a_{ij} - b_{ij}$. The result has the same size. Matrices of
+different sizes cannot be added.
+:::
+
+![Adding two 2 × 3 matrices: every entry with the entry in the same place.](images/matrix-add.png){#fig-add width=96%}
+
+::: {.callout-note title="Example 5.2 — Points after the bonus round"}
+$$\begin{bmatrix} 120 & 80 & 50 \\ 90 & 60 & 40 \end{bmatrix} + \begin{bmatrix} 30 & 20 & 10 \\ 10 & 40 & 0 \end{bmatrix} = \begin{bmatrix} 150 & 100 & 60 \\ 100 & 100 & 40 \end{bmatrix}$$
+
+1. Both matrices are 2 × 3, so the sum exists and is 2 × 3.
+2. Player 1 in level 2: 80 + 20 = 100.
+3. Player 2 in level 3: 40 + 0 = 40.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Adding a 2 × 3 matrix to a 3 × 2 matrix. There is no entry in the same place
+for every number, so the sum does not exist. Check the sizes first.
+:::
+
+{{< sim file="sims/matrix-lab.html" poster="sims/matrix-lab.png" title="Matrix Lab: add, subtract and multiply by a number" height="560" >}}
+
+### Hard mode: multiplying a matrix by a number
+
+In hard mode, every enemy of an RPG has 1.5 times its HP, damage and speed.
+The enemy table E has one row per enemy (slime, troll) and the columns HP,
+damage and speed.
+The designer does not change the table number by number: the game multiplies
+the whole matrix by 1.5 (@fig-scale).
+
+::: {.callout-important title="Definition 5.3 — A number times a matrix"}
+To multiply a matrix A by a number k (a **scalar**), multiply every entry by
+k: $(kA)_{ij} = k\,a_{ij}$. The size does not change.
+:::
+
+![Hard mode multiplies every entry of the stats matrix by 1.5.](images/matrix-scale.png){#fig-scale width=96%}
+
+::: {.callout-note title="Example 5.3 — The stats in hard mode"}
+$$1.5 \begin{bmatrix} 40 & 10 & 4 \\ 60 & 20 & 2 \end{bmatrix} = \begin{bmatrix} 60 & 15 & 6 \\ 90 & 30 & 3 \end{bmatrix}$$
+
+1. The troll's HP: 1.5 × 60 = 90.
+2. The slime's damage: 1.5 × 10 = 15.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Multiplying only one row or one column. The number multiplies **every** entry
+of the matrix.
+:::
+
+::: {.callout-note title="Do it · Add and scale in Matrix Lab"}
+Open **Matrix Lab** (above, or scan the QR code). Choose A + B and tap one
+entry of the result. Then choose k × A.
+
+1. Set k = 1.5 and tap two entries of the result. Write each product.
+2. Set k = −1. What happens to every sign?
+
+*Your result:* one sum, two products and one sentence about k = −1.
+
+::: {.check}
+A sum: the two entries in the same place added. With k = 1.5 every entry is
+1.5 times bigger (for example 1.5 × 4 = 6). With k = −1 every sign changes.
+:::
+:::
+
+## 5.3 Casting a spell: a matrix times a vector
+
+The crystal of *Crystal Spells* stands at (4, 1). The spell "Stretch" doubles
+x and triples y. The game keeps the spell as a 2 × 2 matrix and the position
+as a column vector, and multiplies them (@fig-mv).
+
+::: {.callout-important title="Definition 5.4 — Matrix times vector"}
+To multiply a matrix A by a column vector **v**, take each **row** of A times
+**v**: multiply the pairs of numbers and add them. This is the dot product of
+Lecture 2. For a 2 × 2 matrix:
+$$\begin{bmatrix} a & b \\ c & d \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} ax + by \\ cx + dy \end{bmatrix}$$
+:::
+
+![Each row of the matrix times the vector gives one coordinate. The point (4, 1) goes to (8, 3).](images/matrix-vector.png){#fig-mv width=96%}
+
+::: {.callout-note title="Example 5.4 — The spell Stretch"}
+$$\begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix} \begin{bmatrix} 4 \\ 1 \end{bmatrix} = \begin{bmatrix} 2 \times 4 + 0 \times 1 \\ 0 \times 4 + 3 \times 1 \end{bmatrix} = \begin{bmatrix} 8 \\ 3 \end{bmatrix}$$
+
+1. Row 1 times the vector gives the new x: 8.
+2. Row 2 times the vector gives the new y: 3.
+3. The crystal moves from (4, 1) to (8, 3).
+:::
+
+::: {.callout-note title="Example 5.5 — The spell Turn"}
+Turn has the rows (0, −1) and (1, 0). The crystal stands at (3, 2).
+
+1. Row 1: 0 × 3 + (−1) × 2 = −2.
+2. Row 2: 1 × 3 + 0 × 2 = 3.
+3. The crystal goes to (−2, 3): (x, y) became (−y, x), a turn of 90°
+   anticlockwise. Lecture 6 explains why.
+:::
+
+A 2 × 2 matrix times a 2 × 1 vector gives a 2 × 1 vector: the result is
+again a position. One matrix can move every point of a sprite in the same
+way: this is how games apply a transformation.
+
+::: {.callout-warning title="Common mistake"}
+Multiplying entry by entry: 2 × 4 and 3 × 1 only. Every row uses **both**
+coordinates: 0 × 4 + 3 × 1. The zeros matter in other matrices.
+:::
+
+{{< sim file="sims/multiply-lab.html" poster="sims/multiply-lab.png" title="Multiply Lab: a 2 × 2 matrix moves a point and a shape" height="760" >}}
+
+::: {.callout-note title="Do it · Check Turn in Multiply Lab"}
+Open **Multiply Lab** (above, or scan the QR code).
+
+1. On paper, multiply Turn (rows (0, −1) and (1, 0)) by P = (2, 3).
+2. In the lab, press "Turn 90°" and drag P to (2, 3). Compare.
+
+*Your result:* your two rows of calculation and the point from the lab.
+
+::: {.check}
+Row 1: 0 × 2 + (−1) × 3 = −3. Row 2: 1 × 2 + 0 × 3 = 2. Turn sends (2, 3) to
+(−3, 2); the lab shows the same point.
+:::
+:::
+
+### Two spells at once: a matrix times a matrix
+
+A model of 2000 points gets two spells in a row. The game does not multiply
+every point twice. It multiplies the two matrices **once** and uses the
+result for every point. So we need the product of two matrices (@fig-mm).
+
+::: {.callout-important title="Definition 5.5 — Matrix times matrix"}
+The product AB exists when A has as many **columns** as B has **rows**. If A
+is m × n and B is n × p, then AB is m × p. Its entry in row *i*, column *j*
+is row *i* of A times column *j* of B (a dot product).
+:::
+
+![The entry in row 1, column 2 of AB is row 1 of A times column 2 of B.](images/matrix-matrix.png){#fig-mm width=96%}
+
+::: {.callout-note title="Example 5.6 — Four dot products"}
+A has the rows (1, 2) and (3, 0); B has the rows (4, 1) and (0, 2).
+
+1. Row 1 · column 1: 1 × 4 + 2 × 0 = 4. Row 1 · column 2: 1 × 1 + 2 × 2 = 5.
+2. Row 2 · column 1: 3 × 4 + 0 × 0 = 12. Row 2 · column 2: 3 × 1 + 0 × 2 = 3.
+3. $AB = \begin{bmatrix} 4 & 5 \\ 12 & 3 \end{bmatrix}$.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Multiplying entry by entry, as in addition: 1 × 4, 2 × 1, …. That is not the
+matrix product. Each entry of AB is a whole row times a whole column.
+:::
+
+## 5.4 First stretch, then turn: the order matters
+
+A level designer stretches a platform to double width and then turns it by
+90°. A second designer turns first and stretches after. Their platforms are
+not the same (@fig-order). With numbers, AB and BA usually differ.
+
+::: {.callout-important title="Definition 5.6 — Not commutative"}
+Matrix multiplication is **not commutative**: in general $AB \neq BA$. In
+$AB\mathbf{v}$, the matrix next to the vector acts first: first B, then A.
+Read a product of transformations from **right to left**.
+:::
+
+![Stretch then turn (left) and turn then stretch (right) give different shapes.](images/order-matters.png){#fig-order width=96%}
+
+::: {.callout-note title="Example 5.7 — AB and BA"}
+With A and B of Example 5.6:
+
+1. $BA$: row 1 of B times the columns of A: 4 × 1 + 1 × 3 = 7 and
+   4 × 2 + 1 × 0 = 8.
+2. Row 2 of B: 0 × 1 + 2 × 3 = 6 and 0 × 2 + 2 × 0 = 0.
+3. $BA = \begin{bmatrix} 7 & 8 \\ 6 & 0 \end{bmatrix}$, but
+   $AB = \begin{bmatrix} 4 & 5 \\ 12 & 3 \end{bmatrix}$.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Reading a product from left to right. In $AB\mathbf{v}$, B acts first.
+:::
+
+::: {.callout-note title="Do it · Order on paper and in the lab"}
+Flip has the rows (−1, 0) and (0, 1); Turn has the rows (0, −1) and (1, 0).
+Take the point (3, 1).
+
+1. On paper, apply Flip then Turn, and Turn then Flip.
+2. In **Multiply Lab**, put P at (3, 1). Press "Flip x" and read MP. Then
+   enter that point as P, press "Turn 90°", and read MP again.
+
+*Your result:* the two end points, and which order the lab followed.
+
+::: {.check}
+Flip then Turn: (3, 1) → (−3, 1) → (−1, −3). Turn then Flip: (3, 1) →
+(−1, 3) → (1, 3). Two different points: the order matters. The lab followed
+Flip first, then Turn.
+:::
+:::
+
+## 5.5 The spell that changes nothing: the identity
+
+A new object in a scene stands at the origin, is not turned and has size 1.
+Its matrix must change nothing. This matrix is the **identity** (@fig-id).
+
+::: {.callout-important title="Definition 5.7 — Identity matrix"}
+The **identity matrix** I is the square matrix with 1 on the main diagonal
+and 0 everywhere else. For every matrix A and vector **v** of matching size:
+$IA = AI = A$ and $I\mathbf{v} = \mathbf{v}$.
+:::
+
+![The identity matrix leaves every point where it is.](images/identity.png){#fig-id width=96%}
+
+::: {.callout-note title="Example 5.8 — I times a point"}
+$$\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} 5 \\ -2 \end{bmatrix} = \begin{bmatrix} 1 \times 5 + 0 \times (-2) \\ 0 \times 5 + 1 \times (-2) \end{bmatrix} = \begin{bmatrix} 5 \\ -2 \end{bmatrix}$$
+
+1. The 1 in row 1 keeps x; the 0 removes y from the new x.
+2. The 1 in row 2 keeps y. The point stays at (5, −2).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that a matrix of 1s is the identity. The matrix with the rows (1, 1)
+and (1, 1) sends (5, −2) to (3, 3). The identity has 1s only on the main
+diagonal.
+:::
+
+::: {.callout-note title="Do it · The identity in Multiply Lab"}
+In **Multiply Lab**, press "Identity".
+
+1. Drag P to three different points. Where is MP each time?
+2. Change one 0 into a 1. What happens to the house?
+
+*Your result:* three points and one sentence about the change.
+
+::: {.check}
+With the identity, MP is always the same as P. When a 0 becomes 1, a
+coordinate is added to the other one, so the house leans: it is no longer
+the identity.
+:::
+:::
+
+## 5.6 Undo: the inverse matrix
+
+The player casts Grow by mistake: the crystal jumps from (3, 2) to (6, 4).
+The game needs the spell that brings it back. This is the **inverse** of
+Grow (@fig-inv).
+
+::: {.callout-important title="Definition 5.8 — Inverse"}
+The **inverse** of a square matrix A is the matrix $A^{-1}$ that undoes it:
+$AA^{-1} = A^{-1}A = I$. Doing A and then $A^{-1}$ (or the other way round)
+changes nothing.
+:::
+
+![Grow takes P = (3, 2) to (6, 4); its inverse brings it back.](images/inverse.png){#fig-inv width=96%}
+
+::: {.callout-note title="Example 5.9 — Undo Grow"}
+Grow has the rows (2, 0) and (0, 2): it doubles x and y.
+
+1. To undo it, halve x and y: the rows (0.5, 0) and (0, 0.5). This is
+   Shrink.
+2. Check: Shrink × (6, 4) = (0.5 × 6, 0.5 × 4) = (3, 2). The crystal is back.
+3. Shrink × Grow = I: the two spells together change nothing.
+:::
+
+Not every spell can be undone. Squash has the rows (1, 2) and (1, 2): it
+sends both (2, 0) and (0, 1) to the same point (2, 2). From (2, 2), no spell
+can know which point came first, so Squash has **no inverse**.
+
+::: {.callout-warning title="Common mistake"}
+Thinking that every matrix has an inverse, or that the inverse is "1 ÷ every
+entry". A spell that sends two points to the same place cannot be undone.
+Always check: $A^{-1}A$ must give the identity.
+:::
+
+::: {.callout-note title="Do it · Undo in Multiply Lab"}
+In **Multiply Lab**:
+
+1. Press "Grow" and drag P to (2, 1). Write MP. Then enter the rows
+   (0.5, 0) and (0, 0.5) and put P at that point. Where does it go?
+2. Press "Squash" and look at the house. Why can it not come back?
+
+*Your result:* the two points and one sentence about Squash.
+
+::: {.check}
+Grow sends (2, 1) to (4, 2); Shrink brings (4, 2) back to (2, 1). Squash
+puts the whole house on one line: many points land on the same place, so no
+spell can bring them back.
+:::
+:::
+
+## Case study: Crystal Spells
+
+*Crystal Spells* is a made-up puzzle game. The crystal starts at (2, 1).
+Each spell is a 2 × 2 matrix: **Grow** = rows (2, 0) and (0, 2); **Shrink** =
+rows (0.5, 0) and (0, 0.5); **Turn** = rows (0, −1) and (1, 0); **Flip** =
+rows (−1, 0) and (0, 1); **Stay** = the identity. The player must predict
+where a spell sends the crystal, choose the spell for a gate, keep the
+crystal still on a trap, and undo a mistake. The Game challenge of the
+interactive lesson uses these numbers. In the mini-game below you play five
+rounds.
+
+{{< sim file="sims/crystal-spells.html" poster="sims/crystal-spells.png" title="Crystal Spells: cast the right matrix" kind="game" height="720" >}}
+
+## Further reading
+
+Dunn and Parberry, *3D Math Primer for Graphics and Game Development*,
+2nd ed., Chapter 4 (matrices: notation, multiplying matrices, the identity)
+and Chapter 6 (the idea of the inverse).
+
+## Exercises
+
+1. A matrix has 2 rows and 5 columns. What is its size, and how many entries
+   does it have?
+2. In the mine map M, what is $m_{21}$? What is $m_{12}$?
+3. Add the matrices with rows (3, 1), (0, 2) and rows (1, 1), (4, −2).
+4. Can a 3 × 2 matrix and a 2 × 3 matrix be added? Why?
+5. Compute 3A for A with rows (2, 0) and (−1, 4).
+6. Multiply the rows (3, 0) and (0, 1) by the vector (2, 5).
+7. Multiply the rows (1, 2) and (0, 1) by the vector (1, 3).
+8. A is 3 × 2 and B is 2 × 5. Does AB exist? What is its size? Does BA
+   exist?
+9. Compute AB for A = rows (1, 1), (0, 2) and B = rows (3, 0), (1, 1).
+10. Compute BA for the same A and B. Is it equal to AB?
+11. In $AB\mathbf{v}$, which matrix acts first on **v**?
+12. What is I × (7, −3)?
+13. Grow3 has the rows (3, 0) and (0, 3). Which matrix undoes it?
+14. *Crystal Spells*: the crystal is at (2, 1). Which spell sends it to
+    (−2, 1)? Which spell undoes Grow?
+
+## Answers to the exercises
+
+::: {.answers}
+1. 2 × 5; 10 entries.
+2. $m_{21} = 4$; $m_{12} = 0$.
+3. Rows (4, 2) and (4, 0).
+4. No: the sizes are different.
+5. Rows (6, 0) and (−3, 12).
+6. (6, 5).
+7. (1 + 6, 0 + 3) = (7, 3).
+8. Yes, 3 × 5. BA: (2 × 5) times (3 × 2): 5 and 3 differ, so no.
+9. Rows (4, 1) and (2, 2).
+10. Rows (3, 3) and (1, 3). No: AB ≠ BA.
+11. B, the matrix next to the vector.
+12. (7, −3).
+13. The rows (1/3, 0) and (0, 1/3): it divides x and y by 3.
+14. Flip. Shrink.
+:::

@@ -1,0 +1,409 @@
+---
+title: "Boolean Algebra and Decision Conditions"
+description: "Tautologies, contradictions and equivalent conditions, the laws of Boolean algebra, De Morgan's laws, simplifying a condition, rule words as conditions, decision tables and else-if chains."
+lesson: 9
+ilos: [B2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game. Then it explains the idea behind it. It ends
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check.
+
+## Key terms
+
+{{< glossary tautology contradiction logical-equivalence boolean-algebra de-morgan-laws distributive-law absorption-law decision-table else-if-chain unreachable-rule >}}
+
+## 9.1 Always, never or the same: tautologies and equivalence
+
+- **Tautology:** T in every row (p ∨ ¬p). **Contradiction:** F in every row
+  (p ∧ ¬p).
+- **Equivalent (≡):** the same last column in every row; one can replace
+  the other.
+- p → q ≡ ¬p ∨ q ≡ ¬(p ∧ ¬q).
+- "Open when the alarm is on and off" is a contradiction: the door never
+  opens.
+
+![Always true, always false, the same table.](images/taut-equiv.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Equivalent means equal in **every** row, not in most rows.
+:::
+
+::: {.callout-note title="Do it · Same or not?"}
+Build the tables of p → q and q → p. Are they equivalent? Which row shows
+it?
+
+::: {.check}
+p → q: T, F, T, T; q → p: T, T, F, T. Not equivalent: the rows (T, F) and
+(F, T) differ.
+:::
+:::
+
+::: {.callout-tip title="Try it 1 · Always, never, same"}
+Choose the right answer.
+
+::: {.match extra="neither, it depends|a test case"}
+p ∨ ¬p is …
+:   a tautology
+
+    Why: one of p and ¬p is always true.
+
+alarm ∧ ¬alarm is …
+:   a contradiction
+
+    Why: the alarm cannot be on and off at once: always false.
+
+p → q and ¬p ∨ q are …
+:   equivalent
+
+    Why: both are false only in the row p = T, q = F.
+
+p → q and q → p are …
+:   not equivalent
+
+    Why: they differ in the rows (T, F) and (F, T).
+:::
+:::
+
+## 9.2 The laws of Boolean algebra
+
+- Identity, domination, idempotent, complement, double negation.
+- Commutative and associative: order and brackets of one operator do not
+  matter.
+- **Distributive:** p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r), and p ∨ (q ∧ r) ≡
+  (p ∨ q) ∧ (p ∨ r).
+- **Absorption:** p ∨ (p ∧ q) ≡ p.
+
+![Laws of Boolean algebra.](images/bool-laws.png){width=90%}
+
+{{< sim file="sims/equivalence-lab.html" poster="sims/equivalence-lab.png" title="Equivalence Lab: are two conditions the same?" height="640" >}}
+
+::: {.callout-warning title="Watch out!"}
+Not every law of numbers is a law of logic, and the other way round.
+:::
+
+::: {.callout-note title="Do it · Check two laws"}
+In **Equivalence Lab**, check the distributive and absorption laws. Then
+compare p ∨ (q ∧ r) with (p ∨ q) ∧ (p ∨ r).
+
+::: {.check}
+Both laws give the same column on both sides, and so do p ∨ (q ∧ r) and
+(p ∨ q) ∧ (p ∨ r): they are equivalent.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Laws"}
+Simplify. You can use an answer more than once.
+
+::: {.match extra="q|¬p"}
+p ∧ T
+:   p
+
+    Why: identity: AND with true changes nothing.
+
+p ∨ T
+:   T
+
+    Why: domination: OR with true is always true.
+
+p ∧ ¬p
+:   F
+
+    Why: complement: never both.
+
+p ∨ (p ∧ q)
+:   p
+
+    Why: absorption: if p is false, p ∧ q is false too.
+:::
+:::
+
+## 9.3 De Morgan's laws
+
+- **¬(p ∧ q) ≡ ¬p ∨ ¬q** and **¬(p ∨ q) ≡ ¬p ∧ ¬q**.
+- The NOT goes into the brackets and AND and OR swap.
+- Cannot dock: `!(hasPass && shieldsUp)` = `!hasPass || !shieldsUp`.
+
+![De Morgan's laws.](images/de-morgan.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+¬(p ∧ q) is not ¬p ∧ ¬q: the row (T, F) differs.
+:::
+
+::: {.callout-note title="Do it · Remove the NOT"}
+Rewrite `!(isDay || isLit)` and `!(hasKey && !doorLocked)` without a NOT in
+front of brackets.
+
+::: {.check}
+`!isDay && !isLit` and `!hasKey || doorLocked`.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · De Morgan"}
+Choose the equivalent condition.
+
+::: {.match extra="!isDay || !isLit|hasKey && doorLocked"}
+!(hasPass && shieldsUp)
+:   !hasPass || !shieldsUp
+
+    Why: De Morgan: NOT each part, && becomes ||.
+
+!(isDay || isLit)
+:   !isDay && !isLit
+
+    Why: De Morgan: NOT each part, || becomes &&.
+
+!(hasKey && !doorLocked)
+:   !hasKey || doorLocked
+
+    Why: De Morgan, then !!doorLocked is doorLocked.
+
+!(!a || !b)
+:   a && b
+
+    Why: De Morgan, then double negation: !!a is a.
+:::
+:::
+
+## 9.4 Simplifying a condition
+
+- One law per step, with its name; check the end with a truth table.
+- (p ∧ q) ∨ (p ∧ ¬q) → p ∧ (q ∨ ¬q) → p ∧ T → **p**.
+- ¬(¬p ∨ q) → ¬¬p ∧ ¬q → **p ∧ ¬q**.
+
+![Simplifying step by step.](images/simplify-steps.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Do not jump two laws at once without a check.
+:::
+
+::: {.callout-note title="Do it · Simplify"}
+Simplify with the name of each law: p ∧ (p ∨ q); ¬(¬p ∧ ¬q);
+(p ∨ q) ∧ (p ∨ ¬q).
+
+::: {.check}
+p (absorption); p ∨ q (De Morgan, double negation); p (distributive,
+complement, identity).
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Simplify"}
+Choose the simplest equivalent. You can use an answer more than once.
+
+::: {.match extra="p ∧ q|¬p ∨ q"}
+p ∧ (p ∨ q)
+:   p
+
+    Why: absorption.
+
+¬(¬p ∧ ¬q)
+:   p ∨ q
+
+    Why: De Morgan: ¬¬p ∨ ¬¬q, then double negation.
+
+(p ∨ q) ∧ (p ∨ ¬q)
+:   p
+
+    Why: distributive: p ∨ (q ∧ ¬q) = p ∨ F = p.
+
+¬(¬p ∨ q)
+:   p ∧ ¬q
+
+    Why: De Morgan: ¬¬p ∧ ¬q, then double negation.
+
+p ∨ (q ∧ ¬q)
+:   p
+
+    Why: q ∧ ¬q is F, and p ∨ F = p.
+:::
+:::
+
+## 9.5 From words to conditions
+
+- **and** → `&&` · **or** → `||` (also both) · **not, no** → `!`
+- **either … or, not both** → `^` · **unless p** → if not p
+- Give each fact a letter, then find the word that joins the two big parts.
+- "Code and no alarm, **or** owner" → `(c && !a) || o`.
+
+![Rule words and their logic.](images/rule-words.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+`c && (!a || o)` looks similar, but then an owner needs the code.
+:::
+
+::: {.callout-note title="Do it · Translate"}
+Write as conditions: "The trap fires when the player steps on the plate and
+is not flying"; "the red key or the blue key, but not both"; "the alarm
+rings unless the guard is asleep".
+
+::: {.check}
+`p && !f`; `r ^ b`; `alarm = !a`.
+:::
+:::
+
+::: {.callout-tip title="Try it 5 · Words to logic"}
+Choose the condition.
+
+::: {.match extra="p -> !q|!(p || q)"}
+plate pressed and not flying
+:   p && !f
+
+    Why: "and" is &&, "not" is !.
+
+the red key or the blue key, but not both
+:   r ^ b
+
+    Why: "but not both" is XOR.
+
+the alarm rings unless the guard is asleep
+:   alarm = !a
+
+    Why: "unless" means "if not".
+
+code and no alarm, or owner
+:   (c && !a) || o
+
+    Why: the comma before "or" splits the sentence into two parts.
+:::
+:::
+
+## 9.6 Decision tables and else-if chains
+
+- A **decision table**: one column per condition, **2^n rows**, and the
+  **action** in each row. **Complete:** every row has an action. **No
+  conflict:** never two actions.
+- The guard: s = sees, n = near, w = weak. "A weak guard flees; otherwise it
+  attacks a player it sees near, or chases a player it sees; otherwise it
+  patrols."
+- In an **else-if chain** the first true rule wins. A rule whose cases are
+  all caught above it is **unreachable**. Most important and most specific
+  rules first; `else` last.
+
+![The decision table of the guard.](images/decision-table.png){width=90%}
+
+![The same rules in a wrong and a right order.](images/rule-order.png){width=90%}
+
+{{< sim file="sims/guard-brain.html" poster="sims/guard-brain.png" title="Guard Brain: rules, order and the decision table" height="900" >}}
+
+::: {.callout-warning title="Watch out!"}
+`if (s)` before `else if (s && n)`: Attack never runs.
+:::
+
+::: {.callout-note title="Do it · A trap table and the rule order"}
+The spike trap fires when the plate is pressed (p) and the trap is armed
+(a), unless the player is flying (f). Make the 8-row table: in how many rows
+does it fire? Then, in **Guard Brain**, change the order of the rules until
+the chain agrees with the designer in all 8 rows.
+
+::: {.check}
+The trap fires in 1 of 8 rows (p = T, a = T, f = F). The right order: Flee
+(if w), Attack (else if s and n), Chase (else if s), Patrol (else).
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Tables and chains"}
+Use the table of the guard. Choose the right answer.
+
+::: {.match extra="Sleep|the last rule"}
+s = T, n = T, w = F. The action?
+:   Attack
+
+    Why: not weak, sees and near: attack.
+
+s = T, n = T, w = T. The action?
+:   Flee
+
+    Why: a weak guard always flees.
+
+s = F, n = F, w = F. The action?
+:   Patrol
+
+    Why: sees nothing: patrol.
+
+The chain `if (s) Chase(); else if (s && n) Attack(); …`. Which rule never runs?
+:   Attack()
+
+    Why: every case with s is caught by Chase first.
+
+Which rule runs when two conditions are true?
+:   the first true rule from the top
+
+    Why: an else-if chain stops at the first true rule.
+:::
+:::
+
+## Game challenge: Rule Smith {.challenge}
+
+Work alone. Use every section of today.
+
+The designer of *Torch Hall* gives six rules: the chest opens if the player
+has the key (k) and no skeleton (s) is near, or the player is a thief (t);
+the bridge stays up **unless** the lever (l) is pulled; a door opens with
+the red key (r) or the blue key (b), **but not both**; a guard cannot see
+the player when **not** (light on and player in view); a shop chain with a
+rule that never runs; and a condition with a part that never matters.
+
+{{< sim file="sims/rule-smith.html" poster="sims/rule-smith.png" title="Rule Smith: exact rules, no bugs" kind="game" height="560" >}}
+
+::: {.callout-tip title="Try it 7 · The rules of Torch Hall"}
+Torch Hall: chest (k and no s) or t; bridge up unless l; door r or b, but not
+both; guard blind when not (l and v). Choose the right answer.
+
+::: {.match extra="bridgeUp = l|r || b"}
+The chest rule in code?
+:   (k && !s) || t
+
+    Why: (key and no skeleton) or thief.
+
+The bridge stays up unless the lever is pulled.
+:   bridgeUp = !l
+
+    Why: "unless l" means "if not l".
+
+The red key or the blue key, but not both?
+:   r ^ b
+
+    Why: exactly one: XOR.
+
+The same as !(l && v)?
+:   !l || !v
+
+    Why: De Morgan.
+:::
+:::
+
+::: {.callout-tip title="Try it 8 · Count and clean (harder)"}
+The chest opens with (k ∧ ¬s) ∨ t. Choose the right answer.
+
+::: {.match extra="6|lit && windy"}
+In how many of 8 rows does (k ∧ ¬s) ∨ t open the chest?
+:   5
+
+    Why: the 4 rows with t, and (T, F, F).
+
+`if (gold > 0) Sell(); else if (gold > 50) Discount();` Which rule never runs?
+:   Discount()
+
+    Why: gold > 50 is always caught by gold > 0 first.
+
+A shorter condition for `lit || (lit && windy)`?
+:   lit
+
+    Why: absorption: p ∨ (p ∧ q) ≡ p.
+
+How many rows has a table with 4 conditions?
+:   16
+
+    Why: 2^4.
+:::
+:::
+
+## Summary {.summary}
+
+- A tautology is always true, a contradiction always false; equivalent conditions have the same table.
+- The laws of Boolean algebra make a condition shorter, one step at a time.
+- De Morgan: the NOT goes into the brackets, and AND and OR swap.
+- Rule words: and, or, not, but not both (XOR), unless (if not).
+- A decision table lists every case; in an else-if chain the first true rule wins.

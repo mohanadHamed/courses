@@ -46,9 +46,11 @@ jobs:
           find _site -name "*.pdf" -o -name "*.pptx" | sort
           test -n "$(find _site -name '*.pdf')"
           test -n "$(find _site -name '*.pptx')"
-          test -z "$(find _site -name 'lesson-*-book.pdf' -o -name 'lesson-*-slides.pptx')"
+          test -z "$(find _site -name 'lesson-*-book.pdf' -o -name 'lesson-*-slides.pptx' -o -name 'seminar-*-book.pdf' -o -name 'seminar-*-slides.pptx' -o -name 'practice-*-book.pdf' -o -name 'practice-*-slides.pptx' -o -name 'online-*.pdf')"
           if ls courses/*/week-*/homework-*.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_homework[0-9]*.pdf')"; fi
-          if grep -lqs '^online: true' courses/*/week-*/lesson-*.qmd; then test -n "$(find _site -name '*_lecture[0-9]*_tasks.pdf')"; fi
+          if ls courses/*/week-*/seminar-*-book.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_seminar[0-9]*.pdf')"; fi
+          if ls courses/*/week-*/practice-*-book.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_practice[0-9]*.pdf')"; fi
+          if ls courses/*/week-*/online-*.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_online[0-9]*_tasks.pdf')"; fi
 
       - uses: actions/upload-pages-artifact@v4
         with:

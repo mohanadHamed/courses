@@ -151,14 +151,10 @@ promo-builder|courses/digital-media/week-12/sims/promo-builder.html|8|courses/di
 licence-lab|courses/digital-media/week-13/sims/licence-lab.html|9|courses/digital-media/week-13/sims/licence-lab.gif
 can-we-use-it|courses/digital-media/week-13/sims/can-we-use-it.html|8|courses/digital-media/week-13/sims/can-we-use-it.gif
 rights-check|courses/digital-media/week-13/sims/rights-check.html|9|courses/digital-media/week-13/sims/rights-check.gif
-ip-desk|courses/digital-media/week-13/sims/ip-desk.html|8|courses/digital-media/week-13/sims/ip-desk.gif
-credit-builder|courses/digital-media/week-14/sims/credit-builder.html|9|courses/digital-media/week-14/sims/credit-builder.gif
-asset-shopping|courses/digital-media/week-14/sims/asset-shopping.html|8|courses/digital-media/week-14/sims/asset-shopping.gif
-audit-board|courses/digital-media/week-14/sims/audit-board.html|8|courses/digital-media/week-14/sims/audit-board.gif
-audit-fixes|courses/digital-media/week-14/sims/audit-fixes.html|8|courses/digital-media/week-14/sims/audit-fixes.gif
+credit-builder|courses/digital-media/week-13/sims/credit-builder.html|9|courses/digital-media/week-13/sims/credit-builder.gif
+audit-board|courses/digital-media/week-13/sims/audit-board.html|8|courses/digital-media/week-13/sims/audit-board.gif
 production-planner|courses/digital-media/week-15/sims/production-planner.html|7|courses/digital-media/week-15/sims/production-planner.gif
 package-checker|courses/digital-media/week-15/sims/package-checker.html|9|courses/digital-media/week-15/sims/package-checker.gif
-workshop-day|courses/digital-media/week-15/sims/workshop-day.html|8|courses/digital-media/week-15/sims/workshop-day.gif
 package-review|courses/digital-media/week-15/sims/package-review.html|8|courses/digital-media/week-15/sims/package-review.gif
 talk-planner|courses/digital-media/week-15/sims/talk-planner.html|6|courses/digital-media/week-15/sims/talk-planner.gif
 path-finder|courses/digital-skills/week-01/sims/path-finder.html|9|courses/digital-skills/week-01/sims/path-finder.gif

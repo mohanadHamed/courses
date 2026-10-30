@@ -133,14 +133,25 @@ The teacher's notes:
   Checker, Disk Doctor and four unused figures removed; `schedule.yml`,
   `plan.md`, `NOTES.md`, `index.qmd`. `check_size.py`: no warning.
 
+- Digital Media (plan v3 done): Lecture 12 "Intellectual Property:
+  Copyright, Licences, Fair Use and Credits" (old 12.1 with 12.2, 12.3 with
+  13.2, 12.4, and 13.1 + 13.3 + 13.4 as section 12.4; Can We Use It? as the
+  Game challenge; 4 sections, 27 questions, 15 slides), Seminar 12
+  "Intellectual-Property Issues and a Licence Audit" (the rights check of
+  old Seminar 12 and the audit of old Seminar 13, with the AI audit at
+  home), Homework 12 kept (due one week after Lecture 12; old Homework 13
+  dropped); week-14 removed (its figures, Credit Builder and Audit Board
+  moved to week-13); Lecture 14 rewritten as Practice 1 (the Storm Night
+  package planned and checked; the team activity in the worksheet),
+  Seminar 14 relabelled Practice 2; Asset Shopping, IP Desk, Audit Fixes,
+  Workshop Day and unused figures removed; `schedule.yml`, `plan.md`,
+  `NOTES.md`, `index.qmd`. `check_size.py`: no warning.
+
 ### Still to do (in this order)
 
 1. **Game Math:** done (see above).
 2. **Computing Systems:** done (see above).
-3. **Digital Media** (design above): merge Lectures 12 + 13 and Seminars
-   12 + 13 (week-13; move figures and sims from week-14), Lecture 14 →
-   Practice 1, Seminar 14 → Practice 2, homework 12 + 13 → 12,
-   `schedule.yml`, `plan.md`, `NOTES.md`, `index.qmd`.
+3. **Digital Media:** done (see above).
 4. **Digital Skills** (design above): swap Online activities 9 and 10 (files,
    sims, figures, dues), new Lecture 10 from Practice 4 + Online activity
    13 (notes, page, slides), Online activity 13 practises it, old Lecture

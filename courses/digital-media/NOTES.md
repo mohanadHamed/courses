@@ -4,8 +4,9 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
 
 ## Timing and textbook
 
-- 2 × 60 min (2 credit hours: 1 theory + 1 seminar). Lesson A = syllabus
-  Lecture, Lesson B = syllabus Seminar (analysis, critique, production practice).
+- 2 credit hours (1 theory + 1 seminar), taught every week as one lecture
+  of 60 min and one seminar of 60 min; the seminar practises the lecture of
+  the same week (analysis, critique, production practice).
 - Textbook: Schell, *The Art of Game Design: A Book of Lenses*, 3rd ed.
   References: Collins, *Game Sound* (2008); McKee, *Story* (1997).
 - PLO 2 (player experience) is behind almost every ILO: always tie a media
@@ -51,3 +52,15 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   by the student and drawn as a storyboard, a scene drafted with AI and
   rewritten in screenplay format, a licence audit of 20 assets checked at
   their sources. Never AI images, sound or video as the student's product.
+- 2026-10-31 (plan v3): every week is one lecture and one seminar; 12 core
+  weeks and 2 practice weeks (with the midterm week, 15 weeks on the
+  platform). Lectures 12 and 13 were merged into Lecture 12 "Intellectual
+  Property: Copyright, Licences, Fair Use and Credits" (unit 12 covers
+  syllabus weeks 13 and 14; four sections), and Seminars 12 and 13 into
+  Seminar 12 (a rights check of six assets; a licence audit of eight). D1
+  keeps its core part there (respecting rights); the team work is in the
+  practice weeks: Lecture 14 became Practice 1 (plan the Storm Night package
+  and check version 1; the team activity in its worksheet) and Seminar 14
+  Practice 2 (the team presentation). Homework 13 was dropped (Homework 12
+  already checks rights and credits). Removed: Asset Shopping, IP Desk,
+  Audit Fixes, Workshop Day and the figures no session uses.

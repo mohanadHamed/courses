@@ -1,4 +1,4 @@
-// A tiny frame of Rooftop Rescue for the video simulators of lectures 19-20.
+// A tiny frame of Rooftop Rescue for the video simulators of Lectures 10 and 11.
 //   RS.draw(ctx, x, y, w, h, t, look)  t = time in seconds; look = { tint, block (pixel size), boat }
 (function () {
   function draw(c, x, y, w, h, t, look) {

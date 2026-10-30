@@ -162,15 +162,19 @@ The teacher's notes:
   `schedule.yml` (10 units, 5 practice weeks), `plan.md`, `NOTES.md`,
   `index.qmd`. `check_size.py --all`: no warning in any course.
 
+- Rules: `AUTHORING.md` ("Courses", "Units and sessions", "Mapping the
+  syllabus week", "What a seminar looks like", "Blended courses",
+  "Homework", "Course pages and the schedule", "The course package", a
+  lessons-learned entry of 2026-10-31) and the seminar and homework
+  templates describe core weeks and practice weeks.
+
 ### Still to do (in this order)
 
 1. **Game Math:** done (see above).
 2. **Computing Systems:** done (see above).
 3. **Digital Media:** done (see above).
 4. **Digital Skills:** done (see above).
-5. **Rules:** `AUTHORING.md` ("Units and sessions", seminars, practice
-   weeks, homework, the mapping of syllabus weeks, a lessons-learned entry),
-   the templates, CI output check.
+5. **Rules:** done (see above).
 6. **courses-private** (clone it next to this repo as `../courses-private`):
    homework solutions renamed and merged (Game Math 9–13 → 8–12, 14
    removed; Computing Systems 5 + 6 → 5, 7–13 → 6–12; Digital Media 12 +

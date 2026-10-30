@@ -14,7 +14,7 @@ Program: Mobile Game Development and Design, Intermediate University Degree
 
 | Slug | Official course name | Code | Credit hours | Per week (as taught) | Textbook |
 |---|---|---|---|---|---|
-| `game-math` | Mathematics and Computing for Digital Games | 13411131 | 3 | 2 lectures × **90 min** | Dunn & Parberry, *3D Math Primer for Graphics and Game Development*, 2nd ed. |
+| `game-math` | Mathematics and Computing for Digital Games | 13411131 | 3 | 2 × **90 min** (lecture + seminar) | Dunn & Parberry, *3D Math Primer for Graphics and Game Development*, 2nd ed. |
 | `computing-systems` | Fundamentals of Computing Systems and Digital Platforms | 13411133 | 2 | 2 × **60 min** (lecture + seminar) | Tanenbaum & Austin, *Structured Computer Organization*, 6th ed. |
 | `digital-media` | Digital Media Technologies and Creative Production for Games | 13411134 | 2 | 2 × **60 min** (lecture + seminar) | Schell, *The Art of Game Design*, 3rd ed. |
 | `digital-skills` | Digital Skills | 01101154 | 2 | **blended**: 1 × **60 min** lab lecture + 1 online activity | Evans, Martin & Poatsy, *Technology in Action*, 18th ed. (+ Microsoft Office and AI references) |
@@ -23,73 +23,102 @@ Program: Mobile Game Development and Design, Intermediate University Degree
 most of them not in technology: it is simpler than the other courses (A2
 English) and uses general examples, never the games industry. Its
 `NOTES.md` has the details and overrides "Level and language" below.
-Since 2026-10-23 it teaches Microsoft Office and AI tools (syllabus v2) and
-is **blended**: each week one face-to-face lecture (a full lesson) and one
-online activity (see "Blended courses: the online activity" below).
+Since 2026-10-23 it teaches Microsoft Office and AI tools (syllabus v2). It
+is **fully practical** (2 hours in the computer lab in the study plan) and
+**blended**: each week one face-to-face lab session and one online activity
+(see "Blended courses: the online activity" below). It has no seminars.
 
-**Units = the weeks of the syllabus.** 16 weeks: week 8 midterm, week 16
-final. The materials cover every row of each syllabus's weekly table: every
-semester the dean asks for them in the official 15-week format (see "The
-course package"). Use the official course names exactly.
+**Core weeks and practice weeks.** The syllabus has 16 weeks: week 8
+midterm, week 16 final. The e-learning platform has a 15-week plan. Each
+course has **10–12 core weeks** (units, with all the new ideas) and fills
+the rest of the 15 weeks with **practice weeks** (filling weeks: revision,
+an applied problem set, a case study, a lab practice, project
+presentations; no new content) and the midterm week. The materials still
+cover every row of each syllabus's weekly table: every semester the dean
+asks for them in the official 15-week format (see "The course package").
+Use the official course names exactly.
 The textbook is in `course.textbook` (`_metadata.yml`). Follow its topics and
 level; never copy its text, figures or exercises.
 
 ### Units and sessions (what students see)
 
 Jordanian semesters lose the first two or three weeks, the exams and days to
-holidays, snow or absences. So each course has about **19 core sessions**
-(always taught) and **flexible** sessions (taught when time allows, else
-studied at home: every answer is on their page). Lecture length does not
-change (90 min Game Math, 60 min the others).
+holidays, snow or absences. So each course has **10–12 core weeks** (always
+taught) and **practice weeks** (taught when time allows; when a week is
+lost, a practice week goes first, and nothing is missing for the students).
+Lecture length does not change (90 min Game Math, 60 min the others).
 
-- A **unit** is one week of the official syllabus: its lecture(s), its
-  seminar, practice session or online activity, and its homework. Units are
-  numbered in teaching order, without gaps for exam weeks.
+- A **unit** is a core week: **Lecture N and Seminar N** (Game Math,
+  Computing Systems, Digital Media: the seminar practises the lecture of the
+  same week) or **Lecture N and its online activity** (Digital Skills), and
+  **Homework N** (not in Digital Skills). Units are numbered 1, 2, 3 … in
+  teaching order, so "Unit 5" holds Lecture 5 and Seminar 5.
+- A **practice week** (a filling week) has **no new ideas**: one or two
+  Practice sessions (revision, an applied problem set, a case study, project
+  presentations; Digital Skills: a lab practice with an online practice
+  activity). It is flexible: taught when time allows, else studied at home
+  (every answer is on its page). The 15-week plan on the platform is the
+  units, the practice weeks and the midterm week.
 - **Session types:**
 
   | Type | Label | Content | Core? |
   |---|---|---|---|
   | Lecture | "Lecture N" | New ideas: the lesson model below. | Always. |
-  | Seminar | "Seminar N" | **No new ideas.** Students apply the lectures they had, through activities (see "What a seminar looks like"). Game Math, Computing Systems, Digital Media. | Core or flexible (`schedule.yml`). |
-  | Practice | "Practice N" | Digital Skills: hands-on work on earlier lectures, in the seminar format. | Flexible. |
-  | Online activity | "Online activity N" | Digital Skills: practises its unit, never repeats the lecture. | Always (asynchronous). |
+  | Seminar | "Seminar N" | **No new ideas.** Students apply the lecture of the same unit, through activities (see "What a seminar looks like"). Game Math, Computing Systems, Digital Media. | Always. |
+  | Practice | "Practice N" | **No new ideas.** A practice week: revision, problems, a case study, presentations; Digital Skills: hands-on lab work. Seminar format. | Flexible. |
+  | Online activity | "Online activity N" | Digital Skills: practises its unit, never repeats the lecture. Numbered 1–15 in teaching order. | Core in a unit; flexible in a practice week. |
 
 - Lectures, seminars, practice sessions and online activities are numbered
-  separately, each in teaching order. "Which lecture did we reach?" still
-  works: the teacher must reach the last lecture and the core seminars.
+  separately, each in teaching order; Lecture N and Seminar N are always in
+  the same unit. "Which lecture did we reach?" still works.
 - Every ILO keeps at least one core section at its Bloom level: no ILO
-  depends on a flexible session. A second application of the same idea goes
-  to the seminar of the unit.
+  depends on a practice week. A second application of the same idea goes to
+  the seminar of the unit.
+- When a syllabus week has more content than one lecture can hold, merge
+  two lectures into one (at most the size of one lecture: see "Size every
+  lesson") and move the second applications to the seminar; never move new
+  content to a practice week.
 - **The site never shows a week.** Absences move each course differently, so
   everything students see counts sessions. The course page lists the units
-  ("Unit 3"), each with its sessions and homework.
+  ("Unit 3") and the practice weeks ("Practice week", tagged Flexible), each
+  with its sessions and, for a unit, its homework.
 - **Exams are not on the site.** The university sets them in its own week.
-  A revision session is an ordinary session ("Revision of Lectures 1–10").
-- **Homework U** belongs to unit U, practises the lectures of that unit only
-  (never a flexible seminar), and is due "before lecture N" (the first
-  lecture of the next unit). No homework after a revision unit or the
-  project.
+  A revision session is a practice session ("Revision of Lectures 1–7").
+- **Homework U** belongs to unit U, practises Lecture U only (never a
+  seminar or a practice session), and is due "before lecture N" (the next
+  lecture); the last homework is due "one week after lecture N". No
+  homework in a practice week.
 - Pages, PDFs, slides and download names say "Lecture N", "Seminar N",
   "Practice N", "Online activity N" and "Homework U", never "Week N". Slide
-  subtitles: "Lecture N", "Seminar N · practises Lecture X".
-- **Folders:** `week-WW`, WW = the syllabus week of the unit (Game Math and
-  Digital Skills `week-01 … week-15`; Computing Systems and Digital Media
-  have no unit in week 8). The name is internal and never shown.
-- `courses/<slug>/schedule.yml` holds the units, their sessions (`kind`,
-  `n`, `slot` = the syllabus column, `title`, `ilos`, `practises`, `core`)
-  and is the source for the course page, the banners and the course package.
+  subtitles: "Lecture N", "Seminar N · practises Lecture N", "Practice N ·
+  practises Lectures X–Y".
+- **Folders:** `week-WW`, WW = the syllabus week whose row the unit or the
+  practice week covers (the first one for a merged unit). The name is
+  internal and never shown.
+- `courses/<slug>/schedule.yml` lists the weeks in teaching order: units
+  (`unit: N`) and practice weeks (`filling: true`), each with `week`
+  (folder and syllabus row), `covers` (more syllabus rows of a merged unit)
+  and its sessions (`kind`, `n`, `slot` = the syllabus column, `title`,
+  `ilos`, `practises`). It is the source for the course page, the banners
+  and the course package.
 
 ### Mapping the syllabus week to the sessions
 
-- `game-math`: syllabus has First Lecture + Second Lecture + Seminar, taught
-  as 2 × 90 min. In a week with two lectures, the seminar topic is the Game
-  challenge of the second lecture. In a week with one (merged) lecture, the
-  second session is a seminar with the syllabus seminar title.
-- `computing-systems`, `digital-media`: Lecture + Seminar. The lecture is
-  core; the seminar does the syllabus seminar topic (applied, analysis,
-  practice), core where an ILO needs it.
-- `digital-skills` (blended): Lecture 1 (face-to-face) is a lecture or a
-  flexible practice session; Lecture 2 is the online activity.
+- `game-math`: the syllabus has First Lecture + Second Lecture + Seminar;
+  taught as one lecture (90 min) and one seminar (90 min) per week. The
+  lecture of a unit covers both lecture columns of its syllabus week (two
+  old lectures merged into 7 sections where needed); the seminar does the
+  syllabus seminar topic. 12 units (syllabus weeks 1–7 and 9–13) and 3
+  practice weeks (8: revision; 14 and 15: problem set, case studies, course
+  revision).
+- `computing-systems`, `digital-media`: Lecture + Seminar per week. 12 units
+  (one merged unit covers two syllabus weeks: Computing Systems 5–6, Digital
+  Media 13–14) and 2 practice weeks (syllabus week 15: case studies or the
+  team workshop, and the presentations), with the midterm week.
+- `digital-skills` (blended, fully practical): Lecture 1 of the syllabus is
+  the face-to-face lab session (a lecture in a unit, a practice session in a
+  practice week); Lecture 2 is the online activity. 10 units and 5 practice
+  weeks (8, 10, 12, 14, 15).
 - Exam sessions get no session. Confirm with me when a syllabus week is
   unclear. The maps are in each course's `plan.md`.
 
@@ -142,18 +171,20 @@ box). The web lesson's main button is "Lesson notes (PDF)".
 
 ### What a seminar looks like
 
-A seminar (Digital Skills: a practice session) has **no new ideas**:
-students apply the lectures they already had. It must look like a seminar
+A seminar (and a practice session, in the same format) has **no new
+ideas**: students apply the lectures they already had. A seminar practises
+the lecture of its unit; a practice session (a practice week) revises or
+applies several lectures. It must look like a seminar or a practice session
 in its title, label, grouping and slides, so a teacher knows at once that it
 is activity-based. Templates: `seminar-template.qmd`,
 `seminar-book-template.qmd`, `seminar-slides-template.qmd`.
 
 - **Files:** `seminar-NN.qmd` (page), `seminar-NN-book.qmd` (worksheet,
-  PDF), `seminar-NN-slides.qmd`; Digital Skills `practice-NN*`. Front
-  matter `seminar: N` (or `practice: N`); what it practises and whether it
-  is core come from `schedule.yml`. The banner shows "Seminar 2 · practises
-  Lecture 8" and "Flexible"; a flexible page says in one line that it is
-  studied at home when it is not held.
+  PDF), `seminar-NN-slides.qmd`; a practice session `practice-NN*`. Front
+  matter `seminar: N` (or `practice: N`); what it practises comes from
+  `schedule.yml`. The banner shows "Seminar 2 · practises Lecture 2", or
+  "Practice 1 · practises Lectures 1–7" and "Flexible"; a practice page says
+  in one line that it is studied at home when it is not held.
 - **Short, with room to explain.** Most students cannot solve a seminar
   problem alone, even with its answer on the page: the teacher explains
   almost every problem before and after the students try it. So a seminar
@@ -187,8 +218,8 @@ is activity-based. Templates: `seminar-template.qmd`,
   (the result, `.reveal` step by step); a Live demo slide for a simulator
   the activities use; a Wrap-up. `pptx_finish.py` puts a "SEMINAR" (or
   "PRACTICE") mark on every slide.
-- **Team work** stays only in the notes of the session that `plan.md` names,
-  with an individual alternative.
+- **Team work** stays only in the notes or the worksheet of the session that
+  `plan.md` names, with an individual alternative.
 
 ### Applied first (a diploma, not a bachelor's degree)
 
@@ -356,15 +387,16 @@ the same.
 
 ### Blended courses: the online activity
 
-A blended course (`course.blended: true`; now `digital-skills`) has one
-face-to-face session and one online activity in each unit. The face-to-face
-session is a lecture (a full lesson with all three outputs) or a flexible
-practice session (seminar format). The online activity (`kind: online` in
+A blended course (`course.blended: true`; now `digital-skills`) is fully
+practical and has one face-to-face lab session and one online activity in
+every week. In a unit the face-to-face session is a lecture (a full lesson
+with all three outputs); in a practice week it is a practice session
+(seminar format, no new ideas). The online activity (`kind: online` in
 `schedule.yml`) is **one page**, `online-NN.qmd` with `online: N`, `due:` and
 `marks:` in the front matter (template: `shared/templates/online-template.qmd`).
 It **practises its unit** and never repeats the face-to-face lecture; in a
-unit whose face-to-face session is a flexible practice, it carries the core
-idea of the unit:
+unit it may add a skill of the unit's syllabus row, in a practice week it
+adds nothing new:
 
 - "Before you start" (what you need, about how long, what you submit);
 - 2–3 short **Steps** marked `{.study}`: a plain explanation, a figure, a
@@ -817,13 +849,14 @@ what the class does with it. Short is good; unclear is not.
 
 ## Course pages and the schedule
 
-- `courses/<slug>/schedule.yml` lists every unit and its sessions in
-  teaching order (see "Units and sessions"); no exams. The course page shows
-  it with `{{< schedule >}}`, one card per unit ("Unit 3") with its homework:
-  each session is labelled "Lecture N", "Seminar N", "Practice N" or "Online
-  activity N", flexible ones are tagged "Flexible"; a session whose `.qmd`
-  exists and is not a draft is bright, with links (page, PDF, slides); the
-  others are faded ("Coming soon").
+- `courses/<slug>/schedule.yml` lists every week in teaching order: units
+  and practice weeks (see "Units and sessions"); no exams. The course page
+  shows it with `{{< schedule >}}`: one card per unit ("Unit 3") with its
+  homework, and one dashed card per practice week ("Practice week", tagged
+  Flexible). Each session is labelled "Lecture N", "Seminar N", "Practice N"
+  or "Online activity N"; a session whose `.qmd` exists and is not a draft
+  is bright, with links (page, PDF, slides); the others are faded ("Coming
+  soon").
 - Titles in `schedule.yml` follow the syllabus weekly table. Change a title
   there, and in the lesson's front matter, together.
 
@@ -860,12 +893,12 @@ homework and its solution together.
 - **One homework per unit** (not in a blended course: there the online
   activity takes its place): homework U belongs to unit U
   (`courses/<slug>/week-WW/homework-UU.qmd`), from
-  `shared/templates/homework-template.qmd`. None after a revision unit;
-  computing-systems and digital-media: the project instead of the last
-  homework (syllabus).
-- Built from the ILOs of the lectures of its unit (`ilos:`): practise exactly
-  what they taught, in the same words, never a flexible seminar. No new
-  content.
+  `shared/templates/homework-template.qmd`. None in a practice week;
+  computing-systems and digital-media: the project in the practice weeks
+  (syllabus).
+- Built from the ILOs of the lecture of its unit (`ilos:`): practise exactly
+  what it taught, in the same words, never a seminar or a practice session.
+  No new content.
 - **With AI in mind** (see "Tasks with AI"): where a short question could be
   pasted into an AI and answered without learning, prefer one Task with AI
   at a higher level, which asks for the AI-use statement. The page says:
@@ -884,8 +917,8 @@ homework and its solution together.
   task. Classes are small, so copying is not a risk now.
 - **Change the numbers and situations every semester.** Old versions stay in
   the git history, and old answers go around.
-- `due:` names a lecture ("before lecture 3": the first lecture of the next
-  unit), never a week or a date, so
+- `due:` names a lecture ("before lecture 3": the lecture of the next unit;
+  the last one "one week after lecture 12"), never a week or a date, so
   the page works every semester and after any delay. Exact dates go on the
   e-learning platform.
 - Submission: the university e-learning platform (syllabus). The page says how.
@@ -921,7 +954,10 @@ organised by the official weekly plan of its syllabus.
   `_package/<slug>/` (not in git): one folder per syllabus week with its
   PDFs, slides, homework and the addresses of its pages, and `index.html` /
   `index.pdf`: the syllabus table exactly as approved, with one added
-  **Materials** column (Lecture 8, Seminar 2, Online activity 5, Homework 5).
+  **Materials** column (Lecture 8, Seminar 8, Practice 1 (flexible),
+  Online activity 5, Homework 5). A merged unit is listed in every row it
+  covers; the practice weeks fill the rows of the case studies, revisions
+  and presentations.
 - The script checks that every teaching row has its material and that every
   session belongs to exactly one row. Fix every problem before sending it.
 
@@ -1096,3 +1132,17 @@ do not add it. The draft mechanism still works (a draft lecture is faded,
   allow (the estimated limit, about 30 % simpler than October 2026), with
   A2–B1 English in the notes and A2 on the pages and slides. Rules above
   ("What a seminar looks like", "Level and language").
+- 2026-10-31 (teacher's review of the order, plan v3): the seminars were
+  scattered (Game Math went Lecture 1, Seminar 1, Lectures 2–7, then a
+  seminar), and the 15 units mixed core and flexible sessions. Now every
+  week is one lecture and one seminar that practises it (Game Math, Computing
+  Systems, Digital Media) or one lab lecture and one online activity
+  (Digital Skills, fully practical, no seminars). Each course has 10–12 core
+  weeks (units) and practice weeks without new content that fill the
+  15-week plan of the platform and are dropped first when weeks are lost.
+  Game Math merged the two lectures of four syllabus weeks; Computing
+  Systems and Digital Media merged one pair each; Digital Skills turned the
+  PivotTable practice into Lecture 10. Rules above ("Units and sessions",
+  "Mapping the syllabus week", "What a seminar looks like", "Blended
+  courses", "Homework", "Course pages and the schedule").
+

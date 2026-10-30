@@ -1,0 +1,152 @@
+---
+title: "Cloud Services for Games: Storage and Hosting"
+description: "Seminar worksheet · Choose a cloud service for each need of a new game and check the save of a game you play, then solve the problems of an online game in Cloud Planner."
+seminar: 10
+ilos: [A2, C2]
+format: lesson-typst
+---
+
+::: {.lead}
+In Lecture 10 you learned what the cloud is, its service models, the cloud
+services of a game, and its costs and risks. Today you choose services for
+a new game and solve the problems of an online game. There are no new
+ideas: two short problems. Do each one alone. The results of the
+activities are at the end of this worksheet.
+:::
+
+## Recall
+
+- **BaaS** (a game back end): player accounts, **cloud saves**,
+  leaderboards.
+- **Object storage + a CDN**: files that players download; the CDN keeps
+  copies near the players. **Dedicated game servers** run the live matches
+  in **regions** near the players.
+- The cloud grows and shrinks with the players (**auto-scaling**); costs
+  grow with use.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="a printer|a USB stick"}
+Which service keeps the progress of a player on a server?
+:   a cloud save
+
+What keeps copies of downloads near the players?
+:   a CDN
+
+Which model gives ready accounts and leaderboards through an SDK?
+:   BaaS
+:::
+:::
+
+## Activity 1 · A service for each need
+
+The studio plans *Dune Duel*, a desert race for two players. The game
+needs: player accounts; the progress of each player on every phone; a
+**120 MB** track pack that changes every month; **live duels** between two
+players. Each need has a cloud service; a service that no need asks for is
+left out.
+
+![The cloud services of an online game.](images/game-cloud.png){width=90%}
+
+::: {.callout-note title="Activity 1 · Four needs · 15 min"}
+1. Copy the table and fill it for *Dune Duel*.
+
+   | need | cloud service | why |
+   |---|---|---|
+   | accounts | | |
+   | progress on every phone | | |
+   | 120 MB track pack | | |
+   | live duels | | |
+
+2. Open the settings of a game on your phone. Does it have a cloud save or
+   an account link?
+
+*Your product:* the filled table and one answer.
+
+::: {.check}
+| need | cloud service | why |
+|---|---|---|
+| accounts | back end (BaaS) | ready accounts through an SDK |
+| progress on every phone | cloud save (BaaS) | loads after the login on any phone |
+| 120 MB track pack | object storage + CDN | not inside the app; copies near the players |
+| live duels | dedicated game servers | they run the duels and decide who wins |
+
+Your game: for example "Yes, it links to Google Play Games: on a new phone
+the progress loads." Without an account link, a lost phone is lost
+progress.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Needs and services"}
+Choose the service.
+
+::: {.match extra="a bigger app|a printer"}
+Where does the 120 MB track pack go, so that it can change every month?
+:   object storage with a CDN
+
+What runs the live duels?
+:   dedicated game servers
+
+What gives the accounts with the least work?
+:   a game back end (BaaS)
+:::
+:::
+
+## Activity 2 · The inbox after an online update
+
+After the online update of *Pocket Quest*, the inbox of Byte Bay is full: a
+player who lost a phone (**level 12, 840 coins**); slow downloads of the
+**80 MB** pack in **Amman**; jumping cars with a ping of **90 ms**;
+**impossible race times**; a teammate who wants to put a **secret key** in
+the app; and a bill that **doubled** after 50,000 downloads.
+
+{{< sim file="sims/cloud-planner.html" poster="sims/cloud-planner.png" title="Cloud Planner: the right service for each problem" kind="game" >}}
+
+::: {.callout-note title="Activity 2 · Six problems · 15 min"}
+In **Cloud Planner**, choose what solves each problem.
+
+*Your product:* your score and the six problems, each with its solution.
+
+::: {.check}
+Lost phone → a cloud save. Slow downloads in Amman → a CDN with a copy near
+the players. Jumping cars at 90 ms → race servers in a region near the
+players. Impossible race times → a dedicated server decides the race. The
+secret key → never in the app: secrets stay on the server. The doubled bill
+→ a CDN and smaller packs, because costs grow with use.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · The inbox"}
+Choose what solves it, or what it shows.
+
+::: {.match extra="a bigger phone|yes, if the file is hidden"}
+A lost phone, with level 12 and 840 coins.
+:   a cloud save
+
+The 80 MB pack downloads slowly in Amman.
+:   a CDN with a copy near the players
+
+May the payment key go into the app?
+:   never: secrets stay on the server
+
+Which risk of the cloud does the doubled bill show?
+:   costs grow with use
+:::
+:::
+
+## Exercises
+
+1. What does a CDN do?
+2. Why does a dedicated server decide the score of a match?
+3. Where must a payment key be kept?
+4. Why can a cloud bill grow when a game gets popular?
+
+## Answers to the exercises
+
+::: {.answers}
+1. It keeps copies of the files near the players, so downloads are faster.
+2. A cheating phone cannot change what the server measured.
+3. On the server only, never in the app.
+4. Costs grow with use.
+:::

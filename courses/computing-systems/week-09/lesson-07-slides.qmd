@@ -1,0 +1,169 @@
+---
+title: "Mobile Platforms Compared: Android vs iOS"
+subtitle: "Lecture 7"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary market-share fragmentation cross-platform test-device sideloading app-store reliable-source comparison-criteria >}}
+
+## 7.1 Players and devices
+
+:::: {.columns}
+::: {.column width="50%"}
+- Worldwide, about seven in ten phones run Android.
+- The share is different in each country, so we check it with its date.
+- Android runs on many makers and models, and iOS on a few iPhones.
+- **Do it:** Count the Android phones and the iPhones in your family. Is the share near 70 / 30?
+:::
+::: {.column width="50%"}
+![](images/reach-devices.png)
+:::
+::::
+
+## Try it 1 · Players and devices
+
+a) About how many phones in ten run Android worldwide?
+b) What does fragmentation mean for a tester?
+c) Why do we look at the share of one country?
+
+::: {.answer}
+a) about seven
+b) many models and versions to test
+c) Players differ from country to country.
+:::
+
+## 7.2 Building and testing
+
+:::: {.columns}
+::: {.column width="50%"}
+- Android Studio runs on Windows, macOS and Linux.
+- Xcode runs only on a Mac, so an iOS build needs a Mac.
+- Android needs more real test phones than iOS.
+- **Do it:** Plan a launch on both in Launch Planner with only Windows PCs. What is the problem?
+:::
+::: {.column width="50%"}
+![](images/build-test.png)
+:::
+::::
+
+## Example · Byte Bay's computers
+
+Byte Bay has five Windows PCs and no Mac.
+**Which builds can the studio make, and on which phones does it test?**
+
+::: {.reveal}
+1. The **Android** build is possible today, on any of the PCs.
+2. The **iOS** build waits until the studio buys or rents a Mac.
+3. It tests on P5, P6 and P7 for Android, and on two iPhones for iOS.
+:::
+
+## Live demo · Launch Planner
+
+{{< sim file="sims/launch-planner.html" poster="sims/launch-planner.png" title="Launch Planner: Android, iOS or both?" task="**Show:** Android only, then iOS with only Windows PCs, then with a Mac, then both. **Ask:** what does a launch on both need in computers and test phones?" >}}
+
+## Try it 2 · Build and test
+
+a) On which computer can Xcode run?
+b) Byte Bay has only Windows PCs. Which build can it make?
+c) Why are virtual phones on the PC not enough for testing?
+
+::: {.answer}
+a) only on a Mac
+b) the Android build
+c) A virtual phone has no real battery, heat or weak chip.
+:::
+
+## 7.3 Open or closed
+
+:::: {.columns}
+::: {.column width="50%"}
+- Android is open, and apps can come from other stores or an .apk file.
+- iOS is closed, and apps come mainly from the App Store.
+- Android updates come from each maker, but Apple updates all iPhones at once.
+- **Do it:** Find "Install unknown apps" on an Android phone. Which apps may install other apps?
+:::
+::: {.column width="50%"}
+![](images/openness.png)
+:::
+::::
+
+## Try it 3 · Open or closed?
+
+a) Which platform installs an .apk file from outside the store?
+b) Which platform updates every supported phone at the same time?
+c) Why does a tester still test on an old Android version?
+
+::: {.answer}
+a) Android
+b) iOS
+c) Many phones never get the newest version.
+:::
+
+## 7.4 Facts you can trust
+
+:::: {.columns}
+::: {.column width="50%"}
+- We choose the criteria of a comparison for the decision we must make.
+- A reliable source has a known author, a date and its data.
+- The best source for a fact about a platform is the maker's own page.
+- **Do it:** Judge the five sources in Source Check. Which three signs did you use?
+:::
+::: {.column width="50%"}
+![](images/criteria-sources.png)
+:::
+::::
+
+## Live demo · Source Check
+
+{{< sim file="sims/source-check.html" poster="sims/source-check.png" title="Source Check: can you trust this source?" task="**Show:** tick the signs of source 1 (Apple's page about Xcode) and use it, then skip source 2 (a forum post). **Ask:** which sign is missing in the forum post?" >}}
+
+## Example · Three sources for one fact
+
+Rami needs the share of Android phones in the country of his players.
+**Which of three sources does he use?**
+
+::: {.reveal}
+1. A market report with its data, updated last month, is **reliable**: he writes the month.
+2. A blog from 2019 is **too old** and shows no data.
+3. A forum post has **no author and no date**, so he cannot check it.
+:::
+
+## Try it 4 · Sources
+
+a) Which source is best for the fact that Xcode runs only on a Mac?
+b) A forum post has no author and no date. Does Rami use it?
+c) Why does a market share in a table need its date?
+
+::: {.answer}
+a) Apple's developer page, with this year's date
+b) No, he finds a better source.
+c) Shares change from month to month.
+:::
+
+## Game challenge · Platform Pick
+
+{{< sim file="sims/platform-pick.html" poster="sims/platform-pick.png" title="Platform Pick: Android or iOS for the launch?" kind="game" task="**The story:** the producer of Byte Bay asks six questions before the launch of Pocket Quest. **Play:** choose the best answer about Android and iOS for each one." >}}
+
+## Try it 5 · Advice (harder)
+
+The facts: an iOS build needs a Mac. Android reaches about 7 in 10 phones worldwide, and iOS about 3 in 10.
+
+a) Which platform should a studio with only Windows PCs and budget-phone players choose first?
+b) Which platform fits a studio with a Mac whose players mostly have iPhones?
+c) What should a studio with a Mac and players all over the world choose?
+
+::: {.answer}
+a) Android first
+b) iOS first, or both
+c) both platforms
+:::
+
+## Summary
+
+- Android reaches more phones worldwide, but each country is different.
+- Android builds on any PC, and iOS needs a Mac.
+- Android needs more test phones because of fragmentation.
+- Android is open and updated by each maker, and iOS by Apple.
+- A fact goes into a comparison only with a reliable source and its date.

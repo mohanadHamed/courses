@@ -84,10 +84,7 @@ marble-peak|courses/computing-systems/week-04/sims/marble-peak.html|9|courses/co
 sheet-filter|courses/computing-systems/week-04/sims/sheet-filter.html|10|courses/computing-systems/week-04/sims/sheet-filter.gif
 scheduler-lab|courses/computing-systems/week-05/sims/scheduler-lab.html|8|courses/computing-systems/week-05/sims/scheduler-lab.gif
 ram-rush|courses/computing-systems/week-05/sims/ram-rush.html|9|courses/computing-systems/week-05/sims/ram-rush.gif
-settings-explorer|courses/computing-systems/week-05/sims/settings-explorer.html|9|courses/computing-systems/week-05/sims/settings-explorer.gif
-disk-doctor|courses/computing-systems/week-06/sims/disk-doctor.html|9|courses/computing-systems/week-06/sims/disk-doctor.gif
-name-checker|courses/computing-systems/week-06/sims/name-checker.html|8|courses/computing-systems/week-06/sims/name-checker.gif
-test-day|courses/computing-systems/week-06/sims/test-day.html|8|courses/computing-systems/week-06/sims/test-day.gif
+test-day|courses/computing-systems/week-05/sims/test-day.html|8|courses/computing-systems/week-05/sims/test-day.gif
 stack-builder|courses/computing-systems/week-07/sims/stack-builder.html|9|courses/computing-systems/week-07/sims/stack-builder.gif
 pause-please|courses/computing-systems/week-07/sims/pause-please.html|8|courses/computing-systems/week-07/sims/pause-please.gif
 launch-planner|courses/computing-systems/week-09/sims/launch-planner.html|8|courses/computing-systems/week-09/sims/launch-planner.gif

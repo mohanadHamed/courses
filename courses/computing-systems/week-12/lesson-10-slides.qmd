@@ -1,0 +1,158 @@
+---
+title: "Cloud Computing: Models and Services"
+subtitle: "Lecture 10"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary cloud-computing data-centre virtual-machine iaas paas saas baas public-cloud hybrid-cloud cloud-save cdn scalability >}}
+
+## 10.1 What is the cloud?
+
+:::: {.columns}
+::: {.column width="50%"}
+- The cloud is computing power and storage that a studio rents over the Internet.
+- The provider runs data centres in regions, and we pay for what we use.
+- A public cloud serves many customers, a private cloud one organization, and a hybrid cloud mixes own servers with a public cloud.
+- **Do it:** Which kind fits a club with no money for servers?
+:::
+::: {.column width="50%"}
+![](images/deployment.png)
+:::
+::::
+
+## Example · Two ways to run the races
+
+Byte Bay needs race servers for launch day, when ten times more players come.
+**Should it buy servers or rent them in the cloud?**
+
+::: {.reveal}
+1. Ten **own servers** cost money every day, also at night, and repairs are Byte Bay's problem.
+2. **Cloud** servers are rented by the hour, in a region near the players.
+3. After the peak, Byte Bay **gives the cloud servers back** and stops paying.
+:::
+
+## Try it 1 · The cloud
+
+a) What is a building with thousands of servers called?
+b) What is a computer made in software on a real server?
+c) Which kind of cloud serves one organization only?
+
+::: {.answer}
+a) a data centre
+b) a virtual machine
+c) a private cloud
+:::
+
+## 10.2 Service models
+
+:::: {.columns}
+::: {.column width="50%"}
+- In IaaS the studio rents virtual machines and manages the OS.
+- In PaaS it uploads only its code, and in SaaS it uses a finished app.
+- BaaS gives ready game services, such as cloud saves and leaderboards.
+- **Do it:** Set the layers of IaaS, PaaS and SaaS in Cloud Stack. What does Byte Bay still manage?
+:::
+::: {.column width="50%"}
+![](images/service-models.png)
+:::
+::::
+
+## Live demo · Cloud Stack
+
+{{< sim file="sims/cloud-stack.html" poster="sims/cloud-stack.png" title="Cloud Stack: who manages what?" task="**Show:** set IaaS with one wrong layer and check, fix it, then PaaS. **Ask:** what does Byte Bay still manage with SaaS?" >}}
+
+## Try it 2 · Models
+
+a) Which model rents a virtual machine on which the studio installs everything?
+b) Which model takes only the code of the studio?
+c) Which model gives ready friends lists and cloud saves through an SDK?
+
+::: {.answer}
+a) IaaS
+b) PaaS
+c) BaaS
+:::
+
+## 10.3 The cloud services of a game
+
+:::: {.columns}
+::: {.column width="50%"}
+- A back end gives player accounts, cloud saves and leaderboards.
+- A CDN keeps copies of the downloads near the players.
+- Dedicated game servers run the live matches near the players.
+- **Do it:** Choose a game you know. Which cloud services does it use, and for what?
+:::
+::: {.column width="50%"}
+![](images/game-cloud.png)
+:::
+::::
+
+## Try it 3 · The services of a game
+
+a) A player changes phone and wants to continue in garden 5. Which service helps?
+b) New levels download slowly far from the storage. Which service helps?
+c) Which service runs the live matches of an action game?
+
+::: {.answer}
+a) a cloud save
+b) a CDN
+c) dedicated game servers
+:::
+
+## 10.4 Scaling, cost and risks
+
+:::: {.columns}
+::: {.column width="50%"}
+- Auto-scaling adds servers when players come and removes them when they leave.
+- Fixed servers are too few at the peak or idle at night.
+- The risks are growing costs, outages, vendor lock-in and data laws.
+- **Do it:** How many fixed servers turn nobody away in Launch Day Scaling?
+:::
+::: {.column width="50%"}
+![](images/scaling.png)
+:::
+::::
+
+## Live demo · Launch Day Scaling
+
+{{< sim file="sims/scale-sim.html" poster="sims/scale-sim.png" title="Launch Day Scaling: enough servers, not too many" task="**Show:** play the day with 5 fixed servers, then with auto-scaling. **Ask:** why is auto-scaling cheaper and still enough at 19:00?" >}}
+
+## Try it 4 · Launch day
+
+a) How many players are turned away with 5 fixed servers at the peak?
+b) How many fixed servers turn nobody away, at least?
+c) Which way turns nobody away and costs less?
+
+::: {.answer}
+a) about 3,700
+b) 9
+c) auto-scaling
+:::
+
+## Game challenge · Cloud Match
+
+{{< sim file="sims/cloud-match.html" poster="sims/cloud-match.png" title="Cloud Match: the right cloud for each job" kind="game" task="**The story:** Byte Bay and its partners have six jobs that need computing. **Play:** match each job with the right cloud model or kind of cloud." >}}
+
+## Try it 5 · The jobs (harder)
+
+The facts: the race server needs a special OS setting. A bank keeps its payment data in its own data centre. Byte Bay keeps build PCs in the office and rents servers for peaks.
+
+a) Which model fits the race server?
+b) Which kind of cloud fits the bank?
+c) Which kind of cloud fits Byte Bay's build PCs with servers for peaks?
+
+::: {.answer}
+a) IaaS
+b) a private cloud
+c) a hybrid cloud
+:::
+
+## Summary
+
+- The cloud is rented computing over the Internet, paid by use.
+- Public, private and hybrid clouds differ in who shares them.
+- IaaS, PaaS, SaaS and BaaS differ in who manages what.
+- A game uses a back end, storage with a CDN, and game servers.
+- Auto-scaling follows the players, but costs and risks need care.

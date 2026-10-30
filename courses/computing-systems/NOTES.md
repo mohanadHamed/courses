@@ -4,8 +4,9 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
 
 ## Timing and textbook
 
-- 2 × 60 min (2 credit hours). Lesson A = syllabus Lecture topic, Lesson B =
-  syllabus Seminar topic (applied: devices, specs, case studies).
+- 2 credit hours (1 theory + 1 seminar), taught every week as one lecture
+  of 60 min and one seminar of 60 min; the seminar practises the lecture of
+  the same week (applied: devices, specs, case studies).
 - Textbook: Tanenbaum and Austin, *Structured Computer Organization*, 6th ed.
   (the computer as a multilevel machine, the computer zoo); reference:
   Silberschatz et al., *Operating System Concepts*, 10th ed., and the official
@@ -57,3 +58,14 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   devices with three numbers checked on the makers' pages, a test plan for
   four devices, a store-listing checklist checked against the official
   guidelines.
+- 2026-10-31 (plan v3): every week is one lecture and one seminar; 12 core
+  weeks and 2 practice weeks (with the midterm week, 15 weeks on the
+  platform). Lectures 5 and 6 were merged into Lecture 5 "Operating Systems:
+  Processes, Memory, Files and Devices" (unit 5 covers syllabus weeks 5 and
+  6); the device check (old 6.3) is now a problem of Seminar 5, which joins
+  the OS tour and the device check. Old Lectures and Seminars 7–13 became
+  6–12; Lecture 14 became Practice 1 (two case studies: frames and a hot
+  phone with Performance Detective; one build for every device with
+  Compatibility Lab and a reliable source) and Seminar 14 Practice 2 (the
+  project presentations). Homework 5 joins old 5 and 6. Removed: Settings
+  Explorer, Name Checker, Disk Doctor and four unused figures.

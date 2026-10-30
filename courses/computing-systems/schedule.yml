@@ -1,87 +1,87 @@
-# The sessions of the course, grouped in units (AUTHORING.md, "Units and
-# sessions"). One unit = one week of the official syllabus: `week` is that
-# syllabus week (a week with only an exam has no unit), `slot` names the
-# syllabus column(s) the session covers (tools/course_package.py). Units and
-# sessions are numbered in teaching order; the site never shows a week.
+# The weeks of the course in teaching order (AUTHORING.md, "Units and
+# sessions"): 12 core weeks (units) and 2 practice weeks (filling weeks);
+# the midterm week has no session (exams are not on the site), so the
+# 15-week plan of the e-learning platform has 12 units, the midterm week
+# and 2 practice weeks.
 #
-# kind: lecture (always core), seminar (an activity session on earlier lectures)
-# n: the number of the session within its kind ("Lecture 4", "Seminar 2").
-# core: false = flexible: taught when time allows, else studied at home
-# (every answer is on its page). practises: the lectures it applies.
+# A unit is a core week: Lecture N and Seminar N (the seminar practises the
+# lecture of the same week, 60 min each) and Homework N. A practice week
+# (`filling: true`) has no new ideas (case studies, project presentations)
+# and is taught when time allows.
 #
-# Files of a unit are in week-WW (WW = `week`): lesson-NN (lecture),
-# seminar-NN (seminar), homework-UU (UU = the unit; unit 14 has the project
-# instead). A session is ready (bright, with links) when its .qmd exists and
-# has no `draft: true`.
+# `week` is the syllabus week whose row the week covers (folder week-WW,
+# tools/course_package.py); `covers` lists more syllabus weeks of a merged
+# unit; `slot` names the syllabus columns. kind: lecture | seminar |
+# practice; practises: the lectures it applies. Practice sessions are
+# flexible; lectures and seminars are core.
 
 units:
   - unit: 1
     week: 1
     sessions:
       - {kind: lecture, n: 1, slot: "Lecture", title: "Computing Systems and Digital Platforms in the Games Industry", ilos: [A1]}
-      - {kind: seminar, n: 1, slot: "Seminar", title: "The Devices Students Use and How Games Run on Them", ilos: [A1], practises: [1], core: false}
+      - {kind: seminar, n: 1, slot: "Seminar", title: "The Devices Students Use and How Games Run on Them", ilos: [A1], practises: [1]}
   - unit: 2
     week: 2
     sessions:
       - {kind: lecture, n: 2, slot: "Lecture", title: "Computer Components: CPU, Memory and Storage", ilos: [A1]}
-      - {kind: seminar, n: 2, slot: "Seminar", title: "Identifying Components and Reading Specifications", ilos: [A1], practises: [2], core: true}
+      - {kind: seminar, n: 2, slot: "Seminar", title: "Identifying Components and Reading Specifications", ilos: [A1], practises: [2]}
   - unit: 3
     week: 3
     sessions:
       - {kind: lecture, n: 3, slot: "Lecture", title: "Input/Output Devices, the GPU and Graphics Hardware", ilos: [A1, B2]}
-      - {kind: seminar, n: 3, slot: "Seminar", title: "Comparing Device Specifications for Gaming", ilos: [A1, B2], practises: [2, 3], core: true}
+      - {kind: seminar, n: 3, slot: "Seminar", title: "Comparing Device Specifications for Gaming", ilos: [A1, B2], practises: [2, 3]}
   - unit: 4
     week: 4
     sessions:
       - {kind: lecture, n: 4, slot: "Lecture", title: "Smartphone Architecture: SoC, Sensors, Touch Screen and Battery", ilos: [A1, B2]}
-      - {kind: seminar, n: 4, slot: "Seminar", title: "Analyzing a Smartphone Specification Sheet", ilos: [A1, B2], practises: [4], core: true}
+      - {kind: seminar, n: 4, slot: "Seminar", title: "Analyzing a Smartphone Specification Sheet", ilos: [A1, B2], practises: [4]}
   - unit: 5
     week: 5
+    covers: [6]
     sessions:
-      - {kind: lecture, n: 5, slot: "Lecture", title: "Operating Systems: Functions, Processes and Memory Management", ilos: [A2]}
-      - {kind: seminar, n: 5, slot: "Seminar", title: "Operating-System Tour on PC and Mobile", ilos: [A2], practises: [5], core: false}
+      - {kind: lecture, n: 5, slot: "Lecture", title: "Operating Systems: Processes, Memory, Files and Devices", ilos: [A2]}
+      - {kind: seminar, n: 5, slot: "Seminar", title: "Operating-System Tour and File and Resource Management", ilos: [A2], practises: [5]}
   - unit: 6
-    week: 6
-    sessions:
-      - {kind: lecture, n: 6, slot: "Lecture", title: "File Systems, Resources and Device Management", ilos: [A2, C1]}
-      - {kind: seminar, n: 6, slot: "Seminar", title: "Hands-on: File and Resource Management", ilos: [A2, C1], practises: [6], core: false}
-  - unit: 7
     week: 7
     sessions:
-      - {kind: lecture, n: 7, slot: "Lecture", title: "Mobile Operating Systems: Android and iOS Architecture", ilos: [A2, B1]}
-      - {kind: seminar, n: 7, slot: "Seminar", title: "Exploring Android and iOS Features", ilos: [A2, B1], practises: [7], core: false}
-  - unit: 8
+      - {kind: lecture, n: 6, slot: "Lecture", title: "Mobile Operating Systems: Android and iOS Architecture", ilos: [A2, B1]}
+      - {kind: seminar, n: 6, slot: "Seminar", title: "Exploring Android and iOS Features", ilos: [A2, B1], practises: [6]}
+  - unit: 7
     week: 9
     sessions:
-      - {kind: lecture, n: 8, slot: "Lecture", title: "Mobile Platforms Compared: Android vs iOS", ilos: [B1, D1]}
-      - {kind: seminar, n: 8, slot: "Seminar", title: "Platform Comparison Activity", ilos: [B1, D1], practises: [8], core: false}
-  - unit: 9
+      - {kind: lecture, n: 7, slot: "Lecture", title: "Mobile Platforms Compared: Android vs iOS", ilos: [B1, D1]}
+      - {kind: seminar, n: 7, slot: "Seminar", title: "Platform Comparison Activity", ilos: [B1, D1], practises: [7]}
+  - unit: 8
     week: 10
     sessions:
-      - {kind: lecture, n: 9, slot: "Lecture", title: "App Stores and Publishing Requirements", ilos: [C2]}
-      - {kind: seminar, n: 9, slot: "Seminar", title: "Reviewing App-Store Guidelines", ilos: [C2], practises: [9], core: false}
-  - unit: 10
+      - {kind: lecture, n: 8, slot: "Lecture", title: "App Stores and Publishing Requirements", ilos: [C2]}
+      - {kind: seminar, n: 8, slot: "Seminar", title: "Reviewing App-Store Guidelines", ilos: [C2], practises: [8]}
+  - unit: 9
     week: 11
     sessions:
-      - {kind: lecture, n: 10, slot: "Lecture", title: "Networking Concepts: LAN, the Internet and Protocols", ilos: [A2]}
-      - {kind: seminar, n: 10, slot: "Seminar", title: "Networking Tools Demonstration", ilos: [A2], practises: [10], core: false}
-  - unit: 11
+      - {kind: lecture, n: 9, slot: "Lecture", title: "Networking Concepts: LAN, the Internet and Protocols", ilos: [A2]}
+      - {kind: seminar, n: 9, slot: "Seminar", title: "Networking Tools Demonstration", ilos: [A2], practises: [9]}
+  - unit: 10
     week: 12
     sessions:
-      - {kind: lecture, n: 11, slot: "Lecture", title: "Cloud Computing: Models and Services", ilos: [A2, C2]}
-      - {kind: seminar, n: 11, slot: "Seminar", title: "Cloud Services for Games: Storage and Hosting", ilos: [A2, C2], practises: [11], core: false}
-  - unit: 12
+      - {kind: lecture, n: 10, slot: "Lecture", title: "Cloud Computing: Models and Services", ilos: [A2, C2]}
+      - {kind: seminar, n: 10, slot: "Seminar", title: "Cloud Services for Games: Storage and Hosting", ilos: [A2, C2], practises: [10]}
+  - unit: 11
     week: 13
     sessions:
-      - {kind: lecture, n: 12, slot: "Lecture", title: "Gaming Platforms: Consoles, PC, Mobile and Cloud Gaming", ilos: [B1, B2]}
-      - {kind: seminar, n: 12, slot: "Seminar", title: "Case Study: Comparing Gaming Platforms", ilos: [B1, B2], practises: [12], core: false}
-  - unit: 13
+      - {kind: lecture, n: 11, slot: "Lecture", title: "Gaming Platforms: Consoles, PC, Mobile and Cloud Gaming", ilos: [B1, B2]}
+      - {kind: seminar, n: 11, slot: "Seminar", title: "Case Study: Comparing Gaming Platforms", ilos: [B1, B2], practises: [11]}
+  - unit: 12
     week: 14
     sessions:
-      - {kind: lecture, n: 13, slot: "Lecture", title: "Setting Up Test Environments: Emulators and Real Devices", ilos: [C1]}
-      - {kind: seminar, n: 13, slot: "Seminar", title: "Hands-on: Running a Sample App on an Emulator", ilos: [C1], practises: [13], core: true}
-  - unit: 14
+      - {kind: lecture, n: 12, slot: "Lecture", title: "Setting Up Test Environments: Emulators and Real Devices", ilos: [C1]}
+      - {kind: seminar, n: 12, slot: "Seminar", title: "Hands-on: Running a Sample App on an Emulator", ilos: [C1], practises: [12]}
+  - filling: true
     week: 15
     sessions:
-      - {kind: lecture, n: 14, slot: "Lecture", title: "Platform Performance and Compatibility: Case Studies", ilos: [B2, C1, D1]}
-      - {kind: seminar, n: 14, slot: "Seminar", title: "Student Presentations (Project)", ilos: [B2, C1, D1], practises: [14], core: true}
+      - {kind: practice, n: 1, slot: "Lecture", title: "Platform Performance and Compatibility: Case Studies", ilos: [B2, C1, D1], practises: [3, 5, 6, 7, 12]}
+  - filling: true
+    week: 15
+    sessions:
+      - {kind: practice, n: 2, slot: "Seminar", title: "Student Presentations (Project)", ilos: [B2, C1, D1], practises: [7, 8, 9, 10, 11, 12]}

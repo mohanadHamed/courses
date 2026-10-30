@@ -43,7 +43,7 @@ def map_text(s, lec_map, sem_map, hw_map, due_map=None):
         if b is None:
             v = map_one(a, lec_map)
             if isinstance(v, int):
-                return "%s %d" % (word if not word.endswith("s") else base, v)
+                return "%s %d" % (word, v)
             return m.group(0) + "‹?›"
         b = int(b)
         va, vb = map_one(a, lec_map), map_one(b, lec_map)

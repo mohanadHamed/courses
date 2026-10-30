@@ -120,14 +120,23 @@ The teacher's notes:
   `plan.md` and `NOTES.md` describe the 12 units and 3 practice weeks.
   `check_size.py` gives no warning for Game Math.
 
+- Computing Systems (plan v3 done): Lecture 5 "Operating Systems:
+  Processes, Memory, Files and Devices" (old 5.1–5.3, old 6.1 with the
+  essentials of 6.2; Pocket Quest and RAM Rush as the Game challenge; 4
+  sections, 16 slides), Seminar 5 "Operating-System Tour and File and
+  Resource Management" (the Windows tour of old Seminar 5 and the device
+  check of old Seminar 6 with Test Day), Homework 5 (old 5 task 1 and old 6
+  task 1); old 7–13 renamed 6–12 with all references; Lecture 14 rewritten
+  as Practice 1 (two case studies with Performance Detective and
+  Compatibility Lab), Seminar 14 relabelled Practice 2; week-06 removed
+  (its figures and Test Day moved to week-05); Settings Explorer, Name
+  Checker, Disk Doctor and four unused figures removed; `schedule.yml`,
+  `plan.md`, `NOTES.md`, `index.qmd`. `check_size.py`: no warning.
+
 ### Still to do (in this order)
 
 1. **Game Math:** done (see above).
-2. **Computing Systems** (design above): merge Lectures 5 + 6 and Seminars
-   5 + 6 (week-05; move the needed figures and sims from week-06),
-   renumber 7–13 → 6–12, Lecture 14 → Practice 1 (practice format),
-   Seminar 14 → Practice 2, homework 5 + 6 → 5 and renumber, `schedule.yml`,
-   `plan.md`, `NOTES.md`, `index.qmd`.
+2. **Computing Systems:** done (see above).
 3. **Digital Media** (design above): merge Lectures 12 + 13 and Seminars
    12 + 13 (week-13; move figures and sims from week-14), Lecture 14 →
    Practice 1, Seminar 14 → Practice 2, homework 12 + 13 → 12,

@@ -1,12 +1,12 @@
 ---
-title: "Operating Systems: Functions, Processes and Memory Management"
+title: "Operating Systems: Processes, Memory, Files and Devices"
 subtitle: "Lecture 5"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary operating-system os-services process scheduler time-slice process-state background-app memory-management >}}
+{{< glossary operating-system process scheduler memory-management file-system file-path device-driver system-resources >}}
 
 ## 5.1 What the OS does for a game
 
@@ -112,6 +112,44 @@ b) No, the OS closed it to free RAM.
 c) It should save its state.
 :::
 
+## 5.4 Where a game keeps its files
+
+:::: {.columns}
+::: {.column width="50%"}
+- The file system keeps files and folders with their names, paths, sizes and dates.
+- The game folder holds the program and the packs of levels and music.
+- The player's save file is in the user's own folder, so it stays after an update.
+- A FAT32 stick refuses any file of 4 GB or more.
+- **Do it:** Open one folder in C:\\Program Files. What is the path of its biggest file?
+:::
+::: {.column width="50%"}
+![](images/game-files.png)
+:::
+::::
+
+## Example · A new gamepad
+
+Ali connects a new gamepad, and the game does not see it.
+**Where does he look, and what is the fix?**
+
+::: {.reveal}
+1. He opens Device Manager and finds the gamepad with a yellow sign.
+2. The sign means that the driver is missing or does not work.
+3. He installs the driver, and the game reads the buttons.
+:::
+
+## Try it 4 · Files and paths
+
+a) What does the extension .sav tell about a file?
+b) Why is the save file outside the game folder?
+c) Why does a 4.5 GB video not copy to a FAT32 stick with 20 GB free?
+
+::: {.answer}
+a) It is a save file.
+b) so that it stays after an update
+c) FAT32 allows no file of 4 GB or more.
+:::
+
 ## Game challenge · Pocket Quest
 
 {{< sim file="sims/ram-rush.html" poster="sims/ram-rush.png" title="RAM Rush: you are the operating system of a phone" kind="game" task="**The story:** Pocket Quest runs on a 4 GB phone next to the camera, Chat and Music. **Play:** you are the OS; in each round, decide what fits and which app must close." >}}
@@ -132,8 +170,8 @@ c) Music and Chat
 
 ## Summary
 
-- The OS manages the hardware and gives services to all apps.
-- The scheduler shares the CPU cores between processes in short time slices.
-- The app on the screen gets the most time.
-- The OS gives each process its own part of the RAM.
-- A full RAM makes a phone close background apps, so a game saves its state.
+- The OS manages the hardware and gives services to every app.
+- The scheduler shares the CPU cores, and the app on the screen gets the most time.
+- When the RAM is full, the OS closes background apps, so a game saves its state.
+- The file system keeps files in folders with paths, and a save file stays in the player's folder.
+- The OS finds devices, loads their drivers and shares all the resources.

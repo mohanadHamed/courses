@@ -77,6 +77,60 @@ demonstration and the way to do a step without the app):
 
 Lecture 6 is the model (done 2026-10-31); the others follow it.
 
+## Online activities: varied content, always tasks to submit
+
+Each online activity has a content type (`content:` in its front matter),
+so the 15 weeks do not all look the same. Every type keeps the Steps with
+their self-checks and the Tasks to submit (marks, a concrete product,
+uploaded to Moodle; model answers in courses-private). The practice weeks
+(8, 10, 12, 14, 15) add no new content.
+
+- **lesson** (a): an interactive lesson: the Steps explain with text,
+  figures and self-checks; simulators where they help.
+- **sims** (b): simulators only: every Step is a simulator with a one-line
+  instruction and its self-check.
+- **mix** (c): text steps and simulator steps.
+- **video** (d): free official videos, linked (never copied), with title,
+  source, length and the date checked; the Steps practise what they show.
+- **course-video** (e): a short video made for the course (generic
+  interfaces like the simulators, A2 captions, a voice-over), in the page.
+
+| # | Online activity | Week | Type | Content |
+|---|---|---|---|---|
+| 1 | Your University Account, Cloud Storage and Files | Unit 1 | course-video | video *Folders, paths and good file names* (about 2 min, to be made); Path Finder, Folder Lab, Sync Lab |
+| 2 | Writing Clear Prompts | Unit 2 | sims | Prompt Builder, Follow-up Chat, Prompt Doctor |
+| 3 | Office on the Computer, the Web and the Phone | Unit 3 | sims | PDF Export, Paste Lab, Share Settings |
+| 4 | Word (2): Page Layout, Headers and a Table of Contents | Unit 4 | video | Microsoft Support: *Change margins* (0:31), *Insert or remove a page break* (0:45), *Insert a header or footer* (0:56), *Insert page numbers* (0:57), *Add a Table of Contents in Word* (0:38) |
+| 5 | A Formal Letter and a CV with AI Help | Unit 5 | lesson | the parts of a letter and a CV, checking what the AI wrote; Letter Builder, Profile Picker, CV Checker |
+| 6 | A Monthly Budget Sheet | Unit 6 | course-video | video *A monthly budget in Excel* (about 2 min, to be made); Budget Builder, Number Format Lab |
+| 7 | AI with Excel: Formulas, Clean Data and the Right Chart | Unit 7 | mix | AI Formula Lab, Clean Data Lab, Chart Lab |
+| 8 | Review Activity: Practice Questions | Practice week | sims | Practice Quiz, Contents Builder, Reference Lab |
+| 9 | A Short Presentation with AI Help | Unit 8 | mix | Outline Lab, Image Prompt Lab, a check before presenting |
+| 10 | A Five-Slide Talk | Practice week | video | Microsoft Support: *Add speaker notes* (0:32), *Add animations to slides* (1:18), *Use Presenter View* (1:36); Talk Planner, Rehearsal Lab |
+| 11 | Fact-Checking an AI-Written Document | Unit 9 | course-video | video *Check an AI answer: claims, sources and fair words* (about 2 min, to be made); Claim Finder, Claim Court |
+| 12 | Safe Prompts and an AI-Use Statement | Practice week | mix | Prompt Cleaner, a tool and copyright check, Statement Builder |
+| 13 | Analyzing a Small Dataset and Charting It | Unit 10 | video | Microsoft Support: *Create a PivotTable* (0:45), *Create charts* (0:52); Pivot Lab |
+| 14 | Course Project (1): Plan, Data Sheet and First Draft | Practice week | lesson | the plan, the data sheet and the first draft; Plan Checker |
+| 15 | Course Project (2): Final Report, Data Sheet and Presentation | Practice week | lesson | the final files, the checks and the AI-use statement |
+
+Three activities of each type. The official videos (all with English
+captions, checked 2026-10-31 by their pages and captions):
+
+| Video (title on the page) | Page (Microsoft Support) | Length |
+|---|---|---|
+| Change margins | support.microsoft.com/en-us/word/training/change-margins | 0:31 |
+| Insert or remove a page break | support.microsoft.com/en-us/word/training/insert-a-page-break | 0:45 |
+| Insert a header or footer | support.microsoft.com/en-us/word/training/insert-a-header-or-footer | 0:56 |
+| Insert page numbers | support.microsoft.com/en-us/word/training/insert-page-numbers | 0:57 |
+| Add a Table of Contents in Word | support.microsoft.com/en-us/word/training/insert-a-table-of-contents | 0:38 |
+| Add speaker notes | support.microsoft.com/en-us/powerpoint/training/add-speaker-notes-to-your-slides | 0:32 |
+| Add animations to slides | support.microsoft.com/en-us/powerpoint/training/animate-text-or-objects | 1:18 |
+| Use Presenter View | support.microsoft.com/en-us/powerpoint/training/use-presenter-view-in-powerpoint | 1:36 |
+| Create a PivotTable | support.microsoft.com/en-us/excel/get-started/create-a-pivottable-to-analyze-worksheet-data | 0:45 |
+| Create charts | support.microsoft.com/en-us/excel/get-started/create-a-chart-from-start-to-finish | 0:52 |
+
+Check the links every semester: Microsoft moves its pages.
+
 ## Tasks with AI (ideas)
 
 AI is already the subject of many sessions; the Tasks with AI there are the Office tasks done with AI help at a higher level (a formatted report, a budget with formulas and a chart), always with checking and, from unit 9, the AI-use statement.

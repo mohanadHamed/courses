@@ -51,11 +51,19 @@ The teacher's request (after plan v3, same branch and PR):
 - Lecture 6 (model): `lesson-06-sheet.qmd` (four experiments in Excel with
   `shop-start.xlsx`; Formula Lab and Reference Lab as the demonstration),
   page, notes and slides (16) converted.
+- The table of the 15 online activities in `courses/digital-skills/plan.md`
+  (three of each type: lesson 5, 14, 15; sims 2, 3, 8; mix 7, 9, 12; video
+  4, 10, 13; course-video 1, 6, 11) and the ten Microsoft Support videos
+  (titles, pages, lengths; English captions read to check their content,
+  2026-10-31). The teacher approved the design and the table (2026-10-31)
+  and chose the tools for the course videos: **Mac tools, no install** (an
+  HTML/SVG animation like the simulators, frames from headless Chrome, a
+  voice-over with macOS `say` (Samantha), joined into an H.264/AAC MP4 by a
+  Swift/AVFoundation script; A2 captions in the picture and a .vtt file).
 
 ### Still to do (in this order)
 
-1. The table of the 15 online activities (content type, videos found or to
-   be made) and the teacher's choice of the tool for course-made videos.
+1. (done: the table and the video tool)
 2. Lectures 1–5 and 7–10: worksheet, start files, page, notes, slides (one
    commit each; plan in `courses/digital-skills/plan.md`).
 3. Online activities 1–15 by the table (one commit each), with their

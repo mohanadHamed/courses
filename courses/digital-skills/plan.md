@@ -93,7 +93,9 @@ uploaded to Moodle; model answers in courses-private). The practice weeks
 - **video** (d): free official videos, linked (never copied), with title,
   source, length and the date checked; the Steps practise what they show.
 - **course-video** (e): a short video made for the course (generic
-  interfaces like the simulators, A2 captions, a voice-over), in the page.
+  interfaces like the simulators), in the page, with a **voice-over that
+  reads its script word for word**; the A2 captions are the same words,
+  timed to the voice (the script is written first: `videos/<name>-script.txt`).
 
 | # | Online activity | Week | Type | Content |
 |---|---|---|---|---|

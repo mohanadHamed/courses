@@ -134,16 +134,38 @@ The teacher's request (after plan v3, same branch and PR):
      video (4, 10, 13): Steps that follow the Microsoft videos of the plan
      (check each link again on the day); course-video (1, 6, 11): make the
      video, then Steps with the simulators.
-   - Course videos (the teacher's choice: Mac tools, nothing to install):
-     an HTML/SVG animation drawn like the simulators (generic windows, no
-     logos, no screenshots), with a function that draws the picture at any
-     time t, so the frames are exact; headless Chrome takes one PNG every
-     1/30 s (as `record.ts` does with screenshots); the voice-over with
-     `say -v Samantha -r 165` from a script in A2 English, `afconvert` to
-     AAC; `shared/sims/recordings/make-video.swift` joins them (1280 × 720,
-     about 1 MB a minute). A2 captions drawn in the picture and the same
-     lines as a `.vtt` file. About 2 minutes each; files in
-     `week-WW/videos/` (add the folder to the resources of `_quarto.yml`).
+   - Course videos (the teacher's choice: Mac tools, nothing to install).
+     **Every course video has a voice-over that reads its script word for
+     word** (the teacher's request of 2026-10-31): the script is written
+     first, and it is the one source of the voice, the captions and the
+     timing of the pictures.
+     - The script: `week-WW/videos/<name>-script.txt`, one caption line per
+       line (A2 English, at most about 12 words), a blank line between
+       scenes; the teacher can read and change it before the video is made.
+     - The voice: one `say -v Samantha -r 165` file per line, a short pause
+       after each line and a longer one between scenes, joined into one AAC
+       track; the length of each line (`afinfo` or AVFoundation) gives its
+       start and end time.
+     - The captions: the same lines with these times as `<name>.vtt`, and
+       drawn in the picture at the same times: never other words than the
+       voice says.
+     - The pictures: an HTML/SVG animation drawn like the simulators
+       (generic windows, no logos, no screenshots), with a function that
+       draws the picture at any time t and reads the line times, so each
+       scene starts with its first line; headless Chrome takes one PNG every
+       1/30 s (as `record.ts` does with screenshots).
+     - Joining: `shared/sims/recordings/make-video.swift` (1280 × 720, about
+       1 MB a minute); extend it, or add a step before it, to build the
+       voice track from the lines and to write the `.vtt`.
+     - Checks: `check_size.py` (course-video) finds the script, the MP4, the
+       `.vtt` and the poster, and warns when the `.vtt` lines differ from the
+       script; then play the MP4 and read the captions along with the voice.
+     - About 2 minutes each, files in `week-WW/videos/` (add the folder to
+       the resources of `_quarto.yml`). The page shows the video with its
+       English captions track and a poster, and the script under it as a
+       transcript (closed until opened). AUTHORING.md ("Blended courses")
+       gets the rule: a course video has a voice-over that reads its script,
+       and its captions are the same words.
 4. **Tasks with AI in all courses** (the teacher's request of 2026-10-31,
    see the next section): after steps 2 and 3, or in its own branch.
 5. `check_size.py --all` and `check_figures.py` without warnings, a full

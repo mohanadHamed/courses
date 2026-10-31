@@ -116,11 +116,20 @@ The teacher's request (after plan v3, same branch and PR):
   two metres; the long points copied into the notes and made short; Fade
   with Apply To All (a star on every thumbnail) and Appear By Paragraph
   (1, 2, 3); 16 slides.
+- Lecture 9: four experiments, no start file: Fact-Check Lab (keep,
+  correct, remove), the highest mountain in Jordan checked in two sources
+  (Jabal Umm al-Dami, about 1 850 m), two AI studies with the three checks;
+  Bias Lab and a job advert for a warehouse worker made fair; Prompt Cleaner
+  (Huda's reminder) and a made-up prompt about a leaking water tank written
+  with placeholders; an AI-use statement in Word checked for its four parts.
+  16 slides (three simulators: no Table of results slide, now a rule in
+  AUTHORING.md). The QR card of a worksheet mentions start files only when
+  it has some.
 
 ### Still to do (in this order; the next session starts here)
 
 1. (done: the table and the video tool)
-2. **Lectures 9, 10** (1–8 are done): worksheet, start
+2. **Lecture 10** (1–9 are done): worksheet, start
    files, page, notes, slides, one commit each, by the table "Lecture
    worksheets" in `courses/digital-skills/plan.md`. The recipe (Lectures 1,
    2 and 6 are the examples):

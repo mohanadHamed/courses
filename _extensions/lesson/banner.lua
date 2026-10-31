@@ -405,8 +405,10 @@ local function web_lesson_card(meta)
   local url = site_url() .. (rel ~= "." and (rel:gsub("\\", "/") .. "/") or "") .. web .. ".html"
   local seminar = meta.seminar or meta.practice
   local head = seminar and "Interactive page" or "Interactive lesson"
+  local files = meta["start-files"] and #meta["start-files"] > 0
   local text = sheet
-    and "Do each experiment on the computer and write your result after each step. The interactive lesson has the start files and the same experiments, with a field for each result and \"Check your result\" after every step. The results are also at the end of this worksheet: look only after you try."
+    and ("Do each experiment on the computer and write your result after each step. The interactive lesson has "
+      .. (files and "the start files and " or "") .. "the same experiments, with a field for each result and \"Check your result\" after every step. The results are also at the end of this worksheet: look only after you try.")
     or seminar
     and "This worksheet is a self-test: the results of the activities are at the end. The interactive page has the same activities with \"Check your result\" and questions that give instant feedback."
     or "These notes are the main study text of the lecture and a self-test: the results are at the end. The interactive lesson practises the same sections with questions that give instant feedback and their reasons, and runs the simulators and mini-games marked with a QR code in the text."

@@ -449,7 +449,9 @@ measurements. Template: `shared/templates/sheet-template.qmd`.
   slide (the results, step by step, in `.reveal`); a Live demo slide for
   each simulator; the Game challenge and its Try it slide; a "Table of
   results" slide; the Summary. The Try it questions of the sections stay on
-  the page (home study).
+  the page (home study). A deck with four experiments and three simulators
+  leaves out the "Table of results" slide, so it keeps to 16 slides (the
+  Check slides show every result).
 - `check_size.py` checks it: an experiment for every section of the notes,
   an Aim and 2–5 steps in each, a record field and a check after every
   step, the table of results, the start files, the experiments on the page

@@ -75,6 +75,8 @@ The teacher's request (after plan v3, same branch and PR):
   file; 14 slides.
 - `shared/sims/recordings/make-video.swift`: the tested tool for the course
   videos (PNG frames + a voice-over → H.264/AAC MP4, macOS AVFoundation).
+- `tools/start_files.py` writes the same bytes for the same data (fixed zip
+  dates), so running it again changes no start file.
 
 ### Still to do (in this order; the next session starts here)
 

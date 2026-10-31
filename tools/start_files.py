@@ -21,6 +21,13 @@ from xml.sax.saxutils import escape
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+def put(z, name, data):
+    """One file in the zip, with a fixed date: the same data gives the same file."""
+    info = zipfile.ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))
+    info.compress_type = zipfile.ZIP_DEFLATED
+    z.writestr(info, data)
+
 # ----------------------------------------------------------------- xlsx
 
 CT_XLSX = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -97,15 +104,15 @@ def write_xlsx(path, sheets):
                 'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
                 "<sheets>%s</sheets><calcPr fullCalcOnLoad=\"1\"/></workbook>" % "".join(entries))
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("[Content_Types].xml", CT_XLSX % "\n".join(overrides))
-        z.writestr("_rels/.rels", RELS % "xl/workbook.xml")
-        z.writestr("xl/workbook.xml", workbook)
-        z.writestr("xl/_rels/workbook.xml.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
+        put(z, "[Content_Types].xml", CT_XLSX % "\n".join(overrides))
+        put(z, "_rels/.rels", RELS % "xl/workbook.xml")
+        put(z, "xl/workbook.xml", workbook)
+        put(z, "xl/_rels/workbook.xml.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
                    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
                    + "".join(rels) + "</Relationships>")
-        z.writestr("xl/styles.xml", STYLES)
+        put(z, "xl/styles.xml", STYLES)
         for i, (_, rows, widths) in enumerate(sheets, 1):
-            z.writestr("xl/worksheets/sheet%d.xml" % i, sheet_xml(rows, widths))
+            put(z, "xl/worksheets/sheet%d.xml" % i, sheet_xml(rows, widths))
 
 
 # ----------------------------------------------------------------- docx
@@ -132,9 +139,9 @@ def write_docx(path, paragraphs):
            '<w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>'
            "</w:sectPr></w:body></w:document>")
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("[Content_Types].xml", CT_DOCX)
-        z.writestr("_rels/.rels", RELS % "word/document.xml")
-        z.writestr("word/document.xml", doc)
+        put(z, "[Content_Types].xml", CT_DOCX)
+        put(z, "_rels/.rels", RELS % "word/document.xml")
+        put(z, "word/document.xml", doc)
 
 
 # ----------------------------------------------------------------- the files

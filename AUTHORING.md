@@ -534,66 +534,85 @@ Course-specific notes: `courses/<slug>/NOTES.md`. Unit map:
 
 ## Tasks with AI
 
-Students have AI assistants. A lesson that only asks simple questions lets a
-student paste them into an AI and learn nothing, and asking an AI to explain
-the lesson needs no lesson. So lessons are built **for a world with AI**:
-some tasks are set at a **higher level than a student could reach alone in
-the time**, with guidance on how to reach it with an AI assistant and how
-to check its work. The student uses AI to do more, not to do the work for
-them, and learns to use AI well.
+Students have AI assistants, and many of them have never used one to learn.
+In Game Math, Computing Systems and Digital Media no ILO or PLO asks for AI:
+a "Task with AI" box is an **extra for the curious**, so that students meet
+AI as a modern way to learn. It is as simple and as inviting as possible
+(the teacher's request of 2026-10-31):
 
 ```markdown
-::: {.callout-note .ai-task title="Task with AI · Simulate 1000 loot drops"}
-**Goal:** a sheet that rolls 1000 drops of the loot table and compares them
-with the expected numbers.
+::: {.callout-note .ai-task title="Task with AI · Draw the vector to the enemy"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt into
+an AI assistant that the university allows (for example Microsoft Copilot
+with your university account), and look at the result.
 
-1. **Ask the AI:** start with this prompt and add your table.
+::: {.prompt}
+A complete prompt: every detail and number of one situation, ready to copy,
+that asks for something to look at (a picture, a diagram, a chart, a small
+table). For example: Draw a 2D grid from 0 to 10. The player is at (2, 3)
+and the enemy at (6, 6). Draw the vector from the player to the enemy as an
+arrow, with its x part and its y part, and label them.
+:::
 
-   ::: {.prompt}
-   Write spreadsheet formulas that roll one loot drop per row …
-   :::
+**What do you see?**
 
-2. **Do it yourself:** paste the formulas, fill 1000 rows, count each item.
-3. **Check:** work out by hand the expected number of rare drops
-   (1000 × 5 % = 50). Your sheet must give about 50. If not, find the
-   mistake in the AI's formulas.
+::: {.check label="What you should see"}
+The result in words, to compare: the AI can be wrong.
+:::
 
-*Your product:* the sheet, and one sentence on what the AI got wrong or what
-you changed.
+::: {.try-change}
+**Change:** one number or one word, for example the enemy to (8, 2). Ask
+again. What do you notice?
 
 ::: {.check}
-A good sheet … (2–3 point self-check list)
+What the student should notice.
 :::
+:::
+
+::: {.try-change}
+**Change:** a second change. What do you notice?
+
+::: {.check}
+What the student should notice.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again.
 :::
 ```
 
-- **A product beyond the usual level, inside the ILOs of the session**
-  (never a topic of a later week): long or hard by hand, for example 1000
-  random rolls, a five-phone comparison table, a story with three endings
-  and its storyboard, a licence audit of 20 assets.
-- **A starter prompt** (`::: {.prompt}`; the page adds "Copy prompt").
-- **The student's own part:** they build, change, choose or decide.
-- **A check with the tools of the lesson:** a value worked by hand, a
-  simulator, GeoGebra, the maker's page, the official source. The AI can be
-  wrong; finding where is part of the task.
-- **A product**, and one sentence on what the AI got wrong or what the
-  student changed.
-- On the page and in the notes the box has a `.check`. In graded work
-  (homework, Tasks to submit) it has none and asks for the **AI-use
-  statement** (which tool, what was asked, what the student changed).
-- **0–2 per session**, only where AI really lets students do more: often
-  the Game challenge of a lecture, the "At home" part of a seminar (at most
-  one there) or a homework task. Not on the slides.
-- Free tools named generally (Microsoft Copilot with the university
+- **A complete prompt** (`::: {.prompt}`; the page adds "Copy prompt"):
+  every detail and number of one game or work situation, ready to copy. The
+  student never completes or designs it: no brackets, no "add your …".
+- **A visual result:** the prompt asks the AI for something to look at: a
+  picture, a diagram, a chart, a small table or a small web page.
+- **What you should see:** `::: {.check label="What you should see"}`, a
+  closed box with the result in words, so the student can compare (the AI
+  can be wrong).
+- **2–3 changes to try** (`::: {.try-change}`): one number or one word
+  changed, "What do you notice?", and a closed answer inside (`::: {.check}`,
+  "What you notice"); then one line that invites the student's own idea.
+  The notes (PDF) print these answers at the end, with the other results.
+- No heavy check step before the student sees the result: keep it fun.
+- **0–2 per session**, only as an extra: the "At home" part of a seminar
+  (at most one there), or after the Game challenge of a lecture. Not on the
+  slides. Free tools named generally (Microsoft Copilot with the university
   account, ChatGPT, Gemini); no task needs a paid plan. No personal data in
-  a prompt.
-- Never AI images, sound or video as a student's media product in Digital
-  Media (unclear rights, and it skips the production ILOs); they are a case
-  in the IP sessions.
+  a prompt. Never AI images, sound or video as a student's media product in
+  Digital Media (unclear rights, and it skips the production ILOs).
+- **Graded work** (homework, Tasks to submit) keeps its own model until the
+  teacher decides otherwise: a task with a prompt, the student's own part, a
+  check step and the **AI-use statement** (which tool, what was asked, what
+  the student changed), and no answers on the page.
+- **Digital Skills** has no "Task with AI" box: AI is in its ILOs (A1, B1,
+  C4, D1), so its experiments and online tasks teach AI on purpose, with
+  checking and, from unit 9, the AI-use statement.
 - The rule "no tool or assistant names" (Site identity) is about how the
   lessons are made, not about the tools students use.
-- `check_size.py` warns above 2 per file and about a box without `.prompt`
-  or a check step (and, in graded work, without the AI-use statement).
+- `check_size.py` warns above 2 per file, about a prompt that is not
+  complete or asks for no visual result, about a box without "What you
+  should see", and about changes to try without a closed answer (in graded
+  work: a box without a check step or the AI-use statement).
 
 ## Source of truth: the Google Drive folder (private, never copy into this repo)
 
@@ -1251,4 +1270,12 @@ do not add it. The draft mechanism still works (a draft lecture is faded,
   PivotTable practice into Lecture 10. Rules above ("Units and sessions",
   "Mapping the syllabus week", "What a seminar looks like", "Blended
   courses", "Homework", "Course pages and the schedule").
+- 2026-10-31 (teacher's review of the AI boxes): the "Task with AI" boxes
+  gave an incomplete prompt for the student to complete, which is not right
+  for basic students, many of whom have never learned with AI. In Game
+  Math, Computing Systems and Digital Media no ILO asks for AI, so every box
+  is now an extra for the curious: a complete prompt that asks for a
+  picture, a diagram or a table, what the student should see, and two or
+  three changes to try, each with a closed answer. Rules above ("Tasks with
+  AI").
 

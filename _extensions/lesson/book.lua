@@ -15,9 +15,13 @@
 --                        seminar or practice session: "Results of the
 --                        activities"), under the title of its box.
 --
---   ::: {.prompt}        A starter prompt of a "Task with AI" box: a dashed box.
+--   ::: {.prompt}        The prompt of a "Task with AI" box: a dashed box.
 --   …
 --   :::
+--
+--   ::: {.try-change}    A change to try in a "Task with AI" box: its text
+--   … ::: {.check} …     stays, and its answer goes to the results at the
+--   :::                  end ("… · Change 1").
 --
 -- A lecture worksheet (lesson-NN-sheet.qmd; AUTHORING.md, "Lecture
 -- worksheets"): under "## Experiment N · …" the steps are a numbered list,
@@ -35,6 +39,7 @@ local section = nil     -- "1.2" of the current ## heading
 local experiment = nil  -- "Experiment 2" of the current ## heading (worksheet)
 local steps = false     -- a result of a step of an experiment
 local box = nil         -- title of the current callout
+local changes = 0       -- the changes to try in the current callout
 local lab = false       -- a result of a "Lab task" box (Digital Skills)
 
 local function is_typst()
@@ -95,11 +100,26 @@ local collect = {
   end,
   Callout = function(c)
     box = callout_title(c)
+    changes = 0
   end,
   Div = function(div)
     if not is_typst() then return nil end
     for _, c in ipairs(div.classes) do
-      if c:match("^callout%-") then box = callout_title(div) end
+      if c:match("^callout%-") then box = callout_title(div); changes = 0 end
+    end
+    if div.classes:includes("try-change") then
+      changes = changes + 1
+      local kept = pandoc.Blocks({})
+      for _, b in ipairs(div.content) do
+        if b.t == "Div" and b.classes:includes("check") then
+          local label = (box or "Task") .. " · Change " .. changes
+          if section then label = section .. " · " .. label end
+          table.insert(results, { label = label, blocks = b.content })
+        else
+          kept:insert(b)
+        end
+      end
+      return wrap("#block(width: 100%, inset: (left: 8pt, y: 3pt), stroke: (left: 2pt + rgb(\"#b197fc\")))[\n", kept), false
     end
     if div.classes:includes("check") then
       return take_check(div, experiment), false
@@ -116,7 +136,7 @@ local collect = {
     if div.classes:includes("prompt") then
       return wrap('#block(width: 100%, breakable: false, fill: white, radius: 6pt, inset: (x: 9pt, y: 7pt), '
         .. 'stroke: (paint: rgb("#b197fc"), thickness: 0.8pt, dash: "dashed"))[#text(size: 8.5pt, weight: "bold", '
-        .. 'fill: rgb("#5f3dc4"))[Starter prompt] \\\n#set text(size: 9.5pt)\n', div.content)
+        .. 'fill: rgb("#5f3dc4"))[Prompt to copy] \\\n#set text(size: 9.5pt)\n', div.content)
     end
     return nil
   end,

@@ -33,8 +33,16 @@
 --   ::: {.check}    "Check your result" of a Do it task or a seminar activity:
 --   …               a closed <details> box. In the notes (PDF) book.lua moves
 --   :::             it to "Results of the Do it tasks" at the end.
---   ::: {.prompt}   A starter prompt in a "Task with AI" box, with a
---   …               "Copy prompt" button (lesson-script.html).
+--   ::: {.prompt}   The prompt of a "Task with AI" box, with a "Copy
+--   …               prompt" button (lesson-script.html).
+--   :::
+--   ::: {.check label="What you should see"}
+--                   The same closed box with another label.
+--   ::: {.try-change}
+--   **Try a change:** … What do you notice?
+--   ::: {.check}    A change to try in a "Task with AI" box, then its
+--   …               closed answer ("What you notice"); book.lua prints the
+--   :::             answers at the end of the notes.
 --   :::
 
 local str = pandoc.utils.stringify
@@ -193,12 +201,28 @@ local function active()
   return quarto.doc.is_format("html") or quarto.doc.is_format("typst")
 end
 
--- HTML: "Check your result" (closed until the student opens it).
-local function check_box(div)
+-- HTML: "Check your result" (closed until the student opens it), or the
+-- label of the box (label="…").
+local function check_box(div, label)
+  label = div.attributes.label or label or "Check your result"
   local blocks = pandoc.Blocks({ pandoc.RawBlock("html",
-    '<details class="check"><summary>Check your result</summary><div class="check-body">') })
+    '<details class="check"><summary>' .. label:gsub("&", "&amp;"):gsub("<", "&lt;") .. '</summary><div class="check-body">') })
   blocks:extend(div.content)
   blocks:insert(pandoc.RawBlock("html", "</div></details>"))
+  return blocks
+end
+
+-- HTML: a change to try in a "Task with AI" box, with its closed answer.
+local function try_change(div)
+  local blocks = pandoc.Blocks({ pandoc.RawBlock("html", '<div class="try-change">') })
+  for _, b in ipairs(div.content) do
+    if b.t == "Div" and b.classes:includes("check") then
+      blocks:extend(check_box(b, "What you notice"))
+    else
+      blocks:insert(b)
+    end
+  end
+  blocks:insert(pandoc.RawBlock("html", "</div>"))
   return blocks
 end
 
@@ -206,6 +230,9 @@ return {
   {
     traverse = "topdown",
     Div = function(div)
+      if div.classes:includes("try-change") and quarto.doc.is_format("html") then
+        return try_change(div), false
+      end
       if div.classes:includes("check") and quarto.doc.is_format("html") then
         return check_box(div)
       end

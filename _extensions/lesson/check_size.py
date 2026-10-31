@@ -246,12 +246,37 @@ def ai_task_warnings(body, graded=False):
         out.append("%d Task with AI boxes, at most %d (only where AI lets students do more)" % (len(ai), AI_MAX))
     for head, text in ai:
         title = (re.search(r'title="([^"]*)"', head) or re.search(r"(.*)", head)).group(1)
-        if not re.search(r"^\s*:::+ *\{\.prompt\}", text, re.M):
-            out.append('Task with AI "%s" has no starter ::: {.prompt}' % title)
-        if not re.search(r"\bCheck:|\*\*Check\*\*", text):
-            out.append('Task with AI "%s" has no check step ("Check:"): the AI can be wrong' % title)
-        if graded and "AI-use statement" not in text:
-            out.append('Task with AI "%s" in graded work does not ask for the AI-use statement' % title)
+        prompt = re.search(r"^\s*:::+ *\{\.prompt\}\n(.*?)^\s*:::+\s*$", text, re.M | re.S)
+        if not prompt:
+            out.append('Task with AI "%s" has no ::: {.prompt}' % title)
+        if graded:
+            # Graded work keeps a check step and the AI-use statement, and no answers.
+            if not re.search(r"\bCheck:|\*\*Check\*\*", text):
+                out.append('Task with AI "%s" has no check step ("Check:"): the AI can be wrong' % title)
+            if "AI-use statement" not in text:
+                out.append('Task with AI "%s" in graded work does not ask for the AI-use statement' % title)
+            continue
+        # An extra for the curious (AUTHORING.md, "Tasks with AI"): a complete
+        # prompt with a visual result, what you should see, and changes to try,
+        # each with its closed answer.
+        if prompt:
+            words = prompt.group(1)
+            if re.search(r"\[[^\]]*\]|…|\.\.\.|:\s*$|\badd your\b|\byour (premise|points|rule|notes)\b", words, re.I):
+                out.append('Task with AI "%s": the prompt is not complete (no brackets, "…" or "add your …": '
+                           'give every detail, ready to copy)' % title)
+            if not re.search(r"\b(draw|picture|diagram|chart|graph|grid|map|table|plot|web page|timeline)\b", words, re.I):
+                out.append('Task with AI "%s": the prompt asks for no visual result (a picture, diagram, chart, '
+                           'table or small web page)' % title)
+        changes = re.findall(r"^\s*:::+ *\{\.try-change\}(.*?)(?=^\s*:::+ *\{\.try-change\}|\Z)", text, re.M | re.S)
+        if not 2 <= len(changes) <= 3:
+            out.append('Task with AI "%s" has %d changes to try (::: {.try-change}); give 2 or 3' % (title, len(changes)))
+        for c in changes:
+            if not re.search(r"^\s*:::+ *\{\.check", c, re.M):
+                out.append('Task with AI "%s": a change to try has no closed answer (::: {.check} inside it)' % title)
+        before = re.split(r"^\s*:::+ *\{\.try-change\}", text, flags=re.M)[0]
+        if not re.search(r"^\s*:::+ *\{\.check", before, re.M):
+            out.append('Task with AI "%s" does not say what the student should see ('
+                       '::: {.check label="What you should see"} after the prompt)' % title)
     return out
 
 

@@ -108,11 +108,19 @@ The teacher's request (after plan v3, same branch and PR):
   Sum 77) and clear it; Greater Than 20 (24, 30, 48), a total changed to 22,
   data bars (34); a column chart with a real title, a pie (77, 51, 72) and a
   line of the days (Wednesday, 65 JD); 16 slides.
+- Lecture 8: four experiments in PowerPoint with `talk-start.pptx` (*Saving
+  Water at Home*: a Title Slide, six long points of up to 18 words, three
+  short points; made from Markdown by the pandoc of Quarto with a fixed
+  SOURCE_DATE_EPOCH, so the same text gives the same file): layouts, a Two
+  Content slide (3 placeholders) and F5; a theme and two variants, read from
+  two metres; the long points copied into the notes and made short; Fade
+  with Apply To All (a star on every thumbnail) and Appear By Paragraph
+  (1, 2, 3); 16 slides.
 
 ### Still to do (in this order; the next session starts here)
 
 1. (done: the table and the video tool)
-2. **Lectures 8, 9, 10** (1–7 are done): worksheet, start
+2. **Lectures 9, 10** (1–8 are done): worksheet, start
    files, page, notes, slides, one commit each, by the table "Lecture
    worksheets" in `courses/digital-skills/plan.md`. The recipe (Lectures 1,
    2 and 6 are the examples):
@@ -124,10 +132,8 @@ The teacher's request (after plan v3, same branch and PR):
       worksheet) and fix the state between steps (undo, or say what is in
       the cells).
    b. Start files: an entry in `FILES` of `tools/start_files.py`, then run
-      it (xlsx: sheets of rows; docx: plain paragraphs). Still missing in
-      the tool: a `.pptx` writer for Lecture 8 (`talk-start.pptx`; for
-      example `quarto pandoc` from Markdown) and a picture for Lecture 4
-      (`park.png`: an SVG drawing exported to PNG, no photo).
+      it (xlsx: sheets of rows; docx: plain paragraphs; pptx: Markdown for
+      pandoc). A picture is an SVG drawing exported to PNG (Lecture 4).
    c. `python3 plans/helpers/sheet.py page …/lesson-NN.qmd [--files]` and
       `python3 plans/helpers/sheet.py notes …/lesson-NN-book.qmd "what
       experiment 1 does" …`; then by hand the intro paragraph of the page,

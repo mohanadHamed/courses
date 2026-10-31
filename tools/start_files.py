@@ -12,10 +12,15 @@ together, then run it again):
 Only the Python standard library is used: a small writer for .xlsx (one or
 more sheets: text, numbers, formulas, bold header row, column widths) and
 for .docx (plain paragraphs, some bold, with the styles of a new Word
-document: the students give the styles themselves).
+document: the students give the styles themselves). A .pptx is a short talk
+in Markdown, made by the pandoc of Quarto (a Title Slide, then a Title and
+Content slide for every "## " heading).
 """
 
 import os
+import shutil
+import subprocess
+import tempfile
 import zipfile
 from xml.sax.saxutils import escape
 
@@ -168,6 +173,20 @@ def write_docx(path, paragraphs):
         put(z, "word/styles.xml", DOCX_STYLES)
 
 
+# ----------------------------------------------------------------- pptx
+
+def write_pptx(path, markdown):
+    """A talk from Markdown (`title:` and `subtitle:` make the Title Slide).
+    SOURCE_DATE_EPOCH fixes the dates: the same text gives the same file."""
+    cmd = ["quarto", "pandoc"] if shutil.which("quarto") else ["pandoc"]
+    with tempfile.TemporaryDirectory() as tmp:
+        src = os.path.join(tmp, "talk.md")
+        with open(src, "w", encoding="utf-8") as f:
+            f.write(markdown)
+        env = dict(os.environ, SOURCE_DATE_EPOCH="1767225600")  # 2026-01-01
+        subprocess.run(cmd + [src, "-o", path], check=True, env=env)
+
+
 # ----------------------------------------------------------------- the files
 
 DS = "courses/digital-skills"
@@ -236,6 +255,29 @@ FILES = {
         ("Types", [["Type", "Sales (JD)"], ["Paper", 77], ["Drinks", 51], ["Bags", 72]], [12, 12]),
         ("Days", [["Day", "Sales (JD)"], ["Sun", 24], ["Mon", 54], ["Tue", 26], ["Wed", 65], ["Thu", 31]], [10, 12]),
     ]),
+    # Lecture 8, PowerPoint: a short talk in the default theme, with one slide
+    # of six long points (Experiment 3) and one of three short points
+    # (the animation of Experiment 4). Not Slide Doctor: that is the Game challenge.
+    DS + "/week-09/files/talk-start.pptx": ("pptx", """---
+title: "Saving Water at Home"
+subtitle: "A short talk for the Sunrise staff"
+---
+
+## Small changes at home
+
+- When you brush your teeth, the tap does not need to run all the time, so close it.
+- A dripping tap in the kitchen wastes water all day and all night, so fix it soon.
+- A short shower uses much less water than a full bath, and it is just as clean.
+- Wash the car with a bucket of water, not with a hose that runs for a long time.
+- Water the plants early in the morning or in the evening, when the sun is not strong.
+- Use the washing machine only when it is full, and choose a short programme.
+
+## What we do at the office
+
+- Report a dripping tap at once.
+- Turn off the tap after you wash.
+- Boil only the water that you need.
+"""),
     # Lecture 6, Excel (1): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
     DS + "/week-06/files/shop-start.xlsx": ("xlsx", [
         ("Shop", [["Item", "Price (JD)", "Quantity"],
@@ -258,6 +300,8 @@ def main():
         os.makedirs(os.path.dirname(path), exist_ok=True)
         if kind == "xlsx":
             write_xlsx(path, data)
+        elif kind == "pptx":
+            write_pptx(path, data)
         else:
             write_docx(path, data)
         print("wrote", rel)

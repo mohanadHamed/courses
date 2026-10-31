@@ -2,7 +2,10 @@
 // AAC audio) for a short video made for a course (AUTHORING.md, "Blended
 // courses"; the course videos of the online activities).
 //
-//   swift make-video.swift <frames-dir> <fps> <voice.m4a> <out.mp4>
+//   swift make-video.swift <frames-dir> <fps> <voice.m4a> <out.mp4> [bits-per-second]
+//
+// The bit rate of the picture is 900 000 by default; a course video of still
+// pictures looks sharp with much less (make-course-video.sh gives 260 000).
 //
 // <frames-dir> holds PNG frames named in order (00000.png, 00001.png …), one
 // frame every 1/fps second, all the same size (for example 1280 × 720). When
@@ -15,10 +18,11 @@ import AVFoundation
 import AppKit
 
 let args = CommandLine.arguments
-guard args.count == 5, let fps = Int32(args[2]) else {
-  print("usage: swift make-video.swift <frames-dir> <fps> <voice.m4a> <out.mp4>")
+guard args.count == 5 || args.count == 6, let fps = Int32(args[2]) else {
+  print("usage: swift make-video.swift <frames-dir> <fps> <voice.m4a> <out.mp4> [bits-per-second]")
   exit(1)
 }
+let bitRate = args.count == 6 ? Int(args[5]) ?? 900_000 : 900_000
 let dir = URL(fileURLWithPath: args[1]), audio = URL(fileURLWithPath: args[3]), out = URL(fileURLWithPath: args[4])
 let files = try FileManager.default.contentsOfDirectory(atPath: dir.path).filter { $0.hasSuffix(".png") }.sorted()
 guard let firstName = files.first, let first = NSImage(contentsOf: dir.appendingPathComponent(firstName)) else {
@@ -34,7 +38,8 @@ try? FileManager.default.removeItem(at: out)
 let writer = try AVAssetWriter(outputURL: silent, fileType: .mp4)
 let input = AVAssetWriterInput(mediaType: .video, outputSettings: [
   AVVideoCodecKey: AVVideoCodecType.h264, AVVideoWidthKey: w, AVVideoHeightKey: h,
-  AVVideoCompressionPropertiesKey: [AVVideoAverageBitRateKey: 900_000, AVVideoProfileLevelKey: AVVideoProfileLevelH264MainAutoLevel],
+  AVVideoCompressionPropertiesKey: [AVVideoAverageBitRateKey: bitRate, AVVideoProfileLevelKey: AVVideoProfileLevelH264MainAutoLevel,
+                                    AVVideoMaxKeyFrameIntervalKey: Int(fps) * 10],
 ])
 let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: [
   kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32ARGB,

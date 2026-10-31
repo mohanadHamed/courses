@@ -787,8 +787,8 @@ local function watch(kwargs)
   <figcaption><span class="watch-title">🎬 %s</span><span class="watch-meta">%s · made for this course%s</span></figcaption>
   %s
 </figure>]], poster ~= "" and (' poster="' .. html_attr(poster) .. '"') or "", html_attr(file),
-      captions ~= "" and ('\n    <track kind="captions" srclang="en" label="English" src="' .. html_attr(captions) .. '" default>') or "",
-      html_attr(title), html_attr(length), captions ~= "" and " · English captions" or "", transcript))
+      captions ~= "" and ('\n    <track kind="captions" srclang="en" label="English" src="' .. html_attr(captions) .. '">') or "",
+      html_attr(title), html_attr(length), captions ~= "" and " · captions in the picture and in CC" or "", transcript))
   end
   -- A free official video: a card with the link, never a copy.
   local source, checked, captions = str(kwargs.source), str(kwargs.checked), str(kwargs.captions)

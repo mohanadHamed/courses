@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Course video: Folders, paths and good file names</title>
+<!-- The pictures of the course video of Online activity 1 (AUTHORING.md,
+     "Blended courses"). One scene for each scene of folders-script.txt; the
+     voice reads that script, and make-course-video.sh makes the video. -->
+</head>
+<body>
+<script src="../../../../shared/sims/recordings/video-kit.js"></script>
+<script>
+const { C, text, spans, rect, win, folder, file, pill, arrow, mark, titleCard, show, group, el } = VK;
+
+// A small file list, sorted, in a window.
+function list(g, x, y, names, o = {}) {
+  const row = o.row || 50;
+  names.forEach((n, i) => {
+    rect(g, x, y + i * row, o.w || 520, row - 8, { fill: i % 2 ? "#fff" : C.soft, r: 8, o: o.o });
+    text(g, x + 16, y + i * row + row / 2 + 4, n, { size: 22, mono: true, o: o.o });
+  });
+}
+// One rule: a good name and a bad name.
+function rule(g, y, n, label, good, bad, o) {
+  pill(g, 90, y - 34, String(n), { size: 26, fill: C.accent, ink: "#fff", w: 52, o });
+  text(g, 160, y, label, { size: 28, o });
+  mark(g, 700, y - 9, true, { o, r: 16 });
+  text(g, 726, y, good, { size: 20, mono: true, o });
+  mark(g, 980, y - 9, false, { o, r: 16 });
+  text(g, 1006, y, bad, { size: 20, mono: true, fill: C.red, o });
+}
+
+window.VIDEO = {
+  label: "Digital Skills · Online activity 1",
+  title: "Folders, paths and good file names",
+  scenes: [
+    // 1. Title.
+    (g, k, p) => {
+      titleCard(g, k, p, "Folders, paths and good file names", "Sara's course files, in order");
+      folder(g, 900, 360, { s: 1.4, o: show(k, 1, p) });
+    },
+    // 2. File, folder, tree.
+    (g, k, p) => {
+      file(g, 130, 150, { ext: "DOCX", label: "cv.docx", mono: true, o: show(k, 0, p) });
+      text(g, 158, 300, "a file", { size: 26, anchor: "middle", fill: C.accent, o: show(k, 0, p) });
+      folder(g, 110, 360, { s: 1.2, label: "Documents", o: show(k, 1, p) });
+      text(g, 158, 500, "a folder", { size: 26, anchor: "middle", fill: C.accent, o: show(k, 1, p) });
+      // The tree: each row is one folder (or the file), indented under its parent.
+      const rows = [["Documents", 0, 1], ["Courses", 1, 2], ["Digital-Skills", 2, 3], ["unit-01", 3, 3], ["cv.docx", 4, 2],
+        ["English", 2, 3], ["unit-01", 3, 3]];
+      const o2 = show(k, 2, p);
+      win(g, 380, 110, 820, 470, "Files", { o: o2 });
+      rows.forEach(([name, depth, n], i) => {
+        const x = 420 + depth * 60, y = 180 + i * 56, o = name === "cv.docx" ? o2 : o2;
+        if (depth > 0) el("path", { d: `M${x - 34} ${y - 40}v26h22`, stroke: C.line, "stroke-width": 3, fill: "none", opacity: o }, g);
+        if (name.endsWith(".docx")) file(g, x + 2, y - 26, { ext: "DOC", o, color: C.blue, s: 0.5 });
+        else folder(g, x - 8, y - 20, { s: 0.5, o });
+        const hl = k >= 3 && (name === "Digital-Skills" || name === "English" || name === "unit-01");
+        if (hl) rect(g, x + 38, y - 22, name.length * 15 + 24, 36, { fill: "#FFE8CC", r: 8, o: show(k, 3, p) });
+        text(g, x + 48, y + 4, name, { size: 24, mono: true, o });
+      });
+    },
+    // 3. The path.
+    (g, k, p) => {
+      const parts = ["C:", "Users", "Sara", "Documents", "Courses", "Digital-Skills", "unit-01", "cv.docx"];
+      win(g, 60, 90, 1160, 120, "The path of a file", { o: show(k, 0, p) });
+      let x = 80;
+      parts.forEach((s, i) => {
+        const w = s.length * 12.1 + 26, o = i === 0 ? show(k, 1, p) : show(k, 2, p);
+        pill(g, x, 154, s, { size: 20, mono: true, w, fill: i === 0 ? "#FFE8CC" : i === parts.length - 1 ? "#D0EBFF" : C.soft, o });
+        if (i < parts.length - 1) text(g, x + w + 5, 181, "›", { size: 26, fill: C.accent, o: show(k, 2, p) });
+        x += w + 20;
+      });
+      text(g, 80, 300, "C:\\Users\\Sara\\Documents\\Courses\\Digital-Skills\\unit-01\\cv.docx", { size: 26, mono: true, o: show(k, 3, p) });
+      const o4 = show(k, 4, p);
+      rect(g, 70, 360, 1140, 200, { fill: "#fff", stroke: C.line, r: 14, o: o4 });
+      spans(g, 100, 430, [["...\\Courses\\"], ["Digital-Skills", C.accent], ["\\unit-01\\cv.docx"]], { size: 26, mono: true, o: o4 });
+      spans(g, 100, 500, [["...\\Courses\\"], ["English", C.blue], ["\\unit-01\\cv.docx"]], { size: 26, mono: true, o: o4 });
+      text(g, 940, 470, "same name, other path", { size: 26, fill: C.green, anchor: "middle", o: o4 });
+    },
+    // 4. The extension.
+    (g, k, p) => {
+      text(g, 380, 230, "cv", { size: 96, mono: true, o: show(k, 0, p), anchor: "end" });
+      text(g, 380, 230, ".docx", { size: 96, mono: true, fill: C.accent, o: show(k, 0, p) });
+      arrow(g, 560, 260, 560, 330, { o: show(k, 1, p) });
+      text(g, 560, 380, "the type: a Word document, opened by Word", { size: 30, anchor: "middle", o: show(k, 1, p) });
+      const o = show(k, 2, p);
+      [["report.docx", "DOCX", C.blue, "Word"], ["budget.xlsx", "XLSX", C.green, "Excel"], ["talk.pptx", "PPTX", C.accent, "PowerPoint"]]
+        .forEach(([n, e, c, app], i) => {
+          file(g, 830 + i * 140, 160, { ext: e, color: c, o });
+          text(g, 858 + i * 140, 262, n, { size: 18, mono: true, anchor: "middle", o });
+          text(g, 858 + i * 140, 292, app, { size: 20, anchor: "middle", fill: c, o });
+        });
+    },
+    // 5. Four rules.
+    (g, k, p) => {
+      text(g, 640, 120, "Four rules for good file names", { size: 40, weight: 800, fill: C.accent, anchor: "middle", o: show(k, 0, p) });
+      rule(g, 196, 1, "Say what it is", "cv.docx", "New Document.docx", show(k, 1, p));
+      rule(g, 272, 2, "No spaces: - or _", "english-talk.pptx", "english talk.pptx", show(k, 2, p));
+      rule(g, 348, 3, "Date: year-month-day", "2026-10-05", "5-10-2026", show(k, 3, p));
+      list(g, 160, 372, ["2026-09-28_notes_v01.docx", "2026-10-05_cv_v02.docx", "2026-10-12_essay_v01.docx"], { o: show(k, 4, p), w: 440, row: 44 });
+      rule(g, 566, 4, "Versions: v01, v02", "cv_v02.docx", "cv_final2.docx", show(k, 5, p));
+    },
+    // 6. A bad name and a good name.
+    (g, k, p) => {
+      mark(g, 170, 170, false, { o: show(k, 0, p), r: 24 });
+      text(g, 210, 182, "New Document (3).docx", { size: 40, mono: true, fill: C.red, o: show(k, 0, p) });
+      const o = show(k, 1, p);
+      mark(g, 170, 320, true, { o, r: 24 });
+      text(g, 210, 334, "2026-10-05_cv_v02.docx", { size: 44, mono: true, fill: C.green, o });
+      [["the date", 215, 470], ["what it is", 520, 600], ["the version", 655, 740]].forEach(([s, x1, x2]) => {
+        el("path", { d: `M${x1} 360v14h${x2 - x1}v-14`, stroke: C.accent, "stroke-width": 3, fill: "none", opacity: o }, g);
+        text(g, (x1 + x2) / 2, 410, s, { size: 24, anchor: "middle", fill: C.accent, o });
+      });
+      win(g, 860, 120, 360, 300, "unit-01", { o: show(k, 2, p) });
+      ["2026-09-28_notes_v01", "2026-10-05_cv_v02", "2026-10-12_essay_v01"].forEach((n, i) => {
+        rect(g, 880, 190 + i * 64, 320, 50, { fill: i === 1 ? "#D3F9D8" : C.soft, r: 8, o: show(k, 2, p) });
+        text(g, 896, 222 + i * 64, n, { size: 19, mono: true, o: show(k, 2, p) });
+      });
+    },
+    // 7. Try it.
+    (g, k, p) => {
+      const o = show(k, 0, p);
+      [["Path Finder", "files, folders and paths"], ["Folder Lab", "folders and good file names"]].forEach(([n, s], i) => {
+        rect(g, 170 + i * 500, 160, 440, 200, { fill: "#fff", stroke: C.line, r: 22, o });
+        el("circle", { cx: 250 + i * 500, cy: 260, r: 38, fill: C.accent, opacity: o }, g);
+        el("path", { d: `M${238 + i * 500} 240l30 20l-30 20z`, fill: "#fff", opacity: o }, g);
+        text(g, 310 + i * 500, 250, n, { size: 34, weight: 800, o });
+        text(g, 310 + i * 500, 290, s, { size: 22, fill: C.grey, o });
+      });
+      pill(g, 440, 430, "Then: the Tasks to submit", { size: 30, fill: C.accent, ink: "#fff", o: show(k, 1, p) });
+    },
+  ],
+};
+</script>
+</body>
+</html>

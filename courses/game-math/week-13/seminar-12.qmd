@@ -186,35 +186,48 @@ A shuffle bag has 1 crit and 4 normal hits. What is the longest run without a cr
 
 ## At home · Task with AI
 
-::: {.callout-note .ai-task title="Task with AI · Simulate 1000 hunters"}
-**Goal:** a spreadsheet that lets 1000 players hunt the rare hammer
-(p = 2 %) and shows the average and the longest wait. An AI assistant
-writes the formulas; you check them with what you know.
+::: {.callout-note .ai-task title="Task with AI · 1000 hunters in a chart"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt
+into an AI assistant that the university allows (for example Microsoft
+Copilot with your university account), and look at the picture.
 
-1. **Ask the AI:** start with this prompt.
+::: {.prompt}
+In a game, a rare hammer drops with the chance 2 % on each try. Simulate
+1000 players: each player tries again and again until the hammer drops.
+Draw a column chart of the number of tries in groups of 10 (1–10, 11–20,
+and so on), and give the average number of tries and the largest number of
+tries.
+:::
 
-   ::: {.prompt}
-   I use a spreadsheet (Excel or Google Sheets). Each row is one player who
-   tries again and again until a rare item drops, with the chance 2 % per
-   try. Write one formula that gives the number of tries for one player,
-   using a random number. Then write formulas for the average and the
-   largest value of 1000 rows.
-   :::
+**What do you see?**
 
-2. **Do it yourself:** fill 1000 rows and read the average and the largest
-   value. Then change 2 % to 5 %.
-3. **Check:** the average must be close to 1/p (50 tries, then 20).
-   Compare the largest value with Drop Rate Lab. A value of 0 tries means a
-   wrong formula.
+::: {.check label="What you should see"}
+The first column (1–10 tries) is the tallest, with about 180 players, and
+the columns get lower to the right. The average is close to 50 (1 ÷ 2 %),
+and a few players need more than 200 tries.
+:::
 
-*Your product:* the sheet, the averages for 2 % and 5 %, and one sentence
-on what the AI got wrong or what you changed.
+::: {.try-change}
+**Change:** change the chance to 5 %, and ask again. What do you notice?
 
 ::: {.check}
-A good sheet: 1000 rows; the average near 50 (2 %) and near 20 (5 %); the
-largest value often over 200 for 2 %; no row with 0 tries. AI formulas
-often forget to round up (and give 0 tries).
+The average is close to 20 (1 ÷ 5 %). The first column holds about 400
+players, the columns fall much faster, and the largest number of tries is
+much smaller, often about 100 to 150.
 :::
+:::
+
+::: {.try-change}
+**Change:** change the chance to 50 %, and ask again. What do you notice?
+
+::: {.check}
+Almost all 1000 players get the hammer in the first 10 tries: one column
+holds nearly everyone, and the average is close to 2.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
 :::
 
 ## Wrap-up {.summary}

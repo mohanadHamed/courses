@@ -187,36 +187,52 @@ Turn (3, 1) by 90° about the pivot (1, 1). Where is it?
 
 ## At home · Task with AI
 
-::: {.callout-note .ai-task title="Task with AI · Build a level from one sprite"}
-**Goal:** a plan that places 6 copies of one block (corners (0, 0) and
-(1, 1)) in a level, each with its own size, turn and place, with the
-transformations in the right order. The AI tries many plans quickly; you
-check them.
+::: {.callout-note .ai-task title="Task with AI · Three blocks from one square"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt
+into an AI assistant that the university allows (for example Microsoft
+Copilot with your university account), and look at the picture.
 
-1. **Do it yourself:** sketch your level on squared paper: 6 blocks, each
-   with the corners where it must end (some bigger, one turned by 90°).
-2. **Ask the AI:** start with this prompt and add your targets.
+::: {.prompt}
+Draw a grid from −6 to 6 on both axes. Draw a blue square with the corners
+(0, 0), (1, 0), (1, 1) and (0, 1). Make three copies of it, each in the
+order: scale, then rotate anticlockwise about (0, 0), then move. Copy A:
+scale 2, rotate 0°, move by (2, 1). Copy B: scale 1, rotate 90°, move by
+(−2, 3). Copy C: scale 3, rotate 0°, move by (−5, −5). Draw each copy in its
+own colour with its letter, and make a table of the four corners of each
+copy.
+:::
 
-   ::: {.prompt}
-   A unit square has the corners (0, 0) and (1, 1). For each target below,
-   give the transformations in the order scale, rotate (about the origin,
-   in degrees), then translate, and the new corners. Show the steps for
-   one corner of each block. Targets:
-   :::
+**What do you see?**
 
-3. **Check:** for two blocks, do the steps by hand on the corner (1, 1).
-   Then check one block in **Transform Lab** or **Rotate Lab**.
+::: {.check label="What you should see"}
+A: (2, 1), (4, 1), (4, 3), (2, 3), a square of 2 × 2. B: (−2, 3), (−2, 4),
+(−3, 4), (−3, 3), a square of 1 × 1 turned by 90°. C: (−5, −5), (−2, −5),
+(−2, −2), (−5, −2), a square of 3 × 3 in the bottom left.
+:::
 
-*Your product:* your sketch, the AI's plan, your two hand checks, and one
-sentence on any mistake you found.
+::: {.try-change}
+**Change:** for B, move first and rotate after. Ask again. What do you notice?
 
 ::: {.check}
-A good plan gives each block "scale, then rotate, then translate", and the
-corner (1, 1) lands on your sketch for every block you check. A block
-turned by 90° about the origin needs its move chosen after the turn: (1, 1)
-becomes (−1, 1) first. AI tools often translate first: check the turned
-block by hand.
+B lands somewhere else: (−3, −2), (−3, −1), (−4, −1), (−4, −2), in the
+bottom left instead of the top left. The turn about (0, 0) also turned the
+move: the order of the steps matters.
 :::
+:::
+
+::: {.try-change}
+**Change:** for A, rotate by 90° before the move (scale 2, rotate 90°, move by
+(2, 1)). What do you notice?
+
+::: {.check}
+A is still a square of 2 × 2, but now it covers x from 0 to 2 instead of 2
+to 4: (2, 1), (2, 3), (0, 3), (0, 1). The turn put the square on the left
+of its corner (2, 1).
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
 :::
 
 ## Wrap-up {.summary}

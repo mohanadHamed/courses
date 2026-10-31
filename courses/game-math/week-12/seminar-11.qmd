@@ -189,35 +189,49 @@ The bear came 0 times in 20 draws. Is that a bug?
 
 ## At home · Task with AI
 
-::: {.callout-note .ai-task title="Task with AI · Simulate 1000 prize draws"}
-**Goal:** a spreadsheet that draws 1000 prizes from the table 64, 24, 10, 2
-and compares the counts with the expected numbers. By hand it takes hours;
-with an AI assistant it takes minutes, and you check it.
+::: {.callout-note .ai-task title="Task with AI · 1000 prizes in a chart"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt
+into an AI assistant that the university allows (for example Microsoft
+Copilot with your university account), and look at the picture.
 
-1. **Ask the AI:** start with this prompt.
+::: {.prompt}
+A prize machine gives a sticker with the chance 64 %, a toy 24 %, a plush
+10 % and a bear 2 %. Simulate 1000 prizes with random numbers. Draw a column
+chart that shows, for each prize, your count next to the expected count
+(1000 × its chance). Also give the four counts in a small table.
+:::
 
-   ::: {.prompt}
-   I use a spreadsheet (Excel or Google Sheets). Write formulas that draw
-   one prize per row from this weighted table: sticker 64, toy 24, plush
-   10, bear 2. Use a random number from 0 to 100 and the cumulative
-   weights. Then write formulas that count each prize in 1000 rows.
-   :::
+**What do you see?**
 
-2. **Do it yourself:** paste the formulas, fill 1000 rows and read the four
-   counts.
-3. **Check:** work out the expected counts by hand (1000 × 64 % = 640, …).
-   Your counts must be close. Check that a random number of exactly 64
-   gives a toy, not a sticker (r < cumulative).
+::: {.check label="What you should see"}
+Counts close to the expected 640, 240, 100 and 20, for example a bear count
+between about 10 and 30. Each new simulation gives a little different
+counts.
+:::
 
-*Your product:* the sheet, the four counts next to the expected ones, and
-one sentence on what the AI got wrong or what you changed.
+::: {.try-change}
+**Change:** simulate only 100 prizes, and ask again. What do you notice?
 
 ::: {.check}
-A good sheet: 1000 rows; counts close to 640, 240, 100 and 20 (for example
-the bear 12 to 30); the borders use `<` (64 gives a toy). AI formulas often
-use `<=` at the borders, or a random number from 0 to 1 against weights up
-to 100.
+The expected counts are 64, 24, 10 and 2, and the counts jump more around
+them: the bear can easily be 0 or 4. Few tries give results far from the
+chances.
 :::
+:::
+
+::: {.try-change}
+**Change:** make the bear 10 % and the sticker 56 %, and ask again. What do you
+notice?
+
+::: {.check}
+The expected counts are 560, 240, 100 and 100: the bear column grows to
+about 100, as tall as the plush, and the sticker column falls to about
+560.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
 :::
 
 ## Wrap-up {.summary}

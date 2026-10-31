@@ -192,36 +192,48 @@ Unity is left-handed with y up. Where does +z point?
 
 ## At home · Task with AI
 
-::: {.callout-note .ai-task title="Task with AI · Your own level in numbers"}
-**Goal:** a level of 8 objects and 2 moving enemies, described in words and
-turned into numbers and a GeoGebra picture. The AI does the typing; you
-check it.
+::: {.callout-note .ai-task title="Task with AI · Draw a level from its description"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt
+into an AI assistant that the university allows (for example Microsoft
+Copilot with your university account), and look at the picture.
 
-1. **Do it yourself:** write a short description of your own level: 8
-   objects ("the castle is 5 units left of the centre and 2 up …") and 2
-   enemies, each with a start and a velocity per frame.
-2. **Ask the AI:** paste your description after this prompt.
+::: {.prompt}
+The origin (0, 0) is the centre of a 2D game level; x goes right and y goes
+up. Draw a grid from −8 to 8 on both axes. Draw each object as a labelled
+dot: a castle 5 units left of the centre and 2 up; a tree 3 right and 4 up;
+a lake 4 left and 3 down; a gate 6 right and 1 down. Then make a table with
+each object, its coordinates and its quadrant.
+:::
 
-   ::: {.prompt}
-   The origin is the centre of a 2D game level; x goes right and y goes up.
-   Turn the description below into a table: object, coordinates, quadrant.
-   Then write GeoGebra commands that draw every object, and the positions of
-   each enemy after 1, 2 and 3 frames. Description:
-   :::
+**What do you see?**
 
-3. **Check:** draw the commands in GeoGebra. Check that each object is
-   where your words say. Work out one enemy after 3 frames by hand
-   (start + 3 × velocity) and compare.
+::: {.check label="What you should see"}
+Castle (−5, 2) in quadrant II; tree (3, 4) in quadrant I; lake (−4, −3) in
+quadrant III; gate (6, −1) in quadrant IV. Left and down give minus signs:
+check the castle and the lake first.
+:::
 
-*Your product:* the table, the picture, and one sentence on any mistake the
-AI made and how you corrected it.
+::: {.try-change}
+**Change:** put the tree 4 left and 4 up, and ask again. What do you notice?
 
 ::: {.check}
-A good product has 8 objects that match their words (left = minus x, down =
-minus y), quadrants that fit the signs, and one enemy checked by hand after
-3 frames. AI tools often swap x and y or forget the minus sign for "left"
-or "down": look for these first.
+The tree moves to (−4, 4), across the y-axis, into quadrant II. Only the
+sign of x changed.
 :::
+:::
+
+::: {.try-change}
+**Change:** add an enemy that starts at the castle and moves 2 right and 1 down
+every frame. Ask for its dots after frames 1, 2 and 3. What do you notice?
+
+::: {.check}
+The enemy is at (−3, 1), (−1, 0) and (1, −1). After 2 frames it is on the
+x-axis (y = 0, in no quadrant); after 3 frames it is in quadrant IV.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
 :::
 
 ## Wrap-up {.summary}

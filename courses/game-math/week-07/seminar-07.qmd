@@ -180,37 +180,52 @@ Which axis does a yaw turn around?
 
 ## At home · Task with AI
 
-::: {.callout-note .ai-task title="Task with AI · A small solar system"}
-**Goal:** the world positions of a moon in a small solar system after 0, 1,
-2 and 3 seconds: a chain of two parents. An AI assistant sets up a
-spreadsheet; you check it.
+::: {.callout-note .ai-task title="Task with AI · A planet and its moon"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt
+into an AI assistant that the university allows (for example Microsoft
+Copilot with your university account), and look at the picture.
 
-1. **Ask the AI:** start with this prompt.
+::: {.prompt}
+Draw a grid from −6 to 6 on both axes, with the sun at (0, 0). A planet is a
+child of the sun: it sits at (4, 0) in the sun's space, and the sun's space
+turns by 90° anticlockwise every second. A moon is a child of the planet: it
+sits at (1, 0) in the planet's space, and the planet's space also turns by
+90° anticlockwise every second. Draw the planet in blue and the moon in
+grey at t = 0, 1, 2 and 3 seconds, with the time next to each dot, and make
+a table of their world positions.
+:::
 
-   ::: {.prompt}
-   A 2D game has a sun at (0, 0). A planet is a child of the sun: it sits
-   at (4, 0) in the sun's space, and the sun's space turns by 90° per
-   second. A moon is a child of the planet: it sits at (1, 0) in the
-   planet's space, and the planet's space turns by 90° per second too. Make
-   a spreadsheet table with the world position of the planet and of the
-   moon at t = 0, 1, 2 and 3 seconds, with the formulas.
-   :::
+**What do you see?**
 
-2. **Do it yourself:** put the table in a spreadsheet and draw the moon's
-   four points.
-3. **Check:** work out t = 1 by hand: the planet is at R(90°) × (4, 0) =
-   (0, 4); the planet's space has turned by 180°, so the moon is at
-   (0, 4) + R(180°) × (1, 0).
+::: {.check label="What you should see"}
+The planet: (4, 0), (0, 4), (−4, 0), (0, −4). The moon: (5, 0), (−1, 4),
+(−3, 0), (−1, −4). The moon is always 1 unit from its planet, but it turns
+twice as fast: at t = 2 it is on the inside, between the planet and the
+sun.
+:::
 
-*Your product:* the table, the drawing, your hand check for t = 1, and one
-sentence on what the AI got wrong (or "nothing").
+::: {.try-change}
+**Change:** stop the planet's own turn (only the sun's space turns), and ask
+again. What do you notice?
 
 ::: {.check}
-t = 0: planet (4, 0), moon (5, 0). t = 1: planet (0, 4), moon (−1, 4).
-t = 2: planet (−4, 0), moon (−3, 0). t = 3: planet (0, −4), moon (−1, −4).
-AI tools often forget that the moon also turns with the planet's parent:
-then the moon at t = 1 is at (0, 5).
+The moon now stays outside its planet: (5, 0), (0, 5), (−5, 0), (0, −5),
+always 5 units from the sun. It only turns with the sun.
 :::
+:::
+
+::: {.try-change}
+**Change:** put the moon at (2, 0) in the planet's space, and ask again. What do
+you notice?
+
+::: {.check}
+Every moon dot is now 2 units from its planet: (6, 0), (−2, 4), (−2, 0),
+(−2, −4). The planet's dots do not change.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
 :::
 
 ## Wrap-up {.summary}

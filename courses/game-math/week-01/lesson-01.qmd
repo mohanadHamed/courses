@@ -454,33 +454,48 @@ In which quadrant are all three points of the map?
 :::
 :::
 
-::: {.callout-note .ai-task title="Task with AI · Every frame of a delivery"}
-**Goal:** a GeoGebra picture that shows every frame of two deliveries from
-Alpha to Beta, so you see at once which one is hit by the comet.
+::: {.callout-note .ai-task title="Task with AI · Draw every frame of a delivery"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt
+into an AI assistant that the university allows (for example Microsoft
+Copilot with your university account), and look at the picture.
 
-1. **Ask the AI:** start with this prompt.
+::: {.prompt}
+Draw a 2D grid with x and y from 0 to 10, with numbered axes. A spaceship
+starts at (1, 2). In every frame it adds the velocity (2, 1) to its
+position. Draw its position for frames 0, 1, 2, 3 and 4 as blue dots, and
+write the frame number next to each dot. Draw a red star for a comet at
+(5, 4). Show the result as a picture.
+:::
 
-   ::: {.prompt}
-   Write GeoGebra commands that draw the points of a ship that starts at
-   (1, 2) and adds the velocity (2, 1) once per frame, for frames 0 to 4.
-   Then do the same for the velocity (4, 2), frames 0 to 2. Also draw the
-   point C = (5, 4). Give only the commands, one per line.
-   :::
+**What do you see?**
 
-2. **Do it yourself:** paste the commands into geogebra.org/calculator. Give
-   the two deliveries different colours.
-3. **Check:** work out by hand where each ship is after 2 frames. Compare
-   with the picture. If a point is wrong, correct the command.
+::: {.check label="What you should see"}
+Five blue dots on one straight line: (1, 2), (3, 3), (5, 4), (7, 5) and
+(9, 6). Dot 2 is on the red star: the comet hits the ship after 2 frames.
+:::
 
-*Your product:* the picture, which delivery is hit and when, and one sentence
-on what you had to correct (or "nothing").
+::: {.try-change}
+**Change:** make the velocity (4, 2) and ask again. What do you notice?
 
 ::: {.check}
-With (2, 1): (1, 2), (3, 3), (5, 4), (7, 5), (9, 6): hit after 2 frames.
-With (4, 2): (1, 2), (5, 4), (9, 6): hit after 1 frame. Both are hit: the
-comet is on the straight line from Alpha to Beta. AI tools often draw one
-frame too many or too few: check that the last point is Beta.
+The dots are twice as far apart, on the same line: (1, 2), (5, 4), (9, 6).
+Dot 1 is on the star now: a hit after 1 frame. Dots 3 and 4 are outside the
+grid (x = 13 and x = 17).
 :::
+:::
+
+::: {.try-change}
+**Change:** make the velocity (2, 2) and ask again. What do you notice?
+
+::: {.check}
+The line is steeper: (1, 2), (3, 4), (5, 6), (7, 8), (9, 10). No dot is on
+the star: after 2 frames the ship is at (5, 6), 2 units above the comet, so
+it is not hit.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
 :::
 
 ## Summary {.summary}

@@ -179,36 +179,47 @@ State C (dragon awake, music not loud). Is rule 2 kept or broken?
 
 ## At home · Task with AI
 
-::: {.callout-note .ai-task title="Task with AI · A test plan for a big rule"}
-**Goal:** the full truth table and test plan of a rule with four
-conditions: 16 rows by hand is long; an AI assistant writes them, and you
-check them.
+::: {.callout-note .ai-task title="Task with AI · A coloured truth table"}
+An extra for the curious: let an AI assistant make the table. Copy the
+prompt into an AI assistant that the university allows (for example
+Microsoft Copilot with your university account), and look at the result.
 
-1. **Do it yourself:** write a game rule with four conditions in words, for
-   example "the boss door opens when the player has the key and (the boss
-   is awake or the timer is 0), and the player is not invisible".
-2. **Ask the AI:** start with this prompt and add your rule.
+::: {.prompt}
+A boss door opens when the player has the key AND (the boss is awake OR the
+timer is 0) AND the player is NOT invisible. Make the truth table with the
+columns key, awake, timer, invisible and opens, with all 16 rows of true
+and false (the key column first: 8 true, then 8 false). Colour the rows
+where the door opens green.
+:::
 
-   ::: {.prompt}
-   Write the rule below as a condition with the variables p, q, r, s, then
-   make its full truth table with 16 rows in the usual order (the first
-   column half T, half F). Mark the rows where the rule is true. Then list
-   the test cases a tester should run. Rule:
-   :::
+**What do you see?**
 
-3. **Check:** check three rows by hand, one of them a true row. Are there
-   exactly 16 rows, with no row twice? Type the condition into **Truth
-   Table Lab** and compare the true rows.
+::: {.check label="What you should see"}
+3 green rows out of 16: the key is true, invisible is false, and awake or
+timer is true (true and true, true and false, false and true).
+:::
 
-*Your product:* the condition, the table, your three hand checks and one
-sentence on any mistake you found.
+::: {.try-change}
+**Change:** remove "AND NOT invisible" from the rule, and ask again. What do you
+notice?
 
 ::: {.check}
-A good plan has 16 different rows, the same true rows as Truth Table Lab,
-and test cases for the true rows and for the false rows next to them. For
-the example rule key ∧ (awake ∨ timer0) ∧ ¬invisible, the door opens in 3
-of 16 rows. AI tools often forget the brackets or repeat a row.
+6 green rows: the same 3 rows, now with invisible true and with invisible
+false. A condition less lets the door open more often.
 :::
+:::
+
+::: {.try-change}
+**Change:** change OR to AND, and ask again. What do you notice?
+
+::: {.check}
+Only 1 green row: key, awake and timer are all true, and invisible is
+false. AND makes the rule harder to meet.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
 :::
 
 ## Wrap-up {.summary}

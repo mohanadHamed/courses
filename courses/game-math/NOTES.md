@@ -48,11 +48,14 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   challenge. A game that the merged lectures gave up (Multiply Lab, Asteroid
   Beam, Raft Rush, Sky Lift, Turn Lab, Roll Lab, Crate Lab) is the tool of an
   activity when it fits.
-- Tasks with AI fit here when the AI does the long part and the student
-  checks it: a sheet of 1000 loot rolls against the expected value,
-  GeoGebra commands for a path or a chain of transformations checked at two
-  points by hand, a truth table for a door with four conditions. Never trust
-  AI arithmetic without a check.
+- Tasks with AI (an extra for the curious; AUTHORING.md): the AI draws
+  what the lesson computes, from a complete prompt with every number: the
+  frames of a ship on a grid, a level with its quadrants, a sprite before
+  and after a matrix, transformed blocks, a planet and its moon, a coloured
+  truth table or decision table, a chart of 1000 draws or 1000 hunters. The
+  changes to try change one number or one word (a velocity, the order of
+  two rules, a chance), and their closed answers say what changes and why.
+  Homework 1 (graded) keeps its task with the AI-use statement.
 
 ## Lessons learned
 
@@ -97,3 +100,7 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   turning the short way, and theory and experiment (now Seminar 10). Removed:
   Fair Speed and Raft Odds. Old Lectures 17–19 became Practices 3–5 in the
   practice format; Homework 14 was removed.
+- 2026-10-31 (teacher's review of the AI boxes): the eleven "Task with AI"
+  boxes (Lecture 1 notes and page, Seminars 1, 5, 6, 7, 8, 9, 11, 12 and
+  Practice 2) became extras with a complete prompt, a picture or a coloured
+  table to look at, and two or three changes to try with closed answers.

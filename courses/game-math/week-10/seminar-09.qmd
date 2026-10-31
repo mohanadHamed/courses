@@ -189,39 +189,50 @@ Sell when apples >= 50 and trips < 3. What happens in the test (50, 3)?
 
 ## At home · Task with AI
 
-::: {.callout-note .ai-task title="Task with AI · The rule set of a boss"}
-**Goal:** a complete rule set with four conditions: a 16-row decision
-table and an else-if chain. That is long by hand; an AI assistant writes
-it, and you check it.
+::: {.callout-note .ai-task title="Task with AI · The rule set of a boss in colours"}
+An extra for the curious: let an AI assistant make the table. Copy the
+prompt into an AI assistant that the university allows (for example
+Microsoft Copilot with your university account), and look at the result.
 
-1. **Do it yourself:** read the rules of the boss. "The boss heals when its
-   health is under 25 (h) and it has a potion (q). Otherwise it raises its
-   shield when the player charges (c). Otherwise it attacks when the player
-   is near (n). Otherwise it walks."
-2. **Ask the AI:** copy this prompt and add the rules.
+::: {.prompt}
+A game boss has four conditions: h (its health is under 25), q (it has a
+potion), c (the player charges) and n (the player is near). The rules, in
+this order: if h and q, the boss heals; otherwise, if c, it raises its
+shield; otherwise, if n, it attacks; otherwise, it walks. Make the decision
+table with all 16 rows of h, q, c and n (true or false; h first: 8 true,
+then 8 false) and the action in each row. Colour each action in its own
+colour, and count the rows of each action.
+:::
 
-   ::: {.prompt}
-   Here are the rules of a game boss in words. Make the decision table
-   with all 16 rows of the conditions h, q, c, n (the first column 8 T,
-   then 8 F) and the action in each row. Count the rows of each action.
-   Then write the rules as one C# else-if chain in the right order, and
-   give three edge-case tests for "health under 25". Rules:
-   :::
+**What do you see?**
 
-3. **Check:** are there exactly 16 different rows? Check three rows by
-   hand. Is the order of the chain the designer's order? Is the code
-   `health < 25`, not `<= 25`?
+::: {.check label="What you should see"}
+Heal 4 rows (h and q true), Shield 6 rows, Attack 3 rows and Walk 3 rows:
+4 + 6 + 3 + 3 = 16.
+:::
 
-*Your product:* the table, the chain, your three hand checks and one
-sentence on a mistake you found (or "no mistake").
+::: {.try-change}
+**Change:** put the shield rule first (shield, then heal, then attack, then
+walk), and ask again. What do you notice?
 
 ::: {.check}
-Heal 4 rows (h and q true), Shield 6 rows, Attack 3 rows, Walk 3 rows:
-4 + 6 + 3 + 3 = 16. The chain: `if (h && q) Heal(); else if (c) Shield();
-else if (n) Attack(); else Walk();`. Tests: health 24 heals (with a
-potion), 25 and 26 do not. AI tools often put Shield first or write
-`<= 25`.
+Shield 8 rows, Heal 2, Attack 3, Walk 3. The shield now wins every row
+where the player charges, and the boss heals in only 2 rows: the order of
+the rules changes the boss.
 :::
+:::
+
+::: {.try-change}
+**Change:** remove the attack rule, and ask again. What do you notice?
+
+::: {.check}
+Heal 4, Shield 6 and Walk 6: the 3 rows of Attack now walk. The boss never
+attacks.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
 :::
 
 ## Wrap-up {.summary}

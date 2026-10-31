@@ -168,6 +168,12 @@ The teacher's notes:
   lessons-learned entry of 2026-10-31) and the seminar and homework
   templates describe core weeks and practice weeks.
 
+- courses-private (pushed to `main`, commit 9d91bfb): homework solutions
+  renamed, merged and removed to match the new homework; the online
+  solutions 9 and 10 swapped; dues of the online activities 13–15; the
+  Moodle week maps of the four courses show the 15-week plan (units,
+  practice weeks, midterm) and have an Arabic text for a practice week.
+
 ### Still to do (in this order)
 
 1. **Game Math:** done (see above).
@@ -175,14 +181,10 @@ The teacher's notes:
 3. **Digital Media:** done (see above).
 4. **Digital Skills:** done (see above).
 5. **Rules:** done (see above).
-6. **courses-private** (clone it next to this repo as `../courses-private`):
-   homework solutions renamed and merged (Game Math 9–13 → 8–12, 14
-   removed; Computing Systems 5 + 6 → 5, 7–13 → 6–12; Digital Media 12 +
-   13 → 12), Digital Skills online solutions 9 ↔ 10, `moodle/<slug>-weeks.md`
-   rewritten for the 15-week plan (core weeks and filling weeks). Commit on
-   `main` and push.
-7. **GIF recordings** for new or changed slides with a QR code (none new so
-   far: the seminars reuse sims that have GIFs).
+6. **courses-private:** done (see above).
+7. **GIF recordings:** none needed: the new seminars and practice sessions
+   reuse simulators that already have GIFs, and no simulator changed its
+   look (`check_size.py` reports no slide without a recording).
 8. **Build and check:** full `quarto render` on the Mac (Quarto 1.10.20
    is installed; CI pins 1.10.19), `tools/course_package.py`, then
    `quarto preview` for the teacher's review on localhost.

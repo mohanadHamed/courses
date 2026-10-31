@@ -12,8 +12,9 @@ calculator, and every week she makes a mistake. Excel can do the
 calculation for her, and it does it again by itself when a number changes.
 In Lecture 3 you met Excel: a **workbook** with **worksheets** and
 **cells**. In this lesson you make Excel calculate: you write **formulas**,
-you copy them, and you use the first **functions**. Every section ends with
-a lab task.
+you copy them, and you use the first **functions**. These notes are a short
+reference: in class you do each idea in Excel, as an experiment of the
+**worksheet**.
 :::
 
 ## Key terms
@@ -48,18 +49,7 @@ Typing "2 JD" in a price cell. Then it is text, and Excel cannot compute
 with it. Type only the number, and write "JD" in the heading.
 :::
 
-::: {.callout-note title="Lab task · The shop list"}
-1. Open Excel (or Excel on the web) and a new workbook.
-2. Type the shop list of Example 6.1 in A1:C4.
-3. Click B3. What does the Name Box (left of the formula bar) show?
-
-*Your result:* the list, saved as `shop.xlsx`.
-
-::: {.check}
-The Name Box shows **B3**: the price of the pen, 0.5. The numbers sit on
-the right of their cells, the words on the left.
-:::
-:::
+*In class: Experiment 1 of the worksheet, the cells and ranges of the shop list.*
 
 ## 6.2 Let Excel calculate: formulas
 
@@ -89,18 +79,7 @@ numbers (=2\*10): then the total does not change when the price changes.
 
 {{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" height="560" >}}
 
-::: {.callout-note title="Lab task · A formula"}
-1. In your `shop.xlsx`, type *Total (JD)* in D1 and **=B2\*C2** in D2.
-2. Change the price in B2. Watch D2.
-
-*Your result:* D2 with the formula, and one sentence: what happened when the
-price changed?
-
-::: {.check}
-D2 shows 20 (2 × 10). When you change the price in B2, for example to 3,
-D2 changes to 30 by itself: the formula uses the address B2.
-:::
-:::
+*In class: Experiment 2 of the worksheet, a formula that changes by itself.*
 
 ## 6.3 Copy a formula: relative and absolute references
 
@@ -137,19 +116,7 @@ Tip: after typing F1, press **F4**; Excel adds the $ signs.
 
 {{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" height="520" >}}
 
-::: {.callout-note title="Lab task · Copy down"}
-1. In `shop.xlsx`, copy D2 down to D4 with the fill handle.
-2. Type 10% in F1. In E2 write =D2\*\$F\$1 and copy it down.
-3. Click E4. What formula does the formula bar show?
-
-*Your result:* columns D and E filled, and the formula of E4.
-
-::: {.check}
-With the notebook at 2 JD: D3 shows 20 and D4 shows 36. E2 and E3 show 2,
-and E4 shows 3.6. The formula bar of E4 shows =D4\*\$F\$1: D4 moved, and
-\$F\$1 stayed.
-:::
-:::
+*In class: Experiment 3 of the worksheet, copying a formula with and without \$.*
 
 ## 6.4 Ready formulas: SUM, AVERAGE, MAX, MIN
 
@@ -181,18 +148,7 @@ Error values. **#DIV/0!**: the formula divides by 0 (or by an empty cell).
 the column is too narrow; make it wider.
 :::
 
-::: {.callout-note title="Lab task · The functions"}
-1. In `shop.xlsx`, under the totals in column D, use AutoSum for the total.
-2. Add the average price with =AVERAGE(B2:B4) and the highest price with
-   =MAX(B2:B4).
-
-*Your result:* `shop.xlsx` with SUM, AVERAGE and MAX.
-
-::: {.check}
-With the notebook at 2 JD: the AutoSum under column D gives =SUM(D2:D4),
-76. =AVERAGE(B2:B4) gives about 4.83, and =MAX(B2:B4) gives 12.
-:::
-:::
+*In class: Experiment 4 of the worksheet, SUM, AVERAGE, MAX and MIN on a week of sales.*
 
 ## Case study: the shop's week
 
@@ -205,19 +161,6 @@ an empty cell. The Game challenge of the interactive lesson uses these
 cells. In the mini-game below you predict them.
 
 {{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" height="560" >}}
-
-::: {.callout-note title="Lab task · The week"}
-1. Type the sales of the week (Sun 10 to Thu 50) in a new sheet.
-2. Add SUM, AVERAGE, MAX and MIN under them. Do the results match the
-   mini-game?
-
-*Your result:* a sheet named *Week* with the four functions.
-
-::: {.check}
-SUM 150, AVERAGE 30, MAX 50 and MIN 10: the same results as in the
-mini-game.
-:::
-:::
 
 ## Further reading
 

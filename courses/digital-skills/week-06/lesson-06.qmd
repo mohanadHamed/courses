@@ -6,14 +6,27 @@ ilos: [C2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem at study or at work. Then it explains one idea. It
-ends with a **Lab task** and one set of questions. Every question on this
+This page is the interactive version of the lesson. In class you follow the
+**worksheet (PDF)**: four experiments in Excel. Each section of this page
+explains one idea, then shows its experiment: do each step, write your
+result in its box, then open "Check your result". Every question on this
 page has its answer: try first, then check.
 
 ## Key terms
 
 {{< glossary workbook worksheet cell cell-address cell-range formula formula-bar relative-reference absolute-reference fill-handle function autosum >}}
+
+## Before you start
+
+- **You need:** Excel (the desktop app, or Excel on the web at `office.com`).
+- **Start file:** download it, then open it in Excel. Every student works
+  with the same numbers.
+
+{{< start-files >}}
+
+- What you type in the boxes stays in this browser only.
+
+![How the worksheet works: do the step, write your result, check it.](../week-01/images/worksheet-steps.png){width=100%}
 
 ## 6.1 The grid: cells and ranges
 
@@ -31,16 +44,7 @@ Do not type "2 JD" in a cell: that is text. Type 2, and put JD in the
 heading.
 :::
 
-::: {.callout-note title="Lab task · The shop list"}
-1. Open Excel and type the shop list in A1:C4.
-2. Click B3. What does the Name Box show?
-3. Save as `shop.xlsx`.
-
-::: {.check}
-The Name Box shows **B3**: the price of the pen, 0.5. The numbers sit on
-the right of their cells, the words on the left.
-:::
-:::
+{{< experiment 1 >}}
 
 ::: {.callout-tip title="Try it 1 · Cells"}
 Choose the right answer.
@@ -89,15 +93,7 @@ You type "2 JD" in a cell. What is it for Excel?
 No =, no formula. And use addresses (=B2\*C2), not numbers (=2\*10).
 :::
 
-::: {.callout-note title="Lab task · A formula"}
-1. Type *Total (JD)* in D1 and **=B2\*C2** in D2.
-2. Change the price in B2. What happens to D2?
-
-::: {.check}
-D2 shows 20 (2 × 10). When you change the price in B2, for example to 3,
-D2 changes to 30 by itself: the formula uses the address B2.
-:::
-:::
+{{< experiment 2 >}}
 
 ::: {.callout-tip title="Try it 2 · Formulas"}
 Choose the right answer.
@@ -150,17 +146,7 @@ What must every formula start with?
 A rate or a total that every row needs must have $ signs.
 :::
 
-::: {.callout-note title="Lab task · Copy down"}
-1. Copy D2 down to D4.
-2. Type 10% in F1; in E2 write =D2\*\$F\$1 and copy it down.
-3. Click E4: which formula does the formula bar show?
-
-::: {.check}
-With the notebook at 2 JD: D3 shows 20 and D4 shows 36. E2 and E3 show 2,
-and E4 shows 3.6. The formula bar of E4 shows =D4\*\$F\$1: D4 moved, and
-\$F\$1 stayed.
-:::
-:::
+{{< experiment 3 >}}
 
 ::: {.callout-tip title="Try it 3 · References"}
 Choose the right answer.
@@ -208,15 +194,7 @@ Which kind of reference stays the same when you copy?
 #NAME? often means a typing mistake in the function name.
 :::
 
-::: {.callout-note title="Lab task · The functions"}
-1. Under column D, use AutoSum for the total.
-2. Add =AVERAGE(B2:B4) and =MAX(B2:B4) for the prices.
-
-::: {.check}
-With the notebook at 2 JD: the AutoSum under column D gives =SUM(D2:D4),
-76. =AVERAGE(B2:B4) gives about 4.83, and =MAX(B2:B4) gives 12.
-:::
-:::
+{{< experiment 4 >}}
 
 ::: {.callout-tip title="Try it 4 · Functions"}
 Sales 5, 10, 15, 20 in B2:B5. Choose the right answer.
@@ -248,6 +226,10 @@ What does the Σ button write?
     Why: AutoSum writes =SUM( ) for the cells above.
 :::
 :::
+
+## Table of results
+
+{{< experiment results >}}
 
 ## Game challenge: the shop's week {.challenge}
 

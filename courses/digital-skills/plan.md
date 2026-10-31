@@ -54,6 +54,29 @@ Fully practical and blended: every week has a face-to-face lab session
 - The AI-use statement starts in unit 9 (Lecture 9).
 - No homework (the online activities replace it).
 
+## Lecture worksheets: real apps or simulators
+
+Every lecture is built around a worksheet (`lesson-NN-sheet.qmd`, AUTHORING.md,
+"Lecture worksheets"): one experiment per section, done on the computer in
+class and checked there. The tools of each lecture, by its nature (a real
+app first when the lab has it; the simulators of the page are the teacher's
+demonstration and the way to do a step without the app):
+
+| Lecture | Experiments (one per section) | Tools | Start files |
+|---|---|---|---|
+| 1 Productivity apps | by hand or with AutoSum · find the apps · a first prompt | mix: Excel, the Start menu and an AI assistant; Time Saver, App Launcher, AI Chat | `prices-start.xlsx` |
+| 2 Generative AI tools | two good jobs · weak spots · AI, search or spreadsheet | mix: an AI assistant and a search engine; Weak Spots, Right Tool | none |
+| 3 Office concepts | the parts of the window · the ribbon · Save, Save As and formats | mix: Word, Excel and PowerPoint; Window Tour, Ribbon Finder, Save Lab | `notice-start.docx` |
+| 4 Word (1) | formatting · styles · a list and a table · a picture | real app: Word; Format Lab, Style Lab, List and Table Lab | `family-day-start.docx`, `park.png` |
+| 5 AI with Word | a draft · a summary · a new tone · a translation | mix: an AI assistant and Word; Word AI Lab, Tone Lab | `report-start.docx` |
+| 6 Excel (1) | cells and ranges · a formula · copy a formula · four functions | real app: Excel; Formula Lab and Reference Lab | `shop-start.xlsx` |
+| 7 Excel (2) | sort · filter · a colour rule · two charts | real app: Excel; Table Lab, Chart Lab | `sales-start.xlsx` |
+| 8 PowerPoint | slides and layouts · a theme · notes · transitions and animations | real app: PowerPoint; Slide Builder, Transition Lab | `talk-start.pptx` |
+| 9 Checking AI output | claims and sources · bias · personal data · the AI-use statement | simulators and a browser: Fact-Check Lab, Bias Lab, Prompt Cleaner; Word for the statement | none |
+| 10 Excel (3) | a PivotTable · weeks and averages · check an AI summary | mix: Excel and an AI assistant; Pivot Lab, Summary Check | `month-start.xlsx` |
+
+Lecture 6 is the model (done 2026-10-31); the others follow it.
+
 ## Tasks with AI (ideas)
 
 AI is already the subject of many sessions; the Tasks with AI there are the Office tasks done with AI help at a higher level (a formatted report, a budget with formulas and a chart), always with checking and, from unit 9, the AI-use statement.

@@ -8,40 +8,52 @@ format: lesson-pptx
 
 {{< glossary cell-address cell-range formula formula-bar relative-reference absolute-reference function autosum >}}
 
-## 6.1 Cells and ranges
+## Before you start
+
+:::: {.columns}
+::: {.column width="50%"}
+- Open the page of Lecture 6 and download the file shop-start.xlsx.
+- The file has two sheets: Shop has three items, and Week has five days of sales.
+- Do each experiment of the worksheet when the teacher shows it.
+- Write your result after each step, then check it at the end of the worksheet.
+:::
+::: {.column width="50%"}
+![](../week-01/images/worksheet-steps.png)
+:::
+::::
+
+## Experiment 1 · Cells and ranges
 
 :::: {.columns}
 ::: {.column width="50%"}
 - A cell address is a column letter and a row number, for example B3.
-- A range is a block of cells, for example B2:B4.
-- Text sits on the left of a cell, and numbers sit on the right.
-- **Do it:** Type the shop list in Excel and click B3. What does the Name Box show?
+- **Step 1:** Click the price of the pen. What does the Name Box show?
+- **Step 2:** Type B2:B4 in the Name Box. What Sum does the status bar show?
+- **Step 3:** Type 2 JD in B6 and 2 in B7. Which one sits on the left?
 :::
 ::: {.column width="50%"}
 ![](images/excel-grid.png)
 :::
 ::::
 
-## Try it 1 · Cells
+## Check 1 · Cells and ranges
 
-a) Which column and row is cell C4?
-b) Which range holds the cells A2 to A6?
-c) Why is "2 JD" in a cell a problem?
+What did you record in Experiment 1?
 
-::: {.answer}
-a) column C, row 4
-b) A2:A6
-c) It is text, so Excel cannot compute with it.
+::: {.reveal}
+- Step 1: The Name Box shows B3, and the cell holds 0.5.
+- Step 2: The status bar shows Sum 14.5 for the three prices in B2:B4.
+- Step 3: 2 JD sits on the left because it is text, and 2 sits on the right.
 :::
 
-## 6.2 Formulas
+## Experiment 2 · A formula
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A formula starts with = and uses cell addresses.
-- The cell shows the result, and the formula bar shows the formula.
-- When a number changes, the result changes by itself.
-- **Do it:** Write =B2\*C2 in D2 and change the price. What happens?
+- A formula starts with = and uses cell addresses, so it changes by itself.
+- **Step 1:** Type =B2\*C2 in D2. What does D2 show?
+- **Step 2:** Change the price in B2 to 3. What does D2 show now?
+- **Step 3:** Type =2+3\*4 and =(2+3)\*4. What does each one give?
 :::
 ::: {.column width="50%"}
 ![](images/formula-parts.png)
@@ -50,28 +62,26 @@ c) It is text, so Excel cannot compute with it.
 
 ## Live demo · Formula Lab
 
-{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" task="**Show:** type =B2\*C2 in D2, copy it down, then add SUM in D5. **Ask:** why did the total change when the formula was copied?" >}}
+{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" task="**Show:** type =B2\*C2 in D2, then change the price in B2. **Ask:** why did D2 change by itself?" >}}
 
-## Try it 2 · Formulas
+## Check 2 · A formula
 
-a) B2 is 6 and C2 is 5. What does =B2\*C2 show?
-b) What does =2+3\*4 give?
-c) Why should a formula use B2 and not the number 6?
+What did you record in Experiment 2?
 
-::: {.answer}
-a) 30
-b) 14
-c) so that it changes when B2 changes
+::: {.reveal}
+- Step 1: D2 shows 20, and the formula bar shows =B2\*C2.
+- Step 2: D2 shows 30, because the formula uses the address B2.
+- Step 3: =2+3\*4 gives 14, and =(2+3)\*4 gives 20.
 :::
 
-## 6.3 Relative and absolute references
+## Experiment 3 · Copy a formula
 
 :::: {.columns}
 ::: {.column width="50%"}
-- The fill handle copies a formula to the next rows.
-- A relative reference like B2 changes in each row.
-- An absolute reference like \$F\$1 stays the same everywhere.
-- **Do it:** Copy =D2\*\$F\$1 down. Which formula is in E4?
+- A copied formula moves B2 to B3, but \$F\$1 stays the same.
+- **Step 1:** Copy D2 down with the fill handle. Which formula is in D3?
+- **Step 2:** Type 10% in F1 and copy =D2\*F1 from E2 down. What does E3 show?
+- **Step 3:** Copy =D2\*\$F\$1 down. Which formula is in E4?
 :::
 ::: {.column width="50%"}
 ![](images/references.png)
@@ -82,53 +92,38 @@ c) so that it changes when B2 changes
 
 {{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" task="**Show:** copy =B2\*F1 down and look at the zeros, then copy =B2\*\$F\$1 down. **Ask:** which part of the formula stayed the same?" >}}
 
-## Example · One discount rate for all
+## Check 3 · Copy a formula
 
-The rate 10 % is in F1, and Rana copies =B2\*F1 from C2 down.
-**What goes wrong, and how does she fix it?**
+What did you record in Experiment 3?
 
 ::: {.reveal}
-1. C3 gets =B3\*F2, and F2 is empty, so the discount is 0.
-2. She writes **=B2\*\$F\$1** and copies it again.
-3. Now every row uses F1, and a new rate changes all rows.
+- Step 1: D3 has =B3\*C3 and shows 20, and D4 shows 36.
+- Step 2: E3 shows 0, because F1 moved to the empty cell F2.
+- Step 3: E4 has =D4\*\$F\$1 and shows 3.6, because \$F\$1 stayed.
 :::
 
-## Try it 3 · References
-
-a) You copy =B2\*C2 from D2 to D5. Which formula is in D5?
-b) You copy =B2\*\$F\$1 from C2 to C4. Which formula is in C4?
-c) Which key adds the $ signs after you type F1?
-
-::: {.answer}
-a) =B5\*C5
-b) =B4\*\$F\$1
-c) F4
-:::
-
-## 6.4 SUM, AVERAGE, MAX and MIN
+## Experiment 4 · Four functions
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A function is a ready formula with a name, used on a range.
-- SUM adds, AVERAGE gives the average, MAX the highest and MIN the lowest.
-- The Σ button (AutoSum) writes a SUM formula for you.
-- **Do it:** Use AutoSum under your totals. Which formula does Excel write?
+- A function is a ready formula with a name, for example =SUM(B2:B6).
+- **Step 1:** On the sheet Week, use AutoSum in B7. What does it show?
+- **Step 2:** Type AVERAGE, MAX and MIN of B2:B6. What do they give?
+- **Step 3:** Type =SUMM(B2:B6). Which error does the cell show?
 :::
 ::: {.column width="50%"}
 ![](images/functions.png)
 :::
 ::::
 
-## Try it 4 · Functions
+## Check 4 · Four functions
 
-a) The sales are 5, 10, 15 and 20. What does SUM give?
-b) What does AVERAGE give for the same sales?
-c) A cell shows #NAME?. What is a likely reason?
+What did you record in Experiment 4?
 
-::: {.answer}
-a) 50
-b) 12.5
-c) The function name is wrong, for example SUMM.
+::: {.reveal}
+- Step 1: B7 shows 100 with the formula =SUM(B2:B6).
+- Step 2: AVERAGE gives 20, MAX gives 30, and MIN gives 12.
+- Step 3: The cell shows #NAME?, because Excel does not know SUMM.
 :::
 
 ## Game challenge · The Shop's Week
@@ -147,6 +142,17 @@ c) What does =A2/B2 show when B2 is empty?
 a) =C3\*\$F\$1
 b) 30
 c) #DIV/0!
+:::
+
+## Table of results
+
+Which results do you have in your table?
+
+::: {.reveal}
+- Experiment 1: The address is B3, and the Sum of B2:B4 is 14.5.
+- Experiment 2: D2 shows 30 when the price is 3; the two formulas give 14 and 20.
+- Experiment 3: E3 shows 0 with =D2\*F1, and E4 has =D4\*\$F\$1.
+- Experiment 4: SUM gives 100, AVERAGE gives 20, and =SUMM shows #NAME?.
 :::
 
 ## Summary

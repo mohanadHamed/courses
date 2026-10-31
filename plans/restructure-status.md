@@ -73,19 +73,124 @@ The teacher's request (after plan v3, same branch and PR):
   three books searched in Bing, Weak Spots; the right tool: the library
   hours from the AI and from the university website, Right Tool); no start
   file; 14 slides.
+- `shared/sims/recordings/make-video.swift`: the tested tool for the course
+  videos (PNG frames + a voice-over → H.264/AAC MP4, macOS AVFoundation).
 
-### Still to do (in this order)
+### Still to do (in this order; the next session starts here)
 
 1. (done: the table and the video tool)
-2. Lectures 3, 4, 5, 7, 8, 9 and 10 (1, 2 and 6 are done): worksheet, start
-   files, page, notes, slides (one commit each; plan in
-   `courses/digital-skills/plan.md`).
-3. Online activities 1–15 by the table (one commit each), with their
-   solutions in courses-private (`week-WW/online-NN-solutions.md`, pushed to
-   `main`); `check_size.py` (`ONLINE_MIN_SIMS` by content type), AUTHORING.md
-   ("Blended courses"), NOTES.md ("Practical first").
-4. `check_size.py --all` and `check_figures.py` without warnings, a full
-   `quarto render`, `tools/course_package.py`, the pages in the browser.
+2. **Lectures 3, 4, 5, 7, 8, 9, 10** (1, 2 and 6 are done): worksheet, start
+   files, page, notes, slides, one commit each, by the table "Lecture
+   worksheets" in `courses/digital-skills/plan.md`. The recipe (Lectures 1,
+   2 and 6 are the examples):
+   a. Read the notes, the page and the slides. Write `lesson-NN-sheet.qmd`
+      from `shared/templates/sheet-template.qmd`: one experiment per
+      section, an Aim, 2–5 steps, a `{{< record >}}` and a `.check` after
+      every step, the Table of results, the Game challenge line. Use other
+      numbers than the Game challenge (its answers must not be in the
+      worksheet) and fix the state between steps (undo, or say what is in
+      the cells).
+   b. Start files: an entry in `FILES` of `tools/start_files.py`, then run
+      it (xlsx: sheets of rows; docx: plain paragraphs). Still missing in
+      the tool: a `.pptx` writer for Lecture 8 (`talk-start.pptx`; for
+      example `quarto pandoc` from Markdown) and a picture for Lecture 4
+      (`park.png`: an SVG drawing exported to PNG, no photo).
+   c. `python3 plans/helpers/sheet.py page …/lesson-NN.qmd [--files]` and
+      `python3 plans/helpers/sheet.py notes …/lesson-NN-book.qmd "what
+      experiment 1 does" …`; then by hand the intro paragraph of the page,
+      the "You need" bullet of its Before you start, and the lead of the
+      notes.
+   d. Slides: Keywords; Before you start (picture
+      `../week-01/images/worksheet-steps.png`); for each experiment
+      "Experiment N · …" (columns: the idea in one sentence and three steps
+      with their questions | the section's figure) and "Check N · …"
+      (`.reveal`, one line per step); the Live demo slides of the page's
+      simulators; Game challenge and its Try it (harder); Table of results
+      (`.reveal`); Summary. At most 16 slides. `check_size.py` reads "work
+      together" as group work: write "from one company" instead.
+   e. `python3 _extensions/lesson/check_size.py --all | grep -E
+      "week-WW|WARNING"`, then `quarto render courses/digital-skills/week-WW`
+      and look at the worksheet PDF.
+   f. One signed commit, this file updated, push.
+3. **Online activities 1–15** by the table "Online activities" in
+   `plan.md` (one commit each; solutions in courses-private
+   `courses/digital-skills/week-WW/online-NN-solutions.md` when a task
+   changes, pushed to `main`):
+   - Pipeline first: `content:` in the front matter (lesson, sims, mix,
+     video, course-video); `check_size.py` checks by type instead of
+     `ONLINE_MIN_SIMS` (sims: a simulator in every Step; video: at least one
+     `{{< watch >}}` with title, source, length and the date checked;
+     course-video: the MP4, its captions and a poster exist); a
+     `{{< watch >}}` shortcode in `shortcodes.lua` (an official video: a
+     card that links the Microsoft Support page, never a copy; a course
+     video: `<video>` with the MP4, a `.vtt` English track and a poster);
+     a chip with the type in the hero (`banner.lua`); AUTHORING.md
+     ("Blended courses") and NOTES.md ("Practical first: many simulators")
+     say that the type decides the simulators.
+   - sims (2, 3, 8): each Step one instruction, its simulator and its Try
+     it; lesson (5, 14, 15) and mix (7, 9, 12): as now, with `content:`;
+     video (4, 10, 13): Steps that follow the Microsoft videos of the plan
+     (check each link again on the day); course-video (1, 6, 11): make the
+     video, then Steps with the simulators.
+   - Course videos (the teacher's choice: Mac tools, nothing to install):
+     an HTML/SVG animation drawn like the simulators (generic windows, no
+     logos, no screenshots), with a function that draws the picture at any
+     time t, so the frames are exact; headless Chrome takes one PNG every
+     1/30 s (as `record.ts` does with screenshots); the voice-over with
+     `say -v Samantha -r 165` from a script in A2 English, `afconvert` to
+     AAC; `shared/sims/recordings/make-video.swift` joins them (1280 × 720,
+     about 1 MB a minute). A2 captions drawn in the picture and the same
+     lines as a `.vtt` file. About 2 minutes each; files in
+     `week-WW/videos/` (add the folder to the resources of `_quarto.yml`).
+4. **Tasks with AI in all courses** (the teacher's request of 2026-10-31,
+   see the next section): after steps 2 and 3, or in its own branch.
+5. `check_size.py --all` and `check_figures.py` without warnings, a full
+   `quarto render`, `tools/course_package.py`, the pages in the browser
+   (this Mac has no Noto fonts: local PDFs use fallback fonts; CI has them).
+
+### The teacher's request for the AI boxes (2026-10-31; not started)
+
+The teacher checked the AI boxes of the site: they give an incomplete prompt
+and ask the student to complete it. That is not right for basic students,
+and many of them have never used AI to learn. In Game Math, Computing
+Systems and Digital Media no ILO or PLO asks for AI: the AI boxes are an
+**extra**, offered so that students meet AI as a modern way to learn. So
+they must be as simple and as inviting as possible:
+
+- **A complete prompt** in every AI box: all the details and numbers of one
+  game or work situation, ready to copy and paste (the Copy prompt button
+  stays). The student does not complete or design it.
+- **A visual result:** the prompt asks the AI for something to look at, for
+  example in a vectors lecture: "Draw a 2D grid; the player is at (2, 3) and
+  the enemy at (6, 6); draw the vector from the player to the enemy as an
+  arrow with its x and y parts, and label them" (a picture, a diagram, a
+  chart, a small table, or a small web page that the AI makes).
+- **Optional changes for the curious:** "Change the enemy to (8, 2) and ask
+  the AI to draw it again. What do you notice?" (two or three changes of one
+  number or one word), and the students' own ideas.
+- **Collapsed expected answers:** after each "What do you notice?", a
+  closed box with what the student should see (like "Check your result"), so
+  the page still answers everything.
+- No heavy check step before the student sees the result; keep it fun. A
+  short reminder that AI can be wrong may stay, with the expected answer to
+  compare.
+- **Scope:** every AI box in every course: 19 boxes today (Game Math 12:
+  Lecture 1 notes and page, Seminars 1, 5, 6, 7, 8, 9, 11, 12, Practice 2,
+  and Homework 1; Computing Systems 4: Seminars 3, 7, 8, 12; Digital Media 3:
+  Seminars 3, 4, 12). Digital Skills has no "Task with AI" box: there AI
+  **is** in the ILOs (A1, B1, C4, D1), so its AI experiments and online
+  tasks stay as they are (ask the teacher before changing them). Graded
+  work (Homework 1 of Game Math, tasks to submit) keeps no answers: ask the
+  teacher whether its AI box becomes the same kind of optional extra.
+- **Pipeline to change** (then every box): AUTHORING.md ("Tasks with AI":
+  the new model, the example box, "0–2 per session"); `check_size.py`
+  (`ai_task_warnings`: a complete `.prompt`, the changes, a collapsed
+  answer after each "What do you notice?"; no "Check:" step required
+  outside graded work); a class for the changes and their answers (for
+  example `::: {.try-change}` with a `.check` inside each change), rendered
+  on the page as closed boxes (`match.lua`, `lesson.css`) and in the PDF at
+  the end like the other results (`book.lua`); the templates; each course's
+  NOTES.md ("Tasks with AI fit here when …").
 
 ## Plan v3 (teacher's request of 2026-10-31): core weeks and practice weeks
 

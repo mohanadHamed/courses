@@ -64,3 +64,9 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   Practice 2 (the team presentation). Homework 13 was dropped (Homework 12
   already checks rights and credits). Removed: Asset Shopping, IP Desk,
   Audit Fixes, Workshop Day and the figures no session uses.
+- 2026-10-31 (teacher's review of the AI boxes): the three "Task with AI"
+  boxes (Seminars 3, 4 and 12) became extras with a complete prompt about
+  the Lantern Keeper story or made-up assets, something to look at (a map
+  of scenes, a screenplay in a table, a credits table coloured by licence)
+  and two or three changes to try with closed answers. They are never a
+  media product of the student.

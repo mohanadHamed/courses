@@ -69,3 +69,10 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   Compatibility Lab and a reliable source) and Seminar 14 Practice 2 (the
   project presentations). Homework 5 joins old 5 and 6. Removed: Settings
   Explorer, Name Checker, Disk Doctor and four unused figures.
+- 2026-10-31 (teacher's review of the AI boxes): the four "Task with AI"
+  boxes (Seminars 3, 7, 8 and 12) became extras with a complete prompt and a
+  coloured table to look at, built from given facts so that the answers do
+  not change: five made-up test phones by level, Android and iOS for a
+  studio with one Windows laptop, a checklist before the stores, and a test
+  table of four setups; each has two or three changes to try with closed
+  answers.

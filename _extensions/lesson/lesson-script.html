@@ -45,6 +45,32 @@
     p.appendChild(btn);
   }
 
+  // Worksheet fields ({{< record >}} and the empty cells of a .record-table):
+  // what the student types stays in this browser only, so the results are
+  // still there when the page opens again. The page works the same without storage.
+  for (const td of document.querySelectorAll(".record-table td")) {
+    if (td.textContent.trim() === "") {
+      td.classList.add("record-cell");
+      td.contentEditable = "true";
+      td.spellcheck = false;
+    }
+  }
+  const fields = [...document.querySelectorAll(".record-input, td.record-cell")];
+  if (fields.length) {
+    const recKey = "rec:" + location.pathname;
+    let rec = {};
+    try { rec = JSON.parse(localStorage.getItem(recKey) || "{}") || {}; } catch (_) {}
+    const read = (el) => (el.tagName === "TD" ? el.textContent : el.value);
+    const write = (el, v) => { if (el.tagName === "TD") el.textContent = v; else el.value = v; };
+    fields.forEach((el, i) => {
+      if (typeof rec[i] === "string") write(el, rec[i]);
+      el.addEventListener("input", () => {
+        rec[i] = read(el);
+        try { localStorage.setItem(recKey, JSON.stringify(rec)); } catch (_) {}
+      });
+    });
+  }
+
   // Resize simulator iframes to the height they report (shared/sims/sim-base.js).
   window.addEventListener("message", (e) => {
     const h = e.data && e.data.simHeight;

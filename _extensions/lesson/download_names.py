@@ -6,6 +6,7 @@ course has the same names. After the render, this step renames them in _site:
 
     lesson-05-book.pdf      -> math_lecture5.pdf
     lesson-05-slides.pptx   -> math_lecture5_slides.pptx
+    lesson-06-sheet.pdf     -> digital_skills_lecture6_sheet.pdf (lecture worksheet)
     seminar-02-book.pdf     -> math_seminar2.pdf
     seminar-02-slides.pptx  -> math_seminar2_slides.pptx
     practice-03-book.pdf    -> digital_skills_practice3.pdf
@@ -28,6 +29,7 @@ import re
 RULES = [
     (re.compile(r"^lesson-(\d+)-book\.pdf$"), "{prefix}_lecture{n}.pdf"),
     (re.compile(r"^lesson-(\d+)-slides\.pptx$"), "{prefix}_lecture{n}_slides.pptx"),
+    (re.compile(r"^lesson-(\d+)-sheet\.pdf$"), "{prefix}_lecture{n}_sheet.pdf"),
     (re.compile(r"^seminar-(\d+)-book\.pdf$"), "{prefix}_seminar{n}.pdf"),
     (re.compile(r"^seminar-(\d+)-slides\.pptx$"), "{prefix}_seminar{n}_slides.pptx"),
     (re.compile(r"^practice-(\d+)-book\.pdf$"), "{prefix}_practice{n}.pdf"),

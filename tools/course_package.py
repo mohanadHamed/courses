@@ -24,7 +24,8 @@ and writes `_package/<slug>/` (not in git):
 
     week-01/ … week-16/   the notes and worksheets (PDF), slides (PPTX),
                           homework and printed online tasks (PDF) of that
-                          week, and pages.html with the address of every
+                          week, the start files of its lecture worksheets,
+                          and pages.html with the address of every
                           interactive page
     index.html, index.pdf the syllabus weekly table exactly as approved, with
                           one added column, Materials, naming the sessions
@@ -216,7 +217,14 @@ def materials(slug, unit, prefix):
         labels.append(label)
         base = "%s_%s%d" % (prefix, FILE[kind], n)
         names = [base + "_tasks.pdf"] if kind == "online" else [base + ".pdf", base + "_slides.pptx"]
+        # A lecture worksheet (lesson-NN-sheet.qmd) and its start files (files/).
+        qmd = os.path.join(ROOT, "courses", slug, wdir, "%s-%02d" % (STEM[kind], n))
+        if os.path.exists(qmd + "-sheet.qmd"):
+            names.append(base + "_sheet.pdf")
         files += [os.path.join(src, x) for x in names]
+        if kind == "lecture" and os.path.exists(qmd + "-sheet.qmd"):
+            start = os.path.join(ROOT, "courses", slug, wdir, "files")
+            files += [os.path.join(src, "files", x) for x in sorted(os.listdir(start))] if os.path.isdir(start) else []
         pages.append((label, s.get("title", ""), url + "%s-%02d.html" % (STEM[kind], n)))
     u = unit.get("unit")
     if u is None or unit.get("filling"):

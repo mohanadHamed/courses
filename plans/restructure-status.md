@@ -1,8 +1,69 @@
 # Restructure: status
 
 Branch `restructure-units` (PR mohanadHamed/courses#25, signed commits). The
-newest plan is **plan v3** below; plan v2 (`plans/restructure-19-lectures.md`)
+newest work is the **Digital Skills worksheets and online activities** below,
+after **plan v3**; plan v2 (`plans/restructure-19-lectures.md`)
 and its history follow at the end of this file.
+
+## Digital Skills: lecture worksheets and varied online activities (2026-10-31)
+
+The teacher's request (after plan v3, same branch and PR):
+
+1. **Lectures 1–10 are built around a worksheet**, like the manual of a lab
+   experiment: the goal (ILOs), what you need, start files (the same data
+   for every student), 3–4 numbered experiments (one per section) with
+   numbered steps and a place to record the result after every step, and a
+   short table of results. Done and checked in class, never uploaded. The
+   page shows the same experiments with "Check your result" after every
+   step; the PDF has the results at the end. The notes become a short
+   reference; the slides demonstrate the worksheet. Real apps, simulators or
+   a mix, by lecture (`courses/digital-skills/plan.md`).
+2. **Online activities 1–15 vary their content**: an interactive lesson,
+   simulators only, a mix, an existing free video (official sources, linked,
+   with title, source, length and the date checked) or a short video made for
+   the course; every activity keeps its tasks to submit on Moodle, and its
+   model answers in courses-private. The practice weeks add no new content.
+
+### Design (decided 2026-10-31)
+
+- `lesson-NN-sheet.qmd` (`lesson-typst`) → `digital_skills_lectureN_sheet.pdf`.
+  `## Experiment N · title` with `**Aim:**` and 2–5 numbered steps; after each
+  step `{{< record "label" >}}` and `::: {.check}`; `## Table of results` in
+  `::: {.record-table}`; `start-files:` in the front matter (files in
+  `week-WW/files/`, written by `tools/start_files.py`).
+- The page reads the experiments from the worksheet (`{{< experiment N >}}`,
+  `{{< experiment results >}}`, `{{< start-files >}}`): written once. Text
+  fields keep what the student types in the browser (`lesson-script.html`).
+- `book.lua`: results by step ("Experiment 2 · Step 3") on a new page;
+  `banner.lua`: "Worksheet (PDF)" first on the page, goal card and QR card in
+  the PDF; `shortcodes.lua`: course page "Worksheet" and "Notes" links;
+  `download_names.py`, `course_package.py` (worksheet and start files), the
+  CI output check, `check_size.py` (`check_sheet`), the templates
+  (`sheet-template.qmd`), AUTHORING.md ("Lecture worksheets"), NOTES.md.
+- Notes: each section ends with *In class: Experiment N of the worksheet, …*
+  instead of a Lab task. Slides: Keywords, Before you start (figure
+  `week-01/images/worksheet-steps.png`), Experiment N + Check N per
+  experiment, Live demos, Game challenge + Try it, Table of results, Summary.
+
+### Done
+
+- Pipeline, rules and templates (see Design).
+- Lecture 6 (model): `lesson-06-sheet.qmd` (four experiments in Excel with
+  `shop-start.xlsx`; Formula Lab and Reference Lab as the demonstration),
+  page, notes and slides (16) converted.
+
+### Still to do (in this order)
+
+1. The table of the 15 online activities (content type, videos found or to
+   be made) and the teacher's choice of the tool for course-made videos.
+2. Lectures 1–5 and 7–10: worksheet, start files, page, notes, slides (one
+   commit each; plan in `courses/digital-skills/plan.md`).
+3. Online activities 1–15 by the table (one commit each), with their
+   solutions in courses-private (`week-WW/online-NN-solutions.md`, pushed to
+   `main`); `check_size.py` (`ONLINE_MIN_SIMS` by content type), AUTHORING.md
+   ("Blended courses"), NOTES.md ("Practical first").
+4. `check_size.py --all` and `check_figures.py` without warnings, a full
+   `quarto render`, `tools/course_package.py`, the pages in the browser.
 
 ## Plan v3 (teacher's request of 2026-10-31): core weeks and practice weeks
 

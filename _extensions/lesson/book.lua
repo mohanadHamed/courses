@@ -18,11 +18,22 @@
 --   ::: {.prompt}        A starter prompt of a "Task with AI" box: a dashed box.
 --   …
 --   :::
+--
+-- A lecture worksheet (lesson-NN-sheet.qmd; AUTHORING.md, "Lecture
+-- worksheets"): under "## Experiment N · …" the steps are a numbered list,
+-- each step with a {{< record >}} field and a {.check}. The results go to
+-- "Results of the experiments", labelled "Experiment N · Step M".
+--
+--   ::: {.record-table}  A table with empty cells to fill in (the "Table of
+--   | … |   |          results"): taller rows, room to write.
+--   :::
 
 local str = pandoc.utils.stringify
 
 local results = {}      -- { label = "1.2 · Do it · Add two arrows", blocks = {...} }
 local section = nil     -- "1.2" of the current ## heading
+local experiment = nil  -- "Experiment 2" of the current ## heading (worksheet)
+local steps = false     -- a result of a step of an experiment
 local box = nil         -- title of the current callout
 local lab = false       -- a result of a "Lab task" box (Digital Skills)
 
@@ -37,7 +48,12 @@ local function wrap(prefix, content)
   return blocks
 end
 
-local function take_check(div)
+local function take_check(div, step_label)
+  if step_label then
+    steps = true
+    table.insert(results, { label = step_label, blocks = div.content })
+    return {}
+  end
   local label = (box or "Task"):gsub(" · %d+ min$", "")
   if label:match("^Lab task") then lab = true end
   if section and not label:match("^Activity") then label = section .. " · " .. label end
@@ -56,8 +72,26 @@ local collect = {
   Header = function(h)
     if h.level == 2 then
       section = str(h.content):match("^(%d+%.%d+)")
+      experiment = str(h.content):match("^(Experiment %d+)")
       box = nil
     end
+  end,
+  -- The steps of an experiment: each result is labelled with its step.
+  OrderedList = function(list)
+    if not is_typst() or not experiment then return nil end
+    local start = list.listAttributes and list.listAttributes.start or list.start or 1
+    for i, item in ipairs(list.content) do
+      local kept = pandoc.Blocks({})
+      for _, b in ipairs(item) do
+        if b.t == "Div" and b.classes:includes("check") then
+          take_check(b, string.format("%s · Step %d", experiment, start + i - 1))
+        else
+          kept:insert(b)
+        end
+      end
+      list.content[i] = kept
+    end
+    return list, false
   end,
   Callout = function(c)
     box = callout_title(c)
@@ -68,7 +102,10 @@ local collect = {
       if c:match("^callout%-") then box = callout_title(div) end
     end
     if div.classes:includes("check") then
-      return take_check(div), false
+      return take_check(div, experiment), false
+    end
+    if div.classes:includes("record-table") then
+      return wrap("#block(width: 100%)[#set table(inset: (x: 6pt, y: 11pt))\n", div.content)
     end
     if div.classes:includes("answers") then
       return wrap("#block(width: 100%)[#set text(size: 9pt)\n", div.content)
@@ -90,11 +127,15 @@ local append = {
     if not is_typst() or #results == 0 then return nil end
     local m = doc.meta
     local seminar = m.seminar or m.practice
-    doc.blocks:insert(pandoc.Header(2, seminar and "Results of the activities"
-      or (lab and "Results of the Lab tasks" or "Results of the Do it tasks")))
-    doc.blocks:insert(pandoc.Para({ pandoc.Emph({ pandoc.Str(seminar
-      and "Do each activity first. Then compare your result with the one here."
-      or "Do each task first. Then compare your result with the one here.") }) }))
+    -- A worksheet is printed: its results start on a new page.
+    if steps then doc.blocks:insert(pandoc.RawBlock("typst", "#pagebreak(weak: true)")) end
+    doc.blocks:insert(pandoc.Header(2, steps and "Results of the experiments"
+      or (seminar and "Results of the activities"
+      or (lab and "Results of the Lab tasks" or "Results of the Do it tasks"))))
+    doc.blocks:insert(pandoc.Para({ pandoc.Emph({ pandoc.Str(steps
+      and "Do each step first and record your result. Then compare it with the one here."
+      or (seminar and "Do each activity first. Then compare your result with the one here."
+      or "Do each task first. Then compare your result with the one here.")) }) }))
     local body = pandoc.Blocks({})
     for _, r in ipairs(results) do
       body:insert(pandoc.Para({ pandoc.Strong({ pandoc.Str(r.label) }) }))

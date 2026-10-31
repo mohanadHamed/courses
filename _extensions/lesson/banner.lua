@@ -8,6 +8,10 @@
 --   HTML: hero header (course, title, lecture/time chips, PDF and slides
 --         buttons) + "Today you will learn" card with the ILOs.
 --   PDF:  passes theme values to the Typst template (title band) + ILO card.
+-- A lecture of a practical course can have a worksheet (lesson-NN-sheet.qmd;
+-- AUTHORING.md, "Lecture worksheets"): the page shows a "Worksheet (PDF)"
+-- button first, and the worksheet PDF has a goal card (the ILOs) and a QR
+-- card to the page, where every step has its result.
 -- Course page (no `lesson:`): HTML hero with course name, code and tagline.
 --
 -- Data: `course` (courses/<slug>/_metadata.yml), `diploma-line` and
@@ -54,7 +58,8 @@ end
 -- files to match): math_lecture5.pdf, math_lecture5_slides.pptx,
 -- math_seminar2.pdf, math_seminar2_slides.pptx, math_homework1.pdf,
 -- digital_skills_practice3.pdf, digital_skills_online4_tasks.pdf (the printed
--- online activity). The prefix is course.file-prefix.
+-- online activity), digital_skills_lecture6_sheet.pdf (the worksheet of a
+-- lecture). The prefix is course.file-prefix.
 local STEM_NAMES = { lesson = "lecture", seminar = "seminar", practice = "practice", online = "online" }
 
 local function download_names(course, stem)
@@ -69,11 +74,18 @@ local function download_names(course, stem)
     notes = base and (base .. ".pdf") or (stem .. "-book.pdf"),
     slides = base and (base .. "_slides.pptx") or (stem .. "-slides.pptx"),
     tasks = base and (base .. "_tasks.pdf") or (stem .. ".pdf"),
+    sheet = base and (base .. "_sheet.pdf") or (stem .. "-sheet.pdf"),
   }
 end
 
 local function number(v)
   return v ~= nil and tonumber(str(v)) or nil
+end
+
+-- The worksheet of a lecture (lesson-NN-sheet.qmd) rather than its notes.
+local function is_sheet()
+  local stem = pandoc.path.split_extension(pandoc.path.filename(quarto.doc.input_file))
+  return stem:match("%-sheet$") ~= nil
 end
 
 -- An online activity of a blended course: one page with digital content and
@@ -202,6 +214,7 @@ local function page_chips(meta, course)
     if sess.kind ~= "lecture" and not info.core then table.insert(chips, "Flexible") end
     if course.blended then table.insert(chips, "🏫 Face-to-face") end
     if course.minutes then table.insert(chips, "⏱ " .. str(course.minutes) .. " min") end
+    if sess.kind == "lecture" and is_sheet() then table.insert(chips, "Worksheet") end
   end
   return chips
 end
@@ -217,6 +230,7 @@ end
 
 local function ilo_title(meta)
   if meta.homework then return "This homework practises" end
+  if is_sheet() then return "Goal of this worksheet" end
   if is_online(meta) then return "This online activity practises" end
   if meta.seminar then return "This seminar practises" end
   if meta.practice then return "This practice session practises" end
@@ -225,9 +239,12 @@ end
 
 -- HTML --------------------------------------------------------------------
 
-local function hero_note(meta, slides, online)
+local function hero_note(meta, slides, online, sheet)
   local lines = {}
-  if online then
+  if sheet then
+    table.insert(lines, "In class, follow the worksheet (PDF): do each experiment on the computer and record your results. "
+      .. "On this page every step has its result. The lesson notes (PDF) are a short reference.")
+  elseif online then
     table.insert(lines, "Work through the steps on this page, then do the tasks and submit them on the university e-learning platform.")
   elseif meta.seminar or meta.practice then
     table.insert(lines, "No new ideas today: you apply the lectures you had. Do each activity alone, then open \"Check your result\".")
@@ -250,13 +267,18 @@ local function html_lesson(doc, course)
   -- Homework PDF is the printed page itself (homework_pdf.py), so both match.
   local buttons = {}
   local online = is_online(meta)
+  -- A lecture with a worksheet: the worksheet is the main document of the session.
+  local sheet = meta.lesson and not online and file_exists(pandoc.path.join({ dir, stem .. "-sheet.qmd" }))
   if meta.homework then
     table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download PDF</a>', esc(names.homework)))
   elseif online then
     table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download tasks (PDF)</a>', esc(names.tasks)))
   elseif file_exists(pandoc.path.join({ dir, stem .. "-book.qmd" })) then
-    table.insert(buttons, string.format('<a class="hero-btn" href="%s">⬇ %s (PDF)</a>', esc(names.notes),
-      (meta.seminar or meta.practice) and "Worksheet" or "Lesson notes"))
+    if sheet then
+      table.insert(buttons, string.format('<a class="hero-btn" href="%s">⬇ Worksheet (PDF)</a>', esc(names.sheet)))
+    end
+    table.insert(buttons, string.format('<a class="hero-btn%s" href="%s">⬇ %s (PDF)</a>', sheet and " hero-btn-ghost" or "",
+      esc(names.notes), (meta.seminar or meta.practice) and "Worksheet" or "Lesson notes"))
   end
   if meta.homework then
     table.insert(buttons,
@@ -299,7 +321,7 @@ local function html_lesson(doc, course)
     desc ~= "" and ('<p class="hero-sub">' .. esc(desc) .. "</p>") or "",
     table.concat(chip_html, ""),
     table.concat(buttons, ""),
-    hero_note(meta, slides, online))
+    hero_note(meta, slides, online, sheet))
 
   local blocks = { pandoc.RawBlock("html", hero) }
   if is_printed(meta) then
@@ -375,14 +397,17 @@ end
 local function web_lesson_card(meta)
   local input = quarto.doc.input_file
   local stem = pandoc.path.split_extension(pandoc.path.filename(input))
-  local web = stem:match("^(.-)%-book$")
+  local web = stem:match("^(.-)%-book$") or stem:match("^(.-)%-sheet$")
   if not web then return nil end
+  local sheet = stem:match("%-sheet$") ~= nil
   local root = quarto.project and quarto.project.directory or pandoc.system.get_working_directory()
   local rel = pandoc.path.make_relative(pandoc.path.normalize(pandoc.path.directory(input)), pandoc.path.normalize(root))
   local url = site_url() .. (rel ~= "." and (rel:gsub("\\", "/") .. "/") or "") .. web .. ".html"
   local seminar = meta.seminar or meta.practice
   local head = seminar and "Interactive page" or "Interactive lesson"
-  local text = seminar
+  local text = sheet
+    and "Do each experiment on the computer and write your result after each step. The interactive lesson has the start files and the same experiments, with a field for each result and \"Check your result\" after every step. The results are also at the end of this worksheet: look only after you try."
+    or seminar
     and "This worksheet is a self-test: the results of the activities are at the end. The interactive page has the same activities with \"Check your result\" and questions that give instant feedback."
     or "These notes are the main study text of the lecture and a self-test: the results are at the end. The interactive lesson practises the same sections with questions that give instant feedback and their reasons, and runs the simulators and mini-games marked with a QR code in the text."
   return pandoc.RawBlock("typst", string.format([[

@@ -23,9 +23,9 @@ management, medical sterilization, facility assessment). So this course is
   at most, one worked example per section, small steps. Leave out names,
   dates and numbers that no task needs.
 - **Notes:** at most about 2 000 words without exercises; exercises are short
-  and answered in one line.
-- **Lab tasks** use only the lab computer, a browser and the student's own
-  phone, with steps written as a numbered list.
+  and answered in one line. With the worksheet they are a short reference.
+- **Lab tasks and experiments** use only the lab computer, a browser and the
+  student's own phone, with steps written as a numbered list.
 - The ILOs and the lecture titles follow the course syllabus v2 (Drive,
   2026-10-23): Microsoft Office and AI tools, built on the university course
   description *Smart Digital Skills*. Ask the teacher before a syllabus title
@@ -42,10 +42,22 @@ management, medical sterilization, facility assessment). So this course is
   10 units (core: Lecture N and its online activity) and 5 practice weeks
   (flexible: Practice N in the lab and an online practice activity, no new
   ideas). Online activities are numbered 1–15 in teaching order.
-- **Face-to-face lecture:** a full lesson like the other courses: notes
-  (PDF), interactive page, slides; size for **60 minutes** (3–4 sections), a
-  Lab task in every section, a ~10-min Game challenge set in an ordinary
-  workplace or a student's study work.
+- **Face-to-face lecture: a worksheet first** (AUTHORING.md, "Lecture
+  worksheets"). The worksheet (`lesson-NN-sheet.qmd`, PDF) is the main
+  document of the session, like the manual of a lab experiment: the goal
+  (the ILOs), what you need, the start files, 3–4 experiments (one per
+  section) with numbered steps, a place to record the result after every
+  step, and a table of results. Students do it on the computer during the
+  lecture and the teacher checks it there; it is never uploaded. The notes
+  (PDF) are a short reference, the interactive page shows the same
+  experiments with "Check your result" after every step, and the slides are
+  the teacher's demonstration of the worksheet. Size for **60 minutes**
+  (3–4 sections, about 40 minutes of experiments) and a ~10-min Game
+  challenge set in an ordinary workplace or a student's study work.
+- **Real apps or simulators** in the worksheet, by the nature of the
+  lecture (the choice of each lecture is in `plan.md`): Word, Excel,
+  PowerPoint or an AI tool when the lab has it, the simulators of the page
+  as the teacher's demonstration and the way to do a step without the app.
 - **Practice session** (`practice-NN*`, flexible, in a practice week):
   hands-on work on earlier lectures in Word, Excel, PowerPoint or an AI
   tool, in the seminar format (AUTHORING.md, "What a seminar looks like");
@@ -200,3 +212,9 @@ real tool.
   Practice 5 became Practice 4. Online activity 13 is due one week after
   Lecture 10, Online activity 14 before Practice 5. Removed: Presentation
   Day and one unused figure.
+- 2026-10-31 (teacher's request, lecture worksheets): every lecture is now
+  built around a worksheet that students fill in during the lecture, like
+  the manual of a lab experiment, with start files (`tools/start_files.py`)
+  so that every student has the same data. Lecture 6 (Excel 1) was the
+  model: four experiments in Excel with `shop-start.xlsx`, Formula Lab and
+  Reference Lab as the teacher's demonstration.

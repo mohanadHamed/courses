@@ -146,6 +146,11 @@ The PDF links to the web lesson (QR card under the ILOs, added by
 `banner.lua`) and to every simulator and mini-game (QR in the `{{< sim >}}`
 box). The web lesson's main button is "Lesson notes (PDF)".
 
+In a fully practical course (now `digital-skills`) every lecture also has a
+**worksheet** (`lesson-NN-sheet.qmd`), the main document of the session,
+like the manual of a lab experiment; its notes are then a short reference
+and its main button is "Worksheet (PDF)" (see "Lecture worksheets").
+
 ### The page teaches, the notes test
 
 - **The interactive page is the study version:** a simplified copy of the
@@ -246,7 +251,8 @@ slides.
   the action ("Why the game loads slowly: storage") over abstract ones.
 - **One "Do it" task per section** (notes and page:
   `::: {.callout-note title="Do it · short title"}`; in `digital-skills` the
-  same box is called "Lab task"). Short (2–5 minutes), done alone, on things
+  same box is called "Lab task", and in a lecture with a worksheet it is the
+  experiment of the section). Short (2–5 minutes), done alone, on things
   every student has: their phone, the lab computer, a browser, a simulator or
   mini-game of the lesson, a free tool that runs in the lab, or paper. It
   has a concrete product: a number, a filled table, a file, a sketch, a
@@ -376,6 +382,10 @@ explanations; see "What a seminar looks like"):
 | Slides (title slide not counted) | 5–9 | 6–10 |
 | Worksheet words, at most | 1 200 | 1 600 |
 
+**Lecture worksheets** (a practical course, 60 min): one experiment per
+section (3–4), 2–5 steps in each, about 40 minutes of experiments, at most
+1 600 words without the results. The slides stay within 10–16.
+
 `_extensions/lesson/check_size.py` (project pre-render) checks these numbers,
 that every section of the notes is on the page, the one-box-per-section rule,
 one "Do it" (or "Lab task") box in every section of the notes and the page,
@@ -384,6 +394,67 @@ page: Key terms, Game challenge, Summary) and one "Live demo" slide per
 simulator. Fix every warning before you open a PR. Full table:
 `python3 _extensions/lesson/check_size.py --all`. Keep `SIZES` and this table
 the same.
+
+### Lecture worksheets (a practical course)
+
+A lecture of a fully practical course (now `digital-skills`) is built
+around a **worksheet**, like the manual of a lab experiment. It is the main
+document of the session: students follow it during the lecture, do each
+step on the computer and record what they see, as they would record
+measurements. Template: `shared/templates/sheet-template.qmd`.
+
+- **File:** `lesson-NN-sheet.qmd` (`format: lesson-typst`, the same
+  `lesson:` and `ilos:` as the lecture) → `<prefix>_lectureN_sheet.pdf`.
+  The page shows "Worksheet (PDF)" as its first button, and the course page
+  a "Worksheet" link (the notes link is then "Notes").
+- **Parts:** the goal (the ILO card, added by `banner.lua`, with a QR card
+  to the page); `## Before you start` (what you need, the time, how to
+  check, and `{{< start-files >}}`); then **one experiment per section** of
+  the notes, `## Experiment N · short title`, with an `**Aim:**` line (the
+  section of the notes and the minutes) and **2–5 numbered steps**. After
+  each step: a place to record the result, `{{< record "D2 shows" >}}` (a
+  value, a formula, an observation, a file name; `lines=2` for a sentence,
+  `box=4` for a sketch), and its `::: {.check}`. At the end
+  `## Table of results`: a short table in `::: {.record-table}` (what to
+  record, an empty "Your result" column) that the teacher checks before the
+  end of the lecture; then one line pointing to the Game challenge.
+- **Start files:** when the steps need data, every student gets the same
+  file. List it in the front matter (`start-files:` with `name` and
+  `about`); the file is in `week-WW/files/`, written by
+  `tools/start_files.py` (change the numbers there and in the worksheet
+  together, then run it).
+- **Real apps or simulators,** chosen by the nature of the lecture and
+  written in `plan.md`: the steps run in Word, Excel, PowerPoint or an AI
+  tool, on the simulators of the interactive lesson, or a mix. A real app
+  comes first when the lab has it; a simulator is the teacher's
+  demonstration and the way to do the step without the app.
+- **The page teaches, the worksheet tests.** The interactive lesson shows
+  each experiment in its section with `{{< experiment N >}}`, read from the
+  worksheet (written once): a text field after each step (kept in the
+  student's browser only) and "Check your result". `{{< experiment results >}}`
+  shows the table of results. In the PDF, `book.lua` moves every result to
+  "Results of the experiments" ("Experiment 2 · Step 3"), on a new page.
+- **Done and checked in class, never uploaded.** The worksheet is not
+  homework and has no marks; the online activity is the graded work of
+  the unit.
+- **The notes are a short reference:** definitions, worked examples, common
+  mistakes, the case study, the exercises. Each section ends with one line
+  that points to its experiment (*In class: Experiment 2 of the worksheet,
+  …*) instead of a Lab task.
+- **The slides are the teacher's demonstration of the worksheet:**
+  Keywords; "Before you start" (the start files, the figure
+  `week-01/images/worksheet-steps.png`); for each experiment an
+  "Experiment N · …" slide (the idea in one sentence and the steps, each
+  with its question; a picture in the other column) and a "Check N · …"
+  slide (the results, step by step, in `.reveal`); a Live demo slide for
+  each simulator; the Game challenge and its Try it slide; a "Table of
+  results" slide; the Summary. The Try it questions of the sections stay on
+  the page (home study).
+- `check_size.py` checks it: an experiment for every section of the notes,
+  an Aim and 2–5 steps in each, a record field and a check after every
+  step, the table of results, the start files, the experiments on the page
+  and in the notes, an Experiment and a Check slide for each, and at most
+  1 600 words (without the results).
 
 ### Blended courses: the online activity
 
@@ -628,13 +699,15 @@ mini-games in `week-WW/sims/`. Images and simulators move with their session.
 | `lesson-NN.qmd` | `lesson-html` | Interactive lesson page |
 | `lesson-NN-slides.qmd` | `lesson-pptx` | Slides (.pptx), public summary |
 | `seminar-NN-book.qmd`, `seminar-NN.qmd`, `seminar-NN-slides.qmd` | the same | Seminar worksheet, page and slides (Digital Skills: `practice-NN*`) |
+| `lesson-NN-sheet.qmd` | `lesson-typst` | Lecture worksheet, PDF (Digital Skills: the main document of the session) |
 | `online-NN.qmd` | `lesson-html` | Online activity (Digital Skills) |
 | `homework-UU.qmd` (UU = unit) | `lesson-html` | Take-home task page with Print and Download PDF buttons |
 
 - **Download names.** Files students download have meaningful, unique
   names: `math_lecture5.pdf` (notes), `math_lecture5_slides.pptx` (slides),
   `math_seminar2.pdf`, `math_seminar2_slides.pptx`, `math_homework1.pdf`,
-  `digital_skills_practice3.pdf`, `digital_skills_online4_tasks.pdf`. N is
+  `digital_skills_practice3.pdf`, `digital_skills_online4_tasks.pdf`,
+  `digital_skills_lecture6_sheet.pdf` (a lecture worksheet). N is
   the number without a leading zero; the prefix is `course.file-prefix` in
   `_metadata.yml` (`math`, `computing_systems`, `digital_media`,
   `digital_skills`). `download_names.py` (post-render) renames the rendered
@@ -1132,6 +1205,15 @@ do not add it. The draft mechanism still works (a draft lecture is faded,
   allow (the estimated limit, about 30 % simpler than October 2026), with
   A2–B1 English in the notes and A2 on the pages and slides. Rules above
   ("What a seminar looks like", "Level and language").
+- 2026-10-31 (Digital Skills, lecture worksheets): the course is fully
+  practical, so every lecture is now built around a worksheet, like the
+  manual of a lab experiment: 3–4 experiments (one per section), numbered
+  steps done on the computer (a real app, a simulator or both), a place to
+  record the result of every step, start files with the same data for
+  every student, and a table of results that the teacher checks in class.
+  The page shows the same experiments with a check after every step; the
+  notes became a short reference; the slides demonstrate the worksheet.
+  Rules above ("Lecture worksheets").
 - 2026-10-31 (teacher's review of the order, plan v3): the seminars were
   scattered (Game Math went Lecture 1, Seminar 1, Lectures 2–7, then a
   seminar), and the 15 units mixed core and flexible sessions. Now every

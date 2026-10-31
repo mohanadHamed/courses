@@ -174,6 +174,20 @@ The teacher's notes:
   Moodle week maps of the four courses show the 15-week plan (units,
   practice weeks, midterm) and have an Arabic text for a practice week.
 
+- Build and check (2026-10-31, on the Mac, Quarto 1.10.20): a full
+  `quarto render` (one error fixed: two figures labelled `fig-tree` in the
+  merged Game Math Lecture 10 notes), then 147 session pages, 147 PDFs and
+  96 slide decks with their download names; no notes PDF or worksheet shows
+  `Why:` or `:::`. `tools/course_package.py`: the four packages with every
+  syllabus row filled (merged units in both rows, practice weeks in theirs),
+  no session left over. Browser (local server on port 4321): the four course
+  pages show the units and the practice weeks, every session ready; 147
+  pages, 231 embedded simulators and 1,219 links and files load; the moved
+  simulators load all their scripts; two wrong tries show the answer with
+  its reason. Fixes found by the check: Seminar 2's list of wrong answers,
+  and the practised lectures of Game Math Practices 3 and 4. The Mac has no
+  Noto fonts, so local PDFs use fallback fonts (CI installs Noto).
+
 ### Still to do (in this order)
 
 1. **Game Math:** done (see above).
@@ -185,9 +199,10 @@ The teacher's notes:
 7. **GIF recordings:** none needed: the new seminars and practice sessions
    reuse simulators that already have GIFs, and no simulator changed its
    look (`check_size.py` reports no slide without a recording).
-8. **Build and check:** full `quarto render` on the Mac (Quarto 1.10.20
-   is installed; CI pins 1.10.19), `tools/course_package.py`, then
-   `quarto preview` for the teacher's review on localhost.
+8. **Build and check:** done (see above).
+9. **The teacher's review** on localhost (`quarto render`, then `quarto
+   preview`, or `python3 -m http.server 4321 --directory _site`), then the
+   merge of PR #25.
 
 ---
 

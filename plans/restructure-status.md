@@ -67,12 +67,19 @@ The teacher's request (after plan v3, same branch and PR):
 - Helper for the mechanical part of a conversion: `plans/helpers/sheet.py`
   (`page`: Lab task boxes → `{{< experiment N >}}`, Before you start, Table
   of results; `notes`: Lab task boxes → "*In class: Experiment N …*").
+- Lecture 2: three experiments with an AI assistant (two good jobs: trip
+  ideas and a summary of the library text printed in the worksheet, then a
+  check for added facts; the weak spots: 12 pens against the calculator,
+  three books searched in Bing, Weak Spots; the right tool: the library
+  hours from the AI and from the university website, Right Tool); no start
+  file; 14 slides.
 
 ### Still to do (in this order)
 
 1. (done: the table and the video tool)
-2. Lectures 1–5 and 7–10: worksheet, start files, page, notes, slides (one
-   commit each; plan in `courses/digital-skills/plan.md`).
+2. Lectures 3, 4, 5, 7, 8, 9 and 10 (1, 2 and 6 are done): worksheet, start
+   files, page, notes, slides (one commit each; plan in
+   `courses/digital-skills/plan.md`).
 3. Online activities 1–15 by the table (one commit each), with their
    solutions in courses-private (`week-WW/online-NN-solutions.md`, pushed to
    `main`); `check_size.py` (`ONLINE_MIN_SIMS` by content type), AUTHORING.md

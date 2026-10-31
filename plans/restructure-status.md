@@ -60,6 +60,13 @@ The teacher's request (after plan v3, same branch and PR):
   HTML/SVG animation like the simulators, frames from headless Chrome, a
   voice-over with macOS `say` (Samantha), joined into an H.264/AAC MP4 by a
   Swift/AVFoundation script; A2 captions in the picture and a .vtt file).
+- Lecture 1: three experiments (eight prices by hand with a stopwatch and
+  with AutoSum, `prices-start.xlsx`; the apps of Microsoft 365 in the Start
+  menu and at office.com; a first prompt, the same prompt twice, a question
+  about made-up Sunrise Company, one tip rewritten in Word); 15 slides.
+- Helper for the mechanical part of a conversion: `plans/helpers/sheet.py`
+  (`page`: Lab task boxes → `{{< experiment N >}}`, Before you start, Table
+  of results; `notes`: Lab task boxes → "*In class: Experiment N …*").
 
 ### Still to do (in this order)
 

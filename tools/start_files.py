@@ -142,6 +142,10 @@ def write_docx(path, paragraphs):
 DS = "courses/digital-skills"
 
 FILES = {
+    # Lecture 1, productivity apps: eight prices to add by hand and with AutoSum (Experiment 1).
+    DS + "/week-01/files/prices-start.xlsx": ("xlsx", [
+        ("Prices", [["Price (JD)"], [10], [25], [15], [30], [20], [5], [35], [10]], [14]),
+    ]),
     # Lecture 6, Excel (1): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
     DS + "/week-06/files/shop-start.xlsx": ("xlsx", [
         ("Shop", [["Item", "Price (JD)", "Quantity"],

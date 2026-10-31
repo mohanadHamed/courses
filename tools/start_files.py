@@ -153,6 +153,16 @@ FILES = {
     DS + "/week-01/files/prices-start.xlsx": ("xlsx", [
         ("Prices", [["Price (JD)"], [10], [25], [15], [30], [20], [5], [35], [10]], [14]),
     ]),
+    # Lecture 3, Office concepts: a staff notice to find the parts, use the ribbon and save (59 words).
+    DS + "/week-03/files/notice-start.docx": ("docx", [
+        "**Sunrise Company: Staff Notice**",
+        "Dear colleagues,",
+        "Our office moves to the second floor next Sunday. The new rooms have more light and a small kitchen.",
+        "Please put your files in boxes on Thursday afternoon. Write your name on every box.",
+        "We meet in Room 21 at 9:00 on Sunday morning.",
+        "Thank you for your help.",
+        "Yousef Haddad, Office Manager",
+    ]),
     # Lecture 6, Excel (1): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
     DS + "/week-06/files/shop-start.xlsx": ("xlsx", [
         ("Shop", [["Item", "Price (JD)", "Quantity"],

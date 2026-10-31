@@ -122,6 +122,33 @@ local collect = {
   end,
 }
 
+-- A worksheet: the "Table of results" (its title, its line and the table)
+-- stays on one page, so the teacher checks it on one sheet.
+local keep = {
+  Pandoc = function(doc)
+    if not is_typst() then return nil end
+    local out, i, n, changed = pandoc.Blocks({}), 1, #doc.blocks, false
+    while i <= n do
+      local b = doc.blocks[i]
+      if b.t == "Header" and b.level == 2 and str(b.content):match("^Table of results") then
+        local j = i + 1
+        while j <= n and not (doc.blocks[j].t == "Header" and doc.blocks[j].level <= 2) do j = j + 1 end
+        out:insert(pandoc.RawBlock("typst", "#block(width: 100%, breakable: false)["))
+        for k = i, j - 1 do out:insert(doc.blocks[k]) end
+        out:insert(pandoc.RawBlock("typst", "]"))
+        i, changed = j, true
+      else
+        out:insert(b)
+        i = i + 1
+      end
+    end
+    if changed then
+      doc.blocks = out
+      return doc
+    end
+  end,
+}
+
 local append = {
   Pandoc = function(doc)
     if not is_typst() or #results == 0 then return nil end
@@ -146,4 +173,4 @@ local append = {
   end,
 }
 
-return { collect, append }
+return { collect, keep, append }

@@ -77,11 +77,17 @@ The teacher's request (after plan v3, same branch and PR):
   videos (PNG frames + a voice-over → H.264/AAC MP4, macOS AVFoundation).
 - `tools/start_files.py` writes the same bytes for the same data (fixed zip
   dates), so running it again changes no start file.
+- Lecture 3: three experiments with `notice-start.docx` (a staff notice of
+  59 words): the parts of Word, Excel and PowerPoint (title bar and status
+  bar, C4 and Sheet2, three slides, a template); four commands on the
+  ribbon (Center, Table, Orientation, Word Count); Save As, a PDF that
+  nobody changes, and the AutoSave switch; 15 slides. `book.lua` keeps the
+  Table of results of a worksheet on one page.
 
 ### Still to do (in this order; the next session starts here)
 
 1. (done: the table and the video tool)
-2. **Lectures 3, 4, 5, 7, 8, 9, 10** (1, 2 and 6 are done): worksheet, start
+2. **Lectures 4, 5, 7, 8, 9, 10** (1, 2, 3 and 6 are done): worksheet, start
    files, page, notes, slides, one commit each, by the table "Lecture
    worksheets" in `courses/digital-skills/plan.md`. The recipe (Lectures 1,
    2 and 6 are the examples):

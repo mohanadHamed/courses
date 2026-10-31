@@ -174,7 +174,16 @@ The teacher's request (after plan v3, same branch and PR):
    its Try it; five figures removed); video 4, 10 and 13 (the ten Microsoft
    Support videos as cards in their Steps, every page checked again on
    2026-10-31 in the browser: the player is there); lesson 5, 14, 15 and mix
-   7, 9, 12 as they were. Still to do: the three course videos (1, 6, 11).
+   7, 9, 12 as they were. The three course videos are made (Mac tools in
+   `shared/sims/recordings`: `make-voice.swift`, `video-kit.js`,
+   `record-video.ts`, `make-video.swift`, run by `make-course-video.sh`):
+   *Folders, paths and good file names* (1:18, Online activity 1, Step 2),
+   *A monthly budget in Excel* (1:29, Online activity 6) and *Check an AI
+   answer: claims, sources and fair words* (1:10, Online activity 11), each
+   about 2 MB, with its script, captions (the same words), poster and
+   transcript. To change a video: edit `videos/<name>-script.txt` (and the
+   scenes of `videos/<name>.html` if a scene changes), then run
+   `sh shared/sims/recordings/make-course-video.sh <videos folder> <name>`.
    The plan of this step, by the table "Online activities" in
    `plan.md` (one commit each; solutions in courses-private
    `courses/digital-skills/week-WW/online-NN-solutions.md` when a task

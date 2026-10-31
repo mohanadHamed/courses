@@ -115,6 +115,43 @@
       fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round" }, g);
     return g;
   }
+  // A worksheet like Excel: column letters, row numbers and cells. rows: one
+  // array of values for each row (row 1 first); o.cols: the column widths;
+  // o.hl: { "B4": colour } fills cells; o.bold: the rows in bold.
+  function grid(parent, x, y, o) {
+    const g = group(parent, o), rh = o.rowH || 32, cols = o.cols, size = o.size || 19;
+    const width = 44 + cols.reduce((a, b) => a + b, 0), head = "#F1E6DA";
+    rect(g, x, y, width, rh, { fill: head, r: 0 });
+    let cx = x + 44;
+    cols.forEach((w, i) => { text(g, cx + w / 2, y + rh - 9, String.fromCharCode(65 + i), { size: 16, anchor: "middle", fill: C.grey }); cx += w; });
+    o.rows.forEach((row, r) => {
+      const ry = y + rh * (r + 1);
+      rect(g, x, ry, 44, rh, { fill: head, r: 0 });
+      text(g, x + 22, ry + rh - 9, String(r + 1), { size: 16, anchor: "middle", fill: C.grey });
+      cx = x + 44;
+      cols.forEach((w, c) => {
+        const ref = String.fromCharCode(65 + c) + (r + 1), v = row[c];
+        rect(g, cx, ry, w, rh, { fill: (o.hl && o.hl[ref]) || "#fff", stroke: "#E3D3C3", sw: 1, r: 0 });
+        if (v !== undefined && v !== null && v !== "") {
+          const num = typeof v === "number" || /^-?[\d.,]+%?$/.test(String(v));   // text sits left, numbers right
+          text(g, num ? cx + w - 10 : cx + 10, ry + rh - 9, String(v), { size, anchor: num ? "end" : "start",
+            weight: (o.bold || []).includes(r + 1) ? 800 : 600, fill: (o.ink && o.ink[ref]) || C.ink });
+        }
+        cx += w;
+      });
+    });
+    return g;
+  }
+  // The formula bar: the name of the cell and what is really in it.
+  function formulaBar(parent, x, y, w, ref, formula, o = {}) {
+    const g = group(parent, o);
+    rect(g, x, y, w, 44, { fill: "#fff", stroke: C.line, r: 8 });
+    rect(g, x, y, 90, 44, { fill: C.soft, r: 8 });
+    text(g, x + 45, y + 30, ref, { size: 20, anchor: "middle", mono: true });
+    text(g, x + 104, y + 30, "fx", { size: 20, fill: C.grey, weight: 800 });
+    text(g, x + 140, y + 30, formula, { size: 22, mono: true, fill: o.fill || C.ink });
+    return g;
+  }
   // A big title card (the first scene of a video).
   function titleCard(g, k, p, title, sub) {
     rect(g, 140, 150, 1000, 300, { fill: C.paper, stroke: C.line, r: 28, o: show(k, 0, p) });
@@ -127,7 +164,7 @@
   function fade(p, d = 0.45) { return Math.max(0, Math.min(1, p / d)); }
   function show(k, n, p) { return k > n ? 1 : k === n ? fade(p) : 0; }
 
-  window.VK = { W, H, C, el, group, text, spans, rect, win, folder, file, pill, arrow, mark, titleCard, fade, show };
+  window.VK = { W, H, C, el, group, text, spans, rect, win, folder, file, pill, arrow, mark, grid, formulaBar, titleCard, fade, show };
 
   // ---- the stage and drawAt(t) ----
   let svg, cap, last = "";

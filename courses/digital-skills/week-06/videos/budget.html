@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Course video: A monthly budget in Excel</title>
+<!-- The pictures of the course video of Online activity 6 (AUTHORING.md,
+     "Blended courses"). One scene for each scene of budget-script.txt; the
+     voice reads that script, and make-course-video.sh makes the video. -->
+</head>
+<body>
+<script src="../../../../shared/sims/recordings/video-kit.js"></script>
+<script>
+const { C, text, spans, rect, win, pill, arrow, mark, grid, formulaBar, titleCard, show, group, el } = VK;
+
+// Sami's month (made up), as in Step 1 of the activity: rows 1-14 of the sheet.
+function rows(o = {}) {
+  const r = [
+    ["Income", "Amount (JD)", o.partHead ? "Part" : ""],
+    ["Allowance", 150, ""],
+    ["Part-time job", 100, ""],
+    ["Total income", o.totals ? 250 : "", ""],
+    ["", "", ""],
+    ["Expenses", "Amount (JD)", o.partHead ? "Part" : ""],
+    ["Transport", 40, ""], ["Phone", 15, ""], ["Food", 90, ""], ["Books", 20, ""], ["Fun", 30, ""],
+    ["Total expenses", o.totals ? 195 : "", ""],
+    ["", "", ""],
+    ["Left", o.left ? 55 : "", ""],
+  ];
+  (o.parts || []).forEach((v, i) => { r[6 + i][2] = v; });
+  return r;
+}
+const X = 70, Y = 90, COLS = [210, 150, 120], RH = 31;
+function sheet(g, o, hl) {
+  return grid(g, X, Y, { cols: COLS, rowH: RH, rows: rows(o), bold: [1, 4, 6, 12, 14], hl, size: 18 });
+}
+// The outline of rows a..b of the sheet (a block).
+function block(g, a, b, colour, o) {
+  rect(g, X - 6, Y + RH * a - 4, 44 + COLS.reduce((s, w) => s + w, 0) + 12, RH * (b - a + 1) + 8,
+    { fill: "none", stroke: colour, sw: 4, r: 10, o });
+}
+
+window.VIDEO = {
+  label: "Digital Skills · Online activity 6",
+  title: "A monthly budget in Excel",
+  scenes: [
+    // 1. Title.
+    (g, k, p) => {
+      titleCard(g, k, p, "A monthly budget in Excel", "Sami's month: money in, money out");
+      grid(g, 820, 330, { cols: [90, 80], rowH: 26, rows: [["In", 250], ["Out", 195], ["Left", 55]], size: 16, o: show(k, 1, p), bold: [3] });
+    },
+    // 2. Income, expenses, two blocks, totals.
+    (g, k, p) => {
+      const hl = {};
+      if (k >= 0) ["A2", "B2", "A3", "B3"].forEach((r) => { hl[r] = "#D3F9D8"; });
+      if (k >= 1) ["A7", "B7", "A8", "B8", "A9", "B9", "A10", "B10", "A11", "B11"].forEach((r) => { hl[r] = "#FFE3E3"; });
+      if (k >= 4) ["A4", "B4", "A12", "B12"].forEach((r) => { hl[r] = "#FFE8CC"; });
+      sheet(g, {}, hl);
+      text(g, 720, 170, "Income: money that comes in", { size: 28, fill: C.green, o: show(k, 0, p) });
+      text(g, 720, 330, "Expenses: money that goes out", { size: 28, fill: C.red, o: show(k, 1, p) });
+      block(g, 1, 4, C.green, show(k, 2, p));
+      block(g, 6, 12, C.red, show(k, 2, p));
+      text(g, 720, 220, "at the top", { size: 24, fill: C.grey, o: show(k, 3, p) });
+      text(g, 720, 380, "below", { size: 24, fill: C.grey, o: show(k, 3, p) });
+      pill(g, 720, 450, "Each block ends with a Total line", { size: 24, fill: "#FFE8CC", o: show(k, 4, p) });
+    },
+    // 3. Only numbers in the cells.
+    (g, k, p) => {
+      const hl = {};
+      if (k >= 0) for (const r of [2, 3, 7, 8, 9, 10, 11]) hl["B" + r] = "#D0EBFF";
+      if (k >= 2) { hl.B1 = "#FFE8CC"; hl.B6 = "#FFE8CC"; }
+      sheet(g, {}, hl);
+      const o1 = show(k, 1, p);
+      grid(g, 760, 170, { cols: [150], rowH: 40, rows: [["150 JD"]], size: 22, o: o1, ink: { A1: C.red } });
+      mark(g, 990, 230, false, { o: o1 });
+      text(g, 1020, 238, "text", { size: 24, fill: C.red, o: o1 });
+      grid(g, 760, 290, { cols: [150], rowH: 40, rows: [[150]], size: 22, o: o1 });
+      mark(g, 990, 350, true, { o: o1 });
+      text(g, 1020, 358, "a number", { size: 24, fill: C.green, o: o1 });
+      text(g, 760, 450, "Amount (JD): JD in the heading", { size: 26, o: show(k, 2, p) });
+    },
+    // 4. SUM and what is left.
+    (g, k, p) => {
+      const hl = {};
+      if (k >= 1) hl.B4 = "#D3F9D8";
+      if (k >= 2) hl.B12 = "#FFE3E3";
+      if (k >= 3) hl.B14 = "#FFE8CC";
+      sheet(g, { totals: k >= 1, left: k >= 4 }, hl);
+      if (k >= 1) {
+        const f = k === 1 ? ["B4", "=SUM(B2:B3)", "250 JD"] : k === 2 ? ["B12", "=SUM(B7:B11)", "195 JD"] : ["B14", "=B4-B12", "55 JD"];
+        formulaBar(g, 700, 140, 520, f[0], f[1], { o: k === 1 || k === 2 || k === 3 ? show(k, k, p) : 1 });
+        text(g, 720, 240, k >= 4 ? "250 − 195 = 55 JD left" : f[2], { size: 40, weight: 800, fill: C.accent, o: k >= 4 ? show(k, 4, p) : 1 });
+      }
+      text(g, 720, 330, "Σ AutoSum", { size: 30, fill: C.grey, o: show(k, 0, p) });
+    },
+    // 5. The part of the income: =B7/$B$4 copied down.
+    (g, k, p) => {
+      const parts = k >= 2 ? [0.16, 0.06, 0.36, 0.08, 0.12] : k >= 1 ? [0.16] : [];
+      const hl = { C7: k >= 1 ? "#FFF3BF" : undefined, C9: k >= 3 ? "#FFE8CC" : undefined, B9: k >= 3 ? "#FFE8CC" : undefined, B4: k >= 2 ? "#D0EBFF" : undefined };
+      sheet(g, { totals: true, left: true, partHead: true, parts }, hl);
+      text(g, 700, 170, "Part = amount ÷ total income", { size: 30, o: show(k, 0, p) });
+      const f = group(g, { o: show(k, 1, p) });
+      formulaBar(f, 700, 210, 520, "C7", "", {});
+      spans(f, 840, 240, [["=B7/"], ["$B$4", C.blue]], { size: 22, mono: true });
+      text(g, 700, 320, "Copy it down: B7 becomes B8, B9 …", { size: 24, o: show(k, 2, p) });
+      text(g, 700, 360, "$B$4 stays: the total income", { size: 24, fill: C.blue, o: show(k, 2, p) });
+      text(g, 700, 450, "Food: 90 ÷ 250 = 0.36", { size: 36, weight: 800, fill: C.accent, o: show(k, 3, p) });
+    },
+    // 6. Number formats.
+    (g, k, p) => {
+      text(g, 640, 140, "Home › Number: the look changes, the value stays", { size: 30, anchor: "middle", o: show(k, 0, p) });
+      const card = (x, y, from, to, label, o) => {
+        grid(g, x, y, { cols: [140], rowH: 44, rows: [[from]], size: 24, o });
+        arrow(g, x + 200, y + 66, x + 290, y + 66, { o });
+        grid(g, x + 300, y, { cols: [140], rowH: 44, rows: [[to]], size: 24, o });
+        text(g, x + 300 + 92, y + 130, label, { size: 22, anchor: "middle", fill: C.grey, o });
+      };
+      card(120, 190, "0.36", "36%", "Percentage", show(k, 1, p));
+      card(700, 190, 55, "55.00", "2 decimals", show(k, 2, p));
+      const o3 = show(k, 3, p);
+      formulaBar(g, 300, 400, 680, "C9", "0.36", { o: o3 });
+      text(g, 640, 500, "The cell shows 36%. The formula bar shows 0.36.", { size: 26, anchor: "middle", o: o3 });
+    },
+    // 7. Everything changes by itself; try it.
+    (g, k, p) => {
+      const o0 = show(k, 0, p);
+      grid(g, 120, 130, { cols: [200, 130], rowH: 40, rows: [["Food", "90 → 100"], ["Total expenses", "195 → 205"], ["Left", "55 → 45"]],
+        size: 22, o: o0, hl: { B1: "#FFF3BF", B2: "#FFE3E3", B3: "#FFE8CC" } });
+      text(g, 560, 220, "Excel does it at once.", { size: 30, fill: C.green, o: o0 });
+      const o1 = show(k, 1, p);
+      [["Budget Builder", "Sami's month"], ["Number Format Lab", "the same number, another look"]].forEach(([n, s], i) => {
+        rect(g, 120 + i * 540, 330, 500, 150, { fill: "#fff", stroke: C.line, r: 22, o: o1 });
+        el("circle", { cx: 190 + i * 540, cy: 405, r: 34, fill: C.accent, opacity: o1 }, g);
+        el("path", { d: `M${179 + i * 540} 387l28 18l-28 18z`, fill: "#fff", opacity: o1 }, g);
+        text(g, 245 + i * 540, 398, n, { size: 30, weight: 800, o: o1 });
+        text(g, 245 + i * 540, 434, s, { size: 20, fill: C.grey, o: o1 });
+      });
+      pill(g, 440, 520, "Then: the Tasks to submit", { size: 28, fill: C.accent, ink: "#fff", o: show(k, 2, p) });
+    },
+  ],
+};
+</script>
+</body>
+</html>

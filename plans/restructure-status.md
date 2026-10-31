@@ -241,15 +241,17 @@ The teacher's request (after plan v3, same branch and PR):
    check, the PDF results "… · Change N", `check_size.py`, AUTHORING.md,
    the templates, the course notes) and 18 boxes: Game Math 11, Computing
    Systems 4, Digital Media 3, each with a complete prompt that asks for a
-   picture or a table, "What you should see" and two changes to try. Open:
-   **Homework 1 of Game Math** (graded) keeps its old box; ask the teacher
-   whether it becomes the same kind of extra (then without answers on the
-   page, or as an ungraded extra next to the homework).
+   picture or a table, "What you should see" and two changes to try. The
+   teacher then decided that AI is always an optional extra, also in
+   homework: Homework 1 of Game Math does Task 2 by hand and ends with an
+   optional "Task with AI (no marks) {.extra}" about another robot (hidden
+   on paper); the other 35 homeworks say "No task needs AI."; the solution
+   in courses-private is updated.
 5. `check_size.py --all` and `check_figures.py` without warnings, a full
    `quarto render`, `tools/course_package.py`, the pages in the browser
    (this Mac has no Noto fonts: local PDFs use fallback fonts; CI has them).
 
-### The teacher's request for the AI boxes (2026-10-31; done, except Homework 1)
+### The teacher's request for the AI boxes (2026-10-31; done)
 
 The teacher checked the AI boxes of the site: they give an incomplete prompt
 and ask the student to complete it. That is not right for basic students,

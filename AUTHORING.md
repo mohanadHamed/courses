@@ -600,10 +600,14 @@ What the student should notice.
   account, ChatGPT, Gemini); no task needs a paid plan. No personal data in
   a prompt. Never AI images, sound or video as a student's media product in
   Digital Media (unclear rights, and it skips the production ILOs).
-- **Graded work** (homework, Tasks to submit) keeps its own model until the
-  teacher decides otherwise: a task with a prompt, the student's own part, a
-  check step and the **AI-use statement** (which tool, what was asked, what
-  the student changed), and no answers on the page.
+- **AI is always an optional extra, also in homework** (the teacher's
+  decision of 2026-10-31): no graded task needs AI. A homework may end with
+  `## Optional · Task with AI (no marks) {.extra}`: the same kind of box,
+  about another situation than the graded tasks, so its closed answers give
+  nothing away; it is hidden on paper, and the first line of the page says
+  "No task needs AI. The optional Task with AI at the end gives no marks."
+  (In Digital Skills, AI is in the ILOs: its online tasks to submit may use
+  AI on purpose, with the AI-use statement.)
 - **Digital Skills** has no "Task with AI" box: AI is in its ILOs (A1, B1,
   C4, D1), so its experiments and online tasks teach AI on purpose, with
   checking and, from unit 9, the AI-use statement.
@@ -611,8 +615,8 @@ What the student should notice.
   lessons are made, not about the tools students use.
 - `check_size.py` warns above 2 per file, about a prompt that is not
   complete or asks for no visual result, about a box without "What you
-  should see", and about changes to try without a closed answer (in graded
-  work: a box without a check step or the AI-use statement).
+  should see", about changes to try without a closed answer, and about a
+  box inside graded tasks.
 
 ## Source of truth: the Google Drive folder (private, never copy into this repo)
 
@@ -1015,13 +1019,12 @@ homework and its solution together.
 - Built from the ILOs of the lecture of its unit (`ilos:`): practise exactly
   what it taught, in the same words, never a seminar or a practice session.
   No new content.
-- **With AI in mind** (see "Tasks with AI"): where a short question could be
-  pasted into an AI and answered without learning, prefer one Task with AI
-  at a higher level, which asks for the AI-use statement. The page says:
-  "You may use AI where a task says so. Check its work and say how you used
-  it." The homework stays light: students who finish it quickly do it.
+- **No task needs AI** (see "Tasks with AI"): the page says "No task needs
+  AI." A homework may end with an optional Task with AI that gives no marks
+  (`## Optional · Task with AI (no marks) {.extra}`, hidden on paper). The
+  homework stays light: students who finish it quickly do it.
 - Size: **1–2 short, simple tasks, about 10 minutes, never more than 15**,
-  in all courses, a Task with AI included (at most one per homework, small).
+  in all courses.
   Shorter is better: never make a homework longer than it is. A
   student who has read the notes or gone through the interactive page must be
   able to answer at once; no research, no long calculations. Short homework that students finish is better than long homework
@@ -1276,6 +1279,7 @@ do not add it. The draft mechanism still works (a draft lecture is faded,
   Math, Computing Systems and Digital Media no ILO asks for AI, so every box
   is now an extra for the curious: a complete prompt that asks for a
   picture, a diagram or a table, what the student should see, and two or
-  three changes to try, each with a closed answer. Rules above ("Tasks with
-  AI").
+  three changes to try, each with a closed answer. The teacher then decided
+  that AI is always an optional extra, also in homework: no graded task
+  needs AI. Rules above ("Tasks with AI", "Homework").
 

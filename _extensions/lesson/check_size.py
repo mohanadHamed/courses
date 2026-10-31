@@ -41,9 +41,11 @@ most one Task with AI, and Recall / Activity / Check slides.
 On every page (AUTHORING.md, "The page teaches, the notes test"): every Do it,
 Lab task and Activity box has a {.check}, and every Try it question has a
 "Why:" reason. Graded work (homework, "Tasks to submit") never shows them.
-"Task with AI" boxes (a harder task done with an AI assistant): at most AI_MAX
-per file, each with a starter {.prompt} and a check step ("Check:"); on a page
-also a {.check}, in graded work the AI-use statement.
+"Task with AI" boxes (an extra for the curious; AUTHORING.md, "Tasks with
+AI"): at most AI_MAX per file, each with a complete {.prompt} that asks for a
+visual result, "What you should see" and 2-3 changes to try with closed
+answers. AI is never part of graded work: in a homework a box belongs in an
+optional section "## Optional · Task with AI (no marks) {.extra}".
 
 A lecture worksheet (a practical course: lesson-NN-sheet.qmd; AUTHORING.md,
 "Lecture worksheets") is the main document of the session. It needs "Before
@@ -246,16 +248,14 @@ def ai_task_warnings(body, graded=False):
         out.append("%d Task with AI boxes, at most %d (only where AI lets students do more)" % (len(ai), AI_MAX))
     for head, text in ai:
         title = (re.search(r'title="([^"]*)"', head) or re.search(r"(.*)", head)).group(1)
+        if graded:
+            # AI is always an extra: never in graded tasks.
+            out.append('Task with AI "%s" is in graded work; put it after the tasks, in an optional '
+                       '"## Optional · Task with AI (no marks) {.extra}" section' % title)
+            continue
         prompt = re.search(r"^\s*:::+ *\{\.prompt\}\n(.*?)^\s*:::+\s*$", text, re.M | re.S)
         if not prompt:
             out.append('Task with AI "%s" has no ::: {.prompt}' % title)
-        if graded:
-            # Graded work keeps a check step and the AI-use statement, and no answers.
-            if not re.search(r"\bCheck:|\*\*Check\*\*", text):
-                out.append('Task with AI "%s" has no check step ("Check:"): the AI can be wrong' % title)
-            if "AI-use statement" not in text:
-                out.append('Task with AI "%s" in graded work does not ask for the AI-use statement' % title)
-            continue
         # An extra for the curious (AUTHORING.md, "Tasks with AI"): a complete
         # prompt with a visual result, what you should see, and changes to try,
         # each with its closed answer.
@@ -724,7 +724,12 @@ def check(project_dir):
     for path in sorted(glob.glob(os.path.join(week, "homework-[0-9][0-9].qmd"))):
         rel = os.path.relpath(path, project_dir)
         hw = read(path)
-        warnings.extend("%s: %s" % (rel, w) for w in graded_warnings(hw) + ai_task_warnings(hw, graded=True))
+        # An optional section {.extra} (a Task with AI, no marks) is not graded work.
+        parts = re.split(r"^(?=## )", hw, flags=re.M)
+        extra = "".join(p for p in parts if re.match(r"## .*\{\.extra\}", p))
+        graded = "".join(p for p in parts if not re.match(r"## .*\{\.extra\}", p))
+        warnings.extend("%s: %s" % (rel, w) for w in graded_warnings(graded) + ai_task_warnings(graded, graded=True)
+                        + ai_task_warnings(extra))
     pattern = os.path.join(project_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].qmd")
     for path in sorted(glob.glob(pattern)):
         slug = path.split(os.sep)[-3]

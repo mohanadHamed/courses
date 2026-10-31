@@ -55,7 +55,8 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   truth table or decision table, a chart of 1000 draws or 1000 hunters. The
   changes to try change one number or one word (a velocity, the order of
   two rules, a chance), and their closed answers say what changes and why.
-  Homework 1 (graded) keeps its task with the AI-use statement.
+  No graded task needs AI: Homework 1 does the patrol by hand and ends with
+  an optional Task with AI (no marks) about another robot.
 
 ## Lessons learned
 
@@ -104,3 +105,7 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   boxes (Lecture 1 notes and page, Seminars 1, 5, 6, 7, 8, 9, 11, 12 and
   Practice 2) became extras with a complete prompt, a picture or a coloured
   table to look at, and two or three changes to try with closed answers.
+- 2026-10-31 (teacher's decision): AI is always an optional extra, also in
+  homework. Homework 1, Task 2 (3 marks) is done by hand (the velocity, the
+  positions, a drawing); the AI box became an optional section with no
+  marks, about another robot, hidden on paper.

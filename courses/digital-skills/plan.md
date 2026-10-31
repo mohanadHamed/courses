@@ -67,7 +67,7 @@ demonstration and the way to do a step without the app):
 | 1 Productivity apps | by hand or with AutoSum · find the apps · a first prompt | mix: Excel, the Start menu and an AI assistant; Time Saver, App Launcher, AI Chat | `prices-start.xlsx` |
 | 2 Generative AI tools | two good jobs · weak spots · AI, search or spreadsheet | mix: an AI assistant and a search engine; Weak Spots, Right Tool | none |
 | 3 Office concepts | the parts of the window · the ribbon · Save, Save As and formats | mix: Word, Excel and PowerPoint; Window Tour, Ribbon Finder, Save Lab | `notice-start.docx` |
-| 4 Word (1) | formatting · styles · a list and a table · a picture | real app: Word; Format Lab, Style Lab, List and Table Lab | `family-day-start.docx`, `park.png` |
+| 4 Word (1) | formatting · styles · a list and a table · a picture | real app: Word; Format Lab, Style Lab, List and Table Lab | `book-fair-start.docx`, `books.png` (not the Family Day notice of the Game challenge) |
 | 5 AI with Word | a draft · a summary · a new tone · a translation | mix: an AI assistant and Word; Word AI Lab, Tone Lab | `report-start.docx` |
 | 6 Excel (1) | cells and ranges · a formula · copy a formula · four functions | real app: Excel; Formula Lab and Reference Lab | `shop-start.xlsx` |
 | 7 Excel (2) | sort · filter · a colour rule · two charts | real app: Excel; Table Lab, Chart Lab | `sales-start.xlsx` |

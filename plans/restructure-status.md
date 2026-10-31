@@ -83,11 +83,21 @@ The teacher's request (after plan v3, same branch and PR):
   ribbon (Center, Table, Orientation, Word Count); Save As, a PDF that
   nobody changes, and the AutoSave switch; 15 slides. `book.lua` keeps the
   Table of results of a worksheet on one page.
+- Lecture 4: four experiments in Word with `book-fair-start.docx` (a plain
+  notice of a library book fair, not the Family Day notice of the Game
+  challenge) and `books.png` (drawn in `images/books.svg`): Bold on one word
+  and Center on one line, line spacing 1.5; Title, Heading 1, the Navigation
+  Pane (4 headings) and Heading 1 modified once; bullets or numbers, a price
+  table of 2 × 4 and Tab in the last cell; a picture in line, a corner or a
+  side handle, Square and alt text. 16 slides: with three simulators the
+  deck has no Table of results slide (the Check slides show every result).
+  The Word start files now have the styles of a new document (Calibri 11,
+  Title, Heading 1, Heading 2), so every Word version shows the same.
 
 ### Still to do (in this order; the next session starts here)
 
 1. (done: the table and the video tool)
-2. **Lectures 4, 5, 7, 8, 9, 10** (1, 2, 3 and 6 are done): worksheet, start
+2. **Lectures 5, 7, 8, 9, 10** (1, 2, 3, 4 and 6 are done): worksheet, start
    files, page, notes, slides, one commit each, by the table "Lecture
    worksheets" in `courses/digital-skills/plan.md`. The recipe (Lectures 1,
    2 and 6 are the examples):

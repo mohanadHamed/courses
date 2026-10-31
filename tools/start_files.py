@@ -11,8 +11,8 @@ together, then run it again):
 
 Only the Python standard library is used: a small writer for .xlsx (one or
 more sheets: text, numbers, formulas, bold header row, column widths) and
-for .docx (plain paragraphs, some bold; no styles, so the students give the
-styles themselves).
+for .docx (plain paragraphs, some bold, with the styles of a new Word
+document: the students give the styles themselves).
 """
 
 import os
@@ -122,7 +122,29 @@ CT_DOCX = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
 <Default Extension="xml" ContentType="application/xml"/>
 <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
 </Types>"""
+
+# The styles of a new Word document (Calibri 11, single lines, 6 pt after a
+# paragraph), so that every Word version shows the same text, and Title,
+# Heading 1 and Heading 2 are in the Styles gallery and the Navigation Pane.
+DOCX_STYLES = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri" w:cs="Arial"/><w:sz w:val="22"/><w:szCs w:val="22"/><w:lang w:val="en-US"/></w:rPr></w:rPrDefault>
+<w:pPrDefault><w:pPr><w:spacing w:after="120" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>
+<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style>
+<w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:uiPriority w:val="10"/><w:qFormat/><w:pPr><w:spacing w:after="160"/><w:contextualSpacing/></w:pPr><w:rPr><w:rFonts w:ascii="Calibri Light" w:hAnsi="Calibri Light"/><w:spacing w:val="-10"/><w:kern w:val="28"/><w:sz w:val="56"/><w:szCs w:val="56"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:uiPriority w:val="9"/><w:qFormat/><w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="240" w:after="60"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:rFonts w:ascii="Calibri Light" w:hAnsi="Calibri Light"/><w:color w:val="2F5496"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:uiPriority w:val="9"/><w:qFormat/><w:pPr><w:keepNext/><w:keepLines/><w:spacing w:before="160" w:after="40"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:rFonts w:ascii="Calibri Light" w:hAnsi="Calibri Light"/><w:color w:val="2F5496"/><w:sz w:val="26"/><w:szCs w:val="26"/></w:rPr></w:style>
+<w:style w:type="paragraph" w:styleId="ListParagraph"><w:name w:val="List Paragraph"/><w:basedOn w:val="Normal"/><w:uiPriority w:val="34"/><w:qFormat/><w:pPr><w:ind w:left="720"/><w:contextualSpacing/></w:pPr></w:style>
+<w:style w:type="character" w:default="1" w:styleId="DefaultParagraphFont"><w:name w:val="Default Paragraph Font"/><w:uiPriority w:val="1"/><w:semiHidden/><w:unhideWhenUsed/></w:style>
+<w:style w:type="table" w:default="1" w:styleId="TableNormal"><w:name w:val="Normal Table"/><w:uiPriority w:val="99"/><w:semiHidden/><w:unhideWhenUsed/><w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style>
+</w:styles>"""
+
+DOCX_RELS = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+</Relationships>"""
 
 
 def write_docx(path, paragraphs):
@@ -142,6 +164,8 @@ def write_docx(path, paragraphs):
         put(z, "[Content_Types].xml", CT_DOCX)
         put(z, "_rels/.rels", RELS % "word/document.xml")
         put(z, "word/document.xml", doc)
+        put(z, "word/_rels/document.xml.rels", DOCX_RELS)
+        put(z, "word/styles.xml", DOCX_STYLES)
 
 
 # ----------------------------------------------------------------- the files
@@ -162,6 +186,26 @@ FILES = {
         "We meet in Room 21 at 9:00 on Sunday morning.",
         "Thank you for your help.",
         "Yousef Haddad, Office Manager",
+    ]),
+    # Lecture 4, Word (1): a notice with no formatting, to format, give styles,
+    # make a list and a table, and add a picture (files/books.png, drawn in
+    # images/books.svg). Not the Family Day notice: that is the Game challenge.
+    DS + "/week-04/files/book-fair-start.docx": ("docx", [
+        "Book Fair at the College Library",
+        "The college library holds a book fair for all students and staff. You can buy new books, "
+        "swap your old books and meet two writers from Jordan. Come with your friends and your family.",
+        "When and where",
+        "The fair is in the library hall from Sunday to Tuesday, from 10:00 to 15:00.",
+        "What you can bring",
+        "Old books in good condition",
+        "Your student card",
+        "A bag for your new books",
+        "How to swap a book",
+        "Take one old book to the swap desk.",
+        "Get a swap ticket.",
+        "Choose a new book from the swap table.",
+        "Prices",
+        "Entry to the fair is free for everyone.",
     ]),
     # Lecture 6, Excel (1): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
     DS + "/week-06/files/shop-start.xlsx": ("xlsx", [

@@ -236,13 +236,20 @@ The teacher's request (after plan v3, same branch and PR):
        transcript (closed until opened). AUTHORING.md ("Blended courses")
        gets the rule: a course video has a voice-over that reads its script,
        and its captions are the same words.
-4. **Tasks with AI in all courses** (the teacher's request of 2026-10-31,
-   see the next section): after steps 2 and 3, or in its own branch.
+4. **Tasks with AI in all courses**: done (2026-10-31, in this branch). The
+   pipeline (`::: {.try-change}` with a closed answer, `label=` for a
+   check, the PDF results "… · Change N", `check_size.py`, AUTHORING.md,
+   the templates, the course notes) and 18 boxes: Game Math 11, Computing
+   Systems 4, Digital Media 3, each with a complete prompt that asks for a
+   picture or a table, "What you should see" and two changes to try. Open:
+   **Homework 1 of Game Math** (graded) keeps its old box; ask the teacher
+   whether it becomes the same kind of extra (then without answers on the
+   page, or as an ungraded extra next to the homework).
 5. `check_size.py --all` and `check_figures.py` without warnings, a full
    `quarto render`, `tools/course_package.py`, the pages in the browser
    (this Mac has no Noto fonts: local PDFs use fallback fonts; CI has them).
 
-### The teacher's request for the AI boxes (2026-10-31; not started)
+### The teacher's request for the AI boxes (2026-10-31; done, except Homework 1)
 
 The teacher checked the AI boxes of the site: they give an incomplete prompt
 and ask the student to complete it. That is not right for basic students,

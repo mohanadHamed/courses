@@ -1,16 +1,19 @@
 ---
 # Online activity of a blended course (AUTHORING.md, "Blended courses").
-# Copy to courses/<slug>/week-PP/lesson-NN.qmd, where NN is the even lecture
-# of the week (the online lecture after face-to-face lecture NN-1).
+# Copy to courses/<slug>/week-WW/online-NN.qmd: Online activity NN, in the
+# folder of its unit (WW = the syllabus week). It practises its unit and never
+# repeats the face-to-face lecture.
 # On paper only the tasks are printed: sections marked {.study} stay on the
-# screen. homework_pdf.py prints the page as <prefix>_lectureNN_tasks.pdf.
-# Model answers and marking notes: courses-private, week-PP/lesson-NN-solutions.md.
+# screen. homework_pdf.py prints the page as <prefix>_onlineN_tasks.pdf.
+# The Steps teach: every Try it question has a "Why:", every step that asks
+# for a result has a ::: {.check}. The Tasks to submit stay unanswered.
+# Model answers and marking notes: courses-private, week-WW/online-NN-solutions.md.
 title: "Short title from schedule.yml"
 description: "Online activity · One short line. About 60 minutes."
-lesson: 2
-online: true
+online: 1          # the number of the online activity
 due: "before lecture 3"   # the next face-to-face lecture, never a week or a date
 marks: 6
+content: lesson    # lesson | sims | mix | video | course-video (AUTHORING.md, "Blended courses")
 ilos: [A1]
 toc-title: "In this activity"
 format: lesson-html
@@ -43,12 +46,22 @@ Choose the right answer.
 ::: {.match extra="wrong answer"}
 A question?
 :   its answer
+
+    Why: one sentence, in the words of the step.
 :::
 :::
 
 ## Step 2 · Short title {.study}
 
-One simulator and one self-check, like Step 1.
+One simulator and one self-check, like Step 1. A `video` activity starts a
+Step with the official video that it practises (a link, never a copy):
+
+{{< watch title="Change margins" source="Microsoft Support" url="https://support.microsoft.com/en-us/word/training/change-margins" length="0:31" checked="2026-10-31" captions="English" >}}
+
+A `course-video` activity shows its own video, whose voice reads the script
+word for word (`videos/<name>-script.txt`; the captions are the same words):
+
+    {{< watch file="videos/x.mp4" captions="videos/x.vtt" poster="videos/x.png" script="videos/x-script.txt" title="…" length="2:00" >}}
 
 ## Tasks to submit {.tasks}
 

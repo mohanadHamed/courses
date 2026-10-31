@@ -5,7 +5,8 @@
 //   note      (blue)   Example                 — worked example with numbered steps
 //   warning   (orange) Common mistake          — "Watch out" in the web lesson
 //   caution            In game code            — a short C# reading example
-//   note with the title "Do it …" or "Lab task …" — a task the student does now
+//   note with the title "Do it …", "Lab task …" or "Activity …" — a task the student does now
+//   note with the title "Task with AI …" — a harder task done with an AI assistant (book.lua prints the prompt)
 #let plain-text(c) = {
   let r = if c == none { "" }
     else if type(c) == str { c }
@@ -19,7 +20,8 @@
 }
 #let callout(body: [], title: "Callout", background_color: rgb("#dddddd"), icon: none, icon_color: black, body_background_color: white) = {
   let title-text = plain-text(title).trim()
-  let kind = if title-text.starts-with("Do it") or title-text.starts-with("Lab task") { "do" }
+  let kind = if title-text.starts-with("Do it") or title-text.starts-with("Lab task") or title-text.starts-with("Activity") { "do" }
+    else if title-text.starts-with("Task with AI") { "ai" }
     else if icon_color == rgb("#00A047") { "try" }
     else if icon_color == rgb("#CC1914") { "key" }
     else if icon_color == rgb("#EB9113") { "warn" }
@@ -29,18 +31,20 @@
     else if kind == "key" { accent.lighten(88%) }
     else if kind == "warn" { rgb("#fff4e6") }
     else if kind == "do" { accent2.lighten(72%) }
+    else if kind == "ai" { rgb("#ede7ff") }
     else { luma(244) }
-  let body-fill = if kind == "key" { accent.lighten(96%) } else if kind == "warn" { rgb("#fffaf3") } else if kind == "do" { accent2.lighten(93%) } else { white }
+  let body-fill = if kind == "key" { accent.lighten(96%) } else if kind == "warn" { rgb("#fffaf3") } else if kind == "do" { accent2.lighten(93%) } else if kind == "ai" { rgb("#faf8ff") } else { white }
   let line-paint = if kind == "try" { accent.lighten(70%) }
     else if kind == "key" { accent.lighten(45%) }
     else if kind == "warn" { rgb("#f0b37a") }
     else if kind == "do" { accent2.darken(10%) }
+    else if kind == "ai" { rgb("#b197fc") }
     else { luma(205) }
-  let title-fill = if kind == "warn" { rgb("#a3500b") } else if kind == "note" or kind == "code" { luma(60) } else { accent.darken(40%) }
+  let title-fill = if kind == "warn" { rgb("#a3500b") } else if kind == "ai" { rgb("#5f3dc4") } else if kind == "note" or kind == "code" { luma(60) } else { accent.darken(40%) }
   block(
     breakable: false,
     fill: body-fill,
-    stroke: if kind == "key" { (left: 3pt + accent, rest: 0.6pt + line-paint) } else if kind == "do" { (left: 4pt + accent2.darken(10%), rest: 0.8pt + line-paint) } else { (paint: line-paint, thickness: 0.6pt, dash: if kind == "note" { "dashed" } else { "solid" }) },
+    stroke: if kind == "key" { (left: 3pt + accent, rest: 0.6pt + line-paint) } else if kind == "do" { (left: 4pt + accent2.darken(10%), rest: 0.8pt + line-paint) } else if kind == "ai" { (left: 4pt + rgb("#7048e8"), rest: 0.8pt + line-paint) } else { (paint: line-paint, thickness: 0.6pt, dash: if kind == "note" { "dashed" } else { "solid" }) },
     width: 100%,
     radius: 6pt,
     clip: true,

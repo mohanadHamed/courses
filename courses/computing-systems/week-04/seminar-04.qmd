@@ -1,0 +1,156 @@
+---
+title: "Analyzing a Smartphone Specification Sheet"
+description: "Seminar · Write the spec sheet of your phone with the lines that matter for a game, then choose the test phone that shows the problems of three games first."
+seminar: 4
+ilos: [A1, B2]
+format: lesson-html
+---
+
+No new ideas today: two short problems on Lecture 4. Do each one alone,
+then open "Check your result". Every question on this page has its answer:
+try first, then check.
+
+## Recall
+
+- A phone's main chip is the **SoC**: CPU cores, GPU and more. On a spec
+  sheet it is the **Chipset** (or Chip) line.
+- Sensors: the **accelerometer** (tilt), the **gyroscope** (turning), the
+  **GPS** (position). The **touch sampling rate** says how often the screen
+  checks for touches.
+- Battery: play time ≈ mAh ÷ mA. A hot chip slows down to protect itself.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="the compass|2 hours"}
+A game steers by turning the phone. Which sensor does it need?
+:   the gyroscope
+
+    Why: The gyroscope measures turning.
+
+Which line of a phone sheet holds the CPU cores and the GPU?
+:   the Chipset
+
+    Why: The SoC is the Chipset line.
+
+5000 mAh and a game that draws 500 mA. About how long?
+:   10 hours
+
+    Why: 5000 ÷ 500 = 10.
+:::
+:::
+
+## Activity 1 · Your phone's sheet: the lines that matter
+
+An advert shows the camera and the screen size first. A developer reads the
+lines that change how a game runs: the **chipset**, the **RAM**, the
+**display** (refresh rate, touch sampling rate), the **battery**, the
+**OS**, the free **storage** and the **sensors**. The capacity is not the
+free space: the phone shows the free space in Settings → Storage.
+
+![The sheet of phone P6.](images/phone-sheet.png){width=84%}
+
+{{< sim file="sims/sheet-filter.html" poster="sims/sheet-filter.png" title="Sheet Filter: the lines that matter for a game" height="760" >}}
+
+::: {.callout-note title="Activity 1 · Six lines · 15 min"}
+1. In **Sheet Filter**, keep only the lines that matter for a game.
+2. Write the sheet of your phone in six lines: chipset, RAM, storage
+   (capacity and free), display, battery, OS. **Android:** Settings → About
+   phone and Settings → Storage. **iPhone:** Settings → General → About;
+   the other lines are on the maker's page.
+
+*Your product:* a sheet with six lines.
+
+::: {.check}
+A good sheet: "Chipset: 8 cores, up to 2.4 GHz · RAM: 6 GB · Storage:
+128 GB (41 GB free) · Display: 6.6 inches, 120 Hz · Battery: 5000 mAh · OS:
+Android 14." Apple does not print the RAM of an iPhone: write "not given".
+The camera, the weight and the colours rarely matter for a game.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Which lines matter?"}
+Choose the right answer.
+
+::: {.match extra="the colour|the weight"}
+Which line tells how fast the GPU is?
+:   the chipset
+
+    Why: The GPU is part of the SoC.
+
+Which line tells if a game can be installed at all?
+:   the OS version
+
+    Why: An old OS cannot install a game that needs a newer one.
+
+A phone shows "128 GB" and Settings shows "3 GB free". How much can you install?
+:   3 GB
+
+    Why: The capacity is not the free space.
+:::
+:::
+
+## Activity 2 · Which phone for which game?
+
+Every game loads the phone in its own way. *Byte Bay* has three test
+phones:
+
+- **P5:** basic GPU; 4 GB RAM; 20 GB free; touch 120 Hz; 5000 mAh;
+  accelerometer and GPS, **no gyroscope**.
+- **P6:** mid-range GPU; 8 GB; 90 GB free; touch 240 Hz; 5000 mAh;
+  accelerometer, gyroscope, GPS.
+- **P7:** top GPU; 12 GB; 300 GB free; touch 480 Hz; **4500 mAh**;
+  accelerometer, gyroscope, GPS.
+
+![Different games need different lines.](images/game-needs.png){width=84%}
+
+::: {.callout-note title="Activity 2 · Three games · 15 min"}
+For each game, choose the phone that will show its problems first, and
+name the line that decides.
+
+1. *Sky Rider*: the player steers a glider by turning the phone.
+2. *Long Road*: a runner that players play for hours; it draws 900 mA.
+3. *Castle Builder*: needs 6 GB of RAM and 30 GB of free storage.
+
+*Your product:* three phones, each with its deciding line.
+
+::: {.check}
+1. P5: no gyroscope, so it cannot run the game at all. 2. P7: the smallest
+battery (4500 ÷ 900 = 5 hours). 3. P5: only 4 GB of RAM and 20 GB free;
+both lines are too small.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Phone and game"}
+Use the three test phones above. Choose the right answer. You can use an
+answer more than once.
+
+::: {.match extra="all three phones|P6"}
+A glider game steers by turning the phone. Which phone cannot run it?
+:   P5
+
+    Why: P5 has no gyroscope.
+
+On which phone do taps reach a rhythm game first?
+:   P7
+
+    Why: Its touch sampling rate is the highest: 480 Hz.
+
+How long does P7 last in a game that draws 900 mA?
+:   about 5 hours
+
+    Why: 4500 ÷ 900 = 5.
+
+After 20 minutes P6 is hot, and the game gets slower. Why?
+:   the hot chip slows down to protect itself
+
+    Why: Heat makes the chip lower its speed.
+:::
+:::
+
+## Wrap-up {.summary}
+
+- You can write the spec sheet of your phone and find the lines that matter
+  for a game.
+- You can choose the test phone that shows the problems of a game, and the
+  line that decides.

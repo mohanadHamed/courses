@@ -1,0 +1,282 @@
+---
+title: "Excel (1): Cells, Formulas, References and Basic Functions"
+description: "The parts of a worksheet, formulas that compute by themselves, copying a formula with relative and absolute references, and the functions SUM, AVERAGE, MAX and MIN."
+lesson: 6
+ilos: [C2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson. In class you follow the
+**worksheet (PDF)**: four experiments in Excel. Each section of this page
+explains one idea, then shows its experiment: do each step, write your
+result in its box, then open "Check your result". Every question on this
+page has its answer: try first, then check.
+
+## Key terms
+
+{{< glossary workbook worksheet cell cell-address cell-range formula formula-bar relative-reference absolute-reference fill-handle function autosum >}}
+
+## Before you start
+
+- **You need:** Excel (the desktop app, or Excel on the web at `office.com`).
+- **Start file:** download it, then open it in Excel. Every student works
+  with the same numbers.
+
+{{< start-files >}}
+
+- What you type in the boxes stays in this browser only.
+
+![How the worksheet works: do the step, write your result, check it.](../week-01/images/worksheet-steps.png){width=100%}
+
+## 6.1 The grid: cells and ranges
+
+- Columns have letters; rows have numbers. The **cell address** is both:
+  **B3** = column B, row 3.
+- A **range** is a block of cells: **B2:B4** = B2, B3, B4.
+- Text sits on the left, numbers on the right.
+- The **formula bar** shows what is really in the cell.
+- The shop list: Notebook 2 JD × 10, Pen 0.5 JD × 40, Bag 12 JD × 3.
+
+![A worksheet with a selected cell and a range.](images/excel-grid.png){width=100%}
+
+::: {.callout-warning title="Watch out!"}
+Do not type "2 JD" in a cell: that is text. Type 2, and put JD in the
+heading.
+:::
+
+{{< experiment 1 >}}
+
+::: {.callout-tip title="Try it 1 · Cells"}
+Choose the right answer.
+
+::: {.match extra="row C, column 4|A2-A6"}
+What is cell C4?
+:   column C, row 4
+
+    Why: The letter is the column, and the number is the row.
+
+Which range holds A2, A3, A4, A5 and A6?
+:   A2:A6
+
+    Why: A range is the first cell, a colon and the last cell.
+
+Where does a number sit in a cell?
+:   on the right
+
+    Why: Numbers sit on the right; text sits on the left.
+
+What shows what is really in a cell?
+:   the formula bar
+
+    Why: The cell shows the result; the formula bar shows what is really in it.
+
+You type "2 JD" in a cell. What is it for Excel?
+:   text
+
+    Why: With "JD" in it, it is not a number, so Excel cannot compute with it.
+:::
+:::
+
+## 6.2 Let Excel calculate: formulas
+
+- A **formula** starts with **=**: **=B2\*C2**.
+- Signs: + add, − subtract, * multiply, / divide, ( ) first.
+- * and / come before + and −: =2+3\*4 is 14; =(2+3)\*4 is 20.
+- The cell shows the result; the formula bar shows the formula.
+- Change a number, and the result changes by itself.
+
+![A formula and its result.](images/formula-parts.png){width=100%}
+
+{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" height="560" >}}
+
+::: {.callout-warning title="Watch out!"}
+No =, no formula. And use addresses (=B2\*C2), not numbers (=2\*10).
+:::
+
+{{< experiment 2 >}}
+
+::: {.callout-tip title="Try it 2 · Formulas"}
+Choose the right answer.
+
+::: {.match extra="B2\*C2|11"}
+B2 = 6 and C2 = 5. What does =B2\*C2 show?
+:   30
+
+    Why: =B2\*C2 multiplies: 6 × 5 = 30.
+
+What does =2+3\*4 give?
+:   14
+
+    Why: Excel multiplies first: 3 × 4 = 12, then 2 + 12 = 14.
+
+What does =(2+3)\*4 give?
+:   20
+
+    Why: The brackets come first: 2 + 3 = 5, then 5 × 4 = 20.
+
+Why should a formula use B2, not the number 6?
+:   it changes when B2 changes
+
+    Why: A formula with addresses computes again by itself.
+
+What must every formula start with?
+:   =
+
+    Why: Without =, Excel takes it as text.
+:::
+:::
+
+## 6.3 Copy a formula: relative and absolute references
+
+- Copy a formula with the **fill handle** (the small square; drag it or
+  double-click it).
+- **Relative** (B2): changes when copied: in the next row it is B3.
+- **Absolute** (\$F\$1): stays when copied. Use it for a cell that every row
+  needs (a rate).
+- D2 =B2\*C2 copied down: D3 =B3\*C3, D4 =B4\*C4.
+- Rate 10 % in F1: =B2\*F1 copied gives =B3\*F2 (empty: 0). =B2\*\$F\$1 copied
+  gives =B3\*\$F\$1: right.
+- Tip: press **F4** after typing F1.
+
+![Relative and absolute references.](images/references.png){width=100%}
+
+{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" height="520" >}}
+
+::: {.callout-warning title="Watch out!"}
+A rate or a total that every row needs must have $ signs.
+:::
+
+{{< experiment 3 >}}
+
+::: {.callout-tip title="Try it 3 · References"}
+Choose the right answer.
+
+::: {.match extra="=B2\*C2|=B5\*\$F\$4"}
+You copy =B2\*C2 from D2 to D5. What is in D5?
+:   =B5\*C5
+
+    Why: The relative references move down with the copy: B2 and C2 become B5 and C5.
+
+You copy =B2\*\$F\$1 from C2 to C4. What is in C4?
+:   =B4\*\$F\$1
+
+    Why: B2 moves two rows down; \$F\$1 stays.
+
+You copy =B2\*F1 down. Why do the next rows show 0?
+:   F1 moved to the empty cells F2, F3
+
+    Why: Without \$, the rate cell moves too, and empty cells count as 0.
+
+Which key adds the $ signs?
+:   F4
+
+    Why: F4 adds the \$ signs to the address.
+
+Which kind of reference stays the same when you copy?
+:   absolute (\$F\$1)
+
+    Why: The \$ signs keep the address when you copy.
+:::
+:::
+
+## 6.4 Ready formulas: SUM, AVERAGE, MAX, MIN
+
+- A **function** is a ready formula with a name, used on a range.
+- Sales 10, 20, 30, 40, 50 in B2:B6: **=SUM(B2:B6)** = 150;
+  **=AVERAGE(B2:B6)** = 30; **=MAX(B2:B6)** = 50; **=MIN(B2:B6)** = 10.
+- **AutoSum** (Σ, Home): click under the numbers, press Σ, then Enter.
+- Errors: **#DIV/0!** divides by 0; **#NAME?** a wrong name (=SUMM);
+  **####** the column is too narrow.
+
+![Four basic functions.](images/functions.png){width=100%}
+
+::: {.callout-warning title="Watch out!"}
+#NAME? often means a typing mistake in the function name.
+:::
+
+{{< experiment 4 >}}
+
+::: {.callout-tip title="Try it 4 · Functions"}
+Sales 5, 10, 15, 20 in B2:B5. Choose the right answer.
+
+::: {.match extra="15|5"}
+What does =SUM(B2:B5) give?
+:   50
+
+    Why: 5 + 10 + 15 + 20 = 50.
+
+What does =AVERAGE(B2:B5) give?
+:   12.5
+
+    Why: 50 ÷ 4 = 12.5.
+
+What does =MAX(B2:B5) give?
+:   20
+
+    Why: MAX gives the highest value.
+
+A cell shows #NAME?. Why?
+:   the function name is wrong
+
+    Why: #NAME? means that Excel does not know the name, for example =SUMM.
+
+What does the Σ button write?
+:   a SUM formula
+
+    Why: AutoSum writes =SUM( ) for the cells above.
+:::
+:::
+
+## Table of results
+
+{{< experiment results >}}
+
+## Game challenge: the shop's week {.challenge}
+
+Work alone. Use every section of today.
+
+Rana keeps the sales of the *Sunrise* shop in Excel. Before she presses
+Enter, she predicts each cell: tea for 3 JD × 4 packs (=B2\*C2); the week of
+10, 20, 30, 40, 50 JD (SUM and AVERAGE); D2 =B2\*C2 copied to D3; D2
+=C2\*\$F\$1 copied to D3; and =A2/B2 when B2 is empty.
+
+{{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" height="560" >}}
+
+::: {.callout-tip title="Try it 5 · Rana's cells (harder)"}
+Rana predicts each cell before she presses Enter. Choose the right answer.
+
+::: {.match extra="=B2\*C2|=C3\*\$F\$2|7"}
+Tea: 3 JD in B2 and 4 packs in C2. What does =B2\*C2 show?
+:   12
+
+    Why: 3 × 4 = 12.
+
+D2 has =B2\*C2. Rana copies it to D3. Which formula is in D3?
+:   =B3\*C3
+
+    Why: The relative references move one row down.
+
+D2 has =C2\*\$F\$1. Rana copies it to D3. Which formula is in D3?
+:   =C3\*\$F\$1
+
+    Why: C2 becomes C3; \$F\$1 stays.
+
+A2 has 50, and B2 is empty. What does =A2/B2 show?
+:   #DIV/0!
+
+    Why: An empty cell counts as 0, and Excel cannot divide by 0.
+
+The column shows ####. What do you do?
+:   make the column wider
+
+    Why: #### means that the number does not fit in the column.
+:::
+:::
+
+## Summary {.summary}
+
+- A cell address is a column letter and a row number; a range is written like B2:B6.
+- A formula starts with = and uses addresses, so it changes by itself.
+- Copying changes relative references (B2) but not absolute ones (\$F\$1).
+- SUM, AVERAGE, MAX and MIN work on a range; AutoSum writes SUM for you.
+- #DIV/0!, #NAME? and #### tell you what to fix.

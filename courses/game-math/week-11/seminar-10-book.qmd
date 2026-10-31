@@ -1,0 +1,201 @@
+---
+title: "Probability in Loot Drops and Critical Hits"
+description: "Seminar worksheet · Compute the chances of gem drops and compare them with many rolls, find the chance of a critical hit when the first die is known, then decide if a loot crate is worth its price."
+seminar: 10
+ilos: [A2, B2]
+format: lesson-typst
+---
+
+::: {.lead}
+In Lecture 10 you learned sample spaces, the probability of an event, the
+complement, grids and trees, OR and AND, conditional probability with the
+multiplication rule, and the expected value with fair prices and the average
+number of tries. Today you use them on gem drops, critical hits and loot
+crates. There are no new ideas: three short problems. Do each one alone.
+The results of the activities are at the end of this worksheet.
+:::
+
+## Recall
+
+- P(A) = outcomes of A ÷ all outcomes, when they are equally likely.
+  P(not A) = 1 − P(A). Two independent events: P(A and B) = P(A) × P(B).
+- P(A | B): count A only inside B. Without putting back:
+  P(A and B) = P(A) × P(B | A).
+- E = x₁p₁ + x₂p₂ + …: the long-run average. Fair: the price equals E(win).
+  A success with probability p takes 1/p tries on average.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="1/12|0.5"}
+One die. What is P(more than 4)?
+:   1/3
+
+P(A) = 0.2. What is P(not A)?
+:   0.8
+
+A drop has p = 1/10. How many tries does it take on average?
+:   10
+:::
+:::
+
+## Activity 1 · Gems: theory and many rolls
+
+A slime drops a gem when a die shows a 6. Two slimes roll two dice, and the
+dice are independent. The designer wants to know how often players get gems,
+and checks the code with many rolls.
+
+![Two dice: 36 equally likely outcomes in a grid.](images/dice-sums.png){width=80%}
+
+{{< sim file="sims/roll-lab.html" poster="sims/roll-lab.png" title="Roll Lab: theory and experiment" >}}
+
+::: {.callout-note title="Activity 1 · Theory and rolls · 18 min"}
+1. Write the sample space of one die, P(gem) and P(no gem).
+2. Two slimes: find P(two gems) and P(at least one gem). Use the complement
+   for the second one.
+3. Find P(the sum of two dice is 7) with the grid.
+4. In **Roll Lab**, roll 10 times, then 1000 times. Write the share of 6s
+   (hits ÷ rolls) each time. Then choose "at least one 6 (two dice)" and roll
+   1000 times.
+
+*Your product:* four probabilities, three shares, and one sentence: when is
+the share close to the probability?
+
+::: {.check}
+1. S = {1, 2, 3, 4, 5, 6}; P(gem) = 1/6; P(no gem) = 5/6.
+2. P(two gems) = 1/6 × 1/6 = 1/36. P(at least one) = 1 − 5/6 × 5/6 =
+   1 − 25/36 = 11/36, about 0.31.
+3. (1,6), (2,5), (3,4), (4,3), (5,2), (6,1): 6/36 = 1/6.
+4. After 10 rolls the share of 6s can be far from 1/6 ≈ 0.17 (0.1, 0.3 …).
+   After 1000 rolls it is close (about 0.14 to 0.19), and "at least one 6"
+   is close to 0.31.
+
+The share comes close to the probability only after many rolls.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Gems"}
+A slime drops a gem on a 6. Choose the right answer.
+
+::: {.match extra="1/6|exactly 100"}
+What is P(no gem from two slimes)?
+:   25/36
+
+The game rolls 600 times. About how many gems come?
+:   about 100
+
+After 10 rolls, the share of 6s is 0.4. Is the code wrong?
+:   not sure: 10 rolls are too few
+:::
+:::
+
+## Activity 2 · A critical hit and a chest
+
+A sword makes a critical hit when two dice show a sum of 10 or more.
+Sometimes the first die is already known. A chest holds 6 items, 2 of them
+rare; the hero takes two, one after the other, without putting one back.
+
+![A condition makes the sample space smaller: count only inside B.](images/conditional-grid.png){width=80%}
+
+{{< sim file="sims/conditional-lab.html" poster="sims/conditional-lab.png" title="Conditional Lab: what do we know already?" >}}
+
+::: {.callout-note title="Activity 2 · Knowing the first die · 18 min"}
+1. Find P(critical hit) before the roll: count the sums of 10 or more in the
+   grid.
+2. The first die shows 5. Find P(critical hit | first die is 5).
+3. Check the case "first die is 6" in **Conditional Lab**: A = sum 10 or
+   more, B = first die is 6.
+4. Find P(two rare items) from the chest.
+
+*Your product:* four probabilities, and one sentence: why does knowing the
+first die change the chance?
+
+::: {.check}
+1. (4,6), (5,5), (5,6), (6,4), (6,5), (6,6): 6/36 = 1/6.
+2. Inside B: (5,1) … (5,6), 6 outcomes; (5,5) and (5,6) give 10 or more:
+   2/6 = 1/3.
+3. Conditional Lab: P(A | B) = 3/6 = 1/2 ((6,4), (6,5), (6,6)).
+4. 2/6 × 1/5 = 2/30 = 1/15: after a rare item, 5 items are left with 1 rare.
+
+The known die removes the outcomes outside B, so we count in a smaller
+sample space.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Hits and chests"}
+Two dice; a critical hit needs a sum of 10 or more. Choose the right answer.
+
+::: {.match extra="1/36|2/15"}
+The first die shows 1. What is P(critical hit)?
+:   0
+
+The first die shows 4. What is P(critical hit)?
+:   1/6
+
+A chest has 5 items, 1 rare. The hero takes two without putting back. What is P(the rare one first, then a normal one)?
+:   1/5
+:::
+:::
+
+## Activity 3 · Is the crate worth its price?
+
+A crate holds 10 items: 2 are worth 50 coins, 5 are worth 10 coins and 3 are
+empty. It costs 18 coins. An axe hits for 12 damage; a critical hit, with
+the probability 1/3, does 30. A rare cape drops with the probability 1/20.
+
+![The expected value of a crate: each value times its probability.](images/expected-value.png){width=80%}
+
+{{< sim file="sims/crate-lab.html" poster="sims/crate-lab.png" title="Crate Lab: the expected value of a loot crate" >}}
+
+::: {.callout-note title="Activity 3 · Expected value and price · 18 min"}
+1. Find E(coins) of the crate and the expected gain at the price 18. Is it
+   fair? Which price is fair?
+2. Find E(damage) of the axe per hit.
+3. How many tries does the cape take on average?
+4. In **Crate Lab**, build the crate (2 × 50, 5 × 10, 3 × 0) with the price
+   18. Open 1000 crates and compare the average with your E.
+
+*Your product:* two expected values, one gain, one fair price and one
+average wait.
+
+::: {.check}
+1. E = 50 × 0.2 + 10 × 0.5 + 0 × 0.3 = 10 + 5 + 0 = 15 coins. Gain =
+   15 − 18 = −3 coins: not fair. A fair price is 15 coins.
+2. E = 12 × 2/3 + 30 × 1/3 = 8 + 10 = 18 damage.
+3. 1/p = 20 tries on average (some players need many more).
+4. Crate Lab: after 1000 crates the average is close to 15.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Crates"}
+Choose the right answer.
+
+::: {.match extra="25|41.7"}
+A crate gives 30 coins (p = 0.5) or nothing (p = 0.5). What is E?
+:   15
+
+A crate has E = 15 and costs 20. What is the expected gain?
+:   −5
+
+A pet drops with p = 1/50. After 50 tries, does every player have it?
+:   no
+:::
+:::
+
+## Exercises
+
+1. One die. What is P(less than 3)? And P(not less than 3)?
+2. Two dice. What is P(two 6s)? And P(at least one 6)?
+3. Two dice, the first die shows 3. What is P(sum 7)?
+4. A crate gives 40 coins (p = 0.25), 20 coins (p = 0.25) or nothing (p = 0.5). What is E? Is a price of 12 coins fair?
+5. A drop has p = 1/8. How many tries does it take on average?
+
+## Answers to the exercises
+
+::: {.answers}
+1. 2/6 = 1/3; 1 − 1/3 = 2/3.
+2. 1/36; 1 − 25/36 = 11/36.
+3. Only (3, 4) of the 6 outcomes: 1/6.
+4. E = 10 + 5 + 0 = 15 coins; the gain is 15 − 12 = +3, so it is not fair: the player wins in the long run.
+5. 8 tries.
+:::

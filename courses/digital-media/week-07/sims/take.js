@@ -1,4 +1,4 @@
-// A made-up recording of Pasha's meow for the audio sims of lectures 13-14:
+// A made-up recording of Pasha's meow for the audio sims of Lecture 7 and Seminar 7:
 // TK.make(problems) builds the samples; TK.draw(ctx, x, y, w, h, data, opts) draws the waveform.
 // problems: { lead: seconds of silence at the start, hum: level of a 50 Hz hum, gain: level of the meow,
 //             clip: true if the meow is clipped, click: true for a click at the end }

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Make the homework PDFs by printing the homework web pages with Chrome.
 
-The online activities of a blended course (lesson-NN.html with `online: true`)
-print the same way: on paper only their tasks (lesson.css hides the study
-steps), saved as lesson-NN.pdf and renamed <prefix>_lectureN_tasks.pdf by
-download_names.py.
+The online activities of a blended course (online-NN.html; older pages:
+lesson-NN.html with `online: true`) print the same way: on paper only their
+tasks (lesson.css hides the study steps), saved as online-NN.pdf and renamed
+<prefix>_onlineN_tasks.pdf by download_names.py.
 
 Homework is a web page with a "Print homework" button (one A4 page, with
 answer lines). The "Download PDF" file must look exactly like that printout,
@@ -65,8 +65,9 @@ def main():
     out_dir = os.path.join(project_dir, os.environ.get("QUARTO_PROJECT_OUTPUT_DIR", "_site"))
     pages = [p for p in sorted(glob.glob(os.path.join(out_dir, "courses", "*", "week-*", "homework-*.html")))
              if is_real_page(p)]
-    pages += [p for p in sorted(glob.glob(os.path.join(out_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].html")))
-              if is_online_activity(p)]
+    for name in ("online-[0-9][0-9].html", "lesson-[0-9][0-9].html"):
+        pages += [p for p in sorted(glob.glob(os.path.join(out_dir, "courses", "*", "week-*", name)))
+                  if is_online_activity(p)]
     if not pages:
         return
     chrome = find_chrome()

@@ -1,0 +1,292 @@
+---
+title: "Probability: Events, Conditional Probability and Expected Value"
+subtitle: "Lecture 10"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary sample-space event probability complement-event independent-events conditional-probability expected-value fair-game >}}
+
+## 10.1 Sample spaces
+
+:::: {.columns}
+::: {.column width="50%"}
+- A random experiment has a result that we cannot know in advance.
+- The sample space S is the set of all outcomes.
+- We list outcomes so that each one is equally likely.
+- **Do it:** Write the sample space of three coins. How many outcomes has it?
+:::
+::: {.column width="50%"}
+![](images/sample-spaces.png)
+:::
+::::
+
+## Example · The experiments of Lucky Raft
+
+The board game Lucky Raft uses a die, two coins and loot crates.
+**What is the sample space of each experiment?**
+
+::: {.reveal}
+1. One die gives **S = {1, 2, 3, 4, 5, 6}** with 6 outcomes.
+2. Two coins give **{HH, HT, TH, TT}**, because HT and TH are different.
+3. A crate with 10 items gives **10 equally likely outcomes**.
+:::
+
+## Try it 1 · Sample spaces
+
+a) How many outcomes does one die have?
+b) How many outcomes do three coins have?
+c) How many outcomes do two dice have?
+
+::: {.answer}
+a) 6
+b) 8
+c) 36
+:::
+
+## 10.2 The probability of an event
+
+:::: {.columns}
+::: {.column width="50%"}
+- An event is a set of outcomes.
+- With equally likely outcomes, P(A) = |A| ÷ |S|.
+- A probability is between 0 (impossible) and 1 (certain).
+- **Do it:** Find P(odd) and P(a 7) with one die. What are they?
+:::
+::: {.column width="50%"}
+![](images/event-prob.png)
+:::
+::::
+
+## Live demo · Sample Space Lab
+
+{{< sim file="sims/sample-space-lab.html" poster="sims/sample-space-lab.png" title="Sample Space Lab: count the outcomes" task="**Show:** one die with A = even, then A or B with B = less than 3, then two dice with A = a double and not A. **Ask:** why do we subtract 1/6 for even or less than 3?" >}}
+
+## Try it 2 · One die and a crate
+
+a) What is P(an even number) with one die?
+b) What is P(gold) for 2 gold items of 10?
+c) What is P(a 7) with one die?
+
+::: {.answer}
+a) 1/2
+b) 1/5
+c) 0
+:::
+
+## 10.3 The complement
+
+:::: {.columns}
+::: {.column width="50%"}
+- Not A has all the outcomes that are not in A.
+- P(not A) = 1 − P(A).
+- "At least one" is often easier with the complement.
+- **Do it:** Find P(at least one head) with two coins. Which complement did you use?
+:::
+::: {.column width="50%"}
+![](images/complement.png)
+:::
+::::
+
+## Example · A hit on at least one die
+
+An archer rolls two dice and hits with a 5 or a 6 on either die.
+**What is the probability of a hit?**
+
+::: {.reveal}
+1. The complement is **only 1 to 4 on both dice**: 4 × 4 = 16 of 36 cells.
+2. P(hit) = 1 − 16/36 = **20/36**, about 0.56.
+3. 1/3 + 1/3 = 24/36 is **wrong**, because 4 cells count twice.
+:::
+
+## Try it 3 · Not A
+
+a) What is P(not a 6) with one die?
+b) What is P(not silver) when 3 of 10 items are silver?
+c) What is P(at least one head) with two coins?
+
+::: {.answer}
+a) 5/6
+b) 7/10
+c) 3/4
+:::
+
+## 10.4 Grids and trees
+
+:::: {.columns}
+::: {.column width="50%"}
+- Two steps with m and k outcomes give m × k pairs.
+- A grid shows the 36 pairs of two dice.
+- In a tree diagram, we multiply along a branch.
+- **Do it:** Find P(sum 6) in the grid. How many cells make 6?
+:::
+::: {.column width="50%"}
+![](images/dice-sums.png)
+:::
+::::
+
+## Example · The sum 9
+
+A sum of 9 on two dice calls the goblin.
+**What is P(sum 9)?**
+
+::: {.reveal}
+1. Two dice give **36** equally likely pairs.
+2. Four pairs make 9: **(3,6), (4,5), (5,4), (6,3)**.
+3. P(sum 9) = 4/36 = **1/9**, but P(sum 12) is only 1/36.
+:::
+
+## Try it 4 · Two dice
+
+a) What is P(sum 8) with two dice?
+b) What is P(a double) with two dice?
+c) Why is P(sum 9) not 1/11?
+
+::: {.answer}
+a) 5/36
+b) 1/6
+c) The 11 sums are not equally likely.
+:::
+
+## 10.5 OR and AND
+
+:::: {.columns}
+::: {.column width="50%"}
+- P(A or B) = P(A) + P(B) − P(A and B).
+- Mutually exclusive events have no overlap, so we just add.
+- For independent events, P(A and B) = P(A) × P(B).
+- **Do it:** Find P(heads and a 6). Which rule did you use?
+:::
+::: {.column width="50%"}
+![](images/or-and.png)
+:::
+::::
+
+## Example · Two treasures in a row
+
+There are 10 cards with 2 treasures, and the first card goes back before the second draw.
+**What is P(two treasures)?**
+
+::: {.reveal}
+1. The draws are **independent**, because the card goes back.
+2. P(treasure) = 2/10 = **1/5** each time.
+3. P(two treasures) = 1/5 × 1/5 = **1/25**.
+:::
+
+## Try it 5 · OR and AND
+
+a) What is P(odd or more than 4) with one die?
+b) What is P(a 1 or a 6) with one die?
+c) What is P(tails and an even number)?
+
+::: {.answer}
+a) 4/6
+b) 2/6
+c) 1/4
+:::
+
+## 10.6 Conditional probability
+
+:::: {.columns}
+::: {.column width="50%"}
+- P(A | B) is the probability of A when we know B.
+- We count A only inside B.
+- We divide by the number of outcomes in B.
+- Without putting back, P(A and B) = P(A) × P(B | A).
+- **Do it:** Find P(sum 7 | first die is 1). What do you get?
+:::
+::: {.column width="50%"}
+![](images/conditional-grid.png)
+:::
+::::
+
+## Example · The first die is a 6
+
+The door opens with a sum of 10 or more, and the first die already shows a 6.
+**What is the probability now?**
+
+::: {.reveal}
+1. Only **6 outcomes** are left: (6,1) to (6,6).
+2. Three of them, **(6,4), (6,5), (6,6)**, make 10 or more.
+3. P(A | B) = 3/6 = **1/2**, while P(A) was only 1/6.
+:::
+
+## Live demo · Conditional Lab
+
+{{< sim file="sims/conditional-lab.html" poster="sims/conditional-lab.png" title="Conditional Lab: what do we know already?" task="**Show:** sum 10 or more without a condition, then with the first die 6, then the second die 6. **Ask:** why does the condition change the first event but not the second?" >}}
+
+## Try it 6 · Conditions
+
+a) Two dice, the first die is 6. What is P(sum ≥ 9)?
+b) Two dice, the sum is 4. What is P(a double)?
+c) Two dice, the first die is 4. What is P(sum ≥ 8)?
+
+::: {.answer}
+a) 2/3
+b) 1/3
+c) 1/2
+:::
+
+## 10.7 The expected value
+
+:::: {.columns}
+::: {.column width="50%"}
+- A random variable is a number that depends on chance.
+- E = x₁p₁ + x₂p₂ + …, the long-run average.
+- A game is fair when its price equals E(win), and a success takes 1/p tries on average.
+- **Do it:** A spin costs 3 coins, and 1 of 8 parts wins 20 coins. Is the spin fair?
+:::
+::: {.column width="50%"}
+![](images/expected-value.png)
+:::
+::::
+
+## Example · The loot crate
+
+A crate gives 100 coins (1/10), 20 coins (3/10) or 5 coins (6/10).
+**What is it worth on average?**
+
+::: {.reveal}
+1. E = 100·0.1 + 20·0.3 + 5·0.6 = **10 + 6 + 3 = 19 coins**.
+2. The plain average of 41.7 is **wrong**, because wood comes most often.
+3. 100 crates give about **1900 coins**.
+:::
+
+## Try it 7 · Expected values
+
+a) What is E for 30 coins (0.5) or 10 coins (0.5)?
+b) What is E for 20 damage (0.6) or 5 damage (0.4)?
+c) What must the probabilities of all values add up to?
+
+::: {.answer}
+a) 20
+b) 14
+c) 1
+:::
+
+## Game challenge · Treasure Odds
+
+{{< sim file="sims/treasure-odds.html" poster="sims/treasure-odds.png" title="Treasure Odds: loot drops and critical hits" kind="game" task="The designer of Lucky Raft tunes the loot drops and the critical hits of its dungeon. **Play:** use conditions and expected values to choose well in each room on your phone." >}}
+
+## Try it · Tune the hits (harder)
+
+The facts: a normal hit does 10 damage, and a critical hit has the probability 1/4.
+
+a) A critical hit does 30 damage. What is E(damage) per hit?
+b) The designer wants E(damage) = 20. How much must a critical hit do?
+c) On average, how many hits come before the first critical hit, counting it?
+
+::: {.answer}
+a) 15
+b) 50
+c) 4
+:::
+
+## Summary
+
+- The probability of an event is its outcomes divided by all outcomes, when they are equally likely.
+- The complement gives P(not A) = 1 − P(A), and grids and trees list two-step experiments.
+- OR adds the probabilities without the overlap, and AND multiplies them for independent events.
+- A condition makes the sample space smaller: we count A only inside B.
+- The expected value is the long-run average, and a fair price equals E(win).

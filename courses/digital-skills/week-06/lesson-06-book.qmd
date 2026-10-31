@@ -1,0 +1,198 @@
+---
+title: "Excel (1): Cells, Formulas, References and Basic Functions"
+description: "Lesson notes · The parts of a worksheet, formulas that compute by themselves, copying a formula with relative and absolute references, and the functions SUM, AVERAGE, MAX and MIN."
+lesson: 6
+ilos: [C2]
+format: lesson-typst
+---
+
+::: {.lead}
+Rana works in the *Sunrise* shop. Every evening she adds up the sales on a
+calculator, and every week she makes a mistake. Excel can do the
+calculation for her, and it does it again by itself when a number changes.
+In Lecture 3 you met Excel: a **workbook** with **worksheets** and
+**cells**. In this lesson you make Excel calculate: you write **formulas**,
+you copy them, and you use the first **functions**. These notes are a short
+reference: in class you do each idea in Excel, as an experiment of the
+**worksheet**.
+:::
+
+## Key terms
+
+{{< glossary workbook worksheet cell cell-address cell-range formula formula-bar relative-reference absolute-reference fill-handle function autosum >}}
+
+## 6.1 The grid: cells and ranges
+
+A worksheet is a big grid. The **columns** have letters (A, B, C …) and the
+**rows** have numbers (1, 2, 3 …). Each box is a **cell** (@fig-grid).
+
+::: {.callout-important title="Definition 6.1 — Cell address and range"}
+The **cell address** is the column letter and the row number, for example
+**B3**. A **range** is a block of cells: **B2:B4** means B2, B3 and B4.
+:::
+
+![A small sheet of the shop. B3 is selected; the range B2:B4 holds the three prices.](images/excel-grid.png){#fig-grid width=100%}
+
+- Type in a cell and press **Enter**: the cell below is selected.
+- **Text** sits on the left of a cell; **numbers** sit on the right.
+- The **formula bar** above the grid shows what is really in the cell.
+
+::: {.callout-note title="Example 6.1 — The shop list"}
+1. Rana types *Item*, *Price (JD)* and *Quantity* in A1, B1 and C1.
+2. Under them: Notebook 2 10, Pen 0.5 40, Bag 12 3.
+3. The price of the pen is in **B3**; the three prices are the range
+   **B2:B4**.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Typing "2 JD" in a price cell. Then it is text, and Excel cannot compute
+with it. Type only the number, and write "JD" in the heading.
+:::
+
+*In class: Experiment 1 of the worksheet, the cells and ranges of the shop list.*
+
+## 6.2 Let Excel calculate: formulas
+
+Rana wants the total of each item: price × quantity. She does not use a
+calculator. She writes a **formula** (@fig-formula).
+
+::: {.callout-important title="Definition 6.2 — Formula"}
+A **formula** starts with **=**. It uses cell addresses and the signs
+**+ − * /**. The cell shows the result; the formula bar shows the formula.
+:::
+
+![D2 has =B2\*C2. The cell shows 20.](images/formula-parts.png){#fig-formula width=100%}
+
+Excel multiplies and divides before it adds and subtracts: =2+3\*4 is 14.
+Use brackets to change the order: =(2+3)\*4 is 20.
+
+::: {.callout-note title="Example 6.2 — Total of the notebooks"}
+1. Rana clicks D2 and types **=B2\*C2**, then presses Enter.
+2. D2 shows **20** (2 × 10).
+3. She changes the price in B2 to 3. D2 changes to 30 by itself.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Forgetting the =. "B2\*C2" without = is only text. Also, do not type the
+numbers (=2\*10): then the total does not change when the price changes.
+:::
+
+{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" height="560" >}}
+
+*In class: Experiment 2 of the worksheet, a formula that changes by itself.*
+
+## 6.3 Copy a formula: relative and absolute references
+
+Rana needs the same formula in every row. She does not type it three times.
+She **copies** it down with the **fill handle**: the small square at the
+corner of the cell (@fig-refs).
+
+::: {.callout-important title="Definition 6.3 — Relative and absolute references"}
+A **relative reference** (B2) changes when you copy the formula: in the
+next row it becomes B3. An **absolute reference** has $ signs (\$F\$1) and
+does **not** change when you copy.
+:::
+
+![Without $, the rate cell F1 moves to F2 and F3. With \$F\$1, it stays.](images/references.png){#fig-refs width=100%}
+
+::: {.callout-note title="Example 6.3 — Copying the totals"}
+1. Rana selects D2 (=B2\*C2) and double-clicks the fill handle.
+2. D3 gets =B3\*C3 and D4 gets =B4\*C4. Each row uses its own price and
+   quantity.
+:::
+
+::: {.callout-note title="Example 6.4 — One discount rate for all"}
+The discount rate (10 %) is in F1. In C2 Rana writes =B2\*F1 and copies it.
+
+1. C3 becomes =B3\*F2. F2 is empty, so the discount is 0: wrong.
+2. She writes **=B2\*\$F\$1** and copies again. Now C3 is =B3\*\$F\$1: right.
+3. When the rate changes to 20 %, all discounts change at once.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Forgetting the $ for a cell that every row needs (a rate, a price, a total).
+Tip: after typing F1, press **F4**; Excel adds the $ signs.
+:::
+
+{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" height="520" >}}
+
+*In class: Experiment 3 of the worksheet, copying a formula with and without \$.*
+
+## 6.4 Ready formulas: SUM, AVERAGE, MAX, MIN
+
+Rana wants the total of the week, the average day, the best day and the
+worst day. Excel has **functions** for these (@fig-functions).
+
+::: {.callout-important title="Definition 6.4 — Function"}
+A **function** is a ready formula with a name, used on a range:
+**=SUM(B2:B6)** adds, **=AVERAGE(B2:B6)** gives the average, **=MAX(B2:B6)**
+the highest and **=MIN(B2:B6)** the lowest value.
+:::
+
+![Four functions on the sales of the week.](images/functions.png){#fig-functions width=100%}
+
+The **AutoSum** button (Σ, Home tab) writes a SUM formula for you: click the
+cell under the numbers and press Σ, then Enter.
+
+::: {.callout-note title="Example 6.5 — The week of the shop"}
+Sales: 10, 20, 30, 40 and 50 JD in B2:B6.
+
+1. =SUM(B2:B6) gives **150** JD.
+2. =AVERAGE(B2:B6) gives **30** JD per day (150 ÷ 5).
+3. =MAX(B2:B6) gives **50** (Thursday); =MIN(B2:B6) gives **10** (Sunday).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Error values. **#DIV/0!**: the formula divides by 0 (or by an empty cell).
+**#NAME?**: a function name is wrong, for example =SUMM(B2:B6). **####**:
+the column is too narrow; make it wider.
+:::
+
+*In class: Experiment 4 of the worksheet, SUM, AVERAGE, MAX and MIN on a week of sales.*
+
+## Case study: the shop's week
+
+Rana keeps the sales of the *Sunrise* shop in Excel. Before she presses
+Enter, she wants to know what each cell will show: a total of tea
+(=B2\*C2 with 3 JD and 4 packs), the sum and the average of a week of
+10, 20, 30, 40 and 50 JD, the formula in D3 after she copies =B2\*C2 down,
+the formula in D3 after she copies =C2\*\$F\$1 down, and a cell that divides by
+an empty cell. The Game challenge of the interactive lesson uses these
+cells. In the mini-game below you predict them.
+
+{{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" height="560" >}}
+
+## Further reading
+
+Microsoft Support, "Overview of formulas in Excel" and "Switch between
+relative and absolute references" (support.microsoft.com). Evans, Martin
+and Poatsy, *Technology in Action*, 18th ed., the chapter on productivity
+software (spreadsheets).
+
+## Exercises
+
+1. What is in cell C4: which column and which row?
+2. Write the range of the cells A2, A3, A4, A5 and A6.
+3. B2 = 6 and C2 = 5. What does =B2\*C2 show?
+4. What does =2+3\*4 give? And =(2+3)\*4?
+5. Why must a formula start with =?
+6. You copy =B2\*C2 from D2 to D5. What is in D5?
+7. You copy =B2\*\$F\$1 from C2 to C4. What is in C4?
+8. Sales 5, 10, 15, 20 in B2:B5. What do SUM and AVERAGE give?
+9. A cell shows #NAME?. What is a likely reason?
+10. What does the Σ button do?
+
+## Answers to the exercises
+
+::: {.answers}
+1. Column C, row 4.
+2. A2:A6.
+3. 30.
+4. 14; 20.
+5. Without =, Excel takes it as text.
+6. =B5\*C5.
+7. =B4\*\$F\$1.
+8. SUM 50; AVERAGE 12.5.
+9. A wrong function name, for example SUMM.
+10. AutoSum: it writes a SUM formula for the numbers above or beside the cell.
+:::

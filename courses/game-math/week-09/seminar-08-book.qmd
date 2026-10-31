@@ -1,0 +1,173 @@
+---
+title: "Logic Exercises: Game States and Conditions"
+description: "Seminar worksheet · Write the rules of a farm game as conditions, use a truth table as a test plan to find a bug, and check which game states break an IF–THEN rule."
+seminar: 8
+ilos: [A2, B2]
+format: lesson-typst
+---
+
+::: {.lead}
+In Lecture 8 you learned propositions, NOT, AND, OR, XOR, IF–THEN,
+brackets and truth tables. Today you use them on the rules of three games.
+There are no new ideas: three short problems. Do each one alone. The
+results of the activities are at the end of this worksheet.
+:::
+
+## Recall
+
+- NOT `!p`, AND `p && q`, OR `p || q`, XOR `p ^ q`. The order is NOT, AND,
+  OR; brackets first.
+- p → q is false only when p is true and q is false.
+- A truth table with n variables has 2^n rows; its true rows show when a
+  rule fires.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="6|p || q"}
+How many rows has the truth table of 3 variables?
+:   8
+
+Which C# condition means "exactly one of p and q"?
+:   p ^ q
+
+p = T, q = F. What is p → q?
+:   false
+:::
+:::
+
+## Activity 1 · Rules in game code
+
+A farm game has these game states as `bool` variables: `isDay`, `inFight`,
+`hasSeeds`, `hasWater`, `isRaining`. The designer writes the rules in
+words.
+
+![The value of NOT, AND and OR in each case.](images/not-and-or.png){width=80%}
+
+::: {.callout-note title="Activity 1 · Words to code · 15 min"}
+Write each rule as a C# condition.
+
+1. The shop is open when it is day and the player is not in a fight.
+2. The player can plant when there are seeds and (water or rain).
+3. The scarecrow warning shows when it is night or the player is in a
+   fight.
+4. A crop grows when it is raining or the player has water, but not both.
+
+*Your product:* four conditions.
+
+::: {.check}
+1. `isDay && !inFight`. 2. `hasSeeds && (hasWater || isRaining)`: the
+brackets are needed. 3. `!isDay || inFight`. 4. `isRaining ^ hasWater`:
+"but not both" is XOR.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Code"}
+Choose the right condition.
+
+::: {.match extra="hasSeeds && hasWater || isRaining|isDay || !inFight"}
+"Plant when there are seeds and water or rain."
+:   hasSeeds && (hasWater || isRaining)
+
+"Open when it is day and the player is not in a fight."
+:   isDay && !inFight
+
+"Exactly one of two switches is up."
+:   left ^ right
+:::
+:::
+
+## Activity 2 · Every row is a test case
+
+A tester uses the truth table as a test plan: each row is a situation with
+the result that the table predicts. The dock door rule is p ∧ (q ∨ r)
+(pass, shields up, officer on board), but the code says
+`if (hasPass && shieldsUp || officer)`.
+
+{{< sim file="sims/truth-table-lab.html" poster="sims/truth-table-lab.png" title="Truth Table Lab: every case of a condition" >}}
+
+::: {.callout-note title="Activity 2 · Find the bug · 18 min"}
+1. Make the truth table of p ∧ (q ∨ r) in **Truth Table Lab**. How many
+   rows are true?
+2. Test the row (F, F, T): no pass, no shields, an officer. What does the
+   table say? What does the code do?
+3. Write the corrected condition.
+
+*Your product:* the number of true rows, one bug and its fix.
+
+::: {.check}
+p ∧ (q ∨ r) is true in 3 of the 8 rows: (T, T, T), (T, T, F) and
+(T, F, T). Row (F, F, T): the table says **shut**, but the code opens the
+door, because && is computed first, so `… || officer` is true. Fix:
+`hasPass && (shieldsUp || officer)`.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Testing"}
+Choose the right answer.
+
+::: {.match extra="only the true rows|4"}
+Why test the false rows too?
+:   to see that it does not fire when it should not
+
+How many test cases cover every case of a 3-condition rule?
+:   8
+
+The code `hasPass && shieldsUp || officer` opens for an officer alone. Why?
+:   && is computed before ||
+:::
+:::
+
+## Activity 3 · IF–THEN rules in a quest
+
+A quest has two rules: "If the player has the map, then the cave is shown"
+and "If the dragon is awake, then the music is loud". A tester writes down
+four game states (map, cave shown, dragon awake, music loud):
+A (T, T, F, F); B (T, F, T, T); C (F, T, T, F); D (F, F, F, F).
+
+![XOR and IF–THEN.](images/xor-implies.png){width=78%}
+
+::: {.callout-note title="Activity 3 · Which states break a rule? · 15 min"}
+1. For each state, is rule 1 kept? Is rule 2 kept?
+2. Write the C# condition that finds a broken rule 1.
+
+*Your product:* a table of four states with "kept" or "broken", and one
+condition.
+
+::: {.check}
+A: both kept (the dragon is asleep, so rule 2 says nothing). B: rule 1
+broken (map, but no cave). C: rule 2 broken (dragon awake, music not
+loud). D: both kept. Condition: `hasMap && !caveShown`.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Rules kept or broken"}
+Choose the right answer. You can use an answer more than once.
+
+::: {.match extra="both broken"}
+State B (map, no cave). Is rule 1 kept or broken?
+:   broken
+
+State D (no map, no cave). Is rule 1 kept or broken?
+:   kept
+
+State C (dragon awake, music not loud). Is rule 2 kept or broken?
+:   broken
+:::
+:::
+
+## Exercises
+
+1. Write as a C# condition: "the gate opens when the player has the key or the lever is down, and the alarm is off".
+2. How many rows has the truth table of 4 variables?
+3. p = F, q = T. What are p ∧ q, p ∨ q and p ⊕ q?
+4. "If the player is hit, then the screen flashes." The player is not hit and the screen flashes. Is the rule kept?
+
+## Answers to the exercises
+
+::: {.answers}
+1. (hasKey || leverDown) && !alarmOn.
+2. 16.
+3. F, T, T.
+4. Kept: F → T is true.
+:::

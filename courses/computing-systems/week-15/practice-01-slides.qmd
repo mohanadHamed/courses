@@ -1,0 +1,79 @@
+---
+title: "Platform Performance and Compatibility: Case Studies"
+subtitle: "Practice 1 · practises Lectures 3, 5, 6, 7 and 12"
+format: lesson-pptx
+---
+
+## Recall · Lectures 3, 5, 6, 7 and 12
+
+a) A phone is hot after 15 minutes and the game slows down. What is it?
+b) Where do you check what a new OS version changes for games?
+c) A forum post says "the game runs twice as fast after the update". What is it?
+
+::: {.answer}
+a) thermal throttling
+b) the official release notes
+c) a claim to check
+:::
+
+## Activity 1 · Read the frames · 15 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The time of one frame is 1000 ms divided by the frame rate.
+- One frame that is much longer than the others is a stutter, and the player sees a jerk.
+- **Do it:** Find the frame times at 30 and 60 fps. What does one 70 ms frame do in a 60 fps race? Then play Performance Detective.
+:::
+::: {.column width="50%"}
+![](images/frame-times.png)
+:::
+::::
+
+## Live demo · Performance Detective
+
+{{< sim file="sims/perf-detective.html" poster="sims/perf-detective.png" title="Performance Detective: six reports about Pocket Quest" kind="game" task="**Show:** answer the six reports of the players. **Ask:** which report needs a test that lasts as long as a player plays?" >}}
+
+## Check 1 · Read the frames
+
+What do the frame times and the hot phone show?
+
+::: {.reveal}
+1. One frame takes about 33.3 ms at 30 fps and 16.7 ms at 60 fps.
+2. A frame of 70 ms takes more than four normal frames, so the player sees a stutter.
+3. The hot phone slows down because of thermal throttling.
+4. A frame-rate cap of 30 fps or lower settings keep the game steady.
+:::
+
+## Activity 2 · Make every row green · 15 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Build 43 needs Android 11, but one test phone has Android 8.
+- One old GPU has no Vulkan, and a 4:3 tablet cuts off the Start button.
+- **Do it:** Make every row green in Compatibility Lab and write what each fix costs. Which source about the update do you trust?
+:::
+::: {.column width="50%"}
+![](images/compat-matrix.png)
+:::
+::::
+
+## Live demo · Compatibility Lab
+
+{{< sim file="sims/compat-lab.html" poster="sims/compat-lab.png" title="Compatibility Lab: build 43 for every device" task="**Show:** change the minimum version, add a second graphics path and anchor the menu. **Ask:** why does every fix cost more testing?" >}}
+
+## Check 2 · Make every row green
+
+How does build 43 run on every device?
+
+::: {.reveal}
+1. The minimum version goes down to Android 8, so the team tests Android 8 too.
+2. A second graphics path (OpenGL ES) is one more path to test.
+3. The menu is anchored to the safe area, so every screen shape needs a check.
+4. The release notes are the reliable source, and the team tests the update itself.
+:::
+
+## Wrap-up
+
+- You can read frame times and explain a stutter and a hot phone.
+- You can make one build work on many devices and say what it costs.
+- You can check a claim about a platform with a reliable source.

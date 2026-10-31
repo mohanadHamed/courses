@@ -1,0 +1,245 @@
+---
+title: "Where Mathematics Appears in a Mobile Game"
+description: "Seminar · Find the mathematics in a game you play, place a level in numbers, and move a guard and a drone with vectors."
+seminar: 1
+ilos: [A1]
+format: lesson-html
+---
+
+No new ideas today: three short problems on Lecture 1. Do each one alone,
+then open "Check your result". Every question on this page has its answer:
+try first, then check.
+
+## Recall
+
+- A game repeats the **game loop**: read the input, change the numbers,
+  draw. One pass makes one frame.
+- A 2D point is (x, y); the signs decide the quadrant. With y up, a 3D point
+  (x, y, z) has its height in the middle.
+- From A to B: **B − A**. Every frame: position + velocity.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="quadrant I|(3, 2)"}
+In which quadrant is (−2, −6)?
+:   quadrant III
+
+    Why: Both signs are minus.
+
+What is the vector from A = (1, 1) to B = (4, 3)?
+:   (3, 2)
+
+    Why: B − A = (4 − 1, 3 − 1) = (3, 2).
+
+With y up, which number of (7, 2, 9) is the height?
+:   2
+
+    Why: The height is the middle number.
+:::
+:::
+
+## Activity 1 · Find the mathematics in a game
+
+Every moving thing in a game is computed with numbers, and each needs a
+kind of mathematics.
+
+| What the game does | Mathematics |
+|---|---|
+| know where every object is; move it | coordinates, vectors |
+| aim a turret; make an object bob up and down | trigonometry |
+| move, turn and resize models | matrices |
+| decide if a door opens or an enemy attacks | logic |
+| loot, critical hits, random levels | probability |
+
+::: {.callout-note title="Activity 1 · Four things · 12 min"}
+1. Play a game on your phone for two minutes.
+2. Write four things it must compute with numbers, and the mathematics of
+   each one from the table.
+
+*Your product:* a table with four rows: game thing, mathematics.
+
+::: {.check}
+A good answer: "where my car is: coordinates", "the car moves forward:
+vectors", "a box gives a random prize: probability", "the gate opens only
+with a key: logic".
+
+- ☐ Four different things that the game computes.
+- ☐ At least one row is not about position (logic or probability).
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Which mathematics?"}
+Choose the right answer.
+
+::: {.match extra="matrices"}
+A boss attacks only when its health is below 50 and the player is near.
+:   logic
+
+    Why: "Only when … and …" is a rule: logic.
+
+A coin floats up and down above a platform.
+:   trigonometry
+
+    Why: Bobbing up and down is a wave: trigonometry.
+
+A chest gives a rare sword 1 time in 20.
+:   probability
+
+    Why: "1 time in 20" is a chance.
+:::
+:::
+
+## Activity 2 · A level from a description
+
+A designer describes a farm level in words. The origin is the well in the
+centre; x goes right and y goes up.
+
+- the barn is 4 units left of the well and 1 unit up;
+- the gate is 6 units right of the well, on the ground line (y = 0);
+- the tractor is 2 units right and 3 units down;
+- the scarecrow is 5 units left and 2 units down.
+
+{{< sim file="sims/grid-strike.html" poster="sims/grid-strike.png" title="Grid Strike: hit the coordinates" kind="game" height="600" >}}
+
+::: {.callout-note title="Activity 2 · A level in numbers · 15 min"}
+1. Write the coordinates and the quadrant (or the axis) of the well, the
+   barn, the gate, the tractor and the scarecrow.
+2. Play stage 1 of **Grid Strike**.
+
+*Your product:* a table with five rows (object, coordinates, quadrant) and
+your Grid Strike score.
+
+::: {.check}
+Well (0, 0): the origin. Barn (−4, 1): quadrant II. Gate (6, 0): on the
+x-axis. Tractor (2, −3): quadrant IV. Scarecrow (−5, −2): quadrant III.
+Left and down are minus; a 0 puts the point on an axis.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · The farm level"}
+The well is the origin; barn (−4, 1), gate (6, 0), tractor (2, −3). Choose
+the right answer.
+
+::: {.match extra="quadrant I|(−1, 4)"}
+The tractor drives 3 units up. Where is it now?
+:   (2, 0)
+
+    Why: Up changes y: −3 + 3 = 0.
+
+Where is the tractor after that move?
+:   on the x-axis
+
+    Why: y = 0 puts it on the x-axis.
+
+A pond is 1 unit right of the barn and 3 units up. What is its position?
+:   (−3, 4)
+
+    Why: (−4 + 1, 1 + 3) = (−3, 4).
+:::
+:::
+
+## Activity 3 · A guard in 2D and a drone in 3D
+
+A guard in a museum level is at G = (−4, 3), and the player at
+P = (2, −1). A delivery drone in a 3D world with y up flies from the ground
+at A = (1, 0, 2) to a roof at B = (5, 6, −1).
+
+![Left-handed and right-handed coordinate systems.](images/handedness.png){width=72%}
+
+::: {.callout-note title="Activity 3 · Two moves · 18 min"}
+1. Find the vector that takes the guard to the player.
+2. The guard gets there in 2 frames. Find its velocity per frame.
+3. Find the displacement of the drone from A to B. How many units does it
+   climb?
+
+*Your product:* three vectors and one height.
+
+::: {.check}
+1. P − G = (2 − (−4), −1 − 3) = (6, −4).
+2. (6, −4) ÷ 2 = (3, −2) per frame: (−4, 3) + (3, −2) = (−1, 1), then
+   (−1, 1) + (3, −2) = (2, −1). It arrives.
+3. B − A = (4, 6, −3). With y up, the drone climbs 6 units.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Moves and axes"}
+Guard G = (−4, 3), player P = (2, −1); drone A = (1, 0, 2), B = (5, 6, −1),
+y up. Choose the right answer.
+
+::: {.match extra="(6, −4)|towards you"}
+Which vector takes the player back to the guard?
+:   (−6, 4)
+
+    Why: G − P is the opposite of P − G: the same size, the other way.
+
+What is the way back of the drone, from B to A?
+:   (−4, −6, 3)
+
+    Why: A − B is the opposite: all three signs change.
+
+A character walks on flat ground. What is its v~y~?
+:   0
+
+    Why: Flat ground means no change in height.
+
+Unity is left-handed with y up. Where does +z point?
+:   into the screen
+
+    Why: The left-hand rule: fingers along +x, bent to +y, the thumb into the screen.
+:::
+:::
+
+## At home · Task with AI
+
+::: {.callout-note .ai-task title="Task with AI · Draw a level from its description"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt
+into an AI assistant that the university allows (for example Microsoft
+Copilot with your university account), and look at the picture.
+
+::: {.prompt}
+The origin (0, 0) is the centre of a 2D game level; x goes right and y goes
+up. Draw a grid from −8 to 8 on both axes. Draw each object as a labelled
+dot: a castle 5 units left of the centre and 2 up; a tree 3 right and 4 up;
+a lake 4 left and 3 down; a gate 6 right and 1 down. Then make a table with
+each object, its coordinates and its quadrant.
+:::
+
+**What do you see?**
+
+::: {.check label="What you should see"}
+Castle (−5, 2) in quadrant II; tree (3, 4) in quadrant I; lake (−4, −3) in
+quadrant III; gate (6, −1) in quadrant IV. Left and down give minus signs:
+check the castle and the lake first.
+:::
+
+::: {.try-change}
+**Change:** put the tree 4 left and 4 up, and ask again. What do you notice?
+
+::: {.check}
+The tree moves to (−4, 4), across the y-axis, into quadrant II. Only the
+sign of x changed.
+:::
+:::
+
+::: {.try-change}
+**Change:** add an enemy that starts at the castle and moves 2 right and 1 down
+every frame. Ask for its dots after frames 1, 2 and 3. What do you notice?
+
+::: {.check}
+The enemy is at (−3, 1), (−1, 0) and (1, −1). After 2 frames it is on the
+x-axis (y = 0, in no quadrant); after 3 frames it is in quadrant IV.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
+:::
+
+## Wrap-up {.summary}
+
+- You can find where coordinates, vectors and other mathematics work in a
+  game.
+- You can turn a level description into coordinates and quadrants.
+- You can find the vector from one object to another, its velocity per
+  frame, and a move in 3D.

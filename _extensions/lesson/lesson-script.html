@@ -14,8 +14,61 @@
   // "Do it" and "Lab task" boxes (callout-note with that title) get their own look.
   // The title attribute holds the plain title (the visible title also has a
   // hidden "Note" label for screen readers).
+  // "Task with AI" boxes get theirs too, and each starter prompt a copy button.
   for (const c of document.querySelectorAll(".callout-note")) {
-    if (/^\s*(Do it|Lab task)/.test(c.getAttribute("title") || "")) c.classList.add("do-it");
+    const t = c.getAttribute("title") || "";
+    if (/^\s*(Do it|Lab task|Activity)/.test(t)) c.classList.add("do-it");
+    if (/^\s*Task with AI/.test(t)) c.classList.add("ai-task");
+  }
+  for (const p of document.querySelectorAll("div.prompt")) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy-prompt";
+    btn.textContent = "Copy prompt";
+    btn.addEventListener("click", async () => {
+      const text = p.innerText.replace(/\s*Copy prompt\s*$/, "").trim();
+      let ok = false;
+      try { await navigator.clipboard.writeText(text); ok = true; } catch (_) {}
+      if (!ok) {
+        // No clipboard access: select the text, try the older copy command,
+        // and else leave it selected so the student can copy it by hand.
+        const r = document.createRange();
+        r.selectNodeContents(p.firstElementChild || p);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+        try { ok = document.execCommand("copy"); } catch (_) {}
+      }
+      btn.textContent = ok ? "✓ Copied" : "Selected: copy it now";
+      setTimeout(() => { btn.textContent = "Copy prompt"; }, 2000);
+    });
+    p.appendChild(btn);
+  }
+
+  // Worksheet fields ({{< record >}} and the empty cells of a .record-table):
+  // what the student types stays in this browser only, so the results are
+  // still there when the page opens again. The page works the same without storage.
+  for (const td of document.querySelectorAll(".record-table td")) {
+    if (td.textContent.trim() === "") {
+      td.classList.add("record-cell");
+      td.contentEditable = "true";
+      td.spellcheck = false;
+    }
+  }
+  const fields = [...document.querySelectorAll(".record-input, td.record-cell")];
+  if (fields.length) {
+    const recKey = "rec:" + location.pathname;
+    let rec = {};
+    try { rec = JSON.parse(localStorage.getItem(recKey) || "{}") || {}; } catch (_) {}
+    const read = (el) => (el.tagName === "TD" ? el.textContent : el.value);
+    const write = (el, v) => { if (el.tagName === "TD") el.textContent = v; else el.value = v; };
+    fields.forEach((el, i) => {
+      if (typeof rec[i] === "string") write(el, rec[i]);
+      el.addEventListener("input", () => {
+        rec[i] = read(el);
+        try { localStorage.setItem(recKey, JSON.stringify(rec)); } catch (_) {}
+      });
+    });
   }
 
   // Resize simulator iframes to the height they report (shared/sims/sim-base.js).
@@ -28,8 +81,11 @@
   });
 
   // "Try it" matching (match.lua): the student taps the right answer for the
-  // question in colour and sees at once if it is right. When all questions are
-  // right, the box sends "match:done" (the "I did it" button below listens).
+  // question in colour and sees at once if it is right, with the reason
+  // ("Why:"). After two wrong tries the right answer is shown with its reason
+  // and the question does not count as right at the first try. When all
+  // questions are answered, the box sends "match:done" (the "I did it" button
+  // below listens).
   for (const box of document.querySelectorAll(".match")) {
     const qs = [...box.querySelectorAll(".match-q")];
     const wrap = box.querySelector(".match-opts");
@@ -50,9 +106,22 @@
       }
       opts.forEach((o) => wrap.appendChild(o));
     };
+    // Mark q as answered with option o (and show its reason, if it has one).
+    const solve = (q, o, mark) => {
+      q.classList.remove("is-wrong");
+      q.classList.add("is-right");
+      q.querySelector(".match-slot").innerHTML = mark + o.innerHTML;
+      const why = q.querySelector(".match-why");
+      if (why) why.hidden = false;
+      if (!reuse) { o.disabled = true; o.classList.add("is-used"); }
+    };
+    const next = () => {
+      const n = qs.find((x) => !x.classList.contains("is-right"));
+      if (n) select(n); else finish();
+    };
     const finish = () => {
       select(null);
-      say("");
+      if (!feedback.classList.contains("shown")) say("");
       score.textContent = (firstTry === qs.length ? "🏆 " : "🎉 ") +
         "All done! " + firstTry + " / " + qs.length + " right at the first try.";
       reset.hidden = false;
@@ -61,9 +130,11 @@
     const start = () => {
       firstTry = 0;
       qs.forEach((q) => {
-        q.classList.remove("is-right", "is-wrong");
+        q.classList.remove("is-right", "is-wrong", "is-shown");
         delete q.dataset.miss;
         q.querySelector(".match-slot").textContent = "?";
+        const why = q.querySelector(".match-why");
+        if (why) why.hidden = true;
       });
       opts.forEach((o) => { o.disabled = false; o.classList.remove("is-used", "is-wrong"); });
       say("");
@@ -85,19 +156,25 @@
         const q = active;
         if (!q) return;
         if (q.dataset.a === o.dataset.o) {
-          q.classList.remove("is-wrong");
-          q.classList.add("is-right");
-          q.querySelector(".match-slot").innerHTML = "✓ " + o.innerHTML;
           if (!q.dataset.miss) firstTry++;
-          if (!reuse) { o.disabled = true; o.classList.add("is-used"); }
+          solve(q, o, "✓ ");
           say("✓ Right!", "good");
-          const next = qs.find((x) => !x.classList.contains("is-right"));
-          if (next) select(next); else finish();
+          next();
         } else {
-          q.dataset.miss = "1";
+          const miss = (Number(q.dataset.miss) || 0) + 1;
+          q.dataset.miss = String(miss);
           replay(q, "is-wrong");
           replay(o, "is-wrong");
-          say("✗ Not this one. Try again.", "bad");
+          if (miss < 2) {
+            say("✗ Not this one. Try again.", "bad");
+          } else {
+            // Two wrong tries: show the right answer and why, then go on.
+            const right = opts.find((x) => x.dataset.o === q.dataset.a);
+            solve(q, right, "→ ");
+            q.classList.add("is-shown");
+            say("The right answer is shown, with the reason. Read it, then go on.", "shown");
+            next();
+          }
         }
       });
     });

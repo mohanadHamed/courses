@@ -1,0 +1,99 @@
+---
+title: "Logic Exercises: Game States and Conditions"
+subtitle: "Seminar 8 · practises Lecture 8"
+format: lesson-pptx
+---
+
+## Recall · Lecture 8
+
+a) How many rows has the truth table of 3 variables?
+b) Which C# condition means "exactly one of p and q"?
+c) What is p → q when p = T and q = F?
+
+::: {.answer}
+a) 8
+b) p ^ q
+c) false
+:::
+
+## Activity 1 · Words to code · 15 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A farm game has the states isDay, inFight, hasSeeds, hasWater and isRaining.
+- **Do it:** Write four rules as C# conditions: the shop, planting, the scarecrow warning, and a crop that grows with rain or water but not both.
+- Your product is four conditions.
+:::
+::: {.column width="50%"}
+![](images/not-and-or.png)
+:::
+::::
+
+## Check 1 · Words to code
+
+Which conditions match the four rules?
+
+::: {.reveal}
+1. The shop is open with isDay && !inFight.
+2. The player can plant with hasSeeds && (hasWater || isRaining): the brackets are needed.
+3. The warning shows with !isDay || inFight.
+4. The crop grows with isRaining ^ hasWater, because "but not both" is XOR.
+:::
+
+## Activity 2 · Find the bug · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The dock door rule is p ∧ (q ∨ r), but the code says hasPass && shieldsUp || officer.
+- **Do it:** Make the truth table in Truth Table Lab. Test the row (F, F, T). Then write the corrected condition.
+- Your product is the true rows, one bug and its fix.
+:::
+::: {.column width="50%"}
+![](images/tt-rows.png)
+:::
+::::
+
+## Live demo · Truth Table Lab
+
+{{< sim file="sims/truth-table-lab.html" poster="sims/truth-table-lab.png" title="Truth Table Lab: every case of a condition" task="**Show:** the table of p ∧ (q ∨ r). **Ask:** what does the row (F, F, T) say about an officer without a pass?" >}}
+
+## Check 2 · Find the bug
+
+Why does the code open the door for an officer alone?
+
+::: {.reveal}
+1. The rule p ∧ (q ∨ r) is true in 3 of the 8 rows.
+2. In the row (F, F, T) the table says shut, but the code opens the door.
+3. The code computes && before ||, so it means (hasPass && shieldsUp) || officer.
+4. The fix is hasPass && (shieldsUp || officer).
+:::
+
+## Activity 3 · Kept or broken? · 15 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Rule 1 says: if the player has the map, then the cave is shown. Rule 2 says: if the dragon is awake, then the music is loud.
+- **Do it:** For the states A (T, T, F, F), B (T, F, T, T), C (F, T, T, F) and D (F, F, F, F), write kept or broken for each rule.
+- Your product is a table of four states.
+:::
+::: {.column width="50%"}
+![](images/xor-implies.png)
+:::
+::::
+
+## Check 3 · Kept or broken?
+
+Which states break a rule?
+
+::: {.reveal}
+1. In A both rules are kept, because the dragon is asleep.
+2. In B rule 1 is broken: the player has the map, but the cave is not shown.
+3. In C rule 2 is broken: the dragon is awake, but the music is not loud.
+4. In D both rules are kept, and hasMap && !caveShown finds a broken rule 1.
+:::
+
+## Wrap-up
+
+- You can write the rules of a game as conditions with brackets.
+- You can use a truth table as a test plan and find a bug.
+- You can check which game states keep or break an IF–THEN rule.

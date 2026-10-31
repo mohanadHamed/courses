@@ -1,0 +1,307 @@
+---
+title: "Setting Up Test Environments: Emulators and Real Devices"
+description: "The parts of a test environment, emulators and the iOS Simulator, preparing real devices with developer options, and a device matrix that says which test runs where."
+lesson: 12
+ilos: [C1]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem of a tester. Then it explains the idea behind it. It
+ends with a **Do it** task and one set of questions. Every question on this
+page has its answer: try first, then check.
+
+## Key terms
+
+{{< glossary test-environment emulator ios-simulator android-studio avd system-image test-device developer-options usb-debugging adb device-farm device-matrix >}}
+
+## 12.1 What is a test environment?
+
+- **The build** (one exact version), **the devices** (with their OS
+  versions), **the tools** (Android Studio, adb, Logcat; Xcode), **the test
+  plan**, **the bug report**.
+- Write the setup down, so that others can repeat the test.
+- Star Garden 2.0, build 17: a tablet emulator, an emulator with Android 9,
+  the team's phone for the reminders, the iOS Simulator on a Mac.
+
+![A test environment.](images/test-environment.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+"It works on my phone" is not a test result: name the build, the device and
+the OS version.
+:::
+
+::: {.callout-note title="Do it · Your test setup"}
+Write the test environment for one game on your phone: the build (the
+version in the store), the device, the OS version, and two tests.
+
+::: {.check}
+A good answer looks like: "Build: version 3.2.1 (from the store page).
+Device: Samsung A35. OS: Android 14. Tests: the first level on mobile data;
+the settings menu in landscape."
+
+- ☐ An exact version, a device and an OS version.
+- ☐ Two tests that someone else could repeat.
+:::
+:::
+
+::: {.callout-tip title="Try it 1 · The parts"}
+Choose the part of the test environment.
+
+::: {.match extra="the logo|the price"}
+PocketQuest_1.3, build 42.
+:   the build
+
+    Why: The build is one exact version of the game.
+
+The P5 with Android 11.
+:   a test device
+
+    Why: A device with a known OS version.
+
+Android Studio, adb, Logcat.
+:   the tools
+
+    Why: The tools build, install and read the log.
+
+Which test runs on which device.
+:   the test plan
+
+    Why: The plan connects tests and devices.
+:::
+:::
+
+## 12.2 Emulators and simulators
+
+- **Emulator:** copies the device; the real app runs. **AVD** = a device
+  profile (screen, RAM) + a **system image** (Android version, for example
+  API 30).
+- **iOS Simulator:** in Xcode, on a Mac only; imitates iOS.
+- Good for versions and sizes; **not** for speed, heat, battery, sensors.
+- The P5 twin: 720 × 1600, 4 GB, API 30. The oldest supported: API 26
+  (Android 8). A tablet: API 33.
+- The emulator needs **virtualization** on in the BIOS.
+
+![Emulator or real device?](images/emulator-vs-real.png){width=90%}
+
+{{< sim file="sims/avd-builder.html" poster="sims/avd-builder.png" title="AVD Builder: virtual devices for Pocket Quest" height="840" >}}
+
+::: {.callout-warning title="Watch out!"}
+60 fps in the emulator does not mean 60 fps on the phone: the computer is
+much stronger.
+:::
+
+::: {.callout-note title="Do it · Build three AVDs"}
+In **AVD Builder**, create the P5 twin, the oldest supported phone and the
+tablet. Write one thing each can test and one thing it cannot.
+
+::: {.check}
+P5 twin (720 × 1600, 4 GB, API 30): the layout and the menus of the P5 /
+not its speed or heat. Oldest phone (API 26): does the game start on
+Android 8? / not the real speed. Tablet (API 33): the tablet layout / not
+touch on a real 10-inch screen, nor the battery.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · AVDs"}
+Use AVD Builder. Choose the right answer.
+
+::: {.match extra="a cable|a USB stick"}
+The screen size and the RAM of an AVD.
+:   the device profile
+
+    Why: The profile says which device the AVD copies.
+
+The Android version of an AVD.
+:   the system image
+
+    Why: One system image is one Android version.
+
+Android 8 as a system image.
+:   API 26
+
+    Why: Each Android version has an API level; Android 8 is API 26.
+
+What must be on in the BIOS for a fast emulator?
+:   virtualization
+
+    Why: The processor helps to run the virtual device.
+:::
+:::
+
+## 12.3 Real devices
+
+- Android: **developer options** (tap the build number 7 times) → **USB
+  debugging** → cable → allow the computer → `adb devices` → `adb install`.
+- iPhone: a Mac with Xcode, or a beta build through TestFlight.
+- **Device farm:** real phones in the cloud, rented by the hour.
+- Only a real phone shows the heat of a long race, the battery and the
+  sensors.
+
+![Preparing a real Android device.](images/real-device-setup.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+Switch USB debugging off on a personal phone after testing, and install
+builds only from your studio.
+:::
+
+::: {.callout-note title="Do it · Prepare a phone"}
+On an Android phone, find the build number, switch on developer options and
+find USB debugging. Change nothing else. On an iPhone, find the iOS version.
+
+::: {.check}
+Android: Settings › About phone › (Software information) › Build number,
+tapped seven times: "You are now a developer". Then Settings › System ›
+Developer options › USB debugging (on Samsung: Settings › Developer
+options). iPhone: Settings › General › About › iOS version. Switch
+developer options off again on a personal phone.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Real devices"}
+Choose the right answer.
+
+::: {.match extra="restart the router|buy a new phone"}
+How do you show the developer options?
+:   tap the build number 7 times
+
+    Why: It is in About phone.
+
+adb devices shows "unauthorized". What do you do?
+:   allow the computer on the phone
+
+    Why: The phone has not trusted this computer yet.
+
+How do you test an iPhone build?
+:   a Mac with Xcode, or TestFlight
+
+    Why: iPhones get test builds only these ways.
+
+15 real phones for a few hours?
+:   a device farm
+
+    Why: A device farm rents real phones in the cloud.
+:::
+:::
+
+## 12.4 Choosing a device matrix
+
+- Cover the **oldest and newest OS**, the **weakest device** (real), the
+  main **screen sizes**, **both platforms**, and real devices for speed,
+  heat, battery and sensors.
+- Emulators for breadth, real devices for truth, a device farm for the
+  final check.
+
+![A device matrix.](images/device-matrix.png){width=90%}
+
+{{< sim file="sims/matrix-builder.html" poster="sims/matrix-builder.png" title="Matrix Builder: which devices for the test?" height="720" >}}
+
+::: {.callout-warning title="Watch out!"}
+Do not test only on the newest phone of the team: most players have weaker
+devices.
+:::
+
+::: {.callout-note title="Do it · Your matrix"}
+In **Matrix Builder**, cover every row for $300 or less. Then write a
+five-row matrix for a game you know: device, kind, OS, why.
+
+::: {.check}
+In Matrix Builder: the free AVDs (API 26, API 34, tablet), the real P5 and
+a few device-farm hours cover every row for less than $300. A good matrix
+has the oldest and the newest OS, the weakest real phone, a tablet or a big
+screen, and an iPhone (real, farm or Simulator), each with a reason.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · The matrix"}
+Use Matrix Builder. Choose the right answer.
+
+::: {.match extra="the newest phone only|a printer"}
+The free way to test Android 8?
+:   an AVD with API 26
+
+    Why: A system image for each version is free.
+
+Which row can only a real phone cover?
+:   speed, heat and touch
+
+    Why: An emulator runs on the computer's power.
+
+Real iPhones and tablets without buying them?
+:   a device farm
+
+    Why: The team rents real devices by the hour.
+
+Why test on the weakest supported phone?
+:   it sets the minimum requirements
+
+    Why: If it runs there, it runs for all supported players.
+:::
+:::
+
+## Game challenge: Emulator or Real? {.challenge}
+
+Work alone. Use every section of today.
+
+Rami's test plan for **Pocket Quest 1.3** has **six tests**: the menu on
+**six screen sizes**, **heat** on the P5 after **20 minutes**, the start on
+**Android 8**, the new menu on **iPhone screens** with no iPhone at hand, a
+final check on **15 real phones**, and tilt steering with the
+**gyroscope**.
+
+{{< sim file="sims/emulator-or-real.html" poster="sims/emulator-or-real.png" title="Emulator or Real? The right place for each test" kind="game" height="460" >}}
+
+::: {.callout-tip title="Try it 5 · The tests"}
+Choose the best environment. You can use an answer more than once.
+
+::: {.match extra="a printer|a router"}
+The menu on six screen sizes.
+:   Android emulators
+
+    Why: AVDs give any screen size for free.
+
+Heat after a 20-minute race.
+:   a real phone
+
+    Why: An emulator does not heat up like a phone.
+
+The iPhone menu, with no iPhone today.
+:   the iOS Simulator on a Mac
+
+    Why: The Simulator shows iPhone screens.
+
+Tilt steering with the gyroscope.
+:   a real phone
+
+    Why: Emulators do not have real sensors.
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Plan and setup (harder)"}
+Choose the right answer.
+
+::: {.match extra="the newest phone|the P8 only"}
+The start on Android 8, with no Android 8 phone.
+:   an AVD with API 26
+
+    Why: A system image gives any Android version.
+
+A final check on 15 real phones.
+:   a device farm
+
+    Why: Rented real phones cover many models.
+
+What must Rami write next to every test result?
+:   the build, the device and the OS version
+
+    Why: Then others can repeat the test.
+:::
+:::
+
+## Summary {.summary}
+
+- A test environment: build, devices, tools, test plan, bug report.
+- Emulators (AVDs) and the iOS Simulator: many versions and sizes, free.
+- Real devices: speed, heat, battery, sensors and touch.
+- Prepare Android phones with developer options and USB debugging.
+- A device matrix covers versions, sizes, platforms and the weakest device.

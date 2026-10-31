@@ -4,10 +4,15 @@
 Quarto names each output after its source file (lesson-05-book.pdf), so every
 course has the same names. After the render, this step renames them in _site:
 
-    lesson-05-book.pdf    -> math_lecture5.pdf
-    lesson-05-slides.pptx -> math_lecture5_slides.pptx
-    homework-03.pdf       -> math_homework3.pdf
-    lesson-02.pdf         -> digital_skills_lecture2_tasks.pdf (online activity)
+    lesson-05-book.pdf      -> math_lecture5.pdf
+    lesson-05-slides.pptx   -> math_lecture5_slides.pptx
+    lesson-06-sheet.pdf     -> digital_skills_lecture6_sheet.pdf (lecture worksheet)
+    seminar-02-book.pdf     -> math_seminar2.pdf
+    seminar-02-slides.pptx  -> math_seminar2_slides.pptx
+    practice-03-book.pdf    -> digital_skills_practice3.pdf
+    homework-03.pdf         -> math_homework3.pdf (homework of unit 3)
+    online-04.pdf           -> digital_skills_online4_tasks.pdf (online activity)
+    lesson-02.pdf           -> digital_skills_lecture2_tasks.pdf (older online activity)
 
 The prefix is `course.file-prefix` in courses/<slug>/_metadata.yml (else the
 slug with "_" for "-"). banner.lua and the schedule shortcode link the same
@@ -24,7 +29,13 @@ import re
 RULES = [
     (re.compile(r"^lesson-(\d+)-book\.pdf$"), "{prefix}_lecture{n}.pdf"),
     (re.compile(r"^lesson-(\d+)-slides\.pptx$"), "{prefix}_lecture{n}_slides.pptx"),
+    (re.compile(r"^lesson-(\d+)-sheet\.pdf$"), "{prefix}_lecture{n}_sheet.pdf"),
+    (re.compile(r"^seminar-(\d+)-book\.pdf$"), "{prefix}_seminar{n}.pdf"),
+    (re.compile(r"^seminar-(\d+)-slides\.pptx$"), "{prefix}_seminar{n}_slides.pptx"),
+    (re.compile(r"^practice-(\d+)-book\.pdf$"), "{prefix}_practice{n}.pdf"),
+    (re.compile(r"^practice-(\d+)-slides\.pptx$"), "{prefix}_practice{n}_slides.pptx"),
     (re.compile(r"^homework-(\d+)\.pdf$"), "{prefix}_homework{n}.pdf"),
+    (re.compile(r"^online-(\d+)\.pdf$"), "{prefix}_online{n}_tasks.pdf"),
     (re.compile(r"^lesson-(\d+)\.pdf$"), "{prefix}_lecture{n}_tasks.pdf"),
 ]
 

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Platform Pick</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Platform Pick</h1>
+  <p class="hint">The producer of <b>Byte Bay</b> asks about the launch of <i>Pocket Quest</i>. Each question has one best answer about Android and iOS.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { tag: "Build", goal: "Byte Bay has only Windows PCs. For which platform can it make a build <b>this week</b>?", choices: C(["Android", "iOS", "both", "neither"]), answer: "Android",
+      good: "Android builds are made on any PC. An iOS build needs a Mac with Xcode.", why: { iOS: "Without a Mac there is no iOS build." } },
+    { tag: "Reach", goal: "The producer wants the game on <b>as many phones as possible</b> worldwide with one platform first. Which one?", choices: C(["Android: about 7 in 10 phones", "iOS: about 7 in 10 phones", "they are equal", "the platform with the newest phones"]), answer: "Android: about 7 in 10 phones",
+      good: "Worldwide, about seven in ten phones run Android. In some countries iPhones are more common: check the market of the game.", why: { "they are equal": "Worldwide they are not equal." } },
+    { tag: "Testing", goal: "Why does an Android launch need <b>more test phones</b> than an iOS launch?", choices: C(["many makers, screens, chips and versions", "Android games are longer", "iPhones never have bugs", "Android has no emulator"]), answer: "many makers, screens, chips and versions",
+      good: "Fragmentation: Android runs on thousands of models. Apple makes a few iPhone models, and most of them run a recent iOS.", why: { "iPhones never have bugs": "They do; there are just fewer models to test." } },
+    { tag: "Source", goal: "The producer asks for the <b>share of Android phones in Jordan</b>. Which source does Rami use?", choices: C(["a market report with its data and the month", "a forum post without a date", "a shop blog from 2019", "the first advert in the search"]), answer: "a market report with its data and the month",
+      good: "A reliable source has a known author, a date and its data. A share changes: write the month in the table.", why: { "a shop blog from 2019": "Old, and it sells something: not a source for a share today.", "a forum post without a date": "No author and no date: you cannot check it." } },
+    { tag: "Updates", goal: "A bug appears only on <b>Android 11</b>. Why must Byte Bay still care about such an old version?", choices: C(["many Android phones never get the newest version", "Android 11 is the newest version", "Google updates every phone at once", "old versions have no players"]), answer: "many Android phones never get the newest version",
+      good: "Android updates come from each phone maker, late or never. iPhones get iOS updates from Apple, for all supported models at once.", why: { "Google updates every phone at once": "Phone makers deliver the updates, not Google alone." } },
+    { tag: "Installing", goal: "A tester wants to install the game <b>from a file</b>, outside the store. On which platform is this simple?", choices: C(["Android: an .apk with 'install unknown apps'", "iOS: an .ipa from a website", "both, the same way", "neither"]), answer: "Android: an .apk with 'install unknown apps'",
+      good: "Android allows apps from files and other stores (sideloading). iOS uses the App Store (other app stores only in some regions).", why: { "iOS: an .ipa from a website": "iPhones do not install apps from websites." } },
+  ];
+  Kit.game({
+    rounds, cols: 1, colsPhone: 1, animMs: 600, still: true,
+    intro: "Round 1 is the story of the lesson: the studio's computers.",
+    canvas: () => 70,
+    draw(c, W, H, now, r) {
+      c.fillStyle = "#fffdf5"; c.fillRect(0, 0, W, H);
+      if (!r) return;
+      const tags = ["Build", "Reach", "Testing", "Money", "Updates", "Installing"], w = (W - 20) / tags.length;
+      tags.forEach((t, i) => { const on = t === r.tag; Kit.rrect(c, 10 + i * w + 3, 16, w - 6, 38, 10, on ? "#A86700" : "#fff9db", "#A86700", 2); Kit.text(c, t, 10 + i * w + w / 2, 40, W < 460 ? 9.5 : 12.5, on ? "#fff" : "#7a5a00"); });
+    },
+  });
+})();
+</script>
+</body>
+</html>

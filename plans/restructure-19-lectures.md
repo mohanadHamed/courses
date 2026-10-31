@@ -1,7 +1,8 @@
-# Plan: answered pages, simpler lessons, lectures and seminars in a 15-week plan, study with AI
+# Plan: answered pages, simpler lessons, lectures and seminars in a 15-week plan, tasks with AI
 
 Status: approved on 2026-10-28 and revised the same day (version 2, see
-"Why version 2"). Implementation not started. Do the work on a new branch
+"Why version 2"; Part 4 revised the same day). Implementation started
+on 2026-10-28 (branch `restructure-units`). Do the work on a new branch
 from `main`, in **one pull request**, as described in "Implementation"
 below. This file is not published (only `.qmd` files become pages).
 
@@ -21,8 +22,9 @@ below. This file is not published (only `.qmd` files become pages).
    (always taught). The other sessions are seminars or practice sessions that
    are taught when time allows and otherwise studied at home. Lecture length
    does not grow (90 min Game Math, 60 min the others).
-4. **Study with AI.** Activities in which the student uses an AI chat to
-   understand the lesson faster, only where this really helps.
+4. **Tasks with AI.** Lessons built for students who have AI assistants:
+   some tasks are set at a higher level, with guidance on how to reach it
+   with AI and how to check the AI's work (Part 4).
 5. **Moodle weeks.** Texts for the platform weeks without new teaching
    (introduction, review, exams, catch-up).
 
@@ -484,77 +486,103 @@ margin is on the face-to-face side.
 - Images and simulators move with their session. Old printed QR codes may
   open another session (accepted).
 
-## Part 4 · Study with AI
+## Part 4 · Tasks with AI (revised 2026-10-28)
 
-### Four kinds of activity, chosen because they speed up understanding
+### The idea (the teacher's clarification)
 
-Each one ends with a check, because the AI can be wrong.
+Students have AI assistants. A lesson that only asks simple questions lets a
+student paste them into an AI and learn nothing. Asking an AI to explain the
+lesson is something every student can do alone; it needs no lesson. Instead,
+the lessons are built **for a world with AI**: some tasks are set at a
+**higher level than students could reach alone in the time**, with guidance
+on how to use an AI assistant to reach it. The student uses AI to do more,
+not to do the homework for them, and learns to use AI well. This replaces
+the "Study with AI" boxes of the first version of this plan (explain it,
+quiz me, review my work, find the mistake).
 
-| Kind | What the student does | Best for | Check |
-|---|---|---|---|
-| 1. Explain it another way | Copies a ready prompt: "Explain X in Arabic with a game example, in 5 sentences." | The hardest idea of a lecture; students whose English is weak. | Compare with the lesson's definition: the given key words must appear. |
-| 2. Quiz me | "Ask me 3 questions about X, one at a time; give me a hint, not the answer." | Ideas that need more practice, after the Try it. | Answers come from the lesson; compare with the notes. |
-| 3. Review my work | Pastes their own result and the lesson's checklist: "What is missing by this checklist?" | Seminar activities: premise, scene, storyboard, spec comparison, a Word or Excel file. | The student decides which comments to accept and writes one line why. |
-| 4. Find the mistake | The page shows a prepared AI answer (fixed text) with one or two planted mistakes; the student finds them. | Every course; especially arithmetic in Game Math and made-up specs in Computing Systems. | A `match` question with `Why:`: answered at once, no AI account needed. |
+### What a Task with AI looks like
 
-Left out on purpose:
+```markdown
+::: {.callout-note .ai-task title="Task with AI · Simulate 1000 loot drops"}
+**Goal:** a sheet that rolls 1000 drops of the loot table and compares them
+with the expected numbers.
 
-- "Write the solution for me": it replaces the learning.
-- "Generate new problems": AI arithmetic is not reliable. Use it rarely, and
-  only when the student verifies in GeoGebra or a simulator.
-- AI-generated images, sound or video in Digital Media: unclear rights, and it
-  skips the production ILOs. Mention it only as a case in the IP sessions.
+1. **Ask the AI:** start with this prompt and add your table.
 
-### Form and place
+   ::: {.prompt}
+   Write spreadsheet formulas that roll one loot drop per row …
+   :::
 
-- A new box, in the notes (PDF) and on the page:
+2. **Do it yourself:** paste the formulas, fill 1000 rows, count each item.
+3. **Check:** work out by hand the expected number of rare drops
+   (1000 × 5 % = 50). Your sheet must give about 50. If not, find the
+   mistake in the AI's formulas.
 
-  ```markdown
-  ::: {.callout-note .ai-study title="Study with AI · Explain the dot product in Arabic"}
-  Goal: …
-  ::: {.prompt}
-  Explain the dot product to a first-year student in Arabic … in 5 sentences.
-  :::
-  Check: the answer must say … If it says …, it is wrong.
-  :::
-  ```
+*Your product:* the sheet, and one sentence on what the AI got wrong or what
+you changed.
 
-  - HTML: a "Copy prompt" button (`lesson-script.html`) and its own colour
-    (`lesson.css`).
-  - PDF: the same box with the prompt printed (`typst-body.typ`).
-- 0–2 boxes per session, in the hardest place, not one per section ("No
-  repetition"). Kinds 1, 2 and 4 suit lectures; kind 3 suits seminars. Home
-  study: not counted in the session time, not on the slides.
-- Where it helps (audit judgement):
-  - **game-math:** vectors, dot product, trigonometry, matrices and logic
-    (explain, quiz me); conditional probability and matrix products (find
-    the mistake only); fairness and the course revision. Not in 3D
-    transformation chains or random generation (unreliable arithmetic; the
-    simulators do it better).
-  - **computing-systems:** components, spec comparison, the smartphone and
-    its spec sheet (explain one line of my phone's sheet: the model name
-    only, checked on the maker's page); Android vs iOS (best fit: check AI
-    claims against official sources, the D1 skill); app stores; gaming
-    platforms; performance cases.
-  - **digital-media:** story fundamentals, story structure, the premise (best
-    fit: review against the six questions, without the AI rewriting it), the
-    scene, IP (find the mistake: "under 10 seconds is fair use"), licences
-    and credits. Not in the audio and video production sessions.
-  - **digital-skills:** accounts and files, Office terms, Word, Excel (the
-    strongest: relative and absolute references), charts, PowerPoint. None
-    in sessions whose topic is AI. Not before the prompts activity.
-- Fixed rules (new `AUTHORING.md` section "Study with AI"):
-  - free tools named generally, as in `digital-skills/NOTES.md` (Microsoft
-    Copilot with the university account, ChatGPT, Gemini);
-  - no personal data;
-  - every activity ends with a check;
-  - AI is for understanding the lesson, not for writing graded work. Every
-    homework page gets one line: "You may use AI to understand the lesson.
-    Write the answers yourself.";
+::: {.check}
+A good sheet … (on the page; in the PDF at the end)
+:::
+:::
+```
+
+- **A product beyond the usual level**, inside the ILOs of the session (never
+  a topic of a later week): something that is long or hard by hand, such as
+  1000 random rolls, a five-phone comparison table, a story with three
+  endings and its storyboard, a licence audit of 20 assets.
+- **A starter prompt** (`.prompt`, with a "Copy prompt" button on the page).
+- **The student's own part**: they build, change, choose or decide.
+- **A check with the tools of the lesson**: a value worked by hand, a
+  simulator, GeoGebra, the maker's page, the official source. The AI can be
+  wrong, and finding where it is wrong is part of the task.
+- **A product** to keep or hand in, and one sentence on what the AI got
+  wrong or what the student changed.
+- On the page and in the notes the box has a `.check` (a model product and a
+  self-check list). In graded work (homework, Tasks to submit) it has no
+  `.check` and asks for the AI-use statement.
+
+### Where
+
+- 0–2 per session, only where AI really lets students do more: often a
+  seminar activity, the Game challenge, or a homework task. Not on the
+  slides (home or seminar work).
+- Homework: where a short question could be pasted into an AI, prefer one
+  small Task with AI, with the AI-use statement. The whole homework takes
+  about 10 minutes, never more than 15, and never gets longer than it is
+  (the teacher's rule, 2026-10-29). The homework
+  page says: "You may use AI where a task says so. Check its work and say
+  how you used it."
+- Ideas per course:
+  - **game-math:** a sheet of 1000 rolls of a loot table or a crit chance
+    against the expected value; GeoGebra commands from the AI for a path of
+    10 points or a chain of transformations, checked at two points by hand;
+    a rule table (truth table) for a door with four conditions, checked row
+    by row.
+  - **computing-systems:** a comparison table of five phones or consoles
+    from an AI draft, three numbers checked on the makers' pages; a test
+    plan for a game on four devices; a store-listing checklist checked
+    against the official store guidelines (D1, reliable sources).
+  - **digital-media:** a branching story with three endings, edited by the
+    student and drawn as a storyboard; a scene drafted with AI and rewritten
+    in screenplay format; a credits list and licence audit of 20 assets,
+    each licence checked at its source. Never AI images, sound or video as
+    the student's media product (unclear rights; it skips the production
+    ILOs); it is a case in the IP sessions.
+  - **digital-skills:** AI is already the subject of many sessions; the
+    Tasks with AI there are the Office tasks done with AI help at a higher
+    level (a formatted report, a budget with formulas and a chart), always
+    with checking and, from unit 11, the AI-use statement.
+- Fixed rules (new `AUTHORING.md` section "Tasks with AI"):
+  - free tools named generally (Microsoft Copilot with the university
+    account, ChatGPT, Gemini); no task needs a paid plan;
+  - no personal data in a prompt;
+  - every task has a check step;
   - the rule "no tool or assistant names" keeps applying to how the lessons
     are made, not to the tools students use.
-- `check_size.py` counts `.ai-study` boxes: warn above 2 per session, and when
-  a box has no `.prompt` or no "Check:" line.
+- `check_size.py`: at most 2 per session; a box without `.prompt` or without
+  a check step is a warning; on a page it needs a `.check`; in graded work
+  it must ask for the AI-use statement and show no `.check`.
 
 ## Part 5 · The 15-week course package and the Moodle weeks
 
@@ -605,7 +633,7 @@ sessions, not weeks.
 Branch from `main`, one pull request, one commit per step below.
 
 1. **Pipeline:**
-   - `match.lua` (`Why:`, `.check`, `.ai-study` / `.prompt`);
+   - `match.lua` (`Why:`, `.check`, `.prompt` of the Tasks with AI);
    - `lesson-script.html` (reason, reveal after two wrong tries, copy button);
    - `lesson.css`, `typst-body.typ`;
    - `book.lua` ("Results of the Do it tasks" / "Results of the activities");
@@ -642,7 +670,7 @@ Branch from `main`, one pull request, one commit per step below.
    - units, lectures, seminars, practice and online sessions; core and
      flexible sessions; numbering and names;
    - "What a seminar looks like";
-   - "Study with AI";
+   - "Tasks with AI";
    - the course package;
    - homework one per unit;
    - a lessons-learned entry for 2026-10-28.
@@ -657,7 +685,7 @@ Branch from `main`, one pull request, one commit per step below.
    - new case-study numbers;
    - the error fixes;
    - `Why:` and `.check` everywhere;
-   - the Study with AI boxes;
+   - the Tasks with AI;
    - slides derived again from the notes (seminar decks in the seminar style);
    - homework renumbered by unit;
    - new GIF recordings only for changed simulators

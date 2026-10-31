@@ -23,14 +23,44 @@
 --     recording="sims/other.gif" (made by shared/sims/recordings/).
 --
 --   {{< schedule >}}
---     Course page: every lecture from courses/<slug>/schedule.yml, in pairs,
---     each pair with its homework. A ready lecture (its .qmd exists, no `draft: true`) is bright and
---     links its page, PDF and slides; the others are faded ("coming soon").
---     The review profile shows drafts as ready.
---     Blended course: a lecture with `online: true` (schedule.yml or its
---     front matter) is an online activity: it is tagged "Online", links its
---     page and its tasks PDF (<prefix>_lectureN_tasks.pdf), and shows its due
---     lecture and marks.
+--     Course page: every week of courses/<slug>/schedule.yml (`units:`), in
+--     teaching order. A core week is a unit ("Unit N": Lecture N, Seminar N
+--     or Online activity N, and Homework N); a filling week (`filling: true`)
+--     is a "Practice week" with no new ideas, tagged "Flexible". Every
+--     session is labelled "Lecture N", "Seminar N", "Practice N" or "Online
+--     activity N"; practice sessions (and a seminar with `core: false`) are
+--     tagged "Flexible". A ready session (its .qmd exists, no `draft: true`)
+--     is bright and links its page, PDF and slides; the others are faded
+--     ("coming soon"). The review profile shows drafts as ready. Files of a
+--     week are in week-WW (WW = its syllabus week): lesson-NN, seminar-NN,
+--     practice-NN, online-NN and homework-UU (UU = the unit).
+--     Older schedules (`lectures:`, before units) are shown in pairs.
+--
+--   Lecture worksheets (a practical course; AUTHORING.md, "Lecture worksheets"):
+--   {{< record "D2 shows" >}}  /  {{< record "What happened?" lines=2 >}}
+--     The place to record the result of one step of an experiment
+--     (lesson-NN-sheet.qmd). PDF: the label and a dotted line (or lines, or
+--     box=4: an empty box, cm) to write on. Page: a text field; what the
+--     student types stays in this browser only. Slides: nothing.
+--   {{< experiment 2 >}}  /  {{< experiment results >}}
+--     Interactive lesson (lesson-NN.qmd): Experiment 2 of the worksheet next
+--     to it ("## Experiment 2 · …" in lesson-NN-sheet.qmd), in a box with its
+--     steps, a text field and "Check your result" after each step; or its
+--     "Table of results". The experiments are written once, in the worksheet.
+--   {{< start-files >}}
+--     The start files of the worksheet (`start-files:` in its front matter,
+--     files in week-WW/files/): download buttons on the page, names and links
+--     in the PDF.
+--
+--   Videos of an online activity (AUTHORING.md, "Blended courses"):
+--   {{< watch title="Change margins" source="Microsoft Support" url="https://…"
+--       length="0:31" checked="2026-10-31" captions="English" >}}
+--     A free official video: a card that links its page (never a copy), with
+--     its source, its length and the date the link was checked.
+--   {{< watch file="videos/x.mp4" captions="videos/x.vtt" poster="videos/x.png"
+--       script="videos/x-script.txt" title="…" length="2:05" >}}
+--     A video made for the course: the player with its English captions and
+--     poster, and its script under it as a transcript (closed until opened).
 
 local str = pandoc.utils.stringify
 
@@ -356,10 +386,113 @@ local function file_prefix(meta)
   return (str(course.slug or "course"):gsub("%-", "_"))
 end
 
--- Folder of lecture n (or homework k = pair k): week-01 for lectures 1-2,
--- week-02 for 3-4, ... The name is internal and never shown.
+-- Folder of a unit: week-WW, WW = its syllabus week (older schedules: the
+-- pair of lectures). The name is internal and never shown.
 local function pair_dir(pair)
   return string.format("week-%02d", pair)
+end
+
+-- One session of a unit: { stem, link text, file names, label }.
+local SESSION = {
+  lecture = { stem = "lesson", go = "Open lecture →", label = "Lecture", file = "lecture", pdf = "PDF" },
+  seminar = { stem = "seminar", go = "Open seminar →", label = "Seminar", file = "seminar", pdf = "Worksheet" },
+  practice = { stem = "practice", go = "Open practice →", label = "Practice", file = "practice", pdf = "Worksheet" },
+  online = { stem = "online", go = "Open activity →", label = "Online activity", file = "online" },
+}
+
+-- Practice sessions (filling weeks) are flexible unless `core: true`; a
+-- seminar is core unless `core: false`; lectures and online activities are core.
+local function is_flexible(kind, x)
+  local core = x.core
+  if core ~= nil then core = core == true or str(core) == "true" end
+  if kind == "practice" then return core ~= true end
+  if kind == "seminar" then return core == false end
+  return false
+end
+
+local function session_row(dir, wdir, prefix, slides_public, x, in_filling)
+  local kind = str(x.kind or "lecture")
+  local s = SESSION[kind]
+  if not s then error("schedule.yml: unknown kind '" .. kind .. "' (lecture, seminar, practice, online)") end
+  local n = tonumber(str(x.n))
+  local stem = string.format("%s-%02d", s.stem, n)
+  local base = pandoc.path.join({ dir, wdir, stem })
+  local fm = front_matter(base .. ".qmd")
+  local ok = ready(fm)
+  local flexible = is_flexible(kind, x) and not in_filling
+  local file = string.format("%s/%s_%s%d", wdir, prefix, s.file, n)
+  local links
+  if ok then
+    local parts = { string.format('<a class="sl-go" href="%s/%s.html">%s</a>', wdir, stem, s.go) }
+    if kind == "online" then
+      table.insert(parts, string.format('<a class="sl-file" href="%s_tasks.pdf">Tasks PDF</a>', file))
+      local bits = {}
+      if fm.marks then table.insert(bits, str(fm.marks) .. " marks") end
+      if fm.due then table.insert(bits, "due " .. str(fm.due)) end
+      if #bits > 0 then
+        table.insert(parts, '<span class="sl-due">' .. html_attr(table.concat(bits, " · ")) .. "</span>")
+      end
+    else
+      -- A lecture with a worksheet (lesson-NN-sheet.qmd): the worksheet is the
+      -- main document of the session, the notes are a short reference.
+      local sheet = file_exists(base .. "-sheet.qmd")
+      if sheet then
+        table.insert(parts, string.format('<a class="sl-file" href="%s_sheet.pdf">Worksheet</a>', file))
+      end
+      if file_exists(base .. "-book.qmd") then
+        table.insert(parts, string.format('<a class="sl-file" href="%s.pdf">%s</a>', file, sheet and "Notes" or s.pdf))
+      end
+      if slides_public and file_exists(base .. "-slides.qmd") then
+        table.insert(parts, string.format('<a class="sl-file" href="%s_slides.pptx">Slides</a>', file))
+      end
+    end
+    links = '<span class="sl-links">' .. table.concat(parts, "") .. "</span>"
+  else
+    links = '<span class="sl-soon">Coming soon</span>'
+  end
+  local tags = ""
+  if flexible then tags = tags .. ' <span class="sl-tag sl-flex">Flexible</span>' end
+  if kind == "online" then tags = tags .. ' <span class="sl-tag">💻 Online</span>' end
+  return string.format(
+    '<div class="sl sl-%s %s"><span class="sl-kind">%s %d</span><span class="sl-title">%s%s</span>%s</div>',
+    kind, ok and "is-ready" or "is-soon", s.label, n, html_attr(str(x.title)), tags, links), ok
+end
+
+local function schedule_units(dir, prefix, slides_public, units)
+  local out = { '<div class="schedule">' }
+  for _, u in ipairs(units) do
+    local filling = u.filling == true or str(u.filling or "") == "true"
+    local unit = tonumber(str(u.unit or ""))
+    local wdir = pair_dir(tonumber(str(u.week)))
+    local rows, any_ready = {}, false
+    for _, x in ipairs(u.sessions or {}) do
+      local row, ok = session_row(dir, wdir, prefix, slides_public, x, filling)
+      table.insert(rows, row)
+      any_ready = any_ready or ok
+    end
+    local hw_html = ""
+    if unit and not filling then
+      local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", unit) }))
+      if ready(hw) then
+        local bits = {}
+        if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
+        if hw.due then table.insert(bits, "due " .. str(hw.due)) end
+        hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
+          wdir, unit, unit, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
+      end
+    end
+    local head
+    if filling then
+      head = '<span class="sw-week">Practice week</span><span class="sl-tag sl-flex">Flexible</span>'
+    else
+      head = string.format('<span class="sw-week">Unit %d</span>', unit or 0)
+    end
+    table.insert(out, string.format(
+      '<section class="sw sw-unit%s %s"><header class="sw-head">%s%s</header>%s</section>',
+      filling and " sw-filling" or "", any_ready and "has-ready" or "", head, hw_html, table.concat(rows, "")))
+  end
+  table.insert(out, "</div>")
+  return pandoc.RawBlock("html", table.concat(out, "\n"))
 end
 
 local function schedule(meta)
@@ -369,6 +502,7 @@ local function schedule(meta)
   local data = read_yaml(pandoc.path.join({ dir, "schedule.yml" }))
   local config = read_yaml(pandoc.path.join({ project_dir(), "_quarto.yml" }))
   local slides_public = config["slides-public"] == true
+  if data.units then return schedule_units(dir, prefix, slides_public, data.units) end
   local lectures = data.lectures or {}
   local out = { '<div class="schedule">' }
   -- Two lectures, then their homework: one section per pair.
@@ -439,9 +573,253 @@ local function schedule(meta)
   return pandoc.RawBlock("html", table.concat(out, "\n"))
 end
 
+-- Lecture worksheets ------------------------------------------------------
+-- The worksheet of a lecture (lesson-NN-sheet.qmd, a PDF) is the main document
+-- of a face-to-face session in a practical course: numbered experiments, each
+-- with numbered steps, a place to record the result of every step, and a
+-- short table of results. The interactive lesson shows the same experiments,
+-- read from the worksheet when the page is rendered.
+
+-- The worksheet of this page: lesson-NN.qmd (or lesson-NN-sheet.qmd itself).
+local function sheet_path()
+  local input = quarto.doc.input_file
+  local stem = pandoc.path.split_extension(pandoc.path.filename(input))
+  stem = stem:gsub("%-sheet$", "")
+  return pandoc.path.join({ pandoc.path.directory(input), stem .. "-sheet.qmd" })
+end
+
+-- The arguments of a shortcode written in a text: '"D2 shows" lines=2'.
+local function parse_args(s)
+  local label = s:match('^%s*"(.-)"') or s:match("^%s*'(.-)'")
+  local kw = {}
+  for k, v in s:gmatch('(%w+)="(.-)"') do kw[k] = v end
+  for k, v in s:gmatch("(%w+)=(%d+%.?%d*)") do kw[k] = v end
+  return label, kw
+end
+
+local function record_html(label, lines, box)
+  local field
+  if box > 0 then
+    field = string.format('<textarea class="record-input" style="height:%gcm" aria-label="%s"></textarea>',
+      box, html_attr(label))
+  elseif lines > 1 then
+    field = string.format('<textarea class="record-input" rows="%d" aria-label="%s"></textarea>',
+      lines, html_attr(label))
+  else
+    field = string.format('<input class="record-input" type="text" autocomplete="off" spellcheck="false" aria-label="%s">',
+      html_attr(label))
+  end
+  return string.format('<div class="record"><span class="record-label">%s</span>%s</div>', html_attr(label), field)
+end
+
+local function record_typst(label, lines, box)
+  local head = string.format('box(fill: accent2.lighten(62%%), radius: 3pt, inset: (x: 5pt, y: 2.5pt), '
+    .. 'text(size: 8pt, weight: "bold", fill: accent.darken(45%%), %s))', typst_string(label))
+  local dots = 'line(length: 100%, stroke: (paint: luma(140), thickness: 0.7pt, dash: "dotted"))'
+  local out = { '#block(width: 100%, breakable: false, above: 6pt, below: 10pt)[' }
+  if box > 0 then
+    table.insert(out, "#" .. head)
+    table.insert(out, string.format('#v(3pt)#rect(width: 100%%, height: %gcm, radius: 4pt, '
+      .. 'stroke: (paint: luma(160), thickness: 0.7pt, dash: "dashed"))', box))
+  else
+    table.insert(out, string.format("#grid(columns: (auto, 1fr), column-gutter: 6pt, align: bottom, %s, %s)", head, dots))
+    for _ = 2, lines do table.insert(out, "#v(0.55cm)#" .. dots) end
+  end
+  return table.concat(out, "") .. "]"
+end
+
+local function record(args, kwargs)
+  local label = str(args[1] or "")
+  if label == "" then label = str(kwargs.label or "") end
+  if label == "" then label = "Your result" end
+  local lines = tonumber(str(kwargs.lines)) or 1
+  local box = tonumber(str(kwargs.box)) or 0
+  if quarto.doc.is_format("html") then
+    return pandoc.RawBlock("html", record_html(label, lines, box))
+  elseif quarto.doc.is_format("typst") then
+    return pandoc.RawBlock("typst", record_typst(label, lines, box))
+  end
+  return pandoc.Null()
+end
+
+-- The "## …" section of a .qmd text whose title matches `pattern`: its title
+-- and its text up to the next "## " heading (or nil).
+local function md_section(text, pattern)
+  text = (text:gsub("^%-%-%-\n.-\n%-%-%-\n", "", 1))
+  local title, body = nil, {}
+  for line in (text .. "\n"):gmatch("([^\n]*)\n") do
+    local h = line:match("^## (.-)%s*$")
+    if h then
+      if title then break end
+      if h:match(pattern) then title = h end
+    elseif title then
+      table.insert(body, line)
+    end
+  end
+  return title, title and table.concat(body, "\n") or nil
+end
+
+local function check_details(div)
+  local blocks = pandoc.Blocks({ pandoc.RawBlock("html",
+    '<details class="check"><summary>Check your result</summary><div class="check-body">') })
+  blocks:extend(div.content)
+  blocks:insert(pandoc.RawBlock("html", "</div></details>"))
+  return blocks
+end
+
+local function experiment(args)
+  if not quarto.doc.is_format("html") then return pandoc.Null() end
+  local which = str(args[1] or "")
+  local path = sheet_path()
+  local text = read_text(path)
+  if not text then error("experiment shortcode: the worksheet " .. path .. " is missing") end
+  local results = which == "results"
+  local title, body = md_section(text, results and "^Table of results" or ("^Experiment " .. which .. "%f[^%d]"))
+  if not body then
+    error("experiment shortcode: no \"## " .. (results and "Table of results" or ("Experiment " .. which))
+      .. "\" in " .. path)
+  end
+  title = (title:gsub("%s*%b{}%s*$", ""))
+  -- A record field becomes its text field (with the indentation of its step);
+  -- the simulators are already in the section of the page.
+  body = body:gsub("([ \t]*){{<%s*record%s+(.-)%s*>}}", function(indent, a)
+    local label, kw = parse_args(a)
+    local html = record_html(label or "Your result", tonumber(kw.lines) or 1, tonumber(kw.box) or 0)
+    return indent .. "```{=html}\n" .. indent .. html .. "\n" .. indent .. "```"
+  end)
+  body = body:gsub("{{<%s*sim%s.-%s*>}}", "")
+  local doc = pandoc.read(body, "markdown")
+  doc = doc:walk({ Div = function(d) if d.classes:includes("check") then return check_details(d) end end })
+  local head
+  if results then
+    head = '<span class="exp-title">Table of results</span>'
+  else
+    local num, rest = title:match("^(Experiment %d+)%s*·%s*(.*)$")
+    head = string.format('<span class="exp-num">%s</span><span class="exp-title">%s</span>',
+      html_attr(num or title), html_attr(rest or ""))
+  end
+  local blocks = pandoc.Blocks({ pandoc.RawBlock("html", string.format(
+    '<div class="experiment%s" id="%s"><div class="exp-head">%s</div><div class="exp-body">',
+    results and " exp-results" or "", results and "experiment-results" or ("experiment-" .. which), head)) })
+  blocks:extend(doc.blocks)
+  blocks:insert(pandoc.RawBlock("html", "</div></div>"))
+  return blocks
+end
+
+-- The start files: `start-files:` (name, about) in the worksheet's front
+-- matter; the files are in the folder files/ next to it.
+local function start_files(meta)
+  local files = meta and meta["start-files"]
+  if not files then
+    local fm = front_matter(sheet_path())
+    files = fm and fm["start-files"]
+  end
+  if not files or #files == 0 then return pandoc.Null() end
+  if quarto.doc.is_format("html") then
+    local items = {}
+    for _, f in ipairs(files) do
+      local name = str(f.name or f)
+      table.insert(items, string.format(
+        '<li><a class="sf-file" href="files/%s" download>⬇ %s</a><span class="sf-about">%s</span></li>',
+        html_attr(name), html_attr(name), html_attr(str(f.about or ""))))
+    end
+    return pandoc.RawBlock("html", '<div class="start-files"><div class="sf-title">📂 Start files</div><ul>'
+      .. table.concat(items, "") .. '</ul><p class="sf-note">The same data for every student. '
+      .. "Download each file, then open it in its app.</p></div>")
+  elseif quarto.doc.is_format("typst") then
+    local rel = doc_rel_dir()
+    local items = {}
+    for _, f in ipairs(files) do
+      local name = str(f.name or f)
+      local url = site_url() .. (rel ~= "" and (rel .. "/") or "") .. "files/" .. name
+      table.insert(items, string.format("- #link(%s)[#strong(%s)]: #%s", typst_string(url), typst_string(name),
+        typst_string(str(f.about or ""))))
+    end
+    return pandoc.RawBlock("typst", string.format([[
+#block(width: 100%%, breakable: false, fill: accent2.lighten(88%%), radius: 6pt, inset: (x: 10pt, y: 8pt), stroke: 0.6pt + accent2.darken(5%%))[
+#text(weight: "bold", fill: accent.darken(35%%))[Start files] #h(4pt) #text(size: 8.5pt, fill: luma(80))[The same data for every student. Download them from the interactive lesson (QR code above).]
+%s
+]
+]], table.concat(items, "\n")))
+  end
+  return pandoc.Null()
+end
+
+-- Videos (online activities) ------------------------------------------------
+local MONTHS = { "January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December" }
+
+local function long_date(iso)
+  local y, m, d = iso:match("^(%d%d%d%d)%-(%d%d)%-(%d%d)$")
+  if not y then return iso end
+  return string.format("%d %s %s", tonumber(d), MONTHS[tonumber(m)], y)
+end
+
+local function watch(kwargs)
+  local title, length = str(kwargs.title), str(kwargs.length)
+  local file, url = str(kwargs.file), str(kwargs.url)
+  if title == "" or length == "" or (file == "" and url == "") then
+    error("watch shortcode needs title=, length= and url= (an official video) or file= (a course video)")
+  end
+  if file ~= "" then
+    -- A video made for the course: player, captions, poster, transcript.
+    local captions, poster, script = str(kwargs.captions), str(kwargs.poster), str(kwargs.script)
+    if not quarto.doc.is_format("html") then
+      return pandoc.Para({ pandoc.Strong({ pandoc.Str("Video: ") }), pandoc.Str(title .. " (" .. length .. ")") })
+    end
+    local transcript = ""
+    if script ~= "" then
+      local text = read_text(pandoc.path.join({ pandoc.path.directory(quarto.doc.input_file), script }))
+      if not text then error("watch shortcode: the script " .. script .. " is missing") end
+      local paras = {}
+      for scene in (text:gsub("\r", "") .. "\n\n"):gmatch("(.-)\n%s*\n") do
+        scene = scene:gsub("^%s+", ""):gsub("%s+$", ""):gsub("\n", " ")
+        if scene ~= "" then table.insert(paras, "<p>" .. html_attr(scene) .. "</p>") end
+      end
+      transcript = '<details class="transcript"><summary>Read the words of the video</summary>'
+        .. '<div class="transcript-body">' .. table.concat(paras, "") .. "</div></details>"
+    end
+    return pandoc.RawBlock("html", string.format([[
+<figure class="watch watch-video">
+  <video controls preload="metadata" playsinline%s>
+    <source src="%s" type="video/mp4">%s
+  </video>
+  <figcaption><span class="watch-title">🎬 %s</span><span class="watch-meta">%s · made for this course%s</span></figcaption>
+  %s
+</figure>]], poster ~= "" and (' poster="' .. html_attr(poster) .. '"') or "", html_attr(file),
+      captions ~= "" and ('\n    <track kind="captions" srclang="en" label="English" src="' .. html_attr(captions) .. '">') or "",
+      html_attr(title), html_attr(length), captions ~= "" and " · captions in the picture and in CC" or "", transcript))
+  end
+  -- A free official video: a card with the link, never a copy.
+  local source, checked, captions = str(kwargs.source), str(kwargs.checked), str(kwargs.captions)
+  if source == "" or checked == "" then
+    error("watch shortcode: an official video needs source= and checked= (the date the link was checked)")
+  end
+  if quarto.doc.is_format("html") then
+    return pandoc.RawBlock("html", string.format([[
+<div class="watch watch-link">
+  <a class="watch-play" href="%s" target="_blank" rel="noopener" aria-label="Watch: %s">▶</a>
+  <div class="watch-info">
+    <a class="watch-title" href="%s" target="_blank" rel="noopener">%s ↗</a>
+    <span class="watch-meta">%s · %s%s</span>
+    <span class="watch-note">A free video on the %s website: it opens in a new tab. Link checked on %s.</span>
+  </div>
+</div>]], html_attr(url), html_attr(title), html_attr(url), html_attr(title), html_attr(source), html_attr(length),
+      captions ~= "" and (" · " .. html_attr(captions) .. " captions") or "", html_attr(source), long_date(checked)))
+  elseif quarto.doc.is_format("typst") then
+    return pandoc.RawBlock("typst", string.format("#block[*Video:* #link(%s)[#%s] (%s, %s)]",
+      typst_string(url), typst_string(title), typst_string(source), typst_string(length)))
+  end
+  return pandoc.Null()
+end
+
 return {
   ["schedule"] = function(_, _, meta) return schedule(meta) end,
+  ["watch"] = function(_, kwargs) return watch(kwargs) end,
   ["answer-space"] = function(_, kwargs) return answer_space(kwargs) end,
   ["glossary"] = function(args) return glossary(args) end,
   ["sim"] = function(_, kwargs) return sim(kwargs) end,
+  ["record"] = function(args, kwargs) return record(args, kwargs) end,
+  ["experiment"] = function(args) return experiment(args) end,
+  ["start-files"] = function(_, _, meta) return start_files(meta) end,
 }

@@ -1,6 +1,6 @@
 ---
-# Copy to courses/<slug>/week-PP/lesson-NN-book.qmd (NN = lecture number,
-# PP = folder of the pair: lectures 1-2 in week-01, 3-4 in week-02). Lesson notes (PDF): the
+# Copy to courses/<slug>/week-WW/lesson-NN-book.qmd (NN = lecture number,
+# WW = the syllabus week of its unit; schedule.yml). Lesson notes (PDF): the
 # main study text, written FIRST, like an applied chapter of a textbook.
 # Applied first: every section goes situation → concept → Do it task.
 # Simple English (B1): short sentences, common words, every technical word
@@ -9,6 +9,11 @@
 # "Level and language", "Size every lesson"; check_size.py).
 #   60 min: 3–4 sections, at most 3 500 words, 2+ examples, 6–10 exercises.
 #   90 min: 5–7 sections, at most 6 000 words, 4+ examples, 10–16 exercises.
+# THE NOTES TEST: the result of every Do it task is in a ::: {.check} inside
+# its box; book.lua prints it at the end ("Results of the Do it tasks").
+# A lecture with a worksheet (lesson-NN-sheet.qmd, a practical course): the
+# notes are a short reference; each section ends with one line instead of a
+# Do it box: *In class: Experiment N of the worksheet, what it does.*
 title: "Lesson title, as in schedule.yml"
 description: "Lesson notes · One sentence that lists the sections."
 lesson: 1          # the lecture number (1, 2, 3 … across the course; schedule.yml)
@@ -57,6 +62,10 @@ and iPhone (or Windows) differ, say how.
 
 *Your result:* the concrete product (a number, a table, a file, a sketch, a
 decision with one reason).
+
+::: {.check}
+The result and one line of why (printed at the end of the notes).
+:::
 :::
 
 ::: {.callout-caution title="In game code"}
@@ -78,6 +87,49 @@ Vector3 position = new Vector3(1f, 2f, 4f);
 …
 
 {{< sim file="sims/name.html" poster="sims/name.png" title="What it shows" kind="game" >}}
+
+<!-- 0–2 per session, only where AI lets students do MORE than the usual task
+(AUTHORING.md, "Task with AI"): a harder product, a starter prompt, a check
+with the tools of the lesson, the result.
+::: {.callout-note .ai-task title="Task with AI · Short title"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt into
+an AI assistant that the university allows (for example Microsoft Copilot
+with your university account), and look at the result.
+
+::: {.prompt}
+A complete prompt: every detail and number of one situation, ready to copy,
+that asks for something to look at (a picture, a diagram, a chart, a small
+table). For example: Draw a 2D grid from 0 to 10. The player is at (2, 3)
+and the enemy at (6, 6). Draw the vector from the player to the enemy as an
+arrow, with its x part and its y part, and label them.
+:::
+
+**What do you see?**
+
+::: {.check label="What you should see"}
+The result in words, to compare: the AI can be wrong.
+:::
+
+::: {.try-change}
+**Change:** one number or one word, for example the enemy to (8, 2). Ask
+again. What do you notice?
+
+::: {.check}
+What the student should notice.
+:::
+:::
+
+::: {.try-change}
+**Change:** a second change. What do you notice?
+
+::: {.check}
+What the student should notice.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again.
+:::
+-->
 
 <!-- Only in the 1–2 lessons named in plan.md (D1 weeks):
 ::: {.callout-note title="Team activity"}

@@ -43,7 +43,7 @@
     ["theme.ogg", "freelancer, contract signed", "cleared", "The contract gives Night Owl the rights."],
     ["cat_sticker.png", "art site, CC BY-NC", "replace", "NC: not allowed in a game for sale."],
     ["poster_bg.jpg", "image search, source unknown", "replace", "Unknown owner and licence: replace it."],
-    ["physics.dll", "code library, MIT, notice missing", "to fix", "MIT allows it; add the copyright notice."],
+    ["thunder.ogg", "CC BY 4.0, saved licence page, credit missing", "to fix", "Allowed for sale; write the TASL credit."],
     ["roof_tiles.png", "CC BY-SA 4.0, recoloured, credit written", "cleared", "Credit written; the recoloured tiles are shared as CC BY-SA."],
   ];
   const S = { cleared: "g", "to fix": "y", replace: "r" };
@@ -68,7 +68,7 @@
     render();
     const cnt = (k) => Object.values(s.pick).filter((v) => v === k).length;
     $("calc").textContent = `Your audit: ${cnt("cleared")} cleared, ${cnt("to fix")} to fix, ${cnt("replace")} to replace. ${s.perfect ? "All correct." : wrong.length + " status(es) need another look (red rows)."}`;
-    upd(wrong.length ? ROWS[wrong[0]][0] + ": " + (s.pick[wrong[0]] ? "check the licence again." : "no status yet.") : "Report: 4 cleared, 2 to fix (a credit, a notice), 2 to replace (NC sticker, unknown photo).");
+    upd(wrong.length ? ROWS[wrong[0]][0] + ": " + (s.pick[wrong[0]] ? "check the licence again." : "no status yet.") : "Report: 4 cleared, 2 to fix (two credits), 2 to replace (NC sticker, unknown photo).");
   }
   function upd(note) {
     let m = "";

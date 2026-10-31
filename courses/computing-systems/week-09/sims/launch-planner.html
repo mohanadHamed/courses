@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Launch Planner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .sim .tabs button.on { background: var(--sim-accent); color: #fff; }
+    .sim table.p { border-collapse: collapse; width: 100%; font-size: .92rem; }
+    .sim table.p td, .sim table.p th { border: 1px solid #e9ecef; padding: 6px 8px; text-align: left; vertical-align: top; }
+    .sim table.p th { background: #fff9db; color: #7a5a00; width: 38%; }
+    .sim .note { font-size: .85rem; color: var(--sim-muted); }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Launch Planner: Android, iOS or both?</h1>
+  <p class="hint"><i>Byte Bay</i> plans the launch of <i>Pocket Quest</i>. Choose the platforms and what the studio has. The planner shows what the launch needs.</p>
+  <div class="tabs" id="plat"></div>
+  <div class="tabs" id="mac"></div>
+  <table class="p" id="t"></table>
+  <p class="message" id="msg"></p>
+  <p class="note">Round numbers for a plan, checked in 2026; shares change: always check a dated source.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const s = { plat: "android", mac: false };
+  const P = {
+    android: { reach: 70, devices: 3, build: "any PC (Windows, macOS or Linux)", pkg: ".apk or .aab", updates: "from each phone maker, often late" },
+    ios: { reach: 30, devices: 2, build: "a Mac with Xcode", pkg: ".ipa", updates: "from Apple, for all supported iPhones" },
+  };
+  function tabs(id, items, key) {
+    Kit.buttons($(id), items.map(([k, label]) => ({ k, label })), (k) => { s[key] = k === "true" ? true : k === "false" ? false : k; tabs(id, items, key); show(); });
+    $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === String(s[key])));
+  }
+  function show() {
+    const L = s.plat === "both" ? ["android", "ios"] : [s.plat];
+    const reach = L.reduce((a, k) => a + P[k].reach, 0);
+    const rows = [
+      ["Phones it can reach (worldwide)", `about ${reach} %`],
+      ["Build machine", L.map((k) => P[k].build).join(" and ")],
+      ["Test phones (at least)", `${L.reduce((a, k) => a + P[k].devices, 0)} (${L.map((k) => (k === "android" ? "weak, typical, strong Android" : "an older and a newer iPhone")).join("; ")})`],
+      ["Package", L.map((k) => P[k].pkg).join("; ")],
+      ["System updates", L.map((k) => P[k].updates).join("; ")],
+    ];
+    $("t").innerHTML = rows.map(([a, b]) => `<tr><th>${a}</th><td>${b}</td></tr>`).join("");
+    const needMac = L.includes("ios") && !s.mac;
+    $("msg").textContent = needMac ? "Problem: an iOS build needs a Mac with Xcode. Byte Bay must buy or rent a Mac first." :
+      s.plat === "both" ? "Both: the most players, but two builds and more test phones." :
+      s.plat === "android" ? "Android only: most phones, but many devices to test." : "iOS only: fewer phones, but a small set of devices to test and players who often spend more in games.";
+    $("msg").classList.toggle("bad", needMac);
+  }
+  tabs("plat", [["android", "Android only"], ["ios", "iOS only"], ["both", "Android and iOS"]], "plat");
+  tabs("mac", [["false", "Byte Bay has only Windows PCs"], ["true", "Byte Bay has a Mac"]], "mac");
+  window.LP = { set: (o) => { Object.assign(s, o); tabs("plat", [["android", "Android only"], ["ios", "iOS only"], ["both", "Android and iOS"]], "plat"); tabs("mac", [["false", "Byte Bay has only Windows PCs"], ["true", "Byte Bay has a Mac"]], "mac"); show(); } };
+  show();
+})();
+</script>
+</body>
+</html>

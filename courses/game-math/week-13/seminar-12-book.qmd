@@ -1,0 +1,183 @@
+---
+title: "Game Balancing Exercise"
+description: "Seminar worksheet · Balance the wait for a rare item with a pity timer, check the expected reward and the odds of a chest, and answer players about streaks and a shuffle bag."
+seminar: 12
+ilos: [C2, D1]
+format: lesson-typst
+---
+
+::: {.lead}
+In Lecture 12 you learned how probability keeps a game fair: drop rates,
+pity timers, the expected reward, streaks, the gambler's fallacy and shuffle
+bags. Today you balance one game with them. There are no new ideas: three
+short problems. Do each one alone. The results of the activities are at the
+end of this worksheet.
+:::
+
+## Recall
+
+- P(at least one drop in n tries) = 1 − (1 − p)ⁿ; the average is 1/p
+  tries. A pity timer limits the longest wait.
+- The expected reward E = Σ value × probability; chests for an item ≈
+  price ÷ E.
+- Independent tries have no memory; a shuffle bag gives exact shares.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="2|100 %"}
+p = 0.5. What is P(at least one drop in 2 tries)?
+:   3/4
+
+p = 0.1. How many tries does a player need on average?
+:   10
+
+A chest gives 2 coins (50 %) or 8 coins (50 %). What is E?
+:   5
+:::
+:::
+
+## Activity 1 · The rare hammer
+
+In *Mole Keep*, a rare hammer drops with **p = 2 %**. A formula gives the
+average wait; a simulation also shows the unlucky players. **Drop Rate
+Lab** lets 1000 players hunt the hammer.
+
+![A pity timer.](images/pity-timer.png){width=80%}
+
+{{< sim file="sims/drop-rate-lab.html" poster="sims/drop-rate-lab.png" title="Drop Rate Lab: how long do players wait?" >}}
+
+::: {.callout-note title="Activity 1 · Waits and a pity timer · 18 min"}
+1. What is the average number of tries? Compute it, then check in the lab.
+2. Simulate 1000 players without a pity timer. What is the longest wait?
+3. Add a pity timer at 60. What are the average and the longest wait now?
+   Would you keep the timer?
+
+*Your product:* one computed and three simulated numbers, and one sentence.
+
+::: {.check}
+1. 1/0.02 = **50 tries**. 2. The longest wait is often 200 or more: some
+players wait very long. 3. The average falls a little (to about 40), and
+the longest wait is **60**. A good sentence: keep the timer, because it
+ends the endless waits but keeps early lucky drops.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Waits"}
+Choose the right answer.
+
+::: {.match extra="the average only|0"}
+p = 4 %. What is the average number of tries?
+:   25
+
+A pity timer is set at 60. What is the longest wait?
+:   60
+
+What does a simulation show that the formula 1/p does not?
+:   the unlucky players
+:::
+:::
+
+## Activity 2 · The chest and its odds
+
+A chest of *Mole Keep* gives **10 coins with 80 %** or **50 coins with
+20 %**. A bow costs **180 coins**. The store page says "big prize: 30 %".
+
+![The chances of a chest.](../week-12/images/weighted.png){width=80%}
+
+::: {.callout-note title="Activity 2 · Reward and odds · 15 min"}
+1. Compute the expected reward E of one chest.
+2. About how many chests does a player open on average for the bow?
+3. Is the store page honest? Write the odds that the chest screen must
+   show.
+
+*Your product:* two numbers, one answer and two odds.
+
+::: {.check}
+1. E = 10 × 0.8 + 50 × 0.2 = 8 + 10 = **18 coins**. 2. 180 ÷ 18 = **10
+chests**. 3. No: the real chance of the big prize is 20 %, not 30 %. The
+screen must show 10 coins: 80 %, 50 coins: 20 %.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Rewards and odds"}
+Choose the right answer.
+
+::: {.match extra="25 %|5"}
+A chest gives 4 coins (75 %) or 20 coins (25 %). What is E?
+:   8
+
+E is 8 coins, and a shield costs 80 coins. About how many chests for the shield?
+:   10
+
+The code gives the big prize with 20 %, but the page says 30 %. What is this?
+:   dishonest odds
+:::
+:::
+
+## Activity 3 · Streaks and a shuffle bag
+
+Three players write to the team. Player 1 hits with **90 %** and missed
+**two times in a row**: "the game cheats!". Player 2 flipped a coin in a
+mini-game and got **four tails in a row**: "now heads must come!". Player 3
+asks how often a crit comes: the crits come from a **shuffle bag with 1
+crit and 3 normal hits**.
+
+![A shuffle bag.](images/shuffle-bag.png){width=80%}
+
+::: {.callout-note title="Activity 3 · Answer the players · 18 min"}
+1. What is the chance of two misses in a row with a hit chance of 90 %?
+2. Is player 2 right? What is P(heads) on the next flip?
+3. What share of the hits are crits? What is the longest run of normal
+   hits without a crit?
+4. Present your answer to player 1 alone: a reply of three sentences
+   (what the player saw, the number, and what it means for the game).
+   Read it aloud in less than one minute.
+
+*Your product:* three short answers, each with a number, and the reply to
+player 1.
+
+::: {.check}
+1. 0.1 × 0.1 = 0.01 = **1 %**: rare, but with many players it happens
+every day. 2. No: the coin has no memory, so P(heads) = **1/2**. Thinking
+otherwise is the gambler's fallacy. 3. 1 of 4 hits: **25 %**. The longest
+run is **6** normal hits: the crit is first in one bag and last in the
+next. 4. A good reply: "Two misses in a row at 90 % have the chance 1 %.
+With thousands of players, this happens to someone every day. The game is
+fair: every shot still hits with 90 %." It names the number and says what
+it means.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Streaks and bags"}
+Choose the right answer.
+
+::: {.match extra="1/16|always 25 %"}
+Hit chance 80 %. What is P(two misses in a row)?
+:   4 %
+
+A die showed no 6 in five rolls. What is P(a 6 on the next roll)?
+:   1/6
+
+A shuffle bag has 1 crit and 4 normal hits. What is the longest run without a crit?
+:   8 normal hits
+:::
+:::
+
+## Exercises
+
+1. An item drops with p = 5 %. How many tries does a player need on average?
+2. p = 0.5. What is P(at least one drop in 3 tries)?
+3. A chest gives 5 coins (60 %) or 15 coins (40 %). What is E?
+4. A coin showed heads three times. What is P(heads) on the next flip?
+5. What does a pity timer at 40 tries do?
+
+## Answers to the exercises
+
+::: {.answers}
+1. 20.
+2. 1 − 1/8 = 7/8.
+3. 3 + 6 = 9 coins.
+4. 1/2: the coin has no memory.
+5. No player waits more than 40 tries.
+:::

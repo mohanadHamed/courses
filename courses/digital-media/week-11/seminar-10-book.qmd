@@ -1,0 +1,147 @@
+---
+title: "Video-Editing Tool Tour"
+description: "Seminar worksheet · Make a project with the right resolution and frame rate in a free video editor and read the settings of three clips, then export a teaser for the store and compare two bitrates."
+seminar: 10
+ilos: [C3]
+format: lesson-typst
+---
+
+::: {.lead}
+In Lecture 10 you learned frames and the frame rate, resolution and aspect
+ratio, containers, codecs and bitrate, and the settings for each target.
+Today you use them in a free video editor. There are no new ideas: two
+short problems. Do each one alone. The results of the activities are at the
+end of this worksheet.
+:::
+
+## Recall
+
+- A video is a series of **frames**; the frame rate counts them per
+  second. The **resolution** is the size (1920 × 1080), the **aspect
+  ratio** the shape (16:9 wide, 9:16 tall).
+- The **container** (MP4, MOV) holds the tracks; the **codec** (H.264,
+  ProRes) compresses them.
+- A higher **bitrate** gives a better picture and a bigger file; too little
+  gives blocks in fast action.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="1280 × 720|ProRes"}
+What is the resolution of Full HD?
+:   1920 × 1080
+
+Which codec plays on almost every phone?
+:   H.264
+
+A fast chase looks like blocks. What is too low?
+:   the bitrate
+:::
+:::
+
+## Activity 1 · A project with the right settings
+
+A video editor never changes the source files: the **project** keeps the
+edits. First set the **resolution** and the **frame rate** of the project
+(DaVinci Resolve: File › Project Settings). Then **import** the clips (File
+› Import › Media, or drag them): they appear in the **media pool**, where
+the clip details show their resolution, frame rate and codec.
+
+![From a new project to an exported file.](images/workflow.png){width=94%}
+
+::: {.callout-warning title="Watch out!"}
+Moving the source files after the import gives "media offline".
+:::
+
+::: {.callout-note title="Activity 1 · Project and clips · 15 min"}
+1. Make a project of 1920 × 1080 at 30 fps. Import three short clips: your
+   own phone videos, or the clips your teacher gives.
+2. For each clip, write its resolution, frame rate and codec. Which clip
+   does not match the project?
+
+*Your product:* a table of three clips and one sentence.
+
+::: {.check}
+A typical table: clip 1, 1920 × 1080, 30 fps, H.264; clip 2, 1080 × 1920,
+30 fps, H.264 (a tall phone video); clip 3, 1920 × 1080, 60 fps, H.265.
+Clip 2 does not match: it is tall in a wide project, so it must be
+cropped, not stretched. Clip 3 has twice the frame rate of the project.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · The project"}
+Choose the right answer.
+
+::: {.match extra="the Deliver page|the clip's name"}
+What do you set first in a new project?
+:   the resolution and the frame rate
+
+Where do the imported clips appear?
+:   the media pool
+
+What happens to the source files when you edit?
+:   nothing
+
+A tall phone clip goes into a wide project. What do you do?
+:   crop it, never stretch it
+:::
+:::
+
+## Activity 2 · Export for the store
+
+The project is not a video: it must be **exported** (DaVinci Resolve: the
+Deliver page). For the store: **MP4**, **H.264**, the resolution and frame
+rate of the project, a good quality, and a clear name with a version.
+
+![The export settings.](images/export-settings.png){width=94%}
+
+::: {.callout-note title="Activity 2 · Two exports · 18 min"}
+1. Drag your clips onto the timeline in a good order.
+2. Export `yourname-teaser-v1.mp4`: MP4, H.264, 1920 × 1080, 30 fps.
+3. Export the same project again with a much lower bitrate (or quality):
+   `yourname-teaser-low.mp4`. Compare the two file sizes and the moving
+   parts of the picture.
+
+*Your product:* two files, their sizes and one sentence.
+
+::: {.check}
+A typical result: the v1 file is a few MB for 10–20 seconds and looks
+clean; the low-bitrate file is much smaller, and its fast moving parts show
+blocks. A higher bitrate gives a better picture and a bigger file. Send the
+MP4, never the project file.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Export"}
+Choose the right answer.
+
+::: {.match extra="the project file|a GIF"}
+Which page of DaVinci Resolve makes the video file?
+:   Deliver
+
+Which is a good file name?
+:   rooftop-teaser-v1.mp4
+
+What do you send to the producer?
+:   the MP4 file
+
+What do you do after the render?
+:   watch the whole file once
+:::
+:::
+
+## Exercises
+
+1. A project is 1920 × 1080 at 30 fps. A clip is 1920 × 1080 at 60 fps. Does it match?
+2. Why does the editor show "media offline"?
+3. Which container and codec do you choose for a store trailer?
+4. You export a clip at a much lower bitrate. What happens to the file and the picture?
+
+## Answers to the exercises
+
+::: {.answers}
+1. No: its frame rate is twice the project's.
+2. The source files were moved after the import.
+3. MP4 with H.264.
+4. The file is smaller, and fast action shows blocks.
+:::

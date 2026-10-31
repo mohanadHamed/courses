@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Review Board</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; }</style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Review Board</h1>
+  <p class="hint">Today you are the store reviewer. Six games from small studios wait for a decision. Approve a game, or reject it with the right reason.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const A = "approve", C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { g: "Pocket Quest 1.0", goal: "<b>Pocket Quest 1.0</b>: tested on 5 phones, real screenshots, privacy policy, age rating done, purchases through the store.", choices: C([A, "reject: missing privacy policy", "reject: misleading listing", "reject: crashes"]), answer: A,
+      good: "Everything is in order: approved.", why: {} },
+    { g: "Sky Farm", goal: "<b>Sky Farm</b> shows a “Coming soon” screen on most buttons, and the shop is empty.", choices: C(["reject: incomplete, placeholder content", A, "reject: wrong age rating", "reject: too many ads"]), answer: "reject: incomplete, placeholder content",
+      good: "A submitted build must be complete: no placeholders, no empty features.", why: { [A]: "A store does not accept a demo as a finished game." } },
+    { g: "Gem Rush", goal: "<b>Gem Rush</b> sells a mystery chest for 2 USD with random gems; the odds are not shown anywhere.", choices: C(["reject: show the odds of random paid items", A, "reject: the icon is too small", "reject: no Mac build"]), answer: "reject: show the odds of random paid items",
+      good: "Loot boxes must show the odds of each item before the purchase.", why: {} },
+    { g: "Hero Wars X", goal: "<b>Hero Wars X</b> uses the logo and the heroes of a famous film series; the studio has no licence.", choices: C(["reject: intellectual property of others", A, "reject: performance", "reject: price too high"]), answer: "reject: intellectual property of others",
+      good: "Using brands and characters of others needs their permission.", why: {} },
+    { g: "Tiny Chat Pets", goal: "<b>Tiny Chat Pets</b> is for children; players chat freely with strangers, with no filter and no report button.", choices: C(["reject: unsafe user content for children", A, "reject: the game is too short", "reject: it needs a subtitle"]), answer: "reject: unsafe user content for children",
+      good: "Chat needs filters, reporting and blocking, and apps for children have extra rules.", why: {} },
+    { g: "Speed Car 3", goal: "<b>Speed Car 3</b> crashes on start on two of the reviewer's three test phones.", choices: C(["reject: crashes, not complete", A, "reject: misleading listing", "reject: missing odds"]), answer: "reject: crashes, not complete",
+      good: "Crashes are one of the most common reasons for rejection: test on real devices first.", why: {} },
+  ];
+  Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: Byte Bay's own game." });
+})();
+</script>
+</body>
+</html>

@@ -1,36 +1,90 @@
 ---
-title: "Homework 1: Positions and moves"
-description: "A position on the grid and one vector. About 15 minutes."
+title: "Homework 1: Positions and a patrol"
+description: "A position on the grid, and a patrol planned with one velocity per frame. About 10 minutes."
 homework: 1
-due: "before lecture 3"
+due: "before lecture 2"
 marks: 5
 ilos: [A1]
 toc-title: "In this homework"
 format: lesson-html   # the PDF is made by printing this page (homework_pdf.py)
 ---
 
-**How to submit:** Write on paper and show your steps. Upload a clear photo to the university e-learning platform. Due: **before lecture 3**.
+**How to submit:** Write on paper and show your steps. Upload a clear photo to the university e-learning platform. Due: **before lecture 2**.
+No task needs AI. The optional Task with AI at the end gives no marks.
 
 ## Task 1 · The grid (2 marks)
 
-Draw a grid: x from 0 to 10, y from 0 to 6. Write the numbers on the axes.
+The centre of a level is the origin; x goes right and y goes up. A key is 5
+units left of the centre and 3 units down.
 
-a) Mark the player at P = (4, 2). (1 mark)
-
-{{< answer-space box=5 >}}
-
-b) The player moves 3 steps up. Write the new position. (1 mark)
+a) Write the position of the key and its quadrant. (1 mark)
 
 {{< answer-space lines=1 >}}
 
-## Task 2 · One vector (3 marks)
-
-The player is at (2, 1). The coin is at (8, 4).
-
-a) Find the vector from the player to the coin. Use end − start. (2 marks)
-
-{{< answer-space lines=3 >}}
-
-b) Check: add your vector to (2, 1). Do you get the coin? (1 mark)
+b) The player is at (2, 4). Write the vector from the player to the key. Use
+end − start. (1 mark)
 
 {{< answer-space lines=2 >}}
+
+## Task 2 · A patrol (3 marks)
+
+A robot starts at (−6, 3) and must reach (6, −5) in 4 frames, with the same
+velocity in every frame.
+
+a) Find the velocity. Show your steps. (1 mark)
+
+{{< answer-space lines=2 >}}
+
+b) Write the positions after frames 1, 2, 3 and 4. (1 mark)
+
+{{< answer-space lines=2 >}}
+
+c) Draw the five positions (frames 0 to 4) on squared paper. Are they on one
+straight line? (1 mark)
+
+{{< answer-space box=5 >}}
+
+## Optional · Task with AI (no marks) {.extra}
+
+::: {.callout-note .ai-task title="Task with AI · Draw a robot's patrol"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt
+into an AI assistant that the university allows (for example Microsoft
+Copilot with your university account), and look at the picture.
+
+::: {.prompt}
+Draw a 2D grid with x and y from −6 to 10, with numbered axes. A robot
+starts at (−4, −2) and must reach (8, 4) in 3 frames, with the same
+velocity in every frame. Draw its position after frames 0, 1, 2 and 3 as
+dots, write the frame number next to each dot, and write the velocity.
+:::
+
+**What do you see?**
+
+::: {.check label="What you should see"}
+Four dots on one straight line: (−4, −2), (0, 0), (4, 2) and (8, 4). The
+velocity is (4, 2): the whole move (12, 6) divided by 3 frames.
+:::
+
+::: {.try-change}
+**Change:** let the robot take 6 frames instead of 3, and ask again. What do you
+notice?
+
+::: {.check}
+Seven dots on the same line, closer together: the velocity is (2, 1), half
+as big, because the same move is split into twice as many frames.
+:::
+:::
+
+::: {.try-change}
+**Change:** let the robot reach (8, −2) in 3 frames, and ask again. What do you
+notice?
+
+::: {.check}
+The dots are on a flat line: (−4, −2), (0, −2), (4, −2), (8, −2). The
+velocity is (4, 0): the robot only moves to the right.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again. The AI
+can be wrong: compare its result with the answers.
+:::

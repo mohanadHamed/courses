@@ -14,7 +14,7 @@ Program: Mobile Game Development and Design, Intermediate University Degree
 
 | Slug | Official course name | Code | Credit hours | Per week (as taught) | Textbook |
 |---|---|---|---|---|---|
-| `game-math` | Mathematics and Computing for Digital Games | 13411131 | 3 | 2 lectures × **90 min** | Dunn & Parberry, *3D Math Primer for Graphics and Game Development*, 2nd ed. |
+| `game-math` | Mathematics and Computing for Digital Games | 13411131 | 3 | 2 × **90 min** (lecture + seminar) | Dunn & Parberry, *3D Math Primer for Graphics and Game Development*, 2nd ed. |
 | `computing-systems` | Fundamentals of Computing Systems and Digital Platforms | 13411133 | 2 | 2 × **60 min** (lecture + seminar) | Tanenbaum & Austin, *Structured Computer Organization*, 6th ed. |
 | `digital-media` | Digital Media Technologies and Creative Production for Games | 13411134 | 2 | 2 × **60 min** (lecture + seminar) | Schell, *The Art of Game Design*, 3rd ed. |
 | `digital-skills` | Digital Skills | 01101154 | 2 | **blended**: 1 × **60 min** lab lecture + 1 online activity | Evans, Martin & Poatsy, *Technology in Action*, 18th ed. (+ Microsoft Office and AI references) |
@@ -23,50 +23,104 @@ Program: Mobile Game Development and Design, Intermediate University Degree
 most of them not in technology: it is simpler than the other courses (A2
 English) and uses general examples, never the games industry. Its
 `NOTES.md` has the details and overrides "Level and language" below.
-Since 2026-10-23 it teaches Microsoft Office and AI tools (syllabus v2) and
-is **blended**: each week one face-to-face lecture (a full lesson) and one
-online activity (see "Blended courses: the online activity" below).
+Since 2026-10-23 it teaches Microsoft Office and AI tools (syllabus v2). It
+is **fully practical** (2 hours in the computer lab in the study plan) and
+**blended**: each week one face-to-face lab session and one online activity
+(see "Blended courses: the online activity" below). It has no seminars.
 
-**One lecture = one lesson. Every course has 2 lessons per week.**
-16 weeks: week 8 midterm, week 16 final. Use the official course names exactly.
-
-### Lectures, not weeks (what students see)
-
-The syllabus plans by week, but the site never shows a week. Absences and
-delays move each course differently (one course may reach week 5 while
-another is in week 3), so everything students and the teacher see counts
-**lectures**: "Which lecture did we reach?"
-
-- Lectures are numbered 1, 2, 3 … in teaching order, with no gap for exams.
-  The course page lists them in pairs ("Lectures 1–2"), each pair followed
-  by its homework.
-- **Homework k follows lectures 2k−1 and 2k** and is due "before lecture
-  2k+1". There is no homework after a revision lecture or the project.
-- **Exams are not on the site.** The university sets the midterm and the
-  final exam in its own week; the site does not tie them to a lecture. A
-  revision lecture is an ordinary lecture ("Revision of Lectures 1–14").
-- Pages, PDFs, slides and download names say "Lecture N" and "Homework k",
-  never "Week N"; slide subtitles are "Lecture N" (or "Lecture N ·
-  Seminar", "Lecture N · Lab session").
-- The folders keep the name `week-PP` (PP = the pair: lectures 1–2 and
-  homework 1 in `week-01`, lectures 3–4 and homework 2 in `week-02`). The
-  name is internal: it keeps the links and QR codes of printed notes
-  working, and it is never shown.
+**Core weeks and practice weeks.** The syllabus has 16 weeks: week 8
+midterm, week 16 final. The e-learning platform has a 15-week plan. Each
+course has **10–12 core weeks** (units, with all the new ideas) and fills
+the rest of the 15 weeks with **practice weeks** (filling weeks: revision,
+an applied problem set, a case study, a lab practice, project
+presentations; no new content) and the midterm week. The materials still
+cover every row of each syllabus's weekly table: every semester the dean
+asks for them in the official 15-week format (see "The course package").
+Use the official course names exactly.
 The textbook is in `course.textbook` (`_metadata.yml`). Follow its topics and
 level; never copy its text, figures or exercises.
 
-### Mapping the syllabus week to the 2 lessons
+### Units and sessions (what students see)
 
-- `game-math`: syllabus has First Lecture + Second Lecture + Seminar.
-  Lesson A = First Lecture, Lesson B = Second Lecture. The seminar topic
-  becomes the case study / Game challenge of lesson A.
-- `computing-systems`, `digital-media`: Lecture + Seminar.
-  Lesson A = Lecture topic, Lesson B = Seminar topic (applied, analysis, practice).
-- `digital-skills` (blended): Lecture 1 (face-to-face, computer lab) is a
-  full lesson with "Lab task" boxes; Lecture 2 is an online activity.
-- Exam sessions (midterm, final) get no lesson and no number. Revision
-  sessions get a revision lesson. Confirm with me when a syllabus week is
-  unclear.
+Jordanian semesters lose the first two or three weeks, the exams and days to
+holidays, snow or absences. So each course has **10–12 core weeks** (always
+taught) and **practice weeks** (taught when time allows; when a week is
+lost, a practice week goes first, and nothing is missing for the students).
+Lecture length does not change (90 min Game Math, 60 min the others).
+
+- A **unit** is a core week: **Lecture N and Seminar N** (Game Math,
+  Computing Systems, Digital Media: the seminar practises the lecture of the
+  same week) or **Lecture N and its online activity** (Digital Skills), and
+  **Homework N** (not in Digital Skills). Units are numbered 1, 2, 3 … in
+  teaching order, so "Unit 5" holds Lecture 5 and Seminar 5.
+- A **practice week** (a filling week) has **no new ideas**: one or two
+  Practice sessions (revision, an applied problem set, a case study, project
+  presentations; Digital Skills: a lab practice with an online practice
+  activity). It is flexible: taught when time allows, else studied at home
+  (every answer is on its page). The 15-week plan on the platform is the
+  units, the practice weeks and the midterm week.
+- **Session types:**
+
+  | Type | Label | Content | Core? |
+  |---|---|---|---|
+  | Lecture | "Lecture N" | New ideas: the lesson model below. | Always. |
+  | Seminar | "Seminar N" | **No new ideas.** Students apply the lecture of the same unit, through activities (see "What a seminar looks like"). Game Math, Computing Systems, Digital Media. | Always. |
+  | Practice | "Practice N" | **No new ideas.** A practice week: revision, problems, a case study, presentations; Digital Skills: hands-on lab work. Seminar format. | Flexible. |
+  | Online activity | "Online activity N" | Digital Skills: practises its unit, never repeats the lecture. Numbered 1–15 in teaching order. | Core in a unit; flexible in a practice week. |
+
+- Lectures, seminars, practice sessions and online activities are numbered
+  separately, each in teaching order; Lecture N and Seminar N are always in
+  the same unit. "Which lecture did we reach?" still works.
+- Every ILO keeps at least one core section at its Bloom level: no ILO
+  depends on a practice week. A second application of the same idea goes to
+  the seminar of the unit.
+- When a syllabus week has more content than one lecture can hold, merge
+  two lectures into one (at most the size of one lecture: see "Size every
+  lesson") and move the second applications to the seminar; never move new
+  content to a practice week.
+- **The site never shows a week.** Absences move each course differently, so
+  everything students see counts sessions. The course page lists the units
+  ("Unit 3") and the practice weeks ("Practice week", tagged Flexible), each
+  with its sessions and, for a unit, its homework.
+- **Exams are not on the site.** The university sets them in its own week.
+  A revision session is a practice session ("Revision of Lectures 1–7").
+- **Homework U** belongs to unit U, practises Lecture U only (never a
+  seminar or a practice session), and is due "before lecture N" (the next
+  lecture); the last homework is due "one week after lecture N". No
+  homework in a practice week.
+- Pages, PDFs, slides and download names say "Lecture N", "Seminar N",
+  "Practice N", "Online activity N" and "Homework U", never "Week N". Slide
+  subtitles: "Lecture N", "Seminar N · practises Lecture N", "Practice N ·
+  practises Lectures X–Y".
+- **Folders:** `week-WW`, WW = the syllabus week whose row the unit or the
+  practice week covers (the first one for a merged unit). The name is
+  internal and never shown.
+- `courses/<slug>/schedule.yml` lists the weeks in teaching order: units
+  (`unit: N`) and practice weeks (`filling: true`), each with `week`
+  (folder and syllabus row), `covers` (more syllabus rows of a merged unit)
+  and its sessions (`kind`, `n`, `slot` = the syllabus column, `title`,
+  `ilos`, `practises`). It is the source for the course page, the banners
+  and the course package.
+
+### Mapping the syllabus week to the sessions
+
+- `game-math`: the syllabus has First Lecture + Second Lecture + Seminar;
+  taught as one lecture (90 min) and one seminar (90 min) per week. The
+  lecture of a unit covers both lecture columns of its syllabus week (two
+  old lectures merged into 7 sections where needed); the seminar does the
+  syllabus seminar topic. 12 units (syllabus weeks 1–7 and 9–13) and 3
+  practice weeks (8: revision; 14 and 15: problem set, case studies, course
+  revision).
+- `computing-systems`, `digital-media`: Lecture + Seminar per week. 12 units
+  (one merged unit covers two syllabus weeks: Computing Systems 5–6, Digital
+  Media 13–14) and 2 practice weeks (syllabus week 15: case studies or the
+  team workshop, and the presentations), with the midterm week.
+- `digital-skills` (blended, fully practical): Lecture 1 of the syllabus is
+  the face-to-face lab session (a lecture in a unit, a practice session in a
+  practice week); Lecture 2 is the online activity. 10 units and 5 practice
+  weeks (8, 10, 12, 14, 15).
+- Exam sessions get no session. Confirm with me when a syllabus week is
+  unclear. The maps are in each course's `plan.md`.
 
 ## The lesson model: the notes come first
 
@@ -91,6 +145,86 @@ this order.
 The PDF links to the web lesson (QR card under the ILOs, added by
 `banner.lua`) and to every simulator and mini-game (QR in the `{{< sim >}}`
 box). The web lesson's main button is "Lesson notes (PDF)".
+
+In a fully practical course (now `digital-skills`) every lecture also has a
+**worksheet** (`lesson-NN-sheet.qmd`), the main document of the session,
+like the manual of a lab experiment; its notes are then a short reference
+and its main button is "Worksheet (PDF)" (see "Lecture worksheets").
+
+### The page teaches, the notes test
+
+- **The interactive page is the study version:** a simplified copy of the
+  notes in which every question and task has an immediate answer with a
+  short reason. No student is left stuck.
+  - Every Try it question has a `Why:` reason (see "Try it"). After two
+    wrong tries the page shows the right answer with its reason.
+  - Every Do it, Lab task, Activity and Task with AI box has a
+    `::: {.check}`: "Check your result", closed until the student opens it.
+    A fixed task: the result and one line of why. A personal task (their
+    phone, their premise): "A good answer looks like …" and a 2–3 point
+    self-check list.
+  - A prose question on the page is answered in the text itself.
+- **The PDF is the self-test:** questions inside the lesson, answers at the
+  end. `book.lua` moves every `.check` of the notes to "Results of the Do it
+  tasks" ("Results of the activities" in a seminar), next to "Answers to the
+  exercises"; `Why:` is not printed.
+- **Graded work stays unanswered:** the homework and the "Tasks to submit"
+  of online activities have no `.check` and no `Why:`. Their solutions are
+  in `courses-private`.
+- `check_size.py` warns about a task without `.check`, a Try it question
+  without `Why:`, and answers in graded work.
+
+### What a seminar looks like
+
+A seminar (and a practice session, in the same format) has **no new
+ideas**: students apply the lectures they already had. A seminar practises
+the lecture of its unit; a practice session (a practice week) revises or
+applies several lectures. It must look like a seminar or a practice session
+in its title, label, grouping and slides, so a teacher knows at once that it
+is activity-based. Templates: `seminar-template.qmd`,
+`seminar-book-template.qmd`, `seminar-slides-template.qmd`.
+
+- **Files:** `seminar-NN.qmd` (page), `seminar-NN-book.qmd` (worksheet,
+  PDF), `seminar-NN-slides.qmd`; a practice session `practice-NN*`. Front
+  matter `seminar: N` (or `practice: N`); what it practises comes from
+  `schedule.yml`. The banner shows "Seminar 2 · practises Lecture 2", or
+  "Practice 1 · practises Lectures 1–7" and "Flexible"; a practice page says
+  in one line that it is studied at home when it is not held.
+- **Short, with room to explain.** Most students cannot solve a seminar
+  problem alone, even with its answer on the page: the teacher explains
+  almost every problem before and after the students try it. So a seminar
+  is **two short problems** (three only when two cannot hold the concepts),
+  each with little effort and little time, that **together use every
+  concept of the lecture(s) it practises**. The planned time (Recall and the
+  activity times) is about **40 minutes of a 60-min seminar** and about
+  **60 minutes of a 90-min seminar**; the rest is for the teacher's
+  explanations. A problem is short when it has one situation, two to four
+  steps and one small product; never a second problem on the same concept.
+- **Structure:**
+  1. **Recall** (about 5 min): 3 key ideas of the lectures it practises
+     and one Try it with 2–3 questions. No new terms and no glossary.
+  2. **Activities** (`## Activity N · title`): 2 (at most 3). Each has a
+     short game (or workplace) situation, an
+     `::: {.callout-note title="Activity N · title · 15 min"}` box with a
+     task for each student alone and a concrete product, its `.check`, and
+     one Try it with 2–3 questions (with `Why:`). Seminars are where the
+     syllabus seminar titles are done ("Matrix exercises", "Drawing a
+     storyboard from a scene"). The unit's mini-game, when it fits, is the
+     tool of an activity; a seminar has no separate Game challenge.
+  3. **At home** (optional, `## At home · Task with AI`): at most one Task
+     with AI, outside the planned time.
+  4. **Wrap-up** (`## Wrap-up {.summary}`): 2–3 lines, "what you can now do".
+- **Worksheet (PDF):** Recall, the activities, 3–5 short exercises;
+  "Answers to the exercises" and "Results of the activities" at the end.
+  No case study.
+- **Slides teach by asking:** a Recall slide (questions on the earlier
+  lectures, `.answer` cards); per activity a Task slide ("Activity 2 · …
+  · 15 min": the situation, the instruction, the product) and a Check slide
+  (the result, `.reveal` step by step); a Live demo slide for a simulator
+  the activities use; a Wrap-up. `pptx_finish.py` puts a "SEMINAR" (or
+  "PRACTICE") mark on every slide.
+- **Team work** stays only in the notes or the worksheet of the session that
+  `plan.md` names, with an individual alternative.
 
 ### Applied first (a diploma, not a bachelor's degree)
 
@@ -117,7 +251,8 @@ slides.
   the action ("Why the game loads slowly: storage") over abstract ones.
 - **One "Do it" task per section** (notes and page:
   `::: {.callout-note title="Do it · short title"}`; in `digital-skills` the
-  same box is called "Lab task"). Short (2–5 minutes), done alone, on things
+  same box is called "Lab task", and in a lecture with a worksheet it is the
+  experiment of the section). Short (2–5 minutes), done alone, on things
   every student has: their phone, the lab computer, a browser, a simulator or
   mini-game of the lesson, a free tool that runs in the lab, or paper. It
   has a concrete product: a number, a filled table, a file, a sketch, a
@@ -212,7 +347,7 @@ the notes or on the Game challenge slide.
 
 | | 60-min lesson | 90-min lesson (`game-math`) |
 |---|---|---|
-| Notes: numbered sections (`## 1.1`) | 3–4 | 5–7 |
+| Notes: numbered sections (`## 1.1`) | 3–4 | 4–7 |
 | Notes: words (without exercises and answers), at most | 3 500 | 6 000 |
 | Notes: worked examples | 2+ | 4+ |
 | Notes: exercises (with short answers at the end) | 6–10 | 10–16 |
@@ -236,6 +371,21 @@ mostly explanation) · Game challenge ~10 · summary and questions 10.
 **Time plan (60 min):** key terms 3 · sections ~42 · Game challenge ~8 ·
 summary 7.
 
+**Seminars and practice sessions** (short, with room for the teacher's
+explanations; see "What a seminar looks like"):
+
+| | 60 min | 90 min |
+|---|---|---|
+| Activities (`## Activity N`) | 2–3 | 2–3 |
+| Planned time: Recall 5 min + the activity times, at most | 40 min | 60 min |
+| Try it questions | 6–12 | 8–15 |
+| Slides (title slide not counted) | 5–9 | 6–10 |
+| Worksheet words, at most | 1 200 | 1 600 |
+
+**Lecture worksheets** (a practical course, 60 min): one experiment per
+section (3–4), 2–5 steps in each, about 40 minutes of experiments, at most
+1 600 words without the results. The slides stay within 10–16.
+
 `_extensions/lesson/check_size.py` (project pre-render) checks these numbers,
 that every section of the notes is on the page, the one-box-per-section rule,
 one "Do it" (or "Lab task") box in every section of the notes and the page,
@@ -245,29 +395,119 @@ simulator. Fix every warning before you open a PR. Full table:
 `python3 _extensions/lesson/check_size.py --all`. Keep `SIZES` and this table
 the same.
 
+### Lecture worksheets (a practical course)
+
+A lecture of a fully practical course (now `digital-skills`) is built
+around a **worksheet**, like the manual of a lab experiment. It is the main
+document of the session: students follow it during the lecture, do each
+step on the computer and record what they see, as they would record
+measurements. Template: `shared/templates/sheet-template.qmd`.
+
+- **File:** `lesson-NN-sheet.qmd` (`format: lesson-typst`, the same
+  `lesson:` and `ilos:` as the lecture) → `<prefix>_lectureN_sheet.pdf`.
+  The page shows "Worksheet (PDF)" as its first button, and the course page
+  a "Worksheet" link (the notes link is then "Notes").
+- **Parts:** the goal (the ILO card, added by `banner.lua`, with a QR card
+  to the page); `## Before you start` (what you need, the time, how to
+  check, and `{{< start-files >}}`); then **one experiment per section** of
+  the notes, `## Experiment N · short title`, with an `**Aim:**` line (the
+  section of the notes and the minutes) and **2–5 numbered steps**. After
+  each step: a place to record the result, `{{< record "D2 shows" >}}` (a
+  value, a formula, an observation, a file name; `lines=2` for a sentence,
+  `box=4` for a sketch), and its `::: {.check}`. At the end
+  `## Table of results`: a short table in `::: {.record-table}` (what to
+  record, an empty "Your result" column) that the teacher checks before the
+  end of the lecture; then one line pointing to the Game challenge.
+- **Start files:** when the steps need data, every student gets the same
+  file. List it in the front matter (`start-files:` with `name` and
+  `about`); the file is in `week-WW/files/`, written by
+  `tools/start_files.py` (change the numbers there and in the worksheet
+  together, then run it).
+- **Real apps or simulators,** chosen by the nature of the lecture and
+  written in `plan.md`: the steps run in Word, Excel, PowerPoint or an AI
+  tool, on the simulators of the interactive lesson, or a mix. A real app
+  comes first when the lab has it; a simulator is the teacher's
+  demonstration and the way to do the step without the app.
+- **The page teaches, the worksheet tests.** The interactive lesson shows
+  each experiment in its section with `{{< experiment N >}}`, read from the
+  worksheet (written once): a text field after each step (kept in the
+  student's browser only) and "Check your result". `{{< experiment results >}}`
+  shows the table of results. In the PDF, `book.lua` moves every result to
+  "Results of the experiments" ("Experiment 2 · Step 3"), on a new page.
+- **Done and checked in class, never uploaded.** The worksheet is not
+  homework and has no marks; the online activity is the graded work of
+  the unit.
+- **The notes are a short reference:** definitions, worked examples, common
+  mistakes, the case study, the exercises. Each section ends with one line
+  that points to its experiment (*In class: Experiment 2 of the worksheet,
+  …*) instead of a Lab task.
+- **The slides are the teacher's demonstration of the worksheet:**
+  Keywords; "Before you start" (the start files, the figure
+  `week-01/images/worksheet-steps.png`); for each experiment an
+  "Experiment N · …" slide (the idea in one sentence and the steps, each
+  with its question; a picture in the other column) and a "Check N · …"
+  slide (the results, step by step, in `.reveal`); a Live demo slide for
+  each simulator; the Game challenge and its Try it slide; a "Table of
+  results" slide; the Summary. The Try it questions of the sections stay on
+  the page (home study). A deck with four experiments and three simulators
+  leaves out the "Table of results" slide, so it keeps to 16 slides (the
+  Check slides show every result).
+- `check_size.py` checks it: an experiment for every section of the notes,
+  an Aim and 2–5 steps in each, a record field and a check after every
+  step, the table of results, the start files, the experiments on the page
+  and in the notes, an Experiment and a Check slide for each, and at most
+  1 600 words (without the results).
+
 ### Blended courses: the online activity
 
-A blended course (`course.blended: true`; now `digital-skills`) has one
-face-to-face lecture and one online lecture each week. The face-to-face
-lecture (odd number) is a full lesson with all three outputs. The online
-lecture (even number, `online: true` in `schedule.yml`) is **one page**,
-`lesson-NN.qmd` with `online: true`, `due:` and `marks:` in the front matter
-(template: `shared/templates/online-template.qmd`):
+A blended course (`course.blended: true`; now `digital-skills`) is fully
+practical and has one face-to-face lab session and one online activity in
+every week. In a unit the face-to-face session is a lecture (a full lesson
+with all three outputs); in a practice week it is a practice session
+(seminar format, no new ideas). The online activity (`kind: online` in
+`schedule.yml`) is **one page**, `online-NN.qmd` with `online: N`, `due:` and
+`marks:` in the front matter (template: `shared/templates/online-template.qmd`).
+It **practises its unit** and never repeats the face-to-face lecture; in a
+unit it may add a skill of the unit's syllabus row, in a practice week it
+adds nothing new:
 
 - "Before you start" (what you need, about how long, what you submit);
-- 2–3 short **Steps** marked `{.study}`: a plain explanation, a figure, a
-  simulator to try at once, one "Try it" self-check each (a video, if the
-  teacher has one, is linked on the e-learning platform);
+- 2–3 short **Steps** marked `{.study}`: what the content type gives (see
+  below), one "Try it" self-check each, with `Why:`, and a `.check` where a
+  step asks for a result;
 - **Tasks to submit** (`{.tasks}`): 2–4 practical tasks with marks and a
   concrete product (a named file, a screenshot, a short answer), with
   `{{< answer-space >}}` for the printed copy; then "How to submit".
 
+**The content type** (`content:` in the front matter, a chip on the page)
+varies the weeks, so the activities do not all look the same; it decides
+what the Steps hold (the table of each activity is in `plan.md`):
+
+- `lesson`: an interactive lesson: plain explanations, figures and
+  simulators where they help;
+- `sims`: simulators only: every Step is one short instruction, its
+  simulator and its self-check;
+- `mix`: text steps and simulator steps;
+- `video`: free official videos (Microsoft Support), linked and never
+  copied, each with `{{< watch title=… source=… url=… length=… checked=…
+  captions=… >}}`; the Steps practise what they show. Check every link
+  again before the semester and change `checked=`;
+- `course-video`: a short video made for the course (generic interfaces,
+  like the simulators), shown with `{{< watch file=… captions=… poster=…
+  script=… >}}`. **Its voice-over reads its script word for word**, and its
+  English captions are the same words at the same times: the script
+  (`videos/<name>-script.txt`, one caption line per line, A2) is written
+  first and is the one source of the voice, the captions and the pictures.
+  The page shows the script as a transcript.
+
 The page has "Download tasks (PDF)" and "Print tasks" buttons; on paper only
 the tasks are printed (`homework_pdf.py` prints it as
-`<prefix>_lectureN_tasks.pdf`). The online activity **replaces the
+`<prefix>_onlineN_tasks.pdf`). The online activity **replaces the
 homework** of that course. Its model answers stay private in
-`courses-private` (`week-PP/lesson-NN-solutions.md`). `check_size.py` checks
-its parts and that it has at least two simulators.
+`courses-private` (`week-WW/online-NN-solutions.md`). `check_size.py` checks
+its parts and its content type (a simulator in every Step of `sims`; the
+source, length and date of every official video; the files of a course
+video, and captions with the words of its script).
 
 **Independent study first; team work only where the syllabus asks for it.**
 Every student must be able to learn from the notes and the page alone.
@@ -288,8 +528,95 @@ of the lesson"), then "Try it" boxes that combine the sections of the day (the
 last one "(harder)"). The notes contain the same story as a "Case study"
 section.
 
-Course-specific notes: `courses/<slug>/NOTES.md`. Week map:
-`courses/<slug>/schedule.yml` (titles, ILOs) and `courses/<slug>/plan.md`.
+Course-specific notes: `courses/<slug>/NOTES.md`. Unit map:
+`courses/<slug>/schedule.yml` (sessions, titles, ILOs) and
+`courses/<slug>/plan.md`.
+
+## Tasks with AI
+
+Students have AI assistants, and many of them have never used one to learn.
+In Game Math, Computing Systems and Digital Media no ILO or PLO asks for AI:
+a "Task with AI" box is an **extra for the curious**, so that students meet
+AI as a modern way to learn. It is as simple and as inviting as possible
+(the teacher's request of 2026-10-31):
+
+```markdown
+::: {.callout-note .ai-task title="Task with AI · Draw the vector to the enemy"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt into
+an AI assistant that the university allows (for example Microsoft Copilot
+with your university account), and look at the result.
+
+::: {.prompt}
+A complete prompt: every detail and number of one situation, ready to copy,
+that asks for something to look at (a picture, a diagram, a chart, a small
+table). For example: Draw a 2D grid from 0 to 10. The player is at (2, 3)
+and the enemy at (6, 6). Draw the vector from the player to the enemy as an
+arrow, with its x part and its y part, and label them.
+:::
+
+**What do you see?**
+
+::: {.check label="What you should see"}
+The result in words, to compare: the AI can be wrong.
+:::
+
+::: {.try-change}
+**Change:** one number or one word, for example the enemy to (8, 2). Ask
+again. What do you notice?
+
+::: {.check}
+What the student should notice.
+:::
+:::
+
+::: {.try-change}
+**Change:** a second change. What do you notice?
+
+::: {.check}
+What the student should notice.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again.
+:::
+```
+
+- **A complete prompt** (`::: {.prompt}`; the page adds "Copy prompt"):
+  every detail and number of one game or work situation, ready to copy. The
+  student never completes or designs it: no brackets, no "add your …".
+- **A visual result:** the prompt asks the AI for something to look at: a
+  picture, a diagram, a chart, a small table or a small web page.
+- **What you should see:** `::: {.check label="What you should see"}`, a
+  closed box with the result in words, so the student can compare (the AI
+  can be wrong).
+- **2–3 changes to try** (`::: {.try-change}`): one number or one word
+  changed, "What do you notice?", and a closed answer inside (`::: {.check}`,
+  "What you notice"); then one line that invites the student's own idea.
+  The notes (PDF) print these answers at the end, with the other results.
+- No heavy check step before the student sees the result: keep it fun.
+- **0–2 per session**, only as an extra: the "At home" part of a seminar
+  (at most one there), or after the Game challenge of a lecture. Not on the
+  slides. Free tools named generally (Microsoft Copilot with the university
+  account, ChatGPT, Gemini); no task needs a paid plan. No personal data in
+  a prompt. Never AI images, sound or video as a student's media product in
+  Digital Media (unclear rights, and it skips the production ILOs).
+- **AI is always an optional extra, also in homework** (the teacher's
+  decision of 2026-10-31): no graded task needs AI. A homework may end with
+  `## Optional · Task with AI (no marks) {.extra}`: the same kind of box,
+  about another situation than the graded tasks, so its closed answers give
+  nothing away; it is hidden on paper, and the first line of the page says
+  "No task needs AI. The optional Task with AI at the end gives no marks."
+  (In Digital Skills, AI is in the ILOs: its online tasks to submit may use
+  AI on purpose, with the AI-use statement.)
+- **Digital Skills** has no "Task with AI" box: AI is in its ILOs (A1, B1,
+  C4, D1), so its experiments and online tasks teach AI on purpose, with
+  checking and, from unit 9, the AI-use statement.
+- The rule "no tool or assistant names" (Site identity) is about how the
+  lessons are made, not about the tools students use.
+- `check_size.py` warns above 2 per file, about a prompt that is not
+  complete or asks for no visual result, about a box without "What you
+  should see", about changes to try without a closed answer, and about a
+  box inside graded tasks.
 
 ## Source of truth: the Google Drive folder (private, never copy into this repo)
 
@@ -330,13 +657,15 @@ ILO–PLO matrix). Use the newest version of each file.
 
 ### Level and language
 
-The students' starting level is very basic. The level is about 20 %
+The students' starting level is very basic. Since 2026-10-30 the lessons
+are **as simple as the outcomes allow**: the estimated limit, about 30 %
 simpler than the first applied version of the lessons (October 2026), which
-was already slightly easier than a first-year bachelor's course; the English
-is simple. The ILOs and PLOs stay exactly the same: a lesson is easier in
-*how* it teaches, never in *what* the ILO asks for. (The estimated limit is
-about 30 % simpler: beyond it, syllabus topics, the ILO verb or the practical
-tasks would be lost.)
+was already slightly easier than a first-year bachelor's course. Beyond it,
+syllabus topics, the ILO verb or the practical tasks would be lost. The ILOs
+and PLOs stay exactly the same: a lesson is easier in *how* it teaches,
+never in *what* the ILO asks for. Explain each idea in the simplest way, and
+teach only the simplest concepts that still reach every ILO at its Bloom
+level and serve the PLO behind it.
 
 - **Scope: only what the outcomes need.** A topic goes into a lesson only if
   the syllabus week names it, an ILO of the week asks for it, or an ILO of a
@@ -358,11 +687,13 @@ tasks would be lost.)
   sentences. Leave out details that the ILO and the tasks do not need
   (cache levels, standards, exceptions); one short sentence is enough when
   a student may meet the detail in practice.
-- **English (notes):** CEFR B1. Short sentences (about 20 words at most,
-  one idea each), common words, active voice ("the CPU reads the value",
-  not "the value is read"), no idioms. Explain every technical word in plain
-  words the first time it appears, then use the same word every time.
-- **English (page and slides):** A2–B1: even shorter sentences and lists.
+- **English (notes):** CEFR A2–B1. Short sentences (about 15 words at most,
+  one idea each), the most common words, active voice ("the CPU reads the
+  value", not "the value is read"), no idioms. Explain every technical word
+  in plain words the first time it appears, then use the same word every
+  time.
+- **English (page and slides):** A2: even shorter sentences (about 12
+  words) and lists.
 - Definitions stay precise, but in the same simple English.
 - No programming yet: *Programming Fundamentals (1)* (C#) is in semester 2.
   Code in semester-1 courses is a short C# example to read, never a task,
@@ -373,7 +704,7 @@ tasks would be lost.)
 
 ## Writing rules (always enforce)
 
-- **Notes:** simple English (B1, see "Level and language"): short
+- **Notes:** simple English (A2–B1, see "Level and language"): short
   paragraphs, direct steps. Precise
   definitions (`::: {.callout-important title="Definition 1.2 — …"}`), worked
   examples with numbered steps (`::: {.callout-note title="Example 1.3 — …"}`),
@@ -381,7 +712,7 @@ tasks would be lost.)
   (`::: {.callout-caution title="In game code"}`), figures with captions and
   `@fig-` references, tables with captions, `::: {.lead}` opening paragraph,
   `::: {.answers}` for the short answers.
-- **Page:** the same content, shorter and plainer (A2–B1): one idea per
+- **Page:** the same content, shorter and plainer (A2): one idea per
   sentence, but no baby talk. "Watch out!" boxes for common mistakes.
 - **Slides:** short, complete sentences and pictures; no paragraphs. See
   "Slides explain themselves".
@@ -402,30 +733,36 @@ tasks would be lost.)
   Check `glossary.yml` before adding; reuse existing keys. No `: ` inside a
   value (YAML).
 
-## Three outputs per lesson
+## Three outputs per session
 
-Folder: `courses/<slug>/week-PP/`, one folder for each pair of lectures
-(see "Lectures, not weeks"): lectures 1–2 in `week-01`, 3–4 in `week-02`, ….
-NN in the file names is the lecture number. Figures in `week-PP/images/`,
-simulators and mini-games in `week-PP/sims/`.
+Folder: `courses/<slug>/week-WW/`, one folder for each unit, WW = its
+syllabus week (see "Units and sessions"). NN in the file names is the number
+of the session within its kind. Figures in `week-WW/images/`, simulators and
+mini-games in `week-WW/sims/`. Images and simulators move with their session.
 
 | File | Format | Output |
 |---|---|---|
 | `lesson-NN-book.qmd` | `lesson-typst` | Lesson notes, PDF (the main text) |
 | `lesson-NN.qmd` | `lesson-html` | Interactive lesson page |
 | `lesson-NN-slides.qmd` | `lesson-pptx` | Slides (.pptx), public summary |
-| `homework-KK.qmd` (KK = pair) | `lesson-html` | Take-home task page with Print and Download PDF buttons |
+| `seminar-NN-book.qmd`, `seminar-NN.qmd`, `seminar-NN-slides.qmd` | the same | Seminar worksheet, page and slides (Digital Skills: `practice-NN*`) |
+| `lesson-NN-sheet.qmd` | `lesson-typst` | Lecture worksheet, PDF (Digital Skills: the main document of the session) |
+| `online-NN.qmd` | `lesson-html` | Online activity (Digital Skills) |
+| `homework-UU.qmd` (UU = unit) | `lesson-html` | Take-home task page with Print and Download PDF buttons |
 
 - **Download names.** Files students download have meaningful, unique
   names: `math_lecture5.pdf` (notes), `math_lecture5_slides.pptx` (slides),
-  `math_homework1.pdf` (homework). N is the lecture or homework number
-  without a leading zero; the prefix is `course.file-prefix` in
+  `math_seminar2.pdf`, `math_seminar2_slides.pptx`, `math_homework1.pdf`,
+  `digital_skills_practice3.pdf`, `digital_skills_online4_tasks.pdf`,
+  `digital_skills_lecture6_sheet.pdf` (a lecture worksheet). N is
+  the number without a leading zero; the prefix is `course.file-prefix` in
   `_metadata.yml` (`math`, `computing_systems`, `digital_media`,
   `digital_skills`). `download_names.py` (post-render) renames the rendered
   files; `banner.lua` and `{{< schedule >}}` link the same names. Keep the
   source names (`lesson-NN-book.qmd`) as they are.
 - Start from `shared/templates/book-template.qmd`, `lesson-template.qmd`,
-  `slides-template.qmd` and `homework-template.qmd`.
+  `slides-template.qmd`, the three `seminar-*` templates,
+  `online-template.qmd` and `homework-template.qmd`.
 - Formats, styles and filters live in the Quarto extension `_extensions/lesson/`
   (Quarto requires `_extensions/` at the project root). Change look and
   behaviour there, once, for every course.
@@ -433,7 +770,8 @@ simulators and mini-games in `week-PP/sims/`.
   number, ILOs) automatically from metadata.
 - PDF engine: Typst. Main font Noto Sans; Arabic font Noto Naskh Arabic
   (installed in CI from `fonts-noto-core`). Book filter: `book.lua`
-  (`.lead`, `.answers`); callout styles: `typst-body.typ`.
+  (`.lead`, `.answers`, `.check` results, `.prompt`); callout styles:
+  `typst-body.typ`.
 
 ## Design
 
@@ -468,14 +806,23 @@ One instruction.
 First question.
 :   its answer
 
+    Why: one sentence, in the words of the lesson.
+
 Second question.
 :   its answer
+
+    Why: one sentence.
 :::
 :::
 ```
 
 - Each question is followed by its right answer (`:   answer`). The page shows
   every different answer once as a button, in random order.
+- **Every question has a reason** (`Why:`, indented under the answer): one
+  sentence in the words of the lesson, why the answer is right (or why a
+  tempting answer is wrong). The page shows it after the right answer, or
+  after two wrong tries together with the right answer. The notes do not
+  print it.
 - The same answer may fit several questions; say so: "You can use an answer
   more than once." With few different answers, add wrong ones in `extra`.
 - Keep answers short. Escape a backslash as `\\`.
@@ -622,12 +969,14 @@ what the class does with it. Short is good; unclear is not.
 
 ## Course pages and the schedule
 
-- `courses/<slug>/schedule.yml` lists every lecture in teaching order
-  (number, title, ILOs); no weeks and no exams. The course page shows it with
-  `{{< schedule >}}` in pairs, each with its homework: a lecture whose
-  `lesson-NN.qmd` exists and is not a draft is bright, with links (lecture,
-  PDF, slides); the others are faded ("Coming soon"). Released homework
-  appears after its two lectures.
+- `courses/<slug>/schedule.yml` lists every week in teaching order: units
+  and practice weeks (see "Units and sessions"); no exams. The course page
+  shows it with `{{< schedule >}}`: one card per unit ("Unit 3") with its
+  homework, and one dashed card per practice week ("Practice week", tagged
+  Flexible). Each session is labelled "Lecture N", "Seminar N", "Practice N"
+  or "Online activity N"; a session whose `.qmd` exists and is not a draft
+  is bright, with links (page, PDF, slides); the others are faded ("Coming
+  soon").
 - Titles in `schedule.yml` follow the syllabus weekly table. Change a title
   there, and in the lesson's front matter, together.
 
@@ -658,18 +1007,25 @@ OpenCourseWare, Stanford and Harvard CS50 publish their problem sets). Students
 can prepare, and the homework is take-home anyway. **Solutions, model answers
 and marking notes stay private**, never in this repo: they go in the private
 repo `courses-private` (folder `../courses-private`, next to this one), with
-the same paths: `courses/<slug>/week-KK/homework-KK-solutions.md`. Change a
+the same paths: `courses/<slug>/week-WW/homework-UU-solutions.md`. Change a
 homework and its solution together.
 
-- One homework after every two lectures (not in a blended course: there the
-  online activity takes its place): homework k follows lectures 2k−1
-  and 2k (`courses/<slug>/week-KK/homework-KK.qmd`), from
-  `shared/templates/homework-template.qmd`. None after a revision lecture;
-  computing-systems, digital-media and digital-skills: the project instead
-  of the last homework (syllabus).
-- Built from the ILOs of its two lectures (`ilos:`): practise exactly what
-  the two lessons taught, in the same words. No new content.
-- Size: **1–2 short, simple tasks, under 10 minutes**, in all courses. A
+- **One homework per unit** (not in a blended course: there the online
+  activity takes its place): homework U belongs to unit U
+  (`courses/<slug>/week-WW/homework-UU.qmd`), from
+  `shared/templates/homework-template.qmd`. None in a practice week;
+  computing-systems and digital-media: the project in the practice weeks
+  (syllabus).
+- Built from the ILOs of the lecture of its unit (`ilos:`): practise exactly
+  what it taught, in the same words, never a seminar or a practice session.
+  No new content.
+- **No task needs AI** (see "Tasks with AI"): the page says "No task needs
+  AI." A homework may end with an optional Task with AI that gives no marks
+  (`## Optional · Task with AI (no marks) {.extra}`, hidden on paper). The
+  homework stays light: students who finish it quickly do it.
+- Size: **1–2 short, simple tasks, about 10 minutes, never more than 15**,
+  in all courses.
+  Shorter is better: never make a homework longer than it is. A
   student who has read the notes or gone through the interactive page must be
   able to answer at once; no research, no long calculations. Short homework that students finish is better than long homework
   they skip. I may make it longer later in the course, if the students do it well;
@@ -680,15 +1036,16 @@ homework and its solution together.
   task. Classes are small, so copying is not a risk now.
 - **Change the numbers and situations every semester.** Old versions stay in
   the git history, and old answers go around.
-- `due:` names a lecture ("before lecture 3"), never a week or a date, so
+- `due:` names a lecture ("before lecture 3": the lecture of the next unit;
+  the last one "one week after lecture 12"), never a week or a date, so
   the page works every semester and after any delay. Exact dates go on the
   e-learning platform.
 - Submission: the university e-learning platform (syllabus). The page says how.
-- Release: homework is published together with its two lectures, when the
+- Release: homework is published together with its unit, when the
   PR is merged (see "Release: no drafts"). Earlier homework stays online.
 - No answers on the page: no `.match` boxes, no "Check your answers".
-- **A web page that prints well.** Homework belongs to two lectures, not to
-  one lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF" and
+- **A web page that prints well.** Homework belongs to a unit, not to one
+  lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF" and
   "🖨 Print homework" buttons. The PDF is the printed page itself:
   `_extensions/lesson/homework_pdf.py` (post-render) prints each homework page
   with headless Chrome, so the download and the printout are the same one A4
@@ -700,26 +1057,45 @@ homework and its solution together.
 - **One A4 page:** the printed page must fit on one page.
   "How to submit" is one short line; the print layout is tight.
   If it does not fit, cut a question or use fewer lines, never a smaller font.
-- The course page lists released homework after its two lectures (number, due, marks).
+- The course page lists released homework in its unit card (number, due, marks).
 - Check every task like a "Try it": self-contained, one clear answer
   (or a clear marking rule), no changing state, tried before release.
+
+## The course package (for the dean, every semester)
+
+The college asks every semester for the complete materials of each course,
+organised by the official weekly plan of its syllabus.
+
+- The weekly table of each syllabus is copied **word for word** into
+  `courses-private/courses/<slug>/syllabus-weeks.yml` (private; this repo
+  keeps only titles and ILO codes).
+- After a full `quarto render`, `python3 tools/course_package.py` writes
+  `_package/<slug>/` (not in git): one folder per syllabus week with its
+  PDFs, slides, homework and the addresses of its pages, and `index.html` /
+  `index.pdf`: the syllabus table exactly as approved, with one added
+  **Materials** column (Lecture 8, Seminar 8, Practice 1 (flexible),
+  Online activity 5, Homework 5). A merged unit is listed in every row it
+  covers; the practice weeks fill the rows of the case studies, revisions
+  and presentations.
+- The script checks that every teaching row has its material and that every
+  session belongs to exactly one row. Fix every problem before sending it.
 
 ## Public repo — never commit
 
 Assignment solutions and marking notes, exam questions, question banks, grades,
-student data, official internal university documents. Those live elsewhere,
-privately. Homework *tasks* are public (see "Homework").
+student data, official internal university documents (also the syllabus
+tables of the course package). Those live elsewhere, privately. Homework *tasks* are public (see "Homework").
 Nothing unfinished goes to `main`: the PR review is the check (see "Release:
 no drafts").
 
 ## Way of working
 
-- Build two lectures at a time. Never generate all lessons up front.
-- Phase 1: `schedule.yml` + `plan.md` per course (16-week map → ILOs, same weeks as the syllabus), approved by me first.
-- Phase 2: **a typical session = the next two lectures of each course**
-  (the syllabus week that holds them), each with all 3 outputs, plus one
-  homework per course. Start every session by reading that week in the
-  Drive syllabus.
+- Build one unit at a time. Never generate all lessons up front.
+- Phase 1: `schedule.yml` + `plan.md` per course (the units of the 16-week
+  syllabus → sessions → ILOs), approved by me first.
+- Phase 2: **a typical work session = the next unit of each course**, each
+  session with all its outputs, plus its homework. Start by reading that
+  week in the Drive syllabus.
 - I review every lesson in its PR before I merge it; merging is the release.
   Ask before big structural decisions.
 
@@ -727,7 +1103,7 @@ no drafts").
 
 New lectures, online activities and homework are written **without**
 `draft: true` and are published when I merge their PR. The course page then
-shows them at once (homework after its two lectures), so students can study
+shows them at once (homework in its unit), so students can study
 ahead. Use `draft: true` only when I ask for it for one file; the templates
 do not add it. The draft mechanism still works (a draft lecture is faded,
 "Coming soon", and `--profile review` shows it).
@@ -853,3 +1229,57 @@ do not add it. The draft mechanism still works (a draft lecture is faded,
   the arrow keys from scrolling the page, and keeps `focus()` from scrolling
   the page; on a phone, a simulator takes the whole width of the screen.
   Test every new simulator inside the page, not only on its own.
+- 2026-10-28 (plan `plans/restructure-19-lectures.md`): semesters lose two
+  or three weeks plus holidays, the students are weaker than expected, and
+  the dean checks the materials against the 15-week syllabus. The courses
+  are now organised in units (one per syllabus week) with about 19 core
+  sessions and flexible seminars or practice sessions; the interactive page
+  answers every question and task (`Why:`, `.check`), while the PDF stays a
+  self-test; content beyond the ILOs was cut and second applications moved
+  to the seminars. Students have AI assistants, so some tasks are now set at
+  a higher level and done with AI, with a check step (not "explain it to
+  me" prompts, which every student can do alone). Rules above ("Units and
+  sessions", "The page teaches, the notes test", "What a seminar looks
+  like", "Tasks with AI", "The course package").
+- 2026-10-30 (teacher review of the first seminars): the seminars were too
+  long for the class. Most students cannot solve a seminar problem alone, so
+  the teacher explains almost every problem, and that takes time. A seminar
+  is now two short problems (three at most) that together use every concept
+  of the lecture it practises, planned for about 40 of 60 minutes (60 of 90),
+  with no separate Game challenge or case study; a Task with AI is an
+  optional "At home" part. The lessons are now as simple as the outcomes
+  allow (the estimated limit, about 30 % simpler than October 2026), with
+  A2–B1 English in the notes and A2 on the pages and slides. Rules above
+  ("What a seminar looks like", "Level and language").
+- 2026-10-31 (Digital Skills, lecture worksheets): the course is fully
+  practical, so every lecture is now built around a worksheet, like the
+  manual of a lab experiment: 3–4 experiments (one per section), numbered
+  steps done on the computer (a real app, a simulator or both), a place to
+  record the result of every step, start files with the same data for
+  every student, and a table of results that the teacher checks in class.
+  The page shows the same experiments with a check after every step; the
+  notes became a short reference; the slides demonstrate the worksheet.
+  Rules above ("Lecture worksheets").
+- 2026-10-31 (teacher's review of the order, plan v3): the seminars were
+  scattered (Game Math went Lecture 1, Seminar 1, Lectures 2–7, then a
+  seminar), and the 15 units mixed core and flexible sessions. Now every
+  week is one lecture and one seminar that practises it (Game Math, Computing
+  Systems, Digital Media) or one lab lecture and one online activity
+  (Digital Skills, fully practical, no seminars). Each course has 10–12 core
+  weeks (units) and practice weeks without new content that fill the
+  15-week plan of the platform and are dropped first when weeks are lost.
+  Game Math merged the two lectures of four syllabus weeks; Computing
+  Systems and Digital Media merged one pair each; Digital Skills turned the
+  PivotTable practice into Lecture 10. Rules above ("Units and sessions",
+  "Mapping the syllabus week", "What a seminar looks like", "Blended
+  courses", "Homework", "Course pages and the schedule").
+- 2026-10-31 (teacher's review of the AI boxes): the "Task with AI" boxes
+  gave an incomplete prompt for the student to complete, which is not right
+  for basic students, many of whom have never learned with AI. In Game
+  Math, Computing Systems and Digital Media no ILO asks for AI, so every box
+  is now an extra for the curious: a complete prompt that asks for a
+  picture, a diagram or a table, what the student should see, and two or
+  three changes to try, each with a closed answer. The teacher then decided
+  that AI is always an optional extra, also in homework: no graded task
+  needs AI. Rules above ("Tasks with AI", "Homework").
+

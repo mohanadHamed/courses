@@ -1,12 +1,12 @@
 ---
-title: "Mathematics in Game Development and Coordinate Systems"
+title: "Coordinates and Vectors"
 subtitle: "Lecture 1"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary game-loop frame-rate coordinate-system origin axis ordered-pair quadrant handedness >}}
+{{< glossary game-loop frame-rate coordinate-system origin axis ordered-pair quadrant handedness scalar vector magnitude component displacement velocity >}}
 
 ## 1.1 The game loop
 
@@ -15,23 +15,12 @@ format: lesson-pptx
 - For a computer, a game is numbers: positions, health, score.
 - The game loop repeats: read the input, change the numbers, draw.
 - One pass makes one **frame**; 60 fps means 60 passes every second.
-- **Do it:** Write four things that a game you play computes with numbers.
+- **Do it:** A racing game runs at 30 fps. How many updates does it make in 10 seconds?
 :::
 ::: {.column width="50%"}
 ![](images/game-loop.png)
 :::
 ::::
-
-## Example · One tap, one pass
-
-The player taps to build a tower that costs 50 coins.
-**What does the game do in one pass of the loop?**
-
-::: {.reveal}
-1. Read: the game reads where the finger touched.
-2. Change: it adds a tower, and the coins go from 200 to 150.
-3. Draw: the next frame shows the tower and the new coins.
-:::
 
 ## Try it 1 · The game loop
 
@@ -45,51 +34,14 @@ b) 600 frames (60 × 10)
 c) probability
 :::
 
-## 1.2 One dimension: the number line
-
-:::: {.columns}
-::: {.column width="50%"}
-- Displacement = end − start. A minus sign means left (or down).
-- Distance is the displacement without the sign.
-- A board game uses whole numbers; a runner can use decimals.
-- **Do it:** Draw a line from −5 to 10. What is the displacement from 0 to 6?
-:::
-::: {.column width="50%"}
-![](images/number-line.png)
-:::
-::::
-
-## Example · Back to the checkpoint
-
-The player is at 4. The checkpoint is at −3.
-**What are the displacement and the distance back to the checkpoint?**
-
-::: {.reveal}
-1. Displacement = end − start = −3 − 4 = **−7**.
-2. The minus sign means the player moves to the left.
-3. The distance has no sign: **7 units**.
-:::
-
-## Try it 2 · Moving along a line
-
-a) The player runs from 0 to a coin at 6. What is the displacement?
-b) One move has a displacement of −5, another of +5. What are their distances?
-c) A board game piece can stand only on squares 1, 2, 3. What kind of numbers are these?
-
-::: {.answer}
-a) +6
-b) 5 units each
-c) whole numbers
-:::
-
-## 1.3 Two dimensions: (x, y)
+## 1.2 Two dimensions: (x, y)
 
 :::: {.columns}
 ::: {.column width="50%"}
 - A point is an ordered pair (x, y): x to the right, y up.
 - The signs of x and y decide the **quadrant** (I to IV).
 - A point with a 0 lies on an axis, not in a quadrant.
-- **Do it:** In GeoGebra, draw the key at (−3, 2). In which quadrant is it?
+- **Do it:** In GeoGebra, draw an enemy at (−5, −2). In which quadrant is it?
 :::
 ::: {.column width="50%"}
 ![](images/quadrants.png)
@@ -107,29 +59,25 @@ The coin is at (4, 3), the key at (−3, 2) and the exit at (2, −3).
 3. Exit (2, −3): plus and minus, so **quadrant IV**.
 :::
 
-## Live demo · Grid Strike
-
-{{< sim file="sims/grid-strike.html" poster="sims/grid-strike.png" title="Grid Strike: hit the coordinates" kind="game" task="**Show:** tap the point that the game asks for. **Ask:** which number do you read first, x or y?" >}}
-
-## Try it 3 · Where is the point?
+## Try it 2 · Where is the point?
 
 a) Both numbers of a point are negative. In which quadrant is it?
 b) A tree stands at (−5, 0). Where is it?
-c) A point is 3 units right of the centre and 2 units down. What are its coordinates?
+c) A player at (2, 1) moves 3 right and 4 up. What is the new position?
 
 ::: {.answer}
 a) quadrant III
-b) on the x-axis
-c) (3, −2)
+b) on the x-axis, in no quadrant
+c) (5, 5)
 :::
 
-## 1.4 Three dimensions: (x, y, z)
+## 1.3 Three dimensions: (x, y, z)
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A point in 3D is an ordered triple (x, y, z).
-- In most engines, y is up, so y is the height.
-- On the ground, y = 0.
+- A 3D point has three numbers: (x, y, z).
+- In most engines y points up, so y is the height.
+- Every point on the ground has y = 0.
 - **Do it:** In the 3D viewer, move the player to (1, 2, 4). Which slider changes the height?
 :::
 ::: {.column width="50%"}
@@ -137,90 +85,183 @@ c) (3, −2)
 :::
 ::::
 
-## Example · A drone over the harbour
+## Live demo · Place an object in 3D
 
-A drone flies at (4, 12, −3), and y is up.
-**How high is it, and where is the point below it on the ground?**
+{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" task="**Show:** move the player to (1, 2, 4), then down to the ground. **Ask:** which number changed?" >}}
 
-::: {.reveal}
-1. The height is the middle number: **12 units**.
-2. The point below it has y = 0: **(4, 0, −3)**.
-3. When the drone lands straight down, only y changes.
-:::
+## Try it 3 · Positions in 3D
 
-## Live demo · 3D position
-
-{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" task="**Show:** move the player up with the y slider. **Ask:** which number changes when the player jumps?" >}}
-
-## Try it 4 · Positions in 3D
-
-In these questions, y is up.
-
-a) A box is at (5, 0, 5). Where is it?
-b) Point A is at (1, 4, 2) and point C at (3, 7, −1). Which point is higher?
-c) A tower stands on the ground at x = 4 and z = −3. What is its position?
+a) A drone is at (4, 12, −3) and y is up. How high is it?
+b) A depot stands on the ground at x = 4 and z = −3. What is its position?
+c) The drone lands straight down. Which number changes?
 
 ::: {.answer}
-a) on the ground
-b) C
-c) (4, 0, −3)
+a) 12 units (the middle number)
+b) (4, 0, −3)
+c) only y
 :::
 
-## 1.5 Left-handed or right-handed?
+## 1.4 Left-handed or right-handed?
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Hand rule: point the fingers along +x and bend them towards +y. The thumb shows +z.
-- Left hand: +z points into the screen (**left-handed**).
-- Right hand: +z points towards you (**right-handed**).
-- **Do it:** Try the rule with your left hand. Where does your thumb point?
+- With x right and y up, z can point into the screen or out of it.
+- Point your fingers along +x and bend them to +y: the thumb shows +z.
+- Unity is left-handed: +z goes into the screen.
+- **Do it:** Try the rule with each hand. Where does each thumb point?
 :::
 ::: {.column width="50%"}
 ![](images/handedness.png)
 :::
 ::::
 
-## Unity and Blender use different axes
+## Try it 4 · Which hand?
 
-| Software | Up axis | Handedness |
-|---|---|---|
-| Unity | y | left-handed |
-| Blender | z | right-handed |
-
-## Try it 5 · Which hand?
-
-a) Is Blender left-handed or right-handed?
-b) Which axis is up in Blender?
-c) Left hand: the fingers point right and bend up. Where does the thumb (+z) point?
+a) Your left hand has the fingers to the right, bent up. Where does the thumb point?
+b) Is Unity left-handed or right-handed?
+c) A tool's +z comes out of the screen. Which handedness does it have?
 
 ::: {.answer}
-a) right-handed
-b) z
-c) into the screen
+a) into the screen
+b) left-handed
+c) right-handed
 :::
 
-## Game challenge · Harbor Guard
+## 1.5 Vectors and components
 
-{{< sim file="sims/harbor-guard.html" poster="sims/harbor-guard.png" title="Harbor Guard: build towers at the right coordinates" kind="game" task="**The story:** ships attack a harbour; the origin is in its centre. **Play:** tap the point the radar gives to build a tower." >}}
+:::: {.columns}
+::: {.column width="50%"}
+- A scalar is one number; a vector has a size and a direction.
+- A vector is an arrow, and it has no position.
+- The game stores its components: head minus tail.
+- **Do it:** In GeoGebra, compare the arrows from (1, 4) to (5, 1) and from (−2, 2) to (2, −1).
+:::
+::: {.column width="50%"}
+![](images/components.png)
+:::
+::::
 
-## Try it 6 · The harbour (harder)
+## Example · Components of an arrow
 
-The facts: Harbor Guard runs at 60 fps. The dock is at (0, −6). A ship enters at (5, 8) and sails to the dock.
+An arrow starts at (1, 4) and ends at (5, 1).
+**What are its components?**
 
-a) How many frames does the game make in 5 seconds?
-b) The dock is at (0, −6). Where is it?
-c) The ship sails from y = 8 down to y = −6. What is its displacement in y?
+::: {.reveal}
+1. Along x: 5 − 1 = 4, so four units to the right.
+2. Along y: 1 − 4 = −3, so three units down.
+3. The vector is **(4, −3)**.
+:::
+
+## Try it 5 · Scalars and components
+
+a) Is the score 12 400 a scalar or a vector?
+b) An arrow goes from (−2, 3) to (4, −1). What are its components?
+c) Where does the vector (0, 5) point?
 
 ::: {.answer}
-a) 300 frames
-b) on the y-axis
-c) −14
+a) a scalar
+b) (6, −4)
+c) straight up
+:::
+
+## 1.6 From one point to another
+
+:::: {.columns}
+::: {.column width="50%"}
+- The movement from A to B is the vector B − A.
+- A − B is the opposite vector: same size, other way.
+- An enemy that uses E − P walks away from the player.
+- **Do it:** In GeoGebra, type E = (−2, 1) and P = (3, 4). What is P − E?
+:::
+::: {.column width="50%"}
+![](images/displacement.png)
+:::
+::::
+
+## Example · Enemy and player
+
+The enemy is at E = (2, 7) and the player at P = (6, 4).
+**Which vector takes the enemy to the player?**
+
+::: {.reveal}
+1. From E to P is P − E.
+2. P − E = (6 − 2, 4 − 7) = **(4, −3)**.
+3. The way back is E − P = (−4, 3), the opposite vector.
+:::
+
+## Try it 6 · Enemy and treasure
+
+a) The player is at (−3, 2) and the treasure at (5, −4). What is the arrow to the treasure?
+b) The player stands on the goal. What is goal − player?
+
+::: {.answer}
+a) (8, −6)
+b) the zero vector (0, 0)
+:::
+
+## 1.7 Moving every frame
+
+:::: {.columns}
+::: {.column width="50%"}
+- Every frame the game adds the velocity to the position.
+- After n frames the object has moved n times the velocity.
+- To find a velocity, divide the total displacement by the frames.
+- **Do it:** Play three levels of Vector Dash and check one velocity.
+:::
+::: {.column width="50%"}
+![](images/per-frame.png)
+:::
+::::
+
+## Example · Which velocity?
+
+A missile at (10, 7) must reach (4, 1) in exactly 3 frames.
+**Which velocity does it need?**
+
+::: {.reveal}
+1. The total displacement is (4, 1) − (10, 7) = (−6, −6).
+2. Each frame is one third of it: **(−2, −2)**.
+3. Check: (10, 7) + 3 × (−2, −2) = (4, 1).
+:::
+
+## Live demo · Vector Dash
+
+{{< sim file="sims/vector-dash.html" poster="sims/vector-dash.png" title="Vector Dash: one velocity, n frames" kind="game" task="**Show:** choose a velocity that lands the ship on the target. **Ask:** how do we find it without guessing?" >}}
+
+## Try it 7 · Frame by frame
+
+a) A ball at (0, 2) has the velocity (3, 1). Where is it after 3 frames?
+b) What does the game add to the position in every frame?
+c) What does an object with the velocity (0, 0) do?
+
+::: {.answer}
+a) (9, 5)
+b) the velocity
+c) It stands still.
+:::
+
+## Game challenge · Comet Courier
+
+{{< sim file="sims/comet-courier.html" poster="sims/comet-courier.png" title="Comet Courier: one velocity per frame, avoid the comet" kind="game" task="The ship flies from Alpha (1, 2) to Beta (9, 6) with one velocity per frame, and a comet is at (5, 4). **Play:** choose a velocity on your phone. Does your ship hit the comet?" >}}
+
+## Try it 8 · Alpha to Beta (harder)
+
+The facts: Alpha is at (1, 2), Beta at (9, 6), and the comet at (5, 4).
+
+a) What is the displacement from Alpha to Beta?
+b) A ship leaves Alpha with (2, 1). After how many frames does it hit the comet?
+c) Which velocity reaches Beta from Alpha in only 2 frames?
+
+::: {.answer}
+a) (8, 4)
+b) after 2 frames, at (5, 4)
+c) (4, 2)
 :::
 
 ## Summary
 
-- The game loop reads, changes and draws, once per frame.
-- On a line, displacement = end − start; distance has no sign.
-- In 2D, the signs of x and y decide the quadrant.
-- In 3D with y up, y is the height, and the ground is y = 0.
-- Unity is left-handed with y up; Blender is right-handed with z up.
+- The game loop reads, changes the numbers and draws, once per frame.
+- The signs of (x, y) decide the quadrant, and with y up, y is the height.
+- Unity is left-handed, so its +z goes into the screen.
+- A vector has a size and a direction, and its components are head minus tail.
+- The move from A to B is B − A, and every frame adds the velocity.

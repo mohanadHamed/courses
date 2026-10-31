@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Generator Doctor</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .card { font-weight: 700; background: #ebfbee; border: 1.5px solid #2F9E44; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }</style>
+</head>
+<body class="theme-arcade">
+<main class="sim">
+  <h1>Generator Doctor</h1>
+  <p class="hint">Testers of <i>Torch Hall</i> report six problems with the level and event generator. Choose the fix or the number that answers each report.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { card: "\"I played a great floor and want my friend to play exactly the same floor.\"", goal: "What should the player share?", answer: "the seed of the floor", choices: C(["the seed of the floor", "a screenshot", "the time of the game", "the number of rooms"]), good: "The same seed and the same code build the same floor again.", why: { "the time of the game": "Two starts at different times give different seeds and different floors." } },
+    { card: "The walker of the cave makes 100 steps, one tile to a neighbour each time.", goal: "Is every floor tile connected to the start?", answer: "yes: the walker only moves to neighbours", choices: C(["yes: the walker only moves to neighbours", "no, never", "only with 1000 steps", "only for seed 1"]), good: "Every tile it digs is next to the tile before, so the whole cave is one connected piece." },
+    { card: "A monster must not stand within 3 steps of the start. 80 % of the floor tiles are allowed.", goal: "How many tries does the generator need on average?", answer: "1.25", choices: C(["1.25", "3", "0.8", "80"]), good: "With acceptance p = 0.8, the expected number of tries is 1/p = 1.25.", why: { "0.8": "That is p itself. The average number of tries is 1/p." } },
+    { card: "Event table per room: chest 20 % (+30 coins), gem 10 % (+50 coins), the rest no coins.", goal: "Expected coins per room?", answer: "11", choices: C(["11", "80", "40", "30"]), good: "0.2 × 30 + 0.1 × 50 = 6 + 5 = 11.", why: { "40": "That is the plain average of 30 and 50: the probabilities are missing." } },
+    { card: "Rooms are rolled one by one, and some floors have no gem at all. Players feel cheated.", goal: "Which change keeps the gem rate but spreads the gems?", answer: "deal the rooms from a shuffle bag", choices: C(["deal the rooms from a shuffle bag", "raise the gem chance to 90 %", "remove the empty rooms", "roll every room twice"]), good: "A bag holds a fixed share of gems: the average stays, and floors without a gem become rare." },
+    { card: "The team adds a rule: the exit must be at least 20 steps from the start.", goal: "How do they check the new rule?", answer: "test 1000 seeds and count the floors that pass", choices: C(["test 1000 seeds and count the floors that pass", "play one floor", "ask the generator", "nothing: a rule is always right"]), good: "A generator test over many seeds shows how often the rule holds and what it changes." },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; });
+  const g = Kit.game({ rounds, cols: 2, colsPhone: 1, animMs: 600, intro: "Round 1 is the first report: a player wants to share a floor." });
+  const box = Kit.el("div", { class: "card", id: "card" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.textContent = g.st.over ? "The generator is healthy." : g.cur().card; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Lag Detective</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .code { font: 600 .86rem/1.45 ui-monospace, Consolas, monospace; background: #1e1e2e; color: #e9ecef; padding: 10px 12px; border-radius: 10px; margin: 6px 0; white-space: pre-wrap; } .sim .code .say { font-family: Nunito, system-ui, sans-serif; color: #ffd43b; font-weight: 800; }</style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Lag Detective</h1>
+  <p class="hint">Players of <i>Pocket Quest</i> write to Byte Bay: “The game lags!” Rami asks them to run network tools. Read each output and find the problem.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t) => ({ k: t, label: t }));
+  const rounds = [
+    { box: "<span class=say>“I cannot connect at all.”</span>\nC:\\> ipconfig\n   IPv4 Address. . . . : 169.254.10.4\n   Default Gateway . . :",
+      goal: "What is the problem?", answer: "no address from the router: check the Wi-Fi or the cable", choices: C(["no address from the router: check the Wi-Fi or the cable", "the DNS is down", "the game server is too far", "the phone is too slow"]),
+      good: "169.254.x.x and no gateway: the laptop got no address. Start near: the cable, the Wi-Fi, the router." },
+    { box: "<span class=say>“Every match lags and players jump.”</span>\nC:\\> ping 192.168.8.1      (the café router)\nReply: time=8ms\nReply: time=171ms\nRequest timed out.\nReply: time=96ms\nLost = 1 (25% loss)",
+      goal: "Where is the problem?", answer: "the Wi-Fi in the café: high jitter and loss", choices: C(["the Wi-Fi in the café: high jitter and loss", "the game server", "the DNS", "the bandwidth of the ISP"]),
+      good: "Already the gateway (the first device) is slow and loses packets: move closer to the router or use a cable.", why: { "the game server": "The gateway is inside the café. The problem is before the Internet." } },
+    { box: "<span class=say>“The game says: server not found.”</span>\nC:\\> ping play.example.net\nPing request could not find host play.example.net.\nC:\\> ping 198.51.100.7\nReply: time=29ms … 0% loss",
+      goal: "What is the problem?", answer: "the DNS: the name gives no address", choices: C(["the DNS: the name gives no address", "the Wi-Fi", "the cable", "too many users"]),
+      good: "By IP the server answers fast, by name it cannot be found: a DNS problem." },
+    { box: "<span class=say>“Lag every evening, at home.”</span>\nC:\\> ping 192.168.0.1      (the home router)\nAverage = 3ms, 0% loss\nC:\\> ping play.example.net\nAverage = 104ms, 2% loss",
+      goal: "Where does the delay start?", answer: "outside the home, on the way to the server", choices: C(["outside the home, on the way to the server", "at the home router", "in the phone", "at the DNS"]),
+      good: "The gateway answers in 3 ms, so the home network is fine. The delay is on the way to the server: a server region closer to the player helps.", why: { "at the home router": "The router answers in 3 ms: it is fast." } },
+    { box: "<span class=say>“Lag when my family is at home.”</span>\nspeed test: Download 1.2 Mbit/s, Upload 0.3 Mbit/s\nping 35 ms, 0% loss\n(three people stream videos at the same time)",
+      goal: "What is the problem?", answer: "too little bandwidth: too many users", choices: C(["too little bandwidth: too many users", "the DNS", "packet loss on the cable", "the game server is down"]),
+      good: "The videos use almost all the bandwidth. Pause the downloads, or ask for a faster plan." },
+    { box: "<span class=say>“The game stutters in big battles.”</span>\nC:\\> ping play.example.net\nAverage = 24ms, 0% loss\nGame overlay: 18 FPS in battles, 60 FPS in menus",
+      goal: "What is the problem?", answer: "not the network: the phone is too slow (FPS)", choices: C(["not the network: the phone is too slow (FPS)", "the Wi-Fi", "the DNS", "the way to the server"]),
+      good: "The network is fine (24 ms, no loss). The low FPS in battles points to the device: lower the graphics settings." },
+  ];
+  rounds.forEach((r) => { r.why = r.why || {}; });
+  const g = Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 600, intro: "Round 1 is the story of the lesson: start near, with ipconfig." });
+  const box = Kit.el("div", { class: "code", id: "code" });
+  document.querySelector("main.sim").insertBefore(box, document.getElementById("choices"));
+  let last = -1;
+  (function upd() { const k = g.st.over ? -2 : g.st.i; if (k !== last) { last = k; box.innerHTML = g.st.over ? "All players can play again." : g.cur().box; } requestAnimationFrame(upd); })();
+})();
+</script>
+</body>
+</html>

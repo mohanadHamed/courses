@@ -1,0 +1,145 @@
+---
+title: "Comparing Device Specifications for Gaming"
+description: "Seminar worksheet · Compare the lab computer with the requirements of a game line by line, then tell a compatibility problem from a performance problem on your phone."
+seminar: 3
+ilos: [A1, B2]
+format: lesson-typst
+---
+
+::: {.lead}
+In Lectures 2 and 3 you learned the parts of a computer, the GPU and video
+memory, and how settings change the frame rate. Today you compare devices
+with the requirements of a game. There are no new ideas: two short
+problems. Do each one alone. The results of the activities are at the end
+of this worksheet.
+:::
+
+## Recall
+
+- The **GPU** draws the pixels. An integrated GPU shares the RAM; a
+  graphics card has its own video memory (VRAM).
+- 1080p has about twice the pixels of 720p: about half the frame rate.
+- Higher textures need more video memory; shadows lower the frame rate.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="the CPU|240 fps"}
+Which part colours the pixels of a frame?
+:   the GPU
+
+A game runs at 120 fps at 720p. About how fast at 1080p?
+:   about 60 fps
+
+Where does an integrated GPU keep its textures?
+:   in the main RAM
+:::
+:::
+
+## Activity 1 · Does Neon Drift run here?
+
+A store page lists the **system requirements** of a game. **Minimum:** the
+game runs at low settings. **Recommended:** it runs well. Compare each line
+with the same line of the spec sheet. **The weakest line decides** the
+level of the whole device.
+
+*Neon Drift* for PC: minimum 4 cores at 2.5 GHz, 8 GB RAM, 2 GB video
+memory, 20 GB free; recommended 6 cores at 3.5 GHz, 16 GB RAM, a graphics
+card with 6 GB, 20 GB free on an SSD.
+
+![Laptop L1 against the requirements.](images/compare-lines.png){width=86%}
+
+{{< sim file="sims/spec-check.html" poster="sims/spec-check.png" title="Spec Check: does Neon Drift run here?" >}}
+
+::: {.callout-note title="Activity 1 · The lab computer · 15 min"}
+1. In **Spec Check**, choose **My lab computer**. Enter its values (from
+   Settings → System → About and Task Manager → Performance).
+2. Write the level of the lab computer and its weakest line.
+
+*Your product:* one level and one weakest line.
+
+::: {.check}
+Many lab computers reach the **minimum**: enough cores and RAM, but an
+integrated GPU with about 2 GB, so the graphics line is the weakest. A lab
+computer with a graphics card of 6 GB or more and 16 GB of RAM reaches the
+recommended level.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · The weakest line"}
+Laptop L1: 8 cores, 4.4 GHz; 16 GB; GPU inside the processor, 2 GB; 120 GB
+free, SSD. Old PC O1: 4 cores, 3.0 GHz; 4 GB RAM; graphics card, 2 GB;
+60 GB free. Choose the right answer.
+
+::: {.match extra="the processor|recommended"}
+Which line holds Laptop L1 back?
+:   graphics
+
+Which level does Old PC O1 reach?
+:   below minimum
+
+A PC meets only the minimum. How does the game run?
+:   at low settings
+:::
+:::
+
+## Activity 2 · Compatibility or performance?
+
+A **compatibility problem** stops the game from installing or starting:
+the OS is too old, or the free storage is too small. More power does not
+help. A **performance problem** makes the game slow. The weakest part is
+the **bottleneck**: when it is the GPU, lower the resolution and the
+shadows.
+
+![Compatibility problem and performance problem.](images/two-problems.png){width=86%}
+
+::: {.callout-note title="Activity 2 · Your phone · 15 min"}
+1. Open the store page of a game you play. **Android:** About this game →
+   Requires Android. **iPhone:** Information → Compatibility. Write the OS
+   version it needs and its size. Compare them with your phone.
+2. A friend's phone runs the game at 25 fps, and the GPU is the
+   bottleneck. Write two settings to lower.
+
+*Your product:* a comparison with numbers, and two settings.
+
+::: {.check}
+A good answer: "Requires Android 8.0 and up, 180 MB. My phone has Android
+13 and 12 GB free, so there is no compatibility problem." The settings:
+lower the resolution (fewer pixels) and turn the shadows off. Both give the
+GPU less work.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Which problem?"}
+Choose the right answer. You can use an answer more than once.
+
+::: {.match extra="buy more RAM"}
+A phone has Android 9. The game needs Android 10.
+:   a compatibility problem
+
+The game runs, but at 25 fps.
+:   a performance problem
+
+The GPU is the bottleneck. What helps first?
+:   lower the resolution and the shadows
+
+The phone has 3 GB free. The game needs 4 GB.
+:   a compatibility problem
+:::
+:::
+
+## Exercises
+
+1. What is the difference between the minimum and the recommended requirements?
+2. A laptop has every line at the recommended level, but only 6 GB of RAM (minimum 8 GB). Which level does it reach?
+3. Is "the game needs Android 11, the phone has Android 10" a compatibility or a performance problem?
+4. A game runs at 30 fps and the GPU is the bottleneck. Name one setting to lower.
+
+## Answers to the exercises
+
+::: {.answers}
+1. Minimum: the game runs at low settings. Recommended: it runs well.
+2. Below the minimum: the weakest line decides.
+3. A compatibility problem.
+4. The resolution or the shadows.
+:::

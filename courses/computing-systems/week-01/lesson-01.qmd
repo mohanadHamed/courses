@@ -1,6 +1,6 @@
 ---
 title: "Computing Systems and Digital Platforms in the Games Industry"
-description: "The four jobs of a computing system, how the CPU runs a game, and digital platforms."
+description: "The four jobs of a computing system, how the CPU runs a game, digital platforms, and the device classes on which people play."
 lesson: 1
 ilos: [A1]
 format: lesson-html
@@ -8,12 +8,12 @@ format: lesson-html
 
 This page is the interactive version of the lesson notes (PDF). Each section
 starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. The full explanations,
-examples and exercises are in the notes.
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check.
 
 ## Key terms
 
-{{< glossary computing-system hardware software cpu memory storage input output instruction-cycle clock-rate digital-platform >}}
+{{< glossary computing-system hardware software cpu memory storage input output instruction-cycle clock-rate digital-platform cloud-gaming >}}
 
 ## 1.1 What a game needs from a computer
 
@@ -36,6 +36,13 @@ games at once fills the **memory**.
 ::: {.callout-note title="Do it · Four jobs in your game"}
 Play a game on your phone for one minute. Make a table with four rows: input,
 processing, output, storage. Write one thing from your game in each row.
+
+::: {.check}
+A good table has one real thing from your game in each row, for example:
+input: a tap or a swipe; processing: the game decides if you hit an enemy;
+output: the picture and the sound; storage: your level or best score after a
+restart.
+:::
 :::
 
 ::: {.callout-tip title="Try it 1 · Four jobs and four parts"}
@@ -45,17 +52,27 @@ Choose the right answer.
 In a racing game, you tilt the phone to turn the car. Which job is the tilt?
 :   input
 
+    Why: Tilting is information that goes into the phone, from its sensors.
+
 The game checks if the car hit the wall. Which job is this?
 :   processing
+
+    Why: The CPU works with the data: it computes and decides.
 
 The best lap time is still there after the phone restarts. Which job kept it?
 :   storage
 
+    Why: Storage keeps data when the power is off.
+
 Which part forgets its data when the phone turns off?
 :   main memory (RAM)
 
+    Why: RAM loses its contents without power.
+
 Which part runs the game's instructions?
 :   the CPU
+
+    Why: The CPU fetches, decodes and executes them.
 :::
 :::
 
@@ -75,6 +92,11 @@ Which part runs the game's instructions?
 ::: {.callout-note title="Do it · Watch one frame"}
 In **Tap Runner**, turn on slow motion and jump. Write the parts that light up,
 in order. Which part decides that the character jumps?
+
+::: {.check}
+The touch screen (input), then the CPU, then the screen (output). The CPU
+decides that the character jumps: it runs the game's instructions.
+:::
 :::
 
 ::: {.callout-tip title="Try it 2 · The instruction cycle"}
@@ -84,17 +106,27 @@ Choose the right answer.
 The CPU gets the next instruction from memory. Which step is this?
 :   fetch
 
+    Why: Fetch is the first step: bring the instruction from memory.
+
 The CPU finds out that the instruction asks for an addition. Which step?
 :   decode
+
+    Why: Decode means finding out what the instruction asks.
 
 The CPU adds 10 to the score. Which step is this?
 :   execute
 
+    Why: Doing the work is the execute step.
+
 How many clock ticks per second does 3 GHz mean?
 :   3 billion
 
+    Why: Giga means billion: 3 GHz = 3 billion ticks per second.
+
 Which part of the phone decides that the character jumps?
 :   the CPU
+
+    Why: The game logic, also the jump, runs on the CPU.
 :::
 :::
 
@@ -119,6 +151,12 @@ Which part of the phone decides that the character jumps?
 ::: {.callout-note title="Do it · Platforms at home"}
 Think of three devices at home that run games. Make a table: device,
 platform, operating system, store. Which platform is the most common?
+
+::: {.check}
+A good table has three rows, for example: phone, Android, Android, Google
+Play; laptop, PC, Windows, Steam; console, PlayStation, the console's
+system, PlayStation Store. For most students the phone is the most common.
+:::
 :::
 
 ::: {.callout-tip title="Try it 3 · Platforms"}
@@ -128,17 +166,76 @@ Choose the right answer.
 The store of the iOS platform.
 :   App Store
 
+    Why: Apple sells iPhone apps in its App Store.
+
 A game is sold on Steam. Which platform is it on?
 :   PC
+
+    Why: Steam is a store for PC games.
 
 A phone game moves to the Nintendo Switch. What new input must it support?
 :   buttons and sticks
 
+    Why: The console is played with a gamepad, not a touch screen.
+
 Who decides what a game may contain on a platform?
 :   the platform owner
 
+    Why: The owner of the platform makes its rules.
+
 Why test an Android game on many phones?
 :   thousands of different models
+
+    Why: Android runs on thousands of models with different chips and screens.
+:::
+:::
+
+## 1.4 Device classes for gaming
+
+- **Smartphone, tablet**: touch, battery, no fan, short sessions.
+- **PC or laptop**: keyboard, mouse or gamepad, long sessions at a desk.
+- **Console**: gamepad, TV, long sessions at home.
+- **Cloud gaming**: any screen, but a fast network.
+- A game for one class must change for another: input, screen, play time,
+  power.
+
+![The five device classes.](images/devices.png){width=92%}
+
+::: {.callout-note title="Do it · The right device for a game"}
+Choose a game you know. Write its input, the screen it needs and the length of
+one session. Which device class fits it best? Give one reason.
+
+::: {.check}
+A good answer names the input (touch, buttons, keyboard), the screen (small
+or large) and a session length, then one device class with a reason that
+uses them, for example "a 5-minute puzzle game with touch: a smartphone,
+because it is played anywhere in short sessions".
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Which device class?"}
+Choose the device class.
+
+::: {.match extra="embedded system"}
+Gamepad, TV, long sessions at home.
+:   console
+
+    Why: A console is played at home on a TV with a gamepad.
+
+Keyboard and mouse, long sessions at a desk.
+:   PC
+
+    Why: A PC stands at a desk, with a keyboard and a mouse.
+
+Touch, battery, no fan, five-minute sessions on the bus.
+:   smartphone
+
+    Why: A phone has a touch screen, a battery and no fan.
+
+Any screen, if the network is fast.
+:   cloud gaming
+
+    Why: The game runs on a server; any screen shows the video.
 :::
 :::
 
@@ -161,17 +258,27 @@ answer.
 The input device for jumping in the phone version.
 :   touch screen
 
+    Why: On a phone the player taps the touch screen.
+
 Where the best distance is kept when the phone is off.
 :   storage
+
+    Why: Storage keeps data when the phone is off.
 
 What does "2.4 GHz" tell about the test phone?
 :   the speed of one core
 
+    Why: The clock rate is the speed of one core.
+
 Where is Tap Runner while the player is playing it?
 :   in the 4 GB of RAM
 
+    Why: A running game is in the RAM.
+
 How many builds does the studio need?
 :   3
+
+    Why: One build for each platform: Android, iPhone, Windows.
 :::
 :::
 
@@ -182,3 +289,4 @@ How many builds does the studio need?
 - The CPU repeats fetch, decode, execute; GHz sets the speed.
 - A platform = devices + system + tools + store and rules.
 - One project, one build for each platform.
+- Each device class needs its own input, screen, play time and power plan.

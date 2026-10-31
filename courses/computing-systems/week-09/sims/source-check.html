@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Source Check</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .src { border: 1.5px solid var(--sim-border); border-radius: 12px; padding: 10px 12px; background: #fff; margin: 8px 0; }
+    .sim .src .u { font-family: ui-monospace, Consolas, monospace; font-size: .85rem; color: #1971c2; }
+    .sim .src .q { margin: 6px 0; line-height: 1.45; }
+    .sim .checks { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 6px 0; font-weight: 700; font-size: .92rem; }
+    .sim .checks label { display: flex; gap: 6px; align-items: center; }
+    .sim .score { font-weight: 800; }
+  </style>
+</head>
+<body class="theme-circuit">
+<main class="sim">
+  <h1>Source Check: can you trust this source?</h1>
+  <p class="hint">Rami collects facts to compare Android and iOS. For each source, tick what is true. Then decide: use it, or find a better source.</p>
+  <div class="tabs" id="tabs" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+  <div class="src" id="src"></div>
+  <div class="checks" id="checks"></div>
+  <div class="row"><button type="button" id="use">Use this source</button><button type="button" class="ghost" id="skip">Find a better source</button></div>
+  <p class="score" id="score"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const Q = ["It is the official page of the maker", "It shows a date from this year", "It names its author or its data", "It sells something about the topic"];
+  // [title, url, quote, true checks (indexes), good?, why]
+  const SRC = [
+    ["Apple Developer: Xcode", "developer.apple.com/xcode", "The page says that Xcode, the tool that makes iOS builds, runs on a Mac with macOS. Updated this year.", [0, 1, 2], true,
+      "The maker's own page, dated, about its own tool: the best source for this fact."],
+    ["A forum post", "forum.example/thread/88123", "“Android is always slower than iPhone, everyone knows it.” Posted by user ‘kingGamer’, no date shown.", [], false,
+      "No author, no date, no data, and a claim for ‘always’ and ‘everyone’. Find a measured test instead."],
+    ["Android Developers: test your app", "developer.android.com/studio/test", "The page advises testing an app on several devices, with different screens and Android versions. Last updated this year.", [0, 1, 2], true,
+      "Google's own developer page, dated: use it for how to test on Android."],
+    ["A shop selling phone cases", "best-cases.example/blog/ios-vs-android", "“iPhones are the only phones for real gamers! Buy our cases.” 2019.", [3], false,
+      "Old (2019), no data, and the page sells something: it is an advertisement, not a source."],
+    ["A market report", "market-report.example/mobile-os-share/worldwide", "A chart of the mobile OS share by month, with the method and the data source shown. Updated last month.", [1, 2], true,
+      "Not the maker, but dated and with its method and data: good for the market share. Write its date in your table."],
+  ];
+  let i = 0, pts = 0, done = new Set();
+  function show() {
+    Kit.buttons($("tabs"), SRC.map((x, k) => ({ k: String(k), label: `Source ${k + 1}${done.has(k) ? " ✓" : ""}` })), (k) => { i = +k; show(); }, "ghost");
+    const [t, u, q] = SRC[i];
+    $("src").innerHTML = `<b>${t}</b><div class="u">${u}</div><div class="q">${q}</div>`;
+    $("checks").innerHTML = Q.map((x, k) => `<label><input type="checkbox" data-k="${k}"> ${x}</label>`).join("");
+    $("score").textContent = `Sources judged: ${done.size} / ${SRC.length} · points: ${pts}`;
+  }
+  function judge(use) {
+    const [, , , truth, good, why] = SRC[i];
+    const ticked = [...document.querySelectorAll("#checks input")].filter((x) => x.checked).map((x) => +x.dataset.k);
+    const okTicks = ticked.length === truth.length && truth.every((k) => ticked.includes(k));
+    const ok = use === good;
+    if (!done.has(i)) { pts += (ok ? 2 : 0) + (okTicks ? 1 : 0); done.add(i); }
+    ok ? Kit.good() : Kit.bad();
+    $("msg").textContent = `${ok ? "✓ Right." : "Not this time."} ${why}${okTicks ? "" : " (Check the boxes again: " + truth.map((k) => Q[k].toLowerCase()).join("; ") + (truth.length ? ".)" : "none of them.)")}`;
+    $("msg").classList.toggle("bad", !ok);
+    show();
+  }
+  $("use").addEventListener("click", () => judge(true));
+  $("skip").addEventListener("click", () => judge(false));
+  window.SC = { go: (k) => { i = k; show(); }, tick: (ks) => ks.forEach((k) => { document.querySelector(`#checks input[data-k="${k}"]`).checked = true; }), use: () => judge(true), skip: () => judge(false) };
+  show();
+})();
+</script>
+</body>
+</html>

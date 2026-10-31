@@ -1,41 +1,95 @@
-# The lectures of the course in teaching order (titles from the official
-# syllabus). Students and the teacher count lectures, not weeks: a missed or
-# late week moves every course differently, so the site never shows weeks.
-# Exams are not listed: the university sets them.
+# The 15 weeks of the course in teaching order (AUTHORING.md, "Units and
+# sessions"): 12 core weeks (units) and 3 practice weeks (filling weeks).
 #
-# Files: lecture n is lesson-NN.qmd (NN = n) in the folder week-PP, where
-# PP = (n + 1) / 2 rounded down: lectures 1-2 are in week-01, 3-4 in week-02,
-# and so on. The folder name is internal (it keeps old links and QR codes
-# working) and is never shown. Homework k (homework-0k.qmd, in week-0k)
-# follows lectures 2k-1 and 2k. A lecture is ready (bright, with links) when
-# its lesson-NN.qmd exists and has no `draft: true`; otherwise it is faded.
-lectures:
-  - {n: 1, title: "Mathematics in Game Development and Coordinate Systems", ilos: [A1]}
-  - {n: 2, title: "Vectors: Definition, Components and Basic Operations", ilos: [A1]}
-  - {n: 3, title: "Vector Operations: Addition, Scaling, Magnitude and Normalization", ilos: [A1, B1]}
-  - {n: 4, title: "The Dot Product and the Angle Between Vectors", ilos: [A1, B1]}
-  - {n: 5, title: "The Cross Product: Direction and Surface Normals", ilos: [B1]}
-  - {n: 6, title: "Distance, Projection and Direction in Game Worlds", ilos: [B1]}
-  - {n: 7, title: "Trigonometry: Sine, Cosine, Tangent and the Unit Circle", ilos: [A2]}
-  - {n: 8, title: "Applied Trigonometry: Angles, Rotation and Oscillating Motion", ilos: [A2, B1]}
-  - {n: 9, title: "Matrices: Definition and Basic Operations", ilos: [A1]}
-  - {n: 10, title: "Matrix Multiplication, the Identity and the Inverse", ilos: [A1, C1]}
-  - {n: 11, title: "Translation and Scaling Transformations", ilos: [C1]}
-  - {n: 12, title: "Rotation in 2D", ilos: [C1]}
-  - {n: 13, title: "Homogeneous Coordinates and Transformation Matrices", ilos: [C1]}
-  - {n: 14, title: "3D Transformations: Translation, Rotation and Scaling", ilos: [C1]}
-  - {n: 15, title: "Revision of Lectures 1–14", ilos: [A1, A2, B1, C1]}
-  - {n: 16, title: "Mathematical Logic: Propositions and Logical Operators", ilos: [A2]}
-  - {n: 17, title: "Truth Tables and Logical Conditions in Game Rules", ilos: [A2, B2]}
-  - {n: 18, title: "Boolean Algebra and Decision Conditions", ilos: [B2]}
-  - {n: 19, title: "Applying Logic to Game Rules and Decisions", ilos: [B2]}
-  - {n: 20, title: "Probability Basics: Events and Sample Space", ilos: [A2]}
-  - {n: 21, title: "Conditional Probability and Expected Value", ilos: [A2, B2]}
-  - {n: 22, title: "Random Numbers: Pseudo-Random Generators and Seeds", ilos: [C2]}
-  - {n: 23, title: "Random Distributions: Uniform and Weighted", ilos: [C2]}
-  - {n: 24, title: "Probability for Game Balance: Drop Rates and Difficulty", ilos: [C2]}
-  - {n: 25, title: "Randomness and Fairness: The Player's Perception", ilos: [C2]}
-  - {n: 26, title: "Applied Problem Set: Vectors, Transformations and Probability", ilos: [B1, C1]}
-  - {n: 27, title: "Case Study: Movement of a 2D Object", ilos: [B1, C1, D1]}
-  - {n: 28, title: "Case Study: Random Level and Event Generation", ilos: [C2]}
-  - {n: 29, title: "Course Revision", ilos: [C2, D1]}
+# A unit is a core week: Lecture N and Seminar N (the seminar practises the
+# lecture of the same week) and Homework N. Units are numbered 1-12 without
+# gaps. A practice week (`filling: true`) has no new ideas: revision, an
+# applied problem set or a case study, in Practice N sessions. It is taught
+# when time allows; the 15-week plan on the e-learning platform uses it to
+# fill the weeks that holidays and absences do not take. Exams are not here.
+#
+# `week` is the syllabus week whose row the week covers (folder week-WW,
+# tools/course_package.py); `covers` lists more syllabus weeks of a merged
+# unit; `slot` names the syllabus columns. kind: lecture | seminar |
+# practice; n: its number; practises: the lectures it applies. Practice
+# sessions are flexible; lectures and seminars are core.
+#
+# Taught as one lecture (90 min) and one seminar (90 min) per week. The
+# syllabus has two lectures in each week: the lecture of the unit covers
+# both lecture columns, the seminar does the syllabus seminar topic.
+
+units:
+  - unit: 1
+    week: 1
+    sessions:
+      - {kind: lecture, n: 1, slot: "First Lecture, Second Lecture", title: "Coordinates and Vectors", ilos: [A1]}
+      - {kind: seminar, n: 1, slot: "Seminar", title: "Where Mathematics Appears in a Mobile Game", ilos: [A1], practises: [1]}
+  - unit: 2
+    week: 2
+    sessions:
+      - {kind: lecture, n: 2, slot: "First Lecture, Second Lecture", title: "Vector Operations and the Dot Product", ilos: [A1, B1]}
+      - {kind: seminar, n: 2, slot: "Seminar", title: "Vector Exercises in Game Scenarios", ilos: [A1, B1], practises: [2]}
+  - unit: 3
+    week: 3
+    sessions:
+      - {kind: lecture, n: 3, slot: "First Lecture, Second Lecture", title: "The Cross Product, Distance and Projection", ilos: [B1]}
+      - {kind: seminar, n: 3, slot: "Seminar", title: "Solving Movement and Aiming Problems", ilos: [B1], practises: [3]}
+  - unit: 4
+    week: 4
+    sessions:
+      - {kind: lecture, n: 4, slot: "First Lecture, Second Lecture", title: "Trigonometry: the Unit Circle, Rotation and Oscillation", ilos: [A2, B1]}
+      - {kind: seminar, n: 4, slot: "Seminar", title: "Trigonometry in Game Motion", ilos: [A2, B1], practises: [4]}
+  - unit: 5
+    week: 5
+    sessions:
+      - {kind: lecture, n: 5, slot: "First Lecture, Second Lecture", title: "Matrices: Operations, Multiplication, Identity and Inverse", ilos: [A1, C1]}
+      - {kind: seminar, n: 5, slot: "Seminar", title: "Matrix Exercises", ilos: [A1, C1], practises: [5]}
+  - unit: 6
+    week: 6
+    sessions:
+      - {kind: lecture, n: 6, slot: "First Lecture, Second Lecture", title: "Translation, Scaling and Rotation in 2D", ilos: [C1]}
+      - {kind: seminar, n: 6, slot: "Seminar", title: "Composing 2D Transformations", ilos: [C1], practises: [6]}
+  - unit: 7
+    week: 7
+    sessions:
+      - {kind: lecture, n: 7, slot: "First Lecture, Second Lecture", title: "Homogeneous Coordinates and 3D Transformations", ilos: [C1]}
+      - {kind: seminar, n: 7, slot: "Seminar", title: "Transformation Chains: Object, World and Camera Space", ilos: [C1], practises: [7]}
+  - filling: true
+    week: 8
+    sessions:
+      - {kind: practice, n: 1, slot: "First Lecture, Seminar", title: "Revision of Lectures 1–7", ilos: [A1, A2, B1, C1], practises: [1, 2, 3, 4, 5, 6, 7]}
+  - unit: 8
+    week: 9
+    sessions:
+      - {kind: lecture, n: 8, slot: "First Lecture, Second Lecture", title: "Propositions, Logical Operators and Truth Tables", ilos: [A2, B2]}
+      - {kind: seminar, n: 8, slot: "Seminar", title: "Logic Exercises: Game States and Conditions", ilos: [A2, B2], practises: [8]}
+  - unit: 9
+    week: 10
+    sessions:
+      - {kind: lecture, n: 9, slot: "First Lecture, Second Lecture", title: "Boolean Algebra and Decision Conditions", ilos: [B2]}
+      - {kind: seminar, n: 9, slot: "Seminar", title: "Designing a Rule Set for a Simple Game", ilos: [B2], practises: [9]}
+  - unit: 10
+    week: 11
+    sessions:
+      - {kind: lecture, n: 10, slot: "First Lecture, Second Lecture", title: "Probability: Events, Conditional Probability and Expected Value", ilos: [A2, B2]}
+      - {kind: seminar, n: 10, slot: "Seminar", title: "Probability in Loot Drops and Critical Hits", ilos: [A2, B2], practises: [10]}
+  - unit: 11
+    week: 12
+    sessions:
+      - {kind: lecture, n: 11, slot: "First Lecture, Second Lecture", title: "Random Numbers: Generators, Seeds and Distributions", ilos: [C2]}
+      - {kind: seminar, n: 11, slot: "Seminar", title: "Generating Random Events in a Game Scenario", ilos: [C2], practises: [11]}
+  - unit: 12
+    week: 13
+    sessions:
+      - {kind: lecture, n: 12, slot: "First Lecture, Second Lecture", title: "Probability for Game Balance and Fairness", ilos: [C2]}
+      - {kind: seminar, n: 12, slot: "Seminar", title: "Game Balancing Exercise", ilos: [C2, D1], practises: [12]}
+  - filling: true
+    week: 14
+    sessions:
+      - {kind: practice, n: 2, slot: "First Lecture", title: "Applied Problem Set: Vectors, Transformations and Probability", ilos: [B1, C1, C2], practises: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+      - {kind: practice, n: 3, slot: "Second Lecture, Seminar", title: "Case Study: Movement of a 2D Object", ilos: [B1, C1, D1], practises: [2, 3, 4, 6]}
+  - filling: true
+    week: 15
+    sessions:
+      - {kind: practice, n: 4, slot: "First Lecture", title: "Case Study: Random Level and Event Generation", ilos: [B2, C2], practises: [10, 11, 12]}
+      - {kind: practice, n: 5, slot: "Second Lecture, Seminar", title: "Course Revision", ilos: [A1, A2, B1, B2, C1, C2, D1], practises: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}

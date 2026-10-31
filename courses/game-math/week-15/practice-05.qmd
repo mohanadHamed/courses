@@ -1,0 +1,199 @@
+---
+title: "Course Revision"
+description: "Practice · Revise the whole course on the islands of Lucky Raft: vectors, angles and transformations, then logic, probability and randomness, and present one solution in five parts."
+practice: 5
+ilos: [A1, A2, B1, B2, C1, C2, D1]
+format: lesson-html
+---
+
+No new ideas today: three short problems that revise Lectures 1–12 before
+the final exam. Do each one alone, then open "Check your result". Every
+question on this page has its answer: try first, then check.
+
+## Recall
+
+![The whole course in six parts.](images/course-map-all.png){width=90%}
+
+- **Vectors, angles and transformations (Lectures 1–7):** a step is B − A;
+  its length √(x² + y²); the dot product for in front or behind; the point
+  at θ is (cos θ, sin θ); rotate about a pivot: move it to the origin,
+  rotate, move it back.
+- **Logic (Lectures 8–9):** AND, OR, NOT and truth tables; De Morgan:
+  ¬(A ∨ B) = ¬A ∧ ¬B.
+- **Probability and randomness (Lectures 10–12):** P(not A) = 1 − P(A);
+  AND multiplies for independent events; E = x₁p₁ + x₂p₂ + …; a shuffle bag
+  spreads the results.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="7|true"}
+What is the length of the vector (6, 8)?
+:   10
+
+    Why: √(36 + 64) = √100.
+
+What is ¬(A ∨ B) when A is false and B is true?
+:   false
+
+    Why: A ∨ B is true, so its NOT is false.
+
+A drop has p = 0.2. What is P(no drop)?
+:   0.8
+
+    Why: 1 − 0.2.
+:::
+:::
+
+## Activity 1 · Vectors, angles and transformations
+
+The raft of *Lucky Raft* sails past the first islands. The beach is at
+(1, 2) and the first island at (7, 10); the raft sails at 2.5 units per
+second. A lighthouse at (0, 0) looks along (1, 0), and the raft passes it at
+(−3, 4). On the next island, a flag at (3, 1) turns by 90° anticlockwise
+about the mast at (1, 1).
+
+{{< sim file="sims/raft-finals.html" poster="sims/raft-finals.png" title="Lucky Raft Finals: eight islands, eight ideas" kind="game" height="560" >}}
+
+::: {.callout-note title="Activity 1 · The first islands · 18 min"}
+1. How far is the island from the beach? How long does the raft need?
+2. Is the raft in front of the lighthouse or behind it? Use the dot
+   product.
+3. Where is the flag after the turn? Move the mast to the origin, rotate,
+   and move back.
+
+*Your product:* a distance, a time, one decision and one point.
+
+::: {.check}
+1. (7, 10) − (1, 2) = (6, 8); the length is 10; the time is 10 ÷ 2.5 = 4 s.
+2. (1, 0) · (−3, 4) = −3: negative, so the raft is behind the lighthouse.
+3. (3, 1) − (1, 1) = (2, 0); turned by 90°: (0, 2); + (1, 1) = (1, 3).
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · The first islands"}
+Choose the right answer.
+
+::: {.match extra="14|(−1, 3)"}
+How far is (7, 10) from (1, 2)?
+:   10
+
+    Why: (6, 8) has the length 10, not 6 + 8.
+
+The flag at (3, 1) turns by 180° about the mast (1, 1). Where is it?
+:   (−1, 1)
+
+    Why: (2, 0) turned by 180° is (−2, 0); + (1, 1).
+
+Which angle does atan2 give for the vector (0, −4)?
+:   −90°
+
+    Why: straight down.
+:::
+:::
+
+## Activity 2 · Logic, chance and a crate
+
+The next islands test the rest of the course. The dock gate opens with
+key ∧ ¬alarm. The raft may sail when ¬(storm ∨ night). A crate gives 10
+coins (p = 0.7) or 50 coins (p = 0.3). A pearl is found with p = 0.1 in
+each dive. Then play the eight islands of **Lucky Raft Finals**.
+
+![Two dice: 36 equally likely outcomes.](../week-11/images/dice-sums.png){width=72%}
+
+::: {.callout-note title="Activity 2 · The last islands · 18 min"}
+1. key = true, alarm = false. Does the gate open? storm = false,
+   night = true. May the raft sail?
+2. What is P(a sum of 7) with two dice?
+3. Find the expected coins of the crate.
+4. Find P(at least one pearl in two dives). A shuffle bag gives 1 pearl in
+   every 10 dives: what is the longest wait?
+5. Play **Lucky Raft Finals**.
+
+*Your product:* two decisions, three probabilities or values, one wait and
+your score.
+
+::: {.check}
+1. true ∧ ¬false = true ∧ true = true: the gate opens.
+   ¬(false ∨ true) = ¬true = false: the raft may not sail.
+2. 6/36 = 1/6.
+3. E = 10 × 0.7 + 50 × 0.3 = 7 + 15 = 22 coins.
+4. 1 − 0.9 × 0.9 = 1 − 0.81 = 0.19. With the bag, the pearl can be first in
+   one bag and last in the next: 18 dives without a pearl at most.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · The last islands"}
+Choose the right answer.
+
+::: {.match extra="0.1|20 dives"}
+What is key ∧ ¬alarm with key = true and alarm = true?
+:   false
+
+    Why: ¬alarm is false, so the AND is false.
+
+A crate gives 20 coins (p = 0.5) or nothing (p = 0.5). What is E?
+:   10
+
+    Why: 20 × 0.5 + 0.
+
+What is P(no pearl in two dives) with p = 0.1?
+:   0.81
+
+    Why: 0.9 × 0.9: the dives are independent.
+:::
+:::
+
+## Activity 3 · Present one solution
+
+A good solution is easy to follow: read, draw, choose the tool, compute,
+check. You present it alone in five parts: the problem, a sketch, the tool
+and why, the steps, and the check with the answer in game words.
+
+![Presenting a solution in five parts, about one minute each.](images/present-solution.png){width=92%}
+
+::: {.callout-note title="Activity 3 · Present it · 18 min"}
+A chest of *Lucky Raft* gives 10 coins, 40 coins or 200 coins with the
+weights 6, 3 and 1 (out of 10).
+
+1. Find the expected coins of the chest.
+2. Prepare the five parts on one page: problem, sketch, tool, steps, check
+   and answer.
+3. Present your solution alone in about four minutes.
+
+*Your product:* one page with the five parts, and your talk.
+
+::: {.check}
+E = 10 × 0.6 + 40 × 0.3 + 200 × 0.1 = 6 + 12 + 20 = 38 coins. A good
+presentation has the five parts in order, names the tool (the expected
+value), shows the three products, checks that the probabilities add up to 1
+and says the answer in game words: "On average a chest gives 38 coins."
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Presenting"}
+Choose the right answer.
+
+::: {.match extra="the answer only|the slides"}
+What comes first in a presentation of a solution?
+:   the problem in one sentence
+
+    Why: the listener must know the question before the steps.
+
+How do you say the answer?
+:   in game words
+
+    Why: "38 coins per chest" means more than "38".
+
+Which check fits a probability of 1.3?
+:   it must be between 0 and 1
+
+    Why: no probability is more than 1.
+:::
+:::
+
+## Wrap-up {.summary}
+
+- You can solve vector, angle and transformation problems of a game.
+- You can solve logic, probability and randomness problems of a game.
+- You can present a solution in five parts, alone.

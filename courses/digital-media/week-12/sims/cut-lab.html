@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Cut Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 5px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar > span.l { min-width: 84px; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-studio">
+<main class="sim">
+  <h1>Cut Lab: how one shot meets the next</h1>
+  <p class="hint">Three places in the <i>Rooftop Rescue</i> trailer need an edit. Choose the place, the transition and its length, then press Play to see it.</p>
+  <div class="bar"><span class="l">Place</span><span id="pl" style="display:contents"></span></div>
+  <div class="bar"><span class="l">Transition</span><span id="tr" style="display:contents"></span></div>
+  <div class="bar" id="sl"></div>
+  <div class="bar"><button type="button" id="play">Play ▶</button></div>
+  <canvas id="c" aria-label="The edit from one shot to the next"></canvas>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="../../week-11/sims/scene.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const PLACES = {
+    "the boat → the net (action)": { a: { sky: "#a5d8ff" }, b: { sky: "#99e9f2" }, want: "cut", maxDur: 0 },
+    "evening → next morning": { a: { sky: "#f783ac", tint: "rgba(40,20,80,.35)" }, b: { sky: "#ffe8a3" }, want: "cross dissolve", maxDur: 1.5 },
+    "last shot → the logo": { a: { sky: "#a5d8ff" }, b: "logo", want: "dip to black", maxDur: 1.5 },
+  };
+  const TR = ["cut", "cross dissolve", "dip to black", "wipe"];
+  const s = { pl: "the boat → the net (action)", tr: "wipe", dur: 1, t0: 0, playing: false };
+  const ok = {};
+  const TASKS = [
+    { q: "Task 1: The boat → the net is one fast action. Which edit hides the change best? Play it.", ok: () => ok["the boat → the net (action)"] },
+    { q: "Task 2: Evening → next morning: time passes. Choose the transition and a length of 0.5–1 s.", ok: () => ok["evening → next morning"] },
+    { q: "Task 3: The last shot → the logo: the end of the trailer. Choose the transition.", ok: () => ok["last shot → the logo"] },
+  ];
+  let ti = 0, ready = false;
+  function tabs(id, items, key) { Kit.buttons($(id), items.map((k) => ({ k, label: k })), (k) => { s[key] = k; upd(); }); $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key])); }
+  const durIn = Kit.slider($("sl"), "Length", 0.25, 3, 0.25, s.dur, (v) => { s.dur = v; if (ready) upd(); }, (v) => v + " s");
+  function judge() {
+    const P = PLACES[s.pl];
+    if (s.tr !== P.want) return { good: false, m: s.tr === "wipe" ? "A wipe pulls attention to the edit itself. Use it rarely, for a playful style." : s.pl.startsWith("the boat") ? "A transition here slows the action down; the movement should go on at once." : s.pl.startsWith("evening") ? (s.tr === "cut" ? "A hard cut jumps from night to day; a soft transition tells the viewer that time passed." : "Black here would feel like the end of the trailer.") : "A cut to the logo is abrupt; a short dip to black closes the story first." };
+    if (P.maxDur && (s.dur < 0.5 || s.dur > P.maxDur)) return { good: false, m: `Right transition, but ${s.dur} s is ${s.dur < 0.5 ? "too short to feel" : "too slow for a 30-second trailer"}: try 0.5–1 s.` };
+    return { good: true, m: s.tr === "cut" ? "A cut on the action: the movement goes on, and nobody sees the edit." : s.tr === "cross dissolve" ? "The dissolve tells the viewer: time has passed." : "A short dip to black ends the story, and the logo comes out of the dark." };
+  }
+  function upd(played) {
+    tabs("pl", Object.keys(PLACES), "pl"); tabs("tr", TR, "tr");
+    durIn.disabled = s.tr === "cut";
+    const j = judge();
+    if (played && j.good) ok[s.pl] = true;
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: cuts for action, dissolves for time, a dip to black for the end.";
+    $("msg").textContent = m + (played ? j.m : "Press Play to see the edit.");
+    $("msg").classList.toggle("bad", played && !j.good);
+  }
+  $("play").addEventListener("click", () => { s.playing = true; s.t0 = performance.now(); setTimeout(() => upd(true), 900); });
+  const cv = Kit.canvas($("c"), (W) => Math.min(250, W * 9 / 16 * 0.75));
+  Kit.loop((now) => {
+    const c = cv.ctx, W = cv.W, H = cv.H, w = Math.min(W - 10, H * 16 / 9), h = w * 9 / 16, x = (W - w) / 2, y = (H - h) / 2, P = PLACES[s.pl];
+    const tot = 3.2, t = s.playing ? (now - s.t0) / 1000 : 0, mid = 1.4, d = s.tr === "cut" ? 0 : s.dur;
+    if (s.playing && t > tot + d) s.playing = false;
+    const drawB = () => { if (P.b === "logo") { c.fillStyle = "#2b2a33"; c.fillRect(x, y, w, h); Kit.text(c, "ROOFTOP RESCUE", x + w / 2, y + h * 0.48, Math.max(14, w / 14), "#f783ac"); Kit.text(c, "Play free now", x + w / 2, y + h * 0.62, Math.max(11, w / 26), "#ffffff"); } else RS.draw(c, x, y, w, h, 1.4 + t * 2, P.b); };
+    const drawA = () => RS.draw(c, x, y, w, h, t * 2, P.a);
+    if (!s.playing || t < mid) drawA();
+    else if (t > mid + d) drawB();
+    else {
+      const k = (t - mid) / d;
+      if (s.tr === "cross dissolve") { drawA(); c.globalAlpha = k; drawB(); c.globalAlpha = 1; }
+      else if (s.tr === "dip to black") { if (k < 0.5) { drawA(); c.fillStyle = `rgba(0,0,0,${k * 2})`; c.fillRect(x, y, w, h); } else { drawB(); c.fillStyle = `rgba(0,0,0,${(1 - k) * 2})`; c.fillRect(x, y, w, h); } }
+      else { drawA(); c.save(); c.beginPath(); c.rect(x, y, w * k, h); c.clip(); drawB(); c.restore(); c.fillStyle = "#fab005"; c.fillRect(x + w * k - 3, y, 6, h); }
+    }
+    if (!s.playing) Kit.text(c, "▶ " + s.tr, x + w - 8, y + 18, 12, "#ffffff", "right");
+  });
+  window.CU = { set: (o) => { Object.assign(s, o); if (o.dur) { durIn.value = o.dur; durIn.dispatchEvent(new Event("input")); } upd(); }, play: () => $("play").click() };
+  ready = true; upd();
+})();
+</script>
+</body>
+</html>

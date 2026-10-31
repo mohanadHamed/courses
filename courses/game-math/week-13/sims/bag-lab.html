@@ -16,8 +16,8 @@
 </head>
 <body class="theme-arcade">
 <main class="sim">
-  <h1>Bag Lab: pure random, shuffle bag or PRD?</h1>
-  <p class="hint">The player's sword in <i>Torch Hall</i> makes a critical hit (crit) 25 % of the time. Compare three ways to roll it: <b>pure random</b> (25 % every attack), a <b>shuffle bag</b> (1 crit in every bag of 4), and <b>PRD</b> (the chance is 0.085 × the attacks since the last crit).</p>
+  <h1>Bag Lab: pure random or a shuffle bag?</h1>
+  <p class="hint">The player's sword in <i>Torch Hall</i> makes a critical hit (crit) 25 % of the time. Compare two ways to roll it: <b>pure random</b> (25 % every attack) and a <b>shuffle bag</b> (1 crit in every bag of 4).</p>
   <div class="bar" id="mode"></div>
   <div class="bar"><button type="button" id="one">100 attacks ▶</button><button type="button" class="ghost" id="many">1000 players ▶</button></div>
   <canvas id="c" aria-label="100 attacks with the crits marked"></canvas>
@@ -32,22 +32,20 @@
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
-  const MODES = ["pure random", "shuffle bag", "PRD"];
+  const MODES = ["pure random", "shuffle bag"];
   const s = { mode: "pure random", seq: null, res: {} };
   const TASKS = [
     { q: "Task 1: Run 100 attacks with pure random. How many crits? What is the longest drought (attacks without a crit)?", ok: () => s.seq && s.mode === "pure random" },
     { q: "Task 2: Switch to the shuffle bag and run 100 attacks. Can the drought be longer than 6?", ok: () => s.seq && s.mode === "shuffle bag" },
-    { q: "Task 3: Switch to PRD and run 100 attacks. What is the longest possible drought?", ok: () => s.seq && s.mode === "PRD" },
-    { q: "Task 4: Let 1000 players fight with each of the three ways. Which way keeps 25 % and limits the droughts?", ok: () => MODES.every((m) => s.res[m]) },
+    { q: "Task 3: Let 1000 players fight with each of the two ways. Which way keeps 25 % and limits the droughts?", ok: () => MODES.every((m) => s.res[m]) },
   ];
   let ti = 0;
   function attacks(mode, n = 100) {
-    const out = []; let bag = [], since = 0;
+    const out = []; let bag = [];
     for (let i = 0; i < n; i++) {
       let crit;
       if (mode === "pure random") crit = Math.random() < 0.25;
       else if (mode === "shuffle bag") { if (!bag.length) { bag = [1, 0, 0, 0]; for (let k = 3; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [bag[k], bag[j]] = [bag[j], bag[k]]; } } crit = bag.pop() === 1; }
-      else { since++; crit = Math.random() < Math.min(1, 0.085 * since); if (crit) since = 0; }
       out.push(crit);
     }
     return out;
@@ -69,7 +67,7 @@
       MODES.map((m) => { const r = s.res[m]; return `<tr><td>${m}</td><td>${r ? r.rate.toFixed(1) + " %" : "–"}</td><td>${r ? r.avg.toFixed(1) : "–"}</td><td>${r ? r.worst : "–"}</td></tr>`; }).join("");
     let m = "";
     while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
-    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the bag and PRD keep about 25 % and cut off the long droughts.";
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: the bag keeps exactly 25 % and cuts off the long droughts.";
     $("msg").textContent = m + "A red square is a crit.";
   }
   $("one").addEventListener("click", () => { s.seq = attacks(s.mode); upd(); });

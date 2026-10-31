@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Course video: Check an AI answer</title>
+<!-- The pictures of the course video of Online activity 11 (AUTHORING.md,
+     "Blended courses"). One scene for each scene of check-ai-script.txt; the
+     voice reads that script, and make-course-video.sh makes the video. The
+     text, the café, the study and its author are made up. -->
+</head>
+<body>
+<script src="../../../../shared/sims/recordings/video-kit.js"></script>
+<script>
+const { C, text, spans, rect, win, pill, arrow, mark, titleCard, show, group, el } = VK;
+
+// The AI text: [sentence, kind] (claim, opinion, unfair).
+const TEXT = [
+  ["The college café sells 200 sandwiches a day.", "claim"],
+  ["Mint tea is the best drink in the morning.", "opinion"],
+  ["A 2020 study by Dr. Lina Haddad shows that breakfast helps memory.", "claim"],
+  ["Experts say that water helps you focus.", "claim"],
+  ["Busy mothers never have time for breakfast.", "unfair"],
+];
+function aiText(g, x, y, o = {}) {
+  win(g, x, y, 1140, 300, "AI answer: Breakfast and study", { o: o.o });
+  TEXT.forEach(([s, kind], i) => {
+    const yy = y + 84 + i * 44;
+    if (o.claims && kind === "claim") rect(g, x + 22, yy - 30, s.length * 13.4 + 20, 40, { fill: "#FFF3BF", r: 8, o: o.claims });
+    if (o.opinion && kind === "opinion") rect(g, x + 22, yy - 30, s.length * 13.4 + 20, 40, { fill: "#F1F3F5", r: 8, o: o.opinion });
+    text(g, x + 32, yy, s, { size: 24, weight: 600, o: o.o });
+    if (o.claims && kind === "claim") pill(g, x + 1000, yy - 30, "claim", { size: 18, fill: "#FFE066", w: 110, o: o.claims });
+    if (o.opinion && kind === "opinion") pill(g, x + 1000, yy - 30, "opinion", { size: 18, fill: "#E9ECEF", w: 110, o: o.opinion });
+  });
+}
+function source(g, x, y, name, kind, says, ok, o) {
+  rect(g, x, y, 520, 110, { fill: "#fff", stroke: C.line, r: 14, o });
+  text(g, x + 20, y + 36, name, { size: 24, weight: 800, o });
+  text(g, x + 20, y + 66, kind, { size: 18, fill: C.grey, o });
+  text(g, x + 20, y + 96, says, { size: 22, weight: 700, fill: ok ? C.green : C.ink, o });
+}
+
+window.VIDEO = {
+  label: "Digital Skills · Online activity 11",
+  title: "Check an AI answer",
+  scenes: [
+    // 1. Title.
+    (g, k, p) => {
+      titleCard(g, k, p, "Check an AI answer", "Claims, sources and fair words");
+      aiText(g, 70, 470, { o: 0 });
+      text(g, 200, 400, "The AI text: breakfast, for the class newsletter", { size: 26, fill: C.grey, o: show(k, 1, p) });
+    },
+    // 2. Claims and an opinion.
+    (g, k, p) => {
+      aiText(g, 70, 110, { o: 1, claims: show(k, 1, p), opinion: show(k, 2, p) });
+      text(g, 640, 500, "Highlight every claim before you check anything.", { size: 28, anchor: "middle", fill: C.accent, o: show(k, 0, p) });
+      text(g, 640, 550, "A claim can be checked. An opinion cannot.", { size: 26, anchor: "middle", o: show(k, 2, p) });
+    },
+    // 3. Two reliable sources (lateral reading).
+    (g, k, p) => {
+      rect(g, 70, 100, 1140, 70, { fill: "#FFF3BF", r: 12, o: show(k, 0, p) });
+      text(g, 100, 145, "Claim: The college café sells 200 sandwiches a day.", { size: 28, o: show(k, 0, p) });
+      const o1 = show(k, 1, p);
+      ["a national health office", "a university", "an encyclopedia"].forEach((s, i) =>
+        pill(g, 100 + i * 360, 200, s, { size: 22, fill: "#D3F9D8", w: 330, o: o1 }));
+      text(g, 640, 300, "Open other pages about the claim: lateral reading", { size: 26, anchor: "middle", fill: C.grey, o: show(k, 2, p) });
+      const o3 = show(k, 3, p);
+      source(g, 80, 330, "College website", "the official page of the college", "about 120 sandwiches a day", true, o3);
+      source(g, 680, 330, "Café notice", "from the café manager", "120 sandwiches every day", true, o3);
+      mark(g, 640, 500, false, { o: o3, r: 20 });
+      text(g, 670, 508, "200 is wrong: correct it to 120", { size: 26, fill: C.red, o: o3 });
+    },
+    // 4. Three checks of a study.
+    (g, k, p) => {
+      rect(g, 70, 100, 1140, 70, { fill: "#FFF3BF", r: 12, o: show(k, 0, p) });
+      text(g, 100, 145, "Study: Haddad (2020), Breakfast and Memory", { size: 28, o: show(k, 0, p) });
+      const checks = [["Search the title", "no result"], ["Check the authors", "no researcher with this name"], ["Open the link", "page not found"]];
+      checks.forEach(([a, b], i) => {
+        const o = show(k, 1, p), y = 210 + i * 90;
+        rect(g, 100, y, 1080, 70, { fill: "#fff", stroke: C.line, r: 12, o });
+        pill(g, 120, y + 12, String(i + 1), { size: 22, fill: C.accent, ink: "#fff", w: 46, o });
+        text(g, 190, y + 45, a, { size: 26, weight: 800, o });
+        mark(g, 640, y + 35, false, { o, r: 16 });
+        text(g, 670, y + 45, b, { size: 24, fill: C.red, o });
+      });
+      pill(g, 380, 500, "All three fail: a made-up source. Delete it.", { size: 26, fill: C.red, ink: "#fff", o: show(k, 2, p) });
+    },
+    // 5. Decide: keep, correct or remove.
+    (g, k, p) => {
+      const rows = [["Water helps you focus (two sources agree)", "keep", C.green],
+        ["The café sells 200 sandwiches a day", "correct: 120", C.blue],
+        ["The 2020 study by Dr. Lina Haddad", "remove", C.red]];
+      rows.forEach(([s, a, c], i) => {
+        const y = 150 + i * 110, o = show(k, 0, p);
+        rect(g, 90, y, 1100, 84, { fill: "#fff", stroke: C.line, r: 14, o });
+        text(g, 120, y + 52, s, { size: 26, weight: 700, o });
+        pill(g, 880, y + 18, a, { size: 24, fill: c, ink: "#fff", w: 270, o: show(k, 1, p) });
+      });
+    },
+    // 6. Fair words.
+    (g, k, p) => {
+      text(g, 640, 130, "Read again: who is shown, and how?", { size: 32, anchor: "middle", fill: C.accent, o: show(k, 0, p) });
+      const o1 = show(k, 1, p);
+      mark(g, 110, 210, false, { o: o1 });
+      text(g, 145, 220, "Busy mothers never have time for breakfast.", { size: 26, fill: C.red, o: o1 });
+      mark(g, 110, 270, true, { o: o1 });
+      text(g, 145, 280, "Busy people often have little time for breakfast.", { size: 26, fill: C.green, o: o1 });
+      const o2 = show(k, 2, p);
+      mark(g, 110, 390, false, { o: o2 });
+      text(g, 145, 400, "Breakfast is always good for everyone.", { size: 26, fill: C.red, o: o2 });
+      mark(g, 110, 450, true, { o: o2 });
+      text(g, 145, 460, "Breakfast helps many people focus; some feel fine without it.", { size: 26, fill: C.green, o: o2 });
+    },
+    // 7. Check log, AI-use statement, try it.
+    (g, k, p) => {
+      const o0 = show(k, 0, p), cols = [["Claim", 300], ["Source", 330], ["Result", 220], ["Action", 170]];
+      let x = 90;
+      cols.forEach(([h, w]) => { rect(g, x, 100, w, 44, { fill: C.soft, stroke: C.line, sw: 1, r: 0, o: o0 }); text(g, x + 12, 130, h, { size: 22, weight: 800, o: o0 }); x += w; });
+      [["café: 200 a day", "college website", "120 a day", "correct"], ["water helps focus", "health office, encyclopedia", "true", "keep"],
+        ["Haddad (2020) study", "title, authors, link", "not found", "remove"]].forEach((r, i) => {
+        let cx = 90;
+        r.forEach((s, j) => { rect(g, cx, 144 + i * 44, cols[j][1], 44, { fill: "#fff", stroke: C.line, sw: 1, r: 0, o: o0 }); text(g, cx + 12, 174 + i * 44, s, { size: 20, o: o0 }); cx += cols[j][1]; });
+      });
+      const o1 = show(k, 1, p);
+      rect(g, 90, 296, 1020, 96, { fill: "#fff", stroke: C.accent, sw: 3, r: 14, o: o1 });
+      text(g, 112, 334, "AI-use statement: I used an AI tool for a first draft.", { size: 22, o: o1 });
+      text(g, 112, 368, "I checked every claim in two sources and changed three sentences.", { size: 22, o: o1 });
+      const o2 = show(k, 2, p);
+      [["Claim Finder", "which sentences can be checked?"], ["Claim Court", "judge the AI answers"]].forEach(([n, s], i) => {
+        rect(g, 90 + i * 540, 420, 500, 140, { fill: "#fff", stroke: C.line, r: 22, o: o2 });
+        el("circle", { cx: 160 + i * 540, cy: 490, r: 34, fill: C.accent, opacity: o2 }, g);
+        el("path", { d: `M${149 + i * 540} 472l28 18l-28 18z`, fill: "#fff", opacity: o2 }, g);
+        text(g, 215 + i * 540, 482, n, { size: 30, weight: 800, o: o2 });
+        text(g, 215 + i * 540, 518, s, { size: 20, fill: C.grey, o: o2 });
+      });
+    },
+  ],
+};
+</script>
+</body>
+</html>

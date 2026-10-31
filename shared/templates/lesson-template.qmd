@@ -1,11 +1,19 @@
 ---
-# Copy to courses/<slug>/week-PP/lesson-NN.qmd (NN = lecture number; PP: see the notes template). The interactive page, derived
+# Copy to courses/<slug>/week-WW/lesson-NN.qmd (NN = lecture number; WW = the syllabus week of its unit). The interactive page, derived
 # from the lesson notes (lesson-NN-book.qmd): the SAME numbered sections, each
-# shorter and plainer (A2–B1 English, short lists), each with its figures, its
+# shorter and plainer (A2 English, short lists), each with its figures, its
 # "Do it" task and ONE "Try it" set of varied questions (at least two thirds
 # ask to apply: calculate, choose for a situation, decide). No repeated
 # questions between sections.
 #   60 min: 4–6 Try it, 15–28 questions.  90 min: 6–9 Try it, 30–45 questions.
+# THE PAGE TEACHES (AUTHORING.md): every question has its answer at once.
+# Every Try it question has a "Why:" reason; every Do it box has a
+# ::: {.check} (the result and why; for a personal task, a model answer and a
+# 2–3 point self-check). Task with AI: 0–2 boxes, only where AI lets students do more.
+# A lecture with a worksheet (lesson-NN-sheet.qmd, a practical course): the
+# Do it box of each section is {{< experiment N >}} (read from the worksheet),
+# "## Before you start" has {{< start-files >}}, and "## Table of results"
+# (before the Game challenge) has {{< experiment results >}}.
 title: "Lesson title, as in the notes"
 description: "One short line for the hero."
 lesson: 1
@@ -15,8 +23,8 @@ format: lesson-html
 
 This page is the interactive version of the lesson notes (PDF). Each section
 starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. The full explanations,
-examples and exercises are in the notes.
+with a **Do it** task and one set of questions. Every question on this page
+has its answer: try first, then check.
 
 ## Key terms
 
@@ -34,6 +42,11 @@ The common mistake from the notes, in one or two sentences.
 
 ::: {.callout-note title="Do it · Short title"}
 The Do it task of the notes, in two or three short sentences.
+
+::: {.check}
+The result, and one line of why. (A personal task: "A good answer looks
+like …", then a 2–3 point self-check list.)
+:::
 :::
 
 ::: {.callout-tip title="Try it 1 · Short title"}
@@ -43,10 +56,57 @@ One instruction.
 A question on this section.
 :   its answer
 
+    Why: one sentence, in the words of the lesson.
+
 A different kind of question on the same section.
 :   its answer
+
+    Why: one sentence.
 :::
 :::
+
+<!-- 0–2 per session, only where AI lets students do MORE than the usual task
+(AUTHORING.md, "Task with AI"): a harder product, a starter prompt, a check
+with the tools of the lesson, the result.
+::: {.callout-note .ai-task title="Task with AI · Short title"}
+An extra for the curious: let an AI assistant draw it. Copy the prompt into
+an AI assistant that the university allows (for example Microsoft Copilot
+with your university account), and look at the result.
+
+::: {.prompt}
+A complete prompt: every detail and number of one situation, ready to copy,
+that asks for something to look at (a picture, a diagram, a chart, a small
+table). For example: Draw a 2D grid from 0 to 10. The player is at (2, 3)
+and the enemy at (6, 6). Draw the vector from the player to the enemy as an
+arrow, with its x part and its y part, and label them.
+:::
+
+**What do you see?**
+
+::: {.check label="What you should see"}
+The result in words, to compare: the AI can be wrong.
+:::
+
+::: {.try-change}
+**Change:** one number or one word, for example the enemy to (8, 2). Ask
+again. What do you notice?
+
+::: {.check}
+What the student should notice.
+:::
+:::
+
+::: {.try-change}
+**Change:** a second change. What do you notice?
+
+::: {.check}
+What the student should notice.
+:::
+:::
+
+**Your own idea:** change one more number or word, and look again.
+:::
+-->
 
 ## 1.2 A different concept
 

@@ -1,4 +1,4 @@
-// The opening scene of Rooftop Rescue (lectures 7-8), drawn as a small world
+// The opening scene of Rooftop Rescue (Lectures 5 and 6), drawn as a small world
 // that a "camera" can frame. Shared by the storyboard simulators of this folder.
 //   RS.draw(ctx, x, y, w, h, cam, opts)   cam = { cx, cy, vh, flip }   (vh = world units in view height)
 //   RS.SHOTS: the shots of the storyboard lessons.

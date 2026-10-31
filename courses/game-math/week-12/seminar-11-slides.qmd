@@ -1,0 +1,99 @@
+---
+title: "Generating Random Events in a Game Scenario"
+subtitle: "Seminar 11 · practises Lecture 11"
+format: lesson-pptx
+---
+
+## Recall · Lecture 11
+
+a) Which numbers does Random.Range(1, 6) give?
+b) Two prizes have the weights 3 and 1. What is the chance of the second?
+c) What is 17 mod 5?
+
+::: {.answer}
+a) 1 … 5
+b) 1/4
+c) 2
+:::
+
+## Activity 1 · Four numbers · 12 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The test build of Firefly Fair uses an LCG with a = 3, c = 5, m = 16 and the seed 1.
+- **Do it:** Compute the next four numbers after the seed 1. Do two testers with the seed 1 see the same moles?
+- Your product is four numbers and one answer.
+:::
+::: {.column width="50%"}
+![](images/lcg-steps.png)
+:::
+::::
+
+## Check 1 · Four numbers
+
+Which numbers follow the seed 1?
+
+::: {.reveal}
+1. 3 × 1 + 5 = 8, so the first number is 8.
+2. 3 × 8 + 5 = 29, and 29 mod 16 = 13.
+3. 3 × 13 + 5 = 44 gives 12, and 3 × 12 + 5 = 41 gives 9.
+4. The same seed gives the same sequence, so both testers see the same moles.
+:::
+
+## Activity 2 · Calls and chances · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A mole pops up in one of the holes 0 … 8, and a golden mole comes with the probability 0.05.
+- **Do it:** Write the call for the hole and the golden-mole condition. Fix Random.Range(1, 9) for the holes 1 … 9. Find P(hole 4) and the golden moles in 200.
+- Your product is two calls, one fix and two numbers.
+:::
+::: {.column width="50%"}
+![](images/uniform.png)
+:::
+::::
+
+## Check 2 · Calls and chances
+
+What are the calls, the fix and the chances?
+
+::: {.reveal}
+1. The hole is Random.Range(0, 9), and a golden mole comes when Random.value < 0.05f.
+2. Random.Range(1, 9) never gives hole 9, so the fix is Random.Range(1, 10).
+3. P(hole 4) is 1/9, because the 9 holes are equally likely.
+4. In 200 moles, about 200 × 0.05 = 10 are golden.
+:::
+
+## Activity 3 · The prize table · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The prizes have the weights 64, 24, 10 and 2, and a tester's code uses Random.value * 98.
+- **Do it:** Write the cumulative weights and the prize for r = 90. Open 1000 prizes in Loot Table Lab. Why does the tester never get a bear?
+- Your product is the weights, one prize, counts and one fix.
+:::
+::: {.column width="50%"}
+![](images/weighted.png)
+:::
+::::
+
+## Live demo · Loot Table Lab
+
+{{< sim file="sims/loot-table-lab.html" poster="sims/loot-table-lab.png" title="Loot Table Lab: weights and chances" task="**Show:** the weights 64, 24, 10, 2 and open 1000. **Ask:** why are the counts close to 640, 240, 100 and 20, but not exact?" >}}
+
+## Check 3 · The prize table
+
+What do the weights and the counts tell us?
+
+::: {.reveal}
+1. The cumulative weights are 64, 88, 98 and 100, so r = 90 gives the plush.
+2. 1000 draws give counts close to 640, 240, 100 and 20, but not exact.
+3. Random.value * 98 is always below 98, so the bear (98 to 100) never comes.
+4. The fix uses the sum of the weights: Random.value * 100.
+:::
+
+## Wrap-up
+
+- You can follow a generator by hand and say what a seed does.
+- You can write the random calls of a game and find their chances.
+- You can build a weighted table and find a bug from the counts.

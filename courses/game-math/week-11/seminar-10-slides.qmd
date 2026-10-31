@@ -1,0 +1,103 @@
+---
+title: "Probability in Loot Drops and Critical Hits"
+subtitle: "Seminar 10 · practises Lecture 10"
+format: lesson-pptx
+---
+
+## Recall · Lecture 10
+
+a) One die. What is P(more than 4)?
+b) P(A) = 0.2. What is P(not A)?
+c) A drop has p = 1/10. How many tries does it take on average?
+
+::: {.answer}
+a) 1/3
+b) 0.8
+c) 10
+:::
+
+## Activity 1 · Theory and rolls · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A slime drops a gem when a die shows a 6, and two slimes roll two independent dice.
+- **Do it:** Find P(gem), P(two gems), P(at least one gem) and P(sum 7). Then roll 10 and 1000 times in Roll Lab.
+- Your product is four probabilities and three shares.
+:::
+::: {.column width="50%"}
+![](images/dice-sums.png)
+:::
+::::
+
+## Live demo · Roll Lab
+
+{{< sim file="sims/roll-lab.html" poster="sims/roll-lab.png" title="Roll Lab: theory and experiment" task="**Show:** roll 10 times, then 1000 times. **Ask:** why is the share of 6s close to 1/6 only after many rolls?" >}}
+
+## Check 1 · Theory and rolls
+
+What are the chances of the gems?
+
+::: {.reveal}
+1. P(gem) = 1/6, and P(no gem) = 5/6.
+2. P(two gems) = 1/36, and P(at least one gem) = 1 − 25/36 = 11/36.
+3. P(sum 7) = 6/36 = 1/6.
+4. After 1000 rolls the share of 6s is close to 0.17, but after 10 rolls it can be far.
+:::
+
+## Activity 2 · Knowing the first die · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A critical hit needs a sum of 10 or more on two dice.
+- A chest holds 6 items, 2 of them rare, and the hero takes two without putting one back.
+- **Do it:** Find P(critical hit), P(critical hit | first die is 5) and P(two rare items). Check "first die is 6" in Conditional Lab.
+:::
+::: {.column width="50%"}
+![](images/conditional-grid.png)
+:::
+::::
+
+## Check 2 · Knowing the first die
+
+How does knowing the first die change the chance?
+
+::: {.reveal}
+1. Before the roll, 6 of the 36 outcomes give 10 or more, so P = 1/6.
+2. When the first die is 5, only (5,5) and (5,6) of 6 outcomes work, so P = 1/3.
+3. When the first die is 6, (6,4), (6,5) and (6,6) work, so P = 1/2.
+4. Two rare items from the chest have P = 2/6 × 1/5 = 1/15.
+:::
+
+## Activity 3 · Expected value and price · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A crate of 10 items has 2 × 50 coins, 5 × 10 coins and 3 empty items, and it costs 18 coins.
+- An axe hits for 12, and a critical hit with p = 1/3 does 30. A cape drops with p = 1/20.
+- **Do it:** Find E(coins), the gain, a fair price, E(damage) and the average wait for the cape.
+:::
+::: {.column width="50%"}
+![](images/expected-value.png)
+:::
+::::
+
+## Live demo · Crate Lab
+
+{{< sim file="sims/crate-lab.html" poster="sims/crate-lab.png" title="Crate Lab: the expected value of a loot crate" task="**Show:** build the crate with 2 × 50, 5 × 10 and 3 × 0 at the price 18, and open 1000 crates. **Ask:** why does the average come close to 15?" >}}
+
+## Check 3 · Expected value and price
+
+Is the crate worth its price?
+
+::: {.reveal}
+1. E = 50 × 0.2 + 10 × 0.5 + 0 = 15 coins, so the gain is 15 − 18 = −3 coins.
+2. The crate is not fair, and a fair price is 15 coins.
+3. The axe does E = 8 + 10 = 18 damage per hit.
+4. The cape takes 20 tries on average, and some players need many more.
+:::
+
+## Wrap-up
+
+- You can compute the chance of a drop with the complement and AND, and check it with many rolls.
+- You can use a known result: count only inside B, and multiply along a chest without putting back.
+- You can decide with the expected value if a crate is worth its price.

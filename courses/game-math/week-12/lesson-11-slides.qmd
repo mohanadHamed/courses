@@ -1,0 +1,255 @@
+---
+title: "Random Numbers: Generators, Seeds and Distributions"
+subtitle: "Lecture 11"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary pseudo-random-number prng lcg modulo seed procedural-generation probability-distribution uniform-distribution weighted-random cumulative-weight loot-table histogram >}}
+
+## 11.1 Why games need random numbers
+
+:::: {.columns}
+::: {.column width="50%"}
+- Chance makes levels, loot and behaviour surprising.
+- A computer makes pseudo-random numbers with a formula.
+- The same start always gives the same numbers.
+- **Do it:** List four random things in a game you play. Which is the most important?
+:::
+::: {.column width="50%"}
+![](images/pseudo-random.png)
+:::
+::::
+
+## Try it 1 · Real or pseudo?
+
+a) Is a physical die real chance or pseudo-random?
+b) Is x = (5x + 3) mod 16 real chance or pseudo-random?
+c) What do we call making caves with random numbers?
+
+::: {.answer}
+a) real chance
+b) pseudo-random
+c) procedural generation
+:::
+
+## 11.2 One LCG step
+
+:::: {.columns}
+::: {.column width="50%"}
+- An LCG computes x(n+1) = (a·x(n) + c) mod m.
+- Mod is the remainder of a division.
+- The sequence repeats after at most m numbers.
+- **Do it:** Compute the next two numbers with a = 3, c = 1, m = 8 and seed 2. What are they?
+:::
+::: {.column width="50%"}
+![](images/lcg-steps.png)
+:::
+::::
+
+## Example · Seed 7
+
+The LCG has a = 5, c = 3, m = 16 and the seed 7.
+**Which numbers does it make?**
+
+::: {.reveal}
+1. x₁ = (5·7 + 3) mod 16 = 38 mod 16 = **6**.
+2. x₂ = 33 mod 16 = **1**, and x₃ = 8 mod 16 = **8**.
+3. After 16 numbers, 7 comes again, so the **period is 16**.
+:::
+
+## Try it 2 · The LCG
+
+a) What is 27 mod 8?
+b) Which number follows 3 when a = 5, c = 3 and m = 16?
+c) What is the longest period with m = 16?
+
+::: {.answer}
+a) 3
+b) 2
+c) 16
+:::
+
+## 11.3 Seeds
+
+:::: {.columns}
+::: {.column width="50%"}
+- The seed is the start value of the generator.
+- The same seed gives the same sequence and the same level.
+- We seed once, when the level starts.
+- **Do it:** Build seed 42 twice in Seed Lab. Is the cave the same?
+:::
+::: {.column width="50%"}
+![](images/seeds.png)
+:::
+::::
+
+## Example · The daily cave
+
+Torch Hall has a daily cave that is the same for every player.
+**How does the game do it?**
+
+::: {.reveal}
+1. The seed is today's date as a number: **20261025**.
+2. Every player builds the cave with this seed, so the cave is **the same**.
+3. Tomorrow the seed is **20261026**, and everybody gets a new cave.
+:::
+
+## Live demo · Seed Lab
+
+{{< sim file="sims/seed-lab.html" poster="sims/seed-lab.png" title="Seed Lab: the same seed, the same level" task="**Show:** seed 42 twice, then 43, then switch on the bug and build. **Ask:** why are all the bats in the same place with the bug?" >}}
+
+## Try it 3 · Seeds
+
+a) Which seed gives a new cave in every game?
+b) Which seed gives the same cave to all players today?
+c) Five bats seed with the time in every frame. What happens?
+
+::: {.answer}
+a) the time
+b) the date
+c) They all fly the same way.
+:::
+
+## 11.4 From numbers to game values
+
+:::: {.columns}
+::: {.column width="50%"}
+- Random.Range(min, max) with integers gives min to max − 1.
+- Random.value < p gives a yes with probability p.
+- a + r·(b − a) gives a value between a and b.
+- **Do it:** Write the call for a lane 1, 2 or 3. What is the max?
+:::
+::: {.column width="50%"}
+![](images/range-map.png)
+:::
+::::
+
+## Example · Dice, lanes and hits
+
+The dice room, the lanes and the sword of Torch Hall all need random numbers.
+**Which calls do they use?**
+
+::: {.reveal}
+1. A die uses **Random.Range(1, 7)**, because 7 is not included.
+2. Three lanes 0, 1, 2 use **Random.Range(0, 3)**.
+3. A critical hit with p = 0.2 uses **Random.value < 0.2f**.
+:::
+
+## Try it 4 · Calls
+
+a) Which call gives a die with 8 faces, 1 to 8?
+b) Which call gives a month from 1 to 12?
+c) Which condition gives a dodge with the probability 0.3?
+
+::: {.answer}
+a) Random.Range(1, 9)
+b) Random.Range(1, 13)
+c) Random.value < 0.3f
+:::
+
+## 11.5 Distributions and uniform
+
+:::: {.columns}
+::: {.column width="50%"}
+- A distribution gives every value its probability, and the sum is 1.
+- In a uniform distribution, all values are equally likely.
+- With n values, each has the probability 1/n.
+- **Do it:** Find P(5) for Random.Range(0, 8). What is it?
+:::
+::: {.column width="50%"}
+![](images/uniform.png)
+:::
+::::
+
+## Example · A random spawn time
+
+A bat appears after Random.Range(2f, 6f) seconds.
+**What is the chance that it comes in the first second?**
+
+::: {.reveal}
+1. The range from 2 to 6 is **4 seconds** long.
+2. The first second, from 2 to 3, is **1 second** of it.
+3. P = 1/4, because the chance is the **share of the length**.
+:::
+
+## Try it 5 · Distributions
+
+a) What is P(3) for Random.Range(0, 5)?
+b) What is P(15 to 20) for Random.Range(0f, 20f)?
+c) What is P(legendary) when four rarities are uniform?
+
+::: {.answer}
+a) 1/5
+b) 1/4
+c) 1/4
+:::
+
+## 11.6 Weighted choice
+
+:::: {.columns}
+::: {.column width="50%"}
+- Each option has a weight.
+- P(i) is its weight divided by the sum of the weights.
+- We pick with cumulative weights and one random number.
+- **Do it:** Make epic items 5 % in Loot Table Lab. Which weights did you use?
+:::
+::: {.column width="50%"}
+![](images/weighted.png)
+:::
+::::
+
+## Example · A chest of Torch Hall
+
+The weights are 60, 30, 9 and 1, so the cumulative weights are 60, 90, 99 and 100.
+**Which item does each random number give?**
+
+::: {.reveal}
+1. r = 72 falls between 60 and 90, so the chest gives **rare**.
+2. r = 99.4 falls between 99 and 100, so it gives **legendary**.
+3. P(epic) = **9/100**, because epic has the weight 9 of 100.
+:::
+
+## Live demo · Loot Table Lab
+
+{{< sim file="sims/loot-table-lab.html" poster="sims/loot-table-lab.png" title="Loot Table Lab: weights and chances" task="**Show:** open 1, 100 and 1000 chests, then set the weights 60, 34, 5, 1 and open 1000 again. **Ask:** why are the counts close to, but not exactly, the expected values?" >}}
+
+## Try it 6 · Weights
+
+a) What is P(axe) with the weights sword 1 and axe 4?
+b) Which item does r = 75 give with cumulative weights 70, 90, 98, 100?
+c) What does a weight of 0 mean?
+
+::: {.answer}
+a) 4/5
+b) rare
+c) The item never drops.
+:::
+
+## Game challenge · Loot Forge
+
+{{< sim file="sims/loot-forge.html" poster="sims/loot-forge.png" title="Loot Forge: shape the randomness" kind="game" task="The loot designer of Torch Hall has six questions about a chest, a rack of weapons, critical hits and the daily cave. **Play:** answer each question of the forge on your phone." >}}
+
+## Try it · Tune the forge (harder)
+
+The facts: the chest has the weights 50, 35, 12 and 3, so the cumulative weights are 50, 85, 97 and 100.
+
+a) Which item drops when r = 85 exactly?
+b) Only the common weight changes, so that legendary is 1 %. What is the new common weight?
+c) About how many epic items come from 1000 chests?
+
+::: {.answer}
+a) epic
+b) 250
+c) about 120
+:::
+
+## Summary
+
+- A PRNG computes numbers with a formula, and the same seed gives the same numbers.
+- An LCG step computes (a·x + c) mod m, and the sequence repeats after its period.
+- A game seeds once, with the time, a shared number or the date.
+- Random.Range(min, max) with integers never gives max.
+- In a uniform distribution, all values are equally likely.
+- A weighted choice gives each item its weight divided by the sum.

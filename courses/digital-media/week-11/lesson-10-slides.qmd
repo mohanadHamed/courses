@@ -1,0 +1,139 @@
+---
+title: "Digital Video Basics: Formats, Resolution and Codecs"
+subtitle: "Lecture 10"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary frame video-frame-rate resolution aspect-ratio video-container video-codec bitrate key-frame >}}
+
+## 10.1 Frames and the frame rate
+
+:::: {.columns}
+::: {.column width="50%"}
+- A video is a series of still frames with sound.
+- The frame rate is the number of frames per second.
+- 24 fps looks like cinema, and 60 fps shows fast action smoothly.
+- **Do it:** Count the frames of a 30 s trailer at 30 fps. How many are there?
+:::
+::: {.column width="50%"}
+![](images/frames.png)
+:::
+::::
+
+## Try it 1 · Frames
+
+a) How many frames does 1 s at 30 fps have?
+b) How many frames does a 10 s clip at 60 fps have?
+c) Which frame rate gives a cinema look?
+
+::: {.answer}
+a) 30
+b) 600
+c) 24 fps
+:::
+
+## 10.2 Resolution and aspect ratio
+
+:::: {.columns}
+::: {.column width="50%"}
+- The resolution is the size of each frame in pixels.
+- 1080p is 1920 × 1080, and 4K is 3840 × 2160.
+- 16:9 is wide, 9:16 is tall and 1:1 is square.
+- **Do it:** Find the resolution of a video on your phone. Which shape is it?
+:::
+::: {.column width="50%"}
+![](images/resolution.png)
+:::
+::::
+
+## Example · Two shapes for one game
+
+Night Owl Games needs a store trailer and a clip for phones held upright.
+**Which resolution does each one get?**
+
+::: {.reveal}
+1. The store trailer is **1920 × 1080**, wide 16:9, like the capture.
+2. The social clip is **1080 × 1920**, tall 9:16.
+3. Tariq **crops** a tall part around Nour's boat and never stretches it.
+:::
+
+## 10.3 Containers, codecs and bitrate
+
+:::: {.columns}
+::: {.column width="50%"}
+- The container (MP4, MOV) holds the tracks of a video.
+- The codec (H.264, ProRes) compresses each track.
+- The bitrate is the data per second: higher gives a better picture and a bigger file.
+- **Do it:** Lower the bitrate in Video Settings Lab until the trailer gets blocky. At which bitrate does it start?
+:::
+::: {.column width="50%"}
+![](images/compression.png)
+:::
+::::
+
+## Live demo · Video Settings Lab
+
+{{< sim file="sims/video-settings-lab.html" poster="sims/video-settings-lab.png" title="Video Settings Lab: export the trailer" task="**Show:** start from the blocky long export, then choose H.264, 1080p, 30 fps, 10 Mbit/s and 30 s. **Ask:** why does the low bitrate make blocks only in the moving parts?" >}}
+
+## Example · The blocky trailer
+
+The first trailer has a huge file, and the second is small but full of blocks.
+**Which settings make a good trailer?**
+
+::: {.reveal}
+1. At **240 Mbit/s** the file is far too big for a store page.
+2. At **2 Mbit/s**, the fast boat chase gets too few bits and turns into blocks.
+3. H.264 at about **10 Mbit/s** gives a clean picture and a file small enough for the store.
+:::
+
+## Try it 2 · Files
+
+a) The boat chase looks like blocks. What is too low?
+b) Which codec plays on almost every phone?
+c) What does a key frame store?
+
+::: {.answer}
+a) the bitrate
+b) H.264
+c) the whole picture
+:::
+
+## 10.4 Settings for each target
+
+:::: {.columns}
+::: {.column width="50%"}
+- The place where the video plays decides the settings.
+- A store trailer is 1080p, 30 fps, H.264 in MP4.
+- An edit master keeps the recording in ProRes.
+- **Do it:** Make the three targets pass in the lab. Which file is the biggest?
+:::
+::: {.column width="50%"}
+![](images/targets.png)
+:::
+::::
+
+## Game challenge · Export Desk
+
+{{< sim file="sims/export-desk.html" poster="sims/export-desk.png" title="Export Desk: the right settings for each request" kind="game" task="**The story:** Salma, the producer, needs videos of Rooftop Rescue for many places. **Play:** choose the right setting for each of the six requests." >}}
+
+## Try it 3 · Requests (harder)
+
+a) What helps a blocky boat chase at 3 Mbit/s?
+b) Which resolution fits a short clip for phones held upright?
+c) Why do we export each target from the project and not from another export?
+
+::: {.answer}
+a) a higher bitrate, about 10 Mbit/s
+b) 1080 × 1920
+c) Every lossy export loses detail again.
+:::
+
+## Summary
+
+- A video is a series of frames, and the frame rate counts them per second.
+- The resolution is the size in pixels, and the aspect ratio is the shape.
+- The container holds the tracks, and the codec compresses them.
+- A higher bitrate gives a better picture and a bigger file, and too little gives blocks.
+- The target decides the settings, and we keep an edit master.

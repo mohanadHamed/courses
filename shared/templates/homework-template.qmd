@@ -1,6 +1,8 @@
 ---
-# Copy to courses/<slug>/week-KK/homework-KK.qmd. Homework K follows lectures
-# 2K-1 and 2K (homework 1 after lectures 1-2), in the same folder as them.
+# Copy to courses/<slug>/week-WW/homework-UU.qmd: the homework of unit UU, in
+# the folder of the unit (WW = its syllabus week). It practises the lecture
+# of its unit only, never a seminar or a practice session. No answers on the
+# page: no .match, no ::: {.check}, no Why: (solutions in courses-private).
 # Rules: "Homework" in AUTHORING.md. Tasks are public; solutions go in courses-private.
 # Size for now: 1–2 short tasks, under 10 minutes.
 title: "Homework N: short title"
@@ -8,12 +10,13 @@ description: "One short line for the course page. About 10 minutes."
 homework: 1
 due: "before lecture 3"   # a lecture, never a week or a date: it works every semester
 marks: 5
-ilos: [A1]          # the ILOs of the two lectures (from the syllabus)
+ilos: [A1]          # the ILOs of the unit's lectures (from the syllabus)
 toc-title: "In this homework"
 format: lesson-html   # the PDF is made by printing this page (homework_pdf.py)
 ---
 
 **How to submit:** Write on paper and show your steps. Upload a clear photo to the university e-learning platform. Due: **before lecture 3**.
+No task needs AI.
 
 ## Task 1 · Short title (2 marks)
 
@@ -32,3 +35,14 @@ a) First question.
 b) A question with a drawing: give an empty box (height in cm).
 
 {{< answer-space box=6 >}}
+
+<!-- Optional (AUTHORING.md, "Tasks with AI"): AI is never part of a graded
+task. After the tasks, an extra with no marks may follow, in another
+situation than the graded tasks (its closed answers give nothing away). It
+is hidden on paper. Then the first line of the page says: "No task needs AI.
+The optional Task with AI at the end gives no marks."
+## Optional · Task with AI (no marks) {.extra}
+
+A box like the one in lesson-template.qmd: a complete prompt, "What you
+should see" and two changes to try, each with a closed answer.
+-->

@@ -23,9 +23,15 @@ local function marker(ch)
   return pandoc.Para({ pandoc.Str(ch) })
 end
 
+-- Results ({.check}) and AI prompts ({.prompt}) are for the page and the
+-- notes; the slides show results with .answer and .reveal instead.
+
 function Div(div)
   if not quarto.doc.is_format("pptx") then
     return nil
+  end
+  if div.classes:includes("check") or div.classes:includes("prompt") then
+    return {}
   end
   for _, kind in ipairs({ "answer", "reveal" }) do
     if div.classes:includes(kind) then

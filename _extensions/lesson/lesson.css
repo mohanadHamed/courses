@@ -271,6 +271,15 @@ main h2 .header-section-number { color: var(--accent); }
 .match-feedback { min-height: 1.4em; margin: 0.5rem 0 0.1rem; font-weight: 800; }
 .match-feedback.good { color: #2b8a3e; }
 .match-feedback.bad { color: #c92a2a; }
+.match-feedback.shown { color: #a3500b; }
+/* The reason ("Why:"), shown under a question once it is answered. */
+.match-why {
+  flex: 1 0 100%; padding: 0.3rem 0 0.1rem 1.4rem;
+  font-size: 0.92rem; color: #3d4a40;
+}
+.match-why::before { content: "Why: "; font-weight: 800; color: var(--accent-ink); }
+.match-q.is-shown { border-color: #f0b37a; background: #fffaf3; }
+.match-q.is-shown .match-slot { border-color: #d9480f; background: #d9480f; }
 .match-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 0.4rem 0.9rem; }
 .match-score { font-weight: 800; color: var(--accent-ink); }
 .match-reset {
@@ -300,6 +309,95 @@ main h2 .header-section-number { color: var(--accent); }
 .callout-note.do-it .callout-title-container { color: var(--accent-ink); font-weight: 800; }
 .callout-note.do-it .callout-title-container::before { content: "✍️ "; }
 
+/* "Check your result" (::: {.check}, match.lua): closed until opened. */
+details.check {
+  margin: 0.6rem 0 0.2rem; padding: 0.15rem 0.8rem;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 35%, #fff); border-radius: 10px; background: #fff;
+}
+details.check > summary { cursor: pointer; padding: 0.3rem 0; font-weight: 800; color: var(--accent-ink); }
+details.check > summary::marker { color: var(--accent); }
+details.check[open] { background: color-mix(in srgb, var(--accent2) 7%, #fff); }
+details.check .check-body { padding: 0.1rem 0 0.4rem; }
+details.check .check-body > :last-child { margin-bottom: 0; }
+
+/* Lecture worksheet on the page ({{< experiment N >}}, shortcodes.lua): one
+   experiment of the worksheet with its numbered steps; after each step a field
+   to record the result ({{< record >}}) and "Check your result". */
+.experiment {
+  margin: 1.2rem 0; border-radius: 14px; overflow: hidden;
+  border: 1.5px solid color-mix(in srgb, var(--accent2) 70%, var(--accent));
+  border-left: 6px solid var(--accent);
+  background: color-mix(in srgb, var(--accent2) 7%, #fff);
+}
+.exp-head {
+  display: flex; flex-wrap: wrap; gap: 0.2rem 0.6rem; align-items: baseline;
+  padding: 0.55rem 0.9rem; background: color-mix(in srgb, var(--accent2) 22%, #fff);
+}
+.exp-num { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--accent); }
+.exp-num::before { content: "🧪 "; }
+.exp-results .exp-head .exp-title::before { content: "📋 "; }
+.exp-title { font-weight: 800; color: var(--accent-ink); }
+.exp-body { padding: 0.6rem 0.9rem 0.4rem; }
+.exp-body > ol > li { margin-bottom: 0.9rem; padding-left: 0.2rem; }
+.exp-body > ol > li::marker { font-weight: 800; color: var(--accent); }
+.record { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.6rem; margin: 0.45rem 0 0.2rem; }
+.record-label {
+  font-size: 0.78rem; font-weight: 800; color: var(--accent-ink); border-radius: 6px; padding: 0.15rem 0.5rem;
+  background: color-mix(in srgb, var(--accent2) 45%, #fff);
+}
+.record-label::before { content: "✎ "; }
+.record-input {
+  flex: 1 1 14rem; min-width: 0; font: inherit; padding: 0.3rem 0.55rem; border-radius: 8px; background: #fff;
+  border: 1.5px dashed color-mix(in srgb, var(--accent) 45%, #fff);
+}
+textarea.record-input { flex-basis: 100%; resize: vertical; }
+.record-input:focus { outline: 2px solid color-mix(in srgb, var(--accent) 55%, #fff); border-style: solid; }
+.record-table td:empty, .record-table td.record-cell { min-width: 6rem; }
+.record-table td.record-cell { background: #fff; border-bottom: 1.5px dashed color-mix(in srgb, var(--accent) 45%, #fff); }
+.record-table td.record-cell:focus { outline: 2px solid color-mix(in srgb, var(--accent) 55%, #fff); }
+.start-files {
+  margin: 0.8rem 0 1.2rem; padding: 0.7rem 0.9rem; border-radius: 14px;
+  border: 1.5px solid color-mix(in srgb, var(--accent2) 70%, var(--accent)); background: color-mix(in srgb, var(--accent2) 10%, #fff);
+}
+.sf-title { font-weight: 800; color: var(--accent-ink); margin-bottom: 0.35rem; }
+.start-files ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; }
+.start-files li { display: flex; flex-wrap: wrap; gap: 0.3rem 0.7rem; align-items: center; }
+.sf-file {
+  font-weight: 800; text-decoration: none; border-radius: 10px; padding: 0.2rem 0.75rem;
+  background: var(--accent); color: #fff !important; box-shadow: 0 6px 14px -8px var(--accent);
+}
+.sf-about { font-size: 0.9rem; color: #4f5a52; }
+.sf-note { margin: 0.45rem 0 0; font-size: 0.82rem; color: #6b6f6c; }
+
+/* "Task with AI" (lesson-script.html adds .ai-task): a harder task done with an
+   AI assistant, a starter prompt (div.prompt) and a check step. */
+.callout.callout-note.ai-task {
+  border: 1.5px solid #b197fc !important;
+  border-left: 6px solid #7048e8 !important;
+  background: #f8f5ff;
+}
+.callout-note.ai-task .callout-title-container { color: #5f3dc4; font-weight: 800; }
+.callout-note.ai-task .callout-title-container::before { content: "🤖 "; }
+div.prompt {
+  position: relative; margin: 0.5rem 0; padding: 0.6rem 0.8rem 2.6rem;
+  border: 1.5px dashed #b197fc; border-radius: 10px; background: #fff;
+  font-family: var(--bs-font-monospace, monospace); font-size: 0.9rem;
+}
+div.prompt > p:last-of-type { margin-bottom: 0; }
+.copy-prompt {
+  position: absolute; right: 0.6rem; bottom: 0.5rem;
+  padding: 0.25rem 0.8rem; border: 1.5px solid #7048e8; border-radius: 999px;
+  background: #fff; color: #5f3dc4; font: inherit; font-family: var(--bs-body-font-family, sans-serif);
+  font-weight: 800; font-size: 0.85rem; cursor: pointer;
+}
+.copy-prompt:hover { background: #f3f0ff; }
+/* A change to try in a "Task with AI" box, with its closed answer. */
+div.try-change {
+  margin: 0.7rem 0; padding: 0.45rem 0.8rem 0.2rem; border-radius: 10px;
+  border-left: 4px solid #b197fc; background: #f8f6ff;
+}
+div.try-change > p:first-child { margin-bottom: 0.3rem; }
+
 /* ---------- Game challenge and summary ---------- */
 section.challenge,
 section.summary {
@@ -325,6 +423,35 @@ main figure img, main .quarto-figure img {
 main figcaption { color: #66766a; font-size: 0.9rem; }
 main table:not(.word-grid table) th { background: color-mix(in srgb, var(--accent) 5%, #fff); }
 div.sourceCode { border-radius: 12px; }
+
+/* ---------- Videos of an online activity ({{< watch >}}) ---------- */
+.watch {
+  margin: 1.4rem 0;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, #fff);
+  background: color-mix(in srgb, var(--accent2) 8%, #fff);
+}
+.watch-link { display: flex; gap: 0.9rem; align-items: center; padding: 0.75rem 0.9rem; }
+.watch-play {
+  flex: 0 0 auto; width: 3rem; height: 3rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  font-size: 1.25rem; box-shadow: 0 8px 18px -10px var(--accent);
+}
+.watch-info { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.watch-title { font-weight: 800; color: var(--accent-ink); }
+.watch-meta { font-size: 0.9rem; color: #4f5a52; }
+.watch-note { font-size: 0.82rem; color: #6b6f6c; }
+.watch-video { padding: 0.6rem; }
+.watch-video video { display: block; width: 100%; border-radius: 12px; background: #111; }
+.watch-video figcaption {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.4rem;
+  margin: 0.5rem 0.3rem 0.1rem; font-size: 0.9rem;
+}
+details.transcript { margin: 0.4rem 0.3rem 0.2rem; }
+details.transcript > summary { cursor: pointer; font-weight: 700; color: var(--accent-ink); }
+details.transcript .transcript-body { font-size: 0.95rem; color: #333; }
+@media print { .watch { display: none; } }
 
 /* ---------- Simulators ---------- */
 figure.sim {
@@ -399,7 +526,7 @@ button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
   a { color: inherit !important; text-decoration: none !important; }
   /* Online activity: on paper only the tasks (the study steps, simulators
      and self-checks stay on the screen). */
-  section.study, .online-print-hide, iframe { display: none !important; }
+  section.study, section.extra, .online-print-hide, iframe, details.check, .copy-prompt { display: none !important; }
   section.tasks h3 { break-after: avoid; margin: 0.45rem 0 0.15rem !important; font-size: 1rem !important; }
 }
 
@@ -444,4 +571,15 @@ button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
 .sl.is-soon .sl-tag { background: #f1f1ef; color: #a6aaa7; }
 .sl-due { font-size: 0.78rem; font-weight: 700; color: #6b6f6c; align-self: center; }
 .sl.is-exam .sl-num { color: #9b6b00; }
+/* Units (schedule.yml `units:`): every session has its label above the title. */
+.sw-unit .sl { grid-template-columns: 1fr; }
+.sl-kind { font-size: 0.74rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #b0b3b1; }
+.sl.is-ready .sl-kind { color: var(--accent); }
+.sl-seminar.is-ready .sl-kind, .sl-practice.is-ready .sl-kind { color: #a3500b; }
+.sl-seminar, .sl-practice { border-left: 3px solid color-mix(in srgb, var(--accent2) 60%, #fff); padding-left: 0.5rem; }
+.sl-tag.sl-flex { background: #fff4e6; color: #a3500b; }
+/* A practice week (schedule.yml `filling: true`): no new ideas, held when time allows. */
+.sw.sw-filling { border-style: dashed; border-color: color-mix(in srgb, #a3500b 35%, #fff); }
+.sw.sw-filling.has-ready { background: linear-gradient(135deg, #fff, #fff8ef); box-shadow: none; }
+.sw.sw-filling.has-ready .sw-week { color: #a3500b; }
 .sl.is-exam .sl-title { color: #6d5a2c; font-style: italic; }

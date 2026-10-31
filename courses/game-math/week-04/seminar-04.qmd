@@ -1,0 +1,149 @@
+---
+title: "Trigonometry in Game Motion"
+description: "Seminar · Aim a turret with atan2, turn an angle into a velocity and read a ramp with the tangent, then move an orb in a circle and time a lift that bobs with sine."
+seminar: 4
+ilos: [A2, B1]
+format: lesson-html
+---
+
+No new ideas today: two short problems on Lecture 4. Do each one alone,
+then open "Check your result". Every question on this page has its answer:
+try first, then check.
+
+## Recall
+
+- An angle starts at +x and grows anticlockwise. In a right triangle,
+  sin = opposite ÷ hypotenuse, cos = adjacent ÷ hypotenuse,
+  tan = opposite ÷ adjacent.
+- The point at θ on the unit circle is (cos θ, sin θ); a velocity at θ is
+  speed × (cos θ, sin θ). atan2(y, x) goes back from a vector to its angle.
+- A circle: P = C + r (cos ωt, sin ωt). A bob: y = c + A sin(360° × t ÷ T).
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right answer.
+
+::: {.match extra="(1, 0)|0.87"}
+What is the point at 90° on the unit circle?
+:   (0, 1)
+
+    Why: cos 90° = 0 and sin 90° = 1: straight up.
+
+What is sin 30°?
+:   0.5
+
+    Why: the table of the common values: sin 30° = 0.5.
+
+Which angle does atan2 give for the vector (−4, 4)?
+:   135°
+
+    Why: x is negative and y positive: quadrant II, on the diagonal.
+:::
+:::
+
+## Activity 1 · Aim and fire
+
+A turret stands at the origin. Three drones hover at (5, 5), (−4, 4) and
+(0, −3). The turret fires a bolt with the speed 10 at the drone at (−4, 4).
+Beside the turret, a ramp rises 3 m over 3 m.
+
+![atan2 uses the signs of x and y, so it finds the angle in every quadrant.](images/atan2.png){width=86%}
+
+{{< sim file="sims/turn-lab.html" poster="sims/turn-lab.png" title="Turn Lab: the angle to a target and the short turn" height="760" >}}
+
+::: {.callout-note title="Activity 1 · Angles and velocities · 25 min"}
+1. Find the angle of each drone with atan2. Name its quadrant.
+2. Check the three angles in **Turn Lab**: tap each drone.
+3. The bolt flies at 135° with the speed 10. Write its velocity.
+4. Another bolt flies at 30° with the speed 10. Write its velocity.
+5. The ramp rises 3 m over 3 m. Find tan θ and the angle of the ramp.
+
+*Your product:* three angles, two velocities and the angle of the ramp.
+
+::: {.check}
+1. (5, 5): 45° (quadrant I). (−4, 4): 135° (quadrant II). (0, −3): −90°
+   (straight down).
+2. Turn Lab shows the same three angles.
+3. 10 × (cos 135°, sin 135°) = 10 × (−0.71, 0.71) = (−7.1, 7.1).
+4. 10 × (0.87, 0.5) = (8.7, 5).
+5. tan θ = 3 ÷ 3 = 1, so θ = 45°.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Aim"}
+Choose the right answer.
+
+::: {.match extra="−45°|(4, 0)"}
+Which angle does atan2 give for the vector (−5, 5)?
+:   135°
+
+    Why: quadrant II, on the diagonal: 180° − 45°.
+
+A drone flies at 90° with the speed 4. What is its velocity?
+:   (0, 4)
+
+    Why: 4 × (cos 90°, sin 90°) = 4 × (0, 1).
+
+A ramp rises 5 m over 5 m. What is its angle?
+:   45°
+
+    Why: tan θ = 5 ÷ 5 = 1, and tan 45° = 1.
+:::
+:::
+
+## Activity 2 · The orb and the lift
+
+A shield orb circles a hero at C = (2, 3) with the radius 3, at 90° per
+second, starting at 0°. In *Sky Lift*, a hero waits on a cliff at the height
+5. Beside the cliff, a lift floats up and down with
+y(t) = 3 + 2 sin(360° × t ÷ 8). A low ledge is at the height 1.
+
+![A bobbing value: the top at a quarter of the period, the bottom at three quarters.](images/sine-wave.png){width=86%}
+
+{{< sim file="sims/sky-lift.html" poster="sims/sky-lift.png" title="Sky Lift: when is the lift level with the ledge?" kind="game" height="760" >}}
+
+::: {.callout-note title="Activity 2 · Circle and bob · 25 min"}
+1. Write the position of the orb at 0 s, 1 s, 2 s and 3 s. What is its
+   period?
+2. Write the middle, the amplitude and the period of the lift.
+3. Find the height of the lift at 0 s, 2 s, 4 s and 6 s.
+4. When can the hero step on at the cliff (height 5)? When at the low ledge
+   (height 1)? Check with the first round of **Sky Lift**.
+
+*Your product:* four positions, four heights and two times.
+
+::: {.check}
+1. 0 s: (2, 3) + 3 × (1, 0) = (5, 3). 1 s: (2, 6). 2 s: (−1, 3).
+   3 s: (2, 0). The period is 360° ÷ 90° = 4 s.
+2. Middle 3, amplitude 2, period 8 s.
+3. 0 s: 3; 2 s: 3 + 2 = 5 (the top); 4 s: 3; 6 s: 3 − 2 = 1 (the bottom).
+4. At the cliff at 2 s (then every 8 s: 10 s, …); at the low ledge at 6 s.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · Circle and bob"}
+Choose the right answer.
+
+::: {.match extra="4 s|(0, 2)"}
+y = 3 + 2 sin(360° × t ÷ 8). What is the height at 6 s?
+:   1
+
+    Why: the angle is 270°, sin = −1: 3 − 2.
+
+An orb turns at 30° per second. What is its period?
+:   12 s
+
+    Why: 360° ÷ 30° = 12 s.
+
+Which point is at 180° on a circle with the radius 2 around (0, 0)?
+:   (−2, 0)
+
+    Why: 2 × (cos 180°, sin 180°) = 2 × (−1, 0).
+:::
+:::
+
+## Wrap-up {.summary}
+
+- You can find the angle to a target with atan2 and the angle of a ramp with
+  the tangent.
+- You can turn an angle and a speed into a velocity.
+- You can move an object in a circle and time a motion that bobs with sine.

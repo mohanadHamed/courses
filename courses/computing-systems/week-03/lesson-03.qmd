@@ -1,0 +1,346 @@
+---
+title: "Input/Output Devices, the GPU and Graphics Hardware"
+description: "Input devices and the numbers they send, output devices, why games need a GPU, and video memory and graphics settings."
+lesson: 3
+ilos: [A1, B2]
+format: lesson-html
+---
+
+This page is the interactive version of the lesson notes (PDF). Each section
+starts with a problem in a game studio. Then it explains the hardware behind
+it. It ends with a **Do it** task (in a simulator, on the lab computer or on
+your phone) and one set of questions. The full explanations, examples and
+exercises are in the notes.
+
+## Key terms
+
+{{< glossary input-device output-device analog-input haptic-feedback gpu parallel-processing frame-rate refresh-rate thermal-throttling video-memory integrated-gpu graphics-card resolution >}}
+
+## 3.1 How the player's action gets into the game
+
+- An **input device** turns an action into numbers. The game reads them in
+  every frame.
+- **Touch screen:** the position of each finger, several at once.
+  **Keyboard:** which keys are down. **Mouse:** movement and buttons.
+  **Gamepad:** buttons, sticks, triggers. **Microphone:** sound.
+  **Camera:** images.
+- **Digital:** only on (1) or off (0): a key, the A button.
+- **Analog:** a range of values: a stick from −1 to 1, a trigger.
+- *Neon Drift* turns the car by 40° per second times the input. Key: 40°.
+  Stick half way: 20°.
+
+![Input devices send numbers in; output devices bring the result out.](images/io-devices.png){width=90%}
+
+![A key gives 0 or 1; a stick gives any value from −1 to 1.](images/analog-digital.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+The face buttons (A, B) of a gamepad are digital. Only the sticks and the
+triggers are analog.
+:::
+
+{{< sim file="sims/input-lab.html" poster="sims/input-lab.png" title="Input Lab: what does the game read?" height="720" >}}
+
+::: {.callout-note title="Do it · Input Lab"}
+Open **Input Lab** on your phone. How many fingers does your phone follow at
+once? Drag the stick half way right and read "stick x". Press A and read
+"button A". Which control is analog?
+
+::: {.check}
+A key gives only 0 or 1, so the car turns fully (40° per second) or not at
+all. The stick gives values between −1 and 1, so the car can turn a little:
+half way gives 20° per second.
+:::
+:::
+
+::: {.callout-tip title="Try it 1 · Input"}
+Choose the right answer.
+
+::: {.match extra="the speaker|5"}
+Which device sends the position of several fingers?
+:   the touch screen
+
+    Why: A touch screen reports every finger at once.
+
+A key is down. Which value does the game read?
+:   1
+
+    Why: A key is digital: down is 1, up is 0.
+
+A stick is pushed fully to the left. Which value does the game read?
+:   −1
+
+    Why: An analog stick gives −1 to 1; full left is −1.
+
+The stick is pushed half way. The car turns 40° per second times the input. How far per second?
+:   20°
+
+    Why: 40° × 0.5 = 20° per second.
+
+Which control can turn the car only a little?
+:   an analog stick
+
+    Why: An analog stick gives values between −1 and 1.
+:::
+:::
+
+## 3.2 How the game talks back: output devices
+
+- An **output device** turns data into an image, a sound or a vibration.
+- **Display:** the picture. **Speakers, headphones:** the sound.
+  **Vibration motor:** the player feels a crash (**haptic feedback**).
+- Some devices are **both**: a touch screen, a gamepad with vibration, a
+  headset with a microphone.
+- Devices connect by cable (USB, HDMI) or without one (Bluetooth).
+- A display has a **refresh rate** (Hz): pictures per second. The game makes
+  **frames** (fps). The player sees only as many new pictures as the slower
+  of the two.
+
+::: {.callout-warning title="Watch out!"}
+A normal monitor is output only. Its cable carries the picture out to the
+player.
+:::
+
+::: {.callout-note title="Do it · The devices around you"}
+Open **Settings → Bluetooth & devices** on the lab computer and the
+Bluetooth and sound settings on your phone (Android: **Sound and
+vibration**; iPhone: **Sounds & Haptics**). List every input and output
+device, built-in ones too. Mark each "input", "output" or "both".
+
+::: {.check}
+A good list has every device with its kind, for example: keyboard (input),
+mouse (input), monitor (output), headset with microphone (both), phone touch
+screen (both), phone speaker (output), vibration motor (output).
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Input, output or both?"}
+Choose the right answer. You can use an answer more than once.
+
+::: {.match}
+A monitor without touch.
+:   output
+
+    Why: It only shows the picture.
+
+A keyboard.
+:   input
+
+    Why: It only sends key presses into the computer.
+
+A gamepad with a vibration motor.
+:   both
+
+    Why: Buttons are input; the vibration is output.
+
+The phone shakes when the car crashes. What is it called?
+:   haptic feedback
+
+    Why: A vibration you feel is haptic feedback.
+
+A 60 Hz screen and a game at 70 fps. New pictures per second?
+:   60
+
+    Why: The screen shows at most 60 pictures per second.
+:::
+:::
+
+## 3.3 Why games need a GPU
+
+- One 1920 × 1080 frame has about **2 million** pixels. At 60 fps: about
+  **120 million** colours each second.
+- A CPU has a few strong cores (4 to 16). Good for long, different steps
+  (game rules).
+- A **GPU** has **thousands of small cores**. Each is slower, but all work
+  at the same time on different pixels: **parallel processing**.
+- Paint race (144 pixels): CPU with 4 cores 2.88 s, GPU with 144 cores
+  0.32 s.
+- CPU and GPU work at the same time on two frames: the slower one sets the
+  frame rate.
+- No fan in a phone: after some minutes the chip gets hot and slows down
+  (**thermal throttling**).
+
+![A few strong CPU cores and many small GPU cores.](images/cpu-gpu-cores.png){width=90%}
+
+::: {.callout-warning title="Watch out!"}
+A GPU is not a faster CPU. Each GPU core is slower. The GPU wins only when
+the work splits into many similar pieces, like pixels.
+:::
+
+{{< sim file="sims/paint-race.html" poster="sims/paint-race.png" title="Paint Race: CPU or GPU?" height="560" >}}
+
+::: {.callout-note title="Do it · Paint Race"}
+In **Paint Race**, press **Start the race** and write the two times. Why does
+the GPU win, although each of its cores is slower?
+
+::: {.check}
+The CPU (4 cores) takes about 2.88 s, the GPU (144 cores) about 0.32 s. The
+GPU wins because all its small cores colour different pixels at the same
+time.
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · CPU or GPU?"}
+Choose the right answer.
+
+::: {.match extra="the RAM|2 thousand"}
+About how many pixels has one 1920 × 1080 frame?
+:   2 million
+
+    Why: 1920 × 1080 is about 2 million.
+
+Which processor computes the colours of the pixels?
+:   the GPU
+
+    Why: The GPU draws the picture.
+
+Which processor runs the rules of the game?
+:   the CPU
+
+    Why: The game logic runs on the CPU.
+
+Many small cores work at the same time. What is it called?
+:   parallel processing
+
+    Why: That is parallel processing.
+
+Is one GPU core faster than one CPU core?
+:   no, it is slower
+
+    Why: Each GPU core is slower; there are just many of them.
+
+A phone game drops from 60 to 40 fps after 20 minutes. Why?
+:   thermal throttling
+
+    Why: A hot chip slows down to protect itself.
+:::
+:::
+
+## 3.4 Video memory and graphics settings
+
+- The GPU keeps textures and frames in **video memory** (VRAM).
+- **Integrated GPU** (most laptops, all phones): part of the processor
+  chip; it takes part of the main RAM (for example 2 GB).
+- **Graphics card** (gaming desktops): its own GPU and its own fast VRAM
+  (for example 8 GB).
+- Textures that do not fit: the game stutters.
+- **Graphics settings:** resolution (1080p ≈ twice the pixels of 720p:
+  about half the fps), texture quality (more video memory), shadows and
+  effects (lower fps).
+
+![Integrated GPU and graphics card.](images/gpu-memory.png){width=90%}
+
+::: {.callout-note title="Do it · The GPU of the lab computer"}
+Open **Task Manager → Performance → GPU 0**. Write the name of the GPU, the
+**Dedicated GPU memory** and the **Shared GPU memory**. Is it an integrated
+GPU or a graphics card? Why?
+
+::: {.check}
+A typical lab computer shows an Intel or AMD GPU with a small dedicated
+memory and a large shared memory: an integrated GPU, because it shares the
+main RAM. A graphics card shows several GB of dedicated GPU memory.
+:::
+:::
+
+::: {.callout-tip title="Try it 4 · Video memory"}
+Choose the right answer.
+
+::: {.match extra="on the SSD|nothing changes"}
+Where does an integrated GPU keep its textures?
+:   in the main RAM
+
+    Why: An integrated GPU shares the main RAM.
+
+The textures need 4 GB, but the GPU has 2 GB. What happens?
+:   the game stutters
+
+    Why: Textures that do not fit must be swapped: the game stutters.
+
+A game runs at 120 fps at 720p. About how fast at 1080p?
+:   about 60 fps
+
+    Why: 1080p has about twice the pixels: about half the fps.
+
+Which setting needs more video memory?
+:   higher texture quality
+
+    Why: Bigger textures need more video memory.
+:::
+:::
+
+## Game challenge: tuning Neon Drift {.challenge}
+
+Work alone. Use every section of today.
+
+*Neon Drift* must run at **60 fps or more** on three test devices of *Byte
+Bay*. In this made-up game, 1080p halves the frame rate of 720p, and shadows
+divide it by 1.5. Textures need 1 GB (Low), 2 GB (Medium) or 4 GB (High) of
+video memory.
+
+- **Laptop L1:** GPU inside the processor, 2 GB; 120 fps at 720p, shadows
+  off.
+- **Phone P1:** GPU inside the chipset, 2 GB; 90 fps at 720p, shadows off.
+- **Desktop D1:** graphics card, 8 GB VRAM; 300 fps at 720p, shadows off.
+
+{{< sim file="sims/settings-tuner.html" poster="sims/settings-tuner.png" title="Settings Tuner: Neon Drift on three devices" kind="game" height="760" >}}
+
+::: {.callout-tip title="Try it 5 · Laptop L1"}
+Laptop L1: 2 GB of video memory, 120 fps at 720p with shadows off. 1080p
+halves the fps; shadows divide it by 1.5. Choose the right answer.
+
+::: {.match extra="120 fps|4 GB"}
+L1 at 1080p, shadows off. How many fps?
+:   60 fps
+
+    Why: 120 ÷ 2 = 60.
+
+L1 at 720p, shadows on. How many fps?
+:   80 fps
+
+    Why: 120 ÷ 1.5 = 80.
+
+L1 at 1080p, shadows on. How many fps?
+:   40 fps
+
+    Why: 120 ÷ 2 ÷ 1.5 = 40.
+
+Which texture quality is the highest that fits on L1?
+:   Medium (2 GB)
+
+    Why: L1 has 2 GB: Medium needs 2 GB, High 4 GB.
+:::
+:::
+
+::: {.callout-tip title="Try it 6 · Three devices (harder)"}
+L1: 2 GB, 120 fps. P1: 2 GB, 90 fps. D1: graphics card 8 GB, 300 fps (all at
+720p, shadows off). Goal: 60 fps or more. Choose the right answer.
+
+::: {.match extra="Laptop L1|30 fps"}
+Phone P1 at 1080p, shadows off. How many fps?
+:   45 fps, too slow
+
+    Why: 90 ÷ 2 = 45, below 60.
+
+Phone P1 at 720p, shadows on. Is it enough?
+:   yes, exactly 60 fps
+
+    Why: 90 ÷ 1.5 = 60.
+
+Which device can use High textures (4 GB)?
+:   Desktop D1
+
+    Why: Only D1 has more than 4 GB of video memory.
+
+Desktop D1 at 1080p, shadows on. How many fps?
+:   100 fps
+
+    Why: 300 ÷ 2 ÷ 1.5 = 100.
+:::
+:::
+
+## Summary {.summary}
+
+- Input devices turn actions into numbers; keys are digital, sticks are analog.
+- Output devices give an image, a sound or a vibration; the screen shows at most its refresh rate.
+- The GPU uses thousands of small cores in parallel; the slower of CPU and GPU sets the frame rate.
+- An integrated GPU shares the RAM; a graphics card has its own VRAM.
+- Resolution, textures and shadows change the work of the GPU and the frame rate.

@@ -1,0 +1,164 @@
+---
+title: "Music and Sound-Effects Production for Games"
+subtitle: "Lecture 8"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary seamless-loop adaptive-music music-layer stinger tempo music-bar foley sound-layering >}}
+
+## 8.1 What music does in a game
+
+:::: {.columns}
+::: {.column width="50%"}
+- A game does not know how long a moment lasts, so its music loops.
+- Adaptive music adds or removes layers with the game state.
+- A short stinger marks one event, such as a success.
+- **Do it:** Switch Loop Builder between calm and chase. What stays the same?
+:::
+::: {.column width="50%"}
+![](images/music-in-game.png)
+:::
+::::
+
+## Live demo · Loop Builder
+
+{{< sim file="sims/loop-builder.html" poster="sims/loop-builder.png" title="Loop Builder: a game-music loop in 16 steps" task="**Show:** play the example loop, switch to calm and back to chase, then change the tempo. **Ask:** why do the drums join in time and not at once?" >}}
+
+## Try it 1 · Game music
+
+a) The player rows for as long as they like. Which kind of music fits?
+b) A wave comes. How does adaptive music change?
+c) The player catches Pasha. What plays at that moment?
+
+::: {.answer}
+a) a seamless loop
+b) A drum layer fades in on the same loop.
+c) a short stinger
+:::
+
+## 8.2 Tempo, bars and loops
+
+:::: {.columns}
+::: {.column width="50%"}
+- The tempo in BPM counts the beats per minute, and a bar has four beats.
+- A loop is a whole number of bars, so the beat goes on at the loop point.
+- A slow tempo feels calm, and a fast tempo feels like a chase.
+- **Do it:** Play the loop at 80 BPM and at 150 BPM in Loop Builder. Which fits a chase?
+:::
+::: {.column width="50%"}
+![](images/tempo-bars.png)
+:::
+::::
+
+## Example · Two loops of the level
+
+Yara needs a rowing loop and a chase loop for the flood level.
+**Which tempo and which length does each loop get?**
+
+::: {.reveal}
+1. The rowing is calm, so its loop gets a slow tempo, about **100 BPM**.
+2. The chase is tense, so its loop gets a fast tempo, about **140 BPM**.
+3. Both loops are **8 bars** long, so the beat never jumps at the loop point.
+:::
+
+## Try it 2 · Tempo
+
+a) How many beats does a bar usually have?
+b) Which tempo fits a chase: 80 BPM or 150 BPM?
+c) A loop ends in the middle of a bar. What happens when it repeats?
+
+::: {.answer}
+a) 4
+b) 150 BPM
+c) The beat jumps at the loop point.
+:::
+
+## 8.3 Where sound effects come from
+
+:::: {.columns}
+::: {.column width="50%"}
+- Foley records actions with real objects, such as a towel for a jump.
+- Synthesis builds beeps and clicks from tones and noise.
+- A library gives ready sounds, but we must check the licence.
+- **Do it:** Which object at home could make the sound of a step?
+:::
+::: {.column width="50%"}
+![](images/sfx-sources.png)
+:::
+::::
+
+## Try it 3 · Sources
+
+a) Where does the sound of Nour's steps on wet tiles come from?
+b) Where does a menu click come from?
+c) What must we check before we use a library sound?
+
+::: {.answer}
+a) recording (foley)
+b) synthesis
+c) its licence
+:::
+
+## 8.4 Layering and variation
+
+:::: {.columns}
+::: {.column width="50%"}
+- Layering joins an attack, a body and a tail into one full sound.
+- All the layers start at the same moment.
+- Variation picks a random take and changes the pitch a little.
+- **Do it:** Record three takes of one sound. Do they sound like one effect?
+:::
+::: {.column width="50%"}
+![](images/layering.png)
+:::
+::::
+
+## Example · The net swish
+
+The net swish plays every few seconds, and only three recordings exist.
+**How does the game keep it from sounding repetitive?**
+
+::: {.reveal}
+1. Yara records **3 takes** of a stick swung through the air.
+2. Each swish picks **one take at random**.
+3. The game changes the pitch by a random **−5 % to +5 %**.
+:::
+
+## Try it 4 · Layers and variation
+
+a) The splash sounds thin. What helps?
+b) Which part of a layered sound comes first?
+c) How much pitch change is typical for variation?
+
+::: {.answer}
+a) layering a thump, the splash and drops
+b) the attack
+c) about ±5 %
+:::
+
+## Game challenge · Score the Scene
+
+{{< sim file="sims/score-the-scene.html" poster="sims/score-the-scene.png" title="Score the Scene: audio decisions for a level" kind="game" task="**The story:** Yara plans the music and the effects of the flood level of Rooftop Rescue. **Play:** choose the best audio decision for each moment of the level." >}}
+
+## Try it 5 · Plan the sounds (harder)
+
+The facts: the flood level has calm rowing, a wave, Pasha caught, a net swish and a big splash.
+
+a) The chase loop is 7.5 bars long. What do you change?
+b) The thunder comes from a sound library. What must Yara check?
+c) The music stops for a second when the wave comes. What should happen instead?
+
+::: {.answer}
+a) Make it exactly 8 bars.
+b) its licence
+c) A layer fades in on the same loop.
+:::
+
+## Summary
+
+- Game music uses seamless loops, adaptive layers and stingers.
+- A loop is a whole number of bars, and the tempo sets the mood.
+- Effects come from foley, synthesis or a library with a licence.
+- Layering makes effects full, and variation keeps them fresh.

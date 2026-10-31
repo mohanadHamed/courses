@@ -1,0 +1,78 @@
+---
+# Copy to courses/<slug>/week-WW/lesson-NN-sheet.qmd: the WORKSHEET of Lecture
+# NN in a fully practical course (AUTHORING.md, "Lecture worksheets"). It is
+# the main document of the session, like the manual of a lab experiment:
+# students do each step on the computer during the lecture and record what
+# they see; the teacher checks the table of results. Never uploaded, no marks.
+#   - One experiment per section of the notes (3–4), each "## Experiment N ·
+#     short title" with an "**Aim:**" line and 2–5 numbered steps.
+#   - After EVERY step: {{< record "label" >}} (lines=2 for a sentence,
+#     box=4 for a sketch) and its ::: {.check} (the result and one line of why).
+#     book.lua prints the results at the end, on a new page.
+#   - The page shows each experiment in its section with {{< experiment N >}}
+#     and the table with {{< experiment results >}}: write them only here.
+#   - Start files: list them below; the files are in week-WW/files/, written
+#     by tools/start_files.py (the same data for every student).
+#   - Steps in a real app (Word, Excel, PowerPoint, an AI tool), on the
+#     simulators of the page, or a mix: plan.md says which. A2 English, the
+#     words of the lecture, at most 1 600 words without the results.
+title: "Lesson title, as in the notes"
+description: "Worksheet · One sentence that lists the experiments."
+lesson: 1
+ilos: [A1]
+start-files:
+  - name: example-start.xlsx
+    about: "what is in the file, in a few words"
+format: lesson-typst
+---
+
+::: {.lead}
+Today you work like in a lab: you do N experiments in the app and record
+what you see. Do each experiment when your teacher shows it. After each
+step, write your result in its box. At the end, copy your key results into
+the table.
+:::
+
+## Before you start
+
+- **You need:** a computer with the app (and a browser).
+- **Time:** about 40 minutes for the experiments.
+- **Check:** the results are at the end of this worksheet. On the
+  interactive lesson, every step has "Check your result". Look only after
+  you try.
+
+{{< start-files >}}
+
+## Experiment 1 · Short title
+
+**Aim:** what the experiment shows, in one line. *(Lesson notes 1.1 · about
+10 minutes)*
+
+1. One action on the computer, with the exact cell, button or words.
+
+   {{< record "What you record" >}}
+
+   ::: {.check}
+   **The result**, and one line of why.
+   :::
+
+2. The next action.
+
+   {{< record "What you see … , because …" lines=2 >}}
+
+   ::: {.check}
+   The result and why.
+   :::
+
+## Table of results
+
+Copy your key results here. Your teacher checks this table before the end of
+the lecture.
+
+::: {.record-table}
+| Experiment | What you record                          | Your result |
+|:-------:|---------------------------------------|--------------------------------|
+| 1          | The first key result                     |             |
+:::
+
+Then play **Game name**, the Game challenge of this lecture.

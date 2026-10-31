@@ -29,11 +29,48 @@ lesson-NN-slides.qmd (slides)
 The game of the lesson: a mini-game in the page's Game challenge must also be
 in the notes (Case study, poster + QR) and on the Game challenge slide.
 
-An online activity (blended course: lesson-NN.qmd with `online: true`) has no
-notes and no slides. It is checked for its own parts (AUTHORING.md, "Blended
+Seminars and practice sessions (seminar-NN*.qmd, practice-NN*.qmd; AUTHORING.md,
+"What a seminar looks like") are short: two problems, with room for the
+teacher's explanations. They are checked with SEMINAR_SIZES: activities
+(## Activity N), Try it questions, slides and words of the worksheet; the
+planned time (Recall + the "· N min" of every Activity box) against
+SEMINAR_TIME; a Recall section, one "Check your result" ({.check}) in every
+activity, no new glossary terms, no separate Game challenge or case study, at
+most one Task with AI, and Recall / Activity / Check slides.
+
+On every page (AUTHORING.md, "The page teaches, the notes test"): every Do it,
+Lab task and Activity box has a {.check}, and every Try it question has a
+"Why:" reason. Graded work (homework, "Tasks to submit") never shows them.
+"Task with AI" boxes (an extra for the curious; AUTHORING.md, "Tasks with
+AI"): at most AI_MAX per file, each with a complete {.prompt} that asks for a
+visual result, "What you should see" and 2-3 changes to try with closed
+answers. AI is never part of graded work: in a homework a box belongs in an
+optional section "## Optional · Task with AI (no marks) {.extra}".
+
+A lecture worksheet (a practical course: lesson-NN-sheet.qmd; AUTHORING.md,
+"Lecture worksheets") is the main document of the session. It needs "Before
+you start", one experiment per section of the notes (## Experiment N · …,
+with an "Aim:"), SHEET_STEPS numbered steps in each, a {{< record >}} field
+and a ::: {.check} after every step, a "Table of results" (::: {.record-table})
+and its start files in files/. The page shows every experiment in its section
+({{< experiment N >}}, which counts as the section's task), each section of
+the notes points to its experiment, and the slides have an "Experiment N" and
+a "Check N" slide for each.
+
+An online activity (blended course: online-NN.qmd, or an older lesson-NN.qmd
+with `online: true`) has no notes and no slides. It is checked for its own parts (AUTHORING.md, "Blended
 courses"): "Before you start", Steps marked {.study} with one "Try it" each,
 "Tasks to submit" ({.tasks}) with marks and answer space, "How to submit",
-`due:` and `marks:`, and at least ONLINE_MIN_SIMS simulators.
+`due:`, `marks:` and a content type (`content:`), which decides what the Steps
+need: sims, a simulator in every Step; mix, at least one simulator; video, a
+{{< watch >}} of an official video with its source, length and the date the
+link was checked; course-video, the video made for the course with its
+captions, poster and script, the captions the same words as the script.
+
+In every file of a unit: a fenced div (`::: {...}`) needs a blank line before
+it when it follows text; otherwise pandoc prints the colons as text (a
+`{.check}` after "*Your result:*" then shows in the PDF and never reaches the
+results).
 
 It prints a warning when a number is outside the range for that lecture time.
 It never stops the render. Run it by hand for the full table:
@@ -61,7 +98,7 @@ SIZES = {
         "slides": (10, 16),
     },
     90: {
-        "book_sections": (5, 7),
+        "book_sections": (4, 7),
         "words": (0, 6000),
         "examples": (4, None),
         "exercises": (10, 16),
@@ -71,9 +108,30 @@ SIZES = {
         "slides": (20, 28),
     },
 }
+# Seminars and practice sessions (no new ideas: activities on earlier lectures).
+SEMINAR_SIZES = {
+    60: {"activities": (2, 3), "questions": (6, 12), "slides": (5, 9), "words": (0, 1200)},
+    90: {"activities": (2, 3), "questions": (8, 15), "slides": (6, 10), "words": (0, 1600)},
+}
+# Planned minutes of a seminar, at most: Recall (SEMINAR_RECALL_MIN) + the
+# activity times. The rest of the session is for the teacher's explanations.
+SEMINAR_TIME = {60: 40, 90: 60}
+SEMINAR_RECALL_MIN = 5
+SEMINAR_AI_MAX = 1
+SEMINAR_BOOK_REQUIRED = ["recall", "exercises", "answers to the exercises"]
+SEMINAR_PAGE_REQUIRED = ["recall", "wrap-up"]
+# A seminar is two short problems: no separate Game challenge or case study.
+SEMINAR_FORBIDDEN = ["game challenge", "case study"]
+# "Task with AI" boxes in one file, at most.
+AI_MAX = 2
+# Lecture worksheet: (min, max) steps in an experiment, and words at most.
+SHEET_STEPS = (2, 5)
+SHEET_WORDS = 1600
+SHEET_REQUIRED = ["before you start", "table of results"]
 # Online activity (blended course): at least this many simulators, and
 # (min, max) tasks to submit.
-ONLINE_MIN_SIMS = 2
+ONLINE_CONTENT = ("lesson", "sims", "mix", "video", "course-video")
+WATCH_RE = re.compile(r"\{\{<\s*watch\s+(.*?)>\}\}", re.S)
 ONLINE_TASKS = (2, 4)
 # Parts every lesson must have (heading text, case does not matter).
 BOOK_REQUIRED = ["key terms", "exercises", "answers to the exercises"]
@@ -91,6 +149,9 @@ NAMES = {
     "questions": "Try it questions",
     "sims": "simulators and mini-games",
     "slides": "slides",
+    "activities": "activities",
+    "minutes": "planned minutes",
+    "experiments": "experiments",
 }
 
 
@@ -125,17 +186,207 @@ def section(body, title_start):
     """The text of the first ## section whose heading starts with title_start."""
     m = re.search(r"^## " + re.escape(title_start) + r".*?$(.*?)(?=^## |\Z)", body, re.M | re.S | re.I)
     return m.group(1) if m else ""
-DO_IT_RE = re.compile(r'^:::+ *\{\.callout-note title="(Do it|Lab task)', re.M)
+DO_IT_RE = re.compile(r'^:::+ *\{\.callout-note[^}\n]*title="(Do it|Lab task|Activity)', re.M)
+# An experiment of the lecture worksheet, shown on the page.
+EXPERIMENT_RE = re.compile(r"^\{\{< *experiment (\d+) *>\}\}", re.M)
+TASK_TITLES = "Do it|Lab task|Activity|Task with AI"
+TRY_IT_RE = re.compile(r'^:::+ *\{\.callout-tip[^}\n]*title="Try it', re.M)
+
+
+def boxes(body):
+    """Every fenced div: (opening line, its text up to the closing fence)."""
+    out, stack = [], []
+    lines = body.splitlines()
+    for i, line in enumerate(lines):
+        m = re.match(r"^(:{3,})\s*(\S.*)?$", line)
+        if not m:
+            continue
+        if m.group(2):
+            stack.append((i, line))
+        elif stack:
+            start, head = stack.pop()
+            out.append((head, "\n".join(lines[start + 1:i])))
+    return out
+
+
+def task_boxes_without_check(body):
+    """Titles of Do it / Lab task / Activity / Task with AI boxes that have no {.check}."""
+    out = []
+    for head, text in boxes(body):
+        m = re.search(r'\{\.callout-note[^}]*title="((%s)[^"]*)"' % TASK_TITLES, head)
+        if m and not re.search(r"^:::+ *\{\.check\}", text, re.M):
+            out.append(m.group(1))
+    return out
+
+
+def questions_without_why(body):
+    """The answers (`:   answer`) of Try it questions that have no "Why:" reason."""
+    out = []
+    lines = body.splitlines()
+    for i, line in enumerate(lines):
+        if not re.match(r"^:   \S", line):
+            continue
+        why = False
+        for nxt in lines[i + 1:]:
+            if nxt.strip() == "":
+                continue
+            if not nxt.startswith("    "):
+                break
+            if nxt.strip().startswith("Why:"):
+                why = True
+                break
+        if not why:
+            out.append(line[4:].strip())
+    return out
+
+
+def ai_task_warnings(body, graded=False):
+    """Warnings for the "Task with AI" boxes of one file."""
+    out = []
+    ai = [(h, t) for h, t in boxes(body) if ".ai-task" in h or 'title="Task with AI' in h]
+    if len(ai) > AI_MAX:
+        out.append("%d Task with AI boxes, at most %d (only where AI lets students do more)" % (len(ai), AI_MAX))
+    for head, text in ai:
+        title = (re.search(r'title="([^"]*)"', head) or re.search(r"(.*)", head)).group(1)
+        if graded:
+            # AI is always an extra: never in graded tasks.
+            out.append('Task with AI "%s" is in graded work; put it after the tasks, in an optional '
+                       '"## Optional · Task with AI (no marks) {.extra}" section' % title)
+            continue
+        prompt = re.search(r"^\s*:::+ *\{\.prompt\}\n(.*?)^\s*:::+\s*$", text, re.M | re.S)
+        if not prompt:
+            out.append('Task with AI "%s" has no ::: {.prompt}' % title)
+        # An extra for the curious (AUTHORING.md, "Tasks with AI"): a complete
+        # prompt with a visual result, what you should see, and changes to try,
+        # each with its closed answer.
+        if prompt:
+            words = prompt.group(1)
+            if re.search(r"\[[^\]]*\]|…|\.\.\.|:\s*$|\badd your\b|\byour (premise|points|rule|notes)\b", words, re.I):
+                out.append('Task with AI "%s": the prompt is not complete (no brackets, "…" or "add your …": '
+                           'give every detail, ready to copy)' % title)
+            if not re.search(r"\b(draw|picture|diagram|chart|graph|grid|map|table|plot|web page|timeline)\b", words, re.I):
+                out.append('Task with AI "%s": the prompt asks for no visual result (a picture, diagram, chart, '
+                           'table or small web page)' % title)
+        changes = re.findall(r"^\s*:::+ *\{\.try-change\}(.*?)(?=^\s*:::+ *\{\.try-change\}|\Z)", text, re.M | re.S)
+        if not 2 <= len(changes) <= 3:
+            out.append('Task with AI "%s" has %d changes to try (::: {.try-change}); give 2 or 3' % (title, len(changes)))
+        for c in changes:
+            if not re.search(r"^\s*:::+ *\{\.check", c, re.M):
+                out.append('Task with AI "%s": a change to try has no closed answer (::: {.check} inside it)' % title)
+        before = re.split(r"^\s*:::+ *\{\.try-change\}", text, flags=re.M)[0]
+        if not re.search(r"^\s*:::+ *\{\.check", before, re.M):
+            out.append('Task with AI "%s" does not say what the student should see ('
+                       '::: {.check label="What you should see"} after the prompt)' % title)
+    return out
+
+
+def answered_warnings(body):
+    """Warnings for a page: tasks without results, questions without reasons."""
+    out = []
+    for t in task_boxes_without_check(body):
+        out.append('"%s" has no ::: {.check} (Check your result)' % t)
+    missing = questions_without_why(body)
+    if missing:
+        out.append("%d Try it question(s) without a Why: reason (first: \"%s\")" % (len(missing), missing[0][:40]))
+    return out
+
+
+def graded_warnings(text):
+    """Graded work (homework, Tasks to submit) never shows answers."""
+    out = []
+    if re.search(r"^:::+ *\{\.check\}", text, re.M):
+        out.append("graded tasks show a result (::: {.check}); keep solutions in courses-private")
+    if re.search(r"^\s+Why:", text, re.M):
+        out.append("graded tasks show a reason (Why:); keep solutions in courses-private")
+    return out
 
 
 def do_its_per_section(body):
-    """Number of "Do it" / "Lab task" boxes in each numbered section."""
+    """Number of "Do it" / "Lab task" boxes (or worksheet experiments) in each numbered section."""
     out = {}
     for part in re.split(r"^(?=## )", body, flags=re.M):
         m = SECTION_RE.match(part)
         if m:
-            out[m.group(1)] = len(DO_IT_RE.findall(part))
+            out[m.group(1)] = len(DO_IT_RE.findall(part)) + len(EXPERIMENT_RE.findall(part))
     return out
+
+
+def sections_text(body):
+    """{"6.1": text of the section, …} in order."""
+    out = {}
+    for part in re.split(r"^(?=## )", body, flags=re.M):
+        m = SECTION_RE.match(part)
+        if m:
+            out[m.group(1)] = part
+    return out
+
+
+def check_sheet(path, rel, notes_sections, page_body, slides_body):
+    """Warnings and the number of experiments of a lecture worksheet."""
+    out = []
+    text = read(path)
+    srel = rel[:-4] + "-sheet.qmd"
+    heads = headings(text)
+    for part in SHEET_REQUIRED:
+        if not any(h.startswith(part) for h in heads):
+            out.append("%s: no \"%s\" section" % (srel, part.capitalize()))
+    exps = [p for p in re.split(r"^(?=## )", text, flags=re.M) if re.match(r"## Experiment \d", p)]
+    nums = [int(re.match(r"## Experiment (\d+)", p).group(1)) for p in exps]
+    if nums != list(range(1, len(nums) + 1)):
+        out.append("%s: experiments numbered %s; number them 1, 2, 3 …" % (srel, nums))
+    if notes_sections and len(nums) != len(notes_sections):
+        out.append("%s: %d experiments for %d sections of the notes (one experiment per section)"
+                   % (srel, len(nums), len(notes_sections)))
+    for p in exps:
+        title = p.splitlines()[0][3:].strip()
+        if " · " not in title:
+            out.append('%s: "%s" has no short title ("## Experiment 1 · The grid")' % (srel, title))
+        if not re.search(r"\bAim:", p):
+            out.append('%s: "%s" has no "Aim:" (what the experiment shows)' % (srel, title))
+        steps = re.split(r"^(?=\d+\. )", p, flags=re.M)[1:]
+        if not (SHEET_STEPS[0] <= len(steps) <= SHEET_STEPS[1]):
+            out.append('%s: "%s" has %d steps; an experiment has %d–%d' % ((srel, title, len(steps)) + SHEET_STEPS))
+        for i, st in enumerate(steps, 1):
+            if "{{< record" not in st:
+                out.append('%s: "%s", step %d has no {{< record … >}} (a place for the result)' % (srel, title, i))
+            if not re.search(r"^\s*:::+ *\{\.check\}", st, re.M):
+                out.append('%s: "%s", step %d has no ::: {.check} (its result)' % (srel, title, i))
+    results = section(text, "Table of results")
+    if results and not re.search(r"^:::+ *\{\.record-table\}", results, re.M):
+        out.append("%s: the Table of results is not in a ::: {.record-table} (room to write)" % srel)
+    files = re.findall(r"^\s+- name:\s*\"?([^\"\n]+)", front_matter(path), re.M)
+    for f in files:
+        if not os.path.exists(os.path.join(os.path.dirname(path), "files", f.strip())):
+            out.append("%s: the start file files/%s is missing" % (srel, f.strip()))
+    if files and "{{< start-files" not in text:
+        out.append("%s: the start files are not listed ({{< start-files >}} in Before you start)" % srel)
+    main = re.split(r"^## Results", text, flags=re.M)[0]
+    if count_words(main) > SHEET_WORDS:
+        out.append("%s: %d words, a worksheet has at most %d" % (srel, count_words(main), SHEET_WORDS))
+    # The page shows every experiment in its section; the notes point to it.
+    page_secs = list(sections_text(page_body).items())
+    for k, (sec, part) in enumerate(page_secs, 1):
+        found = [int(n) for n in EXPERIMENT_RE.findall(part)]
+        if k <= len(nums) and found != [k]:
+            out.append("%s: section %s of the page does not show {{< experiment %d >}}" % (rel, sec, k))
+    if files and "{{< start-files" not in page_body:
+        out.append("%s: the page does not list the start files ({{< start-files >}})" % rel)
+    for k, (sec, part) in enumerate(notes_sections.items(), 1):
+        if not re.search(r"\bExperiment %d\b" % k, part):
+            out.append("%s: section %s of the notes does not point to Experiment %d of the worksheet" % (rel, sec, k))
+    if slides_body is not None:
+        titles = re.findall(r"^## (.+)$", slides_body, re.M)
+        for k in nums:
+            if not any(re.match(r"Experiment %d\b" % k, t) for t in titles):
+                out.append('%s: no "Experiment %d" slide (the teacher shows its steps)' % (rel[:-4] + "-slides.qmd", k))
+            if not any(re.match(r"Check %d\b" % k, t) for t in titles):
+                out.append('%s: no "Check %d" slide (the results of Experiment %d, .reveal)' % (rel[:-4] + "-slides.qmd", k, k))
+        for part in re.split(r"^(?=## )", slides_body, flags=re.M):
+            m = re.match(r"## (Check \d+.*)", part)
+            if m and not re.search(r"^:::+ *\{\.(answer|reveal)\}", part, re.M):
+                out.append('%s: slide "%s": the results are not on the slide (.reveal or .answer)'
+                           % (rel[:-4] + "-slides.qmd", m.group(1).strip()))
+    return out, len(nums)
 
 
 def headings(body):
@@ -173,11 +424,11 @@ def count_page(body):
     for part in parts:
         m = SECTION_RE.match(part)
         if m:
-            per_section[m.group(1)] = len(re.findall(r'^:::+ *\{\.callout-tip title="Try it', part, re.M))
+            per_section[m.group(1)] = len(TRY_IT_RE.findall(part))
     return {
         "sections": SECTION_RE.findall(body),
         "per_section": per_section,
-        "try_its": len(re.findall(r'^:::+ *\{\.callout-tip title="Try it', body, re.M)),
+        "try_its": len(TRY_IT_RE.findall(body)),
         "questions": len(re.findall(r"^:   \S", body, re.M)),
         "sims": len(re.findall(r"\{\{< *sim ", body)),
         "sim_files": set(SIM_FILE_RE.findall(body)),
@@ -301,7 +552,7 @@ def check_online(path, rel):
         title = p.splitlines()[0][3:]
         if "{.study}" not in title:
             out.append('%s: "%s" is not marked {.study} (it would be printed)' % (rel, title))
-        k = len(re.findall(r'^:::+ *\{\.callout-tip title="Try it', p, re.M))
+        k = len(TRY_IT_RE.findall(p))
         if k != 1:
             out.append('%s: "%s" has %d Try it boxes; give each step one self-check' % (rel, title, k))
     tasks = section(body, "Tasks to submit")
@@ -312,14 +563,173 @@ def check_online(path, rel):
         out.append("%s: the tasks have no {{< answer-space >}} for the printed copy" % rel)
     if ".match" in tasks:
         out.append("%s: the tasks to submit show answers (.match); keep self-checks in the Steps" % rel)
+    for w in graded_warnings(tasks) + ai_task_warnings(tasks, graded=True):
+        out.append("%s: Tasks to submit: %s" % (rel, w))
+    study = "".join(steps)
+    for w in answered_warnings(study) + ai_task_warnings(body):
+        out.append("%s: %s" % (rel, w))
+    m = re.search(r"^content:\s*\"?([\w-]+)", fm, re.M)
+    content = m.group(1) if m else ""
+    if content not in ONLINE_CONTENT:
+        out.append("%s: online activity without a content type (`content:` %s)" % (rel, ", ".join(ONLINE_CONTENT)))
     sims = len(re.findall(r"\{\{< *sim ", body))
-    if sims < ONLINE_MIN_SIMS:
-        out.append("%s: %d simulators, an online activity needs %d or more" % (rel, sims, ONLINE_MIN_SIMS))
+    watches = [dict(re.findall(r'(\w+)="([^"]*)"', a)) for a in WATCH_RE.findall(body)]
+    if content == "sims":
+        for p in steps:
+            if not re.search(r"\{\{< *sim ", p):
+                out.append('%s: "%s" has no simulator; every Step of a sims activity has one' % (rel, p.splitlines()[0][3:]))
+    elif content == "mix" and sims == 0:
+        out.append("%s: a mix activity has no simulator (text steps and simulator steps)" % rel)
+    elif content == "video":
+        links = [w for w in watches if w.get("url")]
+        if not links:
+            out.append("%s: a video activity without an official video ({{< watch url=… >}})" % rel)
+        for w in links:
+            for key in ("title", "source", "length", "checked"):
+                if not w.get(key):
+                    out.append('%s: the video "%s" has no %s= (title, source, length and the date checked)'
+                               % (rel, w.get("title", w["url"]), key))
+    elif content == "course-video":
+        videos = [w for w in watches if w.get("file")]
+        if not videos:
+            out.append("%s: a course-video activity without its video ({{< watch file=… >}})" % rel)
+        here = os.path.dirname(path)
+        for w in videos:
+            for key in ("file", "captions", "poster", "script"):
+                if not w.get(key):
+                    out.append('%s: the course video "%s" has no %s=' % (rel, w.get("title", w["file"]), key))
+                elif not os.path.exists(os.path.join(here, w[key])):
+                    out.append("%s: the %s %s of the course video is missing" % (rel, key, w[key]))
+            vtt, script = os.path.join(here, w.get("captions", "")), os.path.join(here, w.get("script", ""))
+            if w.get("captions") and w.get("script") and os.path.exists(vtt) and os.path.exists(script):
+                cues = [l.strip() for l in read(vtt).splitlines()
+                        if l.strip() and l.strip() != "WEBVTT" and "-->" not in l and not l.strip().isdigit()]
+                lines = [l.strip() for l in read(script).splitlines() if l.strip()]
+                if cues != lines:
+                    out.append("%s: the captions %s are not the words of the script %s (the voice reads the script)"
+                               % (rel, w["captions"], w["script"]))
     return out
+
+
+def check_slides_seminar(body):
+    """Seminar decks: a Recall slide, and a Check slide after every Activity slide."""
+    out = []
+    titles = re.findall(r"^## (.+)$", body, re.M)
+    if not any(t.startswith("Recall") for t in titles):
+        out.append("no Recall slide (questions on the earlier lectures, with .answer)")
+    acts = [re.match(r"Activity (\d+)", t).group(1) for t in titles if re.match(r"Activity \d+", t)]
+    checks = {re.match(r"Check (\d+)", t).group(1) for t in titles if re.match(r"Check \d+", t)}
+    for a in acts:
+        if a not in checks:
+            out.append("Activity %s has no Check %s slide (the result, with .reveal)" % (a, a))
+    for part in re.split(r"^(?=## )", body, flags=re.M):
+        m = re.match(r"## (Recall|Check \d+)(.*)", part)
+        if m and not re.search(r"^:::+ *\{\.(answer|reveal)\}", part, re.M):
+            out.append('slide "%s%s": the answers are not on the slide (.answer or .reveal)' % (m.group(1), m.group(2)))
+    return out
+
+
+def check_seminar(path, rel, minutes):
+    """Warnings and counts for a seminar or practice session."""
+    out, n = [], {}
+    body = read(path)
+    heads = headings(body)
+    n["activities"] = len(re.findall(r"^## Activity \d", body, re.M))
+    n["questions"] = len(re.findall(r"^:   \S", body, re.M))
+    n["try_its"] = len(TRY_IT_RE.findall(body))
+    n["sims"] = len(re.findall(r"\{\{< *sim ", body))
+    for part in SEMINAR_PAGE_REQUIRED:
+        if not any(h.startswith(part) for h in heads):
+            out.append("%s: no \"%s\" section" % (rel, part.capitalize()))
+    for part in SEMINAR_FORBIDDEN:
+        if any(h.startswith(part) for h in heads):
+            out.append("%s: a seminar has no \"%s\" (two short problems; a game is the tool of an activity)" % (rel, part.capitalize()))
+    times = []
+    for title in re.findall(r'^:::+ *\{\.callout-note[^}\n]*title="(Activity [^"]*)"', body, re.M):
+        m = re.search(r"·\s*(\d+)\s*min\b", title)
+        if m:
+            times.append(int(m.group(1)))
+        else:
+            out.append('%s: "%s" has no time ("· 15 min")' % (rel, title))
+    n["minutes"] = SEMINAR_RECALL_MIN + sum(times)
+    if n["minutes"] > SEMINAR_TIME[minutes]:
+        out.append("%s: %d planned minutes (Recall %d + activities %s); a %d-min seminar plans at most %d, "
+                   "the rest is for explaining" % (rel, n["minutes"], SEMINAR_RECALL_MIN,
+                                                    " + ".join(map(str, times)), minutes, SEMINAR_TIME[minutes]))
+    n_ai = sum(1 for h, _ in boxes(body) if ".ai-task" in h or 'title="Task with AI' in h)
+    if n_ai > SEMINAR_AI_MAX:
+        out.append("%s: %d Task with AI boxes, a seminar has at most %d (in \"At home\")" % (rel, n_ai, SEMINAR_AI_MAX))
+    if "{{< glossary" in body:
+        out.append("%s: a seminar adds no new terms (no glossary; reuse the lectures' words)" % rel)
+    acts = [p for p in re.split(r"^(?=## )", body, flags=re.M) if re.match(r"## Activity \d", p)]
+    for p in acts:
+        title = p.splitlines()[0][3:]
+        if not DO_IT_RE.search(p):
+            out.append('%s: "%s" has no Activity box (::: {.callout-note title="Activity …"})' % (rel, title))
+        k = len(TRY_IT_RE.findall(p))
+        if k > 1:
+            out.append('%s: "%s" has %d Try it boxes; give each activity one' % (rel, title, k))
+    for w in answered_warnings(body) + ai_task_warnings(body):
+        out.append("%s: %s" % (rel, w))
+
+    book_path = path[:-4] + "-book.qmd"
+    if os.path.exists(book_path):
+        book = read(book_path)
+        main = re.split(r"^## Answers", book, flags=re.M)[0]
+        n["words"] = count_words(main)
+        bheads = headings(book)
+        for part in SEMINAR_BOOK_REQUIRED:
+            if not any(h.startswith(part) for h in bheads):
+                out.append("%s: no \"%s\" section in the worksheet" % (rel, part.capitalize()))
+        for t in task_boxes_without_check(book):
+            out.append('%s: worksheet: "%s" has no ::: {.check} (its result at the end)' % (rel, t))
+        for w in ai_task_warnings(book):
+            out.append("%s: worksheet: %s" % (rel, w))
+    else:
+        out.append("%s: no worksheet (%s)" % (rel, os.path.basename(book_path)))
+
+    slides_path = path[:-4] + "-slides.qmd"
+    if os.path.exists(slides_path):
+        sb = read(slides_path)
+        n["slides"] = count_slides(sb)["slides"]
+        srel = rel[:-4] + "-slides.qmd"
+        for w in check_slides(sb) + check_slides_seminar(sb):
+            out.append("%s: %s" % (srel, w))
+    else:
+        out.append("%s: no slides file (%s)" % (rel, os.path.basename(slides_path)))
+
+    for key, (lo, hi) in SEMINAR_SIZES[minutes].items():
+        v = n.get(key)
+        if v is None:
+            continue
+        if v < lo or (hi is not None and v > hi):
+            out.append("%s: %d %s, a %d-min seminar needs %d–%d" % (rel, v, NAMES[key], minutes, lo, hi))
+    return out, n
 
 
 def check(project_dir):
     rows, warnings = [], []
+    week = os.path.join(project_dir, "courses", "*", "week-*")
+    for name in ("seminar-[0-9][0-9].qmd", "practice-[0-9][0-9].qmd"):
+        for path in sorted(glob.glob(os.path.join(week, name))):
+            minutes = course_minutes(project_dir, path.split(os.sep)[-3])
+            if minutes not in SEMINAR_SIZES:
+                continue
+            rel = os.path.relpath(path, project_dir)
+            w, n = check_seminar(path, rel, minutes)
+            warnings.extend(w)
+            rows.append((rel, minutes, n))
+    for path in sorted(glob.glob(os.path.join(week, "online-[0-9][0-9].qmd"))):
+        warnings.extend(check_online(path, os.path.relpath(path, project_dir)))
+    for path in sorted(glob.glob(os.path.join(week, "homework-[0-9][0-9].qmd"))):
+        rel = os.path.relpath(path, project_dir)
+        hw = read(path)
+        # An optional section {.extra} (a Task with AI, no marks) is not graded work.
+        parts = re.split(r"^(?=## )", hw, flags=re.M)
+        extra = "".join(p for p in parts if re.match(r"## .*\{\.extra\}", p))
+        graded = "".join(p for p in parts if not re.match(r"## .*\{\.extra\}", p))
+        warnings.extend("%s: %s" % (rel, w) for w in graded_warnings(graded) + ai_task_warnings(graded, graded=True)
+                        + ai_task_warnings(extra))
     pattern = os.path.join(project_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].qmd")
     for path in sorted(glob.glob(pattern)):
         slug = path.split(os.sep)[-3]
@@ -335,6 +745,8 @@ def check(project_dir):
         n.update({k: page[k] for k in ("try_its", "questions", "sims")})
 
         book_path = path[:-4] + "-book.qmd"
+        sheet_path = path[:-4] + "-sheet.qmd"
+        has_sheet = os.path.exists(sheet_path)
         if os.path.exists(book_path):
             book = count_book(read(book_path))
             n.update({"book_sections": len(book["sections"]), "words": book["words"],
@@ -346,7 +758,7 @@ def check(project_dir):
             for f in sorted(page["challenge_sims"] - book_sims):
                 warnings.append("%s: the game %s is not in the notes (Case study)" % (rel, f))
             for sec, k in book["do_its"].items():
-                if k == 0:
+                if k == 0 and not has_sheet:
                     warnings.append("%s: section %s of the notes has no Do it task" % (rel, sec))
             missing = [s for s in book["sections"] if s not in page["sections"]]
             if missing:
@@ -357,11 +769,22 @@ def check(project_dir):
         for sec, k in page["do_its"].items():
             if k == 0:
                 warnings.append("%s: section %s of the page has no Do it task" % (rel, sec))
+        page_body = read(path)
+        for w in answered_warnings(page_body) + ai_task_warnings(page_body):
+            warnings.append("%s: %s" % (rel, w))
+        if os.path.exists(book_path):
+            for w in ai_task_warnings(read(book_path)):
+                warnings.append("%s: notes: %s" % (rel, w))
         for sec, k in page["per_section"].items():
             if k > 1:
                 warnings.append("%s: section %s has %d Try it boxes; use one question set per concept" % (rel, sec, k))
 
         slides_path = path[:-4] + "-slides.qmd"
+        if has_sheet:
+            notes_secs = sections_text(read(book_path)) if os.path.exists(book_path) else {}
+            slides_body = read(slides_path) if os.path.exists(slides_path) else None
+            w, n["experiments"] = check_sheet(sheet_path, rel, notes_secs, page_body, slides_body)
+            warnings.extend(w)
         if os.path.exists(slides_path):
             s = count_slides(read(slides_path))
             n["slides"] = s["slides"]
@@ -392,6 +815,13 @@ def check(project_dir):
             if any(h.startswith(part) for h in page["headings"]):
                 warnings.append("%s: no \"%s\" in lessons (use a Game challenge)" % (rel, part.capitalize()))
         rows.append((rel, minutes, n))
+    for path in sorted(glob.glob(os.path.join(week, "*.qmd"))):
+        lines = read(path).split("\n")
+        for i in range(1, len(lines)):
+            prev = lines[i - 1].strip()
+            if re.match(r"\s*:{3,}\s*\{", lines[i]) and prev and not prev.startswith(":::"):
+                warnings.append("%s: a blank line is missing before \"%s\" (pandoc shows it as text)"
+                                % (os.path.relpath(path, project_dir), lines[i].strip()))
     return rows, warnings
 
 
@@ -399,8 +829,9 @@ def main():
     project_dir = os.environ.get("QUARTO_PROJECT_DIR") or os.getcwd()
     rows, warnings = check(project_dir)
     if "--all" in sys.argv:
-        cols = ["book_sections", "words", "examples", "exercises", "try_its", "questions", "sims", "slides"]
-        short = ["sect", "words", "exmpl", "exer", "try", "quest", "sims", "slides"]
+        cols = ["book_sections", "activities", "minutes", "experiments", "words", "examples", "exercises", "try_its",
+                "questions", "sims", "slides"]
+        short = ["sect", "activ", "plan", "exper", "words", "exmpl", "exer", "try", "quest", "sims", "slides"]
         print("%-44s %4s " % ("lesson", "min") + " ".join("%6s" % c for c in short))
         for rel, minutes, n in rows:
             print("%-44s %4d " % (rel, minutes) + " ".join("%6s" % (n.get(c, "-")) for c in cols))

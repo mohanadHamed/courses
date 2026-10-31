@@ -1,0 +1,208 @@
+---
+title: "Analyzing a Small Dataset and Charting It"
+description: "Online activity · Clean a small dataset of training hours, make it an Excel table, summarize it with a PivotTable, choose the right chart, and write three checked insights with AI help. About 60 minutes."
+online: 13
+due: "one week after lecture 10"
+marks: 6
+content: video
+ilos: [C2, C4, B1]
+toc-title: "In this activity"
+format: lesson-html   # online activity: the tasks PDF is made by printing this page (homework_pdf.py)
+---
+
+## Before you start {.study}
+
+- **What you need:** Excel (desktop, on the web at `office.com`, or the
+  phone app) and an AI tool your university allows.
+- **Time:** about 60 minutes. Work alone, at your own speed.
+- **How it works:** do Steps 1–3 on this page. Steps 2 and 3 start with a
+  short video of Microsoft Support (free, with English captions; it opens
+  in a new tab). Each step has the main points, a simulator and a
+  self-check. Then do the **Tasks to submit**.
+- **What you submit:** one Excel file with the clean table, the
+  PivotTables, the chart and your insights, one week after lecture 10.
+- **You need Lectures 6, 7 and 10:** formulas, sort, filter, charts and the
+  PivotTable. Step 2 uses the PivotTable of Lecture 10 on new data.
+
+## Key terms {.study}
+
+{{< glossary data-cleaning duplicate-row excel-table pivottable row-field value-field chart data-insight >}}
+
+## Step 1 · Clean the data and make a table {.study}
+
+- One row per record, one kind of value per column, no empty rows.
+- Remove **duplicate rows** (Data › Remove Duplicates) and make spellings
+  the same ("excel" → "Excel").
+- Then **Format as Table** (Ctrl + T) and switch on the total row.
+
+![From a list to an answer.](images/analysis-steps.png){width=100%}
+
+{{< sim file="../week-07/sims/clean-data-lab.html" poster="../week-07/sims/clean-data-lab.png" title="Clean Data Lab: tidy the sales list with AI advice" height="860" >}}
+
+::: {.callout-tip title="Try it 1 · Clean data"}
+Choose the right answer.
+
+::: {.match extra="a bigger font|a new sheet"}
+the same row twice
+:   remove the duplicate
+
+    Why: A row typed twice counts twice in every total.
+
+"excel" and "Excel" in one column
+:   make the spelling the same
+
+    Why: "excel" and "Excel" would be two different courses in a summary.
+
+an empty row in the middle
+:   delete it
+
+    Why: An empty row stops the table and the filter early.
+
+the step after cleaning
+:   Format as Table
+
+    Why: A clean list becomes a table with a name, filters and a total row.
+:::
+:::
+
+## Step 2 · Summarize with a PivotTable {.study}
+
+Watch the short video first. Then read the main points and practise in the simulator.
+
+{{< watch title="Create a PivotTable" source="Microsoft Support" url="https://support.microsoft.com/en-us/excel/get-started/create-a-pivottable-to-analyze-worksheet-data" length="0:45" checked="2026-10-31" captions="English" >}}
+
+- **Insert › PivotTable**; one field in **Rows**, the number field in
+  **Values**.
+- Change the rows to see the data from another side (by type, by month).
+- Check: the Grand Total must equal the total row of the table.
+
+![A PivotTable.](images/pivot.png){width=100%}
+
+{{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" height="600" >}}
+
+::: {.callout-tip title="Try it 2 · PivotTables"}
+Use Pivot Lab. Choose the right answer.
+
+::: {.match extra="Values: Item|Rows: Total"}
+the total of each type
+:   Rows Type, Values Sum of Total
+
+    Why: Rows give one line per type, and Sum adds the totals.
+
+the number of sales of each item
+:   Rows Item, Values Count of sales
+
+    Why: Count gives the number of sales, not the money.
+
+the Grand Total of Rana's month
+:   355
+
+    Why: The Grand Total equals the total row of the table.
+
+after you add new rows
+:   Refresh
+
+    Why: A PivotTable does not update by itself.
+:::
+:::
+
+## Step 3 · The right chart and checked insights {.study}
+
+Watch the short video first. Then read the main points and practise in the simulator.
+
+{{< watch title="Create charts" source="Microsoft Support" url="https://support.microsoft.com/en-us/excel/get-started/create-a-chart-from-start-to-finish" length="0:52" checked="2026-10-31" captions="English" >}}
+
+- Compare categories: a **column chart**; a change over time: a **line**
+  or column chart in time order; parts of one whole: a **pie** (few parts).
+- Give the chart a clear title and axis labels.
+- An **insight** is a short, true sentence with a number. AI can draft
+  insights; check each one with the PivotTable.
+
+![Sales per week, with insights.](images/weekly-chart.png){width=100%}
+
+{{< sim file="../week-07/sims/chart-lab.html" poster="../week-07/sims/chart-lab.png" title="Chart Lab: the right chart for the question" height="640" >}}
+
+::: {.callout-tip title="Try it 3 · Charts and insights"}
+Choose the right answer.
+
+::: {.match extra="a table of text|no chart at all"}
+hours of three departments compared
+:   a column chart
+
+    Why: Columns compare amounts side by side.
+
+hours from January to April
+:   a line or column chart in month order
+
+    Why: A change over time needs the months in their order.
+
+the share of each course in all hours
+:   a pie chart
+
+    Why: A pie shows the parts of one whole.
+
+an AI insight before you use it
+:   check it with the PivotTable
+
+    Why: An AI insight can have a wrong number.
+:::
+:::
+
+## Tasks to submit {.tasks}
+
+Do the tasks alone. Your teacher marks them (6 marks). Huda collected the
+**training hours** of the staff of Sunrise Company from January to April.
+Type this list into a new Excel workbook, starting in cell A1, and save it
+as `training.xlsx`:
+
+| Month | Department | Course | Hours |
+|---|---|---|---|
+| Jan | Sales | Excel | 6 |
+| Jan | Office | Word | 4 |
+| Jan | Shop | Safety | 2 |
+| Feb | Sales | Word | 4 |
+| Feb | Office | Excel | 6 |
+| Feb | Office | Excel | 6 |
+| Feb | Shop | Excel | 6 |
+| Mar | Sales | Safety | 2 |
+| Mar | Office | Safety | 2 |
+| Mar | Shop | Word | 4 |
+| Mar | Sales | excel | 6 |
+| Apr | Office | Word | 4 |
+| Apr | Shop | Safety | 2 |
+| Apr | Sales | Excel | 6 |
+| Apr | Shop | Excel | 6 |
+| Apr | Office | Safety | 2 |
+
+The row "Feb, Office, Excel, 6" was typed twice by mistake.
+
+### Task 1 · Clean and table (2 marks)
+
+1. Remove the duplicate row and make the spelling of the courses the same.
+2. Make the list an Excel table named `Training` with a total row. Write
+   the total number of hours in a cell next to the table.
+
+### Task 2 · Summarize (2 marks)
+
+1. Make a PivotTable with Rows Department and Values Sum of Hours.
+2. Make a second PivotTable with Rows Course (or change the first one and
+   copy the result). Which department and which course have the most
+   hours?
+
+### Task 3 · Chart and insights (2 marks)
+
+1. Make the right chart for the hours of each month, in month order, with
+   a title.
+2. Ask an AI tool for three insights about the data (paste only the
+   table). Check each number with your PivotTables, correct what is wrong,
+   and write the three checked insights under the chart, with a one-line
+   AI-use statement.
+
+Which AI insight was wrong or unclear, and how did you find out?
+
+{{< answer-space lines=3 >}}
+
+## How to submit
+
+Upload `training.xlsx` (the clean table, the PivotTables, the chart and the
+insights) to the university e-learning platform, **one week after lecture 10**.

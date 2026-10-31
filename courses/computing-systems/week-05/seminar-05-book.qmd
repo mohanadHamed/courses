@@ -1,0 +1,154 @@
+---
+title: "Operating-System Tour and File and Resource Management"
+description: "Seminar worksheet · Find four facts about the lab computer with the Windows tools (processes, memory, drives and drivers), then make a phone ready for a test with the device check."
+seminar: 5
+ilos: [A2]
+format: lesson-typst
+---
+
+::: {.lead}
+In Lecture 5 you learned what an operating system does for a game: it runs
+processes, shares the memory, keeps files and manages devices. Today you
+find these jobs on the lab computer and on your phone. There are no new
+ideas: two short problems. Do each one alone. The results of the activities
+are at the end of this worksheet.
+:::
+
+## Recall
+
+- The OS gives services to every app: processes, memory, files, devices and
+  permissions.
+- The **scheduler** shares the cores; the app on the screen gets the most
+  time.
+- When the RAM of a phone is full, the OS closes background apps, so a game
+  saves its state.
+- The file system keeps files in folders with paths; the OS loads a driver
+  for every device and shares all the resources.
+
+::: {.callout-tip title="Try it 1 · Recall"}
+Choose the right service.
+
+::: {.match extra="the GPU"}
+The game asks to use the microphone. Which service decides?
+:   permissions
+
+The game saves the progress to storage. Which service?
+:   files
+
+The game gets time on a CPU core. Which service?
+:   processes
+:::
+:::
+
+## Activity 1 · A tour of the PC: four tools of Windows
+
+| Tool (shortcut) | What it shows |
+|---|---|
+| Settings › System › About (Win + I) | Windows version, CPU, RAM |
+| Task Manager (Ctrl + Shift + Esc) | processes, CPU %, memory |
+| File Explorer (Win + E) | drives, free space, folders |
+| Device Manager (right-click Start) | devices and their drivers |
+
+A **device driver** is a small program that lets the OS control one kind of
+hardware, such as a gamepad.
+
+![The four tools of Windows.](images/pc-tour.png){width=92%}
+
+::: {.callout-note title="Activity 1 · Four facts · 15 min"}
+On the lab computer, write four facts, each with its tool:
+
+1. the Windows version and the RAM;
+2. the process that uses the most CPU now;
+3. the free space of drive C:;
+4. the graphics card (Device Manager › Display adapters).
+
+*Your product:* four facts with the tool for each.
+
+::: {.check}
+A good answer: "Windows 11, 16 GB RAM (About); the browser uses the most CPU
+(Task Manager); C: has 180 GB free (File Explorer); Intel UHD Graphics
+(Device Manager › Display adapters)". Your values may differ, but each fact
+must come from the right tool.
+:::
+:::
+
+::: {.callout-tip title="Try it 2 · Which Windows tool?"}
+Choose the right tool.
+
+::: {.match extra="Settings › Battery|File Explorer"}
+A game stutters. Which program uses most of the CPU now?
+:   Task Manager
+
+A new gamepad does nothing. Is its driver working?
+:   Device Manager
+
+How much RAM does the PC have?
+:   Settings › About
+:::
+:::
+
+## Activity 2 · Make the phone ready for a test
+
+Rami must test *Pocket Quest 1.2* on phone **P5** for 40 minutes. P5 has
+**1.1 GB** free, the battery shows **34 %**, and **9 apps** are open.
+Clearing an app's **cache** frees space and keeps its progress; clearing
+its **storage** (data) deletes the progress. A test phone must pass the
+**device check**: at least 2 GB free, the battery above 50 % or charging,
+only the game open, Do not disturb on, and the OS version in the report.
+
+![The device check.](images/device-check.png){width=86%}
+
+{{< sim file="sims/test-day.html" poster="sims/test-day.png" title="Test Day: prepare the phone and the files" kind="game" >}}
+
+::: {.callout-note title="Activity 2 · The device check · 15 min"}
+1. In **Test Day**, prepare Rami's phone P5 for the test.
+2. On your own phone, write the free space (Settings › Storage) and the
+   battery level. Does it pass the device check? If not, write what you do
+   first.
+
+*Your product:* your score and two short lines.
+
+::: {.check}
+Test Day: delete old videos and clear caches, charge above 50 %, close the
+other apps, set USB to file transfer, name the screenshot
+`2026-11-12_P5_level3.png`, and turn on Do not disturb. A good answer for
+your phone: "9.4 GB free, battery 72 %: it passes. I close the other apps
+and turn on Do not disturb before the test."
+:::
+:::
+
+::: {.callout-tip title="Try it 3 · The device check"}
+Choose the right answer.
+
+::: {.match extra="Clear storage|test now"}
+Which button frees space and keeps the progress?
+:   Clear cache
+
+A phone has 1.6 GB free and clears 0.6 GB of caches. Is it ready for the test?
+:   yes, 2.2 GB is more than 2 GB
+
+The battery shows 34 %. What do you do before a 40-minute test?
+:   charge it above 50 % first
+
+A call stopped the last test. What do you turn on?
+:   Do not disturb
+:::
+:::
+
+## Exercises
+
+1. Which Windows tool shows the processes and the CPU % of each one?
+2. A gamepad shows a yellow sign in Device Manager. What is wrong?
+3. Where does Windows show the free space of drive C:?
+4. A phone has 1.5 GB free, and clearing caches frees 0.4 GB. Does it pass the 2 GB line of the device check?
+5. Why does a tester turn on Do not disturb before a test?
+
+## Answers to the exercises
+
+::: {.answers}
+1. Task Manager.
+2. Its driver is missing or does not work.
+3. In File Explorer (This PC).
+4. 1.5 + 0.4 = 1.9 GB: no, it needs 0.1 GB more.
+5. So that no call or notification stops the test.
+:::

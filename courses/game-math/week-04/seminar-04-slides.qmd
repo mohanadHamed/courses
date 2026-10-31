@@ -1,0 +1,81 @@
+---
+title: "Trigonometry in Game Motion"
+subtitle: "Seminar 4 · practises Lecture 4"
+format: lesson-pptx
+---
+
+## Recall · Lecture 4
+
+a) What is the point at 90° on the unit circle?
+b) What is sin 30°?
+c) Which angle does atan2 give for the vector (−4, 4)?
+
+::: {.answer}
+a) (0, 1)
+b) 0.5
+c) 135°
+:::
+
+## Activity 1 · Angles and velocities · 25 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A turret at the origin aims at drones at (5, 5), (−4, 4) and (0, −3).
+- It fires a bolt at 135° and another at 30°, both with the speed 10.
+- **Do it:** Find the three angles with atan2 and the two velocities. A ramp rises 3 m over 3 m: what is its angle?
+- Your product is three angles, two velocities and one ramp angle.
+:::
+::: {.column width="50%"}
+![](images/atan2.png)
+:::
+::::
+
+## Live demo · Turn Lab
+
+{{< sim file="sims/turn-lab.html" poster="sims/turn-lab.png" title="Turn Lab: the angle to a target and the short turn" task="**Show:** tap the drones at (5, 5), (−4, 4) and (0, −3). **Ask:** why do (5, 5) and (−5, −5) not have the same angle?" >}}
+
+## Check 1 · Angles and velocities
+
+What are the angles and the velocities?
+
+::: {.reveal}
+1. The drones are at 45°, 135° and −90°.
+2. The bolt at 135° has the velocity 10 × (−0.71, 0.71) = (−7.1, 7.1).
+3. The bolt at 30° has the velocity 10 × (0.87, 0.5) = (8.7, 5).
+4. For the ramp, tan θ = 3 ÷ 3 = 1, so its angle is 45°.
+:::
+
+## Activity 2 · Circle and bob · 25 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- An orb circles C = (2, 3) with the radius 3, at 90° per second.
+- A lift moves with y = 3 + 2 sin(360° × t ÷ 8), beside a cliff at the height 5 and a ledge at 1.
+- **Do it:** Find the orb at 0, 1, 2 and 3 s, and the lift at 0, 2, 4 and 6 s. When can the hero step on?
+- Your product is four positions, four heights and two times.
+:::
+::: {.column width="50%"}
+![](images/sine-wave.png)
+:::
+::::
+
+## Live demo · Sky Lift
+
+{{< sim file="sims/sky-lift.html" poster="sims/sky-lift.png" title="Sky Lift: when is the lift level with the ledge?" kind="game" task="**Show:** play the first round and jump at 2 s. **Ask:** why is the lift at the top at a quarter of its period?" >}}
+
+## Check 2 · Circle and bob
+
+Where are the orb and the lift?
+
+::: {.reveal}
+1. The orb is at (5, 3), (2, 6), (−1, 3) and (2, 0), and its period is 4 s.
+2. The lift has the middle 3, the amplitude 2 and the period 8 s.
+3. Its heights are 3, 5, 3 and 1 at 0, 2, 4 and 6 s.
+4. The hero steps on at the cliff at 2 s and at the low ledge at 6 s.
+:::
+
+## Wrap-up
+
+- You can find the angle to a target with atan2 and the angle of a ramp with the tangent.
+- You can turn an angle and a speed into a velocity.
+- You can move an object in a circle and time a motion that bobs with sine.

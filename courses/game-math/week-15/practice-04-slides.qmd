@@ -1,0 +1,102 @@
+---
+title: "Case Study: Random Level and Event Generation"
+subtitle: "Practice 4 · practises Lectures 10, 11 and 12"
+format: lesson-pptx
+---
+
+## Recall · Lectures 10, 11 and 12
+
+a) A tester wants to see the same random numbers again. What does the tester need?
+b) A rule allows 50 % of the tiles. How many draws are needed on average?
+c) A room gives 10 coins with p = 0.3, else nothing. What is E per room?
+
+::: {.answer}
+a) the same seed
+b) 2
+c) 3 coins
+:::
+
+## Activity 1 · Seeds and steps · 15 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- Torch Hall digs a cave with a walker that moves one random step at a time from the middle.
+- All its random numbers come from one seed.
+- **Do it:** In Cave Generator, go from seed 42 to 43 and back. What stays the same? How many new tiles can 20 steps make at most?
+:::
+::: {.column width="50%"}
+![](images/seeds.png)
+:::
+::::
+
+## Check 1 · Seeds and steps
+
+What do the seed and the walker give?
+
+::: {.reveal}
+1. With seed 42 the walls, the start, the exit and the chest come back the same.
+2. A tester reports the seed, and a shared daily seed gives every player the same floor.
+3. 20 steps make at most 20 new tiles, and often fewer, because the walker steps on some tiles again.
+:::
+
+## Activity 2 · Draws, coins and a bag · 20 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A monster may stand on 80 % of the tiles, and the game draws again when the rule fails.
+- A room has a chest with 25 % (+20 coins) or a torch with 5 % (+100 coins), and a floor has 8 rooms.
+- **Do it:** Find the expected draws, the coins per room and per floor, and P(no chest in 2 rooms). Test the table and the bag in Event Deck.
+:::
+::: {.column width="50%"}
+![](images/event-table.png)
+:::
+::::
+
+## Live demo · Event Deck
+
+{{< sim file="sims/event-deck.html" poster="sims/event-deck.png" title="Event Deck: what is in each room?" task="**Show:** test 1000 floors with the table, then with the shuffle bag. **Ask:** why does the bag give fewer floors without a chest?" >}}
+
+## Check 2 · Draws, coins and a bag
+
+What do the monster and the rooms give?
+
+::: {.reveal}
+1. The monster needs 1/0.8 = 1.25 draws on average.
+2. A room gives E = 5 + 5 = 10 coins, so a floor of 8 rooms gives 80 coins.
+3. P(no chest in 2 rooms) = 0.75 × 0.75, about 56 %.
+4. The bag keeps 80 coins per floor but spreads the chests, so fewer floors have none.
+:::
+
+## Activity 3 · Answer the reports · 20 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- A room holds a chest with 20 % (+30 coins) or a gem with 10 % (+50 coins), and a floor has 10 rooms.
+- About 35 % of the floors have no gem, and a new rule moves the exit 20 steps away.
+- **Do it:** Find the coins per room and per floor. Which change gives every floor its gem? Then play Generator Doctor.
+:::
+::: {.column width="50%"}
+![](images/generator-test.png)
+:::
+::::
+
+## Live demo · Generator Doctor
+
+{{< sim file="sims/generator-doctor.html" poster="sims/generator-doctor.png" title="Generator Doctor: six reports about the generator" kind="game" task="**Show:** answer the six reports of the testers. **Ask:** which report needs a test with many seeds, and why?" >}}
+
+## Check 3 · Answer the reports
+
+How does the team answer the testers?
+
+::: {.reveal}
+1. The player shares the seed of the floor with the friend.
+2. A room gives 6 + 5 = 11 coins, so a floor of 10 rooms gives 110 coins.
+3. A shuffle bag with 1 gem in 10 rooms gives each floor its gem at the same rate.
+4. After a rule change the team tests 1000 seeds or more again and looks at the extremes.
+:::
+
+## Wrap-up
+
+- You can repeat or share a random level with its seed.
+- You can find the expected draws and coins of a generator, and choose a shuffle bag for fairer floors.
+- You can plan a test of a generator with many seeds.

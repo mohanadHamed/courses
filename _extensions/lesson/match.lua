@@ -14,11 +14,36 @@
 --
 -- Each term is a question; its definition is the right answer. `extra` adds
 -- wrong answers, split by "|" (needed when there are only 1–2 questions).
+-- A second paragraph of the definition that starts with "Why:" is the reason:
+--
+--   The magnitude of (3, −4).
+--   :   5
+--
+--       Why: √(3² + 4²) = √25 = 5.
 --
 -- HTML: every answer is shown once as a button. The student taps the answer
--- for the coloured question and sees at once if it is right (lesson-script.html).
+-- for the coloured question and sees at once if it is right, with the reason
+-- (lesson-script.html). After two wrong tries the right answer and its reason
+-- are shown, so no student is left stuck.
 -- PDF:  the questions with a blank line, the answers to choose from, and
---       the answers upside down at the bottom of the box.
+--       the answers upside down at the bottom of the box. The reason is not
+--       printed: the notes are a self-test.
+--
+-- Also, for the interactive page (HTML) only:
+--   ::: {.check}    "Check your result" of a Do it task or a seminar activity:
+--   …               a closed <details> box. In the notes (PDF) book.lua moves
+--   :::             it to "Results of the Do it tasks" at the end.
+--   ::: {.prompt}   The prompt of a "Task with AI" box, with a "Copy
+--   …               prompt" button (lesson-script.html).
+--   :::
+--   ::: {.check label="What you should see"}
+--                   The same closed box with another label.
+--   ::: {.try-change}
+--   **Try a change:** … What do you notice?
+--   ::: {.check}    A change to try in a "Task with AI" box, then its
+--   …               closed answer ("What you notice"); book.lua prints the
+--   :::             answers at the end of the notes.
+--   :::
 
 local str = pandoc.utils.stringify
 
@@ -37,6 +62,26 @@ local function answer_inlines(defs)
     return first.content
   end
   return pandoc.Inlines({ pandoc.Str(str(defs[1] or "")) })
+end
+
+-- The reason ("Why: …" paragraph after the answer), without "Why:"; or nil.
+local function why_inlines(defs)
+  for _, b in ipairs(defs[1] or {}) do
+    if (b.t == "Para" or b.t == "Plain") and b.content[1] and b.content[1].t == "Str"
+        and b.content[1].text:match("^Why:") then
+      local out = pandoc.Inlines({})
+      out:extend(b.content)
+      local rest = out[1].text:gsub("^Why:", "")
+      if rest == "" then
+        out:remove(1)
+        if out[1] and out[1].t == "Space" then out:remove(1) end
+      else
+        out[1] = pandoc.Str(rest)
+      end
+      return out
+    end
+  end
+  return nil
 end
 
 -- Read a .match div: questions, answers and the list of options.
@@ -68,7 +113,7 @@ local function read_match(div)
     local key = str(ans)
     if seen[key] then reuse = true end
     seen[key] = true
-    table.insert(qs, { q = item[1], a = ans, o = add_option(ans) })
+    table.insert(qs, { q = item[1], a = ans, o = add_option(ans), why = why_inlines(item[2]) })
   end
   local extra = div.attributes["extra"]
   if extra then
@@ -84,8 +129,9 @@ local function html_widget(qs, opts, reuse)
   for i, q in ipairs(qs) do
     table.insert(li, string.format(
       '<li class="match-q" data-a="%d" tabindex="0"><span class="match-label">%s)</span>'
-        .. '<span class="match-text">%s</span><span class="match-slot">?</span></li>',
-      q.o, letter(i), html_inlines(q.q)))
+        .. '<span class="match-text">%s</span><span class="match-slot">?</span>%s</li>',
+      q.o, letter(i), html_inlines(q.q),
+      q.why and ('<span class="match-why" hidden>' .. html_inlines(q.why) .. "</span>") or ""))
   end
   for i, o in ipairs(opts) do
     table.insert(buttons, string.format('<button type="button" class="match-opt" data-o="%d">%s</button>',
@@ -94,7 +140,7 @@ local function html_widget(qs, opts, reuse)
   return pandoc.RawBlock("html", string.format([[
 <div class="match" data-reuse="%s">
   <ol class="match-list">%s</ol>
-  <p class="match-help">Tap the right answer for the question in colour.</p>
+  <p class="match-help">Tap the right answer for the question in colour. After two wrong tries, the answer is shown.</p>
   <div class="match-opts" role="group" aria-label="Answers">%s</div>
   <p class="match-feedback" aria-live="polite"></p>
   <div class="match-foot"><span class="match-score"></span><button type="button" class="match-reset" hidden>Start again</button></div>
@@ -155,10 +201,41 @@ local function active()
   return quarto.doc.is_format("html") or quarto.doc.is_format("typst")
 end
 
+-- HTML: "Check your result" (closed until the student opens it), or the
+-- label of the box (label="…").
+local function check_box(div, label)
+  label = div.attributes.label or label or "Check your result"
+  local blocks = pandoc.Blocks({ pandoc.RawBlock("html",
+    '<details class="check"><summary>' .. label:gsub("&", "&amp;"):gsub("<", "&lt;") .. '</summary><div class="check-body">') })
+  blocks:extend(div.content)
+  blocks:insert(pandoc.RawBlock("html", "</div></details>"))
+  return blocks
+end
+
+-- HTML: a change to try in a "Task with AI" box, with its closed answer.
+local function try_change(div)
+  local blocks = pandoc.Blocks({ pandoc.RawBlock("html", '<div class="try-change">') })
+  for _, b in ipairs(div.content) do
+    if b.t == "Div" and b.classes:includes("check") then
+      blocks:extend(check_box(b, "What you notice"))
+    else
+      blocks:insert(b)
+    end
+  end
+  blocks:insert(pandoc.RawBlock("html", "</div>"))
+  return blocks
+end
+
 return {
   {
     traverse = "topdown",
     Div = function(div)
+      if div.classes:includes("try-change") and quarto.doc.is_format("html") then
+        return try_change(div), false
+      end
+      if div.classes:includes("check") and quarto.doc.is_format("html") then
+        return check_box(div)
+      end
       if not active() then return nil end
       if div.classes:includes("match") then
         local blocks, key = build(div)

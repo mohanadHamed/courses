@@ -1,0 +1,157 @@
+---
+title: "Setting Up Test Environments: Emulators and Real Devices"
+subtitle: "Lecture 12"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary test-environment emulator ios-simulator avd system-image test-device developer-options usb-debugging adb device-farm device-matrix >}}
+
+## 12.1 What is a test environment?
+
+:::: {.columns}
+::: {.column width="50%"}
+- A test environment has a build, devices, tools, a test plan and bug reports.
+- Every result names the build, the device and the OS version.
+- Then somebody else can repeat the test.
+- **Do it:** Write the build, the device, the OS version and two tests for a game on your phone.
+:::
+::: {.column width="50%"}
+![](images/test-environment.png)
+:::
+::::
+
+## Try it 1 · The parts
+
+a) Which part of the test environment is "PocketQuest_1.3, build 42"?
+b) Which part says which test runs on which device?
+c) Why must a result name the device and the OS version?
+
+::: {.answer}
+a) the build
+b) the test plan
+c) so that others can repeat the test
+:::
+
+## 12.2 Emulators and simulators
+
+:::: {.columns}
+::: {.column width="50%"}
+- An emulator copies a device, and the real app runs on the computer.
+- An AVD is a device profile plus a system image with one Android version.
+- The iOS Simulator runs only on a Mac.
+- **Do it:** Create three AVDs in AVD Builder. What can each one not test?
+:::
+::: {.column width="50%"}
+![](images/emulator-vs-real.png)
+:::
+::::
+
+## Live demo · AVD Builder
+
+{{< sim file="sims/avd-builder.html" poster="sims/avd-builder.png" title="AVD Builder: virtual devices for Pocket Quest" task="**Show:** create the P5 twin, the API 26 phone and the tablet. **Ask:** what can these AVDs not tell us about the P5?" >}}
+
+## Example · The P5 twin
+
+Rami wants to test Pocket Quest on a copy of the P5 and on Android 8.
+**Which AVDs does Rami create?**
+
+::: {.reveal}
+1. The **P5 twin** has 720 × 1600, 4 GB and Android 11 (API 30).
+2. The **oldest phone** has API 26, and a **tablet** has API 33.
+3. The emulator needs **virtualization** in the BIOS to run fast.
+:::
+
+## Try it 2 · Emulators
+
+a) What are the two parts of an AVD?
+b) Which API level is Android 8?
+c) Why does 60 fps in the emulator not mean 60 fps on the P5?
+
+::: {.answer}
+a) a device profile and a system image
+b) API 26
+c) The emulator runs on the much stronger computer.
+:::
+
+## 12.3 Real devices
+
+:::: {.columns}
+::: {.column width="50%"}
+- On Android we tap the build number seven times and switch on USB debugging.
+- An iPhone needs a Mac with Xcode, or TestFlight.
+- A device farm rents real phones in the cloud.
+- **Do it:** Find the build number and the USB debugging switch on an Android phone.
+:::
+::: {.column width="50%"}
+![](images/real-device-setup.png)
+:::
+::::
+
+## Example · The P5 on the cable
+
+Rami connects the P5 and runs adb devices.
+**What happens, and what does the real phone show?**
+
+::: {.reveal}
+1. The P5 is **unauthorized** until Rami taps "Allow" on the phone.
+2. Then adb devices shows **device**, and Rami installs the build.
+3. After 20 minutes the P5 is **hot** and its frame rate drops, which the emulator never showed.
+:::
+
+## 12.4 A device matrix
+
+:::: {.columns}
+::: {.column width="50%"}
+- The matrix covers the oldest and newest OS versions.
+- It includes the weakest device and the main screen sizes.
+- It covers both platforms, with real devices for speed, heat and sensors.
+- **Do it:** Cover every row in Matrix Builder for $300 or less. What did you choose?
+:::
+::: {.column width="50%"}
+![](images/device-matrix.png)
+:::
+::::
+
+## Live demo · Matrix Builder
+
+{{< sim file="sims/matrix-builder.html" poster="sims/matrix-builder.png" title="Matrix Builder: which devices for the test?" task="**Show:** choose the P5 and two emulators, then add the iOS rows. **Ask:** why is renting a device farm better here than buying more phones?" >}}
+
+## Try it 3 · Real devices and the matrix
+
+a) adb devices shows "unauthorized". What must Rami do?
+b) Which row of the matrix can only a real phone cover?
+c) Why does the matrix need the weakest supported phone?
+
+::: {.answer}
+a) allow the computer on the phone
+b) speed, heat and touch
+c) It sets the minimum requirements.
+:::
+
+## Game challenge · Emulator or Real?
+
+{{< sim file="sims/emulator-or-real.html" poster="sims/emulator-or-real.png" title="Emulator or Real? The right place for each test" kind="game" task="**The story:** Rami's test plan for Pocket Quest 1.3 has six tests. **Play:** choose the best test environment for each test on your phone." >}}
+
+## Try it 4 · The tests (harder)
+
+The facts: Rami must test the menu on six screen sizes, the heat after a 20-minute race, the start on Android 8 and tilt steering with the gyroscope.
+
+a) Where does Rami test the six screen sizes?
+b) Where does Rami test the heat and the tilt steering?
+c) Where does Rami test the start on Android 8 without an Android 8 phone?
+
+::: {.answer}
+a) on Android emulators
+b) on a real phone
+c) on an AVD with API 26
+:::
+
+## Summary
+
+- A test environment has a build, devices, tools, a test plan and bug reports.
+- Emulators and the iOS Simulator give many versions and sizes for free.
+- Real devices show the speed, the heat, the battery and the sensors.
+- Developer options and USB debugging prepare an Android phone.
+- A device matrix covers versions, sizes, platforms and the weakest device.

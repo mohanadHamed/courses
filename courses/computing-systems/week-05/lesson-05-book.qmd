@@ -1,0 +1,327 @@
+---
+title: "Operating Systems: Processes, Memory, Files and Devices"
+description: "Lesson notes · What the operating system does for a game, how it shares the CPU between processes and the RAM between apps, where a game keeps its files, and how the OS manages devices."
+lesson: 5
+ilos: [A2]
+format: lesson-typst
+---
+
+::: {.lead}
+A player opens *Pocket Quest* on a phone. Music plays in another app, a chat
+app waits for messages, and an update downloads. The phone has a few CPU
+cores and a few gigabytes of RAM, but all these apps seem to run at once.
+Who decides which app uses the CPU, how much memory each one gets, where the
+game keeps its files and how a new gamepad starts to work? The **operating
+system** (OS). In Lectures 2 to 4 you met the hardware. In this lesson you
+meet the software that manages it: what the OS does for a game, how it
+shares the CPU between **processes** and the RAM between apps, and how it
+keeps files and runs devices. Every section ends with a short task.
+Seminar 5 practises all of it on the lab computer and on your phone.
+:::
+
+## Key terms
+
+{{< glossary operating-system os-services process multitasking scheduler time-slice foreground-app background-app memory-management file-system file-path file-extension device-driver system-resources >}}
+
+## 5.1 What the OS does for a game
+
+*Pocket Quest* wants to show a picture, read a tap, save the progress and
+play a sound. It does not talk to the GPU, the touch screen, the storage or
+the speaker by itself. It asks the operating system, and the OS does the job
+(@fig-layers).
+
+::: {.callout-important title="Definition 5.1 — Operating system and its services"}
+The **operating system** is the software that manages the hardware and gives
+services to all other programs. Its main services are: running **processes**
+on the CPU, sharing the **memory**, keeping **files** in storage, controlling
+**devices** (screen, touch, sound, camera) and checking **permissions**.
+:::
+
+![The OS works between the apps and the hardware. Every app asks the OS for the CPU, memory, files and devices.](images/os-layers.png){#fig-layers width=96%}
+
+Windows, macOS and Linux are operating systems for computers; Android and
+iOS are operating systems for phones and tablets. Lecture 6 looks inside
+Android and iOS.
+
+::: {.callout-note title="Example 5.1 — The player taps the game icon"}
+1. **Files:** the OS finds the game in storage and loads it into RAM
+   (lecture 2).
+2. **Processes:** the OS starts a new process for the game and gives it CPU
+   time.
+3. **Memory:** the OS gives the process its own part of the RAM.
+4. **Devices:** the OS sends every tap to the game and shows its frames on
+   the screen.
+:::
+
+::: {.callout-note title="Example 5.2 — The game asks for the microphone"}
+*Pocket Quest* has voice chat. The first time, the phone shows: "Allow
+Pocket Quest to record audio?" This is the **permission** service. If the
+player says no, the OS does not give the game the microphone, and voice chat
+stays silent.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Thinking that the OS is only the home screen and the icons. The home screen
+is only one part. Most of the OS works where the player cannot see it:
+sharing the CPU, the RAM and the devices.
+:::
+
+::: {.callout-note title="Do it · Name your two operating systems"}
+On the lab computer, open Settings › System › About (Windows: Win + I). On
+your phone, open Settings › About phone (iPhone: Settings › General ›
+About).
+
+1. Write the name and the version of each OS.
+2. Write one service of the OS that you used today, and what it did.
+
+*Your result:* two OS names with versions, and one service.
+
+::: {.check}
+A good answer: "Lab computer: Windows 11, version 23H2; phone: Android 14
+(or iOS 17)", and one service with a real example, for example "files: I
+saved a document", "permissions: an app asked for the camera".
+:::
+:::
+
+## 5.2 Many apps, few cores: processes and the scheduler
+
+The phone has 8 CPU cores, but more than 100 processes. A PC can have 200.
+They cannot all run on a core at the same moment. The OS **switches** between
+them very fast (@fig-slices).
+
+::: {.callout-important title="Definition 5.2 — Process, scheduler and time slice"}
+A **process** is a running program with its own part of memory. The
+**scheduler** of the OS decides which process runs on a core, for a short
+**time slice** of a few milliseconds, and then switches to the next one.
+This is **multitasking**.
+:::
+
+![One core shared by three processes in time slices of 4 ms. The switches are so fast that all apps seem to run at once.](images/time-slices.png){#fig-slices width=96%}
+
+::: {.callout-note title="Example 5.3 — The game and two other apps"}
+A game, a music app and a download share one core.
+
+1. The scheduler gives each one a short slice in turn: game, music,
+   download, game, …
+2. The switches are so fast that all three seem to run at once.
+3. The player closes the download. Now the game gets its slices more often,
+   so it gets faster.
+:::
+
+The OS gives the **foreground app** (the one on the screen) more CPU time
+than the **background apps**. A phone OS even pauses most background apps.
+
+::: {.callout-warning title="Common mistake"}
+"Eight cores, so eight apps at most." A core runs one process at a time, but
+the scheduler switches many times per second, so hundreds of processes share
+the cores.
+:::
+
+{{< sim file="sims/scheduler-lab.html" poster="sims/scheduler-lab.png" title="Scheduler Lab: one core, many processes" height="560" >}}
+
+::: {.callout-note title="Do it · The processes of the lab computer"}
+Open **Task Manager** (Ctrl + Shift + Esc) and choose the Processes tab
+(press "More details" if you see only a short list).
+
+1. How many apps and how many background processes are there?
+2. Which three processes use the most memory?
+
+*Your result:* two numbers and three process names with their memory.
+
+::: {.check}
+A typical lab computer shows about 5 to 15 apps and 80 to 150 background
+processes. The browser, an office app or a security program often uses the
+most memory.
+:::
+:::
+
+## 5.3 Sharing the RAM: memory management
+
+A player leaves a game to answer a call. When the player comes back, the
+game starts again from the title screen. What happened? The
+RAM was full, and the OS took memory back (@fig-ram).
+
+::: {.callout-important title="Definition 5.3 — Memory management"}
+**Memory management** is the job of the OS that gives each process its own
+part of the RAM, keeps these parts apart (one app cannot read another app's
+memory) and takes the memory back when a process ends. When the RAM is full,
+a **phone** OS closes background apps, the one used longest ago first.
+:::
+
+![A phone with a full RAM: the OS closes the background game.](images/ram-full.png){#fig-ram width=96%}
+
+::: {.callout-note title="Example 5.4 — A puzzle game and a video call"}
+A phone has 6 GB of RAM. The OS uses 2 GB and a puzzle game 3 GB.
+
+1. In use: 2 + 3 = 5 GB. Free: 6 − 5 = 1 GB.
+2. The player answers a video call, which needs 1.5 GB. 5 + 1.5 = 6.5 GB:
+   more than 6 GB.
+3. The game is now in the background, so the OS closes it and frees 3 GB.
+   The video call on the screen keeps running.
+:::
+
+Because a phone OS may close a game in the background at any time, a good
+mobile game **saves its state** when it goes to the background. Then it can
+continue at the same place after a restart.
+
+::: {.callout-warning title="Common mistake"}
+"The game crashed." When a mobile game starts again after the player used
+other apps, it often did not crash: the OS closed it to free RAM. The fix is
+to save the state, not to look for a bug in the game.
+:::
+
+::: {.callout-note title="Do it · The memory of the lab computer"}
+In **Task Manager**, open the Performance tab and choose Memory.
+
+1. Write the total RAM, the RAM in use and the RAM available.
+2. Open three browser tabs with videos. How much does "in use" grow?
+
+*Your result:* three numbers before, and the new "in use" after.
+
+::: {.check}
+A typical result: total 16 GB, in use 6 GB, available 10 GB. Three video
+tabs add several hundred MB to "in use", for example 6.0 → 6.8 GB.
+:::
+:::
+
+## 5.4 Files and devices
+
+A game is not one file. *Pocket Quest* on Windows has a program file, packs
+of levels and music, and the save files of the player. The **file system**
+keeps all of them in folders, and finds them by their **path** (@fig-files).
+
+::: {.callout-important title="Definition 5.4 — File system"}
+The **file system** is the part of the OS that keeps files and folders on a
+drive: their names, their places (paths), their sizes and their dates. The
+data about a file (name, type, size, dates, permissions) is its
+**metadata**.
+:::
+
+![The files of Pocket Quest on a Windows PC: the game folder, and the save files in the player's Documents.](images/game-files.png){#fig-files width=96%}
+
+The **file extension** (.exe, .pak, .sav, .png) tells the OS and the player
+what kind of file it is. A path like
+`C:\Games\PocketQuest\Data\levels.pak` goes from the drive (C:) one folder
+deeper at every `\`. Android and macOS write `/` instead of `\`.
+
+::: {.callout-note title="Example 5.5 — Game files and player files"}
+1. The game folder `C:\Games\PocketQuest` holds the program (80 MB) and the
+   packs `levels.pak` (1.2 GB) and `music.pak` (320 MB). They are the same
+   for every player.
+2. The save file `slot1.sav` (2 KB) is in the player's own folder
+   `C:\Users\Omar\Documents\PocketQuest\Saves`. It is different for every
+   player.
+3. When Omar reinstalls the game, the game folder is new, but his save file
+   stays.
+:::
+
+::: {.callout-note title="Example 5.6 — The same game on a phone"}
+On a phone, each app has its own folder in its sandbox (Lecture 6). The
+player cannot open it; Settings shows only the size: app, user data and
+cache (lecture 2).
+:::
+
+::: {.callout-warning title="Common mistake"}
+"The stick has 16 GB free, so the 5 GB file fits." Not on a stick formatted
+**FAT32**: it refuses any file of 4 GB or more. A stick formatted **exFAT**
+takes big files and works on Windows and Mac.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Looking for the save file in the game folder. Many PC games keep the
+player's files in Documents or in a hidden AppData folder, so that they stay
+when the game is updated.
+:::
+
+### Devices: drivers and resources
+
+A gamepad, a headset, a camera and a USB cable are **devices**. The OS finds
+them, loads their **drivers**, shares them between apps and checks
+permissions. It also shares the other **resources**: CPU time, memory,
+storage, battery and network (@fig-devices).
+
+::: {.callout-important title="Definition 5.5 — Device management"}
+**Device management** is the job of the OS that finds connected devices
+(**plug and play**), loads a **driver** for each one, gives apps access to
+them in turn, and checks their permissions. The **system resources** that
+the OS shares are CPU time, memory, storage, battery, network and devices.
+:::
+
+![A new gamepad: connect, detect, driver, ready. A phone asks what its USB cable may do.](images/device-management.png){#fig-devices width=96%}
+
+::: {.callout-note title="Example 5.7 — A new gamepad"}
+1. Ali connects the gamepad by USB. Windows detects it and loads a driver.
+2. Device Manager shows it under Human Interface Devices. If it has a yellow
+   warning sign, the driver is missing.
+3. With a working driver, the game reads the buttons through the OS.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Blaming the game when a device does not work. If the OS does not see the
+device, no game can use it: check the connection, the driver and the
+permission first.
+:::
+
+::: {.callout-note title="Do it · The files of an app"}
+On the lab computer, open File Explorer and go to `C:\Program Files`.
+
+1. Open the folder of one program. Write the path, and the name and size of
+   its biggest file.
+2. Right-click the file › Properties. Write three items of its metadata.
+
+*Your result:* one path, one file with its size, and three items of metadata.
+
+::: {.check}
+A good answer: "C:\Program Files\Mozilla Firefox, biggest file xul.dll
+(140 MB)", with three items of metadata from Properties, for example the
+type, the size and the date it was created.
+:::
+:::
+
+## Case study: Pocket Quest on a 4 GB phone
+
+*Pocket Quest* is a made-up adventure game by the studio *Byte Bay*. It runs
+on a phone with 4 GB of RAM. The OS takes 1.5 GB, and the game 1.8 GB. In
+one quest, the player must take a photo with the camera (0.9 GB) and come
+back. Later the game loads a bigger level of 2.3 GB while Chat (0.4 GB, used
+1 minute ago) and Music (0.3 GB, used 20 minutes ago) wait in the
+background. The team must know what the OS will do each time. The Game
+challenge of the interactive lesson uses these numbers. In the mini-game
+below you are the OS.
+
+{{< sim file="sims/ram-rush.html" poster="sims/ram-rush.png" title="RAM Rush: you are the operating system of a phone" kind="game" height="640" >}}
+
+## Further reading
+
+Silberschatz, Galvin and Gagne, *Operating System Concepts*, 10th ed.,
+Chapter 1 (what operating systems do), Chapters 3 and 5 (processes and CPU
+scheduling), Chapter 9 (main memory), Chapter 13 (the file-system
+interface) and Chapter 12 (I/O systems).
+
+## Exercises
+
+1. Name four services of an operating system.
+2. A game wants to use the camera. Which service of the OS decides if it may?
+3. What is a process? What does the scheduler do?
+4. Which app gets the most CPU time on a phone?
+5. A phone has 6 GB of RAM. The OS uses 2 GB and a game 2.5 GB. How much is free?
+6. A 4 GB phone: the OS uses 1.5 GB and a game 1.5 GB; a browser (0.5 GB, used 5 minutes ago) waits in the background. The player opens a map app of 0.8 GB. What does the OS close?
+7. What does a file system do? What is the metadata of a file?
+8. Write the path of `slot1.sav` in Omar's Documents folder.
+9. Why can a FAT32 stick not take a 5 GB file? Which format can?
+10. What is a device driver? What does a yellow sign in Device Manager mean?
+
+## Answers to the exercises
+
+::: {.answers}
+1. For example: running processes, sharing memory, keeping files, controlling devices, checking permissions.
+2. The permission service: the player allows or refuses the camera.
+3. A running program with its own memory. The scheduler decides which process runs on a core, and for how long.
+4. The foreground app, the one on the screen.
+5. 6 − 2 − 2.5 = 1.5 GB.
+6. 1.5 + 1.5 + 0.5 + 0.8 = 4.3 GB, more than 4 GB. The OS closes the browser, the background app used longest ago: 3.8 GB fits.
+7. It keeps files and folders on a drive with their names, paths, sizes and dates; metadata is data about a file (name, type, size, dates, permissions).
+8. `C:\\Users\\Omar\\Documents\\PocketQuest\\Saves\\slot1.sav`.
+9. FAT32 allows no file of 4 GB or more; exFAT can.
+10. A small program that lets the OS control one kind of hardware; the driver is missing or does not work.
+:::

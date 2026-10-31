@@ -1,16 +1,24 @@
 -- Page header for lessons and course pages (lesson-html and lesson-typst).
 --
--- Lesson (has `lesson:`), online activity (`lesson:` and `online: true`, with
--- `due:` and `marks:`; blended courses) or homework (has `homework:`, `due:`,
--- `marks:`):
+-- A session page (AUTHORING.md, "Units and sessions"): lecture (`lesson: N`),
+-- seminar (`seminar: N`), practice session (`practice: N`, Digital Skills),
+-- online activity (`online: N`, with `due:` and `marks:`; blended courses;
+-- older pages: `lesson: N` and `online: true`) or homework (`homework: U`,
+-- the unit, with `due:` and `marks:`):
 --   HTML: hero header (course, title, lecture/time chips, PDF and slides
 --         buttons) + "Today you will learn" card with the ILOs.
 --   PDF:  passes theme values to the Typst template (title band) + ILO card.
+-- A lecture of a practical course can have a worksheet (lesson-NN-sheet.qmd;
+-- AUTHORING.md, "Lecture worksheets"): the page shows a "Worksheet (PDF)"
+-- button first, and the worksheet PDF has a goal card (the ILOs) and a QR
+-- card to the page, where every step has its result.
 -- Course page (no `lesson:`): HTML hero with course name, code and tagline.
 --
 -- Data: `course` (courses/<slug>/_metadata.yml), `diploma-line` and
--- `slides-public` (_quarto.yml), `lesson`, `homework`, `ilos` (ILO codes such as
--- [A1, B1]) and `description` (front matter).
+-- `slides-public` (_quarto.yml), the session number, `ilos` (ILO codes such as
+-- [A1, B1]) and `description` (front matter). What a seminar practises, whether
+-- it is core or flexible, and the lectures of a homework's unit come from
+-- courses/<slug>/schedule.yml.
 
 local str = pandoc.utils.stringify
 
@@ -48,25 +56,121 @@ end
 
 -- File names that students download (download_names.py renames the rendered
 -- files to match): math_lecture5.pdf, math_lecture5_slides.pptx,
--- math_homework1.pdf, digital_skills_lecture2_tasks.pdf (the printed online
--- activity). The prefix is course.file-prefix.
+-- math_seminar2.pdf, math_seminar2_slides.pptx, math_homework1.pdf,
+-- digital_skills_practice3.pdf, digital_skills_online4_tasks.pdf (the printed
+-- online activity), digital_skills_lecture6_sheet.pdf (the worksheet of a
+-- lecture). The prefix is course.file-prefix.
+local STEM_NAMES = { lesson = "lecture", seminar = "seminar", practice = "practice", online = "online" }
+
 local function download_names(course, stem)
   local prefix = course["file-prefix"] and str(course["file-prefix"])
     or (str(course.slug or "course"):gsub("%-", "_"))
   local hw = stem:match("^homework%-(%d+)$")
-  local lesson = stem:match("^lesson%-(%d+)$")
+  local kind, n = stem:match("^(%a+)%-(%d+)$")
+  local name = kind and STEM_NAMES[kind]
+  local base = name and string.format("%s_%s%d", prefix, name, tonumber(n))
   return {
     homework = hw and string.format("%s_homework%d.pdf", prefix, tonumber(hw)) or (stem .. ".pdf"),
-    notes = lesson and string.format("%s_lecture%d.pdf", prefix, tonumber(lesson)) or (stem .. "-book.pdf"),
-    slides = lesson and string.format("%s_lecture%d_slides.pptx", prefix, tonumber(lesson)) or (stem .. "-slides.pptx"),
-    tasks = lesson and string.format("%s_lecture%d_tasks.pdf", prefix, tonumber(lesson)) or (stem .. ".pdf"),
+    notes = base and (base .. ".pdf") or (stem .. "-book.pdf"),
+    slides = base and (base .. "_slides.pptx") or (stem .. "-slides.pptx"),
+    tasks = base and (base .. "_tasks.pdf") or (stem .. ".pdf"),
+    sheet = base and (base .. "_sheet.pdf") or (stem .. "-sheet.pdf"),
   }
+end
+
+local function number(v)
+  return v ~= nil and tonumber(str(v)) or nil
+end
+
+-- The worksheet of a lecture (lesson-NN-sheet.qmd) rather than its notes.
+local function is_sheet()
+  local stem = pandoc.path.split_extension(pandoc.path.filename(quarto.doc.input_file))
+  return stem:match("%-sheet$") ~= nil
 end
 
 -- An online activity of a blended course: one page with digital content and
 -- tasks to submit, printed like a homework (homework_pdf.py).
 local function is_online(meta)
-  return meta.lesson and (meta.online == true or str(meta.online or "") == "true")
+  if meta.online == nil or meta.online == false then return false end
+  return number(meta.online) ~= nil or meta.online == true or str(meta.online) == "true"
+end
+
+-- The session of a page: { kind = "lecture" | "seminar" | "practice" |
+-- "online" | "homework", n = its number, label = "Seminar 2" }, or nil.
+local LABELS = { lecture = "Lecture", seminar = "Seminar", practice = "Practice", online = "Online activity", homework = "Homework" }
+
+local function session_of(meta)
+  local kind, n
+  if meta.homework then kind, n = "homework", number(meta.homework)
+  elseif meta.seminar then kind, n = "seminar", number(meta.seminar)
+  elseif meta.practice then kind, n = "practice", number(meta.practice)
+  elseif is_online(meta) and number(meta.online) then kind, n = "online", number(meta.online)
+  elseif is_online(meta) then kind, n = "online", number(meta.lesson)   -- older pages
+  elseif meta.lesson then kind, n = "lecture", number(meta.lesson)
+  else return nil end
+  local label = LABELS[kind] .. (n and (" " .. n) or "")
+  if kind == "online" and not number(meta.online) then label = "Lecture " .. (n or "") end
+  return { kind = kind, n = n, label = label }
+end
+
+-- courses/<slug>/schedule.yml (next to the course page, or the folder above
+-- week-WW), or nil.
+local function read_schedule()
+  local dir = pandoc.path.directory(quarto.doc.input_file)
+  local f = io.open(pandoc.path.join({ dir, "schedule.yml" }), "r")
+    or io.open(pandoc.path.join({ pandoc.path.directory(dir), "schedule.yml" }), "r")
+  if not f then return nil end
+  local text = f:read("a")
+  f:close()
+  return pandoc.read("---\n" .. text .. "\n---\n", "markdown").meta
+end
+
+-- "Lecture 4", "Lectures 4–5", "Lectures 1, 3 and 6".
+local function lectures_text(ns)
+  if #ns == 0 then return nil end
+  if #ns == 1 then return "Lecture " .. ns[1] end
+  local run = true
+  for i = 2, #ns do if ns[i] ~= ns[i - 1] + 1 then run = false end end
+  if run then return string.format("Lectures %d–%d", ns[1], ns[#ns]) end
+  local head = {}
+  for i = 1, #ns - 1 do table.insert(head, tostring(ns[i])) end
+  return "Lectures " .. table.concat(head, ", ") .. " and " .. ns[#ns]
+end
+
+-- From schedule.yml: the unit of the session, what it practises, core or not.
+-- Returns { unit = 3, practises = "Lectures 4–5", core = true, lectures = "…" }.
+local function schedule_info(sess)
+  local out = { core = true }
+  local data = sess and read_schedule()
+  if not data or not data.units then return out end
+  for _, u in ipairs(data.units) do
+    local lectures = {}
+    local found = false
+    for _, x in ipairs(u.sessions or {}) do
+      local kind = str(x.kind or "lecture")
+      if kind == "lecture" then table.insert(lectures, number(x.n)) end
+      if kind == sess.kind and number(x.n) == sess.n then
+        found = true
+        -- A practice session (a filling week) is flexible unless `core: true`;
+        -- a seminar is core unless `core: false`.
+        if kind == "practice" then
+          out.core = x.core == true or str(x.core or "") == "true"
+        else
+          out.core = not (x.core == false or str(x.core or "") == "false")
+        end
+        local ps = {}
+        for _, p in ipairs(x.practises or {}) do table.insert(ps, number(p)) end
+        out.practises = lectures_text(ps)
+      end
+    end
+    if sess.kind == "homework" and number(u.unit) == sess.n then found = true end
+    if found then
+      out.unit = number(u.unit)
+      out.lectures = lectures_text(lectures)
+      return out
+    end
+  end
+  return out
 end
 
 -- Pages that print as tasks with answer space: homework and online activities.
@@ -79,36 +183,91 @@ local function theme_style(course)
     esc(str(course.accent)), esc(str(course.accent2)))
 end
 
--- Chips under the title: lecture (number, time) or homework (number, the two
--- lectures it follows, due, marks). Never a week: courses count lectures.
+-- The content type of an online activity (`content:`; AUTHORING.md,
+-- "Blended courses"), shown as a chip so the weeks do not all look the same.
+local CONTENT = {
+  ["lesson"] = "📖 Interactive lesson",
+  ["sims"] = "🎮 Simulators",
+  ["mix"] = "📖 Lesson and simulators",
+  ["video"] = "▶ Videos",
+  ["course-video"] = "🎬 Course video",
+}
+
+-- Chips under the title: the session (number, what it practises, time) or
+-- homework (number, the lectures of its unit, due, marks). Never a week:
+-- courses count sessions.
 local function page_chips(meta, course)
   local chips = {}
-  if meta.homework then
-    local k = tonumber(str(meta.homework))
-    table.insert(chips, "Homework " .. str(meta.homework))
-    if k then table.insert(chips, string.format("After lectures %d–%d", 2 * k - 1, 2 * k)) end
+  local sess = session_of(meta)
+  if not sess then return chips end
+  local info = schedule_info(sess)
+  if sess.kind == "homework" then
+    table.insert(chips, sess.label)
+    if info.lectures then
+      table.insert(chips, "After " .. info.lectures)
+    elseif sess.n then
+      table.insert(chips, string.format("After lectures %d–%d", 2 * sess.n - 1, 2 * sess.n))
+    end
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
     if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
-  elseif is_online(meta) then
-    table.insert(chips, "Lecture " .. str(meta.lesson))
-    table.insert(chips, "💻 Online activity")
+  elseif sess.kind == "online" then
+    table.insert(chips, sess.label)
+    table.insert(chips, "💻 Online")
+    local content = CONTENT[str(meta.content or "")]
+    if content then table.insert(chips, content) end
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
     if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
   else
-    if meta.lesson then table.insert(chips, "Lecture " .. str(meta.lesson)) end
+    if (sess.kind == "seminar" or sess.kind == "practice") and info.practises then
+      table.insert(chips, sess.label .. " · practises " .. info.practises)
+    else
+      table.insert(chips, sess.label)
+    end
+    if sess.kind ~= "lecture" and not info.core then table.insert(chips, "Flexible") end
     if course.blended then table.insert(chips, "🏫 Face-to-face") end
     if course.minutes then table.insert(chips, "⏱ " .. str(course.minutes) .. " min") end
+    if sess.kind == "lecture" and is_sheet() then table.insert(chips, "Worksheet") end
   end
   return chips
 end
 
+-- A flexible seminar or practice session is held when time allows.
+local function flexible_note(meta)
+  local sess = session_of(meta)
+  if not sess or (sess.kind ~= "seminar" and sess.kind ~= "practice") then return nil end
+  if schedule_info(sess).core then return nil end
+  local what = sess.kind == "seminar" and "seminar" or "practice session"
+  return string.format("This %s is held in class when time allows. If it is not held, study it at home: every answer is on this page.", what)
+end
+
 local function ilo_title(meta)
   if meta.homework then return "This homework practises" end
+  if is_sheet() then return "Goal of this worksheet" end
   if is_online(meta) then return "This online activity practises" end
+  if meta.seminar then return "This seminar practises" end
+  if meta.practice then return "This practice session practises" end
   return "Intended learning outcomes"
 end
 
 -- HTML --------------------------------------------------------------------
+
+local function hero_note(meta, slides, online, sheet)
+  local lines = {}
+  if sheet then
+    table.insert(lines, "In class, follow the worksheet (PDF): do each experiment on the computer and record your results. "
+      .. "On this page every step has its result. The lesson notes (PDF) are a short reference.")
+  elseif online then
+    table.insert(lines, "Work through the steps on this page, then do the tasks and submit them on the university e-learning platform.")
+  elseif meta.seminar or meta.practice then
+    table.insert(lines, "No new ideas today: you apply the lectures you had. Do each activity alone, then open \"Check your result\".")
+  elseif slides then
+    table.insert(lines, "Study from the lesson notes (PDF). Practise on this page. The slides are a short summary for revision.")
+  end
+  local flex = flexible_note(meta)
+  if flex then table.insert(lines, flex) end
+  if #lines == 0 then return "" end
+  return '<p class="hero-note">' .. esc(table.concat(lines, " ")) .. "</p>"
+end
 
 local function html_lesson(doc, course)
   local meta = doc.meta
@@ -120,12 +279,18 @@ local function html_lesson(doc, course)
   -- Homework PDF is the printed page itself (homework_pdf.py), so both match.
   local buttons = {}
   local online = is_online(meta)
+  -- A lecture with a worksheet: the worksheet is the main document of the session.
+  local sheet = meta.lesson and not online and file_exists(pandoc.path.join({ dir, stem .. "-sheet.qmd" }))
   if meta.homework then
     table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download PDF</a>', esc(names.homework)))
   elseif online then
     table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download tasks (PDF)</a>', esc(names.tasks)))
   elseif file_exists(pandoc.path.join({ dir, stem .. "-book.qmd" })) then
-    table.insert(buttons, string.format('<a class="hero-btn" href="%s">⬇ Lesson notes (PDF)</a>', esc(names.notes)))
+    if sheet then
+      table.insert(buttons, string.format('<a class="hero-btn" href="%s">⬇ Worksheet (PDF)</a>', esc(names.sheet)))
+    end
+    table.insert(buttons, string.format('<a class="hero-btn%s" href="%s">⬇ %s (PDF)</a>', sheet and " hero-btn-ghost" or "",
+      esc(names.notes), (meta.seminar or meta.practice) and "Worksheet" or "Lesson notes"))
   end
   if meta.homework then
     table.insert(buttons,
@@ -137,8 +302,9 @@ local function html_lesson(doc, course)
   local slides = meta["slides-public"] == true and not is_printed(meta)
     and file_exists(pandoc.path.join({ dir, stem .. "-slides.qmd" }))
   if slides then
+    local kind = meta.seminar and "Seminar" or (meta.practice and "Practice" or "Lecture")
     table.insert(buttons, string.format(
-      '<a class="hero-btn hero-btn-ghost" href="%s">▶ Lecture slides</a>', esc(names.slides)))
+      '<a class="hero-btn hero-btn-ghost" href="%s">▶ %s slides</a>', esc(names.slides), kind))
   end
 
   local chips = {}
@@ -167,8 +333,7 @@ local function html_lesson(doc, course)
     desc ~= "" and ('<p class="hero-sub">' .. esc(desc) .. "</p>") or "",
     table.concat(chip_html, ""),
     table.concat(buttons, ""),
-    slides and '<p class="hero-note">Study from the lesson notes (PDF). Practise on this page. The slides are a short summary for revision.</p>'
-      or (online and '<p class="hero-note">Work through the steps on this page, then do the tasks and submit them on the university e-learning platform.</p>' or ""))
+    hero_note(meta, slides, online, sheet))
 
   local blocks = { pandoc.RawBlock("html", hero) }
   if is_printed(meta) then
@@ -196,10 +361,12 @@ end
 local function html_course(doc, course)
   local meta = doc.meta
   local chips = { "Course " .. esc(str(course.code)) }
+  local units = (read_schedule() or {}).units ~= nil
   if course.blended then
-    table.insert(chips, "Blended: 1 lab lecture + 1 online activity each week")
+    table.insert(chips, units and "Blended: a lecture or practice session + an online activity in each unit"
+      or "Blended: 1 lab lecture + 1 online activity each week")
   else
-    table.insert(chips, "Homework after every 2 lectures")
+    table.insert(chips, units and "Lectures, seminars and one homework in each unit" or "Homework after every 2 lectures")
   end
   if course.minutes then
     table.insert(chips, "⏱ " .. esc(str(course.minutes)) .. (course.blended and " min lab lecture" or " min each"))
@@ -242,28 +409,36 @@ end
 local function web_lesson_card(meta)
   local input = quarto.doc.input_file
   local stem = pandoc.path.split_extension(pandoc.path.filename(input))
-  local web = stem:match("^(.-)%-book$")
+  local web = stem:match("^(.-)%-book$") or stem:match("^(.-)%-sheet$")
   if not web then return nil end
+  local sheet = stem:match("%-sheet$") ~= nil
   local root = quarto.project and quarto.project.directory or pandoc.system.get_working_directory()
   local rel = pandoc.path.make_relative(pandoc.path.normalize(pandoc.path.directory(input)), pandoc.path.normalize(root))
   local url = site_url() .. (rel ~= "." and (rel:gsub("\\", "/") .. "/") or "") .. web .. ".html"
+  local seminar = meta.seminar or meta.practice
+  local head = seminar and "Interactive page" or "Interactive lesson"
+  local files = meta["start-files"] and #meta["start-files"] > 0
+  local text = sheet
+    and ("Do each experiment on the computer and write your result after each step. The interactive lesson has "
+      .. (files and "the start files and " or "") .. "the same experiments, with a field for each result and \"Check your result\" after every step. The results are also at the end of this worksheet: look only after you try.")
+    or seminar
+    and "This worksheet is a self-test: the results of the activities are at the end. The interactive page has the same activities with \"Check your result\" and questions that give instant feedback."
+    or "These notes are the main study text of the lecture and a self-test: the results are at the end. The interactive lesson practises the same sections with questions that give instant feedback and their reasons, and runs the simulators and mini-games marked with a QR code in the text."
   return pandoc.RawBlock("typst", string.format([[
 #import "@preview/tiaoma:0.3.0": qrcode
 #block(width: 100%%, breakable: false, radius: 8pt, inset: 10pt, stroke: 0.6pt + accent.lighten(55%%))[
   #grid(columns: (1fr, 2.4cm), column-gutter: 12pt, align: horizon,
     [
-      #text(weight: "bold", fill: accent.darken(25%%))[Interactive lesson]
+      #text(weight: "bold", fill: accent.darken(25%%))[%s]
       #v(1pt)
-      #text(size: 9.5pt)[These notes are the main study text of the lecture. The interactive lesson
-      practises the same sections with questions that give instant feedback, and runs the
-      simulators and mini-games marked with a QR code in the text.]
+      #text(size: 9.5pt)[%s]
       #v(1pt)
       #text(size: 8.5pt, fill: luma(90))[#link(%s)]
     ],
     qrcode(%s, width: 2.3cm),
   )
 ]
-]], typst_string(url), typst_string(url)))
+]], head, text, typst_string(url), typst_string(url)))
 end
 
 local function typst_lesson(doc, course)
@@ -309,8 +484,8 @@ function Pandoc(doc)
 
   local blocks
   if quarto.doc.is_format("html") then
-    blocks = (meta.lesson or meta.homework) and html_lesson(doc, course) or html_course(doc, course)
-  elseif quarto.doc.is_format("typst") and (meta.lesson or meta.homework) then
+    blocks = session_of(meta) and html_lesson(doc, course) or html_course(doc, course)
+  elseif quarto.doc.is_format("typst") and session_of(meta) then
     blocks = typst_lesson(doc, course)
   else
     return nil

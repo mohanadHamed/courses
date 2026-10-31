@@ -1,0 +1,172 @@
+---
+title: "Computer Components: CPU, Memory and Storage"
+subtitle: "Lecture 2"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary cpu-core clock-rate thread memory-hierarchy cache byte app-package process ssd app-storage >}}
+
+## 2.1 Cores and threads
+
+:::: {.columns}
+::: {.column width="50%"}
+- A **core** is a small processor inside the CPU. It runs one **thread** at a time.
+- Big cores are fast; small cores save battery.
+- The game logic runs on one main thread, so it always uses one core.
+- GHz tells the speed of **one** core. Cores do not add up.
+- **Do it:** Open Task Manager → Performance → CPU. How many logical processors do you see?
+:::
+::: {.column width="50%"}
+![](images/cpu-cores.png)
+:::
+::::
+
+## Example · Splitting one frame
+
+One frame needs 10 ms on the main thread and 6 ms of work that the cores share.
+**How long is the frame with 1, 2 and 6 cores?**
+
+::: {.reveal}
+1. 1 core: 10 + 6 = **16 ms**.
+2. 2 cores share the 6 ms: 10 + 3 = **13 ms**.
+3. 6 cores share the 6 ms: 10 + 1 = **11 ms**.
+4. The frame is faster, but not 6 times faster.
+:::
+
+## Try it 1 · Cores and threads
+
+A frame needs 8 ms on the main thread and 4 ms of work that the cores share equally.
+
+a) How long is the frame with four cores?
+b) Which core is best for music in the background, with little battery?
+c) A phone has 8 cores at 3 GHz. How fast is the core of the main thread?
+
+::: {.answer}
+a) 9 ms (8 + 1)
+b) an efficiency core
+c) 3 GHz
+:::
+
+## 2.2 The memory hierarchy
+
+:::: {.columns}
+::: {.column width="50%"}
+- Memory has levels: cache, then RAM, then storage.
+- The levels near the core are small and fast.
+- The levels far from the core are big, slow and cheap.
+- A read from the cache takes 1 ns; a read from RAM takes 100 ns.
+- **Do it:** In Data Trip, fetch one value from each level. Which level is the fastest?
+:::
+::: {.column width="50%"}
+![](images/memory-hierarchy.png)
+:::
+::::
+
+## Live demo · Data Trip
+
+{{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" task="**Show:** get one value from the cache, then one from RAM. **Ask:** how many times slower is RAM?" >}}
+
+## Try it 2 · The memory hierarchy
+
+A read from the cache takes 1 ns. A read from RAM takes 100 ns.
+
+a) A read takes about 100 ns. Which level of the hierarchy is it?
+b) The player's position is read 50 times in one frame. Where does the core find it after the first read?
+c) Where is the best score kept when the phone is off?
+
+::: {.answer}
+a) RAM
+b) in the cache
+c) in storage
+:::
+
+## 2.3 Why the game shows a loading screen
+
+:::: {.columns}
+::: {.column width="50%"}
+- Installing copies the app package into storage.
+- Launching creates a process and loads code and assets into RAM.
+- The speed of storage sets the loading time.
+- **Do it:** In Task Manager → Processes, sort by Memory. Which app uses the most?
+:::
+::: {.column width="50%"}
+![](../week-01/images/launch.png)
+:::
+::::
+
+## Example · Cheap phone, slow loading
+
+A level needs 1500 MB of assets. Phone A reads 1500 MB per second, and phone B reads 150 MB per second.
+**How long does the level load on each phone?**
+
+::: {.reveal}
+1. Phone A needs 1500 ÷ 1500 = **1 second**.
+2. Phone B needs 1500 ÷ 150 = **10 seconds**.
+3. The game is the same; only the **speed of storage** is different.
+:::
+
+## Try it 3 · Install, launch, load
+
+a) What does a player fill when installing a game?
+b) How long do 900 MB of assets load at 300 MB per second?
+c) A game update is 2 GB. How many MB is that?
+
+::: {.answer}
+a) storage
+b) 3 seconds
+c) 2048 MB (2 × 1024)
+:::
+
+## 2.4 Storage
+
+:::: {.columns}
+::: {.column width="50%"}
+- A hard disk has spinning disks and a moving arm. It is cheap but slow.
+- An SSD and a phone use flash chips with no moving parts.
+- A game in storage has three parts: the app, the user data and the cache.
+- **Do it:** Open a game's storage screen on your phone. How big is each part?
+:::
+::: {.column width="50%"}
+![](images/storage.png)
+:::
+::::
+
+## Try it 4 · Storage
+
+a) A player presses Clear cache. What do they lose?
+b) A player wants free space but wants to keep the pets. Which button must they not press?
+c) A "1 TB" SSD shows 931 GB in Windows. Is space missing?
+
+::: {.answer}
+a) nothing important (only temporary files)
+b) Clear storage
+c) No. The maker counts in 1000, Windows in 1024.
+:::
+
+## Game challenge · Pocket Pets support desk
+
+{{< sim file="sims/pocket-pets.html" poster="sims/pocket-pets.png" title="Pocket Pets: answer the support desk" kind="game" task="Players of Pocket Pets 2.0 send messages to the support desk about cores, memory and storage. **Play:** send each message to the right part of the device on your phone." >}}
+
+## Try it · Answer the players (harder)
+
+The facts: the new island of Pocket Pets 2.0 has 900 MB. A cheap phone reads 180 MB per second.
+
+a) The island needs 1.6 GB, and a phone has 1.2 GB free. How much more space is needed?
+b) A player pressed Clear storage, and the pets are gone. Which part was deleted?
+c) How long does the island take to load on the cheap phone?
+
+::: {.answer}
+a) 0.4 GB
+b) the user data
+c) 5 seconds (900 ÷ 180)
+:::
+
+## Summary
+
+- A core runs one thread, so 8 cores do not make a game 8 times faster.
+- Memory has levels: cache, RAM and storage, from fast to slow.
+- The cache keeps the data that the game uses again and again.
+- Launching loads the game into RAM, and the speed of storage sets the loading time.
+- Storage holds the app, the user data and the cache.

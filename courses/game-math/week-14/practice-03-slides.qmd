@@ -1,0 +1,100 @@
+---
+title: "Case Study: Movement of a 2D Object"
+subtitle: "Practice 3 · practises Lectures 2, 3, 4 and 6"
+format: lesson-pptx
+---
+
+## Recall · Lectures 2, 3, 4 and 6
+
+a) What is the unit vector of the input (0, 5)?
+b) Which angle does atan2 give for the vector (5, 5)?
+c) What is (3, −4) · (0, 1)?
+
+::: {.answer}
+a) (0, 1)
+b) 45°
+c) −4
+:::
+
+## Activity 1 · Speed, steps and input · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The shuttle flies with the speed 6, and the game moves it by velocity × Δt in every frame.
+- Δt is 1/30 s at 30 fps and 1/60 s at 60 fps.
+- **Do it:** Find the step per frame at 30 and 60 fps. Which velocity does the input (1, 1) get when it is normalized? And the stick (−3, 4) at the speed 10?
+:::
+::: {.column width="50%"}
+![](images/frame-steps.png)
+:::
+::::
+
+## Live demo · Move Lab
+
+{{< sim file="sims/move-lab.html" poster="sims/move-lab.png" title="Move Lab: fly the shuttle of Star Dock" task="**Show:** fly up and right with normalize input off, then on. **Ask:** why is the diagonal faster without normalizing?" >}}
+
+## Check 1 · Speed, steps and input
+
+What are the steps and the velocities?
+
+::: {.reveal}
+1. The step is 0.2 at 30 fps and 0.1 at 60 fps, so the shuttle flies 6 units in one second at both rates.
+2. Without normalizing, (6, 6) is too fast; normalized, the velocity is about (4.3, 4.3).
+3. The stick (−3, 4) has the length 5, so the velocity is (−0.6, 0.8) × 10 = (−6, 8).
+:::
+
+## Activity 2 · Facing and bouncing · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The game turns the sprite by the angle atan2(v~y~, v~x~).
+- At a wall, the part into the wall turns around, and the part along the wall stays.
+- **Do it:** Find the facing angles of (0, −2), (4, −4) and (−3, −3). Bounce (4, −3) on the floor and (−5, 1) on the left wall.
+:::
+::: {.column width="50%"}
+![](images/bounce.png)
+:::
+::::
+
+## Check 2 · Facing and bouncing
+
+Where does the shuttle face, and where does it go after the walls?
+
+::: {.reveal}
+1. The facing angles are −90°, −45° and −135°.
+2. On the floor, v · n̂ = −3, so (4, −3) becomes (4, 3) and the shuttle moves up.
+3. On the left wall, v · n̂ = −5, so (−5, 1) becomes (5, 1).
+:::
+
+## Activity 3 · Local to world · 18 min
+
+:::: {.columns}
+::: {.column width="50%"}
+- The nose of the shuttle is at (1, 0) in its own coordinates.
+- The game scales first, then rotates, then moves.
+- **Do it:** Find the nose with scale 2, angle 90° and position (5, 3). Then play Pilot Check.
+:::
+::: {.column width="50%"}
+![](images/sprite-trs.png)
+:::
+::::
+
+## Live demo · Pilot Check
+
+{{< sim file="sims/pilot-check.html" poster="sims/pilot-check.png" title="Pilot Check: six numbers of the movement code" kind="game" task="**Show:** answer the six questions of the test pilots. **Ask:** which lecture does each question come from?" >}}
+
+## Check 3 · Local to world
+
+Where is the nose in the world?
+
+::: {.reveal}
+1. Scaling gives (2, 0), and rotating by 90° gives (0, 2).
+2. Moving by (5, 3) gives the world point (5, 5).
+3. Pilot Check expects 0.2, a normalized (1, 1), 135°, 2° per frame, (3, 2) and (4, 4).
+:::
+
+## Wrap-up
+
+- You can move a game object at the same speed on every computer and in every direction.
+- You can turn a sprite to face its velocity and bounce it off a wall.
+- You can draw a sprite in the world with scale, rotation and position.

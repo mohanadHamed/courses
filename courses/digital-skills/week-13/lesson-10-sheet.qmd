@@ -1,0 +1,159 @@
+---
+title: "Excel (3): Summarizing Data with AI Help"
+description: "Worksheet · Three experiments: a PivotTable of the sales of March, other questions to the same table (weeks, a line chart, Refresh, averages), and an AI summary checked number by number."
+lesson: 10
+ilos: [C2, C4, B1]
+start-files:
+  - name: month-start.xlsx
+    about: "the 24 sales of the Sunrise shop in March: week, item, type, quantity and total (JD)"
+format: lesson-typst
+---
+
+::: {.lead}
+Today you work like in a lab: you summarize a long list in Excel, you ask
+it new questions, and you test an AI summary of the numbers. Do each
+experiment when your teacher shows it. After each step, write your result
+in its box. At the end, copy your key results into the table.
+:::
+
+## Before you start
+
+- **You need:** a computer with Excel (the desktop app, or Excel on the web
+  at `office.com`) and an AI assistant that the university allows (for
+  example Microsoft Copilot with your university account).
+- **Time:** about 40 minutes for the three experiments.
+- **Check:** the results are at the end of this worksheet. On the
+  interactive lesson, every step has "Check your result". Look only after
+  you try.
+
+{{< start-files >}}
+
+## Experiment 1 · A PivotTable
+
+**Aim:** make a summary table of a long list in a few clicks. *(Lesson
+notes 10.1 · about 10 minutes)*
+
+1. Open `month-start.xlsx` (click **Enable Editing** if you see it). Click
+   one cell of the list. Choose **Insert › PivotTable** and click **OK**.
+
+   {{< record "Where is the PivotTable? What is on the right?" lines=2 >}}
+
+   ::: {.check}
+   Excel adds a **new sheet** with an empty PivotTable. The **PivotTable
+   Fields** pane on the right lists the headings of the list: Week, Item,
+   Type, Qty and Total (JD).
+   :::
+
+2. In the pane, drag **Type** to **Rows** and **Total (JD)** to **Values**.
+
+   {{< record "Paper … ; Drinks … ; Bags … ; Grand Total …" >}}
+
+   ::: {.check}
+   **Paper 206, Drinks 71, Bags 78; Grand Total 355 JD.** One row for each
+   type, and the sum of its totals. Paper sold the most.
+   :::
+
+## Experiment 2 · New questions, same table
+
+**Aim:** change the rows, the chart and the calculation, and keep the table
+up to date. *(Lesson notes 10.2 · about 16 minutes)*
+
+1. Drag **Type** out of Rows, and drag **Week** into Rows.
+
+   {{< record "Weeks 1 to 4: … ; the best … ; the weakest …" lines=2 >}}
+
+   ::: {.check}
+   **87, 63, 112 and 93 JD.** The **third** week was the best, and the
+   **second** the weakest. The Grand Total stays 355 JD.
+   :::
+
+2. Click a cell of the PivotTable. Choose **PivotTable Analyze ›
+   PivotChart**, then **Line**, and click OK.
+
+   {{< record "Where does the line go down?" >}}
+
+   ::: {.check}
+   From **week 1 to week 2** (87 → 63) and from **week 3 to week 4** (112 →
+   93). A line chart shows a change over time.
+   :::
+
+3. Go to the sheet **March**. Change the total of the bag in week 3 from
+   **48** to **58**. Look at week 3 in the PivotTable. Then choose
+   **PivotTable Analyze › Refresh**.
+
+   {{< record "Week 3 before Refresh … ; after Refresh …" >}}
+
+   ::: {.check}
+   **112** before Refresh, **122** after. A PivotTable does not change by
+   itself: you refresh it after a change. Now change 58 back to **48** and
+   refresh again.
+   :::
+
+4. Put **Type** in Rows again (instead of Week). Click **Sum of Total
+   (JD)** in Values, choose **Value Field Settings**, then **Average**.
+
+   {{< record "Average sale: Paper … ; Drinks … ; Bags …" >}}
+
+   ::: {.check}
+   **Paper 20.6, Drinks 7.1, Bags 19.5 JD.** Paper has the biggest average
+   sale. The same list answers a new question.
+   :::
+
+## Experiment 3 · An AI summary
+
+**Aim:** let an AI tool describe the numbers, then check every number with
+the PivotTable. *(Lesson notes 10.3 · about 14 minutes)*
+
+1. Set the Values back to **Sum** (Value Field Settings › Sum). Select the
+   PivotTable and copy it. In the AI assistant, type *Write three short
+   sentences about these sales of March, each with a number:* and paste
+   the table.
+
+   {{< record "Numbers that are right … ; wrong or invented …" lines=2 >}}
+
+   ::: {.check}
+   Check each number with the table: Paper **206**, Drinks **71**, Bags
+   **78**, total **355** JD. If the AI writes a share, check it with a
+   calculator (Paper: 206 ÷ 355 ≈ 58 %). Delete or correct every wrong or
+   invented number. The table has no personal data, so you may paste it.
+   :::
+
+2. Open **Summary Check** on the interactive lesson. Mark each of the six
+   sentences true or wrong.
+
+   {{< record "The wrong sentences" lines=2 >}}
+
+   ::: {.check}
+   **Wrong:** "Bags sold the most" (Paper did, 206 JD); "sales grew every
+   week" (the second week fell); "the biggest sale was a bag for 48 JD"
+   (the notebooks, 60 JD). The other three are true.
+   :::
+
+3. Write your own summary under the PivotTable or in Word: three true
+   sentences, each with a number, and one sentence of AI-use statement.
+
+   {{< record "My best sentence, and my AI-use statement" lines=3 >}}
+
+   ::: {.check}
+   A good summary: "March sales were 355 JD. Paper sold the most, 206 JD.
+   The best week was the third, with 112 JD." A good statement: "I used
+   Copilot for a first draft and checked every number with the
+   PivotTable."
+   :::
+
+## Table of results
+
+Copy your key results here. Your teacher checks this table before the end of
+the lecture.
+
+::: {.record-table}
+| Experiment | What you record                                | Your result |
+|:-------:|---------------------------------------------|--------------------------|
+| 1          | The totals of the three types, and the Grand Total |         |
+| 2          | The best and the weakest week                  |             |
+| 2          | Week 3 before and after Refresh                |             |
+| 2          | The biggest average sale                       |             |
+| 3          | The wrong sentences of Summary Check           |             |
+:::
+
+Then do **Huda's April meeting**, the Game challenge of this lecture.

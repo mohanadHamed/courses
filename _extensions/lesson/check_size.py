@@ -59,7 +59,11 @@ An online activity (blended course: online-NN.qmd, or an older lesson-NN.qmd
 with `online: true`) has no notes and no slides. It is checked for its own parts (AUTHORING.md, "Blended
 courses"): "Before you start", Steps marked {.study} with one "Try it" each,
 "Tasks to submit" ({.tasks}) with marks and answer space, "How to submit",
-`due:` and `marks:`, and at least ONLINE_MIN_SIMS simulators.
+`due:`, `marks:` and a content type (`content:`), which decides what the Steps
+need: sims, a simulator in every Step; mix, at least one simulator; video, a
+{{< watch >}} of an official video with its source, length and the date the
+link was checked; course-video, the video made for the course with its
+captions, poster and script, the captions the same words as the script.
 
 In every file of a unit: a fenced div (`::: {...}`) needs a blank line before
 it when it follows text; otherwise pandoc prints the colons as text (a
@@ -124,7 +128,8 @@ SHEET_WORDS = 1600
 SHEET_REQUIRED = ["before you start", "table of results"]
 # Online activity (blended course): at least this many simulators, and
 # (min, max) tasks to submit.
-ONLINE_MIN_SIMS = 2
+ONLINE_CONTENT = ("lesson", "sims", "mix", "video", "course-video")
+WATCH_RE = re.compile(r"\{\{<\s*watch\s+(.*?)>\}\}", re.S)
 ONLINE_TASKS = (2, 4)
 # Parts every lesson must have (heading text, case does not matter).
 BOOK_REQUIRED = ["key terms", "exercises", "answers to the exercises"]
@@ -538,9 +543,46 @@ def check_online(path, rel):
     study = "".join(steps)
     for w in answered_warnings(study) + ai_task_warnings(body):
         out.append("%s: %s" % (rel, w))
+    m = re.search(r"^content:\s*\"?([\w-]+)", fm, re.M)
+    content = m.group(1) if m else ""
+    if content not in ONLINE_CONTENT:
+        out.append("%s: online activity without a content type (`content:` %s)" % (rel, ", ".join(ONLINE_CONTENT)))
     sims = len(re.findall(r"\{\{< *sim ", body))
-    if sims < ONLINE_MIN_SIMS:
-        out.append("%s: %d simulators, an online activity needs %d or more" % (rel, sims, ONLINE_MIN_SIMS))
+    watches = [dict(re.findall(r'(\w+)="([^"]*)"', a)) for a in WATCH_RE.findall(body)]
+    if content == "sims":
+        for p in steps:
+            if not re.search(r"\{\{< *sim ", p):
+                out.append('%s: "%s" has no simulator; every Step of a sims activity has one' % (rel, p.splitlines()[0][3:]))
+    elif content == "mix" and sims == 0:
+        out.append("%s: a mix activity has no simulator (text steps and simulator steps)" % rel)
+    elif content == "video":
+        links = [w for w in watches if w.get("url")]
+        if not links:
+            out.append("%s: a video activity without an official video ({{< watch url=… >}})" % rel)
+        for w in links:
+            for key in ("title", "source", "length", "checked"):
+                if not w.get(key):
+                    out.append('%s: the video "%s" has no %s= (title, source, length and the date checked)'
+                               % (rel, w.get("title", w["url"]), key))
+    elif content == "course-video":
+        videos = [w for w in watches if w.get("file")]
+        if not videos:
+            out.append("%s: a course-video activity without its video ({{< watch file=… >}})" % rel)
+        here = os.path.dirname(path)
+        for w in videos:
+            for key in ("file", "captions", "poster", "script"):
+                if not w.get(key):
+                    out.append('%s: the course video "%s" has no %s=' % (rel, w.get("title", w["file"]), key))
+                elif not os.path.exists(os.path.join(here, w[key])):
+                    out.append("%s: the %s %s of the course video is missing" % (rel, key, w[key]))
+            vtt, script = os.path.join(here, w.get("captions", "")), os.path.join(here, w.get("script", ""))
+            if w.get("captions") and w.get("script") and os.path.exists(vtt) and os.path.exists(script):
+                cues = [l.strip() for l in read(vtt).splitlines()
+                        if l.strip() and l.strip() != "WEBVTT" and "-->" not in l and not l.strip().isdigit()]
+                lines = [l.strip() for l in read(script).splitlines() if l.strip()]
+                if cues != lines:
+                    out.append("%s: the captions %s are not the words of the script %s (the voice reads the script)"
+                               % (rel, w["captions"], w["script"]))
     return out
 
 

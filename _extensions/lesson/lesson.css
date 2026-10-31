@@ -418,6 +418,35 @@ main figcaption { color: #66766a; font-size: 0.9rem; }
 main table:not(.word-grid table) th { background: color-mix(in srgb, var(--accent) 5%, #fff); }
 div.sourceCode { border-radius: 12px; }
 
+/* ---------- Videos of an online activity ({{< watch >}}) ---------- */
+.watch {
+  margin: 1.4rem 0;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, #fff);
+  background: color-mix(in srgb, var(--accent2) 8%, #fff);
+}
+.watch-link { display: flex; gap: 0.9rem; align-items: center; padding: 0.75rem 0.9rem; }
+.watch-play {
+  flex: 0 0 auto; width: 3rem; height: 3rem; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent); color: #fff !important; text-decoration: none;
+  font-size: 1.25rem; box-shadow: 0 8px 18px -10px var(--accent);
+}
+.watch-info { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.watch-title { font-weight: 800; color: var(--accent-ink); }
+.watch-meta { font-size: 0.9rem; color: #4f5a52; }
+.watch-note { font-size: 0.82rem; color: #6b6f6c; }
+.watch-video { padding: 0.6rem; }
+.watch-video video { display: block; width: 100%; border-radius: 12px; background: #111; }
+.watch-video figcaption {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.4rem;
+  margin: 0.5rem 0.3rem 0.1rem; font-size: 0.9rem;
+}
+details.transcript { margin: 0.4rem 0.3rem 0.2rem; }
+details.transcript > summary { cursor: pointer; font-weight: 700; color: var(--accent-ink); }
+details.transcript .transcript-body { font-size: 0.95rem; color: #333; }
+@media print { .watch { display: none; } }
+
 /* ---------- Simulators ---------- */
 figure.sim {
   margin: 1.6rem 0;

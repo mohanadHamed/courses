@@ -183,6 +183,16 @@ local function theme_style(course)
     esc(str(course.accent)), esc(str(course.accent2)))
 end
 
+-- The content type of an online activity (`content:`; AUTHORING.md,
+-- "Blended courses"), shown as a chip so the weeks do not all look the same.
+local CONTENT = {
+  ["lesson"] = "📖 Interactive lesson",
+  ["sims"] = "🎮 Simulators",
+  ["mix"] = "📖 Lesson and simulators",
+  ["video"] = "▶ Videos",
+  ["course-video"] = "🎬 Course video",
+}
+
 -- Chips under the title: the session (number, what it practises, time) or
 -- homework (number, the lectures of its unit, due, marks). Never a week:
 -- courses count sessions.
@@ -203,6 +213,8 @@ local function page_chips(meta, course)
   elseif sess.kind == "online" then
     table.insert(chips, sess.label)
     table.insert(chips, "💻 Online")
+    local content = CONTENT[str(meta.content or "")]
+    if content then table.insert(chips, content) end
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
     if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
   else

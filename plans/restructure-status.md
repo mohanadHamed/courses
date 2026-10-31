@@ -167,7 +167,15 @@ The teacher's request (after plan v3, same branch and PR):
       "week-WW|WARNING"`, then `quarto render courses/digital-skills/week-WW`
       and look at the worksheet PDF.
    f. One signed commit, this file updated, push.
-3. **Online activities 1–15** by the table "Online activities" in
+3. **Online activities 1–15**. Done (2026-10-31): the pipeline (`content:`
+   and its chip, `{{< watch >}}` for an official video or a course video,
+   `check_size.py` by type, AUTHORING.md, NOTES.md, the template); `content:`
+   in all 15; sims 2, 3 and 8 (each Step one instruction, its simulator and
+   its Try it; five figures removed); video 4, 10 and 13 (the ten Microsoft
+   Support videos as cards in their Steps, every page checked again on
+   2026-10-31 in the browser: the player is there); lesson 5, 14, 15 and mix
+   7, 9, 12 as they were. Still to do: the three course videos (1, 6, 11).
+   The plan of this step, by the table "Online activities" in
    `plan.md` (one commit each; solutions in courses-private
    `courses/digital-skills/week-WW/online-NN-solutions.md` when a task
    changes, pushed to `main`):

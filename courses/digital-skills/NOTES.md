@@ -94,8 +94,11 @@ The teacher wants every lesson and every online activity to be practical and
 interactive: students try each idea at once on something that works like the
 real tool.
 
-- **2–4 simulators or mini-games** in every face-to-face lesson, and **at
-  least 2** in every online activity. Prefer simulators of the real tools:
+- **2–4 simulators or mini-games** in every face-to-face lesson. In an
+  online activity the content type decides (AUTHORING.md, "Blended
+  courses"; the table in `plan.md`): a simulator in every Step of a `sims`
+  activity, at least one in a `mix`, and simulators where they help in a
+  `lesson`, a `video` or a `course-video` activity. Prefer simulators of the real tools:
   a folder window, a Word page with a ribbon, an Excel grid that computes, a
   slide editor, an AI chat with fixed answers. Draw them as simple generic
   interfaces (no Microsoft logos, no screenshots).

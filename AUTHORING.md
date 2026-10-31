@@ -472,20 +472,42 @@ unit it may add a skill of the unit's syllabus row, in a practice week it
 adds nothing new:
 
 - "Before you start" (what you need, about how long, what you submit);
-- 2–3 short **Steps** marked `{.study}`: a plain explanation, a figure, a
-  simulator to try at once, one "Try it" self-check each, with `Why:`, and
-  a `.check` where a step asks for a result (a video, if the teacher has
-  one, is linked on the e-learning platform);
+- 2–3 short **Steps** marked `{.study}`: what the content type gives (see
+  below), one "Try it" self-check each, with `Why:`, and a `.check` where a
+  step asks for a result;
 - **Tasks to submit** (`{.tasks}`): 2–4 practical tasks with marks and a
   concrete product (a named file, a screenshot, a short answer), with
   `{{< answer-space >}}` for the printed copy; then "How to submit".
+
+**The content type** (`content:` in the front matter, a chip on the page)
+varies the weeks, so the activities do not all look the same; it decides
+what the Steps hold (the table of each activity is in `plan.md`):
+
+- `lesson`: an interactive lesson: plain explanations, figures and
+  simulators where they help;
+- `sims`: simulators only: every Step is one short instruction, its
+  simulator and its self-check;
+- `mix`: text steps and simulator steps;
+- `video`: free official videos (Microsoft Support), linked and never
+  copied, each with `{{< watch title=… source=… url=… length=… checked=…
+  captions=… >}}`; the Steps practise what they show. Check every link
+  again before the semester and change `checked=`;
+- `course-video`: a short video made for the course (generic interfaces,
+  like the simulators), shown with `{{< watch file=… captions=… poster=…
+  script=… >}}`. **Its voice-over reads its script word for word**, and its
+  English captions are the same words at the same times: the script
+  (`videos/<name>-script.txt`, one caption line per line, A2) is written
+  first and is the one source of the voice, the captions and the pictures.
+  The page shows the script as a transcript.
 
 The page has "Download tasks (PDF)" and "Print tasks" buttons; on paper only
 the tasks are printed (`homework_pdf.py` prints it as
 `<prefix>_onlineN_tasks.pdf`). The online activity **replaces the
 homework** of that course. Its model answers stay private in
 `courses-private` (`week-WW/online-NN-solutions.md`). `check_size.py` checks
-its parts and that it has at least two simulators.
+its parts and its content type (a simulator in every Step of `sims`; the
+source, length and date of every official video; the files of a course
+video, and captions with the words of its script).
 
 **Independent study first; team work only where the syllabus asks for it.**
 Every student must be able to learn from the notes and the page alone.

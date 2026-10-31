@@ -51,6 +51,16 @@
 --     The start files of the worksheet (`start-files:` in its front matter,
 --     files in week-WW/files/): download buttons on the page, names and links
 --     in the PDF.
+--
+--   Videos of an online activity (AUTHORING.md, "Blended courses"):
+--   {{< watch title="Change margins" source="Microsoft Support" url="https://…"
+--       length="0:31" checked="2026-10-31" captions="English" >}}
+--     A free official video: a card that links its page (never a copy), with
+--     its source, its length and the date the link was checked.
+--   {{< watch file="videos/x.mp4" captions="videos/x.vtt" poster="videos/x.png"
+--       script="videos/x-script.txt" title="…" length="2:05" >}}
+--     A video made for the course: the player with its English captions and
+--     poster, and its script under it as a transcript (closed until opened).
 
 local str = pandoc.utils.stringify
 
@@ -735,8 +745,77 @@ local function start_files(meta)
   return pandoc.Null()
 end
 
+-- Videos (online activities) ------------------------------------------------
+local MONTHS = { "January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December" }
+
+local function long_date(iso)
+  local y, m, d = iso:match("^(%d%d%d%d)%-(%d%d)%-(%d%d)$")
+  if not y then return iso end
+  return string.format("%d %s %s", tonumber(d), MONTHS[tonumber(m)], y)
+end
+
+local function watch(kwargs)
+  local title, length = str(kwargs.title), str(kwargs.length)
+  local file, url = str(kwargs.file), str(kwargs.url)
+  if title == "" or length == "" or (file == "" and url == "") then
+    error("watch shortcode needs title=, length= and url= (an official video) or file= (a course video)")
+  end
+  if file ~= "" then
+    -- A video made for the course: player, captions, poster, transcript.
+    local captions, poster, script = str(kwargs.captions), str(kwargs.poster), str(kwargs.script)
+    if not quarto.doc.is_format("html") then
+      return pandoc.Para({ pandoc.Strong({ pandoc.Str("Video: ") }), pandoc.Str(title .. " (" .. length .. ")") })
+    end
+    local transcript = ""
+    if script ~= "" then
+      local text = read_text(pandoc.path.join({ pandoc.path.directory(quarto.doc.input_file), script }))
+      if not text then error("watch shortcode: the script " .. script .. " is missing") end
+      local paras = {}
+      for scene in (text:gsub("\r", "") .. "\n\n"):gmatch("(.-)\n%s*\n") do
+        scene = scene:gsub("^%s+", ""):gsub("%s+$", ""):gsub("\n", " ")
+        if scene ~= "" then table.insert(paras, "<p>" .. html_attr(scene) .. "</p>") end
+      end
+      transcript = '<details class="transcript"><summary>Read the words of the video</summary>'
+        .. '<div class="transcript-body">' .. table.concat(paras, "") .. "</div></details>"
+    end
+    return pandoc.RawBlock("html", string.format([[
+<figure class="watch watch-video">
+  <video controls preload="metadata" playsinline%s>
+    <source src="%s" type="video/mp4">%s
+  </video>
+  <figcaption><span class="watch-title">🎬 %s</span><span class="watch-meta">%s · made for this course%s</span></figcaption>
+  %s
+</figure>]], poster ~= "" and (' poster="' .. html_attr(poster) .. '"') or "", html_attr(file),
+      captions ~= "" and ('\n    <track kind="captions" srclang="en" label="English" src="' .. html_attr(captions) .. '" default>') or "",
+      html_attr(title), html_attr(length), captions ~= "" and " · English captions" or "", transcript))
+  end
+  -- A free official video: a card with the link, never a copy.
+  local source, checked, captions = str(kwargs.source), str(kwargs.checked), str(kwargs.captions)
+  if source == "" or checked == "" then
+    error("watch shortcode: an official video needs source= and checked= (the date the link was checked)")
+  end
+  if quarto.doc.is_format("html") then
+    return pandoc.RawBlock("html", string.format([[
+<div class="watch watch-link">
+  <a class="watch-play" href="%s" target="_blank" rel="noopener" aria-label="Watch: %s">▶</a>
+  <div class="watch-info">
+    <a class="watch-title" href="%s" target="_blank" rel="noopener">%s ↗</a>
+    <span class="watch-meta">%s · %s%s</span>
+    <span class="watch-note">A free video on the %s website: it opens in a new tab. Link checked on %s.</span>
+  </div>
+</div>]], html_attr(url), html_attr(title), html_attr(url), html_attr(title), html_attr(source), html_attr(length),
+      captions ~= "" and (" · " .. html_attr(captions) .. " captions") or "", html_attr(source), long_date(checked)))
+  elseif quarto.doc.is_format("typst") then
+    return pandoc.RawBlock("typst", string.format("#block[*Video:* #link(%s)[#%s] (%s, %s)]",
+      typst_string(url), typst_string(title), typst_string(source), typst_string(length)))
+  end
+  return pandoc.Null()
+end
+
 return {
   ["schedule"] = function(_, _, meta) return schedule(meta) end,
+  ["watch"] = function(_, kwargs) return watch(kwargs) end,
   ["answer-space"] = function(_, kwargs) return answer_space(kwargs) end,
   ["glossary"] = function(args) return glossary(args) end,
   ["sim"] = function(_, kwargs) return sim(kwargs) end,

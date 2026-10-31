@@ -13,6 +13,7 @@ description: "Online activity · One short line. About 60 minutes."
 online: 1          # the number of the online activity
 due: "before lecture 3"   # the next face-to-face lecture, never a week or a date
 marks: 6
+content: lesson    # lesson | sims | mix | video | course-video (AUTHORING.md, "Blended courses")
 ilos: [A1]
 toc-title: "In this activity"
 format: lesson-html
@@ -52,7 +53,15 @@ A question?
 
 ## Step 2 · Short title {.study}
 
-One simulator and one self-check, like Step 1.
+One simulator and one self-check, like Step 1. A `video` activity starts a
+Step with the official video that it practises (a link, never a copy):
+
+{{< watch title="Change margins" source="Microsoft Support" url="https://support.microsoft.com/en-us/word/training/change-margins" length="0:31" checked="2026-10-31" captions="English" >}}
+
+A `course-video` activity shows its own video, whose voice reads the script
+word for word (`videos/<name>-script.txt`; the captions are the same words):
+
+    {{< watch file="videos/x.mp4" captions="videos/x.vtt" poster="videos/x.png" script="videos/x-script.txt" title="…" length="2:00" >}}
 
 ## Tasks to submit {.tasks}
 

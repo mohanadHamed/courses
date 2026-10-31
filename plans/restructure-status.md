@@ -101,11 +101,18 @@ The teacher's request (after plan v3, same branch and PR):
   added promise and Tone Lab; two paragraphs translated in Word (Saturday,
   9:00, 50 and 12) and Word AI Lab's Translate (الثلاثاء for الخميس);
   16 slides.
+- Lecture 7: four experiments in Excel with `sales-start.xlsx` (the sales of
+  the next week, 200 JD; not the week of the page, which is the Game
+  challenge): sort by Total (the bag of Wednesday, 48 JD) and by Day (Mon,
+  Sun, Thu, Tue, Wed), the Sort Warning of one column; filter Paper (4 rows,
+  Sum 77) and clear it; Greater Than 20 (24, 30, 48), a total changed to 22,
+  data bars (34); a column chart with a real title, a pie (77, 51, 72) and a
+  line of the days (Wednesday, 65 JD); 16 slides.
 
 ### Still to do (in this order; the next session starts here)
 
 1. (done: the table and the video tool)
-2. **Lectures 7, 8, 9, 10** (1–6 are done): worksheet, start
+2. **Lectures 8, 9, 10** (1–7 are done): worksheet, start
    files, page, notes, slides, one commit each, by the table "Lecture
    worksheets" in `courses/digital-skills/plan.md`. The recipe (Lectures 1,
    2 and 6 are the examples):

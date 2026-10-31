@@ -218,6 +218,24 @@ FILES = {
         "On the first day, the first 50 customers get a free bag. Children under 12 get a free pen.",
         "Customers can pay in cash or by card. They can also order online and collect their order at the shop.",
     ]),
+    # Lecture 7, Excel (2): the sales of the next week (200 JD), to sort, filter
+    # and colour (Experiments 1-3), and two small tables for the charts
+    # (Experiment 4). Not the week of the page: that is the Game challenge.
+    DS + "/week-07/files/sales-start.xlsx": ("xlsx", [
+        ("Sales", [["Day", "Item", "Type", "Qty", "Total (JD)"],
+                   ["Sun", "Pen", "Paper", 30, 15],
+                   ["Sun", "Water", "Drinks", 18, 9],
+                   ["Mon", "Bag", "Bags", 2, 24],
+                   ["Mon", "Notebook", "Paper", 15, 30],
+                   ["Tue", "Juice", "Drinks", 28, 14],
+                   ["Tue", "Pen", "Paper", 24, 12],
+                   ["Wed", "Water", "Drinks", 34, 17],
+                   ["Wed", "Bag", "Bags", 4, 48],
+                   ["Thu", "Notebook", "Paper", 10, 20],
+                   ["Thu", "Juice", "Drinks", 22, 11]], [8, 12, 10, 8, 12]),
+        ("Types", [["Type", "Sales (JD)"], ["Paper", 77], ["Drinks", 51], ["Bags", 72]], [12, 12]),
+        ("Days", [["Day", "Sales (JD)"], ["Sun", 24], ["Mon", 54], ["Tue", 26], ["Wed", 65], ["Thu", 31]], [10, 12]),
+    ]),
     # Lecture 6, Excel (1): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
     DS + "/week-06/files/shop-start.xlsx": ("xlsx", [
         ("Shop", [["Item", "Price (JD)", "Quantity"],

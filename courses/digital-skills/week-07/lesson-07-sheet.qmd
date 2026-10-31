@@ -1,0 +1,190 @@
+---
+title: "Excel (2): Sorting, Filtering, Conditional Formatting and Charts"
+description: "Worksheet · Four experiments in Excel on the sales of one week: sort the rows, filter one type, colour the big totals by a rule, and make a column, a pie and a line chart."
+lesson: 7
+ilos: [C2]
+start-files:
+  - name: sales-start.xlsx
+    about: "three sheets: Sales (10 sales of the next week, 200 JD), Types and Days (the totals for the charts)"
+format: lesson-typst
+---
+
+::: {.lead}
+Today you work like in a lab: you do four experiments in Excel on the sales
+of the Sunrise shop and record what you see. These are the sales of the next
+week: other numbers than the table of the lesson. Do each experiment when
+your teacher shows it. After each step, write your result in its box. At
+the end, copy your key results into the table.
+:::
+
+## Before you start
+
+- **You need:** a computer with Excel (the desktop app, or Excel on the web
+  at `office.com`).
+- **Time:** about 40 minutes for the four experiments.
+- **Check:** the results are at the end of this worksheet. On the
+  interactive lesson, every step has "Check your result". Look only after
+  you try.
+
+{{< start-files >}}
+
+## Experiment 1 · Sort
+
+**Aim:** put the rows in order, and see that each row moves as a whole.
+*(Lesson notes 7.1 · about 10 minutes)*
+
+1. Open `sales-start.xlsx` (click **Enable Editing** if you see it). On the
+   sheet **Sales**, click one cell of the table. Choose **Data › Sort**,
+   sort by **Total (JD)**, order **Largest to Smallest**, and click OK.
+
+   {{< record "On top: … ; at the bottom: …" >}}
+
+   ::: {.check}
+   On top: the **bag of Wednesday, 48 JD**. At the bottom: the **water of
+   Sunday, 9 JD**. Each row moved as a whole: the day and the item stayed
+   with their total.
+   :::
+
+2. Sort again, now by **Day**, order **A to Z**.
+
+   {{< record "The order of the days" >}}
+
+   ::: {.check}
+   **Mon, Sun, Thu, Tue, Wed.** Excel sorts the days as words, by their
+   letters, not in the order of the week.
+   :::
+
+3. Click the letter **E** at the top of the column (only the column of the
+   totals is selected). Click **Sort Largest to Smallest** (Data, the button
+   Z→A). Read the message, then click **Cancel**.
+
+   {{< record "What does Excel ask?" lines=2 >}}
+
+   ::: {.check}
+   Excel shows a **Sort Warning**: *Expand the selection* or *Continue with
+   the current selection*. With only one column, the totals would move away
+   from their days and items, and the table would be wrong. So click one
+   cell and sort the whole table.
+   :::
+
+## Experiment 2 · Filter
+
+**Aim:** show only the rows that you need, and see that the other rows are
+only hidden. *(Lesson notes 7.2 · about 10 minutes)*
+
+1. Click one cell of the table. Choose **Data › Filter**. Click the arrow of
+   **Type**, tick only **Paper**, and click OK.
+
+   {{< record "How many rows do you see?" >}}
+
+   ::: {.check}
+   **4 rows**: the pens and the notebooks. The row numbers that you see turn
+   blue: Excel shows that some rows are hidden.
+   :::
+
+2. Select the four totals of Paper. Read the status bar at the bottom.
+
+   {{< record "Sum in the status bar" >}}
+
+   ::: {.check}
+   **Sum: 77** (15 + 30 + 12 + 20). The status bar adds only the rows that
+   you see.
+   :::
+
+3. Click the arrow of **Type** again and choose **Clear Filter From
+   "Type"**.
+
+   {{< record "How many rows now?" >}}
+
+   ::: {.check}
+   **All 10 rows** come back. A filter hides rows; it never deletes them.
+   :::
+
+## Experiment 3 · A colour rule
+
+**Aim:** colour cells by a rule, and see the colour follow the numbers.
+*(Lesson notes 7.3 · about 10 minutes)*
+
+1. Select the totals **E2:E11**. Choose **Home › Conditional Formatting ›
+   Highlight Cells Rules › Greater Than**, type **20**, choose a colour, and
+   click OK.
+
+   {{< record "Cells with the colour: … ; the cell with 20: …" >}}
+
+   ::: {.check}
+   **Three cells: 24, 30 and 48.** The total **20** keeps no colour: 20 is
+   not greater than 20.
+   :::
+
+2. Find the juice of Tuesday (14 JD) and change its total to **22**. Look at
+   the cell. Then press **Ctrl + Z**.
+
+   {{< record "What happens to the cell with 22?" >}}
+
+   ::: {.check}
+   It **gets the colour by itself**: the rule checks the cells again when a
+   number changes. A colour that you add by hand does not do this.
+   :::
+
+3. Select the quantities **D2:D11**. Choose **Home › Conditional Formatting
+   › Data Bars** and one colour.
+
+   {{< record "The longest bar: … pieces of …" >}}
+
+   ::: {.check}
+   **34 pieces of water**, on Wednesday. A data bar shows the size of each
+   number, so the biggest quantity is easy to see.
+   :::
+
+## Experiment 4 · Charts
+
+**Aim:** make the right chart for each question, with a real title.
+*(Lesson notes 7.4 · about 10 minutes)*
+
+1. On the sheet **Types**, select **A1:B4**. Choose **Insert › Recommended
+   Charts** and a **Clustered Column** chart. Click *Chart Title* and type a
+   real title.
+
+   {{< record "My title; the highest column" lines=2 >}}
+
+   ::: {.check}
+   A real title says what the chart shows, for example "Sales by type in
+   one week (JD)". The highest column is **Paper (77)**. Columns compare
+   amounts.
+   :::
+
+2. Click the chart. Choose **Chart Design › Change Chart Type › Pie**. Then
+   click **+** next to the chart and tick **Data Labels**.
+
+   {{< record "The three labels" >}}
+
+   ::: {.check}
+   **77, 51 and 72**: the three parts of 200 JD. A pie shows the parts of
+   one whole. Paper is the biggest part.
+   :::
+
+3. On the sheet **Days**, select **A1:B6** and choose **Insert › Line**.
+
+   {{< record "The highest point of the line" >}}
+
+   ::: {.check}
+   **Wednesday, 65 JD.** A line shows a change over time: up on Monday,
+   down on Tuesday, up again on Wednesday.
+   :::
+
+## Table of results
+
+Copy your key results here. Your teacher checks this table before the end of
+the lecture.
+
+::: {.record-table}
+| Experiment | What you record                                | Your result |
+|:-------:|---------------------------------------------|--------------------------|
+| 1          | The biggest sale, and the order of the days    |             |
+| 2          | The rows and the sum of Paper                  |             |
+| 3          | The cells with the colour, and the longest bar |             |
+| 4          | My chart title, and the three labels of the pie |            |
+| 4          | The highest day on the line                    |             |
+:::
+
+Then play **Rana's Questions**, the Game challenge of this lecture.

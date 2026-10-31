@@ -52,6 +52,8 @@ jobs:
           if ls courses/*/week-*/seminar-*-book.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_seminar[0-9]*.pdf')"; fi
           if ls courses/*/week-*/practice-*-book.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_practice[0-9]*.pdf')"; fi
           if ls courses/*/week-*/online-*.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_online[0-9]*_tasks.pdf')"; fi
+          # Course videos of the online activities: the video, its captions and its poster.
+          for v in courses/*/week-*/videos/*.mp4; do [ -e "$v" ] || continue; for x in mp4 vtt png; do test -f "_site/${v%.mp4}.$x"; done; done
 
       - uses: actions/upload-pages-artifact@v4
         with:

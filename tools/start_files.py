@@ -207,6 +207,17 @@ FILES = {
         "Prices",
         "Entry to the fair is free for everyone.",
     ]),
+    # Lecture 5, AI with Word: a short report to sum up (Experiment 2) and to
+    # translate (Experiment 4). Not Huda's Thursday memo: that is the Game challenge.
+    DS + "/week-05/files/report-start.docx": ("docx", [
+        "**Report: The New Sunrise Shop in Zarqa**",
+        "Sunrise Company opens its second shop next Saturday at 9:00. The new shop is in Zarqa, "
+        "on King Abdullah Street, next to the post office.",
+        "The shop has 6 staff, and Rana Saleh is the manager. It sells notebooks, pens, bags and school books.",
+        "The shop is open from Saturday to Thursday, from 9:00 to 20:00. It is closed on Friday.",
+        "On the first day, the first 50 customers get a free bag. Children under 12 get a free pen.",
+        "Customers can pay in cash or by card. They can also order online and collect their order at the shop.",
+    ]),
     # Lecture 6, Excel (1): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
     DS + "/week-06/files/shop-start.xlsx": ("xlsx", [
         ("Shop", [["Item", "Price (JD)", "Quantity"],

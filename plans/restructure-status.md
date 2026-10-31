@@ -93,11 +93,19 @@ The teacher's request (after plan v3, same branch and PR):
   deck has no Table of results slide (the Check slides show every result).
   The Word start files now have the styles of a new document (Calibri 11,
   Title, Heading 1, Heading 2), so every Word version shows the same.
+- Lecture 5: four experiments with an AI assistant and Word, with
+  `report-start.docx` (the new Sunrise shop in Zarqa; not Huda's Thursday
+  memo of the Game challenge): a notice about a broken printer (delete the
+  added facts, Keep Text Only, Title); a 3-point summary checked against the
+  report, then Word AI Lab's Sum up (3 pm for 5 pm); a polite rewrite with no
+  added promise and Tone Lab; two paragraphs translated in Word (Saturday,
+  9:00, 50 and 12) and Word AI Lab's Translate (الثلاثاء for الخميس);
+  16 slides.
 
 ### Still to do (in this order; the next session starts here)
 
 1. (done: the table and the video tool)
-2. **Lectures 5, 7, 8, 9, 10** (1, 2, 3, 4 and 6 are done): worksheet, start
+2. **Lectures 7, 8, 9, 10** (1–6 are done): worksheet, start
    files, page, notes, slides, one commit each, by the table "Lecture
    worksheets" in `courses/digital-skills/plan.md`. The recipe (Lectures 1,
    2 and 6 are the examples):

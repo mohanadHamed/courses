@@ -6,14 +6,29 @@ ilos: [C2, C4, B1]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem at work. Then it explains the idea. It ends with a
-**Lab task** and one set of questions. Every question on this page has its
-answer: try first, then check.
+This page is the interactive version of the lesson. In class you follow the
+**worksheet (PDF)**: three experiments in Excel and with an AI assistant.
+Each section of this page explains one idea, then shows its experiment: do
+each step, write your result in its box, then open "Check your result".
+Every question on this page has its answer: try first, then check.
 
 ## Key terms
 
 {{< glossary summary-table pivottable row-field value-field chart line-chart data-insight check-ai-output hallucination ai-use-statement >}}
+
+## Before you start
+
+- **You need:** Excel (the desktop app, or Excel on the web at `office.com`)
+  and an AI assistant that the university allows (for example Microsoft
+  Copilot with your university account).
+- **Start file:** download it, then open it in Excel. It has the 24 sales of
+  March, the same as Pivot Lab.
+
+{{< start-files >}}
+
+- What you type in the boxes stays in this browser only.
+
+![How the worksheet works: do the step, write your result, check it.](../week-01/images/worksheet-steps.png){width=100%}
 
 ## 10.1 Totals by group: the PivotTable
 
@@ -32,15 +47,7 @@ list changes.
 
 {{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" height="600" >}}
 
-::: {.callout-note title="Lab task · Totals by type"}
-In **Pivot Lab**, choose Rows **Type** and Values **Sum of Total**. Write
-the total of each type and the Grand Total. Which type sold the most?
-
-::: {.check}
-Paper 206 JD, Drinks 71 JD, Bags 78 JD; Grand Total 355 JD. Paper sold the
-most.
-:::
-:::
+{{< experiment 1 >}}
 
 ::: {.callout-tip title="Try it 1 · The PivotTable"}
 Choose the right answer.
@@ -88,16 +95,7 @@ Why not type the totals into another table by hand?
 A PivotTable does not change by itself. After new rows, click **Refresh**.
 :::
 
-::: {.callout-note title="Lab task · Weeks and averages"}
-In **Pivot Lab**, choose Rows **Week**: which week was the best, and which
-the weakest? Then choose Rows **Type** and Values **Average of Total**:
-which type has the biggest average sale?
-
-::: {.check}
-The third week was the best (112 JD) and the second the weakest (63 JD).
-Paper has the biggest average sale: about 20.6 JD.
-:::
-:::
+{{< experiment 2 >}}
 
 ::: {.callout-tip title="Try it 2 · Other questions"}
 The weeks of March were 87, 63, 112 and 93 JD. Choose the right answer.
@@ -150,18 +148,7 @@ A sentence can sound sure and still be wrong: an AI tool can invent a
 number (a **hallucination**).
 :::
 
-::: {.callout-note title="Lab task · Check the summary"}
-In **Summary Check**, mark each of the six sentences true or wrong. Then
-write a summary of three true sentences, each with a number.
-
-::: {.check}
-True: the total of 355 JD; the third week was the best (112 JD); the
-average sale was about 15 JD. Wrong: "Bags sold the most" (Paper, 206 JD);
-"sales grew every week" (the second week fell); "the biggest sale was a bag
-for 48 JD" (notebooks, 60 JD). A good summary: "March sales were 355 JD.
-Paper sold the most, 206 JD. The best week was the third, with 112 JD."
-:::
-:::
+{{< experiment 3 >}}
 
 ::: {.callout-tip title="Try it 3 · The AI summary"}
 The PivotTable of March: Paper 206 JD, Drinks 71 JD, Bags 78 JD; the weeks
@@ -194,6 +181,10 @@ What goes under a summary that an AI tool helped to write?
     Why: it says which tool you used and how you checked it.
 :::
 :::
+
+## Table of results
+
+{{< experiment results >}}
 
 ## Game challenge: Huda's April meeting {.challenge}
 

@@ -8,14 +8,27 @@ format: lesson-pptx
 
 {{< glossary summary-table pivottable row-field value-field data-insight check-ai-output ai-use-statement >}}
 
-## 10.1 Totals by group: the PivotTable
+## Before you start
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A PivotTable makes a summary table of a long list in a few clicks.
-- Click one cell of the list, then choose Insert › PivotTable.
-- Drag Type to Rows and Total to Values.
-- **Do it:** In Pivot Lab, choose Rows Type and Values Sum of Total. Which type sold the most?
+- Open the page of Lecture 10 and download the file month-start.xlsx.
+- The sheet March has 24 sales of the Sunrise shop, 355 JD in all.
+- Open an AI assistant that the university allows for Experiment 3.
+- Write your result after each step, then check it at the end of the worksheet.
+:::
+::: {.column width="50%"}
+![](../week-01/images/worksheet-steps.png)
+:::
+::::
+
+## Experiment 1 · A PivotTable
+
+:::: {.columns}
+::: {.column width="50%"}
+- A PivotTable makes a summary table with one field in Rows and one in Values.
+- **Step 1:** Click one cell and insert a PivotTable. What appears on the right?
+- **Step 2:** Drag Type to Rows and Total to Values. What does each type sell?
 :::
 ::: {.column width="50%"}
 ![](images/pivot.png)
@@ -26,74 +39,48 @@ format: lesson-pptx
 
 {{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" task="**Show:** choose Rows Type and Values Sum of Total, then Rows Week. **Ask:** why does the Grand Total stay 355 JD?" >}}
 
-## Example · The types of March
+## Check 1 · A PivotTable
 
-Rana has 24 sales of March in a list.
-**How much did each type sell?**
+What did you record in Experiment 1?
 
 ::: {.reveal}
-1. Rana clicks a cell of the list and chooses Insert › PivotTable.
-2. She drags Type to Rows and Total to Values.
-3. Paper sold 206 JD, Drinks 71 JD and Bags 78 JD, so the Grand Total is 355 JD.
+- Step 1: A new sheet has an empty PivotTable, and the field list is on the right.
+- Step 2: Paper sold 206 JD, Drinks 71 JD and Bags 78 JD, so the Grand Total is 355 JD.
 :::
 
-## Try it 1 · The PivotTable
-
-a) Which field goes into Rows to get one row for each type?
-b) The types are 206, 71 and 78 JD. What is the Grand Total?
-c) Why should Rana not type the totals into another table by hand?
-
-::: {.answer}
-a) Type
-b) 355 JD
-c) Typed numbers do not change when the list changes.
-:::
-
-## 10.2 Weeks, averages and a chart
+## Experiment 2 · New questions, same table
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Drag Week to Rows to see the total of each week.
-- Value Field Settings › Average gives the average of each type.
-- After new rows, PivotTable Analyze › Refresh updates the table.
-- **Do it:** In Pivot Lab, choose Rows Week. Which week was the best, and which the weakest?
+- The same PivotTable answers new questions when you change the rows or the calculation.
+- **Step 1:** Put Week in Rows. Which week was the best, and which the weakest?
+- **Step 3:** Change the bag of week 3 from 48 to 58. When does the table change?
+- **Step 4:** Show the average of each type. Which type has the biggest average sale?
 :::
 ::: {.column width="50%"}
 ![](images/weekly-chart.png)
 :::
 ::::
 
-## Example · The weeks of March
+## Check 2 · New questions, same table
 
-The weeks of March were 87, 63, 112 and 93 JD.
-**Which week was the best, and what does the line chart show?**
+What did you record in Experiment 2?
 
 ::: {.reveal}
-1. The third week was the best, with 112 JD.
-2. The second week was the weakest, with 63 JD.
-3. The line chart shows that sales fell in the second week and rose again.
+- Step 1: The weeks are 87, 63, 112 and 93 JD, so the third is the best and the second the weakest.
+- Step 2: The line goes down from week 1 to week 2 and from week 3 to week 4.
+- Step 3: Week 3 shows 112 until you click Refresh, and then 122.
+- Step 4: Paper has the biggest average sale, 20.6 JD.
 :::
 
-## Try it 2 · Other questions
-
-a) Rana adds new sales to the list. What must she do to the PivotTable?
-b) Which chart shows the four weeks of a month?
-c) How does Rana get the average sale of each type?
-
-::: {.answer}
-a) Refresh it.
-b) a line chart
-c) Value Field Settings › Average
-:::
-
-## 10.3 An AI summary: check every number
+## Experiment 3 · An AI summary
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Rana gives an AI tool the summary table, with no personal data.
-- She asks for three short sentences, each with a number.
-- She checks every number with the PivotTable and corrects the wrong sentences.
-- **Do it:** In Summary Check, mark the six sentences true or wrong. Which two are wrong?
+- An AI tool writes about the numbers fast, but you check every number with the PivotTable.
+- **Step 1:** Ask for three sentences about the table. Which numbers are right?
+- **Step 2:** In Summary Check, which sentences are wrong?
+- **Step 3:** Write three true sentences and an AI-use statement. What is your best sentence?
 :::
 ::: {.column width="50%"}
 ![](images/ai-summary.png)
@@ -104,18 +91,14 @@ c) Value Field Settings › Average
 
 {{< sim file="sims/summary-check.html" poster="sims/summary-check.png" title="Summary Check: is the AI right?" task="**Show:** mark the sentence \"Bags sold the most\" with the PivotTable facts. **Ask:** why can a sentence that sounds sure still be wrong?" >}}
 
-## Try it 3 · The AI summary
+## Check 3 · An AI summary
 
-The PivotTable of March shows Paper 206 JD and Bags 78 JD, and the weeks 87, 63, 112 and 93 JD.
+What did you record in Experiment 3?
 
-a) The AI says "Bags sold the most". What is true?
-b) The AI says "Sales grew every week". Is it right?
-c) What goes under a summary that an AI tool helped to write?
-
-::: {.answer}
-a) Paper sold the most.
-b) No, the second week fell.
-c) an AI-use statement
+::: {.reveal}
+- Step 1: Every number must match 206, 71, 78 and 355, and wrong numbers are deleted.
+- Step 2: Bags sold the most, sales grew every week, and the bag of 48 JD are wrong.
+- Step 3: A true sentence is "Paper sold the most, 206 JD", with a statement under the text.
 :::
 
 ## Game challenge · Huda's April meeting
@@ -146,10 +129,20 @@ b) No: Drinks sold the least, 95 JD.
 c) Yes: from 110 JD to 85 JD.
 :::
 
+## Table of results
+
+Which results do you have in your table?
+
+::: {.reveal}
+- Experiment 1: Paper 206 JD, Drinks 71 JD and Bags 78 JD make 355 JD.
+- Experiment 2: The third week is the best, Refresh shows a change, and Paper has the biggest average.
+- Experiment 3: Three sentences of Summary Check are wrong, and every number is checked.
+:::
+
 ## Summary
 
 - A PivotTable makes a summary table, with one field in Rows and one in Values.
 - Rana changes the row field or the calculation to ask another question.
-- She refreshes the PivotTable after new rows, and a line chart shows the weeks.
+- She refreshes the PivotTable after a change, and a line chart shows the weeks.
 - An AI summary can be wrong, so she checks every number with the PivotTable.
 - She adds an AI-use statement under a text that AI helped to write.

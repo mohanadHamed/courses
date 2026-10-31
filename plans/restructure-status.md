@@ -125,11 +125,18 @@ The teacher's request (after plan v3, same branch and PR):
   16 slides (three simulators: no Table of results slide, now a rule in
   AUTHORING.md). The QR card of a worksheet mentions start files only when
   it has some.
+- Lecture 10: three experiments with `month-start.xlsx` (the 24 sales of
+  March, the same as Pivot Lab; April stays the Game challenge): a
+  PivotTable (Paper 206, Drinks 71, Bags 78, 355 JD); weeks (87, 63, 112,
+  93), a line PivotChart, Refresh after a change (112 → 122) and the
+  averages (Paper 20.6); an AI summary of the table checked number by
+  number, Summary Check and a summary of three true sentences with an
+  AI-use statement; 14 slides. **All ten lectures now have a worksheet.**
 
 ### Still to do (in this order; the next session starts here)
 
 1. (done: the table and the video tool)
-2. **Lecture 10** (1–9 are done): worksheet, start
+2. (done: Lectures 1–10 have a worksheet; the recipe stays for later changes) Worksheet, start
    files, page, notes, slides, one commit each, by the table "Lecture
    worksheets" in `courses/digital-skills/plan.md`. The recipe (Lectures 1,
    2 and 6 are the examples):

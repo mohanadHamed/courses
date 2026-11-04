@@ -70,3 +70,23 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   of scenes, a screenplay in a table, a credits table coloured by licence)
   and two or three changes to try with closed answers. They are never a
   media product of the student.
+- 2026-11-04 (teacher's review of Seminar 2): the story sessions asked the
+  students, and even the teacher, to compose: a premise of their own idea,
+  a scene in screenplay format, rewritten lines, barks, a music brief,
+  notes and feedback on a mix, a shot list of "your promo". Composition has
+  no right answer, and no ILO asks for it: A1 explains (Bloom 2), B1
+  analyses a story and builds a sequence of stages (4), C1–C3 produce
+  media (3), B2 evaluates (5); no ILO is at level 6 (create), and PLO 2 is
+  about designing the player experience. So from Seminar 2 on, every such
+  task has one right answer: match the building blocks to given phrases,
+  order shuffled stages, cards or lines, find the missing part, choose
+  among A, B and C, classify given notes. The production tasks stay
+  (storyboards, sound, video), but from given scenes, moments and specs,
+  checked with a checklist or by the simulator. The syllabus titles stay:
+  "Drafting a Story Premise" builds a premise from five given cards;
+  "Writing a Scene and Its Dialogue" puts the shuffled lines of a scene in
+  screenplay format. Tasks on "a game you know" became fixed games (Harbor
+  Run, Sky Kite, Market Day, Snow Post, Bubble Farm). Fix: in Mix Desk the
+  first mix does not clip (the old Seminar 9 answer said it did). The team
+  activities of Practice 1 and 2 (D1) stay. Lecture 1, Seminar 1 and
+  Lecture 2 were already taught and did not change.

@@ -362,7 +362,10 @@ details.check .check-body > :last-child { margin-bottom: 0; }
   border: 1.5px solid color-mix(in srgb, var(--accent) 55%, #fff);
   display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #fff;
 }
-.ic-opt-text { flex: 1; }
+.ic-opt-text { flex: 1; min-width: 0; }
+/* Long words, paths and code wrap inside a check, so it fits a phone. */
+.ic-opt-text, .ic-card-text, .ic-sort-text, .ic-reason, .ic-why, .ic-q { overflow-wrap: anywhere; }
+.ic code { white-space: normal; overflow-wrap: anywhere; }
 .ic-opt-text p { margin: 0; }
 .ic-reason { padding: 0.25rem 0.3rem 0.15rem 2.3rem; }
 .ic-opt-row.is-right .ic-opt, .ic-opt-row.is-shown .ic-opt { border-color: #2b8a3e; background: #f2faf3; color: #1e5f2b; }
@@ -388,7 +391,7 @@ details.check .check-body > :last-child { margin-bottom: 0; }
   width: 1.55rem; height: 1.55rem; border-radius: 50%; font-weight: 800; font-size: 0.85rem;
   background: color-mix(in srgb, var(--accent2) 35%, #fff); color: var(--accent-ink);
 }
-.ic-card-text { flex: 1; font-weight: 600; }
+.ic-card-text { flex: 1; min-width: 0; font-weight: 600; }
 .ic-card-text p { margin: 0; }
 .ic-move { display: flex; gap: 0.25rem; }
 .ic-move button {

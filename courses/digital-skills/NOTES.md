@@ -135,6 +135,45 @@ real tool.
   does: 1 KB = 1024 bytes, 1 MB = 1024 KB, 1 GB = 1024 MB. One-step
   conversions (2 GB = 2048 MB) are fine; 1024 is not hard for the students.
 
+## On the e-learning platform (Moodle)
+
+The teacher fills one section of the university e-learning platform for
+every calendar week, by hand, with the university's template.
+
+- **Language:** the section text is in Arabic (the platform is in Arabic);
+  the linked pages and the files stay in English, as on this site. Never
+  write "مختبر": the face-to-face lecture may be in an ordinary classroom.
+- **The template, part by part:**
+  1. Title: "الأسبوع … (date): topic".
+  2. "في هذا الأسبوع سوف نعمل على": a short paragraph.
+  3. "في نهاية هذا الأسبوع ستكون قادرا على": the outcomes, numbered.
+  4. "المطلوب من الطالب القيام به خلال الأسبوع": numbered steps.
+  5. "الأنشطة غير المتزامنة": the links and the submission.
+- **Parts 1–3 describe the whole week,** the face-to-face lecture
+  included: they are descriptions and ask nothing of the student.
+- **Parts 4–5 are only the online (blended) lecture** ("المحاضرة المدمجة"):
+  its steps (the Steps of the online activity, its videos and simulators,
+  then the tasks to submit), the link to its page and its submission.
+  Never the face-to-face lecture: students get its instructions in class,
+  and a second list of work would confuse them.
+- **No marks and no due dates in the text.** The due date is set as an
+  option of the Moodle assignment, and the platform reminds the students.
+- A lost week stays on the platform as a real week with a role of its own
+  (for example "getting ready": accounts, tools, how the course works),
+  never as a copy of the next week. Its activities are moved to the week in
+  which they are done, not deleted, so that submissions are kept.
+- **The weeks of fall 2026-2027.** Lecture 1 was given in platform week 4,
+  so platform week N holds the week of `schedule.yml` in row N − 3 (week 5:
+  Lecture 2 and Online activity 2; week 13: Lecture 10 and Online activity
+  13). The weeks left hold the 9 units and two practice weeks only, so
+  Practice 1–3 and Online activities 8, 10 and 12 are not given: the three
+  practice pages are linked for self-study in weeks 10–12, next to the
+  lectures they practise. The course project keeps weeks 14 (Practice 4,
+  Online activity 14) and 15 (Practice 5, Online activity 15). The texts of
+  weeks 5–15, with their links, are in `courses-private`
+  (`moodle/digital-skills-weeks.md`); the tasks PDF and the assignment of
+  each online activity are added on the platform when the activity opens.
+
 ## Lessons learned
 
 - Week 1 (2026-10-19): course started with the new lesson model. Interactive
@@ -221,3 +260,9 @@ real tool.
   so that every student has the same data. Lecture 6 (Excel 1) was the
   model: four experiments in Excel with `shop-start.xlsx`, Formula Lab and
   Reference Lab as the teacher's demonstration.
+- 2026-11-03 (the platform): the college was not ready in platform week 3
+  (25/10/2026), so Lecture 1 was given on 1/11/2026, in platform week 4.
+  Week 3 became a "getting ready" week; Lecture 1 and Online activity 1,
+  with its submission, moved to week 4. The practice weeks absorb the lost
+  weeks. The teacher set the rules for the weekly platform text (above,
+  "On the e-learning platform").

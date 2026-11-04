@@ -20,8 +20,11 @@ has its answer: try first, then check.
 - A **sound wave** is a vibration of the air.
 - **Frequency** (Hz): vibrations per second, the **pitch**. People hear
   about 20 Hz to 20 000 Hz.
-- **Amplitude**: the size of the vibration, the **loudness**, in **dB**. In
-  an audio program 0 dB is the top; quieter levels are negative.
+- **Amplitude**: the size of the vibration, the **loudness**, in **dB**
+  (decibels).
+- In an audio program, **0 dB is the top**: the loudest level a file can
+  hold. Quieter levels are negative numbers: −6 dB is quieter than 0 dB,
+  and −20 dB is much quieter.
 - Pasha's meow: 500–800 Hz. Thunder: below 100 Hz. A bell: above 2000 Hz.
 
 ![Frequency and amplitude.](images/sound-wave.png){width=90%}
@@ -71,11 +74,13 @@ Which sound has the lowest frequency?
 
 ## 7.2 From a wave to numbers: sampling
 
-- A **sample** is one measure of the wave. **Sample rate**: samples per
-  second, 44.1 kHz or 48 kHz for games.
-- **Bit depth**: bits per sample. More bits, less hiss: 16-bit in games,
-  24-bit in the studio.
-- **Mono**: one channel. **Stereo**: two channels, twice the size.
+- A **sample** is one measure of the wave.
+- **Sample rate**: samples per second. 1 kHz = 1000 per second, so 48 kHz
+  = 48 000 samples every second. Games use 44.1 kHz or 48 kHz.
+- **Bit depth**: bits per sample. More bits give less hiss: 16-bit in
+  games, 24-bit in the studio.
+- **Mono**: one channel. **Stereo**: two channels, so the file is twice the
+  size.
 
 ![Samples on levels.](images/sampling.png){width=90%}
 
@@ -123,11 +128,11 @@ Pasha is one sound source. How do you record him?
 
 ## 7.3 Audio formats for games
 
-- **WAV**: uncompressed, every sample, big, plays at once.
-- **FLAC**: lossless, about half the size.
-- **OGG, MP3**: **lossy compression**, about 10 times smaller.
-- Short effects → WAV. Music and long loops → OGG. Raw takes → 24-bit WAV
-  in the archive.
+| Format | What it keeps | Size | Use in a game |
+|------------|----------------------------------------|----------------|--------------------------------|
+| WAV | every sample (uncompressed) | big | short effects; raw takes (24-bit) in the archive |
+| FLAC | every sample (lossless) | about half of WAV | the archive |
+| OGG, MP3 | not every detail (**lossy compression**) | about 10 times smaller | music and long loops |
 
 ![Four formats for the same music.](images/audio-formats.png){width=90%}
 
@@ -179,9 +184,11 @@ The raw takes, kept in the archive?
 - **Input level:** peaks near **−6 dB**; at 0 dB the wave is cut flat:
   **clipping**.
 - Record **three takes** and keep the best.
-- Then clean the best take: **trim** the silence, a short **fade-out**
-  against a click, **normalize** to −1 dB, and export a WAV with a clear
-  name: `sfx_pasha_meow_01.wav`.
+- Then clean the best take in four steps:
+  1. **Trim** the silence at the start and the end.
+  2. Add a short **fade-out**, so the end has no click.
+  3. **Normalize** to −1 dB: the loudest peak becomes −1 dB.
+  4. Export a WAV with a clear name: `sfx_pasha_meow_01.wav`.
 
 ![The room, the distance and the meter.](images/recording-setup.png){width=90%}
 

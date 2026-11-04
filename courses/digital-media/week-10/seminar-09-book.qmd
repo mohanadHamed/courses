@@ -1,6 +1,6 @@
 ---
 title: "Mixing and Critique Session"
-description: "Seminar worksheet · Listen to the mix of a level and write notes with a moment and a criterion, then turn them into useful feedback and fix the mix for version 2."
+description: "Seminar worksheet · Listen to the mix of a level and find the true notes and their criteria, then choose useful feedback and fix the mix for version 2."
 seminar: 9
 ilos: [B2, C2]
 format: lesson-typst
@@ -18,8 +18,15 @@ the end of this worksheet.
 
 - Mix by **groups**: the voice first, the **master** below 0 dB, and
   **ducking** lowers the music while a voice plays.
-- Evaluate with **seven criteria** (clarity, balance, consistency,
-  repetition, technical, accessibility, performance), each with evidence.
+- Evaluate with **seven criteria**, each with evidence. Three of them
+  today:
+
+| Criterion | The question it asks |
+|------------|---------------------------------------------------------|
+| clarity | Do we hear the important sounds, like a voice or a warning? |
+| balance | Is one group too loud or too quiet for the others? |
+| technical | Is the sound clean: no clipping above 0 dB, no click, no gap? |
+
 - Feedback in three parts: **I hear …**, **it matters because …**,
   **try …**.
 
@@ -38,7 +45,7 @@ Which part of feedback says what the player loses?
 :::
 :::
 
-## Activity 1 · Listen and note
+## Activity 1 · Listen and choose the true notes
 
 At *Night Owl Games* the team listens to the first mix of the flood level.
 A good note has a **moment** (0:42, or the event) and a **criterion**.
@@ -49,18 +56,32 @@ too.
 
 {{< sim file="sims/mix-desk.html" poster="sims/mix-desk.png" title="Mix Desk: the flood level of Rooftop Rescue" >}}
 
-::: {.callout-note title="Activity 1 · Four notes · 15 min"}
-1. Open **Mix Desk** and play the level as it is, before you change
-   anything. Play it twice.
-2. Write four notes, each with a moment and a criterion.
+A tester wrote six notes about the first mix. Three are true, and three
+are false:
 
-*Your product:* four notes.
+| Note | What the tester wrote |
+|:---:|-----------------------------------------------------------|
+| a | While Nour speaks, her voice is lost under the music. |
+| b | The master clips: it goes above 0 dB. |
+| c | The effects are lost under the music. |
+| d | Nour's voice is much louder than the music. |
+| e | The interface clicks are as loud as Nour's voice. |
+| f | The music stops in the middle of the level. |
+
+::: {.callout-note title="Activity 1 · True notes · 15 min"}
+1. Open **Mix Desk** and play the level as it is, before you change
+   anything. Play it twice, and read the lines under the faders.
+2. Which three notes are true? Write their letters.
+3. Write the criterion of each true note: clarity, balance or technical.
+
+*Your product:* three letters, each with its criterion.
 
 ::: {.check}
-Good notes look like: "In the wave, Nour's line is lost under the music
-(clarity)." "The master meter turns red in the wave (technical)." "The rain
-covers the steps (balance)." "The wave warning is only a sound
-(accessibility)." Each note says when and which criterion.
+The true notes are **a** (clarity: an important line is not heard),
+**c** (balance: one group covers another) and **e** (balance: the clicks
+are too loud for the voice). Note b is false: the loudest moment is about
+−1 dB, so the master line is green. Note d says the opposite of a, and
+the music never stops (f).
 :::
 :::
 
@@ -96,17 +117,26 @@ version 2 at the same moment.
 
 ::: {.callout-note title="Activity 2 · Feedback and a fix · 18 min"}
 1. In **Critique Builder**, build feedback that passes all checks.
-2. Turn two of your notes from Activity 1 into feedback in three parts.
-3. In **Mix Desk**, fix your most important note. Compare v1 and v2 at the
-   same moment.
+2. Which feedback for note a is useful? Choose A, B or C.
 
-*Your product:* two pieces of feedback and one fix.
+   - **A.** "The sound is bad. Please fix it."
+   - **B.** "I hear that Nour's voice is lost under the music while she
+     speaks; it matters because the player misses what she says; try
+     ducking the music by about 8 dB."
+   - **C.** "You are not good at mixing: the voice is lost."
+
+3. In **Mix Desk**, fix note a only: turn on ducking, then lower the music
+   fader until the voice line turns green. Compare v1 and v2 at the same
+   moment, and write the music fader value.
+
+*Your product:* one letter and one fader value.
 
 ::: {.check}
-Good feedback: "I hear that Nour's line is lost under the music in the
-wave; it matters because the player misses the warning; try ducking the
-music by about 8 dB." A good fix: duck the music under the voice; the
-voice line becomes clear, and the master stays below 0 dB.
+Step 2: **B**. It has the three parts: what and when, why it matters for
+the player, and one change. A has no moment and no suggestion; C is about
+the person, not the work. Step 3: with ducking on, the voice line turns
+green when the music fader is **−2 dB or lower**: at −2 dB the voice is
+6 dB above the music while Nour speaks.
 :::
 :::
 
@@ -131,7 +161,9 @@ The 3-minute music is loaded into memory, and the game starts slowly. What helps
 ## Exercises
 
 1. What makes a note about a mix easy to find and use?
-2. Write useful feedback for this note: "The coin sound is the same every time."
+2. Put the three parts of this feedback in order: (1) "try three takes and
+   a small pitch change"; (2) "I hear the coin sound the same way every
+   time"; (3) "it matters because it gets boring".
 3. Why does a designer change one thing at a time?
 4. The menu music plays from the left only. Should music be panned or 3D?
 
@@ -139,7 +171,7 @@ The 3-minute music is loaded into memory, and the game starts slowly. What helps
 
 ::: {.answers}
 1. A moment and a criterion.
-2. For example: I hear the coin repeat the same way; it matters because it gets boring; try three takes and a small pitch change.
+2. (2), (3), (1): I hear, it matters because, try.
 3. Then she knows which change helped.
 4. No: music stays 2D.
 :::

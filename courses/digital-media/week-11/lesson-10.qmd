@@ -18,9 +18,16 @@ has its answer: try first, then check.
 ## 10.1 Frames and the frame rate
 
 - Video = a series of **frames** (still pictures), usually with audio.
-- **Frame rate:** frames per second. 24 fps: cinema look. 30 fps:
-  trailers. 60 fps: fast game action.
-- 2 minutes at 60 fps = 7200 frames.
+- **Frame rate:** frames per second (fps).
+
+| Frame rate | Use |
+|:----------:|------------------------------------|
+| 24 fps | a cinema look |
+| 30 fps | trailers |
+| 60 fps | fast game action |
+
+- The number of frames = seconds × fps. For example, 2 minutes = 120 s,
+  and 120 × 60 = 7200 frames at 60 fps.
 
 ![Video is a series of frames.](images/frames.png){width=94%}
 
@@ -29,8 +36,13 @@ Choose the project's frame rate first; mixed frame rates stutter.
 :::
 
 ::: {.callout-note title="Do it · Count the frames"}
-Count the frames of a 30 s trailer at 30 fps, a 10 s clip at 60 fps, and a
-2-minute film at 24 fps.
+Fill in the frames of each video: frames = seconds × fps.
+
+| Video | Seconds | Frame rate | Frames |
+|----------------------|:-------:|:----------:|:------:|
+| a store trailer | 30 | 30 fps | \_\_\_ |
+| a game clip | 10 | 60 fps | \_\_\_ |
+| a 2-minute film | 120 | 24 fps | \_\_\_ |
 
 ::: {.check}
 (a) 30 × 30 = 900 frames; (b) 10 × 60 = 600 frames; (c) 120 × 24 = 2880
@@ -66,9 +78,15 @@ the frame rate for fast game action
 
 ## 10.2 Resolution and aspect ratio
 
-- **Resolution:** 1280 × 720 (720p), 1920 × 1080 (1080p), 3840 × 2160
-  (4K).
-- **Aspect ratio:** 16:9 wide, 9:16 tall, 1:1 square.
+- **Resolution:** the number of pixels, across × down.
+
+| Name | Resolution |
+|:-------------:|:-----------------:|
+| 720p | 1280 × 720 |
+| 1080p (Full HD) | 1920 × 1080 |
+| 4K | 3840 × 2160 |
+
+- **Aspect ratio:** the shape. 16:9 is wide, 9:16 is tall, 1:1 is square.
 - From wide to tall: **crop** a part, never stretch.
 
 ![Resolution and aspect ratio.](images/resolution.png){width=94%}
@@ -115,12 +133,15 @@ a trailer for a monitor
 
 ## 10.3 Containers, codecs and bitrate
 
-- **Container:** MP4, MOV, WebM; it holds the tracks.
-- **Codec:** H.264 (plays everywhere), H.265, VP9, AV1; ProRes for editing;
-  AAC for audio.
-- **Key frame:** a whole picture; the frames between store only changes.
-- **Bitrate:** data per second (Mbit/s). Higher: a better picture and a
-  bigger file.
+- **Container:** the file type, like a box that holds the tracks (the
+  picture and the sound): MP4, MOV, WebM.
+- **Codec:** the way the picture or the sound is packed inside the box:
+  H.264 (plays everywhere), H.265, VP9, AV1; ProRes for editing; AAC for
+  audio.
+- **Key frame:** a whole picture. The frames between key frames store only
+  what changes.
+- **Bitrate:** data per second, in Mbit/s (million bits per second). A
+  higher bitrate gives a better picture and a bigger file.
 - Too low a bitrate for fast action: **blocks**.
 
 ![A container with coded tracks.](images/container-codec.png){width=94%}

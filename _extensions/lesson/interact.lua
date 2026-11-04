@@ -101,10 +101,41 @@ local function why_of(block)
   return out
 end
 
--- The first block of a list item, as inlines.
+-- The label of a list marker: 3 in LowerAlpha with ")" is "c)".
+local function marker_text(list)
+  local n, style, delim = list.start or 1, list.style, list.delimiter
+  local label = tostring(n)
+  if style == "LowerAlpha" or style == "UpperAlpha" then
+    label = ""
+    repeat
+      label = string.char(97 + (n - 1) % 26) .. label
+      n = (n - 1) // 26
+    until n == 0
+    if style == "UpperAlpha" then label = label:upper() end
+  elseif style == "LowerRoman" or style == "UpperRoman" then
+    local vals = { { 10, "x" }, { 9, "ix" }, { 5, "v" }, { 4, "iv" }, { 1, "i" } }
+    label = ""
+    for _, v in ipairs(vals) do
+      while n >= v[1] do label = label .. v[2]; n = n - v[1] end
+    end
+    if style == "UpperRoman" then label = label:upper() end
+  end
+  if delim == "OneParen" then return label .. ")" end
+  if delim == "TwoParens" then return "(" .. label .. ")" end
+  return label .. "."
+end
+
+-- The first block of a list item, as inlines. A card that starts like a
+-- list item ("b) the main menu", "1. c) the brief") is read by Pandoc as a
+-- list of one item: its marker is put back in front of the text.
 local function item_inlines(item)
   local first = item[1]
   if first and (first.t == "Plain" or first.t == "Para") then return pandoc.Inlines(first.content) end
+  if first and first.t == "OrderedList" and #first.content == 1 then
+    local out = pandoc.Inlines({ pandoc.Str(marker_text(first)), pandoc.Space() })
+    out:extend(item_inlines(first.content[1]))
+    return out
+  end
   return pandoc.Inlines({ pandoc.Str(str(first or "")) })
 end
 
@@ -153,8 +184,10 @@ local function open_tag(kind, div, extra)
     .. '<div class="ic-q">')
 end
 
+-- Stop the render: a broken check must be fixed before the page is built.
+-- (Quarto's error() only prints a line and goes on, so use assert.)
 local function fail(kind, msg)
-  error("A ::: {." .. kind .. "} check " .. msg .. " (see the top of _extensions/lesson/interact.lua).")
+  assert(false, "A ::: {." .. kind .. "} check " .. msg .. " (see the top of _extensions/lesson/interact.lua).")
 end
 
 -- One question, several options (a task list), one of them right.

@@ -162,6 +162,9 @@ FROZEN = {
 IC_RE = re.compile(r"^\s*:{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b", re.M)
 # A whole page check (no nested divs inside): its fence, its text and its
 # closing fence at the same indentation.
+# The start of a list item ("1. ", "b) ", "(a) ", "- "): a line of a check
+# that starts like this is read as a list, not as text.
+LIST_START_RE = re.compile(r"^\s*(\d+[.)]|[a-zA-Z][.)]|\([a-zA-Z0-9]+\)|[-*+])\s")
 IC_BLOCK_RE = re.compile(r"^([ \t]*):{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b[^\n]*\n.*?^\1:{3,}[ \t]*$",
                          re.M | re.S)
 CHOICE_OPTIONS = (2, 4)
@@ -320,6 +323,9 @@ def ic_warnings(body):
                         why += 1
                 elif l.strip() and not l.startswith(" ") and k + 1 < len(lines) and lines[k + 1].startswith(":   "):
                     groups += 1
+                    if LIST_START_RE.match(l):
+                        out.append('%s: the group "%s" starts like a list item, so it is read as a list; '
+                                   'write it as "Question 1 · …"' % (name, l.strip()[:40]))
             if not SORT_GROUPS[0] <= groups <= SORT_GROUPS[1]:
                 out.append("%s: %d groups; give %d–%d" % ((name, groups) + SORT_GROUPS))
             if not SORT_CARDS[0] <= cards <= SORT_CARDS[1]:

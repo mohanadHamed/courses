@@ -10,9 +10,14 @@
 # No Think slides. Keep it short: at most four short sentences per slide.
 # Every concept slide has a picture: picture + text ALWAYS in columns (or the
 # slide is split in two), never text and a picture in the same column.
-# A table slide has no other text. Never put .reveal or .answer inside
-# columns. One "Live demo" slide per simulator. Do it tasks: each student
-# alone, never "together". Simple English (A2).
+# A table slide has no other text. Never put .answer inside columns. One
+# "Live demo" slide per simulator. Do it tasks: each student alone, never
+# "together". Simple English (A2).
+# NO UNSOLVED WORK (AUTHORING.md, "No unsolved work on a slide"): every Do it
+# bullet has its result right under it, in the same column, on a click
+# (::: {.reveal} with one bullet: "**Result:** …", or "**Example:** …" with
+# fixed values for a personal task); every task="…" that asks something has
+# its answer="…" (shown under the task on a click).
 # A lecture with a worksheet (lesson-NN-sheet.qmd): the slides demonstrate it.
 # Keywords, "Before you start", then per experiment "Experiment N · …" (the
 # idea in one sentence and the steps with their questions, a picture) and
@@ -35,6 +40,11 @@ format: lesson-pptx
 - A short sentence with the second idea.
 - A short sentence with the third idea.
 - **Do it:** One instruction for each student. What do you write down?
+
+::: {.reveal}
+- **Result:** the result, with its short reason (a personal task:
+  "**Example:** …" with fixed values).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/name.png)
@@ -53,7 +63,7 @@ The situation with its numbers. **The question that the example answers?**
 
 ## Live demo · Name
 
-{{< sim file="sims/name.html" poster="sims/name.png" title="What it shows" kind="game" task="**Show:** what the teacher does. **Ask:** a full question?" >}}
+{{< sim file="sims/name.html" poster="sims/name.png" title="What it shows" kind="game" task="**Show:** what the teacher does. **Ask:** a full question?" answer="The answer, in one short sentence." >}}
 
 ## Try it 1 · Short title
 

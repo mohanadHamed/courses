@@ -138,7 +138,10 @@ this order.
 2. **Interactive lesson (HTML)** — `lesson-NN.qmd`, derived from the notes.
    The same sections (`## 1.1 …`), each with a short, clear summary (plainer
    English than the notes, but not childish), its figures, its simulator or
-   mini-game, and **one** "Try it" set. Then the Game challenge and a summary.
+   mini-game, its Do it task **checked by the page** (see "The page checks
+   every task") and **one** "Try it" set. Then the Game challenge and a
+   summary. Everything on the page is done by tapping, ordering or sorting
+   cards, typing a number or using a simulator, and the page answers at once.
 3. **Slides (PPTX)** — `lesson-NN-slides.qmd`, derived from the notes: a
    visual summary for class and for revision.
 
@@ -155,24 +158,137 @@ and its main button is "Worksheet (PDF)" (see "Lecture worksheets").
 
 - **The interactive page is the study version:** a simplified copy of the
   notes in which every question and task has an immediate answer with a
-  short reason. No student is left stuck.
+  short reason. No student is left stuck, and no student marks their own
+  work: students expect a page they solve by tapping, ordering cards or
+  using a simulator, and they understand the lesson in the shortest time.
   - Every Try it question has a `Why:` reason (see "Try it"). After two
     wrong tries the page shows the right answer with its reason.
-  - Every Do it, Lab task, Activity and Task with AI box has a
-    `::: {.check}`: "Check your result", closed until the student opens it.
-    A fixed task: the result and one line of why. A personal task (their
-    phone, their premise): "A good answer looks like …" and a 2–3 point
-    self-check list.
+  - Every Do it, Lab task, Activity, experiment step and Task with AI box
+    ends with an **interactive check** that the page marks at once (see
+    "The page checks every task"), never with a closed "Check your result"
+    to open and compare: that is a paper self-test, and it belongs in the
+    PDF.
   - A prose question on the page is answered in the text itself.
 - **The PDF is the self-test:** questions inside the lesson, answers at the
   end. `book.lua` moves every `.check` of the notes to "Results of the Do it
   tasks" ("Results of the activities" in a seminar), next to "Answers to the
-  exercises"; `Why:` is not printed.
+  exercises"; `Why:` is not printed. The notes and the worksheets keep their
+  `.check` boxes and their personal tasks (your phone, your premise: "A good
+  answer looks like …" and a 2–3 point self-check list).
 - **Graded work stays unanswered:** the homework and the "Tasks to submit"
-  of online activities have no `.check` and no `Why:`. Their solutions are
-  in `courses-private`.
-- `check_size.py` warns about a task without `.check`, a Try it question
-  without `Why:`, and answers in graded work.
+  of online activities have no `.check`, no interactive check and no
+  `Why:`. Their solutions are in `courses-private`.
+- `check_size.py` warns about a page task without an interactive check, a
+  closed `.check` on a page, an incomplete check, a Try it question without
+  `Why:`, a notes task without `.check`, and answers in graded work.
+
+### The page checks every task
+
+Since 2026-11-04 (the teacher's request) a task on the page is never a
+self-assessment. The student does the task on the page and the page says at
+once if the result is right, with the reason; a wrong answer says why it is
+wrong. Four kinds of check (`interact.lua`, `lesson-script.html`), for the
+page only (the notes, worksheets and slides leave them out):
+
+```markdown
+::: {.choice}
+Where does u + v end?
+
+- [x] at (4, 3)
+
+  Why: x: 3 + 1 = 4; y: 1 + 2 = 3.
+
+- [ ] at (3, 4)
+
+  Why: The x-part comes first: 3 + 1 = 4.
+
+- [ ] at 7
+
+  Why: The sum of two vectors is a vector, not a number.
+:::
+
+::: {.order}
+Put the steps of the instruction cycle in order.
+
+1. Fetch the instruction
+2. Decode it
+3. Execute it
+
+Why: The CPU fetches, then decodes, then executes.
+:::
+
+::: {.sort}
+Story or gameplay? Sort each choice of Lina.
+
+Story
+:   She saved the fisherman. The next scene is at his house.
+
+    Why: The next scene changes, so the story changes.
+
+Gameplay
+:   She picked a blue boat.
+
+    Why: The boat changes only how she plays.
+
+:   She played on the hard level.
+
+    Why: The level changes how hard it is, not what happens.
+:::
+
+::: {.fill answer="10" unit="cm" hint="Square each part first."}
+How long is the arrow (6, 8)?
+
+Why: √(36 + 64) = √100 = 10.
+:::
+```
+
+- **choice:** one question, 2–4 options (task-list marks), exactly one
+  right (`[x]`). **Every option has its `Why:`**: why it is right, or why a
+  tempting answer is wrong (the page shows it under the option the student
+  taps). The page mixes the options; `{.choice .fixed}` keeps the written
+  order (A, B, C, a scale, yes/no).
+- **order:** 3–6 cards written in the right order, then one `Why:`. The page
+  mixes them; the student swaps two cards with two taps (or ▲ ▼) and taps
+  "Check the order". For a process, a sequence of steps, values from small
+  to large.
+- **sort:** 2–3 groups (the terms), 3–8 cards (one `:` definition each, with
+  its `Why:`). The student taps the group of the card in colour. For a
+  classification (input or output, story or gameplay, raster or vector).
+- **fill:** a number or a very short answer, typed: `answer=` (the right
+  answers, split by `|`), `unit=` (shown after the field and allowed in the
+  answer), `tol=` (how far a number may be off), `hint=` (after the first
+  wrong try), and one `Why:`. Only where typing is the skill (a
+  calculation, a cell reference, a formula, a file name); otherwise a
+  choice is faster.
+- After two wrong tries every check shows the right answer with its reason;
+  a solved check counts in the progress of the page.
+- **The task works on the page.** It uses what the page shows: the figure,
+  a table, the numbers in the box, or the section's simulator or mini-game.
+  A task on the student's own phone or the lab computer gives fixed example
+  values on the page ("One lab computer shows: …", a screen in a figure) and
+  checks the step on them; the notes (PDF) keep the personal version. An
+  outside tool (GeoGebra, Task Manager) may stay as an extra line, but the
+  check never needs it.
+- **One to three checks in a task box**, the main result first, one check
+  per step that has a result. Vary the kinds on a page: order for a
+  process, sort for a classification, fill for a calculation, choice for a
+  decision with a reason. The checks practise the task; the Try it set
+  after it practises the concept: no question twice (see "No repetition").
+- Write the checks like a Try it question: self-contained (the numbers in
+  the question or the box), exactly one right answer, the words of the
+  lesson, A2 English, fixed answers (never what a simulator shows now).
+- A seminar Activity on the page: its steps, each with its check (2–4
+  checks in an activity), then its Try it. A Task with AI on the page: what
+  the student should see is a choice ("Which picture is right?") and each
+  change to try is a choice ("What changes?"); the notes keep the closed
+  answers.
+- A lecture worksheet: each step keeps its `{{< record >}}` and `.check`
+  (the PDF) and adds one check for the page; `{{< experiment N >}}` shows
+  the check instead of the text field and the closed result (see "Lecture
+  worksheets").
+- `check_size.py` checks every check: one right option and a reason for
+  every option; 3–6 cards with a reason; 2–3 groups, 3–8 cards, a reason
+  for every card; an `answer=` and a reason.
 
 ### What a seminar looks like
 
@@ -206,7 +322,9 @@ is activity-based. Templates: `seminar-template.qmd`,
   2. **Activities** (`## Activity N · title`): 2 (at most 3). Each has a
      short game (or workplace) situation, an
      `::: {.callout-note title="Activity N · title · 15 min"}` box with a
-     task for each student alone and a concrete product, its `.check`, and
+     task for each student alone and a concrete product (on the page: its
+     steps, each checked by the page, see "The page checks every task"; in
+     the worksheet: its `.check`), and
      one Try it with 2–3 questions (with `Why:`). Seminars are where the
      syllabus seminar titles are done ("Matrix exercises", "Drawing a
      storyboard from a scene"). The unit's mini-game, when it fits, is the
@@ -258,7 +376,9 @@ slides.
   has a concrete product: a number, a filled table, a file, a sketch, a
   decision with a reason. It works on Android and iOS, and on Windows lab
   computers; if a step differs, say how. No programming and no game-engine
-  interface (see "Students").
+  interface (see "Students"). On the page the same task is done on the page
+  (the figure, the numbers in the box, the simulator) and checked at once
+  (see "The page checks every task").
 - **Theory budget.** About one third of a lesson explains; two thirds apply
   (game-based worked examples, Do it tasks, Try it, Game challenge).
   At most one formal definition per section, only for terms the tasks use.
@@ -430,10 +550,17 @@ measurements. Template: `shared/templates/sheet-template.qmd`.
   demonstration and the way to do the step without the app.
 - **The page teaches, the worksheet tests.** The interactive lesson shows
   each experiment in its section with `{{< experiment N >}}`, read from the
-  worksheet (written once): a text field after each step (kept in the
-  student's browser only) and "Check your result". `{{< experiment results >}}`
-  shows the table of results. In the PDF, `book.lua` moves every result to
-  "Results of the experiments" ("Experiment 2 · Step 3"), on a new page.
+  worksheet (written once). Every step of the worksheet has, after its
+  `{{< record >}}` and its `.check` (the PDF), **one interactive check for
+  the page** (`.choice`, `.order`, `.sort` or `.fill`, indented like the
+  step): the page shows the step and its check, and leaves out the text
+  field and the closed result. A step whose result depends on the app or
+  the AI ("the AI's answer") checks a fixed example: a typical answer in the
+  check, and the question asks what to keep, fix or trust in it.
+  `{{< experiment results >}}` shows the table of results. In the PDF,
+  `book.lua` moves every result to "Results of the experiments"
+  ("Experiment 2 · Step 3"), on a new page, and the page checks are left
+  out.
 - **Done and checked in class, never uploaded.** The worksheet is not
   homework and has no marks; the online activity is the graded work of
   the unit.
@@ -473,8 +600,8 @@ adds nothing new:
 
 - "Before you start" (what you need, about how long, what you submit);
 - 2–3 short **Steps** marked `{.study}`: what the content type gives (see
-  below), one "Try it" self-check each, with `Why:`, and a `.check` where a
-  step asks for a result;
+  below), one "Try it" each, with `Why:`, and an interactive check where a
+  step asks for a result (see "The page checks every task");
 - **Tasks to submit** (`{.tasks}`): 2–4 practical tasks with marks and a
   concrete product (a named file, a screenshot, a short answer), with
   `{{< answer-space >}}` for the printed copy; then "How to submit".
@@ -538,7 +665,8 @@ Students have AI assistants, and many of them have never used one to learn.
 In Game Math, Computing Systems and Digital Media no ILO or PLO asks for AI:
 a "Task with AI" box is an **extra for the curious**, so that students meet
 AI as a modern way to learn. It is as simple and as inviting as possible
-(the teacher's request of 2026-10-31):
+(the teacher's request of 2026-10-31). On the page (the page checks every
+task):
 
 ```markdown
 ::: {.callout-note .ai-task title="Task with AI · Draw the vector to the enemy"}
@@ -554,45 +682,61 @@ and the enemy at (6, 6). Draw the vector from the player to the enemy as an
 arrow, with its x part and its y part, and label them.
 :::
 
-**What do you see?**
+::: {.choice}
+What should the picture show? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-The result in words, to compare: the AI can be wrong.
+- [x] An arrow from (2, 3) to (6, 6): 4 to the right and 3 up.
+
+  Why: The vector to the enemy is E − P = (6 − 2, 6 − 3) = (4, 3).
+
+- [ ] An arrow from (6, 6) to (2, 3).
+
+  Why: That arrow goes from the enemy to the player, the other way.
 :::
 
 ::: {.try-change}
 **Change:** one number or one word, for example the enemy to (8, 2). Ask
-again. What do you notice?
+again.
 
-::: {.check}
-What the student should notice.
+::: {.choice}
+What changes in the picture?
+
+- [x] The arrow now goes 6 to the right and 1 down.
+
+  Why: (8 − 2, 2 − 3) = (6, −1).
+
+- [ ] Nothing: the arrow stays the same.
+
+  Why: The enemy moved, so the arrow to it changes too.
 :::
 :::
 
 ::: {.try-change}
-**Change:** a second change. What do you notice?
-
-::: {.check}
-What the student should notice.
-:::
+**Change:** a second change, with its own choice.
 :::
 
 **Your own idea:** change one more number or word, and look again.
 :::
 ```
 
+In the notes (PDF) the same box keeps closed answers: after the prompt
+`**What do you see?**` and `::: {.check label="What you should see"}` (the
+result in words), and a `::: {.check}` inside each `{.try-change}`;
+`book.lua` prints them at the end.
+
 - **A complete prompt** (`::: {.prompt}`; the page adds "Copy prompt"):
   every detail and number of one game or work situation, ready to copy. The
   student never completes or designs it: no brackets, no "add your …".
 - **A visual result:** the prompt asks the AI for something to look at: a
   picture, a diagram, a chart, a small table or a small web page.
-- **What you should see:** `::: {.check label="What you should see"}`, a
-  closed box with the result in words, so the student can compare (the AI
-  can be wrong).
+- **What you should see:** on the page a `::: {.choice}` ("What should the
+  picture show?": the right result and a typical wrong one, each with its
+  reason), so the student compares the AI's result with the page (the AI
+  can be wrong); in the notes `::: {.check label="What you should see"}`.
 - **2–3 changes to try** (`::: {.try-change}`): one number or one word
-  changed, "What do you notice?", and a closed answer inside (`::: {.check}`,
-  "What you notice"); then one line that invites the student's own idea.
-  The notes (PDF) print these answers at the end, with the other results.
+  changed, and on the page a `::: {.choice}` inside ("What changes?"); in
+  the notes "What do you notice?" and a closed answer (`::: {.check}`),
+  printed at the end. Then one line that invites the student's own idea.
 - No heavy check step before the student sees the result: keep it fun.
 - **0–2 per session**, only as an extra: the "At home" part of a seminar
   (at most one there), or after the Game challenge of a lecture. Not on the
@@ -614,9 +758,10 @@ What the student should notice.
 - The rule "no tool or assistant names" (Site identity) is about how the
   lessons are made, not about the tools students use.
 - `check_size.py` warns above 2 per file, about a prompt that is not
-  complete or asks for no visual result, about a box without "What you
-  should see", about changes to try without a closed answer, and about a
-  box inside graded tasks.
+  complete or asks for no visual result, about a box without what the
+  student should see, about changes to try without their check (a choice
+  on the page, a closed answer in the notes), and about a box inside graded
+  tasks.
 
 ## Source of truth: the Google Drive folder (private, never copy into this repo)
 
@@ -880,6 +1025,21 @@ what the class does with it. Short is good; unclear is not.
   challenge slide has a `task` in its `{{< sim >}}` shortcode: what the
   teacher shows and what the class is asked ("Show: jump with +0 ms, then
   with +220 ms. Ask: why does the jump feel late?").
+- **No unsolved work on a slide** (the teacher's request of 2026-11-04): a
+  teacher presents and explains every activity from the slide alone.
+  - A Do it bullet has its result right under it, in the same column,
+    shown on a click: `::: {.reveal}` with one bullet, "**Result:** …" (a
+    fixed task: the result and the short reason) or "**Example:** …" (a
+    personal task: one good answer, with fixed values, for example "On one
+    lab computer: 6 cores and 12 logical processors.").
+  - A `task` that asks something has its `answer="…"`, shown under it on a
+    click ("Ask: what happens when k is negative?" → answer="The arrow
+    turns around.").
+  - A seminar's Activity slide gives the problem with fixed facts; its
+    Check slide shows one definite result, step by step. A worksheet's
+    Experiment slide is answered by its Check slide.
+  - A task that cannot be shown solved on a slide is cut from the slide,
+    or replaced by a worked example.
 - **Examples state their question** before the steps ("How long does the
   level load on each phone?"); each step is a short sentence that ends with
   the result.
@@ -893,7 +1053,8 @@ what the class does with it. Short is good; unclear is not.
 - `check_size.py` warns about fragments of one to three words, bullets with
   " · " between keywords, questions without a question word or "?", "…",
   Try it slides without an answer on the slide, Examples without a
-  question, simulator slides without a `task`, and group work ("Do it
+  question, simulator slides without a `task`, a Do it bullet without its
+  result, a `task` question without its `answer=`, and group work ("Do it
   together", "with a classmate").
 
 ### Slide types
@@ -911,13 +1072,14 @@ what the class does with it. Short is good; unclear is not.
   text must be in columns, or the slide is split in two:
   `:::: {.columns}` / `::: {.column width="50%"}` text / `::: {.column width="50%"}` picture.
   Text in a column with a picture is lost: keep them in separate columns.
-  At most four sentences and the Do it bullet; `pptx_finish.py` makes long
-  text smaller, but a smaller font is not a reason to write more.
+  At most four sentences and the Do it bullet with its result; `pptx_finish.py`
+  makes long text smaller, but a smaller font is not a reason to write more.
   A table slide has no other text (put a short note in the title).
-  Never put `.reveal` or `.answer` inside columns.
+  Never put `.answer` inside columns; the only `.reveal` inside a column is
+  the result of its Do it bullet (one bullet, at the end of the text column).
 - One "Live demo · …" slide per simulator or mini-game (same `{{< sim >}}`
   shortcode with a `task`: the task line above the recording of the game
-  being played, and a large QR code).
+  being played, its `answer` on a click, and a large QR code).
 - Game challenge: one slide with the game itself (its recording + QR code,
   `{{< sim … kind="game" task="…" >}}`; the task gives the story in one
   sentence and says what to do), then one "Try it" slide (harder, 2–3
@@ -1133,6 +1295,27 @@ do not add it. The draft mechanism still works (a draft lecture is faded,
 - Semesters: improve lessons in place, never copy a course. Tag each finished
   semester (e.g. `git tag 2026-fall`).
 
+### Frozen sessions (kept as sent; rewritten next semester)
+
+When a rule changes in the middle of a semester, every session is rewritten
+with it, except the ones the teacher names because the students already
+work on them (a page and a tasks PDF that were sent): changing them now would
+confuse the students. Those sessions are **frozen**:
+
+- They keep their files as they are (page, notes, worksheet, slides, tasks
+  PDF, platform text), with the older rules. The extension still renders
+  them (a closed `{.check}` still works on a frozen page).
+- `check_size.py` lists them in `FROZEN` and does not check them against
+  the newest rules.
+- **At the start of the next semester** (or when the teacher asks for all
+  lessons to follow the newest rules): rewrite every frozen session with the
+  rules of this file, run `check_size.py`, then empty `FROZEN`.
+
+Frozen in fall 2026-2027: Digital Skills **Lecture 1** (`week-01/lesson-01*`)
+and **Online activity 1** (`week-01/online-01.qmd`, its tasks PDF and its
+platform week), sent to the students before the page checked every task
+(2026-11-04).
+
 ## Git
 
 - Commit locally as me: author and committer come from my git config
@@ -1164,6 +1347,19 @@ do not add it. The draft mechanism still works (a draft lecture is faded,
 ## Lessons learned
 
 <!-- Add general rules from weekly retros here, newest first. -->
+
+- 2026-11-04 (teacher's request): the interactive pages asked students to
+  do a task and then open a closed "Check your result" to compare, like a
+  paper self-test. Students expect a page that they solve by tapping,
+  putting cards in order or using a simulator, and that answers at once.
+  Every task on a page now ends with an interactive check (choice, order,
+  sort, fill) that marks the answer at once and says why a wrong answer is
+  wrong; personal tasks give fixed example values on the page. The notes and
+  worksheets (PDF) keep their self-test. On the slides every Do it bullet
+  shows its result on a click, and every simulator question its answer.
+  Digital Skills Lecture 1 and Online activity 1 were already with the
+  students, so they are frozen until next semester. Rules above ("The page
+  checks every task", "No unsolved work on a slide", "Frozen sessions").
 
 - 2026-10-17: the first week 1 `game-math` lessons were too short for 90 min
   (12–21 "Try it" questions, fewer than the 60-min lessons). Size by the

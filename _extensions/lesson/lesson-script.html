@@ -125,6 +125,7 @@
       score.textContent = (firstTry === qs.length ? "🏆 " : "🎉 ") +
         "All done! " + firstTry + " / " + qs.length + " right at the first try.";
       reset.hidden = false;
+      box.dataset.done = "1";
       box.dispatchEvent(new CustomEvent("match:done", { bubbles: true }));
     };
     const start = () => {
@@ -182,12 +183,281 @@
     start();
   }
 
-  // "I did it" buttons under each "Try it" box, with a counter in the hero.
-  // Saved in this browser only; the page works the same without storage.
-  const tries = [...document.querySelectorAll(".callout-tip")];
+  // Interactive checks (interact.lua): the page checks every task at once.
+  // choice: tap an option; order: put cards in order; sort: put each card in
+  // its group; fill: type a number or a short answer. A right answer shows its
+  // reason; a wrong one says why it is wrong (choice) and the student tries
+  // again; after two wrong tries the right answer is shown with its reason.
+  // A solved check sends "ic:done" (the progress below listens).
+  const icDone = (box) => {
+    if (box.dataset.done) return;
+    box.dataset.done = "1";
+    box.classList.add("is-solved");
+    box.dispatchEvent(new CustomEvent("ic:done", { bubbles: true }));
+  };
+  const icSay = (el, text, kind) => { el.textContent = text; el.className = "ic-feedback " + (kind || ""); };
+  const icShake = (el) => { el.classList.remove("ic-shake"); void el.offsetWidth; el.classList.add("ic-shake"); };
+  const icMix = (parent, items) => {
+    const a = [...items];
+    for (let k = a.length - 1; k > 0; k--) {
+      const j = Math.floor(Math.random() * (k + 1));
+      [a[k], a[j]] = [a[j], a[k]];
+    }
+    a.forEach((x) => parent.appendChild(x));
+    return a;
+  };
+  const icShow = (el) => { if (el && el.innerHTML.trim()) el.hidden = false; };
+
+  for (const box of document.querySelectorAll(".ic-choice")) {
+    const wrap = box.querySelector(".ic-opts");
+    const fb = box.querySelector(".ic-feedback");
+    const rows = box.classList.contains("ic-fixed") ? [...wrap.children] : icMix(wrap, wrap.children);
+    let misses = 0;
+    const lock = () => rows.forEach((r) => { r.querySelector(".ic-opt").disabled = true; });
+    rows.forEach((row) => {
+      const btn = row.querySelector(".ic-opt");
+      btn.addEventListener("click", () => {
+        if (box.dataset.done) return;
+        if (btn.dataset.right === "1") {
+          row.classList.add("is-right");
+          icShow(row.querySelector(".ic-reason"));
+          icSay(fb, "✓ Right!", "good");
+          lock();
+          icDone(box);
+          return;
+        }
+        misses++;
+        row.classList.add("is-wrong");
+        btn.disabled = true;
+        icShow(row.querySelector(".ic-reason"));
+        icShake(btn);
+        if (misses < 2 && rows.some((r) => !r.classList.contains("is-wrong") && r.querySelector(".ic-opt").dataset.right !== "1")) {
+          icSay(fb, "✗ Not this one. Read why, then try again.", "bad");
+        } else if (misses < 2) {
+          icSay(fb, "✗ Not this one. One answer is left: try it.", "bad");
+        } else {
+          const right = rows.find((r) => r.querySelector(".ic-opt").dataset.right === "1");
+          right.classList.add("is-shown");
+          icShow(right.querySelector(".ic-reason"));
+          icSay(fb, "The right answer is shown, with the reason. Read it, then go on.", "shown");
+          lock();
+          icDone(box);
+        }
+      });
+    });
+  }
+
+  for (const box of document.querySelectorAll(".ic-order")) {
+    const list = box.querySelector(".ic-cards");
+    const fb = box.querySelector(".ic-feedback");
+    const check = box.querySelector(".ic-check");
+    const kids = () => [...list.children];
+    const inOrder = () => kids().every((c, i) => Number(c.dataset.pos) === i + 1);
+    // Mix the cards; never start in the right order.
+    for (let k = 0; k < 12 && (k === 0 || inOrder()); k++) icMix(list, list.children);
+    if (inOrder() && list.children.length > 1) list.appendChild(list.firstElementChild);
+    let picked = null, misses = 0;
+    const unpick = () => { if (picked) picked.classList.remove("is-picked"); picked = null; };
+    const fresh = () => { kids().forEach((c) => c.classList.remove("is-right", "is-wrong")); icSay(fb, ""); };
+    const swap = (a, b) => {
+      const mark = document.createElement("li");
+      list.insertBefore(mark, a);
+      list.insertBefore(a, b);
+      list.insertBefore(b, mark);
+      mark.remove();
+    };
+    list.addEventListener("click", (e) => {
+      if (box.dataset.done) return;
+      const card = e.target.closest(".ic-card");
+      if (!card) return;
+      fresh();
+      if (e.target.closest(".ic-up")) {
+        if (card.previousElementSibling) list.insertBefore(card, card.previousElementSibling);
+        unpick();
+      } else if (e.target.closest(".ic-down")) {
+        if (card.nextElementSibling) list.insertBefore(card.nextElementSibling, card);
+        unpick();
+      } else if (!picked) {
+        picked = card;
+        card.classList.add("is-picked");
+      } else if (picked === card) {
+        unpick();
+      } else {
+        swap(picked, card);
+        unpick();
+      }
+    });
+    kids().forEach((c) => {
+      c.tabIndex = 0;
+      c.addEventListener("keydown", (e) => {
+        if (e.target !== c || box.dataset.done) return;
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.click(); }
+        if (e.key === "ArrowUp" && c.previousElementSibling) { e.preventDefault(); fresh(); list.insertBefore(c, c.previousElementSibling); c.focus(); }
+        if (e.key === "ArrowDown" && c.nextElementSibling) { e.preventDefault(); fresh(); list.insertBefore(c.nextElementSibling, c); c.focus(); }
+      });
+    });
+    check.addEventListener("click", () => {
+      if (box.dataset.done) return;
+      unpick();
+      let wrong = 0;
+      kids().forEach((c, i) => {
+        const ok = Number(c.dataset.pos) === i + 1;
+        c.classList.toggle("is-right", ok);
+        c.classList.toggle("is-wrong", !ok);
+        if (!ok) wrong++;
+      });
+      if (!wrong) {
+        icSay(fb, "✓ Right! This is the right order.", "good");
+      } else if (++misses < 2) {
+        icShake(list);
+        icSay(fb, "✗ " + wrong + (wrong === 1 ? " card is" : " cards are") +
+          " not in the right place (in red). Move them, then check again.", "bad");
+        return;
+      } else {
+        kids().sort((a, b) => a.dataset.pos - b.dataset.pos).forEach((c) => {
+          list.appendChild(c);
+          c.classList.remove("is-wrong");
+          c.classList.add("is-right", "is-shown");
+        });
+        icSay(fb, "The right order is shown, with the reason. Read it, then go on.", "shown");
+      }
+      icShow(box.querySelector(".ic-why"));
+      check.disabled = true;
+      icDone(box);
+    });
+  }
+
+  for (const box of document.querySelectorAll(".ic-sort")) {
+    const list = box.querySelector(".ic-sort-cards");
+    const fb = box.querySelector(".ic-feedback");
+    const cards = icMix(list, list.children);
+    const bins = [...box.querySelectorAll(".ic-bin")];
+    const names = {};
+    bins.forEach((b) => { names[b.dataset.g] = b.querySelector(".ic-bin-name").innerHTML; });
+    let active = null, first = 0;
+    const select = (c) => { active = c; cards.forEach((x) => x.classList.toggle("is-active", x === c)); };
+    const count = (g) => {
+      const n = cards.filter((c) => c.dataset.g === g && c.classList.contains("is-placed")).length;
+      const b = bins.find((x) => x.dataset.g === g);
+      b.querySelector(".ic-bin-count").textContent = n ? n + (n === 1 ? " card" : " cards") : "";
+    };
+    const place = (c, shown) => {
+      c.classList.add("is-placed", shown ? "is-shown" : "is-right");
+      const g = c.querySelector(".ic-sort-group");
+      g.innerHTML = (shown ? "→ " : "✓ ") + names[c.dataset.g];
+      g.hidden = false;
+      icShow(c.querySelector(".ic-reason"));
+      count(c.dataset.g);
+    };
+    const next = () => {
+      const n = cards.find((x) => !x.classList.contains("is-placed"));
+      if (n) { select(n); return; }
+      select(null);
+      if (!fb.classList.contains("shown")) icSay(fb, "");
+      icSay(fb, (first === cards.length ? "🏆 " : "🎉 ") + "All sorted! " + first + " / " + cards.length +
+        " right at the first try.", "good");
+      icDone(box);
+    };
+    cards.forEach((c) => {
+      c.addEventListener("click", () => { if (!c.classList.contains("is-placed")) select(c); });
+      c.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.click(); } });
+    });
+    bins.forEach((b) => b.addEventListener("click", () => {
+      if (!active) return;
+      if (b.dataset.g === active.dataset.g) {
+        if (!active.dataset.miss) first++;
+        place(active, false);
+        icSay(fb, "✓ Right!", "good");
+        next();
+        return;
+      }
+      const miss = (Number(active.dataset.miss) || 0) + 1;
+      active.dataset.miss = String(miss);
+      icShake(active);
+      icShake(b);
+      if (miss < 2) {
+        icSay(fb, "✗ Not this group. Try again.", "bad");
+      } else {
+        place(active, true);
+        icSay(fb, "The right group is shown, with the reason. Read it, then go on.", "shown");
+        next();
+      }
+    }));
+    select(cards[0]);
+  }
+
+  // A typed answer: the same after small differences (spaces, case, a unit,
+  // "−" or "-", outer brackets); numbers are compared as numbers.
+  const icNorm = (s, unit) => {
+    let t = String(s).normalize("NFKC").toLowerCase().replace(/[−–—]/g, "-").replace(/×/g, "x")
+      .replace(/\s+/g, "").replace(/\.$/, "");
+    const u = String(unit || "").normalize("NFKC").toLowerCase().replace(/\s+/g, "");
+    if (u && t.endsWith(u) && t.length > u.length) t = t.slice(0, -u.length);
+    if (/^\(.*\)$/.test(t) && t.indexOf("(", 1) < 0) t = t.slice(1, -1);
+    return t;
+  };
+  const icNum = (t) => {
+    const u = t.replace(/(\d),(?=\d{3}(\D|$))/g, "$1").replace(/,/g, ".");
+    return /^[-+]?(\d+\.?\d*|\.\d+)$/.test(u) ? parseFloat(u) : NaN;
+  };
+  for (const box of document.querySelectorAll(".ic-fill")) {
+    const input = box.querySelector(".ic-input");
+    const btn = box.querySelector(".ic-check");
+    const fb = box.querySelector(".ic-feedback");
+    const answers = (box.dataset.answer || "").split("|").map((a) => a.trim()).filter(Boolean);
+    const unit = box.dataset.unit || "";
+    const tol = Number(box.dataset.tol) || 0;
+    let misses = 0;
+    const right = (v) => {
+      const t = icNorm(v, unit), x = icNum(t);
+      return answers.some((a) => {
+        const ta = icNorm(a, unit), y = icNum(ta);
+        if (!isNaN(x) && !isNaN(y)) return Math.abs(x - y) <= Math.max(tol, 1e-9 * Math.max(1, Math.abs(y)));
+        return t === ta;
+      });
+    };
+    const finish = () => { input.disabled = true; btn.disabled = true; icShow(box.querySelector(".ic-why")); icDone(box); };
+    const go = () => {
+      if (box.dataset.done) return;
+      if (!input.value.trim()) { icSay(fb, "Type your answer first, then tap Check.", "bad"); input.focus(); return; }
+      if (right(input.value)) {
+        input.classList.remove("is-wrong");
+        input.classList.add("is-right");
+        icSay(fb, "✓ Right!", "good");
+        finish();
+        return;
+      }
+      misses++;
+      input.classList.add("is-wrong");
+      icShake(input);
+      if (misses < 2) {
+        icSay(fb, "✗ Not yet. " + (box.dataset.hint || "Look at the section again, then try again."), "bad");
+      } else {
+        input.classList.remove("is-wrong");
+        input.classList.add("is-shown");
+        input.value = answers[0] + (unit && !answers[0].endsWith(unit) ? " " + unit : "");
+        icSay(fb, "The right answer is shown, with the reason. Read it, then go on.", "shown");
+        finish();
+      }
+    };
+    btn.addEventListener("click", go);
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); go(); } });
+    input.addEventListener("input", () => { input.classList.remove("is-wrong"); });
+  }
+
+  // "I did it" buttons under each "Try it" box (and each task box that the
+  // page checks), with a counter in the hero. A box is marked by itself when
+  // every check in it is solved. Saved in this browser only; the page works
+  // the same without storage.
+  const hasIc = document.querySelector(".ic") !== null;
+  const tries = [...document.querySelectorAll(".callout-tip, .callout-note.do-it, .callout-note.ai-task, .experiment")]
+    .filter((b) => b.classList.contains("callout-tip") || b.querySelector(".ic"))
+    .filter((b) => !b.parentElement.closest(".callout-tip, .callout-note.do-it, .callout-note.ai-task, .experiment"));
   const chip = document.getElementById("lesson-progress");
   if (!tries.length || !chip) return;
-  const key = "done:" + location.pathname;
+  // Pages with interactive checks count more boxes: a key of their own, so the
+  // marks saved for the older page are not read for other boxes.
+  const key = "done:" + location.pathname + (hasIc ? "#checks" : "");
   let done = [];
   try { done = JSON.parse(localStorage.getItem(key) || "[]"); } catch (_) {}
   // Ignore marks saved for an older version of the page with more boxes.
@@ -210,10 +480,15 @@
       done = done.includes(i) ? done.filter((d) => d !== i) : [...done, i];
       save(); paint(); update();
     });
-    box.addEventListener("match:done", () => {
-      if (!done.includes(i)) { done = [...done, i]; save(); paint(); update(); }
-    });
-    (box.querySelector(".callout-body-container") || box).appendChild(btn);
+    const auto = () => {
+      const all = [...box.querySelectorAll(".match, .ic")];
+      if (all.length && all.every((x) => x.dataset.done) && !done.includes(i)) {
+        done = [...done, i]; save(); paint(); update();
+      }
+    };
+    box.addEventListener("match:done", auto);
+    box.addEventListener("ic:done", auto);
+    (box.querySelector(".callout-body-container") || box.querySelector(".exp-body") || box).appendChild(btn);
     paint();
   });
   update();

@@ -320,6 +320,135 @@ details.check[open] { background: color-mix(in srgb, var(--accent2) 7%, #fff); }
 details.check .check-body { padding: 0.1rem 0 0.4rem; }
 details.check .check-body > :last-child { margin-bottom: 0; }
 
+/* ---------- Interactive checks (interact.lua + lesson-script.html) ----------
+   The page checks every task at once: choice, order, sort and fill. */
+.ic {
+  margin: 0.7rem 0 0.35rem; padding: 0.6rem 0.8rem 0.35rem;
+  border-radius: 12px; background: #fff;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 30%, #fff);
+}
+.ic.is-solved { border-color: #b6dfbd; }
+.ic-q > :last-child { margin-bottom: 0.45rem; }
+.ic-q > p:last-child { font-weight: 700; color: var(--ink); }
+.ic-help { margin: 0.35rem 0 0.1rem; font-size: 0.82rem; color: #66766a; }
+.ic.is-solved .ic-help { display: none; }
+.ic-feedback { min-height: 1.3em; margin: 0.3rem 0 0.15rem; font-weight: 800; }
+.ic-feedback:empty { min-height: 0; margin: 0; }
+.ic-feedback.good { color: #2b8a3e; }
+.ic-feedback.bad { color: #c92a2a; }
+.ic-feedback.shown { color: #a3500b; }
+.ic-why, .ic-reason { font-size: 0.93rem; color: #3d4a40; }
+.ic-why { margin: 0.25rem 0 0.35rem; padding: 0.35rem 0.6rem; border-radius: 10px; background: #f2faf3; }
+.ic-why::before, .ic-reason::before { content: "Why: "; font-weight: 800; color: var(--accent-ink); }
+.ic-shake { animation: match-shake 0.35s; }
+.ic-check {
+  padding: 0.35rem 1rem; border: 1.5px solid var(--accent); border-radius: 10px;
+  background: var(--accent); color: #fff; font: inherit; font-weight: 800; font-size: 0.92rem; cursor: pointer;
+}
+.ic-check:disabled { opacity: 0.45; cursor: default; }
+.ic-actions { margin: 0.2rem 0; }
+/* choice */
+.ic-opts { display: grid; gap: 0.4rem; }
+.ic-opt {
+  display: flex; align-items: flex-start; gap: 0.55rem; width: 100%; text-align: left;
+  padding: 0.45rem 0.75rem; border: 1.5px solid var(--accent); border-radius: 12px;
+  background: #fff; color: var(--accent-ink); font: inherit; font-weight: 700; cursor: pointer;
+  transition: transform 0.12s, background 0.12s;
+}
+.ic-opt:hover:not(:disabled) { background: color-mix(in srgb, var(--accent2) 16%, #fff); transform: translateY(-1px); }
+.ic-opt:disabled { cursor: default; }
+.ic-mark {
+  flex: 0 0 1.35rem; height: 1.35rem; margin-top: 0.1rem; border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 55%, #fff);
+  display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #fff;
+}
+.ic-opt-text { flex: 1; }
+.ic-opt-text p { margin: 0; }
+.ic-reason { padding: 0.25rem 0.3rem 0.15rem 2.3rem; }
+.ic-opt-row.is-right .ic-opt, .ic-opt-row.is-shown .ic-opt { border-color: #2b8a3e; background: #f2faf3; color: #1e5f2b; }
+.ic-opt-row.is-right .ic-mark, .ic-opt-row.is-shown .ic-mark { background: #2b8a3e; border-color: #2b8a3e; }
+.ic-opt-row.is-right .ic-mark::before, .ic-opt-row.is-shown .ic-mark::before { content: "✓"; }
+.ic-opt-row.is-shown .ic-opt { border-color: #d9480f; background: #fffaf3; }
+.ic-opt-row.is-shown .ic-mark { background: #d9480f; border-color: #d9480f; }
+.ic-opt-row.is-wrong .ic-opt { border-color: #c92a2a; background: #fff5f5; color: #a61e1e; opacity: 1; }
+.ic-opt-row.is-wrong .ic-mark { background: #c92a2a; border-color: #c92a2a; }
+.ic-opt-row.is-wrong .ic-mark::before { content: "✗"; }
+.ic-opt-row.is-wrong .ic-reason::before { content: "Why not: "; color: #a61e1e; }
+.ic.is-solved .ic-opt-row:not(.is-right):not(.is-shown):not(.is-wrong) .ic-opt { opacity: 0.5; }
+/* order */
+.ic-cards { list-style: none; padding: 0; margin: 0 0 0.3rem; display: grid; gap: 0.4rem; counter-reset: ic-card; }
+.ic-card {
+  display: flex; align-items: center; gap: 0.55rem; padding: 0.4rem 0.5rem 0.4rem 0.6rem;
+  border: 1.5px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; user-select: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.ic-num { flex: 0 0 auto; counter-increment: ic-card; }
+.ic-num::before {
+  content: counter(ic-card); display: inline-flex; align-items: center; justify-content: center;
+  width: 1.55rem; height: 1.55rem; border-radius: 50%; font-weight: 800; font-size: 0.85rem;
+  background: color-mix(in srgb, var(--accent2) 35%, #fff); color: var(--accent-ink);
+}
+.ic-card-text { flex: 1; font-weight: 600; }
+.ic-card-text p { margin: 0; }
+.ic-move { display: flex; gap: 0.25rem; }
+.ic-move button {
+  width: 2rem; height: 1.9rem; border: 1.5px solid color-mix(in srgb, var(--accent) 40%, #fff); border-radius: 8px;
+  background: #fff; color: var(--accent-ink); font-size: 0.8rem; cursor: pointer; padding: 0;
+}
+.ic-card.is-picked {
+  border-color: var(--accent); background: color-mix(in srgb, var(--accent2) 14%, #fff);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.ic-card.is-right { border-color: #2b8a3e; background: #f2faf3; }
+.ic-card.is-right .ic-num::before { background: #2b8a3e; color: #fff; }
+.ic-card.is-wrong { border-color: #c92a2a; background: #fff5f5; }
+.ic-card.is-shown { border-color: #f0b37a; background: #fffaf3; }
+.ic-card.is-shown .ic-num::before { background: #d9480f; }
+.ic.is-solved .ic-move { display: none; }
+.ic.is-solved .ic-card { cursor: default; }
+/* sort */
+.ic-sort-cards { list-style: none; padding: 0; margin: 0 0 0.3rem; display: grid; gap: 0.4rem; }
+.ic-sort-card {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.6rem;
+  padding: 0.42rem 0.75rem; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer;
+}
+.ic-sort-text { flex: 1 1 12rem; font-weight: 600; }
+.ic-sort-group {
+  margin-left: auto; padding: 0.1rem 0.65rem; border-radius: 999px; font-weight: 800; font-size: 0.88rem;
+  background: #2b8a3e; color: #fff;
+}
+.ic-sort-card .ic-reason { flex: 1 0 100%; padding: 0.15rem 0 0.05rem; }
+.ic-sort-card.is-active {
+  border-color: var(--accent); background: color-mix(in srgb, var(--accent2) 10%, #fff);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.ic-sort-card.is-right { border-color: #b6dfbd; background: #f2faf3; cursor: default; }
+.ic-sort-card.is-shown { border-color: #f0b37a; background: #fffaf3; cursor: default; }
+.ic-sort-card.is-shown .ic-sort-group { background: #d9480f; }
+.ic-bins { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: 0.45rem; margin: 0.25rem 0; }
+.ic-bin {
+  display: flex; flex-direction: column; align-items: center; gap: 0.1rem;
+  padding: 0.55rem 0.6rem; border: 2px dashed var(--accent); border-radius: 12px;
+  background: color-mix(in srgb, var(--accent2) 10%, #fff); color: var(--accent-ink);
+  font: inherit; font-weight: 800; cursor: pointer; transition: transform 0.12s, background 0.12s;
+}
+.ic-bin:hover { background: color-mix(in srgb, var(--accent2) 22%, #fff); transform: translateY(-1px); }
+.ic-bin-count { font-size: 0.78rem; font-weight: 700; color: #66766a; min-height: 1em; }
+.ic.is-solved .ic-bin { cursor: default; border-style: solid; }
+/* fill */
+.ic-fill-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; margin: 0.15rem 0 0.25rem; }
+.ic-input {
+  flex: 0 1 13rem; min-width: 6rem; font: inherit; font-weight: 700; padding: 0.35rem 0.6rem; border-radius: 10px;
+  border: 1.5px solid color-mix(in srgb, var(--accent) 45%, #fff); background: #fff;
+}
+.ic-input:focus { outline: 2px solid color-mix(in srgb, var(--accent) 55%, #fff); }
+.ic-input.is-right { border-color: #2b8a3e; background: #f2faf3; color: #1e5f2b; }
+.ic-input.is-wrong { border-color: #c92a2a; background: #fff5f5; }
+.ic-input.is-shown { border-color: #d9480f; background: #fffaf3; color: #a3500b; }
+.ic-unit { font-weight: 700; color: #56665a; }
+@media (prefers-reduced-motion: reduce) { .ic * { animation: none !important; transition: none !important; } }
+@media print { .ic { display: none !important; } }
+
 /* Lecture worksheet on the page ({{< experiment N >}}, shortcodes.lua): one
    experiment of the worksheet with its numbered steps; after each step a field
    to record the result ({{< record >}}) and "Check your result". */

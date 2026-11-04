@@ -16,6 +16,10 @@ format: lesson-pptx
 - The provider runs data centres in regions, and we pay for what we use.
 - A public cloud serves many customers, a private cloud one organization, and a hybrid cloud mixes own servers with a public cloud.
 - **Do it:** Which kind fits a club with no money for servers?
+
+::: {.reveal}
+- **Result:** A public cloud: rent what you need, with no servers to buy.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/deployment.png)
@@ -53,6 +57,10 @@ c) a private cloud
 - In PaaS it uploads only its code, and in SaaS it uses a finished app.
 - BaaS gives ready game services, such as cloud saves and leaderboards.
 - **Do it:** Set the layers of IaaS, PaaS and SaaS in Cloud Stack. What does Byte Bay still manage?
+
+::: {.reveal}
+- **Result:** IaaS: the OS, the runtime, the app and the data; PaaS: the app and the data; SaaS: only its data.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/service-models.png)
@@ -61,7 +69,7 @@ c) a private cloud
 
 ## Live demo · Cloud Stack
 
-{{< sim file="sims/cloud-stack.html" poster="sims/cloud-stack.png" title="Cloud Stack: who manages what?" task="**Show:** set IaaS with one wrong layer and check, fix it, then PaaS. **Ask:** what does Byte Bay still manage with SaaS?" >}}
+{{< sim file="sims/cloud-stack.html" poster="sims/cloud-stack.png" title="Cloud Stack: who manages what?" task="**Show:** set IaaS with one wrong layer and check, fix it, then PaaS. **Ask:** what does Byte Bay still manage with SaaS?" answer="Its data: who sees it and how long it is kept." >}}
 
 ## Try it 2 · Models
 
@@ -83,6 +91,10 @@ c) BaaS
 - A CDN keeps copies of the downloads near the players.
 - Dedicated game servers run the live matches near the players.
 - **Do it:** Choose a game you know. Which cloud services does it use, and for what?
+
+::: {.reveal}
+- **Example:** A football game: accounts and cloud saves (back end), new kits (storage and a CDN), and online matches (game servers).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/game-cloud.png)
@@ -109,6 +121,10 @@ c) dedicated game servers
 - Fixed servers are too few at the peak or idle at night.
 - The risks are growing costs, outages, vendor lock-in and data laws.
 - **Do it:** How many fixed servers turn nobody away in Launch Day Scaling?
+
+::: {.reveal}
+- **Result:** 9 fixed servers; auto-scaling also turns nobody away and costs less.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/scaling.png)
@@ -117,7 +133,7 @@ c) dedicated game servers
 
 ## Live demo · Launch Day Scaling
 
-{{< sim file="sims/scale-sim.html" poster="sims/scale-sim.png" title="Launch Day Scaling: enough servers, not too many" task="**Show:** play the day with 5 fixed servers, then with auto-scaling. **Ask:** why is auto-scaling cheaper and still enough at 19:00?" >}}
+{{< sim file="sims/scale-sim.html" poster="sims/scale-sim.png" title="Launch Day Scaling: enough servers, not too many" task="**Show:** play the day with 5 fixed servers, then with auto-scaling. **Ask:** why is auto-scaling cheaper and still enough at 19:00?" answer="It adds servers when the players come at 19:00 and removes them at night, so it pays only for what it uses." >}}
 
 ## Try it 4 · Launch day
 

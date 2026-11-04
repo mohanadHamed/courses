@@ -31,16 +31,38 @@ Wi-Fi is not the Internet: it only connects your phone to the access point.
 
 ::: {.callout-note title="Do it · Your network"}
 Draw the network at your home or in your lab: the devices, the router and
-access point, and the way to the Internet. Label at least five parts.
+access point, and the way to the Internet. At home, one box is often router,
+switch and access point together.
 
-::: {.check}
-A good drawing looks like: a PC (cable), two phones (Wi-Fi), the box
-labelled "router + switch + access point", a line to the ISP, and a cloud
-labelled "Internet".
+::: {.sort}
+Which job of the home box is it? Sort the jobs.
 
-- ☐ Every device is connected to the box.
-- ☐ The box has its three jobs.
-- ☐ The way to the Internet goes through the ISP.
+Switch
+:   It joins the PC on a cable.
+
+    Why: A switch joins the wired devices of the LAN.
+
+Access point
+:   It gives the phones Wi-Fi.
+
+    Why: The access point is the Wi-Fi part.
+
+Router
+:   It connects the home through the ISP to the Internet.
+
+    Why: The router joins the LAN to other networks.
+:::
+
+::: {.order}
+Put the way of a packet from a phone to the Internet in order.
+
+1. the phone
+2. Wi-Fi to the access point
+3. the router
+4. the ISP
+5. the Internet
+
+Why: Wi-Fi only reaches the box; the router and the ISP lead out to the Internet.
 :::
 :::
 
@@ -91,13 +113,45 @@ outside the LAN cannot reach it.
 
 ::: {.callout-note title="Do it · Find your address"}
 Phone: Settings › Wi-Fi › the network › details. PC: `ipconfig` in the
-Command Prompt. Write your IP address and gateway. Is the address private?
+Command Prompt. One phone shows IP address 192.168.1.37 and gateway
+192.168.1.1.
 
-::: {.check}
-A good answer looks like: "IP address 192.168.1.37, gateway 192.168.1.1:
-private, because it starts with 192.168." On mobile data the phone may show
-an address that starts with 10: also private, inside the network of the
-mobile company.
+::: {.sort}
+Private or public? Sort the addresses.
+
+Private: inside a LAN
+:   192.168.1.37, the phone at home
+
+    Why: An address that starts with 192.168. is private.
+
+:   192.168.1.1, the gateway
+
+    Why: The router's address inside the home network.
+
+:   10.20.30.40, a phone on mobile data
+
+    Why: 10. addresses are private, inside the network of the mobile company.
+
+Public: on the Internet
+:   203.0.113.80, the game server from the DNS
+
+    Why: The DNS gives the public address of the server.
+:::
+
+::: {.choice}
+A game writes 192.168.1.37 as its server address. What happens?
+
+- [x] Players outside that LAN cannot reach the server.
+
+  Why: A private address works only inside its own network.
+
+- [ ] Every player reaches it faster.
+
+  Why: Outside the LAN the address leads nowhere.
+
+- [ ] The DNS turns it into a name.
+
+  Why: The DNS turns names into addresses; it cannot make a private address public.
 :::
 :::
 
@@ -149,14 +203,44 @@ a lost one.
 
 ::: {.callout-note title="Do it · TCP or UDP?"}
 In **Packet Journey**, send 10 packets with TCP and with UDP, both with
-20 % loss. Then choose TCP or UDP for: a chat message, voice chat, a
-download of a new level.
+20 % loss.
 
-::: {.check}
-TCP: all 10 packets arrive, in order, but it takes longer (the lost ones
-are sent again). UDP: about 2 of 10 packets are missing, but it is fast.
-Chat message: TCP. Voice chat: UDP. Download of a level: TCP (every byte
-must arrive).
+::: {.choice}
+What does TCP do with 20 % loss?
+
+- [x] All 10 packets arrive, in order, but it takes longer.
+
+  Why: TCP sends the lost packets again and waits for them.
+
+- [ ] About 2 of the 10 packets are lost.
+
+  Why: That is UDP: it sends no packet again.
+
+- [ ] It stops sending.
+
+  Why: TCP keeps sending until every packet arrives.
+:::
+
+::: {.sort}
+TCP or UDP? Sort the data of a game.
+
+TCP
+:   a chat message
+
+    Why: Every word must arrive, in order.
+
+:   the download of a new level
+
+    Why: Every byte must arrive.
+
+UDP
+:   voice chat
+
+    Why: A late piece of voice is worse than a lost one.
+
+:   the positions of the players, many times per second
+
+    Why: The next position comes soon; waiting for a lost one would make lag.
 :::
 :::
 
@@ -207,15 +291,35 @@ More bandwidth does not fix lag from a weak Wi-Fi signal.
 
 ::: {.callout-note title="Do it · Compare"}
 Check the ping of an online game (or a speed test) near the router and far
-from it (or on mobile data). Write both values.
+from it (or on mobile data). Hala measured 18 ms near the router, and
+45–120 ms far from it, jumping all the time.
 
-::: {.check}
-A good answer looks like: "Near the router: 18 ms. Far from it: 45–120 ms,
-and it jumps. The far place has a higher latency and more jitter, so the
-game would lag."
+::: {.choice}
+Where would the game lag?
 
-- ☐ Two ping values.
-- ☐ One sentence about latency or jitter.
+- [x] far from the router
+
+  Why: Higher latency and more jitter: the time jumps from 45 to 120 ms.
+
+- [ ] near the router
+
+  Why: 18 ms and steady is good for an action game.
+
+- [ ] nowhere: both are under 200 ms
+
+  Why: An action game needs a ping below about 50 ms and little jitter.
+:::
+
+::: {.choice}
+Does more bandwidth fix the lag far from the router?
+
+- [x] No: the weak Wi-Fi signal makes the delay; go closer or use a cable.
+
+  Why: Bandwidth is the amount per second, not the delay.
+
+- [ ] Yes: more Mbit/s always means less lag.
+
+  Why: A few Mbit/s is enough for a game; the signal decides the delay.
 :::
 :::
 

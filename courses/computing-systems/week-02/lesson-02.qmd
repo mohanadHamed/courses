@@ -37,13 +37,31 @@ Cores do not add up: 8 cores at 3 GHz are **not** 24 GHz.
 ::: {.callout-note title="Do it · Watch the cores at work"}
 On a lab computer: press Ctrl + Shift + Esc → Task Manager →
 **Performance → CPU**. Right-click the graph → **Change graph to → Logical
-processors**. Open the simulator of section 2.2. Watch for 30 seconds. Write
-down the number of cores. Is one graph very busy, or are all graphs busy?
+processors**, and watch it while the simulator of section 2.2 runs. One lab
+computer shows **Cores: 6** and **Logical processors: 12**, and one graph is
+much busier than the others.
 
-::: {.check}
-A typical lab computer shows 4 to 8 cores (8 to 16 logical processors). While
-the simulator runs, one graph is often much busier than the others: the main
-thread of a program runs on one core at a time.
+::: {.choice}
+Why is one graph much busier than the others?
+
+- [x] The main thread of a program runs on one core at a time.
+
+  Why: The game logic cannot be split over the cores; only other work can.
+
+- [ ] The other cores are broken.
+
+  Why: The other cores work too, but they get less work.
+
+- [ ] The busy core has more GHz.
+
+  Why: All cores have the same clock rate; the busy one just has the main thread.
+:::
+
+::: {.fill answer="14" unit="ms" hint="The main thread stays on one core; only the physics is shared by the cores."}
+A frame needs 12 ms on the main thread and 8 ms of physics. With four
+cores, how long does the frame take?
+
+Why: 12 + 8 ÷ 4 = 12 + 2 = 14 ms: faster, but not four times faster.
 :::
 :::
 
@@ -94,14 +112,32 @@ A phone has 8 cores at 3 GHz. How fast is the core of the main thread?
 
 ::: {.callout-note title="Do it · Fetch the data yourself"}
 In **Data Trip**, get one value from the cache, from RAM and from flash
-storage. Write the time and the human-scale time of each level in a table.
-Finish with one sentence: what does the cache do?
+storage, and read the time and the human-scale time of each level.
 
-::: {.check}
-Cache about 1 ns (1 second on the human scale), RAM about 100 ns (about 2
-minutes), flash storage about 100 000 ns (about a day). The cache keeps
-copies of data used a short time ago next to the core, so the core waits
-less.
+::: {.order}
+Put the levels in order, from the fastest to the slowest.
+
+1. the cache: about 1 ns (1 second on the human scale)
+2. RAM: about 100 ns (about 2 minutes)
+3. flash storage: about 100 000 ns (about a day)
+
+Why: Near the core memory is small and fast; farther away it is bigger and slower.
+:::
+
+::: {.choice}
+What does the cache do?
+
+- [x] It keeps copies of data used a short time ago next to the core, so the core waits less.
+
+  Why: Data that the game uses again and again, like the player's position, stays in the cache.
+
+- [ ] It keeps the games when the power is off.
+
+  Why: That is storage; the cache forgets everything like RAM.
+
+- [ ] It makes the clock rate higher.
+
+  Why: The clock rate stays; the cache only shortens the waits for data.
 :::
 :::
 
@@ -158,13 +194,31 @@ the loading time.
 :::
 
 ::: {.callout-note title="Do it · Watch the memory fill"}
-On a lab computer: Task Manager → **Processes**. Sort by **Memory**. Write
-down the browser's memory. Open five pages with many pictures. Wait ten
-seconds. Write it down again. What does the extra memory hold?
+On a lab computer: Task Manager → **Processes**, sorted by **Memory**. Look at
+the browser's memory, open five pages with many pictures, wait ten seconds
+and look again. On one lab computer the browser goes from **400 MB** to
+**900 MB**.
 
-::: {.check}
-The browser's memory grows, for example from 400 MB to 900 MB. The extra
-memory holds the open pages: their pictures, code and data.
+::: {.fill answer="500" unit="MB" hint="The new value minus the old value."}
+How much memory did the five pages add?
+
+Why: 900 − 400 = 500 MB.
+:::
+
+::: {.choice}
+What does the extra memory hold?
+
+- [x] the open pages: their pictures, code and data
+
+  Why: RAM holds what is used now; five open pages need room.
+
+- [ ] the files saved on the SSD
+
+  Why: Saved files stay in storage; RAM holds what is open now.
+
+- [ ] nothing: it is a bug
+
+  Why: Open pages need memory: the growth is normal.
 :::
 :::
 
@@ -218,14 +272,47 @@ player's data.
 
 ::: {.callout-note title="Do it · A game in your phone's storage"}
 **Android:** Settings → Apps → *(a game)* → Storage. **iPhone:** Settings →
-General → iPhone Storage → *(a game)*. Write down the size of each part.
-Which part would grow with a new level? Do **not** press Clear storage,
-Offload App or Delete App.
+General → iPhone Storage → *(a game)*. Do **not** press Clear storage,
+Offload App or Delete App. *Pocket Pets* shows: App 1.1 GB, Documents and
+data 2.4 GB, Cache 0.3 GB.
 
-::: {.check}
-A good answer lists the app size, the user data (documents and data) and
-the cache, for example 1.1 GB, 2.4 GB and 0.3 GB. A new level makes the
-user data grow, because downloaded levels are user data.
+::: {.sort}
+Which part of the game's storage holds each thing? Sort them.
+
+App
+:   the program of the game
+
+    Why: The app part is what you installed from the store.
+
+User data
+:   a downloaded new level
+
+    Why: Downloaded levels are user data: this part grows with a new level.
+
+:   the player's progress and saves
+
+    Why: Progress belongs to the player: user data.
+
+Cache
+:   temporary files that the game can make again
+
+    Why: The cache holds temporary files; clearing it loses nothing important.
+:::
+
+::: {.choice}
+Which button deletes the player's progress?
+
+- [x] Clear storage
+
+  Why: Clear storage deletes the user data, with the progress.
+
+- [ ] Clear cache
+
+  Why: Clear cache deletes only temporary files.
+
+- [ ] Force stop
+
+  Why: Force stop closes the app; it deletes nothing.
 :::
 :::
 

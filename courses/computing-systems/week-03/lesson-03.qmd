@@ -41,14 +41,36 @@ triggers are analog.
 {{< sim file="sims/input-lab.html" poster="sims/input-lab.png" title="Input Lab: what does the game read?" height="720" >}}
 
 ::: {.callout-note title="Do it · Input Lab"}
-Open **Input Lab** on your phone. How many fingers does your phone follow at
-once? Drag the stick half way right and read "stick x". Press A and read
-"button A". Which control is analog?
+Open **Input Lab** on your phone. Count the fingers it follows at once. Drag
+the stick half way right and read "stick x". Press A and read "button A".
 
-::: {.check}
-A key gives only 0 or 1, so the car turns fully (40° per second) or not at
-all. The stick gives values between −1 and 1, so the car can turn a little:
-half way gives 20° per second.
+::: {.sort}
+Which controls are digital, and which are analog? Sort them.
+
+Digital: 0 or 1
+:   a key of the keyboard
+
+    Why: A key is only pressed or not pressed.
+
+:   the A button of a gamepad
+
+    Why: Face buttons are digital: "button A" shows 0 or 1.
+
+Analog: a range of values
+:   a stick
+
+    Why: A stick gives every value from −1 to 1.
+
+:   a trigger
+
+    Why: A trigger can be pressed a little or all the way.
+:::
+
+::: {.fill answer="20|20°" unit="° per second" hint="40° per second × the input 0.5."}
+Neon Drift turns the car by 40° per second times the input. The stick is
+half way (0.5). How fast does the car turn?
+
+Why: 40 × 0.5 = 20° per second; a key (only 0 or 1) would turn it fully, 40°.
 :::
 :::
 
@@ -103,13 +125,38 @@ player.
 ::: {.callout-note title="Do it · The devices around you"}
 Open **Settings → Bluetooth & devices** on the lab computer and the
 Bluetooth and sound settings on your phone (Android: **Sound and
-vibration**; iPhone: **Sounds & Haptics**). List every input and output
-device, built-in ones too. Mark each "input", "output" or "both".
+vibration**; iPhone: **Sounds & Haptics**), and look at every input and
+output device, built-in ones too.
 
-::: {.check}
-A good list has every device with its kind, for example: keyboard (input),
-mouse (input), monitor (output), headset with microphone (both), phone touch
-screen (both), phone speaker (output), vibration motor (output).
+::: {.sort}
+Input, output or both? Sort the devices.
+
+Input
+:   the keyboard
+
+    Why: It sends the keys into the computer.
+
+:   the mouse
+
+    Why: It sends the moves and the clicks.
+
+Output
+:   the monitor
+
+    Why: Its cable only carries the picture out to the player.
+
+:   the vibration motor of the phone
+
+    Why: It gives the player a feeling: output.
+
+Both
+:   a headset with a microphone
+
+    Why: The speakers give sound out, the microphone takes the voice in.
+
+:   the touch screen of the phone
+
+    Why: It shows the picture and reads the finger.
 :::
 :::
 
@@ -169,13 +216,29 @@ the work splits into many similar pieces, like pixels.
 {{< sim file="sims/paint-race.html" poster="sims/paint-race.png" title="Paint Race: CPU or GPU?" height="560" >}}
 
 ::: {.callout-note title="Do it · Paint Race"}
-In **Paint Race**, press **Start the race** and write the two times. Why does
-the GPU win, although each of its cores is slower?
+In **Paint Race**, press **Start the race** and read the two times. The CPU
+(4 cores) needs about 2.88 s, the GPU (144 cores) about 0.32 s.
 
-::: {.check}
-The CPU (4 cores) takes about 2.88 s, the GPU (144 cores) about 0.32 s. The
-GPU wins because all its small cores colour different pixels at the same
-time.
+::: {.choice}
+Why does the GPU win, although each of its cores is slower?
+
+- [x] Its many small cores colour different pixels at the same time.
+
+  Why: The work splits into many similar pieces: pixels.
+
+- [ ] Each GPU core is faster than a CPU core.
+
+  Why: Each GPU core is slower; there are just many more of them.
+
+- [ ] The CPU must wait for the GPU.
+
+  Why: In this race both work alone; the GPU wins by doing many pixels at once.
+:::
+
+::: {.fill answer="9" tol="0.5" hint="Divide the time of the CPU by the time of the GPU."}
+About how many times faster is the GPU here?
+
+Why: 2.88 ÷ 0.32 = 9.
 :::
 :::
 
@@ -230,14 +293,41 @@ A phone game drops from 60 to 40 fps after 20 minutes. Why?
 ![Integrated GPU and graphics card.](images/gpu-memory.png){width=90%}
 
 ::: {.callout-note title="Do it · The GPU of the lab computer"}
-Open **Task Manager → Performance → GPU 0**. Write the name of the GPU, the
-**Dedicated GPU memory** and the **Shared GPU memory**. Is it an integrated
-GPU or a graphics card? Why?
+Open **Task Manager → Performance → GPU 0** and read the name of the GPU, the
+**Dedicated GPU memory** and the **Shared GPU memory**. One lab computer
+shows: Intel UHD Graphics 770, dedicated 128 MB, shared 8 GB.
 
-::: {.check}
-A typical lab computer shows an Intel or AMD GPU with a small dedicated
-memory and a large shared memory: an integrated GPU, because it shares the
-main RAM. A graphics card shows several GB of dedicated GPU memory.
+::: {.choice}
+Is it an integrated GPU or a graphics card?
+
+- [x] an integrated GPU
+
+  Why: A small dedicated memory and a big shared memory: it uses part of the main RAM.
+
+- [ ] a graphics card, because it has 8 GB
+
+  Why: Those 8 GB are shared: they belong to the main RAM.
+
+- [ ] no GPU at all
+
+  Why: Intel UHD Graphics is a GPU inside the processor chip.
+:::
+
+::: {.choice}
+A game runs at 1080p on this computer and is too slow. Which setting helps
+the most?
+
+- [x] the resolution 720p
+
+  Why: 1080p has about twice the pixels of 720p: about half the work.
+
+- [ ] higher texture quality
+
+  Why: Better textures need more video memory, not less.
+
+- [ ] shadows on
+
+  Why: Shadows and effects lower the fps.
 :::
 :::
 

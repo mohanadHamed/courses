@@ -37,13 +37,36 @@ The OS is not only the home screen. Most of its work cannot be seen.
 
 ::: {.callout-note title="Do it · Name your two operating systems"}
 Lab computer: Settings › System › About. Phone: Settings › About phone
-(iPhone: Settings › General › About). Write the name and version of each OS,
-and one service of the OS you used today.
+(iPhone: Settings › General › About). Read the name and version of each OS,
+for example Windows 11, version 23H2, and Android 14. Then think of a
+service of the OS that you used today.
 
-::: {.check}
-A good answer: "Lab computer: Windows 11, version 23H2; phone: Android 14
-(or iOS 17)", and one service with a real example, for example "files: I
-saved a document", "permissions: an app asked for the camera".
+::: {.sort}
+Which service of the OS is at work? Sort the moments of Huda's day.
+
+Files
+:   She saved a document.
+
+    Why: The OS keeps files and folders in storage.
+
+Processes
+:   A tap on the icon started a game.
+
+    Why: The OS starts a process and gives it CPU time.
+
+Devices
+:   The game read her taps.
+
+    Why: The OS sends the input of the touch screen to the app.
+
+:   A printer printed her page.
+
+    Why: The OS controls the printer through its driver.
+
+Permissions
+:   An app asked to use the camera.
+
+    Why: The permission service asks the user first.
 :::
 :::
 
@@ -97,13 +120,40 @@ second.
 :::
 
 ::: {.callout-note title="Do it · The processes of the lab computer"}
-Open **Task Manager** (Ctrl + Shift + Esc), tab Processes. How many apps and
-background processes are there? Which three processes use the most memory?
+Open **Task Manager** (Ctrl + Shift + Esc), tab Processes, and sort by
+Memory. One lab computer shows 9 apps and 112 background processes; the
+browser uses 1.2 GB, Word 350 MB and the security program 210 MB.
 
-::: {.check}
-A typical lab computer shows about 5 to 15 apps and 80 to 150 background
-processes. The browser, an office app or a security program often uses the
-most memory.
+::: {.choice}
+Only a few apps are open, but there are more than 100 processes. Why?
+
+- [x] The OS and the apps run many background processes, and the scheduler gives each one slices of time.
+
+  Why: Multitasking: the cores switch between the processes many times per second.
+
+- [ ] Task Manager counts every window twice.
+
+  Why: Every line is a real process; most of them run in the background.
+
+- [ ] The computer has more than 100 cores.
+
+  Why: A few cores share their time between many processes.
+:::
+
+::: {.choice}
+You close the browser. What happens?
+
+- [x] Its 1.2 GB of memory is freed, and the other processes get their slices more often.
+
+  Why: One process less shares the cores and the RAM.
+
+- [ ] The computer gets more cores.
+
+  Why: The hardware stays the same; only the work changes.
+
+- [ ] Nothing changes.
+
+  Why: Closing an app frees its memory and its CPU time.
 :::
 :::
 
@@ -157,12 +207,32 @@ closed it to free RAM.
 :::
 
 ::: {.callout-note title="Do it · The memory of the lab computer"}
-Task Manager › Performance › Memory: write the total RAM, in use and
-available. Open three browser tabs with videos: how much does "in use" grow?
+Task Manager › Performance › Memory: read the total RAM, in use and
+available. Then open three browser tabs with videos. One lab computer shows
+total 16 GB, in use 6.0 GB and available 10 GB; with the three tabs, in use
+is 6.8 GB.
 
-::: {.check}
-A typical result: total 16 GB, in use 6 GB, available 10 GB. Three video
-tabs add several hundred MB to "in use", for example 6.0 → 6.8 GB.
+::: {.fill answer="0.8|800 MB|800MB" unit="GB" hint="The new value of 'in use' minus the old value."}
+How much RAM did the three video tabs add?
+
+Why: 6.8 − 6.0 = 0.8 GB, about 800 MB.
+:::
+
+::: {.choice}
+An 8 GB phone runs the OS (2.5 GB), a game (4 GB) and Chat (1 GB). The
+camera needs 1 GB. What does the OS do?
+
+- [x] It closes an app in the background, so the camera fits.
+
+  Why: 2.5 + 4 + 1 + 1 = 8.5 GB, more than 8 GB: the OS frees RAM.
+
+- [ ] It makes the RAM bigger.
+
+  Why: RAM is hardware: the OS can only share it.
+
+- [ ] It stops the camera from opening.
+
+  Why: The app in the foreground gets the RAM first.
 :::
 :::
 
@@ -222,14 +292,40 @@ file of 4 GB or more. **exFAT** takes big files on Windows and Mac.
 :::
 
 ::: {.callout-note title="Do it · The files of an app"}
-In File Explorer, open `C:\Program Files` and the folder of one program.
-Write the path and the biggest file. Right-click › Properties: write three
-items of its metadata.
+In File Explorer, open `C:\Program Files` and the folder of one program. Find
+its biggest file, then Right-click › Properties. In the folder of Firefox,
+the biggest file is xul.dll (140 MB).
 
-::: {.check}
-A good answer: "C:\\Program Files\\Mozilla Firefox, biggest file xul.dll
-(140 MB)", with three items of metadata from Properties, for example the
-type (Application extension), the size and the date it was created.
+::: {.choice}
+Which one is the path of that file?
+
+- [x] `C:\Program Files\Mozilla Firefox\xul.dll`
+
+  Why: A path names the drive and every folder down to the file.
+
+- [ ] `xul.dll (140 MB)`
+
+  Why: That is the file name and its size, not where it is.
+
+- [ ] Application extension
+
+  Why: That is its type: one item of its metadata.
+:::
+
+::: {.choice}
+A 5 GB game file does not copy to a USB stick with 20 GB free. Why?
+
+- [x] The stick is formatted FAT32: it refuses any file of 4 GB or more.
+
+  Why: Free space is not the only limit; exFAT takes big files.
+
+- [ ] The stick is full.
+
+  Why: 20 GB are free, more than 5 GB.
+
+- [ ] The file has no driver.
+
+  Why: Drivers are for devices, not for files.
 :::
 :::
 

@@ -60,15 +60,45 @@ settings.
 
 *Your product:* a table of four devices and one requirement line.
 
-::: {.check}
-| device | best setting at 60 fps or more |
-|---|---|
-| old laptop (GPU 2, 4 GB) | low: 80 fps |
-| office PC (GPU 4, 8 GB) | medium: 80 fps (high gives only 40) |
-| handheld PC (GPU 6, 16 GB) | high: 60 fps |
-| gaming PC (GPU 12, 16 GB) | ultra: 72 fps |
+::: {.sort}
+Step 1: which is the highest setting at 60 fps or more on each device? Sort
+the devices.
 
-Minimum: a GPU of 2 points and 4 GB of RAM, for low at 60 fps.
+Low
+:   old laptop (GPU 2, 4 GB)
+
+    Why: Low gives 80 fps; medium is too much for its GPU.
+
+Medium
+:   office PC (GPU 4, 8 GB)
+
+    Why: Medium gives 80 fps; high gives only 40.
+
+High
+:   handheld PC (GPU 6, 16 GB)
+
+    Why: High gives exactly 60 fps.
+
+Ultra
+:   gaming PC (GPU 12, 16 GB)
+
+    Why: Ultra gives 72 fps.
+:::
+
+::: {.choice}
+Step 2: what are the minimum requirements?
+
+- [x] a GPU of 2 points and 4 GB of RAM, for low at 60 fps
+
+  Why: The minimum comes from the weakest supported PC at low settings.
+
+- [ ] a GPU of 12 points and 16 GB of RAM
+
+  Why: That is the gaming PC: it fits ultra, not the minimum.
+
+- [ ] a GPU of 4 points and 8 GB of RAM
+
+  Why: The old laptop with less also runs the game at low.
 :::
 :::
 
@@ -110,17 +140,27 @@ players use phones or PCs. They compare with three criteria: **reach**,
 
 *Your product:* a table with scores, reasons and totals, and one sentence.
 
-::: {.check}
-| criterion | PC | console | cloud |
-|---|---|---|---|
-| reach | 4: many players have a PC | 2: few have a console | 2: few use cloud gaming |
-| fit for the game | 4: a mouse works well | 3: a controller is slower | 5: the delay does not matter |
-| cost and time | 5: the laptop builds it | 1: dev kit and certification | 3: a cloud company must stream it |
-| total | **13** | 6 | 10 |
+::: {.fill answer="13" hint="Add the three scores of the PC."}
+Step 1: the model table gives the PC 4 for reach, 4 for fit and 5 for cost
+and time. What is its total?
 
-Advice: "Port Star Garden to the PC first: the laptop already builds it,
-and many players have a PC." Your scores may differ by one point; what
-matters is a reason in every cell.
+Why: 4 + 4 + 5 = 13; the console gets 6 and the cloud 10.
+:::
+
+::: {.choice}
+Step 2: which advice fits the table?
+
+- [x] "Port Star Garden to the PC first: the laptop already builds it, and many players have a PC."
+
+  Why: The PC has the highest total, and the advice gives the reasons of its scores.
+
+- [ ] "Port it to the console first: it has the biggest screen."
+
+  Why: The console has 6 points: the dev kit and the certification cost too much.
+
+- [ ] "Port it to the cloud first: the delay does not matter."
+
+  Why: The cloud fits the game, but few players use it: 10 points.
 :::
 :::
 

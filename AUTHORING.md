@@ -251,7 +251,7 @@ Why: √(36 + 64) = √100 = 10.
   mixes them; the student swaps two cards with two taps (or ▲ ▼) and taps
   "Check the order". For a process, a sequence of steps, values from small
   to large.
-- **sort:** 2–3 groups (the terms), 3–8 cards (one `:` definition each, with
+- **sort:** 2–4 groups (the terms), 3–8 cards (one `:` definition each, with
   its `Why:`). The student taps the group of the card in colour. For a
   classification (input or output, story or gameplay, raster or vector).
 - **fill:** a number or a very short answer, typed: `answer=` (the right
@@ -287,7 +287,7 @@ Why: √(36 + 64) = √100 = 10.
   the check instead of the text field and the closed result (see "Lecture
   worksheets").
 - `check_size.py` checks every check: one right option and a reason for
-  every option; 3–6 cards with a reason; 2–3 groups, 3–8 cards, a reason
+  every option; 3–6 cards with a reason; 2–4 groups, 3–8 cards, a reason
   for every card; an `answer=` and a reason.
 
 ### What a seminar looks like

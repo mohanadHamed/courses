@@ -16,6 +16,10 @@ format: lesson-pptx
 - Each layer uses only the services of the layer below it.
 - The kernel runs on the hardware and manages processes, memory and drivers.
 - **Do it:** Build both stacks in Stack Builder. Which iOS layer does the job of the Linux kernel?
+
+::: {.reveal}
+- **Result:** Apple's kernel: it does the job of the Linux kernel (processes, memory, drivers and power).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/os-stack.png)
@@ -24,7 +28,7 @@ format: lesson-pptx
 
 ## Live demo · Stack Builder
 
-{{< sim file="sims/stack-builder.html" poster="sims/stack-builder.png" title="Stack Builder: the layers of Android and iOS" task="**Show:** build the Android stack, placing the app framework too early once, then the iOS stack. **Ask:** why can the app framework not sit right on the kernel?" >}}
+{{< sim file="sims/stack-builder.html" poster="sims/stack-builder.png" title="Stack Builder: the layers of Android and iOS" task="**Show:** build the Android stack, placing the app framework too early once, then the iOS stack. **Ask:** why can the app framework not sit right on the kernel?" answer="The framework uses the libraries (graphics, sound, files) between it and the kernel." >}}
 
 ## Try it 1 · Layers
 
@@ -46,6 +50,10 @@ c) It manages processes, memory, drivers and power.
 - iOS has Apple's own kernel, libraries, the app framework and the apps.
 - Android runs on the phones of many makers, and iOS only on Apple's phones.
 - **Do it:** Which OS does your phone run? Who made the phone, and who made the OS?
+
+::: {.reveal}
+- **Example:** On a Samsung phone, Samsung made the phone and Google made Android; on an iPhone, Apple made both.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/android-ios.png)
@@ -83,6 +91,10 @@ c) No, each platform needs its own build.
 - An app cannot read the files of another app.
 - An app reaches the camera, microphone or location only with a permission.
 - **Do it:** Open the settings of a game. How much data does it use, and which permissions does it have?
+
+::: {.reveal}
+- **Example:** Pocket Quest uses 850 MB of data, with Storage allowed and Microphone not allowed.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/sandbox.png)
@@ -109,6 +121,10 @@ c) clearing its storage or deleting the app
 - The OS tells the game before it leaves the foreground, so it can pause and save.
 - When RAM is low, the OS ends apps in the background.
 - **Do it:** Leave a game for a minute and come back. Did it continue or start again?
+
+::: {.reveal}
+- **Example:** After one minute most games continue; after many other apps, many start again from the title screen.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/app-lifecycle.png)

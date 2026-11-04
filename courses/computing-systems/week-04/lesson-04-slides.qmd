@@ -16,6 +16,10 @@ format: lesson-pptx
 - The SoC holds the CPU cores, the GPU, the modem and more.
 - The CPU and the GPU share the RAM, so a phone has no separate video memory.
 - **Do it:** Find the model of your phone in Settings. Which SoC does it have?
+
+::: {.reveal}
+- **Example:** Galaxy A55: Exynos 1480 by Samsung; iPhone 13: A15 Bionic by Apple.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/soc-map.png)
@@ -24,7 +28,7 @@ format: lesson-pptx
 
 ## Live demo · SoC Explorer
 
-{{< sim file="sims/soc-explorer.html" poster="sims/soc-explorer.png" title="SoC Explorer: the parts of a phone's main chip" task="**Show:** tap each part of the chip, then start the Quiz. **Ask:** which part draws the frames, and which part sends the score online?" >}}
+{{< sim file="sims/soc-explorer.html" poster="sims/soc-explorer.png" title="SoC Explorer: the parts of a phone's main chip" task="**Show:** tap each part of the chip, then start the Quiz. **Ask:** which part draws the frames, and which part sends the score online?" answer="The GPU draws the frames, and the modem sends the score online." >}}
 
 ## Try it 1 · Inside the SoC
 
@@ -46,6 +50,10 @@ c) in the RAM that it shares with the CPU
 - The gyroscope shows how fast the phone turns, and it reads 0 when the phone is still.
 - The GPS finds the position, and the compass finds north.
 - **Do it:** Open Tilt Lab on your phone and lay the phone flat. What does the accelerometer show on z?
+
+::: {.reveal}
+- **Result:** About 9.8: gravity is all in z, and x and y show 0.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/sensors.png)
@@ -54,7 +62,7 @@ c) in the RAM that it shares with the CPU
 
 ## Live demo · Tilt Lab
 
-{{< sim file="sims/tilt-lab.html" poster="sims/tilt-lab.png" title="Tilt Lab: the accelerometer and the gyroscope" task="**Show:** tilt the pad and hold it still, then move it fast. **Ask:** why does the gyroscope go back to 0 while the tilt stays?" >}}
+{{< sim file="sims/tilt-lab.html" poster="sims/tilt-lab.png" title="Tilt Lab: the accelerometer and the gyroscope" task="**Show:** tilt the pad and hold it still, then move it fast. **Ask:** why does the gyroscope go back to 0 while the tilt stays?" answer="The gyroscope shows how fast the phone turns: it is 0 when the phone stops, but the accelerometer still feels the tilt." >}}
 
 ## Try it 2 · Which sensor?
 
@@ -76,6 +84,10 @@ c) the gyroscope
 - The finger changes the charge where it touches, so cloth gloves do not work.
 - The touch sampling rate says how often the screen checks for touches, for example 240 times per second.
 - **Do it:** Draw on your phone with a fingertip, a fingernail and a pencil. Which ones work?
+
+::: {.reveal}
+- **Result:** Only the fingertip: the screen feels the electric charge of the skin.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/touch-grid.png)
@@ -102,6 +114,10 @@ c) The picture changes 60 times per second; touches are checked 120 times per se
 - The play time is about the capacity divided by the current.
 - A hot SoC slows down by itself, and the frame rate drops: thermal throttling.
 - **Do it:** Open the battery page in Settings. Which three apps used the most battery today?
+
+::: {.reveal}
+- **Example:** Games and video apps are often at the top, for example a racing game with 18 % and a video app with 12 %.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/battery.png)
@@ -121,7 +137,7 @@ The test phone has a 5000 mAh battery.
 
 ## Live demo · Battery Lab
 
-{{< sim file="sims/battery-lab.html" poster="sims/battery-lab.png" title="Battery Lab: play time and heat" task="**Show:** switch from 60 fps to 120 fps and high graphics, then to 30 fps. **Ask:** which setting changes the play time most, and when does the phone get hot?" >}}
+{{< sim file="sims/battery-lab.html" poster="sims/battery-lab.png" title="Battery Lab: play time and heat" task="**Show:** switch from 60 fps to 120 fps and high graphics, then to 30 fps. **Ask:** which setting changes the play time most, and when does the phone get hot?" answer="The frame rate: 120 fps and high graphics use the most power and make the phone hot; 30 fps gives the longest play." >}}
 
 ## Try it 4 · Battery and heat
 

@@ -45,7 +45,7 @@ On every page (AUTHORING.md, "The page teaches, the notes test", and "The page
 checks every task"): every Do it, Lab task and Activity box ends with an
 interactive check (::: {.choice}, {.order}, {.sort} or {.fill}, interact.lua)
 and never with a closed {.check}; each check is complete (one right option and
-a reason for every option; 3-6 cards in order with a reason; 2-3 groups and a
+a reason for every option; 3-6 cards in order with a reason; 2-4 groups and a
 reason for every card; an answer= and a reason). Every Try it question has a
 "Why:" reason. Graded work (homework, "Tasks to submit") never shows them.
 In the notes and the worksheets (PDF) every task box keeps its {.check}: the
@@ -162,7 +162,7 @@ FROZEN = {
 IC_RE = re.compile(r"^\s*:{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b", re.M)
 CHOICE_OPTIONS = (2, 4)
 ORDER_CARDS = (3, 6)
-SORT_GROUPS = (2, 3)
+SORT_GROUPS = (2, 4)
 SORT_CARDS = (3, 8)
 # Parts every lesson must have (heading text, case does not matter).
 BOOK_REQUIRED = ["key terms", "exercises", "answers to the exercises"]

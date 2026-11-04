@@ -35,12 +35,33 @@ hardware.
 
 ::: {.callout-note title="Do it · Build both stacks"}
 In **Stack Builder**, build the Android stack and the iOS stack from the
-bottom up. Which iOS layer does the job of the Linux kernel?
+bottom up.
 
-::: {.check}
-Android from the bottom: Linux kernel, libraries, app framework, apps. iOS:
-Apple's kernel, libraries, app framework, apps. In iOS the kernel layer does
-the job of the Linux kernel: processes, memory, drivers and power.
+::: {.order}
+Put the layers of the Android stack in order, from the bottom up.
+
+1. the Linux kernel
+2. the libraries
+3. the app framework
+4. the apps
+
+Why: The kernel is the lowest layer; the apps are on top and never talk to the hardware directly.
+:::
+
+::: {.choice}
+Which iOS layer does the job of the Linux kernel?
+
+- [x] Apple's kernel
+
+  Why: It runs the processes, the memory, the drivers and the power, like the Linux kernel.
+
+- [ ] the app framework
+
+  Why: The framework is near the top; it uses the layers below it.
+
+- [ ] the apps
+
+  Why: The apps are the top layer: they ask the OS for everything.
 :::
 :::
 
@@ -91,11 +112,54 @@ An `.apk` cannot be installed on an iPhone. Each platform needs its own build.
 Which OS does your phone run, and who made the phone and the OS? Find two
 lines of the table that differ for your phone and a phone of the other OS.
 
-::: {.check}
-A good answer: "Android 14 on a Samsung phone: Samsung made the phone,
-Google made Android" (or "iOS 17 on an iPhone: Apple made both"), and two
-differences, for example the kernel (Linux or Apple's own) and the package
-(.apk or .ipa).
+::: {.sort}
+Android or iOS? Sort the lines of the table.
+
+Android
+:   the Linux kernel
+
+    Why: Android is built on the Linux kernel.
+
+:   an `.apk` or `.aab` package
+
+    Why: The build of an Android game.
+
+:   Vulkan or OpenGL ES for the graphics
+
+    Why: The graphics libraries of Android.
+
+:   phones by many makers, such as Samsung or Xiaomi
+
+    Why: Google makes Android; many companies make the phones.
+
+iOS
+:   Apple's own kernel
+
+    Why: iOS has its own kernel.
+
+:   an `.ipa` package
+
+    Why: The build of an iOS game; an `.apk` cannot be installed on an iPhone.
+
+:   Metal for the graphics
+
+    Why: Metal is Apple's graphics library.
+:::
+
+::: {.choice}
+A Samsung phone runs Android 14. Who made the phone, and who made the OS?
+
+- [x] Samsung made the phone; Google made Android.
+
+  Why: Android runs on the phones of many makers.
+
+- [ ] Samsung made both.
+
+  Why: Samsung makes the phone, but Android comes from Google.
+
+- [ ] Google made both.
+
+  Why: Google makes Android; Samsung makes this phone.
 :::
 :::
 
@@ -146,13 +210,40 @@ A game cannot save in any folder it likes; it saves in its own sandbox.
 :::
 
 ::: {.callout-note title="Do it · Look at the sandbox"}
-Open the settings of one game on your phone. How much storage does its
-data use, and which permissions does it have?
+Open the settings of one game on your phone: the storage of its data and its
+permissions. *Pocket Quest* shows: data 850 MB; Storage allowed, Microphone
+not allowed.
 
-::: {.check}
-A good answer gives the size of the game's data (for example 850 MB) and its
-permissions (for example Storage allowed, Microphone not allowed). The data
-lives only in the game's own sandbox.
+::: {.choice}
+Where does the game save its progress?
+
+- [x] in its own sandbox
+
+  Why: Each app has its own files; the data of Pocket Quest lives only there.
+
+- [ ] in any folder it likes
+
+  Why: An app cannot write outside its sandbox.
+
+- [ ] in the files of another app
+
+  Why: An app cannot read or write the files of another app.
+:::
+
+::: {.choice}
+Which button removes the progress of the game?
+
+- [x] Clear storage (or deleting the app)
+
+  Why: Both remove the data in the sandbox.
+
+- [ ] Clear cache
+
+  Why: Clear cache removes only temporary files.
+
+- [ ] turning off the microphone
+
+  Why: A permission controls a device, not the saved data.
 :::
 :::
 
@@ -199,14 +290,35 @@ Do not save only on "Quit": the OS can end a game without warning.
 
 ::: {.callout-note title="Do it · Watch the life cycle"}
 Play a game for a moment, go to the home screen, wait a minute and come
-back. Then open many other apps and come back again. What happened each
-time?
+back. Then open many other apps and come back again.
 
-::: {.check}
-After one minute at home, most games continue where you left them (the game
-was in the background or suspended). After many other apps, many games start
-again from the title or loading screen: the OS ended them to free RAM, and a
-good game loads its saved progress.
+::: {.order}
+Put the states of a game in order.
+
+1. not running
+2. foreground
+3. background
+4. suspended
+5. ended
+
+Why: The player starts the game, leaves it, the OS pauses it, and at last the OS may end it.
+:::
+
+::: {.choice}
+After many other apps, the game starts again from its title screen. What
+happened?
+
+- [x] The OS ended it to free RAM; a good game loads its saved progress.
+
+  Why: When RAM is low, the OS ends background apps; only the saved progress survives.
+
+- [ ] The game crashed.
+
+  Why: The OS closed it on purpose; that is not a crash.
+
+- [ ] The game was updated.
+
+  Why: Nothing was installed; the OS needed the RAM.
 :::
 :::
 

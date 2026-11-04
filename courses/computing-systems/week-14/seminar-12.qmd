@@ -67,11 +67,31 @@ On the lab computer (or in **Emulator Lab**, Tasks 1–3):
 *Your product:* a running emulator with the game, and the output of
 `adb devices`.
 
-::: {.check}
-The emulator shows the home screen of Android 11; a first boot takes about
-15–60 seconds. `adb devices` shows `emulator-5554 device`, and `adb
-install` prints `Success`; the Pocket Quest icon appears. If you see
-`no devices/emulators found`, start the emulator first.
+::: {.order}
+Put the steps in order.
+
+1. Create `P5_API_30`: 720 × 1600, 4 GB, Android 11.
+2. Start it: the first start is a cold boot.
+3. Run `adb devices`: it shows `emulator-5554 device`.
+4. Run `adb install PocketQuest_1.3.apk`: it prints `Success`.
+
+Why: adb can install the build only on a device that is running.
+:::
+
+::: {.choice}
+`adb devices` prints `no devices/emulators found`. What do you do first?
+
+- [x] Start the emulator.
+
+  Why: adb finds no running device to install on.
+
+- [ ] Run adb install again.
+
+  Why: Without a running device, the install fails again.
+
+- [ ] Delete the AVD.
+
+  Why: The AVD is fine; it is just not started.
 :::
 :::
 
@@ -120,14 +140,50 @@ Test case 7: "Start a race, then turn the device to landscape."
 
 *Your product:* one complete bug report.
 
-::: {.check}
-The race freezes when the device turns to landscape. A good report:
-**Title:** The race freezes when the device turns to landscape. **Build:**
-PocketQuest_1.3, build 42. **Device:** AVD P5_API_30, Android 11.
-**Steps:** 1. Start a race. 2. Turn the device to landscape. **Expected:**
-the race goes on in landscape. **Actual:** the race freezes; "Pocket Quest
-isn't responding". **Attached:** the screenshot and the log line `E/Unity:
-NullReferenceException: RaceHud.OnScreenRotate () (at RaceHud.cs:118)`.
+::: {.sort}
+The race freezes in landscape. Which part of the bug report is each line?
+Sort them.
+
+Title
+:   The race freezes when the device turns to landscape.
+
+    Why: The problem in one short sentence.
+
+Steps
+:   1. Start a race. 2. Turn the device to landscape.
+
+    Why: Numbered steps that repeat the bug.
+
+Expected and actual result
+:   Expected: the race goes on in landscape.
+
+    Why: What should happen.
+
+:   Actual: the race freezes; "Pocket Quest isn't responding".
+
+    Why: What really happened.
+
+Evidence
+:   the screenshot and the log line `E/Unity: NullReferenceException: RaceHud.OnScreenRotate ()`
+
+    Why: Proof for the developer, from the moment of the problem.
+:::
+
+::: {.choice}
+Why does the report also name the build (PocketQuest_1.3, build 42) and the
+device (AVD P5_API_30, Android 11)?
+
+- [x] So that a developer can repeat the bug on the same setup.
+
+  Why: A bug may appear only on one build or one OS version.
+
+- [ ] To make the report look longer.
+
+  Why: Every part has a job: here, to repeat the bug.
+
+- [ ] Because the store asks for it.
+
+  Why: The report is for the team, not for the store.
 :::
 :::
 
@@ -173,31 +229,48 @@ emulator, a real phone with 4 GB of RAM. Put a tick where the test makes
 sense on that setup, and a dash where it does not.
 :::
 
-**What do you see?**
+::: {.choice}
+Which ticks should the table show? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-The 20-minute race and the tilt sensor have a tick only for the real phone:
-an emulator does not get hot, and its sensors are only simulated. The
-tablet screen has a tick for the tablet emulator. Rotation, a phone call
-and a slow network have ticks for every setup.
+- [x] The 20-minute race and the tilt sensor: only the real phone; the tablet screen: the tablet emulator; the rest: every setup.
+
+  Why: An emulator does not get hot, and its sensors are only simulated.
+
+- [ ] A tick on every setup for every test.
+
+  Why: Heat, battery and real sensors need a real phone.
 :::
 
 ::: {.try-change}
 **Change:** add a fifth column: an old real phone with Android 8 and 2 GB of RAM.
-What do you notice?
+Ask again.
 
-::: {.check}
-The 20-minute race and the tilt sensor now have two ticks. The old phone
-also shows if the race is still smooth on a weak phone.
+::: {.choice}
+What changes?
+
+- [x] The 20-minute race and the tilt sensor now have two ticks.
+
+  Why: The old phone is real too, and it shows if the race is smooth on a weak phone.
+
+- [ ] Nothing changes.
+
+  Why: A second real phone can do the real-phone tests.
 :::
 :::
 
 ::: {.try-change}
-**Change:** remove the real phone, and ask again. What do you notice?
+**Change:** remove the real phone, and ask again.
 
-::: {.check}
-The 20-minute race and the tilt sensor have no tick at all: these tests
-need a real phone.
+::: {.choice}
+What changes?
+
+- [x] The 20-minute race and the tilt sensor have no tick at all.
+
+  Why: These tests need a real phone.
+
+- [ ] The emulators take over the heat test.
+
+  Why: An emulator does not get hot.
 :::
 :::
 

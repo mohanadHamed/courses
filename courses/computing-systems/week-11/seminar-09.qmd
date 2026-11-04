@@ -65,11 +65,39 @@ On the lab PC (or in **Terminal Lab**, Tasks 1–3):
 
 *Your product:* two addresses, two averages and one sentence.
 
-::: {.check}
-A good answer: "IPv4 192.168.1.23, gateway 192.168.1.1: private, because it
-starts with 192.168. Gateway: average 3 ms, 0 % loss. example.com: average
-42 ms, 0 % loss. The LAN is fast; most of the time is on the way to the
-server."
+One lab PC shows IPv4 192.168.1.23 and gateway 192.168.1.1. The gateway
+answers in 3 ms on average, example.com in 42 ms, both with 0 % loss.
+
+::: {.choice}
+Step 2: where is most of the delay?
+
+- [x] far: on the way to the server
+
+  Why: The LAN answers in 3 ms; the other 39 ms are outside, on the way to the server.
+
+- [ ] near: in the router
+
+  Why: The gateway answers in 3 ms with no loss: the LAN is fast.
+
+- [ ] in the PC
+
+  Why: ipconfig and the gateway show that the PC and the LAN work well.
+:::
+
+::: {.choice}
+Step 1: another PC shows 169.254.10.4 and no gateway. What does it mean?
+
+- [x] It got no address from the router.
+
+  Why: An address 169.254.x.x with no gateway: check the cable or the Wi-Fi.
+
+- [ ] It has a very fast connection.
+
+  Why: Without a gateway, nothing leaves the PC.
+
+- [ ] It has a public address.
+
+  Why: 169.254 is the address a PC gives itself when the router does not answer.
 :::
 :::
 
@@ -118,13 +146,36 @@ problem of each one.
 
 *Your product:* your score and the six problems in a list.
 
-::: {.check}
-1. 169.254.10.4, no gateway → no address from the router. 2. The café
-router jumps from 8 to 171 ms with 25 % loss → the café's Wi-Fi. 3. "Server
-not found", the IP works → the DNS. 4. Router 3 ms, server 104 ms in the
-evening → outside the home, on the way to the server. 5. Three video
-streams, 1.2 Mbit/s → too little bandwidth. 6. Ping 24 ms, 0 % loss, but
-18 FPS in battles → not the network: the phone is too slow.
+::: {.sort}
+Where is the problem of each player? Sort them.
+
+Near: the home or café network
+:   169.254.10.4, no gateway
+
+    Why: No address from the router.
+
+:   the café router jumps from 8 to 171 ms, 25 % loss
+
+    Why: The ping to the gateway is already bad: the café's Wi-Fi.
+
+:   three video streams, 1.2 Mbit/s
+
+    Why: Too many users for too little bandwidth.
+
+The DNS
+:   "Server not found", but the IP address works
+
+    Why: The name fails, the number works: the DNS.
+
+The way to the server
+:   router 3 ms, server 104 ms in the evening
+
+    Why: The LAN is fast; the delay is outside the home.
+
+Not the network
+:   ping 24 ms, 0 % loss, but 18 FPS in battles
+
+    Why: The network is fine; the phone is too slow.
 :::
 :::
 

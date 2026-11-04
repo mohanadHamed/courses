@@ -570,7 +570,7 @@ measurements. Template: `shared/templates/sheet-template.qmd`.
   …*) instead of a Lab task.
 - **The slides are the teacher's demonstration of the worksheet:**
   Keywords; "Before you start" (the start files, the figure
-  `week-01/images/worksheet-steps.png`); for each experiment an
+  `week-02/images/worksheet-steps.png`); for each experiment an
   "Experiment N · …" slide (the idea in one sentence and the steps, each
   with its question; a picture in the other column) and a "Check N · …"
   slide (the results, step by step, in `.reveal`); a Live demo slide for
@@ -1314,7 +1314,13 @@ confuse the students. Those sessions are **frozen**:
 Frozen in fall 2026-2027: Digital Skills **Lecture 1** (`week-01/lesson-01*`)
 and **Online activity 1** (`week-01/online-01.qmd`, its tasks PDF and its
 platform week), sent to the students before the page checked every task
-(2026-11-04).
+(2026-11-04). When you rewrite them: give every step of
+`week-01/lesson-01-sheet.qmd` its page check, change its "Check:" line and
+the page's "What you type …" line like the other lectures, and point the
+lecture and its slides to the new figure `week-02/images/worksheet-steps.png`
+(it says "on the page: it answers at once"). Then the new figure can take
+the place of the old one in `week-01/images/` (delete the copy in week 2),
+with every lecture pointing to week 1 again.
 
 ## Git
 

@@ -732,6 +732,11 @@ local function experiment(args)
     end,
   })
   doc = doc:walk({ Div = function(d) if d.classes:includes("check") then return check_details(d) end end })
+  -- The shortcode is expanded after the filters of the page, so the
+  -- interactive checks of the worksheet are built here, with interact.lua.
+  local ok, interact = pcall(dofile, quarto.utils.resolve_path("interact.lua"))
+  if not ok then error("experiment shortcode: cannot load interact.lua: " .. tostring(interact)) end
+  for _, f in ipairs(interact) do doc = doc:walk(f) end
   local head
   if results then
     head = '<span class="exp-title">Table of results</span>'

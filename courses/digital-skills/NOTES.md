@@ -50,8 +50,9 @@ management, medical sterilization, facility assessment). So this course is
   step, and a table of results. Students do it on the computer during the
   lecture and the teacher checks it there; it is never uploaded. The notes
   (PDF) are a short reference, the interactive page shows the same
-  experiments with "Check your result" after every step, and the slides are
-  the teacher's demonstration of the worksheet. Size for **60 minutes**
+  experiments with an interactive check after every step (it answers at
+  once, with the reason), and the slides are the teacher's demonstration
+  of the worksheet. Size for **60 minutes**
   (3–4 sections, about 40 minutes of experiments) and a ~10-min Game
   challenge set in an ordinary workplace or a student's study work.
 - **Real apps or simulators** in the worksheet, by the nature of the
@@ -70,8 +71,9 @@ management, medical sterilization, facility assessment). So this course is
   nothing new. Start from `shared/templates/online-template.qmd`. It has:
   1. "Before you start": what you need, about how long, what you submit;
   2. two or three short **Steps** (`{.study}`): plain explanation, a figure,
-     a simulator to try at once, one "Try it" self-check with `Why:`
-     reasons, and a `.check` where a step asks for a result;
+     a simulator to try at once, one "Try it" check with `Why:`
+     reasons, and an interactive check (`.choice`, `.order`, `.sort` or
+     `.fill`) where a step asks for a result: it answers at once;
      where the teacher has a video, the e-learning platform links it;
   3. **Tasks to submit** (`{.tasks}`): 2–4 tasks with marks, each with a
      concrete product (a file with a given name, a screenshot, a short

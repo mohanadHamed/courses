@@ -160,6 +160,10 @@ FROZEN = {
 # Interactive checks of the page (interact.lua): (min, max) options of a
 # choice, cards of an order, groups and cards of a sort.
 IC_RE = re.compile(r"^\s*:{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b", re.M)
+# A whole page check (no nested divs inside): its fence, its text and its
+# closing fence at the same indentation.
+IC_BLOCK_RE = re.compile(r"^([ \t]*):{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b[^\n]*\n.*?^\1:{3,}[ \t]*$",
+                         re.M | re.S)
 CHOICE_OPTIONS = (2, 4)
 ORDER_CARDS = (3, 8)
 SORT_GROUPS = (2, 4)
@@ -492,6 +496,7 @@ def check_sheet(path, rel, notes_sections, page_body, slides_body):
     if files and "{{< start-files" not in text:
         out.append("%s: the start files are not listed ({{< start-files >}} in Before you start)" % srel)
     main = re.split(r"^## Results", text, flags=re.M)[0]
+    main = IC_BLOCK_RE.sub(" ", main)   # the page checks are not in the PDF
     if count_words(main) > SHEET_WORDS:
         out.append("%s: %d words, a worksheet has at most %d" % (srel, count_words(main), SHEET_WORDS))
     # The page shows every experiment in its section; the notes point to it.

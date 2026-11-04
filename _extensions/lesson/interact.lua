@@ -54,7 +54,10 @@
 -- Behaviour and look: lesson-script.html and lesson.css (".ic"). Every check
 -- sends "ic:done" when it is solved (the progress of the page listens).
 -- check_size.py checks the parts (one right option, a reason for every
--- option, 3–6 cards in order, 2–3 groups).
+-- option, 3–8 cards in order, 2–4 groups and 3–8 cards in a sort). The
+-- experiments of a worksheet ({{< experiment N >}}, shortcodes.lua) are
+-- expanded after the filters, so that shortcode builds their checks with
+-- this file too.
 
 local str = pandoc.utils.stringify
 

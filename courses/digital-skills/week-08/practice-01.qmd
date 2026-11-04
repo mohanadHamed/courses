@@ -65,13 +65,58 @@ She asks an AI tool for the text.
 
 *Your product:* the Word file and its PDF, with only true facts.
 
-::: {.check}
-A good notice: "Library notice. The library closes at 2 pm on Sunday
-because of a meeting. Thank you for your understanding."
+::: {.sort}
+Step 2: an AI wrote these sentences. Keep or delete? Sort them.
 
-- ☐ 2 pm and Sunday are right, and the AI added no other fact.
-- ☐ The first line has the style Title, and 2 pm is bold.
-- ☐ There are two files with the same name: `.docx` and `.pdf`.
+Your fact: keep it
+:   The library closes at 2 pm on Sunday.
+
+    Why: The day and the time that you gave.
+
+:   The reason is a meeting.
+
+    Why: You gave the reason too.
+
+Not given: delete it
+:   Students get free books on Monday.
+
+    Why: Nobody said it: the AI added it.
+
+:   The library also closes on Saturday.
+
+    Why: Another day that you did not give.
+:::
+
+::: {.choice}
+Step 3: which notice is formatted right?
+
+- [x] The first line has the style Title, and 2 pm is bold.
+
+  Why: A style for the heading, and bold for the key fact.
+
+- [ ] The whole notice is bold, in size 28.
+
+  Why: Bold on every word hides the key fact.
+
+- [ ] The first line is bold and big, typed by hand.
+
+  Why: Use the style Title: then Word knows that it is the heading.
+:::
+
+::: {.choice}
+Step 4: which files are in the folder unit-08 now?
+
+- [x] `2026-11-03_library-notice.docx` and `2026-11-03_library-notice.pdf`
+
+  Why: The same good name, with two extensions: the Word file to change, the PDF to send.
+
+- [ ] `library notice.docx` and `library notice final.pdf`
+
+  Why: The name starts with the date, has no spaces, and is the same for both files.
+
+- [ ] only `2026-11-03_library-notice.pdf`
+
+  Why: Keep the Word file too, so you can change the notice later.
 :::
 :::
 
@@ -118,11 +163,50 @@ expensive items first and a chart.
 *Your product:* `prices.xlsx` with the formulas, the sort, the rule and the
 chart.
 
-::: {.check}
-The prices with tax: Bag 13.2, Bottle 4.4, Notebook 2.2, Folder 1.65 and
-Pen 0.55 JD. D8 shows 22. After the sort, the Bag is on top. The rule
-colours two cells green: 13.2 and 4.4. The title says what the chart
-shows, for example "Prices with tax (JD)".
+::: {.fill answer="13.2" unit="JD" hint="The tax is 12 × 10 %; add it to 12."}
+Step 2: what is the price with tax of the Bag (12 JD)?
+
+Why: The tax is 12 × 10 % = 1.2 JD, so 12 + 1.2 = 13.2 JD.
+:::
+
+::: {.fill answer="22" unit="JD" hint="Add the five prices with tax."}
+Step 2: what does D8 show?
+
+Why: 2.2 + 0.55 + 13.2 + 1.65 + 4.4 = 22 JD.
+:::
+
+::: {.order}
+Step 3: put the items in the order of the sort, largest first.
+
+1. Bag: 13.2 JD
+2. Bottle: 4.4 JD
+3. Notebook: 2.2 JD
+4. Folder: 1.65 JD
+5. Pen: 0.55 JD
+
+Why: Largest to smallest: the Bag is on top, and each row moves as a whole.
+:::
+
+::: {.sort}
+Step 3: the rule colours every price with tax above 4 JD. Sort the prices.
+
+Green
+:   13.2 (the Bag)
+
+    Why: 13.2 is above 4.
+
+:   4.4 (the Bottle)
+
+    Why: 4.4 is above 4.
+
+No colour
+:   2.2 (the Notebook)
+
+    Why: 2.2 is below 4.
+
+:   0.55 (the Pen)
+
+    Why: 0.55 is below 4.
 :::
 :::
 

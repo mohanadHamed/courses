@@ -1080,6 +1080,27 @@ organised by the official weekly plan of its syllabus.
 - The script checks that every teaching row has its material and that every
   session belongs to exactly one row. Fix every problem before sending it.
 
+## The e-learning platform (Moodle)
+
+Every course has one section for each calendar week on the university
+platform, in the university template. The section text is in **Arabic**
+(the platform is in Arabic); the linked pages and files stay in English.
+
+- The texts are private, in `courses-private/moodle/<slug>-weeks.md`:
+  for each week the section text and its links (the interactive pages,
+  PDFs, worksheets and slides of the week's sessions), built by
+  `moodle/tools/build.py` from `moodle/tools/content_<slug>.py`. Every
+  link must answer 200 on the live site.
+- **Face-to-face courses** (Game Math, Computing Systems, Digital Media)
+  are not monitored on the platform, so all 15 weeks are written in advance
+  and students know what comes: week 1 is an introduction without links,
+  week N + 1 holds unit N, and the practice weeks fill the rest. A poster
+  of the course (`moodle/posters/`) takes the place of the welcome video.
+- **Digital Skills** is blended and monitored: see its `NOTES.md` ("On the
+  e-learning platform").
+- In an Arabic line, write a range of numbers as "من 1 إلى 7", not "1–7":
+  a dash range is drawn right to left and is easy to misread.
+
 ## Public repo — never commit
 
 Assignment solutions and marking notes, exam questions, question banks, grades,

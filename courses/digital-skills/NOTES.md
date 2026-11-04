@@ -162,6 +162,17 @@ every calendar week, by hand, with the university's template.
   (for example "getting ready": accounts, tools, how the course works),
   never as a copy of the next week. Its activities are moved to the week in
   which they are done, not deleted, so that submissions are kept.
+- **The weeks of fall 2026-2027.** Lecture 1 was given in platform week 4,
+  so platform week N holds the week of `schedule.yml` in row N − 3 (week 5:
+  Lecture 2 and Online activity 2; week 13: Lecture 10 and Online activity
+  13). The weeks left hold the 9 units and two practice weeks only, so
+  Practice 1–3 and Online activities 8, 10 and 12 are not given: the three
+  practice pages are linked for self-study in weeks 10–12, next to the
+  lectures they practise. The course project keeps weeks 14 (Practice 4,
+  Online activity 14) and 15 (Practice 5, Online activity 15). The texts of
+  weeks 5–15, with their links, are in `courses-private`
+  (`moodle/digital-skills-weeks.md`); the tasks PDF and the assignment of
+  each online activity are added on the platform when the activity opens.
 
 ## Lessons learned
 

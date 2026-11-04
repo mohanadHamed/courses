@@ -27,7 +27,7 @@
 <body class="theme-studio">
 <main class="sim">
   <h1>Stage Order</h1>
-  <p class="hint">Moon Diver: Pip, a small robot, dives into a lake on the Moon to find crystals before the base loses power. Tap the cards in the order of the stages, from stage 1 to stage 8. Tap a placed card to take it back. Then check your structure.</p>
+  <p class="hint">Moon Diver: Pip, a small robot, must find the lost crystals in a deep lake on the Moon. Tap the cards in story order: stage 1 first, stage 8 last. Tap a placed card to take it back. Then press Check. Tension = how tense a stage feels: 1 is very calm, 10 is very tense.</p>
   <h2>Shuffled stage cards</h2>
   <div class="deck" id="deck"></div>
   <h2>Your stages (act 1: 1–2 · act 2: 3–6 · act 3: 7–8)</h2>
@@ -44,14 +44,14 @@
   const canvas = document.getElementById("c"), ctx = canvas.getContext("2d");
   const $ = (id) => document.getElementById(id);
   const CARDS = {
-    alarm: ["Alarm", "the base alarm rings: power at 20 %", 6],
-    map: ["The map", "Pip finds an old map of the Deep Lake", 5],
-    caves: ["Ice caves", "Pip finds the first crystal", 4],
-    garden: ["Cave garden", "Pip repairs its lamp among glowing plants", 2],
-    eel: ["Eel attack", "ice eels wake up and chase Pip", 6],
-    dark: ["Dark water", "the lamp fails; Pip moves by sound", 7],
-    guardian: ["The guardian", "a giant guardian protects the last crystal", 9],
-    lights: ["Lights on", "Pip returns; the base lights come back", 2],
+    alarm: ["The base", "Pip lives at the base and learns to swim.", 3],
+    map: ["The alarm", "The base loses power. Pip takes a map and dives in.", 4],
+    caves: ["Ice caves", "Pip takes the first crystal.", 5],
+    garden: ["Cave garden", "Pip rests in a quiet garden.", 2],
+    eel: ["Eel attack", "Ice eels wake up and chase Pip.", 7],
+    dark: ["Dark water", "Pip's lamp breaks. The water is very dark.", 8],
+    guardian: ["The guardian", "A giant fish guards the last crystal.", 10],
+    lights: ["Lights on", "Pip brings the crystals home. The lights come back.", 2],
   };
   const SHUFFLED = ["eel", "lights", "map", "garden", "guardian", "caves", "dark", "alarm"];
   let slots = Array(8).fill(null), W = 0, H = 0, sound = true, audio = null;
@@ -106,17 +106,17 @@
     if (slots.includes(null)) { $("msg").textContent = `Place all eight cards first (${slots.filter(Boolean).length} of 8 placed).`; $("msg").className = "message bad"; return; }
     const at = (k) => slots.indexOf(k);
     const rules = [
-      [at("alarm") === 0, "Alarm opens the game: a hook that shows the stakes.", "Stage 1 should be Alarm: a hook that shows the stakes at once."],
-      [at("map") === 1, "The map is the inciting incident at the end of act 1.", "The map (the inciting incident) belongs in stage 2, at the end of act 1."],
-      [at("caves") < at("eel"), "Ice caves comes before Eel attack: the eels wake up because Pip took the first crystal.", "The eels wake up because Pip took the first crystal: Ice caves must come before Eel attack."],
-      [at("eel") < at("dark") && at("caves") < at("dark"), "Act 2 rises: Ice caves (4), Eel attack (6), Dark water (7).", "Act 2 should rise: Ice caves (4), then Eel attack (6), then Dark water (7)."],
-      [at("garden") >= 3 && at("garden") <= 5, "Cave garden is a rest inside act 2.", "Cave garden is a rest: put it inside act 2 (stages 4–6), between tense stages."],
-      [at("guardian") === 6, "The guardian is the climax, near the end (stage 7).", "The guardian is the climax: it belongs in stage 7, near the end."],
-      [at("lights") === 7, "Lights on closes the game: the resolution.", "Lights on is the resolution: it belongs in stage 8."],
+      [at("alarm") === 0, "Stage 1 is The base: the normal world and the tutorial.", "Stage 1 should be The base: the story starts in the normal world."],
+      [at("map") === 1, "Stage 2 is The alarm: the inciting incident, at the end of act 1.", "The alarm is the inciting incident: it belongs in stage 2, at the end of act 1."],
+      [at("caves") < at("eel"), "Ice caves comes before Eel attack: Pip takes the first crystal, then the eels wake up.", "Pip takes the first crystal in Ice caves, then the eels wake up: Ice caves must come before Eel attack."],
+      [at("eel") < at("dark") && at("caves") < at("dark"), "The tension rises: Ice caves (5), Eel attack (7), Dark water (8).", "The tension should rise: Ice caves (5), then Eel attack (7), then Dark water (8)."],
+      [at("garden") >= 3 && at("garden") <= 5, "Cave garden (2) is a rest inside act 2.", "Cave garden (2) is a rest: put it inside act 2 (stages 4–6), between tense stages."],
+      [at("guardian") === 6, "Stage 7 is The guardian (10): the climax, near the end.", "The guardian (10) is the climax: it belongs in stage 7, near the end."],
+      [at("lights") === 7, "Stage 8 is Lights on: the resolution, the end of the story.", "Lights on is the resolution: it belongs in stage 8, the last stage."],
     ];
     $("fb").innerHTML = rules.map(([ok, yes, no]) => `<li class="${ok ? "ok" : "no"}">${ok ? "✓ " + yes : "✗ " + no}</li>`).join("");
     const good = rules.every((x) => x[0]);
-    $("msg").textContent = good ? "🎉 A good narrative structure! Look at the curve: hook, rise with a rest, climax, resolution." : `${rules.filter((x) => x[0]).length} of ${rules.length} rules are right. Move the red ones and check again.`;
+    $("msg").textContent = good ? "🎉 A good structure! The curve rises, rests in stage 4, is highest in stage 7 and falls in stage 8." : `${rules.filter((x) => x[0]).length} of ${rules.length} rules are right. Move the red ones and check again.`;
     $("msg").className = good ? "message good" : "message bad";
     if (good) [660, 880, 1320].forEach((f, i) => setTimeout(() => beep(f, 0.14), i * 110)); else beep(200, 0.3, "sawtooth");
   });

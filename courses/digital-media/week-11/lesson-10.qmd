@@ -36,17 +36,20 @@ Choose the project's frame rate first; mixed frame rates stutter.
 :::
 
 ::: {.callout-note title="Do it · Count the frames"}
-Fill in the frames of each video: frames = seconds × fps.
+Count the frames of three videos: frames = seconds × fps. (a) a store
+trailer: 30 s at 30 fps; (b) a game clip: 10 s at 60 fps; (c) a 2-minute
+film: 120 s at 24 fps.
 
-| Video | Seconds | Frame rate | Frames |
-|----------------------|:-------:|:----------:|:------:|
-| a store trailer | 30 | 30 fps | \_\_\_ |
-| a game clip | 10 | 60 fps | \_\_\_ |
-| a 2-minute film | 120 | 24 fps | \_\_\_ |
+::: {.fill answer="900" unit="frames" hint="30 seconds × 30 frames per second."}
+How many frames has the store trailer?
 
-::: {.check}
-(a) 30 × 30 = 900 frames; (b) 10 × 60 = 600 frames; (c) 120 × 24 = 2880
-frames. Frames = seconds × frames per second.
+Why: 30 × 30 = 900 frames; the game clip has 10 × 60 = 600.
+:::
+
+::: {.fill answer="2880" unit="frames" hint="120 seconds × 24 frames per second."}
+How many frames has the 2-minute film?
+
+Why: 120 × 24 = 2880 frames.
 :::
 :::
 
@@ -96,12 +99,46 @@ A stretched picture makes Nour thin and tall.
 :::
 
 ::: {.callout-note title="Do it · Shapes"}
-Write the resolution and aspect ratio of one video on your phone and one on
-a store page.
+Find the resolution and the aspect ratio of one video on your phone and one
+on a store page.
 
-::: {.check}
-A typical answer: a phone video 1080 × 1920 (9:16, tall) and a store
-trailer 1920 × 1080 (16:9, wide). The shape tells where the video plays.
+::: {.sort}
+Which shape is each video? Sort them.
+
+16:9, wide
+:   1920 × 1080, a store trailer
+
+    Why: Wider than tall: 16 to 9.
+
+:   3840 × 2160, a 4K video
+
+    Why: Four times the pixels, the same wide shape.
+
+9:16, tall
+:   1080 × 1920, a phone video
+
+    Why: Taller than wide: for a phone held upright.
+
+1:1, square
+:   1080 × 1080, a social post
+
+    Why: As wide as tall.
+:::
+
+::: {.choice}
+A wide video must become tall for a social clip. What do you do?
+
+- [x] Crop a part of it.
+
+  Why: Cropping keeps the shapes right; the picture loses only its sides.
+
+- [ ] Stretch it to fill the tall frame.
+
+  Why: A stretched picture makes Nour thin and tall.
+
+- [ ] Rename the file.
+
+  Why: The name does not change the shape of the picture.
 :::
 :::
 
@@ -155,15 +192,39 @@ Renaming .mov to .mp4 converts nothing.
 :::
 
 ::: {.callout-note title="Do it · Bitrate and blocks"}
-In **Video Settings Lab**, lower the bitrate of the store trailer until it
-gets blocky. At which bitrate does it start? Raise it again: what happens
-to the file size?
+In **Video Settings Lab**, lower the bitrate of the store trailer (1920 ×
+1080, 30 fps) until it gets blocky. Then raise it again.
 
-::: {.check}
-At 1920 × 1080 and 30 fps, the trailer is clean from about 7 Mbit/s. At
-6 Mbit/s and below it gets a little blocky in fast action, and at 3 Mbit/s
-it is blocky. With a higher bitrate the picture is clean again, and the
-file gets bigger.
+::: {.choice}
+From which bitrate does the trailer start to get blocky?
+
+- [x] about 6 Mbit/s and below
+
+  Why: It is clean from about 7 Mbit/s; at 3 Mbit/s it is blocky.
+
+- [ ] about 30 Mbit/s
+
+  Why: At 30 Mbit/s the picture is clean, with a big file.
+
+- [ ] never: the bitrate does not change the picture
+
+  Why: Too low a bitrate for fast action makes blocks.
+:::
+
+::: {.choice}
+You raise the bitrate again. What happens to the file?
+
+- [x] The picture is clean again, and the file gets bigger.
+
+  Why: A higher bitrate keeps more detail and needs more bits.
+
+- [ ] The file gets smaller.
+
+  Why: More bits per second make a bigger file.
+
+- [ ] Nothing changes.
+
+  Why: The bitrate decides the picture and the size.
 :::
 :::
 
@@ -207,14 +268,42 @@ Every new lossy export loses detail: export each target from the project.
 :::
 
 ::: {.callout-note title="Do it · Three targets"}
-In **Video Settings Lab**, make all three targets pass. Write their
+In **Video Settings Lab**, make all three targets pass, and look at their
 settings and file sizes.
 
-::: {.check}
-Store trailer: 1920 × 1080, 30 fps, H.264 in MP4, about 10 Mbit/s, 30 s.
-Social clip: 1080 × 1920, 30 fps, H.264 in MP4, 15–30 s. Edit master:
-1920 × 1080, 60 fps, ProRes in MOV: a very big file, kept on the studio
-drive.
+::: {.sort}
+Which settings fit each target? Sort them.
+
+Store trailer
+:   1920 × 1080, 30 fps, H.264 in MP4, about 10 Mbit/s, 30 s
+
+    Why: Wide, light enough to stream, and clean.
+
+Social clip
+:   1080 × 1920, 30 fps, H.264 in MP4, 15–30 s
+
+    Why: Tall for the phone, and short.
+
+Edit master
+:   1920 × 1080, 60 fps, ProRes in MOV
+
+    Why: As recorded, for editing; it stays on the studio drive.
+:::
+
+::: {.choice}
+Which file is the biggest?
+
+- [x] the edit master
+
+  Why: ProRes keeps almost every detail at 60 fps: a very big file.
+
+- [ ] the store trailer
+
+  Why: H.264 makes the trailer much smaller than the master.
+
+- [ ] the social clip
+
+  Why: Short and in H.264: the smallest file.
 :::
 :::
 

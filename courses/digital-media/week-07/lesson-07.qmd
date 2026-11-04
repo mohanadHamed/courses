@@ -37,12 +37,44 @@ High is not loud: pitch and loudness change separately.
 
 ::: {.callout-note title="Do it · Hear the two numbers"}
 In **Wave Lab**, play 220 Hz and 880 Hz. Then set the amplitude to 0.4 and
-0.8 and read the loudness in dB.
+0.8 and read the loudness in dB: about −8 dB and −2 dB.
 
-::: {.check}
-880 Hz sounds higher than 220 Hz: the frequency gives the pitch. The
-amplitude 0.4 reads about −8 dB and 0.8 about −2 dB: a bigger amplitude is
-louder, closer to 0 dB.
+::: {.choice}
+Which tone sounds higher?
+
+- [x] 880 Hz
+
+  Why: The frequency gives the pitch: more waves per second, a higher sound.
+
+- [ ] 220 Hz
+
+  Why: 220 Hz has fewer waves per second: a lower sound.
+
+- [ ] Both sound the same.
+
+  Why: A different frequency gives a different pitch.
+:::
+
+::: {.sort}
+Does each change move the pitch or the loudness? Sort them.
+
+The pitch
+:   220 Hz → 880 Hz
+
+    Why: The frequency changes.
+
+:   thunder (below 100 Hz) → a bell (above 2000 Hz)
+
+    Why: Low and high sounds: different frequencies.
+
+The loudness
+:   the amplitude 0.4 → 0.8
+
+    Why: A bigger wave is louder.
+
+:   −8 dB → −2 dB
+
+    Why: Closer to 0 dB is louder.
 :::
 :::
 
@@ -89,14 +121,38 @@ One source (a cat, a step, a voice) is recorded in mono.
 :::
 
 ::: {.callout-note title="Do it · Hear the samples"}
-In **Wave Lab**, compare 8 kHz 4-bit with 48 kHz 16-bit. What changes?
-Then write the sample rate, the bit depth and the channels for a recording
-of one voice for a game.
+In **Wave Lab**, compare 8 kHz 4-bit with 48 kHz 16-bit.
 
-::: {.check}
-At 8 kHz and 4-bit the samples are few and on few levels: the sound is
-dull with a hiss. At 48 kHz and 16-bit it is clear. For one voice: 48 kHz,
-16-bit, mono.
+::: {.choice}
+What changes from 8 kHz 4-bit to 48 kHz 16-bit?
+
+- [x] The sound gets clear.
+
+  Why: More samples on more levels: at 8 kHz and 4-bit it is dull, with a hiss.
+
+- [ ] The sound gets louder.
+
+  Why: The loudness comes from the amplitude, not from the samples.
+
+- [ ] Nothing changes.
+
+  Why: Few samples on few levels lose details of the wave.
+:::
+
+::: {.choice}
+Which settings fit a recording of one voice for a game?
+
+- [x] 48 kHz, 16-bit, mono
+
+  Why: One source is recorded in mono; 48 kHz and 16-bit are the game standard.
+
+- [ ] 48 kHz, 16-bit, stereo
+
+  Why: Stereo doubles the file, and one voice needs only one channel.
+
+- [ ] 8 kHz, 4-bit, mono
+
+  Why: Too few samples and levels: the voice sounds dull.
 :::
 :::
 
@@ -141,13 +197,29 @@ Edit the WAV; make the MP3 or OGG only at the end.
 :::
 
 ::: {.callout-note title="Do it · Look at real files"}
-Compare the size per minute of one WAV and one MP3 file. Which format would
-you use for a 2-minute menu music?
+Compare the size per minute of one WAV and one MP3 file. A typical WAV is
+about 10 MB per minute, and an MP3 about 1 MB per minute.
 
-::: {.check}
-A typical result: the WAV is about 10 MB per minute and the MP3 about
-1 MB per minute. For a 2-minute menu music, use OGG or MP3: the file stays
-small.
+::: {.fill answer="20" unit="MB" hint="10 MB for each minute."}
+About how big is a 2-minute menu music as a WAV?
+
+Why: 2 × 10 = 20 MB; as an MP3 it is about 2 MB.
+:::
+
+::: {.choice}
+Which format fits a 2-minute menu music in the game?
+
+- [x] OGG or MP3
+
+  Why: Lossy compression: about 10 times smaller, good for music and long loops.
+
+- [ ] WAV
+
+  Why: WAV keeps every sample: big, for short effects and raw takes.
+
+- [ ] FLAC
+
+  Why: FLAC is for the archive: about half of WAV, still big.
 :::
 :::
 
@@ -198,12 +270,35 @@ The raw takes, kept in the archive?
 
 ::: {.callout-note title="Do it · Three takes"}
 Record one short sound three times: too far, too close and loud, and well
-placed. Which take is best, and why?
+placed. Then clean the best take.
 
-::: {.check}
-The well-placed take is best: the too-far take is quiet with room noise,
-and the too-close take is loud and may clip. A good take has peaks near
-−6 dB and a quiet background.
+::: {.sort}
+Which take is best? Sort them.
+
+The best take
+:   well placed: peaks near −6 dB, a quiet background
+
+    Why: Loud enough, never clipped, with little noise.
+
+Not good
+:   too far: quiet, with room noise
+
+    Why: The sound is weak, and the room is loud.
+
+:   too close and loud: the peaks touch 0 dB
+
+    Why: The take clips: "we fix it later" does not work.
+:::
+
+::: {.order}
+Put the four steps of the clean-up in order.
+
+1. Trim the silence at the start and the end.
+2. Add a short fade-out, so the end has no click.
+3. Normalize to −1 dB.
+4. Export a WAV with a clear name: `sfx_pasha_meow_01.wav`.
+
+Why: Clean the take first, then make it loud enough, then export it.
 :::
 :::
 

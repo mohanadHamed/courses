@@ -16,6 +16,10 @@ format: lesson-pptx
 - The game loop repeats: read the input, change the numbers, draw.
 - One pass makes one **frame**; 60 fps means 60 passes every second.
 - **Do it:** A racing game runs at 30 fps. How many updates does it make in 10 seconds?
+
+::: {.reveal}
+- **Result:** 30 × 10 = 300 updates (at 60 fps: 600, so the cars move more smoothly).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/game-loop.png)
@@ -42,6 +46,10 @@ c) probability
 - The signs of x and y decide the **quadrant** (I to IV).
 - A point with a 0 lies on an axis, not in a quadrant.
 - **Do it:** In GeoGebra, draw an enemy at (−5, −2). In which quadrant is it?
+
+::: {.reveal}
+- **Result:** The enemy is in quadrant III, because both signs are minus.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/quadrants.png)
@@ -79,6 +87,10 @@ c) (5, 5)
 - In most engines y points up, so y is the height.
 - Every point on the ground has y = 0.
 - **Do it:** In the 3D viewer, move the player to (1, 2, 4). Which slider changes the height?
+
+::: {.reveal}
+- **Result:** The y slider changes the height; on the ground the player is at (1, 0, 4).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/axes-3d.png)
@@ -87,7 +99,7 @@ c) (5, 5)
 
 ## Live demo · Place an object in 3D
 
-{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" task="**Show:** move the player to (1, 2, 4), then down to the ground. **Ask:** which number changed?" >}}
+{{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" task="**Show:** move the player to (1, 2, 4), then down to the ground. **Ask:** which number changed?" answer="Only y changed, from 2 to 0: the player is at (1, 0, 4)." >}}
 
 ## Try it 3 · Positions in 3D
 
@@ -109,6 +121,10 @@ c) only y
 - Point your fingers along +x and bend them to +y: the thumb shows +z.
 - Unity is left-handed: +z goes into the screen.
 - **Do it:** Try the rule with each hand. Where does each thumb point?
+
+::: {.reveal}
+- **Result:** The left thumb points into the screen and the right thumb towards you, so Unity is left-handed.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/handedness.png)
@@ -135,6 +151,10 @@ c) right-handed
 - A vector is an arrow, and it has no position.
 - The game stores its components: head minus tail.
 - **Do it:** In GeoGebra, compare the arrows from (1, 4) to (5, 1) and from (−2, 2) to (2, −1).
+
+::: {.reveal}
+- **Result:** Both arrows are (4, −3), so they are the same vector in two places.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/components.png)
@@ -172,6 +192,10 @@ c) straight up
 - A − B is the opposite vector: same size, other way.
 - An enemy that uses E − P walks away from the player.
 - **Do it:** In GeoGebra, type E = (−2, 1) and P = (3, 4). What is P − E?
+
+::: {.reveal}
+- **Result:** P − E = (5, 3), the vector that takes the enemy to the player.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/displacement.png)
@@ -207,6 +231,10 @@ b) the zero vector (0, 0)
 - After n frames the object has moved n times the velocity.
 - To find a velocity, divide the total displacement by the frames.
 - **Do it:** Play three levels of Vector Dash and check one velocity.
+
+::: {.reveal}
+- **Result:** From (1, 1) to (9, 5) in 4 frames: (8, 4) ÷ 4 = (2, 1), and (1, 1) + 4 × (2, 1) = (9, 5).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/per-frame.png)
@@ -226,7 +254,7 @@ A missile at (10, 7) must reach (4, 1) in exactly 3 frames.
 
 ## Live demo · Vector Dash
 
-{{< sim file="sims/vector-dash.html" poster="sims/vector-dash.png" title="Vector Dash: one velocity, n frames" kind="game" task="**Show:** choose a velocity that lands the ship on the target. **Ask:** how do we find it without guessing?" >}}
+{{< sim file="sims/vector-dash.html" poster="sims/vector-dash.png" title="Vector Dash: one velocity, n frames" kind="game" task="**Show:** choose a velocity that lands the ship on the target. **Ask:** how do we find it without guessing?" answer="Divide the total displacement by the frames: velocity = (target − start) ÷ frames." >}}
 
 ## Try it 7 · Frame by frame
 
@@ -242,7 +270,7 @@ c) It stands still.
 
 ## Game challenge · Comet Courier
 
-{{< sim file="sims/comet-courier.html" poster="sims/comet-courier.png" title="Comet Courier: one velocity per frame, avoid the comet" kind="game" task="The ship flies from Alpha (1, 2) to Beta (9, 6) with one velocity per frame, and a comet is at (5, 4). **Play:** choose a velocity on your phone. Does your ship hit the comet?" >}}
+{{< sim file="sims/comet-courier.html" poster="sims/comet-courier.png" title="Comet Courier: one velocity per frame, avoid the comet" kind="game" task="The ship flies from Alpha (1, 2) to Beta (9, 6) with one velocity per frame, and a comet is at (5, 4). **Play:** choose a velocity on your phone. Does your ship hit the comet?" answer="With (2, 1) or (4, 2) the ship stops on the comet at (5, 4); with (8, 4) in 1 frame it jumps over it to Beta." >}}
 
 ## Try it 8 · Alpha to Beta (harder)
 

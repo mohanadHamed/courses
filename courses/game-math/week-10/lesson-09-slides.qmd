@@ -16,6 +16,10 @@ format: lesson-pptx
 - A contradiction is false in every row, such as p ∧ ¬p.
 - Two conditions with the same last column are equivalent.
 - **Do it:** Compare the tables of p → q and q → p. Are they the same?
+
+::: {.reveal}
+- **Result:** No: they differ in the rows (T, F) and (F, T).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/taut-equiv.png)
@@ -53,6 +57,10 @@ c) no, the rows (T, F) and (F, T) differ
 - p ∧ T is p, and p ∨ T is always T.
 - The distributive law turns p ∧ (q ∨ r) into (p ∧ q) ∨ (p ∧ r).
 - **Do it:** Check the absorption law p ∨ (p ∧ q) ≡ p in Equivalence Lab. Is it true?
+
+::: {.reveal}
+- **Result:** Yes: p ∨ (p ∧ q) has the same column as p in every row.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/bool-laws.png)
@@ -61,7 +69,7 @@ c) no, the rows (T, F) and (F, T) differ
 
 ## Live demo · Equivalence Lab
 
-{{< sim file="sims/equivalence-lab.html" poster="sims/equivalence-lab.png" title="Equivalence Lab: are two conditions the same?" task="**Show:** check the distributive law, then the absorption law, then the wrong De Morgan. **Ask:** which row shows that the wrong De Morgan is wrong?" >}}
+{{< sim file="sims/equivalence-lab.html" poster="sims/equivalence-lab.png" title="Equivalence Lab: are two conditions the same?" task="**Show:** check the distributive law, then the absorption law, then the wrong De Morgan. **Ask:** which row shows that the wrong De Morgan is wrong?" answer="The row p = T, q = F: ¬(p ∧ q) is true, but ¬p ∧ ¬q is false." >}}
 
 ## Try it 2 · Laws
 
@@ -83,6 +91,10 @@ c) p
 - ¬(p ∨ q) is equivalent to ¬p ∧ ¬q.
 - The NOT goes into the brackets, and AND and OR swap.
 - **Do it:** Rewrite !(isDay || isLit) without a NOT in front of the brackets. What do you get?
+
+::: {.reveal}
+- **Result:** `!isDay && !isLit`: the NOT goes in, and OR becomes AND.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/de-morgan.png)
@@ -120,6 +132,10 @@ c) a && b
 - The value of the condition never changes.
 - At the end, we check the result with a truth table.
 - **Do it:** Simplify p ∧ (p ∨ q) step by step. Which law did you use?
+
+::: {.reveal}
+- **Result:** p ∧ (p ∨ q) = p, by the absorption law.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/simplify-steps.png)
@@ -157,6 +173,10 @@ c) p ∧ ¬q
 - And, or and not become &&, || and !.
 - "But not both" is XOR, and "unless p" means "if not p".
 - **Do it:** Translate "the alarm rings unless the guard is asleep". What do you get?
+
+::: {.reveal}
+- **Result:** `alarm = !a`: "unless a" means "if not a".
+:::
 :::
 ::: {.column width="50%"}
 ![](images/rule-words.png)
@@ -194,6 +214,10 @@ c) alarm = !a
 - In an else-if chain, only the first true rule runs.
 - A rule is unreachable when the rules above it catch all its cases.
 - **Do it:** Fix the order of the rules in Guard Brain. Which rule comes first?
+
+::: {.reveal}
+- **Result:** Flee (if w) comes first, then Attack, then Chase, and Patrol last.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/decision-table.png)
@@ -213,7 +237,7 @@ The code is if (s) Chase(); else if (s && n) Attack(); else if (w) Flee(); else 
 
 ## Live demo · Guard Brain
 
-{{< sim file="sims/guard-brain.html" poster="sims/guard-brain.png" title="Guard Brain: rules, order and the decision table" task="**Show:** switch on s and n with the first order, then move Attack up, then Flee to the top. **Ask:** why does the order of the rules change the table?" >}}
+{{< sim file="sims/guard-brain.html" poster="sims/guard-brain.png" title="Guard Brain: rules, order and the decision table" task="**Show:** switch on s and n with the first order, then move Attack up, then Flee to the top. **Ask:** why does the order of the rules change the table?" answer="In an else-if chain the first true rule wins, so a rule above can catch the cases of a rule below." >}}
 
 ## Try it 6 · Tables and chains
 

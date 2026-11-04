@@ -6,9 +6,9 @@ ilos: [B1]
 format: lesson-html
 ---
 
-No new ideas today: two short problems on Lecture 3. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: two short problems on Lecture 3. Do each one alone. Tap,
+sort or type your answer at every step: the page checks it at once and tells
+you why.
 
 ## Recall
 
@@ -66,13 +66,65 @@ C (6, 8) and D (−3, −4).
 *Your product:* a table with four rows (along, across, hit or miss) and
 the asteroid that the beam hits first.
 
-::: {.check}
-Squares: A 25, B 50, C 100, D 25: A and D are nearest, but D is behind.
-A: along 1.8 + 3.2 = 5, part along (3, 4), across (0, 0): hit. B: along
-4.2 + 0.8 = 5, part along (3, 4), across (4, −3) with the length 5: miss,
-far to the side. C: along 3.6 + 6.4 = 10, across 0: on the line, but
-farther. D: along −5: behind, miss. B: 0.6 × 1 − 0.8 × 7 = −5, so B is to
-the right. The beam hits **A** first.
+::: {.choice}
+Step 1: which asteroids are nearest to the station S = (0, 0)?
+
+- [x] A and D: both squares are 25.
+
+  Why: A: 9 + 16 = 25; D: 9 + 16 = 25; B: 49 + 1 = 50; C: 36 + 64 = 100.
+
+- [ ] B, because it has the biggest x
+
+  Why: Compare x² + y², not one coordinate: B gives 50.
+
+- [ ] C, because it is on the beam
+
+  Why: On the line does not mean near: C gives 100, the farthest.
+:::
+
+::: {.fill answer="5" hint="Multiply the matching parts of (7, 1) and (0.6, 0.8), then add."}
+Step 2: what is "along" for B = (7, 1)?
+
+Why: 7 × 0.6 + 1 × 0.8 = 4.2 + 0.8 = 5.
+:::
+
+::: {.choice}
+Step 4: is B to the left or to the right of the beam?
+
+- [x] to the right
+
+  Why: û × d = 0.6 × 1 − 0.8 × 7 = 0.6 − 5.6 = −5: negative, so right.
+
+- [ ] to the left
+
+  Why: Left would need a positive û × d; here it is −5.
+
+- [ ] on the beam
+
+  Why: On the beam, û × d would be 0.
+:::
+
+::: {.sort}
+Steps 3 and 5: what happens to each asteroid? Sort them.
+
+Hit first
+:   A (3, 4): along 5, across 0
+
+    Why: In front, in range and on the line: the beam stops here.
+
+Missed
+:   B (7, 1): along 5, across 5
+
+    Why: The part across is 5 long, more than the radius 1.
+
+:   D (−3, −4): along −5
+
+    Why: Along is negative: D is behind the station.
+
+On the line, but after the stop
+:   C (6, 8): along 10, across 0
+
+    Why: The beam is on C's line, but it already stopped at A.
 :::
 :::
 
@@ -121,16 +173,44 @@ normal n̂ = (−1, 0) and the velocity (2, 3).
 *Your product:* two normals and two slides, with one sentence: why does the
 player not stop at the floor?
 
-::: {.check}
-1. (0, 0, 2) × (2, 0, 0) = (0 × 0 − 2 × 0, 2 × 2 − 0 × 0, 0 × 0 − 0 × 2) =
-   (0, 4, 0): up.
-2. (2, 0, 0) × (0, 0, 2) = (0, −4, 0): down. The order decides the front.
-3. v · n̂ = −4: into the floor. Slide = (3, −4) − (−4) × (0, 1) = (3, 0).
-4. v · n̂ = −2; slide = (2, 3) − (−2) × (−1, 0) = (2, 3) − (2, 0) = (0, 3):
-   the player slides up the wall.
+::: {.sort}
+Steps 1–2: which normal does each order of the corners give? Sort them.
 
-The game removes only the part into the floor; the part along the floor
-stays, so the player keeps moving.
+Faces up
+:   A, B, C: n = (0, 4, 0)
+
+    Why: (0, 0, 2) × (2, 0, 0) = (0, 4, 0).
+
+Faces down
+:   A, C, B: n = (0, −4, 0)
+
+    Why: (2, 0, 0) × (0, 0, 2) = (0, −4, 0): the order decides the front.
+
+:   A, B, C with Swap B and C pressed
+
+    Why: The swap gives the order A, C, B again: the normal turns around.
+:::
+
+::: {.fill answer="(3, 0)" hint="v · n̂ = −4. Minus a negative number adds."}
+Step 3: what is the slide v − (v · n̂) n̂ on the floor? Type (x, y).
+
+Why: v · n̂ = −4 (into the floor); (3, −4) − (−4) × (0, 1) = (3, −4) + (0, 4) = (3, 0). The part along the floor stays, so the player keeps moving.
+:::
+
+::: {.choice}
+Step 4: what is the slide at the wall, v = (2, 3), n̂ = (−1, 0)?
+
+- [x] (0, 3): the player slides up the wall
+
+  Why: v · n̂ = −2; (2, 3) − (−2) × (−1, 0) = (2, 3) − (2, 0) = (0, 3).
+
+- [ ] (4, 3)
+
+  Why: (−2) × (−1, 0) = (2, 0) is taken away, not added.
+
+- [ ] (2, 0)
+
+  Why: The wall removes the x-part (into the wall), not the y-part.
 :::
 :::
 

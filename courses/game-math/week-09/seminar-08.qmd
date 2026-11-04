@@ -6,9 +6,9 @@ ilos: [A2, B2]
 format: lesson-html
 ---
 
-No new ideas today: three short problems on Lecture 8. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: three short problems on Lecture 8. Do each one alone.
+Tap, sort or type your answer at every step: the page checks it at once and
+tells you why.
 
 ## Recall
 
@@ -58,10 +58,69 @@ Write each rule as a C# condition.
 
 *Your product:* four conditions.
 
-::: {.check}
-1. `isDay && !inFight`. 2. `hasSeeds && (hasWater || isRaining)`: the
-brackets are needed. 3. `!isDay || inFight`. 4. `isRaining ^ hasWater`:
-"but not both" is XOR.
+::: {.choice}
+Rule 1: the shop is open when it is day and the player is not in a fight.
+
+- [x] `isDay && !inFight`
+
+  Why: Day AND NOT in a fight.
+
+- [ ] `isDay || !inFight`
+
+  Why: OR would open the shop at night when there is no fight.
+
+- [ ] `!isDay && inFight`
+
+  Why: That is night and in a fight: the opposite of the rule.
+:::
+
+::: {.choice}
+Rule 2: the player can plant when there are seeds and (water or rain).
+
+- [x] `hasSeeds && (hasWater || isRaining)`
+
+  Why: The brackets keep "water or rain" together, and the seeds are always needed.
+
+- [ ] `hasSeeds && hasWater || isRaining`
+
+  Why: && is computed first: rain alone would let the player plant without seeds.
+
+- [ ] `hasSeeds || hasWater || isRaining`
+
+  Why: OR everywhere lets the player plant with water but no seeds.
+:::
+
+::: {.choice}
+Rule 3: the warning shows when it is night or the player is in a fight.
+
+- [x] `!isDay || inFight`
+
+  Why: Night is NOT day; OR shows the warning in either case.
+
+- [ ] `!(isDay || inFight)`
+
+  Why: That is night AND no fight, so a fight would hide the warning.
+
+- [ ] `!isDay && inFight`
+
+  Why: AND would need night and a fight at the same time.
+:::
+
+::: {.choice}
+Rule 4: a crop grows when it is raining or the player has water, but not
+both.
+
+- [x] `isRaining ^ hasWater`
+
+  Why: "But not both" is XOR: exactly one is true.
+
+- [ ] `isRaining || hasWater`
+
+  Why: OR is also true when both are true.
+
+- [ ] `isRaining && hasWater`
+
+  Why: AND is true only when both are true, the case the rule excludes.
 :::
 :::
 
@@ -104,11 +163,42 @@ the result that the table predicts. The dock door rule is p ∧ (q ∨ r)
 
 *Your product:* the number of true rows, one bug and its fix.
 
-::: {.check}
-p ∧ (q ∨ r) is true in 3 of the 8 rows: (T, T, T), (T, T, F) and
-(T, F, T). Row (F, F, T): the table says **shut**, but the code opens the
-door, because && is computed first, so `… || officer` is true. Fix:
-`hasPass && (shieldsUp || officer)`.
+::: {.fill answer="3" hint="p must be true, and q or r true."}
+Step 1: how many of the 8 rows of p ∧ (q ∨ r) are true?
+
+Why: (T, T, T), (T, T, F) and (T, F, T): 3 rows, never without the pass.
+:::
+
+::: {.choice}
+Step 2: row (F, F, T). The table says "shut". What does the code do?
+
+- [x] It opens the door.
+
+  Why: && is computed first, so `hasPass && shieldsUp` is false, but `… || officer` is true.
+
+- [ ] It keeps the door shut, like the table.
+
+  Why: Without brackets the officer alone makes the condition true.
+
+- [ ] It shows an error.
+
+  Why: The code runs; it just gives a different answer from the table.
+:::
+
+::: {.choice}
+Step 3: which condition is the fix?
+
+- [x] `hasPass && (shieldsUp || officer)`
+
+  Why: The brackets make OR first, like p ∧ (q ∨ r).
+
+- [ ] `(hasPass && shieldsUp) || officer`
+
+  Why: These brackets only show the bug: && first, as before.
+
+- [ ] `hasPass || shieldsUp || officer`
+
+  Why: OR everywhere opens the door without a pass.
 :::
 :::
 
@@ -149,10 +239,43 @@ A (T, T, F, F); B (T, F, T, T); C (F, T, T, F); D (F, F, F, F).
 *Your product:* a table of four states with "kept" or "broken", and one
 condition.
 
-::: {.check}
-A: both kept (the dragon is asleep, so rule 2 says nothing). B: rule 1
-broken (map, but no cave). C: rule 2 broken (dragon awake, music not
-loud). D: both kept. Condition: `hasMap && !caveShown`.
+::: {.sort}
+Step 1: which rule does each state break? Sort the states.
+
+No rule broken
+:   A (T, T, F, F)
+
+    Why: Map and cave shown; the dragon sleeps, so rule 2 says nothing.
+
+:   D (F, F, F, F)
+
+    Why: No map and no dragon: neither rule says anything.
+
+Rule 1 broken
+:   B (T, F, T, T)
+
+    Why: The player has the map, but the cave is not shown.
+
+Rule 2 broken
+:   C (F, T, T, F)
+
+    Why: The dragon is awake, but the music is not loud.
+:::
+
+::: {.choice}
+Step 2: which condition finds a broken rule 1?
+
+- [x] `hasMap && !caveShown`
+
+  Why: p → q breaks only when p is true and q is false.
+
+- [ ] `!hasMap && caveShown`
+
+  Why: Without the map, rule 1 says nothing.
+
+- [ ] `hasMap || !caveShown`
+
+  Why: OR is also true for a player without the map and without the cave.
 :::
 :::
 
@@ -192,29 +315,51 @@ and false (the key column first: 8 true, then 8 false). Colour the rows
 where the door opens green.
 :::
 
-**What do you see?**
+::: {.choice}
+How many green rows should the table have? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-3 green rows out of 16: the key is true, invisible is false, and awake or
-timer is true (true and true, true and false, false and true).
+- [x] 3 of 16
+
+  Why: The key is true, invisible is false, and awake or timer is true: 3 ways.
+
+- [ ] 8 of 16
+
+  Why: The key alone is not enough: awake or timer, and not invisible, too.
+
+- [ ] 1 of 16
+
+  Why: OR lets the door open with awake, with the timer, or with both.
 :::
 
 ::: {.try-change}
-**Change:** remove "AND NOT invisible" from the rule, and ask again. What do you
-notice?
+**Change:** remove "AND NOT invisible" from the rule, and ask again.
 
-::: {.check}
-6 green rows: the same 3 rows, now with invisible true and with invisible
-false. A condition less lets the door open more often.
+::: {.choice}
+How many green rows now?
+
+- [x] 6
+
+  Why: The same 3 rows, now with invisible true and with invisible false.
+
+- [ ] 3
+
+  Why: One condition less lets the door open more often.
 :::
 :::
 
 ::: {.try-change}
-**Change:** change OR to AND, and ask again. What do you notice?
+**Change:** change OR to AND, and ask again.
 
-::: {.check}
-Only 1 green row: key, awake and timer are all true, and invisible is
-false. AND makes the rule harder to meet.
+::: {.choice}
+How many green rows now?
+
+- [x] 1
+
+  Why: Key, awake and timer must all be true, and invisible false.
+
+- [ ] 6
+
+  Why: AND makes the rule harder to meet, not easier.
 :::
 :::
 

@@ -8,8 +8,8 @@ format: lesson-html
 
 This page is the interactive version of the lesson notes (PDF). Each section
 starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check.
+with a **Do it** task and one set of questions. Tap, sort or type your answer:
+the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -34,13 +34,30 @@ has its answer: try first, then check.
 ![The game loop.](images/game-loop.png){width=66%}
 
 ::: {.callout-note title="Do it · How often does the loop run?"}
-A racing game runs at 30 fps. How many times does it update each car's
-position in 10 seconds? And at 60 fps? Which version moves the cars more
-smoothly?
+A racing game runs at 30 fps. The same game can also run at 60 fps. How
+many times does it update each car's position in 10 seconds?
 
-::: {.check}
-30 × 10 = 300 updates; 60 × 10 = 600 updates. The 60 fps version is
-smoother: twice as many, smaller steps.
+::: {.fill answer="300" hint="Multiply the frames per second by the seconds."}
+At 30 fps, how many updates are there in 10 seconds?
+
+Why: 30 frames each second × 10 seconds = 300 updates.
+:::
+
+::: {.choice}
+At 60 fps the game makes 600 updates in 10 seconds. Which version moves the
+cars more smoothly?
+
+- [x] the 60 fps version
+
+  Why: Twice as many updates, so every step of a car is smaller.
+
+- [ ] the 30 fps version
+
+  Why: Fewer updates mean bigger jumps between two pictures.
+
+- [ ] both look the same
+
+  Why: The frame rate decides how many small steps a car makes in a second.
 :::
 :::
 
@@ -86,13 +103,31 @@ A ship drops a rare reward only sometimes. Which mathematics?
 ![The four quadrants and their signs: coin (4, 3), key (−3, 2), exit (2, −3).](images/quadrants.png){width=58%}
 
 ::: {.callout-note title="Do it · Build the level in GeoGebra"}
-Open geogebra.org/calculator (free, no account). Type `Coin = (4, 3)`,
-`Key = (-3, 2)` and `Exit = (2, -3)`. Add an enemy at (−5, −2) and a door at
-(0, 4). Where is each one?
+The level has a coin at (4, 3), a key at (−3, 2) and an exit at (2, −3).
+Add an enemy at (−5, −2) and a door at (0, 4). You can also type them at
+geogebra.org/calculator: `Coin = (4, 3)`, `Enemy = (-5, -2)` …
 
-::: {.check}
-The enemy (−5, −2) is in quadrant III (both signs minus). The door (0, 4) is
-on the y-axis (x = 0), in no quadrant.
+::: {.sort}
+Where is each point? Sort the points of the level.
+
+Quadrant I
+:   the coin at (4, 3)
+
+    Why: x and y are both plus: right and up.
+
+Quadrant III
+:   the enemy at (−5, −2)
+
+    Why: x and y are both minus: left and down.
+
+On an axis
+:   the door at (0, 4)
+
+    Why: x = 0, so the door is on the y-axis, in no quadrant.
+
+:   the start of the level at (0, 0)
+
+    Why: The origin is on both axes, in no quadrant.
 :::
 :::
 
@@ -143,12 +178,29 @@ With y up, the height is the **middle** number, not the last one.
 {{< sim file="sims/position-3d.html" poster="images/axes-3d.png" title="Place an object in 3D" height="640" >}}
 
 ::: {.callout-note title="Do it · Move a player in 3D"}
-In the 3D viewer, move the player to (1, 2, 4). Which slider changes the
-height? Then move the player straight down to the ground. Where is it now?
+In the 3D viewer, move the player to (1, 2, 4). Then move it straight down
+to the ground.
 
-::: {.check}
-The **y** slider changes the height. On the ground y = 0: the player is at
-(1, 0, 4).
+::: {.choice}
+Which slider changes the height of the player?
+
+- [x] the y slider
+
+  Why: In this world y is up, so y is the height.
+
+- [ ] the z slider
+
+  Why: z moves the player forward or back on the ground.
+
+- [ ] the x slider
+
+  Why: x moves the player left or right.
+:::
+
+::: {.fill answer="(1, 0, 4)" hint="On the ground the height is 0; x and z stay."}
+The player goes straight down to the ground. Where is it now? Type (x, y, z).
+
+Why: Straight down changes only the height: y becomes 0, so (1, 0, 4).
 :::
 :::
 
@@ -197,11 +249,23 @@ A at (1, 4, 2), C at (3, 7, −1). Which is higher?
 
 ::: {.callout-note title="Do it · The hand rule"}
 Hold your left hand palm up, with the fingers to the right. Bend the fingers
-up. Where does your thumb point? Do the same with your right hand. Which
-hand fits Unity?
+up: your thumb shows +z. Do the same with your right hand.
 
-::: {.check}
-Left hand: into the screen. Right hand: towards you. Unity is left-handed.
+::: {.choice}
+In Unity, x goes right, y goes up and +z goes into the screen. Which hand
+fits Unity?
+
+- [x] the left hand
+
+  Why: With the left hand, the thumb points into the screen: Unity is left-handed.
+
+- [ ] the right hand
+
+  Why: With the right hand, the thumb points towards you, out of the screen.
+
+- [ ] both hands
+
+  Why: The two thumbs point in opposite directions, so only one hand fits.
 :::
 :::
 
@@ -249,13 +313,30 @@ Two enemies in different places that both move "2 left per frame" have the
 :::
 
 ::: {.callout-note title="Do it · Arrows in GeoGebra"}
-At geogebra.org/calculator, type `u = Vector((1, 4), (5, 1))` and
-`w = Vector((-2, 2), (2, -1))`. Read the components of both. Are they the same
-vector? Why?
+Arrow u goes from (1, 4) to (5, 1). Arrow w goes from (−2, 2) to (2, −1).
+You can also draw them at geogebra.org/calculator:
+`u = Vector((1, 4), (5, 1))` and `w = Vector((-2, 2), (2, -1))`.
 
-::: {.check}
-u = (4, −3) and w = (2 − (−2), −1 − 2) = (4, −3). The same vector: same
-components. Only the start is different.
+::: {.fill answer="(4, −3)" hint="Head − tail: subtract the x-parts, then the y-parts."}
+What are the components of w? Type (x, y).
+
+Why: Head − tail: (2 − (−2), −1 − 2) = (4, −3).
+:::
+
+::: {.choice}
+u has the components (4, −3) too. Are u and w the same vector?
+
+- [x] Yes: they have the same components.
+
+  Why: A vector has a size and a direction, but no position.
+
+- [ ] No: they start at different points.
+
+  Why: Equal arrows anywhere are the same vector; only the start is different.
+
+- [ ] No: w is longer than u.
+
+  Why: Both have the components (4, −3), so they have the same length.
 :::
 :::
 
@@ -310,13 +391,23 @@ the player.
 :::
 
 ::: {.callout-note title="Do it · Chase the player"}
-In GeoGebra, type `E = (-2, 1)` and `P = (3, 4)`. Type `Vector(E, P)` and
-`Vector(P, E)`. Check the first one by hand with P − E. Which vector does the
-enemy need?
+The enemy is at E = (−2, 1) and the player at P = (3, 4). In GeoGebra you
+can type `Vector(E, P)` and `Vector(P, E)` to see both arrows.
 
-::: {.check}
-P − E = (5, 3); `Vector(P, E)` = (−5, −3), the opposite. The enemy needs
-(5, 3).
+::: {.choice}
+Which vector does the enemy need to walk to the player?
+
+- [x] (5, 3)
+
+  Why: From the enemy to the player is P − E = (3 − (−2), 4 − 1) = (5, 3).
+
+- [ ] (−5, −3)
+
+  Why: That is E − P: it points from the player back to the enemy.
+
+- [ ] (1, 5)
+
+  Why: That is P + E; adding two points has no meaning.
 :::
 :::
 
@@ -364,14 +455,33 @@ The player stands on the goal. Goal − player?
 {{< sim file="sims/vector-dash.html" poster="sims/vector-dash.png" title="Vector Dash: one velocity, n frames" kind="game" height="640" >}}
 
 ::: {.callout-note title="Do it · Vector Dash"}
-Play three levels of **Vector Dash**. For one level, write the start, the
-target, the number of frames and your velocity. Check it: total displacement ÷
-frames.
+Play three levels of **Vector Dash**. Then check one level by hand: the
+start is (1, 1), the target is (9, 5) and you have 4 frames.
 
-::: {.check}
-A good check has three lines: target − start; that vector ÷ frames; start +
-frames × velocity = target. If the last line does not give the target, the
-velocity is wrong.
+::: {.order}
+Put the three lines of the check in order.
+
+1. Total displacement: target − start = (9, 5) − (1, 1) = (8, 4).
+2. Velocity: (8, 4) ÷ 4 frames = (2, 1).
+3. Test: (1, 1) + 4 × (2, 1) = (9, 5), the target.
+
+Why: First the whole way, then the part for one frame, then a test that it ends on the target.
+:::
+
+::: {.choice}
+A friend chose the velocity (8, 4) for this level. What happens?
+
+- [x] The ship flies past the target.
+
+  Why: (8, 4) is the whole way in one frame; after 4 frames the ship is at (33, 17).
+
+- [ ] The ship reaches the target after 4 frames.
+
+  Why: Only (2, 1) reaches it: 4 × (2, 1) = (8, 4).
+
+- [ ] The ship stands still.
+
+  Why: Only the zero vector (0, 0) keeps a ship still.
 :::
 :::
 
@@ -467,30 +577,51 @@ write the frame number next to each dot. Draw a red star for a comet at
 (5, 4). Show the result as a picture.
 :::
 
-**What do you see?**
+::: {.choice}
+What should the picture show? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-Five blue dots on one straight line: (1, 2), (3, 3), (5, 4), (7, 5) and
-(9, 6). Dot 2 is on the red star: the comet hits the ship after 2 frames.
+- [x] Five dots on one straight line, from (1, 2) to (9, 6). Dot 2 is on the star.
+
+  Why: (1, 2) + 2 × (2, 1) = (5, 4), the comet's point.
+
+- [ ] Five dots straight up from (1, 2), one above the other.
+
+  Why: The velocity (2, 1) also moves the ship 2 to the right in every frame.
+
+- [ ] Five dots on a line, and no dot on the star.
+
+  Why: After 2 frames the ship is at (5, 4), exactly on the comet.
 :::
 
 ::: {.try-change}
-**Change:** make the velocity (4, 2) and ask again. What do you notice?
+**Change:** make the velocity (4, 2) and ask again.
 
-::: {.check}
-The dots are twice as far apart, on the same line: (1, 2), (5, 4), (9, 6).
-Dot 1 is on the star now: a hit after 1 frame. Dots 3 and 4 are outside the
-grid (x = 13 and x = 17).
+::: {.choice}
+What changes in the picture?
+
+- [x] The dots are twice as far apart, and dot 1 is on the star.
+
+  Why: (1, 2) + (4, 2) = (5, 4) after only 1 frame; dots 3 and 4 leave the grid.
+
+- [ ] The line turns and gets steeper.
+
+  Why: (4, 2) is 2 × (2, 1): the same direction, so the same line.
 :::
 :::
 
 ::: {.try-change}
-**Change:** make the velocity (2, 2) and ask again. What do you notice?
+**Change:** make the velocity (2, 2) and ask again.
 
-::: {.check}
-The line is steeper: (1, 2), (3, 4), (5, 6), (7, 8), (9, 10). No dot is on
-the star: after 2 frames the ship is at (5, 6), 2 units above the comet, so
-it is not hit.
+::: {.choice}
+What changes in the picture?
+
+- [x] The line is steeper, and no dot is on the star.
+
+  Why: After 2 frames the ship is at (5, 6), 2 units above the comet.
+
+- [ ] The ship is hit after 2 frames again.
+
+  Why: (1, 2) + 2 × (2, 2) = (5, 6), not the comet's point (5, 4).
 :::
 :::
 

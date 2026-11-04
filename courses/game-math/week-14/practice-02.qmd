@@ -7,9 +7,9 @@ format: lesson-html
 ---
 
 No new ideas today: three short problems, one with vectors, one with
-transformations and one with probability. Do each one alone, then open
-"Check your result". Every question on this page has its answer: try
-first, then check.
+transformations and one with probability. Do each one alone. Tap, sort or
+type your answer at every step: the page checks it at once and tells you
+why.
 
 ## Recall
 
@@ -58,10 +58,32 @@ A rescue pod at (−3, 2) flies to a ship at (9, 7) at 2.6 units per second.
 
 *Your product:* a sketch and four results.
 
-::: {.check}
-1. (9, 7) − (−3, 2) = (12, 5); √(144 + 25) = √169 = **13**. 2. 13 ÷ 2.6 =
-**5 s**. 3. (12, 5) ÷ 13; velocity 2.6 × (12/13, 5/13) = **(2.4, 1)**.
-4. 5 × (2.4, 1) = (12, 5): correct.
+::: {.fill answer="13" hint="The step is (9, 7) − (−3, 2). Then √(x² + y²)."}
+Step 1: what is the distance from the pod to the ship?
+
+Why: The step is (12, 5), and √(144 + 25) = √169 = 13.
+:::
+
+::: {.fill answer="5" unit="s" hint="Distance ÷ speed."}
+Step 2: what is the flight time at 2.6 units per second?
+
+Why: 13 ÷ 2.6 = 5 seconds.
+:::
+
+::: {.choice}
+Steps 3–4: what is the velocity of the pod?
+
+- [x] (2.4, 1)
+
+  Why: 2.6 × (12/13, 5/13) = (2.4, 1); check: 5 × (2.4, 1) = (12, 5), the step.
+
+- [ ] (12, 5)
+
+  Why: (12, 5) is the whole step; the velocity is the move in one second.
+
+- [ ] (31.2, 13)
+
+  Why: Multiply the unit direction by the speed, not the whole step.
 :::
 :::
 
@@ -99,10 +121,36 @@ A crane arm has its pivot at P = (−1, 2) and its tip at A = (2, 6).
 
 *Your product:* two points and one check.
 
-::: {.check}
-1. A − P = (3, 4); R(90°): (−4, 3); + P = **(−5, 5)**. 2. (−4, 3) × 0.5 =
-(−2, 1.5); + P = **(−3, 3.5)**. 3. The arm is 5 long, then 2.5 long
-(half): correct.
+::: {.order}
+Step 1: put the steps of the turn about P = (−1, 2) in order.
+
+1. Subtract the pivot: A − P = (3, 4).
+2. Turn by 90°: (3, 4) → (−4, 3).
+3. Add the pivot back: (−4, 3) + (−1, 2) = (−5, 5).
+
+Why: Turn about a pivot: subtract it, rotate, then add it back.
+:::
+
+::: {.fill answer="(−3, 3.5)" hint="(−4, 3) × 0.5, then + P."}
+Step 2: where is the tip after the scale by 0.5 about P? Type (x, y).
+
+Why: (−4, 3) × 0.5 = (−2, 1.5); + (−1, 2) = (−3, 3.5).
+:::
+
+::: {.choice}
+Step 3: how long is the arm before and after?
+
+- [x] 5, then 2.5
+
+  Why: |(3, 4)| = 5; the turn keeps it, and the scale by 0.5 halves it.
+
+- [ ] 5, then 5
+
+  Why: The turn keeps the length, but the scale by 0.5 halves it.
+
+- [ ] 7, then 3.5
+
+  Why: The length is √(3² + 4²) = 5, not 3 + 4.
 :::
 :::
 
@@ -141,10 +189,43 @@ visits 40 asteroids; each holds a crystal with p = 0.2.
 
 *Your product:* four numbers with one line of working each.
 
-::: {.check}
-1. 0.5³ = **1/8**; 1 − 1/8 = **7/8**. 2. 3 × 0.5 = **1.5** hits. 3. 40 ×
-0.2 = **8** crystals. Check: 1/8 and 7/8 are between 0 and 1; 1.5 and 8
-are numbers of hits and crystals, not probabilities.
+::: {.choice}
+Step 1: what are P(no hit in 3 shots) and P(at least one hit)?
+
+- [x] 1/8 and 7/8
+
+  Why: 0.5³ = 1/8, and the complement is 1 − 1/8 = 7/8.
+
+- [ ] 1/8 and 3/8
+
+  Why: "At least one" is the complement of "none": 1 − 1/8.
+
+- [ ] 3/2 and 1/2
+
+  Why: A probability is never more than 1.
+:::
+
+::: {.sort}
+Steps 2–3: sort the numbers. Which are probabilities, and which are
+expected counts?
+
+A probability
+:   1/8, no hit in 3 shots
+
+    Why: Between 0 and 1: a chance.
+
+:   7/8, at least one hit
+
+    Why: Also a chance, the complement of 1/8.
+
+An expected count
+:   1.5 hits in 3 shots
+
+    Why: 3 × 0.5 = 1.5: an average number of hits, not a chance.
+
+:   8 crystals in 40 asteroids
+
+    Why: 40 × 0.2 = 8 crystals on average.
 :::
 :::
 
@@ -184,29 +265,47 @@ the arm by 90° anticlockwise about P, and draw the turned arm and its new
 tip in another colour.
 :::
 
-**What do you see?**
+::: {.choice}
+What should the picture show? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-The arrow from A to B is (12, 5), with the length 13. The arm from P to Q is
-(3, 4); turned by 90° it is (−4, 3), so the new tip is at (−5, 5).
+- [x] The arrow (12, 5) with the length 13, and the turned arm with its tip at (−5, 5).
+
+  Why: Q − P = (3, 4); turned by 90° it is (−4, 3); + P = (−5, 5).
+
+- [ ] The turned arm with its tip at (−6, 2).
+
+  Why: (−6, 2) turns Q about the origin; the turn is about P.
 :::
 
 ::: {.try-change}
-**Change:** turn the arm by 180° instead of 90°, and ask again. What do you
-notice?
+**Change:** turn the arm by 180° instead of 90°, and ask again.
 
-::: {.check}
-The arm points the other way: (−3, −4), so the tip is at (−4, −2), on the
-other side of P. The arm keeps its length 5.
+::: {.choice}
+What changes?
+
+- [x] The tip goes to (−4, −2), on the other side of P; the arm is still 5 long.
+
+  Why: 180° turns (3, 4) into (−3, −4); + P = (−4, −2).
+
+- [ ] The arm gets twice as long.
+
+  Why: A turn keeps every length.
 :::
 :::
 
 ::: {.try-change}
-**Change:** move B to (3, 10), and ask again. What do you notice?
+**Change:** move B to (3, 10), and ask again.
 
-::: {.check}
-The arrow from A to B is now (6, 8), with the length 10. The arm and its
-turn do not change.
+::: {.choice}
+What changes?
+
+- [x] The arrow from A to B is (6, 8), with the length 10; the arm does not change.
+
+  Why: (3, 10) − (−3, 2) = (6, 8), and √(36 + 64) = 10.
+
+- [ ] The arm turns to a new place.
+
+  Why: The arm uses P and Q only; moving B does not change it.
 :::
 :::
 

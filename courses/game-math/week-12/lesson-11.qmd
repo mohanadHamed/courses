@@ -7,9 +7,9 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check.
+starts with a problem in a game. Then it explains the idea behind it. It
+ends with a **Do it** task and one set of questions. Tap, sort or type your
+answer: the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -28,12 +28,37 @@ Good PRNGs are right for games; passwords and payments need secure ones.
 :::
 
 ::: {.callout-note title="Do it · Find the chance"}
-Write four things in a game you play that come from random numbers.
+Write four things in a game you play that come from random numbers. Here are
+six things from a racing game.
 
-::: {.check}
-A good list names four different things, for example the map of a level,
-the item in a chest, where an enemy moves next, and a critical hit. Each one
-changes from game to game without the player choosing it.
+::: {.sort}
+Which ones come from random numbers? Sort them.
+
+Random numbers
+:   the map of a new level
+
+    Why: It changes from game to game without the player choosing it.
+
+:   the item in a chest
+
+    Why: A loot table picks it with random numbers.
+
+:   where an enemy moves next
+
+    Why: Random behaviour keeps the enemy surprising.
+
+:   a critical hit
+
+    Why: It comes with a probability, for example 0.2.
+
+Chosen by the player
+:   the name the player types
+
+    Why: The player chooses it: no chance.
+
+:   the colour of the car the player picks
+
+    Why: A choice of the player, not of a random number.
 :::
 :::
 
@@ -77,10 +102,19 @@ Use the generator of the engine; a home-made one with a small m repeats soon.
 :::
 
 ::: {.callout-note title="Do it · By hand"}
-a = 3, c = 1, m = 8, seed 2: compute the next two numbers.
+a = 3, c = 1, m = 8, seed 2: compute the next two numbers with
+x(n+1) = (a·x(n) + c) mod m.
 
-::: {.check}
-(3·2 + 1) mod 8 = **7**; (3·7 + 1) mod 8 = 22 mod 8 = **6**.
+::: {.fill answer="7" hint="(3 × 2 + 1), then the remainder of the division by 8."}
+What is the first number after the seed 2?
+
+Why: (3·2 + 1) mod 8 = 7 mod 8 = 7.
+:::
+
+::: {.fill answer="6" hint="(3 × 7 + 1) = 22; divide by 8 and keep the remainder."}
+What is the next number after 7?
+
+Why: (3·7 + 1) mod 8 = 22 mod 8 = 6 (22 = 2 × 8 + 6).
 :::
 :::
 
@@ -127,12 +161,33 @@ Seeding from the time gives friends different worlds.
 :::
 
 ::: {.callout-note title="Do it · Seeds"}
-In **Seed Lab**, build seed 42 twice, then 43, then the daily challenge.
-Write what stays the same.
+In **Seed Lab**, build seed 42 twice, then 43, then the daily challenge,
+and look at what stays the same.
 
-::: {.check}
-Seed 42 twice gives exactly the same level; 43 gives another level. The
-daily challenge uses today's date: the same level for everyone today.
+::: {.sort}
+Do the players get the same level? Sort the cases.
+
+The same level
+:   seed 42, then seed 42 again
+
+    Why: The same seed gives the same numbers, so the same level.
+
+:   two friends who share the number 42
+
+    Why: A shared seed gives the same world to both.
+
+:   the daily challenge, for two players today
+
+    Why: The seed is today's date: the same for everyone today.
+
+Another level
+:   seed 42, then seed 43
+
+    Why: Another seed gives other numbers.
+
+:   a seed from the time, for each new game
+
+    Why: The time is different in every game.
 :::
 :::
 
@@ -178,10 +233,54 @@ Random.Range(1, 6) never gives a 6.
 
 ::: {.callout-note title="Do it · Write the call"}
 Write calls for a card 0 … 51, a lane 1, 2 or 3, and a miss with p = 0.15.
+Remember: in Random.Range(min, max) the integer max is not included.
 
-::: {.check}
-`Random.Range(0, 52)`; `Random.Range(1, 4)`; `Random.value < 0.15f`. The
-integer max is not included.
+::: {.choice}
+Which call gives a card 0 … 51?
+
+- [x] `Random.Range(0, 52)`
+
+  Why: The max 52 is not included: 0 to 51, 52 cards.
+
+- [ ] `Random.Range(0, 51)`
+
+  Why: The max is not included, so card 51 never comes.
+
+- [ ] `Random.Range(1, 52)`
+
+  Why: That starts at 1: card 0 never comes.
+:::
+
+::: {.choice}
+Which call gives a lane 1, 2 or 3?
+
+- [x] `Random.Range(1, 4)`
+
+  Why: 1 to 4 − 1 = 3.
+
+- [ ] `Random.Range(1, 3)`
+
+  Why: The max 3 is not included: lane 3 never comes.
+
+- [ ] `Random.Range(0, 3)`
+
+  Why: That gives 0, 1 and 2.
+:::
+
+::: {.choice}
+Which condition gives a miss with p = 0.15?
+
+- [x] `Random.value < 0.15f`
+
+  Why: Random.value is from 0 to 1, so it is below 0.15 in 15 % of the tries.
+
+- [ ] `Random.value > 0.15f`
+
+  Why: That is true in 85 % of the tries.
+
+- [ ] `Random.Range(0, 15)`
+
+  Why: That gives a number from 0 to 14, not yes or no.
 :::
 :::
 
@@ -226,10 +325,19 @@ Uniform rarities make legendary items common (25 % with four rarities).
 :::
 
 ::: {.callout-note title="Do it · Uniform chances"}
-Random.Range(0, 8): P(5)? Random.Range(0f, 10f): P(from 7 to 10)?
+Random.Range(0, 8) gives 8 equally likely values. Random.Range(0f, 10f) gives
+any number from 0 to 10.
 
-::: {.check}
-1/8 (8 values). 3/10 (3 units of 10).
+::: {.fill answer="1/8|0.125|12.5%" hint="8 equal values."}
+Random.Range(0, 8): what is P(5)?
+
+Why: Uniform: each of the 8 values has 1/8.
+:::
+
+::: {.fill answer="3/10|0.3|30%" hint="The part from 7 to 10, divided by the whole length 10."}
+Random.Range(0f, 10f): what is P(from 7 to 10)?
+
+Why: The part is 3 units long, the whole range 10 units: 3/10.
 :::
 :::
 
@@ -281,12 +389,39 @@ Use r < cumulative, so that weight 0 never drops.
 :::
 
 ::: {.callout-note title="Do it · A loot table"}
-In **Loot Table Lab**, open 1000 chests; then make epic 5 % and write the
-weights.
+In **Loot Table Lab**, the weights are 60, 30, 9 and 1 (common, uncommon,
+epic, legendary). Open 1000 chests; then make epic items 5 %.
 
-::: {.check}
-1000 chests give about 600, 300, 90 and 10. For epic 5 %, for example
-60, 34, 5, 1: 5 of 100.
+::: {.choice}
+About how many of 1000 chests give the legendary item (weight 1)?
+
+- [x] about 10
+
+  Why: 1 of 100 is 1 %: about 1000 × 0.01 = 10, not exactly.
+
+- [ ] exactly 1
+
+  Why: The weight is 1 of 100, so about 10 in 1000.
+
+- [ ] about 250
+
+  Why: That would be a uniform table: the weights make it rare.
+:::
+
+::: {.choice}
+Which weights make epic items 5 %?
+
+- [x] 60, 34, 5, 1
+
+  Why: The sum is 100 and epic has 5: 5 %.
+
+- [ ] 60, 30, 9, 1
+
+  Why: Epic has 9 of 100: 9 %.
+
+- [ ] 5, 34, 60, 1
+
+  Why: Now common items are 5 % and epic items 60 %.
 :::
 :::
 

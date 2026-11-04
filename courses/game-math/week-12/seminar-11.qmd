@@ -6,9 +6,9 @@ ilos: [C2]
 format: lesson-html
 ---
 
-No new ideas today: three short problems on Lecture 11. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: three short problems on Lecture 11. Do each one alone.
+Tap, sort or type your answer at every step: the page checks it at once and
+tells you why.
 
 ## Recall
 
@@ -55,10 +55,31 @@ uses a tiny LCG with a = 3, c = 5, m = 16 and the seed 1.
 
 *Your product:* four numbers and one short answer.
 
-::: {.check}
-3·1 + 5 = 8 → **8**; 3·8 + 5 = 29 → **13**; 3·13 + 5 = 44 → **12**;
-3·12 + 5 = 41 → **9**. Yes: the same seed gives the same sequence, so both
-testers see the same moles.
+::: {.order}
+Step 1: put the next four numbers after the seed 1 in order.
+
+1. 8
+2. 13
+3. 12
+4. 9
+
+Why: 3·1 + 5 = 8; 3·8 + 5 = 29 → 13; 3·13 + 5 = 44 → 12; 3·12 + 5 = 41 → 9 (mod 16).
+:::
+
+::: {.choice}
+Step 2: two testers both use the seed 1. Do they see the same moles?
+
+- [x] Yes: the same seed gives the same sequence.
+
+  Why: A PRNG is a formula: the same start gives the same numbers.
+
+- [ ] No: random numbers are always different.
+
+  Why: Pseudo-random numbers repeat with the same seed.
+
+- [ ] Only when they play at the same time.
+
+  Why: The seed decides, not the time of the game.
 :::
 :::
 
@@ -100,10 +121,49 @@ with the probability 0.05.
 
 *Your product:* two calls, one fix and two numbers.
 
-::: {.check}
-1. `Random.Range(0, 9)` and `Random.value < 0.05f`. 2. Hole **9** never
-comes: the max is not included. Fix: `Random.Range(1, 10)`. 3. P(hole 4) =
-1/9 (9 equal holes); 200 × 0.05 = **10** golden moles.
+::: {.choice}
+Step 1: which call gives one of the holes 0 … 8?
+
+- [x] `Random.Range(0, 9)`
+
+  Why: The max 9 is not included: 0 to 8. The golden mole is `Random.value < 0.05f`.
+
+- [ ] `Random.Range(0, 8)`
+
+  Why: Hole 8 never comes: the max is not included.
+
+- [ ] `Random.Range(1, 9)`
+
+  Why: Hole 0 never comes.
+:::
+
+::: {.choice}
+Step 2: `Random.Range(1, 9)` should give the holes 1 … 9. Which hole never
+gets a mole, and what is the fix?
+
+- [x] hole 9; the fix is `Random.Range(1, 10)`
+
+  Why: The max is not included, so the code gives 1 to 8.
+
+- [ ] hole 1; the fix is `Random.Range(0, 9)`
+
+  Why: The min is included: hole 1 comes; hole 9 does not.
+
+- [ ] no hole: the code is right
+
+  Why: Range(1, 9) stops at 8.
+:::
+
+::: {.fill answer="1/9" hint="9 equally likely holes."}
+Step 3: what is P(the mole is in hole 4)?
+
+Why: 9 equal holes: 1/9 each.
+:::
+
+::: {.fill answer="10" hint="200 × 0.05."}
+Step 3: about how many golden moles come in 200 moles?
+
+Why: 200 × 0.05 = 10 (about 10, not exactly).
 :::
 :::
 
@@ -152,11 +212,53 @@ plush 109, bear **0**.
 
 *Your product:* the cumulative weights, one prize, your counts and one fix.
 
-::: {.check}
-1. 64, 88, 98, 100; r = 90 is from 88 to 98: the **plush**. 2. The counts
-are close, but not exact (for example 652, 231, 98, 19). 3. r is always
-below 98, but the bear needs r from 98 to 100. Fix:
-`float r = Random.value * 100;` (the sum of the weights).
+::: {.choice}
+Step 1: the cumulative weights are 64, 88, 98, 100. Which prize does r = 90
+give?
+
+- [x] the plush
+
+  Why: 90 is from 88 to 98: the third prize.
+
+- [ ] the toy
+
+  Why: The toy is from 64 to 88.
+
+- [ ] the giant bear
+
+  Why: The bear is from 98 to 100.
+:::
+
+::: {.choice}
+Step 2: are the counts of 1000 prizes close to 640, 240, 100 and 20?
+
+- [x] close, but not exact (for example 652, 231, 98, 19)
+
+  Why: Each prize is random: many prizes come near the expected counts.
+
+- [ ] exactly 640, 240, 100 and 20
+
+  Why: Random draws are never exact.
+
+- [ ] far from them
+
+  Why: With 1000 prizes the counts come close.
+:::
+
+::: {.choice}
+Step 3: why does `Random.value * 98` never give a bear?
+
+- [x] r is always below 98, but the bear needs r from 98 to 100.
+
+  Why: The fix uses the sum of the weights: `Random.value * 100`.
+
+- [ ] Its weight 2 is too small to ever come.
+
+  Why: 2 of 100 gives about 20 bears in 1000.
+
+- [ ] The bear must be first in the table.
+
+  Why: The order of the prizes does not change their chances.
 :::
 :::
 
@@ -201,32 +303,47 @@ chart that shows, for each prize, your count next to the expected count
 (1000 × its chance). Also give the four counts in a small table.
 :::
 
-**What do you see?**
+::: {.choice}
+What should the chart show? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-Counts close to the expected 640, 240, 100 and 20, for example a bear count
-between about 10 and 30. Each new simulation gives a little different
-counts.
+- [x] Counts close to 640, 240, 100 and 20, a little different in each run.
+
+  Why: 1000 random prizes come near 1000 × each chance; the bear is about 10 to 30.
+
+- [ ] Exactly 640, 240, 100 and 20.
+
+  Why: A simulation draws random numbers: the counts are never exact.
 :::
 
 ::: {.try-change}
-**Change:** simulate only 100 prizes, and ask again. What do you notice?
+**Change:** simulate only 100 prizes, and ask again.
 
-::: {.check}
-The expected counts are 64, 24, 10 and 2, and the counts jump more around
-them: the bear can easily be 0 or 4. Few tries give results far from the
-chances.
+::: {.choice}
+What changes?
+
+- [x] The counts jump more around 64, 24, 10 and 2; the bear can be 0 or 4.
+
+  Why: Few tries give results far from the chances.
+
+- [ ] The counts are exactly 64, 24, 10 and 2.
+
+  Why: Fewer tries make the counts less exact, not more.
 :::
 :::
 
 ::: {.try-change}
-**Change:** make the bear 10 % and the sticker 56 %, and ask again. What do you
-notice?
+**Change:** make the bear 10 % and the sticker 56 %, and ask again.
 
-::: {.check}
-The expected counts are 560, 240, 100 and 100: the bear column grows to
-about 100, as tall as the plush, and the sticker column falls to about
-560.
+::: {.choice}
+What changes?
+
+- [x] The bear grows to about 100, as tall as the plush; the sticker falls to about 560.
+
+  Why: The expected counts are now 560, 240, 100 and 100.
+
+- [ ] Only the bear column changes.
+
+  Why: The sticker changes too, from 64 % to 56 %.
 :::
 :::
 

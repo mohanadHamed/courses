@@ -16,6 +16,10 @@ format: lesson-pptx
 - The shape keeps its size and its direction, and only its place changes.
 - A 2 × 2 matrix cannot translate, because it keeps (0, 0) at (0, 0).
 - **Do it:** Where does the corner (2, 2) go with the move (−3, 1)?
+
+::: {.reveal}
+- **Result:** (2 − 3, 2 + 1) = (−1, 3).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/translate.png)
@@ -35,7 +39,7 @@ A platform has its corner at (1, 1), and the corner must be at (5, 4).
 
 ## Live demo · Transform Lab
 
-{{< sim file="sims/transform-lab.html" poster="sims/transform-lab.png" title="Transform Lab: translate, scale and mirror a shape" task="**Show:** scale by 2 about the origin, then about the centre, then mirror with sx = −1. **Ask:** which point of the house stays still each time?" >}}
+{{< sim file="sims/transform-lab.html" poster="sims/transform-lab.png" title="Transform Lab: translate, scale and mirror a shape" task="**Show:** scale by 2 about the origin, then about the centre, then mirror with sx = −1. **Ask:** which point of the house stays still each time?" answer="Only the pivot: first (0, 0), then the centre (1, 1.5); the mirror keeps the points on the y-axis." >}}
 
 ## Try it 1 · Translation
 
@@ -57,6 +61,10 @@ c) It always keeps (0, 0) at (0, 0).
 - The scaling matrix has the rows (s~x~, 0) and (0, s~y~).
 - Equal factors keep the shape, and different factors stretch it.
 - **Do it:** In Transform Lab, set sx = 2 and sy = 1. Where does the corner (2, 2) go?
+
+::: {.reveal}
+- **Result:** (2, 2) goes to (4, 2): the house gets wide and flat.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/scale-matrix.png)
@@ -94,6 +102,10 @@ c) It halves its size.
 - To scale about a pivot C, move by −C, scale, and move back by +C.
 - For one point, P' = C + S (P − C).
 - **Do it:** In Transform Lab, try the three pivots. Which point stays still?
+
+::: {.reveal}
+- **Result:** The pivot stays still each time: the origin, the feet (1, 0) or the centre (1, 1.5).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/pivot-scale.png)
@@ -131,6 +143,10 @@ c) the pivot
 - x' = x cos θ − y sin θ, and y' = x sin θ + y cos θ.
 - The distance from the origin stays the same.
 - **Do it:** Rotate (2, 2) by 90° on paper. Does Rotate Lab give the same point?
+
+::: {.reveal}
+- **Result:** Yes: (2 × 0 − 2 × 1, 2 × 1 + 2 × 0) = (−2, 2).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/rotate-point.png)
@@ -150,7 +166,7 @@ The tip of a blade is at (4, 0), and it turns by 30° (cos 0.87, sin 0.5).
 
 ## Live demo · Rotate Lab
 
-{{< sim file="sims/rotate-lab.html" poster="sims/rotate-lab.png" title="Rotate Lab: R(θ) and the pivot" task="**Show:** turn the house by 45°, 90° and 180°, then move the pivot to (1, 0). **Ask:** why does the length from the pivot to P never change?" >}}
+{{< sim file="sims/rotate-lab.html" poster="sims/rotate-lab.png" title="Rotate Lab: R(θ) and the pivot" task="**Show:** turn the house by 45°, 90° and 180°, then move the pivot to (1, 0). **Ask:** why does the length from the pivot to P never change?" answer="A rotation keeps every length: P moves on a circle around the pivot." >}}
 
 ## Try it 4 · Rotate a point
 
@@ -172,6 +188,10 @@ c) (−2, 0)
 - Its first column is where (1, 0) goes, and its second column is where (0, 1) goes.
 - R(90°) has the rows (0, −1) and (1, 0), the spell Turn of Lecture 5.
 - **Do it:** Write R(45°) with cos 45° = sin 45° = 0.71. Where does it send (2, 0)?
+
+::: {.reveal}
+- **Result:** R(45°) has the rows (0.71, −0.71) and (0.71, 0.71), so (2, 0) goes to (1.42, 1.42).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/rotation-matrix.png)
@@ -198,6 +218,10 @@ c) (1, 2)
 - For one point, P' = C + R(θ)(P − C).
 - A drawbridge turns about its hinge, not about the origin.
 - **Do it:** Rotate (5, 2) by 90° about the pivot (3, 2). Where does it go?
+
+::: {.reveal}
+- **Result:** (5, 2) − (3, 2) = (2, 0); R(90°) gives (0, 2); + (3, 2) = (3, 4).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/rotate-pivot.png)

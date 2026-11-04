@@ -7,8 +7,8 @@ format: lesson-html
 ---
 
 No new ideas today: three short problems that use Lectures 10, 11 and 12 on
-the level generator of a game. Do each one alone, then open "Check your
-result". Every question on this page has its answer: try first, then check.
+the level generator of a game. Do each one alone. Tap, sort or type your
+answer at every step: the page checks it at once and tells you why.
 
 ## Recall
 
@@ -60,12 +60,52 @@ farthest from the start. All its random numbers come from one seed.
 
 *Your product:* three short answers, each with a reason.
 
-::: {.check}
-1. Everything stays the same with seed 42: the walls, the start, the exit
-   and the chest.
-2. The seed of the floor: with it the team makes the same floor again. A
-   shared daily seed gives every player the same floor.
-3. At most 20; often fewer, because the walker steps on some tiles again.
+::: {.choice}
+Step 1: seed 42, then 43, then 42 again. What stays the same?
+
+- [x] With seed 42, everything: the walls, the start, the exit and the chest.
+
+  Why: The same seed gives the same random numbers, so the same cave.
+
+- [ ] Only the start in the middle.
+
+  Why: Every part of the cave comes from the seed, not only the start.
+
+- [ ] Nothing: a random cave is always new.
+
+  Why: Pseudo-random numbers repeat with the same seed.
+:::
+
+::: {.choice}
+Step 2: what must the tester write in the bug report?
+
+- [x] the seed of the floor
+
+  Why: With the seed the team makes the same floor again; a shared daily seed gives everyone the same floor.
+
+- [ ] the time of the game
+
+  Why: The time does not make the floor again; the seed does.
+
+- [ ] only a screenshot
+
+  Why: A picture shows the bug, but it cannot rebuild the floor.
+:::
+
+::: {.choice}
+Step 3: the walker makes 20 steps. At most how many new floor tiles?
+
+- [x] 20, and often fewer
+
+  Why: One new tile per step at most; the walker often steps on a tile again.
+
+- [ ] 400
+
+  Why: 20 steps can change at most 20 tiles.
+
+- [ ] always exactly 20
+
+  Why: A random walk often goes back to tiles that are already floor.
 :::
 :::
 
@@ -113,13 +153,38 @@ shares.
 *Your product:* one number of draws, two expected values, one probability
 and one sentence on the bag.
 
-::: {.check}
-1. 1/0.8 = 1.25 draws.
-2. E = 20 × 0.25 + 100 × 0.05 + 0 = 5 + 5 = 10 coins per room; 80 coins
-   per floor.
-3. 0.75 × 0.75 = 0.5625, about 56 %.
-4. Both methods give about 80 coins per floor; the bag has far fewer floors
-   without a chest: it spreads the chests but keeps the shares.
+::: {.fill answer="1.25" hint="On average 1/p draws, with p = 0.8."}
+Step 1: how many draws does the monster need on average?
+
+Why: 1 ÷ 0.8 = 1.25 draws.
+:::
+
+::: {.fill answer="10" unit="coins" hint="20 × 0.25 + 100 × 0.05 + 0 × 0.7."}
+Step 2: what are the expected coins per room?
+
+Why: 5 + 5 + 0 = 10 coins per room, so 8 × 10 = 80 coins per floor.
+:::
+
+::: {.fill answer="0.5625|56.25%|56%" tol="0.01" hint="No chest has 75 % in each room; two rooms: multiply."}
+Step 3: what is P(no chest in 2 rooms)?
+
+Why: 0.75 × 0.75 = 0.5625, about 56 %.
+:::
+
+::: {.choice}
+Step 4: what does Event Deck show for the table and for the bag?
+
+- [x] Both give about 80 coins; the bag has far fewer floors without a chest.
+
+  Why: The bag spreads the chests but keeps their share.
+
+- [ ] The bag gives more coins per floor.
+
+  Why: The shares are the same, so the coins are the same on average.
+
+- [ ] The table has fewer floors without a chest.
+
+  Why: Pure random can miss the chest many times; the bag cannot.
 :::
 :::
 
@@ -168,14 +233,59 @@ rooms, and some floors have no gem at all. A new rule puts the exit at least
 
 *Your product:* four short answers and your score in Generator Doctor.
 
-::: {.check}
-1. The seed of the floor.
-2. 1/0.8 = 1.25 draws. E = 30 × 0.2 + 50 × 0.1 = 6 + 5 = 11 coins per room;
-   110 coins per floor.
-3. About 35 % of the floors have no gem. A shuffle bag with 1 gem in every 10
-   rooms gives each floor its gem and keeps the rate.
-4. Test again with 1000 seeds or more and compare the path lengths with the
-   old rule: the average and the extremes.
+::: {.choice}
+Step 1: what does the player share with the friend?
+
+- [x] the seed of the floor
+
+  Why: The same seed gives the friend exactly the same floor.
+
+- [ ] a screenshot of the floor
+
+  Why: A picture cannot rebuild the floor.
+
+- [ ] the score
+
+  Why: The score says nothing about the floor.
+:::
+
+::: {.fill answer="110" unit="coins" hint="Per room: 30 × 0.2 + 50 × 0.1. A floor has 10 rooms."}
+Step 2: what are the expected coins per floor of 10 rooms?
+
+Why: 6 + 5 = 11 coins per room, so 110 per floor. The monster needs 1 ÷ 0.8 = 1.25 draws.
+:::
+
+::: {.choice}
+Step 3: about 35 % of the floors have no gem. Which change gives every floor
+gems at the same rate?
+
+- [x] a shuffle bag with 1 gem in every 10 rooms
+
+  Why: Each floor gets its gem, and the rate of 10 % stays.
+
+- [ ] a gem chance of 50 % per room
+
+  Why: That changes the rate: five times as many gems.
+
+- [ ] no change: 35 % is fair
+
+  Why: The rate is fair, but a third of the floors still feel empty.
+:::
+
+::: {.choice}
+Step 4: the exit rule changes. What does the team do?
+
+- [x] Test again with 1000 seeds or more and compare the path lengths.
+
+  Why: Many seeds show the average and the extremes of the new rule.
+
+- [ ] Play one floor and look at it.
+
+  Why: One seed shows one floor; the extremes need many seeds.
+
+- [ ] Nothing: a small rule needs no test.
+
+  Why: Every change of a generator can break some floors.
 :::
 :::
 

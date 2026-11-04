@@ -6,9 +6,9 @@ ilos: [B1, C1, D1]
 format: lesson-html
 ---
 
-No new ideas today: three short problems that use Lectures 2, 3, 4 and 6
-on the shuttle of a game. Do each one alone, then open "Check your result".
-Every question on this page has its answer: try first, then check.
+No new ideas today: three short problems that use Lectures 2, 3, 4 and 6 on
+the shuttle of a game. Do each one alone. Tap, sort or type your answer at
+every step: the page checks it at once and tells you why.
 
 ## Recall
 
@@ -63,14 +63,49 @@ up (0, 1), right and up (1, 1); a stick can give (−3, 4).
 *Your product:* two steps, one velocity for (1, 1), one for (−3, 4), and one
 sentence on what normalizing changes.
 
-::: {.check}
-1. 6 × 1/30 = 0.2 and 6 × 1/60 = 0.1 per frame. In one second:
-   30 × 0.2 = 6 and 60 × 0.1 = 6, the same distance.
-2. (6, 6) is longer than 6: too fast. Normalized: (0.71, 0.71) × 6 ≈
-   (4.3, 4.3), with the speed 6.
-3. (−3, 4) has the length 5: (−0.6, 0.8) × 10 = (−6, 8).
-4. Move Lab: without normalizing the diagonal is faster; with it, every
-   direction has the same speed.
+::: {.fill answer="0.2" hint="speed × Δt = 6 × 1/30."}
+Step 1: what is the step per frame at 30 fps?
+
+Why: 6 × 1/30 = 0.2; at 60 fps it is 6 × 1/60 = 0.1.
+:::
+
+::: {.choice}
+Step 1: how far does the shuttle fly in one second?
+
+- [x] 6 units at both frame rates
+
+  Why: 30 × 0.2 = 6 and 60 × 0.1 = 6: Δt keeps the speed the same.
+
+- [ ] 12 units at 60 fps
+
+  Why: At 60 fps each step is half as long: 60 × 0.1 = 6.
+
+- [ ] 3 units at 60 fps
+
+  Why: Twice as many steps of half the size give the same 6 units.
+:::
+
+::: {.choice}
+Step 2: the input (1, 1) is not normalized. What happens?
+
+- [x] The shuttle is too fast; normalized it gets about (4.3, 4.3).
+
+  Why: (6, 6) is about 8.5 long; (0.71, 0.71) × 6 ≈ (4.3, 4.3) has the speed 6.
+
+- [ ] The shuttle is too slow.
+
+  Why: (1, 1) is longer than 1, so the speed is bigger, not smaller.
+
+- [ ] The speed is right.
+
+  Why: Only a unit vector keeps the speed 6 in every direction.
+:::
+
+::: {.fill answer="(−6, 8)" hint="(−3, 4) has the length 5: normalize, then × 10."}
+Step 3: the stick gives (−3, 4) and the speed is 10. What is the velocity?
+Type (x, y).
+
+Why: (−3, 4) ÷ 5 = (−0.6, 0.8); × 10 = (−6, 8).
 :::
 :::
 
@@ -117,12 +152,48 @@ split of Lecture 3, with the part along the normal taken away twice.
 
 *Your product:* three angles and two velocities after a bounce.
 
-::: {.check}
-1. (0, −2): −90°. (4, −4): −45°. (−3, −3): −135°.
-2. v · n̂ = −3. v' = (4, −3) − 2 × (−3) × (0, 1) = (4, −3) + (0, 6) = (4, 3):
-   it now moves up.
-3. v · n̂ = −5. v' = (−5, 1) + (10, 0) = (5, 1).
-4. Bounce Lab shows (4, 3) after the floor.
+::: {.sort}
+Step 1: which facing angle atan2(v~y~, v~x~) does each velocity get? Sort
+them.
+
+−90°
+:   (0, −2)
+
+    Why: Straight down.
+
+:   (0, −5)
+
+    Why: Also straight down: the length does not change the angle.
+
+−45°
+:   (4, −4)
+
+    Why: Down-right, on the diagonal.
+
+:   (1, −1)
+
+    Why: The same direction as (4, −4).
+
+−135°
+:   (−3, −3)
+
+    Why: Down-left: x and y are both minus.
+:::
+
+::: {.order}
+Step 2: put the steps of the floor bounce in order.
+
+1. v · n̂ = (4, −3) · (0, 1) = −3.
+2. −2 (v · n̂) n̂ = −2 × (−3) × (0, 1) = (0, 6).
+3. v' = (4, −3) + (0, 6) = (4, 3): it now moves up.
+
+Why: v' = v − 2 (v · n̂) n̂: the part into the floor turns around. Bounce Lab shows (4, 3).
+:::
+
+::: {.fill answer="(5, 1)" hint="v · n̂ = −5; take away 2 × (−5) × (1, 0)."}
+Step 3: what is the velocity after the left wall? Type (x, y).
+
+Why: v · n̂ = −5; v' = (−5, 1) − 2 × (−5) × (1, 0) = (−5, 1) + (10, 0) = (5, 1).
 :::
 :::
 
@@ -167,11 +238,32 @@ check six numbers of its movement code in *Pilot Check*.
 
 *Your product:* three world points and your score in Pilot Check.
 
-::: {.check}
-1. (1, 0) → scale: (2, 0) → rotate 90°: (0, 2) → move: (5, 5).
-2. (1, 0) → (−1, 0) → (1, 4). (−0.5, 0.5) → (0.5, −0.5) → (2.5, 3.5).
-3. Pilot Check: the step 0.2; normalize (1, 1); the facing 135°; 2° per
-   frame; (3, 2) after the left wall; the corner at (4, 4).
+::: {.order}
+Step 1: put the points of the nose in the order of the steps.
+
+1. local: (1, 0)
+2. after the scale by 2: (2, 0)
+3. after the turn by 90°: (0, 2)
+4. after the move by (5, 3): (5, 5)
+
+Why: world point = T · R · S · local point: scale first, then rotate, then move.
+:::
+
+::: {.choice}
+Step 2: scale 1, angle 180°, position (2, 4). Where is the corner
+(−0.5, 0.5)?
+
+- [x] (2.5, 3.5)
+
+  Why: 180° gives (0.5, −0.5); + (2, 4) = (2.5, 3.5). The nose (1, 0) goes to (1, 4).
+
+- [ ] (1.5, 4.5)
+
+  Why: That only moves the corner: the turn of 180° is missing.
+
+- [ ] (−2.5, −3.5)
+
+  Why: The position (2, 4) is added after the turn, not turned with it.
 :::
 :::
 

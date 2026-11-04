@@ -7,8 +7,8 @@ format: lesson-html
 ---
 
 No new ideas today: three short problems that revise Lectures 1–12 before
-the final exam. Do each one alone, then open "Check your result". Every
-question on this page has its answer: try first, then check.
+the final exam. Do each one alone. Tap, sort or type your answer at every
+step: the page checks it at once and tells you why.
 
 ## Recall
 
@@ -64,10 +64,46 @@ about the mast at (1, 1).
 
 *Your product:* a distance, a time, one decision and one point.
 
-::: {.check}
-1. (7, 10) − (1, 2) = (6, 8); the length is 10; the time is 10 ÷ 2.5 = 4 s.
-2. (1, 0) · (−3, 4) = −3: negative, so the raft is behind the lighthouse.
-3. (3, 1) − (1, 1) = (2, 0); turned by 90°: (0, 2); + (1, 1) = (1, 3).
+::: {.choice}
+Step 1: how far is the island, and how long does the raft need?
+
+- [x] 10 units and 4 seconds
+
+  Why: (7, 10) − (1, 2) = (6, 8), the length is 10, and 10 ÷ 2.5 = 4 s.
+
+- [ ] 14 units and 5.6 seconds
+
+  Why: The length is √(36 + 64) = 10, not 6 + 8.
+
+- [ ] 10 units and 25 seconds
+
+  Why: Time = distance ÷ speed = 10 ÷ 2.5.
+:::
+
+::: {.choice}
+Step 2: is the raft at (−3, 4) in front of the lighthouse or behind it?
+
+- [x] behind
+
+  Why: (1, 0) · (−3, 4) = −3: negative.
+
+- [ ] in front
+
+  Why: In front needs a positive dot product.
+
+- [ ] exactly to the side
+
+  Why: To the side needs a dot product of 0.
+:::
+
+::: {.order}
+Step 3: put the steps of the turn about the mast in order.
+
+1. Move the mast to the origin: (3, 1) − (1, 1) = (2, 0).
+2. Turn by 90°: (2, 0) → (0, 2).
+3. Move back: (0, 2) + (1, 1) = (1, 3).
+
+Why: Subtract the pivot, rotate, add the pivot back.
 :::
 :::
 
@@ -113,13 +149,55 @@ each dive. Then play the eight islands of **Lucky Raft Finals**.
 *Your product:* two decisions, three probabilities or values, one wait and
 your score.
 
-::: {.check}
-1. true ∧ ¬false = true ∧ true = true: the gate opens.
-   ¬(false ∨ true) = ¬true = false: the raft may not sail.
-2. 6/36 = 1/6.
-3. E = 10 × 0.7 + 50 × 0.3 = 7 + 15 = 22 coins.
-4. 1 − 0.9 × 0.9 = 1 − 0.81 = 0.19. With the bag, the pearl can be first in
-   one bag and last in the next: 18 dives without a pearl at most.
+::: {.sort}
+Step 1: does the rule say yes? Sort the cases.
+
+Yes
+:   the gate: key = true, alarm = false
+
+    Why: true ∧ ¬false = true ∧ true = true.
+
+:   the raft on a clear day: storm = false, night = false
+
+    Why: ¬(false ∨ false) = ¬false = true.
+
+No
+:   the raft: storm = false, night = true
+
+    Why: ¬(false ∨ true) = ¬true = false.
+
+:   the gate with the alarm on: key = true, alarm = true
+
+    Why: true ∧ ¬true = true ∧ false = false.
+:::
+
+::: {.fill answer="1/6|6/36" hint="Count the pairs with the sum 7 in the grid of 36."}
+Step 2: what is P(a sum of 7) with two dice?
+
+Why: (1, 6), (2, 5), (3, 4), (4, 3), (5, 2), (6, 1): 6/36 = 1/6.
+:::
+
+::: {.fill answer="22" unit="coins" hint="10 × 0.7 + 50 × 0.3."}
+Step 3: what are the expected coins of the crate?
+
+Why: 7 + 15 = 22 coins.
+:::
+
+::: {.choice}
+Step 4: P(at least one pearl in two dives), and the longest wait with the
+bag?
+
+- [x] 0.19, and 18 dives without a pearl at most
+
+  Why: 1 − 0.9 × 0.9 = 0.19; the pearl can be first in one bag and last in the next: 9 + 9.
+
+- [ ] 0.2, and 10 dives at most
+
+  Why: 0.1 + 0.1 counts the case of two pearls twice, and two bags can give 9 + 9.
+
+- [ ] 0.01, and 18 dives at most
+
+  Why: 0.01 = 0.1 × 0.1 is P(two pearls).
 :::
 :::
 
@@ -163,11 +241,38 @@ weights 6, 3 and 1 (out of 10).
 
 *Your product:* one page with the five parts, and your talk.
 
-::: {.check}
-E = 10 × 0.6 + 40 × 0.3 + 200 × 0.1 = 6 + 12 + 20 = 38 coins. A good
-presentation has the five parts in order, names the tool (the expected
-value), shows the three products, checks that the probabilities add up to 1
-and says the answer in game words: "On average a chest gives 38 coins."
+::: {.fill answer="38" unit="coins" hint="10 × 0.6 + 40 × 0.3 + 200 × 0.1."}
+Step 1: what are the expected coins of the chest?
+
+Why: 6 + 12 + 20 = 38 coins; check: 0.6 + 0.3 + 0.1 = 1.
+:::
+
+::: {.order}
+Step 2: put the five parts of the presentation in order.
+
+1. the problem
+2. a sketch
+3. the tool and why (the expected value)
+4. the steps: the three products and their sum
+5. the check and the answer in game words
+
+Why: Read, draw, choose the tool, compute, check: a solution that is easy to follow.
+:::
+
+::: {.choice}
+Step 3: which answer sentence is in game words?
+
+- [x] "On average a chest gives 38 coins."
+
+  Why: It says what the number means for the player.
+
+- [ ] "E = 38."
+
+  Why: Right, but it does not say what it means in the game.
+
+- [ ] "The probabilities add up to 1."
+
+  Why: That is the check, not the answer.
 :::
 :::
 

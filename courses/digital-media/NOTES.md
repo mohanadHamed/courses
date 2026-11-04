@@ -90,3 +90,24 @@ Course-specific rules only. Global rules are in the root `AUTHORING.md`.
   first mix does not clip (the old Seminar 9 answer said it did). The team
   activities of Practice 1 and 2 (D1) stay. Lecture 1, Seminar 1 and
   Lecture 2 were already taught and did not change.
+- 2026-11-04 (teacher's review, second round): Seminar 2 was still hard for
+  a first reader. Its page showed the list of stages as a broken numbered
+  list ("2. Dark water"), the tension numbers fell at the start (6, 5, 4)
+  against the rising curve of Lecture 2, and the cards of Stage Order said
+  other things than the text. From Seminar 2 on, every session now follows
+  these clarity rules, with the same ILOs and the same activities:
+  - The facts of an activity are a numbered table (stages, lines, cards,
+    notes, assets), never an inline list, and no source line starts with
+    a number or a letter (Pandoc turns it into a list).
+  - A number always comes with its name: "stage 2 (The alarm)".
+  - Every number or scale is explained the first time (tension: 1 = very
+    calm, 10 = very tense; 0 dB is the top; 48 kHz = 48 000 samples a
+    second).
+  - Recall has a small table of the words of the lecture in plain English.
+  - In a match, the first answer is done as an example; every step is one
+    action; choices are a list (A, B, C); answers go in a table column.
+  - The slides have a "The facts · …" table slide for the data of each
+    activity; long columns get their width from the dashes of the table.
+  - A simulator shows exactly the names and numbers of the text (Moon
+    Diver: stage 1 The base, stage 2 The alarm; tension 3, 4, 5, 2, 7, 8,
+    10, 2), with a new poster and recording.

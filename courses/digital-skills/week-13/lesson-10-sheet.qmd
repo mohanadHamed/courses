@@ -22,9 +22,9 @@ in its box. At the end, copy your key results into the table.
   at `office.com`) and an AI assistant that the university allows (for
   example Microsoft Copilot with your university account).
 - **Time:** about 40 minutes for the three experiments.
-- **Check:** the results are at the end of this worksheet. On the
-  interactive lesson, every step has "Check your result". Look only after
-  you try.
+- **Check:** the results are at the end of this worksheet. Look only after
+  you try. On the interactive lesson, every step has a check that answers
+  at once.
 
 {{< start-files >}}
 
@@ -44,6 +44,22 @@ notes 10.1 · about 10 minutes)*
    Type, Qty and Total (JD).
    :::
 
+   ::: {.choice}
+   You click **OK**. Where is the new PivotTable?
+
+   - [x] on a new sheet, with the PivotTable Fields pane on the right
+
+     Why: The pane lists the headings of the list: Week, Item, Type, Qty and Total (JD).
+
+   - [ ] under the list, on the same sheet
+
+     Why: With OK, Excel makes a new sheet for it.
+
+   - [ ] in a new workbook
+
+     Why: It stays in the same file, on a new sheet.
+   :::
+
 2. In the pane, drag **Type** to **Rows** and **Total (JD)** to **Values**.
 
    {{< record "Paper … ; Drinks … ; Bags … ; Grand Total …" >}}
@@ -51,6 +67,12 @@ notes 10.1 · about 10 minutes)*
    ::: {.check}
    **Paper 206, Drinks 71, Bags 78; Grand Total 355 JD.** One row for each
    type, and the sum of its totals. Paper sold the most.
+   :::
+
+   ::: {.fill answer="206" unit="JD" hint="Read the row of Paper in the PivotTable."}
+   How much did **Paper** sell?
+
+   Why: Paper 206, Drinks 71, Bags 78; Grand Total 355 JD. One row for each type, with the sum of its totals: Paper sold the most.
    :::
 
 ## Experiment 2 · New questions, same table
@@ -67,6 +89,18 @@ up to date. *(Lesson notes 10.2 · about 16 minutes)*
    **second** the weakest. The Grand Total stays 355 JD.
    :::
 
+   ::: {.order}
+   Weeks 1 to 4 show 87, 63, 112 and 93 JD. Put the weeks in order, from the
+   best to the weakest.
+
+   1. week 3: 112 JD
+   2. week 4: 93 JD
+   3. week 1: 87 JD
+   4. week 2: 63 JD
+
+   Why: The third week was the best, and the second the weakest. The Grand Total stays 355 JD.
+   :::
+
 2. Click a cell of the PivotTable. Choose **PivotTable Analyze ›
    PivotChart**, then **Line**, and click OK.
 
@@ -75,6 +109,22 @@ up to date. *(Lesson notes 10.2 · about 16 minutes)*
    ::: {.check}
    From **week 1 to week 2** (87 → 63) and from **week 3 to week 4** (112 →
    93). A line chart shows a change over time.
+   :::
+
+   ::: {.choice}
+   Where does the line go down?
+
+   - [x] from week 1 to week 2, and from week 3 to week 4
+
+     Why: 87 → 63 and 112 → 93. A line chart shows a change over time.
+
+   - [ ] from week 2 to week 3
+
+     Why: 63 → 112: the line goes up.
+
+   - [ ] nowhere: the sales grew every week
+
+     Why: The second week fell.
    :::
 
 3. Go to the sheet **March**. Change the total of the bag in week 3 from
@@ -89,6 +139,12 @@ up to date. *(Lesson notes 10.2 · about 16 minutes)*
    refresh again.
    :::
 
+   ::: {.fill answer="122" unit="JD" hint="The bag in week 3 is now 10 JD more."}
+   The bag of week 3 is now 58 JD. What does week 3 show **after** Refresh?
+
+   Why: 112 + 10 = 122 JD. Before Refresh it still shows 112: a PivotTable does not change by itself, so you refresh it after a change.
+   :::
+
 4. Put **Type** in Rows again (instead of Week). Click **Sum of Total
    (JD)** in Values, choose **Value Field Settings**, then **Average**.
 
@@ -97,6 +153,22 @@ up to date. *(Lesson notes 10.2 · about 16 minutes)*
    ::: {.check}
    **Paper 20.6, Drinks 7.1, Bags 19.5 JD.** Paper has the biggest average
    sale. The same list answers a new question.
+   :::
+
+   ::: {.choice}
+   With **Average**, which type has the biggest average sale?
+
+   - [x] Paper, 20.6 JD
+
+     Why: Paper 20.6, Bags 19.5 and Drinks 7.1 JD: the same list answers a new question.
+
+   - [ ] Bags, 19.5 JD
+
+     Why: Close, but 19.5 is less than 20.6.
+
+   - [ ] Drinks, 7.1 JD
+
+     Why: The smallest average.
    :::
 
 ## Experiment 3 · An AI summary
@@ -118,6 +190,33 @@ the PivotTable. *(Lesson notes 10.3 · about 14 minutes)*
    invented number. The table has no personal data, so you may paste it.
    :::
 
+   ::: {.sort}
+   An AI wrote five sentences about March. Check each number with the table:
+   Paper 206, Drinks 71, Bags 78, total 355 JD.
+
+   Right: keep it
+   :   Paper sold 206 JD.
+
+       Why: The table says 206.
+
+   :   The total of March was 355 JD.
+
+       Why: The Grand Total is 355 JD.
+
+   :   Paper made about 58 % of the sales.
+
+       Why: 206 ÷ 355 ≈ 0.58, so about 58 %.
+
+   Wrong: correct or delete it
+   :   Drinks sold 91 JD.
+
+       Why: The table says 71 JD.
+
+   :   The sales of March were 400 JD.
+
+       Why: The Grand Total is 355 JD.
+   :::
+
 2. Open **Summary Check** on the interactive lesson. Mark each of the six
    sentences true or wrong.
 
@@ -127,6 +226,36 @@ the PivotTable. *(Lesson notes 10.3 · about 14 minutes)*
    **Wrong:** "Bags sold the most" (Paper did, 206 JD); "sales grew every
    week" (the second week fell); "the biggest sale was a bag for 48 JD"
    (the notebooks, 60 JD). The other three are true.
+   :::
+
+   ::: {.sort}
+   True or wrong? Sort the six sentences of Summary Check.
+
+   True
+   :   Total sales in March were 355 JD.
+
+       Why: The Grand Total is 355 JD.
+
+   :   The third week was the best, with 112 JD.
+
+       Why: 112 JD is the highest week.
+
+   :   The average sale was about 15 JD.
+
+       Why: 355 ÷ 24 ≈ 14.8 JD.
+
+   Wrong
+   :   Bags sold the most, because each bag is expensive.
+
+       Why: Paper sold the most (206 JD); Bags only 78 JD.
+
+   :   Sales grew every week.
+
+       Why: The second week (63 JD) was lower than the first (87 JD).
+
+   :   The biggest single sale was a bag for 48 JD.
+
+       Why: The biggest sales were notebooks for 60 JD.
    :::
 
 3. Write your own summary under the PivotTable or in Word: three true
@@ -139,6 +268,22 @@ the PivotTable. *(Lesson notes 10.3 · about 14 minutes)*
    The best week was the third, with 112 JD." A good statement: "I used
    Copilot for a first draft and checked every number with the
    PivotTable."
+   :::
+
+   ::: {.choice}
+   Which summary is good?
+
+   - [x] March sales were 355 JD. Paper sold the most, 206 JD. The best week was the third, with 112 JD.
+
+     Why: Three true sentences, each with a number from the PivotTable.
+
+   - [ ] Sales were very good. Everybody worked hard.
+
+     Why: No numbers to check, and no facts.
+
+   - [ ] March sales were 355 JD. Bags sold the most.
+
+     Why: Paper sold the most (206 JD), not Bags.
    :::
 
 ## Table of results

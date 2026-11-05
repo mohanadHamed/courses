@@ -7,9 +7,9 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check.
+starts with a problem in a game. Then it explains the idea behind it. It
+ends with a **Do it** task and one set of questions. Tap, sort or type your
+answer: the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -28,10 +28,29 @@ has its answer: try first, then check.
 :::
 
 ::: {.callout-note title="Do it · Chances of a drop"}
-p = 0.5: compute the chance to have the item after 1, 2 and 3 tries.
+p = 0.5: compute the chance to have the item after 1, 2 and 3 tries with
+P(at least one in n) = 1 − (1 − p)ⁿ.
 
-::: {.check}
-1/2; 1 − 1/4 = 3/4; 1 − 1/8 = 7/8. It grows, but never reaches 1.
+::: {.fill answer="7/8|0.875|87.5%" hint="1 − (1/2)³."}
+What is the chance to have the item after 3 tries?
+
+Why: 1 − 1/2 × 1/2 × 1/2 = 1 − 1/8 = 7/8. After 1 try it is 1/2, after 2 tries 3/4.
+:::
+
+::: {.choice}
+Does the chance ever reach 1?
+
+- [x] No: it grows, but it is always a little below 1.
+
+  Why: 1 − (1/2)ⁿ never reaches 1: some players always wait longer.
+
+- [ ] Yes, after 2 tries: 0.5 + 0.5 = 1.
+
+  Why: Chances of tries do not add up: after 2 tries it is 3/4.
+
+- [ ] Yes, after 3 tries.
+
+  Why: After 3 tries it is 7/8, still below 1.
 :::
 :::
 
@@ -74,12 +93,29 @@ Be honest about drop chances; stores ask for shown odds on paid random items.
 :::
 
 ::: {.callout-note title="Do it · Pity"}
-Read the pity timer in the figure: after how many misses does the chance
-start to grow? At which try is the item certain? What is the longest wait?
+Read the pity timer in the figure: the chance is 2 % per try for the first
+20 misses, then it grows until the item is certain.
 
-::: {.check}
-After 20 misses (2 % per try before that); certain at try 40; so nobody
-waits more than 40 tries.
+::: {.fill answer="40" hint="Look where the line of the chance reaches 100 %."}
+At which try is the item certain?
+
+Why: The figure reaches 100 % at try 40: the guarantee.
+:::
+
+::: {.choice}
+What is the longest wait with this pity timer?
+
+- [x] 40 tries
+
+  Why: The item is certain at try 40, so nobody waits longer.
+
+- [ ] 20 tries
+
+  Why: After 20 misses the chance only starts to grow.
+
+- [ ] no limit
+
+  Why: Without a timer there is no limit; this timer ends the wait at 40.
 :::
 :::
 
@@ -123,11 +159,29 @@ The plain average of the values overestimates the rewards.
 :::
 
 ::: {.callout-note title="Do it · The economy"}
-70 % 10 coins, 25 % 40 coins, 5 % 200 coins: E? Chests for a 270-coin
-shield?
+A chest gives 10 coins with 70 %, 40 coins with 25 % and 200 coins with 5 %.
+A shield costs 270 coins.
 
-::: {.check}
-E = 7 + 10 + 10 = 27 coins; 270 ÷ 27 = 10 chests.
+::: {.fill answer="27" unit="coins" hint="Value × chance for each part, then add."}
+What is the expected reward E of one chest?
+
+Why: 10 × 0.7 + 40 × 0.25 + 200 × 0.05 = 7 + 10 + 10 = 27 coins.
+:::
+
+::: {.choice}
+About how many chests does a player open for the shield?
+
+- [x] 10 chests
+
+  Why: price ÷ E = 270 ÷ 27 = 10.
+
+- [ ] 3 chests
+
+  Why: That uses the plain average of the values, (10 + 40 + 200) ÷ 3 ≈ 83: it overestimates the rewards.
+
+- [ ] 27 chests
+
+  Why: 27 is E, the coins of one chest.
 :::
 :::
 
@@ -172,12 +226,35 @@ One streak does not prove an unfair coin: look at many tries.
 :::
 
 ::: {.callout-note title="Do it · Streaks"}
-Write 50 "random" H and T by hand; find your longest run. Then run Streak
-Lab at 50 % five times and compare.
+Write 50 "random" H and T by hand and find your longest run. Then run
+**Streak Lab** at 50 % five times and compare.
 
-::: {.check}
-Most people write runs of 2 or 3. The computer runs are usually 5 to 8:
-real randomness is streakier than it feels.
+::: {.choice}
+Most people write runs of 2 or 3. What does Streak Lab show at 50 %?
+
+- [x] longest runs of about 5 to 8
+
+  Why: Real randomness is streakier than it feels.
+
+- [ ] never more than 3 in a row
+
+  Why: In a long sequence, some long streak is very likely.
+
+- [ ] always exactly 7
+
+  Why: About 7 is typical for 100 flips, but each run is different.
+:::
+
+::: {.choice}
+A fight has 5 misses in a row. Does it prove that the game is unfair?
+
+- [x] No: in many attacks, some long streak is very likely.
+
+  Why: One streak proves nothing; look at many tries.
+
+- [ ] Yes: a fair game never misses 5 times.
+
+  Why: A fair 50 % chance gives runs of 5 or more quite often.
 :::
 :::
 
@@ -221,12 +298,29 @@ A run of 5 tails in 100 flips. Is the coin unfair?
 :::
 
 ::: {.callout-note title="Do it · Due or not?"}
-After 3 misses at 70 %, is a hit sure? Is P(3 misses) under 3 %? Is a crit
-after a crit more likely?
+A hit has the chance 70 %, and the hits are independent. Decide for each
+sentence.
 
-::: {.check}
-No: the next hit is still 0.7. Yes: 0.027. No: the hot-hand fallacy; the
-chance is the same.
+::: {.sort}
+True or false? Sort the sentences.
+
+True
+:   P(3 misses in a row) is under 3 %.
+
+    Why: 0.3 × 0.3 × 0.3 = 0.027 = 2.7 %.
+
+:   After 4 tails, P(heads) on the next flip is 1/2.
+
+    Why: P(H | TTTT) = 1/2: the coin has no memory.
+
+False
+:   After 3 misses at 70 %, the next hit is sure.
+
+    Why: The gambler's fallacy: the next hit is still 0.7.
+
+:   A crit after a crit is more likely.
+
+    Why: The hot-hand fallacy: the chance is the same.
 :::
 :::
 
@@ -269,11 +363,29 @@ If a fair rule feels unfair, the rule or the way you show it needs work.
 :::
 
 ::: {.callout-note title="Do it · Feel the chance"}
-Hit chance 90 %: P(at least one miss) in 2 attacks by hand; then read 5 and
-20 attacks in the figure.
+Hit chance 90 %: compute P(at least one miss) in 2 attacks by hand; then read
+5 and 20 attacks in the figure. P(at least one miss in n) = 1 − pⁿ.
 
-::: {.check}
-1 − 0.81 = 0.19; 41 %; 88 %. A miss is very likely in a long fight.
+::: {.fill answer="0.19|19%|19/100" hint="1 − 0.9 × 0.9."}
+What is P(at least one miss) in 2 attacks?
+
+Why: 1 − 0.81 = 0.19, about 19 %.
+:::
+
+::: {.choice}
+The figure for 20 attacks: in about how many fights is there a miss?
+
+- [x] in about 88 % of the fights
+
+  Why: 1 − 0.9²⁰ ≈ 1 − 0.12 = 0.88: a miss is very likely in a long fight.
+
+- [ ] in about 10 % of the fights
+
+  Why: 10 % is the miss chance of one attack, not of 20.
+
+- [ ] in every fight
+
+  Why: 0.9²⁰ ≈ 12 % of the fights still have no miss.
 :::
 :::
 
@@ -320,12 +432,30 @@ Small bags are predictable; big bags allow longer droughts.
 :::
 
 ::: {.callout-note title="Do it · Bags"}
-In **Bag Lab**, compare pure random and the shuffle bag over 1000 players.
-Then compute the longest drought for 2 crits in a bag of 8.
+In **Bag Lab**, compare pure random and the shuffle bag (4 hits with 1 crit)
+over 1000 players. Then compute the longest drought for 2 crits in a bag
+of 8.
 
-::: {.check}
-Both near 25 % crits; the worst drought is much longer with pure random
-(often 20 or more) than with the bag (6). Bag of 8, 2 crits: 6 + 6 = 12.
+::: {.choice}
+Both give about 25 % crits. Which has the shorter worst drought?
+
+- [x] the shuffle bag
+
+  Why: Every bag has one crit, so at most 6 normal hits come between two crits.
+
+- [ ] pure random
+
+  Why: Pure random often has droughts of 20 or more.
+
+- [ ] both are the same
+
+  Why: The share is the same, but the bag limits the drought.
+:::
+
+::: {.fill answer="12" hint="The crits can be first in one bag and last in the next."}
+2 crits in a bag of 8: what is the longest run of normal hits?
+
+Why: 6 normal hits at the end of one bag and 6 at the start of the next: 6 + 6 = 12.
 :::
 :::
 

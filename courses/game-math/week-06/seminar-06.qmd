@@ -6,9 +6,9 @@ ilos: [C1]
 format: lesson-html
 ---
 
-No new ideas today: three short problems on Lecture 6. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: three short problems on Lecture 6. Do each one alone.
+Tap, sort or type your answer at every step: the page checks it at once and
+tells you why.
 
 ## Recall
 
@@ -57,11 +57,46 @@ ground, and the head is at (1, 3). The feet must stay on the ground.
 *Your product:* two head positions with the steps, and your choice with a
 reason.
 
-::: {.check}
-About the feet: (1, 3) − (1, 0) = (0, 3); × 1.5 = (0, 4.5); + (1, 0) =
-(1, 4.5). The feet stay at (1, 0). About the origin: the head goes to
-(1.5, 4.5) and the feet to (1.5, 0): the hero slides to the right. Choose
-the feet as the pivot, so the hero grows in place.
+::: {.order}
+Step 1: put the steps for the head (1, 3) about the feet (1, 0) in order.
+
+1. Subtract the pivot: (1, 3) − (1, 0) = (0, 3).
+2. Scale by 1.5: (0, 3) → (0, 4.5).
+3. Add the pivot back: (0, 4.5) + (1, 0) = (1, 4.5).
+
+Why: P' = C + S (P − C). The feet stay at (1, 0).
+:::
+
+::: {.choice}
+Step 2: about the origin, where do the head and the feet go?
+
+- [x] head (1.5, 4.5), feet (1.5, 0): the hero slides to the right
+
+  Why: About the origin every coordinate is × 1.5, also the x of the feet.
+
+- [ ] head (1, 4.5), feet (1, 0)
+
+  Why: That is the scaling about the feet, not about the origin.
+
+- [ ] head (1, 3), feet (1, 0): nothing moves
+
+  Why: A scaling by 1.5 moves every point except the pivot.
+:::
+
+::: {.choice}
+Step 3: which pivot do you choose in the game?
+
+- [x] the feet (1, 0)
+
+  Why: The feet stay on the ground, so the hero grows in place.
+
+- [ ] the origin (0, 0)
+
+  Why: About the origin the hero slides to the right.
+
+- [ ] the head (1, 3)
+
+  Why: Then the head stays still and the feet sink into the ground.
 :::
 :::
 
@@ -106,10 +141,42 @@ A coin is at (2, 1).
 
 *Your product:* two coin positions and your two steps for the block.
 
-::: {.check}
-Scale then move: (6, 3) → (7, 3). Move then scale: (3, 1) → (9, 3): the
-move was tripled too. The block: scale 2 ((1, 1) → (2, 2)), then move
-(3, 1): (0, 0) → (3, 1) and (2, 2) → (5, 3).
+::: {.sort}
+Steps 1–2: which order gives each position of the coin? Sort them.
+
+Scale, then move
+:   after the first step: (6, 3)
+
+    Why: (2, 1) × 3 = (6, 3).
+
+:   at the end: (7, 3)
+
+    Why: (6, 3) + (1, 0) = (7, 3).
+
+Move, then scale
+:   after the first step: (3, 1)
+
+    Why: (2, 1) + (1, 0) = (3, 1).
+
+:   at the end: (9, 3)
+
+    Why: (3, 1) × 3 = (9, 3): the move was tripled too.
+:::
+
+::: {.choice}
+Step 3: which two steps make the block (3, 1)–(5, 3)?
+
+- [x] Scale by 2, then move by (3, 1).
+
+  Why: (1, 1) → (2, 2) → (5, 3), and (0, 0) → (0, 0) → (3, 1).
+
+- [ ] Move by (3, 1), then scale by 2.
+
+  Why: Then (0, 0) goes to (6, 2): the move is doubled too.
+
+- [ ] Scale by 3, then move by (2, 0).
+
+  Why: A scale of 3 makes a 3 × 3 block, not 2 × 2.
 :::
 :::
 
@@ -151,11 +218,54 @@ windmill blade has its tip at (2, 2). cos 45° = sin 45° = 0.71; cos 30° =
 
 *Your product:* the matrix R(45°), two turned points and your check.
 
-::: {.check}
-R(45°) = rows (0.71, −0.71), (0.71, 0.71); the gun tip goes to
-(1.42, 1.42); a rotation keeps every length, so the gun is still 2 long.
-R(30°) × (2, 2) = (1.74 − 1, 1 + 1.74) = (0.74, 2.74). R(−30°) brings it
-back to about (2, 2).
+::: {.fill answer="(1.42, 1.42)" hint="R(45°) has the rows (0.71, −0.71) and (0.71, 0.71)."}
+Step 1: where does R(45°) send the gun tip (2, 0)? Type (x, y).
+
+Why: (0.71 × 2 − 0.71 × 0, 0.71 × 2 + 0.71 × 0) = (1.42, 1.42).
+:::
+
+::: {.choice}
+Step 1: is the gun still 2 long?
+
+- [x] Yes: a rotation keeps every length.
+
+  Why: 1.42² + 1.42² ≈ 2 + 2 = 4 = 2².
+
+- [ ] No: it is 1.42 + 1.42 = 2.84 long.
+
+  Why: A length adds the squares, not the parts: √(2 + 2) = 2.
+:::
+
+::: {.choice}
+Step 2: what is R(30°) × (2, 2)?
+
+- [x] (0.74, 2.74)
+
+  Why: (2 × 0.87 − 2 × 0.5, 2 × 0.5 + 2 × 0.87) = (1.74 − 1, 1 + 1.74).
+
+- [ ] (2.74, 0.74)
+
+  Why: That turns clockwise: the minus sign belongs in x'.
+
+- [ ] (1.74, 1)
+
+  Why: Each new part uses both x and y: 1.74 − 1 and 1 + 1.74.
+:::
+
+::: {.choice}
+Step 3: which matrix brings the blade tip back to (2, 2)?
+
+- [x] R(−30°)
+
+  Why: The inverse of a turn is the same turn backwards.
+
+- [ ] R(30°) again
+
+  Why: A second R(30°) turns the tip 60° in all.
+
+- [ ] the matrix that scales by −1
+
+  Why: Scaling by −1 turns the tip by 180°.
 :::
 :::
 
@@ -202,32 +312,48 @@ own colour with its letter, and make a table of the four corners of each
 copy.
 :::
 
-**What do you see?**
+::: {.choice}
+Which copies should the picture show? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-A: (2, 1), (4, 1), (4, 3), (2, 3), a square of 2 × 2. B: (−2, 3), (−2, 4),
-(−3, 4), (−3, 3), a square of 1 × 1 turned by 90°. C: (−5, −5), (−2, −5),
-(−2, −2), (−5, −2), a square of 3 × 3 in the bottom left.
+- [x] A: 2 × 2 from (2, 1) to (4, 3); B: 1 × 1, turned, from (−3, 3) to (−2, 4); C: 3 × 3 from (−5, −5) to (−2, −2).
+
+  Why: Scale first, then turn, then move: each copy keeps its own size.
+
+- [ ] A: 1 × 1 from (2, 1) to (3, 2); B and C as small squares too.
+
+  Why: A is scaled by 2 and C by 3 before the move.
 :::
 
 ::: {.try-change}
-**Change:** for B, move first and rotate after. Ask again. What do you notice?
+**Change:** for B, move first and rotate after. Ask again.
 
-::: {.check}
-B lands somewhere else: (−3, −2), (−3, −1), (−4, −1), (−4, −2), in the
-bottom left instead of the top left. The turn about (0, 0) also turned the
-move: the order of the steps matters.
+::: {.choice}
+What changes?
+
+- [x] B lands in the bottom left: (−3, −2), (−3, −1), (−4, −1), (−4, −2).
+
+  Why: The turn about (0, 0) also turned the move: the order of the steps matters.
+
+- [ ] Nothing: B stays at the top left.
+
+  Why: Move then turn is not the same as turn then move.
 :::
 :::
 
 ::: {.try-change}
 **Change:** for A, rotate by 90° before the move (scale 2, rotate 90°, move by
-(2, 1)). What do you notice?
+(2, 1)). Ask again.
 
-::: {.check}
-A is still a square of 2 × 2, but now it covers x from 0 to 2 instead of 2
-to 4: (2, 1), (2, 3), (0, 3), (0, 1). The turn put the square on the left
-of its corner (2, 1).
+::: {.choice}
+What changes?
+
+- [x] A is still 2 × 2, but now it covers x from 0 to 2.
+
+  Why: The turn puts the square on the left of its corner (2, 1): (2, 1), (2, 3), (0, 3), (0, 1).
+
+- [ ] A becomes a 1 × 1 square.
+
+  Why: A turn keeps every length: A stays 2 × 2.
 :::
 :::
 

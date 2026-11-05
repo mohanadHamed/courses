@@ -6,9 +6,9 @@ ilos: [A1, A2, B1, C1]
 format: lesson-html
 ---
 
-No new ideas today: three short problems that revise Lectures 1–7 before
-the midterm. Do each one alone, then open "Check your result". Every
-question on this page has its answer: try first, then check.
+No new ideas today: three short problems that revise Lectures 1–7 before the
+midterm. Do each one alone. Tap, sort or type your answer at every step: the
+page checks it at once and tells you why.
 
 ## Recall
 
@@ -59,10 +59,42 @@ guard.
 
 *Your product:* five values for the ship and two answers for the player.
 
-::: {.check}
-Step (6, −8); length √(36 + 64) = 10; unit direction (0.6, −0.8); velocity
-2 × (0.6, −0.8) = (1.2, −1.6); time 10 ÷ 2 = 5 seconds. The player:
-f · d = −3, so behind; f × d = 1 × 4 − 0 × (−3) = 4, so to the left.
+::: {.fill answer="10" hint="The step is (4, −5) − (−2, 3). Then √(x² + y²)."}
+Step 1: how long is the step of the ship?
+
+Why: The step is (6, −8), and √(36 + 64) = √100 = 10. The unit direction is (0.6, −0.8).
+:::
+
+::: {.choice}
+Step 2: what are the velocity at 2 units per second and the time of the trip?
+
+- [x] (1.2, −1.6) and 5 seconds
+
+  Why: 2 × (0.6, −0.8) = (1.2, −1.6), and 10 ÷ 2 = 5 seconds.
+
+- [ ] (12, −16) and 5 seconds
+
+  Why: Multiply the unit direction by the speed, not the whole step.
+
+- [ ] (1.2, −1.6) and 20 seconds
+
+  Why: Time = length ÷ speed = 10 ÷ 2 = 5 seconds.
+:::
+
+::: {.choice}
+Step 3: where is the player d = (−3, 4), for f = (1, 0)?
+
+- [x] behind, and to the left
+
+  Why: f · d = −3 is negative (behind); f × d = 1 × 4 − 0 × (−3) = 4 is positive (left).
+
+- [ ] in front, and to the left
+
+  Why: f · d = −3 is negative, so the player is behind.
+
+- [ ] behind, and to the right
+
+  Why: f × d = 4 is positive, so the player is to the left.
 :::
 :::
 
@@ -108,10 +140,36 @@ a turret must aim at an enemy at (−4, 4).
 
 *Your product:* three squares, one velocity and one angle.
 
-::: {.check}
-Squares 9 + 16 = 25, 25 + 1 = 26, 4 + 4 = 8: (2, −2) is nearest. Velocity
-20 × (0.5, 0.87) = (10, 17.4). atan2(4, −4) = 135°: x is minus and y is
-plus, so the angle is in quadrant II.
+::: {.order}
+Step 1: put the enemies in order, from the nearest to the farthest.
+
+1. (2, −2): square 8
+2. (3, 4): square 25
+3. (−5, 1): square 26
+
+Why: x² + y² gives 4 + 4 = 8, 9 + 16 = 25 and 25 + 1 = 26: the smallest square is the nearest.
+:::
+
+::: {.fill answer="(10, 17.4)" hint="20 × (cos 60°, sin 60°) = 20 × (0.5, 0.87)."}
+Step 2: what is the velocity of the cannon ball? Type (x, y).
+
+Why: 20 × (0.5, 0.87) = (10, 17.4).
+:::
+
+::: {.choice}
+Step 3: what is atan2(4, −4)?
+
+- [x] 135°
+
+  Why: x is minus and y is plus: quadrant II, on the diagonal.
+
+- [ ] 45°
+
+  Why: tan alone loses the signs; atan2 sees that x is minus.
+
+- [ ] −45°
+
+  Why: −45° is down-right; this enemy is up-left.
 :::
 :::
 
@@ -160,11 +218,59 @@ own space; it is turned by 180° and moved by (2, 3).
 *Your product:* two matrices, one inverse with its check, one matrix M and
 two results.
 
-::: {.check}
-AB = rows (5, 2) and (1, 1); BA = rows (3, 6) and (1, 3): not equal, the
-order matters. Shrink, rows (0.5, 0) and (0, 0.5), undoes Grow: (3, 2) →
-(6, 4) → (3, 2). M = rows (−1, 0, 2), (0, −1, 3), (0, 0, 1). The point goes
-to (1, 3); the direction goes to (−1, 0): it only turns.
+::: {.choice}
+Step 1: what is AB?
+
+- [x] the rows (5, 2) and (1, 1)
+
+  Why: Row × column: (1 × 3 + 2 × 1, 1 × 0 + 2 × 1) = (5, 2), then (1, 1). BA has the rows (3, 6) and (1, 3): the order matters.
+
+- [ ] the rows (3, 6) and (1, 3)
+
+  Why: That is BA: with B first, the product is different.
+
+- [ ] the rows (4, 2) and (1, 2)
+
+  Why: That adds A and B; a product multiplies rows by columns.
+:::
+
+::: {.choice}
+Step 2: which matrix undoes Grow?
+
+- [x] Shrink, the rows (0.5, 0) and (0, 0.5)
+
+  Why: (3, 2) → Grow (6, 4) → Shrink (3, 2): back where it started.
+
+- [ ] Grow again
+
+  Why: A second Grow makes it 4 times as big.
+
+- [ ] R(180°)
+
+  Why: A turn changes the direction, not the size.
+:::
+
+::: {.sort}
+Step 3: M = T(2, 3) × R(180°) has the rows (−1, 0, 2), (0, −1, 3) and
+(0, 0, 1). What does it do to each one? Sort them.
+
+Turns and moves
+:   the point (1, 0, 1): it goes to (1, 3)
+
+    Why: (−1 + 2, 0 + 3): w = 1, so the move is added.
+
+:   the point (0, 0, 1): it goes to (2, 3)
+
+    Why: The origin of the flag moves by (2, 3).
+
+Only turns
+:   the direction (1, 0, 0): it goes to (−1, 0)
+
+    Why: w = 0: the move is multiplied by 0.
+
+:   the direction (0, 1, 0): it goes to (0, −1)
+
+    Why: A direction turns by 180° and does not move.
 :::
 :::
 

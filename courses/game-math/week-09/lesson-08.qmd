@@ -7,9 +7,9 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check.
+starts with a problem in a game. Then it explains the idea behind it. It
+ends with a **Do it** task and one set of questions. Tap, sort or type your
+answer: the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -29,13 +29,33 @@ has its answer: try first, then check.
 :::
 
 ::: {.callout-note title="Do it · Find the propositions"}
-Write three propositions about a racing game and one sentence that is not
-a proposition.
+Write three propositions about a racing game and one sentence that is not a
+proposition. Here are five sentences from a racing game.
 
-::: {.check}
-A good answer: "the car is on the track", "the lap is finished", "the speed
-is over 100"; "Drive faster!" is not one (an order). Check: each proposition
-can be answered true or false.
+::: {.sort}
+Which sentences are propositions? Sort them.
+
+A proposition
+:   The car is on the track.
+
+    Why: It is true or false.
+
+:   The lap is finished.
+
+    Why: The game can answer it with true or false.
+
+:   The speed is over 100.
+
+    Why: A comparison is true or false once the speed has a value.
+
+Not a proposition
+:   Drive faster!
+
+    Why: An order is not true or false.
+
+:   Is the race over?
+
+    Why: A question is not a statement: it is not true or false.
 :::
 :::
 
@@ -85,13 +105,45 @@ OR is also true when both are true. "A sword or a shield, not both" is XOR.
 :::
 
 ::: {.callout-note title="Do it · Four cases in Logic Lab"}
-In **Logic Lab**, try the four cases of p and q. Write ¬p, p ∧ q, p ∨ q and
-p ⊕ q for each. Then: is "attack with a sword or a bow, one at a time" OR or
-XOR?
+In **Logic Lab**, try the four cases of p and q, and read ¬p, p ∧ q, p ∨ q
+and p ⊕ q each time.
 
-::: {.check}
-(T, T): F, T, T, F. (T, F): F, F, T, T. (F, T): T, F, T, T. (F, F): T, F, F, F.
-"One at a time" is XOR.
+::: {.sort}
+The case p = T and q = F. Which results are true? Sort them.
+
+True
+:   p ∨ q
+
+    Why: OR needs at least one true: p is true.
+
+:   p ⊕ q
+
+    Why: XOR needs exactly one true: only p is true.
+
+False
+:   ¬p
+
+    Why: p is true, so NOT p is false.
+
+:   p ∧ q
+
+    Why: AND needs both: q is false.
+:::
+
+::: {.choice}
+"Attack with a sword or a bow, one at a time." Is it OR or XOR?
+
+- [x] XOR
+
+  Why: "One at a time" means exactly one: XOR.
+
+- [ ] OR
+
+  Why: OR is also true when both are used together.
+
+- [ ] AND
+
+  Why: AND would need the sword and the bow at the same time.
 :::
 :::
 
@@ -144,11 +196,39 @@ When p is false, p → q is true: the rule says nothing then.
 :::
 
 ::: {.callout-note title="Do it · When is the rule broken?"}
-Rule: "If the level is finished, then all coins are collected." Write the
-case that breaks it, and the C# condition.
+Rule: "If the level is finished, then all coins are collected." Find the
+case that breaks it, and the C# condition that finds it.
 
-::: {.check}
-A finished level with coins missing: `levelFinished && !allCoins`.
+::: {.choice}
+Which case breaks the rule?
+
+- [x] The level is finished, and some coins are missing.
+
+  Why: p → q is false only when p is true and q is false.
+
+- [ ] The level is not finished, and some coins are missing.
+
+  Why: When p is false, the rule says nothing: it is kept.
+
+- [ ] The level is finished, and all coins are collected.
+
+  Why: p and q are both true: the rule is kept.
+:::
+
+::: {.choice}
+Which C# condition finds a broken rule?
+
+- [x] `levelFinished && !allCoins`
+
+  Why: Finished AND NOT all coins: the only case that breaks p → q.
+
+- [ ] `!levelFinished && allCoins`
+
+  Why: That is a level that is not finished: the rule says nothing then.
+
+- [ ] `levelFinished || !allCoins`
+
+  Why: OR is also true for a level that is not finished with coins missing.
 :::
 :::
 
@@ -192,10 +272,33 @@ Which C# condition finds a bug in "reactor off → lights red"?
 :::
 
 ::: {.callout-note title="Do it · Compute"}
-p = T, q = F, r = T. Compute p ∨ q ∧ r, (p ∨ q) ∧ r and ¬p ∨ ¬q.
+p = T, q = F, r = T. Compute p ∨ q ∧ r, (p ∨ q) ∧ r, ¬p ∨ ¬q, ¬(p ∨ q) and
+q ∨ ¬r. Remember the order: NOT, then AND, then OR; brackets first.
 
-::: {.check}
-T ∨ (F ∧ T) = T; (T ∨ F) ∧ T = T; F ∨ T = T.
+::: {.sort}
+Which ones are true? Sort them.
+
+True
+:   p ∨ q ∧ r
+
+    Why: AND first: T ∨ (F ∧ T) = T ∨ F = T.
+
+:   (p ∨ q) ∧ r
+
+    Why: The bracket first: (T ∨ F) ∧ T = T ∧ T = T.
+
+:   ¬p ∨ ¬q
+
+    Why: F ∨ T = T.
+
+False
+:   ¬(p ∨ q)
+
+    Why: p ∨ q = T, so NOT gives F.
+
+:   q ∨ ¬r
+
+    Why: F ∨ F = F.
 :::
 :::
 
@@ -254,8 +357,26 @@ What is computed first: AND or OR?
 Build the table of (p ∨ q) ∧ ¬p on paper. Then check it in **Truth Table
 Lab** in Quiz mode.
 
-::: {.check}
-From (T, T) to (F, F): F, F, T, F. It is true only when p = F and q = T.
+::: {.fill answer="1" hint="Compute p ∨ q and ¬p in each of the 4 rows, then AND."}
+In how many of the 4 rows is (p ∨ q) ∧ ¬p true?
+
+Why: From (T, T) to (F, F) the column is F, F, T, F: one true row.
+:::
+
+::: {.choice}
+In which row is it true?
+
+- [x] p = F, q = T
+
+  Why: p ∨ q = T and ¬p = T, so T ∧ T = T.
+
+- [ ] p = T, q = T
+
+  Why: ¬p = F, so the AND is false.
+
+- [ ] p = F, q = F
+
+  Why: p ∨ q = F, so the AND is false.
 :::
 :::
 
@@ -309,11 +430,29 @@ Bugs hide in unusual rows, not in "everything true".
 :::
 
 ::: {.callout-note title="Do it · The repair bay"}
-Build the table of (d ∧ ¬e) ∨ o. In how many cases does the bay open?
+The repair bay opens when (d ∧ ¬e) ∨ o: docked and the engine off, or an
+officer on board. Build its table with 8 rows.
 
-::: {.check}
-5 of 8: always with an officer (4 rows), and without one only when docked
-with the engine off (T, F, F).
+::: {.fill answer="5" hint="Count the rows with o = T, then the other rows that are docked with the engine off."}
+In how many of the 8 cases does the bay open?
+
+Why: All 4 rows with an officer, and 1 more: docked with the engine off (T, F, F).
+:::
+
+::: {.choice}
+Without an officer, when does the bay open?
+
+- [x] only when it is docked with the engine off
+
+  Why: With o = F, the rule is d ∧ ¬e: docked AND NOT engine on.
+
+- [ ] when it is docked with the engine on
+
+  Why: ¬e is false when the engine is on.
+
+- [ ] never
+
+  Why: d ∧ ¬e can still be true without an officer.
 :::
 :::
 

@@ -7,9 +7,9 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check.
+starts with a problem in a game. Then it explains the idea behind it. It
+ends with a **Do it** task and one set of questions. Tap, sort or type your
+answer: the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -32,12 +32,23 @@ Equivalent means equal in **every** row, not in most rows.
 :::
 
 ::: {.callout-note title="Do it · Same or not?"}
-Build the tables of p → q and q → p. Are they equivalent? Which row shows
-it?
+Build the tables of p → q and q → p. p → q is T, F, T, T; compute q → p in
+the same order of rows: (T, T), (T, F), (F, T), (F, F).
 
-::: {.check}
-p → q: T, F, T, T; q → p: T, T, F, T. Not equivalent: the rows (T, F) and
-(F, T) differ.
+::: {.choice}
+Are p → q and q → p equivalent?
+
+- [x] No: the rows (T, F) and (F, T) differ.
+
+  Why: q → p is T, T, F, T: two rows are not the same as T, F, T, T.
+
+- [ ] Yes: both have three true rows.
+
+  Why: Equivalent means the same value in every row, not the same count.
+
+- [ ] Yes: they use the same letters.
+
+  Why: Turning a rule round makes a different rule.
 :::
 :::
 
@@ -86,11 +97,28 @@ Not every law of numbers is a law of logic, and the other way round.
 
 ::: {.callout-note title="Do it · Check two laws"}
 In **Equivalence Lab**, check the distributive and absorption laws. Then
-compare p ∨ (q ∧ r) with (p ∨ q) ∧ (p ∨ r).
+compare p ∨ (q ∧ r) with (p ∨ q) ∧ (p ∨ r), and ¬(p ∧ q) with ¬p ∧ ¬q.
 
-::: {.check}
-Both laws give the same column on both sides, and so do p ∨ (q ∧ r) and
-(p ∨ q) ∧ (p ∨ r): they are equivalent.
+::: {.sort}
+Which pairs are equivalent? Sort them.
+
+Equivalent
+:   p ∧ (q ∨ r) and (p ∧ q) ∨ (p ∧ r)
+
+    Why: The distributive law: the same column on both sides.
+
+:   p ∨ (p ∧ q) and p
+
+    Why: The absorption law.
+
+:   p ∨ (q ∧ r) and (p ∨ q) ∧ (p ∨ r)
+
+    Why: The second distributive law: OR over AND works too.
+
+Not equivalent
+:   ¬(p ∧ q) and ¬p ∧ ¬q
+
+    Why: In the row (T, F) the left side is T and the right side is F.
 :::
 :::
 
@@ -136,8 +164,36 @@ p ∨ (p ∧ q)
 Rewrite `!(isDay || isLit)` and `!(hasKey && !doorLocked)` without a NOT in
 front of brackets.
 
-::: {.check}
-`!isDay && !isLit` and `!hasKey || doorLocked`.
+::: {.choice}
+What is `!(isDay || isLit)`?
+
+- [x] `!isDay && !isLit`
+
+  Why: De Morgan: the NOT goes into the brackets, and OR becomes AND.
+
+- [ ] `!isDay || !isLit`
+
+  Why: AND and OR must swap: || becomes &&.
+
+- [ ] `isDay && isLit`
+
+  Why: The NOT does not disappear; it goes onto each part.
+:::
+
+::: {.choice}
+What is `!(hasKey && !doorLocked)`?
+
+- [x] `!hasKey || doorLocked`
+
+  Why: De Morgan, then NOT NOT doorLocked = doorLocked.
+
+- [ ] `!hasKey && doorLocked`
+
+  Why: AND must become OR.
+
+- [ ] `!hasKey || !doorLocked`
+
+  Why: The NOT of !doorLocked is doorLocked: two NOTs cancel.
 :::
 :::
 
@@ -183,9 +239,36 @@ Do not jump two laws at once without a check.
 Simplify with the name of each law: p ∧ (p ∨ q); ¬(¬p ∧ ¬q);
 (p ∨ q) ∧ (p ∨ ¬q).
 
-::: {.check}
-p (absorption); p ∨ q (De Morgan, double negation); p (distributive,
-complement, identity).
+::: {.sort}
+What does each condition simplify to? Sort them.
+
+p
+:   p ∧ (p ∨ q)
+
+    Why: The absorption law.
+
+:   p ∨ (p ∧ q)
+
+    Why: The other absorption law.
+
+:   (p ∨ q) ∧ (p ∨ ¬q)
+
+    Why: Distributive, complement, identity: p ∨ (q ∧ ¬q) = p ∨ F = p.
+
+p ∨ q
+:   ¬(¬p ∧ ¬q)
+
+    Why: De Morgan gives ¬¬p ∨ ¬¬q, and the double negations cancel.
+:::
+
+::: {.order}
+Put the steps of (p ∨ q) ∧ (p ∨ ¬q) in order.
+
+1. Distributive: (p ∨ q) ∧ (p ∨ ¬q) = p ∨ (q ∧ ¬q)
+2. Complement: q ∧ ¬q = F, so p ∨ F
+3. Identity: p ∨ F = p
+
+Why: One law per step, with its name: the bracket first, then the complement, then the identity.
 :::
 :::
 
@@ -238,8 +321,31 @@ Write as conditions: "The trap fires when the player steps on the plate and
 is not flying"; "the red key or the blue key, but not both"; "the alarm
 rings unless the guard is asleep".
 
-::: {.check}
-`p && !f`; `r ^ b`; `alarm = !a`.
+::: {.sort}
+Which word joins the facts in each rule? Sort the rules.
+
+AND NOT: `&&`, `!`
+:   The trap fires when the player steps on the plate and is not flying.
+
+    Why: `p && !f`: "and" with "not".
+
+XOR: `^`
+:   The red key or the blue key, but not both.
+
+    Why: `r ^ b`: "not both" is exactly one.
+
+:   A sword or a bow, one at a time.
+
+    Why: "One at a time" is exactly one: XOR.
+
+NOT: `!`
+:   The alarm rings unless the guard is asleep.
+
+    Why: `alarm = !a`: "unless a" means "if not a".
+
+:   The shop opens unless it is night.
+
+    Why: `open = !night`.
 :::
 :::
 
@@ -293,13 +399,25 @@ code and no alarm, or owner
 
 ::: {.callout-note title="Do it · A trap table and the rule order"}
 The spike trap fires when the plate is pressed (p) and the trap is armed
-(a), unless the player is flying (f). Make the 8-row table: in how many rows
-does it fire? Then, in **Guard Brain**, change the order of the rules until
-the chain agrees with the designer in all 8 rows.
+(a), unless the player is flying (f). Make the 8-row table. Then, in
+**Guard Brain**, change the order of the rules until the chain agrees with
+the designer in all 8 rows.
 
-::: {.check}
-The trap fires in 1 of 8 rows (p = T, a = T, f = F). The right order: Flee
-(if w), Attack (else if s and n), Chase (else if s), Patrol (else).
+::: {.fill answer="1" hint="The trap needs p = T, a = T and f = F."}
+In how many of the 8 rows does the trap fire?
+
+Why: p ∧ a ∧ ¬f is true only in the row p = T, a = T, f = F.
+:::
+
+::: {.order}
+Put the rules of Guard Brain in the right order.
+
+1. Flee: `if (w)`
+2. Attack: `else if (s && n)`
+3. Chase: `else if (s)`
+4. Patrol: `else`
+
+Why: The first true rule wins: the most important rule first, then the more specific rule before the general one, and else last.
 :::
 :::
 

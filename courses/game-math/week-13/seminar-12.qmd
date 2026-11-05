@@ -6,9 +6,9 @@ ilos: [C2, D1]
 format: lesson-html
 ---
 
-No new ideas today: three short problems on Lecture 12. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: three short problems on Lecture 12. Do each one alone.
+Tap, sort or type your answer at every step: the page checks it at once and
+tells you why.
 
 ## Recall
 
@@ -57,11 +57,42 @@ Lab** lets 1000 players hunt the hammer.
 
 *Your product:* one computed and three simulated numbers, and one sentence.
 
-::: {.check}
-1. 1/0.02 = **50 tries**. 2. The longest wait is often 200 or more: some
-players wait very long. 3. The average falls a little (to about 40), and
-the longest wait is **60**. A good sentence: keep the timer, because it
-ends the endless waits but keeps early lucky drops.
+::: {.fill answer="50" unit="tries" hint="The average wait is 1/p."}
+Step 1: what is the average number of tries with p = 2 %?
+
+Why: 1/0.02 = 50 tries.
+:::
+
+::: {.choice}
+Step 2: without a pity timer, what is the longest wait of 1000 players?
+
+- [x] often 200 tries or more
+
+  Why: Some players are very unlucky: the wait has no limit.
+
+- [ ] 50 tries
+
+  Why: 50 is the average; many players wait longer.
+
+- [ ] exactly 100 tries
+
+  Why: Without a timer nothing stops the wait at 100.
+:::
+
+::: {.choice}
+Step 3: with a pity timer at 60, what changes?
+
+- [x] The average falls a little (about 40), and nobody waits more than 60.
+
+  Why: The timer ends the endless waits but keeps the early lucky drops: keep it.
+
+- [ ] Every player waits exactly 60 tries.
+
+  Why: Lucky players still get the hammer early.
+
+- [ ] The average rises to 60.
+
+  Why: The timer only cuts the long waits, so the average falls.
 :::
 :::
 
@@ -101,10 +132,32 @@ A chest of *Mole Keep* gives **10 coins with 80 %** or **50 coins with
 
 *Your product:* two numbers, one answer and two odds.
 
-::: {.check}
-1. E = 10 × 0.8 + 50 × 0.2 = 8 + 10 = **18 coins**. 2. 180 ÷ 18 = **10
-chests**. 3. No: the real chance of the big prize is 20 %, not 30 %. The
-screen must show 10 coins: 80 %, 50 coins: 20 %.
+::: {.fill answer="18" unit="coins" hint="10 × 0.8 + 50 × 0.2."}
+Step 1: what is the expected reward E of one chest?
+
+Why: 10 × 0.8 + 50 × 0.2 = 8 + 10 = 18 coins.
+:::
+
+::: {.fill answer="10" unit="chests" hint="The price of the bow ÷ E."}
+Step 2: about how many chests does a player open for the bow (180 coins)?
+
+Why: 180 ÷ 18 = 10 chests.
+:::
+
+::: {.choice}
+Step 3: the store page says "big prize: 30 %". Is it honest?
+
+- [x] No: the screen must show 10 coins: 80 %, 50 coins: 20 %.
+
+  Why: The real chance of the big prize is 20 %, not 30 %.
+
+- [ ] Yes: 30 % is close enough.
+
+  Why: Shown odds must be the real odds.
+
+- [ ] Yes: players like a bigger number.
+
+  Why: Wrong odds mislead the players; stores ask for the real ones.
 :::
 :::
 
@@ -151,15 +204,55 @@ crit and 3 normal hits**.
 *Your product:* three short answers, each with a number, and the reply to
 player 1.
 
-::: {.check}
-1. 0.1 × 0.1 = 0.01 = **1 %**: rare, but with many players it happens
-every day. 2. No: the coin has no memory, so P(heads) = **1/2**. Thinking
-otherwise is the gambler's fallacy. 3. 1 of 4 hits: **25 %**. The longest
-run is **6** normal hits: the crit is first in one bag and last in the
-next. 4. A good reply: "Two misses in a row at 90 % have the chance 1 %.
-With thousands of players, this happens to someone every day. The game is
-fair: every shot still hits with 90 %." It names the number and says what
-it means.
+::: {.fill answer="0.01|1%|1/100" hint="The miss chance is 0.1; two in a row: multiply."}
+Step 1: what is the chance of two misses in a row at 90 %?
+
+Why: 0.1 × 0.1 = 0.01 = 1 %: rare, but with many players it happens every day.
+:::
+
+::: {.choice}
+Step 2: four tails in a row. Is player 2 right that heads must come?
+
+- [x] No: P(heads) is still 1/2.
+
+  Why: The coin has no memory; "heads is due" is the gambler's fallacy.
+
+- [ ] Yes: after four tails, heads is due.
+
+  Why: Each flip is independent: the past does not change it.
+:::
+
+::: {.choice}
+Step 3: a shuffle bag with 1 crit and 3 normal hits. What share are crits,
+and what is the longest run without a crit?
+
+- [x] 25 %, and at most 6 normal hits
+
+  Why: 1 of 4 hits; the crit can be first in one bag and last in the next: 3 + 3.
+
+- [ ] 25 %, and at most 3 normal hits
+
+  Why: Two bags in a row can put 3 + 3 normal hits between the crits.
+
+- [ ] 33 %, and at most 3 normal hits
+
+  Why: 1 crit in a bag of 4 is 1/4 = 25 %.
+:::
+
+::: {.choice}
+Step 4: which reply to player 1 is good?
+
+- [x] "Two misses in a row at 90 % have the chance 1 %. With thousands of players, this happens to someone every day. The game is fair: every shot still hits with 90 %."
+
+  Why: It says what the player saw, gives the number and what it means.
+
+- [ ] "The game is fair. Please play again."
+
+  Why: It gives no number and does not explain what happened.
+
+- [ ] "Two misses in a row at 90 % have the chance 10 %, so it is normal."
+
+  Why: The number is wrong: 0.1 × 0.1 = 1 %.
 :::
 :::
 
@@ -199,30 +292,47 @@ and so on), and give the average number of tries and the largest number of
 tries.
 :::
 
-**What do you see?**
+::: {.choice}
+What should the chart show? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-The first column (1–10 tries) is the tallest, with about 180 players, and
-the columns get lower to the right. The average is close to 50 (1 ÷ 2 %),
-and a few players need more than 200 tries.
+- [x] The first column (1–10) is the tallest, about 180 players; the columns fall to the right; the average is near 50.
+
+  Why: 1 − 0.98¹⁰ ≈ 18 % drop it early; the average is 1 ÷ 2 % = 50, and a few need over 200 tries.
+
+- [ ] All columns are about the same height, around 50 tries.
+
+  Why: Each try can drop the hammer, so early columns are the tallest.
 :::
 
 ::: {.try-change}
-**Change:** change the chance to 5 %, and ask again. What do you notice?
+**Change:** change the chance to 5 %, and ask again.
 
-::: {.check}
-The average is close to 20 (1 ÷ 5 %). The first column holds about 400
-players, the columns fall much faster, and the largest number of tries is
-much smaller, often about 100 to 150.
+::: {.choice}
+What changes?
+
+- [x] The average is near 20, and the first column holds about 400 players.
+
+  Why: 1 ÷ 5 % = 20, and the columns fall much faster.
+
+- [ ] The average stays near 50.
+
+  Why: A higher chance makes the waits shorter: 1 ÷ 5 % = 20.
 :::
 :::
 
 ::: {.try-change}
-**Change:** change the chance to 50 %, and ask again. What do you notice?
+**Change:** change the chance to 50 %, and ask again.
 
-::: {.check}
-Almost all 1000 players get the hammer in the first 10 tries: one column
-holds nearly everyone, and the average is close to 2.
+::: {.choice}
+What changes?
+
+- [x] Almost every player gets the hammer in the first 10 tries; the average is near 2.
+
+  Why: 1 ÷ 50 % = 2: one column holds nearly everyone.
+
+- [ ] The chart looks the same as with 2 %.
+
+  Why: The chance decides the waits: 50 % makes them very short.
 :::
 :::
 

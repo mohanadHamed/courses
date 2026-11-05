@@ -17,6 +17,10 @@ format: lesson-pptx
 - The game logic runs on one main thread, so it always uses one core.
 - GHz tells the speed of **one** core. Cores do not add up.
 - **Do it:** Open Task Manager → Performance → CPU. How many logical processors do you see?
+
+::: {.reveal}
+- **Example:** One lab computer shows 6 cores and 12 logical processors.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/cpu-cores.png)
@@ -58,6 +62,10 @@ c) 3 GHz
 - The levels far from the core are big, slow and cheap.
 - A read from the cache takes 1 ns; a read from RAM takes 100 ns.
 - **Do it:** In Data Trip, fetch one value from each level. Which level is the fastest?
+
+::: {.reveal}
+- **Result:** The cache is the fastest, about 1 ns; RAM takes about 100 ns and flash storage about 100 000 ns.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/memory-hierarchy.png)
@@ -66,7 +74,7 @@ c) 3 GHz
 
 ## Live demo · Data Trip
 
-{{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" task="**Show:** get one value from the cache, then one from RAM. **Ask:** how many times slower is RAM?" >}}
+{{< sim file="sims/data-trip.html" poster="sims/data-trip.png" title="Data Trip: fetch data through the memory hierarchy" kind="sim" task="**Show:** get one value from the cache, then one from RAM. **Ask:** how many times slower is RAM?" answer="About 100 times: 100 ns instead of 1 ns." >}}
 
 ## Try it 2 · The memory hierarchy
 
@@ -90,6 +98,10 @@ c) in storage
 - Launching creates a process and loads code and assets into RAM.
 - The speed of storage sets the loading time.
 - **Do it:** In Task Manager → Processes, sort by Memory. Which app uses the most?
+
+::: {.reveal}
+- **Example:** The browser often uses the most, for example 900 MB with five big pages open.
+:::
 :::
 ::: {.column width="50%"}
 ![](../week-01/images/launch.png)
@@ -127,6 +139,10 @@ c) 2048 MB (2 × 1024)
 - An SSD and a phone use flash chips with no moving parts.
 - A game in storage has three parts: the app, the user data and the cache.
 - **Do it:** Open a game's storage screen on your phone. How big is each part?
+
+::: {.reveal}
+- **Example:** App 1.1 GB, documents and data 2.4 GB, and cache 0.3 GB.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/storage.png)

@@ -7,13 +7,18 @@
 # questions between sections.
 #   60 min: 4–6 Try it, 15–28 questions.  90 min: 6–9 Try it, 30–45 questions.
 # THE PAGE TEACHES (AUTHORING.md): every question has its answer at once.
-# Every Try it question has a "Why:" reason; every Do it box has a
-# ::: {.check} (the result and why; for a personal task, a model answer and a
-# 2–3 point self-check). Task with AI: 0–2 boxes, only where AI lets students do more.
+# Every Try it question has a "Why:" reason. THE PAGE CHECKS EVERY TASK: every
+# Do it box ends with 1–3 interactive checks (::: {.choice}, {.order}, {.sort}
+# or {.fill}, every option or card with its "Why:"), never a closed
+# ::: {.check}. The task works on the page (the figure, the numbers in the box,
+# the simulator); a personal task gives fixed example values. The notes keep
+# the {.check} and the personal task. Task with AI: 0–2 boxes, only where AI
+# lets students do more.
 # A lecture with a worksheet (lesson-NN-sheet.qmd, a practical course): the
-# Do it box of each section is {{< experiment N >}} (read from the worksheet),
-# "## Before you start" has {{< start-files >}}, and "## Table of results"
-# (before the Game challenge) has {{< experiment results >}}.
+# Do it box of each section is {{< experiment N >}} (read from the worksheet:
+# every step there has one check for the page), "## Before you start" has
+# {{< start-files >}}, and "## Table of results" (before the Game challenge)
+# has {{< experiment results >}}.
 title: "Lesson title, as in the notes"
 description: "One short line for the hero."
 lesson: 1
@@ -23,8 +28,8 @@ format: lesson-html
 
 This page is the interactive version of the lesson notes (PDF). Each section
 starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check.
+with a **Do it** task and one set of questions. Tap, sort or type your answer:
+the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -41,12 +46,61 @@ The common mistake from the notes, in one or two sentences.
 :::
 
 ::: {.callout-note title="Do it · Short title"}
-The Do it task of the notes, in two or three short sentences.
+The Do it task of the notes, in two or three short sentences, done on the
+page: with the figure, the numbers in this box or the simulator. (A personal
+task of the notes: give fixed example values here.)
 
-::: {.check}
-The result, and one line of why. (A personal task: "A good answer looks
-like …", then a 2–3 point self-check list.)
+::: {.choice}
+The question about the result of the task?
+
+- [x] the right result
+
+  Why: one sentence: why it is right.
+
+- [ ] a tempting wrong result
+
+  Why: one sentence: why it is wrong.
+
+- [ ] another wrong result
+
+  Why: one sentence: why it is wrong.
 :::
+
+<!-- Other kinds (AUTHORING.md, "The page checks every task"):
+::: {.order}
+Put the steps in order.
+
+1. first step
+2. second step
+3. third step
+
+Why: one sentence.
+:::
+
+::: {.sort}
+Which group? Sort each card.
+
+First group
+:   a card
+
+    Why: one sentence.
+
+Second group
+:   another card
+
+    Why: one sentence.
+
+:   a third card
+
+    Why: one sentence.
+:::
+
+::: {.fill answer="10" unit="cm" hint="One short hint."}
+A calculation: what is the result?
+
+Why: the steps of the calculation.
+:::
+-->
 :::
 
 ::: {.callout-tip title="Try it 1 · Short title"}
@@ -81,26 +135,48 @@ and the enemy at (6, 6). Draw the vector from the player to the enemy as an
 arrow, with its x part and its y part, and label them.
 :::
 
-**What do you see?**
+::: {.choice}
+What should the picture show? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-The result in words, to compare: the AI can be wrong.
+- [x] The right result, in words.
+
+  Why: one sentence.
+
+- [ ] A typical wrong result.
+
+  Why: one sentence.
 :::
 
 ::: {.try-change}
 **Change:** one number or one word, for example the enemy to (8, 2). Ask
-again. What do you notice?
+again.
 
-::: {.check}
-What the student should notice.
+::: {.choice}
+What changes?
+
+- [x] what the student should notice
+
+  Why: one sentence.
+
+- [ ] a tempting wrong idea
+
+  Why: one sentence.
 :::
 :::
 
 ::: {.try-change}
-**Change:** a second change. What do you notice?
+**Change:** a second change. Ask again.
 
-::: {.check}
-What the student should notice.
+::: {.choice}
+What changes?
+
+- [x] what the student should notice
+
+  Why: one sentence.
+
+- [ ] a tempting wrong idea
+
+  Why: one sentence.
 :::
 :::
 

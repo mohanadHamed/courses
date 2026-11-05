@@ -7,9 +7,9 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check.
+starts with a problem in a game. Then it explains the idea behind it. It
+ends with a **Do it** task and one set of questions. Tap, sort or type your
+answer: the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -40,8 +40,22 @@ new point.
 On paper: where does the corner (2, 2) go with the move (−3, 1)? Then set
 tx = −3, ty = 1 in **Transform Lab** (sx = sy = 1) and compare.
 
-::: {.check}
-(2 − 3, 2 + 1) = (−1, 3), the same as the lab.
+::: {.fill answer="(−1, 3)" hint="Add the move to the corner, part by part."}
+Where does the corner (2, 2) go? Type (x, y).
+
+Why: (2 − 3, 2 + 1) = (−1, 3), the same as the lab.
+:::
+
+::: {.choice}
+Can a 2 × 2 matrix move the corner (0, 0) to (4, 3)?
+
+- [x] No: M × (0, 0) is always (0, 0).
+
+  Why: Every row times (0, 0) gives 0, so a 2 × 2 matrix cannot translate (Lecture 7 solves this).
+
+- [ ] Yes: the matrix with the rows (4, 0) and (0, 3).
+
+  Why: That matrix scales; (0, 0) still goes to (0, 0).
 :::
 :::
 
@@ -92,12 +106,28 @@ A scaling multiplies; it never adds.
 
 ::: {.callout-note title="Do it · Uniform or stretched?"}
 In **Transform Lab** (tx = ty = 0, pivot "origin"), set sx = sy = 2, then
-sx = 2, sy = 1. Where does the corner (2, 2) go each time? Which house keeps
-its shape?
+sx = 2, sy = 1, and watch the corner (2, 2) and the shape of the house.
 
-::: {.check}
-(2, 2) → (4, 4) with (2, 2), and → (4, 2) with (2, 1). The uniform scaling
-keeps the shape; the stretch makes the house wide and flat.
+::: {.sort}
+Which scalings keep the shape of the house? Sort them.
+
+Keeps its shape
+:   sx = 2, sy = 2: (2, 2) → (4, 4)
+
+    Why: A uniform scaling: x and y grow by the same factor.
+
+:   sx = 0.5, sy = 0.5
+
+    Why: Smaller, but uniform: the proportions stay.
+
+Changes its shape
+:   sx = 2, sy = 1: (2, 2) → (4, 2)
+
+    Why: Only x doubles: the house gets wide and flat.
+
+:   sx = 1, sy = 3
+
+    Why: Only y grows: the house gets tall and thin.
 :::
 :::
 
@@ -149,11 +179,33 @@ Do not forget step 3: move the shape back by +C.
 
 ::: {.callout-note title="Do it · Three pivots"}
 In **Transform Lab** (tx = ty = 0, sx = sy = 2), try the pivots origin, feet
-(1, 0) and centre (1, 1.5). Which point of the house stays still each time?
+(1, 0) and centre (1, 1.5), and watch which point of the house stays still.
 
-::: {.check}
-Origin: (0, 0) stays. Feet: the feet (1, 0) stay on the ground. Centre: the
-centre (1, 1.5) stays and the house grows around it.
+::: {.choice}
+The pivot is the feet (1, 0). Which point stays still?
+
+- [x] the feet (1, 0)
+
+  Why: A scaling about a pivot keeps only the pivot still.
+
+- [ ] the origin (0, 0)
+
+  Why: The origin stays only when it is the pivot.
+
+- [ ] the top of the roof
+
+  Why: The roof moves up: the house grows from its feet.
+:::
+
+::: {.order}
+A crate corner (4, 4) is scaled by 2 about the centre C = (3, 3). Put the
+steps in order.
+
+1. Move by −C: (4, 4) − (3, 3) = (1, 1).
+2. Scale by 2: (1, 1) → (2, 2).
+3. Move back by +C: (2, 2) + (3, 3) = (5, 5).
+
+Why: P' = C + S (P − C): subtract the pivot, scale, then add the pivot back.
 :::
 :::
 
@@ -213,9 +265,26 @@ The minus sign is in x'. Without it the point turns clockwise.
 On paper, rotate (2, 2) by 90° and by 180° around the origin. Then check both
 in **Rotate Lab** with the pivot at the origin.
 
-::: {.check}
-90°: (2 × 0 − 2 × 1, 2 × 1 + 2 × 0) = (−2, 2). 180°: (−2, −2). The lab shows
-the same points.
+::: {.fill answer="(−2, 2)" hint="x' = x cos θ − y sin θ, y' = x sin θ + y cos θ, with cos 90° = 0, sin 90° = 1."}
+Where does (2, 2) go with a turn of 90°? Type (x, y).
+
+Why: (2 × 0 − 2 × 1, 2 × 1 + 2 × 0) = (−2, 2).
+:::
+
+::: {.choice}
+Where does (2, 2) go with a turn of 180°?
+
+- [x] (−2, −2)
+
+  Why: cos 180° = −1 and sin 180° = 0: both signs change.
+
+- [ ] (2, −2)
+
+  Why: That is a turn of −90°, a quarter turn clockwise.
+
+- [ ] (−2, 2)
+
+  Why: That is the turn of 90°, only half of the way.
 :::
 :::
 
@@ -278,11 +347,33 @@ not another 30°.
 :::
 
 ::: {.callout-note title="Do it · A pivot in Rotate Lab"}
-Tap the grid at (1, 0) to move the pivot. Set θ = 90° and read P' for
-P = (2, 2). Check by hand: P − C, R(90°), + C.
+Tap the grid at (1, 0) to move the pivot C. Set θ = 90° and read P' for
+P = (2, 2). Check it by hand.
 
-::: {.check}
-P − C = (1, 2); R(90°) gives (−2, 1); + C = (−1, 1). The lab shows (−1, 1).
+::: {.order}
+Put the steps of the turn about C = (1, 0) in order.
+
+1. Subtract the pivot: P − C = (1, 2).
+2. Turn with R(90°): (1, 2) → (−2, 1).
+3. Add the pivot back: (−2, 1) + (1, 0) = (−1, 1).
+
+Why: Turn about a pivot: subtract it, rotate, then add it back. The lab shows (−1, 1).
+:::
+
+::: {.choice}
+A student turned P = (2, 2) by 90° and got (−2, 2). What went wrong?
+
+- [x] The point turned around the origin, not around C = (1, 0).
+
+  Why: R(90°) × (2, 2) = (−2, 2) is a turn about (0, 0); the pivot was forgotten.
+
+- [ ] Nothing: (−2, 2) is right.
+
+  Why: About C = (1, 0) the point goes to (−1, 1).
+
+- [ ] The angle must be −90°.
+
+  Why: The angle is right; the steps with the pivot are missing.
 :::
 :::
 

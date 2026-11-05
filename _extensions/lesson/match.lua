@@ -32,7 +32,9 @@
 -- Also, for the interactive page (HTML) only:
 --   ::: {.check}    "Check your result" of a Do it task or a seminar activity:
 --   …               a closed <details> box. In the notes (PDF) book.lua moves
---   :::             it to "Results of the Do it tasks" at the end.
+--   :::             it to "Results of the Do it tasks" at the end. A page
+--                   no longer uses it (the page checks every task with
+--                   interact.lua); it stays for the frozen pages.
 --   ::: {.prompt}   The prompt of a "Task with AI" box, with a "Copy
 --   …               prompt" button (lesson-script.html).
 --   :::

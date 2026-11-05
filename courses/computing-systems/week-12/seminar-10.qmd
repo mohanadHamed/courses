@@ -6,9 +6,9 @@ ilos: [A2, C2]
 format: lesson-html
 ---
 
-No new ideas today: two short problems on Lecture 10. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: two short problems on Lecture 10. Do each one alone.
+Tap, sort or type your answer at every step: the page checks it at once and
+tells you why.
 
 ## Recall
 
@@ -66,17 +66,44 @@ left out.
 
 *Your product:* the filled table and one answer.
 
-::: {.check}
-| need | cloud service | why |
-|---|---|---|
-| accounts | back end (BaaS) | ready accounts through an SDK |
-| progress on every phone | cloud save (BaaS) | loads after the login on any phone |
-| 120 MB track pack | object storage + CDN | not inside the app; copies near the players |
-| live duels | dedicated game servers | they run the duels and decide who wins |
+::: {.sort}
+Step 1: which cloud service does each need of Dune Duel use? Sort them.
 
-Your game: for example "Yes, it links to Google Play Games: on a new phone
-the progress loads." Without an account link, a lost phone is lost
-progress.
+Back end (BaaS)
+:   accounts
+
+    Why: Ready accounts through an SDK.
+
+:   progress on every phone
+
+    Why: A cloud save loads after the login on any phone.
+
+Object storage and a CDN
+:   the 120 MB track pack
+
+    Why: Not inside the app; copies near the players.
+
+Dedicated game servers
+:   live duels
+
+    Why: They run the duels and decide who wins.
+:::
+
+::: {.choice}
+Step 2: a game has no cloud save and no account link, and the phone is
+lost. What happens?
+
+- [x] The progress is lost.
+
+  Why: Without an account link, the progress was only on the old phone.
+
+- [ ] The progress loads on the new phone.
+
+  Why: That needs a cloud save with an account.
+
+- [ ] The store keeps the progress.
+
+  Why: The store keeps the app, not the progress.
 :::
 :::
 
@@ -116,12 +143,36 @@ In **Cloud Planner**, choose what solves each problem.
 
 *Your product:* your score and the six problems, each with its solution.
 
-::: {.check}
-Lost phone → a cloud save. Slow downloads in Amman → a CDN with a copy near
-the players. Jumping cars at 90 ms → race servers in a region near the
-players. Impossible race times → a dedicated server decides the race. The
-secret key → never in the app: secrets stay on the server. The doubled bill
-→ a CDN and smaller packs, because costs grow with use.
+::: {.sort}
+What solves each problem in the inbox? Sort them.
+
+A cloud save
+:   a lost phone with level 12 and 840 coins
+
+    Why: After the login, the progress loads on the new phone.
+
+A CDN
+:   slow downloads of the 80 MB pack in Amman
+
+    Why: A copy near the players makes the download fast.
+
+:   a bill that doubled after 50,000 downloads
+
+    Why: A CDN and smaller packs: the costs grow with use.
+
+Game servers
+:   jumping cars with a ping of 90 ms
+
+    Why: Race servers in a region near the players.
+
+:   impossible race times
+
+    Why: A dedicated server decides the race, not the phone.
+
+Secrets on the server
+:   a secret key in the app
+
+    Why: Never in the app: anyone can read an app.
 :::
 :::
 

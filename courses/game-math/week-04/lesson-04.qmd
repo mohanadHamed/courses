@@ -7,9 +7,9 @@ format: lesson-html
 ---
 
 This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check.
+starts with a problem in a game. Then it explains the idea behind it. It
+ends with a **Do it** task and one set of questions. Tap, sort or type your
+answer: the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -35,12 +35,38 @@ and angles turn anticlockwise.
 
 ::: {.callout-note title="Do it · Draw five headings"}
 On squared paper, draw the axes and arrows for 0°, 90°, 135°, 225° and −45°
-(use the diagonals of the squares for 45°). Write the second name of each
-angle, for example 270° = −90°.
+(use the diagonals of the squares for 45°). Each direction has a second
+name, for example 270° = −90°.
 
-::: {.check}
-0° right, 90° up, 135° up-left, 225° down-left, −45° down-right (the last
-three on the diagonals). Second names: 360°, −270°, −225°, −135°, 315°.
+::: {.sort}
+Which way does each angle point? Sort them.
+
+Up-left
+:   135°
+
+    Why: Half-way between 90° (up) and 180° (left).
+
+:   −225°
+
+    Why: −225° + 360° = 135°: the same direction.
+
+Down-left
+:   225°
+
+    Why: Half-way between 180° (left) and 270° (down).
+
+:   −135°
+
+    Why: −135° + 360° = 225°.
+
+Down-right
+:   −45°
+
+    Why: 45° clockwise from +x.
+
+:   315°
+
+    Why: 315° − 360° = −45°: the same direction.
 :::
 :::
 
@@ -105,11 +131,28 @@ Opposite and adjacent depend on the angle you look from.
 ::: {.callout-note title="Do it · The calculator of your phone"}
 Open the calculator in scientific mode (DEG, not RAD). Compute sin 30°,
 cos 30° and tan 45°, and compare with the table. Then compute the height of
-a 10 m ramp at 20°: 10 × sin 20°.
+a 10 m ramp at 20°: 10 × sin 20° (sin 20° ≈ 0.34).
 
-::: {.check}
-sin 30° = 0.5, cos 30° ≈ 0.87, tan 45° = 1. The ramp: about 10 × 0.34 =
-3.4 m. If sin 30 gives −0.99, the calculator is in RAD mode.
+::: {.fill answer="3.4" tol="0.05" unit="m" hint="Multiply the length 10 by sin 20° ≈ 0.34."}
+How high is a 10 m ramp at 20°?
+
+Why: 10 × sin 20° ≈ 10 × 0.34 = 3.4 m.
+:::
+
+::: {.choice}
+A calculator gives sin 30 = −0.99. What is wrong?
+
+- [x] It is in RAD mode: it reads 30 as radians.
+
+  Why: In DEG mode, sin 30° = 0.5, as in the table.
+
+- [ ] Nothing: sin 30° is −0.99.
+
+  Why: The table gives sin 30° = 0.5: a ramp at 30° rises half its length.
+
+- [ ] The calculator is broken.
+
+  Why: Switch it to DEG and it gives 0.5.
 :::
 :::
 
@@ -163,13 +206,29 @@ The point is (cos θ, sin θ), not (sin θ, cos θ). At 90° it is (0, 1).
 {{< sim file="sims/unit-circle-lab.html" poster="sims/unit-circle-lab.png" title="Unit Circle Lab: cos, sin and tan for every angle" height="720" >}}
 
 ::: {.callout-note title="Do it · Four points in Unit Circle Lab"}
-In **Unit Circle Lab**, put the point at 30°, 150°, 210° and 330°. Write
-cos θ and sin θ each time. What changes from row to row, and what stays the
-same?
+In **Unit Circle Lab**, put the point at 30°, 150°, 210° and 330°, and read
+cos θ and sin θ each time. 30° gives (0.87, 0.5).
 
-::: {.check}
-30° (0.87, 0.5), 150° (−0.87, 0.5), 210° (−0.87, −0.5), 330° (0.87, −0.5):
-the numbers stay; only the signs change.
+::: {.fill answer="(−0.87, −0.5)" hint="210° is down-left: both signs are minus."}
+What is (cos 210°, sin 210°)? Type (x, y).
+
+Why: 210° is in quadrant III: the same numbers as 30°, both with a minus sign.
+:::
+
+::: {.choice}
+What changes from 30° to 150°, 210° and 330°?
+
+- [x] Only the signs; the numbers 0.87 and 0.5 stay.
+
+  Why: The four points are mirror images in the four quadrants.
+
+- [ ] The numbers 0.87 and 0.5 get bigger.
+
+  Why: (cos θ, sin θ) is always on the circle of radius 1: the size stays.
+
+- [ ] cos and sin swap places.
+
+  Why: The point is always (cos θ, sin θ); 60° would swap them, not 150°.
 :::
 :::
 
@@ -223,12 +282,29 @@ the speed by cos θ and by sin θ.
 :::
 
 ::: {.callout-note title="Do it · Velocity from the unit circle"}
-A boat sails at 60° with the speed 6. In **Unit Circle Lab**, read cos 60°
-and sin 60°. Multiply both by 6. Check: is the length of your vector about
-6?
+A boat sails at 60° with the speed 6. In **Unit Circle Lab**, read
+cos 60° = 0.5 and sin 60° ≈ 0.87. Multiply both by 6.
 
-::: {.check}
-6 × (0.5, 0.87) ≈ (3, 5.2). Check: 3² + 5.2² ≈ 9 + 27 = 36 = 6².
+::: {.choice}
+What is the velocity of the boat?
+
+- [x] (3, 5.2)
+
+  Why: 6 × (0.5, 0.87) ≈ (3, 5.2).
+
+- [ ] (5.2, 3)
+
+  Why: x uses cos 60° = 0.5 and y uses sin 60° = 0.87: the parts are swapped.
+
+- [ ] 360
+
+  Why: Never multiply the speed by the angle; multiply it by cos θ and sin θ.
+:::
+
+::: {.fill answer="36" tol="0.1" hint="Square each part of (3, 5.2) and add."}
+Check the length: what is 3² + 5.2²?
+
+Why: 9 + 27.04 ≈ 36 = 6²: the length is about 6, the speed of the boat.
 :::
 :::
 
@@ -281,12 +357,35 @@ instead of 0°.
 
 ::: {.callout-note title="Do it · Angles on paper"}
 On squared paper, mark a turret at (0, 0) and the targets (5, 0), (0, 4),
-(−3, 3) and (−3, −3). Draw each vector d. Which quadrant is each target in,
-and which angle does atan2 give? Use the axes and the 45° diagonals.
+(−3, 3) and (−3, −3). Draw each vector d. Use the axes and the 45°
+diagonals.
 
-::: {.check}
-(5, 0): 0°, on the x-axis. (0, 4): 90°, on the y-axis. (−3, 3): 135°,
-quadrant II. (−3, −3): −135° (= 225°), quadrant III.
+::: {.order}
+Put the targets in order of their atan2 angle, from the smallest to the
+biggest.
+
+1. (−3, −3): −135°
+2. (5, 0): 0°
+3. (0, 4): 90°
+4. (−3, 3): 135°
+
+Why: atan2 gives angles from −180° to 180°: quadrant III is negative, the axes give 0° and 90°, quadrant II gives 135°.
+:::
+
+::: {.choice}
+(−3, −3) gives tan θ = 1, like (3, 3). Why is its angle not 45°?
+
+- [x] atan2 uses both signs: (−, −) is quadrant III, at −135°.
+
+  Why: The division d~y~ ÷ d~x~ loses the signs; atan2 keeps them.
+
+- [ ] Because −3 is smaller than 3.
+
+  Why: The size is the same; only the direction is different.
+
+- [ ] atan2 is wrong for negative numbers.
+
+  Why: atan2 is right in every quadrant; tan alone is not.
 :::
 :::
 
@@ -341,12 +440,23 @@ Multiply (cos θ, sin θ) by the radius, then add the centre.
 
 ::: {.callout-note title="Do it · An orbit in Wave Lab"}
 In **Wave Lab**, choose **Orbit**, the amplitude 2 (the radius) and the
-period 4 s. Step to 0, 1, 2 and 3 s and write the positions. Then set the
-period to 8 s: what is the angular speed?
+period 4 s. Wave Lab circles the point (0, 2). Step to 0, 1, 2 and 3 s.
 
-::: {.check}
-Wave Lab circles (0, 2): 0 s (2, 2); 1 s (0, 4); 2 s (−2, 2); 3 s (0, 0).
-Period 8 s: 360° ÷ 8 = 45° per second.
+::: {.order}
+Put the positions in time order, from 0 s to 3 s.
+
+1. (2, 2)
+2. (0, 4)
+3. (−2, 2)
+4. (0, 0)
+
+Why: Every second the point turns 90° anticlockwise: right, top, left, bottom.
+:::
+
+::: {.fill answer="45|45°" unit="° per second" hint="One full turn is 360°."}
+Set the period to 8 s. What is the angular speed?
+
+Why: 360° ÷ 8 s = 45° per second.
 :::
 :::
 
@@ -405,13 +515,29 @@ The amplitude is half of the whole movement: with A = 3, a value moves
 :::
 
 ::: {.callout-note title="Do it · The lift in Wave Lab"}
-In **Wave Lab**, choose **Bob**, the amplitude 3 and the period 4 s. Step to
-0, 1, 2, 3 and 4 s and write the heights. Then set the period to 8 s: when
-is the lift at the top?
+In **Wave Lab**, choose **Bob**, the amplitude 3 and the period 4 s. The
+middle is 2. Step to 0, 1, 2, 3 and 4 s and read the heights.
 
-::: {.check}
-Middle 2: 0 s 2; 1 s 5; 2 s 2; 3 s −1; 4 s 2. With the period 8 s, the top
-comes at 2 s (a quarter of 8).
+::: {.fill answer="−1" hint="At three quarters of the period the lift is at the bottom."}
+What is the height at 3 s?
+
+Why: 3 s is three quarters of 4 s: the bottom, 2 − 3 = −1.
+:::
+
+::: {.choice}
+Now set the period to 8 s. When is the lift at the top?
+
+- [x] at 2 s
+
+  Why: The top comes at a quarter of the period: 8 ÷ 4 = 2 s.
+
+- [ ] at 1 s
+
+  Why: 1 s is a quarter of the old period, 4 s.
+
+- [ ] at 4 s
+
+  Why: Half of the period brings the lift back to the middle.
 :::
 :::
 

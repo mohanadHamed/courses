@@ -16,6 +16,10 @@ format: lesson-pptx
 - Every result names the build, the device and the OS version.
 - Then somebody else can repeat the test.
 - **Do it:** Write the build, the device, the OS version and two tests for a game on your phone.
+
+::: {.reveal}
+- **Example:** Build 3.2.1, a Samsung A35 with Android 14; tests: the first level on mobile data and the settings menu in landscape.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/test-environment.png)
@@ -42,6 +46,10 @@ c) so that others can repeat the test
 - An AVD is a device profile plus a system image with one Android version.
 - The iOS Simulator runs only on a Mac.
 - **Do it:** Create three AVDs in AVD Builder. What can each one not test?
+
+::: {.reveal}
+- **Result:** None of them can test the real speed, the heat, the battery or the sensors of the P5.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/emulator-vs-real.png)
@@ -50,7 +58,7 @@ c) so that others can repeat the test
 
 ## Live demo · AVD Builder
 
-{{< sim file="sims/avd-builder.html" poster="sims/avd-builder.png" title="AVD Builder: virtual devices for Pocket Quest" task="**Show:** create the P5 twin, the API 26 phone and the tablet. **Ask:** what can these AVDs not tell us about the P5?" >}}
+{{< sim file="sims/avd-builder.html" poster="sims/avd-builder.png" title="AVD Builder: virtual devices for Pocket Quest" task="**Show:** create the P5 twin, the API 26 phone and the tablet. **Ask:** what can these AVDs not tell us about the P5?" answer="Its real speed, heat and battery: the computer is much stronger than the phone." >}}
 
 ## Example · The P5 twin
 
@@ -83,6 +91,10 @@ c) The emulator runs on the much stronger computer.
 - An iPhone needs a Mac with Xcode, or TestFlight.
 - A device farm rents real phones in the cloud.
 - **Do it:** Find the build number and the USB debugging switch on an Android phone.
+
+::: {.reveal}
+- **Result:** Settings › About phone › Build number, tapped seven times; then Developer options › USB debugging.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/real-device-setup.png)
@@ -108,6 +120,10 @@ Rami connects the P5 and runs adb devices.
 - It includes the weakest device and the main screen sizes.
 - It covers both platforms, with real devices for speed, heat and sensors.
 - **Do it:** Cover every row in Matrix Builder for $300 or less. What did you choose?
+
+::: {.reveal}
+- **Example:** The free AVDs (API 26, API 34 and a tablet), the real P5 and a few device-farm hours.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/device-matrix.png)
@@ -116,7 +132,7 @@ Rami connects the P5 and runs adb devices.
 
 ## Live demo · Matrix Builder
 
-{{< sim file="sims/matrix-builder.html" poster="sims/matrix-builder.png" title="Matrix Builder: which devices for the test?" task="**Show:** choose the P5 and two emulators, then add the iOS rows. **Ask:** why is renting a device farm better here than buying more phones?" >}}
+{{< sim file="sims/matrix-builder.html" poster="sims/matrix-builder.png" title="Matrix Builder: which devices for the test?" task="**Show:** choose the P5 and two emulators, then add the iOS rows. **Ask:** why is renting a device farm better here than buying more phones?" answer="The iOS rows need only a few hours: renting real phones by the hour costs less than buying them." >}}
 
 ## Try it 3 · Real devices and the matrix
 

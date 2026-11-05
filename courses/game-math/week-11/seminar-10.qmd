@@ -6,9 +6,9 @@ ilos: [A2, B2]
 format: lesson-html
 ---
 
-No new ideas today: three short problems on Lecture 10. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: three short problems on Lecture 10. Do each one alone.
+Tap, sort or type your answer at every step: the page checks it at once and
+tells you why.
 
 ## Recall
 
@@ -62,16 +62,58 @@ and checks the code with many rolls.
 *Your product:* four probabilities, three shares, and one sentence: when is
 the share close to the probability?
 
-::: {.check}
-1. S = {1, 2, 3, 4, 5, 6}; P(gem) = 1/6; P(no gem) = 5/6.
-2. P(two gems) = 1/6 × 1/6 = 1/36. P(at least one) = 1 − 5/6 × 5/6 =
-   1 − 25/36 = 11/36, about 0.31.
-3. (1,6), (2,5), (3,4), (4,3), (5,2), (6,1): 6/36 = 1/6.
-4. After 10 rolls the share of 6s can be far from 1/6 ≈ 0.17 (0.1, 0.3 …).
-   After 1000 rolls it is close (about 0.14 to 0.19), and "at least one 6"
-   is close to 0.31.
+::: {.choice}
+Step 1: what are P(gem) and P(no gem) for one slime?
 
-The share comes close to the probability only after many rolls.
+- [x] 1/6 and 5/6
+
+  Why: S = {1, …, 6}; one face is a 6, five are not.
+
+- [ ] 1/6 and 1/5
+
+  Why: P(no gem) = 1 − 1/6 = 5/6.
+
+- [ ] 1/2 and 1/2
+
+  Why: "Gem or no gem" are not equally likely outcomes.
+:::
+
+::: {.choice}
+Step 2: what is P(at least one gem) with two slimes?
+
+- [x] 11/36
+
+  Why: 1 − P(no gem twice) = 1 − 5/6 × 5/6 = 1 − 25/36 = 11/36, about 0.31.
+
+- [ ] 2/6
+
+  Why: 1/6 + 1/6 counts the case of two gems twice.
+
+- [ ] 1/36
+
+  Why: 1/36 = 1/6 × 1/6 is P(two gems).
+:::
+
+::: {.fill answer="6/36|1/6" hint="List the pairs with the sum 7."}
+Step 3: what is P(the sum of two dice is 7)?
+
+Why: (1, 6), (2, 5), (3, 4), (4, 3), (5, 2), (6, 1): 6/36 = 1/6.
+:::
+
+::: {.choice}
+Step 4: when is the share of 6s close to 1/6 ≈ 0.17?
+
+- [x] only after many rolls, for example 1000
+
+  Why: After 10 rolls the share can be 0.1 or 0.3; after 1000 it is close to 1/6.
+
+- [ ] already after 10 rolls
+
+  Why: Few rolls can be far from the probability by chance.
+
+- [ ] never: dice are random
+
+  Why: With many rolls the share settles near the probability.
 :::
 :::
 
@@ -117,15 +159,48 @@ rare; the hero takes two, one after the other, without putting one back.
 *Your product:* four probabilities, and one sentence: why does knowing the
 first die change the chance?
 
-::: {.check}
-1. (4,6), (5,5), (5,6), (6,4), (6,5), (6,6): 6/36 = 1/6.
-2. Inside B: (5,1) … (5,6), 6 outcomes; (5,5) and (5,6) give 10 or more:
-   2/6 = 1/3.
-3. Conditional Lab: P(A | B) = 3/6 = 1/2 ((6,4), (6,5), (6,6)).
-4. 2/6 × 1/5 = 2/30 = 1/15: after a rare item, 5 items are left with 1 rare.
+::: {.fill answer="6/36|1/6" hint="Count the cells with the sum 10, 11 or 12."}
+Step 1: what is P(critical hit) before the roll?
 
-The known die removes the outcomes outside B, so we count in a smaller
-sample space.
+Why: (4, 6), (5, 5), (5, 6), (6, 4), (6, 5), (6, 6): 6/36 = 1/6.
+:::
+
+::: {.choice}
+Step 2: what is P(critical hit | first die is 5)?
+
+- [x] 1/3
+
+  Why: B has 6 outcomes, (5, 1) to (5, 6); (5, 5) and (5, 6) give 10 or more: 2/6.
+
+- [ ] 2/36
+
+  Why: Inside B, divide by the 6 outcomes of B, not by 36.
+
+- [ ] 1/6
+
+  Why: 1/6 is the chance before the roll; knowing a 5 makes it bigger.
+:::
+
+::: {.choice}
+Steps 2–3: why does knowing the first die change the chance?
+
+- [x] It removes the outcomes outside B: we count in a smaller sample space.
+
+  Why: With a first 6, three of the six outcomes give 10 or more: 1/2.
+
+- [ ] The die remembers its last roll.
+
+  Why: A die has no memory; only what we know has changed.
+
+- [ ] It never changes the chance.
+
+  Why: 1/6 before the roll, 1/3 after a 5: it changed.
+:::
+
+::: {.fill answer="1/15|2/30" hint="Draw without putting back: 2/6, then 1 rare in 5."}
+Step 4: what is P(two rare items) from the chest?
+
+Why: 2/6 × 1/5 = 2/30 = 1/15: after a rare item, 5 items are left with 1 rare.
 :::
 :::
 
@@ -171,12 +246,48 @@ the probability 1/3, does 30. A rare cape drops with the probability 1/20.
 *Your product:* two expected values, one gain, one fair price and one
 average wait.
 
-::: {.check}
-1. E = 50 × 0.2 + 10 × 0.5 + 0 × 0.3 = 10 + 5 + 0 = 15 coins. Gain =
-   15 − 18 = −3 coins: not fair. A fair price is 15 coins.
-2. E = 12 × 2/3 + 30 × 1/3 = 8 + 10 = 18 damage.
-3. 1/p = 20 tries on average (some players need many more).
-4. Crate Lab: after 1000 crates the average is close to 15.
+::: {.fill answer="15" unit="coins" hint="50 × 0.2 + 10 × 0.5 + 0 × 0.3."}
+Step 1: what is E(coins) of the crate?
+
+Why: 50 × 2/10 + 10 × 5/10 + 0 × 3/10 = 10 + 5 + 0 = 15 coins. Crate Lab comes close to 15 after 1000 crates.
+:::
+
+::: {.choice}
+Step 1: the crate costs 18 coins. Is it fair?
+
+- [x] No: the gain is −3 coins; a fair price is 15.
+
+  Why: Gain = 15 − 18 = −3: the player loses 3 coins a crate on average.
+
+- [ ] Yes: a crate can give 50 coins.
+
+  Why: On average a crate gives only 15 coins.
+
+- [ ] No: a fair price is 50 coins.
+
+  Why: 50 is the best item; the fair price is E = 15.
+:::
+
+::: {.fill answer="18" hint="12 × 2/3 + 30 × 1/3."}
+Step 2: what is E(damage) of the axe per hit?
+
+Why: 12 × 2/3 + 30 × 1/3 = 8 + 10 = 18 damage.
+:::
+
+::: {.choice}
+Step 3: the cape drops with the probability 1/20. How many tries on average?
+
+- [x] 20 tries
+
+  Why: On average 1/p = 20 tries; some players need many more.
+
+- [ ] 1/20 of a try
+
+  Why: 1/20 is the probability; the wait is 1/p.
+
+- [ ] always exactly 20 tries
+
+  Why: 20 is an average, not a promise.
 :::
 :::
 

@@ -16,6 +16,10 @@ format: lesson-pptx
 - The sample space S is the set of all outcomes.
 - We list outcomes so that each one is equally likely.
 - **Do it:** Write the sample space of three coins. How many outcomes has it?
+
+::: {.reveal}
+- **Result:** 8 outcomes: HHH, HHT, HTH, HTT, THH, THT, TTH and TTT.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/sample-spaces.png)
@@ -53,6 +57,10 @@ c) 36
 - With equally likely outcomes, P(A) = |A| ÷ |S|.
 - A probability is between 0 (impossible) and 1 (certain).
 - **Do it:** Find P(odd) and P(a 7) with one die. What are they?
+
+::: {.reveal}
+- **Result:** P(odd) = 3/6 = 1/2, and P(a 7) = 0: it is impossible.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/event-prob.png)
@@ -61,7 +69,7 @@ c) 36
 
 ## Live demo · Sample Space Lab
 
-{{< sim file="sims/sample-space-lab.html" poster="sims/sample-space-lab.png" title="Sample Space Lab: count the outcomes" task="**Show:** one die with A = even, then A or B with B = less than 3, then two dice with A = a double and not A. **Ask:** why do we subtract 1/6 for even or less than 3?" >}}
+{{< sim file="sims/sample-space-lab.html" poster="sims/sample-space-lab.png" title="Sample Space Lab: count the outcomes" task="**Show:** one die with A = even, then A or B with B = less than 3, then two dice with A = a double and not A. **Ask:** why do we subtract 1/6 for even or less than 3?" answer="The 2 is even and less than 3: adding counts it twice, so we take its 1/6 away once." >}}
 
 ## Try it 2 · One die and a crate
 
@@ -83,6 +91,10 @@ c) 0
 - P(not A) = 1 − P(A).
 - "At least one" is often easier with the complement.
 - **Do it:** Find P(at least one head) with two coins. Which complement did you use?
+
+::: {.reveal}
+- **Result:** The complement of "no head" (TT): 1 − 1/4 = 3/4.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/complement.png)
@@ -120,6 +132,10 @@ c) 3/4
 - A grid shows the 36 pairs of two dice.
 - In a tree diagram, we multiply along a branch.
 - **Do it:** Find P(sum 6) in the grid. How many cells make 6?
+
+::: {.reveal}
+- **Result:** 5 cells, (1, 5), (2, 4), (3, 3), (4, 2) and (5, 1), so P = 5/36.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/dice-sums.png)
@@ -157,6 +173,10 @@ c) The 11 sums are not equally likely.
 - Mutually exclusive events have no overlap, so we just add.
 - For independent events, P(A and B) = P(A) × P(B).
 - **Do it:** Find P(heads and a 6). Which rule did you use?
+
+::: {.reveal}
+- **Result:** AND of independent events: 1/2 × 1/6 = 1/12.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/or-and.png)
@@ -195,6 +215,10 @@ c) 1/4
 - We divide by the number of outcomes in B.
 - Without putting back, P(A and B) = P(A) × P(B | A).
 - **Do it:** Find P(sum 7 | first die is 1). What do you get?
+
+::: {.reveal}
+- **Result:** Only (1, 6) of the 6 outcomes with a first 1: 1/6.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/conditional-grid.png)
@@ -214,7 +238,7 @@ The door opens with a sum of 10 or more, and the first die already shows a 6.
 
 ## Live demo · Conditional Lab
 
-{{< sim file="sims/conditional-lab.html" poster="sims/conditional-lab.png" title="Conditional Lab: what do we know already?" task="**Show:** sum 10 or more without a condition, then with the first die 6, then the second die 6. **Ask:** why does the condition change the first event but not the second?" >}}
+{{< sim file="sims/conditional-lab.html" poster="sims/conditional-lab.png" title="Conditional Lab: what do we know already?" task="**Show:** sum 10 or more without a condition, then with the first die 6, then the second die 6. **Ask:** why does the condition change the first event but not the second?" answer="The sum needs both dice, so knowing the first die changes it; the second die does not depend on the first." >}}
 
 ## Try it 6 · Conditions
 
@@ -236,6 +260,10 @@ c) 1/2
 - E = x₁p₁ + x₂p₂ + …, the long-run average.
 - A game is fair when its price equals E(win), and a success takes 1/p tries on average.
 - **Do it:** A spin costs 3 coins, and 1 of 8 parts wins 20 coins. Is the spin fair?
+
+::: {.reveal}
+- **Result:** No: E(win) = 20/8 = 2.5 coins, so the gain is −0.5 coins a spin.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/expected-value.png)

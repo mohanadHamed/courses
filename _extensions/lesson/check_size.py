@@ -25,7 +25,10 @@ lesson-NN-slides.qmd (slides)
   - clear slides (AUTHORING.md, "Slides explain themselves"): every question
     is a full question (a question word and "?"), its answer is on the same
     slide, an Example states its question, every simulator slide has a
-    `task`, no fragments of one to three words, no group work ("Do it together")
+    `task`, no fragments of one to three words, no group work ("Do it together");
+    no unsolved work: a "Do it:" question has its result on the slide
+    (::: {.reveal}, "Result:"), and a `task` that asks something has its
+    answer= (shown on click)
 The game of the lesson: a mini-game in the page's Game challenge must also be
 in the notes (Case study, poster + QR) and on the Game challenge slide.
 
@@ -38,14 +41,25 @@ SEMINAR_TIME; a Recall section, one "Check your result" ({.check}) in every
 activity, no new glossary terms, no separate Game challenge or case study, at
 most one Task with AI, and Recall / Activity / Check slides.
 
-On every page (AUTHORING.md, "The page teaches, the notes test"): every Do it,
-Lab task and Activity box has a {.check}, and every Try it question has a
+On every page (AUTHORING.md, "The page teaches, the notes test", and "The page
+checks every task"): every Do it, Lab task and Activity box ends with an
+interactive check (::: {.choice}, {.order}, {.sort} or {.fill}, interact.lua)
+and never with a closed {.check}; each check is complete (one right option and
+a reason for every option; 3-8 cards in order with a reason; 2-4 groups and a
+reason for every card; an answer= and a reason). Every Try it question has a
 "Why:" reason. Graded work (homework, "Tasks to submit") never shows them.
+In the notes and the worksheets (PDF) every task box keeps its {.check}: the
+results are printed at the end (a self-test).
 "Task with AI" boxes (an extra for the curious; AUTHORING.md, "Tasks with
 AI"): at most AI_MAX per file, each with a complete {.prompt} that asks for a
-visual result, "What you should see" and 2-3 changes to try with closed
-answers. AI is never part of graded work: in a homework a box belongs in an
-optional section "## Optional · Task with AI (no marks) {.extra}".
+visual result, what the student should see and 2-3 changes to try: on the
+page as interactive checks, in the notes as closed answers. AI is never part
+of graded work: in a homework a box belongs in an optional section
+"## Optional · Task with AI (no marks) {.extra}".
+
+FROZEN files were sent to students and keep an older model this semester
+(AUTHORING.md, "Frozen sessions"): they are listed and not checked against
+the newest rules. Rewrite them at the start of the next semester.
 
 A lecture worksheet (a practical course: lesson-NN-sheet.qmd; AUTHORING.md,
 "Lecture worksheets") is the main document of the session. It needs "Before
@@ -133,6 +147,30 @@ SHEET_REQUIRED = ["before you start", "table of results"]
 ONLINE_CONTENT = ("lesson", "sims", "mix", "video", "course-video")
 WATCH_RE = re.compile(r"\{\{<\s*watch\s+(.*?)>\}\}", re.S)
 ONLINE_TASKS = (2, 4)
+# Sessions sent to students before a rule changed keep their older model this
+# semester (AUTHORING.md, "Frozen sessions"): they are listed, not checked.
+# Rewrite them with the newest rules at the start of the next semester, then
+# empty this set.
+FROZEN = {
+    # Digital Skills, fall 2026: Lecture 1 and Online activity 1 (with its
+    # tasks PDF) were sent to the students before the page checked every task.
+    "courses/digital-skills/week-01/lesson-01.qmd",
+    "courses/digital-skills/week-01/online-01.qmd",
+}
+# Interactive checks of the page (interact.lua): (min, max) options of a
+# choice, cards of an order, groups and cards of a sort.
+IC_RE = re.compile(r"^\s*:{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b", re.M)
+# A whole page check (no nested divs inside): its fence, its text and its
+# closing fence at the same indentation.
+# The start of a list item ("1. ", "b) ", "(a) ", "- "): a line of a check
+# that starts like this is read as a list, not as text.
+LIST_START_RE = re.compile(r"^\s*(\d+[.)]|[a-zA-Z][.)]|\([a-zA-Z0-9]+\)|[-*+])\s")
+IC_BLOCK_RE = re.compile(r"^([ \t]*):{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b[^\n]*\n.*?^\1:{3,}[ \t]*$",
+                         re.M | re.S)
+CHOICE_OPTIONS = (2, 4)
+ORDER_CARDS = (3, 8)
+SORT_GROUPS = (2, 4)
+SORT_CARDS = (3, 8)
 # Parts every lesson must have (heading text, case does not matter).
 BOOK_REQUIRED = ["key terms", "exercises", "answers to the exercises"]
 PAGE_REQUIRED = ["key terms", "game challenge", "summary"]
@@ -194,18 +232,22 @@ TRY_IT_RE = re.compile(r'^:::+ *\{\.callout-tip[^}\n]*title="Try it', re.M)
 
 
 def boxes(body):
-    """Every fenced div: (opening line, its text up to the closing fence)."""
+    """Every fenced div: (opening line, its text up to the closing fence).
+
+    Divs may be indented (inside a numbered step of a worksheet); the text
+    then loses the indentation of its opening line."""
     out, stack = [], []
     lines = body.splitlines()
     for i, line in enumerate(lines):
-        m = re.match(r"^(:{3,})\s*(\S.*)?$", line)
+        m = re.match(r"^(\s*)(:{3,})\s*(\S.*)?$", line)
         if not m:
             continue
-        if m.group(2):
-            stack.append((i, line))
+        if m.group(3):
+            stack.append((i, line, len(m.group(1))))
         elif stack:
-            start, head = stack.pop()
-            out.append((head, "\n".join(lines[start + 1:i])))
+            start, head, ind = stack.pop()
+            text = [l[ind:] if l[:ind].strip() == "" else l for l in lines[start + 1:i]]
+            out.append((head, "\n".join(text)))
     return out
 
 
@@ -214,15 +256,94 @@ def task_boxes_without_check(body):
     out = []
     for head, text in boxes(body):
         m = re.search(r'\{\.callout-note[^}]*title="((%s)[^"]*)"' % TASK_TITLES, head)
-        if m and not re.search(r"^:::+ *\{\.check\}", text, re.M):
+        if m and not re.search(r"^\s*:::+ *\{\.check\}", text, re.M):
             out.append(m.group(1))
+    return out
+
+
+def task_boxes_without_ic(body):
+    """Titles of Do it / Lab task / Activity / Task with AI boxes without an interactive check."""
+    out = []
+    for head, text in boxes(body):
+        m = re.search(r'\{\.callout-note[^}]*title="((%s)[^"]*)"' % TASK_TITLES, head)
+        if m and not IC_RE.search(text):
+            out.append(m.group(1))
+    return out
+
+
+def try_it_text(body):
+    """The text of the "Try it" boxes only (their questions and answers)."""
+    return "\n".join(text for head, text in boxes(body)
+                     if re.search(r'\{\.callout-tip[^}]*title="Try it', head))
+
+
+def count_questions(body):
+    """Questions in the Try it boxes (`:   answer` lines)."""
+    return len(re.findall(r"^:   \S", try_it_text(body), re.M))
+
+
+def ic_warnings(body):
+    """Warnings for the interactive checks of a page (interact.lua), one string each."""
+    out = []
+    for head, text in boxes(body):
+        m = re.match(r"^\s*:{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b", head)
+        if not m:
+            continue
+        kind = m.group(1)
+        lines = text.splitlines()
+        first = next((l.strip() for l in lines if l.strip()), "")
+        name = '%s check "%s"' % (kind, first[:45])
+        if kind == "choice":
+            items = re.split(r"^- \[[ xX]\] ", text, flags=re.M)
+            marks = re.findall(r"^- \[([ xX])\] ", text, re.M)
+            if not CHOICE_OPTIONS[0] <= len(marks) <= CHOICE_OPTIONS[1]:
+                out.append("%s: %d options; give %d–%d (- [x] right, - [ ] wrong)" % ((name, len(marks)) + CHOICE_OPTIONS))
+            if sum(1 for x in marks if x in "xX") != 1:
+                out.append("%s: needs exactly one right option (- [x])" % name)
+            missing = sum(1 for it in items[1:] if not re.search(r"^\s+Why:", it, re.M))
+            if missing:
+                out.append("%s: %d option(s) without a Why: (why it is right, or why it is wrong)" % (name, missing))
+        elif kind == "order":
+            cards = re.findall(r"^\d+\. \S", text, re.M)
+            if not ORDER_CARDS[0] <= len(cards) <= ORDER_CARDS[1]:
+                out.append("%s: %d cards; give %d–%d in the right order (1. … 2. …)" % ((name, len(cards)) + ORDER_CARDS))
+            if not re.search(r"^Why:", text, re.M):
+                out.append("%s: no Why: after the list (why this is the order)" % name)
+        elif kind == "sort":
+            groups, cards, why = 0, 0, 0
+            for k, l in enumerate(lines):
+                if l.startswith(":   "):
+                    cards += 1
+                    nxt = []
+                    for l2 in lines[k + 1:]:
+                        if l2.startswith(":") or (l2.strip() and not l2.startswith(" ")):
+                            break
+                        nxt.append(l2)
+                    if any(x.strip().startswith("Why:") for x in nxt):
+                        why += 1
+                elif l.strip() and not l.startswith(" ") and k + 1 < len(lines) and lines[k + 1].startswith(":   "):
+                    groups += 1
+                    if LIST_START_RE.match(l):
+                        out.append('%s: the group "%s" starts like a list item, so it is read as a list; '
+                                   'write it as "Question 1 · …"' % (name, l.strip()[:40]))
+            if not SORT_GROUPS[0] <= groups <= SORT_GROUPS[1]:
+                out.append("%s: %d groups; give %d–%d" % ((name, groups) + SORT_GROUPS))
+            if not SORT_CARDS[0] <= cards <= SORT_CARDS[1]:
+                out.append("%s: %d cards; give %d–%d" % ((name, cards) + SORT_CARDS))
+            if why < cards:
+                out.append("%s: %d card(s) without a Why:" % (name, cards - why))
+        else:
+            if not re.search(r'answer="[^"]+"', head):
+                out.append('%s: no answer="…" (the right answers, split by "|")' % name)
+            if not re.search(r"^Why:", text, re.M):
+                out.append("%s: no Why: (the reason, shown with the answer)" % name)
     return out
 
 
 def questions_without_why(body):
     """The answers (`:   answer`) of Try it questions that have no "Why:" reason."""
     out = []
-    lines = body.splitlines()
+    lines = try_it_text(body).splitlines()
     for i, line in enumerate(lines):
         if not re.match(r"^:   \S", line):
             continue
@@ -240,8 +361,11 @@ def questions_without_why(body):
     return out
 
 
-def ai_task_warnings(body, graded=False):
-    """Warnings for the "Task with AI" boxes of one file."""
+def ai_task_warnings(body, graded=False, page=False):
+    """Warnings for the "Task with AI" boxes of one file.
+
+    On a page (page=True) what the student should see and every change to try
+    are interactive checks; in the notes they are closed answers ({.check})."""
     out = []
     ai = [(h, t) for h, t in boxes(body) if ".ai-task" in h or 'title="Task with AI' in h]
     if len(ai) > AI_MAX:
@@ -270,21 +394,31 @@ def ai_task_warnings(body, graded=False):
         changes = re.findall(r"^\s*:::+ *\{\.try-change\}(.*?)(?=^\s*:::+ *\{\.try-change\}|\Z)", text, re.M | re.S)
         if not 2 <= len(changes) <= 3:
             out.append('Task with AI "%s" has %d changes to try (::: {.try-change}); give 2 or 3' % (title, len(changes)))
+        answer = IC_RE if page else re.compile(r"^\s*:::+ *\{\.check", re.M)
         for c in changes:
-            if not re.search(r"^\s*:::+ *\{\.check", c, re.M):
-                out.append('Task with AI "%s": a change to try has no closed answer (::: {.check} inside it)' % title)
+            if not answer.search(c):
+                out.append('Task with AI "%s": a change to try has no %s' % (title, "interactive check (::: {.choice} inside it)"
+                                                                            if page else "closed answer (::: {.check} inside it)"))
         before = re.split(r"^\s*:::+ *\{\.try-change\}", text, flags=re.M)[0]
-        if not re.search(r"^\s*:::+ *\{\.check", before, re.M):
-            out.append('Task with AI "%s" does not say what the student should see ('
-                       '::: {.check label="What you should see"} after the prompt)' % title)
+        if not answer.search(before):
+            out.append('Task with AI "%s" does not say what the student should see (%s after the prompt)'
+                       % (title, "::: {.choice}: which result is right" if page
+                          else '::: {.check label="What you should see"}'))
     return out
 
 
 def answered_warnings(body):
-    """Warnings for a page: tasks without results, questions without reasons."""
+    """Warnings for a page: tasks the page does not check, closed self-checks,
+    incomplete interactive checks, questions without reasons."""
     out = []
-    for t in task_boxes_without_check(body):
-        out.append('"%s" has no ::: {.check} (Check your result)' % t)
+    for t in task_boxes_without_ic(body):
+        out.append('"%s" has no interactive check (::: {.choice}, {.order}, {.sort} or {.fill}): '
+                   "the page checks every task at once" % t)
+    closed = len(re.findall(r"^\s*:::+ *\{\.check\b", body, re.M))
+    if closed:
+        out.append('%d closed "Check your result" box(es) (::: {.check}); on the page every task is checked '
+                   "at once with an interactive check (the notes keep {.check})" % closed)
+    out.extend(ic_warnings(body))
     missing = questions_without_why(body)
     if missing:
         out.append("%d Try it question(s) without a Why: reason (first: \"%s\")" % (len(missing), missing[0][:40]))
@@ -296,6 +430,8 @@ def graded_warnings(text):
     out = []
     if re.search(r"^:::+ *\{\.check\}", text, re.M):
         out.append("graded tasks show a result (::: {.check}); keep solutions in courses-private")
+    if IC_RE.search(text):
+        out.append("graded tasks have an interactive check (it shows the answer); keep solutions in courses-private")
     if re.search(r"^\s+Why:", text, re.M):
         out.append("graded tasks show a reason (Why:); keep solutions in courses-private")
     return out
@@ -351,6 +487,11 @@ def check_sheet(path, rel, notes_sections, page_body, slides_body):
                 out.append('%s: "%s", step %d has no {{< record … >}} (a place for the result)' % (srel, title, i))
             if not re.search(r"^\s*:::+ *\{\.check\}", st, re.M):
                 out.append('%s: "%s", step %d has no ::: {.check} (its result)' % (srel, title, i))
+            if not IC_RE.search(st):
+                out.append('%s: "%s", step %d has no interactive check for the page (::: {.choice}, '
+                           "{.order}, {.sort} or {.fill} after its {.check})" % (srel, title, i))
+        for w in ic_warnings(p):
+            out.append("%s: %s" % (srel, w))
     results = section(text, "Table of results")
     if results and not re.search(r"^:::+ *\{\.record-table\}", results, re.M):
         out.append("%s: the Table of results is not in a ::: {.record-table} (room to write)" % srel)
@@ -361,6 +502,7 @@ def check_sheet(path, rel, notes_sections, page_body, slides_body):
     if files and "{{< start-files" not in text:
         out.append("%s: the start files are not listed ({{< start-files >}} in Before you start)" % srel)
     main = re.split(r"^## Results", text, flags=re.M)[0]
+    main = IC_BLOCK_RE.sub(" ", main)   # the page checks are not in the PDF
     if count_words(main) > SHEET_WORDS:
         out.append("%s: %d words, a worksheet has at most %d" % (srel, count_words(main), SHEET_WORDS))
     # The page shows every experiment in its section; the notes point to it.
@@ -429,7 +571,7 @@ def count_page(body):
         "sections": SECTION_RE.findall(body),
         "per_section": per_section,
         "try_its": len(TRY_IT_RE.findall(body)),
-        "questions": len(re.findall(r"^:   \S", body, re.M)),
+        "questions": count_questions(body),
         "sims": len(re.findall(r"\{\{< *sim ", body)),
         "sim_files": set(SIM_FILE_RE.findall(body)),
         "challenge_sims": set(SIM_FILE_RE.findall(section(body, "Game challenge"))),
@@ -507,9 +649,19 @@ def check_slides(body):
                 out.append("slide %s: no full question (a question word and \"?\")" % name)
         if title.startswith("Example") and "?" not in outside:
             out.append("slide %s: say what the example asks (a question before the steps)" % name)
+        # No unsolved work on a slide: a Do it question shows its result on a
+        # click (a seminar's Activity slide and a worksheet's Experiment slide
+        # have their results on the Check slide after them).
+        if (re.search(r"^\s*- \*\*Do it:\*\*", outside, re.M) and not has_answer
+                and not re.match(r"(Activity|Experiment) \d", title)):
+            out.append('slide %s: the Do it task has no result on the slide (::: {.reveal} with '
+                       '"**Result:** …" or "**Example:** …" under it, in the same column)' % name)
         for sim in re.findall(r"\{\{< *sim [^>]*>\}\}", text):
             if 'layout="qr"' not in sim and "task=" not in sim:
                 out.append('slide %s: the simulator has no task="…" (what to show, what to ask)' % name)
+            if re.search(r"\*\*Ask:\*\*|\?", re.search(r'task="([^"]*)"', sim).group(1) if "task=" in sim else "") \
+                    and "answer=" not in sim:
+                out.append('slide %s: the simulator task asks something but has no answer="…" (shown on a click)' % name)
         if title.startswith("Keywords"):
             continue
         for b in re.findall(r"^\s*- (.+)$", outside, re.M):
@@ -566,7 +718,7 @@ def check_online(path, rel):
     for w in graded_warnings(tasks) + ai_task_warnings(tasks, graded=True):
         out.append("%s: Tasks to submit: %s" % (rel, w))
     study = "".join(steps)
-    for w in answered_warnings(study) + ai_task_warnings(body):
+    for w in answered_warnings(study) + ai_task_warnings(body, page=True):
         out.append("%s: %s" % (rel, w))
     m = re.search(r"^content:\s*\"?([\w-]+)", fm, re.M)
     content = m.group(1) if m else ""
@@ -635,7 +787,7 @@ def check_seminar(path, rel, minutes):
     body = read(path)
     heads = headings(body)
     n["activities"] = len(re.findall(r"^## Activity \d", body, re.M))
-    n["questions"] = len(re.findall(r"^:   \S", body, re.M))
+    n["questions"] = count_questions(body)
     n["try_its"] = len(TRY_IT_RE.findall(body))
     n["sims"] = len(re.findall(r"\{\{< *sim ", body))
     for part in SEMINAR_PAGE_REQUIRED:
@@ -669,7 +821,7 @@ def check_seminar(path, rel, minutes):
         k = len(TRY_IT_RE.findall(p))
         if k > 1:
             out.append('%s: "%s" has %d Try it boxes; give each activity one' % (rel, title, k))
-    for w in answered_warnings(body) + ai_task_warnings(body):
+    for w in answered_warnings(body) + ai_task_warnings(body, page=True):
         out.append("%s: %s" % (rel, w))
 
     book_path = path[:-4] + "-book.qmd"
@@ -707,6 +859,10 @@ def check_seminar(path, rel, minutes):
     return out, n
 
 
+def is_frozen(rel):
+    return rel.replace(os.sep, "/") in FROZEN
+
+
 def check(project_dir):
     rows, warnings = [], []
     week = os.path.join(project_dir, "courses", "*", "week-*")
@@ -716,11 +872,15 @@ def check(project_dir):
             if minutes not in SEMINAR_SIZES:
                 continue
             rel = os.path.relpath(path, project_dir)
+            if is_frozen(rel):
+                continue
             w, n = check_seminar(path, rel, minutes)
             warnings.extend(w)
             rows.append((rel, minutes, n))
     for path in sorted(glob.glob(os.path.join(week, "online-[0-9][0-9].qmd"))):
-        warnings.extend(check_online(path, os.path.relpath(path, project_dir)))
+        rel = os.path.relpath(path, project_dir)
+        if not is_frozen(rel):
+            warnings.extend(check_online(path, rel))
     for path in sorted(glob.glob(os.path.join(week, "homework-[0-9][0-9].qmd"))):
         rel = os.path.relpath(path, project_dir)
         hw = read(path)
@@ -729,13 +889,13 @@ def check(project_dir):
         extra = "".join(p for p in parts if re.match(r"## .*\{\.extra\}", p))
         graded = "".join(p for p in parts if not re.match(r"## .*\{\.extra\}", p))
         warnings.extend("%s: %s" % (rel, w) for w in graded_warnings(graded) + ai_task_warnings(graded, graded=True)
-                        + ai_task_warnings(extra))
+                        + ai_task_warnings(extra, page=True) + ic_warnings(extra))
     pattern = os.path.join(project_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].qmd")
     for path in sorted(glob.glob(pattern)):
         slug = path.split(os.sep)[-3]
         minutes = course_minutes(project_dir, slug)
         rel = os.path.relpath(path, project_dir)
-        if minutes not in SIZES:
+        if minutes not in SIZES or is_frozen(rel):
             continue
         if is_online(path):
             warnings.extend(check_online(path, rel))
@@ -770,7 +930,7 @@ def check(project_dir):
             if k == 0:
                 warnings.append("%s: section %s of the page has no Do it task" % (rel, sec))
         page_body = read(path)
-        for w in answered_warnings(page_body) + ai_task_warnings(page_body):
+        for w in answered_warnings(page_body) + ai_task_warnings(page_body, page=True):
             warnings.append("%s: %s" % (rel, w))
         if os.path.exists(book_path):
             for w in ai_task_warnings(read(book_path)):
@@ -841,6 +1001,9 @@ def main():
             print("  WARNING " + w)
     else:
         print("Lesson size check: %d lessons fit their lecture time." % len(rows))
+    if FROZEN:
+        print("Frozen this semester, not checked (AUTHORING.md, \"Frozen sessions\"; rewrite them next semester): "
+              + ", ".join(sorted(FROZEN)))
     return 0
 
 

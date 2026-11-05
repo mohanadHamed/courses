@@ -6,9 +6,9 @@ ilos: [A2, B1]
 format: lesson-html
 ---
 
-No new ideas today: two short problems on Lecture 4. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: two short problems on Lecture 4. Do each one alone. Tap,
+sort or type your answer at every step: the page checks it at once and tells
+you why.
 
 ## Recall
 
@@ -59,13 +59,65 @@ Beside the turret, a ramp rises 3 m over 3 m.
 
 *Your product:* three angles, two velocities and the angle of the ramp.
 
-::: {.check}
-1. (5, 5): 45° (quadrant I). (−4, 4): 135° (quadrant II). (0, −3): −90°
-   (straight down).
-2. Turn Lab shows the same three angles.
-3. 10 × (cos 135°, sin 135°) = 10 × (−0.71, 0.71) = (−7.1, 7.1).
-4. 10 × (0.87, 0.5) = (8.7, 5).
-5. tan θ = 3 ÷ 3 = 1, so θ = 45°.
+::: {.sort}
+Steps 1–2: which angle does atan2 give for each drone? Sort them.
+
+45°
+:   the drone at (5, 5)
+
+    Why: (+, +), on the diagonal of quadrant I.
+
+:   a drone at (2, 2)
+
+    Why: The same direction as (5, 5): closer, but the same angle.
+
+135°
+:   the drone at (−4, 4)
+
+    Why: (−, +), on the diagonal of quadrant II.
+
+−90°
+:   the drone at (0, −3)
+
+    Why: Straight down, on the y-axis.
+:::
+
+::: {.choice}
+Step 3: the bolt flies at 135° with the speed 10. What is its velocity?
+
+- [x] (−7.1, 7.1)
+
+  Why: 10 × (cos 135°, sin 135°) = 10 × (−0.71, 0.71).
+
+- [ ] (7.1, 7.1)
+
+  Why: cos 135° is negative: the bolt flies to the left.
+
+- [ ] (−7.1, −7.1)
+
+  Why: sin 135° is positive: the bolt flies up.
+:::
+
+::: {.fill answer="(8.7, 5)" hint="10 × (cos 30°, sin 30°) = 10 × (0.87, 0.5)."}
+Step 4: a bolt flies at 30° with the speed 10. What is its velocity? Type (x, y).
+
+Why: 10 × (0.87, 0.5) = (8.7, 5).
+:::
+
+::: {.choice}
+Step 5: the ramp rises 3 m over 3 m. What is its angle?
+
+- [x] 45°
+
+  Why: tan θ = 3 ÷ 3 = 1, and tan 45° = 1.
+
+- [ ] 1°
+
+  Why: 1 is the value of tan θ, not the angle.
+
+- [ ] 90°
+
+  Why: 90° would be a wall; tan 90° does not exist.
 :::
 :::
 
@@ -111,12 +163,55 @@ y(t) = 3 + 2 sin(360° × t ÷ 8). A low ledge is at the height 1.
 
 *Your product:* four positions, four heights and two times.
 
-::: {.check}
-1. 0 s: (2, 3) + 3 × (1, 0) = (5, 3). 1 s: (2, 6). 2 s: (−1, 3).
-   3 s: (2, 0). The period is 360° ÷ 90° = 4 s.
-2. Middle 3, amplitude 2, period 8 s.
-3. 0 s: 3; 2 s: 3 + 2 = 5 (the top); 4 s: 3; 6 s: 3 − 2 = 1 (the bottom).
-4. At the cliff at 2 s (then every 8 s: 10 s, …); at the low ledge at 6 s.
+::: {.order}
+Step 1: put the positions of the orb in time order, from 0 s to 3 s.
+
+1. (5, 3)
+2. (2, 6)
+3. (−1, 3)
+4. (2, 0)
+
+Why: C + 3 × (cos θ, sin θ) at 0°, 90°, 180° and 270°: right, top, left, bottom. The period is 360° ÷ 90° = 4 s.
+:::
+
+::: {.sort}
+Steps 2–3: y(t) = 3 + 2 sin(360° × t ÷ 8). Sort the times by the height of
+the lift.
+
+5 (the top)
+:   2 s
+
+    Why: A quarter of the period 8 s: 3 + 2 = 5.
+
+3 (the middle)
+:   0 s
+
+    Why: sin 0° = 0: the middle, 3.
+
+:   4 s
+
+    Why: Half of the period: back to the middle.
+
+1 (the bottom)
+:   6 s
+
+    Why: Three quarters of the period: 3 − 2 = 1.
+:::
+
+::: {.choice}
+Step 4: when can the hero step on at the low ledge (height 1)?
+
+- [x] at 6 s
+
+  Why: The lift is at the bottom, 1, at three quarters of the period.
+
+- [ ] at 2 s
+
+  Why: At 2 s the lift is at the top, level with the cliff (height 5).
+
+- [ ] at 4 s
+
+  Why: At 4 s the lift is in the middle, at the height 3.
 :::
 :::
 

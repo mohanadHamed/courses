@@ -16,6 +16,10 @@ format: lesson-pptx
 - A switch joins the cables, and an access point gives Wi-Fi.
 - The router connects the LAN through the ISP to the Internet.
 - **Do it:** Draw the network of your home. Which box is the router?
+
+::: {.reveal}
+- **Example:** The box at home is router, switch and access point together; it connects through the ISP to the Internet.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/lan-map.png)
@@ -42,6 +46,10 @@ c) a router
 - Addresses that start with 192.168 or 10 are private and work only inside a LAN.
 - The DNS turns a name into an IP address.
 - **Do it:** Find the IP address and the gateway of your phone or PC. Is the address private?
+
+::: {.reveal}
+- **Example:** IP address 192.168.1.37 and gateway 192.168.1.1: private, because it starts with 192.168.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/addresses.png)
@@ -79,6 +87,10 @@ c) the router
 - TCP checks that every packet arrives and sends lost ones again.
 - UDP sends without checks, so it is fast, and lost packets stay lost.
 - **Do it:** Send 10 packets with TCP and with UDP at 20 % loss in Packet Journey. What changes?
+
+::: {.reveal}
+- **Result:** TCP delivers all 10, in order, but later; UDP is fast, but about 2 of 10 are lost.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/tcp-udp.png)
@@ -87,7 +99,7 @@ c) the router
 
 ## Live demo · Packet Journey
 
-{{< sim file="sims/packet-journey.html" poster="sims/packet-journey.png" title="Packet Journey: TCP or UDP?" task="**Show:** send a purchase with TCP and no loss, then 20 % loss, then the same with UDP. **Ask:** which protocol fits the player positions, and why?" >}}
+{{< sim file="sims/packet-journey.html" poster="sims/packet-journey.png" title="Packet Journey: TCP or UDP?" task="**Show:** send a purchase with TCP and no loss, then 20 % loss, then the same with UDP. **Ask:** which protocol fits the player positions, and why?" answer="UDP: a late position is worse than a lost one, and the next position comes soon." >}}
 
 ## Try it 3 · TCP or UDP
 
@@ -109,6 +121,10 @@ c) A late voice packet is worse than a lost one.
 - An action game needs a ping below about 50 ms and almost no packet loss.
 - We ping the gateway first, then the server.
 - **Do it:** Check the ping near the router and far from it. What changes?
+
+::: {.reveal}
+- **Example:** Near the router 18 ms; far from it 45–120 ms, and it jumps: more latency and more jitter.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/net-quality.png)

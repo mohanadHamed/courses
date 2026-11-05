@@ -4,6 +4,8 @@
     conv.py renumber FILE OLD NEW      sections, definitions, examples, `lesson:`, slide subtitle
     conv.py whys FILE REASONS          one reason per line, in the order of the `:   answer` lines
     conv.py checks FILE CHECKS         blocks "=== start of a box title" + the text of its .check
+                                       (the notes only: on a page every task has an
+                                       interactive check, see boxes.py)
     conv.py intro FILE                 the standard intro paragraph of a lecture page
 """
 import re
@@ -84,8 +86,8 @@ def checks(p, checks_file):
 
 INTRO = """This page is the interactive version of the lesson notes (PDF). Each section
 starts with a problem in a game studio. Then it explains one idea. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check."""
+with a **Do it** task and one set of questions. Tap, sort or type your answer:
+the page checks it at once and tells you why."""
 
 
 def intro(p):

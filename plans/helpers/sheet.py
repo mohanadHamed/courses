@@ -46,8 +46,8 @@ def page(path, files):
         before.append("- **Start file:** download it, then open it. Every student works with the")
         before.append("  same data.")
         before += ["", "{{< start-files >}}", ""]
-    before.append("- What you type in the boxes stays in this browser only.")
-    before += ["", "![How the worksheet works: do the step, write your result, check it.](../week-01/images/worksheet-steps.png){width=100%}", "", ""]
+    before.append("- What you type in the table of results stays in this browser only.")
+    before += ["", "![How the worksheet works: do the step, write your result, check it.](../week-02/images/worksheet-steps.png){width=100%}", "", ""]
     m = re.search(r"^## \d+\.\d+ ", text, re.M)
     text = text[:m.start()] + "\n".join(before) + text[m.start():]
     m = re.search(r"^## Game challenge", text, re.M)

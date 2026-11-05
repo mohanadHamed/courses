@@ -23,6 +23,13 @@
 quarto typst compile --root . --input svg=/courses/game-math/week-01/sims/grid-position.svg shared/sims/export-poster.typ courses/game-math/week-01/sims/grid-position.png --ppi 200
 ```
 
+The figures and posters use the font Helvetica (or Arial). On a computer
+without either, Typst falls back to a serif font: export a copy whose
+`font-family` is `Liberation Sans` (the same widths as Arial), with
+`--font-path` pointing to its folder (for example
+`/usr/share/fonts/truetype/liberation`), and keep the `.svg` itself
+unchanged.
+
 ## Recordings for the slides
 
 The slides show a short GIF of each simulator or mini-game being played, next

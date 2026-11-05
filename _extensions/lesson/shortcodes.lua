@@ -18,6 +18,9 @@
 --     task="Show … Ask: why …?" (slides): one or two sentences that tell the
 --     teacher what to show and what to ask; shown above the recording, so the
 --     slide explains itself. Every Live demo and Game challenge slide has one.
+--     answer="It turns around." (slides): the answer to the question of the
+--     task, shown under it on a click, so no question on a slide is left
+--     without its answer. Every task that asks something has one.
 --     Slides show a recording of the game being played instead of the poster
 --     when it exists: sims/<name>.gif next to sims/<name>.html, or
 --     recording="sims/other.gif" (made by shared/sims/recordings/).
@@ -306,6 +309,16 @@ local function sim(kwargs)
     local task = str(kwargs.task)
     if task ~= "" then
       table.insert(left, 1, pandoc.Para(pandoc.read(task, "markdown").blocks[1].content))
+      -- The answer to the question of the task, shown on a click under it
+      -- (the reveal markers of slides.lua; pptx_finish.py animates it).
+      local answer = str(kwargs.answer)
+      if answer ~= "" then
+        local inl = pandoc.Inlines({ pandoc.Strong({ pandoc.Str("Answer:") }), pandoc.Space() })
+        inl:extend(pandoc.read(answer, "markdown").blocks[1].content)
+        table.insert(left, 2, pandoc.Para({ pandoc.Str("\u{E001}") }))
+        table.insert(left, 3, pandoc.Para(inl))
+        table.insert(left, 4, pandoc.Para({ pandoc.Str("\u{E00F}") }))
+      end
       table.insert(right, 1, pandoc.Para({ pandoc.Str(game and "Scan the QR code to play on your phone."
         or "Scan the QR code to try it on your phone.") }))
     end
@@ -689,7 +702,41 @@ local function experiment(args)
   end)
   body = body:gsub("{{<%s*sim%s.-%s*>}}", "")
   local doc = pandoc.read(body, "markdown")
+  -- A step with an interactive check (::: {.choice}, {.order}, {.sort} or
+  -- {.fill}, interact.lua): the page checks the step at once, so its text
+  -- field and its closed "Check your result" are left out (they stay in the
+  -- worksheet, PDF).
+  local function interactive(b)
+    if b.t ~= "Div" then return false end
+    for _, k in ipairs({ "choice", "order", "sort", "fill" }) do
+      if b.classes:includes(k) then return true end
+    end
+    return false
+  end
+  doc = doc:walk({
+    OrderedList = function(list)
+      for i, item in ipairs(list.content) do
+        local has = false
+        for _, b in ipairs(item) do if interactive(b) then has = true end end
+        if has then
+          local kept = pandoc.Blocks({})
+          for _, b in ipairs(item) do
+            local record = b.t == "RawBlock" and b.text:find('class="record"', 1, true)
+            local closed = b.t == "Div" and b.classes:includes("check")
+            if not record and not closed then kept:insert(b) end
+          end
+          list.content[i] = kept
+        end
+      end
+      return list
+    end,
+  })
   doc = doc:walk({ Div = function(d) if d.classes:includes("check") then return check_details(d) end end })
+  -- The shortcode is expanded after the filters of the page, so the
+  -- interactive checks of the worksheet are built here, with interact.lua.
+  local ok, interact = pcall(dofile, quarto.utils.resolve_path("interact.lua"))
+  if not ok then error("experiment shortcode: cannot load interact.lua: " .. tostring(interact)) end
+  for _, f in ipairs(interact) do doc = doc:walk(f) end
   local head
   if results then
     head = '<span class="exp-title">Table of results</span>'

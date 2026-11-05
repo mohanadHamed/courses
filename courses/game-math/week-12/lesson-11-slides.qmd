@@ -16,6 +16,10 @@ format: lesson-pptx
 - A computer makes pseudo-random numbers with a formula.
 - The same start always gives the same numbers.
 - **Do it:** List four random things in a game you play. Which is the most important?
+
+::: {.reveal}
+- **Example:** The map of a level, the item in a chest, where an enemy moves next and a critical hit; the map matters most, because every game looks different.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/pseudo-random.png)
@@ -42,6 +46,10 @@ c) procedural generation
 - Mod is the remainder of a division.
 - The sequence repeats after at most m numbers.
 - **Do it:** Compute the next two numbers with a = 3, c = 1, m = 8 and seed 2. What are they?
+
+::: {.reveal}
+- **Result:** (3·2 + 1) mod 8 = 7, then (3·7 + 1) mod 8 = 22 mod 8 = 6.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/lcg-steps.png)
@@ -79,6 +87,10 @@ c) 16
 - The same seed gives the same sequence and the same level.
 - We seed once, when the level starts.
 - **Do it:** Build seed 42 twice in Seed Lab. Is the cave the same?
+
+::: {.reveal}
+- **Result:** Yes: the same seed gives exactly the same cave.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/seeds.png)
@@ -98,7 +110,7 @@ Torch Hall has a daily cave that is the same for every player.
 
 ## Live demo · Seed Lab
 
-{{< sim file="sims/seed-lab.html" poster="sims/seed-lab.png" title="Seed Lab: the same seed, the same level" task="**Show:** seed 42 twice, then 43, then switch on the bug and build. **Ask:** why are all the bats in the same place with the bug?" >}}
+{{< sim file="sims/seed-lab.html" poster="sims/seed-lab.png" title="Seed Lab: the same seed, the same level" task="**Show:** seed 42 twice, then 43, then switch on the bug and build. **Ask:** why are all the bats in the same place with the bug?" answer="The bug seeds again before every bat, so every bat gets the same first number." >}}
 
 ## Try it 3 · Seeds
 
@@ -120,6 +132,10 @@ c) They all fly the same way.
 - Random.value < p gives a yes with probability p.
 - a + r·(b − a) gives a value between a and b.
 - **Do it:** Write the call for a lane 1, 2 or 3. What is the max?
+
+::: {.reveal}
+- **Result:** `Random.Range(1, 4)`: the max 4 is not included, so the lanes are 1, 2 and 3.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/range-map.png)
@@ -157,6 +173,10 @@ c) Random.value < 0.3f
 - In a uniform distribution, all values are equally likely.
 - With n values, each has the probability 1/n.
 - **Do it:** Find P(5) for Random.Range(0, 8). What is it?
+
+::: {.reveal}
+- **Result:** 8 equally likely values, so P(5) = 1/8.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/uniform.png)
@@ -194,6 +214,10 @@ c) 1/4
 - P(i) is its weight divided by the sum of the weights.
 - We pick with cumulative weights and one random number.
 - **Do it:** Make epic items 5 % in Loot Table Lab. Which weights did you use?
+
+::: {.reveal}
+- **Example:** The weights 60, 34, 5 and 1: epic is 5 of 100.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/weighted.png)
@@ -213,7 +237,7 @@ The weights are 60, 30, 9 and 1, so the cumulative weights are 60, 90, 99 and 10
 
 ## Live demo · Loot Table Lab
 
-{{< sim file="sims/loot-table-lab.html" poster="sims/loot-table-lab.png" title="Loot Table Lab: weights and chances" task="**Show:** open 1, 100 and 1000 chests, then set the weights 60, 34, 5, 1 and open 1000 again. **Ask:** why are the counts close to, but not exactly, the expected values?" >}}
+{{< sim file="sims/loot-table-lab.html" poster="sims/loot-table-lab.png" title="Loot Table Lab: weights and chances" task="**Show:** open 1, 100 and 1000 chests, then set the weights 60, 34, 5, 1 and open 1000 again. **Ask:** why are the counts close to, but not exactly, the expected values?" answer="Each chest is random: many chests come near 1000 × each chance, but never exactly." >}}
 
 ## Try it 6 · Weights
 

@@ -7,8 +7,8 @@ format: lesson-html
 ---
 
 No new ideas today: two short case studies that use Lectures 3, 5, 6, 7 and
-12. Do each one alone, then open "Check your result". Every question on
-this page has its answer: try first, then check.
+12. Do each one alone. Tap, sort or type your answer at every step: the page
+checks it at once and tells you why.
 
 ## Recall
 
@@ -62,16 +62,43 @@ and slows down after 15 minutes.
 
 *Your product:* two frame times, two short answers and your score.
 
-::: {.check}
-1. 1000 ÷ 30 ≈ 33.3 ms; 1000 ÷ 60 ≈ 16.7 ms.
-2. A stutter: one frame takes more than four normal frames, so the race
-   jerks although the average is 58 fps.
-3. Thermal throttling: the hot chip slows down. Fixes: cap the frame rate
-   at 30 fps or lower the graphics settings, and test as long as players
-   play.
-4. Performance Detective: the frame times (a stutter), thermal throttling,
-   the minimum Android version, a graphics API that the GPU lacks, the safe
-   area of the screen, and the official release notes with your own test.
+::: {.fill answer="33.3|33" tol="0.5" unit="ms" hint="1000 ms ÷ the frame rate."}
+Step 1: what is the frame time at 30 fps?
+
+Why: 1000 ÷ 30 ≈ 33.3 ms; at 60 fps it is 1000 ÷ 60 ≈ 16.7 ms.
+:::
+
+::: {.choice}
+Step 2: in a 60 fps race, one frame takes 70 ms. What does the player see?
+
+- [x] a stutter: the race jerks
+
+  Why: One frame takes more than four normal frames, although the average is 58 fps.
+
+- [ ] nothing: the average is still 58 fps
+
+  Why: The average hides the one long frame that the player sees.
+
+- [ ] the game closes
+
+  Why: A long frame makes a jerk, not a crash.
+:::
+
+::: {.choice}
+Step 3: the phone is hot after 15 minutes and the game slows down. Which
+cause and fix?
+
+- [x] thermal throttling; cap the frame rate at 30 fps or lower the graphics
+
+  Why: The hot chip slows down; less work makes less heat. Test as long as players play.
+
+- [ ] too little storage; delete photos
+
+  Why: Storage does not make the chip hot.
+
+- [ ] a slow network; use Wi-Fi
+
+  Why: The network does not heat the chip in a race.
 :::
 :::
 
@@ -117,13 +144,55 @@ release notes say only "faster loading".
 *Your product:* three settings with their cost, and one sentence about the
 source.
 
-::: {.check}
-1. Minimum Android 8: the game must also be tested on Android 8. A second
-   graphics path (OpenGL ES next to Vulkan): one more path to test. The menu
-   anchored to the safe area: one more layout check per screen shape. Every
-   fix costs more testing.
-2. The release notes: they are official. Before the report, test the update
-   yourself on one device and write the date and the source.
+::: {.sort}
+Step 1: which fix makes each row green? Sort the problems.
+
+Set the minimum to Android 8
+:   an old phone with Android 8
+
+    Why: Build 43 needs Android 11; the game must then be tested on Android 8 too.
+
+Add a second graphics path (OpenGL ES)
+:   an old GPU without Vulkan
+
+    Why: OpenGL ES next to Vulkan: one more path to test.
+
+Anchor the menu to the safe area
+:   a 4:3 tablet that cuts off the Start button
+
+    Why: One more layout check for each screen shape.
+:::
+
+::: {.choice}
+Step 1: what does every fix cost?
+
+- [x] more testing
+
+  Why: Each fix adds a version, a graphics path or a layout that must be tested too.
+
+- [ ] nothing
+
+  Why: Every new version or path must be checked.
+
+- [ ] a new store account
+
+  Why: The same account publishes the build.
+:::
+
+::: {.choice}
+Step 2: which source about the update do you trust?
+
+- [x] the official release notes; then test the update yourself on one device
+
+  Why: Official notes are the best source; write the date and the source in the report.
+
+- [ ] the video, because twice the frame rate is good news
+
+  Why: Good news is not proof; the official notes say only "faster loading".
+
+- [ ] both: write "twice the frame rate and faster loading"
+
+  Why: Only what the official notes say, and your own test shows, goes into the report.
 :::
 :::
 

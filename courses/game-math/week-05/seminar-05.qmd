@@ -6,9 +6,9 @@ ilos: [A1, C1]
 format: lesson-html
 ---
 
-No new ideas today: three short problems on Lecture 5. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: three short problems on Lecture 5. Do each one alone.
+Tap, sort or type your answer at every step: the page checks it at once and
+tells you why.
 
 ## Recall
 
@@ -61,10 +61,48 @@ troll; the columns are HP, damage and speed:
 
 *Your product:* the size, two entries, the new E and one row.
 
-::: {.check}
-E is 2 × 3. e~13~ = 4: the speed of the slime. e~22~ = 20: the damage of
-the troll. After the patch: rows (50, 10, 4) and (60, 25, 3). Hard-mode
-troll: 1.5 × (60, 20, 2) = (90, 30, 3).
+::: {.choice}
+Step 1: what is the size of E?
+
+- [x] 2 × 3
+
+  Why: 2 rows (slime, troll) and 3 columns (HP, damage, speed).
+
+- [ ] 3 × 2
+
+  Why: The size is rows × columns: the rows come first.
+
+- [ ] 6
+
+  Why: 6 is the number of entries; the size gives rows and columns.
+:::
+
+::: {.fill answer="20" hint="Row 2 is the troll; column 2 is the damage."}
+Step 1: what is e~22~?
+
+Why: Row 2, column 2: the damage of the troll, 20.
+:::
+
+::: {.choice}
+Step 2: after the patch, what is the slime's row?
+
+- [x] (50, 10, 4)
+
+  Why: (40 + 10, 10 + 0, 4 + 0): add the entries in the same place.
+
+- [ ] (40, 15, 5)
+
+  Why: (0, 5, 1) is the troll's row of the patch, not the slime's.
+
+- [ ] (50, 15, 5)
+
+  Why: Each row of E gets only the same row of the patch.
+:::
+
+::: {.fill answer="(90, 30, 3)" hint="Multiply every entry of (60, 20, 2) by 1.5."}
+Step 3: what is the troll's hard-mode row, 1.5 × (60, 20, 2)? Type (a, b, c).
+
+Why: (1.5 × 60, 1.5 × 20, 1.5 × 2) = (90, 30, 3).
 :::
 :::
 
@@ -105,9 +143,36 @@ and (0, −1).
 
 *Your product:* three points with their calculations.
 
-::: {.check}
-Stretch: (2 × 3 + 0, 0 + 3 × (−1)) = (6, −3). Turn: (0 × 3 + (−1) × (−1),
-1 × 3 + 0) = (1, 3). Mirror: (3, 1): Mirror changes the sign of y.
+::: {.sort}
+Which spell made each point? The spells were cast on (3, −1) and on (1, 2).
+Sort the end points.
+
+Stretch
+:   (6, −3), from (3, −1)
+
+    Why: (2 × 3 + 0, 0 + 3 × (−1)) = (6, −3).
+
+:   (2, 6), from (1, 2)
+
+    Why: x × 2 and y × 3.
+
+Turn
+:   (1, 3), from (3, −1)
+
+    Why: (0 × 3 + (−1) × (−1), 1 × 3 + 0) = (1, 3).
+
+:   (−2, 1), from (1, 2)
+
+    Why: Turn makes (x, y) into (−y, x).
+
+Mirror
+:   (3, 1), from (3, −1)
+
+    Why: Mirror changes only the sign of y.
+
+:   (1, −2), from (1, 2)
+
+    Why: The rows (1, 0) and (0, −1) keep x and turn the sign of y.
 :::
 :::
 
@@ -150,12 +215,42 @@ the rows (0.5, 0) and (0, 0.5).
 
 *Your product:* one matrix, two end points and two answers.
 
-::: {.check}
-Grow × Turn has the rows (0, −2) and (2, 0); on (1, 0) it gives (0, 2):
-turned by 90° and twice as far. Flip then Turn: (4, −1) → (−4, −1) →
-(1, −4). Turn then Flip: (4, −1) → (1, 4) → (−1, 4). Not the same: the
-order matters. Shrink undoes Grow (it is its inverse); the identity, rows
-(1, 0) and (0, 1), changes nothing.
+::: {.choice}
+Step 1: what is Grow × Turn?
+
+- [x] the rows (0, −2) and (2, 0)
+
+  Why: Row × column: (2 × 0 + 0 × 1, 2 × (−1) + 0 × 0) = (0, −2), then (2, 0). On (1, 0) it gives (0, 2).
+
+- [ ] the rows (2, −1) and (1, 2)
+
+  Why: That adds the two matrices; a product multiplies rows by columns.
+
+- [ ] the rows (0, −1) and (1, 0)
+
+  Why: That is Turn alone; Grow also doubles everything.
+:::
+
+::: {.fill answer="(1, −4)" hint="First Flip: (−4, −1). Then Turn: (x, y) becomes (−y, x)."}
+Step 2: apply Flip then Turn to (4, −1). Where does it end? Type (x, y).
+
+Why: Flip: (−4, −1); Turn: (1, −4). Turn then Flip gives (−1, 4): the order matters.
+:::
+
+::: {.choice}
+Step 3: which spell undoes Grow?
+
+- [x] Shrink, the rows (0.5, 0) and (0, 0.5)
+
+  Why: Shrink halves what Grow doubled: it is the inverse of Grow.
+
+- [ ] Turn
+
+  Why: Turn changes the direction, not the size.
+
+- [ ] the identity
+
+  Why: The identity changes nothing, so the point stays twice as far.
 :::
 :::
 
@@ -201,32 +296,48 @@ and (1, 0), and draw the new house in orange. Make a table of the old and
 the new corners.
 :::
 
-**What do you see?**
+::: {.choice}
+What should the orange house show? The AI can be wrong: compare.
 
-::: {.check label="What you should see"}
-The orange house is the blue house turned by 90° anticlockwise about
-(0, 0): its corners are (0, 0), (0, 2), (−2, 2), (−3, 1) and (−2, 0). The
-roof (1, 3) went to (−3, 1) and points left. This matrix is the spell Turn:
-(x, y) becomes (−y, x).
+- [x] The blue house turned 90° anticlockwise about (0, 0), with the roof at (−3, 1).
+
+  Why: This matrix is Turn: (x, y) becomes (−y, x), so (1, 3) goes to (−3, 1).
+
+- [ ] The blue house moved 2 units to the right.
+
+  Why: A matrix times a point turns, stretches or flips it; it never moves the origin.
 :::
 
 ::: {.try-change}
 **Change:** use the matrix with the rows (2, 0) and (0, 2) (the spell Grow) and
-ask again. What do you notice?
+ask again.
 
-::: {.check}
-The house is twice as big and still stands on (0, 0): (0, 0), (4, 0),
-(4, 4), (2, 6), (0, 4). The roof is at the top of the grid.
+::: {.choice}
+What changes?
+
+- [x] The house is twice as big and still stands on (0, 0).
+
+  Why: Grow doubles every corner: the roof goes to (2, 6).
+
+- [ ] The house keeps its size and moves away from (0, 0).
+
+  Why: (0, 0) × 2 is still (0, 0); every other corner is twice as far.
 :::
 :::
 
 ::: {.try-change}
-**Change:** use the matrix with the rows (1, 0) and (0, 1) and ask again. What do
-you notice?
+**Change:** use the matrix with the rows (1, 0) and (0, 1) and ask again.
 
-::: {.check}
-Nothing moves: the orange house lies exactly on the blue one. This matrix,
-the identity, changes nothing.
+::: {.choice}
+What changes?
+
+- [x] Nothing: the orange house lies on the blue one.
+
+  Why: This is the identity: it changes nothing.
+
+- [ ] The house turns by 90° again.
+
+  Why: Only Turn has the rows (0, −1) and (1, 0); this matrix keeps every corner.
 :::
 :::
 

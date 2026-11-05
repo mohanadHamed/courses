@@ -16,6 +16,10 @@ format: lesson-pptx
 - P(at least one in n) = 1 − (1 − p)ⁿ.
 - The average is 1/p, but some players wait much longer.
 - **Do it:** Compute the chance after 1, 2 and 3 tries with p = 0.5. What are they?
+
+::: {.reveal}
+- **Result:** 1/2, then 1 − 1/4 = 3/4, then 1 − 1/8 = 7/8.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/at-least-one.png)
@@ -53,6 +57,10 @@ c) 4
 - It can also raise the chance after each miss.
 - The longest wait is limited, and the average falls a little.
 - **Do it:** Read the figure. At which try is the item certain?
+
+::: {.reveal}
+- **Result:** At try 40: after 20 misses the chance grows, and at try 40 the item is certain.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/pity-timer.png)
@@ -79,6 +87,10 @@ c) No, the chance depends on the misses before.
 - The number of chests for an item is about price ÷ E.
 - The plain average of the values gives too much.
 - **Do it:** Compute E for 70 % 10, 25 % 40 and 5 % 200 coins. What is it?
+
+::: {.reveal}
+- **Result:** E = 7 + 10 + 10 = 27 coins.
+:::
 :::
 ::: {.column width="50%"}
 ![](../week-11/images/expected-value.png)
@@ -116,6 +128,10 @@ c) 19
 - Real randomness has long streaks.
 - In 100 fair flips, the longest run is about 7.
 - **Do it:** Write 50 random H and T by hand. How long is your longest run?
+
+::: {.reveal}
+- **Example:** People usually write runs of 2 or 3, but Streak Lab at 50 % shows runs of 5 to 8.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/streaks.png)
@@ -124,7 +140,7 @@ c) 19
 
 ## Live demo · Streak Lab
 
-{{< sim file="sims/streak-lab.html" poster="sims/streak-lab.png" title="Streak Lab: does random look random?" task="**Show:** run 100 attacks at 50 % three times, then 1000 players, then 70 %. **Ask:** how often does a fight have 4 misses in a row?" >}}
+{{< sim file="sims/streak-lab.html" poster="sims/streak-lab.png" title="Streak Lab: does random look random?" task="**Show:** run 100 attacks at 50 % three times, then 1000 players, then 70 %. **Ask:** how often does a fight have 4 misses in a row?" answer="In most fights: in 100 attacks at 50 %, a run of 4 misses comes almost every time." >}}
 
 ## Example · Three misses in a row
 
@@ -157,6 +173,10 @@ c) No, long runs are normal in long sequences.
 - "Heads is due" is the gambler's fallacy.
 - "I hit, so I will hit again" is the hot-hand fallacy.
 - **Do it:** Decide if a hit is sure after 3 misses at 70 %. Why or why not?
+
+::: {.reveal}
+- **Result:** No: the next hit is still 70 %, because the past does not change an independent chance.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/no-memory.png)
@@ -183,6 +203,10 @@ c) the gambler's fallacy
 - Players remember the bad streaks.
 - With 90 % and 10 attacks, a player misses in about 65 % of the fights.
 - **Do it:** Compute P(at least one miss in 2 attacks) at 90 %. What do you get?
+
+::: {.reveal}
+- **Result:** 1 − 0.9 × 0.9 = 1 − 0.81 = 0.19, about 19 %.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/felt-chance.png)
@@ -209,6 +233,10 @@ c) about 40 %
 - We draw without putting back and refill an empty bag.
 - With 1 crit in a bag of n, the drought is at most 2(n − 1).
 - **Do it:** Compare pure random and the bag in Bag Lab. Which has the longer droughts?
+
+::: {.reveal}
+- **Result:** Pure random: its worst drought is often 20 or more, but the bag of 4 has at most 6.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/shuffle-bag.png)
@@ -217,7 +245,7 @@ c) about 40 %
 
 ## Live demo · Bag Lab
 
-{{< sim file="sims/bag-lab.html" poster="sims/bag-lab.png" title="Bag Lab: pure random or a shuffle bag?" task="**Show:** 1000 players with pure random, then with the shuffle bag. **Ask:** which way has the shorter worst drought, and why?" >}}
+{{< sim file="sims/bag-lab.html" poster="sims/bag-lab.png" title="Bag Lab: pure random or a shuffle bag?" task="**Show:** 1000 players with pure random, then with the shuffle bag. **Ask:** which way has the shorter worst drought, and why?" answer="The shuffle bag: every bag has exactly one crit, so at most 6 normal hits come between two crits." >}}
 
 ## Example · The crit bag
 

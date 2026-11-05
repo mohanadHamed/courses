@@ -8,8 +8,8 @@ format: lesson-html
 
 This page is the interactive version of the lesson notes (PDF). Each section
 starts with a problem in a game. Then it explains the idea behind it. It ends
-with a **Do it** task and one set of questions. Every question on this page
-has its answer: try first, then check.
+with a **Do it** task and one set of questions. Tap, sort or type your answer:
+the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -35,13 +35,31 @@ has its answer: try first, then check.
 :::
 
 ::: {.callout-note title="Do it · Head to tail in GeoGebra"}
-At geogebra.org/calculator, type `u = Vector((3, 1))`, `v = Vector((1, 2))`
-and `w = Vector((3, 1), (4, 3))`. Then type `u + v`. Does it end where w
-ends? Write the components of u + v.
+Add u = (3, 1) and v = (1, 2) head to tail: draw v from the head of u. You
+can also type them at geogebra.org/calculator: `u = Vector((3, 1))`,
+`v = Vector((1, 2))`, `w = Vector((3, 1), (4, 3))` and `u + v`.
 
-::: {.check}
-u + v = (3 + 1, 1 + 2) = (4, 3). Yes: w is v drawn from the head of u, and it
-ends at (4, 3) too.
+::: {.fill answer="(4, 3)" hint="Add the x-parts, then add the y-parts."}
+What are the components of u + v? Type (x, y).
+
+Why: (3 + 1, 1 + 2) = (4, 3).
+:::
+
+::: {.choice}
+The arrow w starts at the head of u, (3, 1). Why does u + v end where w
+ends?
+
+- [x] w is v drawn from the head of u: head to tail.
+
+  Why: Both go from the origin along u, then along v, to (4, 3).
+
+- [ ] w is longer than v.
+
+  Why: w has the components (1, 2), the same as v: the same length.
+
+- [ ] u + v always ends at (4, 3).
+
+  Why: Other vectors give other sums; here the sum is (4, 3).
 :::
 :::
 
@@ -91,11 +109,34 @@ What is (−3, 2) + (3, −2)?
 
 ::: {.callout-note title="Do it · Scale it in Vector Lab"}
 In **Vector Lab**, drag the arrow to v = (2, 1). Set k to 3, then 0.5, then
-−2. Write down k v each time. Which values of k reverse the arrow?
+−2, then −1, and look at the arrow k v each time.
 
-::: {.check}
-3v = (6, 3), 0.5v = (1, 0.5), −2v = (−4, −2). Only a negative k reverses the
-arrow.
+::: {.fill answer="(−4, −2)" hint="Multiply both parts by −2."}
+What is −2 v for v = (2, 1)? Type (x, y).
+
+Why: (−2 × 2, −2 × 1) = (−4, −2).
+:::
+
+::: {.sort}
+What does each k do to the arrow? Sort them.
+
+Keeps the direction
+:   k = 3
+
+    Why: A k bigger than 1 makes the arrow longer, the same way.
+
+:   k = 0.5
+
+    Why: A k between 0 and 1 makes it shorter, the same way.
+
+Turns the arrow around
+:   k = −2
+
+    Why: A negative k reverses the arrow (and here doubles it).
+
+:   k = −1
+
+    Why: −1 keeps the length and reverses the direction.
 :::
 :::
 
@@ -147,12 +188,29 @@ The game is paused. It scales every velocity by…
 :::
 
 ::: {.callout-note title="Do it · Measure an arrow on paper"}
-On squared paper (1 cm = 1 unit), draw the vector (6, 8). Measure it with a
-ruler. Then calculate √(6² + 8²). Why is the arrow shorter than 6 + 8?
+On squared paper (1 cm = 1 unit), draw the vector (6, 8) and measure it with
+a ruler. Then calculate its magnitude.
 
-::: {.check}
-√(36 + 64) = √100 = 10: the ruler shows about 10 cm. The arrow is the short
-way straight across; 6 + 8 = 14 is the long way along the two sides.
+::: {.fill answer="10" unit="cm" hint="Square each part, add, then take the square root."}
+How long is the arrow (6, 8)?
+
+Why: √(6² + 8²) = √(36 + 64) = √100 = 10.
+:::
+
+::: {.choice}
+Why is the arrow shorter than 6 + 8 = 14?
+
+- [x] It goes the short way, straight across the triangle.
+
+  Why: 6 + 8 is the long way, along the two sides.
+
+- [ ] The ruler is not exact: the arrow is really 14 cm.
+
+  Why: √(36 + 64) = 10, so the arrow really is 10 units long.
+
+- [ ] A magnitude is always 4 less than the sum.
+
+  Why: There is no such rule; (3, 4) gives 5, which is 2 less than 7.
 :::
 :::
 
@@ -204,11 +262,33 @@ A drone flies (2, 3, 6). How far?
 
 ::: {.callout-note title="Do it · Normalize in Vector Lab"}
 In **Vector Lab**, switch on **Show unit vector**. Drag the arrow to (6, 8),
-(0, −5) and (5, 12). Write the magnitude and the unit vector each time.
+(0, −5), (5, 12), (3, 4) and (0, −2), and read the unit vector each time.
 
-::: {.check}
-(6, 8): 10 and (0.6, 0.8). (0, −5): 5 and (0, −1). (5, 12): 13 and about
-(0.38, 0.92). Each unit vector has length 1: 0.6² + 0.8² = 1.
+::: {.sort}
+Which unit vector does each arrow have? Sort the arrows.
+
+(0.6, 0.8)
+:   (6, 8)
+
+    Why: (6, 8) ÷ 10 = (0.6, 0.8).
+
+:   (3, 4)
+
+    Why: (3, 4) ÷ 5 = (0.6, 0.8): shorter, but the same direction.
+
+(0, −1)
+:   (0, −5)
+
+    Why: (0, −5) ÷ 5 = (0, −1): straight down.
+
+:   (0, −2)
+
+    Why: (0, −2) ÷ 2 = (0, −1): the same direction as (0, −5).
+
+(0.38, 0.92)
+:   (5, 12)
+
+    Why: The length is 13: (5 ÷ 13, 12 ÷ 13) ≈ (0.38, 0.92).
 :::
 :::
 
@@ -261,12 +341,19 @@ The products (3 and 0) are only a middle step. The dot product is their sum:
 :::
 
 ::: {.callout-note title="Do it · The dot product in GeoGebra"}
-At geogebra.org/calculator, type `u = Vector((2, 3))`, `v = Vector((4, -1))`
-and then `u * v`. Calculate (2, 3) · (4, −1) by hand. Do the two numbers
-agree?
+Calculate (2, 3) · (4, −1) by hand. You can also check it at
+geogebra.org/calculator: type `u = Vector((2, 3))`, `v = Vector((4, -1))` and
+`u * v`.
 
-::: {.check}
-2 × 4 + 3 × (−1) = 8 − 3 = 5. GeoGebra shows 5 too.
+::: {.order}
+Put the steps of (2, 3) · (4, −1) in order.
+
+1. Multiply the x-parts: 2 × 4 = 8.
+2. Multiply the y-parts: 3 × (−1) = −3.
+3. Add the two products: 8 + (−3) = 5.
+4. The result is one number, 5 (a scalar).
+
+Why: The dot product multiplies the matching parts, then adds them into one number.
 :::
 :::
 
@@ -317,12 +404,46 @@ What kind of result does a dot product give?
 
 ::: {.callout-note title="Do it · Dot Lab"}
 In **Dot Lab**, drag the orange arrow until the dot product is positive,
-then zero, then negative. Write the two vectors and the dot product each
-time. Where is the orange arrow when the result is zero?
+then zero, then negative.
 
-::: {.check}
-Positive: in front (less than 90°). Zero: exactly at a right angle, to the
-side. Negative: behind (more than 90°).
+::: {.choice}
+The dot product is 0. Where is the orange arrow?
+
+- [x] at a right angle to the green arrow, exactly to the side
+
+  Why: Zero means 90°: the two vectors are perpendicular.
+
+- [ ] on top of the green arrow
+
+  Why: The same direction gives a positive dot product.
+
+- [ ] pointing the opposite way
+
+  Why: The opposite direction gives a negative dot product.
+:::
+
+::: {.sort}
+The angle between the two arrows is given. Sort the angles by the sign of
+the dot product.
+
+Positive
+:   30°
+
+    Why: Less than 90°: in front.
+
+:   80°
+
+    Why: Still less than 90°, so still in front.
+
+Zero
+:   90°
+
+    Why: Exactly a right angle.
+
+Negative
+:   150°
+
+    Why: More than 90°: behind.
 :::
 :::
 
@@ -385,10 +506,17 @@ Are (4, 6) and (−3, 2) perpendicular?
 
 ::: {.callout-note title="Do it · Find the angle in Dot Lab"}
 In **Dot Lab**, switch on **Unit vectors**. Make the angle 0°, 60°, 90° and
-180°. Write â · b̂ each time and compare with the table.
+180°, and read â · b̂ each time.
 
-::: {.check}
-0° → 1; 60° → 0.5; 90° → 0; 180° → −1, as in the table.
+::: {.order}
+Put the angles in order, from the biggest â · b̂ to the smallest.
+
+1. 0° (â · b̂ = 1)
+2. 60° (â · b̂ = 0.5)
+3. 90° (â · b̂ = 0)
+4. 180° (â · b̂ = −1)
+
+Why: The bigger the angle, the smaller the dot product of the unit vectors, as in the table.
 :::
 :::
 

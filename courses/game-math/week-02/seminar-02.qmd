@@ -6,9 +6,9 @@ ilos: [A1, B1]
 format: lesson-html
 ---
 
-No new ideas today: two short problems on Lecture 2. Do each one alone,
-then open "Check your result". Every question on this page has its answer:
-try first, then check.
+No new ideas today: two short problems on Lecture 2. Do each one alone.
+Tap, sort or type your answer at every step: the page checks it at once and
+tells you why.
 
 ## Recall
 
@@ -64,15 +64,59 @@ dock 2 is at (10, 8). The raft has 2 frames.
 *Your product:* two paddle vectors with their magnitudes, and one sentence:
 which dock is easier to reach?
 
-::: {.check}
-1. (0, 4) + (3, 0) = (3, 4); its speed is √(9 + 16) = 5.
-2. Dock 1 needs (0, 8) in 2 frames: (0, 4) per frame. Paddle = (0, 4) − (3, 0)
-   = (−3, 4); its magnitude is 5: allowed, just.
-3. Dock 2 needs (6, 8) in 2 frames: (3, 4) per frame. Paddle = (3, 4) − (3, 0)
-   = (0, 4); its magnitude is 4: allowed.
-4. Paddle 5 × (0.6, 0.8) = (3, 4); real move (3, 4) + (3, 0) = (6, 4).
+::: {.choice}
+Step 1: the player paddles (0, 4). What is the real move per frame?
 
-Dock 2 is easier: the current already helps the raft along x.
+- [x] (3, 4), with the speed 5
+
+  Why: (0, 4) + (3, 0) = (3, 4), and √(9 + 16) = 5.
+
+- [ ] (0, 4), with the speed 4
+
+  Why: The current (3, 0) is added in every frame too.
+
+- [ ] (3, 4), with the speed 7
+
+  Why: The speed is the magnitude √(3² + 4²) = 5, not 3 + 4.
+:::
+
+::: {.choice}
+Step 2: dock 1 needs the paddle (−3, 4): (0, 4) − (3, 0). Is it allowed?
+
+- [x] Yes, just: its magnitude is exactly 5.
+
+  Why: √(9 + 16) = √25 = 5, and the limit is 5.
+
+- [ ] No: its magnitude is 7.
+
+  Why: The magnitude is √(3² + 4²) = 5, not 3 + 4.
+
+- [ ] No: a paddle cannot point left.
+
+  Why: It may point any way; only its magnitude is limited.
+:::
+
+::: {.fill answer="(0, 4)" hint="Dock 2 needs (6, 8) in 2 frames. Take away the current."}
+Step 3: which paddle vector takes the raft to dock 2 in 2 frames? Type (x, y).
+
+Why: (6, 8) ÷ 2 = (3, 4) per frame; (3, 4) − (3, 0) = (0, 4), with the magnitude 4. Dock 2 is easier: the current helps along x.
+:::
+
+::: {.choice}
+Step 4: the player paddles at full speed 5 in the direction (0.6, 0.8). What
+is the real move?
+
+- [x] (6, 4)
+
+  Why: The paddle is 5 × (0.6, 0.8) = (3, 4); (3, 4) + (3, 0) = (6, 4).
+
+- [ ] (3, 4)
+
+  Why: (3, 4) is only the paddle; the current adds (3, 0).
+
+- [ ] (3.6, 0.8)
+
+  Why: The current is added to the paddle 5 × (0.6, 0.8), not to the direction.
 :::
 :::
 
@@ -118,11 +162,32 @@ away. Four visitors stand at (8, 7), (7, 8), (4, 9) and (1, 0).
 *Your product:* a table with four rows: d, |d|, f̂ · d̂ and "seen" or "not
 seen".
 
-::: {.check}
-(8, 7): d = (4, 3), |d| = 5, d̂ = (0.8, 0.6), f̂ · d̂ = 0.8: in front, seen.
-(7, 8): d = (3, 4), |d| = 5, f̂ · d̂ = 0.6: seen. (4, 9): d = (0, 5),
-f̂ · d̂ = 0: exactly to the side, not seen. (1, 0): d = (−3, −4),
-f̂ · d̂ = −0.6: behind, not seen.
+::: {.fill answer="0.6" hint="d = (3, 4) has the length 5. Normalize, then multiply by f̂ = (1, 0)."}
+Steps 1–2: the visitor at (7, 8). What is f̂ · d̂?
+
+Why: d = (7, 8) − (4, 4) = (3, 4), |d| = 5, d̂ = (0.6, 0.8); f̂ · d̂ = 1 × 0.6 + 0 × 0.8 = 0.6.
+:::
+
+::: {.sort}
+Step 3: does the guard see each visitor? Sort them.
+
+Seen
+:   the visitor at (8, 7)
+
+    Why: d = (4, 3), 5 units away, f̂ · d̂ = 0.8 ≥ 0.5: in front.
+
+:   the visitor at (7, 8)
+
+    Why: d = (3, 4), 5 units away, f̂ · d̂ = 0.6 ≥ 0.5.
+
+Not seen
+:   the visitor at (4, 9)
+
+    Why: d = (0, 5): f̂ · d̂ = 0, exactly to the side.
+
+:   the visitor at (1, 0)
+
+    Why: d = (−3, −4): f̂ · d̂ = −0.6, behind the guard.
 :::
 :::
 

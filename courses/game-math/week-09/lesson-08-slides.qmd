@@ -16,6 +16,10 @@ format: lesson-pptx
 - In game code, a proposition is a bool such as hasPass.
 - Orders, questions and opinions are not propositions.
 - **Do it:** Write three propositions about a racing game. Which one is true now?
+
+::: {.reveal}
+- **Example:** "The car is on the track" is true now, "the lap is finished" is false, and "Drive faster!" is not a proposition.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/propositions.png)
@@ -42,6 +46,10 @@ c) Yes, and it is false.
 - p AND q is true only when both are true: p && q.
 - p OR q is true when at least one is true: p || q.
 - **Do it:** Try the four cases in Logic Lab. When is p AND q true?
+
+::: {.reveal}
+- **Result:** Only when p and q are both true.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/not-and-or.png)
@@ -61,7 +69,7 @@ The player has the pass (p = T), but the suit has no oxygen (q = F).
 
 ## Live demo · Logic Lab
 
-{{< sim file="sims/logic-lab.html" poster="sims/logic-lab.png" title="Logic Lab: NOT, AND, OR, XOR and IF–THEN" task="**Show:** go through the four cases of p and q and read every row. **Ask:** in which single case is IF p THEN q false?" >}}
+{{< sim file="sims/logic-lab.html" poster="sims/logic-lab.png" title="Logic Lab: NOT, AND, OR, XOR and IF–THEN" task="**Show:** go through the four cases of p and q and read every row. **Ask:** in which single case is IF p THEN q false?" answer="Only when p is true and q is false." >}}
 
 ## Try it 2 · NOT, AND, OR
 
@@ -83,6 +91,10 @@ c) false
 - When both are true or both are false, XOR is false.
 - In C#, XOR of two bools is p ^ q.
 - **Do it:** Is "a sword or a bow, one at a time" OR or XOR? Why?
+
+::: {.reveal}
+- **Result:** XOR: exactly one weapon at a time; OR would also allow both.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/xor-implies.png)
@@ -109,6 +121,10 @@ c) OR
 - It has the same value as ¬p ∨ q.
 - When p is false, the rule says nothing, so p → q is true.
 - **Do it:** Which case breaks "if the level is finished, all coins are collected"?
+
+::: {.reveal}
+- **Result:** A finished level with coins missing: `levelFinished && !allCoins`.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/xor-implies.png)
@@ -146,6 +162,10 @@ c) ¬p ∨ q
 - Brackets are always computed first.
 - So p ∧ q ∨ r means (p ∧ q) ∨ r.
 - **Do it:** p = T, q = F, r = T. What is (p ∨ q) ∧ r?
+
+::: {.reveal}
+- **Result:** (T ∨ F) ∧ T = T ∧ T = T.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/precedence.png)
@@ -185,6 +205,10 @@ c) AND
 - With n variables, the table has 2^n rows.
 - In the first column, half the rows are T and half are F.
 - **Do it:** Write the 8 rows of p, q and r in the usual order.
+
+::: {.reveal}
+- **Result:** p is T T T T F F F F, q is T T F F T T F F, and r is T F T F T F T F.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/tt-rows.png)
@@ -211,6 +235,10 @@ c) T, T, T
 - We compute the columns from the inside out.
 - The last column gives the value of the whole proposition.
 - **Do it:** Build the table of (p ∨ q) ∧ ¬p. Does the lab agree?
+
+::: {.reveal}
+- **Result:** From (T, T) to (F, F) it is F, F, T, F, and the lab agrees.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/tt-steps.png)
@@ -230,7 +258,7 @@ We build the truth table of ¬(p ∧ ¬q) with helper columns.
 
 ## Live demo · Truth Table Lab
 
-{{< sim file="sims/truth-table-lab.html" poster="sims/truth-table-lab.png" title="Truth Table Lab: every case of a condition" task="**Show:** make the tables of p -> q and p && (q || r), then fill one table in Quiz mode with one mistake. **Ask:** which helper column would have found the mistake?" >}}
+{{< sim file="sims/truth-table-lab.html" poster="sims/truth-table-lab.png" title="Truth Table Lab: every case of a condition" task="**Show:** make the tables of p -> q and p && (q || r), then fill one table in Quiz mode with one mistake. **Ask:** which helper column would have found the mistake?" answer="The helper column of the bracket, q || r: compute it first, then AND it with p." >}}
 
 ## Try it 7 · Compute the columns
 
@@ -254,6 +282,10 @@ c) F, F, T, F
 - The dock door p ∧ (q ∨ r) opens in 3 of 8 cases.
 - Without the pass, the dock door never opens.
 - **Do it:** In how many cases does the repair bay (d ∧ ¬e) ∨ o open?
+
+::: {.reveal}
+- **Result:** In 5 of the 8 cases: every row with an officer, and docked with the engine off.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/door-table.png)

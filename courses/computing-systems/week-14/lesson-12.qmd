@@ -8,8 +8,8 @@ format: lesson-html
 
 This page is the interactive version of the lesson notes (PDF). Each section
 starts with a problem of a tester. Then it explains the idea behind it. It
-ends with a **Do it** task and one set of questions. Every question on this
-page has its answer: try first, then check.
+ends with a **Do it** task and one set of questions. Tap, sort or type your
+answer: the page checks it at once and tells you why.
 
 ## Key terms
 
@@ -35,13 +35,48 @@ the OS version.
 Write the test environment for one game on your phone: the build (the
 version in the store), the device, the OS version, and two tests.
 
-::: {.check}
-A good answer looks like: "Build: version 3.2.1 (from the store page).
-Device: Samsung A35. OS: Android 14. Tests: the first level on mobile data;
-the settings menu in landscape."
+::: {.sort}
+Which part of a test environment is each line? Sort them.
 
-- ☐ An exact version, a device and an OS version.
-- ☐ Two tests that someone else could repeat.
+The build
+:   version 3.2.1, from the store page
+
+    Why: The exact version that was tested.
+
+The device
+:   Samsung A35
+
+    Why: The phone the test ran on.
+
+The OS version
+:   Android 14
+
+    Why: A bug may appear on one version only.
+
+A test
+:   the first level on mobile data
+
+    Why: A step that someone else can repeat.
+
+:   the settings menu in landscape
+
+    Why: A second test, just as exact.
+:::
+
+::: {.choice}
+Which one is a test result that someone else can repeat?
+
+- [x] "Build 3.2.1, Samsung A35, Android 14: the first level fails on mobile data."
+
+  Why: It names the build, the device, the OS version and the test.
+
+- [ ] "It works on my phone."
+
+  Why: No build, no device, no OS version: nobody can repeat it.
+
+- [ ] "The game is slow sometimes."
+
+  Why: No setup and no exact steps.
 :::
 :::
 
@@ -92,14 +127,37 @@ much stronger.
 :::
 
 ::: {.callout-note title="Do it · Build three AVDs"}
-In **AVD Builder**, create the P5 twin, the oldest supported phone and the
-tablet. Write one thing each can test and one thing it cannot.
+In **AVD Builder**, create the P5 twin (720 × 1600, 4 GB, API 30), the
+oldest supported phone (API 26, Android 8) and a tablet (API 33).
 
-::: {.check}
-P5 twin (720 × 1600, 4 GB, API 30): the layout and the menus of the P5 /
-not its speed or heat. Oldest phone (API 26): does the game start on
-Android 8? / not the real speed. Tablet (API 33): the tablet layout / not
-touch on a real 10-inch screen, nor the battery.
+::: {.sort}
+What can the AVDs test, and what needs a real phone? Sort them.
+
+An AVD can test it
+:   the layout and the menus of the P5
+
+    Why: The twin has the same screen size and memory.
+
+:   whether the game starts on Android 8
+
+    Why: The API 26 AVD runs the oldest supported version.
+
+:   the tablet layout
+
+    Why: The tablet AVD has the size of a tablet.
+
+Only a real phone
+:   the heat after a long race
+
+    Why: An emulator does not get hot.
+
+:   the battery
+
+    Why: An emulator has no real battery.
+
+:   the real speed of the P5
+
+    Why: The computer is much stronger than the phone.
 :::
 :::
 
@@ -147,14 +205,34 @@ builds only from your studio.
 
 ::: {.callout-note title="Do it · Prepare a phone"}
 On an Android phone, find the build number, switch on developer options and
-find USB debugging. Change nothing else. On an iPhone, find the iOS version.
+find USB debugging. Change nothing else. On an iPhone, find the iOS version
+(Settings › General › About).
 
-::: {.check}
-Android: Settings › About phone › (Software information) › Build number,
-tapped seven times: "You are now a developer". Then Settings › System ›
-Developer options › USB debugging (on Samsung: Settings › Developer
-options). iPhone: Settings › General › About › iOS version. Switch
-developer options off again on a personal phone.
+::: {.order}
+Put the steps on the Android phone in order.
+
+1. Settings › About phone (› Software information) › Build number
+2. Tap the build number seven times: "You are now a developer".
+3. Settings › System › Developer options › USB debugging
+4. Connect the cable and allow the computer.
+
+Why: Developer options appear only after the seven taps; then the computer can use adb.
+:::
+
+::: {.choice}
+The test on a personal phone is over. What do you do?
+
+- [x] Switch USB debugging and developer options off again.
+
+  Why: A personal phone stays safer without them; install builds only from your studio.
+
+- [ ] Leave them on for next time.
+
+  Why: Switch them off after testing on a personal phone.
+
+- [ ] Install builds from any website to test more.
+
+  Why: Install builds only from your studio.
 :::
 :::
 
@@ -205,11 +283,43 @@ devices.
 In **Matrix Builder**, cover every row for $300 or less. Then write a
 five-row matrix for a game you know: device, kind, OS, why.
 
-::: {.check}
-In Matrix Builder: the free AVDs (API 26, API 34, tablet), the real P5 and
-a few device-farm hours cover every row for less than $300. A good matrix
-has the oldest and the newest OS, the weakest real phone, a tablet or a big
-screen, and an iPhone (real, farm or Simulator), each with a reason.
+::: {.choice}
+Which choice covers every row for $300 or less?
+
+- [x] the free AVDs (API 26, API 34, tablet), the real P5 and a few device-farm hours
+
+  Why: Emulators for breadth, the real P5 for the truth, the farm for the iOS rows.
+
+- [ ] five new phones
+
+  Why: Buying phones costs far more than $300.
+
+- [ ] only the newest phone of the team
+
+  Why: Most players have weaker devices, and the iOS rows are missing.
+:::
+
+::: {.sort}
+Emulators, real devices or a device farm? Sort the jobs.
+
+Emulators: breadth
+:   many OS versions and screen sizes
+
+    Why: Free and fast to create.
+
+:   the oldest supported Android
+
+    Why: An AVD with API 26 shows if the game starts.
+
+Real devices: truth
+:   the heat, the battery and the sensors
+
+    Why: Only a real phone shows them.
+
+A device farm: the final check
+:   real phones in the cloud, rented by the hour
+
+    Why: Real devices without buying them.
 :::
 :::
 

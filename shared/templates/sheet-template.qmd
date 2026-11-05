@@ -9,6 +9,11 @@
 #   - After EVERY step: {{< record "label" >}} (lines=2 for a sentence,
 #     box=4 for a sketch) and its ::: {.check} (the result and one line of why).
 #     book.lua prints the results at the end, on a new page.
+#   - Then ONE interactive check for the page (::: {.choice}, {.order},
+#     {.sort} or {.fill}, indented like the step; every option or card with
+#     its "Why:"). The PDF leaves it out; the page shows it instead of the
+#     text field and the closed result. A result that depends on the app or
+#     the AI: check a fixed typical result (what to keep, fix or trust in it).
 #   - The page shows each experiment in its section with {{< experiment N >}}
 #     and the table with {{< experiment results >}}: write them only here.
 #   - Start files: list them below; the files are in week-WW/files/, written
@@ -38,8 +43,7 @@ the table.
 - **You need:** a computer with the app (and a browser).
 - **Time:** about 40 minutes for the experiments.
 - **Check:** the results are at the end of this worksheet. On the
-  interactive lesson, every step has "Check your result". Look only after
-  you try.
+  interactive lesson, the page checks every step at once.
 
 {{< start-files >}}
 
@@ -56,12 +60,30 @@ the table.
    **The result**, and one line of why.
    :::
 
+   ::: {.fill answer="410"}
+   What does the cell show?
+
+   Why: the result and one line of why.
+   :::
+
 2. The next action.
 
    {{< record "What you see … , because …" lines=2 >}}
 
    ::: {.check}
    The result and why.
+   :::
+
+   ::: {.choice}
+   The question about the result of the step?
+
+   - [x] the right result
+
+     Why: one sentence.
+
+   - [ ] a tempting wrong result
+
+     Why: one sentence.
    :::
 
 ## Table of results

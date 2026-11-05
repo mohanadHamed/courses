@@ -16,6 +16,10 @@ format: lesson-pptx
 - Its size is rows × columns, so the mine map M is a 3 × 4 matrix.
 - The entry m~23~ is in row 2 and column 3, and the row always comes first.
 - **Do it:** Draw a level of 3 × 3 tiles with coins and write it as a matrix L. Are l~32~ and l~23~ the same tile?
+
+::: {.reveal}
+- **Example:** Tom's level has the rows (2, 0, 1), (0, 4, 3) and (5, 1, 0): l~32~ = 1 and l~23~ = 3, two different tiles.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/matrix-map.png)
@@ -54,6 +58,10 @@ c) e~22~ = 20
 - Matrices of different sizes cannot be added.
 - A number k times a matrix multiplies every entry by k.
 - **Do it:** In Matrix Lab, choose A + B and tap three entries of the result. What are the sums?
+
+::: {.reveal}
+- **Result:** A has the rows (2, 0, 5), (4, 3, 1) and B the rows (1, 3, 0), (2, 1, 6), so A + B has the rows (3, 3, 5) and (6, 4, 7).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/matrix-add.png)
@@ -62,7 +70,7 @@ c) e~22~ = 20
 
 ## Live demo · Matrix Lab
 
-{{< sim file="sims/matrix-lab.html" poster="sims/matrix-lab.png" title="Matrix Lab: add, subtract and multiply by a number" task="**Show:** A + B, tap one entry of the result, then make B a 3 × 2 matrix. **Ask:** why is there no result now?" >}}
+{{< sim file="sims/matrix-lab.html" poster="sims/matrix-lab.png" title="Matrix Lab: add, subtract and multiply by a number" task="**Show:** A + B, tap one entry of the result, then make B a 3 × 2 matrix. **Ask:** why is there no result now?" answer="A 2 × 3 matrix and a 3 × 2 matrix have different sizes, so they cannot be added." >}}
 
 ## Try it 2 · Adding and scaling
 
@@ -84,6 +92,10 @@ c) 60
 - Each row of the matrix times the vector gives one new coordinate.
 - Stretch, with the rows (2, 0) and (0, 3), sends (4, 1) to (8, 3).
 - **Do it:** Multiply Turn, with the rows (0, −1) and (1, 0), by (2, 3). Where does the point go?
+
+::: {.reveal}
+- **Result:** Row 1: 0 × 2 − 1 × 3 = −3; row 2: 1 × 2 + 0 × 3 = 2. The point goes to (−3, 2).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/matrix-vector.png)
@@ -103,7 +115,7 @@ Turn has the rows (0, −1) and (1, 0), and the crystal stands at (3, 2).
 
 ## Live demo · Multiply Lab
 
-{{< sim file="sims/multiply-lab.html" poster="sims/multiply-lab.png" title="Multiply Lab: a 2 × 2 matrix moves a point and a shape" task="**Show:** press Scale 2, Turn 90°, Flip x and Squash, and drag P. **Ask:** which matrix leaves the house flat on a line?" >}}
+{{< sim file="sims/multiply-lab.html" poster="sims/multiply-lab.png" title="Multiply Lab: a 2 × 2 matrix moves a point and a shape" task="**Show:** press Scale 2, Turn 90°, Flip x and Squash, and drag P. **Ask:** which matrix leaves the house flat on a line?" answer="Squash: it sends many points to the same place on one line." >}}
 
 ## Try it 3 · Matrix × vector
 
@@ -125,6 +137,10 @@ c) (0, 4)
 - The entry in row i, column j of AB is row i of A times column j of B.
 - A 2 × 3 matrix times a 3 × 4 matrix gives a 2 × 4 matrix.
 - **Do it:** A has the rows (2, 1) and (0, 3), and B has the rows (1, 0) and (4, 2). What is AB?
+
+::: {.reveal}
+- **Result:** AB has the rows (2 + 4, 0 + 2) = (6, 2) and (0 + 12, 0 + 6) = (12, 6).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/matrix-matrix.png)
@@ -162,6 +178,10 @@ c) No, because 3 and 2 are different.
 - In AB**v**, the matrix next to the vector acts first, so B acts before A.
 - Stretch then turn gives another shape than turn then stretch.
 - **Do it:** Apply Flip then Turn to (3, 1), and then Turn then Flip. Are the points the same?
+
+::: {.reveal}
+- **Result:** No: Flip then Turn gives (−1, −3), and Turn then Flip gives (1, 3).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/order-matters.png)
@@ -199,6 +219,10 @@ c) rows (7, 8) and (6, 0)
 - I times any vector or matrix leaves it as it is.
 - A new object in an engine starts with the 4 × 4 identity.
 - **Do it:** In Multiply Lab, press Identity and drag P. Where is MP?
+
+::: {.reveal}
+- **Result:** MP is always on P: the identity changes nothing.
+:::
 :::
 ::: {.column width="50%"}
 ![](images/identity.png)
@@ -236,6 +260,10 @@ c) (3, 3), so it is not the identity.
 - Grow doubles x and y, so its inverse Shrink halves them.
 - Squash sends two points to the same place, so it has no inverse.
 - **Do it:** In Multiply Lab, apply Grow to (2, 1) and then Shrink. Where does the point end?
+
+::: {.reveal}
+- **Result:** Grow gives (4, 2), and Shrink brings it back to (2, 1).
+:::
 :::
 ::: {.column width="50%"}
 ![](images/inverse.png)

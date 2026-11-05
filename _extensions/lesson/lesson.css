@@ -423,6 +423,20 @@ main figure img, main .quarto-figure img {
 main figcaption { color: #66766a; font-size: 0.9rem; }
 main table:not(.word-grid table) th { background: color-mix(in srgb, var(--accent) 5%, #fff); }
 div.sourceCode { border-radius: 12px; }
+/* Every table is in its own box (tables.lua). The box takes the margins of
+   the table (0.5rem in the site theme), so the table looks the same in it. */
+.table-scroll { margin: 0.5rem 0; }
+div.table-scroll > table { margin-top: 0; margin-bottom: 0; }
+/* On a narrow screen (a phone), a table wider than the screen scrolls
+   sideways inside its box, its caption wraps in the part you can see, and
+   long inline code (a file path, a command) wraps like the words around it,
+   so the page itself never scrolls sideways. Code blocks and tables keep
+   their lines. A wide screen and paper keep the normal look. */
+@media screen and (max-width: 767.98px) {
+  .table-scroll { overflow-x: auto; container-type: inline-size; }
+  .table-scroll > table > caption { max-width: 100cqi; }
+  main code:not(pre code, table code) { white-space: pre-wrap; overflow-wrap: anywhere; }
+}
 
 /* ---------- Videos of an online activity ({{< watch >}}) ---------- */
 .watch {

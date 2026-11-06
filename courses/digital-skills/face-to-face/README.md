@@ -271,7 +271,7 @@ week, so a new work session can go on from here.
 | 4 | [x] Lecture 7 | [x] Lecture 8 |
 | 5 | [x] Lecture 9 | [x] Lecture 10 |
 | 6 | [x] Lecture 11 | [x] Lecture 12 |
-| 7 | [ ] Lecture 13 | [ ] Lecture 14 |
+| 7 | [x] Lecture 13 | [x] Lecture 14 |
 | 8 | [ ] Practice 1 | [ ] Practice 2 |
 | 9 | [ ] Lecture 15 | [ ] Lecture 16 |
 | 10 | [ ] Practice 3 | [ ] Practice 4 |

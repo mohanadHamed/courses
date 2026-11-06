@@ -95,7 +95,8 @@ management, medical sterilization, facility assessment). So this course is
 The course may become fully face-to-face if the students ask for it. That
 version is written in advance in `face-to-face/` (two sessions of 60
 minutes in the lab each week, each with slides, a worksheet and an
-interactive lesson; no online activities and no notes). It is never built
+interactive lesson; no online activities and no notes), numbered in one
+sequence: Lectures 1–30, two in each week. It is never built
 for the site (`_quarto-site.yml`); preview it with `--profile f2f`. Its
 `README.md` has the model, the rules, the progress and the steps to switch
 the site. When a blended session changes, change its face-to-face session

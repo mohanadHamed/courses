@@ -5,9 +5,9 @@ Run it by hand from the project root (it is not a pre-render step):
 
     python3 courses/digital-skills/face-to-face/check_f2f.py          # all sessions
     python3 courses/digital-skills/face-to-face/check_f2f.py 3 4      # lectures 3 and 4
-    python3 courses/digital-skills/face-to-face/check_f2f.py p1       # practice 1
 
-For each session written so far (lesson-NN or practice-NN in week-WW/):
+For each session written so far (lesson-NN in week-WW/: Lectures 1-30; a
+lecture of a practice week has `practises` in schedule.yml):
 
 - the three files: the page, the worksheet (-sheet) and the slides (-slides),
   with the number, title and ILOs of schedule.yml;
@@ -79,12 +79,13 @@ def sections(text, level=2):
 
 
 def schedule():
-    """{('lecture', 3): (title, [ilos]), ...} from schedule.yml (simple parse)."""
+    """{3: (title, [ilos], practice?), ...} from schedule.yml (simple parse).
+    A lecture of a practice week lists what it practises (`practises`)."""
     out = {}
     for line in read(os.path.join(HERE, "schedule.yml")).split("\n"):
-        m = re.search(r"\{kind: (\w+), n: (\d+),.*?title: \"([^\"]+)\", ilos: \[([^\]]*)\]", line)
+        m = re.search(r"\{kind: lecture, n: (\d+),.*?title: \"([^\"]+)\", ilos: \[([^\]]*)\]", line)
         if m:
-            out[(m.group(1), int(m.group(2)))] = (m.group(3), [x.strip() for x in m.group(4).split(",")])
+            out[int(m.group(1))] = (m.group(2), [x.strip() for x in m.group(3).split(",")], "practises:" in line)
     return out
 
 
@@ -257,7 +258,7 @@ def check_page(path, rel, exps, warn, practice=False):
     if "{{< experiment results >}}" not in text:
         warn("%s: no {{< experiment results >}}" % rel)
     for t, s in secs:
-        if re.match(r"^P?\d+\.\d+ ", t):
+        if re.match(r"^\d+\.\d+ ", t):
             boxes = s.count('title="Try it')
             if boxes != 1:
                 warn("%s: section \"%s\" has %d Try it boxes (one)" % (rel, t, boxes))
@@ -320,13 +321,11 @@ def main(argv):
     done = []
     for page in sorted(glob.glob(os.path.join(HERE, "week-*", "*.qmd"))):
         name = os.path.basename(page)
-        m = re.match(r"^(lesson|practice)-(\d+)\.qmd$", name)
+        m = re.match(r"^lesson-(\d+)\.qmd$", name)
         if not m:
             continue
-        kind = "lecture" if m.group(1) == "lesson" else "practice"
-        n = int(m.group(2))
-        key = ("p%d" % n) if kind == "practice" else str(n)
-        if wanted and key not in wanted:
+        n = int(m.group(1))
+        if wanted and str(n) not in wanted:
             continue
         stem = page[:-4]
         rel = os.path.relpath(stem, project)
@@ -336,7 +335,10 @@ def main(argv):
                 warn("%s%s.qmd is missing" % (rel, suffix))
         if not all(os.path.exists(stem + s + ".qmd") for s in ("-sheet", "-slides")):
             continue
-        title, ilos = sched.get((kind, n), (None, None))
+        title, ilos, pr = sched.get(n, (None, None, False))
+        week = int(re.search(r"week-(\d+)", stem).group(1))
+        if n not in (2 * week - 1, 2 * week):
+            warn("%s: Lecture %d is not a lecture of week %d (Lectures %d and %d)" % (rel, n, week, 2 * week - 1, 2 * week))
         for suffix in ("", "-sheet", "-slides"):
             text = read(stem + suffix + ".qmd")
             fm = front_matter(text)
@@ -344,22 +346,21 @@ def main(argv):
             if title and fm_value(fm, "title") != title:
                 warn("%s: the title is not the one of schedule.yml (\"%s\")" % (r, title))
             if suffix != "-slides":
-                num = fm_value(fm, "lesson" if kind == "lecture" else "practice")
+                num = fm_value(fm, "lesson")
                 if num is None or int(num) != n:
-                    warn("%s: `%s: %d` is missing" % (r, "lesson" if kind == "lecture" else "practice", n))
+                    warn("%s: `lesson: %d` is missing" % (r, n))
                 got = fm_value(fm, "ilos")
                 if ilos and got and [x.strip() for x in got.strip("[]").split(",")] != ilos:
                     warn("%s: ilos %s, schedule.yml has %s" % (r, got, ilos))
             check_minutes(text, r, warn)
             check_wrapped_numbers(text, r, warn)
             check_paths(stem + suffix + ".qmd", r, warn)
-        pr = kind == "practice"
         exps, steps, words = check_sheet(stem + "-sheet.qmd", rel + "-sheet.qmd", warn, pr)
         check_page(stem + ".qmd", rel + ".qmd", exps, warn, pr)
         check_slides(stem + "-slides.qmd", rel + "-slides.qmd", warn, pr)
         slides = len(sections(read(stem + "-slides.qmd")))
-        done.append("%s %d: %d experiments, %d steps, %d words, %d slides"
-                    % ("Lecture" if kind == "lecture" else "Practice", n, len(exps), steps, words, slides))
+        done.append("Lecture %d%s: %d experiments, %d steps, %d words, %d slides"
+                    % (n, " (practice)" if pr else "", len(exps), steps, words, slides))
     for d in done:
         print(d)
     for w in warnings:

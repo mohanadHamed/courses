@@ -54,9 +54,9 @@ figure gives the minutes of a part (no "about 20 minutes", no times in the
 Aim lines). Only the length of the whole session appears (the chip "60
 min" on the page), so the session never looks shorter than an hour.
 
-A practice session has the same three parts (`practice-NN.qmd`,
-`practice-NN-sheet.qmd`, `practice-NN-slides.qmd`), with no new ideas
-(Practice 1 is the model):
+A practice week has two lectures with no new ideas: the same three files
+(`lesson-NN…`), and in `schedule.yml` the lectures that they practise
+(`practises`). Lecture 15 is the model:
 
 - **slides:** 2–3 **Recall** slides (questions on the lectures it
   practises, with `.answer` cards), one Live demo, the Summary, Your
@@ -64,7 +64,7 @@ A practice session has the same three parts (`practice-NN.qmd`,
 - **worksheet:** 2–3 experiments, each with Part A and Part B; "**The idea
   (Lectures X–Y):**" recalls what the experiment uses;
 - **page:** `## Recall` (the main ideas in short points, no Key terms),
-  then one section per experiment, `## P1.1 …` (with its experiment and one
+  then one section per experiment, `## 15.1 …` (with its experiment and one
   Try it), the table of results and `## Wrap-up {.summary}`.
 
 **No lesson notes.** The worksheet takes the place of the notes (PDF): the
@@ -218,10 +218,12 @@ The same as a blended lecture page, with the new worksheet:
 
 ## The 30 sessions, written from the blended sessions
 
-`schedule.yml` holds the map (`from`: the blended session). The numbers
-change: in a unit, Lecture 2u − 1 comes from the blended Lecture u, and
-Lecture 2u from its online activity. Lectures and practice sessions are
-numbered separately, so a lost practice week leaves no gap.
+`schedule.yml` holds the map (`from`: the blended session). Every session
+is a lecture, and the lectures are numbered in one sequence: week w holds
+Lecture 2w − 1 (from the face-to-face session of the blended week) and
+Lecture 2w (from its online activity), so the number of a lecture always
+gives its week. The lectures of a practice week (weeks 8, 10, 12, 14 and
+15) have no new ideas: they practise the lectures before them.
 
 | Week | Session 1 (from) | Session 2 (from) |
 |---|---|---|
@@ -232,14 +234,14 @@ numbered separately, so a lost practice week leaves no gap.
 | 5 | Lecture 9 (Lecture 5) | Lecture 10 (Online activity 5) |
 | 6 | Lecture 11 (Lecture 6) | Lecture 12 (Online activity 6) |
 | 7 | Lecture 13 (Lecture 7) | Lecture 14 (Online activity 7) |
-| 8 | Practice 1 (Practice 1) | Practice 2 (Online activity 8) |
-| 9 | Lecture 15 (Lecture 8) | Lecture 16 (Online activity 9) |
-| 10 | Practice 3 (Practice 2) | Practice 4 (Online activity 10) |
-| 11 | Lecture 17 (Lecture 9) | Lecture 18 (Online activity 11) |
-| 12 | Practice 5 (Practice 3) | Practice 6 (Online activity 12) |
-| 13 | Lecture 19 (Lecture 10) | Lecture 20 (Online activity 13) |
-| 14 | Practice 7 (Practice 4) | Practice 8 (Online activity 14) |
-| 15 | Practice 9 (Practice 5) | Practice 10 (Online activity 15) |
+| 8 · practice | Lecture 15 (Practice 1) | Lecture 16 (Online activity 8) |
+| 9 | Lecture 17 (Lecture 8) | Lecture 18 (Online activity 9) |
+| 10 · practice | Lecture 19 (Practice 2) | Lecture 20 (Online activity 10) |
+| 11 | Lecture 21 (Lecture 9) | Lecture 22 (Online activity 11) |
+| 12 · practice | Lecture 23 (Practice 3) | Lecture 24 (Online activity 12) |
+| 13 | Lecture 25 (Lecture 10) | Lecture 26 (Online activity 13) |
+| 14 · practice | Lecture 27 (Practice 4) | Lecture 28 (Online activity 14) |
+| 15 · practice | Lecture 29 (Practice 5) | Lecture 30 (Online activity 15) |
 
 ## Rules for writing a session
 
@@ -258,7 +260,7 @@ numbered separately, so a lost practice week leaves no gap.
   A worksheet written from an online activity uses the examples of its
   Steps and its own new examples, never the data of its Tasks to submit,
   so that this public repo gives away no answer. The course project
-  (Practices 8–10) keeps the two topics of the blended course (Canteen
+  (Lectures 28–30) keeps the two topics of the blended course (Canteen
   sales, My study week): its worksheets guide each student's own project
   and never show a result of the canteen data.
 - **Paths.** The files of this version are in `face-to-face/week-WW/` and
@@ -284,14 +286,14 @@ week, so a new work session can go on from here.
 | 5 | [x] Lecture 9 | [x] Lecture 10 |
 | 6 | [x] Lecture 11 | [x] Lecture 12 |
 | 7 | [x] Lecture 13 | [x] Lecture 14 |
-| 8 | [x] Practice 1 | [x] Practice 2 |
-| 9 | [x] Lecture 15 | [x] Lecture 16 |
-| 10 | [x] Practice 3 | [x] Practice 4 |
-| 11 | [x] Lecture 17 | [x] Lecture 18 |
-| 12 | [x] Practice 5 | [x] Practice 6 |
-| 13 | [x] Lecture 19 | [x] Lecture 20 |
-| 14 | [x] Practice 7 | [x] Practice 8 |
-| 15 | [x] Practice 9 | [x] Practice 10 |
+| 8 | [x] Lecture 15 | [x] Lecture 16 |
+| 9 | [x] Lecture 17 | [x] Lecture 18 |
+| 10 | [x] Lecture 19 | [x] Lecture 20 |
+| 11 | [x] Lecture 21 | [x] Lecture 22 |
+| 12 | [x] Lecture 23 | [x] Lecture 24 |
+| 13 | [x] Lecture 25 | [x] Lecture 26 |
+| 14 | [x] Lecture 27 | [x] Lecture 28 |
+| 15 | [x] Lecture 29 | [x] Lecture 30 |
 
 ## Switching the site to face-to-face (later, when the teacher decides)
 

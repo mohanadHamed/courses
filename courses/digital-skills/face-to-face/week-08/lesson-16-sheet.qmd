@@ -1,0 +1,288 @@
+---
+title: "Review (2): Practice Questions"
+description: "Practice worksheet · Three experiments on Lectures 1–14: a Word document with headings, contents and page numbers, a week of sales with functions and a $ reference in Excel, and the practice quiz. Part A in the apps, Part B on the simulators."
+lesson: 16
+ilos: [A1, A2, A3, B1, C1, C2, C4]
+format: lesson-typst
+---
+
+::: {.lead}
+Today you review Lectures 1–14 before the midterm exam. There are no new
+ideas: you use what the lectures taught. **Part A** is in Word, Excel and
+File Explorer; **Part B** is on a simulator of the interactive page: on
+paper, scan its QR code; on the screen, click its link. After each step,
+write your result in its box.
+:::
+
+## Before you start
+
+- **You need:** a lab computer with Word and Excel.
+- **No lab computer today?** Do Part B of each experiment on your phone. Do
+  Part A later on any computer with Office.
+- **Check:** the results are at the end of this worksheet. Look only after
+  you try. On the interactive page, every step has a check that answers at
+  once.
+
+## Experiment 1 · Word: headings, contents and page numbers
+
+**The idea (Lectures 7–8):** the styles Title and Heading 1 make clear
+headings. Word makes the table of contents from the heading styles
+(References › Table of Contents), and Update Table keeps it right. Page
+numbers go in the footer (Insert › Page Number), on every page.
+
+**Aim:** make a short document with headings, contents and page numbers.
+
+::: {.part}
+**Part A · In the app (Word)**
+:::
+
+1. In a new Word document, type the title *Our class trip* and give it the
+   style **Title**. Then type three headings with the style **Heading 1**:
+   *The plan*, *What to bring* and *The bus*, with one sentence under each
+   one.
+
+   {{< record "The styles that I used: …" >}}
+
+   ::: {.check}
+   **Title** for *Our class trip*, **Heading 1** for the three headings,
+   and **Normal** for the sentences. The three headings look the same.
+   :::
+
+   ::: {.choice}
+   Why do you give the headings the style Heading 1, not only bold and a
+   big size?
+
+   - [x] Word uses the heading styles for the table of contents.
+
+     Why: A heading made by hand is normal text for Word.
+
+   - [ ] Bold text cannot be big.
+
+     Why: Bold text can have any size; the point is the style.
+
+   - [ ] Heading 1 makes the text red.
+
+     Why: The look can change; the style tells Word that it is a heading.
+   :::
+
+2. Click before *The plan* and press **Ctrl + Enter**. On the empty page 1,
+   under the title, insert **References › Table of Contents › Automatic
+   Table 1**. Then add **Insert › Page Number › Bottom of Page**.
+
+   {{< record "The contents list … headings ; the numbers are …" >}}
+
+   ::: {.check}
+   The contents list **3 headings** with their page numbers (page 2). The
+   page numbers are at the bottom of every page.
+   :::
+
+   ::: {.fill answer="3" unit="headings" hint="Count the lines with Heading 1."}
+   The document has the title (style Title) and three headings with
+   Heading 1. How many headings do the contents list?
+
+   Why: The contents list the heading styles only: 3. The title has the style Title.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-04/sims/toc-builder.html" poster="../../week-04/sims/toc-builder.png" title="Contents Builder: headings, contents, update" >}}
+
+3. In **Contents Builder**, give each heading its style, insert the
+   contents, change a heading and click **Update Table**. Why must you
+   click Update Table?
+
+   {{< record "Update Table, because …" >}}
+
+   ::: {.check}
+   Word does **not** update the contents by itself while you write: after
+   you change, add or move a heading, click **Update Table**.
+   :::
+
+   ::: {.choice}
+   You added a heading, and it is not in the contents. What do you click?
+
+   - [x] Update Table
+
+     Why: The contents change only when you update them.
+
+   - [ ] Insert › Table
+
+     Why: That adds a new table, not the contents.
+
+   - [ ] Bold
+
+     Why: Bold changes the look, not the contents.
+   :::
+
+## Experiment 2 · Excel: functions and a \$ reference
+
+**The idea (Lectures 11–12):** SUM, AVERAGE and MAX work on a range. The
+part of each day is its amount divided by the total: **=B2/\$B\$7**, copied
+down; \$B\$7 stays. The Percentage format changes the look, not the value.
+
+**Aim:** find the total, the average, the best day and the part of each
+day.
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
+
+1. Type the sales of a shop in five days in A1:B6, with the headings
+   **Day** and **Sales (JD)**: **Sun 25**, **Mon 35**, **Tue 15**, **Wed
+   45**, **Thu 30**. In B7 write **=SUM(B2:B6)**, in B8 **=AVERAGE(B2:B6)**
+   and in B9 **=MAX(B2:B6)**.
+
+   {{< record "SUM … ; AVERAGE … ; MAX …" >}}
+
+   ::: {.check}
+   SUM **150**, AVERAGE **30** (150 ÷ 5), MAX **45** (Wednesday).
+   :::
+
+   ::: {.sort}
+   Which function gives each result of the week? Sort them.
+
+   SUM
+   :   150
+
+       Why: 25 + 35 + 15 + 45 + 30 = 150.
+
+   AVERAGE
+   :   30
+
+       Why: 150 ÷ 5 days = 30.
+
+   MAX
+   :   45
+
+       Why: The best day: Wednesday.
+   :::
+
+2. In C2 write **=B2/\$B\$7** and copy it down to C6. Give C2:C6 the
+   **Percentage** format. Read C5, the part of Wednesday.
+
+   {{< record "C5 shows … ; its formula is …" >}}
+
+   ::: {.check}
+   **30%** (45 ÷ 150 = 0.3) with **=B5/\$B\$7**: B5 moved with the row,
+   and \$B\$7 stayed.
+   :::
+
+   ::: {.fill answer="30" unit="%" hint="45 of 150."}
+   What part of the week is Wednesday (45 JD of 150 JD), in percent?
+
+   Why: 45 ÷ 150 = 0.3, which the Percentage format shows as 30%.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-06/sims/formula-lab.html" poster="../../week-06/sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" >}}
+
+3. In **Formula Lab**, do the five tasks. What does **=SUM(D2:D4)** give in
+   D5?
+
+   {{< record "D5 shows … JD" >}}
+
+   ::: {.check}
+   **76 JD** (20 + 20 + 36): the three totals of the shop. The average
+   price is 4.83 JD, and the highest price is 12 JD.
+   :::
+
+   ::: {.fill answer="76" unit="JD" hint="Add the three totals: 20, 20 and 36."}
+   The three totals in Formula Lab are 20, 20 and 36 JD. What does
+   `=SUM(D2:D4)` give?
+
+   Why: 20 + 20 + 36 = 76 JD.
+   :::
+
+## Experiment 3 · Files and the practice quiz
+
+**The idea (Lectures 1–6):** a good file name has the date (year-month-day),
+what it is and a version, with no spaces. A PDF copy keeps the look. The
+practice quiz asks about every unit: files, AI, Word and Excel.
+
+**Aim:** save your work with good names, and find the part to study again.
+
+::: {.part}
+**Part A · In the apps (Word and Excel)**
+:::
+
+1. Save the Word file as `2026-11-29_class-trip_v01.docx` and the Excel
+   file as `2026-11-29_shop-week_v01.xlsx` (use today's date). Save a PDF
+   copy of the Word file too.
+
+   {{< record "My three files: …" lines=2 >}}
+
+   ::: {.check}
+   **2026-11-29_class-trip_v01.docx**, **2026-11-29_class-trip_v01.pdf**
+   and **2026-11-29_shop-week_v01.xlsx**: the date first, what it is, the
+   version, no spaces.
+   :::
+
+   ::: {.choice}
+   Which name follows the rules for the Excel file?
+
+   - [x] `2026-11-29_shop-week_v01.xlsx`
+
+     Why: The date first, what it is, a version and no spaces.
+
+   - [ ] `shop week final.xlsx`
+
+     Why: Spaces, "final" and no date.
+
+   - [ ] `Book1.xlsx`
+
+     Why: It does not say what the file is.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-08/sims/practice-quiz.html" poster="../../week-08/sims/practice-quiz.png" title="Practice Quiz: Units 1–7" >}}
+
+2. Do the **Practice Quiz**: first **All** the questions, then the part
+   with the most wrong answers again. Which part was the hardest for you?
+
+   {{< record "My score … ; the part to study again …" >}}
+
+   ::: {.check}
+   A good answer: your score of the 14 questions, and the part (Files, AI,
+   Word or Excel) with the most wrong answers. Study the lectures of that
+   part again before the exam.
+   :::
+
+   ::: {.choice}
+   What keeps an older copy of your files that a mistake does not reach?
+
+   - [x] a backup
+
+     Why: A backup is a separate copy: a mistake does not reach it.
+
+   - [ ] sync
+
+     Why: Sync copies every change, mistakes too.
+
+   - [ ] the recycle bin
+
+     Why: It keeps deleted files for some days only.
+   :::
+
+## Table of results
+
+Copy your key results here: the rows of the parts that you did. Your
+teacher checks this table before the end of the session.
+
+::: {.record-table}
+| Experiment | What you record                                  | Your result |
+|:-------:|-----------------------------------------------|-------------------------|
+| 1 A        | The headings in the contents                     |             |
+| 1 B        | Why Update Table                                 |             |
+| 2 A        | SUM, AVERAGE and MAX of the week                 |             |
+| 2 A        | The part of Wednesday                            |             |
+| 3 A        | My three file names                              |             |
+| 3 B        | My score, and the part to study again            |             |
+:::

@@ -218,7 +218,9 @@ local function page_chips(meta, course)
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
     if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
   else
-    if (sess.kind == "seminar" or sess.kind == "practice") and info.practises then
+    -- What a seminar or practice session practises; also a lecture of a
+    -- practice week of face-to-face Digital Skills (`practises` in its schedule).
+    if info.practises then
       table.insert(chips, sess.label .. " · practises " .. info.practises)
     else
       table.insert(chips, sess.label)
@@ -261,7 +263,8 @@ end
 local function hero_note(meta, slides, online, sheet)
   local lines = {}
   if sheet and is_f2f(meta) then
-    table.insert(lines, (meta.practice and "No new ideas today: you practise the lectures you had. " or "")
+    local practise = meta.practice or schedule_info(session_of(meta)).practises
+    table.insert(lines, (practise and "No new ideas today: you practise the lectures you had. " or "")
       .. "In class, the teacher first explains with the slides. Then you do the worksheet (PDF): "
       .. "Part A in the real app on the computer, Part B on the simulators of this page (they work on a phone too). "
       .. "On this page, every step has a check that answers at once.")

@@ -22,8 +22,8 @@
 <body class="theme-workshop">
 <main class="sim">
   <h1>Deck Checker: ready to present?</h1>
-  <p class="hint">Sami made five slides about the canteen sales, with AI help. Compare each slide with the facts from the Excel sheet. Mark each slide <b>OK</b> or name its problem.</p>
-  <div class="facts">Excel facts: total 415 JD in four weeks. Sandwiches earned the most (138 JD); tea sold the most cups (150). Weeks: 101, 101, 105, 108 JD.</div>
+  <p class="hint">Sami made five slides about the sales of the college canteen, with AI help. Compare each slide with the facts from the Excel sheet. Mark each slide <b>OK</b> or name its problem.</p>
+  <div class="facts">Excel facts: total 362 JD in four weeks. Juice earned the most (124 JD); water sold the most bottles (180). Weeks: 85, 92, 88, 97 JD.</div>
   <div id="deck"></div>
   <p class="task" id="task"></p>
   <p class="message" id="msg"></p>
@@ -36,10 +36,10 @@
   const $ = (id) => document.getElementById(id);
   const OPT = { ok: "OK", num: "wrong number", claim: "claim not in the data", pic: "picture does not fit", ai: "no AI-use line" };
   const D = [
-    ["Canteen Sales in Four Weeks", "Sami, Digital Skills project", "ok", "A clear title and the name."],
-    ["What sells most?", "Which item earns the most money, and which sells the most cups? [AI picture: a big, busy restaurant with waiters]", "pic", "The question is clear, but the picture does not show a small canteen."],
-    ["The answer in a chart", "[column chart of the total by item] Total: 451 JD", "num", "Excel says 415 JD: two digits swapped."],
-    ["Two insights", "Sandwiches earned the most. Everyone loves sandwiches.", "claim", "The data shows sales, not what everyone loves."],
+    ["College Canteen Sales in Four Weeks", "Sami, Digital Skills project", "ok", "A clear title and the name."],
+    ["What sells most?", "Which item earns the most money, and which sells the most bottles? [AI picture: a big, busy restaurant with waiters]", "pic", "The question is clear, but the picture does not show a small canteen."],
+    ["The answer in a chart", "[column chart of the total by item] Total: 326 JD", "num", "Excel says 362 JD: two digits swapped."],
+    ["Two insights", "Juice earned the most. Everyone loves juice.", "claim", "The data shows sales, not what everyone loves."],
     ["Thank you!", "Questions?", "ai", "AI helped, so the last slide needs an AI-use line."],
   ];
   const s = { m: {} };
@@ -61,7 +61,7 @@
     });
     let m = "";
     while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
-    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: fix 451 to 415, delete the claim, change the picture, and add the AI-use line.";
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: fix 326 to 362, delete the claim, change the picture, and add the AI-use line.";
     $("msg").textContent = m + `${right()} of ${D.length} slides marked correctly.`;
   }
   window.DC = { mark: (i, k) => { s.m[i] = k; render(); } };

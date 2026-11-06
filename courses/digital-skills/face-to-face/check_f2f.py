@@ -24,7 +24,9 @@ For each session written so far (lesson-NN or practice-NN in week-WW/):
   answer= on every simulator slide, the answers of every Try it slide;
 - no minutes for a part of the session anywhere (only "60 min" may appear):
   the teacher's rule of 2026-11-06 (README.md, "Time");
-- every figure, simulator, video and start file that a file names exists.
+- every figure, simulator, video and start file that a file names exists;
+- no wrapped line of a paragraph starts with a number and a full stop
+  ("pages 1 and" / "2."): Markdown reads it as a new numbered list.
 
 Only the Python standard library is used.
 """
@@ -153,6 +155,26 @@ def check_minutes(text, rel, warn):
             line = text[:m.start()].count("\n") + 1
             warn("%s:%d: a time for a part of the session (\"%s\"): the content never gives minutes"
                  % (rel, line, m.group(0)))
+
+
+def check_wrapped_numbers(text, rel, warn):
+    # "look at pages 1 and\n   2." makes "2." a new list: rewrap the line.
+    item = re.compile(r"^(\s*)(\d+[.)]|[-*+]|:)(\s|$)")
+    lines = text.split("\n")
+    for i in range(1, len(lines)):
+        cur, prev = lines[i], lines[i - 1]
+        m = re.match(r"^(\s*)\d+[.)](\s|$)", cur)
+        if not m or not prev.strip() or prev.strip().startswith((":::", "|", "{{<")) \
+                or prev.rstrip().endswith(":"):  # a list that a sentence introduces
+            continue
+        p = item.match(prev)
+        # the text of a line of a list item starts after its marker
+        indent = len(p.group(0)) if p else len(prev) - len(prev.lstrip())
+        if p and not p.group(3):
+            continue
+        if indent == len(m.group(1)):
+            warn("%s:%d: a wrapped line starts with \"%s\": rewrap it, or Markdown starts a list"
+                 % (rel, i + 1, cur.strip()[:12]))
 
 
 def check_choice_blocks(text, rel, warn):
@@ -329,6 +351,7 @@ def main(argv):
                 if ilos and got and [x.strip() for x in got.strip("[]").split(",")] != ilos:
                     warn("%s: ilos %s, schedule.yml has %s" % (r, got, ilos))
             check_minutes(text, r, warn)
+            check_wrapped_numbers(text, r, warn)
             check_paths(stem + suffix + ".qmd", r, warn)
         pr = kind == "practice"
         exps, steps, words = check_sheet(stem + "-sheet.qmd", rel + "-sheet.qmd", warn, pr)

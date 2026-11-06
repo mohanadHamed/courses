@@ -182,6 +182,12 @@ follows the order of the session (no minutes on any slide):
 5. **Results of the worksheet** (at the end of the session): the key
    results, one `.reveal` line for each experiment.
 
+Where a section has no figure, its concept slide shows the poster of its
+simulator, and the Live demo slide of that simulator is left out (two
+pictures of the same simulator on two slides in a row): the students open
+it from the worksheet. A figure made for this version goes in
+`face-to-face/images/` (SVG and PNG; `check_figures.py` checks it).
+
 About 10–13 slides (title slide not counted): 3 sections of 3 slides, the
 Keywords, the Summary, the worksheet and its results. No Experiment or
 Check slides: the worksheet is done after the explanation, not step by
@@ -260,7 +266,7 @@ week, so a new work session can go on from here.
 | Week | Session 1 | Session 2 |
 |---|---|---|
 | 1 | [x] Lecture 1 | [x] Lecture 2 |
-| 2 | [ ] Lecture 3 | [ ] Lecture 4 |
+| 2 | [x] Lecture 3 | [x] Lecture 4 |
 | 3 | [ ] Lecture 5 | [ ] Lecture 6 |
 | 4 | [ ] Lecture 7 | [ ] Lecture 8 |
 | 5 | [ ] Lecture 9 | [ ] Lecture 10 |

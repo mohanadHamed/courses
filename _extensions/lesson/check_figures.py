@@ -164,7 +164,9 @@ def crosses(strokes):
 
 def files(project_dir):
     pats = ["courses/*/week-*/images/*.svg", "courses/*/week-*/sims/*.svg",
-            "courses/*/week-*/sims/*.html", "shared/sims/*.svg", "shared/sims/*.html"]
+            "courses/*/week-*/sims/*.html", "shared/sims/*.svg", "shared/sims/*.html",
+            # the face-to-face version of Digital Skills (not published yet)
+            "courses/*/face-to-face/images/*.svg"]
     for pat in pats:
         yield from sorted(glob.glob(os.path.join(project_dir, pat)))
 

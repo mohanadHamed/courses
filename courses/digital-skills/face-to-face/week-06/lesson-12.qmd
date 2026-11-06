@@ -1,0 +1,193 @@
+---
+title: "A Monthly Budget Sheet"
+description: "A monthly budget in Excel: two blocks with their totals, what is left, the part of the income of each expense with $, and number formats."
+lesson: 12
+ilos: [C2]
+format: lesson-html
+---
+
+This page is the interactive version of Lecture 12. In class, the teacher
+first explains the ideas with the slides. Then you do the **worksheet
+(PDF)**: three experiments, each with Part A in Excel and Part B on a
+simulator of this page. Each section below explains one idea, then shows
+its experiment: do each step, then tap, sort, put in order or type its
+result. The page checks it at once and tells you why.
+
+## Key terms
+
+{{< glossary budget worksheet formula function cell-range absolute-reference fill-handle number-format autosum >}}
+
+## Before you start
+
+- **You need:** Excel (the desktop app, or Excel on the web at `office.com`).
+- **No lab computer?** Do Part B of each experiment on your phone. Do Part A
+  later on any computer with Excel.
+- **Made-up numbers only:** your real money is private.
+- What you type in the table of results stays in this browser only.
+
+![How a session works: the slides, then the worksheet with Part A and Part B, then the check.](../images/how-it-works.png){width=100%}
+
+## 12.1 The layout and the totals
+
+Watch the short video: it shows the whole budget, from the layout to the
+formulas and the number formats (with captions; the words are also under
+it).
+
+{{< watch file="../../week-06/videos/budget.mp4" captions="../../week-06/videos/budget.vtt" poster="../../week-06/videos/budget.png" script="../../week-06/videos/budget-script.txt" title="A monthly budget in Excel" length="1:29" >}}
+
+- A **budget** plans the money of one month: what comes in (**income**) and
+  what goes out (**expenses**).
+- Make two blocks on one sheet: **Income** at the top, **Expenses** below,
+  each with a **Total** line. Leave one empty row between them.
+- Column A: the names (Allowance, Transport, Phone, Food …). Column B: the
+  amounts in JD. Column C: the part of the income (later, in %).
+- Sami's month (made up): Allowance 150 and Part-time job 100; Transport 40,
+  Phone 15, Food 90, Books 20, Fun 30.
+- Write "JD" in the heading, not in the cells: the cells hold only numbers.
+- **Total income** in B4: `=SUM(B2:B3)` = 250. **Total expenses** in B12:
+  `=SUM(B7:B11)` = 195. (Or click the cell and use AutoSum, Σ.)
+- **Left (saving)** in B14: `=B4-B12` = 55.
+
+![A monthly budget sheet with two blocks.](../../week-06/images/budget-layout.png){width=100%}
+
+{{< sim file="../../week-06/sims/budget-builder.html" poster="../../week-06/sims/budget-builder.png" title="Budget Builder: Sami's month" height="760" >}}
+
+{{< experiment 1 >}}
+
+::: {.callout-tip title="Try it 1 · The layout"}
+Choose the right answer.
+
+::: {.match extra="the colour of the sheet|in every cell"}
+What is income?
+:   the money that comes in
+
+    Why: Income is what comes in, for example an allowance.
+
+What is an expense?
+:   money that goes out
+
+    Why: An expense is money that you spend, for example on transport.
+
+Where do you write "JD"?
+:   in the heading of the column
+
+    Why: The cells hold only numbers, so Excel can compute with them.
+
+What does each block end with?
+:   a Total line
+
+    Why: Each block ends with its total, made with SUM.
+
+Why use made-up numbers in this activity?
+:   your real money is private
+
+    Why: A practice budget with made-up numbers works as well.
+:::
+:::
+
+## 12.2 The part of the income
+
+- **The part of the income** for each expense, in column C: in C7 write
+  `=B7/$B$4` and copy it down to C11 with the fill handle. B7 moves to B8,
+  B9 …; `$B$4` (the total income) stays.
+- Food: 90 ÷ 250 = 0.36. Transport: 40 ÷ 250 = 0.16.
+- If an amount changes, every total and every part changes by itself.
+
+![The formulas of the budget.](../../week-06/images/budget-formulas.png){width=100%}
+
+Part B of this experiment uses **Budget Builder** again (its last two
+tasks), in section 12.1 above.
+
+{{< experiment 2 >}}
+
+::: {.callout-tip title="Try it 2 · The formulas"}
+Use Sami's month: income 150 + 100, expenses 40, 15, 90, 20, 30. Choose the
+right answer.
+
+::: {.match extra="=B4+B12|0.9"}
+Which formula gives the total income in B4?
+:   `=SUM(B2:B3)`
+
+    Why: SUM adds the two incomes in B2 and B3.
+
+What is the total of the expenses?
+:   195
+
+    Why: 40 + 15 + 90 + 20 + 30 = 195.
+
+Which formula gives what is left in B14?
+:   `=B4-B12`
+
+    Why: What is left is the total income minus the total expenses.
+
+What does `=B9/$B$4` give for food?
+:   0.36
+
+    Why: 90 ÷ 250 = 0.36.
+
+Why is there a `$` in `$B$4`?
+:   the total income stays the same in every row
+
+    Why: Every part divides by the same total, so its address must not move.
+:::
+:::
+
+## 12.3 Make it readable: number formats
+
+- A **number format** changes how a number looks, not the number itself.
+  Home › Number (or right-click › Format Cells).
+- The parts in column C: **Percentage** (0.36 looks like 36%).
+- The money in column B: **Currency** or Number with 2 decimals (55 looks
+  like 55.00).
+- Make the Total lines **bold**, and widen a column that shows ####.
+- The formula bar always shows the real value (0.36), so the formulas still
+  work.
+
+![The same value in four formats.](../../week-06/images/number-formats.png){width=100%}
+
+{{< sim file="../../week-06/sims/format-lab.html" poster="../../week-06/sims/format-lab.png" title="Number Format Lab: the same number, another look" height="420" >}}
+
+{{< experiment 3 >}}
+
+::: {.callout-tip title="Try it 3 · Formats"}
+Choose the right answer.
+
+::: {.match extra="0.36%|36.00"}
+0.36 in the Percentage format looks like …
+:   36%
+
+    Why: The Percentage format shows 0.36 as 36%.
+
+55 in Currency format with 2 decimals looks like …
+:   55.00 JD
+
+    Why: Currency with 2 decimals adds .00 and the currency.
+
+Does a number format change the value in the formula bar?
+:   no, only the look
+
+    Why: The formula bar still shows the real value.
+
+A cell shows ####. What do you do?
+:   make the column wider
+
+    Why: #### means that the number does not fit in the column.
+
+Where are the number formats in Excel?
+:   Home › Number
+
+    Why: The number formats are in the Number group of the Home tab.
+:::
+:::
+
+## Table of results
+
+{{< experiment results >}}
+
+## Summary {.summary}
+
+- A budget has two blocks, income and expenses, each with a Total line.
+- =SUM adds each block; Left is the total income minus the total expenses.
+- The part of an expense is its amount divided by $B$4, the total income.
+- If one amount changes, every total and part changes by itself.
+- A number format changes the look, not the value: 0.36 looks like 36%.

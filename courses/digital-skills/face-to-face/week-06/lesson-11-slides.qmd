@@ -1,0 +1,127 @@
+---
+title: "Excel (1): Cells, Formulas, References and Basic Functions"
+subtitle: "Lecture 11"
+format: lesson-pptx
+---
+
+## Keywords
+
+{{< glossary cell-address cell-range formula formula-bar relative-reference absolute-reference function autosum >}}
+
+## Cells and formulas
+
+:::: {.columns}
+::: {.column width="50%"}
+- A cell address is a column letter and a row number, like B3, and a range is like B2:B4.
+- A formula starts with = and uses addresses, like =B2\*C2.
+- The cell shows the result, and the formula bar shows the formula.
+- Excel multiplies and divides before it adds, so =2+3\*4 gives 14.
+:::
+::: {.column width="50%"}
+![](../../week-06/images/formula-parts.png)
+:::
+::::
+
+## Live demo · Formula Lab
+
+{{< sim file="../../week-06/sims/formula-lab.html" poster="../../week-06/sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" task="**Show:** type =B2\*C2 in D2, then change the price in B2. **Ask:** why did D2 change by itself?" answer="The formula uses the address B2, not the number: when B2 changes, Excel calculates D2 again." >}}
+
+## Try it 1 · Cells and formulas
+
+a) Which range holds A2, A3, A4, A5 and A6?
+b) B2 = 6 and C2 = 5. What does =B2\*C2 show?
+c) What does =(2+3)\*4 give?
+
+::: {.answer}
+a) A2:A6
+b) 30
+c) 20
+:::
+
+## Copy a formula: relative and absolute
+
+:::: {.columns}
+::: {.column width="50%"}
+- The fill handle copies a formula down to the next rows.
+- A relative reference like B2 moves when you copy: in the next row it is B3.
+- An absolute reference like \$F\$1 stays the same when you copy.
+- You use \$ for a cell that every row needs, like a rate, and F4 adds it.
+:::
+::: {.column width="50%"}
+![](../../week-06/images/references.png)
+:::
+::::
+
+## Live demo · Reference Lab
+
+{{< sim file="../../week-06/sims/reference-lab.html" poster="../../week-06/sims/reference-lab.png" title="Reference Lab: copy a formula with $" task="**Show:** copy =B2\*F1 down and look at the zeros, then copy =B2\*\$F\$1 down. **Ask:** which part of the formula stayed the same?" answer="$F$1: the $ signs make it absolute, so it stays; B2 moves one row down for each row." >}}
+
+## Try it 2 · References
+
+a) D2 has =B2\*C2. You copy it to D3. Which formula is in D3?
+b) D2 has =C2\*\$F\$1. You copy it to D3. Which formula is in D3?
+c) Which key adds the \$ signs after you type F1?
+
+::: {.answer}
+a) =B3\*C3
+b) =C3\*\$F\$1
+c) F4
+:::
+
+## Ready formulas: SUM, AVERAGE, MAX, MIN
+
+:::: {.columns}
+::: {.column width="50%"}
+- A function is a ready formula with a name and a range, like =SUM(B2:B6).
+- AVERAGE gives the average, MAX the largest and MIN the smallest value.
+- AutoSum (Σ) writes =SUM for the numbers above the cell.
+- A wrong name like =SUMM shows the error #NAME?.
+:::
+::: {.column width="50%"}
+![](../../week-06/images/functions.png)
+:::
+::::
+
+## Try it 3 · Functions
+
+a) The sales of a week are 12, 18, 25, 15 and 30 JD. What does =SUM give?
+b) What does =AVERAGE give for the same week?
+c) What does =MAX give for the same week?
+
+::: {.answer}
+a) 100
+b) 20
+c) 30
+:::
+
+## Summary
+
+- A cell address is a column and a row, and a range is written like B2:B6.
+- A formula starts with = and changes by itself when a cell changes.
+- Copying moves relative references, but not absolute ones with \$.
+- SUM, AVERAGE, MAX and MIN work on a range.
+- An error value like #NAME? tells you what to fix.
+
+## Your worksheet
+
+:::: {.columns}
+::: {.column width="50%"}
+- Now do the three experiments of the worksheet alone.
+- Part A is in Excel, with the start file shop-start.xlsx.
+- Part B is on a simulator or the game The Shop's Week: scan its QR code or click its link.
+- Write your result after each step, and fill in the table at the end.
+:::
+::: {.column width="50%"}
+{{< page-qr >}}
+:::
+::::
+
+## Results of the worksheet
+
+Which results do you have in your table?
+
+::: {.reveal}
+- Experiment 1: The pen's price is in B3, D2 shows 20, and 30 when the price is 3.
+- Experiment 2: E3 shows 0 with =D2\*F1, and E4 shows 3.6 with =D4\*\$F\$1.
+- Experiment 3: SUM 100, AVERAGE 20, MAX 30 and MIN 12, and =SUMM shows #NAME?.
+:::

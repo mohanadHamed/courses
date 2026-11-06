@@ -33,6 +33,7 @@ RULES = [
     (re.compile(r"^seminar-(\d+)-book\.pdf$"), "{prefix}_seminar{n}.pdf"),
     (re.compile(r"^seminar-(\d+)-slides\.pptx$"), "{prefix}_seminar{n}_slides.pptx"),
     (re.compile(r"^practice-(\d+)-book\.pdf$"), "{prefix}_practice{n}.pdf"),
+    (re.compile(r"^practice-(\d+)-sheet\.pdf$"), "{prefix}_practice{n}_sheet.pdf"),
     (re.compile(r"^practice-(\d+)-slides\.pptx$"), "{prefix}_practice{n}_slides.pptx"),
     (re.compile(r"^homework-(\d+)\.pdf$"), "{prefix}_homework{n}.pdf"),
     (re.compile(r"^online-(\d+)\.pdf$"), "{prefix}_online{n}_tasks.pdf"),
@@ -67,7 +68,11 @@ def main():
         if not os.path.isdir(course_dir):
             continue
         prefix = file_prefix(project_dir, os.path.basename(course_dir))
-        for path in sorted(glob.glob(os.path.join(course_dir, "week-*", "*"))):
+        # face-to-face/week-*: the face-to-face version of Digital Skills,
+        # built only with --profile f2f (its README.md).
+        paths = glob.glob(os.path.join(course_dir, "week-*", "*"))
+        paths += glob.glob(os.path.join(course_dir, "face-to-face", "week-*", "*"))
+        for path in sorted(paths):
             name = new_name(os.path.basename(path), prefix)
             if name:
                 os.replace(path, os.path.join(os.path.dirname(path), name))

@@ -1,0 +1,300 @@
+---
+title: "AI with Excel: Formulas, Clean Data and the Right Chart"
+description: "Worksheet · Three experiments with an AI assistant and Excel: a formula from AI tested by hand, a messy list cleaned with AI advice, and the AI's chart advice checked. Part A in the apps, Part B on the simulators."
+lesson: 14
+ilos: [C2, C4, B1]
+start-files:
+  - name: sales-start.xlsx
+    about: "three sheets: Sales (10 sales of the next week, 200 JD), Types and Days (the totals for the charts)"
+start-files-dir: "../../week-07/files"
+format: lesson-typst
+---
+
+::: {.lead}
+Today an AI assistant helps you in Excel, and you check every answer. Each
+experiment has two parts. **Part A** is in the AI assistant and Excel on
+the lab computer. **Part B** is on a simulator of the interactive lesson:
+on paper, scan its QR code; on the screen, click its link. After each step,
+write your result in its box. At the end, copy your key results into the
+table.
+:::
+
+## Before you start
+
+- **You need:** a lab computer with Excel, a browser and an AI assistant
+  that the university allows (for example `copilot.microsoft.com`), and
+  the start file of Lecture 13.
+- **No lab computer today?** Do Part B of each experiment on your phone. Do
+  Part A later on any computer with Excel.
+- **Check:** the results are at the end of this worksheet. Look only after
+  you try. On the interactive lesson, every step has a check that answers
+  at once.
+
+{{< start-files >}}
+
+## Experiment 1 · Ask an AI for a formula, then test it
+
+**The idea:** an AI tool can write a formula for you. Tell it three things:
+**where** the data is, **which column** holds what, and **what** you want.
+Then **test every formula**: check one small result by hand. An AI can use
+a wrong column, and the number still looks normal.
+
+**Aim:** get a formula from AI, and test it by hand.
+
+::: {.part}
+**Part A · In the apps (an AI assistant and Excel)**
+:::
+
+1. Open `sales-start.xlsx`, sheet **Sales** (10 sales, 200 JD in all). Ask
+   the AI: *My data is in A1:E11 of an Excel sheet. Column E is the Total
+   in JD. Write one formula for the average Total.* Type its formula in
+   E13. Check it by hand: 200 ÷ 10.
+
+   {{< record "The formula … ; E13 shows … ; by hand …" >}}
+
+   ::: {.check}
+   **=AVERAGE(E2:E11)**, and E13 shows **20**: by hand, 200 ÷ 10 = 20. The
+   formula is right. If the AI gives another range or column, fix it.
+   :::
+
+   ::: {.fill answer="20" unit="JD" hint="The 10 totals add up to 200."}
+   The 10 totals of the sheet Sales add up to 200 JD. What must
+   `=AVERAGE(E2:E11)` show?
+
+   Why: 200 ÷ 10 = 20 JD: one small calculation by hand tests the formula.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-07/sims/ai-formula-lab.html" poster="../../week-07/sims/ai-formula-lab.png" title="AI Formula Lab: ask for a formula, then test it" >}}
+
+2. In **AI Formula Lab**, do the three jobs. Test each formula by hand. In
+   Job 3, what was wrong with the AI's formula?
+
+   {{< record "Job 3: the AI's formula used … ; the right result …" >}}
+
+   ::: {.check}
+   The AI used **column D** (the quantities) instead of **E** (the totals).
+   The fixed formula **=AVERAGE(E2:E11)** gives **18.50 JD** (185 ÷ 10).
+   :::
+
+   ::: {.choice}
+   An AI formula uses the wrong column. What do you see in the cell?
+
+   - [x] a normal-looking number that is wrong
+
+     Why: Excel calculates the wrong column without an error, so you test the result by hand.
+
+   - [ ] an error like #NAME?
+
+     Why: The formula has no wrong name, so Excel shows a number.
+
+   - [ ] an empty cell
+
+     Why: The wrong column has numbers too, so the cell shows a result.
+   :::
+
+## Experiment 2 · Clean the data with AI advice
+
+**The idea:** data from paper or from many people is often **messy**: rows
+typed twice, extra spaces, "drinks" and "Drinks", "9 JD" as text. Messy
+data gives wrong results: a row typed twice counts twice, a name with an
+extra space is a new name for a filter, and SUM skips text. An AI
+tool can list the steps to clean it; **you** check each step before you do
+it. The tools: **Data › Remove Duplicates**, **=TRIM** for spaces, **Find
+and Replace** for spellings, numbers without "JD". Never delete real rows
+because an AI says so.
+
+**Aim:** clean a messy list, with AI advice that you check.
+
+::: {.part}
+**Part A · In the apps (Excel and an AI assistant)**
+:::
+
+1. On a new sheet, type this list from a paper notebook, **with its
+   mistakes**: **Item, Type, Total**; **Pen, Paper, 20**; **Juice, drinks,
+   12**; **Bag, Bags, 30**; **Bag, Bags, 30**; **Water, Drinks, 9 JD**;
+   **Notebook, PAPER, 16**. Ask the AI: *My Excel list has the columns
+   Item, Type and Total. One row is typed twice, some types are spelled in
+   different ways, and one total is "9 JD". How do I clean it in Excel?
+   Give short steps.*
+
+   {{< record "Two steps that the AI gave" lines=2 >}}
+
+   ::: {.check}
+   Good steps, for example: **Data › Remove Duplicates** for the bag typed
+   twice; write each type the same way (**Find and Replace**, or type
+   *Drinks* and *Paper*); type **9** instead of *9 JD*. Check each step: a
+   step that deletes real sales is wrong.
+   :::
+
+   ::: {.sort}
+   The AI gives five steps. Follow them or not? Sort them.
+
+   Follow it
+   :   Remove the row that is typed twice.
+
+       Why: The same sale must count once.
+
+   :   Write drinks and Drinks the same way.
+
+       Why: The same type looks the same in every row.
+
+   :   Type 9 instead of 9 JD.
+
+       Why: SUM skips text, so the total must be a number.
+
+   Do not follow it
+   :   Delete all the totals under 12.
+
+       Why: They are real sales: never delete real rows.
+
+   :   Delete the column Type.
+
+       Why: You need the types to filter and to chart.
+   :::
+
+2. Clean the list: remove the row typed twice (Data › Remove Duplicates),
+   write *Drinks* and *Paper* the same way in every row, and type **9**
+   for *9 JD*. Then add the totals with **=SUM**.
+
+   {{< record "Rows after cleaning … ; SUM …" >}}
+
+   ::: {.check}
+   **5 rows** stay (the bag counts once), and the SUM is **87 JD** (20 +
+   12 + 30 + 9 + 16). Before cleaning, SUM gave 108: it counted the bag
+   twice and skipped the text *9 JD*.
+   :::
+
+   ::: {.fill answer="87" unit="JD" hint="20 + 12 + 30 + 9 + 16: the bag counts once."}
+   After cleaning, what does SUM give for the five totals?
+
+   Why: 20 + 12 + 30 + 9 + 16 = 87 JD. The bag counts once, and 9 is now a number.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-07/sims/clean-data-lab.html" poster="../../week-07/sims/clean-data-lab.png" title="Clean Data Lab: tidy the sales list with AI advice" >}}
+
+3. In **Clean Data Lab**, use the AI's steps one by one, but check each
+   one. Which step do you **not** use? What is the SUM of the clean list?
+
+   {{< record "The bad step … ; the SUM …" >}}
+
+   ::: {.check}
+   **Step 6, "Delete Totals under 12"**: it deletes real sales. With the
+   other five steps, the clean list adds up to **185 JD**.
+   :::
+
+   ::: {.choice}
+   Which AI step in Clean Data Lab is a bad idea?
+
+   - [x] Delete the Totals under 12.
+
+     Why: They are real sales: never delete real rows because an AI says so.
+
+   - [ ] Remove the duplicate rows.
+
+     Why: A row typed twice must count once.
+
+   - [ ] TRIM the extra spaces.
+
+     Why: Extra spaces make the same word look different.
+   :::
+
+## Experiment 3 · Check the AI's chart advice
+
+**The idea:** an AI can suggest a chart and a title, but its advice is not
+always right. Check it with the rule of Lecture 13: **compare** amounts →
+column chart; **change over time** → line chart; **parts of one whole** →
+pie chart. Make the chart from the **clean** data, and give it a real
+title, never "Chart 1".
+
+**Aim:** check the AI's chart advice, and make the right chart.
+
+::: {.part}
+**Part A · In the apps (an AI assistant and Excel)**
+:::
+
+1. Ask the AI: *Which chart shows how the sales of a shop change from
+   Sunday to Thursday?* Then, on the sheet **Days** of `sales-start.xlsx`,
+   select **A1:B6** and make the chart that the rule gives. Give it a real
+   title.
+
+   {{< record "The AI advised … ; I made a … chart with the title …" lines=2 >}}
+
+   ::: {.check}
+   A **line chart**: a line shows a change over time. Many AI answers say
+   so, but some advise a pie or a column chart: the rule decides. A real
+   title, for example "Sales from Sunday to Thursday (JD)".
+   :::
+
+   ::: {.choice}
+   Why is a line chart right for the sales from Sunday to Thursday?
+
+   - [x] It shows a change over time.
+
+     Why: The days follow each other: a line shows up and down.
+
+   - [ ] It shows the parts of one whole.
+
+     Why: That is a pie chart.
+
+   - [ ] It compares types of products.
+
+     Why: The question is about days, not types.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-07/sims/chart-lab.html" poster="../../week-07/sims/chart-lab.png" title="Chart Lab: the right chart for the question" >}}
+
+2. In **Chart Lab**, a weak AI answer advises a **pie chart of the sales
+   per day**. Try it, read what the lab says, then make the right chart.
+
+   {{< record "Chart Lab says … ; the right chart …" lines=2 >}}
+
+   ::: {.check}
+   A pie of the days does not show the change from day to day. The right
+   chart for the days is a **line chart**; a pie is only for the parts of
+   one whole, like the types of the week.
+   :::
+
+   ::: {.choice}
+   The AI suggests the title "Chart 1". What do you write?
+
+   - [x] what the chart shows, for example "Sales per day (JD)"
+
+     Why: A real title says what the chart shows.
+
+   - [ ] "Chart 1", because the AI suggested it
+
+     Why: It says nothing about the numbers.
+
+   - [ ] no title
+
+     Why: Every chart needs a real title.
+   :::
+
+## Table of results
+
+Copy your key results here: the rows of the parts that you did. Your
+teacher checks this table before the end of the lecture.
+
+::: {.record-table}
+| Experiment | What you record                                   | Your result |
+|:-------:|------------------------------------------------|------------------------|
+| 1 A        | The AI's formula, E13, and my check by hand       |             |
+| 1 B        | What was wrong in Job 3                           |             |
+| 2 A        | Two steps of the AI                               |             |
+| 2 A        | The rows and the SUM after cleaning               |             |
+| 2 B        | The bad AI step, and the SUM in Clean Data Lab    |             |
+| 3 A        | The AI's chart advice, and my chart               |             |
+| 3 B        | The right chart for the days in Chart Lab         |             |
+:::

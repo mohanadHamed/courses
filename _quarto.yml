@@ -1,3 +1,11 @@
+# One profile of this group is always active. `site` (the default: CI, and
+# `--profile review`) leaves out the face-to-face version of Digital Skills
+# (courses/digital-skills/face-to-face/, not published; _quarto-site.yml).
+# `--profile f2f` builds it for the teacher's preview (its README.md).
+profile:
+  group:
+    - [site, f2f]
+
 project:
   type: website
   output-dir: _site

@@ -1,0 +1,299 @@
+---
+title: "A Monthly Budget Sheet"
+description: "Worksheet · Three experiments in Excel: the layout and the totals of a monthly budget, the part of the income of each expense with $, and number formats. Part A in Excel, Part B on the simulators."
+lesson: 12
+ilos: [C2]
+format: lesson-typst
+---
+
+::: {.lead}
+Today you build a monthly budget in Excel, like in a lab. Each experiment
+has two parts. **Part A** is in Excel on the lab computer. **Part B** is on
+a simulator of the interactive lesson: on paper, scan its QR code; on the
+screen, click its link. After each step, write your result in its box. At
+the end, copy your key results into the table.
+:::
+
+## Before you start
+
+- **You need:** a computer with Excel (the desktop app, or Excel on the web
+  at `office.com`).
+- **No lab computer today?** Do Part B of each experiment on your phone. Do
+  Part A later on any computer with Excel.
+- **Made-up numbers only:** this is the budget of Lina, a made-up student.
+  Your real money is private.
+- **Check:** the results are at the end of this worksheet. Look only after
+  you try. On the interactive lesson, every step has a check that answers
+  at once.
+
+## Experiment 1 · The layout and the totals
+
+**The idea:** a **budget** plans the money of one month: what comes in
+(**income**) and what goes out (**expenses**). Make two blocks on one
+sheet, Income at the top and Expenses below, each with a **Total** line,
+and one empty row between them. Column A has the names, column B the
+amounts. "JD" goes in the heading, not in the cells. **=SUM** adds each
+block, and *Left* is the total income minus the total expenses.
+
+**Aim:** lay out a budget in two blocks, and let Excel add it up.
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
+
+1. Open a **Blank workbook**. Type Lina's month: in A1 **Income** and in B1
+   **Amount (JD)**; A2 **Allowance**, B2 **120**; A3 **Tutoring**, B3
+   **80**; A4 **Total income**. Leave row 5 empty. A6 **Expenses**; A7 to
+   A11: **Transport 30**, **Phone 10**, **Food 70**, **Books 20**, **Fun
+   20** (the amounts in B7 to B11); A12 **Total expenses**. A14 **Left**.
+
+   {{< record "The rows of the two blocks: income … to … ; expenses … to …" >}}
+
+   ::: {.check}
+   **Income** in rows 2–3 with its total in row 4; **expenses** in rows
+   7–11 with their total in row 12; **Left** in row 14. The cells of
+   column B hold only numbers.
+   :::
+
+   ::: {.order}
+   Put the rows of a budget in order, from the top of the sheet.
+
+   1. the heading Income
+   2. the income amounts
+   3. Total income
+   4. an empty row
+   5. the expenses
+   6. Total expenses
+   7. Left
+
+   Why: Two blocks, each with its Total line, then what is left.
+   :::
+
+2. In B4 type **=SUM(B2:B3)**, in B12 **=SUM(B7:B11)** and in B14
+   **=B4-B12**.
+
+   {{< record "Total income … ; total expenses … ; left …" >}}
+
+   ::: {.check}
+   Total income **200** (120 + 80), total expenses **150** (30 + 10 + 70 +
+   20 + 20), left **50** (200 − 150).
+   :::
+
+   ::: {.fill answer="50" unit="JD" hint="Total income minus total expenses."}
+   Lina's total income is 200 JD and her total expenses are 150 JD. What
+   does B14 show with `=B4-B12`?
+
+   Why: 200 − 150 = 50 JD left to save.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-06/sims/budget-builder.html" poster="../../week-06/sims/budget-builder.png" title="Budget Builder: Sami's month" >}}
+
+3. In **Budget Builder**, build Sami's month: do the first three tasks
+   (the total income, the total expenses and what is left).
+
+   {{< record "Sami: income … ; expenses … ; left …" >}}
+
+   ::: {.check}
+   Total income **250** (=SUM(B2:B3)), total expenses **195**
+   (=SUM(B7:B11)), left **55** (=B4-B12).
+   :::
+
+   ::: {.choice}
+   Which formula gives what is left in B14?
+
+   - [x] `=B4-B12`
+
+     Why: The total income minus the total expenses.
+
+   - [ ] `=B4+B12`
+
+     Why: Left is what stays after the expenses: subtract them.
+
+   - [ ] `=SUM(B2:B12)`
+
+     Why: That adds the income and the expenses together.
+   :::
+
+## Experiment 2 · The part of the income
+
+**The idea:** each expense is a part of the income: divide its amount by
+the total income. In C7 write **=B7/\$B\$4** and copy it down with the fill
+handle: B7 moves to B8, B9 …; **\$B\$4** (the total income) stays. If one
+amount changes, every total and every part changes by itself.
+
+**Aim:** find the part of each expense, and see a budget change by itself.
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
+
+1. In C6 type **Part**. In C7 type **=B7/\$B\$4** and copy it down to C11
+   with the fill handle. Read C9, the part of food.
+
+   {{< record "C9 shows … ; its formula is …" >}}
+
+   ::: {.check}
+   C9 shows **0.35** (70 ÷ 200) with **=B9/\$B\$4**: B9 moved with the
+   row, and \$B\$4 stayed.
+   :::
+
+   ::: {.fill answer="0.35" hint="Food is 70, and the total income is 200."}
+   What does C9 show with `=B9/$B$4` for Lina?
+
+   Why: 70 ÷ 200 = 0.35. B9 moved with the row, and $B$4 stayed.
+   :::
+
+2. Change Food in B9 from 70 to **80**. Which cells change by themselves?
+
+   {{< record "The cells that changed: …" lines=2 >}}
+
+   ::: {.check}
+   **B12** (total expenses 160), **B14** (left 40) and **C9** (0.4). You
+   changed one number, and every formula that uses it changed.
+   :::
+
+   ::: {.choice}
+   Food goes from 70 to 80. What is left in B14 now?
+
+   - [x] 40 JD
+
+     Why: The expenses grow by 10 to 160, so 200 − 160 = 40.
+
+   - [ ] 50 JD
+
+     Why: B14 changes by itself when an expense changes.
+
+   - [ ] 60 JD
+
+     Why: More food means less left, not more.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-06/sims/budget-builder.html" poster="../../week-06/sims/budget-builder.png" title="Budget Builder: Sami's month" >}}
+
+3. In **Budget Builder**, do the last two tasks: the part of food in C9,
+   then the % button.
+
+   {{< record "C9 shows … , then … with %" >}}
+
+   ::: {.check}
+   **0.36** (90 ÷ 250), then **36 %** with the Percentage format: more
+   than a third of Sami's money goes to food.
+   :::
+
+   ::: {.choice}
+   Why is there a `$` in `=B9/$B$4`?
+
+   - [x] The total income stays the same in every row.
+
+     Why: $B$4 is absolute: it does not move when you copy the formula.
+
+   - [ ] The money is in dollars.
+
+     Why: The $ sign of a reference has nothing to do with money.
+
+   - [ ] It makes the result a percentage.
+
+     Why: The % look comes from the number format.
+   :::
+
+## Experiment 3 · Make it readable: number formats
+
+**The idea:** a **number format** changes how a number looks, not the
+number itself (Home › Number). The parts get **Percentage** (0.35 looks
+like 35%); the money gets **Number** with 2 decimals (50 looks like 50.00).
+Make the Total lines bold, and widen a column that shows ####. The formula
+bar always shows the real value.
+
+**Aim:** make the budget easy to read, without changing its values.
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
+
+1. Select C7:C11 and click **%** (Home › Number). Select B2:B14 and give it
+   2 decimals (**Number** format). Make the two Total lines **bold**. Click
+   C7 and look at the formula bar.
+
+   {{< record "C7 shows … ; the formula bar shows …" >}}
+
+   ::: {.check}
+   C7 shows **15%** (30 ÷ 200), but the formula bar still shows
+   **=B7/\$B\$4**, and the value is 0.15. A format changes the look, not the
+   value.
+   :::
+
+   ::: {.choice}
+   Does a number format change the value that the formulas use?
+
+   - [x] No: it changes only the look; the value stays 0.15.
+
+     Why: The formula bar shows the real value, so the formulas still work.
+
+   - [ ] Yes: 15% becomes the number 15.
+
+     Why: 15% is 0.15: the format only shows it as a percentage.
+
+   - [ ] Yes: the decimals are deleted.
+
+     Why: Fewer decimals on the screen do not change the value.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-06/sims/format-lab.html" poster="../../week-06/sims/format-lab.png" title="Number Format Lab: the same number, another look" >}}
+
+2. In **Number Format Lab**, give the same number each format. What does
+   0.36 look like in the Percentage format?
+
+   {{< record "0.36 as a percentage looks like …" >}}
+
+   ::: {.check}
+   **36%**. In Currency with 2 decimals, 55 looks like **55.00 JD**. The
+   value in the formula bar stays the same.
+   :::
+
+   ::: {.sort}
+   Which format shows each look? Sort them.
+
+   Percentage
+   :   36%
+
+       Why: 0.36 in the Percentage format.
+
+   Number with 2 decimals
+   :   55.00
+
+       Why: Two decimals for money.
+
+   A column that is too narrow
+   :   ####
+
+       Why: Make the column wider to see the number.
+   :::
+
+## Table of results
+
+Copy your key results here: the rows of the parts that you did. Your
+teacher checks this table before the end of the lecture.
+
+::: {.record-table}
+| Experiment | What you record                                   | Your result |
+|:-------:|------------------------------------------------|------------------------|
+| 1 A        | Lina: total income, total expenses, left          |             |
+| 1 B        | Sami: total income, total expenses, left          |             |
+| 2 A        | C9 for Lina, and its formula                      |             |
+| 2 A        | The cells that changed when food became 80        |             |
+| 2 B        | C9 for Sami, as a number and as a percentage      |             |
+| 3 A        | C7 with %, and the formula bar                    |             |
+| 3 B        | 0.36 as a percentage                              |             |
+:::

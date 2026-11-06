@@ -124,6 +124,12 @@ local collect = {
     if div.classes:includes("check") then
       return take_check(div, experiment), false
     end
+    -- Face-to-face Digital Skills: "Part A · In the app" or "Part B · On the
+    -- simulator" in an experiment, kept on the page of what follows it.
+    if div.classes:includes("part") then
+      return wrap('#block(width: 100%, sticky: true, above: 1.1em, below: 0.6em, fill: accent2.lighten(72%), '
+        .. 'radius: 4pt, inset: (x: 8pt, y: 4pt))[#set text(fill: accent.darken(40%))\n', div.content), false
+    end
     if div.classes:includes("record-table") then
       return wrap("#block(width: 100%)[#set table(inset: (x: 6pt, y: 11pt))\n", div.content)
     end

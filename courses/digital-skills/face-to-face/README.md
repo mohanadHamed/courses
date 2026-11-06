@@ -55,8 +55,17 @@ Aim lines). Only the length of the whole session appears (the chip "60
 min" on the page), so the session never looks shorter than an hour.
 
 A practice session has the same three parts (`practice-NN.qmd`,
-`practice-NN-sheet.qmd`, `practice-NN-slides.qmd`), with no new ideas: its
-slides recall the ideas it practises.
+`practice-NN-sheet.qmd`, `practice-NN-slides.qmd`), with no new ideas
+(Practice 1 is the model):
+
+- **slides:** 2–3 **Recall** slides (questions on the lectures it
+  practises, with `.answer` cards), one Live demo, the Summary, Your
+  worksheet and the Results; no Keywords;
+- **worksheet:** 2–3 experiments, each with Part A and Part B; "**The idea
+  (Lectures X–Y):**" recalls what the experiment uses;
+- **page:** `## Recall` (the main ideas in short points, no Key terms),
+  then one section per experiment, `## P1.1 …` (with its experiment and one
+  Try it), the table of results and `## Wrap-up {.summary}`.
 
 **No lesson notes.** The worksheet takes the place of the notes (PDF): the
 course is practical, so the main document is a manual of experiments, not
@@ -273,7 +282,7 @@ week, so a new work session can go on from here.
 | 6 | [x] Lecture 11 | [x] Lecture 12 |
 | 7 | [x] Lecture 13 | [x] Lecture 14 |
 | 8 | [x] Practice 1 | [x] Practice 2 |
-| 9 | [ ] Lecture 15 | [ ] Lecture 16 |
+| 9 | [x] Lecture 15 | [x] Lecture 16 |
 | 10 | [ ] Practice 3 | [ ] Practice 4 |
 | 11 | [ ] Lecture 17 | [ ] Lecture 18 |
 | 12 | [ ] Practice 5 | [ ] Practice 6 |

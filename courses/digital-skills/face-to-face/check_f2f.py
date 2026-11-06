@@ -137,7 +137,8 @@ def paths_named(text):
     """Relative paths of figures, simulators, posters, videos and start files."""
     out = re.findall(r"\]\(([^)\s]+\.(?:png|jpg|svg|gif))\)", text)
     out += re.findall(r'(?:file|poster|captions|script|recording)="([^"]+)"', text)
-    return out
+    # captions="English" names the language of an official video, not a file
+    return [p for p in out if "/" in p or re.search(r"\.\w+$", p)]
 
 
 def check_minutes(text, rel, warn):

@@ -206,7 +206,7 @@ def check_sheet(path, rel, warn, practice=False):
         if b_part and "{{< sim" not in b_part and "phone" not in b_part.split("\n", 1)[0]:
             warn("%s: Experiment %s: Part B has no simulator (or a task on the phone)" % (rel, n))
         total += len(st)
-    if not STEPS[0] <= total <= STEPS[1]:
+    if not (5 if practice else STEPS[0]) <= total <= STEPS[1]:
         warn("%s: %d steps in all (about 8-10: a good student finishes the worksheet quickly)" % (rel, total))
     if "## Table of results" not in text or "{.record-table}" not in text:
         warn("%s: no \"## Table of results\" with a ::: {.record-table}" % rel)

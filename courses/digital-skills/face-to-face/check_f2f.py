@@ -168,19 +168,20 @@ def check_choice_blocks(text, rel, warn):
             warn("%s:%d: a choice needs a Why: for every option (%d options, %d reasons)" % (rel, line, opts, whys))
 
 
-def check_sheet(path, rel, warn):
+def check_sheet(path, rel, warn, practice=False):
     text = read(path)
     secs = sections(text)
     titles = [t for t, _ in secs]
     if "Before you start" not in titles:
         warn("%s: no \"## Before you start\"" % rel)
     exps = [(t, s) for t, s in secs if re.match(r"^Experiment \d+ · ", t)]
-    if not 3 <= len(exps) <= 4:
-        warn("%s: %d experiments (3, at most 4)" % (rel, len(exps)))
+    lo = 2 if practice else 3
+    if not lo <= len(exps) <= 4:
+        warn("%s: %d experiments (%d, at most 4)" % (rel, len(exps), lo))
     total = 0
     for t, s in exps:
         n = re.match(r"^Experiment (\d+)", t).group(1)
-        if "**The idea:**" not in s:
+        if not re.search(r"\*\*The idea( \([^)]*\))?:\*\*", s):
             warn("%s: Experiment %s has no \"**The idea:**\"" % (rel, n))
         if "**Aim:**" not in s:
             warn("%s: Experiment %s has no \"**Aim:**\"" % (rel, n))
@@ -218,22 +219,23 @@ def check_sheet(path, rel, warn):
     return [re.match(r"^Experiment (\d+)", t).group(1) for t, _ in exps], total, words
 
 
-def check_page(path, rel, exps, warn):
+def check_page(path, rel, exps, warn, practice=False):
     text = read(path)
     secs = sections(text)
     titles = [t for t, _ in secs]
-    for need in ("Key terms", "Before you start", "Table of results"):
+    # a practice session has no new terms: a Recall instead of Key terms
+    for need in (("Recall",) if practice else ("Key terms",)) + ("Before you start", "Table of results"):
         if need not in titles:
             warn("%s: no \"## %s\"" % (rel, need))
-    if not any(t.startswith("Summary") for t in titles):
-        warn("%s: no \"## Summary {.summary}\"" % rel)
+    if not any(t.startswith("Summary") or t.startswith("Wrap-up") for t in titles):
+        warn("%s: no \"## Summary {.summary}\" (a practice session: Wrap-up)" % rel)
     for n in exps:
         if "{{< experiment %s >}}" % n not in text:
             warn("%s: Experiment %s of the worksheet is not on the page ({{< experiment %s >}})" % (rel, n, n))
     if "{{< experiment results >}}" not in text:
         warn("%s: no {{< experiment results >}}" % rel)
     for t, s in secs:
-        if re.match(r"^\d+\.\d+ ", t):
+        if re.match(r"^P?\d+\.\d+ ", t):
             boxes = s.count('title="Try it')
             if boxes != 1:
                 warn("%s: section \"%s\" has %d Try it boxes (one)" % (rel, t, boxes))
@@ -245,13 +247,15 @@ def check_page(path, rel, exps, warn):
         warn("%s: %d Try it answers but %d reasons (Why:)" % (rel, answers, whys))
 
 
-def check_slides(path, rel, warn):
+def check_slides(path, rel, warn, practice=False):
     text = read(path)
     secs = sections(text)
     titles = [t for t, _ in secs]
     if len(titles) > SLIDES_MAX:
         warn("%s: %d slides (at most %d)" % (rel, len(titles), SLIDES_MAX))
-    for need in ("Keywords", "Summary", "Your worksheet", "Results of the worksheet"):
+    if practice and not any(t.startswith("Recall") for t in titles):
+        warn("%s: a practice session starts with Recall slides" % rel)
+    for need in (() if practice else ("Keywords",)) + ("Summary", "Your worksheet", "Results of the worksheet"):
         if need not in titles:
             warn("%s: no \"## %s\" slide" % (rel, need))
     for t, s in secs:
@@ -326,9 +330,10 @@ def main(argv):
                     warn("%s: ilos %s, schedule.yml has %s" % (r, got, ilos))
             check_minutes(text, r, warn)
             check_paths(stem + suffix + ".qmd", r, warn)
-        exps, steps, words = check_sheet(stem + "-sheet.qmd", rel + "-sheet.qmd", warn)
-        check_page(stem + ".qmd", rel + ".qmd", exps, warn)
-        check_slides(stem + "-slides.qmd", rel + "-slides.qmd", warn)
+        pr = kind == "practice"
+        exps, steps, words = check_sheet(stem + "-sheet.qmd", rel + "-sheet.qmd", warn, pr)
+        check_page(stem + ".qmd", rel + ".qmd", exps, warn, pr)
+        check_slides(stem + "-slides.qmd", rel + "-slides.qmd", warn, pr)
         slides = len(sections(read(stem + "-slides.qmd")))
         done.append("%s %d: %d experiments, %d steps, %d words, %d slides"
                     % ("Lecture" if kind == "lecture" else "Practice", n, len(exps), steps, words, slides))

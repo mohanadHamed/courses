@@ -22,6 +22,12 @@ approved blended content, so that the site can be switched quickly.
 
   Then open `courses/digital-skills/face-to-face/index.html`: the course
   page of this version, with every session that is written.
+- **Check** every session against the rules below (run it by hand, from
+  the project root):
+
+  ```bash
+  python3 courses/digital-skills/face-to-face/check_f2f.py
+  ```
 - The rules of `AUTHORING.md` and `../NOTES.md` hold here too (A2 English,
   general examples, the page checks every task, slides that explain
   themselves), except where this file says otherwise.
@@ -71,6 +77,10 @@ Every experiment has two parts:
   poster, a **QR code** (on paper: scan it with the phone) and a **link**
   (on the screen: click it). Both open the simulator on the interactive
   lesson (`lesson-NN.html#sim-name`), right above the checks of its steps.
+
+Where a session has no simulator for an idea, Part B is one short step
+on the phone (the same app or site on the phone, for example signing in
+with the university account in Lecture 2).
 
 So the worksheet works in every case:
 
@@ -249,7 +259,7 @@ week, so a new work session can go on from here.
 
 | Week | Session 1 | Session 2 |
 |---|---|---|
-| 1 | [ ] Lecture 1 | [ ] Lecture 2 |
+| 1 | [x] Lecture 1 | [x] Lecture 2 |
 | 2 | [ ] Lecture 3 | [ ] Lecture 4 |
 | 3 | [ ] Lecture 5 | [ ] Lecture 6 |
 | 4 | [ ] Lecture 7 | [ ] Lecture 8 |

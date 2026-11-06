@@ -439,8 +439,8 @@ local function web_lesson_card(meta)
   local files = meta["start-files"] and #meta["start-files"] > 0
   if sheet and is_f2f(meta) then head = "Interactive lesson · click the link or scan the QR code" end
   local text = sheet and is_f2f(meta)
-    and ("Part A of each experiment is in the real app on the computer. Part B is on a simulator of the interactive lesson: "
-      .. "its box has a QR code and a link. The interactive lesson also has "
+    and ("Part A of each experiment is in the real app on the computer. Part B is on your phone or on a simulator of the "
+      .. "interactive lesson: a simulator box has a QR code and a link. The interactive lesson also has "
       .. (files and "the start files, " or "") .. "the same steps and a check after every step that answers at once. "
       .. "Write your result after each step. The results are at the end of this worksheet: look only after you try.")
     or sheet

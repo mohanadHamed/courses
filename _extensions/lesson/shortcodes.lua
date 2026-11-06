@@ -125,6 +125,49 @@ local function html_attr(s)
   return (s:gsub("&", "&amp;"):gsub('"', "&quot;"):gsub("<", "&lt;"):gsub(">", "&gt;"))
 end
 
+-- "a/b/../../c/./d.html" -> "c/d.html": a clean address for a QR code and a
+-- link (the face-to-face version of Digital Skills uses the simulators and
+-- start files of the week folders: ../../week-01/sims/x.html).
+local function clean_path(p)
+  local out = {}
+  for part in p:gmatch("[^/]+") do
+    if part == ".." and #out > 0 and out[#out] ~= ".." then
+      table.remove(out)
+    elseif part ~= "." then
+      table.insert(out, part)
+    end
+  end
+  return table.concat(out, "/")
+end
+
+-- The address of a file of this page on the site: site-url + folder + file.
+local function site_file_url(file)
+  local rel = doc_rel_dir()
+  return site_url() .. clean_path((rel ~= "" and (rel .. "/") or "") .. file)
+end
+
+-- The face-to-face version of Digital Skills (`f2f: true` in
+-- courses/digital-skills/face-to-face/_metadata.yml): the QR codes and links
+-- of the worksheet and the slides open the simulator on the interactive
+-- lesson (lesson-NN.html#sim-name), next to the checks of its steps.
+local function is_f2f(meta)
+  return meta and (meta.f2f == true or str(meta.f2f or "") == "true")
+end
+
+-- The interactive lesson of this document: lesson-NN-sheet.qmd,
+-- lesson-NN-slides.qmd and lesson-NN-book.qmd -> lesson-NN.html.
+local function lesson_page()
+  local stem = pandoc.path.split_extension(pandoc.path.filename(quarto.doc.input_file))
+  stem = stem:gsub("%-sheet$", ""):gsub("%-slides$", ""):gsub("%-book$", "")
+  return stem .. ".html"
+end
+
+-- id of a simulator on its page: sims/time-saver.html -> sim-time-saver.
+local function sim_id(file)
+  local name = pandoc.path.split_extension(pandoc.path.filename(file))
+  return "sim-" .. (name:gsub("[^%w%-]", "-"))
+end
+
 -- QR images (for slides) ---------------------------------------------------
 -- PowerPoint cannot draw a QR code itself, so we make a PNG with Quarto's
 -- Typst and the same QR package as the PDF. Cached in .quarto/qr/ (not in git).
@@ -245,7 +288,7 @@ end
 
 -- Simulator ---------------------------------------------------------------
 
-local function sim(kwargs)
+local function sim(kwargs, meta)
   local file = str(kwargs.file)
   local poster = str(kwargs.poster)
   local title = str(kwargs.title)
@@ -258,8 +301,14 @@ local function sim(kwargs)
   if title == "" then title = label end
   if height == "" then height = "480" end
 
-  local rel = doc_rel_dir()
-  local url = site_url() .. (rel ~= "" and (rel .. "/") or "") .. file
+  local url = site_file_url(file)
+  -- Face-to-face Digital Skills: the QR code and the link open the simulator
+  -- on the interactive lesson (page= names another page of the folder).
+  local f2f = is_f2f(meta)
+  if f2f then
+    local page = str(kwargs.page or "")
+    url = site_file_url(page ~= "" and page or lesson_page()) .. "#" .. sim_id(file)
+  end
   local qr_only = str(kwargs.layout) == "qr"
 
   if qr_only and not quarto.doc.is_format("html") and not quarto.doc.is_format("typst") then
@@ -268,10 +317,41 @@ local function sim(kwargs)
 
   if quarto.doc.is_format("html") then
     return pandoc.RawBlock("html", string.format([[
-<figure class="sim">
+<figure class="sim" id="%s">
   <iframe src="%s" title="%s" loading="lazy" style="height:%spx"></iframe>
   <figcaption><span class="sim-label">%s %s: %s</span><a href="%s" target="_blank" rel="noopener">Open full screen ↗</a></figcaption>
-</figure>]], html_attr(file), html_attr(title), html_attr(height), game and "🕹" or "🎮", label, html_attr(title), html_attr(file)))
+</figure>]], html_attr(sim_id(file)), html_attr(file), html_attr(title), html_attr(height), game and "🕹" or "🎮", label,
+      html_attr(title), html_attr(file)))
+
+  elseif quarto.doc.is_format("typst") and f2f then
+    -- A worksheet that is printed or read on the screen: on paper the QR
+    -- code, on the screen a link to click (both open the same place).
+    local short = title:match("^(.-):") or title
+    return pandoc.RawBlock("typst", string.format([=[
+#import "@preview/tiaoma:0.3.0": qrcode
+#block(width: 100%%, breakable: false, fill: accent2.lighten(90%%), stroke: 0.6pt + accent2.darken(10%%), radius: 6pt, inset: 9pt)[
+  #grid(
+    columns: (3.4cm, 1fr, 2.7cm),
+    column-gutter: 10pt,
+    align: horizon,
+    image(%s, width: 100%%),
+    [
+      #text(size: 8pt, weight: "bold", fill: accent.darken(30%%))[%s] \
+      #text(weight: "bold")[#%s] \
+      #v(3pt)
+      #text(size: 8.5pt)[*On paper:* scan the QR code with your phone. \ *On the screen:* click the link.] \
+      #v(2pt)
+      #link(%s)[#box(fill: accent, radius: 3pt, inset: (x: 6pt, y: 3pt))[#text(size: 8.5pt, weight: "bold", fill: white)[Open #%s ↗]]]
+    ],
+    align(center)[
+      #qrcode(%s, width: 2.5cm)
+      #v(1pt)
+      #text(size: 7.5pt)[Scan to %s]
+    ],
+  )
+]
+]=], typst_string(poster), label, typst_string(title), typst_string(url), typst_string(short),
+      typst_string(url), game and "play" or "try it"))
 
   elseif quarto.doc.is_format("typst") then
     return pandoc.RawBlock("typst", string.format([[
@@ -327,6 +407,15 @@ local function sim(kwargs)
       pandoc.Div(right, { class = "column", width = "45%" }),
     }, { class = "columns" })
   end
+end
+
+-- {{< page-qr >}} (slides): the QR code of the interactive lesson of the
+-- deck (lesson-NN-slides.qmd -> lesson-NN.html), for a slide on which the
+-- students open the page on their phones. Nothing on the page and in a PDF.
+local function page_qr()
+  if quarto.doc.is_format("html") or quarto.doc.is_format("typst") then return pandoc.Null() end
+  local url = site_file_url(lesson_page())
+  return pandoc.Para({ pandoc.Image({}, qr_png(url, "Interactive lesson", "Scan to open the lesson")) })
 end
 
 -- Answer space (homework) -------------------------------------------------
@@ -754,40 +843,48 @@ local function experiment(args)
 end
 
 -- The start files: `start-files:` (name, about) in the worksheet's front
--- matter; the files are in the folder files/ next to it.
+-- matter; the files are in the folder files/ next to it, or in the folder
+-- `start-files-dir:` (the face-to-face version of Digital Skills uses the
+-- start files of the week folders: "../../week-01/files").
 local function start_files(meta)
   local files = meta and meta["start-files"]
+  local dir = meta and meta["start-files-dir"] and str(meta["start-files-dir"]) or nil
   if not files then
     local fm = front_matter(sheet_path())
     files = fm and fm["start-files"]
+    if not dir and fm and fm["start-files-dir"] then dir = str(fm["start-files-dir"]) end
   end
+  if not dir or dir == "" then dir = "files" end
+  dir = dir:gsub("/+$", "")
   if not files or #files == 0 then return pandoc.Null() end
   if quarto.doc.is_format("html") then
     local items = {}
     for _, f in ipairs(files) do
       local name = str(f.name or f)
       table.insert(items, string.format(
-        '<li><a class="sf-file" href="files/%s" download>⬇ %s</a><span class="sf-about">%s</span></li>',
-        html_attr(name), html_attr(name), html_attr(str(f.about or ""))))
+        '<li><a class="sf-file" href="%s/%s" download>⬇ %s</a><span class="sf-about">%s</span></li>',
+        html_attr(dir), html_attr(name), html_attr(name), html_attr(str(f.about or ""))))
     end
     return pandoc.RawBlock("html", '<div class="start-files"><div class="sf-title">📂 Start files</div><ul>'
       .. table.concat(items, "") .. '</ul><p class="sf-note">The same data for every student. '
       .. "Download each file, then open it in its app.</p></div>")
   elseif quarto.doc.is_format("typst") then
-    local rel = doc_rel_dir()
     local items = {}
     for _, f in ipairs(files) do
       local name = str(f.name or f)
-      local url = site_url() .. (rel ~= "" and (rel .. "/") or "") .. "files/" .. name
+      local url = site_file_url(dir .. "/" .. name)
       table.insert(items, string.format("- #link(%s)[#strong(%s)]: #%s", typst_string(url), typst_string(name),
         typst_string(str(f.about or ""))))
     end
+    local note = is_f2f(meta)
+      and "The same data for every student. On the screen, click the file name. On paper, scan the QR code above: the files are on the interactive lesson."
+      or "The same data for every student. Download them from the interactive lesson (QR code above)."
     return pandoc.RawBlock("typst", string.format([[
 #block(width: 100%%, breakable: false, fill: accent2.lighten(88%%), radius: 6pt, inset: (x: 10pt, y: 8pt), stroke: 0.6pt + accent2.darken(5%%))[
-#text(weight: "bold", fill: accent.darken(35%%))[Start files] #h(4pt) #text(size: 8.5pt, fill: luma(80))[The same data for every student. Download them from the interactive lesson (QR code above).]
+#text(weight: "bold", fill: accent.darken(35%%))[Start files] #h(4pt) #text(size: 8.5pt, fill: luma(80))[%s]
 %s
 ]
-]], table.concat(items, "\n")))
+]], note, table.concat(items, "\n")))
   end
   return pandoc.Null()
 end
@@ -865,7 +962,8 @@ return {
   ["watch"] = function(_, kwargs) return watch(kwargs) end,
   ["answer-space"] = function(_, kwargs) return answer_space(kwargs) end,
   ["glossary"] = function(args) return glossary(args) end,
-  ["sim"] = function(_, kwargs) return sim(kwargs) end,
+  ["sim"] = function(_, kwargs, meta) return sim(kwargs, meta) end,
+  ["page-qr"] = function() return page_qr() end,
   ["record"] = function(args, kwargs) return record(args, kwargs) end,
   ["experiment"] = function(args) return experiment(args) end,
   ["start-files"] = function(_, _, meta) return start_files(meta) end,

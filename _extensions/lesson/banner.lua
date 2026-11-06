@@ -226,7 +226,7 @@ local function page_chips(meta, course)
     if sess.kind ~= "lecture" and not info.core then table.insert(chips, "Flexible") end
     if course.blended then table.insert(chips, "🏫 Face-to-face") end
     if course.minutes then table.insert(chips, "⏱ " .. str(course.minutes) .. " min") end
-    if sess.kind == "lecture" and is_sheet() then table.insert(chips, "Worksheet") end
+    if (sess.kind == "lecture" or sess.kind == "practice") and is_sheet() then table.insert(chips, "Worksheet") end
   end
   return chips
 end
@@ -251,9 +251,21 @@ end
 
 -- HTML --------------------------------------------------------------------
 
+-- The face-to-face version of Digital Skills (`f2f: true`,
+-- courses/digital-skills/face-to-face/_metadata.yml): two lab sessions a
+-- week, each with slides, a worksheet and this page; no lesson notes.
+local function is_f2f(meta)
+  return meta.f2f == true or str(meta.f2f or "") == "true"
+end
+
 local function hero_note(meta, slides, online, sheet)
   local lines = {}
-  if sheet then
+  if sheet and is_f2f(meta) then
+    table.insert(lines, (meta.practice and "No new ideas today: you practise the lectures you had. " or "")
+      .. "In class, the teacher first explains with the slides. Then you do the worksheet (PDF): "
+      .. "Part A in the real app on the computer, Part B on the simulators of this page (they work on a phone too). "
+      .. "On this page, every step has a check that answers at once.")
+  elseif sheet then
     table.insert(lines, "In class, follow the worksheet (PDF): do each experiment on the computer and record your results. "
       .. "On this page every step has its result. The lesson notes (PDF) are a short reference.")
   elseif online then
@@ -279,18 +291,23 @@ local function html_lesson(doc, course)
   -- Homework PDF is the printed page itself (homework_pdf.py), so both match.
   local buttons = {}
   local online = is_online(meta)
-  -- A lecture with a worksheet: the worksheet is the main document of the session.
-  local sheet = meta.lesson and not online and file_exists(pandoc.path.join({ dir, stem .. "-sheet.qmd" }))
+  -- A lecture with a worksheet: the worksheet is the main document of the
+  -- session (face-to-face Digital Skills: also a practice session, and no notes).
+  local sheet = (meta.lesson or meta.practice) and not online
+    and file_exists(pandoc.path.join({ dir, stem .. "-sheet.qmd" }))
+  local book = file_exists(pandoc.path.join({ dir, stem .. "-book.qmd" }))
   if meta.homework then
     table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download PDF</a>', esc(names.homework)))
   elseif online then
     table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download tasks (PDF)</a>', esc(names.tasks)))
-  elseif file_exists(pandoc.path.join({ dir, stem .. "-book.qmd" })) then
+  elseif sheet or book then
     if sheet then
       table.insert(buttons, string.format('<a class="hero-btn" href="%s">⬇ Worksheet (PDF)</a>', esc(names.sheet)))
     end
-    table.insert(buttons, string.format('<a class="hero-btn%s" href="%s">⬇ %s (PDF)</a>', sheet and " hero-btn-ghost" or "",
-      esc(names.notes), (meta.seminar or meta.practice) and "Worksheet" or "Lesson notes"))
+    if book then
+      table.insert(buttons, string.format('<a class="hero-btn%s" href="%s">⬇ %s (PDF)</a>', sheet and " hero-btn-ghost" or "",
+        esc(names.notes), (meta.seminar or meta.practice) and "Worksheet" or "Lesson notes"))
+    end
   end
   if meta.homework then
     table.insert(buttons,
@@ -362,7 +379,9 @@ local function html_course(doc, course)
   local meta = doc.meta
   local chips = { "Course " .. esc(str(course.code)) }
   local units = (read_schedule() or {}).units ~= nil
-  if course.blended then
+  if is_f2f(meta) then
+    table.insert(chips, "Face-to-face: two sessions in the computer lab each week")
+  elseif course.blended then
     table.insert(chips, units and "Blended: a lecture or practice session + an online activity in each unit"
       or "Blended: 1 lab lecture + 1 online activity each week")
   else
@@ -418,7 +437,13 @@ local function web_lesson_card(meta)
   local seminar = meta.seminar or meta.practice
   local head = seminar and "Interactive page" or "Interactive lesson"
   local files = meta["start-files"] and #meta["start-files"] > 0
-  local text = sheet
+  if sheet and is_f2f(meta) then head = "Interactive lesson · click the link or scan the QR code" end
+  local text = sheet and is_f2f(meta)
+    and ("Part A of each experiment is in the real app on the computer. Part B is on a simulator of the interactive lesson: "
+      .. "its box has a QR code and a link. The interactive lesson also has "
+      .. (files and "the start files, " or "") .. "the same steps and a check after every step that answers at once. "
+      .. "Write your result after each step. The results are at the end of this worksheet: look only after you try.")
+    or sheet
     and ("Do each experiment on the computer and write your result after each step. The interactive lesson has "
       .. (files and "the start files and " or "") .. "the same experiments, with a field for each result and \"Check your result\" after every step. The results are also at the end of this worksheet: look only after you try.")
     or seminar

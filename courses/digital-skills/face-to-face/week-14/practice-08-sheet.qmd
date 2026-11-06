@@ -1,0 +1,349 @@
+---
+title: "Course Project (1): Plan, Data Sheet and First Draft"
+description: "Practice worksheet · Three experiments on your own course project: a clear question and a plan, the data sheet in Excel (table, formula, summary, chart), and the first draft of the report in Word with checked AI help. Part A in the apps, Part B on the simulators."
+practice: 8
+ilos: [A1, A3, C4]
+format: lesson-typst
+---
+
+::: {.lead}
+Today you start your course project: one topic, three files: a data sheet
+(Excel), a report (Word) and a short talk (PowerPoint). There are no new
+ideas: you use what you learned in Lectures 6–20. **Part A** is your own
+project in the apps on the lab computer; **Part B** is on a simulator of
+the interactive page: on paper, scan its QR code; on the screen, click its
+link. After each step, write your result in its box.
+:::
+
+## Before you start
+
+- **You need:** a lab computer with Excel and Word, and an AI assistant
+  that the university allows (for example `copilot.microsoft.com`). Save
+  your files in your OneDrive: you go on with them in Practices 9 and 10.
+- **No lab computer today?** Do Part B of each experiment on your phone. Do
+  Part A later on any computer with Office.
+- **Choose one topic.** **Topic B · My study week:** your own study minutes
+  for two weeks, every day (at least 14 rows: Day, Subject, Minutes). Only
+  your own data. **Topic A · Canteen sales:** the canteen of Sunrise
+  Company sold these items in four weeks (the list is also on the
+  interactive page, to copy):
+
+  | Week | Item     | Qty | Price (JD) |
+  |:----:|----------|----:|-----------:|
+  | 1    | Tea      | 40  | 0.5        |
+  | 1    | Coffee   | 30  | 1          |
+  | 1    | Water    | 20  | 0.25       |
+  | 1    | Sandwich | 24  | 1.5        |
+  | 1    | Cake     | 10  | 1          |
+  | 2    | Tea      | 36  | 0.5        |
+  | 2    | Coffee   | 34  | 1          |
+  | 2    | Water    | 28  | 0.25       |
+  | 2    | Sandwich | 20  | 1.5        |
+  | 2    | Cake     | 12  | 1          |
+  | 3    | Tea      | 44  | 0.5        |
+  | 3    | Coffee   | 28  | 1          |
+  | 3    | Water    | 32  | 0.25       |
+  | 3    | Sandwich | 26  | 1.5        |
+  | 3    | Cake     | 8   | 1          |
+  | 4    | Tea      | 30  | 0.5        |
+  | 4    | Coffee   | 36  | 1          |
+  | 4    | Water    | 40  | 0.25       |
+  | 4    | Sandwich | 22  | 1.5        |
+  | 4    | Cake     | 14  | 1          |
+
+- **Check:** the results are at the end of this worksheet. Look only after
+  you try. On the interactive page, every step has a check that answers at
+  once.
+
+## Experiment 1 · A question and a plan
+
+**The idea (Lectures 17, 19 and 20):** a project starts with **one clear
+question** that your data can answer. Then plan the five parts: the
+question, the data, the chart, the report headings and the slides. No
+personal data of other people: no names, phone numbers or marks.
+
+**Aim:** write the plan of your project in five lines.
+
+::: {.part}
+**Part A · In the app (Word)**
+:::
+
+1. Make a new Word document and save it as `plan.docx`. Write your plan in
+   five lines: the question, the data, the chart, the report headings and
+   the five slides.
+
+   {{< record "My question … ; my data … ; my chart …" lines=3 >}}
+
+   ::: {.check}
+   A good plan, for example for Canteen sales: *What sells most in the
+   canteen, by money and by count?*; 20 rows: week, item, quantity, price,
+   with Total = Qty × Price; a column chart of the total by item; the
+   headings Introduction, The data, Results, What I learned, AI use; five
+   slides: title, question, chart, two insights, thanks.
+   :::
+
+   ::: {.choice}
+   Which question can your study data answer?
+
+   - [x] On which day of the week do I study the most minutes?
+
+     Why: It is clear, and your own minutes can answer it.
+
+   - [ ] Am I a good student?
+
+     Why: Too vague: minutes cannot answer it.
+
+   - [ ] What are my classmates' marks?
+
+     Why: Other people's personal data: not allowed.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-14/sims/plan-checker.html" poster="../../week-14/sims/plan-checker.png" title="Plan Checker: your course project" >}}
+
+2. In **Plan Checker**, do Task 2: make a plan for *My study week* that
+   passes all five checks. Which answers were wrong because of personal
+   data?
+
+   {{< record "Wrong because of personal data: …" lines=2 >}}
+
+   ::: {.check}
+   **"What are my classmates' marks?"** and **"screenshots of classmates'
+   chats"**: other people's personal data is not allowed. Your own minutes
+   are fine.
+   :::
+
+   ::: {.choice}
+   Which data must you never collect for your project?
+
+   - [x] the names and phone numbers of buyers
+
+     Why: Personal data of other people stays out of your project.
+
+   - [ ] the price of each item
+
+     Why: A price is not personal data.
+
+   - [ ] your own study minutes
+
+     Why: Your own data is fine for your project.
+   :::
+
+## Experiment 2 · The data sheet
+
+**The idea (Lectures 11, 19 and 20):** type the data into Excel, one row
+for each record, and make it a **table** (**Ctrl + T**) with a total row.
+Add a column with a **formula**, for example Total = Qty × Price.
+Summarize it with a **PivotTable**, and make **one chart** with a title
+that answers your question.
+
+**Aim:** build the data sheet of your project.
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
+
+1. Type your data, starting in cell **A1**, and make it a table with a
+   total row. Topic A: add the column *Total* with `=C2*D2`. Save the file
+   as `project.xlsx`.
+
+   {{< record "Rows … ; the total row shows …" >}}
+
+   ::: {.check}
+   One row for each record: 20 rows for Topic A, at least 14 for Topic B.
+   In a table, the formula of *Total* fills the whole column by itself.
+   Check one row by hand, for example 24 cups at 0.5 JD = 12 JD.
+   :::
+
+   ::: {.fill answer="12" unit="JD" hint="Qty × Price: 24 × 0.5."}
+   A row has Qty **24** and Price **0.5** JD. What does `=C2*D2` show?
+
+   Why: 24 × 0.5 = 12 JD. Check one row by hand: then you trust the column.
+   :::
+
+2. Insert a PivotTable that answers your question (Topic A: Rows *Item*,
+   Values *Total*; Topic B: Rows *Subject*, Values *Minutes*). Then make
+   one chart of it, with a title that answers your question.
+
+   {{< record "The Grand Total … ; my chart and its title …" lines=2 >}}
+
+   ::: {.check}
+   One row for each item or subject, and a **Grand Total that equals the
+   total row** of the table. A column chart compares the items or the
+   subjects; its title says what it shows, for example "Minutes of study
+   by subject (two weeks)".
+   :::
+
+   ::: {.choice}
+   The Grand Total of your PivotTable is 340, but the total row of the
+   table shows 360. What is wrong?
+
+   - [x] The PivotTable misses some rows: Refresh it, or check its range.
+
+     Why: Both totals come from the same data, so they must be equal.
+
+   - [ ] Excel adds up wrong.
+
+     Why: Excel adds right; the PivotTable does not have all the rows.
+
+   - [ ] Nothing: the numbers are close.
+
+     Why: Close is not equal: some data is missing.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-13/sims/pivot-lab.html" poster="../../week-13/sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" >}}
+
+3. In **Pivot Lab**, make the summary that answers the question *Which week
+   brought the most money?* Which Rows and Values do you choose, and which
+   week is it?
+
+   {{< record "Rows … ; Values … ; the week …" >}}
+
+   ::: {.check}
+   **Rows Week, Values Sum of Total**: the third week, **112 JD**. The
+   question decides the row field and the calculation.
+   :::
+
+   ::: {.choice}
+   Your question is "Which item sells most often?". Which Values do you
+   choose?
+
+   - [x] Count of sales
+
+     Why: Count gives how often each item was sold.
+
+   - [ ] Sum of Total
+
+     Why: Sum gives the money, not how often.
+
+   - [ ] Average of Total
+
+     Why: Average gives the usual size of a sale.
+   :::
+
+## Experiment 3 · The first draft
+
+**The idea (Lectures 6, 7, 9 and 19):** in Word, write the **headings**
+first, with **Heading 1**: Introduction, The data, Results, What I
+learned, AI use. Copy your chart in Excel and paste it into Word. An AI
+tool can draft sentences: check every number in your data sheet, and
+write the text in your own words.
+
+**Aim:** write the first draft of your report.
+
+::: {.part}
+**Part A · In the apps (Word and an AI assistant)**
+:::
+
+1. Make `report.docx` with the five headings, each with the style
+   **Heading 1**: *Introduction*, *The data*, *Results*, *What I learned*,
+   *AI use*. Copy your chart in Excel and paste it under *Results*.
+
+   {{< record "My five headings … ; the chart is under …" >}}
+
+   ::: {.check}
+   Five Heading 1 lines in this order, and the chart under *Results*. The
+   Navigation Pane (**View › Navigation Pane**) shows the five headings.
+   :::
+
+   ::: {.choice}
+   How does each part of the report start?
+
+   - [x] with a Heading 1
+
+     Why: A heading style makes the parts, the Navigation Pane and later the table of contents.
+
+   - [ ] with a bold line in the Normal style
+
+     Why: Bold text looks like a heading, but Word does not see a heading.
+
+   - [ ] with an empty line
+
+     Why: An empty line gives no title to the part.
+   :::
+
+2. Ask the AI assistant for two sentences about your summary: paste only
+   the numbers of your PivotTable. Check each number in your data sheet,
+   write the true sentences in your own words under *Results*, and add a
+   first line under *AI use*.
+
+   {{< record "What I checked … ; was anything wrong? …" lines=2 >}}
+
+   ::: {.check}
+   Every number of an AI sentence must be in your PivotTable. A good first
+   AI-use line: "Two sentences of the Results were drafted with an AI
+   tool; I checked every number with my PivotTable and wrote them in my
+   own words."
+   :::
+
+   ::: {.choice}
+   An AI sentence has a number that is not in your PivotTable. What do you
+   do?
+
+   - [x] Correct it, or delete the sentence.
+
+     Why: Every number of the report comes from your data.
+
+   - [ ] Keep it: the AI knows more data.
+
+     Why: The AI did not see more data; it invented the number.
+
+   - [ ] Round it a little.
+
+     Why: A wrong number stays wrong when you round it.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="../../week-05/sims/word-ai-lab.html" poster="../../week-05/sims/word-ai-lab.png" title="Word AI Lab: draft, sum up, rewrite, translate" >}}
+
+3. In **Word AI Lab**, choose **Rewrite**. Compare the AI text with the
+   memo and tap the wrong part.
+
+   {{< record "The wrong part, and why" >}}
+
+   ::: {.check}
+   **"You can also pick it up on Friday morning"**: the memo says nothing
+   about Friday. A rewrite must not add new facts.
+   :::
+
+   ::: {.choice}
+   What must an AI rewrite of your text never do?
+
+   - [x] add new facts
+
+     Why: A rewrite changes the words, not the facts.
+
+   - [ ] change the tone
+
+     Why: A new tone is the job of a rewrite.
+
+   - [ ] make the text shorter
+
+     Why: A shorter text is fine when every fact stays.
+   :::
+
+## Table of results
+
+Copy your key results here: the rows of the parts that you did. Your
+teacher checks this table before the end of the session.
+
+::: {.record-table}
+| Experiment | What you record                                   | Your result |
+|:-------:|------------------------------------------------|-------------------------|
+| 1 A        | My project question                               |             |
+| 1 B        | The answers with personal data in Plan Checker    |             |
+| 2 A        | My table, my PivotTable and my chart title        |             |
+| 2 B        | The summary of the best week in Pivot Lab         |             |
+| 3 A        | My five headings, and what I checked              |             |
+| 3 B        | The wrong part of the rewrite                     |             |
+:::

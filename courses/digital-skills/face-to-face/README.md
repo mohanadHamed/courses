@@ -257,7 +257,10 @@ numbered separately, so a lost practice week leaves no gap.
   activities are graded and their solutions are private (`courses-private`).
   A worksheet written from an online activity uses the examples of its
   Steps and its own new examples, never the data of its Tasks to submit,
-  so that this public repo gives away no answer.
+  so that this public repo gives away no answer. The course project
+  (Practices 8–10) keeps the two topics of the blended course (Canteen
+  sales, My study week): its worksheets guide each student's own project
+  and never show a result of the canteen data.
 - **Paths.** The files of this version are in `face-to-face/week-WW/` and
   use the figures, simulators and start files of the blended week folders
   (`../../week-WW/images/…`, `../../week-WW/sims/…`). Figures made only
@@ -287,7 +290,7 @@ week, so a new work session can go on from here.
 | 11 | [x] Lecture 17 | [x] Lecture 18 |
 | 12 | [x] Practice 5 | [x] Practice 6 |
 | 13 | [x] Lecture 19 | [x] Lecture 20 |
-| 14 | [ ] Practice 7 | [ ] Practice 8 |
+| 14 | [x] Practice 7 | [x] Practice 8 |
 | 15 | [ ] Practice 9 | [ ] Practice 10 |
 
 ## Switching the site to face-to-face (later, when the teacher decides)

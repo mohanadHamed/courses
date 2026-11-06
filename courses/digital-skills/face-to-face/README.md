@@ -291,7 +291,7 @@ week, so a new work session can go on from here.
 | 12 | [x] Practice 5 | [x] Practice 6 |
 | 13 | [x] Lecture 19 | [x] Lecture 20 |
 | 14 | [x] Practice 7 | [x] Practice 8 |
-| 15 | [ ] Practice 9 | [ ] Practice 10 |
+| 15 | [x] Practice 9 | [x] Practice 10 |
 
 ## Switching the site to face-to-face (later, when the teacher decides)
 

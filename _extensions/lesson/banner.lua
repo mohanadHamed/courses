@@ -2,9 +2,9 @@
 --
 -- A session page (AUTHORING.md, "Units and sessions"): lecture (`lesson: N`),
 -- seminar (`seminar: N`), practice session (`practice: N`, Digital Skills),
--- online activity (`online: N`, with `due:` and `marks:`; blended courses;
+-- online activity (`online: N`, with `due:`; blended courses;
 -- older pages: `lesson: N` and `online: true`) or homework (`homework: U`,
--- the unit, with `due:` and `marks:`):
+-- the unit, with `due:`):
 --   HTML: hero header (course, title, lecture/time chips, PDF and slides
 --         buttons) + "Today you will learn" card with the ILOs.
 --   PDF:  passes theme values to the Typst template (title band) + ILO card.
@@ -194,7 +194,7 @@ local CONTENT = {
 }
 
 -- Chips under the title: the session (number, what it practises, time) or
--- homework (number, the lectures of its unit, due, marks). Never a week:
+-- homework (number, the lectures of its unit, due). Never a week:
 -- courses count sessions.
 local function page_chips(meta, course)
   local chips = {}
@@ -209,14 +209,12 @@ local function page_chips(meta, course)
       table.insert(chips, string.format("After lectures %d–%d", 2 * sess.n - 1, 2 * sess.n))
     end
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
-    if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
   elseif sess.kind == "online" then
     table.insert(chips, sess.label)
     table.insert(chips, "💻 Online")
     local content = CONTENT[str(meta.content or "")]
     if content then table.insert(chips, content) end
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
-    if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
   else
     -- What a seminar or practice session practises; also a lecture of a
     -- practice week of face-to-face Digital Skills (`practises` in its schedule).

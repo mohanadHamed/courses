@@ -529,7 +529,6 @@ local function session_row(dir, wdir, prefix, slides_public, x, in_filling)
     if kind == "online" then
       table.insert(parts, string.format('<a class="sl-file" href="%s_tasks.pdf">Tasks PDF</a>', file))
       local bits = {}
-      if fm.marks then table.insert(bits, str(fm.marks) .. " marks") end
       if fm.due then table.insert(bits, "due " .. str(fm.due)) end
       if #bits > 0 then
         table.insert(parts, '<span class="sl-due">' .. html_attr(table.concat(bits, " · ")) .. "</span>")
@@ -577,7 +576,6 @@ local function schedule_units(dir, prefix, slides_public, units)
       local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", unit) }))
       if ready(hw) then
         local bits = {}
-        if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
         if hw.due then table.insert(bits, "due " .. str(hw.due)) end
         hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
           wdir, unit, unit, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
@@ -626,7 +624,6 @@ local function schedule(meta)
       if ok and online then
         local href = wdir .. "/" .. stem
         local bits = {}
-        if fm.marks then table.insert(bits, str(fm.marks) .. " marks") end
         if fm.due then table.insert(bits, "due " .. str(fm.due)) end
         local parts = {
           string.format('<a class="sl-go" href="%s.html">Open activity →</a>', href),
@@ -658,7 +655,6 @@ local function schedule(meta)
     local hw_html = ""
     if ready(hw) then
       local bits = {}
-      if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
       if hw.due then table.insert(bits, "due " .. str(hw.due)) end
       hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
         wdir, pair, pair, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
@@ -800,6 +796,30 @@ local function experiment(args)
     if not (first and first.t == "Strong" and str(first):match("^The idea")) then kept:insert(b) end
   end
   doc.blocks = kept
+  -- Two ways to do an experiment in class (AUTHORING.md, "Lecture
+  -- worksheets"): the steps of Part A in the real app (a lab computer, or the
+  -- teacher's laptop on the smart screen), or on the simulator of the
+  -- section. The page says where each part runs; the worksheet keeps its
+  -- own labels.
+  doc = doc:walk({
+    Div = function(d)
+      if not d.classes:includes("part") then return nil end
+      local first = d.content[1]
+      if not first or (first.t ~= "Para" and first.t ~= "Plain") then return nil end
+      local label = str(first)
+      local where
+      if label:match("^Part A") then
+        where = "💻 a lab computer, or the teacher's laptop on the screen"
+      elseif label:match("^Part B") then
+        where = "📱 on this page, also at home"
+      end
+      if where then
+        first.content:insert(pandoc.Space())
+        first.content:insert(pandoc.Span({ pandoc.Str(where) }, { class = "part-where" }))
+      end
+      return d
+    end,
+  })
   -- A step with an interactive check (::: {.choice}, {.order}, {.sort} or
   -- {.fill}, interact.lua): the page checks the step at once, so its text
   -- field and its closed "Check your result" are left out (they stay in the

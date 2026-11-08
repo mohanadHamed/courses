@@ -56,7 +56,7 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   changes to try change one number or one word (a velocity, the order of
   two rules, a chance), and their closed answers say what changes and why.
   No graded task needs AI: Homework 1 does the patrol by hand and ends with
-  an optional Task with AI (no marks) about another robot.
+  an optional Task with AI about another robot.
 
 ## Lessons learned
 

@@ -558,6 +558,15 @@ document of the session: students follow it during the lecture, do each
 step on the computer and record what they see, as they would record
 measurements. Template: `shared/templates/sheet-template.qmd`.
 
+**Two ways in class, the teacher's choice (since 2026-11-08).** For each
+experiment the teacher chooses, by the topic and the time: **the simulator**
+of the section on the page (nothing to install; the students use the same
+simulators at home), or **the real app** on the teacher's laptop, connected
+to the smart screen (HDMI), following the steps of Part A that the page
+shows. The page says it in its first lines, and it labels the parts:
+Part A "a lab computer, or the teacher's laptop on the screen", Part B
+"on this page, also at home" (`shortcodes.lua`, the page only).
+
 - **File:** `lesson-NN-sheet.qmd` (`format: lesson-typst`, the same
   `lesson:` and `ilos:` as the lecture) → `<prefix>_lectureN_sheet.pdf`.
   The page shows "Worksheet (PDF)" as its first button, and the course page
@@ -570,8 +579,9 @@ measurements. Template: `shared/templates/sheet-template.qmd`.
   worksheet works alone in the lab; the page leaves it out), an `**Aim:**`
   line (no minutes) and **2–5 numbered steps**. After
   each step: a place to record the result, `{{< record "D2 shows" >}}` (a
-  value, a formula, an observation, a file name; `lines=2` for a sentence,
-  `box=4` for a sketch), and its `::: {.check}`. At the end
+  value, a formula, a word or two, a file name, a tick; `lines=2` for two
+  short results, `box=4` for a sketch; never a reason or a sentence to
+  write, see "Answers without written English"), and its `::: {.check}`. At the end
   `## Table of results`: a short table in `::: {.record-table}` (what to
   record, an empty "Your result" column) that the teacher checks before the
   end of the lecture; then one line pointing to the Game challenge.
@@ -644,8 +654,9 @@ practical and has one face-to-face lab session and one online activity in
 every week. In a unit the face-to-face session is a lecture (a full lesson
 with all three outputs); in a practice week it is a practice session
 (seminar format, no new ideas). The online activity (`kind: online` in
-`schedule.yml`) is **one page**, `online-NN.qmd` with `online: N`, `due:` and
-`marks:` in the front matter (template: `shared/templates/online-template.qmd`).
+`schedule.yml`) is **one page**, `online-NN.qmd` with `online: N` and `due:`
+in the front matter, and no marks anywhere on it (template:
+`shared/templates/online-template.qmd`).
 It **practises its unit** and never repeats the face-to-face lecture; in a
 unit it may add a skill of the unit's syllabus row, in a practice week it
 adds nothing new:
@@ -654,9 +665,11 @@ adds nothing new:
 - 2–3 short **Steps** marked `{.study}`: what the content type gives (see
   below), one "Try it" each, with `Why:`, and an interactive check where a
   step asks for a result (see "The page checks every task");
-- **Tasks to submit** (`{.tasks}`): 2–4 practical tasks with marks and a
-  concrete product (a named file, a screenshot, a short answer), with
-  `{{< answer-space >}}` for the printed copy; then "How to submit".
+- **Tasks to submit** (`{.tasks}`): 2–4 practical tasks with a concrete
+  product (a named file, a screenshot, a short answer), with
+  `{{< answer-space >}}` for the printed copy; then "How to submit". A
+  written answer is a word, a name, a number, yes or no, or a letter of a
+  choice (see "Answers without written English").
 
 **The student works alone, so the Steps teach every task first** (the
 teacher's request of 2026-11-08). Each task to submit has a Step that
@@ -808,10 +821,10 @@ result in words), and a `::: {.check}` inside each `{.try-change}`;
   Digital Media (unclear rights, and it skips the production ILOs).
 - **AI is always an optional extra, also in homework** (the teacher's
   decision of 2026-10-31): no graded task needs AI. A homework may end with
-  `## Optional · Task with AI (no marks) {.extra}`: the same kind of box,
+  `## Optional · Task with AI {.extra}`: the same kind of box,
   about another situation than the graded tasks, so its closed answers give
   nothing away; it is hidden on paper, and the first line of the page says
-  "No task needs AI. The optional Task with AI at the end gives no marks."
+  "No task needs AI. The Task with AI at the end is optional."
   (In Digital Skills, AI is in the ILOs: its online tasks to submit may use
   AI on purpose, with the AI-use statement.)
 - **Digital Skills** has no "Task with AI" box: AI is in its ILOs (A1, B1,
@@ -824,6 +837,15 @@ result in words), and a `::: {.check}` inside each `{.try-change}`;
   is corrected, a sum checked in a spreadsheet, a slide made from an
   outline). No lecture is about AI alone: each one also practises Word,
   Excel, PowerPoint, files or search on a simulator or in the app.
+- **AI is one part of a Digital Skills session, never most of it** (the
+  teacher's request of 2026-11-08): where AI is a topic of the week, it
+  takes **a quarter to a third** of the lecture or the online activity
+  (one experiment of three, or one step of each), and the rest practises a
+  general skill (the phone, Windows, files, search) or Word, Excel and
+  PowerPoint. The students never write a prompt in English (see "Answers
+  without written English"): every prompt is ready to copy, and a change to
+  try is one word or one number. They check, choose and correct what the AI
+  gives, in the app.
 - The rule "no tool or assistant names" (Site identity) is about how the
   lessons are made, not about the tools students use.
 - `check_size.py` warns above 2 per file, about a prompt that is not
@@ -889,7 +911,43 @@ level and serve the PLO behind it.
   tile grid, Blender ↔ Unity conversion, evaluation criteria before the
   evaluation ILO). Spend the time in class on the Do it tasks and questions,
   not on more examples of the same idea: short notes are better than
-  repeated ones.
+  repeated ones. **Since 2026-11-08 (the teacher's request) this is strict:**
+  before a lecture is written or rewritten, hold each section, term, task
+  and question against the syllabus row of its week and its ILOs; what
+  serves none of them is cut, even when it is small. A lecture that holds
+  only its outcomes fits its 40 or 65 minutes.
+
+### Answers without written English (since 2026-11-08)
+
+The university asks for lessons fully in English, but the students' first
+language is Arabic, and almost none of them can write English text well.
+So **no question or task asks the student to write English text**: no
+"explain", "describe", "why?", "give the reason", "write a sentence (a
+paragraph, an e-mail, a prompt) …". The language of a question stays as
+simple as the outcomes allow; the thinking stays at the ILO's level.
+
+- **The student answers by** choosing (an option, a group, true or false,
+  yes or no), putting cards or steps in order, matching, ticking or
+  circling, drawing, or typing a number, a formula, a cell reference, a
+  file or folder name, or a word or two of the lesson (about five words at
+  most), like Online activity 1 of Digital Skills (folder names, a corrected
+  file name, yes or no).
+- **A reason is a choice too:** "Which reason is right? A … B … C …", or
+  "Which sign tells you?" with a short answer, never "Give the reason".
+- **Everywhere:** the page (its checks already work this way), the
+  worksheets (a record field takes a value, a name, a word or a tick, never
+  "…, because …"), the exercises of the notes, the homework, the online
+  tasks and the seminars.
+- **A product made in an app is fine** (a file, a formatted document, a
+  sheet, a slide): the student types the text that the task gives, short
+  labels or names, never their own paragraph.
+- **A prompt for an AI assistant is always given ready to copy**
+  (`::: {.prompt}`); the student may change one word or one number in it
+  (a name, a date, a topic from a list), never write it.
+- `check_size.py` warns about essay words ("explain", "describe", "why?",
+  "give a reason", "write a sentence …", "in your own words") in homework
+  and tasks to submit, and about a worksheet record that asks for a reason
+  ("because") or for long text (`lines=3` or more).
 - **Match the thinking to the ILO.** For a knowledge ILO (describe, explain;
   K), questions ask students to recognise, describe, classify or explain a
   game example. Calculations appear only where the ILO or a later ILO needs
@@ -1255,8 +1313,8 @@ homework and its solution together.
   what it taught, in the same words, never a seminar or a practice session.
   No new content.
 - **No task needs AI** (see "Tasks with AI"): the page says "No task needs
-  AI." A homework may end with an optional Task with AI that gives no marks
-  (`## Optional · Task with AI (no marks) {.extra}`, hidden on paper). The
+  AI." A homework may end with an optional Task with AI, not graded
+  (`## Optional · Task with AI {.extra}`, hidden on paper). The
   homework stays light: students who finish it quickly do it.
 - Size: **1–2 short, simple tasks, about 10 minutes, never more than 15**,
   in all courses.
@@ -1264,7 +1322,14 @@ homework and its solution together.
   student who has read the notes or gone through the interactive page must be
   able to answer at once; no research, no long calculations. Short homework that students finish is better than long homework
   they skip. I may make it longer later in the course, if the students do it well;
-  then I will change this rule. Marks per task in the heading; total in `marks:`.
+  then I will change this rule.
+- **Short, objective answers** (see "Answers without written English"): a
+  number, a name, a word or two, yes or no, a tick, an order, a drawing;
+  never a sentence to write in English.
+- **No marks or grades on the page** (the teacher's request of
+  2026-11-08): no marks in the headings, no total, no `marks:` in the front
+  matter. The e-learning platform keeps the grades; a marking rule may
+  stay in the private solution.
 - At least one task in a real game situation (the PLO behind the ILO).
 - Written answers only (semester 1: no programming). Code may be read, never written.
 - **Fixed numbers only** ("3 steps up", "(8, 4)"): no variables like *n* in a
@@ -1292,7 +1357,7 @@ homework and its solution together.
 - **One A4 page:** the printed page must fit on one page.
   "How to submit" is one short line; the print layout is tight.
   If it does not fit, cut a question or use fewer lines, never a smaller font.
-- The course page lists released homework in its unit card (number, due, marks).
+- The course page lists released homework in its unit card (number, due).
 - Check every task like a "Try it": self-contained, one clear answer
   (or a clear marking rule), no changing state, tried before release.
 
@@ -1346,6 +1411,13 @@ no drafts").
 
 ## Way of working
 
+- **The newest rules are the standard** (the teacher's decision of
+  2026-11-08). Whenever lessons are written or rewritten, in any course,
+  they follow the newest version of this file and of `check_size.py`, not
+  the model of an older lesson. Leaving out the sessions already taught
+  (`HOME_PAGES`, `FROZEN`) holds for this semester only: at the start of
+  the next semester every lecture of every course is rewritten with the
+  newest rules.
 - Build one unit at a time. Never generate all lessons up front.
 - Phase 1: `schedule.yml` + `plan.md` per course (the units of the 16-week
   syllabus → sessions → ILOs), approved by me first.
@@ -1395,6 +1467,12 @@ lecture and its slides to the new figure `week-02/images/worksheet-steps.png`
 the place of the old one in `week-01/images/` (delete the copy in week 2),
 with every lecture pointing to week 1 again.
 
+Also frozen: the **homework of the units taught before 2026-11-08** (Game
+Math Homework 1–2, Computing Systems Homework 1–3, Digital Media Homework
+1–2). They were given with written answers ("Why?", "Give the reason"),
+before the rule "Answers without written English"; only their marks were
+taken off. Rewrite them with short answers next semester.
+
 ## Git
 
 - Commit locally as me: author and committer come from my git config
@@ -1426,6 +1504,21 @@ with every lecture pointing to week 1 again.
 ## Lessons learned
 
 <!-- Add general rules from weekly retros here, newest first. -->
+
+- 2026-11-08 (teacher's request, later the same day): the students' first
+  language is Arabic and few can write English, but the lessons must be in
+  English. No question or task asks for English text any more: answers are
+  choices, orders, numbers, names or a few words, in every course and every
+  output. Homework and online activities show no marks or grades. Lectures
+  hold only what the syllabus week and its ILOs ask for. In Digital Skills
+  AI is a quarter to a third of a session, never most of it, and the
+  students never write a prompt; Unit 2 practises everyday skills on the
+  phone too. The teacher chooses for each experiment between the simulator
+  on the page and the real app on the laptop (HDMI). The newest rules are
+  the standard for every rewrite; leaving out the taught sessions holds for
+  this semester only. Rules above ("Answers without written English",
+  "Level and language", "Homework", "Tasks with AI", "Lecture worksheets",
+  "Way of working", "Frozen sessions").
 
 - 2026-11-08 (teacher's request, smart screens): the classrooms have smart
   screens (a whiteboard with a browser), so the teacher now teaches from the

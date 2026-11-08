@@ -55,7 +55,7 @@ AI"): at most AI_MAX per file, each with a complete {.prompt} that asks for a
 visual result, what the student should see and 2-3 changes to try: on the
 page as interactive checks, in the notes as closed answers. AI is never part
 of graded work: in a homework a box belongs in an optional section
-"## Optional · Task with AI (no marks) {.extra}".
+"## Optional · Task with AI {.extra}".
 
 FROZEN files were sent to students and keep an older model this semester
 (AUTHORING.md, "Frozen sessions"): they are listed and not checked against
@@ -79,12 +79,17 @@ the pages of HOME_PAGES (taught before the screens) keep the older sizes.
 An online activity (blended course: online-NN.qmd, or an older lesson-NN.qmd
 with `online: true`) has no notes and no slides. It is checked for its own parts (AUTHORING.md, "Blended
 courses"): "Before you start", Steps marked {.study} with one "Try it" each,
-"Tasks to submit" ({.tasks}) with marks and answer space, "How to submit",
-`due:`, `marks:` and a content type (`content:`), which decides what the Steps
+"Tasks to submit" ({.tasks}) with answer space, "How to submit", `due:` (no
+marks anywhere) and a content type (`content:`), which decides what the Steps
 need: sims, a simulator in every Step; mix, at least one simulator; video, a
 {{< watch >}} of an official video with its source, length and the date the
 link was checked; course-video, the video made for the course with its
 captions, poster and script, the captions the same words as the script.
+
+Answers without written English (AUTHORING.md): homework, tasks to submit
+and worksheet records never ask for English text (ESSAY_RE: "explain",
+"why?", "give the reason", "write a sentence", …; a record "because …" or
+lines=3+), and homework and online activities name no marks (MARKS_RE).
 
 In every file of a unit: a fenced div (`::: {...}`) needs a blank line before
 it when it follows text; otherwise pandoc prints the colons as text (a
@@ -201,6 +206,15 @@ FROZEN = {
     # tasks PDF) were sent to the students before the page checked every task.
     "courses/digital-skills/week-01/lesson-01.qmd",
     "courses/digital-skills/week-01/online-01.qmd",
+    # The homework of the units taught before 2026-11-08 was given with
+    # written answers ("Why?", "Give the reason"); it keeps them this semester.
+    "courses/game-math/week-01/homework-01.qmd",
+    "courses/game-math/week-02/homework-02.qmd",
+    "courses/computing-systems/week-01/homework-01.qmd",
+    "courses/computing-systems/week-02/homework-02.qmd",
+    "courses/computing-systems/week-03/homework-03.qmd",
+    "courses/digital-media/week-01/homework-01.qmd",
+    "courses/digital-media/week-02/homework-02.qmd",
 }
 # Interactive checks of the page (interact.lua): (min, max) options of a
 # choice, cards of an order, groups and cards of a sort.
@@ -212,6 +226,16 @@ IC_RE = re.compile(r"^\s*:{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b", re.M)
 LIST_START_RE = re.compile(r"^\s*(\d+[.)]|[a-zA-Z][.)]|\([a-zA-Z0-9]+\)|[-*+])\s")
 IC_BLOCK_RE = re.compile(r"^([ \t]*):{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b[^\n]*\n.*?^\1:{3,}[ \t]*$",
                          re.M | re.S)
+# Answers without written English (AUTHORING.md, "Answers without written
+# English"): graded tasks and worksheet records ask for a choice, an order, a
+# number, a name or a few words, never for English text to write.
+ESSAY_RE = re.compile(r"\b(explain|describe|discuss|justify|in your own words|in (?:one|a|two) (?:short )?sentences?"
+                      r"|write (?:a|one|two|three|your|some) (?:short )?(?:sentences?|paragraphs?|e-?mails?|texts?"
+                      r"|reasons?|prompts?|stor(?:y|ies)|advice)|write (?:a|one|your) (?:short |formal )?letter\b"
+                      r"|give (?:a|the|one|your) reasons?|and why\b|why\?)", re.I)
+# No marks or grades on homework and online activities (the teacher's request
+# of 2026-11-08): the e-learning platform keeps the grades.
+MARKS_RE = re.compile(r"\b\d+(?:\.\d+)?\s+marks?\b|\bmarks? (?:them|each|per)\b|\(no marks\)|\bno marks\b", re.I)
 CHOICE_OPTIONS = (2, 4)
 ORDER_CARDS = (3, 8)
 SORT_GROUPS = (2, 4)
@@ -481,7 +505,7 @@ def ai_task_warnings(body, graded=False, page=False):
         if graded:
             # AI is always an extra: never in graded tasks.
             out.append('Task with AI "%s" is in graded work; put it after the tasks, in an optional '
-                       '"## Optional · Task with AI (no marks) {.extra}" section' % title)
+                       '"## Optional · Task with AI {.extra}" section' % title)
             continue
         prompt = re.search(r"^\s*:::+ *\{\.prompt\}\n(.*?)^\s*:::+\s*$", text, re.M | re.S)
         if not prompt:
@@ -540,6 +564,12 @@ def graded_warnings(text):
         out.append("graded tasks have an interactive check (it shows the answer); keep solutions in courses-private")
     if re.search(r"^\s+Why:", text, re.M):
         out.append("graded tasks show a reason (Why:); keep solutions in courses-private")
+    m = MARKS_RE.search(text)
+    if m:
+        out.append('the tasks name marks ("%s"); homework and online tasks show no marks' % m.group(0))
+    for m in ESSAY_RE.finditer(re.sub(r"<!--.*?-->", " ", text, flags=re.S)):
+        out.append('a task asks for written English ("%s"): ask for a choice, an order, a number, '
+                   "a name or a few words" % m.group(0))
     return out
 
 
@@ -589,6 +619,11 @@ def check_sheet(path, rel, notes_sections, page_body, slides_body):
         if not (SHEET_STEPS[0] <= len(steps) <= SHEET_STEPS[1]):
             out.append('%s: "%s" has %d steps; an experiment has %d–%d' % ((srel, title, len(steps)) + SHEET_STEPS))
         for i, st in enumerate(steps, 1):
+            for label, more in re.findall(r'\{\{<\s*record\s+"([^"]*)"([^>]*)>\}\}', st):
+                lines = re.search(r"lines=(\d+)", more)
+                if re.search(r"\bbecause\b|\bin my (own )?words\b|\bwhy\b", label, re.I) or (lines and int(lines.group(1)) >= 3):
+                    out.append('%s: "%s", step %d records a sentence ("%s"): record a value, a name, a word '
+                               "or a tick (AUTHORING.md, \"Answers without written English\")" % (srel, title, i, label))
             if "{{< record" not in st:
                 out.append('%s: "%s", step %d has no {{< record … >}} (a place for the result)' % (srel, title, i))
             if not re.search(r"^\s*:::+ *\{\.check\}", st, re.M):
@@ -804,9 +839,10 @@ def check_online(path, rel):
     out = []
     fm = front_matter(path)
     body = read(path)
-    for key in ("due", "marks"):
-        if not re.search(r"^%s:" % key, fm, re.M):
-            out.append("%s: online activity without `%s:` in the front matter" % (rel, key))
+    if not re.search(r"^due:", fm, re.M):
+        out.append("%s: online activity without `due:` in the front matter" % rel)
+    if re.search(r"^marks:", fm, re.M):
+        out.append("%s: `marks:` in the front matter; online activities show no marks" % rel)
     heads = headings(body)
     for part in ("before you start", "tasks to submit", "how to submit"):
         if not any(h.startswith(part) for h in heads):
@@ -997,13 +1033,17 @@ def check(project_dir):
             warnings.extend(check_online(path, rel))
     for path in sorted(glob.glob(os.path.join(week, "homework-[0-9][0-9].qmd"))):
         rel = os.path.relpath(path, project_dir)
+        if is_frozen(rel):
+            continue
         hw = read(path)
-        # An optional section {.extra} (a Task with AI, no marks) is not graded work.
+        # An optional section {.extra} (a Task with AI, not graded) is not graded work.
         parts = re.split(r"^(?=## )", hw, flags=re.M)
         extra = "".join(p for p in parts if re.match(r"## .*\{\.extra\}", p))
         graded = "".join(p for p in parts if not re.match(r"## .*\{\.extra\}", p))
         warnings.extend("%s: %s" % (rel, w) for w in graded_warnings(graded) + ai_task_warnings(graded, graded=True)
                         + ai_task_warnings(extra, page=True) + ic_warnings(extra))
+        if re.search(r"^marks:", front_matter(path), re.M):
+            warnings.append("%s: `marks:` in the front matter; homework shows no marks" % rel)
     pattern = os.path.join(project_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].qmd")
     for path in sorted(glob.glob(pattern)):
         slug = path.split(os.sep)[-3]

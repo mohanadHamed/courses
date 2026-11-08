@@ -305,7 +305,19 @@ every calendar week, by hand, with the university's template.
   with its submission, moved to week 4. The practice weeks absorb the lost
   weeks. The teacher set the rules for the weekly platform text (above,
   "On the e-learning platform").
-- 2026-11-08 (teacher's request, after Lecture 2 in class): the labs are
+- 2026-11-08 (teacher's request, later the same day): Unit 2 was all AI,
+  which the students do not like, and writing prompts needs more English
+  than they have. Unit 2 is now everyday skills that work on a phone, with
+  AI as one third: Lecture 2 finds a fact on its official website (Search
+  Lab, new), keeps the part of a screen that matters (Windows + Shift + S,
+  the phone's keys, crop) and checks an AI draft and an AI total (Bill
+  Check); Online activity 2 adds a reminder in the phone's calendar and a
+  page scanned into a PDF, and the prompt step only asks the student to
+  choose the missing part (Prompt Doctor). Its answers are files and single
+  words. Weak Spots, Right Tool, Prompt Builder and Follow-up Chat stay in
+  `week-02/sims/`, unused this semester. In every lecture, AI is a quarter
+  to a third of the session, and no task asks for English text.
+- 2026-11-08 (teacher's request): the labs are
   not ready, the classrooms have smart screens, and Lecture 2 felt
   theoretical and boring on the page. The course stays blended (the
   face-to-face version stays hidden). Lectures 2–10 now work with and
@@ -315,9 +327,6 @@ every calendar week, by hand, with the university's template.
   in the app and Part B on a simulator. Lectures 4, 5 and 9 joined two
   experiments (formatting and styles; rewrite and translate; safe prompts
   and the AI-use statement), and the notes of Lectures 4, 5, 6, 8 and 9
-  joined the same sections. Lecture 2 is now practical: a draft from AI
-  checked in Word, the AI's total of a bill checked with formulas in Bill
-  Check (new), the library hours from the AI and from the university
-  website. Online activities 3–13 got a model in each Step and simpler
+  joined the same sections. Online activities 3–13 got a model in each Step and simpler
   tasks (fixed data, fewer steps, one product each); Online activity 2,
   maybe open already, got the models only.

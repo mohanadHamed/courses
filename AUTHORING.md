@@ -565,7 +565,8 @@ simulators at home), or **the real app** on the teacher's laptop, connected
 to the smart screen (HDMI), following the steps of Part A that the page
 shows. The page says it in its first lines, and it labels the parts:
 Part A "a lab computer, or the teacher's laptop on the screen", Part B
-"on this page, also at home" (`shortcodes.lua`, the page only).
+"on this page, also at home" (a simulator) or "each student, on a phone"
+(`shortcodes.lua`, the page only).
 
 - **File:** `lesson-NN-sheet.qmd` (`format: lesson-typst`, the same
   `lesson:` and `ilos:` as the lecture) → `<prefix>_lectureN_sheet.pdf`.

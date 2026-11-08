@@ -28,7 +28,7 @@ Fully practical and blended: every week has a face-to-face lab session
 | Week (syllabus) | Face-to-face (60 min, computer lab) | Online activity | From (plan v2) | ILOs |
 |---|---|---|---|---|
 | Unit 1 (1) | **Lecture 1** Digital Skills and the Apps That Make Us Productive | **Online activity 1** Your University Account, Cloud Storage and Files | L1, O1 | A1 |
-| Unit 2 (2) | **Lecture 2** Generative AI Tools: What They Do Well and Where They Fail | **Online activity 2** Writing Clear Prompts | L2, O2 | A1 C4 |
+| Unit 2 (2) | **Lecture 2** Everyday Digital Skills: Search, Screenshots and an AI Assistant | **Online activity 2** Your Phone for Study: Reminders, Scans and a Clear Prompt | L2, O2 | A1 C4 |
 | Unit 3 (3) | **Lecture 3** Microsoft Office: Concepts, Terms and Common Features | **Online activity 3** Office on the Computer, the Web and the Phone | L3, O3 | A2 A3 |
 | Unit 4 (4) | **Lecture 4** Word (1): Formatting, Styles, Lists, Tables and Pictures | **Online activity 4** Word (2): Page Layout, Headers and a Table of Contents | L4, O4 | C1 |
 | Unit 5 (5) | **Lecture 5** AI with Word: Draft, Summarize, Rewrite and Translate | **Online activity 5** A Formal Letter and a CV with AI Help | L5, O5 | C1 C4 B1 |
@@ -65,7 +65,7 @@ demonstration and the way to do a step without the app):
 | Lecture | Experiments (one per section) | Tools | Start files |
 |---|---|---|---|
 | 1 Productivity apps | by hand or with AutoSum · find the apps · a first prompt | mix: Excel, the Start menu and an AI assistant; Time Saver, App Launcher, AI Chat | `prices-start.xlsx` |
-| 2 Generative AI tools | a first draft checked in Word · an AI total checked in a spreadsheet · AI or the official website | an AI assistant, Word, Excel and a browser (3 prompts); Bill Check, Weak Spots, Right Tool | none |
+| 2 Everyday digital skills | an official fact found with a search engine · a screenshot cropped and named · an AI draft and an AI total checked (the AI third) | a browser, Windows (Snipping Tool), Word, Excel, the phone and an AI assistant (2 prompts); Search Lab (new), Bill Check | none |
 | 3 Office concepts | the parts of the window and a template · the ribbon · Save As, PDF and AutoSave | Word; Window Tour, Ribbon Finder, Save Lab | `notice-start.docx` |
 | 4 Word (1) | formatting and styles · a list and a table · a picture | Word; Format Lab, Style Lab, List and Table Lab, Notice Maker | `book-fair-start.docx`, `books.png` (not the Family Day notice of the Game challenge) |
 | 5 AI with Word | a draft · a summary · a new tone and a translation | an AI assistant and Word (3 prompts); Word AI Lab, Tone Lab | `report-start.docx` |
@@ -105,7 +105,7 @@ uploaded to Moodle; model answers in courses-private). The practice weeks
 | # | Online activity | Week | Type | Content |
 |---|---|---|---|---|
 | 1 | Your University Account, Cloud Storage and Files | Unit 1 | course-video | video *Folders, paths and good file names* (about 2 min, to be made); Path Finder, Folder Lab, Sync Lab |
-| 2 | Writing Clear Prompts | Unit 2 | sims | Prompt Builder, Follow-up Chat, Prompt Doctor |
+| 2 | Your Phone for Study: Reminders, Scans and a Clear Prompt | Unit 2 | mix | a reminder in the phone's calendar, a page scanned into a PDF, choosing a clear prompt (the AI third); Prompt Doctor |
 | 3 | Office on the Computer, the Web and the Phone | Unit 3 | sims | PDF Export, Paste Lab, Share Settings |
 | 4 | Word (2): Page Layout, Headers and a Table of Contents | Unit 4 | video | Microsoft Support: *Change margins* (0:31), *Insert or remove a page break* (0:45), *Insert a header or footer* (0:56), *Insert page numbers* (0:57), *Add a Table of Contents in Word* (0:38) |
 | 5 | A Formal Letter and a CV with AI Help | Unit 5 | lesson | the parts of a letter and a CV, checking what the AI wrote; Letter Builder, Profile Picker, CV Checker |

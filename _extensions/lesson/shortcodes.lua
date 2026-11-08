@@ -810,8 +810,10 @@ local function experiment(args)
       local where
       if label:match("^Part A") then
         where = "💻 a lab computer, or the teacher's laptop on the screen"
-      elseif label:match("^Part B") then
+      elseif label:match("^Part B · On the simulator") then
         where = "📱 on this page, also at home"
+      elseif label:match("^Part B") then
+        where = "📱 each student, on a phone"
       end
       if where then
         first.content:insert(pandoc.Space())

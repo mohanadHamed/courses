@@ -184,6 +184,9 @@ AI_MAX = 2
 SHEET_STEPS = (2, 5)
 SHEET_WORDS = 1600
 SHEET_REQUIRED = ["before you start", "table of results"]
+# Try it questions on the page of a lecture with a worksheet: its experiments
+# have a check after every step, so one or two questions per section are enough.
+SHEET_QUESTIONS = (4, 12)
 # Online activity (blended course): at least this many simulators, and
 # (min, max) tasks to submit.
 ONLINE_CONTENT = ("lesson", "sims", "mix", "video", "course-video")
@@ -288,6 +291,8 @@ def page_minutes(path, page_body):
     parts = re.split(r"^(?=## )", body, flags=re.M)
     explained = "".join(p for p in parts if p.startswith("## ") and not re.match(r"## Summary\b", p))
     explained = IC_BLOCK_RE.sub(" ", explained)
+    # The words of a prompt are in its "prompt" minutes (copied, not explained).
+    explained = drop_divs(explained, ["prompt"])
     words = max(0, count_words(explained) - count_words(try_it_text(explained)))
     minutes = (c["start"] + c["term"] * terms + words / c["wpm"] + c["check"] * checks
                + c["question"] * questions + c["sim"] * sims + c["prompt"] * prompts)
@@ -1071,6 +1076,9 @@ def check(project_dir):
             warnings.append("%s: no slides file (%s)" % (rel, os.path.basename(slides_path)))
 
         sizes = dict(SIZES[minutes])
+        if has_sheet:
+            # The checks of the experiments practise the ideas too: fewer Try it questions.
+            sizes["questions"] = SHEET_QUESTIONS
         home = rel.replace(os.sep, "/") in HOME_PAGES
         if home:
             # Taught before the smart screens: the older home-study page.

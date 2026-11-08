@@ -163,6 +163,7 @@ app-launcher|courses/digital-skills/week-01/sims/app-launcher.html|10|courses/di
 ai-chat|courses/digital-skills/week-01/sims/ai-chat.html|10|courses/digital-skills/week-01/sims/ai-chat.gif
 office-day|courses/digital-skills/week-01/sims/office-day.html|9|courses/digital-skills/week-01/sims/office-day.gif
 weak-spots|courses/digital-skills/week-02/sims/weak-spots.html|10|courses/digital-skills/week-02/sims/weak-spots.gif
+bill-check|courses/digital-skills/week-02/sims/bill-check.html|10|courses/digital-skills/week-02/sims/bill-check.gif
 right-tool|courses/digital-skills/week-02/sims/right-tool.html|10|courses/digital-skills/week-02/sims/right-tool.gif
 newsletter|courses/digital-skills/week-02/sims/newsletter.html|10|courses/digital-skills/week-02/sims/newsletter.gif
 window-tour|courses/digital-skills/week-03/sims/window-tour.html|9|courses/digital-skills/week-03/sims/window-tour.gif

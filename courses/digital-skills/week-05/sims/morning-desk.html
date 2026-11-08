@@ -9,30 +9,35 @@
 <body class="theme-workshop">
 <main class="sim">
   <h1>Huda's Morning</h1>
-  <p class="hint">Huda is the office manager of <b>Sunrise Company</b>. Six requests arrive on Monday morning. For each one, choose the AI job in Word, or the right check.</p>
+  <p class="hint">Huda is the office manager of <b>Sunrise Company</b>. Six requests arrive on Monday morning. For each one, choose the right tool (an AI job, or a tool of Word) or the right check.</p>
 </main>
 
 <script src="../../../../shared/sims/sim-base.js"></script>
 <script src="../../../../shared/sims/game-kit.js"></script>
 <script>
 (() => {
-  const JOBS = ["draft", "sum up", "rewrite", "translate"].map((k) => ({ k, label: k }));
+  // The right tool for each request (Lecture 5): two AI jobs and two tools of
+  // Word, then two checks.
+  const JOBS = [
+    { k: "draft", label: "AI: a first draft" }, { k: "sum up", label: "AI: a summary" },
+    { k: "replace", label: "Word: Find and Replace" }, { k: "translate", label: "Word: Review › Translate" },
+  ];
   const R = (from, text, answer, good, why, choices) => ({ from, text, goal: `Request from <b>${from}</b>`, answer, good, why, choices: choices || JOBS });
   const rounds = [
     R("the manager", "Write a notice: the office closes early on Thursday at 1 pm.", "draft", "There is no text yet: ask the AI for a first draft, then check and format it.",
-      { "sum up": "There is no long text to sum up yet.", rewrite: "There is nothing to rewrite yet." }),
+      { "sum up": "There is no long text to sum up yet.", replace: "There is no text to change yet.", translate: "There is no text to translate yet." }),
     R("the manager", "This report has 6 pages. I need the main points before the 10:00 meeting.", "sum up", "A summary keeps the main points. Then compare each point with the report.",
-      { draft: "The report exists already: you need its main points." }),
-    R("a colleague", "My e-mail to a customer says: “Send the money now.” It sounds rude.", "rewrite", "Rewrite it in a polite tone. Check that the facts stay the same.",
-      { translate: "The language is fine; the tone is the problem." }),
-    R("the reception", "A visitor reads only Arabic. The notice about the closing time is in English.", "translate", "Translate it, then check the day, the date and the time in the translation.",
-      { rewrite: "The words are fine; the reader needs another language." }),
+      { draft: "The report exists already: you need its main points.", replace: "Nothing is wrong in the report: it is only long." }),
+    R("a colleague", "The report says “Zarka” in 12 places. The right name is “Zarqa”.", "replace", "Find and Replace (Ctrl + H) changes all 12 at once: Replace All.",
+      { draft: "The report is fine: only one name is wrong.", "sum up": "A summary drops details; it does not fix the name." }),
+    R("the reception", "A visitor reads only Arabic. The notice about the closing time is in English.", "translate", "Review › Translate, then check the day, the date and the time in the translation.",
+      { replace: "Every word is fine: the reader needs another language.", draft: "The notice exists: it needs another language." }),
     R("Huda herself", "The AI summary says the meeting is on Monday. The report says Tuesday.", "orig", "The original text wins: correct the summary to Tuesday.",
       { trust: "AI tools make mistakes. Check against the original.", again: "A new answer can be wrong too. Check it against the report." },
       [{ k: "orig", label: "correct it: the report wins" }, { k: "trust", label: "trust the AI summary" }, { k: "again", label: "ask again and use the new answer" }]),
-    R("Huda herself", "The AI draft of the notice says: “Free coffee for all staff on Thursday.” Nobody said this.", "delete", "Delete the invented sentence. A draft must have only true facts.",
-      { keep: "It is not true: people will come for coffee that does not exist.", bold: "Bold does not make it true." },
-      [{ k: "delete", label: "delete the invented sentence" }, { k: "keep", label: "keep it, it is nice" }, { k: "bold", label: "make it bold" }]),
+    R("Huda herself", "Word marks “custmers” in the notice with a red line.", "fix", "It is a spelling mistake: choose customers (F7, or tap the word).",
+      { ignore: "Ignore is for a name; custmers is a spelling mistake.", costume: "Costumers wear costumes: the notice is about customers." },
+      [{ k: "fix", label: "change it to customers" }, { k: "ignore", label: "Ignore: it is a name" }, { k: "costume", label: "change it to costumers" }]),
   ];
   Kit.game({
     rounds, still: true, cols: 2, colsPhone: 2, animMs: 600,

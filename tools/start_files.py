@@ -226,15 +226,17 @@ FILES = {
         "Prices",
         "Entry to the fair is free for everyone.",
     ]),
-    # Lecture 5, AI with Word: a short report to sum up (Experiment 2) and to
-    # translate (Experiment 4). Not Huda's Thursday memo: that is the Game challenge.
+    # Lecture 5, Word with AI: a short report to check in Word (Experiment 2:
+    # two spelling mistakes, secnd and custmers, and the time 9:00 twice for
+    # Find and Replace; Check Lab has the same text) and to translate
+    # (Experiment 3). Not Huda's Thursday memo: that is the Game challenge.
     DS + "/week-05/files/report-start.docx": ("docx", [
         "**Report: The New Sunrise Shop in Zarqa**",
-        "Sunrise Company opens its second shop next Saturday at 9:00. The new shop is in Zarqa, "
+        "Sunrise Company opens its secnd shop next Saturday at 9:00. The new shop is in Zarqa, "
         "on King Abdullah Street, next to the post office.",
         "The shop has 6 staff, and Rana Saleh is the manager. It sells notebooks, pens, bags and school books.",
         "The shop is open from Saturday to Thursday, from 9:00 to 20:00. It is closed on Friday.",
-        "On the first day, the first 50 customers get a free bag. Children under 12 get a free pen.",
+        "On the first day, the first 50 custmers get a free bag. Children under 12 get a free pen.",
         "Customers can pay in cash or by card. They can also order online and collect their order at the shop.",
     ]),
     # Lecture 7, Excel (2): the sales of the next week (200 JD), to sort, filter

@@ -567,7 +567,8 @@ def graded_warnings(text):
     m = MARKS_RE.search(text)
     if m:
         out.append('the tasks name marks ("%s"); homework and online tasks show no marks' % m.group(0))
-    for m in ESSAY_RE.finditer(re.sub(r"<!--.*?-->", " ", text, flags=re.S)):
+    # A ready prompt ({.prompt}) is copied, not written: its words do not count.
+    for m in ESSAY_RE.finditer(drop_divs(re.sub(r"<!--.*?-->", " ", text, flags=re.S), ["prompt"])):
         out.append('a task asks for written English ("%s"): ask for a choice, an order, a number, '
                    "a name or a few words" % m.group(0))
     return out

@@ -31,7 +31,7 @@ Fully practical and blended: every week has a face-to-face lab session
 | Unit 2 (2) | **Lecture 2** Everyday Digital Skills: Search, Screenshots and an AI Assistant | **Online activity 2** Your Phone for Study: Reminders, Scans and a Clear Prompt | L2, O2 | A1 C4 |
 | Unit 3 (3) | **Lecture 3** Microsoft Office: Concepts, Terms and Common Features | **Online activity 3** Office on the Computer, the Web and the Phone | L3, O3 | A2 A3 |
 | Unit 4 (4) | **Lecture 4** Word (1): Formatting, Styles, Lists, Tables and Pictures | **Online activity 4** Word (2): Page Layout, Headers and a Table of Contents | L4, O4 | C1 |
-| Unit 5 (5) | **Lecture 5** AI with Word: Draft, Summarize, Rewrite and Translate | **Online activity 5** A Formal Letter and a CV with AI Help | L5, O5 | C1 C4 B1 |
+| Unit 5 (5) | **Lecture 5** Word with AI: Draft, Check and Translate | **Online activity 5** A Formal Letter and a CV with AI Help | L5, O5 | C1 C4 B1 |
 | Unit 6 (6) | **Lecture 6** Excel (1): Cells, Formulas, References and Basic Functions | **Online activity 6** A Monthly Budget Sheet | L6, O6 | C2 |
 | Unit 7 (7) | **Lecture 7** Excel (2): Sorting, Filtering, Conditional Formatting and Charts | **Online activity 7** AI with Excel: Formulas, Clean Data and the Right Chart | L7, O7 | C2 C4 B1 |
 | Practice week (8) | **Practice 1** Review of Lectures 1–7 (then the midterm) | **Online activity 8** Review Activity: Practice Questions | P1, O8 | all of 1–7 |
@@ -68,7 +68,7 @@ demonstration and the way to do a step without the app):
 | 2 Everyday digital skills | an official fact found with a search engine · a screenshot cropped and named · an AI draft and an AI total checked (the AI third) | a browser, Windows (Snipping Tool), Word, Excel, the phone and an AI assistant (2 prompts); Search Lab (new), Bill Check | none |
 | 3 Office concepts | the parts of the window and a template · the ribbon · Save As, PDF and AutoSave | Word; Window Tour, Ribbon Finder, Save Lab | `notice-start.docx` |
 | 4 Word (1) | formatting and styles · a list and a table · a picture | Word; Format Lab, Style Lab, List and Table Lab, Notice Maker | `book-fair-start.docx`, `books.png` (not the Family Day notice of the Game challenge) |
-| 5 AI with Word | a draft · a summary · a new tone and a translation | an AI assistant and Word (3 prompts); Word AI Lab, Tone Lab | `report-start.docx` |
+| 5 Word with AI | a draft from AI pasted into Word, and a summary checked (the AI third) · the spelling and Find and Replace · a translation and the tone | an AI assistant and Word (1 prompt); Word AI Lab, Check Lab (new), Tone Lab | `report-start.docx` (two spelling mistakes, 9:00 twice) |
 | 6 Excel (1) | cells and a formula · copy a formula · four functions | Excel; Formula Lab, Reference Lab, The Shop's Week | `shop-start.xlsx` |
 | 7 Excel (2) | sort · filter · a colour rule · two charts | Excel; Table Lab, Chart Lab | `sales-start.xlsx` |
 | 8 PowerPoint | layouts and a theme · few words and notes · transitions and animations | PowerPoint; Slide Builder, Slide Doctor, Transition Lab | `talk-start.pptx` |

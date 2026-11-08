@@ -37,7 +37,7 @@ Fully practical and blended: every week has a face-to-face lab session
 | Practice week (8) | **Practice 1** Review of Lectures 1–7 (then the midterm) | **Online activity 8** Review Activity: Practice Questions | P1, O8 | all of 1–7 |
 | Unit 8 (9) | **Lecture 8** PowerPoint: Slides, Layouts, Themes, Transitions, Animations and Notes | **Online activity 9** A Short Presentation with AI Help | L8, old O10 | C3 C4 B1 |
 | Practice week (10) | **Practice 2** AI with PowerPoint: Outline, Slides and Pictures | **Online activity 10** A Five-Slide Talk | P2, old O9 | C3 C4 B1 |
-| Unit 9 (11) | **Lecture 9** Checking AI Output and Using AI Responsibly | **Online activity 11** Fact-Checking an AI-Written Document | L9, O11 | B1 D1 |
+| Unit 9 (11) | **Lecture 9** Check Information and Share Safely, with AI Too | **Online activity 11** Fact-Checking an AI-Written Document | L9, O11 | B1 D1 |
 | Practice week (12) | **Practice 3** Responsible AI in Practice: Personal Data, Copyright and Honesty | **Online activity 12** Safe Prompts and an AI-Use Statement | P3, O12 | D1 |
 | Unit 10 (13) | **Lecture 10** Excel (3): Summarizing Data with AI Help | **Online activity 13** Analyzing a Small Dataset and Charting It | old P4 (as a lecture), O13 | C2 C4 B1 |
 | Practice week (14) | **Practice 4** Working Across Office Apps with AI | **Online activity 14** Course Project (1): Plan, Data Sheet and First Draft | old P5, O14 | A1 A3 C4 |
@@ -72,7 +72,7 @@ demonstration and the way to do a step without the app):
 | 6 Excel (1) | cells and a formula · copy a formula · four functions | Excel; Formula Lab, Reference Lab, The Shop's Week | `shop-start.xlsx` |
 | 7 Excel (2) | sort · filter · a colour rule · two charts | Excel; Table Lab, Chart Lab | `sales-start.xlsx` |
 | 8 PowerPoint | layouts and a theme · few words and notes · transitions and animations | PowerPoint; Slide Builder, Slide Doctor, Transition Lab | `talk-start.pptx` |
-| 9 Checking AI output | a claim in two sources · a fair job advert in Word · safe prompts and an AI-use statement | an AI assistant, a search engine and Word (2 prompts); Fact-Check Lab, Bias Lab, Prompt Cleaner | none |
+| 9 Check and share safely | a claim from a message in two sources · a free picture with its source line, and app permissions on the phone · a safe prompt and an AI-use statement (the AI third) | a search engine, Word, the phone and an AI assistant (1 prompt); Fact-Check Lab, Prompt Cleaner | none |
 | 10 Excel (3) | a PivotTable · new questions and Refresh · an AI summary checked | Excel and an AI assistant (1 prompt); Pivot Lab, Summary Check | `month-start.xlsx` |
 
 Since 2026-11-08 (smart screens, labs not ready): every experiment of Lectures 2–10 has **Part A in

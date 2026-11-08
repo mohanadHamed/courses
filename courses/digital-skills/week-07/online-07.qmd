@@ -1,6 +1,6 @@
 ---
-title: "AI with Excel: Formulas, Clean Data and the Right Chart"
-description: "Online activity · Ask an AI tool for an Excel formula and test it, clean a messy list with AI advice and your own checks, and choose the right chart for a question. About 60 minutes."
+title: "Excel: Clean Data, the Right Chart and a Formula from AI"
+description: "Online activity · Clean a messy list in Excel, choose the right chart for a question, and test a formula from an AI tool. About 45 minutes."
 online: 7
 due: "before lecture 8"
 content: mix
@@ -14,12 +14,12 @@ format: lesson-html   # online activity: the tasks PDF is made by printing this 
 - **What you need:** Excel (the desktop app, Excel on the web at
   `office.com`, or the free phone app) and a free AI chat tool (for example
   Microsoft Copilot with your university account, ChatGPT or Gemini).
-- **Time:** about 60 minutes. Work alone, at your own speed.
+- **Time:** about 45 minutes. Work alone, at your own speed.
 - **How it works:** do Steps 1–3 on this page. Each step has a short text, a
   simulator and a quick check. Then do the **Tasks to submit**.
-- **What you submit:** one Excel file and one short answer, on the
+- **What you submit:** one Excel file and two short answers, on the
   university e-learning platform, before lecture 8. Each Step shows how to
-  do its task, with a model.
+  do its task, with a model. You never write a prompt: you copy it.
 - **You need Lectures 5, 6 and 7:** prompts, formulas, sort, filter and
   charts.
 - **Never type personal data into an AI tool.** Use only the made-up shop
@@ -87,17 +87,17 @@ How do you check a formula from an AI?
 :::
 :::
 
-## Step 2 · Clean the data with AI advice {.study}
+## Step 2 · Clean the data in Excel {.study}
 
 - Data from paper or from many people is often **messy**: empty rows, rows
   typed twice, extra spaces, "drinks" and "Drinks", "12 JD" as text.
 - Messy data gives wrong results: a row typed twice counts twice, a name
   with an extra space is a new name for a filter, and SUM skips text.
-- An AI tool can list the steps. **You** check each step before you do it.
 - The tools: delete empty rows; **Data › Remove Duplicates**; `=TRIM(B3)`
   for spaces; **Find and Replace** for spellings; type numbers without
   "JD".
-- Never delete real rows just because an AI says so.
+- An AI tool can list cleaning steps, but you check each one: never
+  delete real rows because an AI says so.
 
 ![Clean the data before you count or chart it.](images/clean-data.png){width=100%}
 
@@ -144,16 +144,17 @@ What is the SUM of the clean list?
 :::
 :::
 
-## Step 3 · Check the AI's chart advice {.study}
+## Step 3 · The right chart for the question {.study}
 
-- An AI can suggest a chart and a title. Its advice is not always right.
-- Check it with the rule of Lecture 7: **compare** amounts → column chart;
-  **change over time** → line chart; **parts of one whole** → pie chart.
+- Choose the chart with the rule of Lecture 7: **compare** amounts →
+  column chart; **change over time** → line chart; **parts of one whole**
+  → pie chart.
+- An AI can suggest a chart too, but check its advice with the same rule.
 - Make the chart from the **clean** list: a chart of messy data shows wrong
   numbers.
 - Check the title: it says what the chart shows, never "Chart 1".
-- In **Chart Lab**, try a pie chart of the sales per day, as a weak AI
-  answer may advise. Read what the lab says, then make the right chart.
+- In **Chart Lab**, try a pie chart of the sales per day. Read what the lab
+  says, then make the right chart.
 
 ![The right chart for the question.](images/chart-types.png){width=100%}
 
@@ -213,15 +214,23 @@ to the number **12**. Do not delete real sales. Save the file as
 
 ### Task 2 · A formula from AI, tested
 
-1. Ask an AI tool for one formula for the **total** of all the sales. Tell
-   it where your data is.
+1. Copy this prompt into an AI tool:
+
+   ::: {.prompt}
+   My data is in A1:E8 of Excel. Column E is the Total in JD, from E2 to
+   E8. Write one Excel formula for the total of all the sales.
+   :::
+
 2. Put the formula under the list, with the label *Total* next to it.
-   Check it: the right total is **133 JD**. (Step 1 and its model show
-   how.)
+   (Step 1 and its model show how.)
 
-a) Copy your prompt here.
+a) Write the formula that the AI gave.
 
-{{< answer-space lines=3 >}}
+{{< answer-space lines=1 >}}
+
+b) Does it give **133** JD? Write **yes** or **no**.
+
+{{< answer-space lines=1 >}}
 
 ### Task 3 · A column chart
 
@@ -233,5 +242,5 @@ with a real title: **Type, Sales (JD)**; **Paper, 60**; **Drinks, 37**;
 
 ## How to submit
 
-Upload `sales_clean.xlsx` and your answer to Task 2 to the university
+Upload `sales_clean.xlsx` and your two answers to Task 2 to the university
 e-learning platform, **before lecture 8**.

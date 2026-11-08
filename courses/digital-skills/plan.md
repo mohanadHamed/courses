@@ -33,7 +33,7 @@ Fully practical and blended: every week has a face-to-face lab session
 | Unit 4 (4) | **Lecture 4** Word (1): Formatting, Styles, Lists, Tables and Pictures | **Online activity 4** Word (2): Page Layout, Headers and a Table of Contents | L4, O4 | C1 |
 | Unit 5 (5) | **Lecture 5** Word with AI: Draft, Check and Translate | **Online activity 5** A Formal Letter and a CV with AI Help | L5, O5 | C1 C4 B1 |
 | Unit 6 (6) | **Lecture 6** Excel (1): Cells, Formulas, References and Basic Functions | **Online activity 6** A Monthly Budget Sheet | L6, O6 | C2 |
-| Unit 7 (7) | **Lecture 7** Excel (2): Sorting, Filtering, Conditional Formatting and Charts | **Online activity 7** AI with Excel: Formulas, Clean Data and the Right Chart | L7, O7 | C2 C4 B1 |
+| Unit 7 (7) | **Lecture 7** Excel (2): Sorting, Filtering, Conditional Formatting and Charts | **Online activity 7** Excel: Clean Data, the Right Chart and a Formula from AI | L7, O7 | C2 C4 B1 |
 | Practice week (8) | **Practice 1** Review of Lectures 1–7 (then the midterm) | **Online activity 8** Review Activity: Practice Questions | P1, O8 | all of 1–7 |
 | Unit 8 (9) | **Lecture 8** PowerPoint: Slides, Layouts, Themes, Transitions, Animations and Notes | **Online activity 9** A Short Presentation with AI Help | L8, old O10 | C3 C4 B1 |
 | Practice week (10) | **Practice 2** AI with PowerPoint: Outline, Slides and Pictures | **Online activity 10** A Five-Slide Talk | P2, old O9 | C3 C4 B1 |
@@ -110,7 +110,7 @@ uploaded to Moodle; model answers in courses-private). The practice weeks
 | 4 | Word (2): Page Layout, Headers and a Table of Contents | Unit 4 | video | Microsoft Support: *Change margins* (0:31), *Insert or remove a page break* (0:45), *Insert a header or footer* (0:56), *Insert page numbers* (0:57), *Add a Table of Contents in Word* (0:38) |
 | 5 | A Formal Letter and a CV with AI Help | Unit 5 | lesson | the parts of a letter and a CV, checking what the AI wrote; Letter Builder, Profile Picker, CV Checker |
 | 6 | A Monthly Budget Sheet | Unit 6 | course-video | video *A monthly budget in Excel* (about 2 min, to be made); Budget Builder, Number Format Lab |
-| 7 | AI with Excel: Formulas, Clean Data and the Right Chart | Unit 7 | mix | AI Formula Lab, Clean Data Lab, Chart Lab |
+| 7 | Excel: Clean Data, the Right Chart and a Formula from AI | Unit 7 | mix | AI Formula Lab, Clean Data Lab, Chart Lab |
 | 8 | Review Activity: Practice Questions | Practice week | sims | Practice Quiz, Contents Builder, Reference Lab |
 | 9 | A Short Presentation with AI Help | Unit 8 | mix | Outline Lab, Image Prompt Lab, a check before presenting |
 | 10 | A Five-Slide Talk | Practice week | video | Microsoft Support: *Add speaker notes* (0:32), *Add animations to slides* (1:18), *Use Presenter View* (1:36); Talk Planner, Rehearsal Lab |

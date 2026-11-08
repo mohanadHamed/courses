@@ -65,15 +65,20 @@ demonstration and the way to do a step without the app):
 | Lecture | Experiments (one per section) | Tools | Start files |
 |---|---|---|---|
 | 1 Productivity apps | by hand or with AutoSum · find the apps · a first prompt | mix: Excel, the Start menu and an AI assistant; Time Saver, App Launcher, AI Chat | `prices-start.xlsx` |
-| 2 Generative AI tools | two good jobs · weak spots · AI, search or spreadsheet | mix: an AI assistant and a search engine; Weak Spots, Right Tool | none |
-| 3 Office concepts | the parts of the window · the ribbon · Save, Save As and formats | mix: Word, Excel and PowerPoint; Window Tour, Ribbon Finder, Save Lab | `notice-start.docx` |
-| 4 Word (1) | formatting · styles · a list and a table · a picture | real app: Word; Format Lab, Style Lab, List and Table Lab | `book-fair-start.docx`, `books.png` (not the Family Day notice of the Game challenge) |
-| 5 AI with Word | a draft · a summary · a new tone · a translation | mix: an AI assistant and Word; Word AI Lab, Tone Lab | `report-start.docx` |
-| 6 Excel (1) | cells and ranges · a formula · copy a formula · four functions | real app: Excel; Formula Lab and Reference Lab | `shop-start.xlsx` |
-| 7 Excel (2) | sort · filter · a colour rule · two charts | real app: Excel; Table Lab, Chart Lab | `sales-start.xlsx` |
-| 8 PowerPoint | slides and layouts · a theme · notes · transitions and animations | real app: PowerPoint; Slide Builder, Transition Lab | `talk-start.pptx` |
-| 9 Checking AI output | claims and sources · bias · personal data · the AI-use statement | simulators and a browser: Fact-Check Lab, Bias Lab, Prompt Cleaner; Word for the statement | none |
-| 10 Excel (3) | a PivotTable · weeks and averages · check an AI summary | mix: Excel and an AI assistant; Pivot Lab, Summary Check | `month-start.xlsx` |
+| 2 Generative AI tools | a first draft checked in Word · an AI total checked in a spreadsheet · AI or the official website | an AI assistant, Word, Excel and a browser (3 prompts); Bill Check, Weak Spots, Right Tool | none |
+| 3 Office concepts | the parts of the window and a template · the ribbon · Save As, PDF and AutoSave | Word; Window Tour, Ribbon Finder, Save Lab | `notice-start.docx` |
+| 4 Word (1) | formatting and styles · a list and a table · a picture | Word; Format Lab, Style Lab, List and Table Lab, Notice Maker | `book-fair-start.docx`, `books.png` (not the Family Day notice of the Game challenge) |
+| 5 AI with Word | a draft · a summary · a new tone and a translation | an AI assistant and Word (3 prompts); Word AI Lab, Tone Lab | `report-start.docx` |
+| 6 Excel (1) | cells and a formula · copy a formula · four functions | Excel; Formula Lab, Reference Lab, The Shop's Week | `shop-start.xlsx` |
+| 7 Excel (2) | sort · filter · a colour rule · two charts | Excel; Table Lab, Chart Lab | `sales-start.xlsx` |
+| 8 PowerPoint | layouts and a theme · few words and notes · transitions and animations | PowerPoint; Slide Builder, Slide Doctor, Transition Lab | `talk-start.pptx` |
+| 9 Checking AI output | a claim in two sources · a fair job advert in Word · safe prompts and an AI-use statement | an AI assistant, a search engine and Word (2 prompts); Fact-Check Lab, Bias Lab, Prompt Cleaner | none |
+| 10 Excel (3) | a PivotTable · new questions and Refresh · an AI summary checked | Excel and an AI assistant (1 prompt); Pivot Lab, Summary Check | `month-start.xlsx` |
+
+Since 2026-11-08 (smart screens, labs not ready): every experiment of Lectures 2–10 has **Part A in
+the app** and **Part B on a simulator**, as in the face-to-face version; without a lab the teacher
+does it on the page on the smart screen (about 40 minutes), in the lab the students follow the
+worksheet (AUTHORING.md, "Lecture worksheets"; NOTES.md).
 
 Lecture 6 is the model (done 2026-10-31); the others follow it.
 

@@ -6,10 +6,9 @@ ilos: [C2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It
-ends with a **Do it** task and one set of questions. Tap, sort or type your
-answer: the page checks it at once and tells you why.
+Each section: a problem in a game, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -28,8 +27,7 @@ Good PRNGs are right for games; passwords and payments need secure ones.
 :::
 
 ::: {.callout-note title="Do it · Find the chance"}
-Write four things in a game you play that come from random numbers. Here are
-six things from a racing game.
+Here are six things from a racing game.
 
 ::: {.sort}
 Which ones come from random numbers? Sort them.
@@ -63,7 +61,7 @@ Chosen by the player
 :::
 
 ::: {.callout-tip title="Try it 1 · Real or pseudo?"}
-Choose the right answer. You can use an answer more than once.
+Choose the right answer.
 
 ::: {.match extra="a picture|the frame rate"}
 Where does the chance of a physical die come from?
@@ -75,11 +73,6 @@ What kind of number does x = (5x + 3) mod 16 give?
 :   pseudo-random
 
     Why: a formula computes each number from the one before.
-
-Which numbers repeat when they start the same way?
-:   pseudo-random
-
-    Why: the same start always gives the same numbers.
 
 What builds the walls of each new cave from random numbers?
 :   procedural generation
@@ -102,19 +95,13 @@ Use the generator of the engine; a home-made one with a small m repeats soon.
 :::
 
 ::: {.callout-note title="Do it · By hand"}
-a = 3, c = 1, m = 8, seed 2: compute the next two numbers with
+a = 3, c = 1, m = 8, seed 2: compute the next number with
 x(n+1) = (a·x(n) + c) mod m.
 
 ::: {.fill answer="7" hint="(3 × 2 + 1), then the remainder of the division by 8."}
 What is the first number after the seed 2?
 
 Why: (3·2 + 1) mod 8 = 7 mod 8 = 7.
-:::
-
-::: {.fill answer="6" hint="(3 × 7 + 1) = 22; divide by 8 and keep the remainder."}
-What is the next number after 7?
-
-Why: (3·7 + 1) mod 8 = 22 mod 8 = 6 (22 = 2 × 8 + 6).
 :::
 :::
 
@@ -126,11 +113,6 @@ What is 27 mod 8?
 :   3
 
     Why: 27 = 3 × 8 + 3: the remainder is 3.
-
-What is 20 mod 5?
-:   0
-
-    Why: 20 = 4 × 5: no remainder.
 
 a = 5, c = 3, m = 16. Which number follows 3?
 :   2
@@ -205,11 +187,6 @@ Which seed gives the same cave to all players today?
 
     Why: everyone has the same date today.
 
-Which seed gives two friends the same world?
-:   a number they share
-
-    Why: the same seed gives the same world.
-
 Five bats seed with the time in every frame. What happens?
 :   they all fly the same way
 
@@ -232,7 +209,7 @@ Random.Range(1, 6) never gives a 6.
 :::
 
 ::: {.callout-note title="Do it · Write the call"}
-Write calls for a card 0 … 51, a lane 1, 2 or 3, and a miss with p = 0.15.
+Write calls for a card 0 … 51 and a miss with p = 0.15.
 Remember: in Random.Range(min, max) the integer max is not included.
 
 ::: {.choice}
@@ -249,22 +226,6 @@ Which call gives a card 0 … 51?
 - [ ] `Random.Range(1, 52)`
 
   Why: That starts at 1: card 0 never comes.
-:::
-
-::: {.choice}
-Which call gives a lane 1, 2 or 3?
-
-- [x] `Random.Range(1, 4)`
-
-  Why: 1 to 4 − 1 = 3.
-
-- [ ] `Random.Range(1, 3)`
-
-  Why: The max 3 is not included: lane 3 never comes.
-
-- [ ] `Random.Range(0, 3)`
-
-  Why: That gives 0, 1 and 2.
 :::
 
 ::: {.choice}
@@ -298,11 +259,6 @@ Which call gives a month, 1 … 12?
 
     Why: the max 13 is not included.
 
-Which call gives a spawn point 0 … 9?
-:   Random.Range(0, 10)
-
-    Why: 10 values, from 0 up to 10 − 1.
-
 Which condition gives a dodge with p = 0.3?
 :   Random.value < 0.3f
 
@@ -325,31 +281,19 @@ Uniform rarities make legendary items common (25 % with four rarities).
 :::
 
 ::: {.callout-note title="Do it · Uniform chances"}
-Random.Range(0, 8) gives 8 equally likely values. Random.Range(0f, 10f) gives
-any number from 0 to 10.
+Random.Range(0, 8) gives 8 equally likely values.
 
 ::: {.fill answer="1/8|0.125|12.5%" hint="8 equal values."}
 Random.Range(0, 8): what is P(5)?
 
 Why: Uniform: each of the 8 values has 1/8.
 :::
-
-::: {.fill answer="3/10|0.3|30%" hint="The part from 7 to 10, divided by the whole length 10."}
-Random.Range(0f, 10f): what is P(from 7 to 10)?
-
-Why: The part is 3 units long, the whole range 10 units: 3/10.
-:::
 :::
 
 ::: {.callout-tip title="Try it 5 · Distributions"}
-Choose the probability. You can use an answer more than once.
+Choose the probability.
 
 ::: {.match extra="1/3|2/3"}
-Two coins. What is P(exactly one head)?
-:   1/2
-
-    Why: HT and TH: 2 of 4.
-
 What do all probabilities of a distribution add up to?
 :   1
 
@@ -364,11 +308,6 @@ Random.Range(0f, 20f) gives 15 … 20. The probability?
 :   1/4
 
     Why: 5 units of 20.
-
-Four rarities, uniform. What is P(legendary)?
-:   1/4
-
-    Why: uniform: 1/n with n = 4.
 :::
 :::
 
@@ -443,11 +382,6 @@ Cumulative 70, 90, 98, 100 and r = 75. Which item?
 :   rare
 
     Why: 75 is from 70 to 90.
-
-Cumulative 70, 90, 98, 100 and r = 98.5. Which item?
-:   legendary
-
-    Why: 98.5 is from 98 to 100.
 :::
 :::
 
@@ -474,20 +408,10 @@ What is P(epic) in the chest?
 
     Why: 12 ÷ 100.
 
-What is P(axe) on the rack?
-:   3/5
-
-    Why: 3 ÷ (2 + 3).
-
 r = 90. Which item drops?
 :   epic
 
     Why: 90 is from 85 to 97.
-
-Which condition gives the critical hit?
-:   Random.value < 0.15f
-
-    Why: below 0.15 in 15 % of the cases.
 :::
 :::
 
@@ -496,20 +420,10 @@ The same chest: 50, 35, 12, 3, cumulative 50, 85, 97, 100. Choose the right
 answer.
 
 ::: {.match extra="rare|item 0"}
-r = 85 exactly. Which item drops?
-:   epic
-
-    Why: r < 85 is false, r < 97 is true.
-
 Only the common weight changes, so that legendary (3) is 1 %. The new common weight?
 :   250
 
     Why: the sum must be 300, so common = 300 − 35 − 12 − 3.
-
-About how many epic items come from 1000 chests?
-:   about 120
-
-    Why: 12 % of 1000.
 
 Items 0 … 4 use Random.Range(0, 4). Which item never drops?
 :   item 4

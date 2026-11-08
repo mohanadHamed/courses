@@ -68,8 +68,13 @@ with an "Aim:"), SHEET_STEPS numbered steps in each, a {{< record >}} field
 and a ::: {.check} after every step, a "Table of results" (::: {.record-table})
 and its start files in files/. The page shows every experiment in its section
 ({{< experiment N >}}, which counts as the section's task), each section of
-the notes points to its experiment, and the slides have an "Experiment N" and
-a "Check N" slide for each.
+the notes points to its experiment, and the slides have a "Your worksheet" and
+a "Results of the worksheet" slide. An experiment with Part A ({.part}, in the
+app) has a Part B (on a simulator or the phone), and no part gives minutes.
+
+A lecture page is taught in class on the smart screen (since 2026-11-08):
+page_minutes() estimates its class time (PAGE_TIME_COST), at most PAGE_TIME;
+the pages of HOME_PAGES (taught before the screens) keep the older sizes.
 
 An online activity (blended course: online-NN.qmd, or an older lesson-NN.qmd
 with `online: true`) has no notes and no slides. It is checked for its own parts (AUTHORING.md, "Blended
@@ -100,6 +105,7 @@ import re
 import sys
 
 # (min, max) for each lecture time. None = no limit. Keep in step with AUTHORING.md.
+# The page sizes (try_its, questions) are for a page taught in class (PAGE_TIME).
 SIZES = {
     60: {
         "book_sections": (3, 4),
@@ -107,7 +113,7 @@ SIZES = {
         "examples": (2, None),
         "exercises": (6, 10),
         "try_its": (4, 6),
-        "questions": (15, 28),
+        "questions": (8, 16),
         "sims": (0, 4),
         "slides": (10, 16),
     },
@@ -117,10 +123,46 @@ SIZES = {
         "examples": (4, None),
         "exercises": (10, 16),
         "try_its": (6, 9),
-        "questions": (30, 45),
+        "questions": (18, 28),
         "sims": (1, 3),
         "slides": (20, 28),
     },
+}
+# The page is taught in class (AUTHORING.md, "The page is taught in class"):
+# since 2026-11-08 the teacher teaches from the interactive page on the smart
+# screen of the classroom, so a lecture page fits about 40 minutes of a 60-min
+# lecture and about 65 of a 90-min lecture; the rest of the lecture is for the
+# students' questions and the delays of a real class. The planned minutes are
+# estimated from what the page shows (PAGE_TIME_COST): the explanation is read
+# on the screen and explained in Arabic, the class answers every check and
+# every Try it question, and the teacher shows every simulator and runs every
+# AI prompt. A Task with AI box is an extra (shown when time is left): not
+# counted.
+PAGE_TIME = {60: 40, 90: 65}
+PAGE_TIME_COST = {
+    "start": 2,        # open the page, its first lines and the summary
+    "term": 0.2,       # each term of the glossary
+    "wpm": 40,         # words of explanation per minute (on the screen, explained in Arabic)
+    "check": 1,        # each interactive check of a task (choice, order, sort, fill)
+    "question": 1,     # each Try it question
+    "sim": 2,          # each simulator or mini-game shown on the screen
+    "prompt": 2,       # each AI prompt run on the screen (copy, paste, read the answer)
+}
+# Lectures taught before the smart screens keep their home-study page this
+# semester: the older page sizes (HOME_SIZES) and no class time. Rewrite them
+# for class at the start of the next semester, then empty this set.
+HOME_PAGES = {
+    "courses/game-math/week-01/lesson-01.qmd",
+    "courses/game-math/week-02/lesson-02.qmd",
+    "courses/computing-systems/week-01/lesson-01.qmd",
+    "courses/computing-systems/week-02/lesson-02.qmd",
+    "courses/computing-systems/week-03/lesson-03.qmd",
+    "courses/digital-media/week-01/lesson-01.qmd",
+    "courses/digital-media/week-02/lesson-02.qmd",
+}
+HOME_SIZES = {
+    60: {"try_its": (4, 6), "questions": (15, 28)},
+    90: {"try_its": (6, 9), "questions": (30, 45)},
 }
 # Seminars and practice sessions (no new ideas: activities on earlier lectures).
 SEMINAR_SIZES = {
@@ -191,6 +233,62 @@ NAMES = {
     "minutes": "planned minutes",
     "experiments": "experiments",
 }
+GLOSSARY_RE = re.compile(r"\{\{<\s*glossary\s+([^>]*?)\s*>\}\}")
+
+
+def drop_divs(text, classes):
+    """The text without the fenced divs ({.check}, …) of the given classes,
+    at any indentation (the closing fence has the indentation of the opening one)."""
+    out, skip = [], None
+    for line in text.split("\n"):
+        if skip is not None:
+            m = re.match(r"^(\s*):{3,}\s*$", line)
+            if m and len(m.group(1)) == skip:
+                skip = None
+            continue
+        m = re.match(r"^(\s*):{3,}\s*\{\.(%s)\b" % "|".join(classes), line)
+        if m:
+            skip = len(m.group(1))
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
+def experiment_on_page(sheet_body, n):
+    """What {{< experiment n >}} shows on the page (shortcodes.lua): the steps
+    and their checks, without "The idea:", the record fields, the closed
+    results and the simulators (they are in the section of the page)."""
+    m = re.search(r"^## Experiment %s\b[^\n]*\n(.*?)(?=^## |\Z)" % n, sheet_body, re.M | re.S)
+    if not m:
+        return ""
+    t = re.sub(r"^\*\*The idea[^\n]*(\n[^\n]+)*", " ", m.group(1), flags=re.M)
+    t = re.sub(r"\{\{<\s*(record|sim)\b.*?>\}\}", " ", t, flags=re.S)
+    return drop_divs(t, ["check"])
+
+
+def page_minutes(path, page_body):
+    """The planned class minutes of a lecture page (PAGE_TIME_COST)."""
+    c = PAGE_TIME_COST
+    body = page_body
+    sheet = path[:-4] + "-sheet.qmd"
+    if os.path.exists(sheet):
+        st = read(sheet)
+        body = re.sub(r"^\{\{< *experiment (\d+) *>\}\}", lambda m: experiment_on_page(st, m.group(1)),
+                      body, flags=re.M)
+    # A Task with AI box is an extra, shown only when time is left.
+    for head, text in boxes(body):
+        if ".ai-task" in head or 'title="Task with AI' in head:
+            body = body.replace(text, " ")
+    terms = sum(len(g.split()) for g in GLOSSARY_RE.findall(body))
+    questions = count_questions(body)
+    checks = len(IC_RE.findall(body))
+    sims = len(re.findall(r"\{\{< *sim ", body))
+    prompts = len(re.findall(r"^\s*:{3,} *\{\.prompt\}", body, re.M))
+    explained = IC_BLOCK_RE.sub(" ", body)
+    words = max(0, count_words(explained) - count_words(try_it_text(explained)))
+    minutes = (c["start"] + c["term"] * terms + words / c["wpm"] + c["check"] * checks
+               + c["question"] * questions + c["sim"] * sims + c["prompt"] * prompts)
+    return int(round(minutes))
 
 
 def course_minutes(project_dir, slug):
@@ -516,18 +614,26 @@ def check_sheet(path, rel, notes_sections, page_body, slides_body):
     for k, (sec, part) in enumerate(notes_sections.items(), 1):
         if not re.search(r"\bExperiment %d\b" % k, part):
             out.append("%s: section %s of the notes does not point to Experiment %d of the worksheet" % (rel, sec, k))
+    for p in exps:
+        title = p.splitlines()[0][3:].strip()
+        if re.search(r"\b\d+\s*(min|minutes)\b", p.split("\n1. ")[0]):
+            out.append('%s: "%s" gives the minutes of a part; only the whole session has a length' % (srel, title))
+        if "{.part}" in p and not re.search(r"Part B", p):
+            out.append('%s: "%s" has Part A but no Part B (a step on a simulator or the phone)' % (srel, title))
     if slides_body is not None:
+        # The slides are a reference of the lecture (AUTHORING.md, "Lecture
+        # worksheets"): the worksheet and its results are on two slides.
+        srel_s = rel[:-4] + "-slides.qmd"
         titles = re.findall(r"^## (.+)$", slides_body, re.M)
-        for k in nums:
-            if not any(re.match(r"Experiment %d\b" % k, t) for t in titles):
-                out.append('%s: no "Experiment %d" slide (the teacher shows its steps)' % (rel[:-4] + "-slides.qmd", k))
-            if not any(re.match(r"Check %d\b" % k, t) for t in titles):
-                out.append('%s: no "Check %d" slide (the results of Experiment %d, .reveal)' % (rel[:-4] + "-slides.qmd", k, k))
+        if not any(t.startswith("Your worksheet") for t in titles):
+            out.append('%s: no "Your worksheet" slide (Part A, Part B, the start files and {{< page-qr >}})' % srel_s)
+        if not any(t.startswith("Results of the worksheet") for t in titles):
+            out.append('%s: no "Results of the worksheet" slide (one .reveal line for each experiment)' % srel_s)
         for part in re.split(r"^(?=## )", slides_body, flags=re.M):
-            m = re.match(r"## (Check \d+.*)", part)
+            m = re.match(r"## (Results of the worksheet.*)", part)
             if m and not re.search(r"^:::+ *\{\.(answer|reveal)\}", part, re.M):
                 out.append('%s: slide "%s": the results are not on the slide (.reveal or .answer)'
-                           % (rel[:-4] + "-slides.qmd", m.group(1).strip()))
+                           % (srel_s, m.group(1).strip()))
     return out, len(nums)
 
 
@@ -961,7 +1067,18 @@ def check(project_dir):
         else:
             warnings.append("%s: no slides file (%s)" % (rel, os.path.basename(slides_path)))
 
-        for key, (lo, hi) in SIZES[minutes].items():
+        sizes = dict(SIZES[minutes])
+        home = rel.replace(os.sep, "/") in HOME_PAGES
+        if home:
+            # Taught before the smart screens: the older home-study page.
+            sizes.update(HOME_SIZES[minutes])
+        else:
+            n["minutes"] = page_minutes(path, page_body)
+            if n["minutes"] > PAGE_TIME[minutes]:
+                warnings.append("%s: about %d minutes in class (the page is taught on the screen); a %d-min "
+                                "lecture plans at most %d, the rest is for questions and delays (AUTHORING.md, "
+                                "\"The page is taught in class\")" % (rel, n["minutes"], minutes, PAGE_TIME[minutes]))
+        for key, (lo, hi) in sizes.items():
             v = n.get(key)
             if v is None:
                 continue

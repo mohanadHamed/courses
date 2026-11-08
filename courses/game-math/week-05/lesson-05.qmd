@@ -6,10 +6,9 @@ ilos: [A1, C1]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It
-ends with a **Do it** task and one set of questions. Tap, sort or type your
-answer: the page checks it at once and tells you why.
+Each section: a problem in a game, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -34,27 +33,14 @@ The size is rows × columns, never columns × rows. In a spreadsheet, the cell
 C2 is column C, row 2: the other way round.
 :::
 
-::: {.callout-note title="Do it · Your own level as a matrix"}
-Draw a level of 3 × 3 tiles on squared paper, with a number of coins in each
-tile, and write it as a matrix L. Tom drew this level: L has the rows
-(2, 0, 1), (0, 4, 3) and (5, 1, 0).
+::: {.callout-note title="Do it · A level as a matrix"}
+Tom drew a level of 3 × 3 tiles with the coins in each tile. His matrix L
+has the rows (2, 0, 1), (0, 4, 3) and (5, 1, 0).
 
 ::: {.fill answer="1" hint="Row 3 first, then column 2."}
 How many coins are in Tom's tile l~32~?
 
 Why: Row 3 is (5, 1, 0); its column 2 is 1.
-:::
-
-::: {.choice}
-Are l~32~ and l~23~ the same tile?
-
-- [x] No: l~32~ is row 3, column 2, and l~23~ is row 2, column 3.
-
-  Why: The row always comes first: l~32~ = 1, but l~23~ = 3.
-
-- [ ] Yes: both use the numbers 2 and 3.
-
-  Why: The order of the numbers matters: row first, then column.
 :::
 :::
 
@@ -67,11 +53,6 @@ What is the size of a matrix with 2 rows and 5 columns?
 
     Why: rows first, then columns.
 
-What is the size of the mine map M?
-:   3 × 4
-
-    Why: 3 rows and 4 columns.
-
 How many gems are in m~32~?
 :   7
 
@@ -81,11 +62,6 @@ How many gems are in m~23~?
 :   0
 
     Why: row 2 is (4, 3, 0, 6); column 3 is 0.
-
-Which entry of E is the damage of the troll?
-:   e~22~
-
-    Why: the troll is row 2 and damage is column 2.
 :::
 :::
 
@@ -110,31 +86,14 @@ Check the sizes before you add. And a number multiplies every entry, not only
 one row.
 :::
 
-::: {.callout-note title="Do it · Add and scale in Matrix Lab"}
+::: {.callout-note title="Do it · Add in Matrix Lab"}
 In **Matrix Lab**, A has the rows (2, 0, 5) and (4, 3, 1), and B has the
 rows (1, 3, 0) and (2, 1, 6). Choose A + B and tap one entry of the result.
-Then choose k × A with k = 1.5, and then k = −1.
 
 ::: {.fill answer="7" hint="Add the two entries in the same place: row 2, column 3."}
 What is the entry in row 2, column 3 of A + B?
 
 Why: a~23~ + b~23~ = 1 + 6 = 7.
-:::
-
-::: {.choice}
-k = −1. What happens to A?
-
-- [x] Every sign changes.
-
-  Why: −1 multiplies every entry: 2 becomes −2, 5 becomes −5.
-
-- [ ] Only the first row changes.
-
-  Why: A number multiplies every entry, not one row.
-
-- [ ] Nothing changes.
-
-  Why: Only k = 1 leaves the matrix as it is.
 :::
 :::
 
@@ -147,30 +106,15 @@ Rows (3, 1) and (0, 2) plus rows (1, 1) and (4, −2). What is row 1 of the sum?
 
     Why: (3 + 1, 1 + 1) = (4, 2).
 
-Player 1 has 80 points in level 2 and gets a bonus of 20. What is the total?
-:   100
-
-    Why: entries in the same place are added: 80 + 20.
-
 Can a 2 × 3 matrix and a 3 × 2 matrix be added?
 :   no, the sizes are different
 
     Why: only matrices of the same size can be added.
 
-What is 3 × the matrix with rows (2, 0) and (−1, 4)?
-:   rows (6, 0) and (−3, 12)
-
-    Why: every entry × 3.
-
 Hard mode is 1.5 × the stats. The slime has 40 HP. What is its new HP?
 :   60
 
     Why: 1.5 × 40 = 60.
-
-What does −1 × a matrix do?
-:   it changes every sign
-
-    Why: every entry × (−1): plus becomes minus and minus becomes plus.
 :::
 :::
 
@@ -224,26 +168,6 @@ What is the matrix with rows (3, 0) and (0, 1) times (2, 5)?
 :   (6, 5)
 
     Why: row 1: 3 × 2 + 0 × 5 = 6; row 2: 0 × 2 + 1 × 5 = 5.
-
-What is the matrix with rows (1, 2) and (0, 1) times (1, 3)?
-:   (7, 3)
-
-    Why: row 1: 1 + 6 = 7; row 2: 0 + 3 = 3.
-
-Turn has the rows (0, −1) and (1, 0). Where does it send (4, 0)?
-:   (0, 4)
-
-    Why: row 1: 0 − 0 = 0; row 2: 4 + 0 = 4.
-
-Stretch has the rows (2, 0) and (0, 3). Where does it send (4, 1)?
-:   (8, 3)
-
-    Why: row 1: 2 × 4 = 8; row 2: 3 × 1 = 3.
-
-Each entry of a matrix × vector is …
-:   one row times the vector
-
-    Why: each row gives one coordinate (a dot product).
 
 A = rows (1, 1), (0, 2); B = rows (3, 0), (1, 1). What is AB?
 :   rows (4, 1) and (2, 2)
@@ -314,16 +238,6 @@ In AB**v**, which matrix acts first?
 
     Why: the matrix next to the vector acts first.
 
-From (3, 1), Flip then Turn: where does the point go?
-:   (−1, −3)
-
-    Why: Flip: (−3, 1); Turn: (−y, x) = (−1, −3).
-
-From (3, 1), Turn then Flip: where does the point go?
-:   (1, 3)
-
-    Why: Turn: (−1, 3); Flip: (1, 3).
-
 In which order do you read a product of transformations?
 :   from right to left
 
@@ -348,8 +262,7 @@ The identity has 1s only on the main diagonal.
 :::
 
 ::: {.callout-note title="Do it · The identity in Multiply Lab"}
-Press "Identity" in **Multiply Lab** and drag P to three points. Then change
-the 0 of row 1 into a 1, so the rows are (1, 1) and (0, 1).
+Press "Identity" in **Multiply Lab** and drag P to three points.
 
 ::: {.choice}
 With the identity, where is MP?
@@ -366,33 +279,12 @@ With the identity, where is MP?
 
   Why: That is Grow, rows (2, 0) and (0, 2).
 :::
-
-::: {.choice}
-Now the rows are (1, 1) and (0, 1). Where does (2, 3) go?
-
-- [x] (5, 3): the house leans.
-
-  Why: Row 1 gives 2 + 3 = 5; row 2 gives 3. y is added to x.
-
-- [ ] (2, 3): it stays.
-
-  Why: Only the identity keeps every point; now row 1 also adds y.
-
-- [ ] (3, 3)
-
-  Why: Row 2 is (0, 1): it keeps y = 3; row 1 gives 2 + 3 = 5.
-:::
 :::
 
 ::: {.callout-tip title="Try it 5 · The identity"}
 Choose the right answer.
 
 ::: {.match extra="rows (1, 1) and (1, 1)|(0, 0)"}
-What is I × (7, −3)?
-:   (7, −3)
-
-    Why: the identity changes nothing.
-
 Which matrix is the 2 × 2 identity?
 :   rows (1, 0) and (0, 1)
 
@@ -402,11 +294,6 @@ A new object has the identity matrix. Does it move?
 :   no, it stays where it is
 
     Why: the identity keeps every point where it is.
-
-Rows (1, 1) and (1, 1) times (5, −2) gives …
-:   (3, 3)
-
-    Why: both rows give 5 + (−2) = 3: not the identity.
 
 What is I × A?
 :   A
@@ -433,29 +320,12 @@ A^−1^ A must give I.
 
 ::: {.callout-note title="Do it · Undo in Multiply Lab"}
 In **Multiply Lab**, press "Grow" and drag P to (2, 1). Then enter Shrink,
-the rows (0.5, 0) and (0, 0.5), and put P at the new point. Then press
-"Squash".
+the rows (0.5, 0) and (0, 0.5), and put P at the new point.
 
 ::: {.fill answer="(4, 2)" hint="Grow doubles x and y."}
 Where does Grow send (2, 1)? Type (x, y).
 
 Why: (2 × 2, 2 × 1) = (4, 2); Shrink brings (4, 2) back to (2, 1).
-:::
-
-::: {.choice}
-Why can the house not come back after Squash?
-
-- [x] Squash sends different points to the same place.
-
-  Why: (2, 0) and (0, 1) both go to (2, 2): no matrix can tell them apart again.
-
-- [ ] Its inverse is 1 ÷ every entry.
-
-  Why: The inverse is not 1 ÷ every entry, and Squash has no inverse at all.
-
-- [ ] Its entries are too big.
-
-  Why: Grow has big entries too, and Shrink undoes it.
 :::
 :::
 
@@ -473,20 +343,10 @@ What is A × A^−1^?
 
     Why: the inverse undoes A: together they change nothing.
 
-Grow3 = rows (3, 0) and (0, 3). Which matrix undoes it?
-:   rows (1/3, 0) and (0, 1/3)
-
-    Why: Grow3 triples x and y; dividing by 3 undoes it.
-
 Why has Squash no inverse?
 :   it sends two points to the same place
 
     Why: from the same end point, no spell can know where a point came from.
-
-Shrink × (6, 4)?
-:   (3, 2)
-
-    Why: (0.5 × 6, 0.5 × 4).
 :::
 :::
 
@@ -515,16 +375,6 @@ Which spell sends the crystal to (−1, 2)?
 :   Turn
 
     Why: Turn: (x, y) → (−y, x) = (−1, 2).
-
-Which spell sends the crystal to (−2, 1)?
-:   Flip
-
-    Why: Flip changes only the sign of x.
-
-Which spell keeps the crystal at (2, 1)?
-:   Stay
-
-    Why: Stay is the identity.
 :::
 :::
 
@@ -542,16 +392,6 @@ From (2, 1): Flip, then Turn. Where does the crystal land?
 :   (−1, −2)
 
     Why: Flip: (−2, 1); Turn: (−1, −2).
-
-From (1, 2): Turn, then Grow. Where does the crystal land?
-:   (−4, 2)
-
-    Why: Turn: (−2, 1); Grow: (−4, 2).
-
-Grow × Turn as one matrix: what are its rows?
-:   (0, −2) and (2, 0)
-
-    Why: row 1 of Grow (2, 0) · the columns of Turn: 0, −2; row 2 (0, 2): 2, 0.
 :::
 :::
 

@@ -791,6 +791,15 @@ local function experiment(args)
   end)
   body = body:gsub("{{<%s*sim%s.-%s*>}}", "")
   local doc = pandoc.read(body, "markdown")
+  -- "The idea:" opens an experiment of the worksheet, so that the worksheet
+  -- works alone in the lab; on the page the section above it explains the
+  -- idea, so the page leaves it out.
+  local kept = pandoc.Blocks({})
+  for _, b in ipairs(doc.blocks) do
+    local first = b.t == "Para" and b.content[1]
+    if not (first and first.t == "Strong" and str(first):match("^The idea")) then kept:insert(b) end
+  end
+  doc.blocks = kept
   -- A step with an interactive check (::: {.choice}, {.order}, {.sort} or
   -- {.fill}, interact.lua): the page checks the step at once, so its text
   -- field and its closed "Check your result" are left out (they stay in the

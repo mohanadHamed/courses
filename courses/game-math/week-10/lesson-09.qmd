@@ -6,10 +6,9 @@ ilos: [B2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It
-ends with a **Do it** task and one set of questions. Tap, sort or type your
-answer: the page checks it at once and tells you why.
+Each section: a problem in a game, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -70,11 +69,6 @@ p → q and ¬p ∨ q are …
 :   equivalent
 
     Why: both are false only in the row p = T, q = F.
-
-p → q and q → p are …
-:   not equivalent
-
-    Why: they differ in the rows (T, F) and (F, T).
 :::
 :::
 
@@ -136,11 +130,6 @@ p ∨ T
 
     Why: domination: OR with true is always true.
 
-p ∧ ¬p
-:   F
-
-    Why: complement: never both.
-
 p ∨ (p ∧ q)
 :   p
 
@@ -161,8 +150,7 @@ p ∨ (p ∧ q)
 :::
 
 ::: {.callout-note title="Do it · Remove the NOT"}
-Rewrite `!(isDay || isLit)` and `!(hasKey && !doorLocked)` without a NOT in
-front of brackets.
+Rewrite `!(isDay || isLit)` without a NOT in front of the brackets.
 
 ::: {.choice}
 What is `!(isDay || isLit)`?
@@ -179,22 +167,6 @@ What is `!(isDay || isLit)`?
 
   Why: The NOT does not disappear; it goes onto each part.
 :::
-
-::: {.choice}
-What is `!(hasKey && !doorLocked)`?
-
-- [x] `!hasKey || doorLocked`
-
-  Why: De Morgan, then NOT NOT doorLocked = doorLocked.
-
-- [ ] `!hasKey && doorLocked`
-
-  Why: AND must become OR.
-
-- [ ] `!hasKey || !doorLocked`
-
-  Why: The NOT of !doorLocked is doorLocked: two NOTs cancel.
-:::
 :::
 
 ::: {.callout-tip title="Try it 3 · De Morgan"}
@@ -205,11 +177,6 @@ Choose the equivalent condition.
 :   !hasPass || !shieldsUp
 
     Why: De Morgan: NOT each part, && becomes ||.
-
-!(isDay || isLit)
-:   !isDay && !isLit
-
-    Why: De Morgan: NOT each part, || becomes &&.
 
 !(hasKey && !doorLocked)
 :   !hasKey || doorLocked
@@ -236,8 +203,7 @@ Do not jump two laws at once without a check.
 :::
 
 ::: {.callout-note title="Do it · Simplify"}
-Simplify with the name of each law: p ∧ (p ∨ q); ¬(¬p ∧ ¬q);
-(p ∨ q) ∧ (p ∨ ¬q).
+Simplify each condition with a law of section 9.2.
 
 ::: {.sort}
 What does each condition simplify to? Sort them.
@@ -260,36 +226,16 @@ p ∨ q
 
     Why: De Morgan gives ¬¬p ∨ ¬¬q, and the double negations cancel.
 :::
-
-::: {.order}
-Put the steps of (p ∨ q) ∧ (p ∨ ¬q) in order.
-
-1. Distributive: (p ∨ q) ∧ (p ∨ ¬q) = p ∨ (q ∧ ¬q)
-2. Complement: q ∧ ¬q = F, so p ∨ F
-3. Identity: p ∨ F = p
-
-Why: One law per step, with its name: the bracket first, then the complement, then the identity.
-:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Simplify"}
-Choose the simplest equivalent. You can use an answer more than once.
+Choose the simplest equivalent.
 
 ::: {.match extra="p ∧ q|¬p ∨ q"}
-p ∧ (p ∨ q)
-:   p
-
-    Why: absorption.
-
 ¬(¬p ∧ ¬q)
 :   p ∨ q
 
     Why: De Morgan: ¬¬p ∨ ¬¬q, then double negation.
-
-(p ∨ q) ∧ (p ∨ ¬q)
-:   p
-
-    Why: distributive: p ∨ (q ∧ ¬q) = p ∨ F = p.
 
 ¬(¬p ∨ q)
 :   p ∧ ¬q
@@ -358,11 +304,6 @@ plate pressed and not flying
 
     Why: "and" is &&, "not" is !.
 
-the red key or the blue key, but not both
-:   r ^ b
-
-    Why: "but not both" is XOR.
-
 the alarm rings unless the guard is asleep
 :   alarm = !a
 
@@ -430,16 +371,6 @@ s = T, n = T, w = F. The action?
 
     Why: not weak, sees and near: attack.
 
-s = T, n = T, w = T. The action?
-:   Flee
-
-    Why: a weak guard always flees.
-
-s = F, n = F, w = F. The action?
-:   Patrol
-
-    Why: sees nothing: patrol.
-
 The chain `if (s) Chase(); else if (s && n) Attack(); …`. Which rule never runs?
 :   Attack()
 
@@ -475,16 +406,6 @@ The chest rule in code?
 
     Why: (key and no skeleton) or thief.
 
-The bridge stays up unless the lever is pulled.
-:   bridgeUp = !l
-
-    Why: "unless l" means "if not l".
-
-The red key or the blue key, but not both?
-:   r ^ b
-
-    Why: exactly one: XOR.
-
 The same as !(l && v)?
 :   !l || !v
 
@@ -496,11 +417,6 @@ The same as !(l && v)?
 The chest opens with (k ∧ ¬s) ∨ t. Choose the right answer.
 
 ::: {.match extra="6|lit && windy"}
-In how many of 8 rows does (k ∧ ¬s) ∨ t open the chest?
-:   5
-
-    Why: the 4 rows with t, and (T, F, F).
-
 `if (gold > 0) Sell(); else if (gold > 50) Discount();` Which rule never runs?
 :   Discount()
 
@@ -510,11 +426,6 @@ A shorter condition for `lit || (lit && windy)`?
 :   lit
 
     Why: absorption: p ∨ (p ∧ q) ≡ p.
-
-How many rows has a table with 4 conditions?
-:   16
-
-    Why: 2^4.
 :::
 :::
 

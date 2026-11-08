@@ -45,18 +45,27 @@ in AUTHORING.md ("The page is taught in class", "Lecture worksheets",
   `courses-private` (`online-NN-solutions.md`,
   `moodle/tools/content_digital_skills.py`).
 
-## Still to do (in this order)
+## Checked (2026-11-08)
 
-1. Render check with Quarto 1.10.19 (the Typst package `tiaoma` 0.3.0 must
-   be in `.quarto/typst/packages/preview/` when packages.typst.org is not
-   reachable): every changed week, then look at a few pages, PDFs and
-   decks.
-2. `courses/digital-skills/NOTES.md` and `plan.md`: the two-case model,
-   the experiments of each lecture, the face-to-face version left as it was
-   on 2026-11-06 (align it if the course is switched).
-3. Rebuild `moodle/digital-skills-weeks.md` in courses-private
-   (`moodle/tools/build.py`).
-4. Online activities 14 and 15 (the course project) and Practice 4–5: look
-   at their size; Online activities 8, 10 and 12 are not given this
-   semester.
-5. Open the pull requests when the teacher asks.
+- `check_size.py`: 95 lessons fit their lecture time, no warning;
+  `check_figures.py`: no cross shapes; `face-to-face/check_f2f.py`: 0
+  warnings.
+- Rendered with Quarto 1.10.19 (the Typst package `tiaoma` 0.3.0 copied
+  into `.quarto/typst/packages/preview/`, because packages.typst.org was not
+  reachable): Digital Skills weeks 2–7, 9, 11 and 13 (pages, notes and
+  worksheet PDFs, slides, online activities) and sample pages of the other
+  courses (Game Math Lectures 3 and 10, Computing Systems Lecture 4, Digital
+  Media Lectures 4 and 12), without errors. The tasks PDFs of the online
+  activities were not printed here (headless Chrome hangs without the
+  Google hosts); CI prints them.
+- `courses/digital-skills/NOTES.md` and `plan.md` updated;
+  `moodle/digital-skills-weeks.md` rebuilt in courses-private.
+
+## Still to do
+
+1. Online activities 14 and 15 (the course project, weeks 14 and 15) and
+   Practice 4–5 keep their size: ask the teacher whether they should be
+   simpler too. Online activities 8, 10 and 12 are not given this semester.
+2. Next semester: rewrite the lectures taught before the screens
+   (`HOME_PAGES` in `check_size.py`) and Digital Skills Lecture 1 (frozen)
+   for class, then empty both sets.

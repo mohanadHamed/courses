@@ -18,8 +18,9 @@ format: lesson-html   # online activity: the tasks PDF is made by printing this 
 - **Time:** about 60 minutes. Work alone, at your own speed.
 - **How it works:** do Steps 1–3 on this page. Each step has a short text, a
   simulator and a quick check. Then do the **Tasks to submit**.
-- **What you submit:** one Excel file and three short answers, on the
-  university e-learning platform, before lecture 8.
+- **What you submit:** one Excel file and one short answer, on the
+  university e-learning platform, before lecture 8. Each Step shows how to
+  do its task, with a model.
 - **You need Lectures 5, 6 and 7:** prompts, formulas, sort, filter and
   charts.
 - **Never type personal data into an AI tool.** Use only the made-up shop
@@ -42,6 +43,19 @@ format: lesson-html   # online activity: the tasks PDF is made by printing this 
 ![A clear prompt for a formula.](images/ai-formula.png){width=100%}
 
 {{< sim file="sims/ai-formula-lab.html" poster="sims/ai-formula-lab.png" title="AI Formula Lab: ask for a formula, then test it" height="900" >}}
+
+::: {.callout-note title="Model · Sami asks for a formula, and tests it"}
+1. Sami's prices are in B2:B6. He copies this prompt into an AI chat:
+
+   ::: {.prompt}
+   My data is in A1:B6. Column B is the Price in JD, from B2 to B6. Write
+   one Excel formula for the highest price.
+   :::
+
+2. The AI answers `=MAX(B2:B6)`. Sami writes it in B8, with the label
+   *Highest price* in A8.
+3. He tests it: the biggest number in B2:B6 is the one that B8 shows.
+:::
 
 ::: {.callout-tip title="Try it 1 · Formulas from an AI"}
 Use AI Formula Lab. Choose the right answer.
@@ -89,6 +103,16 @@ How do you check a formula from an AI?
 ![Clean the data before you count or chart it.](images/clean-data.png){width=100%}
 
 {{< sim file="sims/clean-data-lab.html" poster="sims/clean-data-lab.png" title="Clean Data Lab: tidy the sales list with AI advice" height="860" >}}
+
+::: {.callout-note title="Model · Lina cleans three mistakes"}
+1. Two rows are the same sale, typed twice: she selects the table and
+   chooses **Data › Remove Duplicates**.
+2. *fruit* and *Fruit* are one type: **Find and Replace** makes every one
+   *Fruit*.
+3. A total says *8 JD*: she types **8**, a number.
+
+Now SUM counts every sale once.
+:::
 
 ::: {.callout-tip title="Try it 2 · Clean data"}
 Use Clean Data Lab. Choose the right answer.
@@ -183,35 +207,32 @@ from a paper notebook of the Sunrise shop):
 
 ### Task 1 · Clean the list (2 marks)
 
-1. Ask an AI tool how to clean this list. Copy its steps into your answer
-   sheet (a second sheet named *AI steps*).
-2. Clean the list in Excel: one duplicate row, two spellings of the Type,
-   and one total as text. Do not delete real sales.
-3. Save it as `sales_clean.xlsx`.
+In Excel, clean the list: delete the row that is typed twice, write the
+**Type** with the same spelling in every row, and change the total *12 JD*
+to the number **12**. Do not delete real sales. Save the file as
+`sales_clean.xlsx`. (Step 2 and its model show how.)
 
-### Task 2 · Two formulas from AI (2 marks)
+### Task 2 · A formula from AI, tested (2 marks)
 
-1. Ask an AI tool for a formula for the **total** of all the sales, and one
-   for the **average** sale. Tell it where your data is.
-2. Put the formulas under the list, with a label next to each.
-3. Check each result by hand. The right results are 133 JD and 19 JD.
+1. Ask an AI tool for one formula for the **total** of all the sales. Tell
+   it where your data is.
+2. Put the formula under the list, with the label *Total* next to it.
+   Check it: the right total is **133 JD**. (Step 1 and its model show
+   how.)
 
-### Task 3 · A chart and short answers (2 marks)
-
-1. Make a small table *Type / Sales* from the clean list, and a **column
-   chart** of it with a real title.
-
-a) Write your prompt for Task 2 and say if the first AI answer was right.
+a) Copy your prompt here.
 
 {{< answer-space lines=3 >}}
 
-b) Which AI step did you **not** follow, or change, and why? If all steps
-were good, say how you checked them.
+### Task 3 · A column chart (2 marks)
 
-{{< answer-space lines=3 >}}
+Next to the list, type this small table, and make a **column chart** of it
+with a real title: **Type, Sales (JD)**; **Paper, 60**; **Drinks, 37**;
+**Bags, 36**. (Step 3 shows how.)
+
+*Submit:* the file `sales_clean.xlsx` (Tasks 1–3).
 
 ## How to submit
 
-Upload `sales_clean.xlsx` (with the sheets *Sales* and *AI steps*) and your
-answers to Task 3 to the university e-learning platform, **before
-lecture 8**.
+Upload `sales_clean.xlsx` and your answer to Task 2 to the university
+e-learning platform, **before lecture 8**.

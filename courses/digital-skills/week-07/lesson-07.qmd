@@ -6,26 +6,24 @@ ilos: [C2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson. In class you follow the
-**worksheet (PDF)**: four experiments in Excel. Each section of this page
-explains one idea, then shows its experiment: do each step, then tap, sort
-or type its result: the page checks it at once and tells you why.
+This page is the lecture, in class and at home. Each section explains one
+idea, then shows its experiment: **Part A** in the app, **Part B** on a
+simulator or on your phone. The page checks every step at once.
+
+- **No computers in the room?** The teacher does each experiment here on
+  the screen: Part A on the simulator of the section (or in the app on the
+  teacher's laptop). Then the class checks the result with the step.
+- **In the computer lab?** Follow the **worksheet (PDF)**: Part A in the
+  app, Part B on the simulator. Write each result, then check it here.
+- **You need:** Excel (the desktop app, or Excel on the web at `office.com`) and the start file, or only the simulators of this page.
 
 ## Key terms
 
-{{< glossary sort-data filter-data conditional-formatting chart column-chart line-chart pie-chart chart-title cell-range >}}
+{{< glossary sort-data filter-data conditional-formatting chart column-chart line-chart pie-chart chart-title >}}
 
 ## Before you start
 
-- **You need:** Excel (the desktop app, or Excel on the web at `office.com`).
-- **Start file:** download it, then open it in Excel. It has the sales of
-  the **next** week (200 JD): other numbers than the table on this page.
-
 {{< start-files >}}
-
-- What you type in the table of results stays in this browser only.
-
-![How the worksheet works: do the step, write your result, check it.](../week-02/images/worksheet-steps.png){width=100%}
 
 ## 7.1 Put the rows in order: Sort
 
@@ -33,30 +31,14 @@ or type its result: the page checks it at once and tells you why.
 - Click **one cell** in the table › **Data › Sort** › choose the column and
   the order.
 - Quick buttons: **A→Z** (smallest first) and **Z→A** (largest first).
-- The sales of the Sunrise shop in one week:
-
-| Day | Item | Type | Qty | Total (JD) |
-|---|---|---|---|---|
-| Sun | Notebook | Paper | 12 | 24 |
-| Sun | Juice | Drinks | 20 | 10 |
-| Mon | Pen | Paper | 40 | 20 |
-| Mon | Water | Drinks | 30 | 15 |
-| Tue | Bag | Bags | 3 | 36 |
-| Tue | Juice | Drinks | 24 | 12 |
-| Wed | Notebook | Paper | 8 | 16 |
-| Wed | Bag | Bags | 2 | 24 |
-| Thu | Water | Drinks | 26 | 13 |
-| Thu | Pen | Paper | 30 | 15 |
-
-- Sorted by Total, largest first: the bag of Tuesday (36 JD) is on top.
+- **Table Lab** below holds the sales of the Sunrise shop in one week.
 
 ![Sort by Total.](images/sort.png){width=100%}
 
 {{< sim file="sims/table-lab.html" poster="sims/table-lab.png" title="Table Lab: sort, filter and colour the Sunrise sales" height="680" >}}
 
 ::: {.callout-warning title="Watch out!"}
-Do not select only one column to sort: the other columns stay, and the
-table is wrong.
+Never sort one column alone: the rows break apart.
 :::
 
 {{< experiment 1 >}}
@@ -65,21 +47,6 @@ table is wrong.
 Choose the right answer.
 
 ::: {.match extra="Data › Filter|the colour"}
-Where do you find Sort?
-:   Data › Sort
-
-    Why: Sort is on the Data tab.
-
-Which button puts the largest total on top?
-:   Z→A
-
-    Why: Z→A sorts from the largest to the smallest.
-
-What happens to each row when you sort?
-:   it moves as a whole
-
-    Why: Sort keeps each row together, so the table stays right.
-
 Which sale is on top after the sort, largest first?
 :   the bag of Tuesday, 36 JD
 
@@ -92,8 +59,7 @@ Which sale is on top after the sort, largest first?
 - A **filter** shows only the rows you choose. The others are **hidden, not
   deleted**.
 - Click one cell › **Data › Filter**. Arrows appear in the headings.
-- Arrow of *Type* › tick only **Drinks** › OK: 4 rows.
-- Select the totals: the status bar shows **Sum: 50**.
+- Click the arrow of a heading and tick the values to show.
 - **Clear Filter** shows all rows again.
 
 ![Filter the drinks.](images/filter.png){width=100%}
@@ -102,31 +68,18 @@ Which sale is on top after the sort, largest first?
 Never delete rows to "hide" them. Use a filter.
 :::
 
+Part B: **Table Lab** (Task 2), in section 7.1.
+
 {{< experiment 2 >}}
 
 ::: {.callout-tip title="Try it 2 · Filter"}
 Use the sales table of section 7.1. Choose the right answer.
 
 ::: {.match extra="they are deleted|10"}
-What happens to the rows a filter does not show?
-:   they are hidden
-
-    Why: A filter hides rows; it never deletes them.
-
-How many rows are Drinks?
-:   4
-
-    Why: Juice on Sunday and Tuesday, and Water on Monday and Thursday.
-
 What is the sum of the Drinks totals?
 :   50 JD
 
     Why: 10 + 15 + 12 + 13 = 50 JD.
-
-How do you see all rows again?
-:   Clear Filter
-
-    Why: Clear Filter shows all the rows again.
 :::
 :::
 
@@ -135,7 +88,6 @@ How do you see all rows again?
 - **Conditional formatting** colours cells by a rule, by itself.
 - Select the totals › **Home › Conditional Formatting › Highlight Cells
   Rules › Greater Than** › 20 › a colour.
-- Three cells turn green: 24, 36 and 24. The 20 stays white.
 - When a number changes, the colour changes too. Remove with **Clear
   Rules**.
 
@@ -145,27 +97,14 @@ How do you see all rows again?
 Colours you add by hand do not change when the numbers change.
 :::
 
+Part B: **Table Lab** (Task 3), in section 7.1.
+
 {{< experiment 3 >}}
 
 ::: {.callout-tip title="Try it 3 · Rules"}
 Use the sales table of section 7.1. Choose the right answer.
 
 ::: {.match extra="Data › Sort|2"}
-Where is conditional formatting?
-:   Home › Conditional Formatting
-
-    Why: Conditional formatting is on the Home tab.
-
-How many totals are greater than 20?
-:   3
-
-    Why: 24, 36 and 24 are greater than 20.
-
-Is the total 20 coloured by the rule Greater Than 20?
-:   no
-
-    Why: 20 is not greater than 20.
-
 Juice changes from 12 to 22. What happens?
 :   it turns green by itself
 
@@ -193,28 +132,13 @@ Juice changes from 12 to 22. What happens?
 {{< experiment 4 >}}
 
 ::: {.callout-tip title="Try it 4 · Charts"}
-Choose the right chart. You can use an answer more than once.
+Choose the right chart.
 
 ::: {.match extra="a table|a picture"}
-Compare Paper, Drinks and Bags?
-:   a column chart
-
-    Why: Columns compare amounts side by side.
-
-The sales from Sunday to Thursday?
-:   a line chart
-
-    Why: A line shows a change over time.
-
 The part of each type in the 185 JD?
 :   a pie chart
 
     Why: A pie shows the parts of one whole.
-
-The sales of five shops in one month?
-:   a column chart
-
-    Why: Five shops are amounts to compare.
 :::
 :::
 
@@ -223,8 +147,6 @@ The sales of five shops in one month?
 {{< experiment results >}}
 
 ## Game challenge: Rana's Questions {.challenge}
-
-Work alone. Use every section of today.
 
 Huda asks Rana six questions about the sales of the week: the biggest sale,
 only the drinks, big totals in green, the change over the days, the three
@@ -241,26 +163,6 @@ Which sale was the biggest? Which tool shows it fast?
 :   Sort by Total, largest first
 
     Why: Sort puts the biggest total on top.
-
-"Show me only the drinks." Which tool?
-:   Filter the column Type
-
-    Why: A filter shows only the rows of one type.
-
-"Make every total above 20 JD green, also next week." Which tool?
-:   Conditional formatting
-
-    Why: A rule colours the totals by itself, also next week.
-
-What is the total of the Paper sales?
-:   75 JD
-
-    Why: 24 + 20 + 16 + 15 = 75 JD.
-
-On which day were the sales highest?
-:   Tuesday, 48 JD
-
-    Why: Tuesday: 36 + 12 = 48 JD, more than any other day.
 :::
 :::
 

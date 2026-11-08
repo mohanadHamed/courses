@@ -284,7 +284,10 @@ def page_minutes(path, page_body):
     checks = len(IC_RE.findall(body))
     sims = len(re.findall(r"\{\{< *sim ", body))
     prompts = len(re.findall(r"^\s*:{3,} *\{\.prompt\}", body, re.M))
-    explained = IC_BLOCK_RE.sub(" ", body)
+    # The first lines and the summary are in "start".
+    parts = re.split(r"^(?=## )", body, flags=re.M)
+    explained = "".join(p for p in parts if p.startswith("## ") and not re.match(r"## Summary\b", p))
+    explained = IC_BLOCK_RE.sub(" ", explained)
     words = max(0, count_words(explained) - count_words(try_it_text(explained)))
     minutes = (c["start"] + c["term"] * terms + words / c["wpm"] + c["check"] * checks
                + c["question"] * questions + c["sim"] * sims + c["prompt"] * prompts)

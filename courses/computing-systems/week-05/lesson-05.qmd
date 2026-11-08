@@ -6,10 +6,9 @@ ilos: [A2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game studio. Then it explains the idea behind it.
-It ends with a **Do it** task and one set of questions. Tap, sort or type
-your answer: the page checks it at once and tells you why.
+Each section: a question from a game studio, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -22,11 +21,6 @@ your answer: the page checks it at once and tells you why.
   keep **files**, control **devices** (screen, touch, sound, camera), check
   **permissions**.
 - Computers: Windows, macOS, Linux. Phones: Android, iOS.
-- You see the OS at work in its tools: **Task Manager** and **Settings** on
-  a PC, **Settings** on a phone.
-- A tap on the game icon: the OS loads the game from storage into RAM
-  (files), starts a process (processes), gives it RAM (memory), and sends it
-  the taps (devices).
 - "Allow Pocket Quest to record audio?" is the **permission** service.
 
 ![The OS between the apps and the hardware.](images/os-layers.png){width=92%}
@@ -36,10 +30,8 @@ The OS is not only the home screen. Most of its work cannot be seen.
 :::
 
 ::: {.callout-note title="Do it · Name your two operating systems"}
-Lab computer: Settings › System › About. Phone: Settings › About phone
-(iPhone: Settings › General › About). Read the name and version of each OS,
-for example Windows 11, version 23H2, and Android 14. Then think of a
-service of the OS that you used today.
+Your own devices: Settings › About shows the name and version of each OS,
+for example Windows 11 and Android 14.
 
 ::: {.sort}
 Which service of the OS is at work? Sort the moments of Huda's day.
@@ -71,28 +63,13 @@ Permissions
 :::
 
 ::: {.callout-tip title="Try it 1 · OS services"}
-Choose the right service. You can use an answer more than once.
+Choose the right service.
 
 ::: {.match extra="the GPU"}
 The game asks to use the camera. Which service decides?
 :   permissions
 
     Why: The player allows or refuses it: the permission service.
-
-The game saves the progress to storage. Which service?
-:   files
-
-    Why: The OS keeps the files in storage.
-
-A tap on the screen reaches the game. Which service?
-:   devices
-
-    Why: The OS controls the devices and sends the taps.
-
-The game gets its own part of the RAM. Which service?
-:   memory
-
-    Why: The memory service gives each process its part.
 
 The game gets time on a CPU core. Which service?
 :   processes
@@ -139,38 +116,12 @@ Only a few apps are open, but there are more than 100 processes. Why?
 
   Why: A few cores share their time between many processes.
 :::
-
-::: {.choice}
-You close the browser. What happens?
-
-- [x] Its 1.2 GB of memory is freed, and the other processes get their slices more often.
-
-  Why: One process less shares the cores and the RAM.
-
-- [ ] The computer gets more cores.
-
-  Why: The hardware stays the same; only the work changes.
-
-- [ ] Nothing changes.
-
-  Why: Closing an app frees its memory and its CPU time.
-:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Processes"}
 Choose the right answer.
 
 ::: {.match extra="8 apps at most|deleted"}
-What is a process?
-:   a running program with its own memory
-
-    Why: the OS starts a process when a program runs.
-
-What does the scheduler decide?
-:   which process runs on a core, and for how long
-
-    Why: it gives each process short time slices.
-
 A phone has 8 cores and 40 apps open. Can they all run?
 :   yes, the scheduler switches between them
 
@@ -180,11 +131,6 @@ The player closes the download. What happens to the game?
 :   it gets more time on the core
 
     Why: fewer processes share the core.
-
-Which app gets the most time on a phone?
-:   the foreground app
-
-    Why: the app on the screen comes first; most background apps pause.
 :::
 :::
 
@@ -194,9 +140,6 @@ Which app gets the most time on a phone?
   the parts apart and takes memory back when a process ends.
 - **Phone, RAM full:** the OS closes background apps, the one used longest
   ago first.
-- A 6 GB phone: OS 2 GB + a puzzle game 3 GB = 5 GB, 1 GB free. A video
-  call needs 1.5 GB: 6.5 GB is too much, so the OS closes the game in the
-  background.
 - A good mobile game **saves its state** when it goes to the background.
 
 ![A phone with a full RAM.](images/ram-full.png){width=92%}
@@ -217,34 +160,12 @@ How much RAM did the three video tabs add?
 
 Why: 6.8 − 6.0 = 0.8 GB, about 800 MB.
 :::
-
-::: {.choice}
-An 8 GB phone runs the OS (2.5 GB), a game (4 GB) and Chat (1 GB). The
-camera needs 1 GB. What does the OS do?
-
-- [x] It closes an app in the background, so the camera fits.
-
-  Why: 2.5 + 4 + 1 + 1 = 8.5 GB, more than 8 GB: the OS frees RAM.
-
-- [ ] It makes the RAM bigger.
-
-  Why: RAM is hardware: the OS can only share it.
-
-- [ ] It stops the camera from opening.
-
-  Why: The app in the foreground gets the RAM first.
-:::
 :::
 
 ::: {.callout-tip title="Try it 3 · Memory"}
 Choose the right answer.
 
 ::: {.match extra="the foreground app|it adds more RAM"}
-A phone has 8 GB of RAM. The OS uses 2.5 GB and a game 3 GB. How much is free?
-:   2.5 GB
-
-    Why: 8 − 2.5 − 3 = 2.5 GB.
-
 The RAM of a phone is full. Which apps does the OS close?
 :   background apps
 
@@ -254,11 +175,6 @@ A game starts again from its title screen after a call. Did it crash?
 :   no, the OS closed it to free RAM
 
     Why: The OS closed the background game to free RAM.
-
-What should a mobile game do when it goes to the background?
-:   save its state
-
-    Why: Then it can continue at the same place after a restart.
 :::
 :::
 
@@ -272,17 +188,11 @@ What should a mobile game do when it goes to the background?
   .png picture.
 - The game folder holds the program and the packs; the player's save is in
   Documents (or AppData), so it stays after an update.
-- On a phone, each app has its own sandbox folder; Settings shows only the
-  size.
 
 ![Where the files of a PC game live.](images/game-files.png){width=92%}
 
 - **Devices:** the OS finds a new device (**plug and play**), loads its
-  **driver** and shares it between apps. A new gamepad: connect → detect →
-  driver → ready; a yellow sign in Device Manager means the driver is
-  missing.
-- The OS shares all the **system resources**: CPU time, memory, storage,
-  battery, network and devices.
+  **driver** and shares it between apps: connect → detect → driver → ready.
 
 ![How the OS manages a device.](images/device-management.png){width=92%}
 
@@ -311,47 +221,16 @@ Which one is the path of that file?
 
   Why: That is its type: one item of its metadata.
 :::
-
-::: {.choice}
-A 5 GB game file does not copy to a USB stick with 20 GB free. Why?
-
-- [x] The stick is formatted FAT32: it refuses any file of 4 GB or more.
-
-  Why: Free space is not the only limit; exFAT takes big files.
-
-- [ ] The stick is full.
-
-  Why: 20 GB are free, more than 5 GB.
-
-- [ ] The file has no driver.
-
-  Why: Drivers are for devices, not for files.
-:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Files and paths"}
 Choose the right answer.
 
 ::: {.match extra="the content of the file|C:"}
-What does the extension .sav tell?
-:   it is a save file
-
-    Why: the extension names the kind of file.
-
-What is the metadata of a file?
-:   its name, type, size and dates
-
-    Why: metadata is data about the file, not its content.
-
 Why is the save file outside the game folder?
 :   so that it stays after an update
 
     Why: an update replaces the game folder.
-
-Which sign separates folders in an Android path?
-:   /
-
-    Why: Android and macOS use /, Windows uses \\.
 
 A 4.5 GB video does not copy to a FAT32 stick with 20 GB free. Why?
 :   FAT32 allows no file of 4 GB or more
@@ -382,20 +261,10 @@ How much RAM is free before the camera opens?
 
     Why: 4 − 1.5 − 1.8 = 0.7 GB.
 
-How much RAM do the OS, the game and the camera need together?
-:   4.2 GB
-
-    Why: 1.5 + 1.8 + 0.9 = 4.2 GB, more than 4.
-
 Which app does the OS close?
 :   Pocket Quest, in the background
 
     Why: The game is in the background now, so it is closed.
-
-Which app keeps running?
-:   the camera, on the screen
-
-    Why: The app on the screen keeps running.
 :::
 :::
 
@@ -404,25 +273,10 @@ RAM 4 GB. OS 1.5 GB, Pocket Quest 2.3 GB (on the screen), Chat 0.4 GB (used
 1 minute ago), Music 0.3 GB (used 20 minutes ago). Choose the right answer.
 
 ::: {.match extra="only Music|Pocket Quest"}
-How much RAM do all four need?
-:   4.5 GB
-
-    Why: 1.5 + 2.3 + 0.4 + 0.3 = 4.5 GB.
-
 Which app does the OS close first?
 :   Music, used longest ago
 
     Why: The background app used longest ago goes first.
-
-Which apps must the OS close in the end?
-:   Music and Chat
-
-    Why: Without Music it is still 4.2 GB: Chat must go too.
-
-How does the player keep the progress if the OS closes the game later?
-:   the game saves its state in the background
-
-    Why: A saved state lets the game continue after a restart.
 :::
 :::
 

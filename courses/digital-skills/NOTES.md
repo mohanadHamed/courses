@@ -42,23 +42,34 @@ management, medical sterilization, facility assessment). So this course is
   10 units (core: Lecture N and its online activity) and 5 practice weeks
   (flexible: Practice N in the lab and an online practice activity, no new
   ideas). Online activities are numbered 1–15 in teaching order.
-- **Face-to-face lecture: a worksheet first** (AUTHORING.md, "Lecture
-  worksheets"). The worksheet (`lesson-NN-sheet.qmd`, PDF) is the main
-  document of the session, like the manual of a lab experiment: the goal
-  (the ILOs), what you need, the start files, 3–4 experiments (one per
-  section) with numbered steps, a place to record the result after every
-  step, and a table of results. Students do it on the computer during the
-  lecture and the teacher checks it there; it is never uploaded. The notes
-  (PDF) are a short reference, the interactive page shows the same
-  experiments with an interactive check after every step (it answers at
-  once, with the reason), and the slides are the teacher's demonstration
-  of the worksheet. Size for **60 minutes**
-  (3–4 sections, about 40 minutes of experiments) and a ~10-min Game
-  challenge set in an ordinary workplace or a student's study work.
-- **Real apps or simulators** in the worksheet, by the nature of the
-  lecture (the choice of each lecture is in `plan.md`): Word, Excel,
-  PowerPoint or an AI tool when the lab has it, the simulators of the page
-  as the teacher's demonstration and the way to do a step without the app.
+- **Face-to-face lecture: two cases, one lesson** (since 2026-11-08;
+  AUTHORING.md, "The page is taught in class" and "Lecture worksheets").
+  The computer labs of the college are not ready yet, and the classrooms
+  have smart screens. So every lecture works in both cases:
+  - *Without a lab* (now): the teacher teaches from the **interactive
+    page** on the smart screen, about **40 minutes**. Each section is the
+    idea in a few points, its simulator, its experiment and one applied Try
+    it question. The teacher does Part A of the experiment on the
+    simulator of the section (it holds the data of the start file) or in
+    the app on the teacher's laptop, runs each AI prompt (**Copy prompt**)
+    in an AI assistant in another tab, and the class answers the check of
+    every step. Students can open the page on their phones and do Part B.
+  - *In the lab* (later): the students follow the **worksheet** (PDF, the
+    manual): Part A in Word, Excel, PowerPoint or an AI assistant, Part B
+    on a simulator; they write each result, and the teacher checks the
+    table of results.
+  The worksheet has 3 experiments (`## Experiment N · …`: "The idea:",
+  "Aim:", Part A and Part B as `{.part}` labels, 2–3 steps in Part A and 1
+  in Part B), taken from the face-to-face version; the page leaves out
+  "The idea:". The notes (PDF) are a short reference with one section per
+  experiment; the slides are a reference of the lecture in the
+  face-to-face model (concepts, Live demos, Try it, Summary, Your
+  worksheet, Results of the worksheet, the Game challenge).
+- **Real apps and simulators:** Part A in Word, Excel, PowerPoint or an AI
+  tool, Part B on the simulators of the page. A simulator of an Office task
+  is the lab of a class without computers, so give it the data of the
+  start file (Formula Lab and `shop-start.xlsx`, Bill Check and the bill of
+  Lecture 2).
 - **Practice session** (`practice-NN*`, flexible, in a practice week):
   hands-on work on earlier lectures in Word, Excel, PowerPoint or an AI
   tool, in the seminar format (AUTHORING.md, "What a seminar looks like");
@@ -99,8 +110,13 @@ interactive lesson; no online activities and no notes), numbered in one
 sequence: Lectures 1–30, two in each week. It is never built
 for the site (`_quarto-site.yml`); preview it with `--profile f2f`. Its
 `README.md` has the model, the rules, the progress and the steps to switch
-the site. When a blended session changes, change its face-to-face session
-too (`face-to-face/schedule.yml`, `from`).
+the site. On 2026-11-08 the teacher decided that the course stays blended
+and that this version stays hidden as it is. The blended Lectures 2–10 then
+took its worksheets, pages and slides (Part A and Part B) and were sized
+for a class on the smart screen, with three experiments each and prompts to
+copy, so they now differ from it. Leave the face-to-face version as it was
+on 2026-11-06; if the course is ever switched, first bring it in line with
+the blended lectures (`face-to-face/schedule.yml`, `from`).
 
 ## Practical first: many simulators
 
@@ -135,6 +151,15 @@ real tool.
 - Every task done with AI ends with checking the output and, from unit 9 (Lecture 9) on, an AI-use statement.
 - AI is a tool for documents, data and presentations here; how AI works is
   the subject of *AI Applications* (01101153). Keep to what a user needs.
+- **Practical, never AI alone** (the teacher's request of 2026-11-08: the
+  students know AI already, and Lecture 2 felt theoretical in class). Every
+  AI step of a worksheet gives its complete prompt in `::: {.prompt}` (the
+  page adds "Copy prompt"; a prompt that needs a text holds the text, so it
+  works without the start file), and its result goes into an Office task: a
+  draft corrected in Word, a total checked in a spreadsheet, a fair advert
+  with an AI-use statement in Word, an AI summary checked against a
+  PivotTable. No more than three prompts in a lecture: each one takes about
+  two minutes in class.
 
 ## Lab sessions
 
@@ -280,3 +305,19 @@ every calendar week, by hand, with the university's template.
   with its submission, moved to week 4. The practice weeks absorb the lost
   weeks. The teacher set the rules for the weekly platform text (above,
   "On the e-learning platform").
+- 2026-11-08 (teacher's request, after Lecture 2 in class): the labs are
+  not ready, the classrooms have smart screens, and Lecture 2 felt
+  theoretical and boring on the page. The course stays blended (the
+  face-to-face version stays hidden). Lectures 2–10 now work with and
+  without a lab: the page is taught on the screen in about 40 minutes
+  (simulators of the Office tasks, prompts to copy into an AI assistant in
+  another tab, one applied Try it per section), and the worksheet has Part A
+  in the app and Part B on a simulator. Lectures 4, 5 and 9 joined two
+  experiments (formatting and styles; rewrite and translate; safe prompts
+  and the AI-use statement), and the notes of Lectures 4, 5, 6, 8 and 9
+  joined the same sections. Lecture 2 is now practical: a draft from AI
+  checked in Word, the AI's total of a bill checked with formulas in Bill
+  Check (new), the library hours from the AI and from the university
+  website. Online activities 3–13 got a model in each Step and simpler
+  tasks (fixed data, fewer steps, one product each); Online activity 2,
+  maybe open already, got the models only.

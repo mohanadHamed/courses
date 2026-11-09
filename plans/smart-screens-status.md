@@ -74,3 +74,10 @@ English", "Lecture worksheets", "Tasks with AI", "Blended courses",
    "Answers without written English" at the same time.
 2. If Online activity 2 is already open on the platform, replace its page
    and tasks PDF there: its tasks changed completely.
+3. The exercises of the lesson notes (PDF, self-study with answers) of the
+   untaught lectures still have 49 "Why …?" or "Explain …" items in 26
+   files (Computing Systems 4–12, Digital Media 3–12, Game Math 5–12,
+   Digital Skills 4, 6, 8). Turn each into a choice ("Which reason is
+   right? A … B …") with its answer, then let `check_size.py` check the
+   notes exercises too. The pages, worksheets, homework and online tasks
+   are done.

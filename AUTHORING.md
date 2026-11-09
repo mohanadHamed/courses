@@ -939,7 +939,9 @@ simple as the outcomes allow; the thinking stays at the ILO's level.
 - **Everywhere:** the page (its checks already work this way), the
   worksheets (a record field takes a value, a name, a word or a tick, never
   "…, because …"), the exercises of the notes, the homework, the online
-  tasks and the seminars.
+  tasks and the seminars. (The notes exercises of the lectures rewritten
+  on 2026-11-08 still have some "Why …?" items: see
+  `plans/smart-screens-status.md`.)
 - **A product made in an app is fine** (a file, a formatted document, a
   sheet, a slide): the student types the text that the task gives, short
   labels or names, never their own paragraph.

@@ -421,7 +421,14 @@ end
 -- Answer space (homework) -------------------------------------------------
 -- {{< answer-space lines=3 >}}   dotted lines to write the answer on
 -- {{< answer-space box=6 >}}     an empty box, 6 cm high (for a drawing)
+-- {{< answer-cell >}}            an empty table cell to fill in
 -- Hidden on screen, shown when the homework page is printed (web only).
+
+-- The lines hold an empty link to https://answer.field/N: on paper Chrome
+-- prints it as a link rectangle, and homework_pdf.py turns it into a text
+-- field, so the downloaded PDF can be filled in (the teacher's request of
+-- 2026-11-08). A box for a drawing has no field.
+local answer_fields = 0
 
 local function answer_space(kwargs)
   local lines = tonumber(str(kwargs.lines)) or 0
@@ -432,10 +439,23 @@ local function answer_space(kwargs)
       return pandoc.RawBlock("html", string.format(
         '<div class="answer-space answer-box" style="height:%gcm" aria-hidden="true"></div>', box))
     end
-    return pandoc.RawBlock("html",
-      '<div class="answer-space" aria-hidden="true">' .. string.rep('<div class="answer-line"></div>', lines) .. "</div>")
+    answer_fields = answer_fields + 1
+    return pandoc.RawBlock("html", string.format(
+      '<div class="answer-space" aria-hidden="true"><a class="answer-field" href="https://answer.field/%d?lines=%d" tabindex="-1"></a>',
+      answer_fields, lines) .. string.rep('<div class="answer-line"></div>', lines) .. "</div>")
   end
   return pandoc.Null()
+end
+
+-- {{< answer-cell >}} in an empty table cell that the student fills in: on
+-- paper the cell holds an answer link like an answer space, so the PDF has a
+-- field there (homework_pdf.py). Nothing on the screen.
+local function answer_cell()
+  if not quarto.doc.is_format("html") then return pandoc.Str("") end
+  answer_fields = answer_fields + 1
+  return pandoc.RawInline("html", string.format(
+    '<a class="answer-field answer-cell" href="https://answer.field/%d?lines=1" tabindex="-1" aria-hidden="true"></a>',
+    answer_fields))
 end
 
 -- Course schedule (course page) ---------------------------------------------
@@ -992,6 +1012,7 @@ return {
   ["schedule"] = function(_, _, meta) return schedule(meta) end,
   ["watch"] = function(_, kwargs) return watch(kwargs) end,
   ["answer-space"] = function(_, kwargs) return answer_space(kwargs) end,
+  ["answer-cell"] = function() return answer_cell() end,
   ["glossary"] = function(args) return glossary(args) end,
   ["sim"] = function(_, kwargs, meta) return sim(kwargs, meta) end,
   ["page-qr"] = function() return page_qr() end,

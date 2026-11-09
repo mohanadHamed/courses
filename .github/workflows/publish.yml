@@ -38,6 +38,14 @@ jobs:
       - name: Check Chrome
         run: google-chrome --version
 
+      # The homework and tasks PDFs are forms to type in: homework_pdf.py
+      # turns their answer lines into form fields with pypdf.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pypdf
+        run: python -m pip install "pypdf>=5,<7"
+
       - name: Render site
         run: quarto render
 
@@ -52,6 +60,8 @@ jobs:
           if ls courses/*/week-*/seminar-*-book.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_seminar[0-9]*.pdf')"; fi
           if ls courses/*/week-*/practice-*-book.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_practice[0-9]*.pdf')"; fi
           if ls courses/*/week-*/online-*.qmd >/dev/null 2>&1; then test -n "$(find _site -name '*_online[0-9]*_tasks.pdf')"; fi
+          # Every homework and tasks PDF has form fields (at least the name and the student number).
+          python -c "import glob, sys; from pypdf import PdfReader; p = sorted(glob.glob('_site/courses/*/week-*/*_tasks.pdf') + glob.glob('_site/courses/*/week-*/*_homework[0-9]*.pdf')); bad = [f for f in p if not PdfReader(f).get_fields()]; print(len(p), 'fillable PDFs'); sys.exit('no form fields: ' + ', '.join(bad) if bad else 0)"
           # Course videos of the online activities: the video, its captions and its poster.
           for v in courses/*/week-*/videos/*.mp4; do [ -e "$v" ] || continue; for x in mp4 vtt png; do test -f "_site/${v%.mp4}.$x"; done; done
 

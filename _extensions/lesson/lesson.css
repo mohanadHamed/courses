@@ -657,7 +657,7 @@ figure.sim figcaption a { font-weight: 700; }
 
 /* ---------- Homework: answer space and printing ---------- */
 button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
-.answer-space, .print-only { display: none; }
+.answer-space, .print-only, .hero-fill, .answer-cell { display: none; }
 
 @media print {
   @page { size: A4; margin: 1.2cm 1.4cm; }
@@ -672,13 +672,19 @@ button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
   .hero-title { font-size: 1.35rem; margin: 0.1rem 0; }
   .hero-sub { display: none; }
   .hero-chip { padding: 0.05rem 0.5rem; font-size: 0.75rem; }
+  .hero-chip.hero-fill { display: inline-flex; background: #f0f7ff; border-color: #9ec5fe; color: #1c4fbf; }
   .ilo-card { box-shadow: none; padding: 0.35rem 0.7rem; margin: 0.3rem 0 0.5rem; font-size: 0.9rem; }
   p, ol, ul { margin: 0 0 0.25rem !important; }
   li { margin: 0 !important; }
   .print-only { display: block; }
   .hw-name { display: flex; gap: 0.5rem; align-items: baseline; margin: 0.3rem 0 0.6rem; font-weight: 700; }
-  .hw-name i { flex: 1; border-bottom: 1.5px dotted #888; }
-  .answer-space { display: block; margin: 0 0 0.45rem; break-inside: avoid; }
+  .hw-name i { flex: 1; border-bottom: 1.5px dotted #888; position: relative; min-height: 1.2em; }
+  .answer-space { display: block; margin: 0 0 0.45rem; break-inside: avoid; position: relative; }
+  /* The empty link that homework_pdf.py turns into a form field to type in. */
+  .answer-field { position: absolute; inset: 0; display: block; }
+  .answer-cell { inset: 1px; }
+  .hw-name .answer-field { top: auto; height: 1.4em; }
+  td:has(> .answer-cell), td:has(> p > .answer-cell) { position: relative; min-width: 2.2cm; }
   p:has(+ .answer-space), ol:has(+ .answer-space), ul:has(+ .answer-space) { break-after: avoid; }   /* question and its lines on one page */
   .answer-line { height: 0.72cm; border-bottom: 1.5px dotted #888; }
   .answer-box { border: 1px dashed #999; border-radius: 6px; }

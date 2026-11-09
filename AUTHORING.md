@@ -703,9 +703,10 @@ what the Steps hold (the table of each activity is in `plan.md`):
   first and is the one source of the voice, the captions and the pictures.
   The page shows the script as a transcript.
 
-The page has "Download tasks (PDF)" and "Print tasks" buttons; on paper only
+The page has "Tasks PDF to fill in" and "Print tasks" buttons; on paper only
 the tasks are printed (`homework_pdf.py` prints it as
-`<prefix>_onlineN_tasks.pdf`). The online activity **replaces the
+`<prefix>_onlineN_tasks.pdf`), and the PDF is a form: students type their
+answers in it, save it and upload it (see "Homework"). The online activity **replaces the
 homework** of that course. Its model answers stay private in
 `courses-private` (`week-WW/online-NN-solutions.md`). `check_size.py` checks
 its parts and its content type (a simulator in every Step of `sims`; the
@@ -1346,11 +1347,23 @@ homework and its solution together.
   PR is merged (see "Release: no drafts"). Earlier homework stays online.
 - No answers on the page: no `.match` boxes, no "Check your answers".
 - **A web page that prints well.** Homework belongs to a unit, not to one
-  lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF" and
-  "🖨 Print homework" buttons. The PDF is the printed page itself:
-  `_extensions/lesson/homework_pdf.py` (post-render) prints each homework page
-  with headless Chrome, so the download and the printout are the same one A4
-  page. Only `format: lesson-html`; no Typst version.
+  lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF to
+  fill in" and "🖨 Print homework" buttons. The PDF is the printed page
+  itself: `_extensions/lesson/homework_pdf.py` (post-render) prints each
+  homework page with headless Chrome, so the download and the printout are
+  the same one A4 page. Only `format: lesson-html`; no Typst version.
+- **The PDF is a form to fill in** (the teacher's request of 2026-11-08:
+  students tried to type in the PDF instead of printing it). Every
+  `{{< answer-space lines=N >}}` and the Name and Student number line
+  become text fields (multiline from two lines) in a thin blue frame, so
+  the printed lines stay visible; a chip on paper says "Type in the blue
+  boxes, save, upload".
+  How: on paper each answer space holds an empty link to
+  `https://answer.field/N`, Chrome prints it as a link rectangle, and
+  `homework_pdf.py` turns each rectangle into a field with **pypdf**
+  (installed in CI; without it the PDFs are made without fields). A box for
+  a drawing (`box=`) stays a box. The same holds for the tasks PDF of an
+  online activity.
 - **Answer space:** after every question, add space to write the answer:
   `{{< answer-space lines=2 >}}` (dotted lines; as many as a good answer needs)
   or `{{< answer-space box=6 >}}` (an empty box, height in cm, for a drawing).
@@ -1505,6 +1518,12 @@ taken off. Rewrite them with short answers next semester.
 ## Lessons learned
 
 <!-- Add general rules from weekly retros here, newest first. -->
+
+- 2026-11-08 (teacher's request, the same evening): students tried to type
+  their answers in the tasks PDF of an online activity, which they cannot
+  edit. The homework and tasks PDFs are now forms: every answer line and the
+  Name and Student number line are text fields (`homework_pdf.py`, pypdf).
+  Rules above ("Homework", "Blended courses").
 
 - 2026-11-08 (teacher's request, later the same day): the students' first
   language is Arabic and few can write English, but the lessons must be in

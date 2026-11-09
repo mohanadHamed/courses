@@ -90,7 +90,7 @@ management, medical sterilization, facility assessment). So this course is
      concrete product (a file with a given name, a screenshot, a short
      answer) and answer space for the printed copy;
   4. **How to submit**: one short line (the e-learning platform, file names).
-  The Steps are hidden on paper: "Print tasks" and "Download tasks (PDF)"
+  The Steps are hidden on paper: "Print tasks" and "Tasks PDF to fill in"
   give only the tasks (`homework_pdf.py` prints the page).
 - The online activity **replaces the homework**: no `homework-UU.qmd` in
   this course. Model answers and marking notes go to `courses-private`

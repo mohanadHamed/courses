@@ -232,7 +232,7 @@ IC_BLOCK_RE = re.compile(r"^([ \t]*):{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\
 ESSAY_RE = re.compile(r"\b(explain|describe|discuss|justify|in your own words|in (?:one|a|two) (?:short )?sentences?"
                       r"|write (?:a|one|two|three|your|some) (?:short )?(?:sentences?|paragraphs?|e-?mails?|texts?"
                       r"|reasons?|prompts?|stor(?:y|ies)|advice)|write (?:a|one|your) (?:short |formal )?letter\b"
-                      r"|give (?:a|the|one|your) reasons?|and why\b|why\?)", re.I)
+                      r"|give (?:a|the|one|your) reasons?|and why\b|why\?|\bwhy (?:do|does|did|is|are|was|were|must|should|can|not)\b)", re.I)
 # No marks or grades on homework and online activities (the teacher's request
 # of 2026-11-08): the e-learning platform keeps the grades.
 MARKS_RE = re.compile(r"\b\d+(?:\.\d+)?\s+marks?\b|\bmarks? (?:them|each|per)\b|\(no marks\)|\bno marks\b", re.I)
@@ -567,8 +567,12 @@ def graded_warnings(text):
     m = MARKS_RE.search(text)
     if m:
         out.append('the tasks name marks ("%s"); homework and online tasks show no marks' % m.group(0))
-    # A ready prompt ({.prompt}) is copied, not written: its words do not count.
-    for m in ESSAY_RE.finditer(drop_divs(re.sub(r"<!--.*?-->", " ", text, flags=re.S), ["prompt"])):
+    # A ready prompt ({.prompt}) is copied, not written: its words do not count;
+    # neither does a question answered with a letter ("Write A or B. (A) …").
+    plain_text = drop_divs(re.sub(r"<!--.*?-->", " ", text, flags=re.S), ["prompt"])
+    plain_text = "\n\n".join(p for p in re.split(r"\n\s*\n", plain_text)
+                             if not re.search(r"\(A\)|\*\*A\.\*\*|Choose A, B", p))
+    for m in ESSAY_RE.finditer(plain_text):
         out.append('a task asks for written English ("%s"): ask for a choice, an order, a number, '
                    "a name or a few words" % m.group(0))
     return out

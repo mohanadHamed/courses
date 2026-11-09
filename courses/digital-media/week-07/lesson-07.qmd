@@ -6,10 +6,9 @@ ilos: [C2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game studio. Then it explains one idea. It ends
-with a **Do it** task and one set of questions. Tap, sort or type your
-answer: the page checks it at once and tells you why.
+Each section: a problem in a game studio, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -38,22 +37,6 @@ High is not loud: pitch and loudness change separately.
 ::: {.callout-note title="Do it · Hear the two numbers"}
 In **Wave Lab**, play 220 Hz and 880 Hz. Then set the amplitude to 0.4 and
 0.8 and read the loudness in dB: about −8 dB and −2 dB.
-
-::: {.choice}
-Which tone sounds higher?
-
-- [x] 880 Hz
-
-  Why: The frequency gives the pitch: more waves per second, a higher sound.
-
-- [ ] 220 Hz
-
-  Why: 220 Hz has fewer waves per second: a lower sound.
-
-- [ ] Both sound the same.
-
-  Why: A different frequency gives a different pitch.
-:::
 
 ::: {.sort}
 Does each change move the pitch or the loudness? Sort them.
@@ -87,20 +70,10 @@ What does the frequency of a sound give?
 
     Why: More vibrations per second sound higher.
 
-What does the amplitude of a sound give?
-:   the loudness
-
-    Why: A bigger vibration sounds louder.
-
 Which is the loudest level a sound file can hold?
 :   0 dB
 
     Why: In an audio program, 0 dB is the top; quieter levels are negative.
-
-Which sound has the lowest frequency?
-:   thunder
-
-    Why: Thunder is below 100 Hz, the lowest of the three.
 :::
 :::
 
@@ -124,22 +97,6 @@ One source (a cat, a step, a voice) is recorded in mono.
 In **Wave Lab**, compare 8 kHz 4-bit with 48 kHz 16-bit.
 
 ::: {.choice}
-What changes from 8 kHz 4-bit to 48 kHz 16-bit?
-
-- [x] The sound gets clear.
-
-  Why: More samples on more levels: at 8 kHz and 4-bit it is dull, with a hiss.
-
-- [ ] The sound gets louder.
-
-  Why: The loudness comes from the amplitude, not from the samples.
-
-- [ ] Nothing changes.
-
-  Why: Few samples on few levels lose details of the wave.
-:::
-
-::: {.choice}
 Which settings fit a recording of one voice for a game?
 
 - [x] 48 kHz, 16-bit, mono
@@ -160,16 +117,6 @@ Which settings fit a recording of one voice for a game?
 Choose the right answer.
 
 ::: {.match extra="8 kHz|4-bit"}
-Which sample rate do games use?
-:   48 kHz
-
-    Why: Games use 44.1 or 48 kHz.
-
-Which bit depth do games use?
-:   16-bit
-
-    Why: Studios record with 24-bit; games use 16-bit.
-
 Which needs twice the size: mono or stereo?
 :   stereo
 
@@ -200,12 +147,6 @@ Edit the WAV; make the MP3 or OGG only at the end.
 Compare the size per minute of one WAV and one MP3 file. A typical WAV is
 about 10 MB per minute, and an MP3 about 1 MB per minute.
 
-::: {.fill answer="20" unit="MB" hint="10 MB for each minute."}
-About how big is a 2-minute menu music as a WAV?
-
-Why: 2 × 10 = 20 MB; as an MP3 it is about 2 MB.
-:::
-
 ::: {.choice}
 Which format fits a 2-minute menu music in the game?
 
@@ -231,16 +172,6 @@ Nour's footsteps, short and played often?
 :   WAV
 
     Why: A short effect plays often and must start at once.
-
-The 3-minute music of the flood level?
-:   OGG
-
-    Why: Long music is about 10 times smaller as OGG.
-
-The rain over the city, a long loop?
-:   OGG
-
-    Why: A long loop is music-like and long: OGG keeps it small.
 
 The raw takes, kept in the archive?
 :   WAV
@@ -289,17 +220,6 @@ Not good
 
     Why: The take clips: "we fix it later" does not work.
 :::
-
-::: {.order}
-Put the four steps of the clean-up in order.
-
-1. Trim the silence at the start and the end.
-2. Add a short fade-out, so the end has no click.
-3. Normalize to −1 dB.
-4. Export a WAV with a clear name: `sfx_pasha_meow_01.wav`.
-
-Why: Clean the take first, then make it loud enough, then export it.
-:::
 :::
 
 ::: {.callout-tip title="Try it 4 · The take"}
@@ -315,16 +235,6 @@ The tops of the wave are flat. What is it?
 :   clipping
 
     Why: At 0 dB the wave is cut flat.
-
-How far from the microphone should the sound be?
-:   15–30 cm
-
-    Why: Closer is too loud; farther brings the room in.
-
-How many takes does a sound designer record?
-:   about three, then keeps the best
-
-    Why: Yara chooses the best of three takes.
 :::
 :::
 
@@ -351,16 +261,6 @@ The meter hits 0 dB. What does Yara do?
 :   lower the input level and record again
 
     Why: A clipped take is lost: record again more quietly.
-
-Take 2 is quiet with a hum. What does Yara do?
-:   move closer and turn off the fridge
-
-    Why: Closer gives a louder sound; the hum must go away.
-
-Which format for the footsteps?
-:   WAV
-
-    Why: Footsteps are short and played often.
 :::
 :::
 
@@ -368,25 +268,10 @@ Which format for the footsteps?
 Yara keeps take 3 of the meow and cleans it. Choose the right edit.
 
 ::: {.match extra="Amplify +20 dB|Recording 3.wav"}
-The take starts with a long silence.
-:   trim
-
-    Why: Trim deletes the silence before and after the sound.
-
-There is a click at the very end.
-:   a short fade-out
-
-    Why: A fade-out lowers the very end softly, so the click goes.
-
 The loudest peak is at −14 dB.
 :   normalize to −1 dB
 
     Why: Normalize brings the loudest peak to −1 dB without clipping.
-
-Which name fits the exported meow?
-:   sfx_pasha_meow_01.wav
-
-    Why: The name says the type, what it is and the version, with no spaces.
 :::
 :::
 

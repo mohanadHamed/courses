@@ -6,10 +6,9 @@ ilos: [C2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It
-ends with a **Do it** task and one set of questions. Tap, sort or type your
-answer: the page checks it at once and tells you why.
+Each section: a problem in a game, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -28,7 +27,7 @@ answer: the page checks it at once and tells you why.
 :::
 
 ::: {.callout-note title="Do it · Chances of a drop"}
-p = 0.5: compute the chance to have the item after 1, 2 and 3 tries with
+p = 0.5: compute the chance to have the item after 3 tries with
 P(at least one in n) = 1 − (1 − p)ⁿ.
 
 ::: {.fill answer="7/8|0.875|87.5%" hint="1 − (1/2)³."}
@@ -36,33 +35,12 @@ What is the chance to have the item after 3 tries?
 
 Why: 1 − 1/2 × 1/2 × 1/2 = 1 − 1/8 = 7/8. After 1 try it is 1/2, after 2 tries 3/4.
 :::
-
-::: {.choice}
-Does the chance ever reach 1?
-
-- [x] No: it grows, but it is always a little below 1.
-
-  Why: 1 − (1/2)ⁿ never reaches 1: some players always wait longer.
-
-- [ ] Yes, after 2 tries: 0.5 + 0.5 = 1.
-
-  Why: Chances of tries do not add up: after 2 tries it is 3/4.
-
-- [ ] Yes, after 3 tries.
-
-  Why: After 3 tries it is 7/8, still below 1.
-:::
 :::
 
 ::: {.callout-tip title="Try it 1 · At least once"}
 Choose the probability.
 
 ::: {.match extra="100 %|20 %"}
-p = 0.1, two tries. What is P(none)?
-:   0.81
-
-    Why: 0.9 × 0.9: the tries are independent.
-
 p = 0.1, two tries. What is P(at least one)?
 :   0.19
 
@@ -101,22 +79,6 @@ At which try is the item certain?
 
 Why: The figure reaches 100 % at try 40: the guarantee.
 :::
-
-::: {.choice}
-What is the longest wait with this pity timer?
-
-- [x] 40 tries
-
-  Why: The item is certain at try 40, so nobody waits longer.
-
-- [ ] 20 tries
-
-  Why: After 20 misses the chance only starts to grow.
-
-- [ ] no limit
-
-  Why: Without a timer there is no limit; this timer ends the wait at 40.
-:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Pity"}
@@ -127,11 +89,6 @@ A pity timer guarantees the drop at try 25. The longest wait?
 :   25
 
     Why: after 24 misses, try 25 always drops.
-
-p = 5 %, no pity. The average number of tries?
-:   20
-
-    Why: 1/p = 1 ÷ 0.05.
 
 What does a pity timer do to the average?
 :   it falls a little
@@ -186,18 +143,13 @@ About how many chests does a player open for the shield?
 :::
 
 ::: {.callout-tip title="Try it 3 · Rewards"}
-Choose the right answer. You can use an answer more than once.
+Choose the right answer.
 
 ::: {.match extra="28|85"}
 A chest: 50 % 4 coins, 50 % 16 coins. E?
 :   10
 
     Why: 2 + 8.
-
-E = 10 coins. Chests for a 100-coin hat?
-:   10
-
-    Why: price ÷ E = 100 ÷ 10.
 
 A chest: 90 % 10 coins, 10 % 100 coins. E?
 :   19
@@ -226,8 +178,7 @@ One streak does not prove an unfair coin: look at many tries.
 :::
 
 ::: {.callout-note title="Do it · Streaks"}
-Write 50 "random" H and T by hand and find your longest run. Then run
-**Streak Lab** at 50 % five times and compare.
+Run **Streak Lab** at 50 % five times and read the longest run each time.
 
 ::: {.choice}
 Most people write runs of 2 or 3. What does Streak Lab show at 50 %?
@@ -244,18 +195,6 @@ Most people write runs of 2 or 3. What does Streak Lab show at 50 %?
 
   Why: About 7 is typical for 100 flips, but each run is different.
 :::
-
-::: {.choice}
-A fight has 5 misses in a row. Does it prove that the game is unfair?
-
-- [x] No: in many attacks, some long streak is very likely.
-
-  Why: One streak proves nothing; look at many tries.
-
-- [ ] Yes: a fair game never misses 5 times.
-
-  Why: A fair 50 % chance gives runs of 5 or more quite often.
-:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Streaks"}
@@ -266,11 +205,6 @@ Hit chance 0.7. P(3 misses at one place)?
 :   0.3³ = 2.7 %
 
     Why: three independent misses: 0.3 × 0.3 × 0.3.
-
-Hit chance 0.5. P(2 misses at one place)?
-:   25 %
-
-    Why: 0.5 × 0.5.
 
 What is the usual longest run in 100 fair flips?
 :   about 7
@@ -333,11 +267,6 @@ A die showed no 6 in 4 rolls. P(6 on the next roll)?
 
     Why: the die has no memory.
 
-What is P(TTH) for a fair coin?
-:   1/8
-
-    Why: the whole sequence: 1/2 × 1/2 × 1/2.
-
 "A 6 is due after many rolls without one." Which mistake?
 :   the gambler's fallacy
 
@@ -363,29 +292,13 @@ If a fair rule feels unfair, the rule or the way you show it needs work.
 :::
 
 ::: {.callout-note title="Do it · Feel the chance"}
-Hit chance 90 %: compute P(at least one miss) in 2 attacks by hand; then read
-5 and 20 attacks in the figure. P(at least one miss in n) = 1 − pⁿ.
+Hit chance 90 %: compute P(at least one miss) in 2 attacks.
+P(at least one miss in n) = 1 − pⁿ.
 
 ::: {.fill answer="0.19|19%|19/100" hint="1 − 0.9 × 0.9."}
 What is P(at least one miss) in 2 attacks?
 
 Why: 1 − 0.81 = 0.19, about 19 %.
-:::
-
-::: {.choice}
-The figure for 20 attacks: in about how many fights is there a miss?
-
-- [x] in about 88 % of the fights
-
-  Why: 1 − 0.9²⁰ ≈ 1 − 0.12 = 0.88: a miss is very likely in a long fight.
-
-- [ ] in about 10 % of the fights
-
-  Why: 10 % is the miss chance of one attack, not of 20.
-
-- [ ] in every fight
-
-  Why: 0.9²⁰ ≈ 12 % of the fights still have no miss.
 :::
 :::
 
@@ -397,11 +310,6 @@ Hit chance 0.95, 10 attacks. P(at least one miss)?
 :   about 40 %
 
     Why: the table: 95 % hit, 10 tries.
-
-Hit chance 0.7, 5 attacks. P(at least one miss)?
-:   about 83 %
-
-    Why: the table: 70 % hit, 5 tries.
 
 Hit chance 0.8, 2 attacks. P(at least one miss)?
 :   0.36
@@ -433,8 +341,7 @@ Small bags are predictable; big bags allow longer droughts.
 
 ::: {.callout-note title="Do it · Bags"}
 In **Bag Lab**, compare pure random and the shuffle bag (4 hits with 1 crit)
-over 1000 players. Then compute the longest drought for 2 crits in a bag
-of 8.
+over 1000 players.
 
 ::: {.choice}
 Both give about 25 % crits. Which has the shorter worst drought?
@@ -451,12 +358,6 @@ Both give about 25 % crits. Which has the shorter worst drought?
 
   Why: The share is the same, but the bag limits the drought.
 :::
-
-::: {.fill answer="12" hint="The crits can be first in one bag and last in the next."}
-2 crits in a bag of 8: what is the longest run of normal hits?
-
-Why: 6 normal hits at the end of one bag and 6 at the start of the next: 6 + 6 = 12.
-:::
 :::
 
 ::: {.callout-tip title="Try it 7 · Bags"}
@@ -472,11 +373,6 @@ A bag of 3 with 1 crit. The longest drought?
 :   4
 
     Why: 2(3 − 1): the crit first in one bag, last in the next.
-
-A bag of 6 with 1 crit. The longest drought?
-:   10
-
-    Why: 2(6 − 1).
 
 Are the draws of a shuffle bag independent?
 :   no, on purpose
@@ -504,11 +400,6 @@ Hit 80 %; no 6 in 5 rolls; key 50 %, 3 tries; bag 1 crit + 4 normal; chest
 10 (80 %) or 50 (20 %), bow 180. Choose the right answer.
 
 ::: {.match extra="16 %|1"}
-P(2 misses in a row at one place), hit 80 %?
-:   4 %
-
-    Why: 0.2 × 0.2.
-
 P(a 6 on the next roll)?
 :   1/6
 
@@ -518,16 +409,6 @@ P(at least one key in 3 tries)?
 :   7/8
 
     Why: 1 − (1/2)³.
-
-The longest wait without a crit with the bag?
-:   8 attacks
-
-    Why: 2(5 − 1).
-
-Chests on average for the bow?
-:   10
-
-    Why: E = 8 + 10 = 18; 180 ÷ 18.
 :::
 :::
 
@@ -539,16 +420,6 @@ The bag becomes 2 crits and 8 normal hits. The crit rate?
 :   20 %, the same
 
     Why: 2 of 10 is still 20 %.
-
-The bag of 2 crits in 10. The longest drought?
-:   16 attacks
-
-    Why: both crits first in one bag and last in the next: 8 + 8.
-
-The bow price rises to 270 coins. Chests on average?
-:   15
-
-    Why: 270 ÷ 18.
 
 The key gets a pity timer at try 4. P(no key after 4 tries)?
 :   0

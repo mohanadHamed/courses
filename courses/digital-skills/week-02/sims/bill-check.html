@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Bill Check</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .ai { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 8px 12px; margin: 0 0 10px; }
+    .sim .ai b { color: var(--sim-accent); }
+    .sim .task { font-weight: 700; margin: 4px 0 8px; }
+    .sim .verdict { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .sim .verdict[hidden] { display: none; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Bill Check: is the AI right?</h1>
+  <p class="note">A practice sheet that works like Excel. Tap a cell, type in the formula bar, then press Enter. Nothing is sent to the Internet.</p>
+  <div class="ai" id="ai"><b>AI assistant:</b> 12 pens at 0.25 JD and 5 notebooks at 1.20 JD cost <b>9.50 JD</b> in all.</div>
+  <p class="task" id="task"></p>
+  <div id="sheet"></div>
+  <div class="verdict" id="verdict" hidden>
+    <span><b>Your sheet and the AI:</b> who is right?</span>
+    <button type="button" id="sheetRight">The sheet</button>
+    <button type="button" id="aiRight" class="ghost">The AI</button>
+  </div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="../../../../shared/sims/mini-sheet.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const say = (t, cls = "") => { $("msg").textContent = t; $("msg").className = "message " + cls; };
+  // The same bill as the worksheet (Lecture 2, Experiment 2): 12 pens at
+  // 0.25 JD and 5 notebooks at 1.20 JD. The right total is 3 + 6 = 9 JD.
+  const data = { A1: "Item", B1: "Price (JD)", C1: "Quantity", D1: "Total (JD)", A2: "Pen", B2: 0.25, C2: 12, A3: "Notebook", B3: 1.2, C3: 5, A4: "All" };
+  const locked = ["A1", "B1", "C1", "D1", "A2", "B2", "C2", "A3", "B3", "C3", "A4"];
+  const f = (s, a) => s.formula(a);
+  const tasks = [
+    { q: "In D2, write the total of the pens: price × quantity. Start with =.", check: (s) => /^=(B2\*C2|C2\*B2)$/.test(f(s, "D2")), ok: "D2 = B2*C2 = 3.00 JD: 12 × 0.25." },
+    { q: "Copy D2 down to D3: tap D2, then press “Copy down”.", check: (s) => /^=(B3\*C3|C3\*B3)$/.test(f(s, "D3")), ok: "D3 = B3*C3 = 6.00 JD: 5 × 1.20." },
+    { q: "In D4, add up the two totals with SUM.", check: (s) => /^=SUM\(D2:D3\)$/.test(f(s, "D4")), ok: "SUM(D2:D3) = 3 + 6 = 9.00 JD." },
+  ];
+  const sheet = MiniSheet.create($("sheet"), {
+    rows: 4, cols: 4, data, locked, widths: { A: 100 }, select: "D2", bold: ["A1", "B1", "C1", "D1", "A4"],
+    formats: { B2: "0.00", B3: "0.00", D2: "0.00", D3: "0.00", D4: "0.00" }, taskEl: $("task"), say,
+    tasks,
+    onTask: (t, i, n) => {
+      say("✓ " + t.ok, "good"); Kit.good();
+      if (i === n) { $("verdict").hidden = false; say("✓ " + t.ok + " Now compare with the AI: it said 9.50 JD."); }
+    },
+    onChange: (s) => {
+      const v = s.value(s.sel);
+      if (v && v.err) say(`${v.err}: check the formula in ${s.sel}.`, "bad");
+      else if (/^[A-Z]/.test(s.raw(s.sel)) && /[*+/]|SUM/i.test(s.raw(s.sel))) say("A formula must start with = (for example =B2*C2). Without = it is only text.", "bad");
+    },
+  });
+  const btn = Kit.el("button", { type: "button", class: "ghost", id: "down" }, "Copy down ⇩");
+  btn.addEventListener("click", () => sheet.copyDown());
+  sheet.tools.appendChild(btn);
+  $("sheetRight").addEventListener("click", () => {
+    say("✓ Right: the sheet adds exactly, 9.00 JD. The AI wrote 9.50 JD: a wrong number, one of the weak spots of AI. For exact numbers, use a spreadsheet.", "good");
+    Kit.good();
+  });
+  $("aiRight").addEventListener("click", () => {
+    say("Not this time: 12 × 0.25 = 3 and 5 × 1.20 = 6, so the bill is 9.00 JD. An AI answer can sound sure and still have a wrong number.", "bad");
+  });
+  window.BC = sheet;
+  say("Tap D2 and type =B2*C2 in the formula bar.");
+})();
+</script>
+</body>
+</html>

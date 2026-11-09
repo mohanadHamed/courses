@@ -421,7 +421,14 @@ end
 -- Answer space (homework) -------------------------------------------------
 -- {{< answer-space lines=3 >}}   dotted lines to write the answer on
 -- {{< answer-space box=6 >}}     an empty box, 6 cm high (for a drawing)
+-- {{< answer-cell >}}            an empty table cell to fill in
 -- Hidden on screen, shown when the homework page is printed (web only).
+
+-- The lines hold an empty link to https://answer.field/N: on paper Chrome
+-- prints it as a link rectangle, and homework_pdf.py turns it into a text
+-- field, so the downloaded PDF can be filled in (the teacher's request of
+-- 2026-11-08). A box for a drawing has no field.
+local answer_fields = 0
 
 local function answer_space(kwargs)
   local lines = tonumber(str(kwargs.lines)) or 0
@@ -432,10 +439,23 @@ local function answer_space(kwargs)
       return pandoc.RawBlock("html", string.format(
         '<div class="answer-space answer-box" style="height:%gcm" aria-hidden="true"></div>', box))
     end
-    return pandoc.RawBlock("html",
-      '<div class="answer-space" aria-hidden="true">' .. string.rep('<div class="answer-line"></div>', lines) .. "</div>")
+    answer_fields = answer_fields + 1
+    return pandoc.RawBlock("html", string.format(
+      '<div class="answer-space" aria-hidden="true"><a class="answer-field" href="https://answer.field/%d?lines=%d" tabindex="-1"></a>',
+      answer_fields, lines) .. string.rep('<div class="answer-line"></div>', lines) .. "</div>")
   end
   return pandoc.Null()
+end
+
+-- {{< answer-cell >}} in an empty table cell that the student fills in: on
+-- paper the cell holds an answer link like an answer space, so the PDF has a
+-- field there (homework_pdf.py). Nothing on the screen.
+local function answer_cell()
+  if not quarto.doc.is_format("html") then return pandoc.Str("") end
+  answer_fields = answer_fields + 1
+  return pandoc.RawInline("html", string.format(
+    '<a class="answer-field answer-cell" href="https://answer.field/%d?lines=1" tabindex="-1" aria-hidden="true"></a>',
+    answer_fields))
 end
 
 -- Course schedule (course page) ---------------------------------------------
@@ -529,7 +549,6 @@ local function session_row(dir, wdir, prefix, slides_public, x, in_filling)
     if kind == "online" then
       table.insert(parts, string.format('<a class="sl-file" href="%s_tasks.pdf">Tasks PDF</a>', file))
       local bits = {}
-      if fm.marks then table.insert(bits, str(fm.marks) .. " marks") end
       if fm.due then table.insert(bits, "due " .. str(fm.due)) end
       if #bits > 0 then
         table.insert(parts, '<span class="sl-due">' .. html_attr(table.concat(bits, " · ")) .. "</span>")
@@ -577,7 +596,6 @@ local function schedule_units(dir, prefix, slides_public, units)
       local hw = front_matter(pandoc.path.join({ dir, wdir, string.format("homework-%02d.qmd", unit) }))
       if ready(hw) then
         local bits = {}
-        if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
         if hw.due then table.insert(bits, "due " .. str(hw.due)) end
         hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
           wdir, unit, unit, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
@@ -626,7 +644,6 @@ local function schedule(meta)
       if ok and online then
         local href = wdir .. "/" .. stem
         local bits = {}
-        if fm.marks then table.insert(bits, str(fm.marks) .. " marks") end
         if fm.due then table.insert(bits, "due " .. str(fm.due)) end
         local parts = {
           string.format('<a class="sl-go" href="%s.html">Open activity →</a>', href),
@@ -658,7 +675,6 @@ local function schedule(meta)
     local hw_html = ""
     if ready(hw) then
       local bits = {}
-      if hw.marks then table.insert(bits, str(hw.marks) .. " marks") end
       if hw.due then table.insert(bits, "due " .. str(hw.due)) end
       hw_html = string.format('<a class="sw-hw" href="%s/homework-%02d.html">📝 Homework %d%s</a>',
         wdir, pair, pair, #bits > 0 and (" · " .. html_attr(table.concat(bits, " · "))) or "")
@@ -791,6 +807,41 @@ local function experiment(args)
   end)
   body = body:gsub("{{<%s*sim%s.-%s*>}}", "")
   local doc = pandoc.read(body, "markdown")
+  -- "The idea:" opens an experiment of the worksheet, so that the worksheet
+  -- works alone in the lab; on the page the section above it explains the
+  -- idea, so the page leaves it out.
+  local kept = pandoc.Blocks({})
+  for _, b in ipairs(doc.blocks) do
+    local first = b.t == "Para" and b.content[1]
+    if not (first and first.t == "Strong" and str(first):match("^The idea")) then kept:insert(b) end
+  end
+  doc.blocks = kept
+  -- Two ways to do an experiment in class (AUTHORING.md, "Lecture
+  -- worksheets"): the steps of Part A in the real app (a lab computer, or the
+  -- teacher's laptop on the smart screen), or on the simulator of the
+  -- section. The page says where each part runs; the worksheet keeps its
+  -- own labels.
+  doc = doc:walk({
+    Div = function(d)
+      if not d.classes:includes("part") then return nil end
+      local first = d.content[1]
+      if not first or (first.t ~= "Para" and first.t ~= "Plain") then return nil end
+      local label = str(first)
+      local where
+      if label:match("^Part A") then
+        where = "💻 a lab computer, or the teacher's laptop on the screen"
+      elseif label:match("^Part B · On the simulator") then
+        where = "📱 on this page, also at home"
+      elseif label:match("^Part B") then
+        where = "📱 each student, on a phone"
+      end
+      if where then
+        first.content:insert(pandoc.Space())
+        first.content:insert(pandoc.Span({ pandoc.Str(where) }, { class = "part-where" }))
+      end
+      return d
+    end,
+  })
   -- A step with an interactive check (::: {.choice}, {.order}, {.sort} or
   -- {.fill}, interact.lua): the page checks the step at once, so its text
   -- field and its closed "Check your result" are left out (they stay in the
@@ -961,6 +1012,7 @@ return {
   ["schedule"] = function(_, _, meta) return schedule(meta) end,
   ["watch"] = function(_, kwargs) return watch(kwargs) end,
   ["answer-space"] = function(_, kwargs) return answer_space(kwargs) end,
+  ["answer-cell"] = function() return answer_cell() end,
   ["glossary"] = function(args) return glossary(args) end,
   ["sim"] = function(_, kwargs, meta) return sim(kwargs, meta) end,
   ["page-qr"] = function() return page_qr() end,

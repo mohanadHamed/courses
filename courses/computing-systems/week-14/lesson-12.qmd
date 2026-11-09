@@ -6,10 +6,9 @@ ilos: [C1]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem of a tester. Then it explains the idea behind it. It
-ends with a **Do it** task and one set of questions. Tap, sort or type your
-answer: the page checks it at once and tells you why.
+Each section: a question from a game studio, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -62,22 +61,6 @@ A test
 
     Why: A second test, just as exact.
 :::
-
-::: {.choice}
-Which one is a test result that someone else can repeat?
-
-- [x] "Build 3.2.1, Samsung A35, Android 14: the first level fails on mobile data."
-
-  Why: It names the build, the device, the OS version and the test.
-
-- [ ] "It works on my phone."
-
-  Why: No build, no device, no OS version: nobody can repeat it.
-
-- [ ] "The game is slow sometimes."
-
-  Why: No setup and no exact steps.
-:::
 :::
 
 ::: {.callout-tip title="Try it 1 · The parts"}
@@ -88,16 +71,6 @@ PocketQuest_1.3, build 42.
 :   the build
 
     Why: The build is one exact version of the game.
-
-The P5 with Android 11.
-:   a test device
-
-    Why: A device with a known OS version.
-
-Android Studio, adb, Logcat.
-:   the tools
-
-    Why: The tools build, install and read the log.
 
 Which test runs on which device.
 :   the test plan
@@ -165,20 +138,10 @@ Only a real phone
 Use AVD Builder. Choose the right answer.
 
 ::: {.match extra="a cable|a USB stick"}
-The screen size and the RAM of an AVD.
-:   the device profile
-
-    Why: The profile says which device the AVD copies.
-
 The Android version of an AVD.
 :   the system image
 
     Why: One system image is one Android version.
-
-Android 8 as a system image.
-:   API 26
-
-    Why: Each Android version has an API level; Android 8 is API 26.
 
 What must be on in the BIOS for a fast emulator?
 :   virtualization
@@ -218,42 +181,16 @@ Put the steps on the Android phone in order.
 
 Why: Developer options appear only after the seven taps; then the computer can use adb.
 :::
-
-::: {.choice}
-The test on a personal phone is over. What do you do?
-
-- [x] Switch USB debugging and developer options off again.
-
-  Why: A personal phone stays safer without them; install builds only from your studio.
-
-- [ ] Leave them on for next time.
-
-  Why: Switch them off after testing on a personal phone.
-
-- [ ] Install builds from any website to test more.
-
-  Why: Install builds only from your studio.
-:::
 :::
 
 ::: {.callout-tip title="Try it 3 · Real devices"}
 Choose the right answer.
 
 ::: {.match extra="restart the router|buy a new phone"}
-How do you show the developer options?
-:   tap the build number 7 times
-
-    Why: It is in About phone.
-
 adb devices shows "unauthorized". What do you do?
 :   allow the computer on the phone
 
     Why: The phone has not trusted this computer yet.
-
-How do you test an iPhone build?
-:   a Mac with Xcode, or TestFlight
-
-    Why: iPhones get test builds only these ways.
 
 15 real phones for a few hours?
 :   a device farm
@@ -280,8 +217,7 @@ devices.
 :::
 
 ::: {.callout-note title="Do it · Your matrix"}
-In **Matrix Builder**, cover every row for $300 or less. Then write a
-five-row matrix for a game you know: device, kind, OS, why.
+In **Matrix Builder**, cover every row for $300 or less.
 
 ::: {.choice}
 Which choice covers every row for $300 or less?
@@ -298,29 +234,6 @@ Which choice covers every row for $300 or less?
 
   Why: Most players have weaker devices, and the iOS rows are missing.
 :::
-
-::: {.sort}
-Emulators, real devices or a device farm? Sort the jobs.
-
-Emulators: breadth
-:   many OS versions and screen sizes
-
-    Why: Free and fast to create.
-
-:   the oldest supported Android
-
-    Why: An AVD with API 26 shows if the game starts.
-
-Real devices: truth
-:   the heat, the battery and the sensors
-
-    Why: Only a real phone shows them.
-
-A device farm: the final check
-:   real phones in the cloud, rented by the hour
-
-    Why: Real devices without buying them.
-:::
 :::
 
 ::: {.callout-tip title="Try it 4 · The matrix"}
@@ -336,16 +249,6 @@ Which row can only a real phone cover?
 :   speed, heat and touch
 
     Why: An emulator runs on the computer's power.
-
-Real iPhones and tablets without buying them?
-:   a device farm
-
-    Why: The team rents real devices by the hour.
-
-Why test on the weakest supported phone?
-:   it sets the minimum requirements
-
-    Why: If it runs there, it runs for all supported players.
 :::
 :::
 
@@ -362,14 +265,9 @@ final check on **15 real phones**, and tilt steering with the
 {{< sim file="sims/emulator-or-real.html" poster="sims/emulator-or-real.png" title="Emulator or Real? The right place for each test" kind="game" height="460" >}}
 
 ::: {.callout-tip title="Try it 5 · The tests"}
-Choose the best environment. You can use an answer more than once.
+Choose the best environment.
 
 ::: {.match extra="a printer|a router"}
-The menu on six screen sizes.
-:   Android emulators
-
-    Why: AVDs give any screen size for free.
-
 Heat after a 20-minute race.
 :   a real phone
 
@@ -379,11 +277,6 @@ The iPhone menu, with no iPhone today.
 :   the iOS Simulator on a Mac
 
     Why: The Simulator shows iPhone screens.
-
-Tilt steering with the gyroscope.
-:   a real phone
-
-    Why: Emulators do not have real sensors.
 :::
 :::
 
@@ -391,16 +284,6 @@ Tilt steering with the gyroscope.
 Choose the right answer.
 
 ::: {.match extra="the newest phone|the P8 only"}
-The start on Android 8, with no Android 8 phone.
-:   an AVD with API 26
-
-    Why: A system image gives any Android version.
-
-A final check on 15 real phones.
-:   a device farm
-
-    Why: Rented real phones cover many models.
-
 What must Rami write next to every test result?
 :   the build, the device and the OS version
 

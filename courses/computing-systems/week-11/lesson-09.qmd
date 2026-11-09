@@ -6,10 +6,9 @@ ilos: [A2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem of an online game. Then it explains the idea behind
-it. It ends with a **Do it** task and one set of questions. Tap, sort or
-type your answer: the page checks it at once and tells you why.
+Each section: a question from a game studio, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -30,28 +29,8 @@ Wi-Fi is not the Internet: it only connects your phone to the access point.
 :::
 
 ::: {.callout-note title="Do it · Your network"}
-Draw the network at your home or in your lab: the devices, the router and
-access point, and the way to the Internet. At home, one box is often router,
-switch and access point together.
-
-::: {.sort}
-Which job of the home box is it? Sort the jobs.
-
-Switch
-:   It joins the PC on a cable.
-
-    Why: A switch joins the wired devices of the LAN.
-
-Access point
-:   It gives the phones Wi-Fi.
-
-    Why: The access point is the Wi-Fi part.
-
-Router
-:   It connects the home through the ISP to the Internet.
-
-    Why: The router joins the LAN to other networks.
-:::
+At home, one box is often the router, the switch and the access point
+together. Follow a packet from a phone to the Internet.
 
 ::: {.order}
 Put the way of a packet from a phone to the Internet in order.
@@ -75,20 +54,10 @@ Which device joins the cables of the office PCs?
 
     Why: A switch connects the wired devices of a LAN.
 
-Which device gives Wi-Fi to the test phones?
-:   an access point
-
-    Why: An access point connects Wi-Fi devices to the LAN.
-
 Which device connects the LAN to the ISP?
 :   a router
 
     Why: The router connects the LAN to other networks.
-
-What is the worldwide network of networks?
-:   the Internet
-
-    Why: A LAN covers one place; the Internet connects all of them.
 :::
 :::
 
@@ -137,33 +106,12 @@ Public: on the Internet
 
     Why: The DNS gives the public address of the server.
 :::
-
-::: {.choice}
-A game writes 192.168.1.37 as its server address. What happens?
-
-- [x] Players outside that LAN cannot reach the server.
-
-  Why: A private address works only inside its own network.
-
-- [ ] Every player reaches it faster.
-
-  Why: Outside the LAN the address leads nowhere.
-
-- [ ] The DNS turns it into a name.
-
-  Why: The DNS turns names into addresses; it cannot make a private address public.
-:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Addresses"}
 Choose the right answer.
 
 ::: {.match extra="the switch|300.1.2.3"}
-Which of these is a private IP address?
-:   192.168.1.23
-
-    Why: Addresses that start with 192.168 work only inside a LAN.
-
 What turns play.example.net into a number?
 :   the DNS
 
@@ -173,11 +121,6 @@ What is the router, seen from the laptop?
 :   the default gateway
 
     Why: Packets to other networks go to the gateway first.
-
-Which tool shows the address of a Windows PC?
-:   ipconfig
-
-    Why: ipconfig shows the IP address and the gateway.
 :::
 :::
 
@@ -220,33 +163,10 @@ What does TCP do with 20 % loss?
 
   Why: TCP keeps sending until every packet arrives.
 :::
-
-::: {.sort}
-TCP or UDP? Sort the data of a game.
-
-TCP
-:   a chat message
-
-    Why: Every word must arrive, in order.
-
-:   the download of a new level
-
-    Why: Every byte must arrive.
-
-UDP
-:   voice chat
-
-    Why: A late piece of voice is worse than a lost one.
-
-:   the positions of the players, many times per second
-
-    Why: The next position comes soon; waiting for a lost one would make lag.
-:::
 :::
 
 ::: {.callout-tip title="Try it 3 · TCP or UDP"}
-Use Packet Journey. Choose the protocol. You can use an answer more than
-once.
+Use Packet Journey. Choose the protocol.
 
 ::: {.match extra="DNS|Wi-Fi"}
 Player positions in a race, 30 per second.
@@ -258,16 +178,6 @@ A purchase of gems.
 :   TCP
 
     Why: Every byte of a purchase must arrive.
-
-Voice chat.
-:   UDP
-
-    Why: A late voice packet is worse than a lost one.
-
-A chat message.
-:   TCP
-
-    Why: Every letter must arrive, in the right order.
 :::
 :::
 
@@ -309,18 +219,6 @@ Where would the game lag?
 
   Why: An action game needs a ping below about 50 ms and little jitter.
 :::
-
-::: {.choice}
-Does more bandwidth fix the lag far from the router?
-
-- [x] No: the weak Wi-Fi signal makes the delay; go closer or use a cable.
-
-  Why: Bandwidth is the amount per second, not the delay.
-
-- [ ] Yes: more Mbit/s always means less lag.
-
-  Why: A few Mbit/s is enough for a game; the signal decides the delay.
-:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Quality"}
@@ -332,20 +230,10 @@ What is the time of a packet there and back?
 
     Why: Latency, the ping, is measured in milliseconds.
 
-How much the ping changes from packet to packet?
-:   jitter
-
-    Why: A ping of 30, 180, 40 ms has high jitter.
-
 What is a good ping for an action game?
 :   below about 50 ms
 
     Why: Low latency keeps the game responsive.
-
-Which connection usually has the lowest ping?
-:   a cable
-
-    Why: A cable has no radio signal that can get weak.
 :::
 :::
 
@@ -365,11 +253,6 @@ Four PCs, Wi-Fi phones, play.example.net, positions and purchases. Choose
 the right answer.
 
 ::: {.match extra="a hard disk|Wi-Fi"}
-What joins the four PCs with cables?
-:   a switch
-
-    Why: A switch connects the wired devices of the LAN.
-
 What finds the IP address of play.example.net?
 :   the DNS
 
@@ -379,11 +262,6 @@ What carries 30 positions per second?
 :   UDP
 
     Why: Fast, and the next position replaces a lost one.
-
-What carries a purchase safely?
-:   HTTPS over TCP
-
-    Why: Every byte must arrive, and nobody may read it.
 :::
 :::
 
@@ -391,25 +269,10 @@ What carries a purchase safely?
 Choose the right answer.
 
 ::: {.match extra="public|0 %"}
-Is 10.0.4.17 public or private?
-:   private
-
-    Why: Addresses that start with 10 are private.
-
-Sent 8, received 6: what is the packet loss?
-:   25 %
-
-    Why: 2 lost of 8 is a quarter.
-
 Ping 30, 180, 40, 210 ms: what is the problem?
 :   high jitter
 
     Why: The ping changes a lot from packet to packet.
-
-Ping 24 ms, 0 % loss: is the network good for a race?
-:   yes, good
-
-    Why: Low latency and no loss.
 :::
 :::
 

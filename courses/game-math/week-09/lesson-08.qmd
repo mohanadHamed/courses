@@ -6,10 +6,9 @@ ilos: [A2, B2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game. Then it explains the idea behind it. It
-ends with a **Do it** task and one set of questions. Tap, sort or type your
-answer: the page checks it at once and tells you why.
+Each section: a problem in a game, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -29,8 +28,7 @@ answer: the page checks it at once and tells you why.
 :::
 
 ::: {.callout-note title="Do it · Find the propositions"}
-Write three propositions about a racing game and one sentence that is not a
-proposition. Here are five sentences from a racing game.
+Here are five sentences from a racing game.
 
 ::: {.sort}
 Which sentences are propositions? Sort them.
@@ -63,11 +61,6 @@ Not a proposition
 Is it a proposition? Choose the right answer.
 
 ::: {.match extra="yes, it is true|yes, it is an order"}
-"The player has the pass."
-:   yes, it is true or false
-
-    Why: at any moment it is true or false.
-
 "Open the door!"
 :   no, it is an order
 
@@ -129,38 +122,12 @@ False
 
     Why: AND needs both: q is false.
 :::
-
-::: {.choice}
-"Attack with a sword or a bow, one at a time." Is it OR or XOR?
-
-- [x] XOR
-
-  Why: "One at a time" means exactly one: XOR.
-
-- [ ] OR
-
-  Why: OR is also true when both are used together.
-
-- [ ] AND
-
-  Why: AND would need the sword and the bow at the same time.
-:::
 :::
 
 ::: {.callout-tip title="Try it 2 · NOT, AND, OR, XOR"}
-p = "has the pass", q = "has oxygen". Choose the value or the operator. You can use an answer more than once.
+p = "has the pass", q = "has oxygen". Choose the value or the operator.
 
 ::: {.match extra="true or false|p && q"}
-p = T, q = F. What is p ∧ q?
-:   false
-
-    Why: AND needs both to be true.
-
-p = T, q = F. What is p ∨ q?
-:   true
-
-    Why: OR needs at least one to be true.
-
 q = F. What is ¬q?
 :   true
 
@@ -170,11 +137,6 @@ p = T, q = T. What is p ⊕ q?
 :   false, both are true
 
     Why: XOR needs exactly one.
-
-How do you write XOR for bools in C#?
-:   p ^ q
-
-    Why: ^ (or !=) is XOR for bool values.
 
 "The alarm rings when a door or a window opens." Which operator?
 :   OR
@@ -197,7 +159,7 @@ When p is false, p → q is true: the rule says nothing then.
 
 ::: {.callout-note title="Do it · When is the rule broken?"}
 Rule: "If the level is finished, then all coins are collected." Find the
-case that breaks it, and the C# condition that finds it.
+case that breaks it.
 
 ::: {.choice}
 Which case breaks the rule?
@@ -214,22 +176,6 @@ Which case breaks the rule?
 
   Why: p and q are both true: the rule is kept.
 :::
-
-::: {.choice}
-Which C# condition finds a broken rule?
-
-- [x] `levelFinished && !allCoins`
-
-  Why: Finished AND NOT all coins: the only case that breaks p → q.
-
-- [ ] `!levelFinished && allCoins`
-
-  Why: That is a level that is not finished: the rule says nothing then.
-
-- [ ] `levelFinished || !allCoins`
-
-  Why: OR is also true for a level that is not finished with coins missing.
-:::
 :::
 
 ::: {.callout-tip title="Try it 3 · IF–THEN"}
@@ -240,11 +186,6 @@ When is p → q false?
 :   p is true and q is false
 
     Why: that is the only case that breaks the rule.
-
-p = F, q = F. What is p → q?
-:   true
-
-    Why: when the condition is false, the rule is not broken.
 
 Which expression has the same value as p → q?
 :   ¬p ∨ q
@@ -303,23 +244,13 @@ False
 :::
 
 ::: {.callout-tip title="Try it 4 · Brackets"}
-p = T, q = F, r = T. Choose the value. You can use an answer more than once.
+p = T, q = F, r = T. Choose the value.
 
 ::: {.match extra="first OR|both"}
 p ∨ q ∧ r
 :   true
 
     Why: AND first: F ∧ T = F; then T ∨ F = T.
-
-(p ∨ q) ∧ r
-:   true
-
-    Why: bracket first: T ∨ F = T; then T ∧ T = T.
-
-¬p ∨ ¬q
-:   true
-
-    Why: F ∨ T = T.
 
 ¬(p ∨ r)
 :   false
@@ -362,22 +293,6 @@ In how many of the 4 rows is (p ∨ q) ∧ ¬p true?
 
 Why: From (T, T) to (F, F) the column is F, F, T, F: one true row.
 :::
-
-::: {.choice}
-In which row is it true?
-
-- [x] p = F, q = T
-
-  Why: p ∨ q = T and ¬p = T, so T ∧ T = T.
-
-- [ ] p = T, q = T
-
-  Why: ¬p = F, so the AND is false.
-
-- [ ] p = F, q = F
-
-  Why: p ∨ q = F, so the AND is false.
-:::
 :::
 
 ::: {.callout-tip title="Try it 5 · Truth tables"}
@@ -389,16 +304,6 @@ How many rows has a table with 3 variables?
 
     Why: 2 × 2 × 2 = 8.
 
-How many rows has a table with 5 variables?
-:   32
-
-    Why: 2^5 = 32.
-
-In the usual order, what is the first row of p, q, r?
-:   T, T, T
-
-    Why: every column starts with T.
-
 The column of p ∧ ¬q.
 :   F, T, F, F
 
@@ -408,11 +313,6 @@ The column of ¬p ∨ q.
 :   T, F, T, T
 
     Why: false only when p = T and q = F.
-
-The column of ¬(p ∨ q).
-:   F, F, F, T
-
-    Why: p ∨ q is false only in the last row.
 :::
 :::
 
@@ -438,22 +338,6 @@ In how many of the 8 cases does the bay open?
 
 Why: All 4 rows with an officer, and 1 more: docked with the engine off (T, F, F).
 :::
-
-::: {.choice}
-Without an officer, when does the bay open?
-
-- [x] only when it is docked with the engine off
-
-  Why: With o = F, the rule is d ∧ ¬e: docked AND NOT engine on.
-
-- [ ] when it is docked with the engine on
-
-  Why: ¬e is false when the engine is on.
-
-- [ ] never
-
-  Why: d ∧ ¬e can still be true without an officer.
-:::
 :::
 
 ::: {.callout-tip title="Try it 6 · Read the rule"}
@@ -469,11 +353,6 @@ In how many rows is p ∨ q ∨ r true?
 :   7
 
     Why: false only when all three are F: 8 − 1.
-
-In how many rows is (d ∧ ¬e) ∨ o true?
-:   5
-
-    Why: the 4 rows with o = T, and (T, F, F).
 
 In how many rows is p ∧ q ∧ r true?
 :   1
@@ -501,16 +380,6 @@ The iron door: the key and a torch.
 
     Why: "and": both are needed.
 
-The wooden door: the key or a torch.
-:   hasKey || hasTorch
-
-    Why: "or": at least one.
-
-The trap: no torch.
-:   !hasTorch
-
-    Why: NOT turns "has a torch" round.
-
 The lever: exactly one switch up.
 :   left ^ right
 
@@ -527,20 +396,10 @@ Which condition opens the last gate (boss defeated, and key or torch)?
 
     Why: brackets make "key or torch" one part.
 
-Which condition checks that the crown rule is kept?
-:   !hasCrown || bossDead
-
-    Why: crown → boss defeated is the same as ¬crown ∨ boss defeated.
-
 Boss alive, no key, torch: what is bossDead && hasKey || hasTorch?
 :   true, a bug
 
     Why: && first: F && F = F; then F || T = T: the gate opens by mistake.
-
-Boss alive, no key, torch: what is bossDead && (hasKey || hasTorch)?
-:   false
-
-    Why: F && (F || T) = F && T = F.
 :::
 :::
 

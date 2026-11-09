@@ -163,6 +163,8 @@ app-launcher|courses/digital-skills/week-01/sims/app-launcher.html|10|courses/di
 ai-chat|courses/digital-skills/week-01/sims/ai-chat.html|10|courses/digital-skills/week-01/sims/ai-chat.gif
 office-day|courses/digital-skills/week-01/sims/office-day.html|9|courses/digital-skills/week-01/sims/office-day.gif
 weak-spots|courses/digital-skills/week-02/sims/weak-spots.html|10|courses/digital-skills/week-02/sims/weak-spots.gif
+bill-check|courses/digital-skills/week-02/sims/bill-check.html|10|courses/digital-skills/week-02/sims/bill-check.gif
+search-lab|courses/digital-skills/week-02/sims/search-lab.html|11|courses/digital-skills/week-02/sims/search-lab.gif
 right-tool|courses/digital-skills/week-02/sims/right-tool.html|10|courses/digital-skills/week-02/sims/right-tool.gif
 newsletter|courses/digital-skills/week-02/sims/newsletter.html|10|courses/digital-skills/week-02/sims/newsletter.gif
 window-tour|courses/digital-skills/week-03/sims/window-tour.html|9|courses/digital-skills/week-03/sims/window-tour.gif
@@ -180,6 +182,7 @@ page-setup-lab|courses/digital-skills/week-04/sims/page-setup-lab.html|9|courses
 header-footer-lab|courses/digital-skills/week-04/sims/header-footer-lab.html|8|courses/digital-skills/week-04/sims/header-footer-lab.gif
 toc-builder|courses/digital-skills/week-04/sims/toc-builder.html|9|courses/digital-skills/week-04/sims/toc-builder.gif
 word-ai-lab|courses/digital-skills/week-05/sims/word-ai-lab.html|10|courses/digital-skills/week-05/sims/word-ai-lab.gif
+check-lab|courses/digital-skills/week-05/sims/check-lab.html|12|courses/digital-skills/week-05/sims/check-lab.gif
 tone-lab|courses/digital-skills/week-05/sims/tone-lab.html|9|courses/digital-skills/week-05/sims/tone-lab.gif
 morning-desk|courses/digital-skills/week-05/sims/morning-desk.html|8|courses/digital-skills/week-05/sims/morning-desk.gif
 formula-lab|courses/digital-skills/week-06/sims/formula-lab.html|10|courses/digital-skills/week-06/sims/formula-lab.gif

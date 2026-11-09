@@ -28,16 +28,16 @@ Fully practical and blended: every week has a face-to-face lab session
 | Week (syllabus) | Face-to-face (60 min, computer lab) | Online activity | From (plan v2) | ILOs |
 |---|---|---|---|---|
 | Unit 1 (1) | **Lecture 1** Digital Skills and the Apps That Make Us Productive | **Online activity 1** Your University Account, Cloud Storage and Files | L1, O1 | A1 |
-| Unit 2 (2) | **Lecture 2** Generative AI Tools: What They Do Well and Where They Fail | **Online activity 2** Writing Clear Prompts | L2, O2 | A1 C4 |
+| Unit 2 (2) | **Lecture 2** Everyday Digital Skills: Search, Screenshots and an AI Assistant | **Online activity 2** Your Phone for Study: Reminders, Scans and a Clear Prompt | L2, O2 | A1 C4 |
 | Unit 3 (3) | **Lecture 3** Microsoft Office: Concepts, Terms and Common Features | **Online activity 3** Office on the Computer, the Web and the Phone | L3, O3 | A2 A3 |
 | Unit 4 (4) | **Lecture 4** Word (1): Formatting, Styles, Lists, Tables and Pictures | **Online activity 4** Word (2): Page Layout, Headers and a Table of Contents | L4, O4 | C1 |
-| Unit 5 (5) | **Lecture 5** AI with Word: Draft, Summarize, Rewrite and Translate | **Online activity 5** A Formal Letter and a CV with AI Help | L5, O5 | C1 C4 B1 |
+| Unit 5 (5) | **Lecture 5** Word with AI: Draft, Check and Translate | **Online activity 5** A Formal Letter and a CV with AI Help | L5, O5 | C1 C4 B1 |
 | Unit 6 (6) | **Lecture 6** Excel (1): Cells, Formulas, References and Basic Functions | **Online activity 6** A Monthly Budget Sheet | L6, O6 | C2 |
-| Unit 7 (7) | **Lecture 7** Excel (2): Sorting, Filtering, Conditional Formatting and Charts | **Online activity 7** AI with Excel: Formulas, Clean Data and the Right Chart | L7, O7 | C2 C4 B1 |
+| Unit 7 (7) | **Lecture 7** Excel (2): Sorting, Filtering, Conditional Formatting and Charts | **Online activity 7** Excel: Clean Data, the Right Chart and a Formula from AI | L7, O7 | C2 C4 B1 |
 | Practice week (8) | **Practice 1** Review of Lectures 1–7 (then the midterm) | **Online activity 8** Review Activity: Practice Questions | P1, O8 | all of 1–7 |
 | Unit 8 (9) | **Lecture 8** PowerPoint: Slides, Layouts, Themes, Transitions, Animations and Notes | **Online activity 9** A Short Presentation with AI Help | L8, old O10 | C3 C4 B1 |
 | Practice week (10) | **Practice 2** AI with PowerPoint: Outline, Slides and Pictures | **Online activity 10** A Five-Slide Talk | P2, old O9 | C3 C4 B1 |
-| Unit 9 (11) | **Lecture 9** Checking AI Output and Using AI Responsibly | **Online activity 11** Fact-Checking an AI-Written Document | L9, O11 | B1 D1 |
+| Unit 9 (11) | **Lecture 9** Check Information and Share Safely, with AI Too | **Online activity 11** Fact-Checking an AI-Written Document | L9, O11 | B1 D1 |
 | Practice week (12) | **Practice 3** Responsible AI in Practice: Personal Data, Copyright and Honesty | **Online activity 12** Safe Prompts and an AI-Use Statement | P3, O12 | D1 |
 | Unit 10 (13) | **Lecture 10** Excel (3): Summarizing Data with AI Help | **Online activity 13** Analyzing a Small Dataset and Charting It | old P4 (as a lecture), O13 | C2 C4 B1 |
 | Practice week (14) | **Practice 4** Working Across Office Apps with AI | **Online activity 14** Course Project (1): Plan, Data Sheet and First Draft | old P5, O14 | A1 A3 C4 |
@@ -65,15 +65,20 @@ demonstration and the way to do a step without the app):
 | Lecture | Experiments (one per section) | Tools | Start files |
 |---|---|---|---|
 | 1 Productivity apps | by hand or with AutoSum · find the apps · a first prompt | mix: Excel, the Start menu and an AI assistant; Time Saver, App Launcher, AI Chat | `prices-start.xlsx` |
-| 2 Generative AI tools | two good jobs · weak spots · AI, search or spreadsheet | mix: an AI assistant and a search engine; Weak Spots, Right Tool | none |
-| 3 Office concepts | the parts of the window · the ribbon · Save, Save As and formats | mix: Word, Excel and PowerPoint; Window Tour, Ribbon Finder, Save Lab | `notice-start.docx` |
-| 4 Word (1) | formatting · styles · a list and a table · a picture | real app: Word; Format Lab, Style Lab, List and Table Lab | `book-fair-start.docx`, `books.png` (not the Family Day notice of the Game challenge) |
-| 5 AI with Word | a draft · a summary · a new tone · a translation | mix: an AI assistant and Word; Word AI Lab, Tone Lab | `report-start.docx` |
-| 6 Excel (1) | cells and ranges · a formula · copy a formula · four functions | real app: Excel; Formula Lab and Reference Lab | `shop-start.xlsx` |
-| 7 Excel (2) | sort · filter · a colour rule · two charts | real app: Excel; Table Lab, Chart Lab | `sales-start.xlsx` |
-| 8 PowerPoint | slides and layouts · a theme · notes · transitions and animations | real app: PowerPoint; Slide Builder, Transition Lab | `talk-start.pptx` |
-| 9 Checking AI output | claims and sources · bias · personal data · the AI-use statement | simulators and a browser: Fact-Check Lab, Bias Lab, Prompt Cleaner; Word for the statement | none |
-| 10 Excel (3) | a PivotTable · weeks and averages · check an AI summary | mix: Excel and an AI assistant; Pivot Lab, Summary Check | `month-start.xlsx` |
+| 2 Everyday digital skills | an official fact found with a search engine · a screenshot cropped and named · an AI draft and an AI total checked (the AI third) | a browser, Windows (Snipping Tool), Word, Excel, the phone and an AI assistant (2 prompts); Search Lab (new), Bill Check | none |
+| 3 Office concepts | the parts of the window and a template · the ribbon · Save As, PDF and AutoSave | Word; Window Tour, Ribbon Finder, Save Lab | `notice-start.docx` |
+| 4 Word (1) | formatting and styles · a list and a table · a picture | Word; Format Lab, Style Lab, List and Table Lab, Notice Maker | `book-fair-start.docx`, `books.png` (not the Family Day notice of the Game challenge) |
+| 5 Word with AI | a draft from AI pasted into Word, and a summary checked (the AI third) · the spelling and Find and Replace · a translation and the tone | an AI assistant and Word (1 prompt); Word AI Lab, Check Lab (new), Tone Lab | `report-start.docx` (two spelling mistakes, 9:00 twice) |
+| 6 Excel (1) | cells and a formula · copy a formula · four functions | Excel; Formula Lab, Reference Lab, The Shop's Week | `shop-start.xlsx` |
+| 7 Excel (2) | sort · filter · a colour rule · two charts | Excel; Table Lab, Chart Lab | `sales-start.xlsx` |
+| 8 PowerPoint | layouts and a theme · few words and notes · transitions and animations | PowerPoint; Slide Builder, Slide Doctor, Transition Lab | `talk-start.pptx` |
+| 9 Check and share safely | a claim from a message in two sources · a free picture with its source line, and app permissions on the phone · a safe prompt and an AI-use statement (the AI third) | a search engine, Word, the phone and an AI assistant (1 prompt); Fact-Check Lab, Prompt Cleaner | none |
+| 10 Excel (3) | a PivotTable · new questions and Refresh · an AI summary checked | Excel and an AI assistant (1 prompt); Pivot Lab, Summary Check | `month-start.xlsx` |
+
+Since 2026-11-08 (smart screens, labs not ready): every experiment of Lectures 2–10 has **Part A in
+the app** and **Part B on a simulator**, as in the face-to-face version; without a lab the teacher
+does it on the page on the smart screen (about 40 minutes), in the lab the students follow the
+worksheet (AUTHORING.md, "Lecture worksheets"; NOTES.md).
 
 Lecture 6 is the model (done 2026-10-31); the others follow it.
 
@@ -100,12 +105,12 @@ uploaded to Moodle; model answers in courses-private). The practice weeks
 | # | Online activity | Week | Type | Content |
 |---|---|---|---|---|
 | 1 | Your University Account, Cloud Storage and Files | Unit 1 | course-video | video *Folders, paths and good file names* (about 2 min, to be made); Path Finder, Folder Lab, Sync Lab |
-| 2 | Writing Clear Prompts | Unit 2 | sims | Prompt Builder, Follow-up Chat, Prompt Doctor |
+| 2 | Your Phone for Study: Reminders, Scans and a Clear Prompt | Unit 2 | mix | a reminder in the phone's calendar, a page scanned into a PDF, choosing a clear prompt (the AI third); Prompt Doctor |
 | 3 | Office on the Computer, the Web and the Phone | Unit 3 | sims | PDF Export, Paste Lab, Share Settings |
 | 4 | Word (2): Page Layout, Headers and a Table of Contents | Unit 4 | video | Microsoft Support: *Change margins* (0:31), *Insert or remove a page break* (0:45), *Insert a header or footer* (0:56), *Insert page numbers* (0:57), *Add a Table of Contents in Word* (0:38) |
 | 5 | A Formal Letter and a CV with AI Help | Unit 5 | lesson | the parts of a letter and a CV, checking what the AI wrote; Letter Builder, Profile Picker, CV Checker |
 | 6 | A Monthly Budget Sheet | Unit 6 | course-video | video *A monthly budget in Excel* (about 2 min, to be made); Budget Builder, Number Format Lab |
-| 7 | AI with Excel: Formulas, Clean Data and the Right Chart | Unit 7 | mix | AI Formula Lab, Clean Data Lab, Chart Lab |
+| 7 | Excel: Clean Data, the Right Chart and a Formula from AI | Unit 7 | mix | AI Formula Lab, Clean Data Lab, Chart Lab |
 | 8 | Review Activity: Practice Questions | Practice week | sims | Practice Quiz, Contents Builder, Reference Lab |
 | 9 | A Short Presentation with AI Help | Unit 8 | mix | Outline Lab, Image Prompt Lab, a check before presenting |
 | 10 | A Five-Slide Talk | Practice week | video | Microsoft Support: *Add speaker notes* (0:32), *Add animations to slides* (1:18), *Use Presenter View* (1:36); Talk Planner, Rehearsal Lab |

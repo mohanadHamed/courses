@@ -139,11 +139,15 @@ this order.
    The same sections (`## 1.1 …`), each with a short, clear summary (plainer
    English than the notes, but not childish), its figures, its simulator or
    mini-game, its Do it task **checked by the page** (see "The page checks
-   every task") and **one** "Try it" set. Then the Game challenge and a
+   every task") and **one** short "Try it" set. Then the Game challenge and a
    summary. Everything on the page is done by tapping, ordering or sorting
    cards, typing a number or using a simulator, and the page answers at once.
+   Since 2026-11-08 **the page is what the teacher teaches from in class**,
+   on the smart screen of the classroom, so it is sized for the lecture (see
+   "The page is taught in class").
 3. **Slides (PPTX)** — `lesson-NN-slides.qmd`, derived from the notes: a
-   visual summary for class and for revision.
+   visual summary for revision. The teacher no longer teaches from them, but
+   they stay on the site as a reference for students and teachers.
 
 The PDF links to the web lesson (QR card under the ILOs, added by
 `banner.lua`) and to every simulator and mini-game (QR in the `{{< sim >}}`
@@ -391,10 +395,11 @@ slides.
   "Level and language" for the level of thinking.
 - **Worked examples are game cases with real numbers** (a load time, a frame
   budget, a sound level, a file name), never abstract ones.
-- **Slides teach by showing.** In class, each section is a short concept and
-  a live demonstration on the projector (phone settings, the lab computer, a
-  simulator); then each student does the Do it task alone, on their own
-  phone or lab computer. Never "do it together": no group or class activity.
+- **The page teaches by showing.** In class the teacher opens the page on
+  the smart screen: each section is a short concept and a live
+  demonstration (the simulator, the Do it task and its check, an AI answer
+  in another tab); each student answers on their own phone or on paper.
+  Never "do it together": no group or class activity.
 
 ### No repetition (most important)
 
@@ -472,24 +477,54 @@ the notes or on the Game challenge slide.
 | Notes: worked examples | 2+ | 4+ |
 | Notes: exercises (with short answers at the end) | 6–10 | 10–16 |
 | Page: "Try it" boxes (one per section + Game challenge) | 4–6 | 6–9 |
-| Page: questions in all "Try it" boxes | 15–28 | 30–45 |
+| Page: questions in all "Try it" boxes | 8–16 | 18–28 |
+| Page: planned minutes in class (estimate, see below), at most | 40 | 65 |
 | Simulators / mini-games | 0–4 | 1–3 |
 | Slides (title slide not counted) | 10–16 | 20–28 |
 
-**Class time and home time.** The notes and the interactive page are studied
-at home, without a time limit, so they keep their full size. The **slides**
-are what is taught in the lecture, and they are kept short so that the
-teacher has time to explain the hard concepts in Arabic and answer
-questions: one concept slide per section, the key worked examples, one
-"Try it" slide per section with **2–3** of the page's questions, one Game
-challenge story slide and **one** challenge "Try it" slide. Everything else
-(the other questions, the second challenge box, extra examples, the
-exercises) is for home.
+### The page is taught in class (since 2026-11-08)
 
-**Time plan (90 min):** key terms 5 · sections ~65 (about 10 per section,
-mostly explanation) · Game challenge ~10 · summary and questions 10.
-**Time plan (60 min):** key terms 3 · sections ~42 · Game challenge ~8 ·
-summary 7.
+The classrooms of the college now have **smart screens**: a whiteboard and
+a browser in one, to which the teacher can also connect a laptop. The
+teacher opens the interactive page on the screen and teaches from it
+instead of the slides, because the class sees every check answer at once,
+every simulator and every AI answer. So a lecture page is sized for the
+lecture, not for home:
+
+- **About 40 minutes of a 60-min lecture, about 60–70 of a 90-min lecture**
+  (at most 65 planned). The other 20–30 minutes are for the students'
+  questions and the delays of a real lecture (a late start, a long question,
+  a problem with the screen). The page never shows minutes.
+- **What fits in a section:** the idea in 3–5 short points and one figure;
+  its simulator; one Do it task with one check (two only when the task has
+  two results); and **one Try it of 2–3 questions** that apply the idea.
+  The Game challenge: the story, its game and **one** Try it box of 3–4
+  questions (the last one harder). Outside tools in a Do it task (GeoGebra,
+  Task Manager) stay out of the class plan: one short line at most.
+- **The planned minutes** (`check_size.py`, the "plan" column) are estimated
+  from what the page shows: 2 to open and close the page; 0.2 for each term
+  of the glossary; the words of explanation (points, Watch out, the
+  instructions of a task, the challenge story) at 40 words a minute, read on
+  the screen and explained in Arabic; 1 for each check of a task; 1 for each
+  Try it question; 2 for each simulator or mini-game; 2 for each AI prompt
+  that the teacher runs in another tab. A Task with AI box is an extra: it
+  is not counted, and the teacher shows it only when time is left.
+- **The notes (PDF)** keep the full text, the worked examples and the
+  exercises with answers: they are the home study. A page is shortened
+  without changing its sections, so the notes and the slides stay right.
+- **The slides** stay on the site as a visual summary for revision and for
+  a teacher who prefers them. They are not shortened with the page.
+- **Taught before the screens:** Game Math Lectures 1–2, Computing Systems
+  Lectures 1–3, Digital Media Lectures 1–2 and Digital Skills Lecture 1
+  keep their home-study page this semester (`HOME_PAGES` in
+  `check_size.py`, the older sizes: 15–28 and 30–45 questions); rewrite them
+  for class at the start of the next semester.
+
+**Time plan (90 min):** key terms 3 · sections ~50 (about 7 per section:
+the idea 3, the task 2, the Try it 2–3) · Game challenge ~8 · the rest for
+questions and delays. **Time plan (60 min):** key terms 2 · sections ~30
+(about 8 per section) · Game challenge ~6 · the rest for questions and
+delays.
 
 **Seminars and practice sessions** (short, with room for the teacher's
 explanations; see "What a seminar looks like"):
@@ -523,31 +558,62 @@ document of the session: students follow it during the lecture, do each
 step on the computer and record what they see, as they would record
 measurements. Template: `shared/templates/sheet-template.qmd`.
 
+**Two ways in class, the teacher's choice (since 2026-11-08).** For each
+experiment the teacher chooses, by the topic and the time: **the simulator**
+of the section on the page (nothing to install; the students use the same
+simulators at home), or **the real app** on the teacher's laptop, connected
+to the smart screen (HDMI), following the steps of Part A that the page
+shows. The page says it in its first lines, and it labels the parts:
+Part A "a lab computer, or the teacher's laptop on the screen", Part B
+"on this page, also at home" (a simulator) or "each student, on a phone"
+(`shortcodes.lua`, the page only).
+
 - **File:** `lesson-NN-sheet.qmd` (`format: lesson-typst`, the same
   `lesson:` and `ilos:` as the lecture) → `<prefix>_lectureN_sheet.pdf`.
   The page shows "Worksheet (PDF)" as its first button, and the course page
   a "Worksheet" link (the notes link is then "Notes").
 - **Parts:** the goal (the ILO card, added by `banner.lua`, with a QR card
-  to the page); `## Before you start` (what you need, the time, how to
-  check, and `{{< start-files >}}`); then **one experiment per section** of
-  the notes, `## Experiment N · short title`, with an `**Aim:**` line (the
-  section of the notes and the minutes) and **2–5 numbered steps**. After
+  to the page); `## Before you start` (what you need, what to do without a
+  lab computer, how to check, and `{{< start-files >}}`); then **one
+  experiment per section** of the notes, `## Experiment N · short title`,
+  with `**The idea:**` (the concept in one or two sentences, so the
+  worksheet works alone in the lab; the page leaves it out), an `**Aim:**`
+  line (no minutes) and **2–5 numbered steps**. After
   each step: a place to record the result, `{{< record "D2 shows" >}}` (a
-  value, a formula, an observation, a file name; `lines=2` for a sentence,
-  `box=4` for a sketch), and its `::: {.check}`. At the end
+  value, a formula, a word or two, a file name, a tick; `lines=2` for two
+  short results, `box=4` for a sketch; never a reason or a sentence to
+  write, see "Answers without written English"), and its `::: {.check}`. At the end
   `## Table of results`: a short table in `::: {.record-table}` (what to
   record, an empty "Your result" column) that the teacher checks before the
   end of the lecture; then one line pointing to the Game challenge.
+- **Two cases, one worksheet (since 2026-11-08).** Every experiment has
+  **Part A · In the app** (`::: {.part}`: numbered steps in Word, Excel,
+  PowerPoint or an AI assistant on a computer) and **Part B · On the
+  simulator** (one step on a simulator of the page, with its
+  `{{< sim >}}` box: a QR code on paper, a link on the screen; or one short
+  step on the phone); the steps are numbered on through the experiment.
+  *In the computer lab* the students follow the worksheet: Part A in the
+  app, Part B on the simulator. *Without a lab* (the lab is not ready, or
+  the lecture is in a classroom) the teacher does every experiment on the
+  page on the smart screen: Part A on the simulator of its section, which
+  holds the same data as the start file (or in the real app on the
+  teacher's laptop), Part B on its simulator, and the class answers each
+  check. Every step that asks an AI assistant gives its prompt in
+  `::: {.prompt}` (on the page "Copy prompt": the teacher pastes it into an
+  AI assistant in another tab, and the class checks the real answer with
+  the step's check; in the PDF a dashed box). Size: 3 experiments (4 only
+  when they are very short), 2–3 steps in Part A and 1 in Part B, about 8–10
+  steps in all, so the page stays within its 40 minutes.
 - **Start files:** when the steps need data, every student gets the same
   file. List it in the front matter (`start-files:` with `name` and
   `about`); the file is in `week-WW/files/`, written by
   `tools/start_files.py` (change the numbers there and in the worksheet
   together, then run it).
-- **Real apps or simulators,** chosen by the nature of the lecture and
-  written in `plan.md`: the steps run in Word, Excel, PowerPoint or an AI
-  tool, on the simulators of the interactive lesson, or a mix. A real app
-  comes first when the lab has it; a simulator is the teacher's
-  demonstration and the way to do the step without the app.
+- **Real apps and simulators:** Part A runs in Word, Excel, PowerPoint or
+  an AI tool; Part B on the simulators of the interactive lesson (written in
+  `plan.md`). A simulator of an Office task (a grid that computes, a page
+  with a ribbon, a slide editor) is the lab of a class without computers:
+  give it the data of the start file, so the steps of Part A work on it too.
 - **The page teaches, the worksheet tests.** The interactive lesson shows
   each experiment in its section with `{{< experiment N >}}`, read from the
   worksheet (written once). Every step of the worksheet has, after its
@@ -568,22 +634,19 @@ measurements. Template: `shared/templates/sheet-template.qmd`.
   mistakes, the case study, the exercises. Each section ends with one line
   that points to its experiment (*In class: Experiment 2 of the worksheet,
   …*) instead of a Lab task.
-- **The slides are the teacher's demonstration of the worksheet:**
-  Keywords; "Before you start" (the start files, the figure
-  `week-02/images/worksheet-steps.png`); for each experiment an
-  "Experiment N · …" slide (the idea in one sentence and the steps, each
-  with its question; a picture in the other column) and a "Check N · …"
-  slide (the results, step by step, in `.reveal`); a Live demo slide for
-  each simulator; the Game challenge and its Try it slide; a "Table of
-  results" slide; the Summary. The Try it questions of the sections stay on
-  the page (home study). A deck with four experiments and three simulators
-  leaves out the "Table of results" slide, so it keeps to 16 slides (the
-  Check slides show every result).
+- **The slides are a reference of the lecture** (the model of the
+  face-to-face version, `courses/digital-skills/face-to-face/README.md`):
+  Keywords; for each experiment a concept slide (the idea in at most four
+  sentences, with its figure, in columns), the Live demo of its simulator
+  and a Try it slide (2–3 questions with `.answer`); the Summary; "Your
+  worksheet" (Part A and Part B, the start files, and `{{< page-qr >}}`);
+  "Results of the worksheet" (one `.reveal` line for each experiment); the
+  Game challenge and its Try it slide. At most 16 slides.
 - `check_size.py` checks it: an experiment for every section of the notes,
   an Aim and 2–5 steps in each, a record field and a check after every
   step, the table of results, the start files, the experiments on the page
-  and in the notes, an Experiment and a Check slide for each, and at most
-  1 600 words (without the results).
+  and in the notes, the "Your worksheet" and "Results of the worksheet"
+  slides, and at most 1 600 words (without the results).
 
 ### Blended courses: the online activity
 
@@ -592,8 +655,9 @@ practical and has one face-to-face lab session and one online activity in
 every week. In a unit the face-to-face session is a lecture (a full lesson
 with all three outputs); in a practice week it is a practice session
 (seminar format, no new ideas). The online activity (`kind: online` in
-`schedule.yml`) is **one page**, `online-NN.qmd` with `online: N`, `due:` and
-`marks:` in the front matter (template: `shared/templates/online-template.qmd`).
+`schedule.yml`) is **one page**, `online-NN.qmd` with `online: N` and `due:`
+in the front matter, and no marks anywhere on it (template:
+`shared/templates/online-template.qmd`).
 It **practises its unit** and never repeats the face-to-face lecture; in a
 unit it may add a skill of the unit's syllabus row, in a practice week it
 adds nothing new:
@@ -602,9 +666,21 @@ adds nothing new:
 - 2–3 short **Steps** marked `{.study}`: what the content type gives (see
   below), one "Try it" each, with `Why:`, and an interactive check where a
   step asks for a result (see "The page checks every task");
-- **Tasks to submit** (`{.tasks}`): 2–4 practical tasks with marks and a
-  concrete product (a named file, a screenshot, a short answer), with
-  `{{< answer-space >}}` for the printed copy; then "How to submit".
+- **Tasks to submit** (`{.tasks}`): 2–4 practical tasks with a concrete
+  product (a named file, a screenshot, a short answer), with
+  `{{< answer-space >}}` for the printed copy; then "How to submit". A
+  written answer is a word, a name, a number, yes or no, or a letter of a
+  choice (see "Answers without written English").
+
+**The student works alone, so the Steps teach every task first** (the
+teacher's request of 2026-11-08). Each task to submit has a Step that
+shows how: the steps in the app in a numbered list, and a **model** of the
+product in another situation (a finished prompt with its parts marked, a
+small sheet with its formulas, a short paragraph made right), never the
+data of the task. The tasks are **simple enough to do alone**: one
+situation each, 2–4 short steps, one small product, all the data given;
+about 30 minutes for all of them. A task names the Step it practises
+("Step 1 shows how").
 
 **The content type** (`content:` in the front matter, a chip on the page)
 varies the weeks, so the activities do not all look the same; it decides
@@ -627,9 +703,10 @@ what the Steps hold (the table of each activity is in `plan.md`):
   first and is the one source of the voice, the captions and the pictures.
   The page shows the script as a transcript.
 
-The page has "Download tasks (PDF)" and "Print tasks" buttons; on paper only
+The page has "Tasks PDF to fill in" and "Print tasks" buttons; on paper only
 the tasks are printed (`homework_pdf.py` prints it as
-`<prefix>_onlineN_tasks.pdf`). The online activity **replaces the
+`<prefix>_onlineN_tasks.pdf`), and the PDF is a form: students type their
+answers in it, save it and upload it (see "Homework"). The online activity **replaces the
 homework** of that course. Its model answers stay private in
 `courses-private` (`week-WW/online-NN-solutions.md`). `check_size.py` checks
 its parts and its content type (a simulator in every Step of `sims`; the
@@ -746,15 +823,31 @@ result in words), and a `::: {.check}` inside each `{.try-change}`;
   Digital Media (unclear rights, and it skips the production ILOs).
 - **AI is always an optional extra, also in homework** (the teacher's
   decision of 2026-10-31): no graded task needs AI. A homework may end with
-  `## Optional · Task with AI (no marks) {.extra}`: the same kind of box,
+  `## Optional · Task with AI {.extra}`: the same kind of box,
   about another situation than the graded tasks, so its closed answers give
   nothing away; it is hidden on paper, and the first line of the page says
-  "No task needs AI. The optional Task with AI at the end gives no marks."
+  "No task needs AI. The Task with AI at the end is optional."
   (In Digital Skills, AI is in the ILOs: its online tasks to submit may use
   AI on purpose, with the AI-use statement.)
 - **Digital Skills** has no "Task with AI" box: AI is in its ILOs (A1, B1,
   C4, D1), so its experiments and online tasks teach AI on purpose, with
-  checking and, from unit 9, the AI-use statement.
+  checking and, from unit 9, the AI-use statement. AI there is always
+  **practical** (the teacher's request of 2026-11-08: the students know AI
+  already and find talk about it boring): every AI step gives a complete
+  prompt in `::: {.prompt}` that the teacher runs in another tab on the
+  smart screen, and its result goes into an Office task (a Word notice that
+  is corrected, a sum checked in a spreadsheet, a slide made from an
+  outline). No lecture is about AI alone: each one also practises Word,
+  Excel, PowerPoint, files or search on a simulator or in the app.
+- **AI is one part of a Digital Skills session, never most of it** (the
+  teacher's request of 2026-11-08): where AI is a topic of the week, it
+  takes **a quarter to a third** of the lecture or the online activity
+  (one experiment of three, or one step of each), and the rest practises a
+  general skill (the phone, Windows, files, search) or Word, Excel and
+  PowerPoint. The students never write a prompt in English (see "Answers
+  without written English"): every prompt is ready to copy, and a change to
+  try is one word or one number. They check, choose and correct what the AI
+  gives, in the app.
 - The rule "no tool or assistant names" (Site identity) is about how the
   lessons are made, not about the tools students use.
 - `check_size.py` warns above 2 per file, about a prompt that is not
@@ -820,7 +913,45 @@ level and serve the PLO behind it.
   tile grid, Blender ↔ Unity conversion, evaluation criteria before the
   evaluation ILO). Spend the time in class on the Do it tasks and questions,
   not on more examples of the same idea: short notes are better than
-  repeated ones.
+  repeated ones. **Since 2026-11-08 (the teacher's request) this is strict:**
+  before a lecture is written or rewritten, hold each section, term, task
+  and question against the syllabus row of its week and its ILOs; what
+  serves none of them is cut, even when it is small. A lecture that holds
+  only its outcomes fits its 40 or 65 minutes.
+
+### Answers without written English (since 2026-11-08)
+
+The university asks for lessons fully in English, but the students' first
+language is Arabic, and almost none of them can write English text well.
+So **no question or task asks the student to write English text**: no
+"explain", "describe", "why?", "give the reason", "write a sentence (a
+paragraph, an e-mail, a prompt) …". The language of a question stays as
+simple as the outcomes allow; the thinking stays at the ILO's level.
+
+- **The student answers by** choosing (an option, a group, true or false,
+  yes or no), putting cards or steps in order, matching, ticking or
+  circling, drawing, or typing a number, a formula, a cell reference, a
+  file or folder name, or a word or two of the lesson (about five words at
+  most), like Online activity 1 of Digital Skills (folder names, a corrected
+  file name, yes or no).
+- **A reason is a choice too:** "Which reason is right? A … B … C …", or
+  "Which sign tells you?" with a short answer, never "Give the reason".
+- **Everywhere:** the page (its checks already work this way), the
+  worksheets (a record field takes a value, a name, a word or a tick, never
+  "…, because …"), the exercises of the notes, the homework, the online
+  tasks and the seminars. (The notes exercises of the lectures rewritten
+  on 2026-11-08 still have some "Why …?" items: see
+  `plans/smart-screens-status.md`.)
+- **A product made in an app is fine** (a file, a formatted document, a
+  sheet, a slide): the student types the text that the task gives, short
+  labels or names, never their own paragraph.
+- **A prompt for an AI assistant is always given ready to copy**
+  (`::: {.prompt}`); the student may change one word or one number in it
+  (a name, a date, a topic from a list), never write it.
+- `check_size.py` warns about essay words ("explain", "describe", "why?",
+  "give a reason", "write a sentence …", "in your own words") in homework
+  and tasks to submit, and about a worksheet record that asks for a reason
+  ("because") or for long text (`lines=3` or more).
 - **Match the thinking to the ILO.** For a knowledge ILO (describe, explain;
   K), questions ask students to recognise, describe, classify or explain a
   game example. Calculations appear only where the ILO or a later ILO needs
@@ -1094,6 +1225,10 @@ what the class does with it. Short is good; unclear is not.
 - `slides-public: true` in `_quarto.yml` shows a "Lecture slides" button on each
   lesson and a "Slides" link on the course page. Slides are a summary, not
   study material. Set it to `false` to keep slides teacher-only.
+- Since 2026-11-08 the teacher teaches from the page on the smart screen,
+  but **every deck stays on the site** (the teacher's decision): a reference
+  for revision, for a student who missed the lecture and for a teacher who
+  prefers slides. Never delete a deck because the page is taught instead.
 
 ## Simulators
 
@@ -1182,8 +1317,8 @@ homework and its solution together.
   what it taught, in the same words, never a seminar or a practice session.
   No new content.
 - **No task needs AI** (see "Tasks with AI"): the page says "No task needs
-  AI." A homework may end with an optional Task with AI that gives no marks
-  (`## Optional · Task with AI (no marks) {.extra}`, hidden on paper). The
+  AI." A homework may end with an optional Task with AI, not graded
+  (`## Optional · Task with AI {.extra}`, hidden on paper). The
   homework stays light: students who finish it quickly do it.
 - Size: **1–2 short, simple tasks, about 10 minutes, never more than 15**,
   in all courses.
@@ -1191,7 +1326,14 @@ homework and its solution together.
   student who has read the notes or gone through the interactive page must be
   able to answer at once; no research, no long calculations. Short homework that students finish is better than long homework
   they skip. I may make it longer later in the course, if the students do it well;
-  then I will change this rule. Marks per task in the heading; total in `marks:`.
+  then I will change this rule.
+- **Short, objective answers** (see "Answers without written English"): a
+  number, a name, a word or two, yes or no, a tick, an order, a drawing;
+  never a sentence to write in English.
+- **No marks or grades on the page** (the teacher's request of
+  2026-11-08): no marks in the headings, no total, no `marks:` in the front
+  matter. The e-learning platform keeps the grades; a marking rule may
+  stay in the private solution.
 - At least one task in a real game situation (the PLO behind the ILO).
 - Written answers only (semester 1: no programming). Code may be read, never written.
 - **Fixed numbers only** ("3 steps up", "(8, 4)"): no variables like *n* in a
@@ -1207,11 +1349,23 @@ homework and its solution together.
   PR is merged (see "Release: no drafts"). Earlier homework stays online.
 - No answers on the page: no `.match` boxes, no "Check your answers".
 - **A web page that prints well.** Homework belongs to a unit, not to one
-  lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF" and
-  "🖨 Print homework" buttons. The PDF is the printed page itself:
-  `_extensions/lesson/homework_pdf.py` (post-render) prints each homework page
-  with headless Chrome, so the download and the printout are the same one A4
-  page. Only `format: lesson-html`; no Typst version.
+  lesson, so it is never in a lesson PDF. The page has "⬇ Download PDF to
+  fill in" and "🖨 Print homework" buttons. The PDF is the printed page
+  itself: `_extensions/lesson/homework_pdf.py` (post-render) prints each
+  homework page with headless Chrome, so the download and the printout are
+  the same one A4 page. Only `format: lesson-html`; no Typst version.
+- **The PDF is a form to fill in** (the teacher's request of 2026-11-08:
+  students tried to type in the PDF instead of printing it). Every
+  `{{< answer-space lines=N >}}` and the Name and Student number line
+  become text fields (multiline from two lines) in a thin blue frame, so
+  the printed lines stay visible; a chip on paper says "Type in the blue
+  boxes, save, upload".
+  How: on paper each answer space holds an empty link to
+  `https://answer.field/N`, Chrome prints it as a link rectangle, and
+  `homework_pdf.py` turns each rectangle into a field with **pypdf**
+  (installed in CI; without it the PDFs are made without fields). A box for
+  a drawing (`box=`) stays a box. The same holds for the tasks PDF of an
+  online activity.
 - **Answer space:** after every question, add space to write the answer:
   `{{< answer-space lines=2 >}}` (dotted lines; as many as a good answer needs)
   or `{{< answer-space box=6 >}}` (an empty box, height in cm, for a drawing).
@@ -1219,7 +1373,7 @@ homework and its solution together.
 - **One A4 page:** the printed page must fit on one page.
   "How to submit" is one short line; the print layout is tight.
   If it does not fit, cut a question or use fewer lines, never a smaller font.
-- The course page lists released homework in its unit card (number, due, marks).
+- The course page lists released homework in its unit card (number, due).
 - Check every task like a "Try it": self-contained, one clear answer
   (or a clear marking rule), no changing state, tried before release.
 
@@ -1273,6 +1427,13 @@ no drafts").
 
 ## Way of working
 
+- **The newest rules are the standard** (the teacher's decision of
+  2026-11-08). Whenever lessons are written or rewritten, in any course,
+  they follow the newest version of this file and of `check_size.py`, not
+  the model of an older lesson. Leaving out the sessions already taught
+  (`HOME_PAGES`, `FROZEN`) holds for this semester only: at the start of
+  the next semester every lecture of every course is rewritten with the
+  newest rules.
 - Build one unit at a time. Never generate all lessons up front.
 - Phase 1: `schedule.yml` + `plan.md` per course (the units of the 16-week
   syllabus → sessions → ILOs), approved by me first.
@@ -1322,6 +1483,12 @@ lecture and its slides to the new figure `week-02/images/worksheet-steps.png`
 the place of the old one in `week-01/images/` (delete the copy in week 2),
 with every lecture pointing to week 1 again.
 
+Also frozen: the **homework of the units taught before 2026-11-08** (Game
+Math Homework 1–2, Computing Systems Homework 1–3, Digital Media Homework
+1–2). They were given with written answers ("Why?", "Give the reason"),
+before the rule "Answers without written English"; only their marks were
+taken off. Rewrite them with short answers next semester.
+
 ## Git
 
 - Commit locally as me: author and committer come from my git config
@@ -1353,6 +1520,47 @@ with every lecture pointing to week 1 again.
 ## Lessons learned
 
 <!-- Add general rules from weekly retros here, newest first. -->
+
+- 2026-11-08 (teacher's request, the same evening): students tried to type
+  their answers in the tasks PDF of an online activity, which they cannot
+  edit. The homework and tasks PDFs are now forms: every answer line and the
+  Name and Student number line are text fields (`homework_pdf.py`, pypdf).
+  Rules above ("Homework", "Blended courses").
+
+- 2026-11-08 (teacher's request, later the same day): the students' first
+  language is Arabic and few can write English, but the lessons must be in
+  English. No question or task asks for English text any more: answers are
+  choices, orders, numbers, names or a few words, in every course and every
+  output. Homework and online activities show no marks or grades. Lectures
+  hold only what the syllabus week and its ILOs ask for. In Digital Skills
+  AI is a quarter to a third of a session, never most of it, and the
+  students never write a prompt; Unit 2 practises everyday skills on the
+  phone too. The teacher chooses for each experiment between the simulator
+  on the page and the real app on the laptop (HDMI). The newest rules are
+  the standard for every rewrite; leaving out the taught sessions holds for
+  this semester only. Rules above ("Answers without written English",
+  "Level and language", "Homework", "Tasks with AI", "Lecture worksheets",
+  "Way of working", "Frozen sessions").
+
+- 2026-11-08 (teacher's request, smart screens): the classrooms have smart
+  screens (a whiteboard with a browser), so the teacher now teaches from the
+  interactive page instead of the slides: the class sees every check, every
+  simulator and every AI answer at once. The pages were made for home study
+  and were longer than a lecture. Every lecture page that was not taught
+  yet (Game Math from Lecture 3, Computing Systems from Lecture 4, Digital
+  Media from Lecture 3, Digital Skills from Lecture 2) is now sized for
+  class: about 40 minutes of a 60-min lecture and about 65 of a 90-min
+  lecture, estimated by `check_size.py`, with one Try it of 2–3 questions
+  per section and one challenge box; the rest of the lecture is for
+  questions and delays. The notes keep everything for home, and every deck
+  stays on the site as a reference. Digital Skills, whose computer labs are
+  not ready, now works in both cases: the worksheet has Part A in the app
+  (the lab) and Part B on a simulator, the teacher does every experiment on
+  the page without a lab, and every AI step has a prompt to run in another
+  tab, joined to a Word, Excel or PowerPoint task. Its online activities
+  teach every task in their Steps with a model, and their tasks are simpler.
+  Rules above ("The page is taught in class", "Lecture worksheets", "Tasks
+  with AI", "Blended courses").
 
 - 2026-11-04 (teacher's request): the interactive pages asked students to
   do a task and then open a closed "Check your result" to compare, like a

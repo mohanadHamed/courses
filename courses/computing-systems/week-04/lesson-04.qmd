@@ -6,24 +6,22 @@ ilos: [A1, B2]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem in a game studio. Then it explains one part of the
-phone. It ends with a **Do it** task (in a simulator or on your phone) and
-one set of questions. Tap, sort or type your answer: the page checks it at
-once and tells you why.
+Each section: a question from a game studio, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
-{{< glossary soc chipset npu modem sensor accelerometer gyroscope gps capacitive-touch-screen touch-sampling-rate battery-capacity thermal-throttling >}}
+{{< glossary soc chipset modem sensor accelerometer gyroscope gps capacitive-touch-screen touch-sampling-rate battery-capacity thermal-throttling >}}
 
 ## 4.1 Why a phone has one main chip: the SoC
 
 - A phone has no room for a graphics card and no fan. Its main parts sit on
   **one chip**: the **system on a chip (SoC)**.
-- On a spec sheet, the SoC is the **Chipset** line (Seminar 2).
-- Its parts: **CPU cores** (game logic, physics), **GPU** (draws every
-  frame), **modem** (mobile data, online play), **image processor**
-  (camera), **memory controller** (talks to the RAM).
+- On a spec sheet, the SoC is the **Chipset** line.
+- Its parts: **CPU cores** (game logic), **GPU** (draws every frame),
+  **modem** (mobile data), **image processor** (camera) and the **memory
+  controller** (talks to the RAM).
 - The RAM sits next to the SoC. The CPU and the GPU **share** it: no
   separate video memory.
 
@@ -37,11 +35,8 @@ the SoC often matters more.
 {{< sim file="sims/soc-explorer.html" poster="sims/soc-explorer.png" title="SoC Explorer: the parts of a phone's main chip" height="640" >}}
 
 ::: {.callout-note title="Do it · The SoC of your phone"}
-**Android:** Settings → About phone (look for Processor or Chipset; if it is
-not there, search the model on the maker's website). **iPhone:** Settings →
-General → About → Model Name; Apple's website lists the chip of each model.
 Two spec lines: "Galaxy A55, Exynos 1480, Samsung" and "iPhone 13, A15
-Bionic, Apple".
+Bionic, Apple". (Your own phone: Settings → About.)
 
 ::: {.sort}
 What is each word of the two spec lines? Sort them.
@@ -84,21 +79,6 @@ It draws every frame of the racing game.
 
     Why: The GPU draws the pictures.
 
-It moves the enemies and checks the rules.
-:   the CPU cores
-
-    Why: The game logic runs on the CPU cores.
-
-It sends the score to the online leaderboard over 4G.
-:   the modem
-
-    Why: The modem sends mobile data.
-
-It moves the textures from the RAM to the GPU.
-:   the memory controller
-
-    Why: The memory controller moves data to and from the RAM.
-
 Where does the GPU of a phone keep its textures?
 :   in the RAM it shares with the CPU
 
@@ -114,24 +94,19 @@ Where does the GPU of a phone keep its textures?
 - **Gyroscope:** shows how fast the phone **turns** (degrees per second). It
   reads 0 when the phone is still, even when it is tilted.
 - **GPS:** the position on Earth. **Compass:** the direction to north.
-  **Proximity, light, camera, microphone** are sensors too.
-- Games: steer by tilting → accelerometer; aim by turning → gyroscope;
-  shake to roll the dice → accelerometer; city treasure hunt → GPS; AR pet →
-  camera + gyroscope + accelerometer.
 
 ![The sensors of a phone.](images/sensors.png){width=92%}
 
 ::: {.callout-warning title="Watch out!"}
 The gyroscope does not show the tilt; the accelerometer does. Many cheap
-phones have no gyroscope: a game that needs one cannot run there.
+phones have no gyroscope.
 :::
 
 {{< sim file="sims/tilt-lab.html" poster="sims/tilt-lab.png" title="Tilt Lab: the accelerometer and the gyroscope" height="560" >}}
 
 ::: {.callout-note title="Do it · Your phone's sensors in Tilt Lab"}
-Open **Tilt Lab** on your phone and press **Use the sensors** (or use the
-pad). Lay the phone flat, then tilt it to the left and hold still, then turn
-it quickly.
+In **Tilt Lab**, use the pad (on a phone: **Use the sensors**). Lay the phone
+flat, then tilt it and hold still, then turn it quickly.
 
 ::: {.choice}
 The phone lies flat on a table. What does the accelerometer show?
@@ -148,27 +123,10 @@ The phone lies flat on a table. What does the accelerometer show?
 
   Why: The accelerometer always feels gravity, 9.8 m/s².
 :::
-
-::: {.choice}
-You tilt the phone to the left and hold it still. What does the gyroscope
-show?
-
-- [x] about 0
-
-  Why: The gyroscope shows how fast the phone turns; a still phone does not turn.
-
-- [ ] the angle of the tilt
-
-  Why: The accelerometer shows the tilt, not the gyroscope.
-
-- [ ] a big number that stays
-
-  Why: Its values move only while the phone turns, then go back to 0.
-:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Which sensor?"}
-Choose the sensor. You can use an answer more than once.
+Choose the sensor.
 
 ::: {.match extra="the light sensor"}
 A racing game: the player steers by tilting the phone.
@@ -180,21 +138,6 @@ A shooter: the player aims by turning the phone.
 :   the gyroscope
 
     Why: The gyroscope measures the turning.
-
-A treasure hunt on the streets of the city.
-:   the GPS
-
-    Why: The GPS finds the place on the map.
-
-"Shake the phone to roll the dice."
-:   the accelerometer
-
-    Why: The accelerometer feels the shaking.
-
-A tilted phone lies still on a book. Which sensor reads 0?
-:   the gyroscope
-
-    Why: The gyroscope measures turning; a still phone does not turn.
 :::
 :::
 
@@ -203,12 +146,9 @@ A tilted phone lies still on a book. Which sensor reads 0?
 - A **capacitive touch screen** has a grid of thin wires under the glass.
 - The finger changes the electric charge where it touches. A controller
   finds the place and sends the position to the game.
-- Cloth carries no charge: a normal glove does not work. A wet screen can
-  confuse the grid.
+- Cloth carries no charge: a normal glove does not work.
 - **Touch sampling rate:** how often the screen checks for touches. 120 Hz:
   about every 8 ms. 240 Hz: about every 4 ms.
-- **Refresh rate** (lecture 3): how often the picture changes. Many phones
-  read touches twice as often as they draw (60 Hz picture, 120 Hz touch).
 
 ![A grid finds the finger; checking more often finds a tap sooner.](images/touch-grid.png){width=92%}
 
@@ -217,10 +157,8 @@ A 120 Hz screen does not mean 120 Hz touch. They are two different numbers.
 :::
 
 ::: {.callout-note title="Do it · Test your touch screen"}
-In a drawing or notes app, try a fingertip, a fingernail, the back of a
-pencil and a paper tissue. Then find the refresh rate setting (Android:
-Settings → Display → Motion smoothness, Smooth display or Refresh rate;
-iPhone: no setting).
+In a drawing app, try a fingertip, a fingernail, the back of a pencil and a
+paper tissue.
 
 ::: {.sort}
 Does the screen feel it? Sort them.
@@ -247,23 +185,6 @@ Does not work
 
     Why: Cloth carries no charge.
 :::
-
-::: {.choice}
-A phone draws the picture at 60 Hz and reads touches at 120 Hz. How often
-does it check for a touch?
-
-- [x] about every 8 ms
-
-  Why: 1000 ms ÷ 120 ≈ 8 ms.
-
-- [ ] about every 16 ms
-
-  Why: 16 ms is one picture at 60 Hz; touch is read twice as often.
-
-- [ ] every 120 ms
-
-  Why: 120 Hz means 120 times in a second, not every 120 ms.
-:::
 :::
 
 ::: {.callout-tip title="Try it 3 · The touch screen"}
@@ -275,20 +196,10 @@ Why does a normal glove not work on the screen?
 
     Why: The screen feels the electric charge of the finger.
 
-What is under the glass of a capacitive touch screen?
-:   a grid of thin wires
-
-    Why: A grid of thin wires finds the charge of the finger.
-
 At 240 Hz, how often does the screen check for touches?
 :   about every 4 ms
 
     Why: 1000 ms ÷ 240 is about 4 ms.
-
-A phone has 60 Hz and 120 Hz on its sheet. Which number is the touch sampling rate?
-:   120 Hz
-
-    Why: The touch sampling rate is the higher number.
 :::
 :::
 
@@ -297,8 +208,6 @@ A phone has 60 Hz and 120 Hz on its sheet. Which number is the touch sampling ra
 - **Battery capacity** in mAh; the game draws a **current** in mA.
 - **Play time ≈ capacity ÷ current:** 5000 mAh ÷ 1000 mA = **5 hours**;
   5000 ÷ 500 = 10 hours.
-- Power goes to the **screen** (brightness, refresh rate), the **SoC**
-  (frame rate, graphics) and the **radios** (mobile data, GPS).
 - The SoC turns power into heat. With no fan, a hot SoC slows down:
   **thermal throttling** (lecture 3). 60 fps can fall to 45 fps.
 - Games offer a "30 fps (battery saver)" setting: less work, less heat,
@@ -313,10 +222,8 @@ A bigger mAh number does not make a phone faster. It only means more charge.
 {{< sim file="sims/battery-lab.html" poster="sims/battery-lab.png" title="Battery Lab: play time and heat" height="600" >}}
 
 ::: {.callout-note title="Do it · Battery use on your phone"}
-Android: **Settings → Battery → Battery usage**. iPhone: **Settings →
-Battery**. Look at the three apps that used the most battery today. Then,
-in **Battery Lab**, find settings for at least 6 hours with 5000 mAh, with
-a cool phone.
+In **Battery Lab**, find settings for at least 6 hours with 5000 mAh, with a
+cool phone.
 
 ::: {.sort}
 Which settings give a longer play time? Sort them.
@@ -343,17 +250,10 @@ Shorter play
 
     Why: A radio that is always on uses power.
 :::
-
-::: {.fill answer="5" unit="hours" hint="mAh ÷ mA = hours."}
-A game draws 1000 mA from a 5000 mAh battery. How many hours can the player
-play?
-
-Why: 5000 ÷ 1000 = 5 hours.
-:::
 :::
 
 ::: {.callout-tip title="Try it 4 · Battery and heat"}
-Choose the right answer. You can use an answer more than once.
+Choose the right answer.
 
 ::: {.match extra="10 hours|the phone gets faster"}
 A phone has 5000 mAh. A game draws 1000 mA. About how long can the player play?
@@ -361,25 +261,10 @@ A phone has 5000 mAh. A game draws 1000 mA. About how long can the player play?
 
     Why: 5000 ÷ 1000 = 5.
 
-A phone has 4500 mAh. A game draws 900 mA. About how long?
-:   5 hours
-
-    Why: 4500 ÷ 900 = 5.
-
 After 20 minutes the SoC is hot. What happens?
 :   it slows down: thermal throttling
 
     Why: Without a fan, a hot SoC slows itself down.
-
-Which setting saves the most battery and heat in a game?
-:   a lower frame rate (30 fps)
-
-    Why: Fewer frames mean less work for the SoC.
-
-Does a bigger mAh number make a phone faster?
-:   no, it only holds more charge
-
-    Why: mAh measures charge, not speed.
 :::
 :::
 
@@ -387,19 +272,17 @@ Does a bigger mAh number make a phone faster?
 
 Work alone. Use every section of today.
 
-*Byte Bay* tests *Marble Peak* on the test phone T1: chipset with 8 CPU
-cores (up to 3.0 GHz) and a GPU; 8 GB of RAM; a 120 Hz screen with a
-touch sampling rate of 240 Hz; a 5000 mAh battery; sensors: accelerometer,
-gyroscope, compass and GPS. The game reads the **accelerometer** to roll the
-marble. At 60 fps with a bright screen it draws 1000 mA. After 20 minutes
-the SoC is hot, and the game falls to 45 fps.
+*Byte Bay* tests *Marble Peak* on the test phone T1: 8 CPU cores and a GPU,
+a 5000 mAh battery, an accelerometer, a gyroscope, a compass and GPS. The
+game reads the **accelerometer** to roll the marble. At 60 fps it draws
+1000 mA. After 20 minutes the SoC is hot, and the game falls to 45 fps.
 
 {{< sim file="sims/marble-peak.html" poster="sims/marble-peak.png" title="Marble Peak: tilt to roll the marble" kind="game" height="720" >}}
 
 ::: {.callout-tip title="Try it 5 · The test phone T1"}
-T1: 8 cores, GPU; 8 GB RAM; 120 Hz screen, 240 Hz touch; 5000 mAh;
-accelerometer, gyroscope, compass, GPS. Marble Peak: 1000 mA at 60 fps.
-Choose the right answer.
+T1: 8 cores, GPU; 5000 mAh; accelerometer, gyroscope, compass, GPS. Marble
+Peak: 1000 mA at 60 fps; after 20 minutes, 45 fps and a hot phone. Choose the
+right answer. The last question is harder.
 
 ::: {.match extra="the GPS|8 hours"}
 Which sensor rolls the marble?
@@ -407,59 +290,22 @@ Which sensor rolls the marble?
 
     Why: Marble Peak reads the tilt from the accelerometer.
 
-How long does the battery of T1 last in Marble Peak?
-:   about 5 hours
-
-    Why: 5000 mAh ÷ 1000 mA = 5 hours.
-
 Which part of the SoC draws the mountain and the marble?
 :   the GPU
 
     Why: The GPU draws every frame.
 
-How often does T1 check for touches?
-:   240 times per second
-
-    Why: T1 has a touch sampling rate of 240 Hz.
-:::
-:::
-
-::: {.callout-tip title="Try it 6 · Problems in the test (harder)"}
-Marble Peak on T1: 60 fps, 1000 mA, 5000 mAh. After 20 minutes: 45 fps and a
-hot phone. Choose the right answer.
-
-::: {.match extra="the battery is too small|add more CPU cores"}
 Why does the game fall to 45 fps after 20 minutes?
 :   the hot SoC slows down (thermal throttling)
 
     Why: The hot SoC slows itself down.
-
-What can Byte Bay add to keep the phone cooler?
-:   a 30 fps battery saver setting
-
-    Why: 30 fps means less work and less heat.
-
-A tester's phone has no gyroscope. Can the tester play Marble Peak?
-:   yes, it uses the accelerometer
-
-    Why: Marble Peak needs only the accelerometer.
-
-The game drops to 500 mA in battery saver mode. How long does T1 last now?
-:   10 hours
-
-    Why: 5000 ÷ 500 = 10 hours.
-
-A tester plays with thick winter gloves. What happens at a tap on "Pause"?
-:   nothing: the screen does not feel the glove
-
-    Why: The screen does not feel the charge through the glove.
 :::
 :::
 
 ## Summary {.summary}
 
-- The SoC holds the CPU cores, the GPU, the modem and more; the RAM next to it is shared.
-- Sensors feel the player: the accelerometer shows tilt, the gyroscope shows turning, the GPS shows position.
-- A capacitive touch screen finds the finger's charge; the touch sampling rate says how often it checks.
+- The SoC holds the CPU cores, the GPU and the modem; they share the RAM.
+- The accelerometer shows tilt, the gyroscope turning, the GPS position.
+- The touch screen finds the finger's charge, many times a second.
 - Play time ≈ battery capacity (mAh) ÷ current (mA).
-- A hot SoC slows down (thermal throttling); a lower frame rate saves power and heat.
+- A hot SoC slows down (thermal throttling); 30 fps saves power and heat.

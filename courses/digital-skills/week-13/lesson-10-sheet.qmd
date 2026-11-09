@@ -1,6 +1,6 @@
 ---
 title: "Excel (3): Summarizing Data with AI Help"
-description: "Worksheet · Three experiments: a PivotTable of the sales of March, other questions to the same table (weeks, a line chart, Refresh, averages), and an AI summary checked number by number."
+description: "Worksheet · Three experiments: a PivotTable of the sales of March, new questions to the same table (weeks, a line chart, Refresh, averages), and an AI summary checked number by number. Part A in Excel and an AI assistant, Part B on the simulators."
 lesson: 10
 ilos: [C2, C4, B1]
 start-files:
@@ -10,18 +10,21 @@ format: lesson-typst
 ---
 
 ::: {.lead}
-Today you work like in a lab: you summarize a long list in Excel, you ask
-it new questions, and you test an AI summary of the numbers. Do each
-experiment when your teacher shows it. After each step, write your result
-in its box. At the end, copy your key results into the table.
+Today you summarize a long list in Excel, you ask it new questions, and you
+test an AI summary of the numbers. Each experiment has two parts. **Part
+A** is in Excel and an AI assistant on the lab computer. **Part B** is on a
+simulator of the interactive lesson: on paper, scan its QR code; on the
+screen, click its link. After each step, write your result in its box. At
+the end, copy your key results into the table.
 :::
 
 ## Before you start
 
-- **You need:** a computer with Excel (the desktop app, or Excel on the web
-  at `office.com`) and an AI assistant that the university allows (for
-  example Microsoft Copilot with your university account).
-- **Time:** about 40 minutes for the three experiments.
+- **You need:** a lab computer with Excel (the desktop app, or Excel on the
+  web at `office.com`) and an AI assistant that the university allows (for
+  example `copilot.microsoft.com` with your university account).
+- **No lab computer today?** Your teacher does Part A on the screen, on the
+  simulators of the interactive lesson and in an AI assistant. Do Part B on your phone.
 - **Check:** the results are at the end of this worksheet. Look only after
   you try. On the interactive lesson, every step has a check that answers
   at once.
@@ -30,8 +33,17 @@ in its box. At the end, copy your key results into the table.
 
 ## Experiment 1 · A PivotTable
 
-**Aim:** make a summary table of a long list in a few clicks. *(Lesson
-notes 10.1 · about 10 minutes)*
+**The idea:** a **PivotTable** makes a **summary table** of a long list in
+a few clicks. Click one cell of the list › **Insert › PivotTable** › OK.
+Then drag a field to **Rows** (the groups) and a number field to
+**Values** (what Excel adds up). Do not type the totals by hand: typed
+numbers do not change when the list changes.
+
+**Aim:** make a summary table of the 24 sales of March.
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
 
 1. Open `month-start.xlsx` (click **Enable Editing** if you see it). Click
    one cell of the list. Choose **Insert › PivotTable** and click **OK**.
@@ -49,7 +61,7 @@ notes 10.1 · about 10 minutes)*
 
    - [x] on a new sheet, with the PivotTable Fields pane on the right
 
-     Why: The pane lists the headings of the list: Week, Item, Type, Qty and Total (JD).
+     Why: The pane lists the headings of the list.
 
    - [ ] under the list, on the same sheet
 
@@ -72,62 +84,79 @@ notes 10.1 · about 10 minutes)*
    ::: {.fill answer="206" unit="JD" hint="Read the row of Paper in the PivotTable."}
    How much did **Paper** sell?
 
-   Why: Paper 206, Drinks 71, Bags 78; Grand Total 355 JD. One row for each type, with the sum of its totals: Paper sold the most.
+   Why: Paper 206, Drinks 71, Bags 78; Grand Total 355 JD: Paper sold the most.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" >}}
+
+3. In **Pivot Lab**, choose Rows **Item** and Values **Sum of Total**.
+   Which item brought the most money?
+
+   {{< record "The item … ; its total …" >}}
+
+   ::: {.check}
+   **Notebook, 148 JD.** The row field decides the groups: by type, by
+   week or by item. The Grand Total stays 355 JD.
+   :::
+
+   ::: {.choice}
+   Rows **Item**, Values **Sum of Total**. What does each row show?
+
+   - [x] one item, and the money of all its sales
+
+     Why: Excel adds up the totals of each item.
+
+   - [ ] one sale of the list
+
+     Why: A PivotTable groups the sales; it does not copy them.
+
+   - [ ] the number of sales of each item
+
+     Why: That is Count of sales, not Sum of Total.
    :::
 
 ## Experiment 2 · New questions, same table
 
-**Aim:** change the rows, the chart and the calculation, and keep the table
-up to date. *(Lesson notes 10.2 · about 16 minutes)*
+**The idea:** the same PivotTable answers new questions. Change the **row
+field** (Week instead of Type) or the calculation (**Value Field Settings
+› Average**). **PivotTable Analyze › PivotChart › Line** makes a **line
+chart** of the weeks. A PivotTable does not change by itself: after a
+change in the list, click **PivotTable Analyze › Refresh**.
 
-1. Drag **Type** out of Rows, and drag **Week** into Rows.
+**Aim:** ask new questions to the same table, and keep it up to date.
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
+
+1. Drag **Type** out of Rows, and drag **Week** into Rows. Then click a
+   cell of the PivotTable and choose **PivotTable Analyze › PivotChart ›
+   Line** › OK.
 
    {{< record "Weeks 1 to 4: … ; the best … ; the weakest …" lines=2 >}}
 
    ::: {.check}
    **87, 63, 112 and 93 JD.** The **third** week was the best, and the
-   **second** the weakest. The Grand Total stays 355 JD.
+   **second** the weakest. The line goes down from week 1 to week 2 and
+   from week 3 to week 4. The Grand Total stays 355 JD.
    :::
 
    ::: {.order}
-   Weeks 1 to 4 show 87, 63, 112 and 93 JD. Put the weeks in order, from the
-   best to the weakest.
+   Put the weeks of March in order, from the best to the weakest.
 
    1. week 3: 112 JD
    2. week 4: 93 JD
    3. week 1: 87 JD
    4. week 2: 63 JD
 
-   Why: The third week was the best, and the second the weakest. The Grand Total stays 355 JD.
+   Why: The third week was the best, and the second the weakest.
    :::
 
-2. Click a cell of the PivotTable. Choose **PivotTable Analyze ›
-   PivotChart**, then **Line**, and click OK.
-
-   {{< record "Where does the line go down?" >}}
-
-   ::: {.check}
-   From **week 1 to week 2** (87 → 63) and from **week 3 to week 4** (112 →
-   93). A line chart shows a change over time.
-   :::
-
-   ::: {.choice}
-   Where does the line go down?
-
-   - [x] from week 1 to week 2, and from week 3 to week 4
-
-     Why: 87 → 63 and 112 → 93. A line chart shows a change over time.
-
-   - [ ] from week 2 to week 3
-
-     Why: 63 → 112: the line goes up.
-
-   - [ ] nowhere: the sales grew every week
-
-     Why: The second week fell.
-   :::
-
-3. Go to the sheet **March**. Change the total of the bag in week 3 from
+2. Go to the sheet **March**. Change the total of the bag in week 3 from
    **48** to **58**. Look at week 3 in the PivotTable. Then choose
    **PivotTable Analyze › Refresh**.
 
@@ -135,18 +164,23 @@ up to date. *(Lesson notes 10.2 · about 16 minutes)*
 
    ::: {.check}
    **112** before Refresh, **122** after. A PivotTable does not change by
-   itself: you refresh it after a change. Now change 58 back to **48** and
-   refresh again.
+   itself. Now change 58 back to **48** and refresh again.
    :::
 
    ::: {.fill answer="122" unit="JD" hint="The bag in week 3 is now 10 JD more."}
    The bag of week 3 is now 58 JD. What does week 3 show **after** Refresh?
 
-   Why: 112 + 10 = 122 JD. Before Refresh it still shows 112: a PivotTable does not change by itself, so you refresh it after a change.
+   Why: 112 + 10 = 122 JD. Before Refresh it still shows 112.
    :::
 
-4. Put **Type** in Rows again (instead of Week). Click **Sum of Total
-   (JD)** in Values, choose **Value Field Settings**, then **Average**.
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" >}}
+
+3. In **Pivot Lab**, choose Rows **Type** and Values **Average of Total**.
+   Which type has the biggest average sale?
 
    {{< record "Average sale: Paper … ; Drinks … ; Bags …" >}}
 
@@ -160,7 +194,7 @@ up to date. *(Lesson notes 10.2 · about 16 minutes)*
 
    - [x] Paper, 20.6 JD
 
-     Why: Paper 20.6, Bags 19.5 and Drinks 7.1 JD: the same list answers a new question.
+     Why: Paper 20.6, Bags 19.5 and Drinks 7.1 JD.
 
    - [ ] Bags, 19.5 JD
 
@@ -173,32 +207,41 @@ up to date. *(Lesson notes 10.2 · about 16 minutes)*
 
 ## Experiment 3 · An AI summary
 
-**Aim:** let an AI tool describe the numbers, then check every number with
-the PivotTable. *(Lesson notes 10.3 · about 14 minutes)*
+**The idea:** an AI tool can describe the numbers fast, but a sentence can
+sound sure and still be wrong: an AI can even invent a number (a
+**hallucination**). Give it only the **summary table**, with no personal
+data. Ask for three short sentences, each with a number, and check every
+number with the PivotTable. A **data insight** is a short, true sentence
+such as "Paper sold the most". Add an **AI-use statement** under the text.
 
-1. Set the Values back to **Sum** (Value Field Settings › Sum). Select the
-   PivotTable and copy it. In the AI assistant, type *Write three short
-   sentences about these sales of March, each with a number:* and paste
-   the table.
+**Aim:** let an AI tool describe the numbers, then check every number.
+
+::: {.part}
+**Part A · In the apps (Excel and an AI assistant)**
+:::
+
+1. Put **Type** in Rows again, with Values **Sum of Total (JD)**. Copy this
+   prompt into the AI assistant: it holds the PivotTable of March. Compare
+   each sentence of the answer with your PivotTable.
+
+   ::: {.prompt}
+   Write three short sentences about these sales of March, each with a
+   number. Paper: 206 JD. Drinks: 71 JD. Bags: 78 JD. Grand Total: 355 JD.
+   :::
 
    {{< record "Numbers that are right … ; wrong or invented …" lines=2 >}}
 
    ::: {.check}
    Check each number with the table: Paper **206**, Drinks **71**, Bags
-   **78**, total **355** JD. If the AI writes a share, check it with a
-   calculator (Paper: 206 ÷ 355 ≈ 58 %). Delete or correct every wrong or
-   invented number. The table has no personal data, so you may paste it.
+   **78**, total **355** JD. Check a share with a calculator (Paper: 206 ÷
+   355 ≈ 58 %). Delete or correct every wrong or invented number.
    :::
 
    ::: {.sort}
-   An AI wrote five sentences about March. Check each number with the table:
-   Paper 206, Drinks 71, Bags 78, total 355 JD.
+   An AI wrote four sentences about March. Check each number with the
+   table: Paper 206, Drinks 71, Bags 78, total 355 JD.
 
    Right: keep it
-   :   Paper sold 206 JD.
-
-       Why: The table says 206.
-
    :   The total of March was 355 JD.
 
        Why: The Grand Total is 355 JD.
@@ -217,57 +260,17 @@ the PivotTable. *(Lesson notes 10.3 · about 14 minutes)*
        Why: The Grand Total is 355 JD.
    :::
 
-2. Open **Summary Check** on the interactive lesson. Mark each of the six
-   sentences true or wrong.
+2. Under the PivotTable, paste only the AI sentences that are true, and
+   type after them: **(AI-generated, checked with the PivotTable)**. How
+   many sentences are true?
 
-   {{< record "The wrong sentences" lines=2 >}}
-
-   ::: {.check}
-   **Wrong:** "Bags sold the most" (Paper did, 206 JD); "sales grew every
-   week" (the second week fell); "the biggest sale was a bag for 48 JD"
-   (the notebooks, 60 JD). The other three are true.
-   :::
-
-   ::: {.sort}
-   True or wrong? Sort the six sentences of Summary Check.
-
-   True
-   :   Total sales in March were 355 JD.
-
-       Why: The Grand Total is 355 JD.
-
-   :   The third week was the best, with 112 JD.
-
-       Why: 112 JD is the highest week.
-
-   :   The average sale was about 15 JD.
-
-       Why: 355 ÷ 24 ≈ 14.8 JD.
-
-   Wrong
-   :   Bags sold the most, because each bag is expensive.
-
-       Why: Paper sold the most (206 JD); Bags only 78 JD.
-
-   :   Sales grew every week.
-
-       Why: The second week (63 JD) was lower than the first (87 JD).
-
-   :   The biggest single sale was a bag for 48 JD.
-
-       Why: The biggest sales were notebooks for 60 JD.
-   :::
-
-3. Write your own summary under the PivotTable or in Word: three true
-   sentences, each with a number, and one sentence of AI-use statement.
-
-   {{< record "My best sentence, and my AI-use statement" lines=3 >}}
+   {{< record "True sentences" >}}
 
    ::: {.check}
-   A good summary: "March sales were 355 JD. Paper sold the most, 206 JD.
-   The best week was the third, with 112 JD." A good statement: "I used
-   Copilot for a first draft and checked every number with the
-   PivotTable."
+   Keep only sentences whose numbers are in the PivotTable, for example
+   "March sales were 355 JD. Paper sold the most, 206 JD. The best week was
+   the third, with 112 JD." The line in brackets is a short AI-use
+   statement.
    :::
 
    ::: {.choice}
@@ -286,19 +289,68 @@ the PivotTable. *(Lesson notes 10.3 · about 14 minutes)*
      Why: Paper sold the most (206 JD), not Bags.
    :::
 
-## Table of results
-
-Copy your key results here. Your teacher checks this table before the end of
-the lecture.
-
-::: {.record-table}
-| Experiment | What you record                                | Your result |
-|:-------:|---------------------------------------------|--------------------------|
-| 1          | The totals of the three types, and the Grand Total |         |
-| 2          | The best and the weakest week                  |             |
-| 2          | Week 3 before and after Refresh                |             |
-| 2          | The biggest average sale                       |             |
-| 3          | The wrong sentences of Summary Check           |             |
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
 :::
 
-Then do **Huda's April meeting**, the Game challenge of this lecture.
+{{< sim file="sims/summary-check.html" poster="sims/summary-check.png" title="Summary Check: is the AI right?" >}}
+
+3. In **Summary Check**, mark each of the six AI sentences true or wrong.
+   Which sentences are wrong?
+
+   {{< record "The wrong sentences" lines=2 >}}
+
+   ::: {.check}
+   **Wrong:** "Bags sold the most" (Paper did, 206 JD); "Sales grew every
+   week" (the second week fell); "The biggest single sale was a bag for 48
+   JD" (the notebooks, 60 JD). The other three are true.
+   :::
+
+   ::: {.sort}
+   True or wrong? Sort the sentences of Summary Check.
+
+   True
+   :   Total sales in March were 355 JD.
+
+       Why: The Grand Total is 355 JD.
+
+   :   The third week was the best, with 112 JD.
+
+       Why: 112 JD is the highest week.
+
+   Wrong
+   :   Bags sold the most, because each bag is expensive.
+
+       Why: Paper sold the most (206 JD); Bags only 78 JD.
+
+   :   Sales grew every week.
+
+       Why: The second week (63 JD) was lower than the first (87 JD).
+   :::
+
+## Table of results
+
+Copy your key results here: the rows of the parts that you did. Your
+teacher checks this table before the end of the lecture.
+
+::: {.record-table}
+| Experiment | What you record                                   | Your result |
+|:-------:|------------------------------------------------|-------------------------|
+| 1 A        | The totals of the three types, and the Grand Total |             |
+| 1 B        | The item with the most money                      |             |
+| 2 A        | The best and the weakest week; week 3 after Refresh |           |
+| 2 B        | The biggest average sale                          |             |
+| 3 A        | A wrong AI number, and my best sentence           |             |
+| 3 B        | The wrong sentences of Summary Check              |             |
+:::
+
+## Game challenge · Huda's April meeting
+
+Finished early? In April the Sunrise shop sold **400 JD**: **Paper 180
+JD**, **Drinks 95 JD** and **Bags 125 JD**; the four weeks had **90, 110,
+85 and 115 JD**. An AI tool writes: "Drinks sold the most. The best week
+was the fourth, with 115 JD. Sales fell in the third week." Which sentence
+is wrong? Then check your answers in **Try it 4** of the interactive
+lesson.
+
+{{< record "The wrong sentence … ; the true fact …" >}}

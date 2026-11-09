@@ -6,10 +6,9 @@ ilos: [A2, B1]
 format: lesson-html
 ---
 
-This page is the interactive version of the lesson notes (PDF). Each section
-starts with a problem at a game studio. Then it explains the idea behind it.
-It ends with a **Do it** task and one set of questions. Tap, sort or type
-your answer: the page checks it at once and tells you why.
+Each section: a question from a game studio, the idea, a **Do it** task and a short **Try it**.
+The page checks every answer at once and tells you why. More examples
+and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
@@ -47,22 +46,6 @@ Put the layers of the Android stack in order, from the bottom up.
 
 Why: The kernel is the lowest layer; the apps are on top and never talk to the hardware directly.
 :::
-
-::: {.choice}
-Which iOS layer does the job of the Linux kernel?
-
-- [x] Apple's kernel
-
-  Why: It runs the processes, the memory, the drivers and the power, like the Linux kernel.
-
-- [ ] the app framework
-
-  Why: The framework is near the top; it uses the layers below it.
-
-- [ ] the apps
-
-  Why: The apps are the top layer: they ask the OS for everything.
-:::
 :::
 
 ::: {.callout-tip title="Try it 1 · Layers"}
@@ -74,20 +57,10 @@ Which layer runs directly on the hardware?
 
     Why: The kernel is the lowest layer.
 
-Which layer is at the top of the stack?
-:   the apps
-
-    Why: The apps sit on all the other layers.
-
 Which layer may each layer use?
 :   only the layer below it
 
     Why: Each layer uses only the layer below it.
-
-Which job does the kernel do?
-:   manages processes, memory and drivers
-
-    Why: The kernel manages processes, memory, drivers and power.
 :::
 :::
 
@@ -109,8 +82,7 @@ An `.apk` cannot be installed on an iPhone. Each platform needs its own build.
 :::
 
 ::: {.callout-note title="Do it · Your phone's stack"}
-Which OS does your phone run, and who made the phone and the OS? Find two
-lines of the table that differ for your phone and a phone of the other OS.
+Read the table of Android and iOS in the figure, line by line.
 
 ::: {.sort}
 Android or iOS? Sort the lines of the table.
@@ -145,22 +117,6 @@ iOS
 
     Why: Metal is Apple's graphics library.
 :::
-
-::: {.choice}
-A Samsung phone runs Android 14. Who made the phone, and who made the OS?
-
-- [x] Samsung made the phone; Google made Android.
-
-  Why: Android runs on the phones of many makers.
-
-- [ ] Samsung made both.
-
-  Why: Samsung makes the phone, but Android comes from Google.
-
-- [ ] Google made both.
-
-  Why: Google makes Android; Samsung makes this phone.
-:::
 :::
 
 ::: {.callout-tip title="Try it 2 · Android or iOS?"}
@@ -172,11 +128,6 @@ Which OS has the Linux kernel?
 
     Why: Android is built on the Linux kernel.
 
-Which OS uses Metal for graphics?
-:   iOS
-
-    Why: Metal is Apple's graphics interface.
-
 Which OS runs on the phones of many makers?
 :   Android
 
@@ -186,11 +137,6 @@ Which OS installs `.ipa` packages?
 :   iOS
 
     Why: An iPhone build is an .ipa.
-
-Who makes both the iPhone and its OS?
-:   Apple
-
-    Why: Apple makes the phone and iOS.
 :::
 :::
 
@@ -229,22 +175,6 @@ Where does the game save its progress?
 
   Why: An app cannot read or write the files of another app.
 :::
-
-::: {.choice}
-Which button removes the progress of the game?
-
-- [x] Clear storage (or deleting the app)
-
-  Why: Both remove the data in the sandbox.
-
-- [ ] Clear cache
-
-  Why: Clear cache removes only temporary files.
-
-- [ ] turning off the microphone
-
-  Why: A permission controls a device, not the saved data.
-:::
 :::
 
 ::: {.callout-tip title="Try it 3 · The sandbox"}
@@ -256,20 +186,10 @@ Pocket Quest wants the camera. Whom does it ask?
 
     Why: Apps reach the hardware only through the OS.
 
-What does the game get after Rami allows the camera?
-:   the picture of the camera only
-
-    Why: A permission opens only that one device.
-
 Can Pocket Quest read the files of the messages app?
 :   no, they are in another sandbox
 
     Why: Each app has its own sandbox.
-
-What removes the saved progress of a game?
-:   clearing its storage or deleting the app
-
-    Why: The progress is in the game's own sandbox.
 :::
 :::
 
@@ -303,23 +223,6 @@ Put the states of a game in order.
 
 Why: The player starts the game, leaves it, the OS pauses it, and at last the OS may end it.
 :::
-
-::: {.choice}
-After many other apps, the game starts again from its title screen. What
-happened?
-
-- [x] The OS ended it to free RAM; a good game loads its saved progress.
-
-  Why: When RAM is low, the OS ends background apps; only the saved progress survives.
-
-- [ ] The game crashed.
-
-  Why: The OS closed it on purpose; that is not a crash.
-
-- [ ] The game was updated.
-
-  Why: Nothing was installed; the OS needed the RAM.
-:::
 :::
 
 ::: {.callout-tip title="Try it 4 · States"}
@@ -340,11 +243,6 @@ The game is in RAM but gets no CPU time. Which state?
 :   suspended
 
     Why: A suspended app waits in RAM without CPU time.
-
-RAM is low. What may happen to a game in the background?
-:   it is ended
-
-    Why: The OS ends background apps to free RAM.
 :::
 :::
 
@@ -362,20 +260,10 @@ and at the end he opens the game again.
 Choose the right answer.
 
 ::: {.match extra="the game gets more CPU time|it moves to the cloud"}
-Rami taps the icon. In which state is the game?
-:   foreground
-
-    Why: It starts on the screen: the foreground.
-
 On P8 the game stays in the background a few seconds. What does iOS do?
 :   suspends it
 
     Why: iOS suspends background apps quickly.
-
-RAM is low on P5. What does Android do?
-:   ends the game in the background
-
-    Why: Android ends background apps when RAM is low.
 
 Rami opens the game again after it was ended. What does he see?
 :   level 3 from the saved point
@@ -388,25 +276,10 @@ Rami opens the game again after it was ended. What does he see?
 Choose the right answer.
 
 ::: {.match extra="Vulkan|only on Quit"}
-Which package does Byte Bay build for P8?
-:   .ipa
-
-    Why: P8 is an iPhone: it needs an .ipa.
-
-Which graphics interface does the P8 build use?
-:   Metal
-
-    Why: iOS games draw with Metal.
-
 Can the P5 build (.apk) be installed on P8?
 :   no, P8 needs its own .ipa build
 
     Why: An .apk is made for the Android stack.
-
-When is the right moment for the game to save?
-:   when it leaves the foreground
-
-    Why: The OS can end the game later without warning.
 :::
 :::
 

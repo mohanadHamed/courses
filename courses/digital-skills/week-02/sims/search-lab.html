@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Search Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .score { margin-left: auto; color: var(--sim-accent); font-variant-numeric: tabular-nums; }
+    .sim .need { border: 1.5px solid #ffc078; background: #fff8f1; border-radius: 12px; padding: 8px 12px; font-weight: 800; margin-bottom: 8px; }
+    .sim .need small { display: block; font-weight: 600; color: var(--sim-muted); font-size: .8rem; }
+    .sim .box { display: flex; align-items: center; gap: 8px; border: 1.5px solid #dee2e6; border-radius: 999px; padding: 6px 14px; margin-bottom: 10px; background: #fff; font-weight: 700; }
+    .sim .box svg { width: 18px; height: 18px; flex: none; }
+    .sim .results { display: grid; gap: 8px; }
+    .sim .res { display: block; width: 100%; text-align: left; padding: 8px 12px; background: #fff; color: inherit; border: 1.5px solid #eee3d9; box-shadow: none; border-radius: 12px; font-weight: 600; }
+    .sim .res .url { display: block; font-size: .8rem; color: #2b8a3e; font-weight: 700; word-break: break-all; }
+    .sim .res .url .ad { display: inline-block; margin-right: 6px; padding: 0 6px; border-radius: 4px; background: #343a40; color: #fff; font-size: .72rem; }
+    .sim .res .title { display: block; color: #1c4fbf; font-size: 1rem; font-weight: 800; margin: 2px 0; }
+    .sim .res .snip { display: block; font-size: .85rem; color: var(--sim-muted); }
+    .sim .res.good { background: #d3f9d8; border-color: #2b8a3e; }
+    .sim .res.bad { background: #ffe3e3; border-color: #c92a2a; }
+    .sim .message.bad { color: #c92a2a; }
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Search Lab: which result do you open?</h1>
+  <p class="note">Practice results of a search engine, made up for this lesson. Tap the result that you trust. Nothing is sent to the Internet.</p>
+  <div class="hud"><span id="round"></span><span class="score" id="score">0 on the first try</span></div>
+  <div class="need" id="need"></div>
+  <div class="box"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="none" stroke="#1c7ed6" stroke-width="2.4"/><line x1="12.5" y1="12.5" x2="18" y2="18" stroke="#1c7ed6" stroke-width="2.6" stroke-linecap="round"/></svg><span id="keys"></span></div>
+  <div class="results" id="results"></div>
+  <div class="controls"><button id="next" type="button" hidden>Next search ▶</button><button id="restart" type="button" class="ghost">Restart</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  // Three searches (Lecture 2, section 2.1 and Experiment 1). Each result:
+  // [ad?, web address, title, text, right?, why]. The rule: open the website
+  // of the owner of the fact, skip ads and forums, and check the year.
+  const SEARCHES = [
+    {
+      need: "The first day of the final exams at Sunrise College this year (2026–2027).",
+      keys: "Sunrise College academic calendar",
+      results: [
+        [true, "www.exam-dates-now.com", "Exam dates for all universities: fast!", "Get every exam date in one app.", false,
+          "This is an ad: someone paid for it, and it is not the college's website."],
+        [false, "www.sunrise-college.edu.jo/calendar", "Academic calendar 2026–2027", "The official calendar: the first day of classes, holidays and the final exams.", true,
+          ".edu.jo is a university website in Jordan: the college's own page, and it is for this year."],
+        [false, "forum.student-chat.com", "Exam dates? Anyone know?", "2021 · I think the exams start on Sunday…", false,
+          "A forum shows what people think, and this post is from 2021."],
+        [false, "www.sunrise-college.edu.jo/calendar-2023", "Academic calendar 2023–2024", "The official calendar of the year 2023–2024.", false,
+          "The website is official, but the page is old: its dates are for 2023–2024."],
+      ],
+    },
+    {
+      need: "The opening hours of Sunrise Company's shop.",
+      keys: "Sunrise Company shop hours",
+      results: [
+        [false, "www.sunrise-company.com/contact", "Contact us · Sunrise Company", "Shop hours: 9 a.m. to 6 p.m., Saturday to Thursday.", true,
+          "The company's own website is the real source of its opening hours."],
+        [false, "www.city-reviews.com/sunrise", "Sunrise shop: 3 reviews", "2019 · \"They are open every day, I think.\"", false,
+          "A review shows what one customer thinks, and it is old."],
+        [true, "www.best-shops-amman.com", "The 10 best shops in Amman", "Sponsored · Find a shop near you.", false,
+          "This is an ad, and the list is not from the company."],
+        [false, "www.video-site.com/watch?v=sun", "A day at Sunrise Company (video)", "A video for customers, 4 minutes.", false,
+          "A video takes time and may be old: the hours are on the company's website."],
+      ],
+    },
+    {
+      need: "The price of the Microsoft 365 plan for students.",
+      keys: "Microsoft 365 students price",
+      results: [
+        [true, "www.cheap-office-keys.com", "Office for 2 JD! Buy a key now", "Sponsored · A key for every app.", false,
+          "This is an ad, and a very cheap key is often not legal."],
+        [false, "my-tech-blog.net/office-prices", "Office prices (my list)", "2018 · All the prices that I know.", false,
+          "A personal blog from 2018: its prices are old."],
+        [false, "www.microsoft.com/microsoft-365/students", "Microsoft 365 for students", "Plans and prices for students, from Microsoft.", true,
+          "Microsoft makes the plan, so its own website has the real price."],
+        [false, "forum.games-help.com", "Is Office free for students?", "2022 · Some people say yes, some say no.", false,
+          "A forum shows opinions. Read the answer on the official website."],
+      ],
+    },
+  ];
+  const $ = (id) => document.getElementById(id);
+  const fixed = /fixed-order/.test(location.search);
+  const shuffle = (a) => fixed ? a.slice() : a.map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
+  let k, first, score, done;
+  function say(t, c) { $("msg").innerHTML = t; $("msg").className = "message " + (c || ""); }
+  function show() {
+    const s = SEARCHES[k];
+    $("round").textContent = "Search " + (k + 1) + " of " + SEARCHES.length;
+    $("need").innerHTML = "<small>You need:</small>" + s.need;
+    $("keys").textContent = s.keys;
+    first = true; done = false; $("next").hidden = true;
+    say("Read the web address of each result. Which one do you open?");
+    $("results").innerHTML = "";
+    shuffle(s.results).forEach((r) => {
+      const [ad, url, title, text] = r;
+      const b = document.createElement("button"); b.type = "button"; b.className = "res";
+      b.innerHTML = '<span class="url">' + (ad ? '<span class="ad">Ad</span>' : "") + url + '</span><span class="title">' + title +
+        '</span><span class="snip">' + text + "</span>";
+      b.addEventListener("click", () => pick(r, b));
+      $("results").appendChild(b);
+    });
+  }
+  function pick(r, b) {
+    if (done) { say(k + 1 < SEARCHES.length ? "Press <b>Next search</b>." : "Done. Press <b>Restart</b> to play again."); return; }
+    const [, , , , right, why] = r;
+    if (!right) { b.classList.add("bad"); first = false; say("Not this one: " + why, "bad"); return; }
+    b.classList.add("good"); done = true; if (window.Kit && Kit.good) Kit.good();
+    if (first) score++;
+    $("score").textContent = score + " on the first try";
+    if (k + 1 < SEARCHES.length) { $("next").hidden = false; say("✓ " + why, "good"); }
+    else say("✓ " + why + " Done: " + score + " of " + SEARCHES.length + " on the first try. Open the website of the owner of the fact, skip ads and forums, and check the year.", "good");
+  }
+  function start() { k = 0; score = 0; $("score").textContent = "0 on the first try"; show(); }
+  $("next").addEventListener("click", () => { if (k + 1 < SEARCHES.length) { k++; show(); } });
+  $("restart").addEventListener("click", start);
+  start();
+})();
+</script>
+</body>
+</html>

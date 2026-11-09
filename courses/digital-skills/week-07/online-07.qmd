@@ -1,9 +1,8 @@
 ---
-title: "AI with Excel: Formulas, Clean Data and the Right Chart"
-description: "Online activity · Ask an AI tool for an Excel formula and test it, clean a messy list with AI advice and your own checks, and choose the right chart for a question. About 60 minutes."
+title: "Excel: Clean Data, the Right Chart and a Formula from AI"
+description: "Online activity · Clean a messy list in Excel, choose the right chart for a question, and test a formula from an AI tool. About 45 minutes."
 online: 7
 due: "before lecture 8"
-marks: 6
 content: mix
 ilos: [C2, C4, B1]
 toc-title: "In this activity"
@@ -15,11 +14,12 @@ format: lesson-html   # online activity: the tasks PDF is made by printing this 
 - **What you need:** Excel (the desktop app, Excel on the web at
   `office.com`, or the free phone app) and a free AI chat tool (for example
   Microsoft Copilot with your university account, ChatGPT or Gemini).
-- **Time:** about 60 minutes. Work alone, at your own speed.
+- **Time:** about 45 minutes. Work alone, at your own speed.
 - **How it works:** do Steps 1–3 on this page. Each step has a short text, a
   simulator and a quick check. Then do the **Tasks to submit**.
-- **What you submit:** one Excel file and three short answers, on the
-  university e-learning platform, before lecture 8.
+- **What you submit:** one Excel file and two short answers, on the
+  university e-learning platform, before lecture 8. Each Step shows how to
+  do its task, with a model. You never write a prompt: you copy it.
 - **You need Lectures 5, 6 and 7:** prompts, formulas, sort, filter and
   charts.
 - **Never type personal data into an AI tool.** Use only the made-up shop
@@ -42,6 +42,19 @@ format: lesson-html   # online activity: the tasks PDF is made by printing this 
 ![A clear prompt for a formula.](images/ai-formula.png){width=100%}
 
 {{< sim file="sims/ai-formula-lab.html" poster="sims/ai-formula-lab.png" title="AI Formula Lab: ask for a formula, then test it" height="900" >}}
+
+::: {.callout-note title="Model · Sami asks for a formula, and tests it"}
+1. Sami's prices are in B2:B6. He copies this prompt into an AI chat:
+
+   ::: {.prompt}
+   My data is in A1:B6. Column B is the Price in JD, from B2 to B6. Write
+   one Excel formula for the highest price.
+   :::
+
+2. The AI answers `=MAX(B2:B6)`. Sami writes it in B8, with the label
+   *Highest price* in A8.
+3. He tests it: the biggest number in B2:B6 is the one that B8 shows.
+:::
 
 ::: {.callout-tip title="Try it 1 · Formulas from an AI"}
 Use AI Formula Lab. Choose the right answer.
@@ -74,21 +87,31 @@ How do you check a formula from an AI?
 :::
 :::
 
-## Step 2 · Clean the data with AI advice {.study}
+## Step 2 · Clean the data in Excel {.study}
 
 - Data from paper or from many people is often **messy**: empty rows, rows
   typed twice, extra spaces, "drinks" and "Drinks", "12 JD" as text.
 - Messy data gives wrong results: a row typed twice counts twice, a name
   with an extra space is a new name for a filter, and SUM skips text.
-- An AI tool can list the steps. **You** check each step before you do it.
 - The tools: delete empty rows; **Data › Remove Duplicates**; `=TRIM(B3)`
   for spaces; **Find and Replace** for spellings; type numbers without
   "JD".
-- Never delete real rows just because an AI says so.
+- An AI tool can list cleaning steps, but you check each one: never
+  delete real rows because an AI says so.
 
 ![Clean the data before you count or chart it.](images/clean-data.png){width=100%}
 
 {{< sim file="sims/clean-data-lab.html" poster="sims/clean-data-lab.png" title="Clean Data Lab: tidy the sales list with AI advice" height="860" >}}
+
+::: {.callout-note title="Model · Lina cleans three mistakes"}
+1. Two rows are the same sale, typed twice: she selects the table and
+   chooses **Data › Remove Duplicates**.
+2. *fruit* and *Fruit* are one type: **Find and Replace** makes every one
+   *Fruit*.
+3. A total says *8 JD*: she types **8**, a number.
+
+Now SUM counts every sale once.
+:::
 
 ::: {.callout-tip title="Try it 2 · Clean data"}
 Use Clean Data Lab. Choose the right answer.
@@ -121,16 +144,17 @@ What is the SUM of the clean list?
 :::
 :::
 
-## Step 3 · Check the AI's chart advice {.study}
+## Step 3 · The right chart for the question {.study}
 
-- An AI can suggest a chart and a title. Its advice is not always right.
-- Check it with the rule of Lecture 7: **compare** amounts → column chart;
-  **change over time** → line chart; **parts of one whole** → pie chart.
+- Choose the chart with the rule of Lecture 7: **compare** amounts →
+  column chart; **change over time** → line chart; **parts of one whole**
+  → pie chart.
+- An AI can suggest a chart too, but check its advice with the same rule.
 - Make the chart from the **clean** list: a chart of messy data shows wrong
   numbers.
 - Check the title: it says what the chart shows, never "Chart 1".
-- In **Chart Lab**, try a pie chart of the sales per day, as a weak AI
-  answer may advise. Read what the lab says, then make the right chart.
+- In **Chart Lab**, try a pie chart of the sales per day. Read what the lab
+  says, then make the right chart.
 
 ![The right chart for the question.](images/chart-types.png){width=100%}
 
@@ -164,7 +188,7 @@ Your chart shows Bags 96 JD, but the paper says 60 JD. What happened?
 
 ## Tasks to submit {.tasks}
 
-Do the tasks alone. Your teacher marks them (6 marks). Use only this made-up
+Do the tasks alone. Use only this made-up
 data.
 
 Type this list into a new Excel workbook, **with its mistakes** (it comes
@@ -181,37 +205,42 @@ from a paper notebook of the Sunrise shop):
 | Tue | Juice | Drinks | 24 | 12 JD |
 | Wed | Notebook | Paper | 8 | 16 |
 
-### Task 1 · Clean the list (2 marks)
+### Task 1 · Clean the list
 
-1. Ask an AI tool how to clean this list. Copy its steps into your answer
-   sheet (a second sheet named *AI steps*).
-2. Clean the list in Excel: one duplicate row, two spellings of the Type,
-   and one total as text. Do not delete real sales.
-3. Save it as `sales_clean.xlsx`.
+In Excel, clean the list: delete the row that is typed twice, write the
+**Type** with the same spelling in every row, and change the total *12 JD*
+to the number **12**. Do not delete real sales. Save the file as
+`sales_clean.xlsx`. (Step 2 and its model show how.)
 
-### Task 2 · Two formulas from AI (2 marks)
+### Task 2 · A formula from AI, tested
 
-1. Ask an AI tool for a formula for the **total** of all the sales, and one
-   for the **average** sale. Tell it where your data is.
-2. Put the formulas under the list, with a label next to each.
-3. Check each result by hand. The right results are 133 JD and 19 JD.
+1. Copy this prompt into an AI tool:
 
-### Task 3 · A chart and short answers (2 marks)
+   ::: {.prompt}
+   My data is in A1:E8 of Excel. Column E is the Total in JD, from E2 to
+   E8. Write one Excel formula for the total of all the sales.
+   :::
 
-1. Make a small table *Type / Sales* from the clean list, and a **column
-   chart** of it with a real title.
+2. Put the formula under the list, with the label *Total* next to it.
+   (Step 1 and its model show how.)
 
-a) Write your prompt for Task 2 and say if the first AI answer was right.
+a) Write the formula that the AI gave.
 
-{{< answer-space lines=3 >}}
+{{< answer-space lines=1 >}}
 
-b) Which AI step did you **not** follow, or change, and why? If all steps
-were good, say how you checked them.
+b) Does it give **133** JD? Write **yes** or **no**.
 
-{{< answer-space lines=3 >}}
+{{< answer-space lines=1 >}}
+
+### Task 3 · A column chart
+
+Next to the list, type this small table, and make a **column chart** of it
+with a real title: **Type, Sales (JD)**; **Paper, 60**; **Drinks, 37**;
+**Bags, 36**. (Step 3 shows how.)
+
+*Submit:* the file `sales_clean.xlsx` (Tasks 1–3).
 
 ## How to submit
 
-Upload `sales_clean.xlsx` (with the sheets *Sales* and *AI steps*) and your
-answers to Task 3 to the university e-learning platform, **before
-lecture 8**.
+Upload `sales_clean.xlsx` and your two answers to Task 2 to the university
+e-learning platform, **before lecture 8**.

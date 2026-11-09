@@ -2,9 +2,9 @@
 --
 -- A session page (AUTHORING.md, "Units and sessions"): lecture (`lesson: N`),
 -- seminar (`seminar: N`), practice session (`practice: N`, Digital Skills),
--- online activity (`online: N`, with `due:` and `marks:`; blended courses;
+-- online activity (`online: N`, with `due:`; blended courses;
 -- older pages: `lesson: N` and `online: true`) or homework (`homework: U`,
--- the unit, with `due:` and `marks:`):
+-- the unit, with `due:`):
 --   HTML: hero header (course, title, lecture/time chips, PDF and slides
 --         buttons) + "Today you will learn" card with the ILOs.
 --   PDF:  passes theme values to the Typst template (title band) + ILO card.
@@ -194,7 +194,7 @@ local CONTENT = {
 }
 
 -- Chips under the title: the session (number, what it practises, time) or
--- homework (number, the lectures of its unit, due, marks). Never a week:
+-- homework (number, the lectures of its unit, due). Never a week:
 -- courses count sessions.
 local function page_chips(meta, course)
   local chips = {}
@@ -209,14 +209,12 @@ local function page_chips(meta, course)
       table.insert(chips, string.format("After lectures %d–%d", 2 * sess.n - 1, 2 * sess.n))
     end
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
-    if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
   elseif sess.kind == "online" then
     table.insert(chips, sess.label)
     table.insert(chips, "💻 Online")
     local content = CONTENT[str(meta.content or "")]
     if content then table.insert(chips, content) end
     if meta.due then table.insert(chips, "Due: " .. str(meta.due)) end
-    if meta.marks then table.insert(chips, str(meta.marks) .. " marks") end
   else
     -- What a seminar or practice session practises; also a lecture of a
     -- practice week of face-to-face Digital Skills (`practises` in its schedule).
@@ -272,7 +270,10 @@ local function hero_note(meta, slides, online, sheet)
     table.insert(lines, "In class, follow the worksheet (PDF): do each experiment on the computer and record your results. "
       .. "On this page every step has its result. The lesson notes (PDF) are a short reference.")
   elseif online then
-    table.insert(lines, "Work through the steps on this page, then do the tasks and submit them on the university e-learning platform.")
+    table.insert(lines, "Work through the steps on this page, then do the tasks and submit them on the university e-learning platform. "
+      .. "Type your answers in the tasks PDF (it has boxes to fill in), save it and upload it, or print it and write by hand.")
+  elseif meta.homework then
+    table.insert(lines, "Type your answers in the PDF (it has boxes to fill in), save it and upload it, or print it and write by hand.")
   elseif meta.seminar or meta.practice then
     table.insert(lines, "No new ideas today: you apply the lectures you had. Do each activity alone, then open \"Check your result\".")
   elseif slides then
@@ -300,9 +301,9 @@ local function html_lesson(doc, course)
     and file_exists(pandoc.path.join({ dir, stem .. "-sheet.qmd" }))
   local book = file_exists(pandoc.path.join({ dir, stem .. "-book.qmd" }))
   if meta.homework then
-    table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download PDF</a>', esc(names.homework)))
+    table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download PDF to fill in</a>', esc(names.homework)))
   elseif online then
-    table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Download tasks (PDF)</a>', esc(names.tasks)))
+    table.insert(buttons, string.format('<a class="hero-btn" href="%s" download>⬇ Tasks PDF to fill in</a>', esc(names.tasks)))
   elseif sheet or book then
     if sheet then
       table.insert(buttons, string.format('<a class="hero-btn" href="%s">⬇ Worksheet (PDF)</a>', esc(names.sheet)))
@@ -334,6 +335,10 @@ local function html_lesson(doc, course)
     table.insert(chip_html, '<span class="hero-chip">' .. c .. "</span>")
   end
   table.insert(chip_html, '<span class="hero-chip hero-progress" id="lesson-progress" hidden></span>')
+  if is_printed(meta) then
+    -- Only on paper (and in the PDF): the answer lines are boxes to type in.
+    table.insert(chip_html, '<span class="hero-chip hero-fill">✎ Type in the blue boxes, save, upload</span>')
+  end
 
   local desc = meta.description and str(meta.description) or ""
   local hero = string.format([[
@@ -359,7 +364,8 @@ local function html_lesson(doc, course)
   if is_printed(meta) then
     -- Only on paper: a line for the name and the student number.
     table.insert(blocks, pandoc.RawBlock("html",
-      '<div class="print-only hw-name"><span>Name:</span><i></i><span>Student number:</span><i></i></div>'))
+      '<div class="print-only hw-name"><span>Name:</span><i><a class="answer-field" href="https://answer.field/name" tabindex="-1"></a></i>'
+      .. '<span>Student number:</span><i><a class="answer-field" href="https://answer.field/student-number" tabindex="-1"></a></i></div>'))
   end
 
   local ilos = lesson_ilos(meta, course)

@@ -55,7 +55,7 @@ AI"): at most AI_MAX per file, each with a complete {.prompt} that asks for a
 visual result, what the student should see and 2-3 changes to try: on the
 page as interactive checks, in the notes as closed answers. AI is never part
 of graded work: in a homework a box belongs in an optional section
-"## Optional · Task with AI (no marks) {.extra}".
+"## Optional · Task with AI {.extra}".
 
 FROZEN files were sent to students and keep an older model this semester
 (AUTHORING.md, "Frozen sessions"): they are listed and not checked against
@@ -68,18 +68,28 @@ with an "Aim:"), SHEET_STEPS numbered steps in each, a {{< record >}} field
 and a ::: {.check} after every step, a "Table of results" (::: {.record-table})
 and its start files in files/. The page shows every experiment in its section
 ({{< experiment N >}}, which counts as the section's task), each section of
-the notes points to its experiment, and the slides have an "Experiment N" and
-a "Check N" slide for each.
+the notes points to its experiment, and the slides have a "Your worksheet" and
+a "Results of the worksheet" slide. An experiment with Part A ({.part}, in the
+app) has a Part B (on a simulator or the phone), and no part gives minutes.
+
+A lecture page is taught in class on the smart screen (since 2026-11-08):
+page_minutes() estimates its class time (PAGE_TIME_COST), at most PAGE_TIME;
+the pages of HOME_PAGES (taught before the screens) keep the older sizes.
 
 An online activity (blended course: online-NN.qmd, or an older lesson-NN.qmd
 with `online: true`) has no notes and no slides. It is checked for its own parts (AUTHORING.md, "Blended
 courses"): "Before you start", Steps marked {.study} with one "Try it" each,
-"Tasks to submit" ({.tasks}) with marks and answer space, "How to submit",
-`due:`, `marks:` and a content type (`content:`), which decides what the Steps
+"Tasks to submit" ({.tasks}) with answer space, "How to submit", `due:` (no
+marks anywhere) and a content type (`content:`), which decides what the Steps
 need: sims, a simulator in every Step; mix, at least one simulator; video, a
 {{< watch >}} of an official video with its source, length and the date the
 link was checked; course-video, the video made for the course with its
 captions, poster and script, the captions the same words as the script.
+
+Answers without written English (AUTHORING.md): homework, tasks to submit
+and worksheet records never ask for English text (ESSAY_RE: "explain",
+"why?", "give the reason", "write a sentence", …; a record "because …" or
+lines=3+), and homework and online activities name no marks (MARKS_RE).
 
 In every file of a unit: a fenced div (`::: {...}`) needs a blank line before
 it when it follows text; otherwise pandoc prints the colons as text (a
@@ -100,6 +110,7 @@ import re
 import sys
 
 # (min, max) for each lecture time. None = no limit. Keep in step with AUTHORING.md.
+# The page sizes (try_its, questions) are for a page taught in class (PAGE_TIME).
 SIZES = {
     60: {
         "book_sections": (3, 4),
@@ -107,7 +118,7 @@ SIZES = {
         "examples": (2, None),
         "exercises": (6, 10),
         "try_its": (4, 6),
-        "questions": (15, 28),
+        "questions": (8, 16),
         "sims": (0, 4),
         "slides": (10, 16),
     },
@@ -117,10 +128,46 @@ SIZES = {
         "examples": (4, None),
         "exercises": (10, 16),
         "try_its": (6, 9),
-        "questions": (30, 45),
+        "questions": (18, 28),
         "sims": (1, 3),
         "slides": (20, 28),
     },
+}
+# The page is taught in class (AUTHORING.md, "The page is taught in class"):
+# since 2026-11-08 the teacher teaches from the interactive page on the smart
+# screen of the classroom, so a lecture page fits about 40 minutes of a 60-min
+# lecture and about 65 of a 90-min lecture; the rest of the lecture is for the
+# students' questions and the delays of a real class. The planned minutes are
+# estimated from what the page shows (PAGE_TIME_COST): the explanation is read
+# on the screen and explained in Arabic, the class answers every check and
+# every Try it question, and the teacher shows every simulator and runs every
+# AI prompt. A Task with AI box is an extra (shown when time is left): not
+# counted.
+PAGE_TIME = {60: 40, 90: 65}
+PAGE_TIME_COST = {
+    "start": 2,        # open the page, its first lines and the summary
+    "term": 0.2,       # each term of the glossary
+    "wpm": 40,         # words of explanation per minute (on the screen, explained in Arabic)
+    "check": 1,        # each interactive check of a task (choice, order, sort, fill)
+    "question": 1,     # each Try it question
+    "sim": 2,          # each simulator or mini-game shown on the screen
+    "prompt": 2,       # each AI prompt run on the screen (copy, paste, read the answer)
+}
+# Lectures taught before the smart screens keep their home-study page this
+# semester: the older page sizes (HOME_SIZES) and no class time. Rewrite them
+# for class at the start of the next semester, then empty this set.
+HOME_PAGES = {
+    "courses/game-math/week-01/lesson-01.qmd",
+    "courses/game-math/week-02/lesson-02.qmd",
+    "courses/computing-systems/week-01/lesson-01.qmd",
+    "courses/computing-systems/week-02/lesson-02.qmd",
+    "courses/computing-systems/week-03/lesson-03.qmd",
+    "courses/digital-media/week-01/lesson-01.qmd",
+    "courses/digital-media/week-02/lesson-02.qmd",
+}
+HOME_SIZES = {
+    60: {"try_its": (4, 6), "questions": (15, 28)},
+    90: {"try_its": (6, 9), "questions": (30, 45)},
 }
 # Seminars and practice sessions (no new ideas: activities on earlier lectures).
 SEMINAR_SIZES = {
@@ -142,6 +189,9 @@ AI_MAX = 2
 SHEET_STEPS = (2, 5)
 SHEET_WORDS = 1600
 SHEET_REQUIRED = ["before you start", "table of results"]
+# Try it questions on the page of a lecture with a worksheet: its experiments
+# have a check after every step, so one or two questions per section are enough.
+SHEET_QUESTIONS = (4, 12)
 # Online activity (blended course): at least this many simulators, and
 # (min, max) tasks to submit.
 ONLINE_CONTENT = ("lesson", "sims", "mix", "video", "course-video")
@@ -156,6 +206,15 @@ FROZEN = {
     # tasks PDF) were sent to the students before the page checked every task.
     "courses/digital-skills/week-01/lesson-01.qmd",
     "courses/digital-skills/week-01/online-01.qmd",
+    # The homework of the units taught before 2026-11-08 was given with
+    # written answers ("Why?", "Give the reason"); it keeps them this semester.
+    "courses/game-math/week-01/homework-01.qmd",
+    "courses/game-math/week-02/homework-02.qmd",
+    "courses/computing-systems/week-01/homework-01.qmd",
+    "courses/computing-systems/week-02/homework-02.qmd",
+    "courses/computing-systems/week-03/homework-03.qmd",
+    "courses/digital-media/week-01/homework-01.qmd",
+    "courses/digital-media/week-02/homework-02.qmd",
 }
 # Interactive checks of the page (interact.lua): (min, max) options of a
 # choice, cards of an order, groups and cards of a sort.
@@ -167,6 +226,16 @@ IC_RE = re.compile(r"^\s*:{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b", re.M)
 LIST_START_RE = re.compile(r"^\s*(\d+[.)]|[a-zA-Z][.)]|\([a-zA-Z0-9]+\)|[-*+])\s")
 IC_BLOCK_RE = re.compile(r"^([ \t]*):{3,}\s*\{[^}\n]*\.(choice|order|sort|fill)\b[^\n]*\n.*?^\1:{3,}[ \t]*$",
                          re.M | re.S)
+# Answers without written English (AUTHORING.md, "Answers without written
+# English"): graded tasks and worksheet records ask for a choice, an order, a
+# number, a name or a few words, never for English text to write.
+ESSAY_RE = re.compile(r"\b(explain|describe|discuss|justify|in your own words|in (?:one|a|two) (?:short )?sentences?"
+                      r"|write (?:a|one|two|three|your|some) (?:short )?(?:sentences?|paragraphs?|e-?mails?|texts?"
+                      r"|reasons?|prompts?|stor(?:y|ies)|advice)|write (?:a|one|your) (?:short |formal )?letter\b"
+                      r"|give (?:a|the|one|your) reasons?|and why\b|why\?|\bwhy (?:do|does|did|is|are|was|were|must|should|can|not)\b)", re.I)
+# No marks or grades on homework and online activities (the teacher's request
+# of 2026-11-08): the e-learning platform keeps the grades.
+MARKS_RE = re.compile(r"\b\d+(?:\.\d+)?\s+marks?\b|\bmarks? (?:them|each|per)\b|\(no marks\)|\bno marks\b", re.I)
 CHOICE_OPTIONS = (2, 4)
 ORDER_CARDS = (3, 8)
 SORT_GROUPS = (2, 4)
@@ -191,6 +260,67 @@ NAMES = {
     "minutes": "planned minutes",
     "experiments": "experiments",
 }
+GLOSSARY_RE = re.compile(r"\{\{<\s*glossary\s+([^>]*?)\s*>\}\}")
+
+
+def drop_divs(text, classes):
+    """The text without the fenced divs ({.check}, …) of the given classes,
+    at any indentation (the closing fence has the indentation of the opening one)."""
+    out, skip = [], None
+    for line in text.split("\n"):
+        if skip is not None:
+            m = re.match(r"^(\s*):{3,}\s*$", line)
+            if m and len(m.group(1)) == skip:
+                skip = None
+            continue
+        m = re.match(r"^(\s*):{3,}\s*\{\.(%s)\b" % "|".join(classes), line)
+        if m:
+            skip = len(m.group(1))
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
+def experiment_on_page(sheet_body, n):
+    """What {{< experiment n >}} shows on the page (shortcodes.lua): the steps
+    and their checks, without "The idea:", the record fields, the closed
+    results and the simulators (they are in the section of the page)."""
+    m = re.search(r"^## Experiment %s\b[^\n]*\n(.*?)(?=^## |\Z)" % n, sheet_body, re.M | re.S)
+    if not m:
+        return ""
+    t = re.sub(r"^\*\*The idea[^\n]*(\n[^\n]+)*", " ", m.group(1), flags=re.M)
+    t = re.sub(r"\{\{<\s*(record|sim)\b.*?>\}\}", " ", t, flags=re.S)
+    return drop_divs(t, ["check"])
+
+
+def page_minutes(path, page_body):
+    """The planned class minutes of a lecture page (PAGE_TIME_COST)."""
+    c = PAGE_TIME_COST
+    body = page_body
+    sheet = path[:-4] + "-sheet.qmd"
+    if os.path.exists(sheet):
+        st = read(sheet)
+        body = re.sub(r"^\{\{< *experiment (\d+) *>\}\}", lambda m: experiment_on_page(st, m.group(1)),
+                      body, flags=re.M)
+    # A Task with AI box is an extra, shown only when time is left.
+    for head, text in boxes(body):
+        if ".ai-task" in head or 'title="Task with AI' in head:
+            body = body.replace(text, " ")
+    terms = sum(len(g.split()) for g in GLOSSARY_RE.findall(body))
+    questions = count_questions(body)
+    checks = len(IC_RE.findall(body))
+    sims = len(re.findall(r"\{\{< *sim ", body))
+    prompts = len(re.findall(r"^\s*:{3,} *\{\.prompt\}", body, re.M))
+    # The first lines and the summary are in "start".
+    parts = re.split(r"^(?=## )", body, flags=re.M)
+    explained = "".join(p for p in parts if p.startswith("## ") and not re.match(r"## Summary\b", p))
+    explained = IC_BLOCK_RE.sub(" ", explained)
+    # The words of a prompt are in its "prompt" minutes (copied, not explained).
+    explained = drop_divs(explained, ["prompt"])
+    words = max(0, count_words(explained) - count_words(try_it_text(explained)))
+    minutes = (c["start"] + c["term"] * terms + words / c["wpm"] + c["check"] * checks
+               + c["question"] * questions + c["sim"] * sims + c["prompt"] * prompts)
+    return int(round(minutes))
 
 
 def course_minutes(project_dir, slug):
@@ -375,7 +505,7 @@ def ai_task_warnings(body, graded=False, page=False):
         if graded:
             # AI is always an extra: never in graded tasks.
             out.append('Task with AI "%s" is in graded work; put it after the tasks, in an optional '
-                       '"## Optional · Task with AI (no marks) {.extra}" section' % title)
+                       '"## Optional · Task with AI {.extra}" section' % title)
             continue
         prompt = re.search(r"^\s*:::+ *\{\.prompt\}\n(.*?)^\s*:::+\s*$", text, re.M | re.S)
         if not prompt:
@@ -434,6 +564,17 @@ def graded_warnings(text):
         out.append("graded tasks have an interactive check (it shows the answer); keep solutions in courses-private")
     if re.search(r"^\s+Why:", text, re.M):
         out.append("graded tasks show a reason (Why:); keep solutions in courses-private")
+    m = MARKS_RE.search(text)
+    if m:
+        out.append('the tasks name marks ("%s"); homework and online tasks show no marks' % m.group(0))
+    # A ready prompt ({.prompt}) is copied, not written: its words do not count;
+    # neither does a question answered with a letter ("Write A or B. (A) …").
+    plain_text = drop_divs(re.sub(r"<!--.*?-->", " ", text, flags=re.S), ["prompt"])
+    plain_text = "\n\n".join(p for p in re.split(r"\n\s*\n", plain_text)
+                             if not re.search(r"\(A\)|\*\*A\.\*\*|Choose A, B", p))
+    for m in ESSAY_RE.finditer(plain_text):
+        out.append('a task asks for written English ("%s"): ask for a choice, an order, a number, '
+                   "a name or a few words" % m.group(0))
     return out
 
 
@@ -483,6 +624,11 @@ def check_sheet(path, rel, notes_sections, page_body, slides_body):
         if not (SHEET_STEPS[0] <= len(steps) <= SHEET_STEPS[1]):
             out.append('%s: "%s" has %d steps; an experiment has %d–%d' % ((srel, title, len(steps)) + SHEET_STEPS))
         for i, st in enumerate(steps, 1):
+            for label, more in re.findall(r'\{\{<\s*record\s+"([^"]*)"([^>]*)>\}\}', st):
+                lines = re.search(r"lines=(\d+)", more)
+                if re.search(r"\bbecause\b|\bin my (own )?words\b|\bwhy\b", label, re.I) or (lines and int(lines.group(1)) >= 3):
+                    out.append('%s: "%s", step %d records a sentence ("%s"): record a value, a name, a word '
+                               "or a tick (AUTHORING.md, \"Answers without written English\")" % (srel, title, i, label))
             if "{{< record" not in st:
                 out.append('%s: "%s", step %d has no {{< record … >}} (a place for the result)' % (srel, title, i))
             if not re.search(r"^\s*:::+ *\{\.check\}", st, re.M):
@@ -516,18 +662,26 @@ def check_sheet(path, rel, notes_sections, page_body, slides_body):
     for k, (sec, part) in enumerate(notes_sections.items(), 1):
         if not re.search(r"\bExperiment %d\b" % k, part):
             out.append("%s: section %s of the notes does not point to Experiment %d of the worksheet" % (rel, sec, k))
+    for p in exps:
+        title = p.splitlines()[0][3:].strip()
+        if re.search(r"\b\d+\s*(min|minutes)\b", p.split("\n1. ")[0]):
+            out.append('%s: "%s" gives the minutes of a part; only the whole session has a length' % (srel, title))
+        if "{.part}" in p and not re.search(r"Part B", p):
+            out.append('%s: "%s" has Part A but no Part B (a step on a simulator or the phone)' % (srel, title))
     if slides_body is not None:
+        # The slides are a reference of the lecture (AUTHORING.md, "Lecture
+        # worksheets"): the worksheet and its results are on two slides.
+        srel_s = rel[:-4] + "-slides.qmd"
         titles = re.findall(r"^## (.+)$", slides_body, re.M)
-        for k in nums:
-            if not any(re.match(r"Experiment %d\b" % k, t) for t in titles):
-                out.append('%s: no "Experiment %d" slide (the teacher shows its steps)' % (rel[:-4] + "-slides.qmd", k))
-            if not any(re.match(r"Check %d\b" % k, t) for t in titles):
-                out.append('%s: no "Check %d" slide (the results of Experiment %d, .reveal)' % (rel[:-4] + "-slides.qmd", k, k))
+        if not any(t.startswith("Your worksheet") for t in titles):
+            out.append('%s: no "Your worksheet" slide (Part A, Part B, the start files and {{< page-qr >}})' % srel_s)
+        if not any(t.startswith("Results of the worksheet") for t in titles):
+            out.append('%s: no "Results of the worksheet" slide (one .reveal line for each experiment)' % srel_s)
         for part in re.split(r"^(?=## )", slides_body, flags=re.M):
-            m = re.match(r"## (Check \d+.*)", part)
+            m = re.match(r"## (Results of the worksheet.*)", part)
             if m and not re.search(r"^:::+ *\{\.(answer|reveal)\}", part, re.M):
                 out.append('%s: slide "%s": the results are not on the slide (.reveal or .answer)'
-                           % (rel[:-4] + "-slides.qmd", m.group(1).strip()))
+                           % (srel_s, m.group(1).strip()))
     return out, len(nums)
 
 
@@ -690,9 +844,10 @@ def check_online(path, rel):
     out = []
     fm = front_matter(path)
     body = read(path)
-    for key in ("due", "marks"):
-        if not re.search(r"^%s:" % key, fm, re.M):
-            out.append("%s: online activity without `%s:` in the front matter" % (rel, key))
+    if not re.search(r"^due:", fm, re.M):
+        out.append("%s: online activity without `due:` in the front matter" % rel)
+    if re.search(r"^marks:", fm, re.M):
+        out.append("%s: `marks:` in the front matter; online activities show no marks" % rel)
     heads = headings(body)
     for part in ("before you start", "tasks to submit", "how to submit"):
         if not any(h.startswith(part) for h in heads):
@@ -883,13 +1038,17 @@ def check(project_dir):
             warnings.extend(check_online(path, rel))
     for path in sorted(glob.glob(os.path.join(week, "homework-[0-9][0-9].qmd"))):
         rel = os.path.relpath(path, project_dir)
+        if is_frozen(rel):
+            continue
         hw = read(path)
-        # An optional section {.extra} (a Task with AI, no marks) is not graded work.
+        # An optional section {.extra} (a Task with AI, not graded) is not graded work.
         parts = re.split(r"^(?=## )", hw, flags=re.M)
         extra = "".join(p for p in parts if re.match(r"## .*\{\.extra\}", p))
         graded = "".join(p for p in parts if not re.match(r"## .*\{\.extra\}", p))
         warnings.extend("%s: %s" % (rel, w) for w in graded_warnings(graded) + ai_task_warnings(graded, graded=True)
                         + ai_task_warnings(extra, page=True) + ic_warnings(extra))
+        if re.search(r"^marks:", front_matter(path), re.M):
+            warnings.append("%s: `marks:` in the front matter; homework shows no marks" % rel)
     pattern = os.path.join(project_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].qmd")
     for path in sorted(glob.glob(pattern)):
         slug = path.split(os.sep)[-3]
@@ -961,7 +1120,21 @@ def check(project_dir):
         else:
             warnings.append("%s: no slides file (%s)" % (rel, os.path.basename(slides_path)))
 
-        for key, (lo, hi) in SIZES[minutes].items():
+        sizes = dict(SIZES[minutes])
+        if has_sheet:
+            # The checks of the experiments practise the ideas too: fewer Try it questions.
+            sizes["questions"] = SHEET_QUESTIONS
+        home = rel.replace(os.sep, "/") in HOME_PAGES
+        if home:
+            # Taught before the smart screens: the older home-study page.
+            sizes.update(HOME_SIZES[minutes])
+        else:
+            n["minutes"] = page_minutes(path, page_body)
+            if n["minutes"] > PAGE_TIME[minutes]:
+                warnings.append("%s: about %d minutes in class (the page is taught on the screen); a %d-min "
+                                "lecture plans at most %d, the rest is for questions and delays (AUTHORING.md, "
+                                "\"The page is taught in class\")" % (rel, n["minutes"], minutes, PAGE_TIME[minutes]))
+        for key, (lo, hi) in sizes.items():
             v = n.get(key)
             if v is None:
                 continue

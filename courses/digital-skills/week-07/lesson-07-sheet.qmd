@@ -1,6 +1,6 @@
 ---
 title: "Excel (2): Sorting, Filtering, Conditional Formatting and Charts"
-description: "Worksheet · Four experiments in Excel on the sales of one week: sort the rows, filter one type, colour the big totals by a rule, and make a column, a pie and a line chart."
+description: "Worksheet · Four experiments in Excel on the sales of one week: sort the rows, filter one type, colour the big totals by a rule, and make a column and a pie chart. Part A in Excel, Part B on the simulators."
 lesson: 7
 ilos: [C2]
 start-files:
@@ -10,18 +10,19 @@ format: lesson-typst
 ---
 
 ::: {.lead}
-Today you work like in a lab: you do four experiments in Excel on the sales
-of the Sunrise shop and record what you see. These are the sales of the next
-week: other numbers than the table of the lesson. Do each experiment when
-your teacher shows it. After each step, write your result in its box. At
-the end, copy your key results into the table.
+Today you put the sales of one week in order, like in a lab. Each
+experiment has two parts. **Part A** is in Excel on the lab computer.
+**Part B** is on a simulator of the interactive lesson: on paper, scan its
+QR code; on the screen, click its link. After each step, write your result
+in its box. At the end, copy your key results into the table.
 :::
 
 ## Before you start
 
 - **You need:** a computer with Excel (the desktop app, or Excel on the web
-  at `office.com`).
-- **Time:** about 40 minutes for the four experiments.
+  at `office.com`) and the start file.
+- **No lab computer today?** Your teacher does Part A on the screen, on the
+  simulators of the interactive lesson. Do Part B on your phone.
 - **Check:** the results are at the end of this worksheet. Look only after
   you try. On the interactive lesson, every step has a check that answers
   at once.
@@ -30,12 +31,21 @@ the end, copy your key results into the table.
 
 ## Experiment 1 · Sort
 
-**Aim:** put the rows in order, and see that each row moves as a whole.
-*(Lesson notes 7.1 · about 10 minutes)*
+**The idea:** **Sort** (Data › Sort) puts the rows of a table in order: by
+a number (largest to smallest) or by a word (A to Z). Click **one cell** of
+the table first: then each row moves as a whole. If you select one column
+only, Excel shows a **Sort Warning**: choose *Expand the selection*, or the
+totals leave their rows.
 
-1. Open `sales-start.xlsx` (click **Enable Editing** if you see it). On the
-   sheet **Sales**, click one cell of the table. Choose **Data › Sort**,
-   sort by **Total (JD)**, order **Largest to Smallest**, and click OK.
+**Aim:** put the rows in order, and see that each row moves as a whole.
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
+
+1. Open `sales-start.xlsx`, sheet **Sales**. Click one cell of the table.
+   Choose **Data › Sort**, sort by **Total (JD)**, order **Largest to
+   Smallest**, and click OK.
 
    {{< record "On top: … ; at the bottom: …" >}}
 
@@ -50,49 +60,31 @@ the end, copy your key results into the table.
 
    - [x] the bag of Wednesday, 48 JD
 
-     Why: The biggest total. Each row moved as a whole: the day and the item stayed with their total.
+     Why: The largest total comes first, with its whole row.
 
    - [ ] the water of Sunday, 9 JD
 
-     Why: That is at the bottom: the smallest total.
+     Why: That is the smallest total: it goes to the bottom.
 
    - [ ] the first row of the table, as before
 
      Why: Sort changes the order of the rows.
    :::
 
-2. Sort again, now by **Day**, order **A to Z**.
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
 
-   {{< record "The order of the days" >}}
+{{< sim file="sims/table-lab.html" poster="sims/table-lab.png" title="Table Lab: sort, filter and colour the Sunrise sales" >}}
 
-   ::: {.check}
-   **Mon, Sun, Thu, Tue, Wed.** Excel sorts the days as words, by their
-   letters, not in the order of the week.
-   :::
+2. In **Table Lab**, do Task 1: sort the table by Total (JD), largest
+   first. Which sale is on top?
 
-   ::: {.order}
-   Put the days in the order that **Sort A to Z** gives.
-
-   1. Mon
-   2. Sun
-   3. Thu
-   4. Tue
-   5. Wed
-
-   Why: Excel sorts the days as words, by their letters, not in the order of the week.
-   :::
-
-3. Click the letter **E** at the top of the column (only the column of the
-   totals is selected). Click **Sort Largest to Smallest** (Data, the button
-   Z→A). Read the message, then click **Cancel**.
-
-   {{< record "What does Excel ask?" lines=2 >}}
+   {{< record "On top in Table Lab: …" >}}
 
    ::: {.check}
-   Excel shows a **Sort Warning**: *Expand the selection* or *Continue with
-   the current selection*. With only one column, the totals would move away
-   from their days and items, and the table would be wrong. So click one
-   cell and sort the whole table.
+   **The bag on Tuesday, 36 JD**; the juice on Sunday (10 JD) is at the
+   bottom. (Table Lab has its own week of sales.)
    :::
 
    ::: {.sort}
@@ -101,93 +93,107 @@ the end, copy your key results into the table.
    Safe: each row stays whole
    :   Cancel, click one cell of the table, then sort.
 
-       Why: Excel sorts the whole table.
+       Why: Excel then sorts the whole table.
 
    :   Expand the selection.
 
-       Why: Excel takes the whole table into the sort.
+       Why: The whole table is sorted, row by row.
 
    Wrong: the totals leave their rows
    :   Continue with the current selection.
 
-       Why: Only the totals move, away from their days and items: the table is wrong.
+       Why: Only one column moves: the totals no longer match their days and items.
    :::
 
 ## Experiment 2 · Filter
 
-**Aim:** show only the rows that you need, and see that the other rows are
-only hidden. *(Lesson notes 7.2 · about 10 minutes)*
+**The idea:** a **filter** (Data › Filter) shows only the rows that you need,
+for example one type. The other rows are only **hidden**, never deleted:
+**Clear Filter** brings them back. The status bar adds only the rows that
+you see.
 
-1. Click one cell of the table. Choose **Data › Filter**. Click the arrow of
-   **Type**, tick only **Paper**, and click OK.
+**Aim:** show only the rows that you need, and add them up.
 
-   {{< record "How many rows do you see?" >}}
+::: {.part}
+**Part A · In the app (Excel)**
+:::
 
-   ::: {.check}
-   **4 rows**: the pens and the notebooks. The row numbers that you see turn
-   blue: Excel shows that some rows are hidden.
-   :::
+1. Click one cell of the table. Choose **Data › Filter**. Click the arrow
+   of **Type**, tick only **Paper**, and click OK. Select the totals that
+   you see and read **Sum** in the status bar. Then choose **Clear Filter
+   From "Type"**.
 
-   ::: {.fill answer="4" unit="rows" hint="Count the rows of pens and notebooks."}
-   With only **Paper** ticked, how many rows do you see?
-
-   Why: 4 rows: the pens and the notebooks. The row numbers turn blue: Excel shows that some rows are hidden.
-   :::
-
-2. Select the four totals of Paper. Read the status bar at the bottom.
-
-   {{< record "Sum in the status bar" >}}
+   {{< record "Rows of Paper … ; Sum … ; after Clear Filter … rows" >}}
 
    ::: {.check}
-   **Sum: 77** (15 + 30 + 12 + 20). The status bar adds only the rows that
-   you see.
+   **4 rows** (the pens and the notebooks), **Sum: 77** (15 + 30 + 12 +
+   20). After Clear Filter, **all 10 rows** come back: a filter hides rows,
+   it never deletes them.
    :::
 
    ::: {.fill answer="77" hint="15 + 30 + 12 + 20."}
-   What Sum does the status bar show for the four totals of Paper?
+   With only **Paper** ticked, what Sum does the status bar show for the
+   four totals?
 
    Why: 15 + 30 + 12 + 20 = 77. The status bar adds only the rows that you see.
    :::
 
-3. Click the arrow of **Type** again and choose **Clear Filter From
-   "Type"**.
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
 
-   {{< record "How many rows now?" >}}
+{{< sim file="sims/table-lab.html" poster="sims/table-lab.png" title="Table Lab: sort, filter and colour the Sunrise sales" >}}
+
+2. In **Table Lab**, do Task 2: show only the rows of the type **Drinks**.
+   How many rows stay?
+
+   {{< record "Drinks: … rows ; their total … JD" >}}
 
    ::: {.check}
-   **All 10 rows** come back. A filter hides rows; it never deletes them.
+   **4 rows**, with a total of **50 JD**. The other rows are hidden, not
+   deleted.
    :::
 
    ::: {.choice}
-   You clear the filter. What happens?
+   You clear the filter. What happens to the hidden rows?
 
-   - [x] All 10 rows come back.
+   - [x] They all come back.
 
-     Why: A filter hides rows; it never deletes them.
+     Why: A filter only hides rows.
 
-   - [ ] The six hidden rows are gone.
+   - [ ] They are gone.
 
-     Why: Hidden is not deleted.
+     Why: A filter never deletes rows.
 
-   - [ ] Only the Paper rows stay.
+   - [ ] Only the filtered rows stay.
 
      Why: Clear Filter shows every row again.
    :::
 
 ## Experiment 3 · A colour rule
 
+**The idea:** **conditional formatting** colours cells by a rule, for
+example *Greater Than 20* (Home › Conditional Formatting › Highlight Cells
+Rules). The rule checks the cells again when a number changes; a colour
+that you add by hand does not.
+
 **Aim:** colour cells by a rule, and see the colour follow the numbers.
-*(Lesson notes 7.3 · about 10 minutes)*
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
 
 1. Select the totals **E2:E11**. Choose **Home › Conditional Formatting ›
-   Highlight Cells Rules › Greater Than**, type **20**, choose a colour, and
-   click OK.
+   Highlight Cells Rules › Greater Than**, type **20**, choose a colour and
+   click OK. Then change the juice of Tuesday (14 JD) to **22**, look at
+   the cell, and press **Ctrl + Z**.
 
-   {{< record "Cells with the colour: … ; the cell with 20: …" >}}
+   {{< record "Cells with the colour … ; the cell with 22 …" >}}
 
    ::: {.check}
    **Three cells: 24, 30 and 48.** The total **20** keeps no colour: 20 is
-   not greater than 20.
+   not greater than 20. The juice with **22** gets the colour by itself:
+   the rule checks the cells again.
    :::
 
    ::: {.sort}
@@ -216,68 +222,46 @@ only hidden. *(Lesson notes 7.2 · about 10 minutes)*
        Why: 9 is smaller than 20.
    :::
 
-2. Find the juice of Tuesday (14 JD) and change its total to **22**. Look at
-   the cell. Then press **Ctrl + Z**.
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
 
-   {{< record "What happens to the cell with 22?" >}}
+{{< sim file="sims/table-lab.html" poster="sims/table-lab.png" title="Table Lab: sort, filter and colour the Sunrise sales" >}}
 
-   ::: {.check}
-   It **gets the colour by itself**: the rule checks the cells again when a
-   number changes. A colour that you add by hand does not do this.
-   :::
+2. In **Table Lab**, do Task 3: show all types again, then highlight the
+   totals greater than 20. How many totals are green?
 
-   ::: {.choice}
-   You change the juice of Tuesday from 14 to 22. What happens to the cell?
-
-   - [x] It gets the colour by itself.
-
-     Why: The rule checks the cells again when a number changes.
-
-   - [ ] Nothing: you must make the rule again.
-
-     Why: A rule works by itself; only a colour that you add by hand does not change.
-
-   - [ ] Every cell loses its colour.
-
-     Why: The other totals did not change.
-   :::
-
-3. Select the quantities **D2:D11**. Choose **Home › Conditional Formatting
-   › Data Bars** and one colour.
-
-   {{< record "The longest bar: … pieces of …" >}}
+   {{< record "Green totals: …" >}}
 
    ::: {.check}
-   **34 pieces of water**, on Wednesday. A data bar shows the size of each
-   number, so the biggest quantity is easy to see.
+   **Three**: 24, 36 and 24 JD. A total of 20 stays white: 20 is not
+   greater than 20.
    :::
 
-   ::: {.choice}
-   Where is the longest data bar?
+   ::: {.fill answer="3" hint="Count the totals bigger than 20: 24, 36 and 24."}
+   In Table Lab, how many totals are greater than 20?
 
-   - [x] 34 pieces of water, on Wednesday
-
-     Why: A data bar shows the size of each number: the biggest quantity has the longest bar.
-
-   - [ ] the bag of Wednesday, 48 JD
-
-     Why: 48 JD is a total; the bars are on the quantities, D2:D11.
-
-   - [ ] the first row of the table
-
-     Why: The length follows the number, not the row.
+   Why: 24, 36 and 24 are greater than 20; 20 itself is not.
    :::
 
 ## Experiment 4 · Charts
 
+**The idea:** a chart shows numbers as a picture. A **column** chart compares
+amounts; a **line** chart shows a change over time; a **pie** chart shows
+the parts of one whole. Give every chart a real title that says what it
+shows, never "Chart Title".
+
 **Aim:** make the right chart for each question, with a real title.
-*(Lesson notes 7.4 · about 10 minutes)*
+
+::: {.part}
+**Part A · In the app (Excel)**
+:::
 
 1. On the sheet **Types**, select **A1:B4**. Choose **Insert › Recommended
    Charts** and a **Clustered Column** chart. Click *Chart Title* and type a
    real title.
 
-   {{< record "My title; the highest column" lines=2 >}}
+   {{< record "My title … ; the highest column …" lines=2 >}}
 
    ::: {.check}
    A real title says what the chart shows, for example "Sales by type in
@@ -290,15 +274,15 @@ only hidden. *(Lesson notes 7.2 · about 10 minutes)*
 
    - [x] Sales by type in one week (JD)
 
-     Why: It says what the chart shows. The highest column is Paper (77): columns compare amounts.
+     Why: It says what the chart shows, and the unit.
 
    - [ ] Chart Title
 
-     Why: That is the empty title that Excel writes.
+     Why: That is the empty title that Excel puts first.
 
    - [ ] Chart 1
 
-     Why: It says nothing about the data.
+     Why: It says nothing about the numbers.
    :::
 
 2. Click the chart. Choose **Chart Design › Change Chart Type › Pie**. Then
@@ -314,47 +298,64 @@ only hidden. *(Lesson notes 7.2 · about 10 minutes)*
    ::: {.fill answer="200" unit="JD" hint="Add the three labels."}
    The three labels of the pie are 77, 51 and 72. What is the whole?
 
-   Why: 77 + 51 + 72 = 200 JD. A pie shows the parts of one whole; Paper is the biggest part.
+   Why: 77 + 51 + 72 = 200 JD: the whole week. A pie shows the parts of one whole.
    :::
 
-3. On the sheet **Days**, select **A1:B6** and choose **Insert › Line**.
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
 
-   {{< record "The highest point of the line" >}}
+{{< sim file="sims/chart-lab.html" poster="sims/chart-lab.png" title="Chart Lab: the right chart for the question" >}}
+
+3. In **Chart Lab**, do the three tasks: compare the types, show how the
+   sales change from Sunday to Thursday, and show the part of each type.
+   Which chart did you choose for the change from Sunday to Thursday?
+
+   {{< record "Sunday to Thursday: a … chart" >}}
 
    ::: {.check}
-   **Wednesday, 65 JD.** A line shows a change over time: up on Monday,
-   down on Tuesday, up again on Wednesday.
+   **A line chart**: it shows a change over time. The types get a column
+   chart (compare) and a pie chart (the parts of 185 JD).
    :::
 
-   ::: {.choice}
-   What is the highest point of the line?
+   ::: {.sort}
+   Which chart answers each question? Sort them.
 
-   - [x] Wednesday, 65 JD
+   Column chart
+   :   Which type sold the most?
 
-     Why: A line shows a change over time: up on Monday, down on Tuesday, up again on Wednesday.
+       Why: Columns compare amounts.
 
-   - [ ] Paper, 77 JD
+   Line chart
+   :   How did the sales change from Sunday to Thursday?
 
-     Why: Paper is a type, on the sheet Types; the line shows the days.
+       Why: A line shows a change over time.
 
-   - [ ] Thursday, the last day
+   Pie chart
+   :   What part of the week's sales is each type?
 
-     Why: The last point is not the highest one.
+       Why: A pie shows the parts of one whole.
    :::
 
 ## Table of results
 
-Copy your key results here. Your teacher checks this table before the end of
-the lecture.
+Copy your key results here: the rows of the parts that you did. Your
+teacher checks this table before the end of the lecture.
 
 ::: {.record-table}
-| Experiment | What you record                                | Your result |
-|:-------:|---------------------------------------------|--------------------------|
-| 1          | The biggest sale, and the order of the days    |             |
-| 2          | The rows and the sum of Paper                  |             |
-| 3          | The cells with the colour, and the longest bar |             |
-| 4          | My chart title, and the three labels of the pie |            |
-| 4          | The highest day on the line                    |             |
+| Experiment | What you record                                   | Your result |
+|:-------:|------------------------------------------------|------------------------|
+| 1 A        | The biggest and the smallest sale                 |             |
+| 2 A        | The rows and the Sum of Paper                     |             |
+| 2 B        | The rows and the total of Drinks in Table Lab     |             |
+| 3 A        | The cells with the colour, and the cell with 22   |             |
+| 4 A        | My chart title, and the three labels of the pie   |             |
+| 4 B        | The chart for Sunday to Thursday                  |             |
 :::
 
-Then play **Rana's Questions**, the Game challenge of this lecture.
+## Game challenge · Rana's Questions
+
+Finished early? Play **Rana's Questions**: for each question of Rana, choose
+the right Excel tool (sort, filter, a colour rule or a chart).
+
+{{< sim file="sims/ranas-questions.html" poster="sims/ranas-questions.png" title="Rana's Questions: the right Excel tool" kind="game" >}}

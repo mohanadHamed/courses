@@ -271,6 +271,9 @@ ESSAY_RE = re.compile(r"\b(explain|describe|discuss|justify|in your own words|in
 # No marks or grades on homework and online activities (the teacher's request
 # of 2026-11-08): the e-learning platform keeps the grades.
 MARKS_RE = re.compile(r"\b\d+(?:\.\d+)?\s+marks?\b|\bmarks? (?:them|each|per)\b|\(no marks\)|\bno marks\b", re.I)
+# A file name asked for a screenshot or a photo ("name it `x.png`").
+PHONE_NAME_RE = re.compile(r"\b(?:screenshot|photo)\b[^\n]*?(?:\b(?:name it|call it|save it as|named)\b[^\n]*"
+                           r"|`[^`\n]+\.(?:png|jpe?g|heic)`)", re.I)
 CHOICE_OPTIONS = (2, 4)
 ORDER_CARDS = (3, 8)
 SORT_GROUPS = (2, 4)
@@ -610,6 +613,14 @@ def graded_warnings(text):
     for m in ESSAY_RE.finditer(plain_text):
         out.append('a task asks for written English ("%s"): ask for a choice, an order, a number, '
                    "a name or a few words" % m.group(0))
+    # A task asks only for what the device can do (the teacher's request of
+    # 2026-11-10): a phone gives a screenshot or a photo its own name.
+    for task in re.split(r"^(?=### )", text, flags=re.M):
+        m = PHONE_NAME_RE.search(task)
+        if m and re.search(r"\bphones?\b", task, re.I):
+            out.append('a task on a phone names a screenshot or a photo ("%s"); a phone gives it its own name: '
+                       'ask for the screenshot only (AUTHORING.md, "A task asks only for what the device can do")'
+                       % m.group(0).strip())
     return out
 
 

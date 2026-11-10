@@ -686,6 +686,15 @@ situation each, 2–4 short steps, one small product, all the data given;
 about 30 minutes for all of them. A task names the Step it practises
 ("Step 1 shows how").
 
+**A task asks only for what the device can do** (the teacher's request of
+2026-11-10). A screenshot or a photo taken on a phone keeps the name that
+the phone gives it (an iPhone cannot rename it in Photos), so a task asks
+for the screenshot or the photo, never for its file name. A task names a
+file only when the app that makes it asks for a name or the Step shows how
+to rename it (a scan saved from Drive or Files, a Word file). The same
+holds for homework. `check_size.py` warns about a task on a phone that
+names a screenshot or a photo.
+
 **Screens of every app step** (the teacher's request of 2026-11-10). The
 student works alone and may never have seen the app, so every Step that is
 done in an app, on a phone or a computer (the calendar, a scanner, Files,
@@ -1596,7 +1605,10 @@ taken off. Rewrite them with short answers next semester.
   (rule "A fix for one session is a rule for all of them"). The rule of the
   morning (the picture is in the activity that asks about it) went into the
   seminar templates and into `check_size.py`, which found seven places in
-  five Game Math sessions to fix when they are rewritten.
+  five Game Math sessions to fix when they are rewritten. Task 1 of the
+  same activity asked to name a screenshot, which an iPhone cannot do in
+  Photos; it now asks for the screenshot only (rule "A task asks only for
+  what the device can do").
 
 - 2026-11-10 (teacher's review of Game Math Seminar 3): Activity 1 asked
   about four asteroids (A to D) that no picture showed: the figure of the

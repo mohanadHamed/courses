@@ -350,4 +350,7 @@ every calendar week, by hand, with the university's template.
   and asks for the name and for .pdf or .jpg; Files scans from its •••
   button and names the file Scanned Document, which the student renames.
   The other online activities get their screens when they are next written
-  or rewritten (AUTHORING.md, "Screens of every app step").
+  or rewritten (AUTHORING.md, "Screens of every app step"). Task 1 now asks
+  for the screenshot only, with no file name: an iPhone cannot rename a
+  screenshot in Photos (AUTHORING.md, "A task asks only for what the device
+  can do").

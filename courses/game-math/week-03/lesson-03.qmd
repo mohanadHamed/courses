@@ -1,6 +1,6 @@
 ---
 title: "The Cross Product, Distance and Projection"
-description: "Left or right with the 2D cross product, the 3D cross product and its order, the normal of a triangle, the nearest target, how far along a direction, and the parts along and across."
+description: "Left or right with the 2D cross product, the 3D cross product and its order, the normal of a triangle, the nearest target, how far along a direction, and how far to the side."
 lesson: 3
 ilos: [B1]
 format: lesson-html
@@ -12,7 +12,7 @@ examples and exercises are in the lesson notes (PDF).
 
 ## Key terms
 
-{{< glossary cross-product surface-normal triangle-mesh winding-order handedness perpendicular distance projection perpendicular-part dot-product unit-vector >}}
+{{< glossary cross-product surface-normal triangle-mesh winding-order handedness perpendicular distance projection dot-product unit-vector >}}
 
 ## 3.1 Left or right? The cross product in 2D
 
@@ -329,7 +329,7 @@ Normalize the direction first. With (3, 4) instead of (0.6, 0.8), the car
 gives 35: five times too much.
 :::
 
-{{< sim file="sims/projection-lab.html" poster="sims/projection-lab.png" title="Projection Lab: along, across and slide" height="700" >}}
+{{< sim file="sims/projection-lab.html" poster="sims/projection-lab.png" title="Projection Lab: along and to the side" height="720" >}}
 
 ::: {.callout-note title="Do it · Along the road in Projection Lab"}
 In **Projection Lab**, choose û = (0.6, 0.8). Drag the tip of v to (5, 5),
@@ -358,68 +358,74 @@ A road along (1, 0) from (0, 0). A car is at (−3, 1). What is "along"?
 :::
 :::
 
-## 3.7 Along and across: splitting a vector
+## 3.7 How far to the side?
 
-- A wind w blows on a plane that flies along û. Part of the wind pushes
-  the plane forward, part pushes it off course.
-- **Along** (a vector): (v · û) û.
-- **Across** (the **perpendicular part**): v − along.
-- along + across = v, and across · û = 0.
-- Plane along (1, 0), wind (3, 4): along (3, 0), across (0, 4).
-- The same split stops a player sinking into a floor: remove the part
-  **into** the floor and keep the rest: slide = v − (v · n̂) n̂, when
-  v · n̂ < 0 (n̂ = the unit normal of the floor, section 3.4).
-- Floor n̂ = (0, 1), v = (3, −4): v · n̂ = −4, slide = (3, −4) + (0, 4) =
-  **(3, 0)**: the player slides along the floor.
+- A laser fires from S along the unit vector û. It hits a drone only when
+  the drone is close to its line.
+- "Along" (3.6) tells how far forward the drone is. The 2D cross product
+  (3.1) tells how far to the side: side = û × d = û~x~ d~y~ − û~y~ d~x~,
+  with d = drone − S.
+- **The sign** tells the side: positive left, negative right, 0 on the line.
+- **The number** tells how many units the drone is from the line. Like
+  "along", it needs a unit vector û.
+- A round drone with the radius 1 is hit when it is in front and its side is
+  between −1 and 1.
+- Laser along (0.8, 0.6), drone D at (5, 0): along = 4, side =
+  0.8 × 0 − 0.6 × 5 = **−3**: 3 units to the right, so the laser misses D.
 
-![v = (5, 0) split along (0.6, 0.8) and across it.](images/along-across.png){width=88%}
-
-![The game removes the part into the floor, and the player slides.](images/wall-slide.png){width=80%}
+![The drone D is 4 units along the laser and 3 units to its right. The drone E is on the line.](images/side.png){width=88%}
 
 ::: {.callout-warning title="Watch out!"}
-v · û is only a length; the part along is the vector (v · û) û. In a slide,
-minus a negative adds: (3, −4) − (−4)(0, 1) = (3, 0), not (3, −8).
+Put û first: d × û gives the opposite sign, so left and right swap. And
+normalize first: with (8, 6) instead of (0.8, 0.6), D gives −30.
 :::
 
-::: {.callout-note title="Do it · Split a vector"}
-In **Projection Lab**, choose û = (0.8, 0.6) and drag v to (5, 0). Read the
-part along.
+::: {.callout-note title="Do it · How far to the side in Projection Lab"}
+In **Projection Lab** (section 3.6), choose û = (0.8, 0.6). Drag the tip of
+v to (5, 0), then to (2, 4), and read "side" each time.
+
+::: {.fill answer="2" hint="û × v = 0.8 × 4 − 0.6 × 2."}
+v = (2, 4). What is "side" = û × v?
+
+Why: 0.8 × 4 − 0.6 × 2 = 3.2 − 1.2 = 2: positive, so 2 units to the left.
+:::
 
 ::: {.choice}
-What is the part of v along û?
+The laser fires from (0, 0) along û = (0.8, 0.6). A drone with the radius 1
+is at (2, 4). Does the laser hit it?
 
-- [x] (3.2, 2.4)
+- [x] No: it is 2 units to the left, more than the radius 1.
 
-  Why: The part along is (v · û) × û = 4 × (0.8, 0.6) = (3.2, 2.4).
+  Why: The side is 2, not between −1 and 1: the laser passes next to the drone.
 
-- [ ] 4
+- [ ] Yes: "along" is 4, so it is in front.
 
-  Why: 4 is only its length; the part along is a vector.
+  Why: In front is not enough: the drone must also be close to the line.
 
-- [ ] (1.8, −2.4)
+- [ ] Yes: the side is positive.
 
-  Why: That is the part across: v minus the part along. Together they give (5, 0).
+  Why: Positive only means left. The size 2 is more than the radius 1.
 :::
 :::
 
-::: {.callout-tip title="Try it 7 · Split it and slide"}
+::: {.callout-tip title="Try it 7 · How far to the side?"}
 Choose the right answer.
 
-::: {.match extra="(3, 4)|(3, −8)"}
-A plane flies along (1, 0). The wind is (3, 4). The part along?
-:   (3, 0)
+::: {.match extra="2 to the left|no"}
+A laser fires along (1, 0) from (0, 0). How far to the side is a drone at (6, −2)?
+:   2 to the right
 
-    Why: (3, 4) · (1, 0) = 3, and 3 × (1, 0) = (3, 0).
+    Why: (1, 0) × (6, −2) = 1 × (−2) − 0 × 6 = −2: negative, so right.
 
-A plane flies along (1, 0). The wind is (3, 4). The part across?
-:   (0, 4)
+A laser fires along (0, 1) from (0, 0). Where is a drone at (−3, 5)?
+:   3 to the left
 
-    Why: across = v − along = (3, 4) − (3, 0).
+    Why: (0, 1) × (−3, 5) = 0 × 5 − 1 × (−3) = 3: positive, so left.
 
-Floor n̂ = (0, 1), v = (4, −2). The slide?
-:   (4, 0)
+A drone with the radius 1 is in front of a laser, in range. Its side is −0.5. Is it hit?
+:   yes
 
-    Why: v · n̂ = −2; (4, −2) − (−2)(0, 1) = (4, 0).
+    Why: −0.5 is between −1 and 1: the drone is close enough to the line.
 :::
 :::
 
@@ -474,5 +480,5 @@ What must the tower do for drone E, with d = (−2, 3)?
 - 3D: a × b is a vector at a right angle to a and b. The order matters: b × a = −(a × b).
 - Triangle normal: n = (B − A) × (C − A). The winding order decides the front.
 - Distance = |B − A|. To find the nearest target, compare the squares.
-- Along a direction û: v · û (û a unit vector). Across = v − along.
-- A floor removes only the part into it: the player slides.
+- Along a direction û: v · û (û a unit vector). Negative: behind.
+- How far to the side: û × d. Positive: left. Negative: right. Its size: the distance from the line.

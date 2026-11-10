@@ -1,6 +1,6 @@
 ---
 title: "Solving Movement and Aiming Problems"
-description: "Seminar · Decide which asteroid a mining beam hits with distances, the part along and the part across, then find the normal of a floor and the slide of a player."
+description: "Seminar · Decide which asteroid a mining beam hits with distances, how far along and how far to the side, then find the normal of a platform and check if a player falls into it."
 seminar: 3
 ilos: [B1]
 format: lesson-html
@@ -16,8 +16,8 @@ you why.
   negative: right; zero: on the same line.
 - 3D: the normal of a triangle is (B − A) × (C − A); the order of the
   corners decides which way it faces.
-- Distance = |B − A|. Along a unit vector û: v · û. Across = v − along.
-  A floor removes only the part into it: the player slides.
+- Distance = |B − A|. With a unit vector û: along = d · û (how far
+  forward), side = û × d (how far to the side).
 
 ::: {.callout-tip title="Try it 1 · Recall"}
 Choose the right answer.
@@ -42,97 +42,92 @@ What happens to the normal when two corners of a triangle swap?
 
 ## Activity 1 · Which asteroid does the beam hit?
 
-In *Asteroid Beam*, a station at S = (0, 0) fires a mining beam along
+In *Asteroid Beam*, a station at S = (1, 1) fires a mining beam along
 û = (0.6, 0.8). The beam is 10 units long, and each asteroid has the
-radius 1. The beam hits an asteroid when it is in front (along > 0), in
-range (along ≤ 10) and close to the line (across ≤ 1). It stops at the
-first asteroid it hits. Four asteroids float near it: A (3, 4), B (7, 1),
-C (6, 8) and D (−3, −4).
-
-![The beam goes along one direction: an asteroid can be hit, too far to the side or behind.](images/ray-hit.png){width=86%}
-
-{{< sim file="sims/asteroid-beam.html" poster="sims/asteroid-beam.png" title="Asteroid Beam: which asteroid does the beam hit first?" kind="game" height="760" >}}
+radius 1. Three asteroids float near it: A (4, 5), B (5, 4) and C (7, 9).
+The beam hits an asteroid when it is in front (along > 0), in range
+(along ≤ 10) and close to the line (side between −1 and 1). It stops at the
+first asteroid it hits.
 
 ::: {.callout-note title="Activity 1 · Hit or miss · 25 min"}
-1. Which asteroids are nearest to the station? Compare the squares of the
-   distances.
-2. For each asteroid, compute "along" = d · û.
-3. Split d: the part along is (along) × û, and the part across is d minus
-   it. How long is the part across?
-4. Is B to the left or to the right of the beam? Use û × d.
-5. Which asteroid does the beam hit first? Then play the rounds of
-   **Asteroid Beam**.
+![The station S, the beam and the three asteroids A, B and C of this activity. Round 1 of Asteroid Beam (below) shows the same asteroids.](images/beam-rocks.png){width=78%}
 
-*Your product:* a table with four rows (along, across, hit or miss) and
+1. For each asteroid, find d = asteroid − S. Which asteroids are nearest to
+   the station? Compare the squares of the distances.
+2. For each asteroid, compute "along" = d · û.
+3. For each asteroid, compute "side" = û × d. Is B to the left or to the
+   right of the beam?
+4. Which asteroid does the beam hit first? Then play the rounds of
+   **Asteroid Beam** below.
+
+*Your product:* a table with three rows (d, along, side, hit or miss) and
 the asteroid that the beam hits first.
 
 ::: {.choice}
-Step 1: which asteroids are nearest to the station S = (0, 0)?
+Step 1: which asteroids are nearest to the station S = (1, 1)?
 
-- [x] A and D: both squares are 25.
+- [x] A and B: both squares are 25.
 
-  Why: A: 9 + 16 = 25; D: 9 + 16 = 25; B: 49 + 1 = 50; C: 36 + 64 = 100.
-
-- [ ] B, because it has the biggest x
-
-  Why: Compare x² + y², not one coordinate: B gives 50.
+  Why: A: d = (3, 4), 9 + 16 = 25; B: d = (4, 3), 16 + 9 = 25; C: d = (6, 8), 36 + 64 = 100.
 
 - [ ] C, because it is on the beam
 
   Why: On the line does not mean near: C gives 100, the farthest.
+
+- [ ] A only, because the beam hits it
+
+  Why: B is just as near: d = (4, 3) also gives 25.
 :::
 
-::: {.fill answer="5" hint="Multiply the matching parts of (7, 1) and (0.6, 0.8), then add."}
-Step 2: what is "along" for B = (7, 1)?
+::: {.fill answer="4.8" hint="d = (5, 4) − (1, 1) = (4, 3). Multiply the matching parts of (4, 3) and (0.6, 0.8), then add."}
+Step 2: what is "along" for B?
 
-Why: 7 × 0.6 + 1 × 0.8 = 4.2 + 0.8 = 5.
+Why: d = (4, 3); 4 × 0.6 + 3 × 0.8 = 2.4 + 2.4 = 4.8.
 :::
 
 ::: {.choice}
-Step 4: is B to the left or to the right of the beam?
+Step 3: what is "side" for B, and where is B?
 
-- [x] to the right
+- [x] −1.4: B is 1.4 units to the right of the beam.
 
-  Why: û × d = 0.6 × 1 − 0.8 × 7 = 0.6 − 5.6 = −5: negative, so right.
+  Why: û × d = 0.6 × 3 − 0.8 × 4 = 1.8 − 3.2 = −1.4: negative, so right.
 
-- [ ] to the left
+- [ ] 1.4: B is 1.4 units to the left.
 
-  Why: Left would need a positive û × d; here it is −5.
+  Why: That is d × û, the other order. Put û first.
 
-- [ ] on the beam
+- [ ] 0: B is on the beam.
 
-  Why: On the beam, û × d would be 0.
+  Why: Only A and C give 0. B gives 1.8 − 3.2 = −1.4.
 :::
 
 ::: {.sort}
-Steps 3 and 5: what happens to each asteroid? Sort them.
+Step 4: what happens to each asteroid? Sort them.
 
 Hit first
-:   A (3, 4): along 5, across 0
+:   A: along 5, side 0
 
     Why: In front, in range and on the line: the beam stops here.
 
 Missed
-:   B (7, 1): along 5, across 5
+:   B: along 4.8, side −1.4
 
-    Why: The part across is 5 long, more than the radius 1.
-
-:   D (−3, −4): along −5
-
-    Why: Along is negative: D is behind the station.
+    Why: B is 1.4 units to the side, more than the radius 1.
 
 On the line, but after the stop
-:   C (6, 8): along 10, across 0
+:   C: along 10, side 0
 
     Why: The beam is on C's line, but it already stopped at A.
 :::
 :::
 
-::: {.callout-tip title="Try it 2 · The beam"}
-The station is at (0, 0) and fires along û = (0.6, 0.8), 10 units long,
-radius 1. Choose the right answer.
+{{< sim file="sims/asteroid-beam.html" poster="sims/asteroid-beam.png" title="Asteroid Beam: which asteroid does the beam hit first?" kind="game" height="760" >}}
 
-::: {.match extra="15|in front"}
+::: {.callout-tip title="Try it 2 · The beam"}
+Another station, at (0, 0), fires along û = (0.6, 0.8). The beam is
+10 units long, and each asteroid has the radius 1. Choose the right answer.
+
+::: {.match extra="15|3 to the right"}
 An asteroid at (−6, −8). What is "along"?
 :   −10
 
@@ -143,101 +138,107 @@ An asteroid at (9, 12). Is it hit?
 
     Why: along = 5.4 + 9.6 = 15, more than 10.
 
-An asteroid at (6, 8) and one at (3, 4) are both on the line. Which one stops the beam?
-:   (3, 4)
+An asteroid at (0, 5). How far to the side is it?
+:   3 to the left
 
-    Why: along 5 is less than along 10: it comes first.
+    Why: 0.6 × 5 − 0.8 × 0 = 3: positive, so left. 3 is more than 1, so the beam misses it.
 :::
 :::
 
-## Activity 2 · Land on a floor
+## Activity 2 · Land on a platform
 
-A level has a floor triangle with the corners A = (0, 0, 0),
-B = (0, 0, 2) and C = (2, 0, 0). In the side view, a player falls onto it
-with the velocity v = (3, −4), and the floor has the unit normal
-n̂ = (0, 1). Later the player runs into a wall on the right with the unit
-normal n̂ = (−1, 0) and the velocity (2, 3).
+A level has a platform at the height 2: a triangle with the corners
+A = (1, 2, 1), B = (1, 2, 3) and C = (3, 2, 1). A player falls onto it with
+the velocity v = (2, −3, 0). The game tests the fall with the unit normal n̂ of the platform:
+when v · n̂ is negative, the player moves into the platform, and the game stops
+the fall.
 
-![The game removes the part of the movement into the floor, and the player slides.](images/wall-slide.png){width=84%}
+::: {.callout-note title="Activity 2 · The normal of the platform · 25 min"}
+![The platform of this activity: the corners A, B and C, and the player who falls with v = (2, −3, 0).](images/floor-fall.png){width=74%}
 
-{{< sim file="sims/normal-lab.html" poster="sims/normal-lab.png" title="Normal Lab: the normal of a triangle" height="720" >}}
+1. Find the edges B − A and C − A. Compute the normal
+   n = (B − A) × (C − A). Does it face up or down?
+2. Divide n by its length: what is the unit normal n̂?
+3. The player falls with v = (2, −3, 0). Compute v · n̂. Is the player
+   moving into the platform?
+4. A modeller lists the corners as A, C, B. Compute the normal and v · n̂
+   again. **Normal Lab** (below) has a triangle with the same edges: check
+   both normals there with **Swap B and C**.
 
-::: {.callout-note title="Activity 2 · Normal and slide · 25 min"}
-1. Compute the normal (B − A) × (C − A). Does it face up or down?
-2. The corners are listed as A, C, B. Compute the normal again. Check both
-   in **Normal Lab** with **Swap B and C**.
-3. The player falls with v = (3, −4) onto the floor. Compute v · n̂. Is the
-   player moving into the floor? Find the slide v − (v · n̂) n̂.
-4. Find the slide at the wall: v = (2, 3), n̂ = (−1, 0).
+*Your product:* two normals, two values of v · n̂, and the order that the
+game needs.
 
-*Your product:* two normals and two slides, with one sentence: why does the
-player not stop at the floor?
+::: {.fill answer="(0, 4, 0)" hint="First the edges: B − A = (0, 0, 2) and C − A = (2, 0, 0). The y-part is 2 × 2 − 0 × 0."}
+Step 1: what is n = (B − A) × (C − A)? Type (x, y, z).
 
-::: {.sort}
-Steps 1–2: which normal does each order of the corners give? Sort them.
-
-Faces up
-:   A, B, C: n = (0, 4, 0)
-
-    Why: (0, 0, 2) × (2, 0, 0) = (0, 4, 0).
-
-Faces down
-:   A, C, B: n = (0, −4, 0)
-
-    Why: (2, 0, 0) × (0, 0, 2) = (0, −4, 0): the order decides the front.
-
-:   A, B, C with Swap B and C pressed
-
-    Why: The swap gives the order A, C, B again: the normal turns around.
-:::
-
-::: {.fill answer="(3, 0)" hint="v · n̂ = −4. Minus a negative number adds."}
-Step 3: what is the slide v − (v · n̂) n̂ on the floor? Type (x, y).
-
-Why: v · n̂ = −4 (into the floor); (3, −4) − (−4) × (0, 1) = (3, −4) + (0, 4) = (3, 0). The part along the floor stays, so the player keeps moving.
+Why: The edges are (0, 0, 2) and (2, 0, 0); (0 × 0 − 2 × 0, 2 × 2 − 0 × 0, 0 × 0 − 0 × 2) = (0, 4, 0): the platform faces up.
 :::
 
 ::: {.choice}
-Step 4: what is the slide at the wall, v = (2, 3), n̂ = (−1, 0)?
+Steps 2–3: n̂ = (0, 1, 0) and v = (2, −3, 0). Is the player moving into the platform?
 
-- [x] (0, 3): the player slides up the wall
+- [x] Yes: v · n̂ = −3 is negative.
 
-  Why: v · n̂ = −2; (2, 3) − (−2) × (−1, 0) = (2, 3) − (2, 0) = (0, 3).
+  Why: 2 × 0 + (−3) × 1 + 0 × 0 = −3: the player moves against the normal, into the platform.
 
-- [ ] (4, 3)
+- [ ] No: v · n̂ = 3 is positive.
 
-  Why: (−2) × (−1, 0) = (2, 0) is taken away, not added.
+  Why: (−3) × 1 = −3, not 3: the y-part of v is negative.
 
-- [ ] (2, 0)
+- [ ] We cannot tell without the length of v.
 
-  Why: The wall removes the x-part (into the wall), not the y-part.
+  Why: The sign of v · n̂ is enough: negative means into the platform.
+:::
+
+::: {.sort}
+Step 4: which order of the corners gives each result? Sort the cards.
+
+Order A, B, C
+:   n = (0, 4, 0), so n̂ = (0, 1, 0)
+
+    Why: (0, 0, 2) × (2, 0, 0) = (0, 4, 0); divide by its length 4.
+
+:   v · n̂ = −3: the game stops the fall
+
+    Why: (2, −3, 0) · (0, 1, 0) = −3: into the platform.
+
+Order A, C, B
+:   n = (0, −4, 0): it faces down
+
+    Why: (2, 0, 0) × (0, 0, 2) = (0, −4, 0): the other order turns the normal around.
+
+:   v · n̂ = 3: the player falls through the platform
+
+    Why: With n̂ = (0, −1, 0), the game thinks that the player moves away from the platform, so it does not stop the fall.
 :::
 :::
 
-::: {.callout-tip title="Try it 3 · Normal and slide"}
+{{< sim file="sims/normal-lab.html" poster="sims/normal-lab.png" title="Normal Lab: the normal of a triangle" height="720" >}}
+
+::: {.callout-tip title="Try it 3 · Normals"}
 Choose the right answer.
 
-::: {.match extra="(0, −3)|(0, 0, 9)"}
-A player moves (5, −2) onto a floor with n̂ = (0, 1). What is the slide?
-:   (5, 0)
-
-    Why: v · n̂ = −2; (5, −2) − (−2)(0, 1) = (5, 0).
-
-A player moves (4, 3) above a floor with n̂ = (0, 1). Does the game change the movement?
-:   no
-
-    Why: v · n̂ = 3 > 0: the player moves away from the floor.
-
+::: {.match extra="(0, −9, 0)|yes, into it"}
 What is (0, 0, 3) × (3, 0, 0)?
 :   (0, 9, 0)
 
     Why: (0 × 0 − 3 × 0, 3 × 3 − 0 × 0, 0 × 0 − 0 × 3).
+
+A player moves with v = (4, 3, 0) above a floor with n̂ = (0, 1, 0). Is the player moving into the floor?
+:   no, away from it
+
+    Why: v · n̂ = 3 is positive: the player moves away from the floor.
+
+A floor has the normal (0, 6, 0). What is its unit normal?
+:   (0, 1, 0)
+
+    Why: Divide by its length 6.
 :::
 :::
 
 ## Wrap-up {.summary}
 
-- You can find the nearest target and the part of a vector along and across
-  a direction.
-- You can decide with "along" and "across" what a beam or a shot hits.
-- You can find the normal of a floor and make a player slide along it.
+- You can find the nearest target, how far along a direction and how far
+  to the side.
+- You can decide with "along" and "side" what a beam or a shot hits.
+- You can find the normal of a platform and check if a player moves into it.

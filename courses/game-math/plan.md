@@ -28,7 +28,7 @@ topic and practises that lecture.
 | Unit 2 (2) | **Lecture 2** Vector Operations and the Dot Product | Lectures 2 (2.1–2.4, 2.5 as an example) + 3 (3.1–3.3) | A1 B1 |
 | | **Seminar 2** Vector Exercises in Game Scenarios | Raft Rush; 3.4 vision cone | A1 B1 |
 | Unit 3 (3) | **Lecture 3** The Cross Product, Distance and Projection | Lectures 4 (4.1–4.4) + 5 (5.1–5.3) | B1 |
-| | **Seminar 3** Solving Movement and Aiming Problems | 5.4 Asteroid Beam; 4.4 normal and the slide | B1 |
+| | **Seminar 3** Solving Movement and Aiming Problems | 5.4 Asteroid Beam (along and side); 4.4 the normal of a platform | B1 |
 | Unit 4 (4) | **Lecture 4** Trigonometry: the Unit Circle, Rotation and Oscillation | Lectures 6 (6.1–6.4) + 7 (7.1, 7.3, 7.4) | A2 B1 |
 | | **Seminar 4** Trigonometry in Game Motion | Turn Lab; Sky Lift | A2 B1 |
 | Unit 5 (5) | **Lecture 5** Matrices: Operations, Multiplication, Identity and Inverse | Lecture 8 | A1 C1 |

@@ -109,3 +109,16 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   homework. Homework 1, Task 2 (3 marks) is done by hand (the velocity, the
   positions, a drawing); the AI box became an optional section with no
   marks, about another robot, hidden on paper.
+- 2026-11-10 (teacher's review of Unit 3): Seminar 3 asked about asteroids
+  that no picture showed. Activity 1 now uses the asteroids of round 1 of
+  Asteroid Beam (S = (1, 1), A (4, 5), B (5, 4), C (7, 9)) and draws them in
+  its task box (`images/beam-rocks.png`); Activity 2 draws its platform
+  (`images/floor-fall.png`). Lecture 3: the syllabus names projection
+  (week 3, second lecture), so 3.6 "How far along the road?" stays; 3.7
+  "Along and across" (the vector parts and the wall slide) was too hard and
+  no ILO needs it, so it became "How far to the side?": side = û × d, the
+  2D cross product with a unit vector (positive left, negative right, its
+  size the distance from the line). Asteroid Beam and Projection Lab show
+  "along" and "side" (the Wall slide mode is gone); Seminar 3 and Homework 3
+  have no slide (Homework 3, Task 2: the normal of a ramp). Removed: the
+  figures along-across, wall-slide and ray-hit.

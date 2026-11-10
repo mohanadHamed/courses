@@ -20,42 +20,42 @@ c) It points the other way.
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A station at (0, 0) fires a beam along û = (0.6, 0.8), 10 units long, at asteroids with the radius 1.
-- The asteroids are A (3, 4), B (7, 1), C (6, 8) and D (−3, −4).
-- **Do it:** Find "along" and "across" for each asteroid. Is B left or right of the beam? Which asteroid does the beam hit first?
-- Your product is a table with four rows.
+- A station at S = (1, 1) fires a beam along û = (0.6, 0.8), 10 units long, at asteroids with the radius 1.
+- The picture shows the asteroids A (4, 5), B (5, 4) and C (7, 9).
+- **Do it:** Find "along" and "side" for each asteroid. Which asteroid does the beam hit first?
+- Your product is a table with three rows.
 :::
 ::: {.column width="50%"}
-![](images/ray-hit.png)
+![](images/beam-rocks.png)
 :::
 ::::
 
 ## Live demo · Asteroid Beam
 
-{{< sim file="sims/asteroid-beam.html" poster="sims/asteroid-beam.png" title="Asteroid Beam: which asteroid does the beam hit first?" kind="game" task="**Show:** play the first round and tap the asteroid that the beam hits first. **Ask:** why is the nearest asteroid not always the one that is hit?" answer="The nearest asteroid can be behind the station or far to the side of the beam, like D (behind)." >}}
+{{< sim file="sims/asteroid-beam.html" poster="sims/asteroid-beam.png" title="Asteroid Beam: which asteroid does the beam hit first?" kind="game" task="**Show:** play the first round and tap the asteroid that the beam hits first. **Ask:** why is the nearest asteroid not always the one that is hit?" answer="B is as near as A, but it is 1.4 units to the side of the beam, more than the radius 1." >}}
 
 ## Check 1 · Hit or miss
 
 Which asteroid does the beam hit first?
 
 ::: {.reveal}
-1. A has along 5 and across 0, so the beam hits it.
-2. B has along 5 and across (4, −3) with the length 5, so it is far to the side, on the right.
-3. C has along 10 and across 0, so it is on the line but farther away.
-4. D has along −5, so it is behind the station. The beam hits **A** first.
+1. A has d = (3, 4), along 5 and side 0, so the beam hits it.
+2. B has d = (4, 3), along 4.8 and side −1.4, so it is 1.4 units to the right: missed.
+3. C has d = (6, 8), along 10 and side 0, so it is on the line but after A.
+4. A and B are both 5 units away, but the beam hits **A** first.
 :::
 
-## Activity 2 · Normal and slide · 25 min
+## Activity 2 · The platform · 25 min
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A floor triangle has the corners A = (0, 0, 0), B = (0, 0, 2) and C = (2, 0, 0).
-- A player falls onto the floor with v = (3, −4), and the floor has n̂ = (0, 1).
-- **Do it:** Find the normal for A, B, C and for A, C, B. Find the slide of the player.
-- Your product is two normals and two slides.
+- A platform has the corners A = (1, 2, 1), B = (1, 2, 3) and C = (3, 2, 1).
+- A player falls onto it with v = (2, −3, 0).
+- **Do it:** Find the normal in the order A, B, C and in the order A, C, B. Then compute the dot product of v and n̂ for each normal.
+- Your product is two normals and two dot products.
 :::
 ::: {.column width="50%"}
-![](images/wall-slide.png)
+![](images/floor-fall.png)
 :::
 ::::
 
@@ -63,19 +63,19 @@ Which asteroid does the beam hit first?
 
 {{< sim file="sims/normal-lab.html" poster="sims/normal-lab.png" title="Normal Lab: the normal of a triangle" task="**Show:** press Swap B and C, then View from below. **Ask:** why does the normal turn around when two corners swap?" answer="The order of the edges changes, and b × a = −(a × b): the same normal, turned around." >}}
 
-## Check 2 · Normal and slide
+## Check 2 · The normal of the platform
 
-What are the normals and the slides?
+What are the normals, and what does the game do?
 
 ::: {.reveal}
-1. (0, 0, 2) × (2, 0, 0) = (0, 4, 0), so the floor faces up.
-2. In the order A, C, B, the normal is (0, −4, 0), so it faces down.
-3. On the floor, v · n̂ = −4, so the slide is (3, −4) + (0, 4) = (3, 0).
-4. At the wall with n̂ = (−1, 0), the player with (2, 3) slides up with (0, 3).
+1. The edges are (0, 0, 2) and (2, 0, 0), so n = (0, 4, 0) and n̂ = (0, 1, 0): up.
+2. v · n̂ = −3 is negative, so the player moves into the platform, and the game stops the fall.
+3. In the order A, C, B, the normal is (0, −4, 0), and v · n̂ = 3.
+4. With the wrong order, the game thinks that the player moves away, and the player falls through.
 :::
 
 ## Wrap-up
 
-- You can find the nearest target and the parts of a vector along and across a direction.
-- You can decide with "along" and "across" what a beam or a shot hits.
-- You can find the normal of a floor and make a player slide along it.
+- You can find the nearest target, how far along a direction and how far to the side.
+- You can decide with "along" and "side" what a beam or a shot hits.
+- You can find the normal of a platform and check if a player moves into it.

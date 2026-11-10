@@ -1111,6 +1111,13 @@ Second question.
   from the notes (an example, a table, a name such as "Alpha" or "the Switch"),
   the page section shows it too, in a bullet or a figure. When notes or pages
   are shortened, check the questions again.
+- **The picture is in the activity that asks about it** (the teacher's
+  request of 2026-11-10). A question about objects in a picture (asteroids
+  A, B and C, the corners of a triangle) has that picture in the same
+  activity, best inside its task box, with exactly the names and numbers of
+  the questions; never a picture of another lesson, and never only a
+  simulator whose state changes. When the activity uses a simulator or a
+  mini-game, its first round shows the same objects with the same numbers.
 - **No question depends on another one.** Repeat the numbers in each question
   ("The same enemy E = (2, 7) and player P = (6, 4) …"); the student may answer
   in any order.
@@ -1518,6 +1525,18 @@ taken off. Rewrite them with short answers next semester.
 - Quarto version is pinned in the workflow; keep local Quarto the same.
 
 ## Lessons learned
+
+- 2026-11-10 (teacher's review of Game Math Seminar 3): Activity 1 asked
+  about four asteroids (A to D) that no picture showed: the figure of the
+  activity showed other enemies, and round 1 of its game had three other
+  asteroids. Now the picture of an activity shows exactly the objects and
+  numbers of its questions, inside the activity, and the game's first round
+  is the same (rule under "Try it"). In the same review, the teacher found
+  the end of Lecture 3 too hard: the parts of a vector along and across a
+  direction and the wall slide. The syllabus row names projection, so "how
+  far along" stays as one number; the vector split and the slide, which no
+  syllabus row or ILO names, became one easier number: how far to the side,
+  the 2D cross product with a unit vector.
 
 <!-- Add general rules from weekly retros here, newest first. -->
 

@@ -21,7 +21,7 @@
 <body class="theme-arcade">
 <main class="sim">
   <h1>Asteroid Beam</h1>
-  <p class="hint">The station fires a beam along û. For each asteroid, d = asteroid − station, <b>along</b> = d · û and <b>across</b> = |û<sub>x</sub> d<sub>y</sub> − û<sub>y</sub> d<sub>x</sub>|. The beam hits when 0 &lt; along ≤ range and across ≤ 1 (the radius). Which asteroid does it hit first?</p>
+  <p class="hint">The station fires a beam along û. For each asteroid, d = asteroid − station, <b>along</b> = d · û (how far forward) and <b>side</b> = û × d = û<sub>x</sub> d<sub>y</sub> − û<sub>y</sub> d<sub>x</sub> (how far to the side: positive left, negative right). The beam hits when 0 &lt; along ≤ range and the side is between −1 and 1 (the radius). Which asteroid does it hit first?</p>
   <div class="hud">
     <span class="lvl" id="lvl">Round 1</span>
     <span class="goal" id="goal"></span>
@@ -30,7 +30,7 @@
   <canvas id="c" aria-label="A space grid with the station, the beam direction and three asteroids"></canvas>
   <div class="pad" id="choices"></div>
   <table id="tbl" hidden>
-    <thead><tr><th>Asteroid</th><th>d</th><th>along</th><th>across</th><th>Result</th></tr></thead>
+    <thead><tr><th>Asteroid</th><th>d</th><th>along</th><th>side</th><th>Result</th></tr></thead>
     <tbody id="rows"></tbody>
   </table>
   <p id="msg" class="message">Round 1 is the story of the lesson.</p>
@@ -57,10 +57,10 @@
   function test(r) {
     const d = [r[1] - cur.S[0], r[2] - cur.S[1]];
     const along = d[0] * cur.u[0] + d[1] * cur.u[1];
-    const across = Math.abs(cur.u[0] * d[1] - cur.u[1] * d[0]);
-    const hit = along > 0 && along <= cur.range + 1e-9 && across <= RADIUS + 1e-9;
+    const side = cur.u[0] * d[1] - cur.u[1] * d[0];
+    const hit = along > 0 && along <= cur.range + 1e-9 && Math.abs(side) <= RADIUS + 1e-9;
     const why = hit ? "hit" : along <= 0 ? "miss: behind" : along > cur.range + 1e-9 ? "miss: too far" : "miss: too far to the side";
-    return { d, along, across, hit, why };
+    return { d, along, side, hit, why };
   }
   function answer() {
     let best = null;
@@ -90,7 +90,7 @@
     revealed = true; $("tbl").hidden = false;
     $("rows").innerHTML = cur.rocks.map((r) => {
       const t = test(r);
-      return `<tr><td>${r[0]} ${pair(r[1], r[2])}</td><td>${pair(...t.d)}</td><td>${fmt(t.along)}</td><td>${fmt(t.across)}</td><td class="${t.hit ? "hit" : "miss"}">${t.why}</td></tr>`;
+      return `<tr><td>${r[0]} ${pair(r[1], r[2])}</td><td>${pair(...t.d)}</td><td>${fmt(t.along)}</td><td>${fmt(t.side)}</td><td class="${t.hit ? "hit" : "miss"}">${t.why}</td></tr>`;
     }).join("");
   }
   function beep(f, d, type = "triangle") {
@@ -115,13 +115,13 @@
         solved = true;
         const got = tries === 1 ? 3 : tries === 2 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
         $("msg").textContent = best
-          ? `✓ Right! ${"★".repeat(got)} ${best.r[0]} is hit at along = ${fmt(best.t.along)} (across = ${fmt(best.t.across)} ≤ 1).`
+          ? `✓ Right! ${"★".repeat(got)} ${best.r[0]} is hit at along = ${fmt(best.t.along)} (side = ${fmt(best.t.side)}, between −1 and 1).`
           : `✓ Right! ${"★".repeat(got)} The beam misses all three asteroids.`;
         $("msg").className = "message good"; $("next").hidden = false;
         $("next").textContent = round < ROUNDS.length - 1 ? "Next round ▶" : "Finish ▶";
         [660, 880, 1320].forEach((f, i) => setTimeout(() => beep(f, 0.13), i * 110));
       } else {
-        $("msg").textContent = "✗ Not this one. Read the table: the beam stops at the first hit (the smallest along with across ≤ 1). Try again.";
+        $("msg").textContent = "✗ Not this one. Read the table: the beam stops at the first hit (the smallest along with a side between −1 and 1). Try again.";
         $("msg").className = "message bad"; beep(200, 0.3, "sawtooth");
       }
     }, FIRE_MS + 60);

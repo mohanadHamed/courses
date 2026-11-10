@@ -6,7 +6,7 @@ format: lesson-pptx
 
 ## Keywords
 
-{{< glossary cross-product surface-normal winding-order handedness distance projection perpendicular-part >}}
+{{< glossary cross-product surface-normal winding-order handedness distance projection >}}
 
 ## 3.1 Left or right?
 
@@ -227,7 +227,7 @@ c) A bigger distance always has a bigger square.
 
 ## Live demo · Projection Lab
 
-{{< sim file="sims/projection-lab.html" poster="sims/projection-lab.png" title="Projection Lab: along, across and slide" task="**Show:** drag v around a fixed û, then switch to Wall slide. **Ask:** when does the green part point backwards?" answer="When v points more than 90° away from û: then the value along is negative." >}}
+{{< sim file="sims/projection-lab.html" poster="sims/projection-lab.png" title="Projection Lab: along and to the side" task="**Show:** choose û = (0.6, 0.8) and drag v to (3, 4), then to (−3, −4). **Ask:** when is the value along negative?" answer="When v points backwards, more than 90° away from û: (−3, −4) gives −5, behind the start." >}}
 
 ## Try it 6 · Along the road
 
@@ -241,45 +241,45 @@ b) −3: the car is behind the start.
 c) Otherwise the result is too big.
 :::
 
-## 3.7 Along and across
+## 3.7 How far to the side?
 
 :::: {.columns}
 ::: {.column width="50%"}
-- The part along is the unit vector û, scaled by the dot product of v and û.
-- The part across is v minus the part along, and it is at a right angle to û.
-- The two parts add up to the vector v.
-- **Do it:** In Projection Lab, choose û = (0.8, 0.6) and v = (5, 0). Do the two parts add up to v?
+- The cross product with a unit vector û tells how far a point is from the line.
+- A positive side means left, and a negative side means right.
+- A round drone with the radius 1 is hit when its side is between −1 and 1.
+- **Do it:** In Projection Lab, choose û = (0.8, 0.6) and drag v to (2, 4). What does "side" say?
 
 ::: {.reveal}
-- **Result:** Yes: along (3.2, 2.4) + across (1.8, −2.4) = (5, 0).
+- **Result:** 0.8 × 4 − 0.6 × 2 = 3.2 − 1.2 = 2, so the point is 2 units to the left.
 :::
 :::
 ::: {.column width="50%"}
-![](images/along-across.png)
+![](images/side.png)
 :::
 ::::
 
-## Example · Wind on a plane
+## Example · Does the laser hit the drone?
 
-A plane flies along û = (1, 0). The wind is w = (3, 4).
-**Which part of the wind pushes the plane forward, and which part pushes it off course?**
+A laser at (0, 0) fires along û = (0.8, 0.6). A drone with the radius 1 is at D = (5, 0).
+**Does the laser hit the drone?**
 
 ::: {.reveal}
-1. The dot product is w · û = 3, so the part along is **(3, 0)**.
-2. The part across is (3, 4) − (3, 0) = **(0, 4)**.
-3. The pilot must steer against (0, 4) to stay on course.
+1. The vector to the drone is d = (5, 0), and along is 5 × 0.8 + 0 × 0.6 = 4, so D is in front.
+2. The side is 0.8 × 0 − 0.6 × 5 = −3, so D is 3 units to the right.
+3. 3 is more than the radius 1, so the laser **misses** D.
 :::
 
-## Try it 7 · Split it
+## Try it 7 · How far to the side?
 
-a) The vector is v = (4, 6), and û = (0, 1). What is the part along?
-b) What is the part across for the same vectors?
-c) What is the dot product of the part across and û?
+a) A laser fires along (1, 0) from (0, 0). How far to the side is a drone at (6, −2)?
+b) A laser fires along (0, 1) from (0, 0). On which side is a drone at (−3, 5)?
+c) A drone with the radius 1 is in front, and its side is −0.5. Is it hit?
 
 ::: {.answer}
-a) (0, 6)
-b) (4, 0)
-c) 0
+a) 2 units to the right: the side is −2.
+b) on the left: the side is 3.
+c) Yes: −0.5 is between −1 and 1.
 :::
 
 ## Game challenge · Turret Turn
@@ -306,5 +306,5 @@ c) to the left: f × d = 2
 - The 3D cross product gives a vector at a right angle to two vectors, and its order matters.
 - The normal of a triangle is (B − A) × (C − A), and the winding order decides the front.
 - The distance is the magnitude of B − A, and the squares are enough to compare.
-- The dot product with a unit vector gives the part along a direction.
-- The part across is the vector minus the part along.
+- The dot product with a unit vector tells how far along a direction a point is.
+- The cross product with a unit vector tells how far to the side a point is, and on which side.

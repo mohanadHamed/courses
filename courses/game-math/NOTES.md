@@ -122,3 +122,11 @@ Mathematics: LaTeX math (`$…$`) in the notes; plain text with
   "along" and "side" (the Wall slide mode is gone); Seminar 3 and Homework 3
   have no slide (Homework 3, Task 2: the normal of a ramp). Removed: the
   figures along-across, wall-slide and ray-hit.
+- 2026-11-10 (later the same day): the rule of the morning is now in the
+  seminar templates and in `check_size.py`, which compares the points that
+  an activity or a section names with their coordinates with the labels of
+  its pictures and of its game's poster. It found points that no picture
+  shows in Seminar 1 (Activity 3: A, B, G, P), Lecture 2 (2.3: G, P; Shadow
+  Cat: D), Lecture 3 (Turret Turn: drones B to F), Lecture 6 (6.5: C, H, P;
+  Drawbridge: E, H) and Practice 2 (Activity 2: A, P). They are listed in
+  `BEFORE_PICTURES` and get their pictures when they are next rewritten.

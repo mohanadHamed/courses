@@ -328,7 +328,9 @@ is activity-based. Templates: `seminar-template.qmd`,
      `::: {.callout-note title="Activity N · title · 15 min"}` box with a
      task for each student alone and a concrete product (on the page: its
      steps, each checked by the page, see "The page checks every task"; in
-     the worksheet: its `.check`), and
+     the worksheet: its `.check`), the picture that its questions are
+     about inside that box (see "The picture is in the activity that asks
+     about it"), and
      one Try it with 2–3 questions (with `Why:`). Seminars are where the
      syllabus seminar titles are done ("Matrix exercises", "Drawing a
      storyboard from a scene"). The unit's mini-game, when it fits, is the
@@ -422,7 +424,8 @@ slides.
 - Draw figures as SVG (keep the `.svg`, export a `.png` for PDF and slides:
   see `shared/sims/README.md`). Illustrated "game screens" of the made-up
   case-study games are welcome. Never use screenshots of commercial games or
-  copyrighted images.
+  copyrighted images. The screens of a real app are drawn too (see
+  "Screens of every app step").
 - No emoji or special symbols inside SVG figures (the PDF engine cannot draw
   them); draw icons as shapes.
 - No religious symbols, and nothing that looks like one. Above all, never a
@@ -674,13 +677,54 @@ adds nothing new:
 
 **The student works alone, so the Steps teach every task first** (the
 teacher's request of 2026-11-08). Each task to submit has a Step that
-shows how: the steps in the app in a numbered list, and a **model** of the
+shows how: the steps in the app, each with its screen (see "Screens of
+every app step" below), and a **model** of the
 product in another situation (a finished prompt with its parts marked, a
 small sheet with its formulas, a short paragraph made right), never the
 data of the task. The tasks are **simple enough to do alone**: one
 situation each, 2–4 short steps, one small product, all the data given;
 about 30 minutes for all of them. A task names the Step it practises
 ("Step 1 shows how").
+
+**A task asks only for what the device can do** (the teacher's request of
+2026-11-10). A screenshot or a photo taken on a phone keeps the name that
+the phone gives it (an iPhone cannot rename it in Photos), so a task asks
+for the screenshot or the photo, never for its file name. A task names a
+file only when the app that makes it asks for a name or the Step shows how
+to rename it (a scan saved from Drive or Files, a Word file). The same
+holds for homework. `check_size.py` warns about a task on a phone that
+names a screenshot or a photo.
+
+**Screens of every app step** (the teacher's request of 2026-11-10). The
+student works alone and may never have seen the app, so every Step that is
+done in an app, on a phone or a computer (the calendar, a scanner, Files,
+Word, Excel, PowerPoint, an AI assistant, the e-learning platform), shows
+the screens of that app: **one picture for each step**, with a numbered
+orange circle on what to tap, and the step under it in one or two short
+sentences. A student who sees the buttons can imagine the app and tries
+it; text alone does not do that.
+
+- Put the pictures in a `::: {.screens}` div, each with its caption, which
+  starts with the number of its circle:
+  `![[1]{.step-n} Open **Google Calendar**. Tap **+**.](images/x.png)`.
+  They stand side by side on a computer and one under the other on a phone.
+- When the steps differ between devices, give each device its tab:
+  `::: {.panel-tabset group="phone"}` with `### Android` and `### iPhone`
+  (or `group="computer"`: Windows and Mac, or the app and the web). The
+  page remembers the student's choice in every Step.
+- **Drawn, close to the real app** of the current version: its layout, its
+  words and where its buttons are, without logos. Check the app first: its
+  official help page, or the app in the iOS Simulator of Xcode for an
+  iPhone. Small differences between versions and phone makers are fine;
+  name the older word when it changed ("on an older iPhone: **Add**").
+  `tools/phone_screens.py` draws phone screens, one function per screen;
+  add a computer window to it when an activity needs one.
+- The screens show the **model** of the Step (Huda's study group, Omar's
+  homework), never the data of a task.
+- `check_size.py` warns about a Step that has the student tap, click or
+  press without its screens. `BEFORE_SCREENS` lists the online activities
+  written before this rule: each one gets its screens when it is next
+  written or rewritten.
 
 **The content type** (`content:` in the front matter, a chip on the page)
 varies the weeks, so the activities do not all look the same; it decides
@@ -1118,6 +1162,12 @@ Second question.
   the questions; never a picture of another lesson, and never only a
   simulator whose state changes. When the activity uses a simulator or a
   mini-game, its first round shows the same objects with the same numbers.
+  The templates put the picture inside the task box. `check_size.py`
+  compares the points that a seminar activity or a section of a page names
+  with their coordinates ("A (4, 5)", "S = (1, 1)") with the labels of its
+  pictures (the SVG) and of its game's poster; `BEFORE_PICTURES` lists the
+  older sessions where it found points that no picture shows, to be fixed
+  when they are next written or rewritten.
 - **No question depends on another one.** Repeat the numbers in each question
   ("The same enemy E = (2, 7) and player P = (6, 4) …"); the student may answer
   in any order.
@@ -1441,6 +1491,20 @@ no drafts").
   (`HOME_PAGES`, `FROZEN`) holds for this semester only: at the start of
   the next semester every lecture of every course is rewritten with the
   newest rules.
+- **A fix for one session is a rule for all of them** (the teacher's
+  request of 2026-11-10). The teacher asks for an improvement in one
+  session, often the one about to be taught, because there was no time to
+  look at more; but the improvement is meant for every session. So make it
+  in that session and, in the same PR, write it into the pipeline: the rule
+  in this file (or in the course `NOTES.md`), the templates in
+  `shared/templates/`, and a check in `check_size.py` or `check_figures.py`
+  where a script can see it. Do not rewrite the other sessions now (it
+  costs time and the usage limits): they follow the rule when they are next
+  written or rewritten (the bullet above), whether the teacher asks for one
+  session, a few, or all of them. When a new check finds older sessions
+  that break the rule, list them in the check (like `BEFORE_SCREENS` and
+  `BEFORE_PICTURES`) and name them in the PR, so the teacher can choose to
+  fix one sooner.
 - Build one unit at a time. Never generate all lessons up front.
 - Phase 1: `schedule.yml` + `plan.md` per course (the units of the 16-week
   syllabus → sessions → ILOs), approved by me first.
@@ -1525,6 +1589,26 @@ taken off. Rewrite them with short answers next semester.
 - Quarto version is pinned in the workflow; keep local Quarto the same.
 
 ## Lessons learned
+
+- 2026-11-10 (teacher's requests, later the same day): Online activity 2
+  of Digital Skills is done alone at home, and most of its steps are on the
+  phone (a reminder in the calendar, a page scanned into a PDF), but the
+  page gave them as text with one generic figure. Its Steps now show the
+  screens of the apps, one drawn picture per step with numbered orange
+  circles, in a tab for Android and one for iPhone (Google Calendar and
+  Calendar, Google Drive and Files), drawn after the official help pages
+  and the iOS Simulator with `tools/phone_screens.py`. Every online
+  activity gets such screens when it is next written or rewritten (rule
+  "Screens of every app step"). The teacher also said how every request
+  works: a fix asked for one session is meant for all of them; it goes into
+  the pipeline at once, and into the other sessions when they are rewritten
+  (rule "A fix for one session is a rule for all of them"). The rule of the
+  morning (the picture is in the activity that asks about it) went into the
+  seminar templates and into `check_size.py`, which found seven places in
+  five Game Math sessions to fix when they are rewritten. Task 1 of the
+  same activity asked to name a screenshot, which an iPhone cannot do in
+  Photos; it now asks for the screenshot only (rule "A task asks only for
+  what the device can do").
 
 - 2026-11-10 (teacher's review of Game Math Seminar 3): Activity 1 asked
   about four asteroids (A to D) that no picture showed: the figure of the

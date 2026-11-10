@@ -139,6 +139,14 @@ real tool.
   (a path, a file name, a formula, a prompt with task, context and format).
 - Everything works on a phone: many students do the online activity at home
   on a phone.
+- **The screens of the real apps** (AUTHORING.md, "Screens of every app
+  step"): an online activity is done alone, so every Step that has the
+  student work in an app shows its screens, one drawn picture per step,
+  with Android and iPhone in two tabs for a phone app (Online activity 2:
+  Google Calendar and Calendar, Google Drive and Files). A simulator lets
+  the student try the idea; the screens show where the buttons of the real
+  app are. The other online activities get their screens when they are
+  next written or rewritten.
 
 ## AI tools
 
@@ -330,3 +338,19 @@ every calendar week, by hand, with the university's template.
   joined the same sections. Online activities 3–13 got a model in each Step and simpler
   tasks (fixed data, fewer steps, one product each); Online activity 2,
   maybe open already, got the models only.
+- 2026-11-10 (teacher's request): Online activity 2 is studied alone at
+  home, and its Steps 1 and 2 are done on the phone, but they gave only
+  text and one generic figure each. They now show the screens of the apps
+  in two tabs, three drawn pictures in each (Android: Google Calendar and
+  Google Drive; iPhone: Calendar and Files), with the data of the models
+  (Huda's study group, Omar's math homework 3); the two generic figures
+  were removed. The screens follow the official help pages and the iOS
+  Simulator (iOS 26): the new event has the buttons ✓ and ×, no longer
+  Add and Cancel; Drive scans from the camera button at the bottom right
+  and asks for the name and for .pdf or .jpg; Files scans from its •••
+  button and names the file Scanned Document, which the student renames.
+  The other online activities get their screens when they are next written
+  or rewritten (AUTHORING.md, "Screens of every app step"). Task 1 now asks
+  for the screenshot only, with no file name: an iPhone cannot rename a
+  screenshot in Photos (AUTHORING.md, "A task asks only for what the device
+  can do").

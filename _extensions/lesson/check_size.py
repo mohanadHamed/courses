@@ -197,6 +197,41 @@ SHEET_QUESTIONS = (4, 12)
 ONLINE_CONTENT = ("lesson", "sims", "mix", "video", "course-video")
 WATCH_RE = re.compile(r"\{\{<\s*watch\s+(.*?)>\}\}", re.S)
 ONLINE_TASKS = (2, 4)
+# Screens of every app step (AUTHORING.md, "Blended courses", the teacher's
+# request of 2026-11-10): a Step that has the student tap, click or press in
+# an app shows the screens of that app (::: {.screens}, tools/phone_screens.py).
+APP_STEP_RE = re.compile(r"\b(tap|taps|click|clicks|press|presses|open the \w+ app)\b", re.I)
+# Online activities written before that rule. They get their screens when
+# they are next written or rewritten (AUTHORING.md, "Way of working"): take
+# each one out of this set then, and empty it at the start of next semester.
+BEFORE_SCREENS = {
+    "courses/digital-skills/week-03/online-03.qmd",
+    "courses/digital-skills/week-04/online-04.qmd",
+    "courses/digital-skills/week-05/online-05.qmd",
+    "courses/digital-skills/week-06/online-06.qmd",
+    "courses/digital-skills/week-08/online-08.qmd",
+    "courses/digital-skills/week-10/online-10.qmd",
+    "courses/digital-skills/week-13/online-13.qmd",
+    "courses/digital-skills/week-15/online-15.qmd",
+}
+# The picture is in the activity that asks about it (AUTHORING.md, "Try it",
+# the teacher's request of 2026-11-10): the points that the questions name
+# with their coordinates ("A (4, 5)", "S = (1, 1)") are drawn, with the same
+# names, in a picture of the same activity (or section of the page), or in
+# the poster of its game (the first round). "T(2, 3)" and "R(90°)", written
+# without a space, are transformations, not points.
+POINT_RE = re.compile(r"(?<![\w(])([A-Z])(?:\s*=\s*|\s+)\(\s*[-−]?\d+(?:\.\d+)?\s*,")
+# Sessions written before that rule, where the check found named points that
+# no picture of the same activity shows (2026-11-10). They get their pictures
+# when they are next written or rewritten: take each one out of this set then.
+BEFORE_PICTURES = {
+    "courses/game-math/week-01/seminar-01.qmd",       # Activity 3: A, B, G, P
+    "courses/game-math/week-02/lesson-02.qmd",        # 2.3: G, P; Shadow Cat: D
+    "courses/game-math/week-03/lesson-03.qmd",        # Turret Turn: drones B to F
+    "courses/game-math/week-06/lesson-06.qmd",        # 6.5: C, H, P; Drawbridge: E, H
+    "courses/game-math/week-14/practice-02.qmd",      # Activity 2: A, P
+}
+IMAGE_RE = re.compile(r'!\[[^\]]*\]\(([^)\s]+\.png)\)|\{\{< *sim [^>]*poster="([^"]+\.png)"')
 # Sessions sent to students before a rule changed keep their older model this
 # semester (AUTHORING.md, "Frozen sessions"): they are listed, not checked.
 # Rewrite them with the newest rules at the start of the next semester, then
@@ -236,6 +271,9 @@ ESSAY_RE = re.compile(r"\b(explain|describe|discuss|justify|in your own words|in
 # No marks or grades on homework and online activities (the teacher's request
 # of 2026-11-08): the e-learning platform keeps the grades.
 MARKS_RE = re.compile(r"\b\d+(?:\.\d+)?\s+marks?\b|\bmarks? (?:them|each|per)\b|\(no marks\)|\bno marks\b", re.I)
+# A file name asked for a screenshot or a photo ("name it `x.png`").
+PHONE_NAME_RE = re.compile(r"\b(?:screenshot|photo)\b[^\n]*?(?:\b(?:name it|call it|save it as|named)\b[^\n]*"
+                           r"|`[^`\n]+\.(?:png|jpe?g|heic)`)", re.I)
 CHOICE_OPTIONS = (2, 4)
 ORDER_CARDS = (3, 8)
 SORT_GROUPS = (2, 4)
@@ -575,6 +613,14 @@ def graded_warnings(text):
     for m in ESSAY_RE.finditer(plain_text):
         out.append('a task asks for written English ("%s"): ask for a choice, an order, a number, '
                    "a name or a few words" % m.group(0))
+    # A task asks only for what the device can do (the teacher's request of
+    # 2026-11-10): a phone gives a screenshot or a photo its own name.
+    for task in re.split(r"^(?=### )", text, flags=re.M):
+        m = PHONE_NAME_RE.search(task)
+        if m and re.search(r"\bphones?\b", task, re.I):
+            out.append('a task on a phone names a screenshot or a photo ("%s"); a phone gives it its own name: '
+                       'ask for the screenshot only (AUTHORING.md, "A task asks only for what the device can do")'
+                       % m.group(0).strip())
     return out
 
 
@@ -835,6 +881,34 @@ def front_matter(path):
     return ""
 
 
+def picture_warnings(path, part):
+    """The named points of one activity (or section) and its pictures: one string each."""
+    names = sorted(set(POINT_RE.findall(part)))
+    if len(names) < 2 or os.path.relpath(path).replace(os.sep, "/").endswith(tuple(BEFORE_PICTURES)):
+        return []
+    title = part.splitlines()[0].lstrip("#").strip()
+    rule = 'AUTHORING.md, "The picture is in the activity that asks about it"'
+    pictures = [a or b for a, b in IMAGE_RE.findall(part)]
+    if not pictures:
+        return ['"%s" names %s but shows no picture of them in the same activity (%s)'
+                % (title, ", ".join(names), rule)]
+    shown = set()
+    for p in pictures:
+        svg = os.path.join(os.path.dirname(path), p[:-4] + ".svg")
+        if not os.path.exists(svg):
+            return []      # a picture without its SVG source is not read
+        with open(svg, encoding="utf-8") as f:
+            for t in re.findall(r"<text\b[^>]*>(.*?)</text>", f.read(), re.S):
+                m = re.match(r"\s*([A-Z])(?:\s|\(|=|$)", re.sub(r"<[^>]+>", "", t))
+                if m:
+                    shown.add(m.group(1))
+    missing = [n for n in names if n not in shown]
+    if missing:
+        return ['"%s": its picture does not show %s (the questions name %s; %s)'
+                % (title, ", ".join(missing), ", ".join(names), rule)]
+    return []
+
+
 def is_online(path):
     return re.search(r"^online:\s*true\b", front_matter(path), re.M) is not None
 
@@ -862,6 +936,10 @@ def check_online(path, rel):
         k = len(TRY_IT_RE.findall(p))
         if k != 1:
             out.append('%s: "%s" has %d Try it boxes; give each step one self-check' % (rel, title, k))
+        if (APP_STEP_RE.search(p) and not re.search(r"^:::+ *\{\.screens", p, re.M)
+                and rel.replace(os.sep, "/") not in BEFORE_SCREENS):
+            out.append('%s: "%s" has the student work in an app but shows no screens of it (::: {.screens}, '
+                       'one picture per step; AUTHORING.md, "Screens of every app step")' % (rel, title))
     tasks = section(body, "Tasks to submit")
     n_tasks = len(re.findall(r"^### Task \d", tasks, re.M))
     if not (ONLINE_TASKS[0] <= n_tasks <= ONLINE_TASKS[1]):
@@ -976,6 +1054,7 @@ def check_seminar(path, rel, minutes):
         k = len(TRY_IT_RE.findall(p))
         if k > 1:
             out.append('%s: "%s" has %d Try it boxes; give each activity one' % (rel, title, k))
+        out.extend("%s: %s" % (rel, w) for w in picture_warnings(path, p))
     for w in answered_warnings(body) + ai_task_warnings(body, page=True):
         out.append("%s: %s" % (rel, w))
 
@@ -1091,6 +1170,9 @@ def check(project_dir):
         page_body = read(path)
         for w in answered_warnings(page_body) + ai_task_warnings(page_body, page=True):
             warnings.append("%s: %s" % (rel, w))
+        for part in re.split(r"^(?=## )", page_body, flags=re.M):
+            if part.startswith("## "):
+                warnings.extend("%s: %s" % (rel, w) for w in picture_warnings(path, part))
         if os.path.exists(book_path):
             for w in ai_task_warnings(read(book_path)):
                 warnings.append("%s: notes: %s" % (rel, w))

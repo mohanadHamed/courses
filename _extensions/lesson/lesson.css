@@ -584,6 +584,51 @@ div.table-scroll > table { margin-top: 0; margin-bottom: 0; }
   main code:not(pre code, table code) { white-space: pre-wrap; overflow-wrap: anywhere; }
 }
 
+/* ---------- Screens of an app, one per step ({.screens}) ----------
+   The pictures of the steps in an app (tools/phone_screens.py), each with
+   its step under it; a tab for each phone (::: {.panel-tabset
+   group="phone"}). Side by side on a wide screen, one under the other on a
+   phone, where each picture keeps a size you can read. The numbers of the
+   steps ([1]{.step-n}) are the orange circles of the pictures. */
+.screens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 1.2rem 1rem;
+  margin: 1rem 0 1.3rem;
+  align-items: start;
+}
+.screens .quarto-figure, .screens figure { margin: 0; }
+.screens figure > p { margin: 0; }
+main .screens figure img, main .screens .quarto-figure img {
+  display: block;
+  width: 100%;
+  max-width: 270px;
+  margin: 0 auto;
+}
+main .screens figcaption {
+  color: #2a2f2c;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: left;
+  margin: 0.55rem 0.15rem 0;
+}
+.step-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.45em;
+  height: 1.45em;
+  margin-right: 0.2em;
+  border-radius: 999px;
+  background: #d9480f;
+  color: #fff;
+  font-size: 0.82em;
+  font-weight: 800;
+  vertical-align: 0.08em;
+}
+.panel-tabset .nav-tabs .nav-link { font-weight: 800; }
+.panel-tabset .tab-content { padding-top: 0.2rem; }
+
 /* ---------- Videos of an online activity ({{< watch >}}) ---------- */
 .watch {
   margin: 1.4rem 0;

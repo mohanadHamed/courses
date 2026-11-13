@@ -37,7 +37,7 @@ All four units were last changed on 2026-11-09 (PR #32), before the rules of
 
 ## Progress
 
-- [ ] Game Math Unit 4
+- [x] Game Math Unit 4: Seminar 4 pictures inside the activity boxes (`aim-drones`, `orb-lift`, drones named A, B, C); Lecture 4: a figure for the targets of 4.5 (`targets`), the Game challenge in one box of four questions, a tick instead of a sentence in the 4.3 Do it of the notes, exercise 16 new; Homework 4 Task 1b a short answer instead of "Give the reason" (solution changed).
 - [ ] Computing Systems Unit 5
 - [ ] Digital Media Unit 4
 - [ ] Digital Skills Unit 3

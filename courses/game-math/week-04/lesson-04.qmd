@@ -278,6 +278,8 @@ instead of 0°.
 A turret is at (0, 0). The targets are at (5, 0), (0, 4), (−3, 3) and
 (−3, −3).
 
+![The turret and the four targets of this task.](images/targets.png){width=70%}
+
 ::: {.order}
 Put the targets in order of their atan2 angle, from the smallest to the
 biggest.
@@ -433,37 +435,30 @@ only the heading. Ana lives at (5, 8.7), Ben at (0, 10) and Cara at
 
 {{< sim file="sims/drone-drop.html" poster="sims/drone-drop.png" title="Drone Drop: choose the heading to each house" kind="game" height="780" >}}
 
-::: {.callout-tip title="Try it 8 · Which heading?"}
+::: {.callout-tip title="Try it 8 · Deliver the parcels"}
 Drone Drop: depot (0, 0), speed 10, 1 second. Ana (5, 8.7), Ben (0, 10),
-Cara (−7.1, 7.1). Choose the right answer.
+Cara (−7.1, 7.1). cos 30° = 0.87, sin 30° = 0.5. Choose the right answer.
 
-::: {.match extra="30°|180°"}
-Which heading reaches Ana?
+::: {.match extra="30°|(−5, −8.7)"}
+Which heading reaches Ana at (5, 8.7)?
 :   60°
 
     Why: (5, 8.7) = 10 × (0.5, 0.87) = 10 × (cos 60°, sin 60°).
 
-What is the velocity with the heading 60°?
-:   (5, 8.7)
+Which heading reaches Cara at (−7.1, 7.1)?
+:   135°
 
-    Why: 10 × (cos 60°, sin 60°) = 10 × (0.5, 0.87).
-:::
-:::
+    Why: 10 × (cos 135°, sin 135°) = 10 × (−0.71, 0.71): left and up.
 
-::: {.callout-tip title="Try it 9 · New customers (harder)"}
-Drone Drop: depot (0, 0), speed 10, 1 second. cos 30° = 0.87,
-sin 30° = 0.5. Choose the right answer.
-
-::: {.match extra="(5, −8.7)|(−5, −8.7)"}
-The drone flies at 210°. Where does the parcel fall?
-:   (−8.7, −5)
-
-    Why: 10 × (−0.87, −0.5): quadrant III.
-
-A customer lives at (0, −10). Which heading?
+A new customer lives at (0, −10). Which heading?
 :   270°
 
     Why: straight down is 270°.
+
+(Harder) The drone flies at 210°. Where does the parcel fall?
+:   (−8.7, −5)
+
+    Why: 210° is 30° past 180°: 10 × (−0.87, −0.5), quadrant III.
 :::
 :::
 

@@ -1,15 +1,15 @@
 # The 12 weeks of the course in teaching order (AUTHORING.md, "Units and
-# sessions"; "Blended courses"): 10 core weeks (units) and 2 practice weeks
-# (filling weeks), built on syllabus v3 (2026-11-13: the official course
-# description of the study plan). The course is practical and blended: every
-# week has a face-to-face lab session (60 min) and an online activity
-# (asynchronous, on the e-learning platform, with tasks to submit).
+# sessions"; "Blended courses"): 11 core weeks (units) and 1 practice week
+# (the review), built on syllabus v4 (2026-11-14: the official course
+# description merged with Smart Digital Skills, Office and AI tools). The
+# course is practical and blended: every week has a face-to-face lab
+# session (60 min) and an online activity (asynchronous, on the e-learning
+# platform, with tasks to submit).
 #
 # A unit is a core week: Lecture N (face-to-face, new ideas) and its online
 # activity, which practises the unit (and may add a skill of its syllabus
-# row). A practice week (`filling: true`) has no new ideas: Practice N
-# (hands-on work on earlier lectures) and an online practice activity.
-# Online activities are numbered 1-12 in teaching order. Exams are not here.
+# row). A practice week (`filling: true`) has no new ideas. Online
+# activities are numbered 1-12 in teaching order. Exams are not here.
 #
 # `week` is the syllabus week whose row the week covers (folder week-WW,
 # tools/course_package.py); `covers` lists more syllabus rows of a merged
@@ -17,69 +17,69 @@
 # practice; practises: the lectures it applies.
 #
 # Units 1 and 2 were taught before syllabus v3 (fall 2026-2027) and keep
-# their sessions; their ILO codes follow v3.
+# their sessions and their files.
 
 units:
   - unit: 1
     week: 1
     sessions:
       - {kind: lecture, n: 1, slot: "Lecture 1 (face-to-face, computer lab)", title: "Digital Skills and the Apps That Make Us Productive", ilos: [A1]}
-      - {kind: online, n: 1, slot: "Lecture 2 (online activity)", title: "Your University Account, Cloud Storage and Files", ilos: [C1]}
+      - {kind: online, n: 1, slot: "Lecture 2 (online activity)", title: "Your University Account, Cloud Storage and Files", ilos: [A1, C1]}
   - unit: 2
     week: 2
     sessions:
-      - {kind: lecture, n: 2, slot: "Lecture 1 (face-to-face, computer lab)", title: "Everyday Digital Skills: Search, Screenshots and an AI Assistant", ilos: [A2, C1]}
-      - {kind: online, n: 2, slot: "Lecture 2 (online activity)", title: "Your Phone for Study: Reminders, Scans and a Clear Prompt", ilos: [A2, C1]}
+      - {kind: lecture, n: 2, slot: "Lecture 1 (face-to-face, computer lab)", title: "Everyday Digital Skills: Search, Screenshots and an AI Assistant", ilos: [A1, A2, B2, C1]}
+      - {kind: online, n: 2, slot: "Lecture 2 (online activity)", title: "Your Phone for Study: Reminders, Scans and a Clear Prompt", ilos: [A1, B2, C1]}
   - unit: 3
     week: 3
     sessions:
-      - {kind: lecture, n: 3, slot: "Lecture 1 (face-to-face, computer lab)", title: "Digital Communication and Collaboration: E-mail, Calendar, Meetings and Shared Files", ilos: [A2, C1]}
-      - {kind: online, n: 3, slot: "Lecture 2 (online activity)", title: "Safe Devices and Accounts: Passwords, Two-Step Verification, Phishing and Privacy", ilos: [A2, C1]}
+      - {kind: lecture, n: 3, slot: "Lecture 1 (face-to-face, computer lab)", title: "Microsoft Office and Digital Communication: Files, the Ribbon, E-mail, Meetings and Shared Files", ilos: [A2, C1]}
+      - {kind: online, n: 3, slot: "Lecture 2 (online activity)", title: "Safe Devices, Accounts and AI Tools: Passwords, Two-Step Verification, Phishing and Privacy", ilos: [A2, C1]}
   - unit: 4
     week: 4
     covers: [5]
     sessions:
-      - {kind: lecture, n: 4, slot: "Lecture 1 (face-to-face, computer lab)", title: "Digital Content (1): Documents in Word: Formatting, Styles, Tables and Pictures", ilos: [C2]}
-      - {kind: online, n: 4, slot: "Lecture 2 (online activity)", title: "Digital Content (2): Presentations in PowerPoint: Slides, Layouts, Themes and Pictures", ilos: [C2]}
+      - {kind: lecture, n: 4, slot: "Lecture 1 (face-to-face, computer lab)", title: "Digital Content (1): Word Documents, and a Draft from AI Checked", ilos: [A3, B2, C2]}
+      - {kind: online, n: 4, slot: "Lecture 2 (online activity)", title: "A CV and a Cover Letter with AI Help: Headings, a Header, a PDF and an AI-Use Statement", ilos: [A3, B2, C2]}
   - unit: 5
     week: 6
     sessions:
-      - {kind: lecture, n: 5, slot: "Lecture 1 (face-to-face, computer lab)", title: "Data Analysis (1): Excel: Cells, Formulas, References and Basic Functions", ilos: [B1]}
-      - {kind: online, n: 5, slot: "Lecture 2 (online activity)", title: "A Monthly Budget Sheet", ilos: [B1]}
+      - {kind: lecture, n: 5, slot: "Lecture 1 (face-to-face, computer lab)", title: "Digital Content (2): PowerPoint: Layouts, Themes, Pictures and Transitions", ilos: [A3, C2]}
+      - {kind: online, n: 5, slot: "Lecture 2 (online activity)", title: "A Presentation with AI Help, and a Graphic in Canva: Picture Sources and Copyright", ilos: [A3, B2, C2]}
   - unit: 6
     week: 7
     sessions:
-      - {kind: lecture, n: 6, slot: "Lecture 1 (face-to-face, computer lab)", title: "Data Analysis (2): Sorting, Filtering, Conditional Formatting and Charts", ilos: [B1]}
-      - {kind: online, n: 6, slot: "Lecture 2 (online activity)", title: "Data Analysis (3): Totals by Group, a PivotTable and What the Data Shows", ilos: [B1]}
+      - {kind: lecture, n: 6, slot: "Lecture 1 (face-to-face, computer lab)", title: "Data Analysis (1): Excel: Cells, Formulas, References and Basic Functions", ilos: [A3, B1]}
+      - {kind: online, n: 6, slot: "Lecture 2 (online activity)", title: "A Monthly Budget Sheet", ilos: [A3, B1]}
   - filling: true
     week: 8
     sessions:
-      - {kind: practice, n: 1, slot: "Lecture 1 (face-to-face, computer lab)", title: "Review of Lectures 1–6", ilos: [A1, A2, B1, C1, C2], practises: [1, 2, 3, 4, 5, 6]}
-      - {kind: online, n: 7, slot: "Lecture 2 (online activity)", title: "Review Activity: Practice Questions", ilos: [A1, A2, B1, C1, C2]}
+      - {kind: practice, n: 1, slot: "Lecture 1 (face-to-face, computer lab)", title: "Review of Lectures 1–6", ilos: [A1, A2, A3, B1, B2, C1, C2], practises: [1, 2, 3, 4, 5, 6]}
+      - {kind: online, n: 7, slot: "Lecture 2 (online activity)", title: "Review Activity: Practice Questions", ilos: [A1, A2, A3, B1, B2, C1, C2]}
   - unit: 7
     week: 9
-    covers: [10]
     sessions:
-      - {kind: lecture, n: 7, slot: "Lecture 1 (face-to-face, computer lab)", title: "Databases: Tables, Fields, Keys, Relationships and Queries", ilos: [C3]}
-      - {kind: online, n: 8, slot: "Lecture 2 (online activity)", title: "The Shop Database: a Form, Queries and a Report", ilos: [C3]}
+      - {kind: lecture, n: 7, slot: "Lecture 1 (face-to-face, computer lab)", title: "Data Analysis (2): Sorting, Filtering, Conditional Formatting and Charts", ilos: [B1]}
+      - {kind: online, n: 8, slot: "Lecture 2 (online activity)", title: "Data Analysis (3) with AI: Formulas, a PivotTable and What the Data Shows", ilos: [B1, B2]}
   - unit: 8
+    week: 10
+    sessions:
+      - {kind: lecture, n: 8, slot: "Lecture 1 (face-to-face, computer lab)", title: "Databases: Tables, Fields, Keys, Relationships and Queries", ilos: [C3]}
+      - {kind: online, n: 9, slot: "Lecture 2 (online activity)", title: "The Shop Database: a Form, Queries and a Report", ilos: [C3]}
+  - unit: 9
     week: 11
     sessions:
-      - {kind: lecture, n: 8, slot: "Lecture 1 (face-to-face, computer lab)", title: "Creating a Digital Service: Types, Planning and an Online Form", ilos: [A2, C4]}
-      - {kind: online, n: 9, slot: "Lecture 2 (online activity)", title: "A Booking Service: an Online Form Linked to a Spreadsheet", ilos: [A2, C4, D1]}
-  - unit: 9
+      - {kind: lecture, n: 9, slot: "Lecture 1 (face-to-face, computer lab)", title: "Creating a Digital Service: Types, Planning and an Online Form", ilos: [A4, C4]}
+      - {kind: online, n: 10, slot: "Lecture 2 (online activity)", title: "A Booking Service: an Online Form Linked to a Spreadsheet", ilos: [A4, C4, D1]}
+  - unit: 10
     week: 12
     covers: [13]
     sessions:
-      - {kind: lecture, n: 9, slot: "Lecture 1 (face-to-face, computer lab)", title: "Website Design: Plan, Build and Design a Website", ilos: [C4]}
-      - {kind: online, n: 10, slot: "Lecture 2 (online activity)", title: "The Service Website: Pages, Publishing and the Form", ilos: [C4, D1]}
-  - unit: 10
+      - {kind: lecture, n: 10, slot: "Lecture 1 (face-to-face, computer lab)", title: "Website Design: Plan, Build and Design a Website", ilos: [C4]}
+      - {kind: online, n: 11, slot: "Lecture 2 (online activity)", title: "The Service Website: Pages with AI-Drafted Text, Publishing and the Form", ilos: [B2, C4, D1]}
+  - unit: 11
     week: 14
+    covers: [15]
     sessions:
-      - {kind: lecture, n: 10, slot: "Lecture 1 (face-to-face, computer lab)", title: "Marketing Digital Services: Audience, Message, Channels and Results", ilos: [A2, C5]}
-      - {kind: online, n: 11, slot: "Lecture 2 (online activity)", title: "E-marketing: a Product Page, a Promotional Post and a Short Marketing Plan", ilos: [C2, C5, D1]}
-  - filling: true
-    week: 15
-    sessions:
-      - {kind: practice, n: 2, slot: "Lecture 1 (face-to-face, computer lab)", title: "Course Project Presentations: a Digital Service with Its Website, Content, Data and Marketing Plan", ilos: [C2, C3, C4, C5, D1], practises: [4, 5, 6, 7, 8, 9, 10]}
-      - {kind: online, n: 12, slot: "Lecture 2 (online activity)", title: "Final Submission of the Course Project", ilos: [C2, C3, C4, C5, D1]}
+      - {kind: lecture, n: 11, slot: "Lecture 1 (face-to-face, computer lab)", title: "Marketing Digital Services: Audience, Message, Channels and Results", ilos: [A4, B2, C5]}
+      - {kind: online, n: 12, slot: "Lecture 2 (online activity)", title: "The Course Project: a Post, a Marketing Plan, Three Slides and the Final Submission", ilos: [B2, C2, C5, D1]}

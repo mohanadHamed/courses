@@ -1,12 +1,59 @@
-# Digital Skills on syllabus v3: rewrite of Units 3–10 — status
+# Digital Skills on syllabus v4 (and v3 before it): rewrite of Units 3–11 — status
 
-**Resume here.** Branch `claude/happy-volta-gzvzrv` in both repos
-(`courses` and `courses-private`). One commit per finished unit, pushed at
-once. A new session reads this file, `courses/digital-skills/plan.md` (the
-map) and `schedule.yml`, then continues with the first unchecked item of
-"Progress".
+**Resume here.** Branch `claude/happy-volta-gzvzrv` in both repos (open
+PRs mohanadHamed/courses#37 and mohanadHamed/courses-private#6). One commit
+per finished unit, pushed at once. Read this file, `plan.md` and
+`schedule.yml`, then continue with the first unchecked item of "Progress
+(plan v5)".
 
-## The request (2026-11-13)
+## Syllabus v4 (2026-11-14): what changed
+
+The teacher merged the official description (v3) with *Smart Digital
+Skills* (Office and AI tools). New ILOs A3 (Word/Excel/PowerPoint), A4
+(services and e-marketing concepts), B2 (evaluate AI output); C2 and D1
+include AI. Rows 3–6 are Office and AI again: row 3 adds Office concepts
+(ribbon, templates, formats, saving) and "what not to share with an AI
+tool"; row 4 online is a structured Word report; row 5 is Word with AI and
+an AI-assisted CV and cover letter; row 6 is PowerPoint with AI and Canva.
+Excel moves to rows 7 and 9 (row 9 online with AI); databases are one row
+(10); the website and marketing rows add AI text and visuals, checked.
+
+**The teacher's decision:** the project is mandatory (D1), so 11 units and
+no separate project week (plan v5, `plan.md`).
+
+## Progress (plan v5)
+
+- [x] Plan: `_metadata.yml` (v4 ILOs), `schedule.yml`, `plan.md`, this file.
+- [ ] Unit 3 (week-03): Lecture 3 = Office concepts (Window Tour, Ribbon
+      Finder, Save Lab, kept in week-03/sims) + e-mail and meeting (one
+      experiment) + shared files; Online activity 3 + AI privacy (Prompt
+      Cleaner idea: what not to share with an AI tool).
+- [ ] Unit 4 (week-04): Lecture 4 Word + an AI draft checked and
+      proofread; Online activity 4 CV and cover letter with AI (old v2 sims
+      in week-05/sims: letter-builder, cv-checker, word-ai-lab, check-lab).
+- [ ] Unit 5 (week-06): Lecture 5 PowerPoint (from v2 Lecture 8 in git
+      history, week-09/lesson-08*), Online activity 5 a presentation with
+      AI (v2 Online activity 9: outline-lab, image-prompt-lab) + Canva and
+      Picture Rights.
+- [ ] Unit 6 (week-07): Excel (1) moved from week-06 (Lecture 6, Online 6).
+- [ ] Practice 1 and Online activity 7 (week-08): review of the new 1–6.
+- [ ] Unit 7 (week-09): Excel (2) moved from week-07 (Lecture 7); Online
+      activity 8 = the PivotTable activity + AI formulas and summary checked.
+- [ ] Unit 8 (week-10): databases moved from week-09 (Lecture 8, Online 9).
+- [ ] Unit 9 (week-11): renumber (Lecture 9, Online 10).
+- [ ] Unit 10 (week-12): renumber (Lecture 10, Online 11) + AI-drafted page text.
+- [ ] Unit 11 (week-14): renumber (Lecture 11, Online 12 = post with an AI
+      visual checked, plan, three slides, final submission); remove week-15.
+- [ ] Clean-up: NOTES, index, AUTHORING, check_size lists, glossary;
+      private: solutions renumbered, platform weeks 6–14, `syllabus-weeks.yml` v4.
+
+Rule for moving folders: the hidden face-to-face version links the old
+simulators and images of week-03 to week-15 (`../../week-WW/...`): copy
+what a moved session needs, never move or delete those files.
+
+## Plan v4 (syllabus v3, 2026-11-13): the earlier rewrite
+
+### The request (2026-11-13)
 
 The teacher rebuilt the syllabus (v3, 13/11/2026) on the **official course
 description** of the study plan: the concept of digital skills and the

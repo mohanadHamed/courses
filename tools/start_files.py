@@ -258,6 +258,17 @@ FILES = {
         ("Types", [["Type", "Sales (JD)"], ["Paper", 77], ["Drinks", 51], ["Bags", 72]], [12, 12]),
         ("Days", [["Day", "Sales (JD)"], ["Sun", 24], ["Mon", 54], ["Tue", 26], ["Wed", 65], ["Thu", 31]], [10, 12]),
     ]),
+    # Online activity 6, Data Analysis (3) (week-07): the training hours of
+    # the Sunrise staff, for a PivotTable (Sales 18, Office 16, Shop 14;
+    # Excel 24, Word 16, Safety 8; 48 hours in all).
+    DS + "/week-07/files/training.xlsx": ("xlsx", [
+        ("Training", [["Month", "Department", "Course", "Hours"],
+                      ["Jan", "Sales", "Excel", 6], ["Jan", "Office", "Word", 4], ["Jan", "Shop", "Safety", 2],
+                      ["Feb", "Sales", "Word", 4], ["Feb", "Office", "Excel", 6], ["Feb", "Shop", "Excel", 6],
+                      ["Mar", "Sales", "Safety", 2], ["Mar", "Office", "Safety", 2], ["Mar", "Shop", "Word", 4],
+                      ["Apr", "Sales", "Excel", 6], ["Apr", "Office", "Word", 4], ["Apr", "Shop", "Safety", 2]],
+         [8, 12, 10, 8]),
+    ]),
     # Lecture 8, PowerPoint: a short talk in the default theme, with one slide
     # of six long points (Experiment 3) and one of three short points
     # (the animation of Experiment 4). Not Slide Doctor: that is the Game challenge.

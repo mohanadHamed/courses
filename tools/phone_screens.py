@@ -1382,6 +1382,93 @@ def ppt_picture_1(s, top):
     top.mark(3, 230, 178)
 
 
+# =====================================================================
+# Digital Skills, Online activity 6 (week-07, syllabus v3): a PivotTable.
+# The model is Rana's March (Paper 206, Drinks 71, Bags 78 JD); never the
+# data of the task (the training hours).
+# =====================================================================
+
+def excel_grid(s, rows, x=30, y=134, cw=(70, 70, 60, 70)):
+    for r, row in enumerate(rows):
+        cx = x
+        for c, v in enumerate(row):
+            s.rect(cx, y + 22 * r, cw[c], 22, fill="#ffffff" if r else "#f1f3f5", stroke="#d0d4d9", sw=0.8)
+            s.text(cx + 5, y + 22 * r + 15, str(v), 11, 600 if r == 0 else 400, INK)
+            cx += cw[c]
+
+
+@window("computer")
+def pivot_win_1(s, top):
+    """Excel: click in the data, Insert › PivotTable, then OK."""
+    office_bar(s, "Excel", EXCEL, "march.xlsx", tabs=("File", "Home", "Insert", "Data", "View"), active="Insert")
+    s.rect(30, 86, 74, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(67, 107, "PivotTable", 11.5, 600, INK, "middle")
+    excel_grid(s, [["Week", "Item", "Type", "Total"], [1, "Coffee", "Drinks", 6], [1, "Pen", "Paper", 8],
+                   [1, "Juice", "Drinks", 2], [1, "Notebook", "Paper", 60], [2, "Bag", "Bags", 12]])
+    s.rect(320, 150, 210, 150, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(334, 176, "Create PivotTable", 13.5, 700, INK)
+    s.text(334, 202, "Table/Range: March!A1:E25", 11.5, 400, GREY)
+    s.text(334, 228, "New Worksheet", 11.5, 400, INK)
+    s.rect(440, 262, 76, 26, fill=EXCEL, rx=4)
+    s.text(478, 280, "OK", 13, 700, "#ffffff", "middle")
+    top.ring(116, 54, 54, 26, 6)
+    top.mark(1, 182, 66)
+    top.ring(26, 82, 82, 40, 6)
+    top.mark(2, 18, 102)
+    top.ring(436, 258, 84, 34, 6)
+    top.mark(3, 422, 296)
+
+
+@window("computer")
+def pivot_win_2(s, top):
+    """The PivotTable Fields: Type to Rows, Total to Values; the result."""
+    s.rect(15, 15, WW - 30, WH - 30, fill="#ffffff", rx=9)
+    excel_grid(s, [["Row Labels", "Sum of Total"], ["Bags", 78], ["Drinks", 71], ["Paper", 206], ["Grand Total", 355]],
+               x=30, y=40, cw=(100, 100))
+    s.rect(330, 26, 200, 310, fill="#f8f9fa", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(344, 50, "PivotTable Fields", 13, 700, INK)
+    for i, f in enumerate(["Week", "Item", "Type", "Total"]):
+        y = 76 + 24 * i
+        s.rect(344, y - 12, 12, 12, fill="#ffffff", stroke=GREY, sw=1, rx=2)
+        if f in ("Type", "Total"):
+            icon_check(s, 350, y - 6, EXCEL, 0.5, 1.8)
+        s.text(364, y, f, 12, 400, INK)
+    s.text(344, 196, "Rows", 11.5, 600, GREY)
+    s.rect(344, 204, 172, 26, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=3)
+    s.text(352, 222, "Type", 12, 600, INK)
+    s.text(344, 258, "Values", 11.5, 600, GREY)
+    s.rect(344, 266, 172, 26, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=3)
+    s.text(352, 284, "Sum of Total", 12, 600, INK)
+    top.ring(340, 200, 180, 34, 6)
+    top.mark(4, 330, 196)
+    top.ring(340, 262, 180, 34, 6)
+    top.mark(5, 330, 258)
+    top.ring(26, 124, 204, 26, 6)
+    top.mark(6, 244, 138)
+
+
+@window("computer")
+def pivot_chart_1(s, top):
+    """Excel: click the PivotTable, Insert › Column chart; the chart of Rana's month."""
+    office_bar(s, "Excel", EXCEL, "march.xlsx", tabs=("File", "Home", "Insert", "Data", "View"), active="Insert")
+    s.rect(30, 86, 44, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    for i, h in enumerate((10, 18, 14)):
+        s.rect(40 + 8 * i, 112 - h, 6, h, fill=EXCEL)
+    excel_grid(s, [["Row Labels", "Sum of Total"], ["Bags", 78], ["Drinks", 71], ["Paper", 206], ["Grand Total", 355]],
+               x=30, y=140, cw=(90, 90))
+    s.rect(250, 140, 280, 190, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(390, 162, "Sales by type (JD)", 12, 700, INK, "middle")
+    for i, (lab, v) in enumerate((("Bags", 78), ("Drinks", 71), ("Paper", 206))):
+        h = v * 0.62
+        x = 290 + 78 * i
+        s.rect(x, 306 - h, 44, h, fill=EXCEL)
+        s.text(x + 22, 322, lab, 11, 400, INK, "middle")
+    top.ring(116, 54, 54, 26, 6)
+    top.mark(1, 182, 66)
+    top.ring(26, 82, 52, 40, 6)
+    top.mark(2, 92, 102)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -1413,6 +1500,9 @@ SCREENS = {
     "courses/digital-skills/week-04/images/ppt-newslide-1": ppt_newslide_1,
     "courses/digital-skills/week-04/images/ppt-design-1": ppt_design_1,
     "courses/digital-skills/week-04/images/ppt-picture-1": ppt_picture_1,
+    "courses/digital-skills/week-07/images/pivot-win-1": pivot_win_1,
+    "courses/digital-skills/week-07/images/pivot-win-2": pivot_win_2,
+    "courses/digital-skills/week-07/images/pivot-chart-1": pivot_chart_1,
 }
 
 

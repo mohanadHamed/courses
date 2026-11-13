@@ -295,7 +295,7 @@ subtitle: "A short talk for the Sunrise staff"
                    [4, "Coffee", "Drinks", 4, 4], [4, "Pen", "Paper", 10, 5], [4, "Juice", "Drinks", 24, 12]],
          [8, 12, 10, 8, 12]),
     ]),
-    # Lecture 6, Excel (1): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
+    # Lecture 5, Excel (1) (week-06): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
     DS + "/week-06/files/shop-start.xlsx": ("xlsx", [
         ("Shop", [["Item", "Price (JD)", "Quantity"],
                   ["Notebook", 2, 10],

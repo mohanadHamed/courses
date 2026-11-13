@@ -1469,6 +1469,98 @@ def pivot_chart_1(s, top):
     top.mark(2, 92, 102)
 
 
+# =====================================================================
+# Digital Skills, Online activity 8 (week-09, syllabus v3): Access. The
+# model is the Books table of the college library (BookID, Title, Type,
+# Pages); never the data of the tasks (the Products of the Sunrise shop).
+# =====================================================================
+
+ACCESS = "#a4373a"
+
+
+def access_frame(s, active, name="library : Database"):
+    office_bar(s, "Access", ACCESS, name, tabs=("File", "Home", "Create", "External Data", "Database Tools"), active=active)
+    s.rect(15, 123, 120, 222, fill="#f8f9fa")
+    s.text(24, 142, "All Access Objects", 10.5, 600, GREY)
+    s.text(30, 166, "Books", 12, 400, INK)
+
+
+@window("computer")
+def access_form_1(s, top):
+    """Access: select the table, Create › Form; the form shows one record."""
+    access_frame(s, "Create")
+    s.rect(26, 152, 104, 22, fill="#fdecea")
+    s.text(30, 166, "Books", 12, 600, INK)
+    s.rect(30, 86, 50, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(55, 107, "Form", 11.5, 600, INK, "middle")
+    s.rect(150, 134, 380, 200, fill="#ffffff", stroke="#d0d4d9", sw=1)
+    s.text(166, 160, "Books", 15, 700, ACCESS)
+    for i, (f, v) in enumerate([("BookID", "1"), ("Title", "Maths 1"), ("Type", "Study"), ("Pages", "220")]):
+        y = 186 + 30 * i
+        s.text(166, y + 4, f, 12, 600, INK)
+        s.rect(250, y - 12, 200, 22, fill="#ffffff", stroke="#c9cdd2", sw=1)
+        s.text(258, y + 4, v, 12, 400, INK)
+    s.text(166, 322, "Record: 1 of 6", 11.5, 400, GREY)
+    top.ring(24, 150, 108, 26, 6)
+    top.mark(1, 140, 160)
+    top.ring(116, 54, 58, 26, 6)
+    top.mark(2, 186, 66)
+    top.ring(26, 82, 58, 40, 6)
+    top.mark(3, 96, 102)
+
+
+@window("computer")
+def access_query_1(s, top):
+    """Access Query Design: the Criteria row, the Sort row, then Run."""
+    access_frame(s, "Create")
+    s.rect(30, 86, 44, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(52, 108, "! Run", 11.5, 700, ACCESS, "middle")
+    s.rect(150, 134, 120, 70, fill="#ffffff", stroke="#c9cdd2", sw=1)
+    s.text(160, 152, "Books", 12, 700, INK)
+    for i, f in enumerate(["Title", "Type", "Pages"]):
+        s.text(160, 170 + 14 * i, f, 10.5, 400, INK)
+    for r, (lab, a, b) in enumerate([("Field:", "Title", "Type"), ("Sort:", "Ascending", ""), ("Criteria:", "", "\"Story\"")]):
+        y = 224 + 30 * r
+        s.text(150, y + 17, lab, 11.5, 600, GREY)
+        for c, v in enumerate((a, b)):
+            x = 220 + 130 * c
+            s.rect(x, y, 126, 26, fill="#ffffff", stroke="#c9cdd2", sw=1)
+            s.text(x + 8, y + 17, v, 11.5, 400, INK)
+    top.ring(346, 280, 134, 34, 6)
+    top.mark(1, 492, 298)
+    top.ring(216, 250, 134, 34, 6)
+    top.mark(2, 204, 248)
+    top.ring(26, 82, 52, 40, 6)
+    top.mark(3, 92, 102)
+
+
+@window("computer")
+def access_report_1(s, top):
+    """Access: select the table, Create › Report; the report preview."""
+    access_frame(s, "Create")
+    s.rect(26, 152, 104, 22, fill="#fdecea")
+    s.text(30, 166, "Books", 12, 600, INK)
+    s.rect(30, 86, 56, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(58, 107, "Report", 11.5, 600, INK, "middle")
+    s.rect(150, 134, 380, 200, fill="#ffffff", stroke="#d0d4d9", sw=1)
+    s.text(166, 160, "Books", 15, 700, ACCESS)
+    s.text(166, 184, "Title", 11, 700, INK)
+    s.text(300, 184, "Type", 11, 700, INK)
+    s.text(420, 184, "Pages", 11, 700, INK)
+    for i, (t, ty, p) in enumerate([("Maths 1", "Study", "220"), ("The Old Bridge", "Story", "140"), ("English 2", "Study", "180"), ("Desert Rain", "Story", "200")]):
+        y = 206 + 22 * i
+        s.text(166, y, t, 11, 400, INK)
+        s.text(300, y, ty, 11, 400, INK)
+        s.text(420, y, p, 11, 400, INK)
+    s.text(166, 318, "Page 1 of 1", 10.5, 400, GREY)
+    top.ring(24, 150, 108, 26, 6)
+    top.mark(1, 140, 160)
+    top.ring(116, 54, 58, 26, 6)
+    top.mark(2, 186, 66)
+    top.ring(26, 82, 64, 40, 6)
+    top.mark(3, 102, 102)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -1503,6 +1595,9 @@ SCREENS = {
     "courses/digital-skills/week-07/images/pivot-win-1": pivot_win_1,
     "courses/digital-skills/week-07/images/pivot-win-2": pivot_win_2,
     "courses/digital-skills/week-07/images/pivot-chart-1": pivot_chart_1,
+    "courses/digital-skills/week-09/images/access-form-1": access_form_1,
+    "courses/digital-skills/week-09/images/access-query-1": access_query_1,
+    "courses/digital-skills/week-09/images/access-report-1": access_report_1,
 }
 
 

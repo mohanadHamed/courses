@@ -82,7 +82,10 @@ own sentences.
       PivotTable (start file `training.xlsx`, screens, Pivot Lab and Chart
       Lab); old Online activity 7 removed; platform week 9.
 - [x] Practice 1 and Online activity 7 (week-08): review of Lectures 1–6 (Activity 1 a Word notice e-mailed as a PDF; the new Review Quiz).
-- [ ] Unit 7 (week-09): Lecture 7 databases; Online activity 8.
+- [x] Unit 7 (week-09): Lecture 7 databases (Access; Field Lab, Key Lab,
+      Query Lab, game Data Desk; no start file); Online activity 8 (Form Lab,
+      Query Lab, Report Lab; screens of Access; tasks on the simulators,
+      letters only); old PowerPoint pages of week-09 removed; platform week 10.
 - [ ] Unit 8 (week-11): Lecture 8 digital service; Online activity 9 (the project choice).
 - [ ] Unit 9 (week-12): Lecture 9 website; Online activity 10.
 - [ ] Unit 10 (week-14): Lecture 10 e-marketing; Online activity 11.

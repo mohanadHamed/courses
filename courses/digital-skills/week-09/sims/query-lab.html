@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Query Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="db.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Query Lab: ask the table a question</h1>
+  <p class="hint">A practice model of Query Design in Access. Choose a criterion and a sort, then press Run. The Products table of the Sunrise shop has 8 records.</p>
+  <div class="task" id="task"></div>
+  <div class="box">
+    <div class="pad"><b>Criterion:</b>
+      <select id="cf"><option value="">(none)</option><option>Type</option><option>Price</option><option>InStock</option></select>
+      <select id="op"><option>=</option><option>&gt;</option><option>&lt;</option></select>
+      <select id="cv"></select></div>
+    <div class="pad"><b>Sort:</b>
+      <select id="sf"><option value="">(none)</option><option>Name</option><option>Price</option></select>
+      <select id="sd"><option value="asc">Ascending (A to Z, small to big)</option><option value="desc">Descending</option></select></div>
+    <div class="pad"><button type="button" id="run">Run</button><span class="score" id="count"></span></div>
+  </div>
+  <div id="out"></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="shop-db.js"></script>
+<script>
+(() => {
+  const VALUES = { Type: ["Paper", "Drinks", "Bags"], Price: ["1", "2", "5"], InStock: ["Yes", "No"] };
+  // [task, field, op, value, sort field, direction or null]
+  const T = [
+    ["Task 1: show only the products of the type Drinks.", "Type", "=", "Drinks", null],
+    ["Task 2: show only the products with a price above 5 JD.", "Price", ">", "5", null],
+    ["Task 3: show only the products that are not in stock (InStock = No).", "InStock", "=", "No", null],
+    ["Task 4: show the products of the type Paper, from the cheapest to the most expensive.", "Type", "=", "Paper", "Price", "asc"],
+    ["Task 5: show the products with a price below 2 JD, sorted by Name from A to Z.", "Price", "<", "2", "Name", "asc"],
+  ];
+  const $ = (id) => document.getElementById(id);
+  const col = (f) => SHOP.fields.indexOf(f);
+  let t = 0;
+  function fillValues() { const f = $("cf").value; $("cv").innerHTML = (VALUES[f] || []).map((v) => `<option>${v}</option>`).join(""); }
+  function run(cf, op, cv, sf, sd) {
+    let rows = SHOP.rows.slice();
+    if (cf) rows = rows.filter((r) => { const v = r[col(cf)]; if (cf === "Price") { const n = Number(cv); return op === "=" ? v === n : op === ">" ? v > n : v < n; } return op === "=" ? v === cv : false; });
+    if (sf) rows.sort((a, b) => { const x = a[col(sf)], y = b[col(sf)]; const c = typeof x === "number" ? x - y : String(x).localeCompare(y); return sd === "desc" ? -c : c; });
+    return rows;
+  }
+  function show() { $("task").textContent = t < T.length ? T[t][0] : "All five queries are right."; }
+  $("cf").addEventListener("change", fillValues);
+  $("run").addEventListener("click", () => {
+    const cf = $("cf").value, op = $("op").value, cv = $("cv").value, sf = $("sf").value, sd = $("sd").value;
+    if (cf && cf !== "Price" && op !== "=") { $("msg").textContent = "✗ For text and Yes/No, use = (for example Type = Drinks)."; $("msg").className = "message bad"; return; }
+    const rows = run(cf, op, cv, sf, sd);
+    $("out").innerHTML = dbTable(SHOP.fields, rows); $("count").textContent = `${rows.length} record${rows.length === 1 ? "" : "s"}`;
+    if (t >= T.length) return;
+    const [, f, o, v, s, d] = T[t];
+    const want = run(f, o, v, s, d).map((r) => r[0]).join(), got = rows.map((r) => r[0]).join();
+    if (want === got) { $("msg").textContent = `✓ Right: ${rows.length} record${rows.length === 1 ? "" : "s"}. The query shows only what you asked for.`; $("msg").className = "message good"; t++; setTimeout(show, 1200); }
+    else { $("msg").textContent = "✗ Not yet. " + (cf !== f || cv !== v || o !== op ? `The criterion is ${f} ${o} ${v}.` : `Sort by ${s}, ${d === "asc" ? "ascending" : "descending"}.`); $("msg").className = "message bad"; }
+  });
+  fillValues(); show();
+  $("out").innerHTML = dbTable(SHOP.fields, SHOP.rows); $("count").textContent = "8 records";
+})();
+</script>
+</body>
+</html>

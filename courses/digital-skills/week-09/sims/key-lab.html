@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Key Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="db.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Key Lab: the primary key and the relationship</h1>
+  <p class="hint">A primary key has a different value in every record. A relationship joins two tables with the same field.</p>
+  <div class="task" id="task"></div>
+  <div id="data"></div>
+  <div class="pad" id="opts"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="shop-db.js"></script>
+<script>
+(() => {
+  // [task, fields, rows, options, right, why, wrong reasons]
+  const R = [
+    ["Task 1 of 4: choose the primary key of the Customers table.", ["CustomerID", "Name", "City"],
+      [[1, "Huda", "Amman"], [2, "Omar", "Zarqa"], [3, "Lina", "Amman"], [4, "Huda", "Irbid"]],
+      ["CustomerID", "Name", "City"], "CustomerID", "Every customer has a different CustomerID.",
+      { Name: "Two customers are called Huda: a name can repeat.", City: "Amman is there twice: a city repeats." }],
+    ["Task 2 of 4: choose the primary key of the Products table.", SHOP.fields.slice(0, 4), SHOP.rows.slice(0, 5).map((r) => r.slice(0, 4)),
+      ["ProductID", "Type", "Price"], "ProductID", "Every product has a different ProductID.",
+      { Type: "Paper and Drinks repeat.", Price: "0.50 is there twice." }],
+    ["Task 3 of 4: the Orders table has the field CustomerID too. Which field joins Orders to Customers?", ["OrderID", "CustomerID", "Item", "Total"],
+      [[1, 1, "Notebook", 2], [2, 3, "Bag", 12], [3, 1, "Pen", 0.5]],
+      ["CustomerID", "OrderID", "Item"], "CustomerID", "The same field in both tables joins them: order 1 and order 3 belong to customer 1, Huda.",
+      { OrderID: "OrderID is only in the Orders table.", Item: "Item is only in the Orders table." }],
+    ["Task 4 of 4: one customer can have many orders. What is this relationship?", ["CustomerID", "Name", "Orders"],
+      [[1, "Huda", "order 1, order 3"], [3, "Lina", "order 2"]],
+      ["one-to-many", "one-to-one", "no relationship"], "one-to-many", "One customer (1) has many orders (∞): a one-to-many relationship.",
+      { "one-to-one": "Huda has two orders, not one.", "no relationship": "CustomerID joins the two tables." }],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, right = 0, tries = 0;
+  function show() {
+    const [t, f, rows, opts] = R[i]; tries = 0;
+    $("task").textContent = t; $("data").innerHTML = dbTable(f, rows);
+    $("opts").innerHTML = opts.map((o) => `<button type="button" class="ghost" data-o="${o}">${o}</button>`).join("");
+    document.querySelectorAll("#opts button").forEach((b) => b.addEventListener("click", () => pick(b.dataset.o)));
+  }
+  function pick(o) {
+    const [, , , , ok, why, bad] = R[i];
+    if (o !== ok) { tries++; $("msg").textContent = "✗ " + bad[o]; $("msg").className = "message bad"; return; }
+    if (!tries) right++;
+    $("msg").textContent = "✓ " + why; $("msg").className = "message good";
+    $("score").textContent = `${right} of ${R.length} right the first time`;
+    if (i < R.length - 1) { i++; setTimeout(show, 1800); } else { $("task").textContent = "Done: the keys and the relationship are right."; $("opts").innerHTML = ""; }
+  }
+  show();
+})();
+</script>
+</body>
+</html>

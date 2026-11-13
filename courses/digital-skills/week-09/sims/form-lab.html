@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Form Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="db.css">
+  <style>
+    .sim .form { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 14px; max-width: 420px; background: #f8f9fa; }
+    .sim .form label { display: grid; grid-template-columns: 100px 1fr; gap: 8px; align-items: center; margin: 6px 0; font-weight: 800; }
+    .sim .nav { display: flex; gap: 6px; align-items: center; margin-top: 8px; font-weight: 800; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Form Lab: one record at a time</h1>
+  <p class="hint">A form shows one record of a table at a time, in big boxes. It is easier than the table to read and to fill in.</p>
+  <div class="task" id="task"></div>
+  <div class="form">
+    <b>Products</b>
+    <label>ProductID <input type="text" id="f0" disabled></label>
+    <label>Name <input type="text" id="f1"></label>
+    <label>Type <select id="f2"><option>Paper</option><option>Drinks</option><option>Bags</option></select></label>
+    <label>Price <input type="text" id="f3"></label>
+    <label>InStock <select id="f4"><option>Yes</option><option>No</option></select></label>
+    <div class="nav"><button type="button" class="ghost" id="prev">◀</button><span id="pos"></span><button type="button" class="ghost" id="next">▶</button>
+      <button type="button" class="ghost" id="new">New record</button><button type="button" id="save">Save</button></div>
+  </div>
+  <p id="msg" class="message"></p>
+  <details><summary>The table behind the form</summary><div id="table"></div></details>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="shop-db.js"></script>
+<script>
+(() => {
+  const rows = SHOP.rows.map((r) => r.slice());
+  const $ = (id) => document.getElementById(id);
+  let i = 0, adding = false, task = 0;
+  const TASKS = ["Task 1 of 2: use ▶ to go to record 7. Which product is it?", "Task 2 of 2: tap New record and add the Pencil: Name Pencil, Type Paper, Price 0.25, InStock Yes. Then Save."];
+  function show() {
+    const r = adding ? [rows.length + 1, "", "Paper", "", "Yes"] : rows[i];
+    [0, 1, 2, 3, 4].forEach((k) => ($("f" + k).value = r[k] === "" ? "" : (k === 3 && !adding ? Number(r[k]).toFixed(2) : r[k])));
+    $("pos").textContent = adding ? `New record (${rows.length + 1})` : `Record ${i + 1} of ${rows.length}`;
+    $("task").textContent = task < TASKS.length ? TASKS[task] : "Done: you read a record and added one with the form.";
+    $("table").innerHTML = dbTable(SHOP.fields, rows);
+  }
+  const say = (t, g) => { $("msg").textContent = t; $("msg").className = "message " + (g ? "good" : "bad"); };
+  $("prev").addEventListener("click", () => { adding = false; i = Math.max(0, i - 1); show(); });
+  $("next").addEventListener("click", () => {
+    adding = false; i = Math.min(rows.length - 1, i + 1); show();
+    if (task === 0 && i === 6) { say("✓ Record 7 is the Lunch box (Bags, 6.00 JD). A form shows one record at a time.", true); task = 1; show(); }
+  });
+  $("new").addEventListener("click", () => { adding = true; show(); say("A new, empty record. Fill in the boxes, then Save.", true); });
+  $("save").addEventListener("click", () => {
+    if (!adding) { say("Tap New record first, then fill in the boxes.", false); return; }
+    const name = $("f1").value.trim(), price = Number($("f3").value.replace(",", "."));
+    if (!name) { say("✗ Type the Name: Pencil.", false); return; }
+    if (!(price > 0)) { say("✗ Type the Price as a number: 0.25.", false); return; }
+    rows.push([rows.length + 1, name, $("f2").value, price, $("f4").value]); adding = false; i = rows.length - 1;
+    const ok = name.toLowerCase() === "pencil" && price === 0.25 && $("f2").value === "Paper" && $("f4").value === "Yes";
+    if (task === 1 && ok) task = 2;
+    show(); say(ok ? `✓ Saved: the table now has ${rows.length} records. Open "The table behind the form".` : "Saved, but check the four values of the Pencil.", ok);
+  });
+  show();
+})();
+</script>
+</body>
+</html>

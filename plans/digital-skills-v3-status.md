@@ -97,7 +97,12 @@ own sentences.
       text of the four project sites; screens of Google Sites; the web
       address and a phone screenshot); old Practice 3 pages removed;
       platform week 12.
-- [ ] Unit 10 (week-14): Lecture 10 e-marketing; Online activity 11.
+- [x] Unit 10 (week-14): Lecture 10 e-marketing (one AI prompt; a search;
+      Canva; simulators on one engine `sims/quiz-kit.js`: Message Builder,
+      Channel Mixer, Results Reader; game Market Desk); Online activity 11
+      (Product Page Lab, Picture Rights, Plan Builder; screens of Canva; the
+      post PNG and letters); old week-13 and week-14 pages removed;
+      platform week 13.
 - [ ] Practice 2 and Online activity 12 (week-15): the project.
 - [ ] Clean-up: the hidden face-to-face version (`face-to-face/`) uses the
       old simulators and images of week-03 to week-15 (`../../week-WW/...`):

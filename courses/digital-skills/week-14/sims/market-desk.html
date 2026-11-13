@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Market Desk</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .stars { margin-left: auto; color: var(--sim-accent); }
+    .sim .chat { display: grid; gap: 8px; }
+    .sim .bubble { max-width: 88%; padding: 9px 12px; border-radius: 14px; font-weight: 700; line-height: 1.4; }
+    .sim .from { background: #fff4e6; border: 1.5px solid #FFC078; border-bottom-left-radius: 4px; }
+    .sim .from small { display: block; color: var(--sim-muted); font-size: 0.75rem; margin-bottom: 2px; }
+    .sim .me { justify-self: end; background: #D9480F; color: #fff; border-bottom-right-radius: 4px; }
+    .sim .opts { display: grid; gap: 6px; margin-top: 10px; }
+    .sim .opts button { text-align: left; }
+    .sim .opts button.bad { background: #c92a2a; color: #fff; border-color: #c92a2a; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Market Desk at Sunrise Company</h1>
+  <p class="hint">Today you help your colleagues to market their services online. Read each message and choose the best answer.</p>
+  <div class="hud"><span id="lvl">Message 1</span><span class="stars" id="stars">★ 0</span></div>
+  <div class="chat" id="chat"></div>
+  <div class="opts" id="opts"></div>
+  <p id="msg" class="message"></p>
+  <div class="pad"><button id="next" type="button" hidden>Next message ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // [who, question, [answer, ok, why]...]
+  const TICKETS = [
+    ["Omar (shop)", "Who is the audience of our new school bags?",
+      [["parents and students before the school year", true, "A clear group with a need."], ["everybody", false, "Too wide: the message speaks to nobody."], ["other shops", false, "They do not buy our bags."]]],
+    ["Lina (office)", "My post has a photo and a price, but nobody orders. What is missing?",
+      [["a call to action: Order now, with the link", true, "Tell the reader what to do next."], ["more colours", false, "Colours do not tell people what to do."], ["a longer text", false, "Short is better; add the call to action."]]],
+    ["Sami (shop)", "People search for \"phone repair Amman\". Where must Fix It appear?",
+      [["in the search engine results and on the map", true, "People who search are ready to buy."], ["only in an e-mail", false, "E-mail reaches people who already know you."], ["on a poster", false, "A poster is not online."]]],
+    ["Mona (office)", "I want my old customers to know about the new cake, for free.",
+      [["an e-mail to old customers", true, "E-mail reaches people who know you, for free."], ["a paid ad for everybody", false, "That costs money and reaches strangers."], ["wait", false, "Tell them now."]]],
+    ["Huda (office)", "Post A: 1000 views, 10 clicks. Post B: 400 views, 20 clicks. Which is better?",
+      [["post B: 5 clicks for every 100 views", true, "Post A: 1 click for every 100 views; post B: 5."], ["post A: more views", false, "Views alone are not results."], ["the same", false, "Compare clicks for every 100 views."]]],
+    ["Omar (shop)", "May I use a nice cake photo from Google Images in my post?",
+      [["no: it belongs to someone; use a free picture with its source", true, "Found is not free."], ["yes, the Internet is free", false, "Pictures on the Internet belong to their makers."], ["yes, if it is small", false, "Size does not change who owns it."]]],
+    ["Lina (office)", "Which goal is good for a marketing plan?",
+      [["30 orders in January", true, "A number and a time: you can measure it."], ["be the best", false, "You cannot measure it."], ["more customers", false, "How many, by when?"]]],
+    ["Sami (shop)", "I have 15 JD and need new customers in Irbid this week.",
+      [["a small paid ad for people in Irbid", true, "A paid ad reaches the people that you choose, fast."], ["e-mail old customers in Amman", false, "Not new, and not in Irbid."], ["a poster at home", false, "Nobody in Irbid sees it."]]],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, stars = 0, tries = 0, done = false, sound = true, audio = null;
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function show() {
+    if (i >= TICKETS.length) {
+      $("lvl").textContent = "All messages answered"; $("chat").innerHTML = ""; $("opts").innerHTML = "";
+      $("msg").textContent = `🎉 Everybody at Sunrise Company got help! ★ ${stars} of ${TICKETS.length * 2}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; return;
+    }
+    const [who, q, opts] = TICKETS[i]; tries = 0; done = false;
+    $("lvl").textContent = `Message ${i + 1} / ${TICKETS.length}`;
+    $("chat").innerHTML = `<div class="bubble from"><small>${who}</small>${q}</div>`;
+    const order = opts.map((o, k) => k); const s = i % 3; const shuffled = order.slice(s).concat(order.slice(0, s));
+    $("opts").innerHTML = "";
+    shuffled.forEach((k) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.textContent = opts[k][0];
+      b.addEventListener("click", () => answer(k, b)); $("opts").appendChild(b);
+    });
+    $("msg").textContent = ""; $("next").hidden = true;
+  }
+  function answer(k, b) {
+    if (done) { $("msg").textContent = "Press Next message."; return; }
+    const [, , opts] = TICKETS[i], [text, ok, why] = opts[k];
+    if (ok) {
+      done = true; const got = tries === 0 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+      $("chat").insertAdjacentHTML("beforeend", `<div class="bubble me">${text}</div>`);
+      $("opts").innerHTML = ""; $("msg").textContent = `✓ ${why} ${"★".repeat(got)}`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = i < TICKETS.length - 1 ? "Next message ▶" : "Finish ▶";
+      [660, 990].forEach((f, n) => setTimeout(() => beep(f, 0.12), n * 100));
+    } else {
+      tries++; b.classList.add("bad"); $("msg").textContent = `✗ ${why}`; $("msg").className = "message bad"; beep(220, 0.25, "sawtooth");
+    }
+  }
+  $("next").addEventListener("click", () => { if (i >= TICKETS.length) { i = 0; stars = 0; $("stars").textContent = "★ 0"; } else i++; show(); });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  show();
+})();
+</script>
+</body>
+</html>

@@ -1765,6 +1765,90 @@ def sites_publish_1(s, top):
     top.mark(3, 368, 282)
 
 
+# =====================================================================
+# Digital Skills, Online activity 11 (week-14, syllabus v3): Canva in a
+# browser. The model is a post of the college gym ("The gym is open ·
+# Book now"); never the data of the tasks (the four project services).
+# =====================================================================
+
+CANVA = "#7d2ae8"
+
+
+def canva_bar(s):
+    browser_bar(s, "canva.com")
+    s.rect(15, 45, WW - 30, 34, fill="#ffffff")
+    s.text(30, 67, "Canva", 14, 700, CANVA)
+    s.line(15, 79, WW - 15, 79, LINE, 1)
+
+
+@window("browser")
+def canva_search_1(s, top):
+    """Canva: search Instagram post, then choose a design (template)."""
+    canva_bar(s)
+    s.rect(120, 52, 300, 22, fill="#f1f3f5", rx=11)
+    s.text(134, 68, "Instagram post", 12, 400, INK)
+    for i in range(3):
+        x = 40 + 166 * i
+        s.rect(x, 100, 150, 150, fill=["#ffe8cc", "#e7f5ff", "#ebfbee"][i], stroke="#c9cdd2", sw=1, rx=6)
+        s.text(x + 75, 170, ["Fresh food", "Open today", "New offer"][i], 14, 700, INK, "middle")
+        s.rect(x + 40, 196, 70, 20, fill=CANVA, rx=10)
+        s.text(x + 75, 210, "Order", 11, 700, "#ffffff", "middle")
+    s.text(40, 280, "Choose a design, then change it.", 12, 400, GREY)
+    top.ring(116, 48, 308, 30, 15)
+    top.mark(1, 104, 62)
+    top.ring(36, 96, 158, 158, 8)
+    top.mark(2, 200, 104)
+
+
+@window("browser")
+def canva_edit_1(s, top):
+    """Canva editor: click the text and type; Elements › Photos (free)."""
+    canva_bar(s)
+    s.rect(15, 80, 70, 265, fill="#f8f9fa")
+    for i, t in enumerate(["Design", "Elements", "Text", "Uploads"]):
+        s.text(50, 110 + 34 * i, t, 11, 600 if t == "Elements" else 400, CANVA if t == "Elements" else INK, "middle")
+    s.rect(85, 80, 150, 265, fill="#ffffff", stroke="#e3e5e8", sw=1)
+    s.text(96, 104, "Photos", 12, 700, INK)
+    for i in range(4):
+        s.rect(96 + 66 * (i % 2), 116 + 66 * (i // 2), 58, 58, fill=["#ffd8a8", "#c3fae8", "#d0ebff", "#ffe3e3"][i], rx=4)
+    s.text(96, 262, "Free photos", 11, 400, GREY)
+    s.rect(270, 96, 250, 236, fill="#e7f5ff", stroke="#c9cdd2", sw=1)
+    s.rect(300, 116, 190, 90, fill="#a5d8ff", rx=6)
+    s.text(395, 236, "The gym is open", 16, 700, INK, "middle")
+    s.rect(355, 254, 80, 24, fill=CANVA, rx=12)
+    s.text(395, 271, "Book now", 11.5, 700, "#ffffff", "middle")
+    s.text(395, 314, "Photo: Canva", 10, 400, GREY, "middle")
+    top.ring(290, 220, 210, 26, 6)
+    top.mark(1, 512, 232)
+    top.ring(24, 120, 54, 26, 6)
+    top.mark(2, 24, 112)
+    top.ring(92, 112, 64, 64, 6)
+    top.mark(3, 166, 112)
+
+
+@window("browser")
+def canva_download_1(s, top):
+    """Canva: Share › Download, the type PNG, Download."""
+    canva_bar(s)
+    s.rect(440, 52, 76, 22, fill=CANVA, rx=4)
+    s.text(478, 68, "Share", 11.5, 700, "#ffffff", "middle")
+    s.rect(30, 96, 220, 236, fill="#e7f5ff", stroke="#c9cdd2", sw=1)
+    s.text(140, 210, "The gym is open", 14, 700, INK, "middle")
+    s.rect(280, 86, 240, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(296, 112, "Download", 14, 700, INK)
+    s.text(296, 140, "File type", 11, 600, GREY)
+    s.rect(296, 148, 208, 28, fill="#ffffff", stroke="#8a9096", sw=1, rx=4)
+    s.text(306, 167, "PNG (Suggested)", 12, 400, INK)
+    s.rect(296, 240, 208, 32, fill=CANVA, rx=6)
+    s.text(400, 261, "Download", 12.5, 700, "#ffffff", "middle")
+    top.ring(436, 48, 84, 30, 6)
+    top.mark(1, 424, 62)
+    top.ring(292, 144, 216, 36, 6)
+    top.mark(2, 280, 186)
+    top.ring(292, 236, 216, 40, 6)
+    top.mark(3, 280, 282)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -1809,6 +1893,9 @@ SCREENS = {
     "courses/digital-skills/week-12/images/sites-pages-1": sites_pages_1,
     "courses/digital-skills/week-12/images/sites-button-1": sites_button_1,
     "courses/digital-skills/week-12/images/sites-publish-1": sites_publish_1,
+    "courses/digital-skills/week-14/images/canva-search-1": canva_search_1,
+    "courses/digital-skills/week-14/images/canva-edit-1": canva_edit_1,
+    "courses/digital-skills/week-14/images/canva-download-1": canva_download_1,
 }
 
 

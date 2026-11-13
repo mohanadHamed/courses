@@ -193,6 +193,13 @@ site-planner|courses/digital-skills/week-12/sims/site-planner.html|9|courses/dig
 design-check|courses/digital-skills/week-12/sims/design-check.html|9|courses/digital-skills/week-12/sims/design-check.gif
 html-lab|courses/digital-skills/week-12/sims/html-lab.html|9|courses/digital-skills/week-12/sims/html-lab.gif
 web-desk|courses/digital-skills/week-12/sims/web-desk.html|9|courses/digital-skills/week-12/sims/web-desk.gif
+message-builder|courses/digital-skills/week-14/sims/message-builder.html|9|courses/digital-skills/week-14/sims/message-builder.gif
+channel-mixer|courses/digital-skills/week-14/sims/channel-mixer.html|9|courses/digital-skills/week-14/sims/channel-mixer.gif
+results-reader|courses/digital-skills/week-14/sims/results-reader.html|9|courses/digital-skills/week-14/sims/results-reader.gif
+product-page-lab|courses/digital-skills/week-14/sims/product-page-lab.html|9|courses/digital-skills/week-14/sims/product-page-lab.gif
+picture-rights|courses/digital-skills/week-14/sims/picture-rights.html|9|courses/digital-skills/week-14/sims/picture-rights.gif
+plan-builder|courses/digital-skills/week-14/sims/plan-builder.html|9|courses/digital-skills/week-14/sims/plan-builder.gif
+market-desk|courses/digital-skills/week-14/sims/market-desk.html|9|courses/digital-skills/week-14/sims/market-desk.gif
 phish-finder|courses/digital-skills/week-03/sims/phish-finder.html|9|courses/digital-skills/week-03/sims/phish-finder.gif
 format-lab|courses/digital-skills/week-04/sims/format-lab.html|9|courses/digital-skills/week-04/sims/format-lab.gif
 style-lab|courses/digital-skills/week-04/sims/style-lab.html|9|courses/digital-skills/week-04/sims/style-lab.gif

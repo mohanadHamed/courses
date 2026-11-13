@@ -178,6 +178,7 @@ mail-lab|courses/digital-skills/week-03/sims/mail-lab.html|9|courses/digital-ski
 meeting-planner|courses/digital-skills/week-03/sims/meeting-planner.html|10|courses/digital-skills/week-03/sims/meeting-planner.gif
 team-desk|courses/digital-skills/week-03/sims/team-desk.html|9|courses/digital-skills/week-03/sims/team-desk.gif
 password-check|courses/digital-skills/week-03/sims/password-check.html|9|courses/digital-skills/week-03/sims/password-check.gif
+review-quiz|courses/digital-skills/week-08/sims/review-quiz.html|8|courses/digital-skills/week-08/sims/review-quiz.gif
 phish-finder|courses/digital-skills/week-03/sims/phish-finder.html|9|courses/digital-skills/week-03/sims/phish-finder.gif
 format-lab|courses/digital-skills/week-04/sims/format-lab.html|9|courses/digital-skills/week-04/sims/format-lab.gif
 style-lab|courses/digital-skills/week-04/sims/style-lab.html|9|courses/digital-skills/week-04/sims/style-lab.gif

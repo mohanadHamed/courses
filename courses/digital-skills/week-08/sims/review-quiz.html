@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Review Quiz</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .q { font-weight: 800; font-size: 1.02rem; margin: 8px 0; }
+    .sim .opts { display: grid; gap: 6px; }
+    .sim .opts button { text-align: left; }
+    .sim .opts button.right { background: #d3f9d8; border-color: #2b8a3e; color: #2b8a3e; }
+    .sim .opts button.wrong { background: #ffe3e3; border-color: #c92a2a; color: #c92a2a; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim .score { font-weight: 800; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Review Quiz: Lectures 1–6</h1>
+  <p class="hint">Practice questions like the ones in the exam. Choose a part, answer, and read the feedback. Your score is only for you: nothing is saved or sent.</p>
+  <div class="bar" id="parts"></div>
+  <p class="score" id="score"></p>
+  <p class="q" id="q"></p>
+  <div class="opts" id="opts"></div>
+  <p class="message" id="msg"></p>
+  <div class="row"><button type="button" id="next">Next question ▶</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  // [part, question, right answer, wrong answers, feedback]
+  const Q = [
+    ["Files", "Which file name is best for a report of 3 November 2026?", "2026-11-03_report.docx", ["report final new.docx", "Document1.docx", "11-3-26.docx"], "Date first (year-month-day), then what it is, no spaces."],
+    ["Files", "You change a file in your OneDrive folder on the phone. What happens on the laptop?", "the same change appears there", ["the file is deleted", "nothing", "the file is printed"], "Sync keeps the same file on every device."],
+    ["Team", "The manager only needs to know about your e-mail. Where does he go?", "Cc", ["To", "the subject", "the attachment"], "Cc is for the people who only need to know."],
+    ["Team", "A new colleague needs an e-mail and its file. What do you click?", "Forward", ["Reply", "Reply all", "Delete"], "Forward sends the e-mail and its file to a new person."],
+    ["Team", "Five people must change one report. What do you do?", "share one file in OneDrive with Can edit", ["send five copies by e-mail", "print it", "share it with Can view"], "One shared file: everybody changes the same file."],
+    ["Safety", "Which password is the strongest?", "Green-Lamp-River-82", ["sami2005", "Password123", "qwerty"], "Long, random words, a number and symbols; no name or year."],
+    ["Safety", "A message says: \"Your account closes in 2 hours! Type your password here.\" What is it?", "phishing: report it and delete it", ["a real message from the university", "a meeting invitation", "a backup"], "It hurries you and asks for your password."],
+    ["Content", "Which style makes the first line of a notice a heading?", "Title", ["Normal", "Bold", "Font size"], "A style gives the heading its look with one click."],
+    ["Content", "Nobody may change the notice that you send. Which format?", "PDF", [".docx", ".xlsx", ".pptx"], "A PDF keeps the look; people read and print it."],
+    ["Content", "Which layout puts points next to a picture?", "Two Content", ["Title Slide", "Blank", "Title Only"], "Two Content has two boxes side by side."],
+    ["Excel", "B2 = 4 and C2 = 5. What does =B2*C2 show?", "20", ["9", "45", "=B2*C2"], "* multiplies: 4 × 5 = 20."],
+    ["Excel", "You copy =B2*$F$1 from C2 down to C3. What is in C3?", "=B3*$F$1", ["=B2*$F$1", "=B3*$F$2", "=B3*F2"], "B2 moves to B3; $F$1 stays."],
+    ["Excel", "Which function gives the biggest number in B2:B9?", "=MAX(B2:B9)", ["=SUM(B2:B9)", "=BIG(B2:B9)", "=AVERAGE(B2:B9)"], "MAX finds the largest value."],
+    ["Excel", "You want to see only the rows of the type Drinks. What do you use?", "a filter", ["delete the other rows", "a pie chart", "Save As"], "A filter hides rows; it does not delete them."],
+    ["Excel", "You want the total of each type from a long list. What do you use?", "a PivotTable", ["a pie chart", "Save As", "a comment"], "A PivotTable gives one total for each group."],
+  ];
+  const PARTS = ["All", "Files", "Team", "Safety", "Content", "Excel"];
+  let part = "All", list = [], i = 0, right = 0, done = 0, answered = false;
+  function shuffle(a, seed) { let s = seed; const r = () => ((s = (s * 9301 + 49297) % 233280) / 233280); return a.map((x) => [r(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]); }
+  function start(p) {
+    part = p; list = shuffle(Q.filter((q) => p === "All" || q[0] === p), 7); i = 0; right = 0; done = 0;
+    Kit.buttons($("parts"), PARTS.map((k) => ({ k, label: k })), start); $("parts").querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === part));
+    show();
+  }
+  function show() {
+    answered = false;
+    $("score").textContent = `${part} · question ${i + 1} of ${list.length} · right so far: ${right} / ${done}`;
+    const [, q, a, w] = list[i];
+    $("q").textContent = q;
+    Kit.buttons($("opts"), shuffle([a, ...w], i + 3).map((t) => ({ k: t, label: t })), pick);
+    $("msg").textContent = ""; $("next").hidden = true;
+  }
+  function pick(k) {
+    if (answered) return; answered = true; done++;
+    const [, , a, , fb] = list[i], ok = k === a;
+    if (ok) { right++; Kit.good(); } else Kit.bad();
+    $("opts").querySelectorAll("button").forEach((b) => { if (b.dataset.k === a) b.classList.add("right"); else if (b.dataset.k === k) b.classList.add("wrong"); });
+    $("msg").textContent = (ok ? "✓ Right. " : "Not quite. ") + fb; $("msg").classList.toggle("bad", !ok);
+    $("score").textContent = `${part} · question ${i + 1} of ${list.length} · right so far: ${right} / ${done}`;
+    $("next").hidden = false; $("next").textContent = i < list.length - 1 ? "Next question ▶" : "Start again ▶";
+  }
+  $("next").addEventListener("click", () => { if (i < list.length - 1) { i++; show(); } else start(part); });
+  window.PQ = { part: start, pick: (n) => $("opts").querySelectorAll("button")[n].click(), right: () => { const a = list[i][2]; [...$("opts").querySelectorAll("button")].find((b) => b.dataset.k === a).click(); }, next: () => $("next").click() };
+  start("All");
+})();
+</script>
+</body>
+</html>

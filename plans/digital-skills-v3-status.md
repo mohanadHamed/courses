@@ -77,10 +77,11 @@ own sentences.
       with "Use the given text" buttons, Slide Doctor, layouts/themes/text
       figures, copied from old week-09; screens of New Slide, Design and
       Stock Images); solution; platform week 7.
-- [ ] Unit 5 (week-06): old Lecture 6 → Lecture 5, old Online activity 6 → 5.
-- [ ] Unit 6 (week-07): old Lecture 7 → Lecture 6; Online activity 6
-      PivotTable (from old week-13).
-- [ ] Practice 1 and Online activity 7 (week-08): review of Lectures 1–6.
+- [x] Unit 5 (week-06): old Lecture 6 → Lecture 5, old Online activity 6 → 5 (still in BEFORE_SCREENS: no app screens yet); old week-05 pages removed; platform week 8.
+- [x] Unit 6 (week-07): old Lecture 7 → Lecture 6; Online activity 6
+      PivotTable (start file `training.xlsx`, screens, Pivot Lab and Chart
+      Lab); old Online activity 7 removed; platform week 9.
+- [x] Practice 1 and Online activity 7 (week-08): review of Lectures 1–6 (Activity 1 a Word notice e-mailed as a PDF; the new Review Quiz).
 - [ ] Unit 7 (week-09): Lecture 7 databases; Online activity 8.
 - [ ] Unit 8 (week-11): Lecture 8 digital service; Online activity 9 (the project choice).
 - [ ] Unit 9 (week-12): Lecture 9 website; Online activity 10.

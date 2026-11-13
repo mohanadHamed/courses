@@ -888,6 +888,230 @@ def scan_iphone_3(s, top):
     top.mark(6, 36, 336)
 
 
+# =====================================================================
+# Computer windows (Word, Excel, a browser): the same marks, a window frame
+# instead of a phone. Digital Skills, Online activity 3 (week-03): the
+# models are Omar's club notice (club-notice.docx), Lina's table (A1:B3)
+# and Sami's notes shared with his teacher. Never the data of the tasks.
+# =====================================================================
+
+WW, WH = 560, 360                           # the picture of a window
+WORD = "#185abd"; EXCEL = "#107c41"; WEB = "#f3f3f3"
+
+
+def draw_window(fn):
+    s, top = Svg(), Svg()
+    fn(s, top)
+    out = ['<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d" font-family="%s">'
+           % (WW, WH, WW, WH, FONT),
+           '<rect width="%d" height="%d" rx="18" fill="%s"/>' % (WW, WH, BG),
+           '<rect x="14" y="14" width="%d" height="%d" rx="10" fill="#ffffff" stroke="#c9cdd2" stroke-width="1.5"/>'
+           % (WW - 28, WH - 28)]
+    out.extend(s.out)
+    out.extend(top.out)
+    out.append("</svg>")
+    return "\n".join(out) + "\n"
+
+
+def window(kind):
+    def wrap(fn):
+        fn.window = kind
+        return fn
+    return wrap
+
+
+def office_bar(s, app, color, name, tabs=("File", "Home", "Insert", "Layout", "Review", "View")):
+    """The title bar, the tabs and a short ribbon of a desktop Office app."""
+    s.rect(15, 15, WW - 30, 34, fill=color, rx=9)
+    s.rect(15, 35, WW - 30, 14, fill=color)
+    s.text(30, 37, app, 13, 700, "#ffffff")
+    s.text(WW / 2, 37, name, 13, 400, "#ffffff", "middle")
+    x = 28
+    for tab in tabs:
+        s.text(x, 70, tab, 12.5, 600 if tab == "Home" else 400, INK)
+        if tab == "Home":
+            s.line(x, 76, x + 34, 76, color, 2.5)
+        x += 14 + 8 * len(tab)
+    s.rect(15, 82, WW - 30, 40, fill="#f5f6f7")
+    for i in range(7):
+        s.rect(30 + 40 * i, 90, 26, 24, fill="#e3e6ea", rx=4)
+    s.line(15, 122, WW - 15, 122, LINE, 1)
+
+
+def word_page(s, x=150, y=134, w=260, h=200, rows=5):
+    s.rect(x, y, w, h, fill="#ffffff", stroke="#d0d4d9", sw=1)
+    page_lines(s, x + 24, y + 30, w - 48, rows)
+
+
+@window("computer")
+def pdf_win_1(s, top):
+    """Word for Windows: click File."""
+    office_bar(s, "Word", WORD, "club-notice.docx")
+    s.rect(15, 123, WW - 30, 222, fill="#eef0f2")
+    word_page(s)
+    top.ring(20, 56, 40, 22, 6)
+    top.mark(1, 40, 98)
+
+
+@window("computer")
+def pdf_win_2(s, top):
+    """Word for Windows: Save As, the type PDF (*.pdf), Save."""
+    s.rect(15, 15, 150, WH - 30, fill=WORD, rx=9)
+    s.rect(150, 15, 15, WH - 30, fill=WORD)
+    for i, item in enumerate(["Home", "New", "Open", "Save", "Save As", "Print", "Share", "Export"]):
+        y = 50 + 34 * i
+        if item == "Save As":
+            s.rect(15, y - 20, 150, 30, fill="#0f4a99")
+        s.text(36, y, item, 13, 700 if item == "Save As" else 400, "#ffffff")
+    s.text(190, 54, "Save As", 22, 300, INK)
+    s.text(190, 92, "Documents", 13, 600, GREY)
+    s.rect(190, 104, 340, 30, fill="#ffffff", stroke="#8a9096", sw=1.2, rx=3)
+    s.text(200, 124, "club-notice", 13.5, 400, INK)
+    s.rect(190, 144, 340, 30, fill="#ffffff", stroke="#8a9096", sw=1.2, rx=3)
+    s.text(200, 164, "Word Document (*.docx)", 13.5, 400, INK)
+    s.path("M512 156 L520 156 L516 162 Z", fill=INK)
+    s.rect(190, 176, 340, 92, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=3)
+    for i, ty in enumerate(["Word Document (*.docx)", "PDF (*.pdf)", "Plain Text (*.txt)"]):
+        y = 200 + 28 * i
+        if i == 1:
+            s.rect(192, y - 19, 336, 26, fill="#e8f0fb")
+        s.text(204, y, ty, 13.5, 600 if i == 1 else 400, INK)
+    s.rect(440, 288, 90, 32, fill=WORD, rx=4)
+    s.text(485, 309, "Save", 14, 700, "#ffffff", "middle")
+    top.ring(190, 208, 340, 28, 6)
+    top.mark(2, 175, 222)
+    top.ring(436, 284, 98, 40, 8)
+    top.mark(3, 422, 304)
+
+
+@window("browser")
+def pdf_web_1(s, top):
+    """Word on the web (office.com): File, Export, Download as PDF."""
+    s.rect(15, 15, WW - 30, 30, fill=WEB, rx=9)
+    s.rect(70, 21, 300, 18, fill="#ffffff", rx=9)
+    s.text(82, 34, "office.com", 11.5, 400, GREY)
+    s.rect(15, 45, WW - 30, 28, fill=WORD)
+    s.text(30, 64, "Word", 13, 700, "#ffffff")
+    s.text(WW / 2, 64, "club-notice", 12.5, 400, "#ffffff", "middle")
+    x = 28
+    for tab in ("File", "Home", "Insert", "Layout", "Review", "View"):
+        s.text(x, 92, tab, 12.5, 400, INK)
+        x += 14 + 8 * len(tab)
+    s.rect(15, 100, WW - 30, 245, fill="#eef0f2")
+    word_page(s, 260, 112, 240, 220)
+    s.rect(24, 102, 190, 170, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    for i, item in enumerate(["New", "Open", "Save a copy", "Export", "Print", "Share"]):
+        y = 124 + 26 * i
+        if item == "Export":
+            s.rect(26, y - 17, 186, 24, fill="#e8f0fb")
+        s.text(40, y, item, 13, 600 if item == "Export" else 400, INK)
+    s.rect(214, 180, 200, 34, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(228, 202, "Download as PDF", 13, 600, INK)
+    top.ring(20, 78, 40, 22, 6)
+    top.mark(1, 12, 89)
+    top.ring(26, 183, 186, 26, 6)
+    top.mark(2, 180, 165)
+    top.ring(214, 180, 200, 34, 8)
+    top.mark(3, 428, 197)
+
+
+def grid_cells(s, x0, y0, cols, rows, cw=90, rh=26, data=None, sel=None):
+    for c in range(cols):
+        s.rect(x0 + 30 + c * cw, y0, cw, 20, fill="#f0f1f3", stroke=LINE, sw=1)
+        s.text(x0 + 30 + c * cw + cw / 2, y0 + 15, "ABCDE"[c], 11.5, 600, GREY, "middle")
+    for r in range(rows):
+        y = y0 + 20 + r * rh
+        s.rect(x0, y, 30, rh, fill="#f0f1f3", stroke=LINE, sw=1)
+        s.text(x0 + 15, y + 17, str(r + 1), 11.5, 600, GREY, "middle")
+        for c in range(cols):
+            s.rect(x0 + 30 + c * cw, y, cw, rh, fill="#ffffff", stroke=LINE, sw=1)
+            if data and r < len(data) and c < len(data[r]):
+                s.text(x0 + 38 + c * cw, y + 18, data[r][c], 12.5, 700 if r == 0 else 400, INK)
+    if sel:
+        c1, r1, c2, r2 = sel
+        s.rect(x0 + 30 + c1 * cw, y0 + 20 + r1 * rh, (c2 - c1 + 1) * cw, (r2 - r1 + 1) * rh,
+               fill=EXCEL, stroke=EXCEL, sw=2.5, opacity=0.12)
+        s.rect(x0 + 30 + c1 * cw, y0 + 20 + r1 * rh, (c2 - c1 + 1) * cw, (r2 - r1 + 1) * rh, stroke=EXCEL, sw=2.5)
+
+
+LINA = [["Item", "Hours"], ["Reading", "4"], ["Exercises", "3"]]
+
+
+@window("computer")
+def paste_win_1(s, top):
+    """Excel for Windows: select A1:B3 and press Ctrl + C."""
+    office_bar(s, "Excel", EXCEL, "study-hours.xlsx", ("File", "Home", "Insert", "Formulas", "Data", "View"))
+    grid_cells(s, 30, 140, 5, 6, cw=92, data=LINA, sel=(0, 0, 1, 2))
+    top.mark(1, 252, 170)
+    top.label(330, 196, 110, "Ctrl + C", arrow_to=(250, 215))
+
+
+@window("computer")
+def paste_win_2(s, top):
+    """Word for Windows: Ctrl + V, the Paste Options button, Use Destination Styles."""
+    office_bar(s, "Word", WORD, "study-report.docx")
+    s.rect(15, 123, WW - 30, 222, fill="#eef0f2")
+    s.rect(70, 130, 300, 210, fill="#ffffff", stroke="#d0d4d9", sw=1)
+    s.text(90, 158, "My study week", 15, 700, INK)
+    for r, row in enumerate(LINA):
+        for c, v in enumerate(row):
+            s.rect(90 + c * 110, 172 + r * 26, 110, 26, stroke="#9aa5b1", sw=1)
+            s.text(98 + c * 110, 190 + r * 26, v, 12.5, 700 if r == 0 else 400, INK)
+    s.rect(300, 252, 34, 22, fill="#ffffff", stroke="#8a9096", sw=1.2, rx=3)
+    s.text(317, 268, "Ctrl", 10.5, 700, INK, "middle")
+    s.rect(330, 278, 200, 64, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(340, 296, "Paste Options:", 12, 600, GREY)
+    for i in range(6):
+        s.rect(340 + 30 * i, 304, 24, 24, fill="#e3e6ea" if i != 1 else "#e8f0fb", rx=3)
+    s.rect(400, 250, 150, 24, fill="#323130", rx=4)
+    s.text(475, 266, "Use Destination Styles", 11, 600, "#ffffff", "middle")
+    top.label(392, 140, 110, "Ctrl + V", arrow_to=(372, 160))
+    top.mark(2, 286, 263)
+    top.ring(368, 302, 28, 28, 5)
+    top.mark(3, 382, 344)
+
+
+@window("computer")
+def share_win_1(s, top):
+    """Word for Windows: Share at the top right, above the ribbon."""
+    office_bar(s, "Word", WORD, "sami-notes.docx")
+    s.rect(452, 54, 80, 24, fill=WORD, rx=5)
+    s.text(492, 71, "Share", 12.5, 700, "#ffffff", "middle")
+    s.rect(15, 123, WW - 30, 222, fill="#eef0f2")
+    word_page(s)
+    top.ring(448, 50, 88, 32, 8)
+    top.mark(1, 434, 66)
+
+
+@window("computer")
+def share_win_2(s, top):
+    """The Share dialog: the name, the link settings (Specific people), Can view, Send."""
+    s.rect(15, 15, WW - 30, WH - 30, fill="#eef0f2", rx=9)
+    s.rect(90, 30, 380, 300, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=10)
+    s.text(110, 60, "Share “sami-notes”", 16, 700, INK)
+    s.rect(110, 78, 250, 32, fill="#ffffff", stroke="#8a9096", sw=1.2, rx=4)
+    s.text(120, 99, "Ms Rana Khalil", 13.5, 400, INK)
+    s.rect(368, 78, 86, 32, fill="#ffffff", stroke="#8a9096", sw=1.2, rx=4)
+    s.text(380, 99, "Can view", 13, 600, INK)
+    s.path("M440 92 L448 92 L444 98 Z", fill=INK)
+    s.text(110, 140, "Link settings", 13, 600, GREY)
+    for i, who in enumerate(["Anyone", "People in your organization", "Specific people"]):
+        y = 166 + 28 * i
+        s.circle(122, y - 4, 7, stroke=GREY, sw=1.5, fill="#ffffff")
+        if who == "Specific people":
+            s.circle(122, y - 4, 3.5, fill=WORD)
+        s.text(138, y, who, 13, 600 if who == "Specific people" else 400, INK)
+    s.rect(370, 282, 84, 32, fill=WORD, rx=4)
+    s.text(412, 303, "Send", 14, 700, "#ffffff", "middle")
+    top.mark(2, 100, 94)
+    top.ring(112, 205, 160, 26, 6)
+    top.mark(3, 290, 218)
+    top.ring(364, 74, 94, 40, 8)
+    top.mark(4, 472, 94)
+    top.ring(366, 278, 92, 40, 8)
+    top.mark(5, 472, 298)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -901,6 +1125,13 @@ SCREENS = {
     "courses/digital-skills/week-02/images/scan-iphone-1": scan_iphone_1,
     "courses/digital-skills/week-02/images/scan-iphone-2": scan_iphone_2,
     "courses/digital-skills/week-02/images/scan-iphone-3": scan_iphone_3,
+    "courses/digital-skills/week-03/images/pdf-win-1": pdf_win_1,
+    "courses/digital-skills/week-03/images/pdf-win-2": pdf_win_2,
+    "courses/digital-skills/week-03/images/pdf-web-1": pdf_web_1,
+    "courses/digital-skills/week-03/images/paste-win-1": paste_win_1,
+    "courses/digital-skills/week-03/images/paste-win-2": paste_win_2,
+    "courses/digital-skills/week-03/images/share-win-1": share_win_1,
+    "courses/digital-skills/week-03/images/share-win-2": share_win_2,
 }
 
 
@@ -918,7 +1149,7 @@ def main():
             continue
         svg = os.path.join(ROOT, base + ".svg")
         with open(svg, "w", encoding="utf-8") as f:
-            f.write(draw_phone(fn))
+            f.write(draw_window(fn) if getattr(fn, "window", None) else draw_phone(fn))
         if "--svg" not in sys.argv:
             export_png(svg)
         print("wrote", os.path.relpath(svg, ROOT))

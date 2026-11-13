@@ -717,8 +717,9 @@ it; text alone does not do that.
   official help page, or the app in the iOS Simulator of Xcode for an
   iPhone. Small differences between versions and phone makers are fine;
   name the older word when it changed ("on an older iPhone: **Add**").
-  `tools/phone_screens.py` draws phone screens, one function per screen;
-  add a computer window to it when an activity needs one.
+  `tools/phone_screens.py` draws phone screens (`@screen`) and computer
+  windows of Word, Excel and a browser (`@window`, Online activity 3), one
+  function per screen.
 - The screens show the **model** of the Step (Huda's study group, Omar's
   homework), never the data of a task.
 - `check_size.py` warns about a Step that has the student tap, click or

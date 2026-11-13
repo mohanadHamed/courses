@@ -91,7 +91,12 @@ own sentences.
       Online activity 9 (the four project services A-D with their form
       questions; screens of Microsoft Forms; link, two screenshots, letters);
       old week-11 pages removed; platform week 11.
-- [ ] Unit 9 (week-12): Lecture 9 website; Online activity 10.
+- [x] Unit 9 (week-12): Lecture 9 website (Google Sites; Site Planner,
+      Design Check, HTML Lab, game Web Desk; start file `files/page-start.html`
+      written by hand, not by start_files.py); Online activity 10 (the given
+      text of the four project sites; screens of Google Sites; the web
+      address and a phone screenshot); old Practice 3 pages removed;
+      platform week 12.
 - [ ] Unit 10 (week-14): Lecture 10 e-marketing; Online activity 11.
 - [ ] Practice 2 and Online activity 12 (week-15): the project.
 - [ ] Clean-up: the hidden face-to-face version (`face-to-face/`) uses the

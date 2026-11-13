@@ -189,6 +189,10 @@ service-sorter|courses/digital-skills/week-11/sims/service-sorter.html|9|courses
 service-planner|courses/digital-skills/week-11/sims/service-planner.html|9|courses/digital-skills/week-11/sims/service-planner.gif
 form-builder|courses/digital-skills/week-11/sims/form-builder.html|9|courses/digital-skills/week-11/sims/form-builder.gif
 service-desk|courses/digital-skills/week-11/sims/service-desk.html|9|courses/digital-skills/week-11/sims/service-desk.gif
+site-planner|courses/digital-skills/week-12/sims/site-planner.html|9|courses/digital-skills/week-12/sims/site-planner.gif
+design-check|courses/digital-skills/week-12/sims/design-check.html|9|courses/digital-skills/week-12/sims/design-check.gif
+html-lab|courses/digital-skills/week-12/sims/html-lab.html|9|courses/digital-skills/week-12/sims/html-lab.gif
+web-desk|courses/digital-skills/week-12/sims/web-desk.html|9|courses/digital-skills/week-12/sims/web-desk.gif
 phish-finder|courses/digital-skills/week-03/sims/phish-finder.html|9|courses/digital-skills/week-03/sims/phish-finder.gif
 format-lab|courses/digital-skills/week-04/sims/format-lab.html|9|courses/digital-skills/week-04/sims/format-lab.gif
 style-lab|courses/digital-skills/week-04/sims/style-lab.html|9|courses/digital-skills/week-04/sims/style-lab.gif

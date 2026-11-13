@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Design Check</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="web.css">
+  <style>
+    .sim .frame { border: 2px solid #495057; border-radius: 10px; overflow: hidden; background: #fff; transition: max-width .3s; max-width: 560px; }
+    .sim .frame.phone { max-width: 260px; border-radius: 22px; }
+    .sim .site-head { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; }
+    .sim .site-head nav span { margin-left: 10px; font-weight: 700; font-size: 0.85rem; }
+    .sim .frame.phone .site-head nav span { display: none; }
+    .sim .frame.phone .site-head nav::after { content: "≡"; font-size: 1.4rem; font-weight: 800; }
+    .sim .hero { padding: 14px 12px; }
+    .sim .hero .pic { background: linear-gradient(135deg, #ffd8a8, #ffa94d); border-radius: 8px; margin-top: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #7a3a00; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Design Check: fix the page</h1>
+  <p class="hint">The home page of Mona's Cakes has four design problems. Fix them one by one, then look at it on a phone.</p>
+  <div class="task" id="task"></div>
+  <div class="pad" id="fixes"></div>
+  <div class="pad"><button type="button" class="ghost" id="view">Preview: phone</button></div>
+  <div class="frame" id="frame"><div class="site-head" id="head"><b>Mona's Cakes</b><nav id="nav"></nav></div>
+    <div class="hero" id="hero"><div id="title" style="font-size:1.4rem;font-weight:800">Cakes made at home</div><div id="text">For every party. Order online.</div><div class="pic" id="pic">birthday cake photo</div></div></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const P = {
+    contrast: ["Text: light grey on white", "Text: dark on white", "The text was hard to read: dark text on a light background has strong contrast."],
+    fonts: ["Fonts: five different fonts", "Fonts: one or two fonts", "Five fonts look messy: a theme uses one or two fonts."],
+    pic: ["Picture: very big (fills 3 screens)", "Picture: a good size", "A huge picture is slow and pushes the text away."],
+    nav: ["Menu: no links to the other pages", "Menu: Home · Service · Contact", "Without a menu, visitors cannot find the other pages."],
+  };
+  const fixed = {}; let phone = false;
+  function draw() {
+    $("text").style.color = fixed.contrast ? "#212529" : "#ced4da"; $("title").style.color = fixed.contrast ? "#a3360b" : "#dee2e6";
+    $("title").style.fontFamily = fixed.fonts ? "inherit" : "Georgia, serif"; $("text").style.fontFamily = fixed.fonts ? "inherit" : "'Courier New', monospace";
+    $("head").style.fontFamily = fixed.fonts ? "inherit" : "'Comic Sans MS', cursive";
+    $("pic").style.height = fixed.pic ? "90px" : "320px";
+    $("nav").innerHTML = fixed.nav ? "<span>Home</span><span>Service</span><span>Contact</span>" : "";
+    $("frame").classList.toggle("phone", phone);
+    $("fixes").innerHTML = Object.entries(P).map(([k, [bad, good]]) => `<button type="button" class="ghost${fixed[k] ? " on" : ""}" data-k="${k}">${fixed[k] ? "✓ " + good : bad}</button>`).join("");
+    document.querySelectorAll("#fixes button").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.k; if (fixed[k]) return; fixed[k] = true;
+      $("msg").textContent = "✓ " + P[k][2]; $("msg").className = "message good"; draw();
+    }));
+    const left = Object.keys(P).filter((k) => !fixed[k]).length;
+    $("task").textContent = left ? `Tap a problem to fix it (${left} left).` : (phone ? "The page is clear on a computer and on a phone." : "All four are fixed. Now press Preview: phone.");
+  }
+  $("view").addEventListener("click", () => {
+    phone = !phone; $("view").textContent = phone ? "Preview: computer" : "Preview: phone";
+    $("msg").textContent = phone ? "On a phone the menu becomes ≡ and the page is narrow: check that everything is still easy to read." : "The computer view.";
+    $("msg").className = "message good"; draw();
+  });
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1673,6 +1673,98 @@ def forms_responses_1(s, top):
     top.mark(2, 494, 162)
 
 
+# =====================================================================
+# Digital Skills, Online activity 10 (week-12, syllabus v3): Google Sites
+# in a browser. The model is the website of the college gym ("College
+# Gym", with the booking form of Online activity 9); never the data of
+# the tasks (the four project services).
+# =====================================================================
+
+SITES = "#5e35b1"
+
+
+def sites_editor(s, page="Home"):
+    browser_bar(s, "sites.google.com")
+    s.rect(15, 45, WW - 30, 30, fill="#ffffff")
+    s.text(30, 65, "College Gym", 13, 700, INK)
+    s.rect(440, 50, 76, 22, fill=SITES, rx=4)
+    s.text(478, 66, "Publish", 11.5, 700, "#ffffff", "middle")
+    s.line(15, 75, WW - 15, 75, LINE, 1)
+    s.rect(380, 76, 165, 269, fill="#f8f9fa")
+    for i, t in enumerate(["Insert", "Pages", "Themes"]):
+        s.text(398 + 52 * i, 96, t, 11.5, 700 if t == page else 400, SITES if t == page else INK)
+    s.rect(30, 90, 336, 240, fill="#ffffff", stroke="#d0d4d9", sw=1)
+
+
+@window("browser")
+def sites_pages_1(s, top):
+    """Google Sites: Pages, then + to add a page; the menu shows it."""
+    sites_editor(s, "Pages")
+    s.rect(30, 90, 336, 30, fill="#ede7f6")
+    s.text(46, 110, "College Gym", 11.5, 700, SITES)
+    for i, t in enumerate(["Home", "Booking", "Contact"]):
+        s.text(210 + 52 * i, 110, t, 10.5, 600, INK)
+    s.text(46, 160, "Welcome to the College Gym!", 15, 700, INK)
+    page_lines(s, 46, 190, 280, 3)
+    for i, t in enumerate(["Home", "Booking", "Contact"]):
+        s.text(398, 132 + 26 * i, t, 12, 400, INK)
+    s.circle(520, 300, 16, fill=SITES)
+    s.text(520, 306, "+", 18, 700, "#ffffff", "middle")
+    top.ring(444, 84, 50, 20, 5)
+    top.mark(1, 506, 112)
+    top.ring(500, 280, 40, 40, 20)
+    top.mark(2, 490, 268)
+    top.ring(204, 96, 160, 22, 5)
+    top.mark(3, 190, 136)
+
+
+@window("browser")
+def sites_button_1(s, top):
+    """Insert › Button: the name and the link of the form."""
+    sites_editor(s, "Insert")
+    for i, t in enumerate(["Text box", "Images", "Button", "Divider"]):
+        s.text(398, 132 + 26 * i, t, 12, 600 if t == "Button" else 400, INK)
+    s.text(46, 120, "Book the gym", 15, 700, INK)
+    s.rect(80, 150, 250, 150, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(96, 176, "Name", 11, 600, GREY)
+    s.rect(96, 182, 218, 26, fill="#ffffff", stroke="#8a9096", sw=1, rx=3)
+    s.text(104, 200, "Book now", 12, 400, INK)
+    s.text(96, 228, "Link", 11, 600, GREY)
+    s.rect(96, 234, 218, 26, fill="#ffffff", stroke="#8a9096", sw=1, rx=3)
+    s.text(104, 252, "https://forms.office.com/r/aB3...", 10.5, 400, INK)
+    s.rect(254, 270, 60, 24, fill=SITES, rx=4)
+    s.text(284, 287, "Insert", 11.5, 700, "#ffffff", "middle")
+    top.ring(392, 172, 80, 24, 5)
+    top.mark(1, 486, 184)
+    top.ring(92, 178, 226, 34, 6)
+    top.mark(2, 70, 194)
+    top.ring(92, 230, 226, 34, 6)
+    top.mark(3, 70, 248)
+    top.ring(250, 266, 68, 32, 6)
+    top.mark(4, 330, 282)
+
+
+@window("browser")
+def sites_publish_1(s, top):
+    """Publish: the web address, then Publish; Preview › the phone first."""
+    sites_editor(s, "Pages")
+    s.rect(70, 110, 300, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(86, 138, "Publish to the web", 14, 700, INK)
+    s.text(86, 166, "Web address", 11, 600, GREY)
+    s.rect(86, 174, 268, 28, fill="#ffffff", stroke="#8a9096", sw=1, rx=3)
+    s.text(94, 193, "sites.google.com/view/", 11, 400, GREY)
+    s.text(224, 193, "college-gym", 11, 700, INK)
+    s.text(86, 230, "Who can see my site: Anyone", 11.5, 400, INK)
+    s.rect(274, 268, 80, 28, fill=SITES, rx=4)
+    s.text(314, 287, "Publish", 12, 700, "#ffffff", "middle")
+    top.ring(436, 46, 84, 30, 6)
+    top.mark(1, 424, 62)
+    top.ring(82, 170, 276, 36, 6)
+    top.mark(2, 70, 186)
+    top.ring(270, 264, 88, 36, 6)
+    top.mark(3, 368, 282)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -1714,6 +1806,9 @@ SCREENS = {
     "courses/digital-skills/week-11/images/forms-question-1": forms_question_1,
     "courses/digital-skills/week-11/images/forms-collect-1": forms_collect_1,
     "courses/digital-skills/week-11/images/forms-responses-1": forms_responses_1,
+    "courses/digital-skills/week-12/images/sites-pages-1": sites_pages_1,
+    "courses/digital-skills/week-12/images/sites-button-1": sites_button_1,
+    "courses/digital-skills/week-12/images/sites-publish-1": sites_publish_1,
 }
 
 

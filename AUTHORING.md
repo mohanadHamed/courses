@@ -23,8 +23,10 @@ Program: Mobile Game Development and Design, Intermediate University Degree
 most of them not in technology: it is simpler than the other courses (A2
 English) and uses general examples, never the games industry. Its
 `NOTES.md` has the details and overrides "Level and language" below.
-Since 2026-10-23 it teaches Microsoft Office and AI tools (syllabus v2). It
-is **fully practical** (2 hours in the computer lab in the study plan) and
+Since 2026-11-13 it follows syllabus v3, the official course description
+(devices, communication and safety, content, data analysis, databases, a
+digital service, website design, e-marketing), and it is made **as easy as
+possible**, with no English writing (NOTES.md). It is **fully practical** (2 hours in the computer lab in the study plan) and
 **blended**: each week one face-to-face lab session and one online activity
 (see "Blended courses: the online activity" below). It has no seminars.
 
@@ -117,8 +119,9 @@ Lecture length does not change (90 min Game Math, 60 min the others).
   team workshop, and the presentations), with the midterm week.
 - `digital-skills` (blended, fully practical): Lecture 1 of the syllabus is
   the face-to-face lab session (a lecture in a unit, a practice session in a
-  practice week); Lecture 2 is the online activity. 10 units and 5 practice
-  weeks (8, 10, 12, 14, 15).
+  practice week); Lecture 2 is the online activity. Plan v4 (syllabus v3,
+  2026-11-13): 10 units (three of them merge two rows: 4–5, 9–10, 12–13)
+  and 2 practice weeks (8 and 15), 12 weeks for the platform weeks left.
 - Exam sessions get no session. Confirm with me when a syllabus week is
   unclear. The maps are in each course's `plan.md`.
 
@@ -874,8 +877,8 @@ result in words), and a `::: {.check}` inside each `{.try-change}`;
   "No task needs AI. The Task with AI at the end is optional."
   (In Digital Skills, AI is in the ILOs: its online tasks to submit may use
   AI on purpose, with the AI-use statement.)
-- **Digital Skills** has no "Task with AI" box: AI is in its ILOs (A1, B1,
-  C4, D1), so its experiments and online tasks teach AI on purpose, with
+- **Digital Skills** has no "Task with AI" box: AI is in its ILOs (C1 since
+  syllabus v3), so its experiments and online tasks use AI on purpose, with
   checking and, from unit 9, the AI-use statement. AI there is always
   **practical** (the teacher's request of 2026-11-08: the students know AI
   already and find talk about it boring): every AI step gives a complete

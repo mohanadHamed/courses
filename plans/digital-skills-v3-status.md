@@ -107,14 +107,39 @@ own sentences.
       the three-slide talk; the final submission (Project Checker on
       quiz-kit; PowerPoint screens of week-04); old week-10 and week-15
       practice pages removed; platform week 14 and the new mapping.
-- [ ] Clean-up: the hidden face-to-face version (`face-to-face/`) uses the
-      old simulators and images of week-03 to week-15 (`../../week-WW/...`):
-      keep those files; delete only the old blended `.qmd` files that no
-      session uses any more (week-05, week-10, week-13 and the old ones in
-      reused folders); `check_size.py` lists (`BEFORE_SCREENS`); NOTES.md, the course
-      `index.qmd`, AUTHORING.md (the course table and "Mapping the syllabus
-      week"); `glossary.yml`; `courses-private`: `syllabus-weeks.yml` (v3
-      table, word for word), the solutions, the platform texts (weeks 6–14).
+- [x] Clean-up: every old blended page of plan v3 is removed (the
+      simulators, figures and start files of the old weeks stay: the hidden
+      face-to-face version uses them); `check_size.py` lists; NOTES.md, the
+      course `index.qmd`, AUTHORING.md (course note, "Mapping the syllabus
+      week", AI note); `glossary.yml`; `courses-private`:
+      `syllabus-weeks.yml` (v3, word for word), the solutions of Online
+      activities 3–12, the platform texts of weeks 6–14.
+
+**All done (2026-11-13).** `check_size.py --all`: no warning for Digital
+Skills. `course_package.py digital-skills` (with `CHROME=/bin/true`): no
+missing row or duplicate; it only lists files that this container did not
+render (the tasks PDFs, Unit 2).
+
+## For the teacher to check
+
+- **Units 1–2:** not changed. Their ILO tags (A1; A1, C4) are still the
+  old codes; with the v3 texts, Unit 2's banner shows C4 (the digital
+  service). One-line fix if wanted: `ilos: [C1]` in
+  `week-01/online-01.qmd`, `ilos: [A2, C1]` in the four `week-02` files.
+- **Tools that students need from Unit 7 on:** Microsoft Access (Windows
+  only; the online tasks of Unit 7 are done on the simulators), Microsoft
+  Forms (university account), a free Google account (Google Sites) and a
+  free Canva account. Look at the drawn screens once in the real apps
+  (their menus move): Outlook, Teams invitation, Access, Forms, Google
+  Sites, Canva.
+- **The midterm:** Practice 1 and Online activity 7 (review of Lectures
+  1–6) are flexible; the platform text links them for self-study.
+- **Online activity 5** (the budget, kept from plan v3) still has no
+  drawn app screens (`BEFORE_SCREENS`).
+- The tasks PDFs (`homework_pdf.py`) and the course package PDF could not be
+  printed here (headless Chrome hangs in this container); CI makes them.
+  Each online page was printed with Playwright: every one fits one A4
+  page.
 
 ## How each unit is checked
 

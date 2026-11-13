@@ -26,10 +26,19 @@ management, medical sterilization, facility assessment). So this course is
   and answered in one line. With the worksheet they are a short reference.
 - **Lab tasks and experiments** use only the lab computer, a browser and the
   student's own phone, with steps written as a numbered list.
-- The ILOs and the lecture titles follow the course syllabus v2 (Drive,
-  2026-10-23): Microsoft Office and AI tools, built on the university course
-  description *Smart Digital Skills*. Ask the teacher before a syllabus title
-  is changed.
+- The ILOs and the lecture titles follow the course syllabus **v3**
+  (2026-11-13): the official course description of the study plan
+  (digital skills and the labour market, devices and technologies, digital
+  content, data analysis, databases, a digital service, website design,
+  e-marketing). Ask the teacher before a syllabus title is changed.
+- **As easy as possible** (the teacher's request of 2026-11-13): the
+  students come from every diploma, most with no IT background and weak
+  computer skills, and their English is very weak. Each ILO is covered at
+  its minimum; every text is very short; no task asks for English writing
+  (no e-mail, no text of their own): the student chooses, matches, orders,
+  sorts, or types a letter, a number or a given text. Graded online tasks
+  give all the facts (the four project services) and ask for letters,
+  numbers, links, files or screenshots.
 
 ## Timing and textbook: a blended course
 
@@ -38,10 +47,11 @@ management, medical sterilization, facility assessment). So this course is
   (60 min) and one online activity (asynchronous, about 60 min of work, on
   the university e-learning platform: an interactive lesson with
   simulators, or a video, and practical tasks to submit). No seminars.
-  `course.blended: true` in `_metadata.yml`; `schedule.yml` has 15 weeks:
-  10 units (core: Lecture N and its online activity) and 5 practice weeks
-  (flexible: Practice N in the lab and an online practice activity, no new
-  ideas). Online activities are numbered 1–15 in teaching order.
+  `course.blended: true` in `_metadata.yml`; `schedule.yml` has 12 weeks
+  (plan v4): 10 units (core: Lecture N and its online activity) and 2
+  practice weeks (flexible: Practice N and an online practice activity, no
+  new ideas; row 8 the review, row 15 the project). Online activities are
+  numbered 1–12 in teaching order.
 - **Face-to-face lecture: two cases, one lesson** (since 2026-11-08;
   AUTHORING.md, "The page is taught in class" and "Lecture worksheets").
   The computer labs of the college are not ready yet, and the classrooms
@@ -78,8 +88,8 @@ management, medical sterilization, facility assessment). So this course is
   lecture N", the next face-to-face lecture) and `marks:`; no notes and no
   slides. It **practises its unit** and never repeats the face-to-face
   lecture; in a unit it may add a skill of the unit's syllabus row (Online
-  activity 9: an AI outline turned into slides); in a practice week it adds
-  nothing new. Start from `shared/templates/online-template.qmd`. It has:
+  activity 4: PowerPoint, row 5 of a merged unit); in a practice week it
+  adds nothing new. Start from `shared/templates/online-template.qmd`. It has:
   1. "Before you start": what you need, about how long, what you submit;
   2. two or three short **Steps** (`{.study}`): plain explanation, a figure,
      a simulator to try at once, one "Try it" check with `Why:`
@@ -96,10 +106,15 @@ management, medical sterilization, facility assessment). So this course is
   this course. Model answers and marking notes go to `courses-private`
   (`courses/digital-skills/week-WW/online-NN-solutions.md`).
 - Textbook: Evans, Martin and Poatsy, *Technology in Action*, Global Edition,
-  18th ed. References: Lambert and Frye, *Microsoft Office Step by Step
-  (Office 2021 and Microsoft 365)*, 2022; Microsoft 365 Training
-  (support.microsoft.com/training); UNESCO, *Guidance for Generative AI in
-  Education and Research*, 2023; *DigComp 2.2*, 2022.
+  18th ed. References (syllabus v3): Lambert and Frye, *Microsoft Office Step
+  by Step (Office 2021 and Microsoft 365)*, 2022; Chaffey and
+  Ellis-Chadwick, *Digital Marketing*, 8th ed., 2022; Duckett, *HTML and
+  CSS*, 2011; *DigComp 2.2*, 2022; Microsoft 365 Training
+  (support.microsoft.com/training).
+- **The course project (D1)** is built in the core: Online activity 9 (the
+  student chooses one of four given services, A–D, and builds its form),
+  10 (its website), 11 (its post and marketing plan), then Practice 2 (the
+  talk) and Online activity 12 (the final submission).
 
 ## A face-to-face version (prepared, not published)
 
@@ -156,7 +171,10 @@ real tool.
   account has it"; the tasks also work by copying from an AI chat.
 - Never ask students to type real personal data (ID numbers, phone numbers,
   addresses, grades) into an AI tool: use made-up details.
-- Every task done with AI ends with checking the output and, from unit 9 (Lecture 9) on, an AI-use statement.
+- Every task done with AI ends with checking the output; the final project
+  (Online activity 12) has the AI-use line where AI helped. Since syllabus
+  v3, AI is a tool of C1 (Units 1–2) and a small helper in later lectures
+  (one prompt in Lecture 10), never the topic of a session.
 - AI is a tool for documents, data and presentations here; how AI works is
   the subject of *AI Applications* (01101153). Keep to what a user needs.
 - **Practical, never AI alone** (the teacher's request of 2026-11-08: the
@@ -209,19 +227,30 @@ every calendar week, by hand, with the university's template.
   (for example "getting ready": accounts, tools, how the course works),
   never as a copy of the next week. Its activities are moved to the week in
   which they are done, not deleted, so that submissions are kept.
-- **The weeks of fall 2026-2027.** Lecture 1 was given in platform week 4,
-  so platform week N holds the week of `schedule.yml` in row N − 3 (week 5:
-  Lecture 2 and Online activity 2; week 13: Lecture 10 and Online activity
-  13). The weeks left hold the 9 units and two practice weeks only, so
-  Practice 1–3 and Online activities 8, 10 and 12 are not given: the three
-  practice pages are linked for self-study in weeks 10–12, next to the
-  lectures they practise. The course project keeps weeks 14 (Practice 4,
-  Online activity 14) and 15 (Practice 5, Online activity 15). The texts of
-  weeks 5–15, with their links, are in `courses-private`
-  (`moodle/digital-skills-weeks.md`); the tasks PDF and the assignment of
-  each online activity are added on the platform when the activity opens.
+- **The weeks of fall 2026-2027.** Lecture 1 was given in platform week 4
+  (1/11/2026) and Lecture 2 in week 5. From week 6 (15/11/2026, plan v4)
+  each platform week holds one unit: Units 3–10 in weeks 6–13; week 14
+  (10–14/1/2027, the last teaching week) holds Practice 2 and Online
+  activity 12 (the project); week 15 is the final exams. Practice 1 and
+  Online activity 7 (review) are linked for self-study before the midterm.
+  The texts of weeks 5–14, with their links, are in `courses-private`
+  (`moodle/digital-skills-weeks.md`).
 
 ## Lessons learned
+
+- 2026-11-13 (syllabus v3, the teacher's request): the syllabus was rebuilt
+  on the official course description (devices, communication and safety,
+  content, data analysis, databases, a digital service, website design,
+  e-marketing). Units 1–2 (taught) stay; Units 3–10 were rewritten for the
+  nine teaching weeks left (plan v4, `plan.md`; progress in
+  `plans/digital-skills-v3-status.md`): three pairs of syllabus rows are
+  merged (4–5, 9–10, 12–13), and the course has 10 units and 2 practice
+  weeks. New lectures: communication and collaboration (3), databases in
+  Access (7), a digital service with Microsoft Forms (8), a website in Google
+  Sites with a look at HTML and CSS (9), e-marketing with Canva (10); Word
+  (4) and Excel (5–6) were kept. The course project (D1) runs through Online
+  activities 9–12. The same day the teacher asked for the simplest possible
+  course with no English writing (rule above, "As easy as possible").
 
 - Week 1 (2026-10-19): course started with the new lesson model. Interactive
   parts: DigComp self-check (simulator) and Path Finder (mini-game on paths).

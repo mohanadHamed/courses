@@ -103,7 +103,10 @@ own sentences.
       (Product Page Lab, Picture Rights, Plan Builder; screens of Canva; the
       post PNG and letters); old week-13 and week-14 pages removed;
       platform week 13.
-- [ ] Practice 2 and Online activity 12 (week-15): the project.
+- [x] Practice 2 and Online activity 12 (week-15): the project check and
+      the three-slide talk; the final submission (Project Checker on
+      quiz-kit; PowerPoint screens of week-04); old week-10 and week-15
+      practice pages removed; platform week 14 and the new mapping.
 - [ ] Clean-up: the hidden face-to-face version (`face-to-face/`) uses the
       old simulators and images of week-03 to week-15 (`../../week-WW/...`):
       keep those files; delete only the old blended `.qmd` files that no

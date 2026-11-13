@@ -49,13 +49,28 @@ content); only the ILO text goes into this repo.
   wanted, change `ilos:` to `[C1]` in `week-01/online-01.qmd` and to
   `[A2, C1]` in the four `week-02` files (front matter only).
 
+## The teacher's second message (2026-11-13, same day)
+
+Make the course **as easy as possible**: the students come from every
+diploma, most have no IT background and weak computer skills. Cover each
+ILO at the minimum. **No English writing at all** (no e-mail or text to
+write): very short words; answers by choosing (multiple choice), matching,
+ordering, sorting, or a letter or a number. The pipeline already says this
+for Digital Skills (NOTES.md, AUTHORING.md "Answers without written
+English"); every unit below follows it strictly. A task in an app may ask
+the student to type a short given text (a title, a file name), never their
+own sentences.
+
 ## Progress
 
 - [x] Plan: `schedule.yml`, `_metadata.yml` (v3 ILOs and tagline), `plan.md`, this file.
-- [ ] Unit 3 (week-03): Lecture 3 communication (sheet, page, notes,
-      slides; Mail Lab, Meeting Planner, Share Settings; game Team Desk),
-      Online activity 3 safety (Password Check, Phish Finder, screens of
-      two-step verification and app permissions); solution; platform week 6.
+- [x] Unit 3 (week-03): Lecture 3 communication (sheet, page, notes,
+      slides; Mail Lab, Meeting Planner, Share Settings; game Team Desk;
+      start file `agenda-start.docx`), Online activity 3 safety (Password
+      Check, Phish Finder; screens of two-step sign-in, a link, Report
+      phishing and app permissions in `tools/phone_screens.py`); solution;
+      platform week 6. check_size clean; all four outputs and the online
+      page render; the tasks print on one A4 page.
 - [ ] Unit 4 (week-04): Lecture 4 Word (title, ILO, Save As PDF step);
       Online activity 4 PowerPoint (sims from old week-09); solution.
 - [ ] Unit 5 (week-06): old Lecture 6 → Lecture 5, old Online activity 6 → 5.
@@ -67,8 +82,11 @@ content); only the ILO text goes into this repo.
 - [ ] Unit 9 (week-12): Lecture 9 website; Online activity 10.
 - [ ] Unit 10 (week-14): Lecture 10 e-marketing; Online activity 11.
 - [ ] Practice 2 and Online activity 12 (week-15): the project.
-- [ ] Clean-up: delete the old week-05, week-10, week-13 folders and old
-      files; `check_size.py` lists (`BEFORE_SCREENS`); NOTES.md, the course
+- [ ] Clean-up: the hidden face-to-face version (`face-to-face/`) uses the
+      old simulators and images of week-03 to week-15 (`../../week-WW/...`):
+      keep those files; delete only the old blended `.qmd` files that no
+      session uses any more (week-05, week-10, week-13 and the old ones in
+      reused folders); `check_size.py` lists (`BEFORE_SCREENS`); NOTES.md, the course
       `index.qmd`, AUTHORING.md (the course table and "Mapping the syllabus
       week"); `glossary.yml`; `courses-private`: `syllabus-weeks.yml` (v3
       table, word for word), the solutions, the platform texts (weeks 6–14).
@@ -81,3 +99,15 @@ content); only the ILO text goes into this repo.
 - Posters: `quarto typst compile` of the SVG (shared/sims/README.md).
   Recordings (GIF): `plans/helpers/record_gif.py` (Playwright and Pillow;
   the macOS pipeline in `shared/sims/recordings` needs Swift).
+
+## Helpers written in this rewrite (`plans/helpers/`)
+
+- `svgkit.py`: a small SVG kit for figures and posters; `figs_u3.py` draws
+  the figures and posters of Unit 3 (one such script per unit).
+- `export_png.py`: SVG → PNG with Liberation Sans (no Helvetica here).
+- `record_gif.py`: the GIF of a simulator from its line in
+  `shared/sims/recordings/record-all.sh` and its scenario (Node Playwright
+  with `NODE_PATH=/opt/node22/lib/node_modules`, Pillow).
+- Tasks PDF check: print the rendered online page to A4 with Playwright
+  (`page.pdf`) and count the pages (one page).
+- Pandoc reads `@Name` and `**@**` as citations: write `\@Omar`, `**\@**`.

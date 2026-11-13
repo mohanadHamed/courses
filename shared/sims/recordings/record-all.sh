@@ -174,6 +174,11 @@ help-desk|courses/digital-skills/week-03/sims/help-desk.html|9|courses/digital-s
 pdf-export|courses/digital-skills/week-03/sims/pdf-export.html|10|courses/digital-skills/week-03/sims/pdf-export.gif
 paste-lab|courses/digital-skills/week-03/sims/paste-lab.html|9|courses/digital-skills/week-03/sims/paste-lab.gif
 share-settings|courses/digital-skills/week-03/sims/share-settings.html|9|courses/digital-skills/week-03/sims/share-settings.gif
+mail-lab|courses/digital-skills/week-03/sims/mail-lab.html|9|courses/digital-skills/week-03/sims/mail-lab.gif
+meeting-planner|courses/digital-skills/week-03/sims/meeting-planner.html|10|courses/digital-skills/week-03/sims/meeting-planner.gif
+team-desk|courses/digital-skills/week-03/sims/team-desk.html|9|courses/digital-skills/week-03/sims/team-desk.gif
+password-check|courses/digital-skills/week-03/sims/password-check.html|9|courses/digital-skills/week-03/sims/password-check.gif
+phish-finder|courses/digital-skills/week-03/sims/phish-finder.html|9|courses/digital-skills/week-03/sims/phish-finder.gif
 format-lab|courses/digital-skills/week-04/sims/format-lab.html|9|courses/digital-skills/week-04/sims/format-lab.gif
 style-lab|courses/digital-skills/week-04/sims/style-lab.html|9|courses/digital-skills/week-04/sims/style-lab.gif
 list-table-lab|courses/digital-skills/week-04/sims/list-table-lab.html|8|courses/digital-skills/week-04/sims/list-table-lab.gif

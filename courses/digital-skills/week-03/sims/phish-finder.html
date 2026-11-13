@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Phish Finder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .score { margin-left: auto; color: var(--sim-accent); }
+    .sim .msgcard { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 14px; max-width: 520px; line-height: 1.45; }
+    .sim .msgcard small { display: block; color: var(--sim-muted); font-weight: 700; }
+    .sim .msgcard .link { color: #1971c2; font-weight: 800; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+    .sim .signs { margin: 8px 0 0; padding-left: 20px; font-weight: 700; }
+    .sim .message.bad { color: #c92a2a; }
+    .sim [hidden] { display: none !important; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Phish Finder: safe or phishing?</h1>
+  <p class="hint">Read each message. Is it safe, or is it phishing: a fake message that wants your password, a code or your money? (The messages are made up.)</p>
+  <div class="hud"><span id="lvl">Message 1</span><span class="score" id="score">0 right</span></div>
+  <div class="msgcard" id="card"></div>
+  <div class="pad" id="btns"><button type="button" class="ghost" data-a="safe">Safe</button><button type="button" class="ghost" data-a="phish">Phishing</button></div>
+  <p id="msg" class="message"></p>
+  <ul class="signs" id="signs" hidden></ul>
+  <div class="pad"><button type="button" id="next" hidden>Next message ▶</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // [where, from, text (HTML), phishing?, the signs or the reason it is safe]
+  const MSGS = [
+    ["SMS", "+962 7 9000 1111", 'You won a new phone! Pay 2 JD for the delivery today: <span class="link">win-phone-jo.top/pay</span>', true,
+      ["a prize that you did not ask for", "it asks for money", "a strange link"]],
+    ["E-mail", "Ms Rana Khalil (your teacher, university address)", "The lecture on Sunday is in room 105. See you there.", false,
+      "Your teacher's real address, no link, and it asks for nothing."],
+    ["E-mail", "IT Desk &lt;it-desk@univ-help-desk.com&gt;", 'Your password ends today! Sign in here in 2 hours, or we close your account: <span class="link">univ-help-desk.com/login</span>', true,
+      ["the address is not the university's", "it hurries you, with a threat", "it asks you to sign in on a strange link"]],
+    ["Bank app", "Sunrise Bank app", "You paid 12.50 JD at Sunrise Shop.", false,
+      "A note in the real app, with no link. If you did not pay, call the number on your card."],
+    ["WhatsApp", "+962 7 9000 2222", "Hi, it is your cousin. This is my new number. Please send me the code that came to your phone.", true,
+      ["an unknown number", "it asks for a code: the code lets a stranger take your account"]],
+    ["Calendar", "Huda (a colleague)", "Invitation: Staff meeting, Sunday 11:00, Room 21.", false,
+      "A meeting invitation from a colleague that you know, with nothing to pay or type."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, right = 0, tries = 0, done = false;
+  function show() {
+    const [where, from, text] = MSGS[i]; tries = 0; done = false;
+    $("lvl").textContent = `Message ${i + 1} / ${MSGS.length}`;
+    $("card").innerHTML = `<small>${where} · From: ${from}</small>${text}`;
+    $("msg").textContent = ""; $("signs").hidden = true; $("next").hidden = true;
+  }
+  document.querySelectorAll("#btns button").forEach((b) => b.addEventListener("click", () => {
+    if (done) { $("msg").textContent = "Press Next message."; $("msg").className = "message bad"; return; }
+    const [, , , phish, info] = MSGS[i], said = b.dataset.a === "phish";
+    if (said === phish) {
+      done = true; if (tries === 0) right++; $("score").textContent = `${right} right`;
+      $("msg").className = "message good";
+      if (phish) { $("msg").textContent = "✓ Phishing. The warning signs:"; $("signs").innerHTML = info.map((x) => `<li>${x}</li>`).join(""); $("signs").hidden = false; }
+      else $("msg").textContent = "✓ Safe. " + info;
+      $("next").hidden = false; $("next").textContent = i < MSGS.length - 1 ? "Next message ▶" : "Start again ▶";
+    } else {
+      tries++; $("msg").className = "message bad";
+      $("msg").textContent = phish ? "✗ Look again: who sends it, does it hurry you, does it want a code, a password or money?" : "✗ Look again: it is from a person or an app that you know, with no strange link and no request.";
+    }
+  }));
+  $("next").addEventListener("click", () => { if (i >= MSGS.length - 1) { i = 0; right = 0; $("score").textContent = "0 right"; } else i++; show(); });
+  show();
+})();
+</script>
+</body>
+</html>

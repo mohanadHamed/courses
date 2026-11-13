@@ -196,15 +196,16 @@ FILES = {
     DS + "/week-01/files/prices-start.xlsx": ("xlsx", [
         ("Prices", [["Price (JD)"], [10], [25], [15], [30], [20], [5], [35], [10]], [14]),
     ]),
-    # Lecture 3, Office concepts: a staff notice to find the parts, use the ribbon and save (59 words).
-    DS + "/week-03/files/notice-start.docx": ("docx", [
-        "**Sunrise Company: Staff Notice**",
-        "Dear colleagues,",
-        "Our office moves to the second floor next Sunday. The new rooms have more light and a small kitchen.",
-        "Please put your files in boxes on Thursday afternoon. Write your name on every box.",
-        "We meet in Room 21 at 9:00 on Sunday morning.",
-        "Thank you for your help.",
-        "Yousef Haddad, Office Manager",
+    # Lecture 3, communication: the agenda of the staff meeting, to attach to
+    # an e-mail (Experiment 1) and to share, comment and edit together in
+    # OneDrive (Experiment 3; the comment is on "10:00").
+    DS + "/week-03/files/agenda-start.docx": ("docx", [
+        "**Sunrise Company: Staff Meeting**",
+        "Sunday, 10:00, Room 21 and online (Teams)",
+        "1. The new office on the second floor",
+        "2. The book fair at the college library",
+        "3. The training day in December",
+        "4. Other points",
     ]),
     # Lecture 4, Word (1): a notice with no formatting, to format, give styles,
     # make a list and a table, and add a picture (files/books.png, drawn in

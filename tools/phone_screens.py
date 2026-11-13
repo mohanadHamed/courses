@@ -1112,6 +1112,193 @@ def share_win_2(s, top):
     top.mark(5, 472, 298)
 
 
+# =====================================================================
+# Digital Skills, Online activity 3 (week-03, syllabus v3): safe devices
+# and accounts. The models: Lina signs in to her university account on a
+# lab computer (the number 47); a fake parcel message on Omar's phone
+# (parcel-jo-pay.info) and a fake e-mail reported in Outlook; Sami's photo
+# app PhotoFix, whose location permission he turns off. Never the data of
+# the tasks (the mailbox e-mail of Task 2, the Camera app of Task 3).
+# =====================================================================
+
+def browser_bar(s, address):
+    s.rect(15, 15, WW - 30, 30, fill=WEB, rx=9)
+    s.rect(70, 21, 300, 18, fill="#ffffff", rx=9)
+    s.text(82, 34, address, 11.5, 400, GREY)
+
+
+@window("browser")
+def twostep_win_1(s, top):
+    """The sign-in page of the university account asks to approve the sign-in with a number."""
+    browser_bar(s, "login.microsoftonline.com")
+    s.rect(15, 45, WW - 30, WH - 60, fill="#f2f3f5")
+    s.rect(140, 62, 280, 270, fill="#ffffff", stroke="#d0d4d9", sw=1, rx=6)
+    s.text(164, 92, "lina@university", 12.5, 400, GREY)
+    s.text(164, 122, "Approve sign in request", 18, 700, INK)
+    s.text(164, 150, "Open your Authenticator app, and", 12.5, 400, INK)
+    s.text(164, 168, "enter the number shown to sign in.", 12.5, 400, INK)
+    s.text(280, 236, "47", 46, 700, INK, "middle")
+    s.text(164, 300, "No numbers in your app? Make sure to", 11, 400, GREY)
+    s.text(164, 316, "upgrade to the latest version.", 11, 400, GREY)
+    top.ring(240, 192, 80, 56, 10)
+    top.mark(1, 226, 196)
+
+
+@screen("android")
+def twostep_phone_1(s, top):
+    """The authenticator app asks: Are you trying to sign in? Type the number, then Yes."""
+    s.rect(28, 28, 284, 584, fill="#3d434a")
+    s.rect(44, 150, 252, 300, fill="#ffffff", rx=18)
+    s.text(170, 186, "Are you trying to sign in?", 16, 700, INK, "middle")
+    s.text(170, 212, "University", 13, 600, GREY, "middle")
+    s.text(170, 230, "lina@university", 13, 400, GREY, "middle")
+    s.text(170, 262, "Enter the number shown to sign in.", 12.5, 400, INK, "middle")
+    s.rect(110, 276, 120, 44, fill="#ffffff", stroke=INK, sw=1.5, rx=6)
+    s.text(170, 306, "47", 22, 700, INK, "middle")
+    s.line(44, 352, 296, 352, LINE, 1)
+    s.line(170, 352, 170, 450, LINE, 1)
+    s.text(107, 398, "No, it's not me", 13.5, 600, TEAL, "middle")
+    s.text(233, 398, "Yes", 15, 700, TEAL, "middle")
+    top.ring(104, 270, 132, 56, 10)
+    top.mark(2, 88, 300)
+    top.ring(184, 368, 98, 50, 10)
+    top.mark(3, 284, 360)
+
+
+@screen("android")
+def link_phone_1(s, top):
+    """Messages: touch and hold the link; the menu shows its real address."""
+    icon_chev(s, 46, 86, INK)
+    s.text(70, 92, "+962 7 9000 0000", 16, 600)
+    s.rect(44, 130, 236, 120, fill="#eceff1", rx=18)
+    s.text(58, 156, "Your parcel is waiting.", 14, 400)
+    s.text(58, 176, "Pay 0.50 JD in 24 hours, or", 14, 400)
+    s.text(58, 196, "it goes back:", 14, 400)
+    s.text(58, 220, "parcel-jo-pay.info/track", 14, 600, "#1c7ed6")
+    s.rect(28, 260, 284, 352, fill="#000000", opacity=0.25)
+    s.rect(52, 300, 236, 160, fill="#ffffff", rx=14)
+    s.text(68, 330, "http://parcel-jo-pay.info/track", 12.5, 700, INK)
+    for i, t in enumerate(["Open", "Copy link", "Share"]):
+        s.text(68, 372 + 34 * i, t, 14.5, 400, INK)
+    top.ring(52, 202, 200, 28, 8)
+    top.mark(1, 40, 216)
+    top.ring(58, 312, 226, 28, 8)
+    top.mark(2, 296, 300)
+
+
+@window("browser")
+def report_win_1(s, top):
+    """Outlook on the web: an e-mail is open; Report, then Report phishing."""
+    browser_bar(s, "outlook.office.com")
+    s.rect(15, 45, WW - 30, 34, fill="#f5f6f7")
+    for i, t in enumerate(["Delete", "Archive", "Report", "Move to"]):
+        s.text(34 + 86 * i, 67, t, 12.5, 600 if t == "Report" else 400, INK)
+    s.text(40, 112, "Sunrise Bank <service@sunrise-bank-help.co>", 12.5, 700, INK)
+    s.text(40, 134, "Your card is blocked. Sign in now to open it.", 12.5, 400, INK)
+    page_lines(s, 40, 168, 300, 4)
+    s.rect(196, 80, 170, 78, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(212, 108, "Report phishing", 13, 600, INK)
+    s.text(212, 140, "Report junk", 13, 400, INK)
+    top.ring(198, 50, 70, 26, 6)
+    top.mark(1, 188, 52)
+    top.ring(202, 90, 158, 28, 6)
+    top.mark(2, 376, 104)
+
+
+def settings_row(s, y, text, value=None, bold=False, chev=True):
+    s.text(48, y, text, 15, 600 if bold else 400, INK)
+    if value:
+        s.text(268 if chev else 290, y, value, 13.5, 400, GREY, "end")
+    if chev:
+        icon_chev(s, 286, y - 5, LIGHT, left=False, k=0.7)
+    s.line(48, y + 16, 300, y + 16, LINE, 1)
+
+
+@screen("android")
+def perm_android_1(s, top):
+    """Settings › Apps › PhotoFix: App info, then Permissions."""
+    icon_chev(s, 46, 86, INK)
+    s.text(70, 92, "App info", 19, 600)
+    s.rect(140, 118, 60, 60, fill="#f59f00", rx=16)
+    s.circle(170, 148, 14, fill="#ffffff")
+    s.circle(170, 148, 7, fill="#f59f00")
+    s.text(170, 202, "PhotoFix", 18, 600, INK, "middle")
+    s.text(170, 222, "Installed", 12.5, 400, GREY, "middle")
+    for i, (t, v) in enumerate([("Notifications", "Allowed"), ("Permissions", "Camera, Location and Photos"),
+                                ("Storage", "120 MB"), ("Mobile data", None)]):
+        y = 270 + 56 * i
+        s.text(48, y, t, 15.5, 500, INK)
+        if v:
+            s.text(48, y + 20, v, 12.5, 400, GREY)
+    top.ring(36, 306, 268, 50, 10)
+    top.mark(1, 300, 312)
+
+
+@screen("android")
+def perm_android_2(s, top):
+    """Location permission of PhotoFix: Don't allow."""
+    icon_chev(s, 46, 86, INK)
+    s.text(70, 92, "Location permission", 18, 600)
+    s.text(48, 134, "PhotoFix", 13, 600, GREY)
+    opts = ["Allow all the time", "Allow only while using the app", "Ask every time", "Don't allow"]
+    for i, t in enumerate(opts):
+        y = 182 + 52 * i
+        s.circle(58, y - 5, 10, stroke=GREY, sw=2, fill="#ffffff")
+        if t == "Don't allow":
+            s.circle(58, y - 5, 10, stroke=TEAL, sw=2, fill="#ffffff")
+            s.circle(58, y - 5, 5, fill=TEAL)
+        s.text(80, y, t, 14.5, 400, INK)
+    s.text(48, 420, "A photo app does not need", 12.5, 400, GREY)
+    s.text(48, 438, "your location to edit photos.", 12.5, 400, GREY)
+    top.ring(40, 320, 260, 40, 10)
+    top.mark(2, 296, 326)
+
+
+@screen("iphone")
+def perm_iphone_1(s, top):
+    """Settings › Privacy & Security › Location Services: the list of apps."""
+    s.rect(28, 28, 284, 584, fill=IOS_BG)
+    icon_chev(s, 46, 86, IOS_BLUE)
+    s.text(60, 92, "Privacy & Security", 15, 400, IOS_BLUE)
+    s.text(40, 136, "Location Services", 26, 800)
+    s.rect(36, 152, 268, 44, fill="#ffffff", rx=12)
+    s.text(50, 180, "Location Services", 14.5, 400, INK)
+    s.rect(252, 163, 40, 24, fill="#34c759", rx=12)
+    s.circle(280, 175, 10, fill="#ffffff")
+    s.rect(36, 214, 268, 176, fill="#ffffff", rx=12)
+    for i, (app, v) in enumerate([("Camera", "While Using"), ("Maps", "While Using"), ("PhotoFix", "Always"), ("Weather", "Never")]):
+        y = 244 + 44 * i
+        s.text(52, y, app, 14.5, 400, INK)
+        s.text(270, y, v, 13, 400, GREY, "end")
+        icon_chev(s, 286, y - 5, LIGHT, left=False, k=0.6)
+        if i < 3:
+            s.line(52, y + 16, 304, y + 16, LINE, 1)
+    top.ring(40, 314, 262, 38, 10)
+    top.mark(1, 300, 312)
+
+
+@screen("iphone")
+def perm_iphone_2(s, top):
+    """PhotoFix: Allow location access: Never."""
+    s.rect(28, 28, 284, 584, fill=IOS_BG)
+    icon_chev(s, 46, 86, IOS_BLUE)
+    s.text(60, 92, "Location Services", 15, 400, IOS_BLUE)
+    s.text(40, 136, "PhotoFix", 26, 800)
+    s.text(48, 172, "ALLOW LOCATION ACCESS", 11.5, 500, GREY)
+    s.rect(36, 182, 268, 176, fill="#ffffff", rx=12)
+    for i, t in enumerate(["Never", "Ask Next Time Or When I Share", "While Using the App", "Always"]):
+        y = 212 + 44 * i
+        s.text(52, y, t, 14, 400, INK)
+        if t == "Never":
+            icon_check(s, 284, y - 5, IOS_BLUE, 0.8, 2.2)
+        if i < 3:
+            s.line(52, y + 16, 304, y + 16, LINE, 1)
+    s.text(48, 390, "A photo app does not need your", 12.5, 400, GREY)
+    s.text(48, 408, "location to edit photos.", 12.5, 400, GREY)
+    top.ring(40, 188, 262, 38, 10)
+    top.mark(2, 300, 186)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -1132,6 +1319,14 @@ SCREENS = {
     "courses/digital-skills/week-03/images/paste-win-2": paste_win_2,
     "courses/digital-skills/week-03/images/share-win-1": share_win_1,
     "courses/digital-skills/week-03/images/share-win-2": share_win_2,
+    "courses/digital-skills/week-03/images/twostep-win-1": twostep_win_1,
+    "courses/digital-skills/week-03/images/twostep-phone-1": twostep_phone_1,
+    "courses/digital-skills/week-03/images/link-phone-1": link_phone_1,
+    "courses/digital-skills/week-03/images/report-win-1": report_win_1,
+    "courses/digital-skills/week-03/images/perm-android-1": perm_android_1,
+    "courses/digital-skills/week-03/images/perm-android-2": perm_android_2,
+    "courses/digital-skills/week-03/images/perm-iphone-1": perm_iphone_1,
+    "courses/digital-skills/week-03/images/perm-iphone-2": perm_iphone_2,
 }
 
 

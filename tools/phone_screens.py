@@ -1561,6 +1561,118 @@ def access_report_1(s, top):
     top.mark(3, 102, 102)
 
 
+# =====================================================================
+# Digital Skills, Online activity 9 (week-11, syllabus v3): Microsoft
+# Forms in a browser. The model is the booking form of the college gym
+# ("Gym booking": Day, Time); never the data of the tasks (the four
+# project services).
+# =====================================================================
+
+FORMS = "#038387"
+
+
+def forms_bar(s, title="Gym booking"):
+    browser_bar(s, "forms.office.com")
+    s.rect(15, 45, WW - 30, 34, fill=FORMS)
+    s.text(30, 67, "Forms", 13, 700, "#ffffff")
+    s.text(WW / 2, 67, title, 12.5, 400, "#ffffff", "middle")
+
+
+@window("browser")
+def forms_new_1(s, top):
+    """forms.office.com: New Form, then the title."""
+    browser_bar(s, "forms.office.com")
+    s.rect(15, 45, WW - 30, 34, fill=FORMS)
+    s.text(30, 67, "Forms", 13, 700, "#ffffff")
+    s.rect(30, 96, 110, 34, fill=FORMS, rx=6)
+    s.text(85, 118, "+ New Form", 13, 700, "#ffffff", "middle")
+    s.text(160, 118, "New Quiz", 12.5, 400, GREY)
+    s.text(30, 160, "Quick start with", 12, 600, GREY)
+    for i, t in enumerate(["Event registration", "Customer feedback", "Order form"]):
+        x = 30 + 170 * i
+        s.rect(x, 172, 156, 90, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+        page_lines(s, x + 14, 196, 120, 3, gap=16)
+        s.text(x + 12, 252, t, 11.5, 600, INK)
+    s.text(30, 300, "My forms", 12, 600, GREY)
+    top.ring(26, 92, 118, 42, 8)
+    top.mark(1, 156, 96)
+
+
+@window("browser")
+def forms_question_1(s, top):
+    """A new form: + Add new, Choice, the options; Date for the day."""
+    forms_bar(s)
+    s.rect(15, 79, WW - 30, 266, fill="#e9f5f5")
+    s.rect(90, 92, 380, 196, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(106, 118, "1. Which time?", 13, 700, INK)
+    for i, t in enumerate(["10:00", "12:00", "14:00"]):
+        y = 144 + 26 * i
+        s.circle(116, y - 4, 7, fill="#ffffff", stroke=GREY, sw=1.5)
+        s.text(132, y, t, 12.5, 400, INK)
+    s.text(106, 230, "Required", 11.5, 400, GREY)
+    s.rect(170, 220, 30, 16, fill=FORMS, rx=8)
+    s.circle(192, 228, 6, fill="#ffffff")
+    s.rect(90, 298, 110, 30, fill="#ffffff", stroke=FORMS, sw=1.5, rx=6)
+    s.text(145, 318, "+ Add new", 12.5, 700, FORMS, "middle")
+    for i, t in enumerate(["Choice", "Text", "Rating", "Date"]):
+        s.text(214 + 62 * i, 318, t, 12, 600 if t in ("Choice", "Date") else 400, INK)
+    top.ring(86, 294, 118, 38, 8)
+    top.mark(1, 76, 296)
+    top.ring(206, 300, 56, 26, 6)
+    top.mark(2, 234, 344)
+    top.ring(100, 126, 120, 84, 8)
+    top.mark(3, 232, 130)
+
+
+@window("browser")
+def forms_collect_1(s, top):
+    """Collect responses: copy the link (or the QR code)."""
+    forms_bar(s)
+    s.rect(15, 79, WW - 30, 266, fill="#e9f5f5")
+    s.rect(400, 86, 130, 30, fill=FORMS, rx=6)
+    s.text(465, 106, "Collect responses", 11.5, 700, "#ffffff", "middle")
+    s.rect(160, 126, 370, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(176, 154, "Send and collect responses", 14, 700, INK)
+    s.text(176, 182, "Anyone can respond", 12, 400, GREY)
+    s.rect(176, 196, 270, 30, fill="#f1f3f5", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(186, 216, "https://forms.office.com/r/aB3...", 11.5, 400, INK)
+    s.rect(454, 196, 62, 30, fill=FORMS, rx=4)
+    s.text(485, 216, "Copy", 12, 700, "#ffffff", "middle")
+    s.rect(176, 244, 40, 40, fill="#ffffff", stroke=INK, sw=1.5, rx=2)
+    for i in range(3):
+        for j in range(3):
+            if (i + j) % 2 == 0:
+                s.rect(181 + 11 * i, 249 + 11 * j, 8, 8, fill=INK)
+    s.text(226, 270, "QR code", 12, 400, INK)
+    top.ring(396, 82, 138, 38, 8)
+    top.mark(1, 384, 84)
+    top.ring(450, 192, 70, 38, 8)
+    top.mark(2, 438, 244)
+
+
+@window("browser")
+def forms_responses_1(s, top):
+    """The Responses tab: the number of responses, then Open results in Excel."""
+    forms_bar(s)
+    s.rect(15, 79, WW - 30, 266, fill="#e9f5f5")
+    s.text(190, 104, "Questions", 13, 400, INK)
+    s.text(290, 104, "Responses", 13, 700, INK)
+    s.line(290, 110, 360, 110, FORMS, 3)
+    s.rect(60, 124, 440, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(80, 166, "3", 34, 700, INK)
+    s.text(80, 190, "Responses", 12, 400, GREY)
+    s.rect(330, 146, 150, 32, fill="#ffffff", stroke=FORMS, sw=1.5, rx=6)
+    s.text(405, 167, "Open results in Excel", 11.5, 700, FORMS, "middle")
+    for i, (t, w) in enumerate([("10:00", 120), ("12:00", 60), ("14:00", 30)]):
+        y = 220 + 26 * i
+        s.text(80, y, t, 12, 400, INK)
+        s.rect(130, y - 12, w, 14, fill=FORMS, rx=3)
+    top.ring(284, 86, 82, 30, 6)
+    top.mark(1, 378, 98)
+    top.ring(326, 142, 158, 40, 8)
+    top.mark(2, 494, 162)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -1598,6 +1710,10 @@ SCREENS = {
     "courses/digital-skills/week-09/images/access-form-1": access_form_1,
     "courses/digital-skills/week-09/images/access-query-1": access_query_1,
     "courses/digital-skills/week-09/images/access-report-1": access_report_1,
+    "courses/digital-skills/week-11/images/forms-new-1": forms_new_1,
+    "courses/digital-skills/week-11/images/forms-question-1": forms_question_1,
+    "courses/digital-skills/week-11/images/forms-collect-1": forms_collect_1,
+    "courses/digital-skills/week-11/images/forms-responses-1": forms_responses_1,
 }
 
 

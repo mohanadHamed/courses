@@ -86,7 +86,11 @@ own sentences.
       Query Lab, game Data Desk; no start file); Online activity 8 (Form Lab,
       Query Lab, Report Lab; screens of Access; tasks on the simulators,
       letters only); old PowerPoint pages of week-09 removed; platform week 10.
-- [ ] Unit 8 (week-11): Lecture 8 digital service; Online activity 9 (the project choice).
+- [x] Unit 8 (week-11): Lecture 8 digital service (Service Sorter, Service
+      Planner, Form Builder, game Service Desk; `service-plan-start.docx`);
+      Online activity 9 (the four project services A-D with their form
+      questions; screens of Microsoft Forms; link, two screenshots, letters);
+      old week-11 pages removed; platform week 11.
 - [ ] Unit 9 (week-12): Lecture 9 website; Online activity 10.
 - [ ] Unit 10 (week-14): Lecture 10 e-marketing; Online activity 11.
 - [ ] Practice 2 and Online activity 12 (week-15): the project.

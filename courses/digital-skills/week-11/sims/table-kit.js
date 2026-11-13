@@ -1,0 +1,1 @@
+window.dbTable = (fields, rows) => `<table class="db"><tr>${fields.map((f) => `<th>${f}</th>`).join("")}</tr>${rows.map((r) => `<tr>${r.map((v) => `<td>${typeof v === "number" && v % 1 ? v.toFixed(2) : v}</td>`).join("")}</tr>`).join("")}</table>`;

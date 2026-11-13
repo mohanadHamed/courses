@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Service Planner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="svc.css">
+  <style>
+    .sim ol.steps { padding-left: 0; list-style: none; margin: 6px 0; max-width: 520px; }
+    .sim ol.steps li { display: flex; gap: 8px; align-items: center; border: 1.5px solid #ced4da; border-radius: 10px; padding: 6px 10px; margin: 5px 0; font-weight: 700; background: #fff; }
+    .sim ol.steps li span { flex: 1; }
+    .sim ol.steps li button { padding: 2px 9px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Service Planner: the customer, the need, the steps</h1>
+  <p class="hint">Plan a digital service in three parts. Mona makes cakes at home, and she wants to take orders online.</p>
+  <div class="task" id="task"></div>
+  <div id="stage"></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const PARTS = [
+    ["1 · Who is the customer?", ["families who want a cake for a party", "the bank", "Mona's oven"], 0, "The customer is the person who uses the service."],
+    ["2 · What is the need?", ["to order a cake without a phone call, and know the day", "to see Mona's kitchen", "a new oven"], 0, "The need is the problem that the service solves for the customer."],
+  ];
+  const STEPS = ["See the cakes and their prices", "Fill in the order form", "Get a confirmation", "Collect the cake and pay"];
+  let p = 0, order = [2, 0, 3, 1];
+  const say = (t, g) => { $("msg").textContent = t; $("msg").className = "message " + (g ? "good" : "bad"); };
+  function show() {
+    if (p < PARTS.length) {
+      const [q, opts] = PARTS[p];
+      $("task").textContent = q;
+      $("stage").innerHTML = `<div class="pad">${opts.map((o, k) => `<button type="button" class="ghost" data-k="${k}">${o}</button>`).join("")}</div>`;
+      document.querySelectorAll("#stage button").forEach((b) => b.addEventListener("click", () => {
+        const [, , ok, why] = PARTS[p];
+        if (Number(b.dataset.k) !== ok) { say("✗ Look again. " + why, false); return; }
+        say("✓ " + why, true); p++; setTimeout(show, 1200);
+      }));
+    } else {
+      $("task").textContent = "3 · Put the steps of the customer in order (▲ ▼), then Check.";
+      $("stage").innerHTML = `<ol class="steps">${order.map((k, n) => `<li><b>${n + 1}.</b><span>${STEPS[k]}</span><button type="button" class="ghost" data-u="${n}">▲</button><button type="button" class="ghost" data-d="${n}">▼</button></li>`).join("")}</ol><div class="pad"><button type="button" id="chk">Check</button></div>`;
+      document.querySelectorAll("[data-u]").forEach((b) => b.addEventListener("click", () => { const n = +b.dataset.u; if (n > 0) { [order[n - 1], order[n]] = [order[n], order[n - 1]]; show(); } }));
+      document.querySelectorAll("[data-d]").forEach((b) => b.addEventListener("click", () => { const n = +b.dataset.d; if (n < order.length - 1) { [order[n + 1], order[n]] = [order[n], order[n + 1]]; show(); } }));
+      $("chk").addEventListener("click", () => {
+        if (order.join() === "0,1,2,3") say("✓ The plan is ready: the customer sees the cakes, orders with the form, gets a confirmation, then collects and pays. The form is the next part to build.", true);
+        else say("✗ Not yet. What does the customer do first, before the form?", false);
+      });
+    }
+  }
+  show();
+})();
+</script>
+</body>
+</html>

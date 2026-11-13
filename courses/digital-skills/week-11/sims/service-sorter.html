@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Service Sorter</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="svc.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Service Sorter: which kind of digital service?</h1>
+  <p class="hint">Read each service and choose its kind. (The services are made up.)</p>
+  <div class="task" id="task"></div>
+  <div class="box" id="box"></div>
+  <div class="pad" id="kinds"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const KINDS = ["online store", "booking", "online form", "digital product"];
+  const S = [
+    ["Sunrise Shop online: choose notebooks and bags, pay, and get them at home.", "online store", "You buy things and pay online."],
+    ["Fix It: choose a day and a time to repair your phone.", "booking", "You choose a day and a time: a booking."],
+    ["The college survey: ten questions about the canteen.", "online form", "People answer questions on a page: an online form."],
+    ["An e-book of English grammar that you download.", "digital product", "The product itself is a file: a digital product."],
+    ["Study Room: book the library room for one hour.", "booking", "You reserve a room for a time."],
+    ["Mona's Cakes: fill in the order form for a birthday cake.", "online form", "An order form: questions that the customer fills in."],
+    ["A set of 20 slide designs that you buy and download.", "digital product", "A file that you download: a digital product."],
+    ["Green Bites: choose lunch boxes, pay by card, collect them at noon.", "online store", "Choose products and pay online: an online store."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, right = 0, tries = 0;
+  function show() {
+    tries = 0; $("task").textContent = `Service ${i + 1} of ${S.length}: which kind is it?`;
+    $("box").textContent = S[i][0];
+    $("kinds").innerHTML = KINDS.map((k) => `<button type="button" class="ghost" data-k="${k}">${k}</button>`).join("");
+    document.querySelectorAll("#kinds button").forEach((b) => b.addEventListener("click", () => pick(b.dataset.k)));
+  }
+  function pick(k) {
+    const [, ok, why] = S[i];
+    if (k !== ok) { tries++; $("msg").textContent = `✗ Not ${k}. Look again: what does the customer do?`; $("msg").className = "message bad"; return; }
+    if (!tries) right++;
+    $("msg").textContent = `✓ ${ok}: ${why}`; $("msg").className = "message good";
+    $("score").textContent = `${right} of ${S.length} right the first time`;
+    if (i < S.length - 1) { i++; setTimeout(show, 1500); } else { $("task").textContent = "All eight services are sorted."; $("kinds").innerHTML = ""; }
+  }
+  show();
+})();
+</script>
+</body>
+</html>

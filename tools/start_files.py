@@ -269,6 +269,19 @@ FILES = {
                       ["Apr", "Sales", "Excel", 6], ["Apr", "Office", "Word", 4], ["Apr", "Shop", "Safety", 2]],
          [8, 12, 10, 8]),
     ]),
+    # Lecture 8, a digital service (week-11): the plan of Mona's order
+    # service, to complete with words from the worksheet (Experiment 2).
+    DS + "/week-11/files/service-plan-start.docx": ("docx", [
+        "**Service plan: Mona's Cakes, orders online**",
+        "Kind of service:",
+        "The customer:",
+        "The need:",
+        "The steps of the customer:",
+        "1.",
+        "2.",
+        "3.",
+        "4.",
+    ]),
     # Lecture 8, PowerPoint: a short talk in the default theme, with one slide
     # of six long points (Experiment 3) and one of three short points
     # (the animation of Experiment 4). Not Slide Doctor: that is the Game challenge.

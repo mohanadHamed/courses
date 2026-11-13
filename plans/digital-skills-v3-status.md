@@ -71,8 +71,12 @@ own sentences.
       phishing and app permissions in `tools/phone_screens.py`); solution;
       platform week 6. check_size clean; all four outputs and the online
       page render; the tasks print on one A4 page.
-- [ ] Unit 4 (week-04): Lecture 4 Word (title, ILO, Save As PDF step);
-      Online activity 4 PowerPoint (sims from old week-09); solution.
+- [x] Unit 4 (week-04): Lecture 4 Word (new title, ILO C2, a Save As PDF
+      step in Experiment 3; Format Lab left only in the notes and slides so
+      the page is 40 minutes); Online activity 4 PowerPoint (Slide Builder
+      with "Use the given text" buttons, Slide Doctor, layouts/themes/text
+      figures, copied from old week-09; screens of New Slide, Design and
+      Stock Images); solution; platform week 7.
 - [ ] Unit 5 (week-06): old Lecture 6 → Lecture 5, old Online activity 6 → 5.
 - [ ] Unit 6 (week-07): old Lecture 7 → Lecture 6; Online activity 6
       PivotTable (from old week-13).
@@ -110,4 +114,6 @@ own sentences.
   with `NODE_PATH=/opt/node22/lib/node_modules`, Pillow).
 - Tasks PDF check: print the rendered online page to A4 with Playwright
   (`page.pdf`) and count the pages (one page).
+- Render with `HOMEWORK_PDF=off` (its Chrome print hangs here); check the
+  tasks print with Playwright instead.
 - Pandoc reads `@Name` and `**@**` as citations: write `\@Omar`, `**\@**`.

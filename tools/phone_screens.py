@@ -920,7 +920,7 @@ def window(kind):
     return wrap
 
 
-def office_bar(s, app, color, name, tabs=("File", "Home", "Insert", "Layout", "Review", "View")):
+def office_bar(s, app, color, name, tabs=("File", "Home", "Insert", "Layout", "Review", "View"), active="Home"):
     """The title bar, the tabs and a short ribbon of a desktop Office app."""
     s.rect(15, 15, WW - 30, 34, fill=color, rx=9)
     s.rect(15, 35, WW - 30, 14, fill=color)
@@ -928,8 +928,8 @@ def office_bar(s, app, color, name, tabs=("File", "Home", "Insert", "Layout", "R
     s.text(WW / 2, 37, name, 13, 400, "#ffffff", "middle")
     x = 28
     for tab in tabs:
-        s.text(x, 70, tab, 12.5, 600 if tab == "Home" else 400, INK)
-        if tab == "Home":
+        s.text(x, 70, tab, 12.5, 600 if tab == active else 400, INK)
+        if tab == active:
             s.line(x, 76, x + 34, 76, color, 2.5)
         x += 14 + 8 * len(tab)
     s.rect(15, 82, WW - 30, 40, fill="#f5f6f7")
@@ -1299,6 +1299,89 @@ def perm_iphone_2(s, top):
     top.mark(2, 300, 186)
 
 
+# =====================================================================
+# Digital Skills, Online activity 4 (week-04, syllabus v3): PowerPoint.
+# The model is Omar's short talk "Saving Water at Home" (three slides);
+# never the data of the task (the college library).
+# =====================================================================
+
+PPT = "#c43e1c"
+
+
+def ppt_frame(s, tab, name="saving-water.pptx"):
+    office_bar(s, "PowerPoint", PPT, name, tabs=("File", "Home", "Insert", "Design", "Transitions", "View"), active=tab)
+    s.rect(15, 123, WW - 30, 222, fill="#eef0f2")
+    for i in range(3):
+        s.rect(26, 134 + 62 * i, 84, 50, fill="#ffffff", stroke=PPT if i == 1 else "#c9cdd2", sw=1.5 if i == 1 else 1)
+        s.text(20, 150 + 62 * i, str(i + 1), 10, 400, GREY)
+    s.rect(130, 134, 400, 200, fill="#ffffff", stroke="#d0d4d9", sw=1)
+
+
+@window("computer")
+def ppt_newslide_1(s, top):
+    """PowerPoint: Home › New Slide, then a layout (Title and Content)."""
+    ppt_frame(s, "Home")
+    s.rect(30, 86, 74, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(67, 107, "New Slide", 11.5, 600, INK, "middle")
+    s.rect(30, 124, 330, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    for i, name in enumerate(["Title Slide", "Title and Content", "Two Content", "Blank"]):
+        x = 44 + (i % 2) * 156
+        y = 138 + (i // 2) * 92
+        s.rect(x, y, 140, 62, fill="#ffffff", stroke=PPT if i == 1 else "#c9cdd2", sw=2 if i == 1 else 1)
+        if i == 0:
+            s.rect(x + 20, y + 18, 100, 12, fill="#e3e6ea"); s.rect(x + 40, y + 36, 60, 8, fill="#eef0f2")
+        elif i == 1:
+            s.rect(x + 10, y + 8, 120, 10, fill="#e3e6ea"); page_lines(s, x + 14, y + 30, 100, 3, gap=10)
+        elif i == 2:
+            s.rect(x + 10, y + 8, 120, 10, fill="#e3e6ea"); page_lines(s, x + 12, y + 30, 50, 3, gap=10)
+            s.rect(x + 74, y + 26, 54, 28, fill="#eef0f2")
+        s.text(x + 70, y + 78, name, 11, 600 if i == 1 else 400, INK, "middle")
+    top.ring(26, 82, 82, 40, 6)
+    top.mark(1, 120, 100)
+    top.ring(196, 134, 148, 70, 8)
+    top.mark(2, 352, 146)
+
+
+@window("computer")
+def ppt_design_1(s, top):
+    """PowerPoint: the Design tab, then a theme."""
+    ppt_frame(s, "Design")
+    s.rect(15, 82, WW - 30, 40, fill="#f5f6f7")
+    colors = [("#ffffff", "#2a2f2c"), ("#1d3557", "#ffffff"), ("#e9f5db", "#2b6a4f"), ("#fff4e6", "#d9480f"), ("#f1f3f5", "#495057")]
+    for i, (bg, fg) in enumerate(colors):
+        x = 30 + 62 * i
+        s.rect(x, 86, 54, 32, fill=bg, stroke="#c9cdd2", sw=1, rx=3)
+        s.text(x + 27, 107, "Aa", 13, 700, fg, "middle")
+    s.text(372, 106, "Variants", 12, 400, GREY)
+    s.rect(130, 134, 400, 200, fill="#e9f5db", stroke="#d0d4d9", sw=1)
+    s.text(330, 220, "Saving Water at Home", 20, 700, "#2b6a4f", "middle")
+    s.text(330, 250, "A short talk for the Sunrise staff", 12.5, 400, "#2b6a4f", "middle")
+    top.ring(192, 54, 60, 26, 6)
+    top.mark(1, 264, 66)
+    top.ring(150, 82, 62, 40, 6)
+    top.mark(2, 222, 132)
+
+
+@window("computer")
+def ppt_picture_1(s, top):
+    """PowerPoint: Insert › Pictures › Stock Images."""
+    ppt_frame(s, "Insert")
+    s.rect(30, 86, 74, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(67, 107, "Pictures", 11.5, 600, INK, "middle")
+    s.rect(30, 124, 190, 112, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    for i, t in enumerate(["This Device...", "Stock Images...", "Online Pictures..."]):
+        y = 152 + 32 * i
+        if i == 1:
+            s.rect(32, y - 20, 186, 28, fill="#fdecea")
+        s.text(46, y, t, 12.5, 600 if i == 1 else 400, INK)
+    top.ring(130, 54, 54, 26, 6)
+    top.mark(1, 196, 66)
+    top.ring(26, 82, 82, 40, 6)
+    top.mark(2, 18, 102)
+    top.ring(34, 162, 182, 30, 6)
+    top.mark(3, 230, 178)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -1327,6 +1410,9 @@ SCREENS = {
     "courses/digital-skills/week-03/images/perm-android-2": perm_android_2,
     "courses/digital-skills/week-03/images/perm-iphone-1": perm_iphone_1,
     "courses/digital-skills/week-03/images/perm-iphone-2": perm_iphone_2,
+    "courses/digital-skills/week-04/images/ppt-newslide-1": ppt_newslide_1,
+    "courses/digital-skills/week-04/images/ppt-design-1": ppt_design_1,
+    "courses/digital-skills/week-04/images/ppt-picture-1": ppt_picture_1,
 }
 
 

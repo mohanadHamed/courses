@@ -28,9 +28,13 @@ no separate project week (plan v5, `plan.md`).
       Finder) · Save, PDF, AutoSave, sharing to co-edit (Save Lab) · an
       e-mail and a meeting (Mail Lab); Online activity 3 + what never to
       type into an AI tool (Step 3, Task 3 b); solution; platform week 6.
-- [ ] Unit 4 (week-04): Lecture 4 Word + an AI draft checked and
-      proofread; Online activity 4 CV and cover letter with AI (old v2 sims
-      in week-05/sims: letter-builder, cv-checker, word-ai-lab, check-lab).
+- [x] Unit 4 (week-04): Lecture 4 = formatting and styles · a table and a
+      picture · a draft from AI checked and proofread (Word AI Lab, copied
+      from week-05); Online activity 4 = cover letter and CV with AI, header,
+      page number, PDF, AI-use statement (Letter Builder, Profile Picker, CV
+      Checker; new screen word-header-1); solution; platform week 7. The
+      PowerPoint sims and screens of the old Online activity 4 stay in
+      week-04 for Unit 5.
 - [ ] Unit 5 (week-06): Lecture 5 PowerPoint (from v2 Lecture 8 in git
       history, week-09/lesson-08*), Online activity 5 a presentation with
       AI (v2 Online activity 9: outline-lab, image-prompt-lab) + Canva and

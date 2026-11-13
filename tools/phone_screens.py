@@ -1849,6 +1849,34 @@ def canva_download_1(s, top):
     top.mark(3, 280, 282)
 
 
+# =====================================================================
+# Digital Skills, Online activity 4 (week-04, syllabus v4): a header with
+# the name and a page number in Omar's letter (letter.docx); never the
+# data of the tasks.
+# =====================================================================
+
+@window("computer")
+def word_header_1(s, top):
+    """Word: Insert › Header, the name in the header; Insert › Page Number."""
+    office_bar(s, "Word", WORD, "letter.docx", active="Insert")
+    s.rect(30, 86, 60, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(60, 107, "Header", 11.5, 600, INK, "middle")
+    s.rect(98, 86, 96, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(146, 107, "Page Number", 11.5, 600, INK, "middle")
+    s.rect(15, 123, WW - 30, 222, fill="#eef0f2")
+    s.rect(150, 134, 260, 200, fill="#ffffff", stroke="#d0d4d9", sw=1)
+    s.line(150, 168, 410, 168, "#9aa5b1", 1)
+    s.text(162, 158, "Omar Khaled · letter", 11, 600, INK)
+    page_lines(s, 174, 196, 212, 4)
+    s.text(396, 324, "1", 11, 600, INK, "end")
+    top.ring(26, 82, 68, 40, 6)
+    top.mark(1, 18, 102)
+    top.ring(156, 142, 150, 24, 5)
+    top.mark(2, 318, 154)
+    top.ring(94, 82, 104, 40, 6)
+    top.mark(3, 210, 102)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -1877,6 +1905,7 @@ SCREENS = {
     "courses/digital-skills/week-03/images/perm-android-2": perm_android_2,
     "courses/digital-skills/week-03/images/perm-iphone-1": perm_iphone_1,
     "courses/digital-skills/week-03/images/perm-iphone-2": perm_iphone_2,
+    "courses/digital-skills/week-04/images/word-header-1": word_header_1,
     "courses/digital-skills/week-04/images/ppt-newslide-1": ppt_newslide_1,
     "courses/digital-skills/week-04/images/ppt-design-1": ppt_design_1,
     "courses/digital-skills/week-04/images/ppt-picture-1": ppt_picture_1,

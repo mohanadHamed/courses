@@ -24,10 +24,10 @@ no separate project week (plan v5, `plan.md`).
 ## Progress (plan v5)
 
 - [x] Plan: `_metadata.yml` (v4 ILOs), `schedule.yml`, `plan.md`, this file.
-- [ ] Unit 3 (week-03): Lecture 3 = Office concepts (Window Tour, Ribbon
-      Finder, Save Lab, kept in week-03/sims) + e-mail and meeting (one
-      experiment) + shared files; Online activity 3 + AI privacy (Prompt
-      Cleaner idea: what not to share with an AI tool).
+- [x] Unit 3 (week-03): Lecture 3 = the Office window and ribbon (Ribbon
+      Finder) · Save, PDF, AutoSave, sharing to co-edit (Save Lab) · an
+      e-mail and a meeting (Mail Lab); Online activity 3 + what never to
+      type into an AI tool (Step 3, Task 3 b); solution; platform week 6.
 - [ ] Unit 4 (week-04): Lecture 4 Word + an AI draft checked and
       proofread; Online activity 4 CV and cover letter with AI (old v2 sims
       in week-05/sims: letter-builder, cv-checker, word-ai-lab, check-lab).

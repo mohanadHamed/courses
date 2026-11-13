@@ -72,14 +72,15 @@ your phone, open Settings › About phone (iPhone: Settings › General ›
 About).
 
 1. Write the name and the version of each OS.
-2. Write one service of the OS that you used today, and what it did.
+2. You saved a document today. Tick the service of the OS that did it:
+   processes, memory, files, devices or permissions.
 
-*Your result:* two OS names with versions, and one service.
+*Your result:* two OS names with versions, and one ticked service.
 
 ::: {.check}
 A good answer: "Lab computer: Windows 11, version 23H2; phone: Android 14
-(or iOS 17)", and one service with a real example, for example "files: I
-saved a document", "permissions: an app asked for the camera".
+(or iOS 17)". Saving a document is the **files** service: the OS keeps
+files and folders in storage.
 :::
 :::
 
@@ -302,26 +303,26 @@ interface) and Chapter 12 (I/O systems).
 
 1. Name four services of an operating system.
 2. A game wants to use the camera. Which service of the OS decides if it may?
-3. What is a process? What does the scheduler do?
+3. What does the scheduler do? A. It decides which process runs on a core, and for how long. B. It saves the files of a process. C. It adds RAM when the RAM is full.
 4. Which app gets the most CPU time on a phone?
 5. A phone has 6 GB of RAM. The OS uses 2 GB and a game 2.5 GB. How much is free?
 6. A 4 GB phone: the OS uses 1.5 GB and a game 1.5 GB; a browser (0.5 GB, used 5 minutes ago) waits in the background. The player opens a map app of 0.8 GB. What does the OS close?
-7. What does a file system do? What is the metadata of a file?
+7. Which of these is metadata of a file? A. the text inside the file. B. its name, type, size and dates. C. the folder of the game.
 8. Write the path of `slot1.sav` in Omar's Documents folder.
-9. Why can a FAT32 stick not take a 5 GB file? Which format can?
-10. What is a device driver? What does a yellow sign in Device Manager mean?
+9. A FAT32 stick has 20 GB free but refuses a 5 GB file. Which reason is right? A. The stick is full. B. FAT32 allows no file of 4 GB or more. C. The file name is too long. Which format can take it?
+10. A gamepad shows a yellow sign in Device Manager. What is wrong? A. Its driver is missing or does not work. B. Its battery is low. C. It is the newest gamepad.
 
 ## Answers to the exercises
 
 ::: {.answers}
 1. For example: running processes, sharing memory, keeping files, controlling devices, checking permissions.
 2. The permission service: the player allows or refuses the camera.
-3. A running program with its own memory. The scheduler decides which process runs on a core, and for how long.
+3. A: the scheduler gives each process a time slice on a core, in turn.
 4. The foreground app, the one on the screen.
 5. 6 − 2 − 2.5 = 1.5 GB.
 6. 1.5 + 1.5 + 0.5 + 0.8 = 4.3 GB, more than 4 GB. The OS closes the browser, the background app used longest ago: 3.8 GB fits.
-7. It keeps files and folders on a drive with their names, paths, sizes and dates; metadata is data about a file (name, type, size, dates, permissions).
+7. B: metadata is data about a file (name, type, size, dates, permissions), not its content.
 8. `C:\\Users\\Omar\\Documents\\PocketQuest\\Saves\\slot1.sav`.
-9. FAT32 allows no file of 4 GB or more; exFAT can.
-10. A small program that lets the OS control one kind of hardware; the driver is missing or does not work.
+9. B: FAT32 allows no file of 4 GB or more. exFAT can take it.
+10. A: the driver, the small program that lets the OS control the gamepad, is missing or does not work.
 :::

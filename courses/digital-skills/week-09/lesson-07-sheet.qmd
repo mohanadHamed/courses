@@ -1,0 +1,329 @@
+---
+title: "Databases: Tables, Fields, Keys, Relationships and Queries"
+description: "Worksheet · Three experiments: a table with fields and data types, the primary key and a relationship, and a query with a criterion and a sort. Part A in Access, Part B on the simulators."
+lesson: 7
+ilos: [C3]
+format: lesson-typst
+---
+
+::: {.lead}
+Today you build the small database of the Sunrise shop. Each experiment
+has two parts. **Part A** is in Microsoft Access on the lab computer.
+**Part B** is on a simulator of the interactive lesson: on paper, scan its
+QR code; on the screen, click its link. After each step, write your result
+in its box. At the end, copy your key results into the table.
+:::
+
+## Before you start
+
+- **You need:** a lab computer with Microsoft Access (Windows). There is
+  no start file: you type three short records.
+- **No Access?** Do Part B of each experiment on your phone. Access is
+  only on Windows computers.
+- **Check:** the results are at the end of this worksheet. Look only after
+  you try. On the interactive lesson, every step has a check that answers
+  at once.
+
+## Experiment 1 · A table: fields and data types
+
+**The idea:** a **database** keeps data in **tables**. A table has
+**fields** (the columns, such as Name) and **records** (the rows: one
+customer). Each field has a **data type**: Short Text (names, phone
+numbers), Number (to count), Currency (money), Date/Time, Yes/No.
+
+**Aim:** make a table with the right data types, and type its records.
+
+::: {.part}
+**Part A · In the app (Access)**
+:::
+
+1. Open Access. Click **Blank database**, name it `shop` and click
+   **Create**. Click **View › Design View**, and save the table as
+   `Customers`. Type the fields: `CustomerID` (AutoNumber), `Name` (Short
+   Text), `City` (Short Text).
+
+   {{< record "Data type of Name: … ; of CustomerID: …" >}}
+
+   ::: {.check}
+   **Name: Short Text** (a name is text). **CustomerID: AutoNumber**:
+   Access gives every new record the next number by itself.
+   :::
+
+   ::: {.choice}
+   Which data type is right for the field Name?
+
+   - [x] Short Text
+
+     Why: A name is text.
+
+   - [ ] Number
+
+     Why: You never add or count names.
+
+   - [ ] Yes/No
+
+     Why: A name is not yes or no.
+   :::
+
+2. Click **View › Datasheet View**. Type three records: Huda, Amman · Omar,
+   Zarqa · Lina, Amman. (Access writes the CustomerID.)
+
+   {{< record "The table has … records and … fields" >}}
+
+   ::: {.check}
+   **3 records** (Huda, Omar, Lina) and **3 fields** (CustomerID, Name,
+   City). A record is a row; a field is a column.
+   :::
+
+   ::: {.fill answer="3" unit="records" hint="One row for each customer."}
+   Huda, Omar and Lina are in the Customers table. How many records does it
+   have?
+
+   Why: One record (row) for each customer: 3 records.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="sims/field-lab.html" poster="sims/field-lab.png" title="Field Lab: the right data type" >}}
+
+3. In **Field Lab**, choose the data type of the six fields. Which type is
+   right for Price, and which for InStock?
+
+   {{< record "Price: … ; InStock: …" >}}
+
+   ::: {.check}
+   **Price: Currency** (money). **InStock: Yes/No** (only two answers).
+   :::
+
+   ::: {.sort}
+   Which data type? Sort the fields.
+
+   Currency
+   :   Price (2.00 JD)
+
+       Why: Money is Currency.
+
+   Yes/No
+   :   InStock (Yes or No)
+
+       Why: Only two answers.
+
+   Short Text
+   :   Phone (079 000 0001)
+
+       Why: You never add phone numbers, and the 0 at the start must stay.
+
+   Date/Time
+   :   OrderDate (03/11/2026)
+
+       Why: A date.
+   :::
+
+## Experiment 2 · The primary key and a relationship
+
+**The idea:** the **primary key** is the field with a different value in
+every record (CustomerID); a name or a city can repeat. A second table,
+**Orders**, has the field CustomerID too. A **relationship** joins the two
+tables with this field: **one** customer has **many** orders
+(one-to-many).
+
+**Aim:** find the primary key, and join two tables.
+
+::: {.part}
+**Part A · In the app (Access)**
+:::
+
+1. Open the Customers table in **Design View**. Look for the small key
+   next to a field.
+
+   {{< record "The primary key of Customers is" >}}
+
+   ::: {.check}
+   **CustomerID**: it has a different value in every record. Two customers
+   can have the same name or city.
+   :::
+
+   ::: {.choice}
+   Why is Name not a good primary key?
+
+   - [x] Two customers can have the same name.
+
+     Why: A primary key must be different in every record.
+
+   - [ ] A name is too long.
+
+     Why: Length does not matter; a key must not repeat.
+
+   - [ ] Names are text.
+
+     Why: Text keys are possible, but names repeat.
+   :::
+
+2. Make a table `Orders`: `OrderID` (AutoNumber), `CustomerID` (Number),
+   `Item` (Short Text), `Total` (Currency). Click **Database Tools ›
+   Relationships**, add both tables, and drag **CustomerID** from Customers
+   onto CustomerID in Orders. Tick **Enforce Referential Integrity** and
+   click **Create**.
+
+   {{< record "The line shows … next to Customers and … next to Orders" >}}
+
+   ::: {.check}
+   **1** next to Customers and **∞** (many) next to Orders: one customer
+   has many orders.
+   :::
+
+   ::: {.choice}
+   What does the line 1 — ∞ between Customers and Orders mean?
+
+   - [x] One customer can have many orders.
+
+     Why: 1 is next to Customers, ∞ (many) next to Orders.
+
+   - [ ] One order can have many customers.
+
+     Why: Each order belongs to one customer.
+
+   - [ ] The tables have the same records.
+
+     Why: They share only the field CustomerID.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="sims/key-lab.html" poster="sims/key-lab.png" title="Key Lab: the primary key and the relationship" >}}
+
+3. In **Key Lab**, do Tasks 1 to 4. In Task 3, which field joins Orders to
+   Customers?
+
+   {{< record "Task 3: the field" >}}
+
+   ::: {.check}
+   **CustomerID**: the same field is in both tables.
+   :::
+
+   ::: {.choice}
+   In Task 3, which field joins Orders to Customers?
+
+   - [x] CustomerID
+
+     Why: The same field is in both tables.
+
+   - [ ] OrderID
+
+     Why: OrderID is only in the Orders table.
+
+   - [ ] Item
+
+     Why: Item is only in the Orders table.
+   :::
+
+## Experiment 3 · A query: a criterion and a sort
+
+**The idea:** a **query** asks a table a question. It shows only the
+fields and the records that you ask for. A **criterion** chooses the
+records (City = Amman, Price > 5); a **sort** puts them in order
+(ascending: A to Z, small to big). **Create › Query Design**, then **Run**.
+
+**Aim:** show only the records that you need, in order.
+
+::: {.part}
+**Part A · In the app (Access)**
+:::
+
+1. Click **Create › Query Design** and add the Customers table. Double-click
+   **Name** and **City**. In the **Criteria** row under City, type `Amman`.
+   Click **Run** (the red !).
+
+   {{< record "The query shows … records: …" >}}
+
+   ::: {.check}
+   **2 records: Huda and Lina** (both in Amman). Omar (Zarqa) is not
+   shown, but he is still in the table.
+   :::
+
+   ::: {.fill answer="2" unit="records" hint="Count the customers in Amman."}
+   Huda (Amman), Omar (Zarqa), Lina (Amman). How many records does the
+   query City = Amman show?
+
+   Why: Only Huda and Lina live in Amman.
+   :::
+
+2. Go back to **Design View**. In the **Sort** row under Name, choose
+   **Ascending**, and Run again. Save the query as `AmmanCustomers`.
+
+   {{< record "The first name now is" >}}
+
+   ::: {.check}
+   **Huda**: ascending sorts the names from A to Z (H comes before L).
+   :::
+
+   ::: {.choice}
+   The query shows Lina and Huda. After the sort Name, Ascending, which
+   name is first?
+
+   - [x] Huda
+
+     Why: Ascending is A to Z, and H comes before L.
+
+   - [ ] Lina
+
+     Why: Lina is first only with Descending.
+
+   - [ ] Omar
+
+     Why: Omar is not in the query: he lives in Zarqa.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="sims/query-lab.html" poster="sims/query-lab.png" title="Query Lab: ask the table a question" >}}
+
+3. In **Query Lab**, do Tasks 1 to 3. Task 2: how many products cost more
+   than 5 JD?
+
+   {{< record "Task 2: … records" >}}
+
+   ::: {.check}
+   **2 records**: the Bag (12 JD) and the Lunch box (6 JD).
+   :::
+
+   ::: {.fill answer="2" unit="records" hint="Look at the Price column: which prices are above 5?"}
+   The Products table: Notebook 2, Pen 0.50, Bag 12, Water 0.50, Juice 1,
+   Folder 1.50, Lunch box 6, Coffee 1 (JD). How many records does the
+   criterion Price > 5 show?
+
+   Why: Only the Bag (12) and the Lunch box (6) cost more than 5 JD.
+   :::
+
+## Table of results
+
+Copy your key results here: the rows of the parts that you did. Your
+teacher checks this table before the end of the lecture.
+
+::: {.record-table}
+| Experiment | What you record                                 | Your result |
+|:-------:|----------------------------------------------|-------------------------|
+| 1 A        | The data types of Name and CustomerID           |             |
+| 1 A        | The records and fields of Customers             |             |
+| 1 B        | The data types of Price and InStock             |             |
+| 2 A        | The primary key of Customers                    |             |
+| 2 A        | The line between Customers and Orders           |             |
+| 2 B        | The field that joins the two tables             |             |
+| 3 A        | The records of the query City = Amman           |             |
+| 3 A        | The first name after the sort                   |             |
+| 3 B        | The records with Price > 5                      |             |
+:::
+
+## Game challenge · The Data Desk
+
+Finished early? Play **Data Desk at Sunrise Company**: the colleagues ask
+Huda about the shop database. Read each message and choose the best
+answer.
+
+{{< sim file="sims/data-desk.html" poster="sims/data-desk.png" title="Data Desk at Sunrise Company" kind="game" >}}

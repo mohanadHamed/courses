@@ -196,15 +196,16 @@ FILES = {
     DS + "/week-01/files/prices-start.xlsx": ("xlsx", [
         ("Prices", [["Price (JD)"], [10], [25], [15], [30], [20], [5], [35], [10]], [14]),
     ]),
-    # Lecture 3, Office concepts: a staff notice to find the parts, use the ribbon and save (59 words).
-    DS + "/week-03/files/notice-start.docx": ("docx", [
-        "**Sunrise Company: Staff Notice**",
-        "Dear colleagues,",
-        "Our office moves to the second floor next Sunday. The new rooms have more light and a small kitchen.",
-        "Please put your files in boxes on Thursday afternoon. Write your name on every box.",
-        "We meet in Room 21 at 9:00 on Sunday morning.",
-        "Thank you for your help.",
-        "Yousef Haddad, Office Manager",
+    # Lecture 3, communication: the agenda of the staff meeting, to attach to
+    # an e-mail (Experiment 1) and to share, comment and edit together in
+    # OneDrive (Experiment 3; the comment is on "10:00").
+    DS + "/week-03/files/agenda-start.docx": ("docx", [
+        "**Sunrise Company: Staff Meeting**",
+        "Sunday, 10:00, Room 21 and online (Teams)",
+        "1. The new office on the second floor",
+        "2. The book fair at the college library",
+        "3. The training day in December",
+        "4. Other points",
     ]),
     # Lecture 4, Word (1): a notice with no formatting, to format, give styles,
     # make a list and a table, and add a picture (files/books.png, drawn in
@@ -257,6 +258,30 @@ FILES = {
         ("Types", [["Type", "Sales (JD)"], ["Paper", 77], ["Drinks", 51], ["Bags", 72]], [12, 12]),
         ("Days", [["Day", "Sales (JD)"], ["Sun", 24], ["Mon", 54], ["Tue", 26], ["Wed", 65], ["Thu", 31]], [10, 12]),
     ]),
+    # Online activity 6, Data Analysis (3) (week-07): the training hours of
+    # the Sunrise staff, for a PivotTable (Sales 18, Office 16, Shop 14;
+    # Excel 24, Word 16, Safety 8; 48 hours in all).
+    DS + "/week-07/files/training.xlsx": ("xlsx", [
+        ("Training", [["Month", "Department", "Course", "Hours"],
+                      ["Jan", "Sales", "Excel", 6], ["Jan", "Office", "Word", 4], ["Jan", "Shop", "Safety", 2],
+                      ["Feb", "Sales", "Word", 4], ["Feb", "Office", "Excel", 6], ["Feb", "Shop", "Excel", 6],
+                      ["Mar", "Sales", "Safety", 2], ["Mar", "Office", "Safety", 2], ["Mar", "Shop", "Word", 4],
+                      ["Apr", "Sales", "Excel", 6], ["Apr", "Office", "Word", 4], ["Apr", "Shop", "Safety", 2]],
+         [8, 12, 10, 8]),
+    ]),
+    # Lecture 8, a digital service (week-11): the plan of Mona's order
+    # service, to complete with words from the worksheet (Experiment 2).
+    DS + "/week-11/files/service-plan-start.docx": ("docx", [
+        "**Service plan: Mona's Cakes, orders online**",
+        "Kind of service:",
+        "The customer:",
+        "The need:",
+        "The steps of the customer:",
+        "1.",
+        "2.",
+        "3.",
+        "4.",
+    ]),
     # Lecture 8, PowerPoint: a short talk in the default theme, with one slide
     # of six long points (Experiment 3) and one of three short points
     # (the animation of Experiment 4). Not Slide Doctor: that is the Game challenge.
@@ -294,7 +319,7 @@ subtitle: "A short talk for the Sunrise staff"
                    [4, "Coffee", "Drinks", 4, 4], [4, "Pen", "Paper", 10, 5], [4, "Juice", "Drinks", 24, 12]],
          [8, 12, 10, 8, 12]),
     ]),
-    # Lecture 6, Excel (1): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
+    # Lecture 5, Excel (1) (week-06): the shop list (Experiments 1-3) and a week of sales (Experiment 4).
     DS + "/week-06/files/shop-start.xlsx": ("xlsx", [
         ("Shop", [["Item", "Price (JD)", "Quantity"],
                   ["Notebook", 2, 10],

@@ -1,0 +1,173 @@
+---
+title: "The Shop Database: a Form, Queries and a Report"
+description: "Online activity · A form to read and enter records, queries with a criterion and a sort, and a report with groups and totals, on the shop database. About 40 minutes."
+online: 8
+due: "before lecture 8"
+content: mix
+ilos: [C3]
+toc-title: "In this activity"
+format: lesson-html   # online activity: the tasks PDF is made by printing this page (homework_pdf.py)
+---
+
+## Before you start {.study}
+
+- **What you need:** only this page (a phone is fine). The screens show
+  Microsoft Access; Access is only on Windows computers, so the tasks use
+  the simulators.
+- **Time:** about 40 minutes. Work alone, at your own speed.
+- **How it works:** read Steps 1–3, try each simulator and answer the
+  questions: the page checks each answer at once. Then do the **Tasks to
+  submit**.
+- **What you submit:** four letters, on the university e-learning
+  platform, before lecture 8.
+
+## Key terms {.study}
+
+{{< glossary db-form db-query db-criterion db-report >}}
+
+## Step 1 · A form: one record at a time {.study}
+
+- A **form** shows **one record** of a table at a time, in big boxes.
+- It is easy to read, and easy to fill in: **New record**, type, **Save**.
+- The record goes into the table behind the form.
+
+::: {.callout-note title="Model · The library's Books table"}
+The college library has a table **Books** (BookID, Title, Type, Pages). The
+librarian makes a form for it in two clicks, then reads the books one by
+one with the arrows.
+:::
+
+**In Access, on a computer.** The orange numbers show where to click.
+
+::: {.screens}
+![[1]{.step-n} Click the table **Books**. [2]{.step-n} Click **Create**. [3]{.step-n} Click **Form**. The form shows record 1.](images/access-form-1.png)
+:::
+
+{{< sim file="sims/form-lab.html" poster="sims/form-lab.png" title="Form Lab: one record at a time" height="640" >}}
+
+::: {.callout-tip title="Try it 1 · Forms"}
+Choose the right answer.
+
+::: {.match extra="a query|a chart"}
+What shows one record at a time, in big boxes?
+:   a form
+
+    Why: A form is for reading and entering one record at a time.
+
+You save a new record in the form. Where does it go?
+:   into the table
+
+    Why: The form only shows the table; the data is in the table.
+:::
+:::
+
+## Step 2 · Queries: a criterion and a sort {.study}
+
+- A **query** shows only the records that you ask for.
+- The **criterion** goes in the **Criteria** row: `"Story"`, `>5`.
+- The **sort** goes in the **Sort** row: Ascending or Descending.
+- Click **Run** (the red !).
+
+::: {.callout-note title="Model · The stories, A to Z"}
+The librarian wants only the books of the type Story, sorted by Title. In
+Query Design: Criteria `"Story"` under Type, Sort **Ascending** under
+Title, then Run: *Desert Rain*, *The Old Bridge*.
+:::
+
+**In Access, on a computer.** The orange numbers show where to click.
+
+::: {.screens}
+![[1]{.step-n} Type the criterion under **Type**. [2]{.step-n} Choose the sort under **Title**. [3]{.step-n} Click **Run**.](images/access-query-1.png)
+:::
+
+{{< sim file="sims/query-lab.html" poster="sims/query-lab.png" title="Query Lab: ask the table a question" height="640" >}}
+
+::: {.callout-tip title="Try it 2 · Queries"}
+Choose the right answer.
+
+::: {.match extra="Descending|Price < 1"}
+Which criterion shows the products of the type Drinks?
+:   Type = Drinks
+
+    Why: The criterion chooses the records of one type.
+
+Which sort puts the names from A to Z?
+:   Ascending
+
+    Why: Ascending is A to Z, and small to big.
+:::
+:::
+
+## Step 3 · A report: ready to print {.study}
+
+- A **report** shows the data of a table or a query, ready to print.
+- **Create › Report** makes one in one click.
+- A report can **group** the records (by Type), **sort** them and show the
+  **total** of each group.
+
+::: {.callout-note title="Model · The library report"}
+The librarian clicks the table Books, then **Create › Report**: a page with
+all the books, their type and their pages, ready to print for the wall.
+:::
+
+**In Access, on a computer.** The orange numbers show where to click.
+
+::: {.screens}
+![[1]{.step-n} Click the table **Books**. [2]{.step-n} Click **Create**. [3]{.step-n} Click **Report**.](images/access-report-1.png)
+:::
+
+{{< sim file="sims/report-lab.html" poster="sims/report-lab.png" title="Report Lab: a report to print" height="640" >}}
+
+::: {.callout-tip title="Try it 3 · Reports"}
+Choose the right answer.
+
+::: {.match extra="a form|delete the rows"}
+The manager wants the products on paper, grouped by Type, with totals. What do you make?
+:   a report
+
+    Why: A report groups, sorts and adds totals, ready to print.
+
+The report must show the cheapest products first in each group. What do you add?
+:   a sort by Price
+
+    Why: A sort puts the records of each group in order.
+:::
+:::
+
+## Tasks to submit {.tasks}
+
+Use the simulators of this page (the Products table of the Sunrise shop).
+For each answer, choose A, B or C.
+
+### Task 1 · Two queries
+
+Step 2 shows how.
+
+a) In **Query Lab**, criterion **InStock = Yes**. How many records? **A**
+2 · **B** 6 · **C** 8
+
+{{< answer-space lines=1 >}}
+
+b) In **Query Lab**, criterion **Type = Bags**, sort **Price,
+Ascending**. Which product is first? **A** Bag · **B** Lunch box · **C**
+Pen
+
+{{< answer-space lines=1 >}}
+
+### Task 2 · A report and a form
+
+Steps 1 and 3 show how.
+
+a) In **Report Lab**, group by Type and show the totals. What is the
+total of Paper? **A** 2.00 JD · **B** 4.00 JD · **C** 12.00 JD
+
+{{< answer-space lines=1 >}}
+
+b) In **Form Lab**, add the Pencil (Task 2) and save it. How many records
+does the table have now? **A** 8 · **B** 9 · **C** 10
+
+{{< answer-space lines=1 >}}
+
+## How to submit
+
+Upload your four letters, **before lecture 8**.

@@ -920,7 +920,7 @@ def window(kind):
     return wrap
 
 
-def office_bar(s, app, color, name, tabs=("File", "Home", "Insert", "Layout", "Review", "View")):
+def office_bar(s, app, color, name, tabs=("File", "Home", "Insert", "Layout", "Review", "View"), active="Home"):
     """The title bar, the tabs and a short ribbon of a desktop Office app."""
     s.rect(15, 15, WW - 30, 34, fill=color, rx=9)
     s.rect(15, 35, WW - 30, 14, fill=color)
@@ -928,8 +928,8 @@ def office_bar(s, app, color, name, tabs=("File", "Home", "Insert", "Layout", "R
     s.text(WW / 2, 37, name, 13, 400, "#ffffff", "middle")
     x = 28
     for tab in tabs:
-        s.text(x, 70, tab, 12.5, 600 if tab == "Home" else 400, INK)
-        if tab == "Home":
+        s.text(x, 70, tab, 12.5, 600 if tab == active else 400, INK)
+        if tab == active:
             s.line(x, 76, x + 34, 76, color, 2.5)
         x += 14 + 8 * len(tab)
     s.rect(15, 82, WW - 30, 40, fill="#f5f6f7")
@@ -1112,6 +1112,743 @@ def share_win_2(s, top):
     top.mark(5, 472, 298)
 
 
+# =====================================================================
+# Digital Skills, Online activity 3 (week-03, syllabus v3): safe devices
+# and accounts. The models: Lina signs in to her university account on a
+# lab computer (the number 47); a fake parcel message on Omar's phone
+# (parcel-jo-pay.info) and a fake e-mail reported in Outlook; Sami's photo
+# app PhotoFix, whose location permission he turns off. Never the data of
+# the tasks (the mailbox e-mail of Task 2, the Camera app of Task 3).
+# =====================================================================
+
+def browser_bar(s, address):
+    s.rect(15, 15, WW - 30, 30, fill=WEB, rx=9)
+    s.rect(70, 21, 300, 18, fill="#ffffff", rx=9)
+    s.text(82, 34, address, 11.5, 400, GREY)
+
+
+@window("browser")
+def twostep_win_1(s, top):
+    """The sign-in page of the university account asks to approve the sign-in with a number."""
+    browser_bar(s, "login.microsoftonline.com")
+    s.rect(15, 45, WW - 30, WH - 60, fill="#f2f3f5")
+    s.rect(140, 62, 280, 270, fill="#ffffff", stroke="#d0d4d9", sw=1, rx=6)
+    s.text(164, 92, "lina@university", 12.5, 400, GREY)
+    s.text(164, 122, "Approve sign in request", 18, 700, INK)
+    s.text(164, 150, "Open your Authenticator app, and", 12.5, 400, INK)
+    s.text(164, 168, "enter the number shown to sign in.", 12.5, 400, INK)
+    s.text(280, 236, "47", 46, 700, INK, "middle")
+    s.text(164, 300, "No numbers in your app? Make sure to", 11, 400, GREY)
+    s.text(164, 316, "upgrade to the latest version.", 11, 400, GREY)
+    top.ring(240, 192, 80, 56, 10)
+    top.mark(1, 226, 196)
+
+
+@screen("android")
+def twostep_phone_1(s, top):
+    """The authenticator app asks: Are you trying to sign in? Type the number, then Yes."""
+    s.rect(28, 28, 284, 584, fill="#3d434a")
+    s.rect(44, 150, 252, 300, fill="#ffffff", rx=18)
+    s.text(170, 186, "Are you trying to sign in?", 16, 700, INK, "middle")
+    s.text(170, 212, "University", 13, 600, GREY, "middle")
+    s.text(170, 230, "lina@university", 13, 400, GREY, "middle")
+    s.text(170, 262, "Enter the number shown to sign in.", 12.5, 400, INK, "middle")
+    s.rect(110, 276, 120, 44, fill="#ffffff", stroke=INK, sw=1.5, rx=6)
+    s.text(170, 306, "47", 22, 700, INK, "middle")
+    s.line(44, 352, 296, 352, LINE, 1)
+    s.line(170, 352, 170, 450, LINE, 1)
+    s.text(107, 398, "No, it's not me", 13.5, 600, TEAL, "middle")
+    s.text(233, 398, "Yes", 15, 700, TEAL, "middle")
+    top.ring(104, 270, 132, 56, 10)
+    top.mark(2, 88, 300)
+    top.ring(184, 368, 98, 50, 10)
+    top.mark(3, 284, 360)
+
+
+@screen("android")
+def link_phone_1(s, top):
+    """Messages: touch and hold the link; the menu shows its real address."""
+    icon_chev(s, 46, 86, INK)
+    s.text(70, 92, "+962 7 9000 0000", 16, 600)
+    s.rect(44, 130, 236, 120, fill="#eceff1", rx=18)
+    s.text(58, 156, "Your parcel is waiting.", 14, 400)
+    s.text(58, 176, "Pay 0.50 JD in 24 hours, or", 14, 400)
+    s.text(58, 196, "it goes back:", 14, 400)
+    s.text(58, 220, "parcel-jo-pay.info/track", 14, 600, "#1c7ed6")
+    s.rect(28, 260, 284, 352, fill="#000000", opacity=0.25)
+    s.rect(52, 300, 236, 160, fill="#ffffff", rx=14)
+    s.text(68, 330, "http://parcel-jo-pay.info/track", 12.5, 700, INK)
+    for i, t in enumerate(["Open", "Copy link", "Share"]):
+        s.text(68, 372 + 34 * i, t, 14.5, 400, INK)
+    top.ring(52, 202, 200, 28, 8)
+    top.mark(1, 40, 216)
+    top.ring(58, 312, 226, 28, 8)
+    top.mark(2, 296, 300)
+
+
+@window("browser")
+def report_win_1(s, top):
+    """Outlook on the web: an e-mail is open; Report, then Report phishing."""
+    browser_bar(s, "outlook.office.com")
+    s.rect(15, 45, WW - 30, 34, fill="#f5f6f7")
+    for i, t in enumerate(["Delete", "Archive", "Report", "Move to"]):
+        s.text(34 + 86 * i, 67, t, 12.5, 600 if t == "Report" else 400, INK)
+    s.text(40, 112, "Sunrise Bank <service@sunrise-bank-help.co>", 12.5, 700, INK)
+    s.text(40, 134, "Your card is blocked. Sign in now to open it.", 12.5, 400, INK)
+    page_lines(s, 40, 168, 300, 4)
+    s.rect(196, 80, 170, 78, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(212, 108, "Report phishing", 13, 600, INK)
+    s.text(212, 140, "Report junk", 13, 400, INK)
+    top.ring(198, 50, 70, 26, 6)
+    top.mark(1, 188, 52)
+    top.ring(202, 90, 158, 28, 6)
+    top.mark(2, 376, 104)
+
+
+def settings_row(s, y, text, value=None, bold=False, chev=True):
+    s.text(48, y, text, 15, 600 if bold else 400, INK)
+    if value:
+        s.text(268 if chev else 290, y, value, 13.5, 400, GREY, "end")
+    if chev:
+        icon_chev(s, 286, y - 5, LIGHT, left=False, k=0.7)
+    s.line(48, y + 16, 300, y + 16, LINE, 1)
+
+
+@screen("android")
+def perm_android_1(s, top):
+    """Settings › Apps › PhotoFix: App info, then Permissions."""
+    icon_chev(s, 46, 86, INK)
+    s.text(70, 92, "App info", 19, 600)
+    s.rect(140, 118, 60, 60, fill="#f59f00", rx=16)
+    s.circle(170, 148, 14, fill="#ffffff")
+    s.circle(170, 148, 7, fill="#f59f00")
+    s.text(170, 202, "PhotoFix", 18, 600, INK, "middle")
+    s.text(170, 222, "Installed", 12.5, 400, GREY, "middle")
+    for i, (t, v) in enumerate([("Notifications", "Allowed"), ("Permissions", "Camera, Location and Photos"),
+                                ("Storage", "120 MB"), ("Mobile data", None)]):
+        y = 270 + 56 * i
+        s.text(48, y, t, 15.5, 500, INK)
+        if v:
+            s.text(48, y + 20, v, 12.5, 400, GREY)
+    top.ring(36, 306, 268, 50, 10)
+    top.mark(1, 300, 312)
+
+
+@screen("android")
+def perm_android_2(s, top):
+    """Location permission of PhotoFix: Don't allow."""
+    icon_chev(s, 46, 86, INK)
+    s.text(70, 92, "Location permission", 18, 600)
+    s.text(48, 134, "PhotoFix", 13, 600, GREY)
+    opts = ["Allow all the time", "Allow only while using the app", "Ask every time", "Don't allow"]
+    for i, t in enumerate(opts):
+        y = 182 + 52 * i
+        s.circle(58, y - 5, 10, stroke=GREY, sw=2, fill="#ffffff")
+        if t == "Don't allow":
+            s.circle(58, y - 5, 10, stroke=TEAL, sw=2, fill="#ffffff")
+            s.circle(58, y - 5, 5, fill=TEAL)
+        s.text(80, y, t, 14.5, 400, INK)
+    s.text(48, 420, "A photo app does not need", 12.5, 400, GREY)
+    s.text(48, 438, "your location to edit photos.", 12.5, 400, GREY)
+    top.ring(40, 320, 260, 40, 10)
+    top.mark(2, 296, 326)
+
+
+@screen("iphone")
+def perm_iphone_1(s, top):
+    """Settings › Privacy & Security › Location Services: the list of apps."""
+    s.rect(28, 28, 284, 584, fill=IOS_BG)
+    icon_chev(s, 46, 86, IOS_BLUE)
+    s.text(60, 92, "Privacy & Security", 15, 400, IOS_BLUE)
+    s.text(40, 136, "Location Services", 26, 800)
+    s.rect(36, 152, 268, 44, fill="#ffffff", rx=12)
+    s.text(50, 180, "Location Services", 14.5, 400, INK)
+    s.rect(252, 163, 40, 24, fill="#34c759", rx=12)
+    s.circle(280, 175, 10, fill="#ffffff")
+    s.rect(36, 214, 268, 176, fill="#ffffff", rx=12)
+    for i, (app, v) in enumerate([("Camera", "While Using"), ("Maps", "While Using"), ("PhotoFix", "Always"), ("Weather", "Never")]):
+        y = 244 + 44 * i
+        s.text(52, y, app, 14.5, 400, INK)
+        s.text(270, y, v, 13, 400, GREY, "end")
+        icon_chev(s, 286, y - 5, LIGHT, left=False, k=0.6)
+        if i < 3:
+            s.line(52, y + 16, 304, y + 16, LINE, 1)
+    top.ring(40, 314, 262, 38, 10)
+    top.mark(1, 300, 312)
+
+
+@screen("iphone")
+def perm_iphone_2(s, top):
+    """PhotoFix: Allow location access: Never."""
+    s.rect(28, 28, 284, 584, fill=IOS_BG)
+    icon_chev(s, 46, 86, IOS_BLUE)
+    s.text(60, 92, "Location Services", 15, 400, IOS_BLUE)
+    s.text(40, 136, "PhotoFix", 26, 800)
+    s.text(48, 172, "ALLOW LOCATION ACCESS", 11.5, 500, GREY)
+    s.rect(36, 182, 268, 176, fill="#ffffff", rx=12)
+    for i, t in enumerate(["Never", "Ask Next Time Or When I Share", "While Using the App", "Always"]):
+        y = 212 + 44 * i
+        s.text(52, y, t, 14, 400, INK)
+        if t == "Never":
+            icon_check(s, 284, y - 5, IOS_BLUE, 0.8, 2.2)
+        if i < 3:
+            s.line(52, y + 16, 304, y + 16, LINE, 1)
+    s.text(48, 390, "A photo app does not need your", 12.5, 400, GREY)
+    s.text(48, 408, "location to edit photos.", 12.5, 400, GREY)
+    top.ring(40, 188, 262, 38, 10)
+    top.mark(2, 300, 186)
+
+
+# =====================================================================
+# Digital Skills, Online activity 4 (week-04, syllabus v3): PowerPoint.
+# The model is Omar's short talk "Saving Water at Home" (three slides);
+# never the data of the task (the college library).
+# =====================================================================
+
+PPT = "#c43e1c"
+
+
+def ppt_frame(s, tab, name="saving-water.pptx"):
+    office_bar(s, "PowerPoint", PPT, name, tabs=("File", "Home", "Insert", "Design", "Transitions", "View"), active=tab)
+    s.rect(15, 123, WW - 30, 222, fill="#eef0f2")
+    for i in range(3):
+        s.rect(26, 134 + 62 * i, 84, 50, fill="#ffffff", stroke=PPT if i == 1 else "#c9cdd2", sw=1.5 if i == 1 else 1)
+        s.text(20, 150 + 62 * i, str(i + 1), 10, 400, GREY)
+    s.rect(130, 134, 400, 200, fill="#ffffff", stroke="#d0d4d9", sw=1)
+
+
+@window("computer")
+def ppt_newslide_1(s, top):
+    """PowerPoint: Home › New Slide, then a layout (Title and Content)."""
+    ppt_frame(s, "Home")
+    s.rect(30, 86, 74, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(67, 107, "New Slide", 11.5, 600, INK, "middle")
+    s.rect(30, 124, 330, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    for i, name in enumerate(["Title Slide", "Title and Content", "Two Content", "Blank"]):
+        x = 44 + (i % 2) * 156
+        y = 138 + (i // 2) * 92
+        s.rect(x, y, 140, 62, fill="#ffffff", stroke=PPT if i == 1 else "#c9cdd2", sw=2 if i == 1 else 1)
+        if i == 0:
+            s.rect(x + 20, y + 18, 100, 12, fill="#e3e6ea"); s.rect(x + 40, y + 36, 60, 8, fill="#eef0f2")
+        elif i == 1:
+            s.rect(x + 10, y + 8, 120, 10, fill="#e3e6ea"); page_lines(s, x + 14, y + 30, 100, 3, gap=10)
+        elif i == 2:
+            s.rect(x + 10, y + 8, 120, 10, fill="#e3e6ea"); page_lines(s, x + 12, y + 30, 50, 3, gap=10)
+            s.rect(x + 74, y + 26, 54, 28, fill="#eef0f2")
+        s.text(x + 70, y + 78, name, 11, 600 if i == 1 else 400, INK, "middle")
+    top.ring(26, 82, 82, 40, 6)
+    top.mark(1, 120, 100)
+    top.ring(196, 134, 148, 70, 8)
+    top.mark(2, 352, 146)
+
+
+@window("computer")
+def ppt_design_1(s, top):
+    """PowerPoint: the Design tab, then a theme."""
+    ppt_frame(s, "Design")
+    s.rect(15, 82, WW - 30, 40, fill="#f5f6f7")
+    colors = [("#ffffff", "#2a2f2c"), ("#1d3557", "#ffffff"), ("#e9f5db", "#2b6a4f"), ("#fff4e6", "#d9480f"), ("#f1f3f5", "#495057")]
+    for i, (bg, fg) in enumerate(colors):
+        x = 30 + 62 * i
+        s.rect(x, 86, 54, 32, fill=bg, stroke="#c9cdd2", sw=1, rx=3)
+        s.text(x + 27, 107, "Aa", 13, 700, fg, "middle")
+    s.text(372, 106, "Variants", 12, 400, GREY)
+    s.rect(130, 134, 400, 200, fill="#e9f5db", stroke="#d0d4d9", sw=1)
+    s.text(330, 220, "Saving Water at Home", 20, 700, "#2b6a4f", "middle")
+    s.text(330, 250, "A short talk for the Sunrise staff", 12.5, 400, "#2b6a4f", "middle")
+    top.ring(192, 54, 60, 26, 6)
+    top.mark(1, 264, 66)
+    top.ring(150, 82, 62, 40, 6)
+    top.mark(2, 222, 132)
+
+
+@window("computer")
+def ppt_picture_1(s, top):
+    """PowerPoint: Insert › Pictures › Stock Images."""
+    ppt_frame(s, "Insert")
+    s.rect(30, 86, 74, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(67, 107, "Pictures", 11.5, 600, INK, "middle")
+    s.rect(30, 124, 190, 112, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    for i, t in enumerate(["This Device...", "Stock Images...", "Online Pictures..."]):
+        y = 152 + 32 * i
+        if i == 1:
+            s.rect(32, y - 20, 186, 28, fill="#fdecea")
+        s.text(46, y, t, 12.5, 600 if i == 1 else 400, INK)
+    top.ring(130, 54, 54, 26, 6)
+    top.mark(1, 196, 66)
+    top.ring(26, 82, 82, 40, 6)
+    top.mark(2, 18, 102)
+    top.ring(34, 162, 182, 30, 6)
+    top.mark(3, 230, 178)
+
+
+# =====================================================================
+# Digital Skills, Online activity 6 (week-07, syllabus v3): a PivotTable.
+# The model is Rana's March (Paper 206, Drinks 71, Bags 78 JD); never the
+# data of the task (the training hours).
+# =====================================================================
+
+def excel_grid(s, rows, x=30, y=134, cw=(70, 70, 60, 70)):
+    for r, row in enumerate(rows):
+        cx = x
+        for c, v in enumerate(row):
+            s.rect(cx, y + 22 * r, cw[c], 22, fill="#ffffff" if r else "#f1f3f5", stroke="#d0d4d9", sw=0.8)
+            s.text(cx + 5, y + 22 * r + 15, str(v), 11, 600 if r == 0 else 400, INK)
+            cx += cw[c]
+
+
+@window("computer")
+def pivot_win_1(s, top):
+    """Excel: click in the data, Insert › PivotTable, then OK."""
+    office_bar(s, "Excel", EXCEL, "march.xlsx", tabs=("File", "Home", "Insert", "Data", "View"), active="Insert")
+    s.rect(30, 86, 74, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(67, 107, "PivotTable", 11.5, 600, INK, "middle")
+    excel_grid(s, [["Week", "Item", "Type", "Total"], [1, "Coffee", "Drinks", 6], [1, "Pen", "Paper", 8],
+                   [1, "Juice", "Drinks", 2], [1, "Notebook", "Paper", 60], [2, "Bag", "Bags", 12]])
+    s.rect(320, 150, 210, 150, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(334, 176, "Create PivotTable", 13.5, 700, INK)
+    s.text(334, 202, "Table/Range: March!A1:E25", 11.5, 400, GREY)
+    s.text(334, 228, "New Worksheet", 11.5, 400, INK)
+    s.rect(440, 262, 76, 26, fill=EXCEL, rx=4)
+    s.text(478, 280, "OK", 13, 700, "#ffffff", "middle")
+    top.ring(116, 54, 54, 26, 6)
+    top.mark(1, 182, 66)
+    top.ring(26, 82, 82, 40, 6)
+    top.mark(2, 18, 102)
+    top.ring(436, 258, 84, 34, 6)
+    top.mark(3, 422, 296)
+
+
+@window("computer")
+def pivot_win_2(s, top):
+    """The PivotTable Fields: Type to Rows, Total to Values; the result."""
+    s.rect(15, 15, WW - 30, WH - 30, fill="#ffffff", rx=9)
+    excel_grid(s, [["Row Labels", "Sum of Total"], ["Bags", 78], ["Drinks", 71], ["Paper", 206], ["Grand Total", 355]],
+               x=30, y=40, cw=(100, 100))
+    s.rect(330, 26, 200, 310, fill="#f8f9fa", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(344, 50, "PivotTable Fields", 13, 700, INK)
+    for i, f in enumerate(["Week", "Item", "Type", "Total"]):
+        y = 76 + 24 * i
+        s.rect(344, y - 12, 12, 12, fill="#ffffff", stroke=GREY, sw=1, rx=2)
+        if f in ("Type", "Total"):
+            icon_check(s, 350, y - 6, EXCEL, 0.5, 1.8)
+        s.text(364, y, f, 12, 400, INK)
+    s.text(344, 196, "Rows", 11.5, 600, GREY)
+    s.rect(344, 204, 172, 26, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=3)
+    s.text(352, 222, "Type", 12, 600, INK)
+    s.text(344, 258, "Values", 11.5, 600, GREY)
+    s.rect(344, 266, 172, 26, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=3)
+    s.text(352, 284, "Sum of Total", 12, 600, INK)
+    top.ring(340, 200, 180, 34, 6)
+    top.mark(4, 330, 196)
+    top.ring(340, 262, 180, 34, 6)
+    top.mark(5, 330, 258)
+    top.ring(26, 124, 204, 26, 6)
+    top.mark(6, 244, 138)
+
+
+@window("computer")
+def pivot_chart_1(s, top):
+    """Excel: click the PivotTable, Insert › Column chart; the chart of Rana's month."""
+    office_bar(s, "Excel", EXCEL, "march.xlsx", tabs=("File", "Home", "Insert", "Data", "View"), active="Insert")
+    s.rect(30, 86, 44, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    for i, h in enumerate((10, 18, 14)):
+        s.rect(40 + 8 * i, 112 - h, 6, h, fill=EXCEL)
+    excel_grid(s, [["Row Labels", "Sum of Total"], ["Bags", 78], ["Drinks", 71], ["Paper", 206], ["Grand Total", 355]],
+               x=30, y=140, cw=(90, 90))
+    s.rect(250, 140, 280, 190, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(390, 162, "Sales by type (JD)", 12, 700, INK, "middle")
+    for i, (lab, v) in enumerate((("Bags", 78), ("Drinks", 71), ("Paper", 206))):
+        h = v * 0.62
+        x = 290 + 78 * i
+        s.rect(x, 306 - h, 44, h, fill=EXCEL)
+        s.text(x + 22, 322, lab, 11, 400, INK, "middle")
+    top.ring(116, 54, 54, 26, 6)
+    top.mark(1, 182, 66)
+    top.ring(26, 82, 52, 40, 6)
+    top.mark(2, 92, 102)
+
+
+# =====================================================================
+# Digital Skills, Online activity 8 (week-09, syllabus v3): Access. The
+# model is the Books table of the college library (BookID, Title, Type,
+# Pages); never the data of the tasks (the Products of the Sunrise shop).
+# =====================================================================
+
+ACCESS = "#a4373a"
+
+
+def access_frame(s, active, name="library : Database"):
+    office_bar(s, "Access", ACCESS, name, tabs=("File", "Home", "Create", "External Data", "Database Tools"), active=active)
+    s.rect(15, 123, 120, 222, fill="#f8f9fa")
+    s.text(24, 142, "All Access Objects", 10.5, 600, GREY)
+    s.text(30, 166, "Books", 12, 400, INK)
+
+
+@window("computer")
+def access_form_1(s, top):
+    """Access: select the table, Create › Form; the form shows one record."""
+    access_frame(s, "Create")
+    s.rect(26, 152, 104, 22, fill="#fdecea")
+    s.text(30, 166, "Books", 12, 600, INK)
+    s.rect(30, 86, 50, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(55, 107, "Form", 11.5, 600, INK, "middle")
+    s.rect(150, 134, 380, 200, fill="#ffffff", stroke="#d0d4d9", sw=1)
+    s.text(166, 160, "Books", 15, 700, ACCESS)
+    for i, (f, v) in enumerate([("BookID", "1"), ("Title", "Maths 1"), ("Type", "Study"), ("Pages", "220")]):
+        y = 186 + 30 * i
+        s.text(166, y + 4, f, 12, 600, INK)
+        s.rect(250, y - 12, 200, 22, fill="#ffffff", stroke="#c9cdd2", sw=1)
+        s.text(258, y + 4, v, 12, 400, INK)
+    s.text(166, 322, "Record: 1 of 6", 11.5, 400, GREY)
+    top.ring(24, 150, 108, 26, 6)
+    top.mark(1, 140, 160)
+    top.ring(116, 54, 58, 26, 6)
+    top.mark(2, 186, 66)
+    top.ring(26, 82, 58, 40, 6)
+    top.mark(3, 96, 102)
+
+
+@window("computer")
+def access_query_1(s, top):
+    """Access Query Design: the Criteria row, the Sort row, then Run."""
+    access_frame(s, "Create")
+    s.rect(30, 86, 44, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(52, 108, "! Run", 11.5, 700, ACCESS, "middle")
+    s.rect(150, 134, 120, 70, fill="#ffffff", stroke="#c9cdd2", sw=1)
+    s.text(160, 152, "Books", 12, 700, INK)
+    for i, f in enumerate(["Title", "Type", "Pages"]):
+        s.text(160, 170 + 14 * i, f, 10.5, 400, INK)
+    for r, (lab, a, b) in enumerate([("Field:", "Title", "Type"), ("Sort:", "Ascending", ""), ("Criteria:", "", "\"Story\"")]):
+        y = 224 + 30 * r
+        s.text(150, y + 17, lab, 11.5, 600, GREY)
+        for c, v in enumerate((a, b)):
+            x = 220 + 130 * c
+            s.rect(x, y, 126, 26, fill="#ffffff", stroke="#c9cdd2", sw=1)
+            s.text(x + 8, y + 17, v, 11.5, 400, INK)
+    top.ring(346, 280, 134, 34, 6)
+    top.mark(1, 492, 298)
+    top.ring(216, 250, 134, 34, 6)
+    top.mark(2, 204, 248)
+    top.ring(26, 82, 52, 40, 6)
+    top.mark(3, 92, 102)
+
+
+@window("computer")
+def access_report_1(s, top):
+    """Access: select the table, Create › Report; the report preview."""
+    access_frame(s, "Create")
+    s.rect(26, 152, 104, 22, fill="#fdecea")
+    s.text(30, 166, "Books", 12, 600, INK)
+    s.rect(30, 86, 56, 32, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(58, 107, "Report", 11.5, 600, INK, "middle")
+    s.rect(150, 134, 380, 200, fill="#ffffff", stroke="#d0d4d9", sw=1)
+    s.text(166, 160, "Books", 15, 700, ACCESS)
+    s.text(166, 184, "Title", 11, 700, INK)
+    s.text(300, 184, "Type", 11, 700, INK)
+    s.text(420, 184, "Pages", 11, 700, INK)
+    for i, (t, ty, p) in enumerate([("Maths 1", "Study", "220"), ("The Old Bridge", "Story", "140"), ("English 2", "Study", "180"), ("Desert Rain", "Story", "200")]):
+        y = 206 + 22 * i
+        s.text(166, y, t, 11, 400, INK)
+        s.text(300, y, ty, 11, 400, INK)
+        s.text(420, y, p, 11, 400, INK)
+    s.text(166, 318, "Page 1 of 1", 10.5, 400, GREY)
+    top.ring(24, 150, 108, 26, 6)
+    top.mark(1, 140, 160)
+    top.ring(116, 54, 58, 26, 6)
+    top.mark(2, 186, 66)
+    top.ring(26, 82, 64, 40, 6)
+    top.mark(3, 102, 102)
+
+
+# =====================================================================
+# Digital Skills, Online activity 9 (week-11, syllabus v3): Microsoft
+# Forms in a browser. The model is the booking form of the college gym
+# ("Gym booking": Day, Time); never the data of the tasks (the four
+# project services).
+# =====================================================================
+
+FORMS = "#038387"
+
+
+def forms_bar(s, title="Gym booking"):
+    browser_bar(s, "forms.office.com")
+    s.rect(15, 45, WW - 30, 34, fill=FORMS)
+    s.text(30, 67, "Forms", 13, 700, "#ffffff")
+    s.text(WW / 2, 67, title, 12.5, 400, "#ffffff", "middle")
+
+
+@window("browser")
+def forms_new_1(s, top):
+    """forms.office.com: New Form, then the title."""
+    browser_bar(s, "forms.office.com")
+    s.rect(15, 45, WW - 30, 34, fill=FORMS)
+    s.text(30, 67, "Forms", 13, 700, "#ffffff")
+    s.rect(30, 96, 110, 34, fill=FORMS, rx=6)
+    s.text(85, 118, "+ New Form", 13, 700, "#ffffff", "middle")
+    s.text(160, 118, "New Quiz", 12.5, 400, GREY)
+    s.text(30, 160, "Quick start with", 12, 600, GREY)
+    for i, t in enumerate(["Event registration", "Customer feedback", "Order form"]):
+        x = 30 + 170 * i
+        s.rect(x, 172, 156, 90, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+        page_lines(s, x + 14, 196, 120, 3, gap=16)
+        s.text(x + 12, 252, t, 11.5, 600, INK)
+    s.text(30, 300, "My forms", 12, 600, GREY)
+    top.ring(26, 92, 118, 42, 8)
+    top.mark(1, 156, 96)
+
+
+@window("browser")
+def forms_question_1(s, top):
+    """A new form: + Add new, Choice, the options; Date for the day."""
+    forms_bar(s)
+    s.rect(15, 79, WW - 30, 266, fill="#e9f5f5")
+    s.rect(90, 92, 380, 196, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=6)
+    s.text(106, 118, "1. Which time?", 13, 700, INK)
+    for i, t in enumerate(["10:00", "12:00", "14:00"]):
+        y = 144 + 26 * i
+        s.circle(116, y - 4, 7, fill="#ffffff", stroke=GREY, sw=1.5)
+        s.text(132, y, t, 12.5, 400, INK)
+    s.text(106, 230, "Required", 11.5, 400, GREY)
+    s.rect(170, 220, 30, 16, fill=FORMS, rx=8)
+    s.circle(192, 228, 6, fill="#ffffff")
+    s.rect(90, 298, 110, 30, fill="#ffffff", stroke=FORMS, sw=1.5, rx=6)
+    s.text(145, 318, "+ Add new", 12.5, 700, FORMS, "middle")
+    for i, t in enumerate(["Choice", "Text", "Rating", "Date"]):
+        s.text(214 + 62 * i, 318, t, 12, 600 if t in ("Choice", "Date") else 400, INK)
+    top.ring(86, 294, 118, 38, 8)
+    top.mark(1, 76, 296)
+    top.ring(206, 300, 56, 26, 6)
+    top.mark(2, 234, 344)
+    top.ring(100, 126, 120, 84, 8)
+    top.mark(3, 232, 130)
+
+
+@window("browser")
+def forms_collect_1(s, top):
+    """Collect responses: copy the link (or the QR code)."""
+    forms_bar(s)
+    s.rect(15, 79, WW - 30, 266, fill="#e9f5f5")
+    s.rect(400, 86, 130, 30, fill=FORMS, rx=6)
+    s.text(465, 106, "Collect responses", 11.5, 700, "#ffffff", "middle")
+    s.rect(160, 126, 370, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(176, 154, "Send and collect responses", 14, 700, INK)
+    s.text(176, 182, "Anyone can respond", 12, 400, GREY)
+    s.rect(176, 196, 270, 30, fill="#f1f3f5", stroke="#c9cdd2", sw=1, rx=4)
+    s.text(186, 216, "https://forms.office.com/r/aB3...", 11.5, 400, INK)
+    s.rect(454, 196, 62, 30, fill=FORMS, rx=4)
+    s.text(485, 216, "Copy", 12, 700, "#ffffff", "middle")
+    s.rect(176, 244, 40, 40, fill="#ffffff", stroke=INK, sw=1.5, rx=2)
+    for i in range(3):
+        for j in range(3):
+            if (i + j) % 2 == 0:
+                s.rect(181 + 11 * i, 249 + 11 * j, 8, 8, fill=INK)
+    s.text(226, 270, "QR code", 12, 400, INK)
+    top.ring(396, 82, 138, 38, 8)
+    top.mark(1, 384, 84)
+    top.ring(450, 192, 70, 38, 8)
+    top.mark(2, 438, 244)
+
+
+@window("browser")
+def forms_responses_1(s, top):
+    """The Responses tab: the number of responses, then Open results in Excel."""
+    forms_bar(s)
+    s.rect(15, 79, WW - 30, 266, fill="#e9f5f5")
+    s.text(190, 104, "Questions", 13, 400, INK)
+    s.text(290, 104, "Responses", 13, 700, INK)
+    s.line(290, 110, 360, 110, FORMS, 3)
+    s.rect(60, 124, 440, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(80, 166, "3", 34, 700, INK)
+    s.text(80, 190, "Responses", 12, 400, GREY)
+    s.rect(330, 146, 150, 32, fill="#ffffff", stroke=FORMS, sw=1.5, rx=6)
+    s.text(405, 167, "Open results in Excel", 11.5, 700, FORMS, "middle")
+    for i, (t, w) in enumerate([("10:00", 120), ("12:00", 60), ("14:00", 30)]):
+        y = 220 + 26 * i
+        s.text(80, y, t, 12, 400, INK)
+        s.rect(130, y - 12, w, 14, fill=FORMS, rx=3)
+    top.ring(284, 86, 82, 30, 6)
+    top.mark(1, 378, 98)
+    top.ring(326, 142, 158, 40, 8)
+    top.mark(2, 494, 162)
+
+
+# =====================================================================
+# Digital Skills, Online activity 10 (week-12, syllabus v3): Google Sites
+# in a browser. The model is the website of the college gym ("College
+# Gym", with the booking form of Online activity 9); never the data of
+# the tasks (the four project services).
+# =====================================================================
+
+SITES = "#5e35b1"
+
+
+def sites_editor(s, page="Home"):
+    browser_bar(s, "sites.google.com")
+    s.rect(15, 45, WW - 30, 30, fill="#ffffff")
+    s.text(30, 65, "College Gym", 13, 700, INK)
+    s.rect(440, 50, 76, 22, fill=SITES, rx=4)
+    s.text(478, 66, "Publish", 11.5, 700, "#ffffff", "middle")
+    s.line(15, 75, WW - 15, 75, LINE, 1)
+    s.rect(380, 76, 165, 269, fill="#f8f9fa")
+    for i, t in enumerate(["Insert", "Pages", "Themes"]):
+        s.text(398 + 52 * i, 96, t, 11.5, 700 if t == page else 400, SITES if t == page else INK)
+    s.rect(30, 90, 336, 240, fill="#ffffff", stroke="#d0d4d9", sw=1)
+
+
+@window("browser")
+def sites_pages_1(s, top):
+    """Google Sites: Pages, then + to add a page; the menu shows it."""
+    sites_editor(s, "Pages")
+    s.rect(30, 90, 336, 30, fill="#ede7f6")
+    s.text(46, 110, "College Gym", 11.5, 700, SITES)
+    for i, t in enumerate(["Home", "Booking", "Contact"]):
+        s.text(210 + 52 * i, 110, t, 10.5, 600, INK)
+    s.text(46, 160, "Welcome to the College Gym!", 15, 700, INK)
+    page_lines(s, 46, 190, 280, 3)
+    for i, t in enumerate(["Home", "Booking", "Contact"]):
+        s.text(398, 132 + 26 * i, t, 12, 400, INK)
+    s.circle(520, 300, 16, fill=SITES)
+    s.text(520, 306, "+", 18, 700, "#ffffff", "middle")
+    top.ring(444, 84, 50, 20, 5)
+    top.mark(1, 506, 112)
+    top.ring(500, 280, 40, 40, 20)
+    top.mark(2, 490, 268)
+    top.ring(204, 96, 160, 22, 5)
+    top.mark(3, 190, 136)
+
+
+@window("browser")
+def sites_button_1(s, top):
+    """Insert › Button: the name and the link of the form."""
+    sites_editor(s, "Insert")
+    for i, t in enumerate(["Text box", "Images", "Button", "Divider"]):
+        s.text(398, 132 + 26 * i, t, 12, 600 if t == "Button" else 400, INK)
+    s.text(46, 120, "Book the gym", 15, 700, INK)
+    s.rect(80, 150, 250, 150, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(96, 176, "Name", 11, 600, GREY)
+    s.rect(96, 182, 218, 26, fill="#ffffff", stroke="#8a9096", sw=1, rx=3)
+    s.text(104, 200, "Book now", 12, 400, INK)
+    s.text(96, 228, "Link", 11, 600, GREY)
+    s.rect(96, 234, 218, 26, fill="#ffffff", stroke="#8a9096", sw=1, rx=3)
+    s.text(104, 252, "https://forms.office.com/r/aB3...", 10.5, 400, INK)
+    s.rect(254, 270, 60, 24, fill=SITES, rx=4)
+    s.text(284, 287, "Insert", 11.5, 700, "#ffffff", "middle")
+    top.ring(392, 172, 80, 24, 5)
+    top.mark(1, 486, 184)
+    top.ring(92, 178, 226, 34, 6)
+    top.mark(2, 70, 194)
+    top.ring(92, 230, 226, 34, 6)
+    top.mark(3, 70, 248)
+    top.ring(250, 266, 68, 32, 6)
+    top.mark(4, 330, 282)
+
+
+@window("browser")
+def sites_publish_1(s, top):
+    """Publish: the web address, then Publish; Preview › the phone first."""
+    sites_editor(s, "Pages")
+    s.rect(70, 110, 300, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(86, 138, "Publish to the web", 14, 700, INK)
+    s.text(86, 166, "Web address", 11, 600, GREY)
+    s.rect(86, 174, 268, 28, fill="#ffffff", stroke="#8a9096", sw=1, rx=3)
+    s.text(94, 193, "sites.google.com/view/", 11, 400, GREY)
+    s.text(224, 193, "college-gym", 11, 700, INK)
+    s.text(86, 230, "Who can see my site: Anyone", 11.5, 400, INK)
+    s.rect(274, 268, 80, 28, fill=SITES, rx=4)
+    s.text(314, 287, "Publish", 12, 700, "#ffffff", "middle")
+    top.ring(436, 46, 84, 30, 6)
+    top.mark(1, 424, 62)
+    top.ring(82, 170, 276, 36, 6)
+    top.mark(2, 70, 186)
+    top.ring(270, 264, 88, 36, 6)
+    top.mark(3, 368, 282)
+
+
+# =====================================================================
+# Digital Skills, Online activity 11 (week-14, syllabus v3): Canva in a
+# browser. The model is a post of the college gym ("The gym is open ·
+# Book now"); never the data of the tasks (the four project services).
+# =====================================================================
+
+CANVA = "#7d2ae8"
+
+
+def canva_bar(s):
+    browser_bar(s, "canva.com")
+    s.rect(15, 45, WW - 30, 34, fill="#ffffff")
+    s.text(30, 67, "Canva", 14, 700, CANVA)
+    s.line(15, 79, WW - 15, 79, LINE, 1)
+
+
+@window("browser")
+def canva_search_1(s, top):
+    """Canva: search Instagram post, then choose a design (template)."""
+    canva_bar(s)
+    s.rect(120, 52, 300, 22, fill="#f1f3f5", rx=11)
+    s.text(134, 68, "Instagram post", 12, 400, INK)
+    for i in range(3):
+        x = 40 + 166 * i
+        s.rect(x, 100, 150, 150, fill=["#ffe8cc", "#e7f5ff", "#ebfbee"][i], stroke="#c9cdd2", sw=1, rx=6)
+        s.text(x + 75, 170, ["Fresh food", "Open today", "New offer"][i], 14, 700, INK, "middle")
+        s.rect(x + 40, 196, 70, 20, fill=CANVA, rx=10)
+        s.text(x + 75, 210, "Order", 11, 700, "#ffffff", "middle")
+    s.text(40, 280, "Choose a design, then change it.", 12, 400, GREY)
+    top.ring(116, 48, 308, 30, 15)
+    top.mark(1, 104, 62)
+    top.ring(36, 96, 158, 158, 8)
+    top.mark(2, 200, 104)
+
+
+@window("browser")
+def canva_edit_1(s, top):
+    """Canva editor: click the text and type; Elements › Photos (free)."""
+    canva_bar(s)
+    s.rect(15, 80, 70, 265, fill="#f8f9fa")
+    for i, t in enumerate(["Design", "Elements", "Text", "Uploads"]):
+        s.text(50, 110 + 34 * i, t, 11, 600 if t == "Elements" else 400, CANVA if t == "Elements" else INK, "middle")
+    s.rect(85, 80, 150, 265, fill="#ffffff", stroke="#e3e5e8", sw=1)
+    s.text(96, 104, "Photos", 12, 700, INK)
+    for i in range(4):
+        s.rect(96 + 66 * (i % 2), 116 + 66 * (i // 2), 58, 58, fill=["#ffd8a8", "#c3fae8", "#d0ebff", "#ffe3e3"][i], rx=4)
+    s.text(96, 262, "Free photos", 11, 400, GREY)
+    s.rect(270, 96, 250, 236, fill="#e7f5ff", stroke="#c9cdd2", sw=1)
+    s.rect(300, 116, 190, 90, fill="#a5d8ff", rx=6)
+    s.text(395, 236, "The gym is open", 16, 700, INK, "middle")
+    s.rect(355, 254, 80, 24, fill=CANVA, rx=12)
+    s.text(395, 271, "Book now", 11.5, 700, "#ffffff", "middle")
+    s.text(395, 314, "Photo: Canva", 10, 400, GREY, "middle")
+    top.ring(290, 220, 210, 26, 6)
+    top.mark(1, 512, 232)
+    top.ring(24, 120, 54, 26, 6)
+    top.mark(2, 24, 112)
+    top.ring(92, 112, 64, 64, 6)
+    top.mark(3, 166, 112)
+
+
+@window("browser")
+def canva_download_1(s, top):
+    """Canva: Share › Download, the type PNG, Download."""
+    canva_bar(s)
+    s.rect(440, 52, 76, 22, fill=CANVA, rx=4)
+    s.text(478, 68, "Share", 11.5, 700, "#ffffff", "middle")
+    s.rect(30, 96, 220, 236, fill="#e7f5ff", stroke="#c9cdd2", sw=1)
+    s.text(140, 210, "The gym is open", 14, 700, INK, "middle")
+    s.rect(280, 86, 240, 200, fill="#ffffff", stroke="#c9cdd2", sw=1, rx=8)
+    s.text(296, 112, "Download", 14, 700, INK)
+    s.text(296, 140, "File type", 11, 600, GREY)
+    s.rect(296, 148, 208, 28, fill="#ffffff", stroke="#8a9096", sw=1, rx=4)
+    s.text(306, 167, "PNG (Suggested)", 12, 400, INK)
+    s.rect(296, 240, 208, 32, fill=CANVA, rx=6)
+    s.text(400, 261, "Download", 12.5, 700, "#ffffff", "middle")
+    top.ring(436, 48, 84, 30, 6)
+    top.mark(1, 424, 62)
+    top.ring(292, 144, 216, 36, 6)
+    top.mark(2, 280, 186)
+    top.ring(292, 236, 216, 40, 6)
+    top.mark(3, 280, 282)
+
+
 SCREENS = {
     "courses/digital-skills/week-02/images/calendar-android-1": calendar_android_1,
     "courses/digital-skills/week-02/images/calendar-android-2": calendar_android_2,
@@ -1132,6 +1869,33 @@ SCREENS = {
     "courses/digital-skills/week-03/images/paste-win-2": paste_win_2,
     "courses/digital-skills/week-03/images/share-win-1": share_win_1,
     "courses/digital-skills/week-03/images/share-win-2": share_win_2,
+    "courses/digital-skills/week-03/images/twostep-win-1": twostep_win_1,
+    "courses/digital-skills/week-03/images/twostep-phone-1": twostep_phone_1,
+    "courses/digital-skills/week-03/images/link-phone-1": link_phone_1,
+    "courses/digital-skills/week-03/images/report-win-1": report_win_1,
+    "courses/digital-skills/week-03/images/perm-android-1": perm_android_1,
+    "courses/digital-skills/week-03/images/perm-android-2": perm_android_2,
+    "courses/digital-skills/week-03/images/perm-iphone-1": perm_iphone_1,
+    "courses/digital-skills/week-03/images/perm-iphone-2": perm_iphone_2,
+    "courses/digital-skills/week-04/images/ppt-newslide-1": ppt_newslide_1,
+    "courses/digital-skills/week-04/images/ppt-design-1": ppt_design_1,
+    "courses/digital-skills/week-04/images/ppt-picture-1": ppt_picture_1,
+    "courses/digital-skills/week-07/images/pivot-win-1": pivot_win_1,
+    "courses/digital-skills/week-07/images/pivot-win-2": pivot_win_2,
+    "courses/digital-skills/week-07/images/pivot-chart-1": pivot_chart_1,
+    "courses/digital-skills/week-09/images/access-form-1": access_form_1,
+    "courses/digital-skills/week-09/images/access-query-1": access_query_1,
+    "courses/digital-skills/week-09/images/access-report-1": access_report_1,
+    "courses/digital-skills/week-11/images/forms-new-1": forms_new_1,
+    "courses/digital-skills/week-11/images/forms-question-1": forms_question_1,
+    "courses/digital-skills/week-11/images/forms-collect-1": forms_collect_1,
+    "courses/digital-skills/week-11/images/forms-responses-1": forms_responses_1,
+    "courses/digital-skills/week-12/images/sites-pages-1": sites_pages_1,
+    "courses/digital-skills/week-12/images/sites-button-1": sites_button_1,
+    "courses/digital-skills/week-12/images/sites-publish-1": sites_publish_1,
+    "courses/digital-skills/week-14/images/canva-search-1": canva_search_1,
+    "courses/digital-skills/week-14/images/canva-edit-1": canva_edit_1,
+    "courses/digital-skills/week-14/images/canva-download-1": canva_download_1,
 }
 
 

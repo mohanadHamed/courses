@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Field Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="db.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Field Lab: the right data type</h1>
+  <p class="hint">Each field of a table has a data type. Read the field and its example values, then choose its type.</p>
+  <div class="task" id="task"></div>
+  <div class="box" id="box"></div>
+  <div class="pad" id="types"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const TYPES = ["Short Text", "Number", "Currency", "Date/Time", "Yes/No"];
+  // field, examples, right type, why, a hint for each wrong type
+  const F = [
+    ["Name", "Huda · Omar · Lina", "Short Text", "Names are text.", "A name has letters, not a value to count."],
+    ["Price", "2.00 JD · 0.50 JD · 12.00 JD", "Currency", "Money is Currency: Access adds the JD and two decimals.", "Prices are money: choose Currency."],
+    ["OrderDate", "03/11/2026 · 04/11/2026", "Date/Time", "Dates are Date/Time: Access can sort them in time order.", "These are dates."],
+    ["InStock", "Yes · No · Yes", "Yes/No", "Only two answers: Yes or No.", "There are only two answers."],
+    ["Quantity", "10 · 40 · 3", "Number", "Numbers that you count or add are Number.", "A quantity is a number that you can add."],
+    ["Phone", "079 000 0001 · 077 000 0002", "Short Text", "A phone number is text: you never add phone numbers, and the 0 at the start must stay.", "You never add phone numbers: they are text."],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, right = 0, tries = 0;
+  function show() {
+    const [f, ex] = F[i]; tries = 0;
+    $("task").textContent = `Field ${i + 1} of ${F.length}: which data type?`;
+    $("box").innerHTML = `<b>${f}</b><br><span style="color:var(--sim-muted)">Examples: ${ex}</span>`;
+    $("types").innerHTML = TYPES.map((t) => `<button type="button" class="ghost" data-t="${t}">${t}</button>`).join("");
+    document.querySelectorAll("#types button").forEach((b) => b.addEventListener("click", () => pick(b.dataset.t)));
+  }
+  function pick(t) {
+    const [f, , ok, why, hint] = F[i];
+    if (t !== ok) { tries++; $("msg").textContent = `✗ ${t} is not right for ${f}. ${hint}`; $("msg").className = "message bad"; return; }
+    if (!tries) right++;
+    $("msg").textContent = `✓ ${f}: ${ok}. ${why}`; $("msg").className = "message good";
+    $("score").textContent = `${right} of ${F.length} right the first time`;
+    if (i < F.length - 1) { i++; setTimeout(show, 1500); } else { $("task").textContent = "All six fields have their data type."; $("types").innerHTML = ""; }
+  }
+  show();
+})();
+</script>
+</body>
+</html>

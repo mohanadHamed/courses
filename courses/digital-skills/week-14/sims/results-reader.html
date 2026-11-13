@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Results Reader</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="mk.css">
+  <style>
+    .sim #opts { display: grid; gap: 6px; max-width: 560px; }
+    .sim #opts button { text-align: left; }
+    .sim .card { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 14px; max-width: 520px; background: #fff; margin-top: 10px; }
+    .sim .card h3 { margin: 0 0 6px; font-size: 1rem; }
+    .sim .post { background: linear-gradient(135deg, #fff4e6, #ffe8cc); }
+    .sim .cta { display: inline-block; background: #D9480F; color: #fff; border-radius: 8px; padding: 4px 12px; font-weight: 800; margin-top: 6px; }
+    .sim .muted { color: var(--sim-muted); }
+    .sim table.db td:first-child { font-weight: 800; }
+
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Results Reader: which post worked better?</h1>
+  <p class="hint">Mona tried two posts for one week. Read the results: views (how many people saw it), clicks, orders.</p>
+  <div class="task" id="task"></div>
+  <div id="opts"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+  <div id="preview"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="quiz-kit.js"></script>
+<script>
+QuizKit({
+  label: "Question",
+  done: "Post B worked better: more clicks for every 100 views, and more orders.",
+  steps: [
+    {
+      "q": "Post A: 1000 views, 20 clicks. How many clicks for every 100 views?",
+      "opts": [
+        "2",
+        "20",
+        "50"
+      ],
+      "right": 0,
+      "why": "20 ÷ 1000 × 100 = 2 clicks for every 100 views.",
+      "hints": {
+        "1": "20 is all the clicks; divide by 10 (1000 views is 10 × 100).",
+        "2": "Divide the clicks by the views, then × 100."
+      }
+    },
+    {
+      "q": "Post B: 500 views, 25 clicks. How many clicks for every 100 views?",
+      "opts": [
+        "5",
+        "25",
+        "2"
+      ],
+      "right": 0,
+      "why": "25 ÷ 500 × 100 = 5 clicks for every 100 views.",
+      "hints": {
+        "1": "25 is all the clicks; 500 views is 5 × 100.",
+        "2": "Look again: 25 ÷ 5 = 5."
+      }
+    },
+    {
+      "q": "Post A brought 3 orders, post B 6 orders. Which post worked better?",
+      "opts": [
+        "post B",
+        "post A, because it has more views",
+        "both the same"
+      ],
+      "right": 0,
+      "why": "More clicks for every 100 views and more orders: post B.",
+      "hints": {
+        "1": "Views alone are not results: orders are.",
+        "2": "6 orders is double 3."
+      }
+    },
+    {
+      "q": "What does Mona do next week?",
+      "opts": [
+        "use the style of post B again",
+        "stop all posts",
+        "use post A again"
+      ],
+      "right": 0,
+      "why": "Measure, then keep what works.",
+      "hints": {
+        "1": "Post B worked: keep going.",
+        "2": "Post A worked less well."
+      }
+    }
+  ],
+  preview: (c) => `<table class="db"><tr><th></th><th>Views</th><th>Clicks</th><th>Orders</th></tr><tr><td>Post A</td><td>1000</td><td>20</td><td>3</td></tr><tr><td>Post B</td><td>500</td><td>25</td><td>6</td></tr></table>`,
+});
+</script>
+</body>
+</html>

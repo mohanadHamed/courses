@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Channel Mixer</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="mk.css">
+  <style>
+    .sim #opts { display: grid; gap: 6px; max-width: 560px; }
+    .sim #opts button { text-align: left; }
+    .sim .card { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 14px; max-width: 520px; background: #fff; margin-top: 10px; }
+    .sim .card h3 { margin: 0 0 6px; font-size: 1rem; }
+    .sim .post { background: linear-gradient(135deg, #fff4e6, #ffe8cc); }
+    .sim .cta { display: inline-block; background: #D9480F; color: #fff; border-radius: 8px; padding: 4px 12px; font-weight: 800; margin-top: 6px; }
+    .sim .muted { color: var(--sim-muted); }
+    .sim table.db td:first-child { font-weight: 800; }
+
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Channel Mixer: the right channel for the goal</h1>
+  <p class="hint">A channel is the way the message reaches the audience. Choose the best channel for each goal.</p>
+  <div class="task" id="task"></div>
+  <div id="opts"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+  <div id="preview"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="quiz-kit.js"></script>
+<script>
+QuizKit({
+  label: "Goal",
+  done: "Done: each goal has its channel.",
+  steps: [
+    {
+      "q": "People search the Internet for \"cakes Amman\". Mona wants to appear there.",
+      "opts": [
+        "a search engine (and a map listing)",
+        "an e-mail to old customers",
+        "a printed poster"
+      ],
+      "right": 0,
+      "why": "People who search are ready to buy: be in the search results and on the map.",
+      "hints": {
+        "1": "These people are not her customers yet.",
+        "2": "A poster is not online."
+      }
+    },
+    {
+      "q": "Mona wants her 200 old customers to know about the new lemon cake.",
+      "opts": [
+        "an e-mail to old customers",
+        "a paid ad for everybody",
+        "a search engine"
+      ],
+      "right": 0,
+      "why": "E-mail reaches the people who already know her, for free.",
+      "hints": {
+        "1": "Paying to reach strangers is not needed here.",
+        "2": "They will not search for a cake that they do not know."
+      }
+    },
+    {
+      "q": "Mona wants to show photos of her cakes every week, for free.",
+      "opts": [
+        "social media posts (Instagram, Facebook)",
+        "an e-mail every day",
+        "a paid ad"
+      ],
+      "right": 0,
+      "why": "Social media shows photos to followers, for free.",
+      "hints": {
+        "1": "Daily e-mails annoy people.",
+        "2": "A paid ad costs money every time."
+      }
+    },
+    {
+      "q": "Mona has 20 JD and wants new families in Amman to see her offer in three days.",
+      "opts": [
+        "a paid ad for families in Amman",
+        "wait for people to search",
+        "an e-mail to old customers"
+      ],
+      "right": 0,
+      "why": "A paid ad shows the offer to the people that you choose, quickly.",
+      "hints": {
+        "1": "Waiting is slow.",
+        "2": "Old customers are not new families."
+      }
+    }
+  ],
+  preview: (c) => c.length ? `<div class="card"><b>Mona's channels</b><br>${c.map((x) => "• " + x).join("<br>")}</div>` : "",
+});
+</script>
+</body>
+</html>

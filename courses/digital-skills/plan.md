@@ -1,150 +1,139 @@
 # Digital Skills (01101154) — unit plan
 
-Status: plan v3 of 2026-10-31 (`plans/restructure-status.md`), after plan v2 of 2026-10-28 (`plans/restructure-19-lectures.md`). Source: the official syllabus (2026-2027, Drive) and the ILO–PLO matrix.
-15 weeks: 10 units (core weeks) and 5 practice weeks (filling weeks) (AUTHORING.md, "Units and sessions", "Blended courses"). `schedule.yml` holds the same map for the site and the course package; if they differ, `schedule.yml` wins. "From" names the old lectures and sections that each session is built from.
+Status: plan v4 of 2026-11-13, built on **syllabus v3** (2026-11-13: the
+official course description of the accredited study plan; English and
+Arabic copies from the teacher). Progress and the decisions behind it:
+`plans/digital-skills-v3-status.md`. Plan v3 (Office and AI, 10 units and 5
+practice weeks) is in the git history.
+`schedule.yml` holds the same map for the site and the course package; if
+they differ, `schedule.yml` wins.
 
-## Course ILOs
+## Course ILOs (syllabus v3)
 
 | Code | ILO (with PLOs) | Bloom | K/S/C |
 |---|---|---|---|
-| A1 | Explain the main computer applications used to enhance daily productivity, including artificial intelligence tools. (PLO 3) | 2 | K |
-| A2 | Explain basic concepts and terminology related to Microsoft Office applications. (PLO 3) | 2 | K |
-| A3 | Describe the main features and uses of Microsoft Word, Excel and PowerPoint. (PLO 3) | 2 | K |
-| B1 | Evaluate AI-generated text, data and images for accuracy, bias and suitability before using them in a document, worksheet or presentation. (PLO 3, 4) | 5 | K, C |
-| C1 | Explain how Microsoft Word is used to create and format documents. (PLO 3) | 2 | K, S |
-| C2 | Explain how Microsoft Excel is used to organize and present data. (PLO 3, 4) | 2 | K, S |
-| C3 | Identify the basic features of Microsoft PowerPoint used to create presentations. (PLO 2, 3) | 1 | K |
-| C4 | Use generative AI tools to draft, edit and improve Word documents, Excel worksheets and PowerPoint presentations. (PLO 2, 3) | 3 | S |
-| D1 | Use digital and AI tools safely, responsibly and ethically: protect personal data, respect copyright and academic integrity, and state when AI was used. (PLO 3, 4) | 3 | S, C |
+| A1 | Explain the concept of digital skills and their importance in the labour market. (PLO 3) | 2 | K |
+| A2 | Describe digital devices and technologies and the basic concepts of digital content, digital services and e-marketing. (PLO 3) | 2 | K |
+| B1 | Analyze data with spreadsheets (formulas, functions, charts and PivotTables) to reach conclusions that support decisions. (PLO 3, 4) | 4 | K, S |
+| C1 | Use digital devices and technologies (operating system, files, cloud services, communication tools and AI assistants) to do study and work tasks safely. (PLO 3) | 3 | S |
+| C2 | Create digital content (documents, presentations and graphics) with suitable digital tools. (PLO 2, 3) | 3 | S |
+| C3 | Organize and manage data in a simple database (tables, relationships, queries, forms and reports). (PLO 1, 3) | 3 | S |
+| C4 | Create a simple digital service, and design and publish a website for it. (PLO 2, 3) | 3 | S, C |
+| C5 | Market a digital service or a good online: prepare an e-marketing plan and its promotional content. (PLO 3, 4) | 3 | S, C |
+| D1 | Carry out and present an integrated practical project that applies the course skills (a digital service with its website, content, data and marketing plan). (PLO 3, 4) | 3 | S, C |
 
-A1, A2, A3, C1, C2 and C3 are the six outcomes of the university description
-(same text and Bloom level). B1, C4 and D1 add the use of AI.
+## Weeks: 10 units and 2 practice weeks
 
-## Weeks: 10 units and 5 practice weeks, each with a lab session and an online activity
+Fully practical and blended: every week has a face-to-face session (60 min)
+and an online activity with tasks to submit. No seminars, no homework.
 
-Fully practical and blended: every week has a face-to-face lab session
-(60 min) and an online activity with tasks to submit. No seminars.
+Units 1 and 2 were taught before v3 and are not changed. From Unit 3 the
+eleven teaching rows left (3–7, 9–14) go into eight units: three pairs of
+rows are merged, and each merged unit puts one row in its lecture and the
+other in its online activity (AUTHORING.md, "Units and sessions").
 
-| Week (syllabus) | Face-to-face (60 min, computer lab) | Online activity | From (plan v2) | ILOs |
-|---|---|---|---|---|
-| Unit 1 (1) | **Lecture 1** Digital Skills and the Apps That Make Us Productive | **Online activity 1** Your University Account, Cloud Storage and Files | L1, O1 | A1 |
-| Unit 2 (2) | **Lecture 2** Everyday Digital Skills: Search, Screenshots and an AI Assistant | **Online activity 2** Your Phone for Study: Reminders, Scans and a Clear Prompt | L2, O2 | A1 C4 |
-| Unit 3 (3) | **Lecture 3** Microsoft Office: Concepts, Terms and Common Features | **Online activity 3** Office on the Computer, the Web and the Phone | L3, O3 | A2 A3 |
-| Unit 4 (4) | **Lecture 4** Word (1): Formatting, Styles, Lists, Tables and Pictures | **Online activity 4** Word (2): Page Layout, Headers and a Table of Contents | L4, O4 | C1 |
-| Unit 5 (5) | **Lecture 5** Word with AI: Draft, Check and Translate | **Online activity 5** A Formal Letter and a CV with AI Help | L5, O5 | C1 C4 B1 |
-| Unit 6 (6) | **Lecture 6** Excel (1): Cells, Formulas, References and Basic Functions | **Online activity 6** A Monthly Budget Sheet | L6, O6 | C2 |
-| Unit 7 (7) | **Lecture 7** Excel (2): Sorting, Filtering, Conditional Formatting and Charts | **Online activity 7** Excel: Clean Data, the Right Chart and a Formula from AI | L7, O7 | C2 C4 B1 |
-| Practice week (8) | **Practice 1** Review of Lectures 1–7 (then the midterm) | **Online activity 8** Review Activity: Practice Questions | P1, O8 | all of 1–7 |
-| Unit 8 (9) | **Lecture 8** PowerPoint: Slides, Layouts, Themes, Transitions, Animations and Notes | **Online activity 9** A Short Presentation with AI Help | L8, old O10 | C3 C4 B1 |
-| Practice week (10) | **Practice 2** AI with PowerPoint: Outline, Slides and Pictures | **Online activity 10** A Five-Slide Talk | P2, old O9 | C3 C4 B1 |
-| Unit 9 (11) | **Lecture 9** Check Information and Share Safely, with AI Too | **Online activity 11** Fact-Checking an AI-Written Document | L9, O11 | B1 D1 |
-| Practice week (12) | **Practice 3** Responsible AI in Practice: Personal Data, Copyright and Honesty | **Online activity 12** Safe Prompts and an AI-Use Statement | P3, O12 | D1 |
-| Unit 10 (13) | **Lecture 10** Excel (3): Summarizing Data with AI Help | **Online activity 13** Analyzing a Small Dataset and Charting It | old P4 (as a lecture), O13 | C2 C4 B1 |
-| Practice week (14) | **Practice 4** Working Across Office Apps with AI | **Online activity 14** Course Project (1): Plan, Data Sheet and First Draft | old P5, O14 | A1 A3 C4 |
-| Practice week (15) | **Practice 5** Course Project Presentations | **Online activity 15** Course Project (2): Final Report, Data Sheet and Presentation | old L10 (practice format), O15 | B1 C1–C4 D1 |
+| Week (syllabus row) | Face-to-face (60 min) | Online activity | ILOs |
+|---|---|---|---|
+| Unit 1 (1) | **Lecture 1** Digital Skills and the Apps That Make Us Productive | **Online activity 1** Your University Account, Cloud Storage and Files | A1 C1 |
+| Unit 2 (2) | **Lecture 2** Everyday Digital Skills: Search, Screenshots and an AI Assistant | **Online activity 2** Your Phone for Study: Reminders, Scans and a Clear Prompt | A2 C1 |
+| Unit 3 (3) | **Lecture 3** Digital Communication and Collaboration: E-mail, Calendar, Meetings and Shared Files | **Online activity 3** Safe Devices and Accounts: Passwords, Two-Step Verification, Phishing and Privacy | A2 C1 |
+| Unit 4 (4–5) | **Lecture 4** Digital Content (1): Documents in Word: Formatting, Styles, Tables and Pictures | **Online activity 4** Digital Content (2): Presentations in PowerPoint: Slides, Layouts, Themes and Pictures | C2 |
+| Unit 5 (6) | **Lecture 5** Data Analysis (1): Excel: Cells, Formulas, References and Basic Functions | **Online activity 5** A Monthly Budget Sheet | B1 |
+| Unit 6 (7) | **Lecture 6** Data Analysis (2): Sorting, Filtering, Conditional Formatting and Charts | **Online activity 6** Data Analysis (3): Totals by Group, a PivotTable and What the Data Shows | B1 |
+| Practice week (8) | **Practice 1** Review of Lectures 1–6 (then the midterm) | **Online activity 7** Review Activity: Practice Questions | A1 A2 B1 C1 C2 |
+| Unit 7 (9–10) | **Lecture 7** Databases: Tables, Fields, Keys, Relationships and Queries | **Online activity 8** The Shop Database: a Form, Queries and a Report | C3 |
+| Unit 8 (11) | **Lecture 8** Creating a Digital Service: Types, Planning and an Online Form | **Online activity 9** A Booking Service: an Online Form Linked to a Spreadsheet | A2 C4 (D1) |
+| Unit 9 (12–13) | **Lecture 9** Website Design: Plan, Build and Design a Website | **Online activity 10** The Service Website: Pages, Publishing and the Form | C4 (D1) |
+| Unit 10 (14) | **Lecture 10** Marketing Digital Services: Audience, Message, Channels and Results | **Online activity 11** E-marketing: a Product Page, a Promotional Post and a Short Marketing Plan | A2 C2 C5 (D1) |
+| Practice week (15) | **Practice 2** Course Project Presentations | **Online activity 12** Final Submission of the Course Project | C2–C5 D1 |
 
-- Core: Lectures 1–10 with Online activities 1–7, 9, 11 and 13. Flexible:
-  the practice weeks (Practice 1–5 with Online activities 8, 10, 12, 14 and
-  15). When weeks are lost, the practice weeks go first; the course project
-  (Online activities 14 and 15, Practice 5) is in the last two of them.
-- Every core idea is in a unit: PivotTables are in Lecture 10, the AI outline
-  turned into slides in Online activity 9, responsible AI in Lecture 9.
-- AI is the main topic of Lectures 2, 5, 9 and 10 and of Online activities 2,
-  5, 7, 9, 11, 12 and 13: more than the required quarter.
-- The AI-use statement starts in unit 9 (Lecture 9).
-- No homework (the online activities replace it).
+Where each row of the syllabus is done:
+
+- Row 3: the lecture is communication and collaboration (e-mail, calendar,
+  online meetings, sharing and co-editing); the online activity is the safe
+  use of devices and accounts.
+- Rows 4–5 (Unit 4): Word in the lecture (with Save As PDF, the PDF of row 4's
+  online column); PowerPoint (row 5's lecture) in the online activity. The
+  graphics for the web and social media, picture sources and copyright (row
+  5's online column) are in Online activity 11: the promotional post is the
+  graphic, made in Canva with a free picture and its source line.
+- Rows 6 and 7: Excel, the lectures and the budget of plan v3; row 7's
+  online column (totals by group, a PivotTable, what the data shows) is
+  Online activity 6, from the old Lecture 10 and Online activity 13.
+- Rows 9–10 (Unit 7): tables, fields, data types, the primary key,
+  relationships and a first query in the lecture; forms, queries with
+  criteria and sorting, and a report in the online activity (the shop
+  database of both online columns).
+- Row 11 (Unit 8): the kinds of digital services and planning (customer,
+  need, steps) and a first form in the lecture; the booking service with a
+  form linked to a spreadsheet in the online activity.
+- Rows 12–13 (Unit 9): planning, building and designing a website (Google
+  Sites), the mobile view and a look at HTML and CSS in the lecture;
+  building the pages, publishing and linking the form in the online
+  activity.
+- Row 14 (Unit 10): e-marketing, the audience, the message, the channels
+  and measuring results in the lecture; the product page, the promotional
+  post and the short marketing plan in the online activity.
+- Row 8: Practice 1 and Online activity 7. Row 15: Practice 2 and Online
+  activity 12.
+
+Notes:
+
+- **The course project (D1)** runs through the core: each student chooses
+  one of four given services in Online activity 9 and builds its form
+  (Online activity 9), its website (Online activity 10) and its post and
+  marketing plan (Online activity 11). Online activity 12 hands in the
+  whole project (the links, the post, the plan and a three-slide talk) and
+  Practice 2 is the presentations. The four services and their facts are
+  given (no personal data, no English text to write): see Online activity 9.
+- **The calendar of fall 2026-2027:** Unit 3 is taught in the week of
+  15/11/2026 (platform week 6); the last teaching week is 10–14/1/2027
+  (platform week 14). That is nine weeks for Units 3–10 and one practice
+  week: the teacher gives Practice 2 (the project) in the last week, and
+  Practice 1 and Online activity 7 are for self-study before the midterm.
+- Every core idea is in a unit: no ILO depends on a practice week.
+- AI: since v3 the AI assistant is a tool of C1 (rows 2 and 3) and a helper
+  in later tasks (questions for a form, the words of a post), always
+  checked, never most of a session. The AI-use statement is written where a
+  task uses AI (the syllabus honesty policy).
+- Practice weeks are flexible; the course has 12 weeks this semester
+  because three platform weeks were lost before Lecture 1 (NOTES.md).
 
 ## Lecture worksheets: real apps or simulators
 
-Every lecture is built around a worksheet (`lesson-NN-sheet.qmd`, AUTHORING.md,
-"Lecture worksheets"): one experiment per section, done on the computer in
-class and checked there. The tools of each lecture, by its nature (a real
-app first when the lab has it; the simulators of the page are the teacher's
-demonstration and the way to do a step without the app):
+Every lecture is built around a worksheet (`lesson-NN-sheet.qmd`,
+AUTHORING.md, "Lecture worksheets"): three experiments, each with Part A in
+the app and Part B on a simulator of the page.
 
-| Lecture | Experiments (one per section) | Tools | Start files |
+| Lecture | Experiments | Tools (Part A; Part B) | Start files |
 |---|---|---|---|
-| 1 Productivity apps | by hand or with AutoSum · find the apps · a first prompt | mix: Excel, the Start menu and an AI assistant; Time Saver, App Launcher, AI Chat | `prices-start.xlsx` |
-| 2 Everyday digital skills | an official fact found with a search engine · a screenshot cropped and named · an AI draft and an AI total checked (the AI third) | a browser, Windows (Snipping Tool), Word, Excel, the phone and an AI assistant (2 prompts); Search Lab (new), Bill Check | none |
-| 3 Office concepts | the parts of the window and a template · the ribbon · Save As, PDF and AutoSave | Word; Window Tour, Ribbon Finder, Save Lab | `notice-start.docx` |
-| 4 Word (1) | formatting and styles · a list and a table · a picture | Word; Format Lab, Style Lab, List and Table Lab, Notice Maker | `book-fair-start.docx`, `books.png` (not the Family Day notice of the Game challenge) |
-| 5 Word with AI | a draft from AI pasted into Word, and a summary checked (the AI third) · the spelling and Find and Replace · a translation and the tone | an AI assistant and Word (1 prompt); Word AI Lab, Check Lab (new), Tone Lab | `report-start.docx` (two spelling mistakes, 9:00 twice) |
-| 6 Excel (1) | cells and a formula · copy a formula · four functions | Excel; Formula Lab, Reference Lab, The Shop's Week | `shop-start.xlsx` |
-| 7 Excel (2) | sort · filter · a colour rule · two charts | Excel; Table Lab, Chart Lab | `sales-start.xlsx` |
-| 8 PowerPoint | layouts and a theme · few words and notes · transitions and animations | PowerPoint; Slide Builder, Slide Doctor, Transition Lab | `talk-start.pptx` |
-| 9 Check and share safely | a claim from a message in two sources · a free picture with its source line, and app permissions on the phone · a safe prompt and an AI-use statement (the AI third) | a search engine, Word, the phone and an AI assistant (1 prompt); Fact-Check Lab, Prompt Cleaner | none |
-| 10 Excel (3) | a PivotTable · new questions and Refresh · an AI summary checked | Excel and an AI assistant (1 prompt); Pivot Lab, Summary Check | `month-start.xlsx` |
+| 3 Communication | a clear e-mail with an attachment · a meeting in the calendar with an online meeting link · a file shared to edit together, with a comment | Outlook (or any mail app), the calendar, Word in OneDrive; Mail Lab, Meeting Planner, Share Settings | `agenda-start.docx` |
+| 4 Word | formatting and styles · a list and a table · a picture, and Save As PDF | Word; Format Lab, Style Lab, List and Table Lab | `book-fair-start.docx`, `books.png` |
+| 5 Excel (1) | cells and a formula · copy a formula · four functions | Excel; Formula Lab, Reference Lab, The Shop's Week | `shop-start.xlsx` |
+| 6 Excel (2) | sort · filter · a colour rule · two charts | Excel; Table Lab, Chart Lab | `sales-start.xlsx` |
+| 7 Databases | a table: fields and data types · the primary key and a relationship · a query with a criterion | Access; Field Lab, Key Lab, Query Lab | none (the data is in the steps) |
+| 8 Digital service | the kinds of services · a plan: customer, need, steps · an order form linked to a sheet | a browser, Word, Microsoft Forms and Excel; Service Sorter, Service Planner, Form Builder | `service-plan-start.docx` |
+| 9 Website | the plan and the pages · the design and the mobile view · a look at HTML and CSS | Google Sites, Notepad and a browser; Site Planner, Design Check, HTML Lab | `page-start.html` |
+| 10 E-marketing | the audience and the message · the channels · a post and its results | a search engine, Canva, an AI assistant (1 prompt); Message Builder, Channel Mixer, Results Reader | none |
 
-Since 2026-11-08 (smart screens, labs not ready): every experiment of Lectures 2–10 has **Part A in
-the app** and **Part B on a simulator**, as in the face-to-face version; without a lab the teacher
-does it on the page on the smart screen (about 40 minutes), in the lab the students follow the
-worksheet (AUTHORING.md, "Lecture worksheets"; NOTES.md).
+## Online activities
 
-Lecture 6 is the model (done 2026-10-31); the others follow it.
-
-## Online activities: varied content, always tasks to submit
-
-Each online activity has a content type (`content:` in its front matter),
-so the 15 weeks do not all look the same. Every type keeps the Steps with
-their self-checks and the Tasks to submit (marks, a concrete product,
-uploaded to Moodle; model answers in courses-private). The practice weeks
-(8, 10, 12, 14, 15) add no new content.
-
-- **lesson** (a): an interactive lesson: the Steps explain with text,
-  figures and self-checks; simulators where they help.
-- **sims** (b): simulators only: every Step is a simulator with a one-line
-  instruction and its self-check.
-- **mix** (c): text steps and simulator steps.
-- **video** (d): free official videos, linked (never copied), with title,
-  source, length and the date checked; the Steps practise what they show.
-- **course-video** (e): a short video made for the course (generic
-  interfaces like the simulators), in the page, with a **voice-over that
-  reads its script word for word**; the A2 captions are the same words,
-  timed to the voice (the script is written first: `videos/<name>-script.txt`).
+Each online activity has a content type (`content:`), so the weeks do not
+all look the same (AUTHORING.md, "Blended courses").
 
 | # | Online activity | Week | Type | Content |
 |---|---|---|---|---|
-| 1 | Your University Account, Cloud Storage and Files | Unit 1 | course-video | video *Folders, paths and good file names* (about 2 min, to be made); Path Finder, Folder Lab, Sync Lab |
-| 2 | Your Phone for Study: Reminders, Scans and a Clear Prompt | Unit 2 | mix | a reminder in the phone's calendar, a page scanned into a PDF, choosing a clear prompt (the AI third); Prompt Doctor |
-| 3 | Office on the Computer, the Web and the Phone | Unit 3 | sims | PDF Export, Paste Lab, Share Settings |
-| 4 | Word (2): Page Layout, Headers and a Table of Contents | Unit 4 | video | Microsoft Support: *Change margins* (0:31), *Insert or remove a page break* (0:45), *Insert a header or footer* (0:56), *Insert page numbers* (0:57), *Add a Table of Contents in Word* (0:38) |
-| 5 | A Formal Letter and a CV with AI Help | Unit 5 | lesson | the parts of a letter and a CV, checking what the AI wrote; Letter Builder, Profile Picker, CV Checker |
-| 6 | A Monthly Budget Sheet | Unit 6 | course-video | video *A monthly budget in Excel* (about 2 min, to be made); Budget Builder, Number Format Lab |
-| 7 | Excel: Clean Data, the Right Chart and a Formula from AI | Unit 7 | mix | AI Formula Lab, Clean Data Lab, Chart Lab |
-| 8 | Review Activity: Practice Questions | Practice week | sims | Practice Quiz, Contents Builder, Reference Lab |
-| 9 | A Short Presentation with AI Help | Unit 8 | mix | Outline Lab, Image Prompt Lab, a check before presenting |
-| 10 | A Five-Slide Talk | Practice week | video | Microsoft Support: *Add speaker notes* (0:32), *Add animations to slides* (1:18), *Use Presenter View* (1:36); Talk Planner, Rehearsal Lab |
-| 11 | Fact-Checking an AI-Written Document | Unit 9 | course-video | video *Check an AI answer: claims, sources and fair words* (about 2 min, to be made); Claim Finder, Claim Court |
-| 12 | Safe Prompts and an AI-Use Statement | Practice week | mix | Prompt Cleaner, a tool and copyright check, Statement Builder |
-| 13 | Analyzing a Small Dataset and Charting It | Unit 10 | video | Microsoft Support: *Create a PivotTable* (0:45), *Create charts* (0:52); Pivot Lab |
-| 14 | Course Project (1): Plan, Data Sheet and First Draft | Practice week | lesson | the plan, the data sheet and the first draft; Plan Checker |
-| 15 | Course Project (2): Final Report, Data Sheet and Presentation | Practice week | lesson | the final files, the checks and the AI-use statement |
+| 1 | Your University Account, Cloud Storage and Files | Unit 1 | course-video | (taught, frozen) |
+| 2 | Your Phone for Study: Reminders, Scans and a Clear Prompt | Unit 2 | mix | (taught) |
+| 3 | Safe Devices and Accounts | Unit 3 | mix | Password Check, two-step verification (screens), Phish Finder, app permissions on the phone (screens) |
+| 4 | Presentations in PowerPoint | Unit 4 | sims | Slide Builder, Slide Doctor, a picture on a slide (screens) |
+| 5 | A Monthly Budget Sheet | Unit 5 | course-video | video *A monthly budget in Excel*; Budget Builder, Number Format Lab |
+| 6 | Totals by Group, a PivotTable and What the Data Shows | Unit 6 | video | Microsoft Support: *Create a PivotTable*; Pivot Lab, Summary Check |
+| 7 | Review Activity | Practice week | sims | Practice Quiz (Lectures 1–6) |
+| 8 | The Shop Database: a Form, Queries and a Report | Unit 7 | sims | Form Lab, Query Lab, Report Lab |
+| 9 | A Booking Service | Unit 8 | mix | Microsoft Forms (screens), Booking Sheet; the project choice |
+| 10 | The Service Website | Unit 9 | lesson | Google Sites (screens), Publish Check |
+| 11 | E-marketing | Unit 10 | mix | Product Page Lab, Picture Rights, Plan Builder; Canva (screens) |
+| 12 | Final Submission of the Course Project | Practice week | lesson | the project checklist; Project Checker |
 
-Three activities of each type. The official videos (all with English
-captions, checked 2026-10-31 by their pages and captions):
-
-| Video (title on the page) | Page (Microsoft Support) | Length |
-|---|---|---|
-| Change margins | support.microsoft.com/en-us/word/training/change-margins | 0:31 |
-| Insert or remove a page break | support.microsoft.com/en-us/word/training/insert-a-page-break | 0:45 |
-| Insert a header or footer | support.microsoft.com/en-us/word/training/insert-a-header-or-footer | 0:56 |
-| Insert page numbers | support.microsoft.com/en-us/word/training/insert-page-numbers | 0:57 |
-| Add a Table of Contents in Word | support.microsoft.com/en-us/word/training/insert-a-table-of-contents | 0:38 |
-| Add speaker notes | support.microsoft.com/en-us/powerpoint/training/add-speaker-notes-to-your-slides | 0:32 |
-| Add animations to slides | support.microsoft.com/en-us/powerpoint/training/animate-text-or-objects | 1:18 |
-| Use Presenter View | support.microsoft.com/en-us/powerpoint/training/use-presenter-view-in-powerpoint | 1:36 |
-| Create a PivotTable | support.microsoft.com/en-us/excel/get-started/create-a-pivottable-to-analyze-worksheet-data | 0:45 |
-| Create charts | support.microsoft.com/en-us/excel/get-started/create-a-chart-from-start-to-finish | 0:52 |
-
-Check the links every semester: Microsoft moves its pages.
-
-## Tasks with AI (ideas)
-
-AI is already the subject of many sessions; the Tasks with AI there are the Office tasks done with AI help at a higher level (a formatted report, a budget with formulas and a chart), always with checking and, from unit 9, the AI-use statement.
-
-## Notes
-
-- **Independent study first.** Pages, slides and online activities never require classmates (the course project has no peer feedback).
-- The margin: the five practice weeks (Practice 1–5 and their online activities) are flexible: taught when time allows, studied at home otherwise. Lectures 1–10 and their online activities are core.
-- No homework: the online activities replace it. Their model answers are in `courses-private` (`week-WW/online-NN-solutions.md`).
-- The AI-use statement starts in unit 9 (Lecture 9).
+Model answers: `courses-private` (`week-WW/online-NN-solutions.md`).

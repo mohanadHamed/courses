@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Product Page Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="mk.css">
+  <style>
+    .sim #opts { display: grid; gap: 6px; max-width: 560px; }
+    .sim #opts button { text-align: left; }
+    .sim .card { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 14px; max-width: 520px; background: #fff; margin-top: 10px; }
+    .sim .card h3 { margin: 0 0 6px; font-size: 1rem; }
+    .sim .post { background: linear-gradient(135deg, #fff4e6, #ffe8cc); }
+    .sim .cta { display: inline-block; background: #D9480F; color: #fff; border-radius: 8px; padding: 4px 12px; font-weight: 800; margin-top: 6px; }
+    .sim .muted { color: var(--sim-muted); }
+    .sim table.db td:first-child { font-weight: 800; }
+
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Product Page Lab: a page that sells</h1>
+  <p class="hint">Build the product page of the lemon cake in Mona's online store, part by part.</p>
+  <div class="task" id="task"></div>
+  <div id="opts"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+  <div id="preview"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="quiz-kit.js"></script>
+<script>
+QuizKit({
+  label: "Part",
+  done: "The product page is ready: a clear name, a real photo, the price, the key facts and the button.",
+  steps: [
+    {
+      "q": "Which product name?",
+      "opts": [
+        "Lemon cake, 1 kg",
+        "Product 17",
+        "A very very nice cake"
+      ],
+      "right": 0,
+      "why": "A clear name: what it is and its size.",
+      "hints": {
+        "1": "A number says nothing to the customer.",
+        "2": "Say what it is, not only that it is nice."
+      }
+    },
+    {
+      "q": "Which photo?",
+      "opts": [
+        "a clear photo of the real lemon cake",
+        "a photo of a famous cake from the Internet",
+        "no photo"
+      ],
+      "right": 0,
+      "why": "Show the real product, in a photo that you may use.",
+      "hints": {
+        "1": "That photo is not yours, and it is not your cake.",
+        "2": "Customers want to see the product."
+      }
+    },
+    {
+      "q": "Which price line?",
+      "opts": [
+        "10 JD",
+        "Ask us",
+        "Cheap"
+      ],
+      "right": 0,
+      "why": "Show the price: customers do not like to ask.",
+      "hints": {
+        "1": "Hiding the price makes people leave.",
+        "2": "Write the real price."
+      }
+    },
+    {
+      "q": "Which description?",
+      "opts": [
+        "Fresh lemon, made on the day · for 8 people · order a day before",
+        "The best cake in the whole world!!!",
+        "A cake."
+      ],
+      "right": 0,
+      "why": "Short key facts help the customer decide.",
+      "hints": {
+        "1": "Big words and no facts.",
+        "2": "Too short: give the key facts."
+      }
+    },
+    {
+      "q": "Which button?",
+      "opts": [
+        "Add to cart",
+        "Read more about us",
+        "Back"
+      ],
+      "right": 0,
+      "why": "The button lets the customer buy at once.",
+      "hints": {
+        "1": "That is another page.",
+        "2": "That leaves the product."
+      }
+    }
+  ],
+  preview: (c) => c.length ? `<div class="card"><h3>${c[0] || ""}</h3><div class="muted">${c[1] || ""}</div><b>${c[2] || ""}</b><div>${c[3] || ""}</div>${c[4] ? `<span class="cta">${c[4]}</span>` : ""}</div>` : "",
+});
+</script>
+</body>
+</html>

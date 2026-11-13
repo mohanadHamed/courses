@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Message Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="mk.css">
+  <style>
+    .sim #opts { display: grid; gap: 6px; max-width: 560px; }
+    .sim #opts button { text-align: left; }
+    .sim .card { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 14px; max-width: 520px; background: #fff; margin-top: 10px; }
+    .sim .card h3 { margin: 0 0 6px; font-size: 1rem; }
+    .sim .post { background: linear-gradient(135deg, #fff4e6, #ffe8cc); }
+    .sim .cta { display: inline-block; background: #D9480F; color: #fff; border-radius: 8px; padding: 4px 12px; font-weight: 800; margin-top: 6px; }
+    .sim .muted { color: var(--sim-muted); }
+    .sim table.db td:first-child { font-weight: 800; }
+
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Message Builder: the right message for the audience</h1>
+  <p class="hint">Mona's Cakes wants more orders from families in Amman for birthdays. Build her post, part by part.</p>
+  <div class="task" id="task"></div>
+  <div id="opts"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+  <div id="preview"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="quiz-kit.js"></script>
+<script>
+QuizKit({
+  label: "Part",
+  done: "The post is ready: who it is for, why it helps, the offer, and what to do now.",
+  steps: [
+    {
+      "q": "Who is the audience?",
+      "opts": [
+        "families in Amman with a birthday soon",
+        "everybody in the world",
+        "other cake shops"
+      ],
+      "right": 0,
+      "why": "A clear audience: the post speaks to them.",
+      "hints": {
+        "1": "Too wide: the post speaks to nobody.",
+        "2": "They do not buy cakes from Mona."
+      }
+    },
+    {
+      "q": "Which headline?",
+      "opts": [
+        "A birthday cake made at home, just for you",
+        "Mona's Cakes, since 2024",
+        "Click here"
+      ],
+      "right": 0,
+      "why": "The headline speaks to the audience and their need.",
+      "hints": {
+        "1": "It says nothing about the customer.",
+        "2": "It does not say what you offer."
+      }
+    },
+    {
+      "q": "Which benefit?",
+      "opts": [
+        "Fresh, made on the day, delivered in Amman",
+        "Our oven is new",
+        "We have a website"
+      ],
+      "right": 0,
+      "why": "The benefit says why it is good for the customer.",
+      "hints": {
+        "1": "The customer does not care about the oven.",
+        "2": "That is a channel, not a benefit."
+      }
+    },
+    {
+      "q": "Which offer?",
+      "opts": [
+        "10% off birthday cakes this week",
+        "Prices may change",
+        "No offer, ever"
+      ],
+      "right": 0,
+      "why": "A clear offer gives a reason to act now.",
+      "hints": {
+        "1": "That is not an offer.",
+        "2": "An offer helps people decide."
+      }
+    },
+    {
+      "q": "Which call to action?",
+      "opts": [
+        "Order now: tap the link",
+        "Thank you for reading",
+        "Have a nice day"
+      ],
+      "right": 0,
+      "why": "The call to action says what to do next.",
+      "hints": {
+        "1": "It does not ask the reader to act.",
+        "2": "It does not ask the reader to act."
+      }
+    }
+  ],
+  preview: (c) => c.length ? `<div class="card post"><h3>${c[1] || ""}</h3><div>${c[2] || ""}</div><b>${c[3] || ""}</b><br>${c[4] ? `<span class="cta">${c[4]}</span>` : ""}<div class="muted">For: ${c[0]}</div></div>` : "",
+});
+</script>
+</body>
+</html>

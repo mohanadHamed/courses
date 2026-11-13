@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Form Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="svc.css">
+  <style>
+    .sim .q { border: 1.5px solid #ced4da; border-radius: 12px; padding: 8px 12px; margin: 6px 0; max-width: 540px; background: #fff; }
+    .sim .q b { display: block; margin-bottom: 4px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Form Builder: an order form and its sheet</h1>
+  <p class="hint">A practice model of Microsoft Forms. Give each question of Mona's order form its type, then send a test order and look at the sheet.</p>
+  <div class="task" id="task"></div>
+  <div id="qs"></div>
+  <div class="pad"><button type="button" id="test">Send a test order</button></div>
+  <p id="msg" class="message"></p>
+  <div id="sheet"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="table-kit.js"></script>
+<script>
+(() => {
+  const TYPES = ["Text", "Choice", "Number", "Date"];
+  // question, right type, why, the test answer
+  const Q = [
+    ["Your name", "Text", "A name is a short text.", "Sara"],
+    ["Which cake?", "Choice", "The customer chooses one of Mona's cakes: Chocolate, Lemon, Fruit.", "Chocolate"],
+    ["How many cakes?", "Number", "A number that Mona can add up.", "2"],
+    ["Pick-up day", "Date", "A day in the calendar.", "20/11/2026"],
+  ];
+  const $ = (id) => document.getElementById(id);
+  const pick = Q.map(() => null), rows = [];
+  function show() {
+    $("task").textContent = pick.every((p, k) => p === Q[k][1]) ? "All types are right. Now press Send a test order." : "Choose the right type for each question.";
+    $("qs").innerHTML = Q.map(([q], k) => `<div class="q"><b>${k + 1}. ${q}</b>${TYPES.map((t) => `<button type="button" class="ghost${pick[k] === t ? " on" : ""}" data-q="${k}" data-t="${t}">${t}</button>`).join(" ")}</div>`).join("");
+    document.querySelectorAll("[data-q]").forEach((b) => b.addEventListener("click", () => {
+      const k = +b.dataset.q, t = b.dataset.t; pick[k] = t;
+      if (t === Q[k][1]) { $("msg").textContent = `✓ ${Q[k][0]}: ${t}. ${Q[k][2]}`; $("msg").className = "message good"; }
+      else { $("msg").textContent = `✗ ${Q[k][0]}: not ${t}. ${Q[k][2]}`; $("msg").className = "message bad"; }
+      show();
+    }));
+  }
+  $("test").addEventListener("click", () => {
+    const bad = Q.findIndex((q, k) => pick[k] !== q[1]);
+    if (bad >= 0) { $("msg").textContent = `✗ First give question ${bad + 1} its right type.`; $("msg").className = "message bad"; return; }
+    rows.push([rows.length + 1, ...Q.map((q) => q[3])]);
+    $("sheet").innerHTML = "<b>The sheet of the responses (Excel)</b>" + dbTable(["ID", ...Q.map((q) => q[0])], rows);
+    $("msg").textContent = `✓ The test order is response ${rows.length}: one new row in the sheet. Every order that a customer sends adds one row.`; $("msg").className = "message good";
+  });
+  show();
+})();
+</script>
+</body>
+</html>

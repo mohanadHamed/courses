@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Mail Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .task { font-weight: 800; background: #fff4e6; border: 1.5px dashed #FFC078; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
+    .sim .mail { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 12px; max-width: 520px; }
+    .sim .row { display: flex; gap: 8px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+    .sim .row > b { min-width: 64px; }
+    .sim .people { display: grid; gap: 6px; }
+    .sim .person { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .sim .person span { min-width: 92px; font-weight: 800; }
+    .sim .seg { display: inline-flex; gap: 4px; }
+    .sim .seg button { padding: 4px 10px; }
+    .sim .seg button.on { background: #1971c2; color: #fff; border-color: #1971c2; }
+    .sim select { font: inherit; padding: 5px 8px; border: 1.5px solid #ced4da; border-radius: 8px; max-width: 100%; }
+    .sim .got { background: #f8f9fa; border-radius: 10px; padding: 8px 10px; margin: 6px 0 10px; line-height: 1.45; }
+    .sim .got small { color: var(--sim-muted); display: block; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+    .sim .message.bad { color: #c92a2a; }
+    .sim .score { font-weight: 800; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Mail Lab: To, Cc, subject and file</h1>
+  <p class="hint">Send each e-mail right: the right people in To and Cc, a clear subject and the right file. Or choose Reply, Reply all or Forward. (The names are made up.)</p>
+  <div class="task" id="task"></div>
+  <div class="mail" id="mail"></div>
+  <p id="msg" class="message"></p>
+  <div class="pad"><span class="score" id="score"></span></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // Compose tasks: people {name: "to"|"cc"|"none"}, subjects (right first), files (right first).
+  // Answer tasks: a received e-mail and the right button.
+  const TASKS = [
+    { kind: "compose", text: "Huda sends the agenda of Sunday's meeting. Omar and Lina come to the meeting. Mr Yousef, the manager, only needs to know.",
+      people: { "Omar": "to", "Lina": "to", "Mr Yousef": "cc", "Sami": "none" },
+      subjects: ["Agenda: staff meeting on Sunday", "Hello", "READ THIS NOW!!!"],
+      files: ["agenda.docx", "price-list.xlsx", "holiday-photo.jpg"],
+      why: { "none": "Sami is not in the meeting: leave him out.", "subject": "A clear subject says what the e-mail is about.", "file": "The colleagues need the agenda." } },
+    { kind: "compose", text: "Omar sends the price list to a customer, Ms Rana. She must read it, but not change it. Mr Yousef only needs to know.",
+      people: { "Ms Rana": "to", "Mr Yousef": "cc", "Lina": "none", "Sami": "none" },
+      subjects: ["Price list: November", "Hi", "Price"],
+      files: ["price-list.pdf", "price-list.xlsx", "agenda.docx"],
+      why: { "none": "Lina and Sami do not need this e-mail.", "subject": "\"Price list: November\" says what and which month.", "file": "A PDF keeps the prices: the customer reads it but does not change it." } },
+    { kind: "answer", from: "Lina", to: "8 people", subject: "Coffee", body: "Who wants coffee at 11:00?",
+      text: "Huda wants coffee. Only Lina needs the answer.", right: "Reply",
+      why: { "Reply": "Reply answers only Lina.", "Reply all": "Seven people get an e-mail that they do not need.", "Forward": "Forward sends the e-mail to a new person." } },
+    { kind: "answer", from: "Mr Yousef", to: "all staff (6 people)", subject: "Meeting time", body: "Is Sunday at 10:00 OK for the meeting? Please answer so that everybody sees it.",
+      text: "Huda answers \"Yes, 10:00 is OK\". Everybody must see the answer.", right: "Reply all",
+      why: { "Reply all": "Reply all answers the sender and all the staff.", "Reply": "Only Mr Yousef would see it.", "Forward": "Forward is for a new person, not for the people of the e-mail." } },
+    { kind: "answer", from: "Huda (Sent)", to: "Omar, Lina", subject: "Agenda: staff meeting on Sunday", body: "Here is the agenda. [file: agenda.docx]",
+      text: "Sami was not in this e-mail. He needs the agenda and its file.", right: "Forward",
+      why: { "Forward": "Forward sends the e-mail and its file to Sami.", "Reply": "A reply goes to Omar and Lina, without the file.", "Reply all": "Reply all goes to Omar and Lina, not to Sami." } },
+  ];
+  const $ = (id) => document.getElementById(id);
+  let t = 0, right = 0, state = {};
+  const say = (text, good) => { $("msg").textContent = text; $("msg").className = "message " + (good ? "good" : "bad"); };
+  function show() {
+    const T = TASKS[t];
+    $("task").textContent = `Task ${t + 1} of ${TASKS.length}: ${T.text}`;
+    if (T.kind === "compose") {
+      state = {}; Object.keys(T.people).forEach((p) => (state[p] = "none"));
+      const subj = T.subjects.map((s) => s).sort(), files = T.files.map((f) => f).sort();
+      $("mail").innerHTML = `<div class="row"><b>New mail</b></div>
+        <div class="people">${Object.keys(T.people).map((p) => `<div class="person"><span>${p}</span><span class="seg" data-p="${p}">
+          <button type="button" class="ghost" data-w="to">To</button><button type="button" class="ghost" data-w="cc">Cc</button><button type="button" class="ghost on" data-w="none">not in it</button></span></div>`).join("")}</div>
+        <div class="row"><b>Subject</b><select id="subj"><option value="">choose …</option>${subj.map((s) => `<option>${s}</option>`).join("")}</select></div>
+        <div class="row"><b>Attach</b><select id="file"><option value="">choose a file …</option>${files.map((f) => `<option>${f}</option>`).join("")}</select></div>
+        <div class="pad"><button type="button" id="send">Send</button></div>`;
+      document.querySelectorAll(".seg").forEach((g) => g.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+        state[g.dataset.p] = b.dataset.w; g.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b)); })));
+      $("send").addEventListener("click", send);
+    } else {
+      $("mail").innerHTML = `<div class="got"><small>From: ${T.from} · To: ${T.to}</small><b>${T.subject}</b><br>${T.body}</div>
+        <div class="pad">${["Reply", "Reply all", "Forward"].map((b) => `<button type="button" class="ghost" data-a="${b}">${b}</button>`).join("")}</div>`;
+      document.querySelectorAll("[data-a]").forEach((b) => b.addEventListener("click", () => answer(b.dataset.a)));
+    }
+  }
+  function done(text) {
+    right++; $("score").textContent = `${right} of ${TASKS.length} e-mails right`; say("✓ " + text, true);
+    if (t < TASKS.length - 1) { t++; setTimeout(show, 1800); } else { $("task").textContent = "All five e-mails are right."; $("mail").innerHTML = ""; }
+  }
+  function send() {
+    const T = TASKS[t], problems = [];
+    Object.entries(T.people).forEach(([p, w]) => {
+      if (state[p] === w) return;
+      if (w === "to") problems.push(`${p} must read it and act: put ${p} in To.`);
+      else if (w === "cc") problems.push(`${p} only needs to know: put ${p} in Cc.`);
+      else problems.push(T.why.none);
+    });
+    const s = $("subj").value, f = $("file").value;
+    if (!s) problems.push("Choose a subject."); else if (s !== T.subjects[0]) problems.push(`"${s}" does not say what the e-mail is about. ${T.why.subject}`);
+    if (!f) problems.push("Attach a file (the paperclip)."); else if (f !== T.files[0]) problems.push(`${f} is the wrong file. ${T.why.file}`);
+    if (problems.length) { say("✗ " + [...new Set(problems)].join(" "), false); return; }
+    done("Sent: the right people, a clear subject and the right file.");
+  }
+  function answer(a) {
+    const T = TASKS[t];
+    if (a === T.right) done(T.why[a]); else say(`✗ ${a}: ${T.why[a]}`, false);
+  }
+  show();
+})();
+</script>
+</body>
+</html>

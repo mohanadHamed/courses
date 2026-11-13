@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Meeting Planner</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .task { font-weight: 800; background: #fff4e6; border: 1.5px dashed #FFC078; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; }
+    .sim .grid { display: grid; grid-template-columns: 64px repeat(6, minmax(38px, 1fr)); gap: 4px; max-width: 560px; align-items: stretch; }
+    .sim .grid .h { font-size: 0.78rem; font-weight: 800; text-align: center; color: var(--sim-muted); }
+    .sim .grid .n { font-weight: 800; align-self: center; }
+    .sim .grid .c { height: 30px; border-radius: 6px; background: #ebfbee; border: 1.5px solid #b2f2bb; }
+    .sim .grid .c.busy { background: #ffe3e3; border-color: #ffa8a8; }
+    .sim .grid .c.busy::after { content: "busy"; display: block; text-align: center; font-size: 0.72rem; font-weight: 800; color: #c92a2a; line-height: 27px; }
+    .sim .grid button.slot { padding: 6px 0; font-size: 0.8rem; }
+    .sim .grid button.slot.pick { background: #D9480F; color: #fff; border-color: #D9480F; }
+    .sim .note { margin: 8px 0 0; font-weight: 700; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+    .sim .message.bad { color: #c92a2a; }
+    .sim [hidden] { display: none !important; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Meeting Planner: a time for everybody</h1>
+  <p class="hint">Green is free, red is busy. Tap the start of the first hour when all three are free. Then choose a room or an online meeting.</p>
+  <div class="task" id="task"></div>
+  <div class="grid" id="grid"></div>
+  <p class="note" id="note"></p>
+  <div class="pad" id="place" hidden><b>Where?</b><button type="button" class="ghost" data-w="room">Room 21</button><button type="button" class="ghost" data-w="online">Online (Teams)</button></div>
+  <p id="msg" class="message"></p>
+  <div class="pad"><button type="button" id="next" hidden>Next day ▶</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const HOURS = [8, 9, 10, 11, 12, 13];
+  const DAYS = [
+    { day: "Sunday", busy: { Huda: [8, 12], Omar: [9], Lina: [10, 13] }, note: "Omar works from home on Sunday.", place: "online",
+      why: { online: "Omar is at home, so he joins with the link.", room: "Omar works from home on Sunday: he cannot come to Room 21." } },
+    { day: "Monday", busy: { Huda: [9], Omar: [8, 10], Lina: [11] }, note: "On Monday all three are at the office, and Room 21 is free.", place: "room",
+      why: { room: "Everybody is at the office, so they meet in Room 21.", online: "All three are at the office, and Room 21 is free: meet there." } },
+  ];
+  const $ = (id) => document.getElementById(id);
+  let d = 0, hour = null;
+  const say = (t, good) => { $("msg").textContent = t; $("msg").className = "message " + (good ? "good" : "bad"); };
+  const free = (D, h) => Object.values(D.busy).every((b) => !b.includes(h));
+  function show() {
+    const D = DAYS[d]; hour = null;
+    $("task").textContent = `${D.day}: find one hour for Huda, Omar and Lina.`;
+    $("note").textContent = D.note; $("place").hidden = true; $("next").hidden = true; $("msg").textContent = "";
+    let html = `<div></div>${HOURS.map((h) => `<button type="button" class="ghost slot" data-h="${h}">${h}:00</button>`).join("")}`;
+    Object.entries(D.busy).forEach(([who, b]) => {
+      html += `<div class="n">${who}</div>${HOURS.map((h) => `<div class="c${b.includes(h) ? " busy" : ""}"></div>`).join("")}`;
+    });
+    $("grid").innerHTML = html;
+    document.querySelectorAll(".slot").forEach((b) => b.addEventListener("click", () => pick(Number(b.dataset.h), b)));
+    document.querySelectorAll("#place button").forEach((b) => b.classList.remove("on"));
+  }
+  function pick(h, btn) {
+    const D = DAYS[d];
+    if (hour !== null) { say("You chose the hour. Now choose Room 21 or Online.", false); return; }
+    const who = Object.entries(D.busy).filter(([, b]) => b.includes(h)).map(([n]) => n);
+    if (who.length) { say(`✗ At ${h}:00 ${who.join(" and ")} ${who.length > 1 ? "are" : "is"} busy.`, false); return; }
+    const first = HOURS.find((x) => free(D, x));
+    if (h !== first) { say(`✗ ${h}:00 is free, but ${first}:00 is free too, and earlier.`, false); return; }
+    hour = h; btn.classList.add("pick"); $("place").hidden = false;
+    say(`✓ ${h}:00 to ${h + 1}:00: all three are free. Now: where?`, true);
+  }
+  document.querySelectorAll("#place button").forEach((b) => b.addEventListener("click", () => {
+    const D = DAYS[d];
+    if (b.dataset.w !== D.place) { say("✗ " + D.why[b.dataset.w], false); return; }
+    say(`✓ The invitation goes out: ${D.day}, ${hour}:00 to ${hour + 1}:00, ${D.place === "online" ? "online (Teams)" : "Room 21"}. ${D.why[D.place]}`, true);
+    $("next").hidden = false; $("next").textContent = d < DAYS.length - 1 ? "Next day ▶" : "Start again ▶";
+  }));
+  $("next").addEventListener("click", () => { d = (d + 1) % DAYS.length; show(); });
+  show();
+})();
+</script>
+</body>
+</html>

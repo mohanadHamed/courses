@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Project Checker</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="mk.css">
+  <style>
+    .sim #opts { display: grid; gap: 6px; max-width: 560px; }
+    .sim #opts button { text-align: left; }
+    .sim .card { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 14px; max-width: 520px; background: #fff; margin-top: 10px; }
+    .sim .card h3 { margin: 0 0 6px; font-size: 1rem; }
+    .sim .post { background: linear-gradient(135deg, #fff4e6, #ffe8cc); }
+    .sim .cta { display: inline-block; background: #D9480F; color: #fff; border-radius: 8px; padding: 4px 12px; font-weight: 800; margin-top: 6px; }
+    .sim .muted { color: var(--sim-muted); }
+    .sim table.db td:first-child { font-weight: 800; }
+
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Project Checker: is every part ready?</h1>
+  <p class="hint">Sami checks the project of Easy Print before he hands it in. For each part, decide: is it ready?</p>
+  <div class="task" id="task"></div>
+  <div id="opts"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+  <div id="preview"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="quiz-kit.js"></script>
+<script>
+QuizKit({
+  label: "Check",
+  done: "Done: fix the site, the button, the post and the goal, and the project is ready.",
+  steps: [
+    {
+      "q": "Easy Print, the form: Sami sends a test response. It is in row 2 of the sheet. Is the form ready?",
+      "opts": [
+        "yes",
+        "no"
+      ],
+      "right": 0,
+      "why": "One response, one row: the form works.",
+      "hints": {
+        "1": "The test response arrived: the form works."
+      }
+    },
+    {
+      "q": "Easy Print, the site: it opens on Sami's laptop, but on his phone it says \"You need permission\". Is the site ready?",
+      "opts": [
+        "no: press Publish",
+        "yes"
+      ],
+      "right": 0,
+      "why": "Only a published site opens for everybody.",
+      "hints": {
+        "1": "Other people cannot open it yet."
+      }
+    },
+    {
+      "q": "Easy Print, the button: Order now opens the e-learning platform. Is it right?",
+      "opts": [
+        "no: it must open the form",
+        "yes"
+      ],
+      "right": 0,
+      "why": "The button opens the form of the service.",
+      "hints": {
+        "1": "The customer must reach the order form."
+      }
+    },
+    {
+      "q": "Easy Print, the post: a photo from Google Images, no source line. Is it right?",
+      "opts": [
+        "no: a free photo with its source",
+        "yes"
+      ],
+      "right": 0,
+      "why": "Use a free picture and write its source.",
+      "hints": {
+        "1": "That photo belongs to someone."
+      }
+    },
+    {
+      "q": "Easy Print, the plan: the goal is \"be famous\". Is it a good goal?",
+      "opts": [
+        "no: a number and a time",
+        "yes"
+      ],
+      "right": 0,
+      "why": "For example: 20 orders this month.",
+      "hints": {
+        "1": "You cannot measure \"be famous\"."
+      }
+    },
+    {
+      "q": "Easy Print, the talk: three slides, three minutes. Is it right?",
+      "opts": [
+        "yes",
+        "no"
+      ],
+      "right": 0,
+      "why": "One minute for each slide.",
+      "hints": {
+        "1": "Three slides in three minutes is the plan."
+      }
+    }
+  ],
+  preview: (c) => "",
+});
+</script>
+</body>
+</html>

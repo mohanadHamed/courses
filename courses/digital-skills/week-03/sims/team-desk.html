@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini-game: Team Desk</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .hud { display: flex; gap: 14px; align-items: baseline; font-weight: 800; margin-bottom: 8px; }
+    .sim .hud .stars { margin-left: auto; color: var(--sim-accent); }
+    .sim .chat { display: grid; gap: 8px; }
+    .sim .bubble { max-width: 88%; padding: 9px 12px; border-radius: 14px; font-weight: 700; line-height: 1.4; }
+    .sim .from { background: #fff4e6; border: 1.5px solid #FFC078; border-bottom-left-radius: 4px; }
+    .sim .from small { display: block; color: var(--sim-muted); font-size: 0.75rem; margin-bottom: 2px; }
+    .sim .me { justify-self: end; background: #D9480F; color: #fff; border-bottom-right-radius: 4px; }
+    .sim .opts { display: grid; gap: 6px; margin-top: 10px; }
+    .sim .opts button { text-align: left; }
+    .sim .opts button.bad { background: #c92a2a; color: #fff; border-color: #c92a2a; }
+    .sim .pad { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+    .sim .message.bad { color: #c92a2a; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Team Desk at Sunrise Company</h1>
+  <p class="hint">Today you help your colleagues to send, meet and share files. Read each message and choose the best answer.</p>
+  <div class="hud"><span id="lvl">Message 1</span><span class="stars" id="stars">★ 0</span></div>
+  <div class="chat" id="chat"></div>
+  <div class="opts" id="opts"></div>
+  <p id="msg" class="message"></p>
+  <div class="pad"><button id="next" type="button" hidden>Next message ▶</button><button id="sound" type="button" class="ghost">Sound: on</button></div>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // [who, question, [answer, ok, why]...]
+  const TICKETS = [
+    ["Lina (office)", "I sent an e-mail to ten people. One of them asks me a question, only for me. How do I answer?",
+      [["Reply", true, "Reply answers only the person who asked."], ["Reply all", false, "Nine people would get an answer that they do not need."], ["Forward", false, "Forward sends the e-mail to a new person."]]],
+    ["Omar (sales)", "I write to a customer. My manager only needs to know about it. Where do I put him?",
+      [["in Cc", true, "Cc is for the people who only need to know."], ["in To", false, "To is for the people who must read and act: the customer."], ["I send him a second e-mail later", false, "Cc gives him the same e-mail at once."]]],
+    ["Sami (shop)", "I must send the training video to the staff. It is 2 GB. How?",
+      [["Share a OneDrive link to the video", true, "The link opens the one file in OneDrive: no big attachment."], ["Attach the video to an e-mail", false, "A file of 2 GB is far too big for an e-mail."], ["Cut it into twenty e-mails", false, "That is slow, and the staff gets twenty parts."]]],
+    ["Mona (office)", "Five people must change the same report this week. How do we work?",
+      [["Share one file in OneDrive with Can edit", true, "Everybody changes the same file at the same time: no copies."], ["Each person gets a copy by e-mail", false, "Five copies become five different reports."], ["Share it with Can view", false, "With Can view nobody can change the report."]]],
+    ["Huda (office)", "I deleted a paragraph of the report yesterday. Today I need it. What do I do?",
+      [["File › Info › Version History, then Restore", true, "Version History keeps the older versions of the file."], ["Write it again from memory", false, "Version History brings back the real paragraph."], ["Ask a colleague to send her copy", false, "One shared file has no copies: use Version History."]]],
+    ["Lina (office)", "I want Omar to check one number in the shared report. How do I ask him?",
+      [["A comment on the number, with @Omar", true, "The comment is next to the number, and @Omar sends him an e-mail."], ["I change the number myself", false, "Omar must check it first."], ["I call the whole staff", false, "Only Omar must check it."]]],
+    ["Omar (sales)", "The meeting is at the office on Sunday, but I work from home on Sundays. How can I take part?",
+      [["The invitation gets an online meeting link: I click Join", true, "With Teams, Meet or Zoom he joins from home."], ["I cannot take part", false, "An online meeting link lets him join from any place."], ["Huda reads me the notes on Monday", false, "With the link he takes part at the same time."]]],
+    ["Sami (shop)", "A meeting invitation came, but I am on holiday that day. What do I answer?",
+      [["Decline", true, "Decline tells the organizer that he cannot come."], ["Accept", false, "Accept puts the meeting in his calendar: he will not be there."], ["Nothing", false, "The organizer must know who comes."]]],
+  ];
+  const $ = (id) => document.getElementById(id);
+  let i = 0, stars = 0, tries = 0, done = false, sound = true, audio = null;
+  function beep(f, d, type = "triangle") {
+    if (!sound) return;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audio.createOscillator(), g = audio.createGain(); o.type = type; o.frequency.value = f; g.gain.value = 0.07;
+      o.connect(g); g.connect(audio.destination); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + d); o.start(); o.stop(audio.currentTime + d);
+    } catch (_) {}
+  }
+  function show() {
+    if (i >= TICKETS.length) {
+      $("lvl").textContent = "All messages answered"; $("chat").innerHTML = ""; $("opts").innerHTML = "";
+      $("msg").textContent = `🎉 Everybody at Sunrise Company got help! ★ ${stars} of ${TICKETS.length * 2}.`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = "Play again ▶"; return;
+    }
+    const [who, q, opts] = TICKETS[i]; tries = 0; done = false;
+    $("lvl").textContent = `Message ${i + 1} / ${TICKETS.length}`;
+    $("chat").innerHTML = `<div class="bubble from"><small>${who}</small>${q}</div>`;
+    const order = opts.map((o, k) => k); const s = i % 3; const shuffled = order.slice(s).concat(order.slice(0, s));
+    $("opts").innerHTML = "";
+    shuffled.forEach((k) => {
+      const b = document.createElement("button"); b.type = "button"; b.className = "ghost"; b.textContent = opts[k][0];
+      b.addEventListener("click", () => answer(k, b)); $("opts").appendChild(b);
+    });
+    $("msg").textContent = ""; $("next").hidden = true;
+  }
+  function answer(k, b) {
+    if (done) { $("msg").textContent = "Press Next message."; return; }
+    const [, , opts] = TICKETS[i], [text, ok, why] = opts[k];
+    if (ok) {
+      done = true; const got = tries === 0 ? 2 : 1; stars += got; $("stars").textContent = "★ " + stars;
+      $("chat").insertAdjacentHTML("beforeend", `<div class="bubble me">${text}</div>`);
+      $("opts").innerHTML = ""; $("msg").textContent = `✓ ${why} ${"★".repeat(got)}`; $("msg").className = "message good";
+      $("next").hidden = false; $("next").textContent = i < TICKETS.length - 1 ? "Next message ▶" : "Finish ▶";
+      [660, 990].forEach((f, n) => setTimeout(() => beep(f, 0.12), n * 100));
+    } else {
+      tries++; b.classList.add("bad"); $("msg").textContent = `✗ ${why}`; $("msg").className = "message bad"; beep(220, 0.25, "sawtooth");
+    }
+  }
+  $("next").addEventListener("click", () => { if (i >= TICKETS.length) { i = 0; stars = 0; $("stars").textContent = "★ 0"; } else i++; show(); });
+  $("sound").addEventListener("click", () => { sound = !sound; $("sound").textContent = "Sound: " + (sound ? "on" : "off"); });
+  show();
+})();
+</script>
+</body>
+</html>

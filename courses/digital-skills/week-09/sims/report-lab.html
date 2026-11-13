@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Report Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="db.css">
+  <style>
+    .sim .report { border: 1.5px solid #ced4da; border-radius: 6px; padding: 12px 16px; max-width: 460px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+    .sim .report h2 { font-size: 1.05rem; margin: 0 0 6px; }
+    .sim .report h3 { font-size: 0.9rem; margin: 10px 0 2px; color: #D9480F; }
+    .sim .report .line { display: flex; justify-content: space-between; font-size: 0.9rem; }
+    .sim .report .tot { font-weight: 800; border-top: 1px solid #ced4da; }
+    .sim label { font-weight: 800; display: inline-flex; gap: 6px; align-items: center; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Report Lab: a report to print</h1>
+  <p class="hint">A report shows the data of a table or a query, ready to print: grouped, sorted and with totals.</p>
+  <div class="task" id="task"></div>
+  <div class="pad">
+    <label><input type="checkbox" id="g"> Group by Type</label>
+    <label><input type="checkbox" id="s"> Sort by Price</label>
+    <label><input type="checkbox" id="t"> Total of each group</label>
+  </div>
+  <div class="report" id="rep"></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="shop-db.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const TASKS = [
+    ["Task 1 of 3: group the products by Type.", () => $("g").checked],
+    ["Task 2 of 3: sort the products of each group by Price.", () => $("g").checked && $("s").checked],
+    ["Task 3 of 3: show the total of each group. What is the total of Drinks?", () => $("g").checked && $("s").checked && $("t").checked],
+  ];
+  let task = 0;
+  const jd = (n) => n.toFixed(2) + " JD";
+  function draw() {
+    let rows = SHOP.rows.slice();
+    if ($("s").checked) rows.sort((a, b) => a[3] - b[3]);
+    let html = "<h2>Products of the Sunrise shop</h2>";
+    if ($("g").checked) {
+      ["Bags", "Drinks", "Paper"].forEach((ty) => {
+        const g = rows.filter((r) => r[2] === ty);
+        html += `<h3>${ty}</h3>` + g.map((r) => `<div class="line"><span>${r[1]}</span><span>${jd(r[3])}</span></div>`).join("");
+        if ($("t").checked) html += `<div class="line tot"><span>Total ${ty}</span><span>${jd(g.reduce((s, r) => s + r[3], 0))}</span></div>`;
+      });
+    } else html += rows.map((r) => `<div class="line"><span>${r[1]} (${r[2]})</span><span>${jd(r[3])}</span></div>`).join("");
+    $("rep").innerHTML = html;
+    while (task < TASKS.length && TASKS[task][1]()) {
+      task++;
+      $("msg").textContent = task === 3 ? "✓ Done. The total of Drinks is 2.50 JD (Water 0.50 + Juice 1.00 + Coffee 1.00)." : "✓ Done.";
+      $("msg").className = "message good";
+    }
+    $("task").textContent = task < TASKS.length ? TASKS[task][0] : "The report is ready to print: grouped, sorted, with totals.";
+  }
+  ["g", "s", "t"].forEach((id) => $(id).addEventListener("change", draw));
+  draw();
+})();
+</script>
+</body>
+</html>

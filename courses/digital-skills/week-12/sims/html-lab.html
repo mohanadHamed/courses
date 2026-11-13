@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: HTML Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="web.css">
+  <style>
+    .sim pre { background: #212529; color: #f8f9fa; border-radius: 10px; padding: 10px 12px; font-size: 0.85rem; overflow-x: auto; max-width: 560px; }
+    .sim pre b { color: #ffc078; }
+    .sim .out { border: 2px solid #495057; border-radius: 10px; padding: 10px 14px; max-width: 540px; background: #fff; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>HTML Lab: a look at HTML and CSS</h1>
+  <p class="hint">A web page is HTML (what is on the page) and CSS (how it looks). Change one part, and see the page change.</p>
+  <div class="task" id="task"></div>
+  <div class="pad"><b>Heading colour (CSS):</b> <select id="col"><option>brown</option><option>green</option><option>navy</option></select>
+    <b>Size:</b> <select id="size"><option>28px</option><option>36px</option></select></div>
+  <div class="pad"><b>The link goes to:</b> <select id="href"><option>order.html</option><option>contact.html</option></select>
+    <label><input type="checkbox" id="img" checked> picture (img)</label></div>
+  <pre id="code"></pre>
+  <div class="out" id="out"></div>
+  <p id="msg" class="message"></p>
+  <div class="pad" id="q"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const Q = [
+    ["Which tag makes the big heading?", "&lt;h1&gt;", ["&lt;h1&gt;", "&lt;p&gt;", "&lt;a&gt;"], "h1 is the biggest heading of the page."],
+    ["Which tag makes a link?", "&lt;a&gt;", ["&lt;img&gt;", "&lt;a&gt;", "&lt;p&gt;"], "a (with href) is a link to another page."],
+    ["Which language sets the colour?", "CSS", ["HTML", "CSS", "Excel"], "CSS sets the look: colours, fonts and sizes."],
+  ];
+  let q = 0;
+  function draw() {
+    const c = $("col").value, z = $("size").value, h = $("href").value, img = $("img").checked;
+    $("code").innerHTML = `&lt;style&gt;\n  h1 { color: <b>${c}</b>; font-size: <b>${z}</b>; }\n&lt;/style&gt;\n&lt;h1&gt;Mona's Cakes&lt;/h1&gt;\n&lt;p&gt;Cakes made at home.&lt;/p&gt;\n${img ? "&lt;img src=\"cake.png\" alt=\"A birthday cake\"&gt;\n" : ""}&lt;a href=\"<b>${h}</b>\"&gt;Order now&lt;/a&gt;`;
+    $("out").innerHTML = `<div style="color:${c};font-size:${z};font-weight:800">Mona's Cakes</div><p>Cakes made at home.</p>${img ? '<div style="width:120px;height:60px;border-radius:8px;background:linear-gradient(135deg,#ffd8a8,#ffa94d);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem">cake picture</div>' : ""}<p><a href="#" onclick="return false">Order now</a> <span style="color:#868e96">(goes to ${h})</span></p>`;
+  }
+  function ask() {
+    if (q >= Q.length) { $("task").textContent = "Done: HTML says what is on the page, CSS how it looks."; $("q").innerHTML = ""; return; }
+    const [t, , opts] = Q[q]; $("task").textContent = `Change the colour and the size, then answer: ${t}`;
+    $("q").innerHTML = opts.map((o) => `<button type="button" class="ghost" data-o="${o}">${o}</button>`).join("");
+    document.querySelectorAll("#q button").forEach((b) => b.addEventListener("click", () => {
+      const [, ok, , why] = Q[q];
+      if (b.dataset.o !== ok && b.innerHTML !== ok) { $("msg").textContent = "✗ Look at the code again."; $("msg").className = "message bad"; return; }
+      $("msg").textContent = "✓ " + why; $("msg").className = "message good"; q++; setTimeout(ask, 1000);
+    }));
+  }
+  ["col", "size", "href", "img"].forEach((id) => $(id).addEventListener("change", draw));
+  draw(); ask();
+})();
+</script>
+</body>
+</html>

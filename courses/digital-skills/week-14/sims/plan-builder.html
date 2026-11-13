@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Plan Builder</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="mk.css">
+  <style>
+    .sim #opts { display: grid; gap: 6px; max-width: 560px; }
+    .sim #opts button { text-align: left; }
+    .sim .card { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 14px; max-width: 520px; background: #fff; margin-top: 10px; }
+    .sim .card h3 { margin: 0 0 6px; font-size: 1rem; }
+    .sim .post { background: linear-gradient(135deg, #fff4e6, #ffe8cc); }
+    .sim .cta { display: inline-block; background: #D9480F; color: #fff; border-radius: 8px; padding: 4px 12px; font-weight: 800; margin-top: 6px; }
+    .sim .muted { color: var(--sim-muted); }
+    .sim table.db td:first-child { font-weight: 800; }
+
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Plan Builder: a short marketing plan</h1>
+  <p class="hint">A short marketing plan is one table: the goal, the audience, the message, the channel, the budget and the measure. Build Mona's plan for December.</p>
+  <div class="task" id="task"></div>
+  <div id="opts"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+  <div id="preview"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="quiz-kit.js"></script>
+<script>
+QuizKit({
+  label: "Row",
+  done: "The plan is ready: six rows, one page.",
+  steps: [
+    {
+      "q": "The goal (a number and a time):",
+      "opts": [
+        "40 orders in December",
+        "be famous",
+        "more"
+      ],
+      "right": 0,
+      "why": "A goal with a number and a time can be measured.",
+      "hints": {
+        "1": "Not measurable.",
+        "2": "How many, by when?"
+      }
+    },
+    {
+      "q": "The audience:",
+      "opts": [
+        "families in Amman with a birthday soon",
+        "everybody",
+        "cake shops"
+      ],
+      "right": 0,
+      "why": "A clear group of people.",
+      "hints": {
+        "1": "Too wide.",
+        "2": "They do not buy from Mona."
+      }
+    },
+    {
+      "q": "The message:",
+      "opts": [
+        "Birthday cakes made at home · 10% off · Order now",
+        "We are Mona's Cakes",
+        "Cakes"
+      ],
+      "right": 0,
+      "why": "The benefit, the offer and the call to action.",
+      "hints": {
+        "1": "No benefit, no offer.",
+        "2": "Too short."
+      }
+    },
+    {
+      "q": "The channels:",
+      "opts": [
+        "Instagram posts and one paid ad in Amman",
+        "posters in another city",
+        "no channel"
+      ],
+      "right": 0,
+      "why": "Where the audience is, online.",
+      "hints": {
+        "1": "Wrong place, and not online.",
+        "2": "The message needs a channel."
+      }
+    },
+    {
+      "q": "The budget:",
+      "opts": [
+        "20 JD for the paid ad",
+        "1000 JD",
+        "nothing is written"
+      ],
+      "right": 0,
+      "why": "A small, clear budget for the paid part.",
+      "hints": {
+        "1": "Too much for a home shop.",
+        "2": "Write the budget."
+      }
+    },
+    {
+      "q": "The measure:",
+      "opts": [
+        "orders from the form and clicks on the link",
+        "how nice the post looks",
+        "nothing"
+      ],
+      "right": 0,
+      "why": "Count the results that show the goal.",
+      "hints": {
+        "1": "Looks are not results.",
+        "2": "Without a measure you never know."
+      }
+    }
+  ],
+  preview: (c) => c.length ? `<table class="db">${["Goal", "Audience", "Message", "Channels", "Budget", "Measure"].slice(0, c.length).map((h, k) => `<tr><td>${h}</td><td>${c[k]}</td></tr>`).join("")}</table>` : "",
+});
+</script>
+</body>
+</html>

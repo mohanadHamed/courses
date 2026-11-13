@@ -200,7 +200,7 @@ product-page-lab|courses/digital-skills/week-14/sims/product-page-lab.html|9|cou
 picture-rights|courses/digital-skills/week-14/sims/picture-rights.html|9|courses/digital-skills/week-14/sims/picture-rights.gif
 plan-builder|courses/digital-skills/week-14/sims/plan-builder.html|9|courses/digital-skills/week-14/sims/plan-builder.gif
 market-desk|courses/digital-skills/week-14/sims/market-desk.html|9|courses/digital-skills/week-14/sims/market-desk.gif
-project-checker|courses/digital-skills/week-15/sims/project-checker.html|9|courses/digital-skills/week-15/sims/project-checker.gif
+project-checker|courses/digital-skills/week-14/sims/project-checker.html|9|courses/digital-skills/week-14/sims/project-checker.gif
 phish-finder|courses/digital-skills/week-03/sims/phish-finder.html|9|courses/digital-skills/week-03/sims/phish-finder.gif
 format-lab|courses/digital-skills/week-04/sims/format-lab.html|9|courses/digital-skills/week-04/sims/format-lab.gif
 style-lab|courses/digital-skills/week-04/sims/style-lab.html|9|courses/digital-skills/week-04/sims/style-lab.gif

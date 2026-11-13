@@ -44,10 +44,12 @@ no separate project week (plan v5, `plan.md`).
 - [ ] Unit 7 (week-09): Excel (2) moved from week-07 (Lecture 7); Online
       activity 8 = the PivotTable activity + AI formulas and summary checked.
 - [ ] Unit 8 (week-10): databases moved from week-09 (Lecture 8, Online 9).
-- [ ] Unit 9 (week-11): renumber (Lecture 9, Online 10).
-- [ ] Unit 10 (week-12): renumber (Lecture 10, Online 11) + AI-drafted page text.
-- [ ] Unit 11 (week-14): renumber (Lecture 11, Online 12 = post with an AI
-      visual checked, plan, three slides, final submission); remove week-15.
+- [x] Unit 9 (week-11): renumbered (Lecture 9, Online 10); ILOs A4, C4.
+- [x] Unit 10 (week-12): renumbered (Lecture 10, Online 11); Online 11 drafts the Home text with AI (a prompt + the facts of the service) and checks it.
+- [x] Unit 11 (week-14): renumbered (Lecture 11); Online 12 = product
+      page, post with an AI picture checked, plan, Project Checker, three
+      slides, final submission; the old week-15 pages removed (their sims
+      stay).
 - [ ] Clean-up: NOTES, index, AUTHORING, check_size lists, glossary;
       private: solutions renumbered, platform weeks 6–14, `syllabus-weeks.yml` v4.
 

@@ -61,8 +61,10 @@ no separate project week (plan v5, `plan.md`).
 - [x] Clean-up: NOTES, index, AUTHORING, check_size lists; private:
       solutions renumbered (week-15 removed, Online 12 merged), platform
       weeks 8–14, `syllabus-weeks.yml` v4 word for word.
-- [ ] Final checks (check_size --all, check_figures, course_package),
-      PR descriptions, report to the teacher.
+- [x] Final checks (check_size --all, check_figures, course_package),
+      report to the teacher.
+- [x] Units 1–2 ILO codes set to v4 (the teacher's request); new pull
+      requests for the v4 work.
 
 Rule for moving folders: the hidden face-to-face version links the old
 simulators and images of week-03 to week-15 (`../../week-WW/...`): copy
@@ -107,11 +109,10 @@ content); only the ILO text goes into this repo.
 - **The course project (D1)** is built in the core: Online activities 9, 10
   and 11 (form, website, post and plan for one of four given services), then
   Online activity 12 and Practice 2.
-- Units 1–2 files are not touched. Their ILO codes stay as written (Unit 1:
-  A1; Unit 2: A1, C4): the codes exist in v3, but the banner of Unit 2 now
-  shows the v3 text of C4 (the digital service). **For the teacher:** if
-  wanted, change `ilos:` to `[C1]` in `week-01/online-01.qmd` and to
-  `[A2, C1]` in the four `week-02` files (front matter only).
+- Units 1–2: only their ILO codes changed (2026-11-14, the teacher's
+  request), to the v4 table: `week-01/online-01.qmd` [A1, C1]; the three
+  `week-02` lecture files [A1, A2, B2, C1]; `week-02/online-02.qmd`
+  [A1, B2, C1]. Their content is not changed.
 
 ## The teacher's second message (2026-11-13, same day)
 
@@ -186,10 +187,8 @@ render (the tasks PDFs, Unit 2).
 
 ## For the teacher to check
 
-- **Units 1–2:** not changed. Their ILO tags (A1; A1, C4) are still the
-  old codes; with the v3 texts, Unit 2's banner shows C4 (the digital
-  service). One-line fix if wanted: `ilos: [C1]` in
-  `week-01/online-01.qmd`, `ilos: [A2, C1]` in the four `week-02` files.
+- **Units 1–2:** content not changed; ILO codes set to the v4 table
+  (2026-11-14).
 - **Tools that students need from Unit 7 on:** Microsoft Access (Windows
   only; the online tasks of Unit 7 are done on the simulators), Microsoft
   Forms (university account), a free Google account (Google Sites) and a

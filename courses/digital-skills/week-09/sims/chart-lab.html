@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Chart Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .task { font-weight: 700; margin: 4px 0 8px; }
+    .sim .bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; font-weight: 700; font-size: .9rem; }
+    .sim .bar button.on { background: var(--sim-accent); color: #fff; }
+    .sim input[type=text] { font: inherit; padding: 4px 8px; border-radius: 8px; border: 1.5px solid #ced4da; flex: 1; min-width: 160px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Chart Lab: the right chart for the question</h1>
+  <p class="note">A practice model that works like Excel: select the data, then Insert › Chart. Choose the data, the chart type and a title.</p>
+  <p class="task" id="task"></p>
+  <div class="bar" id="data"></div>
+  <div class="bar" id="type"></div>
+  <div class="bar">Title: <input type="text" id="title" value="Chart Title"></div>
+  <canvas id="c" aria-label="The chart"></canvas>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="sales-data.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const sumBy = (col) => { const m = {}; SALES.forEach((r) => (m[r[col]] = (m[r[col]] || 0) + r[4])); return m; };
+  const DATA = { day: { name: "Sales per day", m: sumBy(0) }, type: { name: "Sales per type", m: sumBy(2) } };
+  const s = { data: "type", type: "column", title: "Chart Title" };
+  const COLS = ["#D9480F", "#1c7ed6", "#2b8a3e", "#7048e8", "#e8590c"];
+  const TASKS = [
+    { q: "Task 1: Compare the three types: make a column chart of the sales per type, with a title.", ok: () => s.data === "type" && s.type === "column" && s.title.trim() && s.title !== "Chart Title" },
+    { q: "Task 2: Show how the sales change from Sunday to Thursday: choose the right data and chart.", ok: () => s.data === "day" && s.type === "line" },
+    { q: "Task 3: Show the part of each type in the total of the week (185 JD).", ok: () => s.data === "type" && s.type === "pie" },
+  ];
+  let ti = 0;
+  function tabs(id, items, key) {
+    Kit.buttons($(id), items.map(([k, label]) => ({ k, label })), (k) => { s[key] = k; tabs(id, items, key); draw(); });
+    $(id).querySelectorAll("button").forEach((b) => b.classList.toggle("on", b.dataset.k === s[key]));
+  }
+  function advice() {
+    if (s.type === "line" && s.data === "type") return ["A line joins points in time. The types have no order: use a column chart.", true];
+    if (s.type === "pie" && s.data === "day") return ["A pie shows the parts of one whole. For a change over the days, a line is clearer.", true];
+    if (s.title === "Chart Title" || !s.title.trim()) return ["Give the chart a title that says what it shows, for example “Sales per type, one week”.", true];
+    return [{ column: "A column chart compares amounts: the tallest column is the biggest.", bar: "A bar chart compares amounts, with long names on the side.", line: "A line chart shows a change over time.", pie: "A pie chart shows the parts of one whole." }[s.type], false];
+  }
+  function draw() {
+    const [t, bad] = advice();
+    let msg = t;
+    while (ti < TASKS.length && TASKS[ti].ok()) { msg = "✓ Done. " + t; ti++; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done.";
+    $("msg").textContent = msg; $("msg").classList.toggle("bad", bad && !msg.startsWith("✓"));
+    const c = cv.ctx, W = cv.W, H = cv.H, m = DATA[s.data].m, keys = Object.keys(m), vals = keys.map((k) => m[k]), max = Math.max(...vals);
+    c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+    Kit.text(c, s.title || "", W / 2, 22, 15, "#1d1b2e");
+    const L = 50, R = W - 20, T = 44, B = H - 34;
+    if (s.type === "pie") {
+      const tot = vals.reduce((a, b) => a + b, 0), cx = W / 2 - 60, cy = (T + B) / 2, r = Math.min(B - T, W / 2) / 2;
+      let a0 = -Math.PI / 2;
+      vals.forEach((v, i) => { const a1 = a0 + (v / tot) * 2 * Math.PI; c.beginPath(); c.moveTo(cx, cy); c.arc(cx, cy, r, a0, a1); c.fillStyle = COLS[i]; c.fill();
+        const am = (a0 + a1) / 2; Kit.text(c, Math.round((v / tot) * 100) + " %", cx + Math.cos(am) * r * 0.62, cy + Math.sin(am) * r * 0.62 + 4, 12, "#fff"); a0 = a1; });
+      keys.forEach((k, i) => { c.fillStyle = COLS[i]; c.fillRect(cx + r + 30, cy - 30 + i * 22, 12, 12); c.fillStyle = "#1d1b2e"; c.font = "700 12px sans-serif"; c.textAlign = "left"; c.fillText(`${k} (${m[k]} JD)`, cx + r + 48, cy - 20 + i * 22); });
+      return;
+    }
+    c.strokeStyle = "#adb5bd"; c.lineWidth = 1; c.beginPath(); c.moveTo(L, T); c.lineTo(L, B); c.lineTo(R, B); c.stroke();
+    const top = Math.ceil(max / 10) * 10;
+    for (let v = 0; v <= top; v += 10) { const y = B - (v / top) * (B - T); c.strokeStyle = "#f1f3f5"; c.beginPath(); c.moveTo(L, y); c.lineTo(R, y); c.stroke(); c.fillStyle = "#868e96"; c.font = "11px sans-serif"; c.textAlign = "right"; c.fillText(v, L - 6, y + 4); }
+    const n = keys.length, gw = (R - L) / n;
+    if (s.type === "bar") {
+      const bh = (B - T) / n;
+      keys.forEach((k, i) => { const w = (m[k] / top) * (R - L - 30); c.fillStyle = COLS[0]; c.fillRect(L + 1, T + i * bh + bh * 0.2, w, bh * 0.6);
+        c.fillStyle = "#1d1b2e"; c.font = "700 12px sans-serif"; c.textAlign = "left"; c.fillText(`${k} ${m[k]}`, L + w + 6, T + i * bh + bh * 0.55); });
+      return;
+    }
+    keys.forEach((k, i) => { c.fillStyle = "#495057"; c.font = "700 12px sans-serif"; c.textAlign = "center"; c.fillText(k, L + gw * (i + 0.5), B + 18); });
+    if (s.type === "column") {
+      keys.forEach((k, i) => { const h = (m[k] / top) * (B - T); c.fillStyle = COLS[0]; c.fillRect(L + gw * i + gw * 0.25, B - h, gw * 0.5, h); Kit.text(c, String(m[k]), L + gw * (i + 0.5), B - h - 6, 12, "#1d1b2e"); });
+    } else {
+      c.strokeStyle = COLS[1]; c.lineWidth = 3; c.beginPath();
+      keys.forEach((k, i) => { const x = L + gw * (i + 0.5), y = B - (m[k] / top) * (B - T); i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.stroke();
+      keys.forEach((k, i) => { const x = L + gw * (i + 0.5), y = B - (m[k] / top) * (B - T); c.fillStyle = COLS[1]; c.beginPath(); c.arc(x, y, 4.5, 0, 7); c.fill(); Kit.text(c, String(m[k]), x, y - 10, 12, "#1d1b2e"); });
+    }
+  }
+  const cv = Kit.canvas($("c"), (W) => Math.min(280, W * 0.6));
+  tabs("data", [["type", "Sales per type"], ["day", "Sales per day"]], "data");
+  tabs("type", [["column", "Column"], ["bar", "Bar"], ["line", "Line"], ["pie", "Pie"]], "type");
+  $("title").addEventListener("input", (e) => { s.title = e.target.value; draw(); });
+  window.addEventListener("resize", () => setTimeout(draw, 50));
+  window.CL = { set: (o) => { Object.assign(s, o); if (o.title !== undefined) $("title").value = o.title; tabs("data", [["type", "Sales per type"], ["day", "Sales per day"]], "data"); tabs("type", [["column", "Column"], ["bar", "Bar"], ["line", "Line"], ["pie", "Pie"]], "type"); draw(); } };
+  setTimeout(draw, 30);
+})();
+</script>
+</body>
+</html>

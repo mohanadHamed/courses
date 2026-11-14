@@ -1,173 +1,199 @@
 ---
-title: "The Shop Database: a Form, Queries and a Report"
-description: "Online activity · A form to read and enter records, queries with a criterion and a sort, and a report with groups and totals, on the shop database. About 40 minutes."
+title: "Data Analysis (3) with AI: Formulas, a PivotTable and What the Data Shows"
+description: "Online activity · A PivotTable gives the total of each group in a few clicks; you read what the data shows, choose a chart, and check a formula and a summary from an AI assistant. About 45 minutes."
 online: 8
 due: "before lecture 8"
 content: mix
-ilos: [C3]
+ilos: [B1, B2]
+start-files:
+  - name: training.xlsx
+    about: "the training hours of the Sunrise staff (12 rows): for the tasks"
 toc-title: "In this activity"
 format: lesson-html   # online activity: the tasks PDF is made by printing this page (homework_pdf.py)
 ---
 
 ## Before you start {.study}
 
-- **What you need:** only this page (a phone is fine). The screens show
-  Microsoft Access; Access is only on Windows computers, so the tasks use
-  the simulators.
-- **Time:** about 40 minutes. Work alone, at your own speed.
-- **How it works:** read Steps 1–3, try each simulator and answer the
-  questions: the page checks each answer at once. Then do the **Tasks to
-  submit**.
-- **What you submit:** four letters, on the university e-learning
-  platform, before lecture 8.
+- **What you need:** Excel on a computer, or Excel on the web
+  (`office.com`, with your university account), an AI assistant that the
+  university allows, and the start file below.
+- **Time:** about 45 minutes. Work alone, at your own speed.
+- **How it works:** each Step starts with a short video of Microsoft
+  Support (free, with English captions; it opens in a new tab). Then the
+  main points, the screens, a simulator and a quick check. Then do the
+  **Tasks to submit**.
+- **What you submit:** one Excel file and three letters, on the university
+  e-learning platform, before lecture 8.
+
+{{< start-files >}}
 
 ## Key terms {.study}
 
-{{< glossary db-form db-query db-criterion db-report >}}
+{{< glossary pivottable row-field value-field chart data-insight >}}
 
-## Step 1 · A form: one record at a time {.study}
+## Step 1 · The total of each group: a PivotTable {.study}
 
-- A **form** shows **one record** of a table at a time, in big boxes.
-- It is easy to read, and easy to fill in: **New record**, type, **Save**.
-- The record goes into the table behind the form.
+{{< watch title="Create a PivotTable" source="Microsoft Support" url="https://support.microsoft.com/en-us/excel/get-started/create-a-pivottable-to-analyze-worksheet-data" length="0:45" checked="2026-10-31" captions="English" >}}
 
-::: {.callout-note title="Model · The library's Books table"}
-The college library has a table **Books** (BookID, Title, Type, Pages). The
-librarian makes a form for it in two clicks, then reads the books one by
-one with the arrows.
+- A long list has many rows. You want **one total for each group** (each
+  type, each department).
+- A **PivotTable** does it in a few clicks: **Insert › PivotTable**.
+- Put the group in **Rows** and the number in **Values** (Sum).
+- Check: the **Grand Total** is the total of the whole list.
+
+::: {.callout-note title="Model · Rana's month"}
+Rana has 24 sales of March in a list. She wants the total of each type.
+She makes a PivotTable: Rows **Type**, Values **Sum of Total**. Paper 206
+JD, Drinks 71 JD, Bags 78 JD; Grand Total 355 JD.
 :::
 
-**In Access, on a computer.** The orange numbers show where to click.
+**On a computer or on the web.** The orange numbers show where to click.
 
 ::: {.screens}
-![[1]{.step-n} Click the table **Books**. [2]{.step-n} Click **Create**. [3]{.step-n} Click **Form**. The form shows record 1.](images/access-form-1.png)
+![[1]{.step-n} Click in the list, then **Insert**. [2]{.step-n} Click **PivotTable**. [3]{.step-n} Click **OK**.](images/pivot-win-1.png)
+
+![In **PivotTable Fields**: [4]{.step-n} tick the group (Type): it goes to **Rows**. [5]{.step-n} Tick the number (Total): it goes to **Values**. [6]{.step-n} Read the totals and the **Grand Total**.](images/pivot-win-2.png)
 :::
 
-{{< sim file="sims/form-lab.html" poster="sims/form-lab.png" title="Form Lab: one record at a time" height="640" >}}
+{{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" height="600" >}}
 
-::: {.callout-tip title="Try it 1 · Forms"}
-Choose the right answer.
+::: {.callout-tip title="Try it 1 · PivotTables"}
+Use Rana's month. Choose the right answer.
 
-::: {.match extra="a query|a chart"}
-What shows one record at a time, in big boxes?
-:   a form
+::: {.match extra="Values: Type|355 rows"}
+Where does the group (Type) go?
+:   Rows
 
-    Why: A form is for reading and entering one record at a time.
+    Why: Rows give one line for each type.
 
-You save a new record in the form. Where does it go?
-:   into the table
+Where does the number (Total) go?
+:   Values
 
-    Why: The form only shows the table; the data is in the table.
+    Why: Values add the numbers of each group.
+
+What is the Grand Total of Rana's month?
+:   355 JD
+
+    Why: 206 + 71 + 78 = 355: the total of the whole list.
 :::
 :::
 
-## Step 2 · Queries: a criterion and a sort {.study}
+## Step 2 · What the data shows, and a chart {.study}
 
-- A **query** shows only the records that you ask for.
-- The **criterion** goes in the **Criteria** row: `"Story"`, `>5`.
-- The **sort** goes in the **Sort** row: Ascending or Descending.
-- Click **Run** (the red !).
+{{< watch title="Create charts" source="Microsoft Support" url="https://support.microsoft.com/en-us/excel/get-started/create-a-chart-from-start-to-finish" length="0:52" checked="2026-10-31" captions="English" >}}
 
-::: {.callout-note title="Model · The stories, A to Z"}
-The librarian wants only the books of the type Story, sorted by Title. In
-Query Design: Criteria `"Story"` under Type, Sort **Ascending** under
-Title, then Run: *Desert Rain*, *The Old Bridge*.
+- Read the PivotTable: **which group is the biggest**? Which is the
+  smallest? Is one group **half** of the total?
+- A true sentence about the data, with a number, helps a manager decide.
+- A **column chart** compares the groups: click the PivotTable, then
+  **Insert › Column chart**.
+
+::: {.callout-note title="Model · What Rana's month shows"}
+Paper 206 of 355 JD: more than half of the money. So Rana orders more
+paper for April. The column of Paper in the chart is the tallest.
 :::
 
-**In Access, on a computer.** The orange numbers show where to click.
+**On a computer or on the web.** The orange numbers show where to click.
 
 ::: {.screens}
-![[1]{.step-n} Type the criterion under **Type**. [2]{.step-n} Choose the sort under **Title**. [3]{.step-n} Click **Run**.](images/access-query-1.png)
+![Click in the PivotTable. [1]{.step-n} Click **Insert**. [2]{.step-n} Click the **Column chart** button and the first chart.](images/pivot-chart-1.png)
 :::
 
-{{< sim file="sims/query-lab.html" poster="sims/query-lab.png" title="Query Lab: ask the table a question" height="640" >}}
+{{< sim file="sims/chart-lab.html" poster="sims/chart-lab.png" title="Chart Lab: the right chart for the question" height="640" >}}
 
-::: {.callout-tip title="Try it 2 · Queries"}
+::: {.callout-tip title="Try it 2 · What the data shows"}
+Rana's month: Paper 206, Drinks 71, Bags 78 JD (355 in all). Choose the
+right answer.
+
+::: {.match extra="Drinks|a pie of every sale"}
+Which type brought the most money?
+:   Paper
+
+    Why: 206 is the biggest total.
+
+Is Paper more than half of the money: yes or no?
+:   yes
+
+    Why: Half of 355 is about 178, and 206 is more.
+
+Which chart compares the three types?
+:   a column chart
+
+    Why: Columns side by side compare amounts.
+:::
+:::
+
+## Step 3 · A formula and a summary from AI, checked {.study}
+
+- An AI assistant can give you a **formula** or a **summary** of your
+  data. Copy a ready prompt with the numbers.
+- **Check** the answer: a formula in Excel (does it give the same total?),
+  each number of the summary in the PivotTable.
+- An AI summary can change a number or a name: keep only what is true.
+
+::: {.callout-note title="Model · Rana asks the AI"}
+Rana copies this prompt into an AI assistant:
+
+::: {.prompt}
+My Excel sheet has the totals of a month in C2:C4: Paper 206, Drinks 71,
+Bags 78. Give the formula for the total, and one short sentence about
+what the data shows.
+:::
+
+The AI answers `=SUM(C2:C4)` (355: right) and "Drinks brought the most
+money" (wrong: Paper, 206). Rana keeps the formula and writes the sentence
+again from her PivotTable.
+:::
+
+{{< sim file="sims/summary-check.html" poster="sims/summary-check.png" title="Summary Check: is the AI right?" height="600" >}}
+
+::: {.callout-tip title="Try it 3 · Check the AI"}
 Choose the right answer.
 
-::: {.match extra="Descending|Price < 1"}
-Which criterion shows the products of the type Drinks?
-:   Type = Drinks
+::: {.match extra="=AVERAGE(C2:C4)|keep it"}
+Which formula adds Paper, Drinks and Bags in C2:C4?
+:   =SUM(C2:C4)
 
-    Why: The criterion chooses the records of one type.
+    Why: SUM adds the cells of the range.
 
-Which sort puts the names from A to Z?
-:   Ascending
+The AI says "Drinks brought the most money". The PivotTable says Paper 206. What do you do?
+:   correct it from the PivotTable
 
-    Why: Ascending is A to Z, and small to big.
-:::
-:::
-
-## Step 3 · A report: ready to print {.study}
-
-- A **report** shows the data of a table or a query, ready to print.
-- **Create › Report** makes one in one click.
-- A report can **group** the records (by Type), **sort** them and show the
-  **total** of each group.
-
-::: {.callout-note title="Model · The library report"}
-The librarian clicks the table Books, then **Create › Report**: a page with
-all the books, their type and their pages, ready to print for the wall.
-:::
-
-**In Access, on a computer.** The orange numbers show where to click.
-
-::: {.screens}
-![[1]{.step-n} Click the table **Books**. [2]{.step-n} Click **Create**. [3]{.step-n} Click **Report**.](images/access-report-1.png)
-:::
-
-{{< sim file="sims/report-lab.html" poster="sims/report-lab.png" title="Report Lab: a report to print" height="640" >}}
-
-::: {.callout-tip title="Try it 3 · Reports"}
-Choose the right answer.
-
-::: {.match extra="a form|delete the rows"}
-The manager wants the products on paper, grouped by Type, with totals. What do you make?
-:   a report
-
-    Why: A report groups, sorts and adds totals, ready to print.
-
-The report must show the cheapest products first in each group. What do you add?
-:   a sort by Price
-
-    Why: A sort puts the records of each group in order.
+    Why: The numbers in your data are right; the AI sentence is not.
 :::
 :::
 
 ## Tasks to submit {.tasks}
 
-Use the simulators of this page (the Products table of the Sunrise shop).
-For each answer, choose A, B or C.
+Open the start file `training.xlsx`: the training hours of the Sunrise
+staff (12 rows). (Step 1 shows how.)
 
-### Task 1 · Two queries
+### Task 1 · A PivotTable
 
-Step 2 shows how.
+1. Make a PivotTable: Rows **Department**, Values **Sum of Hours**.
+2. Click the PivotTable and insert a **column chart**.
+3. Save the file as `training.xlsx`.
 
-a) In **Query Lab**, criterion **InStock = Yes**. How many records? **A**
-2 · **B** 6 · **C** 8
+*Submit:* the file `training.xlsx`.
 
-{{< answer-space lines=1 >}}
+### Task 2 · What the data shows
 
-b) In **Query Lab**, criterion **Type = Bags**, sort **Price,
-Ascending**. Which product is first? **A** Bag · **B** Lunch box · **C**
-Pen
-
-{{< answer-space lines=1 >}}
-
-### Task 2 · A report and a form
-
-Steps 1 and 3 show how.
-
-a) In **Report Lab**, group by Type and show the totals. What is the
-total of Paper? **A** 2.00 JD · **B** 4.00 JD · **C** 12.00 JD
+a) Which department has the most hours? **A** Sales · **B** Office · **C**
+Shop.
 
 {{< answer-space lines=1 >}}
 
-b) In **Form Lab**, add the Pencil (Task 2) and save it. How many records
-does the table have now? **A** 8 · **B** 9 · **C** 10
+b) Make a second PivotTable with Rows **Course**. Which sentence is true?
+**A** Safety has more hours than Word. · **B** Half of all the hours are
+Excel. · **C** Word has the most hours. (Step 2)
+
+{{< answer-space lines=1 >}}
+
+c) An AI assistant says: "Office has the most training hours." Is it
+true? **A** yes · **B** no (Step 3)
 
 {{< answer-space lines=1 >}}
 
 ## How to submit
 
-Upload your four letters, **before lecture 8**.
+Upload `training.xlsx` and your three letters, **before lecture 8**.

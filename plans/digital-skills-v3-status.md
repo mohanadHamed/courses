@@ -1,12 +1,78 @@
-# Digital Skills on syllabus v3: rewrite of Units 3–10 — status
+# Digital Skills on syllabus v4 (and v3 before it): rewrite of Units 3–11 — status
 
-**Resume here.** Branch `claude/happy-volta-gzvzrv` in both repos
-(`courses` and `courses-private`). One commit per finished unit, pushed at
-once. A new session reads this file, `courses/digital-skills/plan.md` (the
-map) and `schedule.yml`, then continues with the first unchecked item of
-"Progress".
+**Resume here.** Branch `claude/happy-volta-gzvzrv` in both repos (open
+PRs mohanadHamed/courses#37 and mohanadHamed/courses-private#6). One commit
+per finished unit, pushed at once. Read this file, `plan.md` and
+`schedule.yml`, then continue with the first unchecked item of "Progress
+(plan v5)".
 
-## The request (2026-11-13)
+## Syllabus v4 (2026-11-14): what changed
+
+The teacher merged the official description (v3) with *Smart Digital
+Skills* (Office and AI tools). New ILOs A3 (Word/Excel/PowerPoint), A4
+(services and e-marketing concepts), B2 (evaluate AI output); C2 and D1
+include AI. Rows 3–6 are Office and AI again: row 3 adds Office concepts
+(ribbon, templates, formats, saving) and "what not to share with an AI
+tool"; row 4 online is a structured Word report; row 5 is Word with AI and
+an AI-assisted CV and cover letter; row 6 is PowerPoint with AI and Canva.
+Excel moves to rows 7 and 9 (row 9 online with AI); databases are one row
+(10); the website and marketing rows add AI text and visuals, checked.
+
+**The teacher's decision:** the project is mandatory (D1), so 11 units and
+no separate project week (plan v5, `plan.md`).
+
+## Progress (plan v5)
+
+- [x] Plan: `_metadata.yml` (v4 ILOs), `schedule.yml`, `plan.md`, this file.
+- [x] Unit 3 (week-03): Lecture 3 = the Office window and ribbon (Ribbon
+      Finder) · Save, PDF, AutoSave, sharing to co-edit (Save Lab) · an
+      e-mail and a meeting (Mail Lab); Online activity 3 + what never to
+      type into an AI tool (Step 3, Task 3 b); solution; platform week 6.
+- [x] Unit 4 (week-04): Lecture 4 = formatting and styles · a table and a
+      picture · a draft from AI checked and proofread (Word AI Lab, copied
+      from week-05); Online activity 4 = cover letter and CV with AI, header,
+      page number, PDF, AI-use statement (Letter Builder, Profile Picker, CV
+      Checker; new screen word-header-1); solution; platform week 7. The
+      PowerPoint sims and screens of the old Online activity 4 stay in
+      week-04 for Unit 5.
+- [x] Unit 5 (week-06): Lecture 5 PowerPoint (from v2 Lecture 8 in git
+      history, week-09/lesson-08*; renumbered 5.x); Online activity 5 = an
+      AI outline to three slides (Outline Lab), pictures you may use and
+      their source (Picture Rights), a title graphic in Canva; sims and
+      images copied into week-06; solution; platform week 8.
+- [x] Unit 6 (week-07): Excel (1) moved from week-06 (Lecture 6, Online 6);
+      platform week 9.
+- [x] Practice 1 and Online activity 7 (week-08): review of the new 1–6
+      (no sort, rule or chart: they are in Lecture 7; an AI-draft and a
+      PowerPoint check added; Review Quiz items 14–15 replaced).
+- [x] Unit 7 (week-09): Excel (2) moved from week-07 (Lecture 7); Online
+      activity 8 = the PivotTable activity + AI formulas and summary checked
+      (Summary Check); platform week 10.
+- [x] Unit 8 (week-10): databases moved from week-09 (Lecture 8, Online 9;
+      renumbered 8.x); platform week 11.
+- [x] Unit 9 (week-11): renumbered (Lecture 9, Online 10); ILOs A4, C4.
+- [x] Unit 10 (week-12): renumbered (Lecture 10, Online 11); Online 11 drafts the Home text with AI (a prompt + the facts of the service) and checks it.
+- [x] Unit 11 (week-14): renumbered (Lecture 11); Online 12 = product
+      page, post with an AI picture checked, plan, Project Checker, three
+      slides, final submission; the old week-15 pages removed (their sims
+      stay).
+- [x] Units 9–11: sections renumbered 9.x, 10.x, 11.x (they kept the old
+      numbers after the move).
+- [x] Clean-up: NOTES, index, AUTHORING, check_size lists; private:
+      solutions renumbered (week-15 removed, Online 12 merged), platform
+      weeks 8–14, `syllabus-weeks.yml` v4 word for word.
+- [x] Final checks (check_size --all, check_figures, course_package),
+      report to the teacher.
+- [x] Units 1–2 ILO codes set to v4 (the teacher's request); new pull
+      requests for the v4 work.
+
+Rule for moving folders: the hidden face-to-face version links the old
+simulators and images of week-03 to week-15 (`../../week-WW/...`): copy
+what a moved session needs, never move or delete those files.
+
+## Plan v4 (syllabus v3, 2026-11-13): the earlier rewrite
+
+### The request (2026-11-13)
 
 The teacher rebuilt the syllabus (v3, 13/11/2026) on the **official course
 description** of the study plan: the concept of digital skills and the
@@ -43,11 +109,10 @@ content); only the ILO text goes into this repo.
 - **The course project (D1)** is built in the core: Online activities 9, 10
   and 11 (form, website, post and plan for one of four given services), then
   Online activity 12 and Practice 2.
-- Units 1–2 files are not touched. Their ILO codes stay as written (Unit 1:
-  A1; Unit 2: A1, C4): the codes exist in v3, but the banner of Unit 2 now
-  shows the v3 text of C4 (the digital service). **For the teacher:** if
-  wanted, change `ilos:` to `[C1]` in `week-01/online-01.qmd` and to
-  `[A2, C1]` in the four `week-02` files (front matter only).
+- Units 1–2: only their ILO codes changed (2026-11-14, the teacher's
+  request), to the v4 table: `week-01/online-01.qmd` [A1, C1]; the three
+  `week-02` lecture files [A1, A2, B2, C1]; `week-02/online-02.qmd`
+  [A1, B2, C1]. Their content is not changed.
 
 ## The teacher's second message (2026-11-13, same day)
 
@@ -122,10 +187,8 @@ render (the tasks PDFs, Unit 2).
 
 ## For the teacher to check
 
-- **Units 1–2:** not changed. Their ILO tags (A1; A1, C4) are still the
-  old codes; with the v3 texts, Unit 2's banner shows C4 (the digital
-  service). One-line fix if wanted: `ilos: [C1]` in
-  `week-01/online-01.qmd`, `ilos: [A2, C1]` in the four `week-02` files.
+- **Units 1–2:** content not changed; ILO codes set to the v4 table
+  (2026-11-14).
 - **Tools that students need from Unit 7 on:** Microsoft Access (Windows
   only; the online tasks of Unit 7 are done on the simulators), Microsoft
   Forms (university account), a free Google account (Google Sites) and a

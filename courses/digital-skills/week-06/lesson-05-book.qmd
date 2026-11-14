@@ -1,197 +1,221 @@
 ---
-title: "Data Analysis (1): Excel: Cells, Formulas, References and Basic Functions"
-description: "Lesson notes · The parts of a worksheet, formulas that compute by themselves, copying a formula with relative and absolute references, and the functions SUM, AVERAGE, MAX and MIN."
+title: "Digital Content (2): PowerPoint: Layouts, Themes, Pictures and Transitions"
+description: "Lesson notes · Making slides with the right layout, giving a talk one look with a theme and Designer, keeping few words on each slide and the rest in the speaker notes, and a quiet transition and animation."
 lesson: 5
-ilos: [B1]
+ilos: [A3, C2]
 format: lesson-typst
 ---
 
 ::: {.lead}
-Rana works in the *Sunrise* shop. Every evening she adds up the sales on a
-calculator, and every week she makes a mistake. Excel can do the
-calculation for her, and it does it again by itself when a number changes.
-Excel makes a **workbook** with **worksheets**; one box is a **cell**,
-for example **B3**. In this lesson you make Excel calculate: you write **formulas**,
-you copy them, and you use the first **functions**. These notes are a short
-reference: in class you do each idea in Excel, as an experiment of the
-**worksheet**.
+The *Sunrise* shop has new opening hours from 1 December. Huda, the office
+manager, must tell the whole staff at Monday's meeting, with a few slides
+on the big screen. The first try is one slide with seven long sentences in
+small black letters. Nobody at the back can read it, and everybody reads
+instead of listening. In this lesson you make clear slides in
+**PowerPoint**: you choose a **layout**, give the talk one look with a
+**theme**, keep **few words** on each slide and the rest in the **speaker
+notes**, and add a quiet **transition** and an **animation**. These notes
+are a short reference: in class you try each idea in PowerPoint, as an
+experiment of the **worksheet**.
 :::
 
 ## Key terms
 
-{{< glossary workbook worksheet cell cell-address cell-range formula formula-bar relative-reference absolute-reference fill-handle function autosum >}}
+{{< glossary slide-layout placeholder theme designer colour-contrast slide-show speaker-notes slide-transition slide-animation >}}
 
-## 6.1 Cells and formulas
+## 5.1 Slides, layouts and a theme
 
-A worksheet is a big grid. The **columns** have letters (A, B, C …) and the
-**rows** have numbers (1, 2, 3 …). Each box is a **cell** (@fig-grid).
+PowerPoint opens with a window of three parts: the slide thumbnails on the
+left, the big slide in the middle and the notes pane under it
+(@fig-window).
 
-::: {.callout-important title="Definition 6.1 — Cell address and range"}
-The **cell address** is the column letter and the row number, for example
-**B3**. A **range** is a block of cells: **B2:B4** means B2, B3 and B4.
+![The PowerPoint window and its tabs.](images/ppt-window.png){#fig-window width=100%}
+
+::: {.callout-important title="Definition 5.1 — Layout and placeholder"}
+A **layout** is the plan of a slide: where the title, the text and the
+pictures go. Each layout has **placeholders**, dashed boxes that say "Click
+to add title" or "Click to add text". You click a placeholder and type.
 :::
 
-![A small sheet of the shop. B3 is selected; the range B2:B4 holds the three prices.](images/excel-grid.png){#fig-grid width=100%}
+![Four common layouts.](images/layouts.png){#fig-layouts width=100%}
 
-- Type in a cell and press **Enter**: the cell below is selected.
-- **Text** sits on the left of a cell; **numbers** sit on the right.
-- The **formula bar** above the grid shows what is really in the cell.
+- **Home › New Slide** adds a slide; the arrow under it lets you choose the
+  layout.
+- **Home › Layout** changes the layout of the slide you are on.
+- The first slide uses **Title Slide**; most slides use **Title and
+  Content**; **Two Content** puts a list next to a picture.
+- A picture works as in Word (Lecture 4): resize it from a corner, and
+  write its alt text.
+- **File › Save As** › `shop-hours.pptx`. Press **F5** to start the slide
+  show and **Esc** to stop it.
 
-::: {.callout-note title="Example 6.1 — The shop list"}
-1. Rana types *Item*, *Price (JD)* and *Quantity* in A1, B1 and C1.
-2. Under them: Notebook 2 10, Pen 0.5 40, Bag 12 3.
-3. The price of the pen is in **B3**; the three prices are the range
-   **B2:B4**.
-:::
-
-::: {.callout-warning title="Common mistake"}
-Typing "2 JD" in a price cell. Then it is text, and Excel cannot compute
-with it. Type only the number, and write "JD" in the heading.
-:::
-
-
-### Let Excel calculate: formulas
-
-Rana wants the total of each item: price × quantity. She does not use a
-calculator. She writes a **formula** (@fig-formula).
-
-::: {.callout-important title="Definition 6.2 — Formula"}
-A **formula** starts with **=**. It uses cell addresses and the signs
-**+ − * /**. The cell shows the result; the formula bar shows the formula.
-:::
-
-![D2 has =B2\*C2. The cell shows 20.](images/formula-parts.png){#fig-formula width=100%}
-
-Excel multiplies and divides before it adds and subtracts: =2+3\*4 is 14.
-Use brackets to change the order: =(2+3)\*4 is 20.
-
-::: {.callout-note title="Example 6.2 — Total of the notebooks"}
-1. Rana clicks D2 and types **=B2\*C2**, then presses Enter.
-2. D2 shows **20** (2 × 10).
-3. She changes the price in B2 to 3. D2 changes to 30 by itself.
+::: {.callout-note title="Example 5.1 — Huda's first two slides"}
+1. Slide 1, *Title Slide*: "New shop hours", and under it "Huda, Office
+   Manager".
+2. Home › New Slide › *Title and Content*: the title "From 1 December" and
+   three points in the content placeholder.
+3. Huda saves the file as `shop-hours.pptx`.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Forgetting the =. "B2\*C2" without = is only text. Also, do not type the
-numbers (=2\*10): then the total does not change when the price changes.
+Drawing your own text boxes on a Blank slide. Then the titles jump from
+slide to slide, and Designer cannot use them. Use the placeholders of a
+layout.
 :::
 
-{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" height="560" >}}
+{{< sim file="sims/slide-builder.html" poster="sims/slide-builder.png" title="Slide Builder: one good slide" height="820" >}}
 
-*In class: Experiment 1 of the worksheet, a cell of the shop list and a formula that changes by itself.*
 
-## 6.2 Copy a formula: relative and absolute references
+### One look for the whole talk: themes and Designer
 
-Rana needs the same formula in every row. She does not type it three times.
-She **copies** it down with the **fill handle**: the small square at the
-corner of the cell (@fig-refs).
+Huda's slides are black on white. A **theme** gives all of them the same
+colours and fonts in one click (@fig-themes).
 
-::: {.callout-important title="Definition 6.3 — Relative and absolute references"}
-A **relative reference** (B2) changes when you copy the formula: in the
-next row it becomes B3. An **absolute reference** has $ signs (\$F\$1) and
-does **not** change when you copy.
+::: {.callout-important title="Definition 5.2 — Theme and Designer"}
+A **theme** is a set of colours, fonts and backgrounds for all slides
+(**Design** tab). **Designer** (**Design › Designer**, in Microsoft 365)
+suggests designs for the slide you are on; you click one to use it.
 :::
 
-![Without $, the rate cell F1 moves to F2 and F3. With \$F\$1, it stays.](images/references.png){#fig-refs width=100%}
+![One slide in three themes.](images/themes.png){#fig-themes width=100%}
 
-::: {.callout-note title="Example 6.3 — Copying the totals"}
-1. Rana selects D2 (=B2\*C2) and double-clicks the fill handle.
-2. D3 gets =B3\*C3 and D4 gets =B4\*C4. Each row uses its own price and
-   quantity.
-:::
+- **Design** tab › click a theme; the arrow on the right shows more.
+- **Variants** (next to the themes) change the colours of the same theme.
+- The text must be easy to read: dark text on a light background, or light
+  text on a dark background. This is strong **colour contrast**.
+- Designer needs an Internet connection; if it is not there, use the
+  layouts.
 
-::: {.callout-note title="Example 6.4 — One discount rate for all"}
-The discount rate (10 %) is in F1. In C2 Rana writes =B2\*F1 and copies it.
-
-1. C3 becomes =B3\*F2. F2 is empty, so the discount is 0: wrong.
-2. She writes **=B2\*\$F\$1** and copies again. Now C3 is =B3\*\$F\$1: right.
-3. When the rate changes to 20 %, all discounts change at once.
-:::
-
-::: {.callout-warning title="Common mistake"}
-Forgetting the $ for a cell that every row needs (a rate, a price, a total).
-Tip: after typing F1, press **F4**; Excel adds the $ signs.
-:::
-
-{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" height="520" >}}
-
-*In class: Experiment 2 of the worksheet, copying a formula with and without \$.*
-
-## 6.3 Ready formulas: SUM, AVERAGE, MAX, MIN
-
-Rana wants the total of the week, the average day, the best day and the
-worst day. Excel has **functions** for these (@fig-functions).
-
-::: {.callout-important title="Definition 6.4 — Function"}
-A **function** is a ready formula with a name, used on a range:
-**=SUM(B2:B6)** adds, **=AVERAGE(B2:B6)** gives the average, **=MAX(B2:B6)**
-the highest and **=MIN(B2:B6)** the lowest value.
-:::
-
-![Four functions on the sales of the week.](images/functions.png){#fig-functions width=100%}
-
-The **AutoSum** button (Σ, Home tab) writes a SUM formula for you: click the
-cell under the numbers and press Σ, then Enter.
-
-::: {.callout-note title="Example 6.5 — The week of the shop"}
-Sales: 10, 20, 30, 40 and 50 JD in B2:B6.
-
-1. =SUM(B2:B6) gives **150** JD.
-2. =AVERAGE(B2:B6) gives **30** JD per day (150 ÷ 5).
-3. =MAX(B2:B6) gives **50** (Thursday); =MIN(B2:B6) gives **10** (Sunday).
+::: {.callout-note title="Example 5.2 — A theme for the hours"}
+1. Huda clicks the Design tab and chooses an orange theme like *Sunrise*.
+2. Both slides change at once: orange titles, a light background, the same
+   font.
+3. On slide 2, Huda opens Designer and picks one of its designs.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Error values. **#DIV/0!**: the formula divides by 0 (or by an empty cell).
-**#NAME?**: a function name is wrong, for example =SUMM(B2:B6). **####**:
-the column is too narrow; make it wider.
+A different colour and font on every slide, or light grey text on a light
+background. The talk looks messy, and people at the back cannot read it.
 :::
 
-*In class: Experiment 3 of the worksheet, SUM, AVERAGE, MAX and MIN on a week of sales.*
+*In class: Experiment 1 of the worksheet, the layouts of a short talk, a new Two Content slide and a theme for the whole talk.*
 
-## Case study: the shop's week
+## 5.2 Few words on the slide, the rest in the notes
 
-Rana keeps the sales of the *Sunrise* shop in Excel. Before she presses
-Enter, she wants to know what each cell will show: a total of tea
-(=B2\*C2 with 3 JD and 4 packs), the sum and the average of a week of
-10, 20, 30, 40 and 50 JD, the formula in D3 after she copies =B2\*C2 down,
-the formula in D3 after she copies =C2\*\$F\$1 down, and a cell that divides by
-an empty cell. The Game challenge of the interactive lesson uses these
-cells. In the mini-game below you predict them.
+The slide helps the speaker; it does not replace the speaker
+(@fig-text).
 
-{{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" height="560" >}}
+::: {.callout-important title="Definition 5.3 — Few words and speaker notes"}
+Each slide has **one idea**, a short title and **3 to 5 points**, each of a
+few words (about 8 or fewer). The details are what you **say**: write them
+in the **speaker notes**, the notes pane under the slide. In the slide
+show, **Presenter View** shows the notes only to you.
+:::
+
+![Seven sentences or four short points.](images/text-amount.png){#fig-text width=100%}
+
+- The text is big enough to read from the back: about 24 pt or more.
+- **View › Notes** shows the notes pane when you do not see it.
+- Notes are short reminders, not a text to read aloud.
+
+::: {.callout-note title="Example 5.3 — From seven sentences to four points"}
+1. Huda's first slide has seven long sentences.
+2. Huda keeps four points: "Sun–Thu: 9:00–20:00", "Friday: closed",
+   "Saturday: 10:00–18:00", "From 1 December".
+3. "Tell every customer" and "Rana puts a notice on the door" go into the
+   speaker notes: they are things to say, not things on the slide.
+:::
+
+::: {.callout-warning title="Common mistake"}
+Making the font smaller so that all sentences fit. The problem is too much
+text, not a too big font.
+:::
+
+*In class: Experiment 2 of the worksheet, a slide of six long points made short, with the details in the speaker notes.*
+
+## 5.3 Movement: transitions and animations
+
+Huda's slides change with a jump, and all the points appear at once, so the
+staff read ahead. A quiet **transition** and a simple **animation** help
+the audience follow (@fig-transitions, @fig-animation).
+
+::: {.callout-important title="Definition 5.4 — Transition and animation"}
+A **transition** is the way one slide changes to the next in the slide show
+(**Transitions** tab: Fade, Push, Wipe …). An **animation** makes one thing
+on a slide appear or move (**Animations** tab: Appear, Fade …).
+:::
+
+![Transitions: quiet and the same on every slide.](images/transitions.png){#fig-transitions width=100%}
+
+![An animation: the points come one by one, on a click.](images/animation-steps.png){#fig-animation width=100%}
+
+- **Transitions** tab › Fade › **Duration** 0.5–1 second › **Apply To
+  All**: the same quiet change on every slide.
+- Select the list › **Animations** tab › **Appear** or **Fade** › **Effect
+  Options › By Paragraph**: the points come one by one, on a click.
+- Use few effects: one quiet transition for the talk, and an animation only
+  where points should come one by one.
+
+::: {.callout-note title="Example 5.4 — Huda's slides move"}
+1. Huda opens the Transitions tab, clicks **Fade**, sets 0.7 seconds and
+   clicks **Apply To All**.
+2. On slide 2, she selects the three points and clicks **Animations ›
+   Fade**, then **Effect Options › By Paragraph**.
+3. In the slide show, every click shows the next hour, and the staff listen
+   to one point at a time.
+:::
+
+::: {.callout-warning title="Common mistake"}
+A different wild transition on every slide, and points that fly and spin.
+The audience watches the effects, not the message.
+:::
+
+{{< sim file="sims/transition-lab.html" poster="sims/transition-lab.png" title="Transition Lab: transitions and animations" height="700" >}}
+
+*In class: Experiment 3 of the worksheet, one Fade for every slide, and three points that appear one by one.*
+
+## Case study: Slide Doctor
+
+Huda's colleagues send slides for the Monday meeting, and each slide has
+one problem: seven long sentences, light grey text on light blue, a photo of
+the shop that is too tall and thin, a photo without alt text, and a
+"Thank you!" slide in the wrong layout. The Game challenge of the
+interactive lesson uses these slides. In the mini-game below you choose the
+best fix for each one.
+
+{{< sim file="sims/slide-doctor.html" poster="sims/slide-doctor.png" title="Slide Doctor: fix the slide" kind="game" height="620" >}}
 
 ## Further reading
 
-Microsoft Support, "Overview of formulas in Excel" and "Switch between
-relative and absolute references" (support.microsoft.com). Evans, Martin
-and Poatsy, *Technology in Action*, 18th ed., the chapter on productivity
-software (spreadsheets).
+Microsoft Support, "Create a presentation in PowerPoint", "Apply a theme
+to your presentation", "Add, change, or remove transitions between
+slides", "Animate text or objects" and "Add speaker notes to your slides"
+(support.microsoft.com).
 
 ## Exercises
 
-1. What is in cell C4: which column and which row?
-2. Write the range of the cells A2, A3, A4, A5 and A6.
-3. B2 = 6 and C2 = 5. What does =B2\*C2 show?
-4. What does =2+3\*4 give? And =(2+3)\*4?
-5. Why must a formula start with =?
-6. You copy =B2\*C2 from D2 to D5. What is in D5?
-7. You copy =B2\*\$F\$1 from C2 to C4. What is in C4?
-8. Sales 5, 10, 15, 20 in B2:B5. What do SUM and AVERAGE give?
-9. A cell shows #NAME?. What is a likely reason?
-10. What does the Σ button do?
+1. What is a layout?
+2. What is a placeholder?
+3. Which layout fits the first slide of a talk?
+4. Where do you choose a theme?
+5. Why is light grey text on a light background a problem?
+6. How many points should a slide have?
+7. Where do you write what you will say?
+8. What is a transition? On which tab is it?
+9. What is an animation? Give one example.
+10. Which button gives every slide the same transition?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. Column C, row 4.
-2. A2:A6.
-3. 30.
-4. 14; 20.
-5. Without =, Excel takes it as text.
-6. =B5\*C5.
-7. =B4\*\$F\$1.
-8. SUM 50; AVERAGE 12.5.
-9. A wrong function name, for example SUMM.
-10. AutoSum: it writes a SUM formula for the numbers above or beside the cell.
+1. The plan of a slide: where the title, the text and the pictures go.
+2. A dashed box of a layout where you click and type or add a picture.
+3. Title Slide.
+4. On the Design tab.
+5. The contrast is weak: people at the back cannot read it.
+6. About 3 to 5 short points.
+7. In the speaker notes, the notes pane under the slide.
+8. The way one slide changes to the next in the slide show; the Transitions tab.
+9. An effect that makes one thing on a slide appear or move; for example, the points of a list appear one by one.
+10. Apply To All.
 :::

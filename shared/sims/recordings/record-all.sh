@@ -179,12 +179,12 @@ meeting-planner|courses/digital-skills/week-03/sims/meeting-planner.html|10|cour
 team-desk|courses/digital-skills/week-03/sims/team-desk.html|9|courses/digital-skills/week-03/sims/team-desk.gif
 password-check|courses/digital-skills/week-03/sims/password-check.html|9|courses/digital-skills/week-03/sims/password-check.gif
 review-quiz|courses/digital-skills/week-08/sims/review-quiz.html|8|courses/digital-skills/week-08/sims/review-quiz.gif
-field-lab|courses/digital-skills/week-09/sims/field-lab.html|9|courses/digital-skills/week-09/sims/field-lab.gif
-key-lab|courses/digital-skills/week-09/sims/key-lab.html|9|courses/digital-skills/week-09/sims/key-lab.gif
-query-lab|courses/digital-skills/week-09/sims/query-lab.html|9|courses/digital-skills/week-09/sims/query-lab.gif
-data-desk|courses/digital-skills/week-09/sims/data-desk.html|9|courses/digital-skills/week-09/sims/data-desk.gif
-form-lab|courses/digital-skills/week-09/sims/form-lab.html|9|courses/digital-skills/week-09/sims/form-lab.gif
-report-lab|courses/digital-skills/week-09/sims/report-lab.html|9|courses/digital-skills/week-09/sims/report-lab.gif
+field-lab|courses/digital-skills/week-10/sims/field-lab.html|9|courses/digital-skills/week-10/sims/field-lab.gif
+key-lab|courses/digital-skills/week-10/sims/key-lab.html|9|courses/digital-skills/week-10/sims/key-lab.gif
+query-lab|courses/digital-skills/week-10/sims/query-lab.html|9|courses/digital-skills/week-10/sims/query-lab.gif
+data-desk|courses/digital-skills/week-10/sims/data-desk.html|9|courses/digital-skills/week-10/sims/data-desk.gif
+form-lab|courses/digital-skills/week-10/sims/form-lab.html|9|courses/digital-skills/week-10/sims/form-lab.gif
+report-lab|courses/digital-skills/week-10/sims/report-lab.html|9|courses/digital-skills/week-10/sims/report-lab.gif
 service-sorter|courses/digital-skills/week-11/sims/service-sorter.html|9|courses/digital-skills/week-11/sims/service-sorter.gif
 service-planner|courses/digital-skills/week-11/sims/service-planner.html|9|courses/digital-skills/week-11/sims/service-planner.gif
 form-builder|courses/digital-skills/week-11/sims/form-builder.html|9|courses/digital-skills/week-11/sims/form-builder.gif
@@ -200,7 +200,7 @@ product-page-lab|courses/digital-skills/week-14/sims/product-page-lab.html|9|cou
 picture-rights|courses/digital-skills/week-14/sims/picture-rights.html|9|courses/digital-skills/week-14/sims/picture-rights.gif
 plan-builder|courses/digital-skills/week-14/sims/plan-builder.html|9|courses/digital-skills/week-14/sims/plan-builder.gif
 market-desk|courses/digital-skills/week-14/sims/market-desk.html|9|courses/digital-skills/week-14/sims/market-desk.gif
-project-checker|courses/digital-skills/week-15/sims/project-checker.html|9|courses/digital-skills/week-15/sims/project-checker.gif
+project-checker|courses/digital-skills/week-14/sims/project-checker.html|9|courses/digital-skills/week-14/sims/project-checker.gif
 phish-finder|courses/digital-skills/week-03/sims/phish-finder.html|9|courses/digital-skills/week-03/sims/phish-finder.gif
 format-lab|courses/digital-skills/week-04/sims/format-lab.html|9|courses/digital-skills/week-04/sims/format-lab.gif
 style-lab|courses/digital-skills/week-04/sims/style-lab.html|9|courses/digital-skills/week-04/sims/style-lab.gif

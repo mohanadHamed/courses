@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Profile Picker</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .pad button { text-align: left; font-weight: 700; }</style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Profile Picker: the best lines for a CV</h1>
+  <p class="hint">Sami (a made-up student) asked an AI tool for parts of his CV. Sami's facts: first-year diploma student; summer job in a shop (2025); Word, Excel, helping customers; Arabic and English. Choose the best version each time.</p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const C = (list) => list.map((t, i) => ({ k: String(i), label: t }));
+  const rounds = [
+    { goal: "The <b>profile</b> (2–3 sentences at the top).", answer: "1",
+      choices: C(["I am the best student in Jordan and I can do any job perfectly.", "A first-year diploma student who is careful and friendly, with summer work in a shop and good Word and Excel skills.", "Hello! My name is Sami and I like football, food and films and many other things.", "Student."]),
+      good: "True, short and useful for the reader: who Sami is and what he can do.",
+      why: { "0": "Too big and not true: nobody can check “the best in Jordan”.", "2": "Football and food do not help the reader decide.", "3": "One word says nothing about Sami." } },
+    { goal: "The <b>experience</b> line.", answer: "2",
+      choices: C(["Manager of a big shop, 2019 – 2024.", "Worked.", "Shop assistant, Sunrise Company shop, summer 2025: helped customers and arranged the shelves.", "Many jobs in many places."]),
+      good: "The real job, the place, the time and two tasks.",
+      why: { "0": "Invented: Sami was a child in 2019. Never invent a job.", "1": "Where? When? What did he do?", "3": "Not clear and not checkable." } },
+    { goal: "The <b>skills</b> line.", answer: "0",
+      choices: C(["Word, Excel, helping customers", "Expert in Python, Java and hacking", "Everything", "Microsoft"]),
+      good: "Only the skills Sami really has, named clearly.",
+      why: { "1": "Sami never learned programming; “hacking” is a bad word for a CV.", "2": "Nobody can do everything: name real skills.", "3": "Microsoft is a company, not a skill: name the apps." } },
+    { goal: "The <b>contact details</b>.", answer: "3",
+      choices: C(["Sami Odeh · ID 9981234567 · born 3/3/2007", "Sami · my home: building 4, flat 12, Garden Street", "no contact details", "Sami Odeh · sami.odeh@example.com · Amman"]),
+      good: "Name, e-mail and city are enough. No ID number, no full home address.",
+      why: { "0": "An ID number does not belong in a CV.", "1": "A full home address is not needed; the city is enough.", "2": "Then the company cannot answer Sami." } },
+  ];
+  Kit.game({ rounds, cols: 1, colsPhone: 1, animMs: 500, intro: "Round 1: the profile at the top of Sami's CV." });
+})();
+</script>
+</body>
+</html>

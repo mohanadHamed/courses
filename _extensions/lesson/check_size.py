@@ -205,7 +205,7 @@ APP_STEP_RE = re.compile(r"\b(tap|taps|click|clicks|press|presses|open the \w+ a
 # they are next written or rewritten (AUTHORING.md, "Way of working"): take
 # each one out of this set then, and empty it at the start of next semester.
 BEFORE_SCREENS = {
-    "courses/digital-skills/week-06/online-05.qmd",
+    "courses/digital-skills/week-07/online-06.qmd",
 }
 # The picture is in the activity that asks about it (AUTHORING.md, "Try it",
 # the teacher's request of 2026-11-10): the points that the questions name

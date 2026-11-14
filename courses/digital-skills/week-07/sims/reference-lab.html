@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Reference Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .task { font-weight: 700; margin: 4px 0 8px; } .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; } .sim .fx { font-weight: 700; color: #1864ab; font-variant-numeric: tabular-nums; }</style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Reference Lab: copy a formula with $</h1>
+  <p class="note">The discount rate is in one cell, F1. Every row must use F1. Watch what happens to the formulas when you copy them down.</p>
+  <p class="task" id="task"></p>
+  <div id="sheet"></div>
+  <p class="fx" id="fx"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="../../../../shared/sims/mini-sheet.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const say = (t, cls = "") => { $("msg").textContent = t; $("msg").className = "message " + cls; };
+  const data = { A1: "Item", B1: "Price (JD)", C1: "Discount (JD)", E1: "Rate", F1: 0.1, A2: "Notebook", B2: 20, A3: "Lamp", B3: 15, A4: "Chair", B4: 40, A5: "Desk", B5: 90 };
+  const locked = ["A1", "B1", "C1", "E1", "A2", "B2", "A3", "B3", "A4", "B4", "A5", "B5"];
+  const tasks = [
+    { q: "In C2, write the discount: =B2*F1. Then copy C2 down. What goes wrong?", check: (s) => /^=B3\*F2$|^=F2\*B3$/.test(s.formula("C3")), ok: "C3 became =B3*F2: F1 moved down to F2, which is empty, so the discount is 0." },
+    { q: "Fix it: in C2 write =B2*$F$1 (the $ keeps F1), then copy down again.", check: (s) => /^=B5\*\$F\$1$|^=\$F\$1\*B5$/.test(s.formula("C5")), ok: "C5 = B5*$F$1: B moved with the row, $F$1 stayed. The desk gets 9 JD." },
+    { q: "Change the rate in F1 to 0.2 (20 %). Watch all discounts.", check: (s) => s.value("F1") === 0.2 && Math.abs(s.value("C5") - 18) < 1e-9, ok: "One change in F1, and every row uses the new rate: the desk now gets 18 JD." },
+  ];
+  const sheet = MiniSheet.create($("sheet"), {
+    rows: 6, cols: 6, data, locked, widths: { A: 100 }, select: "C2", bold: ["A1", "B1", "C1", "E1"], formats: { F1: "%" },
+    taskEl: $("task"), say, tasks, onTask: (t) => { say("✓ " + t.ok, "good"); Kit.good(); },
+    onChange: (s) => { $("fx").textContent = "Formulas in column C: " + ["C2", "C3", "C4", "C5"].map((a) => `${a}: ${s.raw(a) || "—"}`).join(" · "); },
+  });
+  const btn = Kit.el("button", { type: "button", class: "ghost", id: "down" }, "Copy down ⇩");
+  btn.addEventListener("click", () => { if (sheet.sel[0] !== "C") { say("Tap C2 first, then copy down."); return; } sheet.copyDown(); });
+  sheet.tools.appendChild(btn);
+  window.RLab = sheet;
+  $("fx").textContent = "Formulas in column C: —";
+  say("Tap C2 and type =B2*F1, then press Copy down.");
+})();
+</script>
+</body>
+</html>

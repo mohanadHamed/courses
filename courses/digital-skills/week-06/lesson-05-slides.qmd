@@ -1,114 +1,114 @@
 ---
-title: "Data Analysis (1): Excel: Cells, Formulas, References and Basic Functions"
+title: "Digital Content (2): PowerPoint: Layouts, Themes, Pictures and Transitions"
 subtitle: "Lecture 5"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary cell-address cell-range formula formula-bar relative-reference absolute-reference function autosum >}}
+{{< glossary slide-layout placeholder theme colour-contrast slide-show speaker-notes slide-transition slide-animation >}}
 
-## Cells and formulas
-
-:::: {.columns}
-::: {.column width="50%"}
-- A cell address is a column letter and a row number, like B3, and a range is like B2:B4.
-- A formula starts with = and uses addresses, like =B2\*C2.
-- The cell shows the result, and the formula bar shows the formula.
-- Excel multiplies and divides before it adds, so =2+3\*4 gives 14.
-:::
-::: {.column width="50%"}
-![](images/formula-parts.png)
-:::
-::::
-
-## Live demo · Formula Lab
-
-{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" task="**Show:** type =B2\*C2 in D2, then change the price in B2. **Ask:** why did D2 change by itself?" answer="The formula uses the address B2, not the number: when B2 changes, Excel calculates D2 again." >}}
-
-## Try it 1 · Cells and formulas
-
-a) Which range holds A2, A3, A4, A5 and A6?
-b) B2 = 6 and C2 = 5. What does =B2\*C2 show?
-c) What does =(2+3)\*4 give?
-
-::: {.answer}
-a) A2:A6
-b) 30
-c) 20
-:::
-
-## Copy a formula: relative and absolute
+## Slides, layouts and a theme
 
 :::: {.columns}
 ::: {.column width="50%"}
-- The fill handle copies a formula down to the next rows.
-- A relative reference like B2 moves when you copy: in the next row it is B3.
-- An absolute reference like \$F\$1 stays the same when you copy.
-- You use \$ for a cell that every row needs, like a rate, and F4 adds it.
+- A layout is the plan of a slide, and its placeholders are boxes where you click and type.
+- The first slide is a Title Slide, and most slides are Title and Content.
+- A theme gives all the slides the same colours, fonts and background.
+- Dark text on a light background, or light on dark, is easy to read.
 :::
 ::: {.column width="50%"}
-![](images/references.png)
+![](images/layouts.png)
 :::
 ::::
 
-## Live demo · Reference Lab
+## Live demo · Slide Builder
 
-{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" task="**Show:** copy =B2\*F1 down and look at the zeros, then copy =B2\*\$F\$1 down. **Ask:** which part of the formula stayed the same?" answer="$F$1: the $ signs make it absolute, so it stays; B2 moves one row down for each row." >}}
+{{< sim file="sims/slide-builder.html" poster="sims/slide-builder.png" title="Slide Builder: one good slide" task="**Show:** choose Title and Content, write a short title and three short points, then a theme. **Ask:** why use the placeholders and not your own text boxes?" answer="The placeholders belong to the layout, so the theme and Designer place and style the text for you." >}}
 
-## Try it 2 · References
+## Try it 1 · Layouts and themes
 
-a) D2 has =B2\*C2. You copy it to D3. Which formula is in D3?
-b) D2 has =C2\*\$F\$1. You copy it to D3. Which formula is in D3?
-c) Which key adds the \$ signs after you type F1?
+a) What is the dashed box "Click to add title"?
+b) Which layout puts a list next to a picture?
+c) What changes when you click a theme?
 
 ::: {.answer}
-a) =B3\*C3
-b) =C3\*\$F\$1
-c) F4
+a) a placeholder
+b) Two Content
+c) the colours and fonts of all the slides
 :::
 
-## Ready formulas: SUM, AVERAGE, MAX, MIN
+## Few words, and the rest in the notes
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A function is a ready formula with a name and a range, like =SUM(B2:B6).
-- AVERAGE gives the average, MAX the largest and MIN the smallest value.
-- AutoSum (Σ) writes =SUM for the numbers above the cell.
-- A wrong name like =SUMM shows the error #NAME?.
+- A slide has one idea, a short title and 3 to 5 points.
+- Each point has about 8 words or fewer.
+- The details that you say go in the speaker notes.
+- In the slide show, only the speaker sees the notes.
 :::
 ::: {.column width="50%"}
-![](images/functions.png)
+![](images/text-amount.png)
 :::
 ::::
 
-## Try it 3 · Functions
+## Try it 2 · Few words and notes
 
-a) The sales of a week are 12, 18, 25, 15 and 30 JD. What does =SUM give?
-b) What does =AVERAGE give for the same week?
-c) What does =MAX give for the same week?
+a) How many points should a slide have?
+b) Where do you write what you will say?
+c) Who sees the speaker notes in the slide show?
 
 ::: {.answer}
-a) 100
-b) 20
-c) 30
+a) 3 to 5
+b) in the speaker notes
+c) only the speaker
+:::
+
+## Movement: transitions and animations
+
+:::: {.columns}
+::: {.column width="50%"}
+- A transition is the move from one slide to the next.
+- You use one quiet transition, the same on every slide: Apply To All.
+- An animation moves one thing, and By Paragraph shows the points one by one.
+- Loud effects like Spin pull the eyes away from the message.
+:::
+::: {.column width="50%"}
+![](images/transitions.png)
+:::
+::::
+
+## Live demo · Transition Lab
+
+{{< sim file="sims/transition-lab.html" poster="sims/transition-lab.png" title="Transition Lab: transitions and animations" task="**Show:** try Fade, then Spin, then an animation By Paragraph. **Ask:** which one fits a work talk?" answer="A quiet Fade on every slide, and By Paragraph for the points: Spin pulls the eyes away from the message." >}}
+
+## Try it 3 · Transitions and animations
+
+a) Which button gives every slide the same transition?
+b) You want the points of a list to come one by one. What do you add?
+c) Why not Spin or Vortex in a work talk?
+
+::: {.answer}
+a) Apply To All
+b) an animation, By Paragraph
+c) They pull the eyes away from the message.
 :::
 
 ## Summary
 
-- A cell address is a column and a row, and a range is written like B2:B6.
-- A formula starts with = and changes by itself when a cell changes.
-- Copying moves relative references, but not absolute ones with \$.
-- SUM, AVERAGE, MAX and MIN work on a range.
-- An error value like #NAME? tells you what to fix.
+- A layout plans a slide, and you type in its placeholders.
+- A theme gives the whole talk one look, with a strong contrast.
+- A slide has 3 to 5 short points, and the details go in the notes.
+- One quiet transition on every slide is enough.
+- By Paragraph shows the points one by one, and F5 starts the show.
 
 ## Your worksheet
 
 :::: {.columns}
 ::: {.column width="50%"}
 - In the computer lab, do the three experiments of the worksheet alone.
-- Part A is in Excel, with the start file shop-start.xlsx.
-- Part B is on a simulator or the game The Shop's Week: scan its QR code or click its link.
+- Part A is in PowerPoint, with the start file talk-start.pptx.
+- Part B is on a simulator or the game Slide Doctor: scan its QR code or click its link.
 - Write your result after each step, and fill in the table at the end.
 :::
 ::: {.column width="50%"}
@@ -121,25 +121,25 @@ c) 30
 Which results do you have in your table?
 
 ::: {.reveal}
-- Experiment 1: The pen's price is in B3, D2 shows 20, and 30 when the price is 3.
-- Experiment 2: E3 shows 0 with =D2\*F1, and E4 shows 3.6 with =D4\*\$F\$1.
-- Experiment 3: SUM 100, AVERAGE 20, MAX 30 and MIN 12, and =SUMM shows #NAME?.
+- Experiment 1: Slide 1 is a Title Slide, the Two Content slide has 3 placeholders, and a theme changes all the slides.
+- Experiment 2: Slide 2 had 6 points, and the short points stay on the slide with the details in the notes.
+- Experiment 3: A star marks every slide with a transition, and the points come on clicks 1, 2 and 3.
 :::
 
-## Game challenge · The Shop's Week
+## Game challenge · Slide Doctor
 
-{{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" task="**The story:** Rana keeps the sales of the Sunrise shop in Excel and predicts each cell before she presses Enter. **Play:** choose what each cell will show, or which formula a copy makes." >}}
+{{< sim file="sims/slide-doctor.html" poster="sims/slide-doctor.png" title="Slide Doctor: fix the slide" kind="game" task="**The story:** Huda's colleagues send slides for the Monday meeting, and each one has a problem. **Play:** choose the best fix for each slide." >}}
 
-## Try it 4 · Copy and errors (harder)
+## Try it 4 · Fix the slide (harder)
 
-The facts: D2 has =C2\*\$F\$1, the week of sales is 10, 20, 30, 40 and 50 JD, and B2 is empty.
+The facts: one slide has seven long sentences, and the shop photo looks tall and thin. The detail "Rana puts a notice on the door" is on a slide.
 
-a) Rana copies D2 to D3. Which formula is in D3?
-b) What does AVERAGE give for the week?
-c) What does =A2/B2 show when B2 is empty?
+a) What is the best fix for a slide with seven long sentences?
+b) What went wrong with the shop photo that looks tall and thin?
+c) Where does "Rana puts a notice on the door" go?
 
 ::: {.answer}
-a) =C3\*\$F\$1
-b) 30
-c) #DIV/0!
+a) Keep a few short points and say the rest.
+b) It was stretched with a side handle.
+c) in the speaker notes
 :::

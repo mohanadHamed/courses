@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Word AI Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }
+    .sim .win { border: 1.5px solid #ced4da; border-radius: 10px; overflow: hidden; }
+    .sim .ribbon { background: #fff4e6; padding: 6px 10px; font-weight: 800; color: #D9480F; font-size: .9rem; border-bottom: 1px solid #ffd8a8; }
+    .sim .body { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+    @media (max-width: 600px) { .sim .body { grid-template-columns: 1fr; } }
+    .sim .doc { padding: 12px 14px; background: #fff; font-size: .92rem; line-height: 1.45; border-right: 1px solid #f1f3f5; }
+    .sim .doc h3 { margin: 0 0 6px; font-size: 1rem; }
+    .sim .pane { padding: 10px 12px; background: #f8f9fa; }
+    .sim .tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+    .sim .tabs button { padding: 6px 2px; font-size: .85rem; }
+    .sim .prompt { margin: 8px 0; font-size: .85rem; background: #fff; border: 1px dashed #ffc078; border-radius: 8px; padding: 6px 8px; }
+    .sim .out { background: #fff; border: 1.5px solid #e3dcd5; border-radius: 10px; padding: 8px 10px; line-height: 1.5; }
+    .sim .out span.s { cursor: pointer; border-radius: 4px; padding: 0 2px; }
+    .sim .out span.s:hover { background: #fff3bf; }
+    .sim .out span.s.found { background: #ffe3e3; text-decoration: line-through; }
+    .sim .out span.s.ok { background: #d3f9d8; }
+    .sim .out[dir="rtl"] { font-family: "Noto Naskh Arabic", "Segoe UI", sans-serif; font-size: 1.05rem; }
+    .sim .ins { margin-top: 8px; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Word AI Lab: draft, sum up, rewrite, translate</h1>
+  <p class="note">A practice model with prepared answers. Nothing is sent to the Internet. Each AI answer has <b>one mistake</b>: compare it with the memo and tap the wrong part.</p>
+  <div class="win">
+    <div class="ribbon">Word · Memo.docx · AI assistant ▸</div>
+    <div class="body">
+      <div class="doc" id="doc"></div>
+      <div class="pane"><div class="tabs" id="tabs"></div><div class="prompt" id="prompt"></div><div class="out" id="out"></div>
+        <button type="button" class="ins" id="ins" disabled>Insert into the document</button></div>
+    </div>
+  </div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const MEMO = `<h3>Memo to all staff</h3><p>From: Huda, Office Manager · 12 November</p>
+    <p>The office will close early on <b>Thursday, 20 November, at 1 pm</b>, because of the yearly cleaning. Please save your work and turn off your computers before you leave.</p>
+    <p>The <b>shop stays open until 6 pm</b> as usual. Staff who work in the shop must come to the office door at <b>5 pm</b> to pick up the new price list.</p>
+    <p>If you have questions, call Huda on extension 214.</p>`;
+  // Each job: the prompt, the parts of the answer [text, wrong?, why], and the fixed text.
+  const JOBS = {
+    Draft: { prompt: "Write a short e-mail to our customers: the office closes early on Thursday 20 November at 1 pm. Polite, 3 sentences.",
+      parts: [["Dear customers, our office will close early on Thursday, 20 November, at 1 pm.", 0], [" Our shop will also close at 1 pm on that day.", 1, "The memo says the shop stays open until 6 pm. The AI added a wrong fact."], [" Thank you for your understanding.", 0]],
+      fix: "Dear customers, our office will close early on Thursday, 20 November, at 1 pm. Our shop stays open until 6 pm. Thank you for your understanding." },
+    "Sum up": { prompt: "Sum up the memo in 3 short points.",
+      parts: [["• The office closes at 1 pm on Thursday, 20 November.", 0], [" • Staff save their work and turn off their computers.", 0], [" • Shop staff pick up the price list at 3 pm.", 1, "The memo says 5 pm, not 3 pm. A summary can change a number."]],
+      fix: "• The office closes at 1 pm on Thursday, 20 November. • Staff save their work and turn off their computers. • Shop staff pick up the price list at 5 pm." },
+    Rewrite: { prompt: "Rewrite in a friendly tone: “Staff who work in the shop must come to the office door at 5 pm to pick up the new price list.”",
+      parts: [["Hi shop team!", 0], [" Please come to the office door at 5 pm and pick up the new price list.", 0], [" You can also pick it up on Friday morning.", 1, "The memo says nothing about Friday. A rewrite must not add new facts."]],
+      fix: "Hi shop team! Please come to the office door at 5 pm and pick up the new price list." },
+    Translate: { prompt: "Translate into Arabic: “The office will close early on Thursday, 20 November, at 1 pm, because of the yearly cleaning.”", rtl: true,
+      parts: [["سيُغلق المكتب مبكرًا ", 0], ["يوم الثلاثاء،", 1, "الثلاثاء is Tuesday. The memo says Thursday (الخميس). Check days, dates and names in a translation."], [" 20 نوفمبر، الساعة 1 ظهرًا،", 0], [" بسبب التنظيف السنوي.", 0]],
+      fix: "سيُغلق المكتب مبكرًا يوم الخميس، 20 نوفمبر، الساعة 1 ظهرًا، بسبب التنظيف السنوي." },
+  };
+  const $ = (id) => document.getElementById(id);
+  let job = "Draft", found = {};
+  $("doc").innerHTML = MEMO;
+  function show() {
+    document.querySelectorAll("#tabs button").forEach((b) => (b.className = b.dataset.k === job ? "" : "ghost"));
+    const J = JOBS[job];
+    $("prompt").innerHTML = "<b>Prompt:</b> " + J.prompt;
+    const out = $("out"); out.innerHTML = ""; out.setAttribute("dir", J.rtl ? "rtl" : "ltr");
+    if (found[job]) { out.textContent = J.fix; $("ins").disabled = false; return; }
+    $("ins").disabled = true;
+    J.parts.forEach(([t, bad, why], i) => {
+      const s = Kit.el("span", { class: "s", "data-i": i }, t);
+      s.addEventListener("click", () => {
+        if (found[job]) return;
+        if (bad) { s.classList.add("found"); found[job] = true; $("msg").textContent = "✓ Found it. " + why + " Now the fixed text can go into the document."; $("msg").className = "message good"; Kit.good(); setTimeout(show, 1500); }
+        else { s.classList.add("ok"); $("msg").textContent = "This part is right: the memo says the same. Look for another part."; $("msg").className = "message"; Kit.beep(300, 0.1); }
+      });
+      out.appendChild(s);
+    });
+    $("msg").textContent = "Read the AI answer and the memo. Tap the part that is wrong.";
+    $("msg").className = "message";
+  }
+  Kit.buttons($("tabs"), Object.keys(JOBS).map((k) => ({ k, label: k })), (k) => { job = k; show(); });
+  $("ins").addEventListener("click", () => {
+    if (!found[job]) { $("msg").textContent = "First check the answer and find the mistake."; return; }
+    $("doc").innerHTML = MEMO + `<p style="background:#fff4e6;padding:4px 6px;border-radius:6px" dir="${JOBS[job].rtl ? "rtl" : "ltr"}">${JOBS[job].fix}</p>`;
+    const left = Object.keys(JOBS).filter((k) => !found[k]);
+    $("msg").textContent = left.length ? `Inserted. Now try: ${left.join(", ")}.` : "🎉 All four jobs are checked and inserted.";
+    $("msg").className = "message good";
+  });
+  show();
+})();
+</script>
+</body>
+</html>

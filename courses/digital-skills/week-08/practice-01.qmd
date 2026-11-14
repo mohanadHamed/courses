@@ -1,8 +1,8 @@
 ---
 title: "Review of Lectures 1–6"
-description: "Practice · A notice in Word sent as a PDF by e-mail, then a price list with tax, a sort, a rule and a chart in Excel."
+description: "Practice · A notice in Word sent as a PDF by e-mail, then a price list with tax, a total and the biggest price in Excel."
 practice: 1
-ilos: [A1, A2, B1, C1, C2]
+ilos: [A1, A2, A3, B1, B2, C1, C2]
 format: lesson-html
 ---
 
@@ -16,14 +16,16 @@ checks it at once and tells you why.
   the people who act, Cc for the people who only need to know. A PDF keeps
   the look of the page.
 - **Word:** the style Title makes a clear heading; Bold shows the key
-  fact.
+  fact. Check every fact of an AI draft.
+- **PowerPoint:** one theme, the layout Title Slide for slide 1, few words
+  on a slide.
 - **Excel:** a formula starts with =. \$F\$1 stays the same when you copy.
-  Sort, a rule and a chart answer questions about the data.
+  SUM, AVERAGE, MAX and MIN are ready formulas.
 
 ::: {.callout-tip title="Try it 1 · Recall"}
 Choose the right answer.
 
-::: {.match extra="Book1.xlsx|=B2\*F1"}
+::: {.match extra="Book1.xlsx|=B2\*F1|keep Monday|Blank"}
 Which file name is best for the price list of 3 November 2026?
 :   2026-11-03_price-list.xlsx
 
@@ -38,6 +40,16 @@ Every price is multiplied by the tax rate in F1. Which formula can Huda copy dow
 :   =B2\*\$F\$1
 
     Why: \$F\$1 stays in every row, and B2 moves down.
+
+An AI draft of the notice says "Monday". The library says Sunday. What do you do?
+:   correct it to Sunday
+
+    Why: Check every fact of an AI draft before you use it.
+
+Which layout is best for the first slide of a talk?
+:   Title Slide
+
+    Why: Slide 1 shows the title of the talk and your name.
 :::
 :::
 
@@ -131,23 +143,21 @@ A student of the club asks a question only for Huda. What does she click?
 
 Rana sells five items in the Sunrise shop: Notebook 2 JD, Pen 0.5 JD, Bag
 12 JD, Folder 1.5 JD and Bottle 4 JD. The tax rate, **10 %**, is in cell
-F1. Rana wants the price with tax of each item, the total, the most
-expensive items first and a chart.
+F1. Rana wants the price with tax of each item, the total and the most
+expensive price.
 
-![Relative and absolute references.](../week-06/images/references.png){width=100%}
+![Relative and absolute references.](../week-07/images/references.png){width=100%}
 
 ::: {.callout-note title="Activity 2 · The price list · 15 min"}
 1. Type *Item* and *Price (JD)* in A1 and B1, the five items under them,
    and 10% in F1.
 2. In C2 write the tax **=B2\*\$F\$1**, and in D2 the price with tax
    **=B2+C2**. Copy both down to row 6. In D8 write **=SUM(D2:D6)**.
-3. Sort the table by the price with tax, largest first. Make every price
-   with tax above 4 JD green with a rule.
-4. Make a column chart of the prices with tax, with a real title. Save it
-   as `prices.xlsx`.
+3. In D9 write **=MAX(D2:D6)**: the most expensive price with tax. Save
+   the file as `prices.xlsx`.
 
-*Your product:* `prices.xlsx` with the formulas, the sort, the rule and the
-chart.
+*Your product:* `prices.xlsx` with the formulas, the total and the
+biggest price.
 
 ::: {.fill answer="13.2" unit="JD" hint="The tax is 12 × 10 %; add it to 12."}
 Step 2: what is the price with tax of the Bag (12 JD)?
@@ -161,45 +171,17 @@ Step 2: what does D8 show?
 Why: 2.2 + 0.55 + 13.2 + 1.65 + 4.4 = 22 JD.
 :::
 
-::: {.order}
-Step 3: put the items in the order of the sort, largest first.
+::: {.fill answer="13.2" unit="JD" hint="The biggest price with tax in D2:D6."}
+Step 3: what does D9 show?
 
-1. Bag: 13.2 JD
-2. Bottle: 4.4 JD
-3. Notebook: 2.2 JD
-4. Folder: 1.65 JD
-5. Pen: 0.55 JD
-
-Why: Largest to smallest: the Bag is on top, and each row moves as a whole.
-:::
-
-::: {.sort}
-Step 3: the rule colours every price with tax above 4 JD. Sort the prices.
-
-Green
-:   13.2 (the Bag)
-
-    Why: 13.2 is above 4.
-
-:   4.4 (the Bottle)
-
-    Why: 4.4 is above 4.
-
-No colour
-:   2.2 (the Notebook)
-
-    Why: 2.2 is below 4.
-
-:   0.55 (the Pen)
-
-    Why: 0.55 is below 4.
+Why: MAX finds the largest value: the Bag, 13.2 JD.
 :::
 :::
 
 ::: {.callout-tip title="Try it 3 · The price list"}
 Use the price list of Activity 2. Choose the right answer.
 
-::: {.match extra="=B3\*\$F\$2|3"}
+::: {.match extra="=B3\*\$F\$2|=SUM(D2:D6)"}
 C2 has =B2\*\$F\$1. You copy it to C3. Which formula is in C3?
 :   =B3\*\$F\$1
 
@@ -210,10 +192,10 @@ What is the price with tax of the bag (12 JD, tax 10 %)?
 
     Why: The tax is 12 × 10 % = 1.2 JD, and 12 + 1.2 = 13.2 JD.
 
-How many prices with tax are greater than 4 JD?
-:   2
+Which formula gives the cheapest price with tax?
+:   =MIN(D2:D6)
 
-    Why: 13.2 and 4.4 are greater than 4; 2.2, 1.65 and 0.55 are not.
+    Why: MIN finds the smallest value: the Pen, 0.55 JD.
 :::
 :::
 
@@ -221,5 +203,6 @@ How many prices with tax are greater than 4 JD?
 
 - You can format a short notice in Word, save it with a good name and a
   PDF copy, and send it by e-mail to the right people.
-- You can make a price list with formulas, a \$ reference, a sort, a rule
-  and a chart.
+- You can make a price list with formulas, a \$ reference, SUM and MAX.
+- You check every fact of an AI draft, and you start a talk with the
+  layout Title Slide.

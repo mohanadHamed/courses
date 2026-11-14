@@ -1,114 +1,114 @@
 ---
-title: "Data Analysis (2): Sorting, Filtering, Conditional Formatting and Charts"
+title: "Data Analysis (1): Excel: Cells, Formulas, References and Basic Functions"
 subtitle: "Lecture 6"
 format: lesson-pptx
 ---
 
 ## Keywords
 
-{{< glossary sort-data filter-data conditional-formatting chart column-chart line-chart pie-chart chart-title >}}
+{{< glossary cell-address cell-range formula formula-bar relative-reference absolute-reference function autosum >}}
 
-## Sort and filter
-
-:::: {.columns}
-::: {.column width="50%"}
-- Sort puts the rows in order, by a number or by a word: Data › Sort.
-- You click one cell of the table first, so each row moves as a whole.
-- A filter shows only the rows that you need, like one type.
-- The other rows are only hidden, and Clear Filter brings them back.
-:::
-::: {.column width="50%"}
-![](images/filter.png)
-:::
-::::
-
-## Live demo · Table Lab
-
-{{< sim file="sims/table-lab.html" poster="sims/table-lab.png" title="Table Lab: sort, filter and colour the Sunrise sales" task="**Show:** sort by Total, largest first, then filter the Drinks. **Ask:** where are the other rows now?" answer="They are hidden, not deleted: Clear Filter shows all the rows again." >}}
-
-## Try it 1–2 · Sort and filter
-
-a) What happens to each row when you sort?
-b) What happens to the rows a filter does not show?
-c) How do you see all rows again?
-
-::: {.answer}
-a) It moves as a whole.
-b) They are hidden.
-c) Clear Filter
-:::
-
-## Colour by a rule
+## Cells and formulas
 
 :::: {.columns}
 ::: {.column width="50%"}
-- Conditional formatting colours cells by a rule, like Greater Than 20.
-- It is on Home › Conditional Formatting › Highlight Cells Rules.
-- The rule checks the cells again when a number changes.
-- A colour that you add by hand does not follow the numbers.
+- A cell address is a column letter and a row number, like B3, and a range is like B2:B4.
+- A formula starts with = and uses addresses, like =B2\*C2.
+- The cell shows the result, and the formula bar shows the formula.
+- Excel multiplies and divides before it adds, so =2+3\*4 gives 14.
 :::
 ::: {.column width="50%"}
-![](images/cond-format.png)
+![](images/formula-parts.png)
 :::
 ::::
 
-## Try it 3 · A colour rule
+## Live demo · Formula Lab
 
-a) Is the total 20 coloured by the rule Greater Than 20?
-b) The juice changes from 12 to 22. What happens to its cell?
-c) Where is conditional formatting?
+{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" task="**Show:** type =B2\*C2 in D2, then change the price in B2. **Ask:** why did D2 change by itself?" answer="The formula uses the address B2, not the number: when B2 changes, Excel calculates D2 again." >}}
+
+## Try it 1 · Cells and formulas
+
+a) Which range holds A2, A3, A4, A5 and A6?
+b) B2 = 6 and C2 = 5. What does =B2\*C2 show?
+c) What does =(2+3)\*4 give?
 
 ::: {.answer}
-a) no
-b) It turns green by itself.
-c) Home › Conditional Formatting
+a) A2:A6
+b) 30
+c) 20
 :::
 
-## Show it as a picture: charts
+## Copy a formula: relative and absolute
 
 :::: {.columns}
 ::: {.column width="50%"}
-- A column chart compares amounts, like the sales of three types.
-- A line chart shows a change over time, like Sunday to Thursday.
-- A pie chart shows the parts of one whole.
-- Every chart gets a real title that says what it shows.
+- The fill handle copies a formula down to the next rows.
+- A relative reference like B2 moves when you copy: in the next row it is B3.
+- An absolute reference like \$F\$1 stays the same when you copy.
+- You use \$ for a cell that every row needs, like a rate, and F4 adds it.
 :::
 ::: {.column width="50%"}
-![](images/chart-types.png)
+![](images/references.png)
 :::
 ::::
 
-## Live demo · Chart Lab
+## Live demo · Reference Lab
 
-{{< sim file="sims/chart-lab.html" poster="sims/chart-lab.png" title="Chart Lab: the right chart for the question" task="**Show:** make a column chart of the types with a title, then a chart of the days. **Ask:** which chart shows the change from Sunday to Thursday?" answer="A line chart: a line shows a change over time." >}}
+{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" task="**Show:** copy =B2\*F1 down and look at the zeros, then copy =B2\*\$F\$1 down. **Ask:** which part of the formula stayed the same?" answer="$F$1: the $ signs make it absolute, so it stays; B2 moves one row down for each row." >}}
 
-## Try it 4 · Which chart?
+## Try it 2 · References
 
-a) You compare Paper, Drinks and Bags. Which chart do you make?
-b) You show the part of each type in the 185 JD. Which chart do you make?
-c) You compare the sales of five shops in one month. Which chart do you make?
+a) D2 has =B2\*C2. You copy it to D3. Which formula is in D3?
+b) D2 has =C2\*\$F\$1. You copy it to D3. Which formula is in D3?
+c) Which key adds the \$ signs after you type F1?
 
 ::: {.answer}
-a) a column chart
-b) a pie chart
-c) a column chart
+a) =B3\*C3
+b) =C3\*\$F\$1
+c) F4
+:::
+
+## Ready formulas: SUM, AVERAGE, MAX, MIN
+
+:::: {.columns}
+::: {.column width="50%"}
+- A function is a ready formula with a name and a range, like =SUM(B2:B6).
+- AVERAGE gives the average, MAX the largest and MIN the smallest value.
+- AutoSum (Σ) writes =SUM for the numbers above the cell.
+- A wrong name like =SUMM shows the error #NAME?.
+:::
+::: {.column width="50%"}
+![](images/functions.png)
+:::
+::::
+
+## Try it 3 · Functions
+
+a) The sales of a week are 12, 18, 25, 15 and 30 JD. What does =SUM give?
+b) What does =AVERAGE give for the same week?
+c) What does =MAX give for the same week?
+
+::: {.answer}
+a) 100
+b) 20
+c) 30
 :::
 
 ## Summary
 
-- Sort puts whole rows in order, and a filter hides the rows you do not need.
-- A filter never deletes rows, and Clear Filter shows them again.
-- A colour rule checks the cells again when the numbers change.
-- Columns compare, a line shows change over time, and a pie shows parts of a whole.
-- Every chart needs a real title.
+- A cell address is a column and a row, and a range is written like B2:B6.
+- A formula starts with = and changes by itself when a cell changes.
+- Copying moves relative references, but not absolute ones with \$.
+- SUM, AVERAGE, MAX and MIN work on a range.
+- An error value like #NAME? tells you what to fix.
 
 ## Your worksheet
 
 :::: {.columns}
 ::: {.column width="50%"}
-- In the computer lab, do the four experiments of the worksheet alone.
-- Part A is in Excel, with the start file sales-start.xlsx.
-- Part B is on a simulator: scan its QR code, or click its link.
+- In the computer lab, do the three experiments of the worksheet alone.
+- Part A is in Excel, with the start file shop-start.xlsx.
+- Part B is on a simulator or the game The Shop's Week: scan its QR code or click its link.
 - Write your result after each step, and fill in the table at the end.
 :::
 ::: {.column width="50%"}
@@ -121,26 +121,25 @@ c) a column chart
 Which results do you have in your table?
 
 ::: {.reveal}
-- Experiment 1: The bag of Wednesday, 48 JD, is on top, and the water of Sunday at the bottom.
-- Experiment 2: Paper has 4 rows and a Sum of 77, and Clear Filter shows all 10 rows.
-- Experiment 3: The rule colours 24, 30 and 48, and the juice with 22 gets the colour by itself.
-- Experiment 4: Paper has the highest column, and the pie shows 77, 51 and 72 of 200 JD.
+- Experiment 1: The pen's price is in B3, D2 shows 20, and 30 when the price is 3.
+- Experiment 2: E3 shows 0 with =D2\*F1, and E4 shows 3.6 with =D4\*\$F\$1.
+- Experiment 3: SUM 100, AVERAGE 20, MAX 30 and MIN 12, and =SUMM shows #NAME?.
 :::
 
-## Game challenge · Rana's Questions
+## Game challenge · The Shop's Week
 
-{{< sim file="sims/ranas-questions.html" poster="sims/ranas-questions.png" title="Rana's Questions: the right Excel tool" kind="game" task="**The story:** Huda asks Rana six questions about the sales of the Sunrise shop. **Play:** choose the Excel tool that answers each question fastest." >}}
+{{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" task="**The story:** Rana keeps the sales of the Sunrise shop in Excel and predicts each cell before she presses Enter. **Play:** choose what each cell will show, or which formula a copy makes." >}}
 
-## Try it 5 · Rana's answers (harder)
+## Try it 4 · Copy and errors (harder)
 
-The facts: the Paper sales were 24, 20, 16 and 15 JD. Huda wants every total above 20 JD in green, also next week.
+The facts: D2 has =C2\*\$F\$1, the week of sales is 10, 20, 30, 40 and 50 JD, and B2 is empty.
 
-a) Which Excel tool puts the biggest sale at the top?
-b) What is the total of the Paper sales?
-c) Which tool makes every total above 20 JD green, also next week?
+a) Rana copies D2 to D3. Which formula is in D3?
+b) What does AVERAGE give for the week?
+c) What does =A2/B2 show when B2 is empty?
 
 ::: {.answer}
-a) Sort by Total, largest first
-b) 75 JD
-c) conditional formatting
+a) =C3\*\$F\$1
+b) 30
+c) #DIV/0!
 :::

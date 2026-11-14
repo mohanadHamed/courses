@@ -1,217 +1,197 @@
 ---
-title: "Data Analysis (2): Sorting, Filtering, Conditional Formatting and Charts"
-description: "Lesson notes · Putting rows in order with Sort, showing only some rows with Filter, colouring cells by a rule with conditional formatting, and choosing and making the right chart with a good title."
+title: "Data Analysis (1): Excel: Cells, Formulas, References and Basic Functions"
+description: "Lesson notes · The parts of a worksheet, formulas that compute by themselves, copying a formula with relative and absolute references, and the functions SUM, AVERAGE, MAX and MIN."
 lesson: 6
-ilos: [B1]
+ilos: [A3, B1]
 format: lesson-typst
 ---
 
 ::: {.lead}
-Rana has the sales of the *Sunrise* shop for one week in Excel: the day,
-the item, the type, the quantity and the total. Huda, the manager, asks her
-questions: Which sale was the biggest? How much did we sell of drinks? Show
-me the big sales. How did the week go? Rana can answer every question in a
-few clicks. In Lecture 5 you made Excel calculate. In this lesson you make
-a table easy to read: you **sort** it, you **filter** it, you colour it
-with a rule, and you make a **chart**. These notes are a short reference:
-in class you try each idea in Excel, as an experiment of the **worksheet**.
+Rana works in the *Sunrise* shop. Every evening she adds up the sales on a
+calculator, and every week she makes a mistake. Excel can do the
+calculation for her, and it does it again by itself when a number changes.
+Excel makes a **workbook** with **worksheets**; one box is a **cell**,
+for example **B3**. In this lesson you make Excel calculate: you write **formulas**,
+you copy them, and you use the first **functions**. These notes are a short
+reference: in class you do each idea in Excel, as an experiment of the
+**worksheet**.
 :::
 
 ## Key terms
 
-{{< glossary sort-data filter-data conditional-formatting chart column-chart line-chart pie-chart chart-title cell-range >}}
+{{< glossary workbook worksheet cell cell-address cell-range formula formula-bar relative-reference absolute-reference fill-handle function autosum >}}
 
-## 7.1 Put the rows in order: Sort
+## 6.1 Cells and formulas
 
-Huda asks: "Which sale was the biggest?" Rana does not read all the rows.
-She **sorts** the table by the Total (@fig-sort).
+A worksheet is a big grid. The **columns** have letters (A, B, C …) and the
+**rows** have numbers (1, 2, 3 …). Each box is a **cell** (@fig-grid).
 
-::: {.callout-important title="Definition 7.1 — Sort"}
-To **sort** is to put the rows in order by one column: A to Z or smallest
-to largest, or the other way. Each row moves as a whole.
+::: {.callout-important title="Definition 6.1 — Cell address and range"}
+The **cell address** is the column letter and the row number, for example
+**B3**. A **range** is a block of cells: **B2:B4** means B2, B3 and B4.
 :::
 
-![Sorted by Total, largest first: the biggest sale is on top.](images/sort.png){#fig-sort width=100%}
+![A small sheet of the shop. B3 is selected; the range B2:B4 holds the three prices.](images/excel-grid.png){#fig-grid width=100%}
 
-- Click **one cell** in the table.
-- **Data › Sort** › Sort by *Total* › Order *Largest to Smallest* › OK.
-- Quick buttons: **A→Z** and **Z→A** on the Data tab.
+- Type in a cell and press **Enter**: the cell below is selected.
+- **Text** sits on the left of a cell; **numbers** sit on the right.
+- The **formula bar** above the grid shows what is really in the cell.
 
-::: {.callout-note title="Example 7.1 — The biggest sale"}
-1. Rana clicks a cell in the table, then Data › Sort.
-2. She chooses Total and Largest to Smallest.
-3. The bag of Tuesday (36 JD) is now on top; the juice of Sunday (10 JD) is
-   at the bottom.
-:::
-
-::: {.callout-warning title="Common mistake"}
-Selecting only the Total column and sorting it. Then the totals move, but
-the days and the items stay: the table is wrong. Click one cell, and let
-Excel take the whole table.
-:::
-
-| Day | Item | Type | Qty | Total (JD) |
-|---|---|---|---|---|
-| Sun | Notebook | Paper | 12 | 24 |
-| Sun | Juice | Drinks | 20 | 10 |
-| Mon | Pen | Paper | 40 | 20 |
-| Mon | Water | Drinks | 30 | 15 |
-| Tue | Bag | Bags | 3 | 36 |
-| Tue | Juice | Drinks | 24 | 12 |
-| Wed | Notebook | Paper | 8 | 16 |
-| Wed | Bag | Bags | 2 | 24 |
-| Thu | Water | Drinks | 26 | 13 |
-| Thu | Pen | Paper | 30 | 15 |
-
-: The sales of the Sunrise shop in one week. {#tbl-sales}
-
-{{< sim file="sims/table-lab.html" poster="sims/table-lab.png" title="Table Lab: sort, filter and colour the Sunrise sales" height="680" >}}
-
-*In class: Experiment 1 of the worksheet, the sales of the next week sorted by total, and Table Lab.*
-
-## 7.2 Show only some rows: Filter
-
-Huda asks: "How much did we sell of drinks?" Rana shows only the drink
-rows with a **filter** (@fig-filter).
-
-::: {.callout-important title="Definition 7.2 — Filter"}
-A **filter** shows only the rows that match your choice. The other rows are
-**hidden, not deleted**.
-:::
-
-![Filter Type = Drinks: four rows are shown.](images/filter.png){#fig-filter width=100%}
-
-- Click one cell in the table › **Data › Filter**. Small arrows appear in
-  the headings.
-- Click the arrow of *Type* › tick only **Drinks** › OK.
-- **Clear Filter** (Data tab) shows all the rows again.
-
-::: {.callout-note title="Example 7.2 — The drinks"}
-1. Rana filters the Type to Drinks: 4 rows stay.
-2. She selects the four totals: the status bar at the bottom of Excel
-   shows **Sum: 50**.
-3. She clears the filter: all 10 rows come back.
+::: {.callout-note title="Example 6.1 — The shop list"}
+1. Rana types *Item*, *Price (JD)* and *Quantity* in A1, B1 and C1.
+2. Under them: Notebook 2 10, Pen 0.5 40, Bag 12 3.
+3. The price of the pen is in **B3**; the three prices are the range
+   **B2:B4**.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Deleting the rows you do not want to see. Then the data is gone. A filter
-only hides rows.
+Typing "2 JD" in a price cell. Then it is text, and Excel cannot compute
+with it. Type only the number, and write "JD" in the heading.
 :::
 
-*In class: Experiment 2 of the worksheet, one type filtered, its sum read and the filter cleared.*
 
-## 7.3 Colour by a rule: conditional formatting
+### Let Excel calculate: formulas
 
-Huda asks: "Show me the big sales, over 20 JD." Rana does not colour the
-cells by hand. She makes a rule (@fig-cf).
+Rana wants the total of each item: price × quantity. She does not use a
+calculator. She writes a **formula** (@fig-formula).
 
-::: {.callout-important title="Definition 7.3 — Conditional formatting"}
-**Conditional formatting** is a rule that colours cells by themselves when
-their value matches, for example *greater than 20*. When a number changes,
-the colour changes too.
+::: {.callout-important title="Definition 6.2 — Formula"}
+A **formula** starts with **=**. It uses cell addresses and the signs
+**+ − * /**. The cell shows the result; the formula bar shows the formula.
 :::
 
-![The rule Greater Than 20 colours three totals green.](images/cond-format.png){#fig-cf width=100%}
+![D2 has =B2\*C2. The cell shows 20.](images/formula-parts.png){#fig-formula width=100%}
 
-- Select the totals (D2:D11).
-- **Home › Conditional Formatting › Highlight Cells Rules › Greater
-  Than**.
-- Type **20**, choose a colour › OK.
-- Other rules: *Data Bars* (a small bar in each cell), *Top 10 Items*.
-- To remove: Conditional Formatting › **Clear Rules**.
+Excel multiplies and divides before it adds and subtracts: =2+3\*4 is 14.
+Use brackets to change the order: =(2+3)\*4 is 20.
 
-::: {.callout-note title="Example 7.3 — The big sales"}
-1. Rana selects D2:D11 and makes the rule Greater Than 20, green.
-2. Three cells are green: 24, 36 and 24. The pen sale of Monday (20) is not
-   green: 20 is not greater than 20.
-3. She changes the juice of Tuesday from 12 to 22: it turns green by
-   itself.
+::: {.callout-note title="Example 6.2 — Total of the notebooks"}
+1. Rana clicks D2 and types **=B2\*C2**, then presses Enter.
+2. D2 shows **20** (2 × 10).
+3. She changes the price in B2 to 3. D2 changes to 30 by itself.
 :::
 
 ::: {.callout-warning title="Common mistake"}
-Colouring cells by hand with the Fill colour. Next week the numbers change,
-and the colours are wrong. A rule keeps them right.
+Forgetting the =. "B2\*C2" without = is only text. Also, do not type the
+numbers (=2\*10): then the total does not change when the price changes.
 :::
 
-*In class: Experiment 3 of the worksheet, a rule that colours the totals greater than 20, and a total that changes.*
+{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" height="560" >}}
 
-## 7.4 Show it as a picture: charts
+*In class: Experiment 1 of the worksheet, a cell of the shop list and a formula that changes by itself.*
 
-Huda asks: "How did the week go?" A **chart** shows the answer at once.
-But each question needs its own kind of chart (@fig-charts).
+## 6.2 Copy a formula: relative and absolute references
 
-::: {.callout-important title="Definition 7.4 — Three common charts"}
-- **Column chart:** compares amounts (Paper, Drinks, Bags).
-- **Line chart:** shows a change over time (Sunday to Thursday).
-- **Pie chart:** shows the parts of one whole (each type in the week).
+Rana needs the same formula in every row. She does not type it three times.
+She **copies** it down with the **fill handle**: the small square at the
+corner of the cell (@fig-refs).
+
+::: {.callout-important title="Definition 6.3 — Relative and absolute references"}
+A **relative reference** (B2) changes when you copy the formula: in the
+next row it becomes B3. An **absolute reference** has $ signs (\$F\$1) and
+does **not** change when you copy.
 :::
 
-![The right chart for the question.](images/chart-types.png){#fig-charts width=100%}
+![Without $, the rate cell F1 moves to F2 and F3. With \$F\$1, it stays.](images/references.png){#fig-refs width=100%}
 
-- Make a small table first, for example *Type* and *Sales*: Paper 75,
-  Drinks 50, Bags 60.
-- Select it › **Insert › Recommended Charts** (or Column, Line, Pie) › OK.
-- Click the **Chart Title** and type what the chart shows.
-- **Chart Elements** (the + next to the chart): add data labels.
-
-::: {.callout-note title="Example 7.4 — Three questions, three charts"}
-1. "Which type sells most?" A column chart: Paper 75 is the tallest.
-2. "How did the days go?" A line chart: up to 48 on Tuesday, down to 28 on
-   Thursday.
-3. "What part of the 185 JD is each type?" A pie: Paper 41 %, Bags 32 %,
-   Drinks 27 %.
+::: {.callout-note title="Example 6.3 — Copying the totals"}
+1. Rana selects D2 (=B2\*C2) and double-clicks the fill handle.
+2. D3 gets =B3\*C3 and D4 gets =B4\*C4. Each row uses its own price and
+   quantity.
 :::
 
-{{< sim file="sims/chart-lab.html" poster="sims/chart-lab.png" title="Chart Lab: the right chart for the question" height="640" >}}
+::: {.callout-note title="Example 6.4 — One discount rate for all"}
+The discount rate (10 %) is in F1. In C2 Rana writes =B2\*F1 and copies it.
+
+1. C3 becomes =B3\*F2. F2 is empty, so the discount is 0: wrong.
+2. She writes **=B2\*\$F\$1** and copies again. Now C3 is =B3\*\$F\$1: right.
+3. When the rate changes to 20 %, all discounts change at once.
+:::
 
 ::: {.callout-warning title="Common mistake"}
-A chart with the title "Chart Title", or a pie chart of the days. Always
-write a real title, and choose the chart for the question.
+Forgetting the $ for a cell that every row needs (a rate, a price, a total).
+Tip: after typing F1, press **F4**; Excel adds the $ signs.
 :::
 
-*In class: Experiment 4 of the worksheet, a column chart with a real title, a pie with data labels, and Chart Lab.*
+{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" height="520" >}}
 
-## Case study: Rana's Questions
+*In class: Experiment 2 of the worksheet, copying a formula with and without \$.*
 
-Huda asks Rana six questions about the sales of the week: which sale was
-the biggest; show only the drinks; make every total above 20 JD green, also
-next week; how the sales changed from Sunday to Thursday; compare Paper,
-Drinks and Bags; and what part of the 185 JD came from each type. The Game
-challenge of the interactive lesson uses these questions. In the mini-game
-below you choose the right tool for each one.
+## 6.3 Ready formulas: SUM, AVERAGE, MAX, MIN
 
-{{< sim file="sims/ranas-questions.html" poster="sims/ranas-questions.png" title="Rana's Questions: the right Excel tool" kind="game" height="520" >}}
+Rana wants the total of the week, the average day, the best day and the
+worst day. Excel has **functions** for these (@fig-functions).
+
+::: {.callout-important title="Definition 6.4 — Function"}
+A **function** is a ready formula with a name, used on a range:
+**=SUM(B2:B6)** adds, **=AVERAGE(B2:B6)** gives the average, **=MAX(B2:B6)**
+the highest and **=MIN(B2:B6)** the lowest value.
+:::
+
+![Four functions on the sales of the week.](images/functions.png){#fig-functions width=100%}
+
+The **AutoSum** button (Σ, Home tab) writes a SUM formula for you: click the
+cell under the numbers and press Σ, then Enter.
+
+::: {.callout-note title="Example 6.5 — The week of the shop"}
+Sales: 10, 20, 30, 40 and 50 JD in B2:B6.
+
+1. =SUM(B2:B6) gives **150** JD.
+2. =AVERAGE(B2:B6) gives **30** JD per day (150 ÷ 5).
+3. =MAX(B2:B6) gives **50** (Thursday); =MIN(B2:B6) gives **10** (Sunday).
+:::
+
+::: {.callout-warning title="Common mistake"}
+Error values. **#DIV/0!**: the formula divides by 0 (or by an empty cell).
+**#NAME?**: a function name is wrong, for example =SUMM(B2:B6). **####**:
+the column is too narrow; make it wider.
+:::
+
+*In class: Experiment 3 of the worksheet, SUM, AVERAGE, MAX and MIN on a week of sales.*
+
+## Case study: the shop's week
+
+Rana keeps the sales of the *Sunrise* shop in Excel. Before she presses
+Enter, she wants to know what each cell will show: a total of tea
+(=B2\*C2 with 3 JD and 4 packs), the sum and the average of a week of
+10, 20, 30, 40 and 50 JD, the formula in D3 after she copies =B2\*C2 down,
+the formula in D3 after she copies =C2\*\$F\$1 down, and a cell that divides by
+an empty cell. The Game challenge of the interactive lesson uses these
+cells. In the mini-game below you predict them.
+
+{{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" height="560" >}}
 
 ## Further reading
 
-Microsoft Support, "Sort data in a range or table", "Filter data in a range
-or table", "Use conditional formatting to highlight information" and
-"Create a chart from start to finish" (support.microsoft.com).
+Microsoft Support, "Overview of formulas in Excel" and "Switch between
+relative and absolute references" (support.microsoft.com). Evans, Martin
+and Poatsy, *Technology in Action*, 18th ed., the chapter on productivity
+software (spreadsheets).
 
 ## Exercises
 
-1. What does Sort do with each row?
-2. Which button sorts from the largest to the smallest?
-3. Does a filter delete rows?
-4. How do you show all rows again after a filter?
-5. What is conditional formatting?
-6. The rule is Greater Than 20. Is the cell 20 coloured?
-7. Why use a rule and not the Fill colour?
-8. Which chart compares amounts?
-9. Which chart shows a change over time?
-10. Which chart shows the parts of one whole?
+1. What is in cell C4: which column and which row?
+2. Write the range of the cells A2, A3, A4, A5 and A6.
+3. B2 = 6 and C2 = 5. What does =B2\*C2 show?
+4. What does =2+3\*4 give? And =(2+3)\*4?
+5. Why must a formula start with =?
+6. You copy =B2\*C2 from D2 to D5. What is in D5?
+7. You copy =B2\*\$F\$1 from C2 to C4. What is in C4?
+8. Sales 5, 10, 15, 20 in B2:B5. What do SUM and AVERAGE give?
+9. A cell shows #NAME?. What is a likely reason?
+10. What does the Σ button do?
 
 ## Answers to the exercises
 
 ::: {.answers}
-1. It moves each row as a whole into the new order.
-2. Z→A (Largest to Smallest).
-3. No, it only hides them.
-4. Data › Clear Filter.
-5. A rule that colours cells by themselves when they match.
-6. No: 20 is not greater than 20.
-7. The colours stay right when the numbers change.
-8. A column chart.
-9. A line chart.
-10. A pie chart.
+1. Column C, row 4.
+2. A2:A6.
+3. 30.
+4. 14; 20.
+5. Without =, Excel takes it as text.
+6. =B5\*C5.
+7. =B4\*\$F\$1.
+8. SUM 50; AVERAGE 12.5.
+9. A wrong function name, for example SUMM.
+10. AutoSum: it writes a SUM formula for the numbers above or beside the cell.
 :::

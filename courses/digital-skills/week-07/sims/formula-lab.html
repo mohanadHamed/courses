@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Formula Lab</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>.sim .task { font-weight: 700; margin: 4px 0 8px; } .sim .note { font-size: .85rem; color: var(--sim-muted); margin: -4px 0 8px; }</style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Formula Lab: the Sunrise shop sheet</h1>
+  <p class="note">A practice sheet that works like Excel. Tap a cell, type in the formula bar, then press Enter.</p>
+  <p class="task" id="task"></p>
+  <div id="sheet"></div>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script src="../../../../shared/sims/mini-sheet.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const say = (t, cls = "") => { $("msg").textContent = t; $("msg").className = "message " + cls; };
+  const data = { A1: "Item", B1: "Price (JD)", C1: "Quantity", D1: "Total (JD)", A2: "Notebook", B2: 2, C2: 10, A3: "Pen", B3: 0.5, C3: 40, A4: "Bag", B4: 12, C4: 3, A5: "Total", A6: "Average price", A7: "Highest price" };
+  const locked = ["A1", "B1", "C1", "D1", "A2", "B2", "C2", "A3", "B3", "C3", "A4", "B4", "C4", "A5", "A6", "A7"];
+  const f = (s, a) => s.formula(a);
+  const tasks = [
+    { q: "In D2, write a formula for the total of the notebooks: price × quantity. Start with =.", check: (s) => /^=(B2\*C2|C2\*B2)$/.test(f(s, "D2")), ok: "D2 = B2*C2 = 20. If a price changes, the total changes by itself." },
+    { q: "Copy D2 down to D4: tap D2, then press “Copy down”.", check: (s) => /^=(B4\*C4|C4\*B4)$/.test(f(s, "D4")) && /^=(B3\*C3|C3\*B3)$/.test(f(s, "D3")), ok: "The formula moved with its row: D3 = B3*C3, D4 = B4*C4." },
+    { q: "In D5, add up the three totals with SUM.", check: (s) => /^=SUM\(D2:D4\)$/.test(f(s, "D5")), ok: "SUM(D2:D4) = 20 + 20 + 36 = 76 JD." },
+    { q: "In B6, find the average price with AVERAGE.", check: (s) => /^=AVERAGE\(B2:B4\)$/.test(f(s, "B6")), ok: "AVERAGE(B2:B4) = (2 + 0.5 + 12) ÷ 3 = 4.83 JD." },
+    { q: "In B7, find the highest price with MAX.", check: (s) => /^=MAX\(B2:B4\)$/.test(f(s, "B7")), ok: "MAX(B2:B4) = 12 JD: the bag." },
+  ];
+  const sheet = MiniSheet.create($("sheet"), {
+    rows: 7, cols: 4, data, locked, widths: { A: 110 }, select: "D2", bold: ["A1", "B1", "C1", "D1", "A5", "A6", "A7"],
+    formats: { B6: "0.00" }, taskEl: $("task"), say,
+    tasks, onTask: (t) => { say("✓ " + t.ok, "good"); Kit.good(); },
+    onChange: (s) => { const v = s.value(s.sel); if (v && v.err) say(`${v.err}: check the formula in ${s.sel}.`, "bad"); else if (/^[A-Z]/.test(s.raw(s.sel)) && /[*+/]|SUM|AVERAGE/i.test(s.raw(s.sel))) say("A formula must start with = (for example =B2*C2). Without = it is only text.", "bad"); },
+  });
+  const btn = Kit.el("button", { type: "button", class: "ghost", id: "down" }, "Copy down ⇩");
+  btn.addEventListener("click", () => sheet.copyDown());
+  sheet.tools.appendChild(btn);
+  window.FL = sheet;
+  say("Tap D2 and type =B2*C2 in the formula bar.");
+})();
+</script>
+</body>
+</html>

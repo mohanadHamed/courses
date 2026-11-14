@@ -1,26 +1,26 @@
 ---
-title: "Data Analysis (1): Excel: Cells, Formulas, References and Basic Functions"
-description: "Worksheet · Three experiments in Excel: cells and a formula that changes by itself, copying a formula with $, and the functions SUM, AVERAGE, MAX and MIN. Part A in Excel, Part B on the simulators."
+title: "Digital Content (2): PowerPoint: Layouts, Themes, Pictures and Transitions"
+description: "Worksheet · Three experiments in PowerPoint on a short talk: layouts and a theme, few words on the slide with speaker notes, and a transition and an animation. Part A in PowerPoint, Part B on the simulators."
 lesson: 5
-ilos: [B1]
+ilos: [A3, C2]
 start-files:
-  - name: shop-start.xlsx
-    about: "two sheets: Shop (three items, their prices and quantities) and Week (the sales of five days)"
+  - name: talk-start.pptx
+    about: "a short talk, Saving Water at Home: three slides with no theme, one of them with too much text"
 format: lesson-typst
 ---
 
 ::: {.lead}
-Today you let Excel calculate, like in a lab. Each experiment has two
-parts. **Part A** is in Excel on the lab computer. **Part B** is on a
-simulator of the interactive lesson: on paper, scan its QR code; on the
-screen, click its link. After each step, write your result in its box. At
-the end, copy your key results into the table.
+Today you improve a short talk in PowerPoint, like in a lab. Each
+experiment has two parts. **Part A** is in PowerPoint on the lab computer.
+**Part B** is on a simulator of the interactive lesson: on paper, scan its
+QR code; on the screen, click its link. After each step, write your result
+in its box. At the end, copy your key results into the table.
 :::
 
 ## Before you start
 
-- **You need:** a computer with Excel (the desktop app, or Excel on the web
-  at `office.com`) and the start file.
+- **You need:** a computer with PowerPoint (the desktop app, or PowerPoint
+  on the web at `office.com`) and the start file.
 - **No lab computer today?** Your teacher does Part A on the screen, on the
   simulators of the interactive lesson. Do Part B on your phone.
 - **Check:** the results are at the end of this worksheet. Look only after
@@ -29,266 +29,293 @@ the end, copy your key results into the table.
 
 {{< start-files >}}
 
-## Experiment 1 · Cells and a formula
+## Experiment 1 · Slides, layouts and a theme
 
-**The idea:** columns have letters and rows have numbers: the **cell
-address** **B3** is column B, row 3. A **range** is a block of cells:
-**B2:B4**. A **formula** starts with **=** and uses addresses: **=B2\*C2**.
-The cell shows the result; the **formula bar** shows the formula. Change a
-number, and the result changes by itself. Excel multiplies and divides
-before it adds and subtracts.
+**The idea:** a presentation is a set of **slides**. A **layout** sets the
+places on a slide (**placeholders**) for the title, the text and the
+pictures: Title Slide, Title and Content, Two Content. A **theme** (Design
+tab) gives the whole talk one look: colours, fonts and background; a
+**variant** changes only its colours. Keep a strong contrast: dark text on
+a light background, or light on dark. **F5** starts the slide show.
 
-**Aim:** find a cell by its address, and let a formula calculate.
+**Aim:** choose a layout, give the talk one look, and start the show.
 
 ::: {.part}
-**Part A · In the app (Excel)**
+**Part A · In the app (PowerPoint)**
 :::
 
-1. Open `shop-start.xlsx`, sheet **Shop**. Click the cell with the price of
-   the pen and read the Name Box (left of the formula bar). Then type
-   **Total (JD)** in D1, and **=B2\*C2** in D2.
+1. Open `talk-start.pptx` (click **Enable Editing** if you see it). Click
+   slide 1 and open **Home › Layout**: its layout is marked. Then click
+   slide 3 and choose **Home › New Slide › Two Content**. Type the title
+   *Before and after*.
 
-   {{< record "The Name Box shows … ; D2 shows …" >}}
-
-   ::: {.check}
-   The price of the pen is in **B3** (it holds 0.5). D2 shows **20**: the
-   price 2 × the quantity 10.
-   :::
-
-   ::: {.fill answer="20" hint="The price in B2 times the quantity in C2."}
-   B2 holds 2 and C2 holds 10. What does D2 show with `=B2*C2`?
-
-   Why: 2 × 10 = 20: the price × the quantity.
-   :::
-
-2. Change the price in B2 from 2 to **3** and press Enter. Look at D2. Then
-   press **Ctrl + Z** (undo): B2 is 2 again.
-
-   {{< record "D2 shows when B2 is 3" >}}
+   {{< record "Slide 1 has the layout … ; the new slide has … placeholders" >}}
 
    ::: {.check}
-   **30** (3 × 10). D2 changed by itself, because the formula uses the
-   address B2, not the number 2. After Ctrl + Z, D2 shows 20 again.
+   Slide 1 has the layout **Title Slide**: a big title and a subtitle. The
+   new slide has **3 placeholders**: the title and two content boxes side
+   by side. You click in a placeholder and type.
+   :::
+
+   ::: {.fill answer="3" unit="placeholders" hint="Count the title and the boxes side by side."}
+   How many placeholders does the new **Two Content** slide have?
+
+   Why: The title and two content boxes side by side.
+   :::
+
+2. On the **Design** tab, click a theme that you like, then two **Variants**,
+   one after the other. Press **F5**, click through the talk, and press
+   **Esc**.
+
+   {{< record "The theme changed … slides ; a variant changes …" >}}
+
+   ::: {.check}
+   **All four slides** change their colours, fonts and background at once:
+   a theme gives the whole talk one look. A **variant** changes only the
+   colours. F5 starts the show from slide 1; Esc stops it.
    :::
 
    ::: {.choice}
-   Why did D2 change by itself when you typed 3 in B2?
+   You click a theme. Which slides change?
 
-   - [x] The formula uses the address B2, not the number 2.
+   - [x] all the slides of the talk
 
-     Why: A formula with addresses calculates again when a cell changes.
+     Why: A theme gives the whole talk one look.
 
-   - [ ] Excel guessed the new total.
+   - [ ] only the slide that you clicked
 
-     Why: Excel calculates the formula; it does not guess.
+     Why: A theme is for the whole presentation.
 
-   - [ ] Ctrl + Z changed it.
+   - [ ] only the title slide
 
-     Why: Ctrl + Z only undoes your last change.
+     Why: Every slide gets the new colours and fonts.
    :::
 
 ::: {.part}
 **Part B · On the simulator** (no computer? do it on your phone)
 :::
 
-{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" >}}
+{{< sim file="sims/slide-builder.html" poster="sims/slide-builder.png" title="Slide Builder: one good slide" >}}
 
-3. In **Formula Lab**, do the first two tasks: write the formula of the
-   total of the notebooks in D2, then copy D2 down to D4. Which formula is
-   in D4?
+3. In **Slide Builder**, do the five tasks: the layout Title and Content, a
+   short title, 3 to 5 short points, a theme, and the picture with its alt
+   text. Which layout do you choose?
 
-   {{< record "D4 holds the formula …" >}}
-
-   ::: {.check}
-   **=B4\*C4**: the formula moved with its row. D2 = B2\*C2 = 20, D3 =
-   B3\*C3, D4 = B4\*C4.
-   :::
-
-   ::: {.choice}
-   You copy `=B2*C2` from D2 down to D4. What is the formula in D4?
-
-   - [x] `=B4*C4`
-
-     Why: Copying moves the addresses with the row: two rows down, 2 becomes 4.
-
-   - [ ] `=B2*C2`
-
-     Why: These addresses move when you copy.
-
-   - [ ] `=B4*C2`
-
-     Why: Both addresses move, not only one.
-   :::
-
-## Experiment 2 · Copy a formula
-
-**The idea:** the **fill handle** (the small square at the bottom right of a
-cell) copies a formula down. A **relative** reference (B2) changes when you
-copy: in the next row it is B3. An **absolute** reference (**\$F\$1**) stays
-the same: use it for a cell that every row needs, like a rate. Press **F4**
-after you type F1, and Excel adds the \$ signs.
-
-**Aim:** copy a formula down, and see which address moves and which stays.
-
-::: {.part}
-**Part A · In the app (Excel)**
-:::
-
-1. Click D2 and double-click its **fill handle**. Type **10%** in F1 and
-   **Discount (JD)** in E1. In E2 type **=D2\*F1**, and copy it down to E4
-   with the fill handle. Look at E3.
-
-   {{< record "E3 shows" >}}
+   {{< record "The layout … ; my title …" >}}
 
    ::: {.check}
-   D3 and D4 now have their totals (20 and 36). E2 shows 2, but E3 and E4
-   show **0**: the copy moved F1 to F2 and F3, which are empty, and an
-   empty cell counts as 0.
-   :::
-
-   ::: {.choice}
-   E3 shows 0. Why?
-
-   - [x] The copy moved F1 to F2, an empty cell, and an empty cell counts as 0.
-
-     Why: Relative addresses move: the discount in F1 was left behind.
-
-   - [ ] The discount in F1 is 0 %.
-
-     Why: F1 holds 10 %; E2 shows 2.
-
-   - [ ] Excel cannot copy a percentage.
-
-     Why: It can: the problem is the address that moved.
-   :::
-
-2. Click E2. Change the formula to **=D2\*\$F\$1** (type F1, then press
-   **F4**). Copy it down to E4 again. Click E4.
-
-   {{< record "E4 shows … ; its formula is …" >}}
-
-   ::: {.check}
-   E4 shows **3.6** with **=D4\*\$F\$1**. D4 moved, and \$F\$1 stayed: an
-   absolute reference does not change when you copy.
-   :::
-
-   ::: {.fill answer="3.6" hint="D4 is 36, and F1 is 10 %."}
-   What does E4 show with `=D4*$F$1`?
-
-   Why: 36 × 10 % = 3.6. D4 moved, and $F$1 stayed: an absolute reference does not change when you copy.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" >}}
-
-3. In **Reference Lab**, do the three tasks: copy =B2\*F1 down, fix it with
-   \$F\$1, then change the rate in F1 to 0.2. What discount does the desk
-   get after the change?
-
-   {{< record "The desk gets … JD" >}}
-
-   ::: {.check}
-   **18 JD**. One change in F1, and every row uses the new rate, because
-   every formula has \$F\$1. With 0.1, the desk got 9 JD.
-   :::
-
-   ::: {.fill answer="18" unit="JD" hint="With the rate 0.1 the desk got 9 JD; the rate doubles."}
-   In Reference Lab, the desk gets 9 JD with the rate 0.1 in F1. You change
-   F1 to 0.2. What does the desk get now?
-
-   Why: 0.2 is twice 0.1, so the discount doubles: 18 JD. Every row uses $F$1.
-   :::
-
-## Experiment 3 · SUM, AVERAGE, MAX and MIN
-
-**The idea:** a **function** is a ready formula with a name and a range:
-**=SUM(B2:B6)** adds, **=AVERAGE(B2:B6)** finds the average, **=MAX(B2:B6)**
-the largest value and **=MIN(B2:B6)** the smallest. **AutoSum** (Σ) writes
-=SUM for you. A wrong name shows **#NAME?**.
-
-**Aim:** use four ready formulas on the sales of a week.
-
-::: {.part}
-**Part A · In the app (Excel)**
-:::
-
-1. Open the sheet **Week**. Click B7. On the Home tab, click **AutoSum**
-   (Σ), then press Enter.
-
-   {{< record "B7 shows … ; its formula is …" >}}
-
-   ::: {.check}
-   **100** with **=SUM(B2:B6)** (12 + 18 + 25 + 15 + 30). AutoSum chose the
-   numbers above the cell.
-   :::
-
-   ::: {.fill answer="100" hint="12 + 18 + 25 + 15 + 30."}
-   What does B7 show with AutoSum?
-
-   Why: =SUM(B2:B6) adds the five days: 12 + 18 + 25 + 15 + 30 = 100.
-   :::
-
-2. In B8, B9 and B10, type **=AVERAGE(B2:B6)**, **=MAX(B2:B6)** and
-   **=MIN(B2:B6)**. Save the file as **shop.xlsx**.
-
-   {{< record "AVERAGE … ; MAX … ; MIN …" >}}
-
-   ::: {.check}
-   AVERAGE **20** (100 ÷ 5), MAX **30** (Thursday), MIN **12** (Sunday).
+   **Title and Content**: a title and one box for the points. A good title
+   has 8 words or fewer, for example "New shop hours".
    :::
 
    ::: {.sort}
-   Which function gives each result of the week? Sort them.
+   Easy or hard to read from two metres? Sort the slides.
 
-   AVERAGE
-   :   20
+   Easy to read: a strong contrast
+   :   dark text on a light background
 
-       Why: 100 ÷ 5 days = 20.
+       Why: A strong contrast: every word is clear.
 
-   MAX
-   :   30
+   :   light text on a dark background
 
-       Why: The biggest day: Thursday.
+       Why: Also a strong contrast.
 
-   MIN
-   :   12
+   Hard to read: a weak contrast
+   :   light grey text on a white background
 
-       Why: The smallest day: Sunday.
+       Why: The text almost disappears.
+
+   :   dark blue text on a black background
+
+       Why: Two dark colours: a weak contrast.
+   :::
+
+## Experiment 2 · Few words and notes
+
+**The idea:** the audience listens to you; the slide only helps. Keep **3 to
+5 points**, each with about **8 words or fewer**. Put the details that you
+will say in the **speaker notes** (View › Notes): in the slide show, only
+you see them (Presenter View).
+
+**Aim:** keep few words on the slide, and put the rest in the notes.
+
+::: {.part}
+**Part A · In the app (PowerPoint)**
+:::
+
+1. Click slide 2, *Small changes at home*. Count its points. Then select
+   its text (**Ctrl + A**, **Ctrl + C**), open **View › Notes**, and paste
+   the text into the notes pane under the slide.
+
+   {{< record "Points: … ; the text is now also in …" >}}
+
+   ::: {.check}
+   **6 points**, the longest with **18 words**: too much text for the back
+   of the room. The long text is now also in the **notes pane**, where it
+   keeps the details that you will say.
+   :::
+
+   ::: {.fill answer="6" unit="points" hint="Count the lines that start with a bullet."}
+   How many points has slide 2 of `talk-start.pptx`?
+
+   Why: 6 points, the longest with 18 words: too much text for one slide.
+   :::
+
+2. Now make the slide short: keep **3 to 5 points**, each with **8 words or
+   fewer**.
+
+   {{< record "My shortest point" >}}
+
+   ::: {.check}
+   A good result, for example: "Close the tap while you brush", "Fix a
+   dripping tap", "Take a short shower", "Use a bucket for the car". The
+   details stay in the notes.
+   :::
+
+   ::: {.sort}
+   A good point for the slide, or too long? Sort them.
+
+   Good: 8 words or fewer
+   :   Close the tap while you brush
+
+       Why: Six short words: easy to read.
+
+   :   Fix a dripping tap
+
+       Why: Four words: clear and short.
+
+   Too long: keep it in the notes
+   :   When you brush your teeth, please remember to close the tap so the water does not run
+
+       Why: Seventeen words: say it, and keep it in the notes.
    :::
 
 ::: {.part}
 **Part B · On the simulator** (no computer? do it on your phone)
 :::
 
-{{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" >}}
+{{< sim file="sims/slide-doctor.html" poster="sims/slide-doctor.png" title="Slide Doctor: fix the slide" kind="game" >}}
 
-3. Play **The Shop's Week**: before Rana presses Enter, choose what each
-   cell will show. What does **=SUMM(B2:B6)** show?
+3. Play **Slide Doctor**: each slide of the Sunrise team has one problem;
+   choose the best fix. What is the fix for a slide with a long paragraph?
 
-   {{< record "=SUMM(B2:B6) shows …" >}}
+   {{< record "The fix for a long paragraph: …" >}}
 
    ::: {.check}
-   **#NAME?**: Excel does not know the name SUMM. Correct it to =SUM, and
-   the cell shows the total.
+   **Short points on the slide, the details in the notes**: the audience
+   reads a few words and listens to you.
    :::
 
    ::: {.choice}
-   What does `=SUMM(B2:B6)` show?
+   A slide has a paragraph of 60 words. What is the best fix?
 
-   - [x] `#NAME?`
+   - [x] Keep 3 to 5 short points, and move the details to the notes.
 
-     Why: Excel does not know the name SUMM.
+     Why: Few words on the slide; you say the rest.
 
-   - [ ] the total of B2:B6
+   - [ ] Make the font smaller, so that everything fits.
 
-     Why: Only after you correct SUMM to SUM.
+     Why: A small font is hard to read from the back of the room.
 
-   - [ ] `0`
+   - [ ] Read the paragraph aloud from the slide.
 
-     Why: A wrong name gives an error, not a number.
+     Why: The audience reads faster than you speak and stops listening.
+   :::
+
+## Experiment 3 · A transition and an animation
+
+**The idea:** a **transition** is the move from one slide to the next
+(Transitions tab); use one quiet transition, the same on every slide. An
+**animation** moves one thing on a slide (Animations tab): **Appear** with
+**By Paragraph** shows the points one by one, on each click. Few, quiet
+effects keep the eyes on your message.
+
+**Aim:** add one quiet transition to every slide, and show points one by
+one.
+
+::: {.part}
+**Part A · In the app (PowerPoint)**
+:::
+
+1. On the **Transitions** tab, choose **Fade**, set the **Duration** to
+   **00.70**, and click **Apply To All**. Look at the thumbnails.
+
+   {{< record "Next to every thumbnail: …" >}}
+
+   ::: {.check}
+   A **small star** appears next to every thumbnail: each slide now has a
+   transition. Apply To All gave every slide the same quiet Fade.
+   :::
+
+   ::: {.choice}
+   After **Apply To All**, what appears next to every thumbnail?
+
+   - [x] a small star
+
+     Why: The star shows that the slide has a transition.
+
+   - [ ] a number
+
+     Why: Numbers mark animations on a slide, not transitions.
+
+   - [ ] nothing
+
+     Why: PowerPoint marks each slide that has a transition.
+   :::
+
+2. Click slide 3, *What we do at the office*. Click in its three points and
+   choose **Animations › Appear**, then **Effect Options › By Paragraph**.
+   Press **F5**, click until the end of slide 3, and press **Esc**.
+
+   {{< record "Numbers next to the points … ; on each click …" lines=2 >}}
+
+   ::: {.check}
+   **1, 2 and 3**, one next to each point: the order of the clicks. In the
+   show, the slide fades in with its title, then **one point comes on each
+   click**.
+   :::
+
+   ::: {.order}
+   In the slide show, put what comes on slide 3 in order.
+
+   1. The slide fades in, with its title.
+   2. Click: the first point appears.
+   3. Click: the second point appears.
+   4. Click: the third point appears.
+
+   Why: The transition brings the slide; By Paragraph brings one point on each click.
+   :::
+
+::: {.part}
+**Part B · On the simulator** (no computer? do it on your phone)
+:::
+
+{{< sim file="sims/transition-lab.html" poster="sims/transition-lab.png" title="Transition Lab: transitions and animations" >}}
+
+3. In **Transition Lab**, try the transitions Appear, Fade and Spin, then an
+   animation By Paragraph. Which transition is too much for a talk?
+
+   {{< record "The transition that is too much" >}}
+
+   ::: {.check}
+   **Spin**: a big, loud effect takes the eyes from your message. A quiet
+   Fade, the same on every slide, is enough.
+   :::
+
+   ::: {.choice}
+   Which transitions fit a talk best?
+
+   - [x] one quiet transition, the same on every slide
+
+     Why: The audience watches your message, not the effects.
+
+   - [ ] a different loud effect on every slide
+
+     Why: Many effects take the eyes from your message.
+
+   - [ ] Spin on every slide
+
+     Why: Spin is loud; a quiet Fade is enough.
    :::
 
 ## Table of results
@@ -297,14 +324,13 @@ Copy your key results here: the rows of the parts that you did. Your
 teacher checks this table before the end of the lecture.
 
 ::: {.record-table}
-| Experiment | What you record                                | Your result |
-|:-------:|---------------------------------------------|-------------------------|
-| 1 A        | The address of the pen's price, and D2         |             |
-| 1 A        | D2 when the price is 3                         |             |
-| 1 B        | The formula in D4 of Formula Lab               |             |
-| 2 A        | E3 with =D2\*F1 copied down                    |             |
-| 2 A        | E4 and its formula with \$F\$1                 |             |
-| 2 B        | The desk's discount with the rate 0.2          |             |
-| 3 A        | SUM, AVERAGE, MAX and MIN of the week          |             |
-| 3 B        | What =SUMM(B2:B6) shows                        |             |
+| Experiment | What you record                                   | Your result |
+|:-------:|------------------------------------------------|------------------------|
+| 1 A        | The layout of slide 1, and the new slide          |             |
+| 1 A        | What a theme and a variant change                 |             |
+| 1 B        | My layout and title in Slide Builder              |             |
+| 2 A        | The points of slide 2, and my shortest point      |             |
+| 2 B        | The fix for a long paragraph                      |             |
+| 3 A        | The stars, and the numbers of the animation       |             |
+| 3 B        | The transition that is too much                   |             |
 :::

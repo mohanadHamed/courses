@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Picture Rights</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="mk.css">
+  <style>
+    .sim #opts { display: grid; gap: 6px; max-width: 560px; }
+    .sim #opts button { text-align: left; }
+    .sim .card { border: 1.5px solid #ced4da; border-radius: 14px; padding: 10px 14px; max-width: 520px; background: #fff; margin-top: 10px; }
+    .sim .card h3 { margin: 0 0 6px; font-size: 1rem; }
+    .sim .post { background: linear-gradient(135deg, #fff4e6, #ffe8cc); }
+    .sim .cta { display: inline-block; background: #D9480F; color: #fff; border-radius: 8px; padding: 4px 12px; font-weight: 800; margin-top: 6px; }
+    .sim .muted { color: var(--sim-muted); }
+    .sim table.db td:first-child { font-weight: 800; }
+
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Picture Rights: may I use this picture?</h1>
+  <p class="hint">A picture belongs to the person who made it. Choose: may Mona use it in her post?</p>
+  <div class="task" id="task"></div>
+  <div id="opts"></div>
+  <p id="msg" class="message"></p>
+  <p class="score" id="score"></p>
+  <div id="preview"></div>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="quiz-kit.js"></script>
+<script>
+QuizKit({
+  label: "Picture",
+  done: "Done: use your own photos or free pictures, and write the source.",
+  steps: [
+    {
+      "q": "A photo that Mona took of her own cake.",
+      "opts": [
+        "yes",
+        "no"
+      ],
+      "right": 0,
+      "why": "Your own photo is yours to use.",
+      "hints": {
+        "1": "Mona made it: she may use it."
+      }
+    },
+    {
+      "q": "A photo of a cake from a search on Google Images.",
+      "opts": [
+        "no",
+        "yes"
+      ],
+      "right": 0,
+      "why": "A picture found on the Internet belongs to someone; it is not free just because you found it.",
+      "hints": {
+        "1": "Found is not free: it belongs to someone."
+      }
+    },
+    {
+      "q": "A free picture from Canva's free elements, or from Pixabay or Unsplash.",
+      "opts": [
+        "yes, with the source written",
+        "no, never"
+      ],
+      "right": 0,
+      "why": "Free pictures may be used; write where they come from.",
+      "hints": {
+        "1": "These sites give pictures that you may use."
+      }
+    },
+    {
+      "q": "The logo of a famous cake company, in her post.",
+      "opts": [
+        "no",
+        "yes"
+      ],
+      "right": 0,
+      "why": "A logo belongs to its company; never use it as yours.",
+      "hints": {
+        "1": "Using another company's logo is not allowed."
+      }
+    },
+    {
+      "q": "Under a free picture, what does Mona write?",
+      "opts": [
+        "Photo: Pixabay",
+        "nothing",
+        "© Mona"
+      ],
+      "right": 0,
+      "why": "Write the source of a picture that is not yours.",
+      "hints": {
+        "1": "Write the source.",
+        "2": "The picture is not Mona's."
+      }
+    }
+  ],
+  preview: (c) => "",
+});
+</script>
+</body>
+</html>

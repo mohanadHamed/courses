@@ -68,7 +68,7 @@ Lecture length does not change (90 min Game Math, 60 min the others).
   | Lecture | "Lecture N" | New ideas: the lesson model below. | Always. |
   | Seminar | "Seminar N" | **No new ideas.** Students apply the lecture of the same unit, through activities (see "What a seminar looks like"). Game Math, Computing Systems, Digital Media. | Always. |
   | Practice | "Practice N" | **No new ideas.** A practice week: revision, problems, a case study, presentations; Digital Skills: hands-on lab work. Seminar format. | Flexible. |
-  | Online activity | "Online activity N" | Digital Skills: practises its unit, never repeats the lecture. Numbered 1–15 in teaching order. | Core in a unit; flexible in a practice week. |
+  | Online activity | "Online activity N" | Digital Skills: practises its unit, never repeats the lecture. Numbered 1–12 in teaching order. | Core in a unit; flexible in a practice week. |
 
 - Lectures, seminars, practice sessions and online activities are numbered
   separately, each in teaching order; Lecture N and Seminar N are always in
@@ -877,9 +877,9 @@ result in words), and a `::: {.check}` inside each `{.try-change}`;
   "No task needs AI. The Task with AI at the end is optional."
   (In Digital Skills, AI is in the ILOs: its online tasks to submit may use
   AI on purpose, with the AI-use statement.)
-- **Digital Skills** has no "Task with AI" box: AI is in its ILOs (C1 since
-  syllabus v3), so its experiments and online tasks use AI on purpose, with
-  checking and, from unit 9, the AI-use statement. AI there is always
+- **Digital Skills** has no "Task with AI" box: AI is in its ILOs (B2 since
+  syllabus v4: evaluate AI output), so its experiments and online tasks use
+  AI on purpose, with checking and, from Unit 4, the AI-use statement. AI there is always
   **practical** (the teacher's request of 2026-11-08: the students know AI
   already and find talk about it boring): every AI step gives a complete
   prompt in `::: {.prompt}` that the teacher runs in another tab on the

@@ -26,11 +26,12 @@ management, medical sterilization, facility assessment). So this course is
   and answered in one line. With the worksheet they are a short reference.
 - **Lab tasks and experiments** use only the lab computer, a browser and the
   student's own phone, with steps written as a numbered list.
-- The ILOs and the lecture titles follow the course syllabus **v3**
-  (2026-11-13): the official course description of the study plan
+- The ILOs and the lecture titles follow the course syllabus **v4**
+  (2026-11-14): the official course description of the study plan
   (digital skills and the labour market, devices and technologies, digital
   content, data analysis, databases, a digital service, website design,
-  e-marketing). Ask the teacher before a syllabus title is changed.
+  e-marketing) merged with *Smart Digital Skills* (01101151: Microsoft
+  Office and AI tools). Ask the teacher before a syllabus title is changed.
 - **As easy as possible** (the teacher's request of 2026-11-13): the
   students come from every diploma, most with no IT background and weak
   computer skills, and their English is very weak. Each ILO is covered at
@@ -48,10 +49,10 @@ management, medical sterilization, facility assessment). So this course is
   the university e-learning platform: an interactive lesson with
   simulators, or a video, and practical tasks to submit). No seminars.
   `course.blended: true` in `_metadata.yml`; `schedule.yml` has 12 weeks
-  (plan v4): 10 units (core: Lecture N and its online activity) and 2
-  practice weeks (flexible: Practice N and an online practice activity, no
-  new ideas; row 8 the review, row 15 the project). Online activities are
-  numbered 1–12 in teaching order.
+  (plan v5): 11 units (core: Lecture N and its online activity) and 1
+  practice week (flexible: Practice 1 and Online activity 7, the review of
+  row 8; no new ideas). Online activities are numbered 1–12 in teaching
+  order.
 - **Face-to-face lecture: two cases, one lesson** (since 2026-11-08;
   AUTHORING.md, "The page is taught in class" and "Lecture worksheets").
   The computer labs of the college are not ready yet, and the classrooms
@@ -88,7 +89,7 @@ management, medical sterilization, facility assessment). So this course is
   lecture N", the next face-to-face lecture) and `marks:`; no notes and no
   slides. It **practises its unit** and never repeats the face-to-face
   lecture; in a unit it may add a skill of the unit's syllabus row (Online
-  activity 4: PowerPoint, row 5 of a merged unit); in a practice week it
+  activity 12: the final submission, row 15 of a merged unit); in a practice week it
   adds nothing new. Start from `shared/templates/online-template.qmd`. It has:
   1. "Before you start": what you need, about how long, what you submit;
   2. two or three short **Steps** (`{.study}`): plain explanation, a figure,
@@ -106,15 +107,15 @@ management, medical sterilization, facility assessment). So this course is
   this course. Model answers and marking notes go to `courses-private`
   (`courses/digital-skills/week-WW/online-NN-solutions.md`).
 - Textbook: Evans, Martin and Poatsy, *Technology in Action*, Global Edition,
-  18th ed. References (syllabus v3): Lambert and Frye, *Microsoft Office Step
+  18th ed. References (syllabus v4): Lambert and Frye, *Microsoft Office Step
   by Step (Office 2021 and Microsoft 365)*, 2022; Chaffey and
   Ellis-Chadwick, *Digital Marketing*, 8th ed., 2022; Duckett, *HTML and
   CSS*, 2011; *DigComp 2.2*, 2022; Microsoft 365 Training
   (support.microsoft.com/training).
-- **The course project (D1)** is built in the core: Online activity 9 (the
-  student chooses one of four given services, A–D, and builds its form),
-  10 (its website), 11 (its post and marketing plan), then Practice 2 (the
-  talk) and Online activity 12 (the final submission).
+- **The course project (D1)** is built in the core, with no project week:
+  Online activity 10 (the student chooses one of four given services, A–D,
+  and builds its form), 11 (its website), 12 (its post, marketing plan,
+  three slides and the final submission with an AI-use statement).
 
 ## A face-to-face version (prepared, not published)
 
@@ -172,9 +173,13 @@ real tool.
 - Never ask students to type real personal data (ID numbers, phone numbers,
   addresses, grades) into an AI tool: use made-up details.
 - Every task done with AI ends with checking the output; the final project
-  (Online activity 12) has the AI-use line where AI helped. Since syllabus
-  v3, AI is a tool of C1 (Units 1–2) and a small helper in later lectures
-  (one prompt in Lecture 10), never the topic of a session.
+  (Online activity 12) has the AI-use statement where AI helped. Since
+  syllabus v4 (B2: evaluate AI output), every unit from Unit 3 has one AI
+  step with its check: privacy in AI tools (Online 3), a Word draft and a
+  CV with an AI-use statement (Unit 4), an outline and AI pictures
+  (Online 5), a formula and a summary checked against a PivotTable
+  (Online 8), the Home text of the website (Online 11), the post's picture
+  (Online 12). AI stays a tool, never the topic of a session.
 - AI is a tool for documents, data and presentations here; how AI works is
   the subject of *AI Applications* (01101153). Keep to what a user needs.
 - **Practical, never AI alone** (the teacher's request of 2026-11-08: the
@@ -228,15 +233,26 @@ every calendar week, by hand, with the university's template.
   never as a copy of the next week. Its activities are moved to the week in
   which they are done, not deleted, so that submissions are kept.
 - **The weeks of fall 2026-2027.** Lecture 1 was given in platform week 4
-  (1/11/2026) and Lecture 2 in week 5. From week 6 (15/11/2026, plan v4)
-  each platform week holds one unit: Units 3–10 in weeks 6–13; week 14
-  (10–14/1/2027, the last teaching week) holds Practice 2 and Online
-  activity 12 (the project); week 15 is the final exams. Practice 1 and
+  (1/11/2026) and Lecture 2 in week 5. From week 6 (15/11/2026, plan v5)
+  each platform week holds one unit: Units 3–11 in weeks 6–14 (week 14,
+  10–14/1/2027, is the last teaching week: Unit 11 and the final
+  submission of the project); week 15 is the final exams. Practice 1 and
   Online activity 7 (review) are linked for self-study before the midterm.
   The texts of weeks 5–14, with their links, are in `courses-private`
   (`moodle/digital-skills-weeks.md`).
 
 ## Lessons learned
+
+- 2026-11-14 (syllabus v4, the teacher's request): the syllabus merged the
+  official description with *Smart Digital Skills* (Office and AI tools):
+  new ILOs A3 (Office), A4 (digital services), B2 (evaluate AI output).
+  Plan v5 (`plan.md`; progress in `plans/digital-skills-v3-status.md`):
+  11 units in the nine teaching weeks left, no project week (the project,
+  D1, is built in Online activities 10–12). Unit 3 adds Office concepts
+  (the ribbon, templates, saving and sharing) to communication; Unit 4 is
+  Word with an AI draft and a CV with AI help; Unit 5 is PowerPoint, with
+  AI and Canva online; Excel (Units 6–7), databases (8), the service (9),
+  the website (10) and marketing (11) follow, each with its AI step.
 
 - 2026-11-13 (syllabus v3, the teacher's request): the syllabus was rebuilt
   on the official course description (devices, communication and safety,

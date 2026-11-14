@@ -35,23 +35,34 @@ no separate project week (plan v5, `plan.md`).
       Checker; new screen word-header-1); solution; platform week 7. The
       PowerPoint sims and screens of the old Online activity 4 stay in
       week-04 for Unit 5.
-- [ ] Unit 5 (week-06): Lecture 5 PowerPoint (from v2 Lecture 8 in git
-      history, week-09/lesson-08*), Online activity 5 a presentation with
-      AI (v2 Online activity 9: outline-lab, image-prompt-lab) + Canva and
-      Picture Rights.
-- [ ] Unit 6 (week-07): Excel (1) moved from week-06 (Lecture 6, Online 6).
-- [ ] Practice 1 and Online activity 7 (week-08): review of the new 1–6.
-- [ ] Unit 7 (week-09): Excel (2) moved from week-07 (Lecture 7); Online
-      activity 8 = the PivotTable activity + AI formulas and summary checked.
-- [ ] Unit 8 (week-10): databases moved from week-09 (Lecture 8, Online 9).
+- [x] Unit 5 (week-06): Lecture 5 PowerPoint (from v2 Lecture 8 in git
+      history, week-09/lesson-08*; renumbered 5.x); Online activity 5 = an
+      AI outline to three slides (Outline Lab), pictures you may use and
+      their source (Picture Rights), a title graphic in Canva; sims and
+      images copied into week-06; solution; platform week 8.
+- [x] Unit 6 (week-07): Excel (1) moved from week-06 (Lecture 6, Online 6);
+      platform week 9.
+- [x] Practice 1 and Online activity 7 (week-08): review of the new 1–6
+      (no sort, rule or chart: they are in Lecture 7; an AI-draft and a
+      PowerPoint check added; Review Quiz items 14–15 replaced).
+- [x] Unit 7 (week-09): Excel (2) moved from week-07 (Lecture 7); Online
+      activity 8 = the PivotTable activity + AI formulas and summary checked
+      (Summary Check); platform week 10.
+- [x] Unit 8 (week-10): databases moved from week-09 (Lecture 8, Online 9;
+      renumbered 8.x); platform week 11.
 - [x] Unit 9 (week-11): renumbered (Lecture 9, Online 10); ILOs A4, C4.
 - [x] Unit 10 (week-12): renumbered (Lecture 10, Online 11); Online 11 drafts the Home text with AI (a prompt + the facts of the service) and checks it.
 - [x] Unit 11 (week-14): renumbered (Lecture 11); Online 12 = product
       page, post with an AI picture checked, plan, Project Checker, three
       slides, final submission; the old week-15 pages removed (their sims
       stay).
-- [ ] Clean-up: NOTES, index, AUTHORING, check_size lists, glossary;
-      private: solutions renumbered, platform weeks 6–14, `syllabus-weeks.yml` v4.
+- [x] Units 9–11: sections renumbered 9.x, 10.x, 11.x (they kept the old
+      numbers after the move).
+- [x] Clean-up: NOTES, index, AUTHORING, check_size lists; private:
+      solutions renumbered (week-15 removed, Online 12 merged), platform
+      weeks 8–14, `syllabus-weeks.yml` v4 word for word.
+- [ ] Final checks (check_size --all, check_figures, course_package),
+      PR descriptions, report to the teacher.
 
 Rule for moving folders: the hidden face-to-face version links the old
 simulators and images of week-03 to week-15 (`../../week-WW/...`): copy

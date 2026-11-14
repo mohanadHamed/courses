@@ -8,7 +8,7 @@ from svgkit import Svg, INK, MUTED, LINE, ORANGE, PEACH, SOFT, GREEN, BLUE, ACCE
 from figs_u3 import poster_head
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-W = os.path.join(ROOT, "courses", "digital-skills", "week-09")
+W = os.path.join(ROOT, "courses", "digital-skills", "week-10")
 
 
 def table(s, x, y, fields, rows, widths, head_fill=GREY_BG, key=None, hi_row=None, hi_col=None):

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Summary Check</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <style>
+    .sim .ai { background: #fff; border: 1.5px solid #ced4da; border-radius: 10px; padding: 8px 12px; margin: 6px 0; }
+    .sim .claim { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f3f5; padding: 6px 0; font-weight: 700; }
+    .sim .claim:last-child { border-bottom: 0; }
+    .sim .claim .btns { display: flex; gap: 6px; }
+    .sim .claim button.on.t { background: #2b8a3e; color: #fff; border-color: #2b8a3e; }
+    .sim .claim button.on.w { background: #c92a2a; color: #fff; border-color: #c92a2a; }
+    .sim .claim .why { flex-basis: 100%; font-size: .85rem; font-weight: 600; color: #495057; }
+    .sim .facts { background: #ebfbee; border: 1.5px solid #217346; border-radius: 10px; padding: 6px 10px; font-weight: 700; font-size: .88rem; line-height: 1.5; }
+    .sim .task { font-weight: 800; color: var(--sim-accent); margin: 6px 0 0; }
+  </style>
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Summary Check: is the AI right?</h1>
+  <p class="hint">Rana pasted the sales list (no customer names) into an AI tool and asked for a summary of March. Check each sentence against the PivotTable facts below, and mark it <b>true</b> or <b>wrong</b>.</p>
+  <div class="facts" id="facts"></div>
+  <div class="ai" id="ai"></div>
+  <p class="task" id="task"></p>
+  <p class="message" id="msg"></p>
+</main>
+
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/game-kit.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const FACTS = "PivotTable facts: Sum by Type: Bags 78, Drinks 71, Paper 206 (total 355 JD). Sum by week: 87, 63, 112, 93 (first to fourth). Count: 24 sales. Biggest sale: 60 JD (Notebook, weeks 1 and 4).";
+  const C = [
+    ["Total sales in March were 355 JD.", true, "The Grand Total is 355 JD."],
+    ["Bags sold the most, because each bag is expensive.", false, "Paper sold the most (206 JD); Bags only 78 JD."],
+    ["The third week was the best, with 112 JD.", true, "The third week: 112 JD, the highest."],
+    ["Sales grew every week.", false, "The second week (63 JD) was lower than the first (87 JD), and the fourth (93) lower than the third."],
+    ["The average sale was about 15 JD.", true, "355 ÷ 24 ≈ 14.8 JD."],
+    ["The biggest single sale was a bag for 48 JD.", false, "The biggest sales were notebooks for 60 JD."],
+  ];
+  const s = { pick: {} };
+  const right = () => C.every((c, i) => s.pick[i] === c[1]);
+  const TASKS = [
+    { q: "Task 1: Mark every sentence true or wrong.", ok: () => Object.keys(s.pick).length === C.length },
+    { q: "Task 2: Correct your marks until all six are right. Which wrong sentence would have misled Rana most?", ok: () => right() },
+  ];
+  let ti = 0;
+  function upd() {
+    $("facts").textContent = FACTS;
+    $("ai").innerHTML = "<b>AI summary:</b>";
+    C.forEach(([t, ok, why], i) => {
+      const row = Kit.el("div", { class: "claim" }), txt = Kit.el("span", {}, t), btns = Kit.el("span", { class: "btns" });
+      row.append(txt, btns);
+      Kit.buttons(btns, [{ k: "t", label: "true" }, { k: "w", label: "wrong" }], (k) => { s.pick[i] = k === "t"; upd(); });
+      btns.querySelectorAll("button").forEach((b) => { b.classList.add(b.dataset.k); b.classList.toggle("on", s.pick[i] !== undefined && (b.dataset.k === "t") === s.pick[i]); });
+      if (s.pick[i] !== undefined) row.append(Kit.el("span", { class: "why" }, (s.pick[i] === ok ? "✔ " : "✘ Look again: ") + (s.pick[i] === ok ? why : "compare it with the facts above.")));
+      $("ai").appendChild(row);
+    });
+    let m = "";
+    while (ti < TASKS.length && TASKS[ti].ok()) { ti++; m = "✓ Done. "; Kit.good(); }
+    $("task").textContent = ti < TASKS.length ? TASKS[ti].q : "All tasks are done: keep the three true sentences, correct the three wrong ones, and say that you checked them.";
+    $("msg").textContent = m + "The AI writes fluent sentences; only your PivotTable shows if the numbers are right.";
+  }
+  window.SC = { mark: (i, v) => { s.pick[i] = v; upd(); } };
+  upd();
+})();
+</script>
+</body>
+</html>

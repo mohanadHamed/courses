@@ -271,9 +271,9 @@ local function hero_note(meta, slides, online, sheet)
       .. "On this page every step has its result. The lesson notes (PDF) are a short reference.")
   elseif online then
     table.insert(lines, "Work through the steps on this page, then do the tasks and submit them on the university e-learning platform. "
-      .. "Type your answers in the tasks PDF (it has boxes to fill in), save it and upload it, or print it and write by hand.")
+      .. "Fill in the tasks PDF (tap a circle, or type in a box), save it and upload it, or print it and write by hand.")
   elseif meta.homework then
-    table.insert(lines, "Type your answers in the PDF (it has boxes to fill in), save it and upload it, or print it and write by hand.")
+    table.insert(lines, "Fill in the PDF (tap a circle, or type in a box), save it and upload it, or print it and write by hand.")
   elseif meta.seminar or meta.practice then
     table.insert(lines, "No new ideas today: you apply the lectures you had. Do each activity alone, then open \"Check your result\".")
   elseif slides then
@@ -337,7 +337,8 @@ local function html_lesson(doc, course)
   table.insert(chip_html, '<span class="hero-chip hero-progress" id="lesson-progress" hidden></span>')
   if is_printed(meta) then
     -- Only on paper (and in the PDF): the answer lines are boxes to type in.
-    table.insert(chip_html, '<span class="hero-chip hero-fill">✎ Type in the blue boxes, save, upload</span>')
+    table.insert(chip_html, '<span class="hero-chip hero-fill"><span class="fill-boxes">✎ Type in the blue boxes, save, upload</span>'
+      .. '<span class="fill-picks">✎ Tap one circle in each question (or type in a blue box), save, upload</span></span>')
   end
 
   local desc = meta.description and str(meta.description) or ""

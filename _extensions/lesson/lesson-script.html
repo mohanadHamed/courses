@@ -494,3 +494,24 @@
   update();
 })();
 </script>
+<script>
+// Graded multiple choice ({.pick}, interact.lua): the student taps one
+// option; nothing is marked right or wrong. The choices are kept in this
+// browser only (a convenience: the page works the same without storage), so
+// "Print tasks" (or Save as PDF) prints them.
+(function () {
+  const picks = document.querySelectorAll(".pick input[type=radio]");
+  if (!picks.length) return;
+  const key = "pick:" + location.pathname;
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(key) || "{}") || {}; } catch (_) {}
+  picks.forEach((input) => {
+    if (saved[input.name] === input.value) input.checked = true;
+    input.addEventListener("change", () => {
+      if (!input.checked) return;
+      saved[input.name] = input.value;
+      try { localStorage.setItem(key, JSON.stringify(saved)); } catch (_) {}
+    });
+  });
+})();
+</script>

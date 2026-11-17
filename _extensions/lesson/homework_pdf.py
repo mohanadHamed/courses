@@ -17,7 +17,11 @@ every {{< answer-space lines=N >}} and the Name and Student number line hold
 an empty link to https://answer.field/<name> (shortcodes.lua, banner.lua,
 lesson.css); Chrome prints each link as a link rectangle, and make_fillable()
 turns each rectangle into a text field of the same size (multiline from two
-lines). A box for a drawing stays a box.
+lines). A box for a drawing stays a box. A multiple-choice question
+({.pick}, interact.lua) prints a circle for each option with a link to
+https://answer.field/pick-N?opt=A: the circles of one question become one
+radio-button field ("Question N"), so the student taps one option in the PDF
+and writes nothing.
 
 Project post-render step. Needs Google Chrome or Chromium (preinstalled on
 GitHub's ubuntu-latest runners) and the Python package pypdf for the form
@@ -70,7 +74,7 @@ def make_fillable(pdf_path):
     try:
         from pypdf import PdfWriter
         from pypdf.generic import (ArrayObject, BooleanObject, DictionaryObject, FloatObject,
-                                   NameObject, NumberObject, TextStringObject)
+                                   NameObject, NumberObject, DecodedStreamObject, TextStringObject)
     except ImportError:
         return None
     writer = PdfWriter(clone_from=pdf_path)
@@ -81,7 +85,35 @@ def make_fillable(pdf_path):
         NameObject("/BaseFont"): NameObject("/Helvetica"),
         NameObject("/Encoding"): NameObject("/WinAnsiEncoding"),
     }))
+    dingbats = writer._add_object(DictionaryObject({
+        NameObject("/Type"): NameObject("/Font"),
+        NameObject("/Subtype"): NameObject("/Type1"),
+        NameObject("/BaseFont"): NameObject("/ZapfDingbats"),
+    }))
     fields = ArrayObject()
+    radios = {}    # "pick-3" -> its radio-button field (a {.pick} question)
+
+    def dot_streams(w, h):
+        """The look of one radio button: "on" is a dark dot in the printed
+        circle, "off" is empty (the printed circle stays visible)."""
+        r = min(w, h) * 0.3
+        cx, cy, k = w / 2, h / 2, 0.5523 * r
+        circle = ("0.13 g %.2f %.2f m %.2f %.2f %.2f %.2f %.2f %.2f c %.2f %.2f %.2f %.2f %.2f %.2f c "
+                  "%.2f %.2f %.2f %.2f %.2f %.2f c %.2f %.2f %.2f %.2f %.2f %.2f c f"
+                  % (cx + r, cy,
+                     cx + r, cy + k, cx + k, cy + r, cx, cy + r,
+                     cx - k, cy + r, cx - r, cy + k, cx - r, cy,
+                     cx - r, cy - k, cx - k, cy - r, cx, cy - r,
+                     cx + k, cy - r, cx + r, cy - k, cx + r, cy))
+        out = []
+        for content in (circle, ""):
+            s = DecodedStreamObject()
+            s.set_data(content.encode("ascii"))
+            s.update({NameObject("/Type"): NameObject("/XObject"), NameObject("/Subtype"): NameObject("/Form"),
+                      NameObject("/BBox"): ArrayObject([FloatObject(0), FloatObject(0), FloatObject(w), FloatObject(h)])})
+            out.append(writer._add_object(s))
+        return out
+
     for page in writer.pages:
         if "/Annots" not in page:
             continue
@@ -94,6 +126,38 @@ def make_fillable(pdf_path):
                 kept.append(ref)
                 continue
             key, _, query = uri[len(FIELD_URL):].partition("?")
+            if key.startswith("pick-") and "opt=" in query:
+                # One option of a multiple-choice question: a radio button.
+                opt = query.split("opt=")[1].split("&")[0]
+                if key not in radios:
+                    name = "Question " + key[len("pick-"):]
+                    radios[key] = writer._add_object(DictionaryObject({
+                        NameObject("/FT"): NameObject("/Btn"),
+                        NameObject("/Ff"): NumberObject(49152),   # radio, no toggle to off
+                        NameObject("/T"): TextStringObject(name),
+                        NameObject("/TU"): TextStringObject(name),
+                        NameObject("/V"): NameObject("/Off"),
+                        NameObject("/Kids"): ArrayObject(),
+                    }))
+                    fields.append(radios[key])
+                rect = [float(v) for v in annot["/Rect"]]
+                on, off = dot_streams(abs(rect[2] - rect[0]), abs(rect[3] - rect[1]))
+                widget = writer._add_object(DictionaryObject({
+                    NameObject("/Type"): NameObject("/Annot"),
+                    NameObject("/Subtype"): NameObject("/Widget"),
+                    NameObject("/Parent"): radios[key],
+                    NameObject("/Rect"): ArrayObject([FloatObject(v) for v in rect]),
+                    NameObject("/F"): NumberObject(4),
+                    NameObject("/P"): page.indirect_reference,
+                    NameObject("/AS"): NameObject("/Off"),
+                    NameObject("/AP"): DictionaryObject({NameObject("/N"): DictionaryObject({
+                        NameObject("/" + opt): on, NameObject("/Off"): off})}),
+                    NameObject("/MK"): DictionaryObject({NameObject("/CA"): TextStringObject("l")}),
+                    NameObject("/DA"): TextStringObject("/ZaDb 0 Tf 0.13 g"),
+                }))
+                radios[key].get_object()["/Kids"].append(widget)
+                kept.append(widget)
+                continue
             lines = int(query.split("lines=")[1]) if "lines=" in query else 1
             name = FIELD_NAMES.get(key, "Answer " + key)
             widget = DictionaryObject({
@@ -122,7 +186,7 @@ def make_fillable(pdf_path):
             NameObject("/NeedAppearances"): BooleanObject(True),
             NameObject("/DA"): TextStringObject("/Helv 11 Tf 0 g"),
             NameObject("/DR"): DictionaryObject({
-                NameObject("/Font"): DictionaryObject({NameObject("/Helv"): font})}),
+                NameObject("/Font"): DictionaryObject({NameObject("/Helv"): font, NameObject("/ZaDb"): dingbats})}),
         })
         with open(pdf_path, "wb") as f:
             writer.write(f)
@@ -132,7 +196,7 @@ def make_fillable(pdf_path):
 def is_real_page(html_path):
     """Skip unpublished drafts (Quarto leaves a tiny empty page for them)."""
     text = read_page(html_path)
-    return 'class="lesson-hero' in text and "answer-space" in text
+    return 'class="lesson-hero' in text and ("answer-space" in text or 'class="pick"' in text)
 
 
 def is_online_activity(html_path):

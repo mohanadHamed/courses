@@ -224,6 +224,40 @@ BEFORE_PICTURES = {
     "courses/game-math/week-06/lesson-06.qmd",        # 6.5: C, H, P; Drawbridge: E, H
     "courses/game-math/week-14/practice-02.qmd",      # Activity 2: A, P
 }
+# A question of graded work with options (A, B, C …) is a multiple choice
+# ({.pick}, interact.lua; the teacher's request of 2026-11-17): the student
+# taps one circle on the page and in the PDF form, and writes nothing. A
+# question that lists its options in the text ("**A** … · **B** …", "(A) …
+# (B) …", "Write its letter") is a {.pick} not written yet.
+LETTER_Q_RE = re.compile(r"\*\*A\*\*[^\n]*\*\*B\*\*|\(A\)[^\n]*\(B\)|\*\*A\.\*\*|\bwrite (?:its|the|a) letter\b"
+                         r"|\bwrite A(?:,| or)|\bChoose A, B", re.I)
+PICK_BLOCK_RE = re.compile(r"^([ \t]*):{3,}\s*\{[^}\n]*\.pick\b[^\n]*\n(.*?)^\1:{3,}[ \t]*$", re.M | re.S)
+PICK_OPTIONS = (2, 5)
+# Graded work written before that rule, where the check found options in the
+# text (2026-11-17). Each one becomes {.pick} questions when it is next
+# written or rewritten: take it out of this set then.
+BEFORE_PICKS = {
+    "courses/computing-systems/week-05/homework-05.qmd",
+    "courses/computing-systems/week-07/homework-06.qmd",
+    "courses/computing-systems/week-12/homework-10.qmd",
+    "courses/computing-systems/week-13/homework-11.qmd",
+    "courses/digital-media/week-03/homework-03.qmd",
+    "courses/digital-media/week-04/homework-04.qmd",
+    "courses/digital-media/week-07/homework-07.qmd",
+    "courses/digital-media/week-09/homework-08.qmd",
+    "courses/digital-media/week-10/homework-09.qmd",
+    "courses/digital-media/week-11/homework-10.qmd",
+    "courses/digital-media/week-13/homework-12.qmd",
+    "courses/digital-skills/week-04/online-04.qmd",
+    "courses/digital-skills/week-06/online-05.qmd",
+    "courses/digital-skills/week-08/online-07.qmd",
+    "courses/digital-skills/week-09/online-08.qmd",
+    "courses/digital-skills/week-10/online-09.qmd",
+    "courses/digital-skills/week-11/online-10.qmd",
+    "courses/digital-skills/week-14/online-12.qmd",
+    "courses/game-math/week-07/homework-07.qmd",
+    "courses/game-math/week-12/homework-11.qmd",
+}
 IMAGE_RE = re.compile(r'!\[[^\]]*\]\(([^)\s]+\.png)\)|\{\{< *sim [^>]*poster="([^"]+\.png)"')
 # Sessions sent to students before a rule changed keep their older model this
 # semester (AUTHORING.md, "Frozen sessions"): they are listed, not checked.
@@ -586,6 +620,20 @@ def answered_warnings(body):
     return out
 
 
+def letter_warnings(text, rel):
+    """Graded questions that give their options in the text: write them as
+    ::: {.pick} (one circle to tap on the page and in the PDF)."""
+    if rel.replace(os.sep, "/") in BEFORE_PICKS:
+        return []
+    text = PICK_BLOCK_RE.sub("", drop_divs(text, ["prompt"]))
+    out = []
+    for m in LETTER_Q_RE.finditer(text):
+        out.append('a question gives its options in the text ("%s"); write it as ::: {.pick} (the student '
+                   'taps one circle on the page and in the PDF; AUTHORING.md, "Multiple choice in graded work")'
+                   % m.group(0)[:40])
+    return out
+
+
 def graded_warnings(text):
     """Graded work (homework, Tasks to submit) never shows answers."""
     out = []
@@ -598,6 +646,13 @@ def graded_warnings(text):
     m = MARKS_RE.search(text)
     if m:
         out.append('the tasks name marks ("%s"); homework and online tasks show no marks' % m.group(0))
+    for m in PICK_BLOCK_RE.finditer(text):
+        body = m.group(2)
+        n = len(re.findall(r"^[ \t]*[-*+] ", body, re.M))
+        if not (PICK_OPTIONS[0] <= n <= PICK_OPTIONS[1]):
+            out.append("a ::: {.pick} question has %d options; it needs %d–%d (- option)" % ((n,) + PICK_OPTIONS))
+        if re.search(r"^[ \t]*[-*+] \[[ xX]\]", body, re.M):
+            out.append("a ::: {.pick} question marks an option ([x] or [ ]); graded work shows no answer")
     # A ready prompt ({.prompt}) is copied, not written: its words do not count;
     # neither does a question answered with a letter ("Write A or B. (A) …").
     plain_text = drop_divs(re.sub(r"<!--.*?-->", " ", text, flags=re.S), ["prompt"])
@@ -937,8 +992,9 @@ def check_online(path, rel):
     n_tasks = len(re.findall(r"^### Task \d", tasks, re.M))
     if not (ONLINE_TASKS[0] <= n_tasks <= ONLINE_TASKS[1]):
         out.append("%s: %d tasks to submit, an online activity needs %d–%d (### Task 1 · …)" % ((rel, n_tasks) + ONLINE_TASKS))
-    if "answer-space" not in tasks:
-        out.append("%s: the tasks have no {{< answer-space >}} for the printed copy" % rel)
+    if "answer-space" not in tasks and not PICK_BLOCK_RE.search(tasks):
+        out.append("%s: the tasks have no {{< answer-space >}} or {.pick} question for the printed copy" % rel)
+    out.extend("%s: Tasks to submit: %s" % (rel, w) for w in letter_warnings(tasks, rel))
     if ".match" in tasks:
         out.append("%s: the tasks to submit show answers (.match); keep self-checks in the Steps" % rel)
     for w in graded_warnings(tasks) + ai_task_warnings(tasks, graded=True):
@@ -1118,7 +1174,8 @@ def check(project_dir):
         extra = "".join(p for p in parts if re.match(r"## .*\{\.extra\}", p))
         graded = "".join(p for p in parts if not re.match(r"## .*\{\.extra\}", p))
         warnings.extend("%s: %s" % (rel, w) for w in graded_warnings(graded) + ai_task_warnings(graded, graded=True)
-                        + ai_task_warnings(extra, page=True) + ic_warnings(extra))
+                        + ai_task_warnings(extra, page=True) + ic_warnings(extra)
+                        + letter_warnings(graded, rel))
         if re.search(r"^marks:", front_matter(path), re.M):
             warnings.append("%s: `marks:` in the front matter; homework shows no marks" % rel)
     pattern = os.path.join(project_dir, "courses", "*", "week-*", "lesson-[0-9][0-9].qmd")

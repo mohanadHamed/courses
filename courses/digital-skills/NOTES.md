@@ -243,6 +243,12 @@ every calendar week, by hand, with the university's template.
 
 ## Lessons learned
 
+- 2026-11-17 (teacher's request): the students did not understand the
+  tasks of Online activity 3 ("Write its letter", options in one line). Its
+  tasks are now five multiple-choice questions (`{.pick}`: tap a circle on
+  the page or in the tasks PDF) and one screenshot. Online activities 4–12
+  get the same when they are next written or rewritten (`BEFORE_PICKS`).
+
 - 2026-11-14 (syllabus v4, the teacher's request): the syllabus merged the
   official description with *Smart Digital Skills* (Office and AI tools):
   new ILOs A3 (Office), A4 (digital services), B2 (evaluate AI output).

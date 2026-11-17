@@ -1000,6 +1000,50 @@ simple as the outcomes allow; the thinking stays at the ILO's level.
   "give a reason", "write a sentence …", "in your own words") in homework
   and tasks to submit, and about a worksheet record that asks for a reason
   ("because") or for long text (`lines=3` or more).
+
+#### Multiple choice in graded work (since 2026-11-17)
+
+Most students did not understand what a task asked ("Write its letter",
+options in one line: **A** … · **B** …), because of the English. So a
+question of the homework or of the Tasks to submit that has options is a
+**multiple choice that the student taps**, on the page and in the PDF:
+
+```markdown
+::: {.pick}
+**a)** Which password is the **strongest**?
+
+- `sami2005`
+- `Blue-Lamp-Rain-58`
+- `qwerty`
+:::
+```
+
+- 2–5 options, one per line; the page adds the letters A, B, C … in the
+  written order. **No `[x]`**: graded work shows no answer (the solution
+  stays in `courses-private`, as letters: "Question 1: C").
+- Start the question with a bold label (`**a)**`), never with `a)` alone:
+  Pandoc reads that as a list.
+- **On the page** each option is a radio button; nothing is marked right
+  or wrong. The choice is kept in the student's browser, so "Print tasks"
+  › Save as PDF prints it.
+- **In the PDF** (`homework_pdf.py`) each question is a radio-button field
+  "Question N": the student taps one circle in the downloaded PDF (Files on
+  an iPhone, Drive on Android, any PDF app on a computer), saves it and
+  uploads it. On paper it is a circle to tick.
+- Prefer a multiple choice over typing whenever the answer is a choice (a
+  letter, yes or no, which one, which numbers). Keep a text field only for
+  a number, a name or a file name that typing practises, and keep the
+  product tasks (a file, a screenshot) as they are.
+- Each question: one short sentence (A2) with the key words in **bold**,
+  the facts in the task (a picture with numbers, a table), and short
+  options. The first line of the tasks says "Tap one answer in each
+  question."
+- `check_size.py` warns about a question that gives its options in the
+  text ("**A** … · **B** …", "(A) … (B) …", "Write its letter") and about a
+  `{.pick}` with fewer than 2 or more than 5 options or with a marked
+  option. `BEFORE_PICKS` lists the homework and online activities written
+  before this rule; each one gets its `{.pick}` questions when it is next
+  written or rewritten.
 - **Match the thinking to the ILO.** For a knowledge ILO (describe, explain;
   K), questions ask students to recognise, describe, classify or explain a
   game example. Calculations appear only where the ILO or a later ILO needs
@@ -1426,7 +1470,11 @@ homework and its solution together.
   `homework_pdf.py` turns each rectangle into a field with **pypdf**
   (installed in CI; without it the PDFs are made without fields). A box for
   a drawing (`box=`) stays a box. The same holds for the tasks PDF of an
-  online activity.
+  online activity. A multiple choice (`{.pick}`, see "Multiple choice in
+  graded work") prints a circle for each option with a link to
+  `https://answer.field/pick-N?opt=A`; the circles of one question become
+  one radio-button field, and the chip says "Tap one circle in each
+  question (or type in a blue box), save, upload".
 - **Answer space:** after every question, add space to write the answer:
   `{{< answer-space lines=2 >}}` (dotted lines; as many as a good answer needs)
   or `{{< answer-space box=6 >}}` (an empty box, height in cm, for a drawing).
@@ -1593,6 +1641,16 @@ taken off. Rewrite them with short answers next semester.
 - Quarto version is pinned in the workflow; keep local Quarto the same.
 
 ## Lessons learned
+
+- 2026-11-17 (teacher's request, Digital Skills Online activity 3): most
+  students did not understand the tasks to submit because of the English:
+  "Write its letter", and options in one line (**A** … · **B** …). The
+  questions are now multiple choice that the student taps (`{.pick}`): a
+  radio button on the page and a radio-button field in the tasks PDF, so
+  the student writes nothing. The rule ("Multiple choice in graded work")
+  is in the templates and in `check_size.py`, which lists the 20 older
+  homework and online activities with options in the text in
+  `BEFORE_PICKS`, to be changed when they are next written or rewritten.
 
 - 2026-11-10 (teacher's requests, later the same day): Online activity 2
   of Digital Skills is done alone at home, and most of its steps are on the

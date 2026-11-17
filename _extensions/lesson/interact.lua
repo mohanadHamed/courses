@@ -306,9 +306,61 @@ end
 
 local BUILD = { choice = choice, order = order, sort = sort, fill = fill }
 
+-- Graded multiple choice ({.pick}): a question of the homework or of the
+-- Tasks to submit, answered with a tap, never with English text (AUTHORING.md,
+-- "Answers without written English"). It shows nothing right or wrong (the
+-- solution stays in courses-private):
+--
+--   ::: {.pick}
+--   **a)** Which password is the strongest?
+--
+--   - `sami2005`
+--   - `Blue-Lamp-Rain-58`
+--   :::
+--
+-- The options get the letters A, B, C … in the written order. On the screen
+-- each option is a radio button (the choice is kept in this browser and
+-- printed with "Print tasks"); on paper it is a circle that holds an empty
+-- link to https://answer.field/pick-N?opt=A, which homework_pdf.py turns into
+-- a radio button of the PDF form "Question N": the student taps a circle in
+-- the downloaded PDF, saves it and uploads it.
+local picks = 0
+local function pick(div)
+  local intro, list, after = split(div, { BulletList = true, OrderedList = true })
+  if not list then fail("pick", "needs a list of 2–5 options (- option)") end
+  if #list.content < 2 or #list.content > 5 then fail("pick", "needs 2–5 options") end
+  picks = picks + 1
+  local opts = {}
+  for i, item in ipairs(list.content) do
+    local inl = item_inlines(item)
+    local mark = inl[1] and inl[1].t == "Str" and inl[1].text or ""
+    if mark == "☒" or mark == "☐" then
+      fail("pick", "is graded: write the options without [x] or [ ] (the answer stays in courses-private)")
+    end
+    local letter = string.char(64 + i)
+    table.insert(opts, string.format(
+      '<label class="pick-opt"><input type="radio" name="pick-%d" value="%s">'
+      .. '<span class="pick-dot"><a class="answer-field answer-radio" href="https://answer.field/pick-%d?opt=%s"'
+      .. ' tabindex="-1" aria-hidden="true"></a></span>'
+      .. '<b class="pick-letter">%s</b><span class="pick-text">%s</span></label>',
+      picks, letter, picks, letter, letter, html_inlines(inl)))
+  end
+  local blocks = pandoc.Blocks({ pandoc.RawBlock("html",
+    string.format('<div class="pick" data-pick="%d"><div class="pick-q">', picks)) })
+  blocks:extend(intro)
+  blocks:insert(pandoc.RawBlock("html", '</div><div class="pick-opts" role="radiogroup">'
+    .. table.concat(opts) .. "</div></div>"))
+  blocks:extend(after)
+  return blocks
+end
+
 return {
   {
     Div = function(div)
+      if div.classes:includes("pick") then
+        if not quarto.doc.is_format("html") then return nil end
+        return pick(div)
+      end
       local kind = kind_of(div)
       if not kind then return nil end
       if not quarto.doc.is_format("html") then

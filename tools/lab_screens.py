@@ -1912,6 +1912,186 @@ def lab_ac_tutu_dl(s, top):
     tutu_download(s, top, "Customers", "sheet")
 
 
+
+# =====================================================================
+# Lecture 9: the plan of the service in Word, and an order form in
+# Microsoft Forms (forms.office.com, signed in with the university account).
+# =====================================================================
+
+FO = "#036c70"
+FO_SOFT = "#e3f2f1"
+PLAN = [("Title", "Mona's Cakes: the plan"), ("Normal", "The customer: students and families in Amman."),
+        ("Normal", "The need: a fresh cake on the right day."), ("Normal", "The steps: see the cakes, choose, order, collect.")]
+
+
+def lab_w9_plan(s, top):
+    """Word: the plan typed; the first line with the style Title."""
+    h = 470
+    _, rb = word_window(s, h, "Home", style="Title")
+    boxes, _ = page(s, 330, 196, 520, h - 250, PLAN, caret=0)
+    mark_box(top, boxes[0], 1, "left")
+    mark_box(top, rb["Title"], 2, "bottom")
+
+
+def lab_w9_save(s, top):
+    save_as(s, top, "plan-Huda", "Word Document (*.docx)", WORD)
+
+
+def forms_shell(s, h, tab="Questions", preview=False):
+    browser(s, h, "forms.office.com", "Microsoft Forms")
+    s.rect(15, 85, W - 30, h - 100, fill="#f1f8f6")
+    s.rect(15, 85, W - 30, 44, fill="#ffffff")
+    s.text(32, 113, "Forms", 15, 700, FO)
+    p = {}
+    for i, n in enumerate(("Questions", "Responses")):
+        x = 360 + i * 110
+        s.text(x, 113, n, 13, 700 if n == tab else 400, FO if n == tab else INK)
+        if n == tab and not preview:
+            s.rect(x - 4, 124, width(n, 13) + 8, 3, fill=FO)
+        p[n] = (x - 8, 96, width(n, 13) + 16, 30)
+    p["preview"] = (640, 98, 80, 26)
+    s.rect(*p["preview"], fill="#ffffff", stroke="#c9d6d4", sw=1, rx=4)
+    s.text(680, 116, "Preview", 12, 600, INK, "middle")
+    s.rect(730, 98, 140, 26, fill=FO, rx=4)
+    s.text(800, 116, "Collect responses", 12, 600, "#ffffff", "middle")
+    return p
+
+
+def fcard(s, x, y, w_, hh, head=False):
+    s.rect(x, y, w_, hh, fill="#ffffff", stroke="#dfe7e5", sw=1, rx=8)
+    if head:
+        s.rect(x, y, w_, 6, fill=FO, rx=3)
+
+
+def lab_fo_new(s, top):
+    """forms.office.com, signed in: New Form."""
+    h = 380
+    browser(s, h, "forms.office.com", "Microsoft Forms")
+    s.rect(15, 85, W - 30, h - 100, fill="#f1f8f6")
+    s.text(40, 120, "Forms", 18, 700, FO)
+    s.rect(780, 102, 70, 26, fill="#ffffff", stroke="#c9d6d4", sw=1, rx=13)
+    s.text(815, 119, "HU", 12, 700, INK, "middle")
+    s.text(40, 166, "Start a new form", 13, 600, INK)
+    s.rect(40, 180, 150, 120, fill="#ffffff", stroke=FO, sw=2, rx=8)
+    s.text(115, 236, "New Form", 14, 700, FO, "middle")
+    s.rect(206, 180, 150, 120, fill="#ffffff", stroke="#dfe7e5", sw=1, rx=8)
+    s.text(281, 236, "New Quiz", 14, 400, INK, "middle")
+    for i, n in enumerate(("Event registration", "Customer feedback")):
+        s.rect(372 + i * 166, 180, 150, 120, fill="#ffffff", stroke="#dfe7e5", sw=1, rx=8)
+        s.text(447 + i * 166, 236, n, 12, 400, GREY, "middle")
+    mark_box(top, (40, 180, 150, 120), 1, "bottom", 8, 3)
+    top.label(400, 320, 330, "first: Sign in with the university account")
+
+
+def lab_fo_title(s, top):
+    """The title, then + Add new and the kinds of questions."""
+    h = 430
+    forms_shell(s, h)
+    fcard(s, 200, 146, 500, 80, True)
+    s.text(220, 186, "Mona's Cakes: order", 20, 400, INK)
+    s.line(220, 196, 680, 196, "#c9d6d4", 1)
+    s.text(220, 214, "Description", 11.5, 400, LIGHT)
+    s.rect(200, 246, 100, 30, fill=FO, rx=4)
+    s.text(250, 266, "+ Add new", 12.5, 700, "#ffffff", "middle")
+    kinds = ("Choice", "Text", "Rating", "Date")
+    for i, k in enumerate(kinds):
+        x = 200 + i * 96
+        s.rect(x, 292, 88, 30, fill="#ffffff", stroke="#c9d6d4", sw=1, rx=15)
+        s.text(x + 44, 312, k, 12.5, 600, INK, "middle")
+    mark_box(top, (210, 166, 300, 34), 1, "left", 4, 2)
+    mark_box(top, (200, 246, 100, 30), 2, "left", 4, 2)
+    mark_box(top, (296, 292, 88, 30), 3, "bottom", 15, 2)
+    top.label(560, 250, 260, "Text, Choice, Date", arrow_to=(500, 300))
+
+
+def lab_fo_questions(s, top):
+    """Three questions: Text (Required), Choice with three options, Date."""
+    h = 560
+    forms_shell(s, h)
+    fcard(s, 200, 140, 500, 80)
+    s.text(216, 166, "1. Your name", 13, 700, INK)
+    s.text(216, 190, "Enter your answer", 11.5, 400, LIGHT)
+    s.rect(560, 198, 14, 14, fill=FO, rx=2)
+    s.text(582, 210, "Required", 11.5, 400, INK)
+    fcard(s, 200, 230, 500, 150)
+    s.text(216, 256, "2. Which cake?", 13, 700, INK)
+    for i, o in enumerate(("Chocolate", "Strawberry", "Vanilla")):
+        s.rect(226, 268 + i * 30, 260, 24, fill="#ffffff", stroke="#e3e3e3", sw=1, rx=12)
+        s.text(240, 285 + i * 30, o, 12, 400, INK)
+    s.text(500, 360, "+ Add option", 11.5, 600, FO)
+    fcard(s, 200, 390, 500, 80)
+    s.text(216, 416, "3. When do you want it?", 13, 700, INK)
+    s.text(216, 440, "Please input date (dd/MM/yyyy)", 11.5, 400, LIGHT)
+    mark_box(top, (556, 194, 90, 22), 1, "right", 4, 2)
+    mark_box(top, (226, 268, 260, 84), 2, "left", 4, 2)
+    mark_box(top, (210, 400, 300, 50), 3, "left", 4, 2)
+
+
+def lab_fo_preview(s, top):
+    """Preview: a test order, then Submit."""
+    h = 520
+    p = forms_shell(s, h, preview=True)
+    fcard(s, 200, 140, 500, 50, True)
+    s.text(216, 172, "Mona's Cakes: order", 17, 400, INK)
+    fcard(s, 200, 198, 500, 60)
+    s.text(216, 220, "1. Your name *", 12.5, 700, INK)
+    s.text(216, 246, "Huda", 12.5, 400, INK)
+    s.line(216, 250, 500, 250, "#c9d6d4", 1)
+    fcard(s, 200, 266, 500, 96)
+    s.text(216, 288, "2. Which cake?", 12.5, 700, INK)
+    for i, o in enumerate(("Chocolate", "Strawberry", "Vanilla")):
+        s.circle(226, 306 + i * 20, 6, fill=FO if i == 0 else "#ffffff", stroke=FO, sw=1.4)
+        s.text(240, 310 + i * 20, o, 12, 400, INK)
+    fcard(s, 200, 370, 500, 60)
+    s.text(216, 392, "3. When do you want it?", 12.5, 700, INK)
+    s.text(216, 418, "05/12/2026", 12.5, 400, INK)
+    s.rect(200, 444, 90, 30, fill=FO, rx=4)
+    s.text(245, 464, "Submit", 13, 700, "#ffffff", "middle")
+    mark_box(top, p["preview"], 1, "bottom", 4, 2)
+    mark_box(top, (210, 230, 300, 120), 2, "left", 4, 2)
+    mark_box(top, (200, 444, 90, 30), 3, "right", 4, 2)
+
+
+def lab_fo_responses(s, top):
+    """Responses: 1 response, and Open results in Excel."""
+    h = 400
+    p = forms_shell(s, h, tab="Responses")
+    fcard(s, 200, 146, 500, 200)
+    s.text(220, 186, "1", 34, 700, INK)
+    s.text(250, 186, "Responses", 16, 400, INK)
+    s.rect(220, 206, 190, 28, fill="#107c41", rx=4)
+    s.text(315, 225, "Open results in Excel", 12, 700, "#ffffff", "middle")
+    s.text(220, 270, "2. Which cake?", 12.5, 700, INK)
+    s.rect(220, 284, 300, 14, fill="#e9ecef", rx=3)
+    s.rect(220, 284, 300, 14, fill=FO, rx=3)
+    s.text(530, 296, "Chocolate  1", 11.5, 400, INK)
+    mark_box(top, p["Responses"], 1, "bottom", 4, 1)
+    mark_box(top, (220, 206, 190, 28), 2, "right", 4, 2)
+
+
+def _doc_ai_page(s, box, paras, fresh=()):
+    x, y, w_, hh = box
+    s.rect(x + 35, y + 13, w_ - 70, hh - 26, fill="#ffffff", stroke="#e0e0e0", sw=1)
+    cy = y + 50
+    for i, (st, txt, col) in enumerate(paras):
+        size = {"Title": 20, "Normal": 11.5}[st]
+        if i in fresh:
+            s.rect(x + 60, cy - size, w_ - 130, size + 8, fill="#fff3bf")
+        s.text(x + 65, cy, txt, size, 400, col or INK)
+        cy += size + 16
+
+
+def lab_w9_tutu_ai(s, top):
+    paras = [("Title", "Mona's Cakes: the plan", None), ("Normal", "Welcome to Mona's Cakes: fresh cakes, made at home.", None),
+             ("Normal", "The customer: students and families in Amman.", None), ("Normal", "The need: a fresh cake on the right day.", None)]
+    tutu_ai(s, top, "plan-Huda", "doc", "Add a short welcome sentence for the customers under the title.",
+            "Done: a welcome sentence is under the title.", lambda s_, b: _doc_ai_page(s_, b, paras, {1}))
+
+
+def lab_w9_tutu_dl(s, top):
+    tutu_download(s, top, "plan-Huda", "doc")
+
+
 # name: (the drawing, the part of it that the worksheet shows: x, y, width, height).
 # A crop zooms in on the buttons of the step, so that they are big on paper.
 SCREENS = {
@@ -1981,6 +2161,18 @@ SCREENS = {
     "week-10/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
     "week-10/images/lab-tutu-2": (lab_ac_tutu_ai, (15, 86, 870, 370)),
     "week-10/images/lab-tutu-3": (lab_ac_tutu_dl, (0, 86, 470, 366)),
+    # Lecture 9, a digital service: Word and Microsoft Forms (week-11)
+    "week-11/images/lab-open-1": (lab_open_1, None),
+    "week-11/images/lab-plan-1": (lab_w9_plan, (320, 80, 565, 300)),
+    "week-11/images/lab-save-1": (lab_w9_save, None),
+    "week-11/images/lab-forms-1": (lab_fo_new, (15, 15, 870, 350)),
+    "week-11/images/lab-forms-2": (lab_fo_title, (15, 85, 870, 260)),
+    "week-11/images/lab-forms-3": (lab_fo_questions, (150, 130, 600, 360)),
+    "week-11/images/lab-forms-4": (lab_fo_preview, (150, 85, 740, 410)),
+    "week-11/images/lab-result-1": (lab_fo_responses, (15, 85, 870, 280)),
+    "week-11/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "week-11/images/lab-tutu-2": (lab_w9_tutu_ai, (15, 86, 870, 370)),
+    "week-11/images/lab-tutu-3": (lab_w9_tutu_dl, (0, 86, 470, 366)),
 }
 
 def draw(fn, crop=None):

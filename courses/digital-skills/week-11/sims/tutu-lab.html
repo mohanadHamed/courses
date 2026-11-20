@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tutu Lab: AI changes your plan</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tutu Lab: AI changes your plan</h1>
+  <p class="hint">The Extra of your worksheet, as on <b>tutudocs.com</b> (no sign-in): <b>open</b> your plan, ask the <b>AI Assistant</b> for a change, then <b>download</b> it for Word. (Practice with fixed answers: no real AI here.)</p>
+  <div id="tutu"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.TUTU = {
+  kind: "doc", file: "plan-Huda.docx",
+  model: [
+    { style: "Title", text: "Mona's Cakes: the plan" },
+    { style: "Normal", text: "The customer: students and families in Amman." },
+    { style: "Normal", text: "The need: a fresh cake on the right day." },
+    { style: "Normal", text: "The steps: see the cakes, choose, order, collect." },
+  ],
+  asks: [
+    { text: "Add a short welcome sentence for the customers under the title.", keys: /welcome|sentence/i, done: "Done: a welcome sentence is under the title.",
+      apply: (m) => { m.splice(1, 0, { style: "Normal", text: "Welcome to Mona's Cakes: fresh cakes, made at home with love." }); return [1]; } },
+    { text: "Make the title green.", keys: /green|colou?r/i, done: "Done: the title is green.",
+      apply: (m) => { m[0].color = "#2b8a3e"; return [0]; } },
+  ],
+};
+</script>
+<script src="../../../../shared/sims/tutu-lab.js"></script>
+</body>
+</html>

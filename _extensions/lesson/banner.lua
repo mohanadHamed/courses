@@ -258,6 +258,13 @@ local function is_f2f(meta)
   return meta.f2f == true or str(meta.f2f or "") == "true"
 end
 
+-- The lab model (Digital Skills, since 2026-11-20; NOTES.md): the lecture
+-- has about 15 minutes on the page, then the printed worksheet, a guide that
+-- the students follow alone in the real app (no questions, no results).
+local function is_lab(meta)
+  return meta.lab == true or str(meta.lab or "") == "true"
+end
+
 local function hero_note(meta, slides, online, sheet)
   local lines = {}
   if sheet and is_f2f(meta) then
@@ -266,6 +273,9 @@ local function hero_note(meta, slides, online, sheet)
       .. "In class, the teacher first explains with the slides. Then you do the worksheet (PDF): "
       .. "Part A in the real app on the computer, Part B on the simulators of this page (they work on a phone too). "
       .. "On this page, every step has a check that answers at once.")
+  elseif sheet and is_lab(meta) then
+    table.insert(lines, "In class, about 15 minutes on this page: the ideas on the simulators. Then each student follows "
+      .. "the worksheet (PDF) in Word on the lab computer, step by step. At home, the simulators of this page work on a phone.")
   elseif sheet then
     table.insert(lines, "In class, follow the worksheet (PDF): do each experiment on the computer and record your results. "
       .. "On this page every step has its result. The lesson notes (PDF) are a short reference.")
@@ -362,6 +372,11 @@ local function html_lesson(doc, course)
     hero_note(meta, slides, online, sheet))
 
   local blocks = { pandoc.RawBlock("html", hero) }
+  -- A page shown like slides (paged: true; lesson-script.html, "paged"): one
+  -- part at a time, for the teacher at the smart screen.
+  if meta.paged == true or str(meta.paged or "") == "true" then
+    table.insert(blocks, pandoc.RawBlock("html", '<div id="paged-lesson" hidden></div>'))
+  end
   if is_printed(meta) then
     -- Only on paper: a line for the name and the student number.
     table.insert(blocks, pandoc.RawBlock("html",
@@ -491,6 +506,10 @@ local function typst_lesson(doc, course)
     program = raw(typst_string(str(meta["diploma-line"] or ""))),
   }
 
+  -- A lab worksheet is a guide to follow step by step: no goal card and no
+  -- card of the page, so that the first task starts on the first page.
+  local stem = pandoc.path.split_extension(pandoc.path.filename(quarto.doc.input_file))
+  if is_lab(meta) and stem:match("%-sheet$") then return {} end
   local ilos = lesson_ilos(meta, course)
   local card = web_lesson_card(meta)
   if #ilos == 0 then return card and { card } or {} end

@@ -117,6 +117,57 @@ management, medical sterilization, facility assessment). So this course is
   and builds its form), 11 (its website), 12 (its post, marketing plan,
   three slides and the final submission with an AI-use statement).
 
+## The lab model (since 2026-11-20; Unit 4 first)
+
+The college now has a **computer lab** for this course: Windows computers
+with Microsoft Office. On 2026-11-20 the teacher asked to rewrite Unit 4 for
+the lab, as a trial; if it works, Units 5 and later follow (not before the
+teacher asks: one unit at a time). A lecture in the lab model
+(`lab: true` in the front matter of the page and the worksheet) has two parts:
+
+1. **About 15 minutes on the interactive page** (`lesson-NN.qmd`), on the
+   smart screen. Every section has two parts, clearly apart:
+   `### On the simulator` (the idea in 3–4 short points and a simulator that
+   looks like the real app, with the same steps as the worksheet) and
+   `### In Word: worksheet Tasks …` (a `:::: {.word-part}` box with the
+   drawn screens of the worksheet: the teacher shows the same steps in the
+   real app on the laptop when time allows). One Try it question per section;
+   no Game challenge; `check_size.py` plans at most 20 minutes (the In Word
+   boxes are not counted).
+2. **About 35 minutes in the lab:** each student gets the **printed
+   worksheet** (`lesson-NN-sheet.qmd`) and follows it alone in the real app.
+
+**The worksheet is a guide, not a test** (the teacher's words: it tells the
+student what to do, like a crib sheet). Its only aim is that every student,
+even the weakest, does the steps alone, fast and right:
+
+- `## Task N · …` sections (3–8), each with numbered steps; every step has a
+  box to tick, says exactly what to click (the button names in bold) and
+  shows **its screen beside it**: a picture drawn close to the real app
+  (Windows, Word of Microsoft 365 and 2021, the classic ribbon), zoomed in on
+  the buttons, with the orange numbered circles of the step
+  (`tools/lab_screens.py`, the `#step(...)` helper of the worksheet).
+- **No questions, no results to record, no table of results**: where the
+  student must judge (a text from AI), the sheet says what to do with each
+  line ("Wrong time: type it with 15:00").
+- **No files to download:** the student types a short text (five lines, a
+  small table). Nothing depends on the Internet: the AI text is printed.
+- **Clarity first, then length:** the teacher prefers one sheet, but two or
+  three are fine when one would make the steps less clear. Every task stays
+  on one page (`#pagebreak(weak: true)` before a task that would split).
+- No goal card and no card of the page on the worksheet (banner.lua): the
+  first task starts on the first page. It ends with "Show your teacher":
+  a picture of the finished file and a short list to tick.
+
+**The page shown like slides** (`paged: true`, Unit 4 as a trial): the
+smart screen shows one part at a time (the start, then every `##` section,
+one page for each `###` part). Previous and Next stand side by side in one
+bottom corner, with the number and the title of the page between them; a tap
+on it opens the list of all the pages, to jump back three pages at once; ⇄
+moves the bar to the other corner. The arrow keys and a presenter's clicker
+work too, and `#page-N` in the address opens the same page after a reload
+(`lesson-script.html`, "paged").
+
 ## A face-to-face version (prepared, not published)
 
 The course may become fully face-to-face if the students ask for it. That
@@ -242,6 +293,17 @@ every calendar week, by hand, with the university's template.
   (`moodle/digital-skills-weeks.md`).
 
 ## Lessons learned
+
+- 2026-11-20 (the teacher's request): the computer lab is ready (Windows and
+  Office). Unit 4 was rewritten in the lab model as a trial (above, "The lab
+  model"): the page is 15 minutes on Word Lab (a simulator that looks like
+  Word, in three parts: styles and formatting, a table, a text from AI), and
+  the worksheet is a guide of six tasks with a drawn screen for every step
+  and no start file (the students type the five lines of the Book Fair
+  notice). The old experiments, Style Lab, List and Table Lab and Word AI Lab
+  stay in `week-04/sims/` (the notes still show them); `book-fair-start.docx`
+  and `books.png` were removed. The page is shown like slides (`paged: true`).
+  Online activity 4 was not changed.
 
 - 2026-11-17 (teacher's request): the students did not understand the
   tasks of Online activity 3 ("Write its letter", options in one line). Its

@@ -1,0 +1,72 @@
+/* Word Lab (word-lab.js): a window like Word for Windows, the classic ribbon. */
+.sim { max-width: 980px; }
+.sim .facts { background: #f1f6fd; border: 1px solid #185abd; border-radius: 8px; padding: 6px 12px; margin: 0 0 8px; font-size: 0.92rem; }
+.word { border: 1px solid #b9bdc2; border-radius: 10px; overflow: hidden; font-family: "Segoe UI", system-ui, Arial, sans-serif; color: #323130; background: #fff; }
+.sim .word .w-title { display: flex; align-items: center; gap: 14px; background: #f3f3f3; padding: 6px 12px; font-size: 0.8rem; }
+.sim .word .w-title b { font-weight: 400; }
+.sim .word .w-auto i { display: inline-block; width: 22px; height: 11px; border: 1px solid #8a8a8a; border-radius: 6px; vertical-align: -1px; position: relative; }
+.sim .word .w-auto i::after { content: ""; position: absolute; left: 2px; top: 2px; width: 5px; height: 5px; border-radius: 50%; background: #5f5f5f; }
+.sim .word .w-search { flex: 1; max-width: 220px; margin: 0 auto; border: 1px solid #c9c9c9; background: #fff; border-radius: 5px; padding: 2px 8px; color: #6b6b6b; }
+.sim .word .w-win { letter-spacing: 12px; }
+.sim .word .w-tabs { display: flex; flex-wrap: wrap; background: #f3f3f3; padding: 0 6px; }
+.sim .word .w-tab { font-weight: 400; background: none; border: 0; box-shadow: none; color: #323130; padding: 6px 9px 7px; font: inherit; font-size: 0.86rem; border-radius: 0; cursor: pointer; }
+.sim .word .w-tab.on { color: #185abd; font-weight: 700; box-shadow: inset 0 -3px 0 #185abd; }
+.sim .word .w-ribbon { position: relative; display: flex; flex-wrap: wrap; gap: 4px 0; background: #f9f9f9; border-bottom: 1px solid #d6d6d6; padding: 6px 4px 2px; min-height: 92px; }
+.sim .word .w-group { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 0 10px; border-right: 1px solid #dadada; }
+.sim .word .w-group > small { text-align: center; color: #6b6b6b; font-size: 0.72rem; margin-top: 2px; }
+.sim .word .w-row { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; max-width: 330px; }
+.sim .word .w-btn { font-weight: 400; background: #fff; color: #323130; border: 1px solid transparent; box-shadow: none; border-radius: 4px; padding: 3px 7px; min-width: 30px; min-height: 30px; font: inherit; font-size: 0.86rem; cursor: pointer; }
+.sim .word .w-btn:hover { background: #e8f0fb; border-color: #9cc0ee; }
+.sim .word .w-btn.on { background: #dbe7f8; border-color: #185abd; }
+.sim .word .w-tall { display: flex; flex-direction: column; align-items: center; min-height: 62px; font-size: 0.8rem; }
+.sim .word .w-big { font-size: 1.5rem; line-height: 1.2; color: #185abd; }
+.sim .word .w-box { border: 1px solid #a6a6a6; background: #fff; padding: 3px 6px; font-size: 0.8rem; border-radius: 2px; }
+.sim .word .w-size { min-width: 44px; }
+.sim .word .w-color { position: relative; }
+.sim .word .w-a { font-size: 1rem; }
+.sim .word .w-bar { position: absolute; left: 7px; bottom: 4px; width: 14px; height: 3px; background: #e03131; }
+.sim .word .w-item { font-size: 0.8rem; padding: 3px 6px; }
+.sim .word .w-item.on { background: #dbe7f8; border-radius: 4px; }
+.sim .word .w-check { font-size: 0.85rem; font-weight: 400 !important; gap: 6px !important; }
+.sim .word .w-check input { width: 16px; height: 16px; accent-color: #185abd; }
+.sim .word .w-styles { display: flex; gap: 3px; }
+.sim .word .w-style { display: flex; flex-direction: column; align-items: center; width: 70px; min-height: 58px; border: 1px solid #e0e0e0; padding: 3px 2px; font-size: 0.7rem; }
+.sim .word .w-sample { font-size: 0.82rem; white-space: nowrap; margin-bottom: 4px; }
+.sim .word .w-sample.s-Heading1 { color: #185abd; font-size: 0.95rem; } .sim .word .w-sample.s-Heading2 { color: #185abd; }
+.sim .word .w-sample.s-Title { font-size: 1.3rem; font-weight: 300; line-height: 1; }
+.sim .word .w-menu { position: absolute; z-index: 5; background: #fff; border: 1px solid #a6a6a6; border-radius: 4px; box-shadow: 0 4px 14px rgba(0,0,0,.18); padding: 8px; }
+.sim .word .w-colors { top: 100%; left: 120px; width: 240px; font-size: 0.8rem; }
+.sim .word .w-swatch { min-width: 22px; min-height: 22px; width: 22px; height: 22px; padding: 0; border: 1px solid #7a7a7a; border-radius: 2px; }
+.sim .word .w-grid { top: 100%; left: 0; font-size: 0.82rem; }
+.sim .word .w-cells { display: grid; grid-template-columns: repeat(8, 22px); gap: 3px; margin-top: 6px; }
+.sim .word .w-cell { width: 22px; height: 22px; min-width: 0; min-height: 0; padding: 0; background: #fff; border: 1px solid #9a9a9a; border-radius: 1px; box-shadow: none; }
+.sim .word .w-cell.on { background: #fde0cd; border-color: #d9480f; }
+.sim .word .w-body { display: flex; background: #e6e6e6; min-height: 300px; }
+.sim .word .w-nav { width: 190px; flex: none; background: #fff; border-right: 1px solid #d0d0d0; padding: 10px; font-size: 0.85rem; }
+.sim .word .w-navtabs { margin: 8px 0; color: #6b6b6b; font-size: 0.78rem; } .sim .word .w-navtabs u { color: #185abd; font-weight: 700; }
+.sim .word .w-navh { padding: 4px 6px; border-radius: 3px; } .sim .word .w-navh:first-of-type { background: #dbe7f8; } .sim .word .w-navh.h2 { margin-left: 14px; }
+.sim .word .w-canvas { flex: 1; padding: 16px; display: flex; justify-content: center; min-width: 0; }
+.sim .word .w-page { position: relative; background: #fff; width: 100%; max-width: 560px; min-height: 270px; box-shadow: 0 1px 4px rgba(0,0,0,.18); padding: 26px 40px; font-family: Calibri, Carlito, "Segoe UI", Arial, sans-serif; }
+.sim .word .w-p { margin: 0 0 6px; padding: 1px 3px; font-size: 15px; border-radius: 3px; cursor: text; user-select: none; }
+.sim .word .w-p.caret { outline: 2px dashed #9cc0ee; }
+.sim .word .w-p.s-Title { font-size: 32px; font-weight: 300; margin-bottom: 10px; }
+.sim .word .w-p.s-Heading1 { font-size: 21px; color: #185abd; margin-top: 12px; }
+.sim .word .w-p.s-Heading2 { font-size: 17px; color: #185abd; }
+.sim .word .w-w.sel { background: #c7dcf7; outline: 1px solid #185abd; }
+.sim .word .w-spell { text-decoration: underline wavy #d13438; text-underline-offset: 3px; cursor: context-menu; }
+.sim .word .w-table { border-collapse: collapse; margin: 4px 0 10px; }
+.sim .word .w-table td { border: 1px solid #5c5c5c; padding: 0; }
+.sim .word .w-table input { border: 0; width: 140px; padding: 5px 7px; font: inherit; font-size: 14px; }
+.sim .word .w-table tr:first-child input { font-weight: 700; }
+.sim .word .w-context { width: 180px; display: flex; flex-direction: column; padding: 4px; }
+.sim .word .w-context .w-btn { text-align: left; }
+.sim .word .w-status { display: flex; gap: 22px; background: #f3f3f3; padding: 4px 12px; font-size: 0.74rem; color: #6b6b6b; }
+.sim .jobs { margin-top: 10px; border: 1px solid var(--sim-border); border-radius: 10px; padding: 6px 14px; font-size: 0.9rem; }
+.sim .jobs b.t { color: var(--sim-accent); }
+.sim .jobs ol { margin: 4px 0; padding-left: 22px; }
+.sim .jobs li { margin: 3px 0; }
+.sim .jobs li.ok { color: #2b8a3e; }
+.sim .jobs li.ok::marker { content: "✓  "; font-weight: 800; }
+.sim .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.sim .message.bad { color: #c92a2a; }
+@media (max-width: 640px) { .sim .word .w-nav { width: 120px; } .sim .word .w-canvas { padding: 8px; } .sim .word .w-page { padding: 16px; } .sim .word .w-win, .sim .word .w-auto { display: none; } .sim .word .w-table input { width: 100px; } }

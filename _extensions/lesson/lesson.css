@@ -832,3 +832,60 @@ body:has(.pick) .hero-fill .fill-picks { display: inline; }
 .sw.sw-filling.has-ready { background: linear-gradient(135deg, #fff, #fff8ef); box-shadow: none; }
 .sw.sw-filling.has-ready .sw-week { color: #a3500b; }
 .sl.is-exam .sl-title { color: #6d5a2c; font-style: italic; }
+
+/* ---------- A page shown like slides (paged: true; lesson-script.html) ---------- */
+html.paged .pg-off { display: none !important; }
+html.paged #read-progress { display: none; }
+html.paged main.content { padding-bottom: 110px; }
+.paged-bar { position: fixed; z-index: 1050; right: 18px; bottom: 18px; display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.96); border: 1px solid #e6dcd3; border-radius: 18px; padding: 8px; box-shadow: 0 8px 26px rgba(0,0,0,.18); }
+.paged-bar.left { right: auto; left: 18px; }
+.paged-bar button { font: inherit; border: 0; cursor: pointer; border-radius: 14px; touch-action: manipulation; }
+.paged-bar .pg-prev, .paged-bar .pg-next { width: 76px; height: 64px; font-size: 1.6rem; background: var(--accent, #d9480f); color: #fff; }
+.paged-bar .pg-prev { background: #fff; color: var(--accent, #d9480f); border: 2px solid var(--accent, #d9480f); }
+.paged-bar button:disabled { opacity: .35; cursor: default; }
+.paged-bar .pg-index { display: flex; flex-direction: column; align-items: flex-start; max-width: 260px; height: 64px; padding: 6px 14px;
+  background: #f6f1ec; color: #2a211c; text-align: left; }
+.paged-bar .pg-num { font-weight: 800; font-size: .95rem; }
+.paged-bar .pg-title { font-size: .8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 230px; }
+.paged-bar .pg-side { width: 40px; height: 64px; background: #fff; color: #7a6a60; font-size: 1.2rem; border: 1px solid #e6dcd3; }
+.paged-list { position: absolute; bottom: calc(100% + 10px); right: 0; width: min(420px, 92vw); max-height: 70vh; overflow: auto;
+  background: #fff; border: 1px solid #e6dcd3; border-radius: 16px; padding: 12px 12px 6px; box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+.paged-bar.left .paged-list { right: auto; left: 0; }
+.paged-list ol { margin: 6px 0 0; padding-left: 28px; }
+.paged-list li { margin: 2px 0; }
+.paged-list li button { display: block; width: 100%; text-align: left; padding: 10px 12px; background: none; color: #2a211c; font-size: 1rem; border-radius: 10px; }
+.paged-list li button:hover { background: #f6f1ec; }
+.paged-list li button.on { background: var(--accent, #d9480f); color: #fff; font-weight: 700; }
+@media (max-width: 600px) {
+  .paged-bar { right: 8px; bottom: 8px; gap: 6px; }
+  .paged-bar.left { left: 8px; }
+  .paged-bar .pg-prev, .paged-bar .pg-next { width: 58px; height: 54px; }
+  .paged-bar .pg-index { height: 54px; max-width: 150px; }
+  .paged-bar .pg-title { max-width: 120px; }
+  .paged-bar .pg-side { display: none; }
+}
+@media print { .paged-bar { display: none; } html.paged .pg-off { display: block !important; } }
+
+/* ---------- The lab model (lab: true): the two parts of a section ---------- */
+section[id^="on-the-simulator"] > h3::before { content: "🎮 "; }
+section[id^="in-word"] > h3::before { content: "💻 "; }
+section[id^="in-word"] > h3 { color: #185abd; }
+.word-part { border: 2px solid #185abd; background: #f4f8fe; border-radius: 14px; padding: 12px 16px 4px; margin: 10px 0 16px; }
+.word-part::before { content: "In Word on a computer: the teacher's laptop now, then yours with the worksheet"; display: block;
+  font-size: .8rem; font-weight: 800; color: #185abd; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .03em; }
+.sim-part { margin: 6px 0 14px; }
+.lab-plan ol { font-size: 1.1rem; }
+.lab-plan li { margin: 6px 0; }
+.lab-go { border: 2px solid var(--accent, #d9480f); border-radius: 14px; padding: 12px 16px; font-size: 1.15rem; background: #fff7f0; }
+
+/* The paged lesson fills the smart screen: the list of the pages replaces "In this lesson". */
+html.paged #quarto-margin-sidebar { display: none; }
+html.paged main.content { grid-column: screen-start-inset / screen-end-inset; width: 100%; max-width: 1180px; justify-self: center; }
+html.paged main.content > section.level2 { min-height: 50vh; }
+html.paged main.content h2 { font-size: 1.9rem; }
+html.paged main.content h3 { font-size: 1.45rem; }
+html.paged main.content { font-size: 1.12rem; }
+/* The screens of the worksheet, big enough to read on the smart screen. */
+.word-part .screens { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+main .word-part .screens figure img { max-width: 540px; border: 1px solid #c9d6ea; border-radius: 8px; }

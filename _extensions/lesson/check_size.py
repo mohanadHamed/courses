@@ -192,6 +192,16 @@ SHEET_REQUIRED = ["before you start", "table of results"]
 # Try it questions on the page of a lecture with a worksheet: its experiments
 # have a check after every step, so one or two questions per section are enough.
 SHEET_QUESTIONS = (4, 12)
+# The lab model (Digital Skills, since 2026-11-20; AUTHORING.md, "The lab
+# model"): `lab: true` in the front matter of the page and the worksheet.
+# The page is about 15 minutes of ideas on the simulators (each section "On
+# the simulator" and "In Word"); the worksheet is a guide that the students
+# follow alone in the real app: "## Task N · …" sections with steps and
+# pictures, no questions and no results to record.
+LAB_PAGE_TIME = 20   # about 15 minutes taught, with room for the class to answer
+LAB_SIZES = {"try_its": (3, 6), "questions": (3, 8)}
+LAB_TASKS = (3, 8)
+LAB_PAGE_REQUIRED = ["key terms", "summary"]
 # Online activity (blended course): at least this many simulators, and
 # (min, max) tasks to submit.
 ONLINE_CONTENT = ("lesson", "sims", "mix", "video", "course-video")
@@ -367,6 +377,9 @@ def page_minutes(path, page_body):
         st = read(sheet)
         body = re.sub(r"^\{\{< *experiment (\d+) *>\}\}", lambda m: experiment_on_page(st, m.group(1)),
                       body, flags=re.M)
+    # The lab model: "In Word" (:::: {.word-part}) is shown in the real app when
+    # time allows; the worksheet repeats it in the lab. Not counted.
+    body = re.sub(r"^::::+ *\{\.word-part\}.*?^::::+ *$", " ", body, flags=re.M | re.S)
     # A Task with AI box is an extra, shown only when time is left.
     for head, text in boxes(body):
         if ".ai-task" in head or 'title="Task with AI' in head:
@@ -957,6 +970,27 @@ def picture_warnings(path, part):
     return []
 
 
+def is_lab(path):
+    return re.search(r"^lab:\s*true\b", front_matter(path), re.M) is not None
+
+
+def check_lab_sheet(sheet_path, rel):
+    """Warnings for the worksheet of a lecture in the lab model (one string each)."""
+    out = []
+    srel = rel[:-4] + "-sheet.qmd"
+    body = read(sheet_path)
+    tasks = re.findall(r"^## Task (\d+) ·", body, re.M)
+    if not (LAB_TASKS[0] <= len(tasks) <= LAB_TASKS[1]):
+        out.append("%s: %d tasks (## Task N · …); a lab worksheet has %d–%d" % ((srel, len(tasks)) + LAB_TASKS))
+    if re.search(r"\{\{<\s*record\b|::: *\{\.check\}|^start-files:", body, re.M):
+        out.append("%s: a lab worksheet is a guide: no {{< record >}}, no .check and no start files" % srel)
+    for img in re.findall(r'"(images/[^"]+\.png)"|\]\((images/[^)\s]+\.png)\)', body):
+        f = img[0] or img[1]
+        if not os.path.exists(os.path.join(os.path.dirname(sheet_path), f)):
+            out.append("%s: the picture %s is missing (tools/lab_screens.py)" % (srel, f))
+    return out, len(tasks)
+
+
 def is_online(path):
     return re.search(r"^online:\s*true\b", front_matter(path), re.M) is not None
 
@@ -1189,6 +1223,7 @@ def check(project_dir):
             warnings.extend(check_online(path, rel))
             continue
         n = {}
+        lab = is_lab(path)
         page = count_page(read(path))
         n.update({k: page[k] for k in ("try_its", "questions", "sims")})
 
@@ -1206,7 +1241,7 @@ def check(project_dir):
             for f in sorted(page["challenge_sims"] - book_sims):
                 warnings.append("%s: the game %s is not in the notes (Case study)" % (rel, f))
             for sec, k in book["do_its"].items():
-                if k == 0 and not has_sheet:
+                if k == 0 and not has_sheet and not lab:
                     warnings.append("%s: section %s of the notes has no Do it task" % (rel, sec))
             missing = [s for s in book["sections"] if s not in page["sections"]]
             if missing:
@@ -1215,7 +1250,7 @@ def check(project_dir):
             warnings.append("%s: no lesson notes (%s)" % (rel, os.path.basename(book_path)))
 
         for sec, k in page["do_its"].items():
-            if k == 0:
+            if k == 0 and not lab:
                 warnings.append("%s: section %s of the page has no Do it task" % (rel, sec))
         page_body = read(path)
         for w in answered_warnings(page_body) + ai_task_warnings(page_body, page=True):
@@ -1231,7 +1266,10 @@ def check(project_dir):
                 warnings.append("%s: section %s has %d Try it boxes; use one question set per concept" % (rel, sec, k))
 
         slides_path = path[:-4] + "-slides.qmd"
-        if has_sheet:
+        if has_sheet and lab:
+            w, n["experiments"] = check_lab_sheet(sheet_path, rel)
+            warnings.extend(w)
+        elif has_sheet:
             notes_secs = sections_text(read(book_path)) if os.path.exists(book_path) else {}
             slides_body = read(slides_path) if os.path.exists(slides_path) else None
             w, n["experiments"] = check_sheet(sheet_path, rel, notes_secs, page_body, slides_body)
@@ -1242,7 +1280,7 @@ def check(project_dir):
             for f in sorted(page["sim_files"] - s["sim_files"]):
                 warnings.append("%s: %s is on no slide (\"Live demo\" or Game challenge)" % (rel, f))
             lesson_dir = os.path.dirname(path)
-            for f in sorted(s["sim_files"]):
+            for f in sorted(s["sim_files"]) if not lab else []:
                 if not os.path.exists(os.path.join(lesson_dir, re.sub(r"\.html$", ".gif", f))):
                     warnings.append("%s: %s has no recording for the slides (shared/sims/recordings)" % (rel, f))
             for f in sorted(page["challenge_sims"] - s["challenge_sims"]):
@@ -1253,7 +1291,9 @@ def check(project_dir):
             warnings.append("%s: no slides file (%s)" % (rel, os.path.basename(slides_path)))
 
         sizes = dict(SIZES[minutes])
-        if has_sheet:
+        if lab:
+            sizes.update(LAB_SIZES)
+        elif has_sheet:
             # The checks of the experiments practise the ideas too: fewer Try it questions.
             sizes["questions"] = SHEET_QUESTIONS
         home = rel.replace(os.sep, "/") in HOME_PAGES
@@ -1262,7 +1302,11 @@ def check(project_dir):
             sizes.update(HOME_SIZES[minutes])
         else:
             n["minutes"] = page_minutes(path, page_body)
-            if n["minutes"] > PAGE_TIME[minutes]:
+            if lab and n["minutes"] > LAB_PAGE_TIME:
+                warnings.append("%s: about %d minutes in class; a lab-model page plans at most %d, the rest of "
+                                "the lecture is the worksheet in the lab (AUTHORING.md, \"The lab model\")"
+                                % (rel, n["minutes"], LAB_PAGE_TIME))
+            elif not lab and n["minutes"] > PAGE_TIME[minutes]:
                 warnings.append("%s: about %d minutes in class (the page is taught on the screen); a %d-min "
                                 "lecture plans at most %d, the rest is for questions and delays (AUTHORING.md, "
                                 "\"The page is taught in class\")" % (rel, n["minutes"], minutes, PAGE_TIME[minutes]))
@@ -1273,7 +1317,7 @@ def check(project_dir):
             if v < lo or (hi is not None and v > hi):
                 want = "%d–%d" % (lo, hi) if hi is not None else "%d or more" % lo
                 warnings.append("%s: %d %s, a %d-min lesson needs %s" % (rel, v, NAMES[key], minutes, want))
-        for part in PAGE_REQUIRED:
+        for part in (LAB_PAGE_REQUIRED if lab else PAGE_REQUIRED):
             if not any(h.startswith(part) for h in page["headings"]):
                 warnings.append("%s: no \"%s\" section" % (rel, part.capitalize()))
         for part in FORBIDDEN:

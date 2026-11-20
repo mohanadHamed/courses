@@ -654,6 +654,20 @@ Part A "a lab computer, or the teacher's laptop on the screen", Part B
   and in the notes, the "Your worksheet" and "Results of the worksheet"
   slides, and at most 1 600 words (without the results).
 
+### The lab model (Digital Skills, since 2026-11-20)
+
+A lecture in a computer lab (`lab: true` in the front matter of the page and
+the worksheet; now Digital Skills Unit 4, as a trial): about 15 minutes of
+ideas on the page, on simulators that look like the real app, then each
+student follows the printed worksheet alone in the real app. The worksheet
+is a **guide, not a test**: tasks with numbered steps, a box to tick and the
+drawn screen of every step beside it (`tools/lab_screens.py`), no
+questions, no results to record and no files to download. The rules, the
+sizes and the page shown like slides (`paged: true`) are in
+`courses/digital-skills/NOTES.md`, "The lab model"; `check_size.py` checks
+them (`LAB_*`). The sections "Lecture worksheets" and "The page is taught
+in class" apply to the other lectures.
+
 ### Blended courses: the online activity
 
 A blended course (`course.blended: true`; now `digital-skills`) is fully

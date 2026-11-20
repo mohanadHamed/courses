@@ -372,9 +372,11 @@ local function html_lesson(doc, course)
     hero_note(meta, slides, online, sheet))
 
   local blocks = { pandoc.RawBlock("html", hero) }
-  -- A page shown like slides (paged: true; lesson-script.html, "paged"): one
-  -- part at a time, for the teacher at the smart screen.
-  if meta.paged == true or str(meta.paged or "") == "true" then
+  -- Every interactive page is shown like slides (lesson-script.html, "paged";
+  -- the teacher's request of 2026-11-20): one part at a time, for the teacher
+  -- at the smart screen and the student on a phone. Not the homework (a form
+  -- to fill in and print); `paged: false` in the front matter turns it off.
+  if not meta.homework and str(meta.paged or "") ~= "false" and meta.paged ~= false then
     table.insert(blocks, pandoc.RawBlock("html", '<div id="paged-lesson" hidden></div>'))
   end
   if is_printed(meta) then

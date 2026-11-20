@@ -488,6 +488,25 @@ the notes or on the Game challenge slide.
 | Simulators / mini-games | 0–4 | 1–3 |
 | Slides (title slide not counted) | 10–16 | 20–28 |
 
+### Every interactive page is shown like slides (since 2026-11-20)
+
+The teacher asked for it after Digital Skills Unit 4: scrolling a long page
+on the smart screen tires the hand. Every interactive page of every course
+(lectures, seminars, practice sessions, online activities; not the
+homework, which is a form to print) shows **one part at a time**: the
+start (the title and the goals), then every `##` section, and one page for
+each `###` part of a section (with a page of its own for the text before
+the first `###`). Previous and Next stand side by side in one bottom
+corner, with the number and the title of the page between them; a tap on it
+opens the list of all the pages, to jump to any of them; ⇄ moves the bar
+to the other corner. The arrow keys and a presenter's clicker work too, the
+links of the page jump to their page, and `#page-N` opens the same page
+after a reload. On paper everything is printed. `banner.lua` turns it on
+(`paged: false` in the front matter turns it off), `lesson-script.html`
+("paged") and `lesson.css` do the rest. So: keep each `##` section (and
+each `###` part) about one screen long, and give it a short, clear title,
+because the titles are the list of the pages.
+
 ### The page is taught in class (since 2026-11-08)
 
 The classrooms of the college now have **smart screens**: a whiteboard and

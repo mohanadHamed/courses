@@ -834,7 +834,8 @@ body:has(.pick) .hero-fill .fill-picks { display: inline; }
 .sl.is-exam .sl-title { color: #6d5a2c; font-style: italic; }
 
 /* ---------- A page shown like slides (paged: true; lesson-script.html) ---------- */
-html.paged .pg-off { display: none !important; }
+/* On the screen only: on paper ("Print tasks", the PDFs printed from a page) every part is printed. */
+@media screen { html.paged .pg-off { display: none !important; } }
 html.paged #read-progress { display: none; }
 html.paged main.content { padding-bottom: 110px; }
 .paged-bar { position: fixed; z-index: 1050; right: 18px; bottom: 18px; display: flex; align-items: center; gap: 8px;
@@ -865,7 +866,7 @@ html.paged main.content { padding-bottom: 110px; }
   .paged-bar .pg-title { max-width: 120px; }
   .paged-bar .pg-side { display: none; }
 }
-@media print { .paged-bar { display: none; } html.paged .pg-off { display: block !important; } }
+@media print { .paged-bar { display: none !important; } html.paged main.content { padding-bottom: 0; } }
 
 /* ---------- The lab model (lab: true): the two parts of a section ---------- */
 section[id^="on-the-simulator"] > h3::before { content: "🎮 "; }

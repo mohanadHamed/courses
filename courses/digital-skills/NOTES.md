@@ -161,7 +161,9 @@ even the weakest, does the steps alone, fast and right:
   **Extra** on its own page: the AI of tutudocs.com changes the student's
   file (below, "AI tools").
 
-**The page shown like slides** (`paged: true`, Unit 4 as a trial): the
+**The page shown like slides** (every interactive page of every course
+since 2026-11-20; AUTHORING.md, "Every interactive page is shown like
+slides"): the
 smart screen shows one part at a time (the start, then every `##` section,
 one page for each `###` part). Previous and Next stand side by side in one
 bottom corner, with the number and the title of the page between them; a tap

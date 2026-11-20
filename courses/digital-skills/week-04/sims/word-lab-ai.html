@@ -3,22 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Simulator: Word Lab: check a text from AI</title>
+  <title>Simulator: Word Lab: ask AI to change your file</title>
   <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
   <link rel="stylesheet" href="word-lab.css">
 </head>
 <body class="theme-workshop">
 <main class="sim">
-  <h1>Word Lab: check a text from AI</h1>
-  <p class="hint">The same steps as your worksheet (Task 5). Check each line with the facts. <b>Right-click</b> a word with a red line (on a phone: tap it).</p>
-  <p class="facts"><b>The facts:</b> Sunday to Tuesday · 10:00 to 15:00 · the college library · entry is free.</p>
-  <div class="word" id="word"></div>
+  <h1>Word Lab: ask AI to change your file</h1>
+  <p class="hint">The Extra of your worksheet. <b>Attach</b> your notice to the AI chat, ask for <b>one change</b>, then <b>open</b> the new file: the page of Word changes. (A practice chat with fixed answers: no real AI here.)</p>
+  <div class="ai-wrap">
+    <div class="chat" id="chat"></div>
+    <div class="word" id="word"></div>
+  </div>
   <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
   <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
   <p id="msg" class="message"></p>
 </main>
 <script src="../../../../shared/sims/sim-base.js"></script>
-<script>window.WORD_LAB = "check";</script>
+<script>window.WORD_LAB = "ai";</script>
 <script src="word-lab.js"></script>
 </body>
 </html>

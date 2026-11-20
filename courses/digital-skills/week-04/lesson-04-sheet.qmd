@@ -43,8 +43,8 @@ the box `#tick`{=typst} after each step. Stuck? Raise your hand.
 ## Task 1 · Open Word and type the notice
 
 ```{=typst}
-#step(1, [Click *Search* on the taskbar #mk(1). Type *word*. Click *Word* #mk(2).], img: "images/lab-open-1.png", w: 92%, left: 32%)
-#step(2, [Click *Blank document* #mk(1).], img: "images/lab-open-2.png", w: 46%, left: 32%)
+#step(1, [Click *Search* on the taskbar #mk(1). Type *word*. Click *Word* #mk(2).], img: "images/lab-open-1.png", w: 88%, left: 32%)
+#step(2, [Click *Blank document* #mk(1).], img: "images/lab-open-2.png", w: 42%, left: 32%)
 #step(3, [Type these five lines. Press *Enter* at the end of each line.], after: typebox[
   #set text(size: 12pt)
   #set par(justify: false, spacing: 0.75em)
@@ -89,43 +89,12 @@ of the document, **Heading 1** for a heading.
 ])
 ```
 
-```{=typst}
-#pagebreak(weak: true)
-```
-
-## Task 5 · A text from AI: check it, then type it
-
-We gave an AI assistant the facts of the fair and asked for three short
-lines. The AI is fast, but it **can make mistakes**: it can change a number
-or add a fact that nobody gave. So we checked each line with the facts.
+## Task 5 · Fix the spelling and save
 
 ```{=typst}
-#typebox[*The facts:* Sunday to Tuesday · 10:00 to 15:00 · the college library · entry is free.]
-#v(4pt)
-#let ok(t) = text(fill: rgb("#2b8a3e"), weight: "bold", t)
-#let no(t) = text(fill: rgb("#c92a2a"), weight: "bold", t)
-#block(breakable: false, table(columns: (auto, 1fr, 1.05fr), inset: 7pt, align: (center + horizon, left + horizon, left + horizon),
-  stroke: 0.5pt + luma(200), fill: (x, y) => if y == 0 { rgb("#ede7ff") },
-  [*Line*], [*The AI wrote*], [*What you do*],
-  [*A*], [Come to the book fair in the college library!], [#ok[Right.] Type it.],
-  [*B*], [It is open from Sunday to Tuesday, 10:00 to *17:00*.], [#no[Wrong time.] Type it with *15:00*.],
-  [*C*], [Entry is free for all studnets.], [#ok[Right fact.] Type it as it is: you fix the spelling in step 3.],
-  [*D*], [Every book costs only 1 JD.], [#no[Nobody gave this fact.] Do *not* type it.],
-))
-#step(1, [Click in the empty line *under the table*. Type *About the fair* and click *Heading 1*. Press *Enter*.])
-#step(2, [Type the lines *A*, *B* (with 15:00) and *C*. Press *Enter* after each line.])
-#step(3, [A *red wavy line* shows a spelling mistake. \ Right-click *studnets* #mk(1). \ Click *students* #mk(2). \ #v(4pt) #text(size: 9pt, fill: luma(80))[Word fixed it by itself while you typed? Good: go on.]], img: "images/lab-spell-1.png", w: 86%, left: 34%)
-```
-
-## Task 6 · Save your notice
-
-```{=typst}
-#step(1, [Press *F12* (on a laptop: *Fn + F12*). The *Save As* window opens. \ _Or:_ click *File*, *Save As*, *Browse*.])
-#step(2, [Click *Desktop* #mk(1). \ In *File name*, type *book-fair-* and your first name #mk(2). \ Click *Save* #mk(3).], img: "images/lab-save-2.png", w: 94%, left: 32%)
-```
-
-```{=typst}
-#pagebreak(weak: true)
+#step(1, [A *red wavy line* under a word? It is a spelling mistake. \ Right-click the word #mk(1). Click the right word #mk(2). \ No red line? Good: go to step 2.], img: "images/lab-spell-1.png", w: 92%, left: 32%)
+#step(2, [Press *F12* (on a laptop: *Fn + F12*). The *Save As* window opens. \ _Or:_ click *File*, *Save As*, *Browse*.])
+#step(3, [Click *Desktop* #mk(1). \ In *File name*, type *book-fair-* and your first name #mk(2). \ Click *Save* #mk(3).], img: "images/lab-save-2.png", w: 94%, left: 32%)
 ```
 
 ## Show your teacher
@@ -141,12 +110,27 @@ or add a fact that nobody gave. So we checked each line with the facts.
     #tick #h(4pt) The pane on the left shows 3 headings. \
     #tick #h(4pt) Only the word *free* is bold and red. \
     #tick #h(4pt) The table has 2 columns and 4 rows. \
-    #tick #h(4pt) Line B says 15:00, and there is no line D. \
     #tick #h(4pt) The file is on the Desktop.
     #v(8pt)
-    #tip[Raise your hand: your teacher looks at your screen.]
-    #v(6pt)
-    *Finished early?* Click in the table. Click the *Table Design* tab, then a style that you like. Press *Ctrl + S* to save again.
+    #tip[Raise your hand: your teacher looks at your screen. \ Then do the *Extra*: AI changes your notice.]
   ],
 ))
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Extra · AI changes your notice
+
+```{=typst}
+#block(width: 100%, fill: rgb("#f4f2fb"), stroke: 0.8pt + rgb("#b9a7f7"), radius: 6pt, inset: (x: 12pt, y: 9pt))[
+  Only when you finish Tasks 1–5. An *AI assistant* opens your Word file and changes it for you. We use *ChatGPT*; Gemini, Claude and Copilot work the same way.
+]
+#step(1, [Open the browser. Go to *chatgpt.com*. Sign in: *Continue with Google*, or with your *Microsoft* (university) account.])
+#step(2, [Click the round button at the left of the box #mk(1) (on some screens: *+*). \ Click *Add photos & files* #mk(2). \ Click *Desktop*, click your file *book-fair-…*, click *Open*.], img: "images/lab-ai-1.png", left: 30%)
+#step(3, [Type this request and press *Enter* #mk(1): #h(4pt) #box(fill: white, stroke: 0.6pt + rgb("#b9a7f7"), radius: 4pt, inset: 6pt)[Make the title blue. Add a row to the table: Magazine, 2. Give me the new Word file.] \ #v(2pt) Click the new file in the answer #mk(2). It downloads.], after: align(center, shot("images/lab-ai-2.png", w: 92%)))
+#step(4, [Open the new file: click it at the top of the browser (*Downloads*). It opens in Word. \ The title is blue, and the table has a new row!])
+#step(5, [One more? Type: #box(fill: white, stroke: 0.6pt + rgb("#b9a7f7"), radius: 4pt, inset: 6pt)[Add a heading About the fair and two short sentences for students. Give me the new Word file.]])
+#tip[The AI answers with text, not a file? Copy the text, and paste it into your notice in Word.]
 ```

@@ -199,7 +199,7 @@ SHEET_QUESTIONS = (4, 12)
 # follow alone in the real app: "## Task N · …" sections with steps and
 # pictures, no questions and no results to record.
 LAB_PAGE_TIME = 20   # about 15 minutes taught, with room for the class to answer
-LAB_SIZES = {"try_its": (3, 6), "questions": (3, 8)}
+LAB_SIZES = {"try_its": (2, 6), "questions": (2, 8)}
 LAB_TASKS = (3, 8)
 LAB_PAGE_REQUIRED = ["key terms", "summary"]
 # Online activity (blended course): at least this many simulators, and

@@ -800,6 +800,20 @@ Course-specific notes: `courses/<slug>/NOTES.md`. Unit map:
 
 ## Tasks with AI
 
+**The AI pipeline of every new lesson (the teacher's rule of 2026-11-20).**
+AI comes **after** the student finishes the required work of the session,
+as an optional extra that is fun to try, and it is **direct use**: never a
+question that asks the student to judge, check or correct an AI answer.
+
+- Game Math, Computing Systems, Digital Media (no ILO asks for AI): the
+  extra gives a **ready prompt to try** (the "Task with AI" box below).
+- Digital Skills: the extra asks an AI assistant for **one change to the
+  file that the student made in the same lecture** (attach the file, ask,
+  open the new file). Details and the recommended assistant:
+  `courses/digital-skills/NOTES.md`, "AI tools".
+- Where the rest of this section asks for checks of AI output, this rule
+  wins for every lesson written or rewritten from now on.
+
 Students have AI assistants, and many of them have never used one to learn.
 In Game Math, Computing Systems and Digital Media no ILO or PLO asks for AI:
 a "Task with AI" box is an **extra for the curious**, so that students meet

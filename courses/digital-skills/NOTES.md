@@ -217,6 +217,33 @@ real tool.
 
 ## AI tools
 
+**Direct use, never a check (the teacher's rule of 2026-11-20; it
+overrides the older points below where they differ).** The students use AI
+every day; showing them AI sentences and asking what is wrong, missing or
+true is theory, and it bores them. So:
+
+- AI is the **Extra** at the end of the face-to-face worksheet, done after
+  the required tasks: the student **attaches the file made in the same
+  lecture** to an AI chat, asks for **one change** in a sentence given on
+  the sheet (a new paragraph, a colour, a new row), downloads the new file
+  and opens it. On the page, a simulator shows the same steps (Word Lab,
+  the "ai" part: attach, ask, open the new file; fixed answers).
+- **No questions about AI output:** no "keep, fix or delete", no "what is
+  wrong in this answer", no prompt to evaluate. The student sees the change
+  in the new file; that is all the check there is.
+- The same holds for the online activities: their AI steps become direct
+  use on the student's own file when each activity is next rewritten
+  (Online activity 4 was not changed yet).
+- **Which assistant (checked 2026-11-20):** none of the free assistants
+  takes a file without an account. ChatGPT, signed out, does not accept
+  uploads; Gemini needs a Google account to upload; Claude always needs an
+  account; Copilot without an account limits uploads to 1 MB and a few a
+  day, and Microsoft is making sign-in mandatory. The worksheet uses
+  **ChatGPT, signed in** (Continue with Google, or the university Microsoft
+  account): it takes a Word file and gives back a new Word file to
+  download. Gemini, Claude and Copilot are named as the same steps. If the
+  answer is text only, the student pastes it into the file.
+
 - Name the idea and two or three common free tools (Microsoft Copilot with
   the university account, ChatGPT, Gemini), never one product only. No task
   needs a paid plan. Copilot inside Word, Excel or PowerPoint is "if your
@@ -293,6 +320,15 @@ every calendar week, by hand, with the university's template.
   (`moodle/digital-skills-weeks.md`).
 
 ## Lessons learned
+
+- 2026-11-20 (the teacher's review of Unit 4): the paged page and the
+  worksheet were liked; the AI part was not (AI sentences to judge, in
+  English: theory, and boring). Task 5 "A text from AI: check it" was
+  removed; the spelling step moved to Task 5 (spelling and save); the
+  worksheet ends with an Extra: ChatGPT changes the student's notice
+  (a blue title and a new table row, then a heading with two sentences).
+  On the page, section 4.3 is "Ask AI to change your file" with Word Lab
+  "ai" (an AI chat beside Word). The rule is in "AI tools" above.
 
 - 2026-11-20 (the teacher's request): the computer lab is ready (Windows and
   Office). Unit 4 was rewritten in the lab model as a trial (above, "The lab

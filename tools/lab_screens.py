@@ -664,31 +664,98 @@ def lab_table_1(s, top):
 
 
 def lab_spell_1(s, top):
-    """A red wavy line: right-click the word, click the right spelling."""
-    h = 620
-    word_window(s, h, "Home", words="45 words")
-    paras = [("Heading 1", "About the fair"), ("Normal", "Come to the book fair in the college library!"),
-             ("Normal", "It is open from Sunday to Tuesday, 10:00 to 15:00."),
-             ("Normal", "Entry is free for all studnets.")]
-    _, words = page(s, 210, 196, 480, h - 250, paras, squiggle=(3, "studnets"))
+    """A red wavy line under a word that you typed: right-click it, click the right spelling."""
+    h = 560
+    word_window(s, h, "Home", words="18 words")
+    paras = [("Title", "Book Fair"), ("Heading 1", "When and where"),
+             ("Normal", "Sunday to Tuesday, 10:00 to 15:00, in the college libary."), ("Normal", "Entry is free.")]
+    _, words = page(s, 120, 196, 560, h - 250, paras, squiggle=(2, "libary"))
     _, wx, wy, ww, wh = words[0]
-    mx, my = wx + ww - 10, wy + wh + 2
-    s.rect(mx, my, 220, 196, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=4)
-    s.rect(mx + 2, my + 4, 216, 26, fill="#e8f0fb")
-    s.text(mx + 16, my + 22, "students", 13, 700, INK)
-    s.text(mx + 16, my + 48, "student's", 13, 400, INK)
-    s.text(mx + 16, my + 74, "students'", 13, 400, INK)
-    s.line(mx, my + 86, mx + 220, my + 86, LINE, 1)
-    s.text(mx + 16, my + 106, "Ignore All", 12.5, 400, INK)
-    s.text(mx + 16, my + 130, "Add to Dictionary", 12.5, 400, INK)
-    s.line(mx, my + 142, mx + 220, my + 142, LINE, 1)
-    s.text(mx + 16, my + 162, "Cut", 12.5, 400, INK)
-    s.text(mx + 16, my + 186, "Copy", 12.5, 400, INK)
+    mx, my = wx - 60, wy + wh + 2
+    s.rect(mx, my, 200, 150, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=4)
+    s.rect(mx + 2, my + 4, 196, 26, fill="#e8f0fb")
+    s.text(mx + 16, my + 22, "library", 13, 700, INK)
+    s.text(mx + 16, my + 48, "libraries", 13, 400, INK)
+    s.line(mx, my + 60, mx + 200, my + 60, LINE, 1)
+    s.text(mx + 16, my + 80, "Ignore All", 12.5, 400, INK)
+    s.text(mx + 16, my + 104, "Add to Dictionary", 12.5, 400, INK)
+    s.line(mx, my + 116, mx + 200, my + 116, LINE, 1)
+    s.text(mx + 16, my + 138, "Copy", 12.5, 400, INK)
     mark_box(top, (wx, wy, ww, wh), 1, "right", 4, 2)
-    top.label(36, wy + 3, 120, "right-click", arrow_to=(wx - 4, wy + 16))
-    mark_box(top, (mx + 2, my + 4, 216, 26), 2, "right", 5, 1)
+    top.label(wx + ww + 40, wy - 36, 120, "right-click", arrow_to=(wx + ww + 2, wy + 4))
+    mark_box(top, (mx + 2, my + 4, 196, 26), 2, "left", 5, 1)
 
 
+def browser(s, h, address, tab=None):
+    """A browser window (Microsoft Edge or Chrome on Windows): the tab bar and the address."""
+    frame(s, h)
+    s.rect(15, 15, W - 30, 70, fill="#f3f3f3", rx=9)
+    s.rect(30, 22, 200, 26, fill="#ffffff", rx=6)
+    s.text(46, 40, tab or address, 12.5, 400, INK)
+    s.rect(30, 54, W - 60, 24, fill="#ffffff", stroke="#d6d6d6", sw=1, rx=12)
+    s.text(48, 70.5, address, 12.5, 400, INK)
+
+
+def clip(s, cx, cy, c=INK):
+    """A paperclip: the attach button of an AI chat."""
+    s.path("M%g %g v-9 a4 4 0 0 1 8 0 v12 a6 6 0 0 1 -12 0 v-10" % (cx + 2, cy + 6), stroke=c, sw=1.7)
+
+
+def chat_box(s, x, y, w, text, hint=True):
+    s.rect(x, y, w, 52, fill="#ffffff", stroke="#cfcfcf", sw=1.2, rx=26)
+    s.circle(x + 28, y + 26, 16, fill="#ffffff", stroke="#cfcfcf", sw=1.2)
+    clip(s, x + 27, y + 25)
+    s.text(x + 56, y + 31, text, 14, 400, GREY if hint else INK)
+    s.circle(x + w - 28, y + 26, 16, fill=INK)
+    s.line(x + w - 28, y + 33, x + w - 28, y + 19, "#ffffff", 2.2)
+    s.poly([(x + w - 34, y + 25), (x + w - 28, y + 18), (x + w - 22, y + 25)], stroke="#ffffff", sw=2.2, closed=False)
+    return (x + 12, y + 10, 32, 32), (x + w - 44, y + 10, 32, 32)
+
+
+def file_card(s, x, y, w, name, sub):
+    s.rect(x, y, w, 50, fill="#ffffff", stroke="#d0d7e2", sw=1.2, rx=10)
+    s.rect(x + 10, y + 8, 28, 34, fill=WORD, rx=4)
+    s.text(x + 24, y + 30, "W", 14, 800, "#ffffff", "middle")
+    s.text(x + 48, y + 22, name, 13, 700, INK)
+    s.text(x + 48, y + 39, sub, 11.5, 400, GREY)
+
+
+def lab_ai_1(s, top):
+    """An AI chat in the browser (ChatGPT here): the attach button, then Add photos & files."""
+    h = 430
+    browser(s, h, "chatgpt.com", "ChatGPT")
+    s.text(40, 112, "ChatGPT", 16, 700, INK)
+    s.text(W / 2, 170, "What can I help with?", 24, 400, INK, "middle")
+    att, send = chat_box(s, 170, 300, 560, "Ask anything")
+    s.rect(170, 196, 230, 96, fill="#ffffff", stroke="#cfcfcf", sw=1, rx=12)
+    s.rect(176, 202, 218, 28, fill="#f0f0f0", rx=7)
+    clip(s, 192, 216)
+    s.text(208, 221, "Add photos & files", 13, 700, INK)
+    s.text(208, 250, "Create image", 13, 400, INK)
+    s.text(208, 276, "Think longer", 13, 400, INK)
+    s.circle(192, 245, 6, stroke=GREY, sw=1.4)
+    s.circle(192, 271, 6, stroke=GREY, sw=1.4)
+    mark_box(top, att, 1, "left", 16, 2)
+    mark_box(top, (176, 202, 218, 28), 2, "right", 7, 1)
+    top.label(470, 362, 290, "then: Desktop › your file › Open")
+
+
+def lab_ai_2(s, top):
+    """The request with the file, and the answer with the new file to download."""
+    h = 470
+    browser(s, h, "chatgpt.com", "ChatGPT")
+    s.text(40, 112, "ChatGPT", 16, 700, INK)
+    file_card(s, 560, 104, 300, "book-fair-Huda.docx", "Document")
+    s.rect(420, 162, 440, 68, fill="#efefef", rx=16)
+    s.text(438, 188, "Make the title blue. Add a row to the table:", 13.5, 400, INK)
+    s.text(438, 210, "Magazine, 2. Give me the new Word file.", 13.5, 400, INK)
+    s.text(60, 262, "Done! The title is blue, and the table has a new row.", 13.5, 400, INK)
+    s.text(60, 284, "Here is your file:", 13.5, 400, INK)
+    file_card(s, 60, 298, 330, "book-fair-Huda-new.docx", "Click to download")
+    s.path("M368 312 v14 M362 321 l6 6 l6 -6 M361 332 h14", stroke=WORD, sw=2)
+    chat_box(s, 170, 380, 560, "Ask anything")
+    mark_box(top, (420, 104, 440, 126), 1, "left", 16, 4)
+    mark_box(top, (60, 298, 330, 50), 2, "right", 10, 3)
 
 
 def lab_save_2(s, top):
@@ -737,13 +804,10 @@ def lab_save_2(s, top):
 
 def lab_result_1(s, top):
     """The notice at the end of the worksheet."""
-    h = 760
-    word_window(s, h, "Home", name="book-fair-Huda - Word", words="42 words")
+    h = 560
+    word_window(s, h, "Home", name="book-fair-Huda - Word", words="27 words")
     paras = [("Title", "Book Fair"), ("Heading 1", "When and where"), TYPED[2], ("Normal", "Entry is free."),
-             ("Heading 1", "Prices"), ("Heading 1", "About the fair"),
-             ("Normal", "Come to the book fair in the college library!"),
-             ("Normal", "It is open from Sunday to Tuesday, 10:00 to 15:00."),
-             ("Normal", "Entry is free for all students.")]
+             ("Heading 1", "Prices")]
     page(s, 210, 192, 480, h - 236, paras, center=(0,), bold_word=(3, "free", RED), table=PRICES, table_at=4)
 
 
@@ -758,9 +822,11 @@ SCREENS = {
     "lab-format-1": (lab_format_1, (220, 80, 480, 200)),
     "lab-format-2": (lab_format_2, (90, 80, 470, 320)),
     "lab-table-1": (lab_table_1, (20, 26, 530, 410)),
-    "lab-spell-1": (lab_spell_1, (24, 200, 640, 380)),
+    "lab-spell-1": (lab_spell_1, (100, 184, 785, 330)),
+    "lab-ai-1": (lab_ai_1, (130, 142, 640, 268)),
+    "lab-ai-2": (lab_ai_2, (30, 92, 850, 270)),
     "lab-save-2": (lab_save_2, None),
-    "lab-result-1": (lab_result_1, (200, 186, 500, 530)),
+    "lab-result-1": (lab_result_1, (200, 186, 500, 340)),
 }
 
 def draw(fn, crop=None):

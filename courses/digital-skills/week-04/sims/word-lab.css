@@ -70,3 +70,31 @@
 .sim .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
 .sim .message.bad { color: #c92a2a; }
 @media (max-width: 640px) { .sim .word .w-nav { width: 120px; } .sim .word .w-canvas { padding: 8px; } .sim .word .w-page { padding: 16px; } .sim .word .w-win, .sim .word .w-auto { display: none; } .sim .word .w-table input { width: 100px; } }
+/* The AI chat of the "ai" part: beside Word on a wide screen, above it on a phone. */
+.sim .ai-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 12px; align-items: start; }
+.sim .chat { display: flex; flex-direction: column; border: 1px solid #c9c9d6; border-radius: 12px; background: #fff; overflow: hidden; min-height: 420px; }
+.sim .chat .c-head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #f4f2fb; border-bottom: 1px solid #e3e0f0; }
+.sim .chat .c-head small { color: #7a7690; font-size: 0.72rem; }
+.sim .chat .c-dot { width: 14px; height: 14px; border-radius: 50%; background: #7048e8; box-shadow: inset 0 0 0 4px #b9a7f7; }
+.sim .chat .c-log { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 10px; max-height: 330px; overflow-y: auto; font-size: 0.88rem; }
+.sim .chat .c-msg { max-width: 92%; padding: 8px 11px; border-radius: 14px; line-height: 1.35; }
+.sim .chat .c-msg.ai { background: #f2f2f5; align-self: flex-start; }
+.sim .chat .c-msg.me { background: #e7e2fb; align-self: flex-end; }
+.sim .chat .c-typing { letter-spacing: 3px; font-weight: 800; }
+.sim .chat .c-compose { border-top: 1px solid #e3e0f0; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.sim .chat .c-line { display: flex; gap: 6px; align-items: center; }
+.sim .chat .c-input { flex: 1; min-width: 0; border: 1px solid #c9c9d6; border-radius: 18px; padding: 7px 12px; font: inherit; font-size: 0.86rem; }
+.sim .chat button.c-attach, .sim .chat button.c-send { width: 36px; height: 36px; padding: 0; border-radius: 50%; font-size: 1.05rem; box-shadow: none; }
+.sim .chat button.c-attach { background: #fff; color: #3d3a4f; border: 1px solid #c9c9d6; }
+.sim .chat button.c-send { background: #3d3a4f; color: #fff; }
+.sim .chat .c-asks { display: flex; flex-direction: column; gap: 5px; }
+.sim .chat button.c-ask { text-align: left; font-weight: 600; font-size: 0.8rem; padding: 6px 10px; background: #fff; color: #5f3dc4; border: 1px dashed #b9a7f7; box-shadow: none; border-radius: 10px; }
+.sim .chat .c-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; border: 1px solid #c9d6ea; background: #f4f8fe; border-radius: 8px; padding: 3px 8px; }
+.sim .chat .c-chip.small { margin-bottom: 4px; }
+.sim .chat .c-doc { display: inline-grid; place-items: center; width: 18px; height: 22px; border-radius: 3px; background: #185abd; color: #fff; font-size: 0.66rem; font-weight: 800; }
+.sim .chat button.c-file { display: flex; align-items: center; gap: 10px; margin-top: 6px; text-align: left; background: #fff; color: #2a211c; border: 1px solid #c9d6ea; box-shadow: none; padding: 8px 10px; border-radius: 10px; font-weight: 400; }
+.sim .chat button.c-file .c-doc { width: 26px; height: 32px; font-size: 0.85rem; }
+.sim .chat button.c-file small { display: block; color: #6b6b6b; font-size: 0.72rem; }
+.sim .chat button.c-file.done { opacity: 0.6; }
+.sim .word .w-p.w-new { background: #fff3bf; }
+@media (max-width: 860px) { .sim .ai-wrap { grid-template-columns: 1fr; } .sim .chat { min-height: 0; } }

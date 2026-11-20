@@ -30,7 +30,7 @@ from phone_screens import (Svg, FONT, INK, GREY, LIGHT, LINE, BG, MARK, MARK_INK
                            icon_search, icon_folder, icon_doc)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = "courses/digital-skills/week-04/images/"
+OUT = "courses/digital-skills/"   # + "week-WW/images/<name>" (the keys of SCREENS)
 
 W = 900                       # the width of every picture
 WORD = "#185abd"              # Word blue
@@ -466,76 +466,82 @@ def note(top, x, y, w, text):
 
 # ---------- The screens --------------------------------------------------------
 
-def lab_open_1(s, top):
-    """Windows 11: click Search on the taskbar, type word, click Word."""
+def open_search(s, top, app="Word", color=WORD):
+    """Windows 11: click Search on the taskbar, type the name of the app, click the app."""
     h = 420
     frame(s, h)
     s.rect(15, 15, W - 30, h - 30, fill="#dfe8f3", rx=9)
     # the search panel
     s.rect(170, 40, 560, 300, fill="#f7f7f7", stroke="#c9c9c9", sw=1, rx=10)
-    s.rect(190, 56, 520, 34, fill="#ffffff", stroke=WORD, sw=1.6, rx=17)
+    s.rect(190, 56, 520, 34, fill="#ffffff", stroke=color, sw=1.6, rx=17)
     icon_search(s, 210, 73, GREY)
-    s.text(228, 78, "word", 14, 400, INK)
-    s.line(262, 64, 262, 82, INK, 1.4)
+    s.text(228, 78, app.lower(), 14, 400, INK)
+    s.line(232 + width(app.lower(), 14), 64, 232 + width(app.lower(), 14), 82, INK, 1.4)
     s.text(196, 118, "Best match", 12, 700, INK)
     s.rect(190, 126, 250, 56, fill="#dbe7f8", rx=6)
-    s.rect(202, 136, 34, 36, fill=WORD, rx=5)
+    s.rect(202, 136, 34, 36, fill=color, rx=5)
     s.rect(209, 143, 20, 22, fill="#ffffff", rx=2)
     for i in range(3):
-        s.line(212, 149 + i * 5, 226, 149 + i * 5, WORD, 1.5)
-    s.text(248, 152, "Word", 14, 700, INK)
+        s.line(212, 149 + i * 5, 226, 149 + i * 5, color, 1.5)
+    s.text(248, 152, app, 14, 700, INK)
     s.text(248, 170, "App", 11.5, 400, GREY)
     s.text(196, 206, "Apps", 12, 700, INK)
     s.text(204, 230, "WordPad", 12.5, 400, INK)
     s.text(204, 254, "Notepad", 12.5, 400, INK)
     # right side: the app and Open
     s.rect(460, 112, 250, 210, fill="#ffffff", rx=8)
-    s.rect(560, 128, 50, 54, fill=WORD, rx=7)
+    s.rect(560, 128, 50, 54, fill=color, rx=7)
     s.rect(571, 139, 28, 32, fill="#ffffff", rx=3)
     for i in range(4):
-        s.line(575, 146 + i * 6, 595, 146 + i * 6, WORD, 1.6)
-    s.text(585, 206, "Word", 16, 700, INK, "middle")
+        s.line(575, 146 + i * 6, 595, 146 + i * 6, color, 1.6)
+    s.text(585, 206, app, 16, 700, INK, "middle")
     s.text(585, 224, "App", 12, 400, GREY, "middle")
     s.line(480, 240, 690, 240, LINE, 1)
-    icon_folder(s, 486, 254, WORD)
-    s.text(518, 268, "Open", 13, 600, WORD)
+    icon_folder(s, 486, 254, color)
+    s.text(518, 268, "Open", 13, 600, color)
     # the taskbar
     s.rect(15, h - 64, W - 30, 49, fill="#eef1f5")
     s.rect(15, h - 25, W - 30, 10, fill="#eef1f5", rx=9)
     for i in range(4):
-        s.rect(372 + (i % 2) * 11, h - 52 + (i // 2) * 11, 9, 9, fill=WORD, rx=1.5)
+        s.rect(372 + (i % 2) * 11, h - 52 + (i // 2) * 11, 9, 9, fill=color, rx=1.5)
     s.rect(405, h - 52, 150, 26, fill="#ffffff", stroke="#c9c9c9", sw=1, rx=13)
     icon_search(s, 421, h - 39, GREY)
     s.text(436, h - 34.5, "Search", 12, 400, GREY)
     s.rect(600, h - 50, 22, 18, fill="#f2b705", rx=2)
     s.rect(634, h - 52, 22, 22, fill="#0f6cbd", rx=4)
     mark_box(top, (405, h - 52, 150, 26), 1, "right", 13)
-    top.label(30, 60, 132, "type: word", arrow_to=(188, 73))
+    top.label(26, 60, 140, "type: " + app.lower(), arrow_to=(188, 73))
     mark_box(top, (190, 126, 250, 56), 2, "left")
 
 
-def lab_open_2(s, top):
-    """Word opens on its start screen: click Blank document."""
+
+
+def lab_open_1(s, top):
+    open_search(s, top)
+
+
+def open_start(s, top, app="Word", color=WORD, blank="Blank document"):
+    """The start screen of the app: click Blank document (workbook, presentation)."""
     h = 380
     frame(s, h)
     s.rect(15, 15, 150, h - 30, fill="#f3f3f3", rx=9)
     s.rect(150, 15, 15, h - 30, fill="#f3f3f3")
-    s.text(32, 46, "Word", 16, 700, WORD)
+    s.text(32, 46, app, 16, 700, color)
     for i, t in enumerate(("Home", "New", "Open")):
         y = 86 + 36 * i
         if t == "Home":
             s.rect(22, y - 21, 136, 30, fill="#e1e1e1", rx=4)
-            s.rect(22, y - 17, 3, 22, fill=WORD, rx=1.5)
+            s.rect(22, y - 17, 3, 22, fill=color, rx=1.5)
         s.text(40, y, t, 13.5, 600 if t == "Home" else 400, INK)
     s.text(40, h - 70, "Account", 13, 400, INK)
     s.text(40, h - 40, "Options", 13, 400, INK)
     s.text(196, 62, "Good morning", 24, 300, INK)
-    names = ("Blank document", "Take a tour", "Single spaced (blank)", "Blog post")
+    names = (blank, "Take a tour", "Templates", "More")
     for i, t in enumerate(names):
         x = 196 + i * 166
-        s.rect(x, 92, 140, 180, fill="#ffffff", stroke=WORD if i == 0 else "#c9c9c9", sw=2 if i == 0 else 1)
+        s.rect(x, 92, 140, 180, fill="#ffffff", stroke=color if i == 0 else "#c9c9c9", sw=2 if i == 0 else 1)
         if i == 1:
-            s.text(x + 70, 160, "Welcome", 14, 700, WORD, "middle")
+            s.text(x + 70, 160, "Welcome", 14, 700, color, "middle")
             for k in range(4):
                 s.line(x + 24, 180 + k * 12, x + 116, 180 + k * 12, "#c3c3c3", 3)
         if i == 2:
@@ -550,6 +556,9 @@ def lab_open_2(s, top):
     mark_box(top, (196, 92, 140, 180), 1, "top")
 
 
+def lab_open_2(s, top):
+    """Word opens on its start screen: click Blank document."""
+    open_start(s, top)
 
 
 def lab_styles_1(s, top):
@@ -825,7 +834,7 @@ def lab_tutu_3(s, top):
     mark_box(top, (sx + 4, dy + 4, 192, 28), 3, "right", 5, 1)
 
 
-def lab_save_2(s, top):
+def save_as(s, top, name="book-fair-Huda", kind="Word Document (*.docx)", color=WORD):
     """The Save As window of Windows: Desktop, the file name, Save."""
     h = 440
     frame(s, h)
@@ -856,17 +865,21 @@ def lab_save_2(s, top):
     s.rect(15, 410, W - 30, 15, fill="#f3f3f3", rx=9)
     s.text(150, 330, "File name:", 12.5, 400, INK, "end")
     s.rect(162, 314, 520, 26, fill="#ffffff", stroke=WORD, sw=1.6, rx=3)
-    s.text(172, 332, "book-fair-Huda", 13, 400, INK)
+    s.text(172, 332, name, 13, 400, INK)
     s.text(150, 364, "Save as type:", 12.5, 400, INK, "end")
     s.rect(162, 348, 520, 26, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
-    s.text(172, 366, "Word Document (*.docx)", 13, 400, INK)
-    s.rect(640, 386, 110, 30, fill=WORD, rx=4)
+    s.text(172, 366, kind, 13, 400, INK)
+    s.rect(640, 386, 110, 30, fill=color, rx=4)
     s.text(695, 406, "Save", 13.5, 700, "#ffffff", "middle")
     s.rect(760, 386, 110, 30, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=4)
     s.text(815, 406, "Cancel", 13.5, 400, INK, "middle")
     mark_box(top, (28, 112 + 30 - 18, 180, 26), 1, "right", 4, 1)
     mark_box(top, (162, 314, 520, 26), 2, "right", 4, 2)
     mark_box(top, (640, 386, 110, 30), 3, "left", 4, 2)
+
+
+def lab_save_2(s, top):
+    save_as(s, top)
 
 
 def lab_result_1(s, top):
@@ -878,23 +891,441 @@ def lab_result_1(s, top):
     page(s, 210, 192, 480, h - 236, paras, center=(0,), bold_word=(3, "free", RED), table=PRICES, table_at=4)
 
 
+
+# =====================================================================
+# Generic tutudocs.com screens (the AI Extra of every lecture): the home
+# page is the same for every file; the editor shows a document, a sheet or
+# slides; the Download menu ends with the file type of the app.
+# =====================================================================
+
+def tutu_home(s, top):
+    lab_tutu_1(s, top)
+
+
+def tutu_shell(s, h, name, kind, panel=True):
+    """The online editor of tutudocs.com, its top bar and menus; returns (AI button, menus, page box)."""
+    browser(s, h, "tutudocs.com/" + {"doc": "doc", "sheet": "excel", "slides": "ppt"}[kind], name)
+    colour = {"doc": "#4a7ff0", "sheet": "#1f9d55", "slides": "#f0a020"}[kind]
+    s.path("M30 96 h11 l6 6 v14 h-17 z", fill=colour)
+    s.text(56, 112, name, 15, 400, INK)
+    s.text(56 + width(name, 15) + 12, 111, "Saved locally · Sign in to save to cloud", 11, 400, "#2b8a3e")
+    ai = (470, 96, 112, 26)
+    s.rect(*ai, fill=TEAL_SOFT, stroke="#8fd1c4", sw=1.2, rx=6)
+    s.text(526, 113.5, "AI Assistant", 12.5, 700, TEAL, "middle")
+    s.rect(600, 96, 92, 26, fill="#d8e9fb", rx=13)
+    s.text(646, 113.5, "Share", 12.5, 700, INK, "middle")
+    s.rect(800, 96, 70, 26, fill=TEAL, rx=13)
+    s.text(835, 113.5, "Sign in", 12.5, 700, "#ffffff", "middle")
+    names = {"doc": ("File", "Edit", "View", "Insert", "Format", "Tools", "Help"),
+             "sheet": ("File", "Edit", "View", "Insert", "Format", "Data", "Help"),
+             "slides": ("File", "Edit", "View", "Insert", "Format", "Slide", "Arrange", "Tools", "Help")}[kind]
+    menus, x = {}, 30
+    for m in names:
+        s.text(x, 145, m, 12.5, 400, INK)
+        menus[m] = (x - 6, 131, 7.6 * len(m) + 12, 20)
+        x += 7.6 * len(m) + 22
+    s.line(15, 156, W - 15, 156, "#e6e6e6", 1)
+    s.line(15, 186, W - 15, 186, "#e6e6e6", 1)
+    pw = 560 if panel else W - 30
+    s.rect(15, 187, pw, h - 202, fill="#f4f5f7")
+    return ai, menus, (15, 187, pw, h - 202)
+
+
+def tutu_ai(s, top, name, kind, ask, answer, draw_page, note=None, note_to=None):
+    """The AI Assistant: the request and the answer; draw_page(s, box) draws the changed file."""
+    h = 470
+    ai, _, box = tutu_shell(s, h, name, kind)
+    draw_page(s, box)
+    px = 575
+    s.rect(px, 187, W - 15 - px, h - 202, fill="#ffffff")
+    s.line(px, 187, px, h - 15, "#e3e3e3", 1)
+    s.text(px + 14, 210, "AI assistant", 13.5, 700, INK)
+    lines = wrap_text(ask, 11.5, 230)
+    bh = 12 + 16 * len(lines)
+    s.rect(W - 25 - 250, 224, 250, bh, fill="#d9f0f5", rx=12)
+    for i, ln in enumerate(lines):
+        s.text(W - 25 - 238, 241 + 16 * i, ln, 11.5, 400, INK)
+    for i, ln in enumerate(wrap_text(answer, 12, 270)):
+        s.text(px + 14, 224 + bh + 30 + 17 * i, ln, 12, 400, INK)
+    b = (px + 10, 372, W - 25 - px - 10, 72)
+    s.rect(*b, fill="#ffffff", stroke=TEAL, sw=1.4, rx=12)
+    s.text(px + 24, 395, "Ask AI anything…", 12.5, 400, LIGHT)
+    s.circle(W - 52, 424, 13, fill="#eef0f2")
+    s.poly([(W - 59, 418), (W - 44, 424), (W - 59, 430), (W - 56, 424)], fill=GREY)
+    mark_box(top, ai, 1, "bottom", 6, 2)
+    mark_box(top, (b[0], b[1], b[2], 36), 2, "left", 10, 2)
+    mark_box(top, (W - 25 - 250, 224, 250, bh), 3, "left", 12, 2)
+    if note:
+        top.label(330, 200, 170, note, arrow_to=note_to)
+
+
+def tutu_download(s, top, name, kind):
+    """File › Download › the file of the app."""
+    h = 470
+    _, menus, box = tutu_shell(s, h, name, kind, panel=False)
+    mx, my = 20, 156
+    items = ("New", "Open...", "Make a copy", "Share", "Download", "Rename", "Save to browser", "Print...")
+    s.rect(mx, my, 220, 30 * len(items) + 10, fill="#ffffff", stroke="#d0d0d0", sw=1, rx=8)
+    for i, it in enumerate(items):
+        y = my + 8 + i * 30
+        if it == "Download":
+            s.rect(mx + 4, y, 212, 28, fill=TEAL_SOFT, rx=5)
+            s.text(mx + 200, y + 19, "›", 14, 700, INK)
+        s.text(mx + 18, y + 19, it, 12.5, 600 if it == "Download" else 400, INK)
+    dy, sx = my + 8 + 4 * 30, mx + 222
+    first = {"doc": "Microsoft Word (.docx)", "sheet": "Microsoft Excel (.xlsx)", "slides": "Microsoft PowerPoint (.pptx)"}[kind]
+    subs = (first, "PDF", "HTML", "Plain text")
+    s.rect(sx, dy, 220, 30 * len(subs) + 8, fill="#ffffff", stroke="#d0d0d0", sw=1, rx=8)
+    for i, it in enumerate(subs):
+        y = dy + 4 + i * 30
+        if i == 0:
+            s.rect(sx + 4, y, 212, 28, fill=TEAL_SOFT, rx=5)
+        s.text(sx + 16, y + 19, it, 12.5, 600 if i == 0 else 400, INK)
+    mark_box(top, menus["File"], 1, "top", 4, 1)
+    mark_box(top, (mx + 4, dy, 212, 28), 2, "left", 5, 1)
+    mark_box(top, (sx + 4, dy + 4, 212, 28), 3, "right", 5, 1)
+
+
+def wrap_text(text, size, maxw):
+    out, line = [], ""
+    for w_ in text.split():
+        trial = (line + " " + w_).strip()
+        if width(trial, size) > maxw and line:
+            out.append(line)
+            line = w_
+        else:
+            line = trial
+    if line:
+        out.append(line)
+    return out
+
+
+# =====================================================================
+# PowerPoint for Windows (Lecture 5): the window, the Home, Design,
+# Transitions and Animations tabs, the thumbnails, the slide and the notes.
+# =====================================================================
+
+PPT = "#c43e1c"
+PPT_SOFT = "#fbe3dc"
+PPT_TABS = ("File", "Home", "Insert", "Draw", "Design", "Transitions", "Animations", "Slide Show", "Review", "View", "Help")
+
+
+def ppt_tabs(s, active):
+    s.rect(15, 49, W - 30, 30, fill=TITLE_BG)
+    x, pos = 30, {}
+    for tname in PPT_TABS:
+        w_ = width(tname, 13) + 4
+        on = tname == active
+        s.text(x, 69, tname, 13, 700 if on else 400, PPT if on else INK)
+        if on:
+            s.rect(x - 2, 74, w_, 3, fill=PPT, rx=1.5)
+        pos[tname] = (x - 6, 52, w_ + 12, 26)
+        x += w_ + 14
+    return pos
+
+
+def ppt_ribbon(s, tab, theme=None, trans=None, anim=None):
+    ribbon_box(s)
+    p = {}
+    if tab == "Home":
+        s.rect(34, 92, 30, 36, fill="#ffffff", stroke="#7a7a7a", sw=1.3, rx=3)
+        s.text(46, 156, "Paste", 11.5, 400, INK)
+        group(s, 20, 96, "Clipboard")
+        p["newslide"] = (104, 88, 70, 80)
+        s.rect(104, 88, 70, 80, fill=BTN, rx=4)
+        s.rect(122, 94, 34, 26, fill="#ffffff", stroke=PPT, sw=1.4, rx=2)
+        s.rect(126, 98, 26, 5, fill=PPT_SOFT)
+        s.text(139, 140, "New", 11.5, 400, INK, "middle")
+        s.text(139, 154, "Slide ▾", 11.5, 400, INK, "middle")
+        p["layout"] = (180, 92, 70, 20)
+        s.text(184, 106, "Layout ▾", 11.5, 400, INK)
+        s.text(184, 128, "Reset", 11.5, 400, INK)
+        s.text(184, 150, "Section ▾", 11.5, 400, INK)
+        group(s, 96, 262, "Slides")
+        dropdown(s, 272, 92, 120, "Aptos (Body)")
+        dropdown(s, 396, 92, 44, "28")
+        for i, c in enumerate(("B", "I", "U", "S")):
+            small_btn(s, 272 + i * 26, 124, 24, 24, c, 13, 800 if c == "B" else 400)
+        s.rect(380, 124, 32, 24, fill=BTN, rx=3)
+        s.text(392, 139, "A", 14, 700, INK, "middle")
+        s.rect(384, 142, 16, 4, fill=RED)
+        group(s, 262, 450, "Font")
+        for i, k in enumerate(("left", "center", "right", "justify")):
+            s.rect(460 + i * 28 - 4, 124, 24, 24, fill=BTN, rx=3)
+            align_icon(s, 460 + i * 28, 130, k)
+        list_icon(s, 460, 96)
+        list_icon(s, 490, 96, True)
+        group(s, 450, 590, "Paragraph")
+        for i, sh in enumerate(("Shapes", "Arrange", "Quick Styles")):
+            s.text(600, 104 + i * 22, sh, 11.5, 400, INK)
+        group(s, 590, 700, "Drawing")
+        s.text(712, 104, "Find", 11.5, 400, INK)
+        s.text(712, 126, "Replace", 11.5, 400, INK)
+        s.text(712, 148, "Select", 11.5, 400, INK)
+        group(s, 700, 790, "Editing")
+        big_btn(s, 800, 70, "Designer", ic_page)
+        s.text(835, 177, "Designer", 10.5, 400, GREY, "middle")
+    elif tab == "Design":
+        themes = [("Office Theme", "#ffffff", INK), ("Facet", "#e7f4e4", "#2b7a3b"), ("Integral", "#eaf2fb", "#1f4e8c"),
+                  ("Ion", "#1a6e8e", "#ffffff"), ("Retrospect", "#fbefe3", "#a14f17"), ("Slice", "#244a6b", "#ffffff")]
+        for i, (n, bg, fg) in enumerate(themes):
+            x = 24 + i * 76
+            on = n == theme
+            p["theme:" + n] = (x, 88, 70, 62)
+            s.rect(x, 88, 70, 62, fill=bg, stroke=PPT if on else "#cfcfcf", sw=2 if on else 1, rx=3)
+            s.text(x + 10, 112, "Aa", 18, 400, fg)
+            s.rect(x + 10, 132, 50, 4, fill=fg, opacity=0.6)
+        group(s, 20, 484, "Themes")
+        for i, c in enumerate(("#2b7a3b", "#1f4e8c", "#a14f17", "#6b3fa0")):
+            x = 494 + i * 40
+            p["variant:%d" % i] = (x, 96, 34, 50)
+            s.rect(x, 96, 34, 50, fill="#ffffff", stroke="#cfcfcf", sw=1, rx=3)
+            s.rect(x + 4, 136, 26, 6, fill=c)
+        group(s, 488, 660, "Variants")
+        s.text(672, 108, "Slide Size ▾", 11.5, 400, INK)
+        s.text(672, 132, "Format Background", 11.5, 400, INK)
+        group(s, 664, 790, "Customize")
+        big_btn(s, 800, 70, "Designer", ic_page)
+        s.text(835, 177, "Designer", 10.5, 400, GREY, "middle")
+    elif tab == "Transitions":
+        big_btn(s, 24, 60, "Preview", ic_page)
+        group(s, 20, 92, "Preview")
+        for i, n in enumerate(("None", "Morph", "Fade", "Push", "Wipe", "Split", "Vortex")):
+            x = 102 + i * 66
+            on = n == trans
+            p["t:" + n] = (x, 88, 60, 62)
+            s.rect(x, 88, 60, 62, fill=PPT_SOFT if on else "#ffffff", stroke=PPT if on else "#e0e0e0", sw=1.4 if on else 1, rx=3)
+            s.rect(x + 18, 96, 24, 24, fill="#f3f3f3", stroke="#9a9a9a", sw=1, rx=2)
+            s.text(x + 30, 142, n, 11, 400, INK, "middle")
+        group(s, 98, 572, "Transition to This Slide")
+        s.text(584, 106, "Effect Options ▾", 11.5, 400, INK)
+        s.text(690, 106, "Duration: 01.00", 11.5, 400, INK)
+        p["applyall"] = (684, 136, 110, 24)
+        s.rect(684, 136, 110, 24, fill=BTN, rx=3)
+        s.text(739, 152.5, "Apply To All", 11.5, 700, INK, "middle")
+        s.text(584, 152.5, "Sound: [No Sound]", 11, 400, GREY)
+        group(s, 576, 820, "Timing")
+    elif tab == "Animations":
+        big_btn(s, 24, 60, "Preview", ic_page)
+        group(s, 20, 92, "Preview")
+        for i, (n, c) in enumerate((("None", "#9a9a9a"), ("Appear", "#2b8a3e"), ("Fade", "#2b8a3e"), ("Fly In", "#2b8a3e"),
+                                    ("Float In", "#2b8a3e"), ("Wipe", "#2b8a3e"), ("Zoom", "#2b8a3e"))):
+            x = 102 + i * 66
+            on = n == anim
+            p["a:" + n] = (x, 88, 60, 62)
+            s.rect(x, 88, 60, 62, fill=PPT_SOFT if on else "#ffffff", stroke=PPT if on else "#e0e0e0", sw=1.4 if on else 1, rx=3)
+            s.poly([(x + 30, 96), (x + 40, 116), (x + 20, 116)], fill=c)
+            s.text(x + 30, 142, n, 11, 400, INK, "middle")
+        group(s, 98, 572, "Animation")
+        s.text(584, 106, "Effect Options ▾", 11.5, 400, INK)
+        s.text(584, 130, "Add Animation ▾", 11.5, 400, INK)
+        s.text(584, 154, "Animation Pane", 11.5, 400, INK)
+        s.text(700, 106, "Start: On Click", 11.5, 400, INK)
+        s.text(700, 130, "Duration: 00.50", 11.5, 400, INK)
+        group(s, 576, 820, "Timing")
+    return p
+
+
+SLIDES = {
+    "title": {"title": "Our Book Fair", "sub": "Sunrise College · Sunday to Tuesday"},
+    "when": {"title": "When and where", "points": ["Sunday to Tuesday", "10:00 to 15:00", "The college library"]},
+}
+
+
+def ppt_slide(s, x, y, w, slide, theme=None, empty=False, sel=None, scale=1.0):
+    """A slide 16:9 at (x, y), width w; returns the boxes of its title and body."""
+    hgt = w * 9 / 16
+    bg, fg, acc = {"Facet": ("#e7f4e4", "#1f3d28", "#2b7a3b"), "Ion": ("#1a6e8e", "#ffffff", "#ffd43b"),
+                   "Integral": ("#eaf2fb", "#1f2f4c", "#1f4e8c")}.get(theme, ("#ffffff", INK, INK))
+    s.rect(x, y, w, hgt, fill=bg, stroke="#bfbfbf", sw=1)
+    if theme == "Facet":
+        s.rect(x, y, w * 0.06, hgt, fill=acc)
+    boxes = {}
+    k = w / 480
+    if slide is None or empty:
+        tb = (x + 30 * k, y + 70 * k, w - 60 * k, 70 * k)
+        s.raw('<rect x="%g" y="%g" width="%g" height="%g" fill="none" stroke="#9a9a9a" stroke-dasharray="4 3"/>' % tb)
+        s.text(x + w / 2, tb[1] + tb[3] / 2 + 8 * k, "Click to add title", 26 * k, 400, GREY, "middle")
+        sb = (x + 70 * k, y + 160 * k, w - 140 * k, 40 * k)
+        s.raw('<rect x="%g" y="%g" width="%g" height="%g" fill="none" stroke="#9a9a9a" stroke-dasharray="4 3"/>' % sb)
+        s.text(x + w / 2, sb[1] + sb[3] / 2 + 6 * k, "Click to add subtitle", 16 * k, 400, GREY, "middle")
+        boxes.update(title=tb, body=sb)
+        return boxes
+    if "sub" in slide:
+        s.text(x + w / 2, y + 115 * k, slide["title"], 34 * k, 400, fg, "middle")
+        s.text(x + w / 2, y + 175 * k, slide["sub"], 15 * k, 400, fg, "middle")
+        boxes.update(title=(x + 30 * k, y + 80 * k, w - 60 * k, 50 * k), body=(x + 70 * k, y + 155 * k, w - 140 * k, 30 * k))
+    else:
+        s.text(x + 34 * k, y + 52 * k, slide["title"], 26 * k, 400, fg)
+        for i, pt in enumerate(slide.get("points", [])):
+            s.circle(x + 42 * k, y + (96 + 30 * i) * k, 3 * k, fill=fg)
+            s.text(x + 54 * k, y + (102 + 30 * i) * k, pt, 17 * k, 400, fg)
+        boxes.update(title=(x + 28 * k, y + 24 * k, w - 56 * k, 40 * k), body=(x + 28 * k, y + 76 * k, w - 56 * k, 30 * len(slide.get("points", [])) * k + 12 * k))
+    if sel == "body":
+        s.rect(*boxes["body"], stroke="#7a7a7a", sw=1)
+    return boxes
+
+
+def ppt_window(s, h, tab, slides, cur=0, theme=None, notes=None, name="Presentation1 - PowerPoint", empty=False, **kw):
+    frame(s, h)
+    title_bar(s, name)
+    tabs = ppt_tabs(s, tab)
+    rb = ppt_ribbon(s, tab, theme=kw.get("theme_sel"), trans=kw.get("trans"), anim=kw.get("anim"))
+    s.rect(15, 184, W - 30, h - 224, fill="#e9e9e9")
+    # thumbnails
+    for i, sl in enumerate(slides):
+        y = 196 + i * 78
+        s.text(26, y + 12, str(i + 1), 11, 400, GREY)
+        if i == cur:
+            s.rect(36, y - 3, 118, 72, stroke=PPT, sw=2.5, rx=3)
+        ppt_slide(s, 40, y, 110, sl, theme, empty=empty and i == 0)
+    nb = notes is not None
+    sh = h - 224 - (54 if nb else 14)
+    sw_ = min(560, (sh - 16) * 16 / 9)
+    sx = 170 + (W - 30 - 170 - sw_) / 2
+    boxes = ppt_slide(s, sx, 194, sw_, slides[cur] if slides else None, theme, empty=empty, sel=kw.get("sel"))
+    nbox = None
+    if nb:
+        nbox = (170, h - 92, W - 200, 46)
+        s.rect(*nbox, fill="#ffffff", stroke="#d0d0d0", sw=1)
+        s.text(184, h - 64, notes or "Click to add notes", 12.5, 400, INK if notes else GREY)
+    s.rect(15, h - 40, W - 30, 25, fill=TITLE_BG)
+    s.rect(15, h - 25, W - 30, 10, fill=TITLE_BG, rx=9)
+    s.text(30, h - 23, "Slide %d of %d" % (cur + 1, max(1, len(slides))), 11, 400, GREY)
+    s.text(140, h - 23, "English (United States)", 11, 400, GREY)
+    s.text(W - 200, h - 23, "Notes", 11, 400, GREY)
+    return tabs, rb, boxes, nbox
+
+
+def lab_ppt_open(s, top):
+    open_search(s, top, "PowerPoint", PPT)
+
+
+def lab_ppt_start(s, top):
+    open_start(s, top, "PowerPoint", PPT, "Blank Presentation")
+
+
+def lab_ppt_title(s, top):
+    """The first slide: click in Click to add title, type; then the subtitle."""
+    _, _, boxes, _ = ppt_window(s, 470, "Home", [None], 0, empty=True)
+    mark_box(top, boxes["title"], 1, "left", 4, 2)
+    mark_box(top, boxes["body"], 2, "left", 4, 2)
+
+
+def lab_ppt_newslide(s, top):
+    """Home › New Slide ▾ › Title and Content."""
+    h = 520
+    _, rb, _, _ = ppt_window(s, h, "Home", [SLIDES["title"]], 0)
+    x0, y0 = 104, 168
+    s.rect(x0, y0, 330, 250, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
+    s.text(x0 + 10, y0 + 20, "Office Theme", 12, 700, INK)
+    lays = ("Title Slide", "Title and Content", "Section Header", "Two Content", "Comparison", "Title Only")
+    for i, n in enumerate(lays):
+        x = x0 + 10 + (i % 3) * 106
+        y = y0 + 32 + (i // 3) * 104
+        s.rect(x, y, 98, 58, fill="#ffffff", stroke=PPT if i == 1 else "#c9c9c9", sw=2 if i == 1 else 1)
+        s.rect(x + 10, y + 8, 78, 10, fill="#d9d9d9")
+        if i in (1, 3, 4):
+            for k in range(3):
+                s.rect(x + 10, y + 26 + k * 8, 34 if i != 1 else 70, 4, fill="#e6e6e6")
+        s.text(x + 49, y + 74, n, 10.5, 600 if i == 1 else 400, INK, "middle")
+    mark_box(top, rb["newslide"], 1, "right", 6, 1)
+    mark_box(top, (x0 + 10 + 106, y0 + 32, 98, 58), 2, "right", 4, 3)
+
+
+def lab_ppt_notes(s, top):
+    """Slide 2: the title and three points; the notes pane under the slide."""
+    h = 520
+    _, _, boxes, nbox = ppt_window(s, h, "Home", [SLIDES["title"], SLIDES["when"]], 1, notes="")
+    mark_box(top, boxes["title"], 1, "left", 4, 2)
+    mark_box(top, boxes["body"], 2, "left", 4, 2)
+    mark_box(top, nbox, 3, "left", 4, 2)
+
+
+def lab_ppt_design(s, top):
+    """Design › a theme (Facet here) › a variant."""
+    h = 470
+    tabs, rb, _, _ = ppt_window(s, h, "Design", [SLIDES["title"], SLIDES["when"]], 0, theme="Facet", theme_sel="Facet")
+    mark_box(top, tabs["Design"], 1, "top", 6, 1)
+    mark_box(top, rb["theme:Facet"], 2, "bottom", 4, 2)
+    mark_box(top, rb["variant:1"], 3, "bottom", 4, 2)
+
+
+def lab_ppt_transition(s, top):
+    """Transitions › Fade › Apply To All."""
+    h = 470
+    tabs, rb, _, _ = ppt_window(s, h, "Transitions", [SLIDES["title"], SLIDES["when"]], 0, theme="Facet", trans="Fade")
+    mark_box(top, tabs["Transitions"], 1, "top", 6, 1)
+    mark_box(top, rb["t:Fade"], 2, "bottom", 4, 2)
+    mark_box(top, rb["applyall"], 3, "bottom", 4, 2)
+
+
+def lab_ppt_animation(s, top):
+    """Slide 2: click the list; Animations › Appear."""
+    h = 470
+    tabs, rb, boxes, _ = ppt_window(s, h, "Animations", [SLIDES["title"], SLIDES["when"]], 1, theme="Facet", anim="Appear", sel="body")
+    mark_box(top, boxes["body"], 1, "left", 4, 2)
+    mark_box(top, tabs["Animations"], 2, "top", 6, 1)
+    mark_box(top, rb["a:Appear"], 3, "bottom", 4, 2)
+
+
+def lab_ppt_save(s, top):
+    save_as(s, top, "talk-Huda", "PowerPoint Presentation (*.pptx)", PPT)
+
+
+def lab_ppt_result(s, top):
+    """The talk at the end: two slides with the theme."""
+    h = 470
+    ppt_window(s, h, "Home", [SLIDES["title"], SLIDES["when"]], 0, theme="Facet", name="talk-Huda - PowerPoint")
+
+
+def _ppt_ai_page(s, box):
+    x, y, w_, hh = box
+    ppt_slide(s, x + 30, y + 14, 230, SLIDES["title"], "Facet")
+    ppt_slide(s, x + 280, y + 14, 230, {"title": "What you can bring", "points": ["Old books in good shape", "Your student card", "A bag for new books"]}, "Facet")
+    s.rect(x + 278, y + 12, 234, 133, stroke="#f2c94c", sw=3, rx=3)
+
+
+def lab_ppt_tutu_ai(s, top):
+    tutu_ai(s, top, "talk-Huda", "slides", "Add a slide with 3 short points: what students can bring to the book fair.",
+            "Done: slide 3, What you can bring, has three short points.", _ppt_ai_page)
+
+
+def lab_ppt_tutu_dl(s, top):
+    tutu_download(s, top, "talk-Huda", "slides")
+
+
 # name: (the drawing, the part of it that the worksheet shows: x, y, width, height).
 # A crop zooms in on the buttons of the step, so that they are big on paper.
 SCREENS = {
-    "lab-open-1": (lab_open_1, None),
-    "lab-open-2": (lab_open_2, (176, 28, 370, 300)),
-    "lab-styles-1": (lab_styles_1, (440, 80, 445, 220)),
-    "lab-styles-2": (lab_styles_2, (440, 80, 445, 340)),
-    "lab-nav-1": (lab_nav_1, (15, 26, 650, 350)),
-    "lab-format-1": (lab_format_1, (220, 80, 480, 200)),
-    "lab-format-2": (lab_format_2, (90, 80, 470, 320)),
-    "lab-table-1": (lab_table_1, (20, 26, 530, 410)),
-    "lab-spell-1": (lab_spell_1, (100, 184, 785, 330)),
-    "lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
-    "lab-tutu-2": (lab_tutu_2, (15, 86, 870, 370)),
-    "lab-tutu-3": (lab_tutu_3, (0, 86, 470, 366)),
-    "lab-save-2": (lab_save_2, None),
-    "lab-result-1": (lab_result_1, (200, 186, 500, 340)),
+    "week-04/images/lab-open-1": (lab_open_1, None),
+    "week-04/images/lab-open-2": (lab_open_2, (176, 28, 370, 300)),
+    "week-04/images/lab-styles-1": (lab_styles_1, (440, 80, 445, 220)),
+    "week-04/images/lab-styles-2": (lab_styles_2, (440, 80, 445, 340)),
+    "week-04/images/lab-nav-1": (lab_nav_1, (15, 26, 650, 350)),
+    "week-04/images/lab-format-1": (lab_format_1, (220, 80, 480, 200)),
+    "week-04/images/lab-format-2": (lab_format_2, (90, 80, 470, 320)),
+    "week-04/images/lab-table-1": (lab_table_1, (20, 26, 530, 410)),
+    "week-04/images/lab-spell-1": (lab_spell_1, (100, 184, 785, 330)),
+    "week-04/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "week-04/images/lab-tutu-2": (lab_tutu_2, (15, 86, 870, 370)),
+    "week-04/images/lab-tutu-3": (lab_tutu_3, (0, 86, 470, 366)),
+    "week-04/images/lab-save-2": (lab_save_2, None),
+    "week-04/images/lab-result-1": (lab_result_1, (200, 186, 500, 340)),
+    # Lecture 5, PowerPoint (week-06)
+    "week-06/images/lab-open-1": (lab_ppt_open, None),
+    "week-06/images/lab-open-2": (lab_ppt_start, (176, 28, 370, 300)),
+    "week-06/images/lab-title-1": (lab_ppt_title, (15, 180, 870, 255)),
+    "week-06/images/lab-newslide-1": (lab_ppt_newslide, (15, 80, 520, 350)),
+    "week-06/images/lab-notes-1": (lab_ppt_notes, (15, 184, 870, 300)),
+    "week-06/images/lab-design-1": (lab_ppt_design, (15, 26, 870, 330)),
+    "week-06/images/lab-transition-1": (lab_ppt_transition, (15, 26, 870, 330)),
+    "week-06/images/lab-animation-1": (lab_ppt_animation, (15, 26, 870, 400)),
+    "week-06/images/lab-save-1": (lab_ppt_save, None),
+    "week-06/images/lab-result-1": (lab_ppt_result, (15, 184, 870, 250)),
+    "week-06/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "week-06/images/lab-tutu-2": (lab_ppt_tutu_ai, (15, 86, 870, 370)),
+    "week-06/images/lab-tutu-3": (lab_ppt_tutu_dl, (0, 86, 470, 366)),
 }
 
 def draw(fn, crop=None):
@@ -945,6 +1376,7 @@ def main():
         if only and not any(o in name for o in only):
             continue
         svg = os.path.join(ROOT, OUT + name + ".svg")
+        os.makedirs(os.path.dirname(svg), exist_ok=True)
         with open(svg, "w", encoding="utf-8") as f:
             f.write(draw(fn, crop))
         if "--svg" not in sys.argv:

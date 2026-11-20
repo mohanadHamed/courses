@@ -1,336 +1,128 @@
 ---
 title: "Digital Content (2): PowerPoint: Layouts, Themes, Pictures and Transitions"
-description: "Worksheet · Three experiments in PowerPoint on a short talk: layouts and a theme, few words on the slide with speaker notes, and a transition and an animation. Part A in PowerPoint, Part B on the simulators."
+description: "Worksheet · Make a short talk in PowerPoint, step by step. Nothing to download."
 lesson: 5
 ilos: [A3, C2]
-start-files:
-  - name: talk-start.pptx
-    about: "a short talk, Saving Water at Home: three slides with no theme, one of them with too much text"
+# The lab model (NOTES.md, "The lab model"): a guide that each student
+# follows alone in PowerPoint, with a drawn screen for every step
+# (tools/lab_screens.py). No questions, no results, no start files.
+lab: true
 format: lesson-typst
 ---
 
+```{=typst}
+#let mk(n) = box(baseline: 22%, circle(radius: 5.8pt, fill: rgb("#d9480f"), stroke: none, inset: 0pt)[#set align(center + horizon); #text(fill: white, weight: "bold", size: 8pt)[#n]])
+#let tick = box(baseline: 12%, width: 10pt, height: 10pt, stroke: 0.9pt + luma(70), radius: 2pt)
+#let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
+#let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f6fd"), stroke: 0.8pt + rgb("#185abd"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
+#let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
+// One step: the box to tick, its number and what to do on the left; its screen on the right.
+#let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
+  #set par(justify: false, leading: 0.62em)
+  #let words = grid(columns: (auto, 1fr), column-gutter: 6pt, [#tick #h(1pt) *#n.*], body)
+  #if img == none { words } else {
+    grid(columns: (left, 1fr), column-gutter: 12pt, align: (top, top), words, align(center, shot(img, w: w)))
+  }
+  #if after != none { v(4pt); after }
+]
+```
+
 ::: {.lead}
-Today you improve a short talk in PowerPoint, like in a lab. Each
-experiment has two parts. **Part A** is in PowerPoint on the lab computer.
-**Part B** is on a simulator of the interactive lesson: on paper, scan its
-QR code; on the screen, click its link. After each step, write your result
-in its box. At the end, copy your key results into the table.
+Today you make a short talk in **PowerPoint** on the lab computer: two
+slides about the college book fair. Do the tasks in order. The **orange
+numbers** in each picture show where to click. Tick the box
+`#tick`{=typst} after each step. Stuck? Raise your hand.
 :::
 
-## Before you start
-
-- **You need:** a computer with PowerPoint (the desktop app, or PowerPoint
-  on the web at `office.com`) and the start file.
-- **No lab computer today?** Your teacher does Part A on the screen, on the
-  simulators of the interactive lesson. Do Part B on your phone.
-- **Check:** the results are at the end of this worksheet. Look only after
-  you try. On the interactive lesson, every step has a check that answers
-  at once.
-
-{{< start-files >}}
-
-## Experiment 1 · Slides, layouts and a theme
-
-**The idea:** a presentation is a set of **slides**. A **layout** sets the
-places on a slide (**placeholders**) for the title, the text and the
-pictures: Title Slide, Title and Content, Two Content. A **theme** (Design
-tab) gives the whole talk one look: colours, fonts and background; a
-**variant** changes only its colours. Keep a strong contrast: dark text on
-a light background, or light on dark. **F5** starts the slide show.
-
-**Aim:** choose a layout, give the talk one look, and start the show.
-
-::: {.part}
-**Part A · In the app (PowerPoint)**
-:::
-
-1. Open `talk-start.pptx` (click **Enable Editing** if you see it). Click
-   slide 1 and open **Home › Layout**: its layout is marked. Then click
-   slide 3 and choose **Home › New Slide › Two Content**. Type the title
-   *Before and after*.
-
-   {{< record "Slide 1 has the layout … ; the new slide has … placeholders" >}}
-
-   ::: {.check}
-   Slide 1 has the layout **Title Slide**: a big title and a subtitle. The
-   new slide has **3 placeholders**: the title and two content boxes side
-   by side. You click in a placeholder and type.
-   :::
-
-   ::: {.fill answer="3" unit="placeholders" hint="Count the title and the boxes side by side."}
-   How many placeholders does the new **Two Content** slide have?
-
-   Why: The title and two content boxes side by side.
-   :::
-
-2. On the **Design** tab, click a theme that you like, then two **Variants**,
-   one after the other. Press **F5**, click through the talk, and press
-   **Esc**.
-
-   {{< record "The theme changed … slides ; a variant changes …" >}}
-
-   ::: {.check}
-   **All four slides** change their colours, fonts and background at once:
-   a theme gives the whole talk one look. A **variant** changes only the
-   colours. F5 starts the show from slide 1; Esc stops it.
-   :::
-
-   ::: {.choice}
-   You click a theme. Which slides change?
-
-   - [x] all the slides of the talk
-
-     Why: A theme gives the whole talk one look.
-
-   - [ ] only the slide that you clicked
-
-     Why: A theme is for the whole presentation.
-
-   - [ ] only the title slide
-
-     Why: Every slide gets the new colours and fonts.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/slide-builder.html" poster="sims/slide-builder.png" title="Slide Builder: one good slide" >}}
-
-3. In **Slide Builder**, do the five tasks: the layout Title and Content, a
-   short title, 3 to 5 short points, a theme, and the picture with its alt
-   text. Which layout do you choose?
-
-   {{< record "The layout … ; my title …" >}}
-
-   ::: {.check}
-   **Title and Content**: a title and one box for the points. A good title
-   has 8 words or fewer, for example "New shop hours".
-   :::
-
-   ::: {.sort}
-   Easy or hard to read from two metres? Sort the slides.
-
-   Easy to read: a strong contrast
-   :   dark text on a light background
-
-       Why: A strong contrast: every word is clear.
-
-   :   light text on a dark background
-
-       Why: Also a strong contrast.
-
-   Hard to read: a weak contrast
-   :   light grey text on a white background
-
-       Why: The text almost disappears.
-
-   :   dark blue text on a black background
-
-       Why: Two dark colours: a weak contrast.
-   :::
-
-## Experiment 2 · Few words and notes
-
-**The idea:** the audience listens to you; the slide only helps. Keep **3 to
-5 points**, each with about **8 words or fewer**. Put the details that you
-will say in the **speaker notes** (View › Notes): in the slide show, only
-you see them (Presenter View).
-
-**Aim:** keep few words on the slide, and put the rest in the notes.
-
-::: {.part}
-**Part A · In the app (PowerPoint)**
-:::
-
-1. Click slide 2, *Small changes at home*. Count its points. Then select
-   its text (**Ctrl + A**, **Ctrl + C**), open **View › Notes**, and paste
-   the text into the notes pane under the slide.
-
-   {{< record "Points: … ; the text is now also in …" >}}
-
-   ::: {.check}
-   **6 points**, the longest with **18 words**: too much text for the back
-   of the room. The long text is now also in the **notes pane**, where it
-   keeps the details that you will say.
-   :::
-
-   ::: {.fill answer="6" unit="points" hint="Count the lines that start with a bullet."}
-   How many points has slide 2 of `talk-start.pptx`?
-
-   Why: 6 points, the longest with 18 words: too much text for one slide.
-   :::
-
-2. Now make the slide short: keep **3 to 5 points**, each with **8 words or
-   fewer**.
-
-   {{< record "My shortest point" >}}
-
-   ::: {.check}
-   A good result, for example: "Close the tap while you brush", "Fix a
-   dripping tap", "Take a short shower", "Use a bucket for the car". The
-   details stay in the notes.
-   :::
-
-   ::: {.sort}
-   A good point for the slide, or too long? Sort them.
-
-   Good: 8 words or fewer
-   :   Close the tap while you brush
-
-       Why: Six short words: easy to read.
-
-   :   Fix a dripping tap
-
-       Why: Four words: clear and short.
-
-   Too long: keep it in the notes
-   :   When you brush your teeth, please remember to close the tap so the water does not run
-
-       Why: Seventeen words: say it, and keep it in the notes.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/slide-doctor.html" poster="sims/slide-doctor.png" title="Slide Doctor: fix the slide" kind="game" >}}
-
-3. Play **Slide Doctor**: each slide of the Sunrise team has one problem;
-   choose the best fix. What is the fix for a slide with a long paragraph?
-
-   {{< record "The fix for a long paragraph: …" >}}
-
-   ::: {.check}
-   **Short points on the slide, the details in the notes**: the audience
-   reads a few words and listens to you.
-   :::
-
-   ::: {.choice}
-   A slide has a paragraph of 60 words. What is the best fix?
-
-   - [x] Keep 3 to 5 short points, and move the details to the notes.
-
-     Why: Few words on the slide; you say the rest.
-
-   - [ ] Make the font smaller, so that everything fits.
-
-     Why: A small font is hard to read from the back of the room.
-
-   - [ ] Read the paragraph aloud from the slide.
-
-     Why: The audience reads faster than you speak and stops listening.
-   :::
-
-## Experiment 3 · A transition and an animation
-
-**The idea:** a **transition** is the move from one slide to the next
-(Transitions tab); use one quiet transition, the same on every slide. An
-**animation** moves one thing on a slide (Animations tab): **Appear** with
-**By Paragraph** shows the points one by one, on each click. Few, quiet
-effects keep the eyes on your message.
-
-**Aim:** add one quiet transition to every slide, and show points one by
-one.
-
-::: {.part}
-**Part A · In the app (PowerPoint)**
-:::
-
-1. On the **Transitions** tab, choose **Fade**, set the **Duration** to
-   **00.70**, and click **Apply To All**. Look at the thumbnails.
-
-   {{< record "Next to every thumbnail: …" >}}
-
-   ::: {.check}
-   A **small star** appears next to every thumbnail: each slide now has a
-   transition. Apply To All gave every slide the same quiet Fade.
-   :::
-
-   ::: {.choice}
-   After **Apply To All**, what appears next to every thumbnail?
-
-   - [x] a small star
-
-     Why: The star shows that the slide has a transition.
-
-   - [ ] a number
-
-     Why: Numbers mark animations on a slide, not transitions.
-
-   - [ ] nothing
-
-     Why: PowerPoint marks each slide that has a transition.
-   :::
-
-2. Click slide 3, *What we do at the office*. Click in its three points and
-   choose **Animations › Appear**, then **Effect Options › By Paragraph**.
-   Press **F5**, click until the end of slide 3, and press **Esc**.
-
-   {{< record "Numbers next to the points … ; on each click …" lines=2 >}}
-
-   ::: {.check}
-   **1, 2 and 3**, one next to each point: the order of the clicks. In the
-   show, the slide fades in with its title, then **one point comes on each
-   click**.
-   :::
-
-   ::: {.order}
-   In the slide show, put what comes on slide 3 in order.
-
-   1. The slide fades in, with its title.
-   2. Click: the first point appears.
-   3. Click: the second point appears.
-   4. Click: the third point appears.
-
-   Why: The transition brings the slide; By Paragraph brings one point on each click.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/transition-lab.html" poster="sims/transition-lab.png" title="Transition Lab: transitions and animations" >}}
-
-3. In **Transition Lab**, try the transitions Appear, Fade and Spin, then an
-   animation By Paragraph. Which transition is too much for a talk?
-
-   {{< record "The transition that is too much" >}}
-
-   ::: {.check}
-   **Spin**: a big, loud effect takes the eyes from your message. A quiet
-   Fade, the same on every slide, is enough.
-   :::
-
-   ::: {.choice}
-   Which transitions fit a talk best?
-
-   - [x] one quiet transition, the same on every slide
-
-     Why: The audience watches your message, not the effects.
-
-   - [ ] a different loud effect on every slide
-
-     Why: Many effects take the eyes from your message.
-
-   - [ ] Spin on every slide
-
-     Why: Spin is loud; a quiet Fade is enough.
-   :::
-
-## Table of results
-
-Copy your key results here: the rows of the parts that you did. Your
-teacher checks this table before the end of the lecture.
-
-::: {.record-table}
-| Experiment | What you record                                   | Your result |
-|:-------:|------------------------------------------------|------------------------|
-| 1 A        | The layout of slide 1, and the new slide          |             |
-| 1 A        | What a theme and a variant change                 |             |
-| 1 B        | My layout and title in Slide Builder              |             |
-| 2 A        | The points of slide 2, and my shortest point      |             |
-| 2 B        | The fix for a long paragraph                      |             |
-| 3 A        | The stars, and the numbers of the animation       |             |
-| 3 B        | The transition that is too much                   |             |
-:::
+- **You need:** a lab computer with PowerPoint. **Nothing to download:**
+  you type the text yourself.
+- **Time:** about 35 minutes. Your PowerPoint may look a little different:
+  the names of the buttons are the same.
+
+## Task 1 · Open PowerPoint and make the first slide
+
+```{=typst}
+#step(1, [Click *Search* on the taskbar #mk(1). Type *powerpoint*. Click *PowerPoint* #mk(2).], img: "images/lab-open-1.png", w: 80%, left: 32%)
+#step(2, [Click *Blank Presentation* #mk(1).], img: "images/lab-open-2.png", w: 36%, left: 32%)
+#step(3, [Click in *Click to add title* #mk(1) and type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Our Book Fair] \ Click in *Click to add subtitle* #mk(2) and type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Sunrise College · Sunday to Tuesday]], img: "images/lab-title-1.png", w: 100%, left: 42%)
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 2 · A slide of points, and the notes
+
+A slide has **few words**: 3 to 5 short points. What you **say** goes in
+the **notes** under the slide.
+
+```{=typst}
+#step(1, [On the *Home* tab, click the small arrow of *New Slide* #mk(1). \ Click *Title and Content* #mk(2).], img: "images/lab-newslide-1.png", w: 82%, left: 36%)
+#step(2, [Click in *Click to add title* #mk(1) and type: #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[When and where] \ Click in *Click to add text* #mk(2) and type three points. Press *Enter* after each one: \ #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 6pt)[Sunday to Tuesday \ 10:00 to 15:00 \ The college library] \ Click in *Click to add notes* #mk(3) and type: #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Entry is free for everyone.]], after: align(center, shot("images/lab-notes-1.png", w: 86%)))
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 3 · A theme for the whole talk
+
+```{=typst}
+#step(1, [Click the *Design* tab #mk(1). Click a theme that you like #mk(2). \ Click a *variant* #mk(3): other colours of the same theme. \ Both slides change at once.], after: align(center, shot("images/lab-design-1.png", w: 92%)))
+```
+
+## Task 4 · A transition and an animation
+
+```{=typst}
+#step(1, [Click the *Transitions* tab #mk(1). Click *Fade* #mk(2). \ Click *Apply To All* #mk(3): every slide fades in.], after: align(center, shot("images/lab-transition-1.png", w: 92%)))
+#step(2, [Click slide *2* on the left. Click the list of points #mk(1). \ Click the *Animations* tab #mk(2). Click *Appear* #mk(3).], img: "images/lab-animation-1.png", w: 100%, left: 34%)
+#step(3, [Press *F5*: the slide show starts. Click: the points come one by one. Press *Esc* to stop.])
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 5 · Save your talk
+
+```{=typst}
+#step(1, [Press *F12* (on a laptop: *Fn + F12*). The *Save As* window opens. \ _Or:_ click *File*, *Save As*, *Browse*.])
+#step(2, [Click *Desktop* #mk(1). \ In *File name*, type *talk-* and your first name #mk(2). \ Click *Save* #mk(3).], img: "images/lab-save-1.png", w: 94%, left: 32%)
+```
+
+## Show your teacher
+
+```{=typst}
+#block(breakable: false, grid(columns: (1.1fr, 1fr), column-gutter: 14pt, align: top,
+  shot("images/lab-result-1.png"),
+  [
+    #set par(spacing: 0.9em, justify: false)
+    Your talk now looks like the picture. Check it:
+    #v(4pt)
+    #tick #h(4pt) Slide 1 is a *Title Slide*: Our Book Fair. \
+    #tick #h(4pt) Slide 2 has 3 short points, and the notes. \
+    #tick #h(4pt) Both slides have the same theme. \
+    #tick #h(4pt) F5: the slides fade in, the points come one by one. \
+    #tick #h(4pt) The file is on the Desktop.
+    #v(8pt)
+    #tip[Raise your hand: your teacher looks at your screen. \ Then do the *Extra*: AI adds a slide to your talk.]
+  ],
+))
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Extra · AI adds a slide to your talk
+
+```{=typst}
+#block(width: 100%, fill: rgb("#e3f4f1"), stroke: 0.8pt + rgb("#8fd1c4"), radius: 6pt, inset: (x: 12pt, y: 9pt))[
+  Only when you finish Tasks 1–5. On *tutudocs.com* an *AI assistant* changes your PowerPoint file for you. *No sign-in.*
+]
+#step(1, [Open the browser. Go to *tutudocs.com*.])
+#step(2, [Click the box *Drop a file anywhere on this page, or click to choose* #mk(1). \ Click *Desktop*, click your file *talk-…*, click *Open*. \ Your talk opens in the online editor.], img: "images/lab-tutu-1.png", w: 84%, left: 36%)
+#step(3, [Click *AI Assistant* at the top #mk(1). \ Click in *Ask AI anything…* #mk(2) and type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Add a slide with 3 short points: what students can bring to the book fair.] \ Press *Enter* #mk(3). Wait about 15 seconds: a new slide comes.], after: align(center, shot("images/lab-tutu-2.png", w: 84%)))
+#step(4, [One more request. Type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Make the title of slide 1 dark blue.] \ Press *Enter*. Wait for the answer before you type again.])
+#step(5, [Click *File* #mk(1), then *Download* #mk(2), then the choice that ends in *.pptx* #mk(3). \ Open the new file from *Downloads*: it opens in PowerPoint, with the changes of the AI.], img: "images/lab-tutu-3.png", w: 74%, left: 44%)
+```

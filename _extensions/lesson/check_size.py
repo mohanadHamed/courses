@@ -380,6 +380,8 @@ def page_minutes(path, page_body):
     # The lab model: "In Word" (:::: {.word-part}) is shown in the real app when
     # time allows; the worksheet repeats it in the lab. Not counted.
     body = re.sub(r"^::::+ *\{\.word-part\}.*?^::::+ *$", " ", body, flags=re.M | re.S)
+    # The lab model: the Extra (AI on tutudocs.com) is shown when time is left.
+    body = re.sub(r"^## Extra\b.*?(?=^## |\Z)", " ", body, flags=re.M | re.S)
     # A Task with AI box is an extra, shown only when time is left.
     for head, text in boxes(body):
         if ".ai-task" in head or 'title="Task with AI' in head:
@@ -1277,7 +1279,7 @@ def check(project_dir):
         if os.path.exists(slides_path):
             s = count_slides(read(slides_path))
             n["slides"] = s["slides"]
-            for f in sorted(page["sim_files"] - s["sim_files"]):
+            for f in sorted(page["sim_files"] - s["sim_files"]) if not lab else []:
                 warnings.append("%s: %s is on no slide (\"Live demo\" or Game challenge)" % (rel, f))
             lesson_dir = os.path.dirname(path)
             for f in sorted(s["sim_files"]) if not lab else []:

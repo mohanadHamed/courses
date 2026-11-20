@@ -26,7 +26,7 @@ import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from phone_screens import (Svg, FONT, INK, GREY, LINE, BG, MARK, MARK_INK, MARK_SOFT,  # noqa: E402
+from phone_screens import (Svg, FONT, INK, GREY, LIGHT, LINE, BG, MARK, MARK_INK, MARK_SOFT,  # noqa: E402
                            icon_search, icon_folder, icon_doc)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -696,66 +696,133 @@ def browser(s, h, address, tab=None):
     s.text(48, 70.5, address, 12.5, 400, INK)
 
 
-def clip(s, cx, cy, c=INK):
-    """A paperclip: the attach button of an AI chat."""
-    s.path("M%g %g v-9 a4 4 0 0 1 8 0 v12 a6 6 0 0 1 -12 0 v-10" % (cx + 2, cy + 6), stroke=c, sw=1.7)
+TEAL = "#0f7a6e"         # the colour of tutudocs.com
+TEAL_SOFT = "#e3f4f1"
 
 
-def chat_box(s, x, y, w, text, hint=True):
-    s.rect(x, y, w, 52, fill="#ffffff", stroke="#cfcfcf", sw=1.2, rx=26)
-    s.circle(x + 28, y + 26, 16, fill="#ffffff", stroke="#cfcfcf", sw=1.2)
-    clip(s, x + 27, y + 25)
-    s.text(x + 56, y + 31, text, 14, 400, GREY if hint else INK)
-    s.circle(x + w - 28, y + 26, 16, fill=INK)
-    s.line(x + w - 28, y + 33, x + w - 28, y + 19, "#ffffff", 2.2)
-    s.poly([(x + w - 34, y + 25), (x + w - 28, y + 18), (x + w - 22, y + 25)], stroke="#ffffff", sw=2.2, closed=False)
-    return (x + 12, y + 10, 32, 32), (x + w - 44, y + 10, 32, 32)
+def tutu_doc_icon(s, x, y):
+    s.path("M%g %g h11 l6 6 v14 h-17 z" % (x, y), fill="#4a7ff0")
+    for i in range(3):
+        s.line(x + 4, y + 9 + i * 3.5, x + 13, y + 9 + i * 3.5, "#ffffff", 1.2)
 
 
-def file_card(s, x, y, w, name, sub):
-    s.rect(x, y, w, 50, fill="#ffffff", stroke="#d0d7e2", sw=1.2, rx=10)
-    s.rect(x + 10, y + 8, 28, 34, fill=WORD, rx=4)
-    s.text(x + 24, y + 30, "W", 14, 800, "#ffffff", "middle")
-    s.text(x + 48, y + 22, name, 13, 700, INK)
-    s.text(x + 48, y + 39, sub, 11.5, 400, GREY)
-
-
-def lab_ai_1(s, top):
-    """An AI chat in the browser (ChatGPT here): the attach button, then Add photos & files."""
-    h = 430
-    browser(s, h, "chatgpt.com", "ChatGPT")
-    s.text(40, 112, "ChatGPT", 16, 700, INK)
-    s.text(W / 2, 170, "What can I help with?", 24, 400, INK, "middle")
-    att, send = chat_box(s, 170, 300, 560, "Ask anything")
-    s.rect(170, 196, 230, 96, fill="#ffffff", stroke="#cfcfcf", sw=1, rx=12)
-    s.rect(176, 202, 218, 28, fill="#f0f0f0", rx=7)
-    clip(s, 192, 216)
-    s.text(208, 221, "Add photos & files", 13, 700, INK)
-    s.text(208, 250, "Create image", 13, 400, INK)
-    s.text(208, 276, "Think longer", 13, 400, INK)
-    s.circle(192, 245, 6, stroke=GREY, sw=1.4)
-    s.circle(192, 271, 6, stroke=GREY, sw=1.4)
-    mark_box(top, att, 1, "left", 16, 2)
-    mark_box(top, (176, 202, 218, 28), 2, "right", 7, 1)
-    top.label(470, 362, 290, "then: Desktop › your file › Open")
-
-
-def lab_ai_2(s, top):
-    """The request with the file, and the answer with the new file to download."""
+def lab_tutu_1(s, top):
+    """tutudocs.com, the home page: no sign-up; click the drop box and choose the file."""
     h = 470
-    browser(s, h, "chatgpt.com", "ChatGPT")
-    s.text(40, 112, "ChatGPT", 16, 700, INK)
-    file_card(s, 560, 104, 300, "book-fair-Huda.docx", "Document")
-    s.rect(420, 162, 440, 68, fill="#efefef", rx=16)
-    s.text(438, 188, "Make the title blue. Add a row to the table:", 13.5, 400, INK)
-    s.text(438, 210, "Magazine, 2. Give me the new Word file.", 13.5, 400, INK)
-    s.text(60, 262, "Done! The title is blue, and the table has a new row.", 13.5, 400, INK)
-    s.text(60, 284, "Here is your file:", 13.5, 400, INK)
-    file_card(s, 60, 298, 330, "book-fair-Huda-new.docx", "Click to download")
-    s.path("M368 312 v14 M362 321 l6 6 l6 -6 M361 332 h14", stroke=WORD, sw=2)
-    chat_box(s, 170, 380, 560, "Ask anything")
-    mark_box(top, (420, 104, 440, 126), 1, "left", 16, 4)
-    mark_box(top, (60, 298, 330, 50), 2, "right", 10, 3)
+    browser(s, h, "tutudocs.com", "TutuDocs")
+    s.rect(15, 85, W - 30, h - 100, fill="#f6fafa")
+    s.text(40, 112, "TutuDocs", 16, 700, INK)
+    for x, w_ in ((520, "Templates"), (600, "Tools"), (650, "AI assistant")):
+        s.text(x, 112, w_, 12.5, 400, GREY)
+    s.rect(790, 96, 76, 26, fill="#ffffff", stroke="#d6d6d6", sw=1, rx=6)
+    s.text(828, 113.5, "Sign in", 12.5, 600, INK, "middle")
+    s.text(W / 2, 162, "Free online Word, Excel & PowerPoint", 25, 700, INK, "middle")
+    s.text(W / 2, 186, "No sign-up · No install · Unlimited use · Free AI every day", 12.5, 400, GREY, "middle")
+    for i, (a_, b_) in enumerate((("Write a document", "Word · DOCX"), ("Make a spreadsheet", "Excel · XLSX"), ("Make slides", "Slides · PPTX"))):
+        x = 200 + i * 172
+        s.rect(x, 202, 160, 74, fill="#ffffff", stroke="#dde3e3", sw=1, rx=10)
+        s.rect(x + 66, 210, 28, 24, fill=TEAL_SOFT, rx=6)
+        s.text(x + 80, 254, a_, 13, 700, INK, "middle")
+        s.text(x + 80, 269, b_, 10.5, 400, GREY, "middle")
+    s.rect(200, 290, 504, 78, fill="#ffffff", stroke="#a9bdb9", sw=1.4, rx=10)
+    s.raw('<rect x="200" y="290" width="504" height="78" rx="10" fill="none" stroke="#a9bdb9" stroke-width="1.6" stroke-dasharray="6 5"/>')
+    s.path("M452 312 v-12 M446 306 l6 -6 l6 6 M444 316 h16", stroke=TEAL, sw=1.8)
+    s.text(W / 2, 338, "Drop a file anywhere on this page, or click to choose", 14, 600, INK, "middle")
+    s.text(W / 2, 356, "Word / Excel / PPT / PDF / CSV / TXT all open", 11, 400, GREY, "middle")
+    s.rect(200, 382, 504, 40, fill="#ffffff", stroke="#dde3e3", sw=1, rx=10)
+    s.text(222, 407, "Tell us what you need…", 12.5, 400, LIGHT)
+    s.rect(616, 388, 80, 28, fill="#8fc7bf", rx=6)
+    s.text(656, 406.5, "Send to AI", 11.5, 600, "#ffffff", "middle")
+    mark_box(top, (200, 290, 504, 78), 1, "left", 10, 3)
+    top.label(430, 430, 290, "then: Desktop › your file › Open")
+
+
+def tutu_editor(s, h, title_blue=True, panel=True):
+    browser(s, h, "tutudocs.com/doc", "book-fair-Huda")
+    tutu_doc_icon(s, 30, 96)
+    s.text(56, 112, "book-fair-Huda", 15, 400, INK)
+    s.text(170, 111, "Saved locally · Sign in to save to cloud", 11, 400, "#2b8a3e")
+    ai = (430, 96, 112, 26)
+    s.rect(*ai, fill=TEAL_SOFT, stroke="#8fd1c4", sw=1.2, rx=6)
+    s.text(486, 113.5, "AI Assistant", 12.5, 700, TEAL, "middle")
+    s.rect(560, 96, 92, 26, fill="#d8e9fb", rx=13)
+    s.text(606, 113.5, "Share", 12.5, 700, INK, "middle")
+    s.rect(800, 96, 70, 26, fill=TEAL, rx=13)
+    s.text(835, 113.5, "Sign in", 12.5, 700, "#ffffff", "middle")
+    menus = {}
+    x = 30
+    for m in ("File", "Edit", "View", "Insert", "Format", "Tools", "Help"):
+        s.text(x, 145, m, 12.5, 400, INK)
+        menus[m] = (x - 6, 131, 7.6 * len(m) + 12, 20)
+        x += 7.6 * len(m) + 22
+    s.line(15, 156, W - 15, 156, "#e6e6e6", 1)
+    for i, c in enumerate(("B", "I", "U")):
+        s.text(40 + i * 26, 175, c, 13, 700 if c == "B" else 400, GREY)
+    s.text(130, 175, "Normal", 12, 400, GREY)
+    s.text(190, 175, "11", 12, 400, GREY)
+    s.text(225, 175, "Arial", 12, 400, GREY)
+    s.line(15, 186, W - 15, 186, "#e6e6e6", 1)
+    pw = 560 if panel else W - 30
+    s.rect(15, 187, pw, h - 202, fill="#f4f5f7")
+    s.rect(50, 200, pw - 70, h - 222, fill="#ffffff", stroke="#e0e0e0", sw=1)
+    ys = 238
+    s.text(80, ys, "Book Fair", 22, 400, "#1c7ed6" if title_blue else INK)
+    s.text(80, ys + 34, "When and where", 16, 700, INK)
+    s.text(80, ys + 56, "Sunday to Tuesday, 10:00 to 15:00, in the college library.", 11.5, 400, INK)
+    s.raw('<text x="80" y="%g" font-size="11.5" fill="%s">Entry is <tspan font-weight="700">free</tspan>.</text>' % (ys + 72, INK))
+    s.text(80, ys + 102, "Prices", 16, 700, INK)
+    return ai, menus
+
+
+def lab_tutu_2(s, top):
+    """The editor: AI Assistant, the request, and the answer; the title is blue in the page."""
+    h = 470
+    ai, _ = tutu_editor(s, h)
+    px = 575
+    s.rect(px, 187, W - 15 - px, h - 202, fill="#ffffff")
+    s.line(px, 187, px, h - 15, "#e3e3e3", 1)
+    s.text(px + 14, 210, "AI assistant", 13.5, 700, INK)
+    s.rect(px + 90, 228, 205, 26, fill="#d9f0f5", rx=12)
+    s.text(px + 192, 245.5, "Make the title Book Fair blue.", 11.5, 400, INK, "middle")
+    s.text(px + 14, 282, "Done: the title Book Fair is", 12, 400, INK)
+    s.text(px + 14, 299, "now blue. Everything else is", 12, 400, INK)
+    s.text(px + 14, 316, "the same.", 12, 400, INK)
+    box = (px + 10, 372, W - 25 - px - 10, 72)
+    s.rect(*box, fill="#ffffff", stroke=TEAL, sw=1.4, rx=12)
+    s.text(px + 24, 395, "Ask AI anything…", 12.5, 400, LIGHT)
+    s.circle(W - 52, 424, 13, fill="#eef0f2")
+    s.poly([(W - 59, 418), (W - 44, 424), (W - 59, 430), (W - 56, 424)], fill=GREY)
+    mark_box(top, ai, 1, "bottom", 6, 2)
+    mark_box(top, (box[0], box[1], box[2], 36), 2, "left", 10, 2)
+    mark_box(top, (px + 90, 228, 205, 26), 3, "left", 12, 2)
+    top.label(330, 214, 170, "the title is blue!", arrow_to=(190, 230))
+
+
+def lab_tutu_3(s, top):
+    """File › Download › Microsoft Word (.docx)."""
+    h = 470
+    _, menus = tutu_editor(s, h, panel=False)
+    mx, my = 20, 156
+    items = ("New document", "Open...", "Make a copy", "Share", "Download", "Rename", "Save to browser", "Print...")
+    s.rect(mx, my, 220, 30 * len(items) + 10, fill="#ffffff", stroke="#d0d0d0", sw=1, rx=8)
+    for i, it in enumerate(items):
+        y = my + 8 + i * 30
+        if it == "Download":
+            s.rect(mx + 4, y, 212, 28, fill=TEAL_SOFT, rx=5)
+            s.text(mx + 200, y + 19, "›", 14, 700, INK)
+        s.text(mx + 18, y + 19, it, 12.5, 600 if it == "Download" else 400, INK)
+    dy = my + 8 + 4 * 30
+    sx = mx + 222
+    subs = ("Microsoft Word (.docx)", "PDF", "HTML", "Plain text", "Markdown (.md)")
+    s.rect(sx, dy, 200, 30 * len(subs) + 8, fill="#ffffff", stroke="#d0d0d0", sw=1, rx=8)
+    for i, it in enumerate(subs):
+        y = dy + 4 + i * 30
+        if i == 0:
+            s.rect(sx + 4, y, 192, 28, fill=TEAL_SOFT, rx=5)
+        s.text(sx + 16, y + 19, it, 12.5, 600 if i == 0 else 400, INK)
+    mark_box(top, menus["File"], 1, "top", 4, 1)
+    mark_box(top, (mx + 4, dy, 212, 28), 2, "left", 5, 1)
+    mark_box(top, (sx + 4, dy + 4, 192, 28), 3, "right", 5, 1)
 
 
 def lab_save_2(s, top):
@@ -823,8 +890,9 @@ SCREENS = {
     "lab-format-2": (lab_format_2, (90, 80, 470, 320)),
     "lab-table-1": (lab_table_1, (20, 26, 530, 410)),
     "lab-spell-1": (lab_spell_1, (100, 184, 785, 330)),
-    "lab-ai-1": (lab_ai_1, (130, 142, 640, 268)),
-    "lab-ai-2": (lab_ai_2, (30, 92, 850, 270)),
+    "lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "lab-tutu-2": (lab_tutu_2, (15, 86, 870, 370)),
+    "lab-tutu-3": (lab_tutu_3, (0, 86, 470, 366)),
     "lab-save-2": (lab_save_2, None),
     "lab-result-1": (lab_result_1, (200, 186, 500, 340)),
 }

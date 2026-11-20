@@ -3,8 +3,9 @@
 // the page that loads it (window.WORD_LAB = "format" | "table" | "ai"):
 //   format: styles (Title, Heading 1), the Navigation Pane, Center, Bold, a colour;
 //   table:  Insert › Table (2 x 4) and the prices typed in its cells;
-//   ai:     the Extra of the worksheet: attach the notice to an AI chat, ask for
-//           a change, and open the new file (fixed answers, no AI service).
+//   ai:     the Extra of the worksheet, as on tutudocs.com (no sign-in): upload
+//           the notice, ask the AI Assistant for a change (it edits the page),
+//           then File › Download › Microsoft Word (.docx). Fixed answers, no AI.
 // The steps are the steps of the worksheet, so the teacher shows them here first.
 (() => {
   const PART = window.WORD_LAB || "format";
@@ -20,17 +21,18 @@
     if (PART === "table") return [...done, P("")];
     return [...done, { table: [["Book", "Price (JD)"], ["Novel", "3"], ["Dictionary", "5"], ["Notebook", "1"]] }];
   }
-  // The AI chat of the "ai" part: the file attached, the requests sent, the changes opened.
+  // The "ai" part: the online editor (tutudocs.com) with its AI Assistant.
   let chat;
   const ASKS = [
-    { id: 1, text: "Make the title Book Fair blue, and add a row to the table: Magazine, 2.", keys: /blue|magazine|row/i,
-      apply: () => { doc[0].words.forEach((w) => { w.c = "#1c7ed6"; }); table().table.push(["Magazine", "2"]); return "The title is blue, and the table has a new row: Magazine, 2."; } },
-    { id: 2, text: "Add a heading About the fair and two short sentences that invite students.", keys: /about|sentence|paragraph|invite/i,
-      apply: () => { doc.push(P("About the fair", "Heading 1", { fresh: true }), P("Come and find a new book to read!", "Normal", { fresh: true }), P("Bring your friends: entry is free.", "Normal", { fresh: true })); return "A new heading and two sentences are at the end."; } },
+    { id: 1, text: "Make the title Book Fair blue.", keys: /blue|colou?r/i, done: "Done: the title Book Fair is now blue.",
+      apply: () => { doc[0].words.forEach((w) => { w.c = "#1c7ed6"; }); doc[0].fresh = true; } },
+    { id: 2, text: "Add a short paragraph at the end that invites students to the book fair.", keys: /paragraph|invite|sentence|add/i,
+      done: "Done: a short paragraph is now at the end of the notice.",
+      apply: () => { doc.push(P("Come to the book fair and find a new book to read! Bring your friends: entry is free.", "Normal", { fresh: true })); } },
   ];
   let doc, caret, sel, typing, nav, tab, menu;
   function reset() { doc = start(); caret = PART === "table" ? 5 : null; sel = null; typing = false; nav = false; tab = "Home"; menu = null;
-    chat = { attached: false, text: "", log: [{ ai: true, html: "Hi! Attach a file and tell me what to change." }], opened: new Set(), busy: false }; }
+    chat = { uploaded: false, chooser: false, panel: false, text: "", log: [], asked: new Set(), busy: false, file: null, downloaded: false }; }
 
   // ---------- The missions (the steps of the worksheet) ----------
   const wordsOf = (p) => p.words.map((w) => w.t).join(" ");
@@ -51,15 +53,21 @@
       ["Novel 3 · Dictionary 5 · Notebook 1 (<b>Tab</b>: the next cell)", () => cell(1, 0) === "novel" && cell(1, 1) === "3" && cell(2, 0) === "dictionary" && cell(2, 1) === "5" && cell(3, 0) === "notebook" && cell(3, 1) === "1"],
     ],
     ai: [
-      ["<b>Attach</b> your file to the chat: <b>book-fair-Huda.docx</b>", () => chat.attached],
-      ["Ask: <b>the title blue, and a row: Magazine, 2</b>. Then open the new file", () => chat.opened.has(1)],
-      ["Ask: <b>a heading About the fair and two sentences</b>. Then open the new file", () => chat.opened.has(2)],
+      ["On <b>tutudocs.com</b>: click the box <b>Drop a file…</b> and open your notice", () => chat.uploaded],
+      ["<b>AI Assistant</b>: ask <b>Make the title Book Fair blue.</b>", () => chat.asked.has(1)],
+      ["Ask: <b>Add a short paragraph at the end…</b>", () => chat.asked.has(2)],
+      ["<b>File › Download › Microsoft Word (.docx)</b>", () => chat.downloaded],
     ],
   }[PART];
 
   // ---------- The window ----------
   const root = $("#word");
-  root.innerHTML = `
+  if (PART === "ai") root.innerHTML = `
+    <div class="t-address"><span>&#8592; &#8594;</span><b>tutudocs.com</b></div>
+    <div class="t-top"></div>
+    <div class="t-body"><div class="w-canvas"><div class="w-page"></div></div><div class="chat" id="chat"></div></div>
+    <div class="w-status"><span class="w-count"></span><span>Pages: 1</span></div>`;
+  else root.innerHTML = `
     <div class="w-title"><span class="w-auto">AutoSave <i></i> Off</span><b>Document1 - Word</b><span class="w-search">Search</span><span class="w-win">&#8211; &#9633; &#10005;</span></div>
     <div class="w-tabs"></div>
     <div class="w-ribbon"></div>
@@ -239,56 +247,100 @@
     let done = 0;
     MISSIONS.forEach(([t, f], i) => { const ok = !!f(); done += ok; const li = h("li", ok ? "ok" : ""); li.innerHTML = t; list.appendChild(li); });
     $("#progress").textContent = `${done} of ${MISSIONS.length}`;
-    if (done === MISSIONS.length && !status.done) { status.done = true; say(PART === "ai" ? "&#10003; All steps done. Now try it with a real AI assistant and your own notice (the Extra of your worksheet)." : "&#10003; All steps done. The same steps are in your worksheet: now do them in Word."); }
+    if (done === MISSIONS.length && !status.done) { status.done = true; say(PART === "ai" ? "&#10003; All steps done. Now do it on tutudocs.com with your own notice: the Extra of your worksheet." : "&#10003; All steps done. The same steps are in your worksheet: now do them in Word."); }
   }
-  // ---------- The AI chat ("ai" part) ----------
+  // ---------- The online editor and its AI Assistant ("ai" part) ----------
+  function webTop() {
+    const top = $(".t-top", root); if (!top) return;
+    top.innerHTML = "";
+    if (!chat.uploaded) return;
+    const bar = h("div", "t-bar");
+    bar.appendChild(h("b", "t-name", "book-fair-Huda"));
+    bar.appendChild(h("small", "t-saved", "Saved locally · Sign in to save to cloud"));
+    bar.appendChild(btn("&#10024; AI Assistant", "AI Assistant", () => { chat.panel = !chat.panel; say(chat.panel ? "The <b>AI assistant</b> opens on the right. Click in <b>Ask AI anything…</b> and type your request." : "The AI assistant is closed."); draw(); }, "t-ai" + (chat.panel ? " on" : "")));
+    top.appendChild(bar);
+    const menus = h("div", "t-menus");
+    ["File", "Edit", "View", "Insert", "Format", "Tools", "Help"].forEach((m) => {
+      const b = btn(m, m, () => { if (m !== "File") { say(`<b>${m}</b>: not needed today. To download, use <b>File</b>.`, true); return; } menu = menu === "file" || menu === "download" ? null : "file"; draw(); }, "t-menu" + (m === "File" && menu ? " on" : ""));
+      menus.appendChild(b);
+    });
+    top.appendChild(menus);
+    if (menu === "file" || menu === "download") {
+      const m = h("div", "w-menu t-file");
+      ["New document", "Open...", "Make a copy", "Share", "Download ›", "Rename", "Save to browser", "Print..."].forEach((it) => {
+        const b = btn(it, it, () => { if (it.startsWith("Download")) { menu = "download"; draw(); } else say(`<b>${it.replace(" ›", "")}</b>: not in today's steps. Choose <b>Download</b>.`, true); }, "t-item" + (it.startsWith("Download") && menu === "download" ? " on" : ""));
+        if (it.startsWith("Download")) b.addEventListener("pointerenter", () => { if (menu !== "download") { menu = "download"; draw(); } });
+        m.appendChild(b);
+      });
+      if (menu === "download") {
+        const s = h("div", "w-menu t-sub");
+        ["Microsoft Word (.docx)", "PDF", "HTML", "Plain text", "Markdown (.md)"].forEach((it) => s.appendChild(btn(it, it, () => {
+          menu = null;
+          if (it.startsWith("Microsoft Word")) { chat.downloaded = true; say("&#10003; <b>book-fair-Huda.docx</b> is in your <b>Downloads</b> folder. Open it: Word shows the changes of the AI."); }
+          else say(`${it}: a different kind of file. Choose <b>Microsoft Word (.docx)</b>.`, true);
+          draw();
+        }, "t-item")));
+        m.appendChild(s);
+      }
+      top.appendChild(m);
+    }
+  }
+  function home() {
+    // tutudocs.com before the upload: the drop box, and a small Open window.
+    const pg = $(".w-page", root); pg.innerHTML = ""; pg.classList.add("t-home");
+    pg.appendChild(h("h2", "t-h", "Free online Word, Excel & PowerPoint"));
+    pg.appendChild(h("p", "t-sub", "No sign-up · No install · Unlimited use · Free AI every day"));
+    const drop = btn("<span class='t-up'>&#8679;</span><b>Drop a file anywhere on this page, or click to choose</b><small>Word / Excel / PPT / PDF / CSV / TXT all open</small>", "Choose a file", () => { chat.chooser = true; draw(); }, "t-drop");
+    pg.appendChild(drop);
+    if (chat.chooser) {
+      const o = h("div", "w-menu t-open");
+      o.innerHTML = "<b>Open</b><div class='t-path'>This PC › <b>Desktop</b></div>";
+      o.appendChild(btn("<span class='c-doc'>W</span> book-fair-Huda.docx", "book-fair-Huda.docx", () => { chat.chooser = false; chat.uploaded = true; menu = null;
+        say("Your notice is open in the online editor, with no sign-in. Now click <b>AI Assistant</b> at the top."); draw(); }, "t-filebtn"));
+      pg.appendChild(o);
+    }
+  }
   function chatBox() {
     const box = $("#chat"); if (!box) return;
-    box.innerHTML = `<div class="c-head"><span class="c-dot"></span><b>AI assistant</b><small>ChatGPT, Gemini, Claude, Copilot…</small></div><div class="c-log"></div>
-      <div class="c-compose"><div class="c-files"></div><div class="c-line"><button type="button" class="c-attach" title="Attach a file" aria-label="Attach a file">&#128206;</button>
-      <input class="c-input" aria-label="Your message" placeholder="Type, or choose a request below"><button type="button" class="c-send" title="Send" aria-label="Send">&#10148;</button></div>
-      <div class="c-asks"></div></div>`;
+    box.hidden = !(chat.uploaded && chat.panel);
+    if (box.hidden) return;
+    box.innerHTML = `<div class="c-head"><b>AI assistant</b></div><div class="c-log"></div>
+      <div class="c-compose"><div class="c-line"><input class="c-input" aria-label="Ask AI anything" placeholder="Ask AI anything…"><button type="button" class="c-send" title="Send" aria-label="Send">&#10148;</button></div>
+      <small class="c-try">Type a request, or tap one:</small><div class="c-asks"></div></div>`;
     const log = $(".c-log", box);
-    chat.log.forEach((m) => { const d = h("div", "c-msg " + (m.ai ? "ai" : "me")); d.innerHTML = m.html; log.appendChild(d);
-      if (m.file) { const f = btn(`<span class="c-doc">W</span><span><b>${m.file}</b><small>Word document · click to open</small></span>`, "Download and open", () => openFile(m), "c-file" + (chat.opened.has(m.ask) ? " done" : "")); d.appendChild(f); } });
-    if (chat.busy) log.appendChild(h("div", "c-msg ai c-typing", "…"));
-    if (chat.attached) { const f = h("span", "c-chip"); f.innerHTML = "<span class='c-doc'>W</span> book-fair-Huda.docx"; $(".c-files", box).appendChild(f); }
+    if (!chat.log.length) log.appendChild(h("div", "c-hello", "How can I help you?"));
+    chat.log.forEach((m) => { const d = h("div", "c-msg " + (m.ai ? "ai" : "me")); d.innerHTML = m.html; log.appendChild(d); });
+    if (chat.busy) log.appendChild(h("div", "c-msg ai c-typing", "Thinking…"));
     const input = $(".c-input", box); input.value = chat.text;
     input.addEventListener("input", () => { chat.text = input.value; });
     input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); send(); } });
-    $(".c-attach", box).addEventListener("click", (e) => { e.stopPropagation(); if (chat.attached) { say("The file is attached already."); return; }
-      chat.attached = true; say("<b>Attached:</b> book-fair-Huda.docx, the file that you saved on the Desktop. Now ask for a change."); draw(); });
     $(".c-send", box).addEventListener("click", (e) => { e.stopPropagation(); send(); });
     ASKS.forEach((a) => $(".c-asks", box).appendChild(btn(a.text, "Use this request", () => { chat.text = a.text; draw(); $(".c-input").focus(); }, "c-ask")));
     log.scrollTop = log.scrollHeight;
   }
   function send() {
-    const text = chat.text.trim(); if (!text || chat.busy) return;
-    chat.log.push({ ai: false, html: (chat.attached ? "<span class='c-chip small'><span class='c-doc'>W</span> book-fair-Huda.docx</span><br>" : "") + text.replace(/</g, "&lt;") });
+    const text = chat.text.trim(); if (!text) return;
+    if (chat.busy) { say("Wait for the answer of the AI, then send the next request.", true); return; }
+    chat.log.push({ ai: false, html: text.replace(/</g, "&lt;") });
     chat.text = ""; chat.busy = true; draw();
     setTimeout(() => {
       chat.busy = false;
       const ask = ASKS.find((a) => a.keys.test(text));
-      if (!chat.attached) chat.log.push({ ai: true, html: "I can't see your notice yet. Click the <b>attach</b> button (&#128206;) and choose your Word file, then ask again." });
-      else if (!ask) chat.log.push({ ai: true, html: "In this simulator I know two requests: choose one of them below. In a real AI chat, you can ask for any change." });
-      else chat.log.push({ ai: true, html: "Done! Here is your notice with the change:", file: `book-fair-Huda (${ask.id + 1}).docx`, ask: ask.id });
+      if (!ask) chat.log.push({ ai: true, html: "In this simulator I know two requests: tap one of them below. On tutudocs.com you can ask for any change." });
+      else { doc.forEach((p) => { delete p.fresh; }); ask.apply(); chat.asked.add(ask.id); chat.log.push({ ai: true, html: ask.done });
+        say(`&#10003; The AI changed the page (in yellow). ${chat.asked.size < 2 ? "Ask for one more change." : "Now <b>File › Download › Microsoft Word (.docx)</b>."}`); }
       draw();
-    }, 900);
-  }
-  function openFile(m) {
-    if (chat.opened.has(m.ask)) { say("This file is open already: look at the page."); return; }
-    const ask = ASKS.find((a) => a.id === m.ask);
-    doc.forEach((p) => { delete p.fresh; });
-    const what = ask.apply(); chat.opened.add(ask.id);
-    say(`&#10003; <b>${m.file}</b> is open in Word. ${what}`);
-    draw();
+    }, 1200);
   }
 
-  function draw() { tabs(); ribbon(); page(); navPane(); chatBox(); status(); }
+  function draw() {
+    if (PART === "ai") { webTop(); if (chat.uploaded) { $(".w-page", root).classList.remove("t-home"); page(); } else home(); chatBox(); status(); return; }
+    tabs(); ribbon(); page(); navPane(); status();
+  }
   document.addEventListener("click", (e) => { if (menu && !e.target.closest(".w-menu")) { menu = null; draw(); } });
   $("#reset").addEventListener("click", () => { reset(); status.done = false; say(HELLO); draw(); });
   const HELLO = { format: "Click in the line <b>Book Fair</b>. Then click <b>Title</b> in <b>Home › Styles</b>.",
     table: "The cursor is in the empty line under <b>Prices</b>. Click the <b>Insert</b> tab.",
-    ai: "Your notice is saved on the Desktop. Click the attach button (&#128206;) of the AI chat." }[PART];
+    ai: "This is <b>tutudocs.com</b>: no sign-in. Click the box <b>Drop a file…</b> and choose your notice on the Desktop." }[PART];
   reset(); say(HELLO); draw();
 })();

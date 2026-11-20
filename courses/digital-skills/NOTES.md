@@ -156,8 +156,10 @@ even the weakest, does the steps alone, fast and right:
   three are fine when one would make the steps less clear. Every task stays
   on one page (`#pagebreak(weak: true)` before a task that would split).
 - No goal card and no card of the page on the worksheet (banner.lua): the
-  first task starts on the first page. It ends with "Show your teacher":
-  a picture of the finished file and a short list to tick.
+  first task starts on the first page. It ends with "Show your teacher" (a
+  picture of the finished file and a short list to tick), then the
+  **Extra** on its own page: the AI of tutudocs.com changes the student's
+  file (below, "AI tools").
 
 **The page shown like slides** (`paged: true`, Unit 4 as a trial): the
 smart screen shows one part at a time (the start, then every `##` section,
@@ -223,26 +225,33 @@ every day; showing them AI sentences and asking what is wrong, missing or
 true is theory, and it bores them. So:
 
 - AI is the **Extra** at the end of the face-to-face worksheet, done after
-  the required tasks: the student **attaches the file made in the same
-  lecture** to an AI chat, asks for **one change** in a sentence given on
-  the sheet (a new paragraph, a colour, a new row), downloads the new file
-  and opens it. On the page, a simulator shows the same steps (Word Lab,
-  the "ai" part: attach, ask, open the new file; fixed answers).
+  the required tasks, on **tutudocs.com** (below): the student opens **the
+  file made in the same lecture**, asks the AI Assistant for **one change**
+  in a sentence given on the sheet (a colour, a short paragraph), and
+  downloads the file for Word. On the page, a simulator shows the same
+  steps (Word Lab, the "ai" part: the drop box, AI Assistant, File ›
+  Download; fixed answers).
 - **No questions about AI output:** no "keep, fix or delete", no "what is
   wrong in this answer", no prompt to evaluate. The student sees the change
   in the new file; that is all the check there is.
 - The same holds for the online activities: their AI steps become direct
   use on the student's own file when each activity is next rewritten
   (Online activity 4 was not changed yet).
-- **Which assistant (checked 2026-11-20):** none of the free assistants
-  takes a file without an account. ChatGPT, signed out, does not accept
-  uploads; Gemini needs a Google account to upload; Claude always needs an
-  account; Copilot without an account limits uploads to 1 MB and a few a
-  day, and Microsoft is making sign-in mandatory. The worksheet uses
-  **ChatGPT, signed in** (Continue with Google, or the university Microsoft
-  account): it takes a Word file and gives back a new Word file to
-  download. Gemini, Claude and Copilot are named as the same steps. If the
-  answer is text only, the student pastes it into the file.
+- **The AI tool of every Digital Skills lesson: tutudocs.com** (the
+  teacher's choice of 2026-11-20, tried in class conditions by the
+  teacher). It works **with no sign-in**: the home page has the box "Drop a
+  file anywhere on this page, or click to choose" (Word, Excel, PPT, PDF,
+  CSV and TXT open); the file opens in an online editor (File, Edit, View,
+  Insert, Format, Tools, Help); the **AI Assistant** button opens a panel on
+  the right with the box "Ask AI anything…", and the AI edits the open
+  document itself (about 15 seconds for a simple request); **File ›
+  Download › Microsoft Word (.docx)** (or PDF, …) gives the file back. Keep
+  the requests short and simple: a request on a table took the AI more than
+  a minute and a half; a colour or a short paragraph takes seconds. One
+  request at a time: a second one waits in a queue. ChatGPT, Gemini,
+  Copilot and Claude are not used: none of them takes a file without an
+  account. The screens of the worksheet are drawn from the site
+  (`tools/lab_screens.py`, `lab-tutu-*`).
 
 - Name the idea and two or three common free tools (Microsoft Copilot with
   the university account, ChatGPT, Gemini), never one product only. No task
@@ -325,10 +334,13 @@ every calendar week, by hand, with the university's template.
   worksheet were liked; the AI part was not (AI sentences to judge, in
   English: theory, and boring). Task 5 "A text from AI: check it" was
   removed; the spelling step moved to Task 5 (spelling and save); the
-  worksheet ends with an Extra: ChatGPT changes the student's notice
-  (a blue title and a new table row, then a heading with two sentences).
-  On the page, section 4.3 is "Ask AI to change your file" with Word Lab
-  "ai" (an AI chat beside Word). The rule is in "AI tools" above.
+  worksheet ends with an Extra in which an AI assistant changes the
+  student's notice (a blue title, then a short paragraph). The same day
+  the teacher found that ChatGPT, Gemini, Copilot and Claude all need an
+  account to take or give a file, and chose **tutudocs.com** (no sign-in)
+  for every lesson of the course. On the page, section 4.3 is "Ask AI to
+  change your file" with Word Lab "ai" (tutudocs.com: open the file, AI
+  Assistant, File › Download). The rule is in "AI tools" above.
 
 - 2026-11-20 (the teacher's request): the computer lab is ready (Windows and
   Office). Unit 4 was rewritten in the lab model as a trial (above, "The lab

@@ -808,9 +808,9 @@ question that asks the student to judge, check or correct an AI answer.
 - Game Math, Computing Systems, Digital Media (no ILO asks for AI): the
   extra gives a **ready prompt to try** (the "Task with AI" box below).
 - Digital Skills: the extra asks an AI assistant for **one change to the
-  file that the student made in the same lecture** (attach the file, ask,
-  open the new file). Details and the recommended assistant:
-  `courses/digital-skills/NOTES.md`, "AI tools".
+  file that the student made in the same lecture**, always on
+  **tutudocs.com** (no sign-in: open the file, AI Assistant, File ›
+  Download). Details: `courses/digital-skills/NOTES.md`, "AI tools".
 - Where the rest of this section asks for checks of AI output, this rule
   wins for every lesson written or rewritten from now on.
 

@@ -22,9 +22,9 @@ format: lesson-pptx
 :::
 ::::
 
-## Live demo · Field Lab
+## Live demo · A table
 
-{{< sim file="sims/field-lab.html" poster="sims/field-lab.png" title="Field Lab: the right data type" task="**Show:** choose the data type of Name, Price and InStock. **Ask:** which type is right for money?" answer="Currency: Access adds the JD and two decimals." >}}
+{{< sim file="sims/access-lab-table.html" poster="sims/access-lab-table.png" title="Access Lab: a table, its fields and records" task="**Show:** the fields Name and City in Design View, then three records. **Ask:** why does ID count by itself?" answer="Its data type is AutoNumber." >}}
 
 ## Try it 1 · Tables
 
@@ -52,9 +52,9 @@ c) Yes/No
 :::
 ::::
 
-## Live demo · Key Lab
+## Live demo · The key
 
-{{< sim file="sims/key-lab.html" poster="sims/key-lab.png" title="Key Lab: the primary key and the relationship" task="**Show:** Task 1, the Customers table with two customers called Huda. **Ask:** why is Name not the primary key?" answer="Two customers have the same name; CustomerID is different in every record." >}}
+{{< sim file="sims/access-lab-key.html" poster="sims/access-lab-key.png" title="Access Lab: the primary key and a relationship" task="**Show:** the key of ID, then the relationship to Orders. **Ask:** which field of Orders joins Customers?" answer="CustomerID: one customer, many orders." >}}
 
 ## Try it 2 · Keys
 
@@ -82,9 +82,9 @@ c) one-to-many
 :::
 ::::
 
-## Live demo · Query Lab
+## Live demo · A query
 
-{{< sim file="sims/query-lab.html" poster="sims/query-lab.png" title="Query Lab: ask the table a question" task="**Show:** Task 2, the criterion Price > 5, then Run. **Ask:** how many products cost more than 5 JD?" answer="2 records: the Bag (12 JD) and the Lunch box (6 JD)." >}}
+{{< sim file="sims/access-lab-query.html" poster="sims/access-lab-query.png" title="Access Lab: a query" task="**Show:** Name and City, the criterion Amman, the sort, Run. **Ask:** how many customers?" answer="Two: Huda and Rana." >}}
 
 ## Try it 3 · Queries
 
@@ -110,10 +110,11 @@ c) Huda and Lina
 
 :::: {.columns}
 ::: {.column width="50%"}
-- In the computer lab, do the three experiments of the worksheet alone.
-- Part A is in Microsoft Access, with three short records to type.
-- Part B is on a simulator: scan its QR code, or click its link.
-- Write your result after each step, and fill in the table at the end.
+- In the computer lab, follow the worksheet alone, step by step, in Access.
+- Five short tasks: a blank database, the fields of Customers, three records, a query, export to Excel.
+- Nothing to download: you type the text yourself.
+- Each step has a picture of the screen; tick each step when it is done.
+- Then the Extra: on tutudocs.com an AI assistant adds customers to your exported table.
 :::
 ::: {.column width="50%"}
 {{< page-qr >}}
@@ -122,12 +123,12 @@ c) Huda and Lina
 
 ## Results of the worksheet
 
-Which results do you have in your table?
+What does your file show at the end?
 
 ::: {.reveal}
-- Experiment 1: Name is Short Text, the table has 3 records and 3 fields, Price is Currency and InStock is Yes/No.
-- Experiment 2: CustomerID is the primary key, and the line 1 — ∞ joins Customers to Orders.
-- Experiment 3: City = Amman shows Huda and Lina, Huda is first after the sort, and Price > 5 shows 2 records.
+- Tasks 1–3: the table Customers has ID (the key), Name and City, and three records.
+- Task 4: the query Amman customers shows Huda and Rana, sorted by name.
+- Task 5: Customers.xlsx is in Documents.
 :::
 
 ## Game challenge · The Data Desk

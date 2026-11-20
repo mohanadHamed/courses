@@ -1640,6 +1640,278 @@ def lab_xl7_tutu_dl(s, top):
     tutu_download(s, top, "sales-Huda", "sheet")
 
 
+
+# =====================================================================
+# Access for Windows (Lecture 8): a blank database, Design View, the
+# datasheet, Query Design, and Export to Excel.
+# =====================================================================
+
+AC = "#a4373a"
+AC_SOFT = "#f3dcdc"
+AC_TABS = ("File", "Home", "Create", "External Data", "Database Tools", "Help")
+CUSTOMERS = [("1", "Huda", "Amman"), ("2", "Omar", "Irbid"), ("3", "Rana", "Amman")]
+
+
+def ac_tabs(s, active, extra=None):
+    s.rect(15, 49, W - 30, 30, fill=TITLE_BG)
+    x, pos = 30, {}
+    for tname in AC_TABS + ((extra,) if extra else ()):
+        w_ = width(tname, 13) + 4
+        on = tname == active
+        s.text(x, 69, tname, 13, 700 if on else 400, AC if on else INK)
+        if on:
+            s.rect(x - 2, 74, w_, 3, fill=AC, rx=1.5)
+        pos[tname] = (x - 6, 52, w_ + 12, 26)
+        x += w_ + 14
+    return pos
+
+
+def ac_ribbon(s, tab):
+    ribbon_box(s)
+    p = {}
+    if tab == "Home":
+        p["view"] = (24, 88, 60, 80)
+        big_btn(s, 24, 60, "View", ic_table)
+        s.text(54, 163, "▾", 11, 400, INK, "middle")
+        group(s, 20, 92, "Views")
+        s.rect(104, 92, 30, 36, fill="#ffffff", stroke="#7a7a7a", sw=1.3, rx=3)
+        s.text(118, 156, "Paste", 11.5, 400, INK, "middle")
+        group(s, 92, 150, "Clipboard")
+        for i, n in enumerate(("Ascending", "Descending", "Filter")):
+            s.text(160, 108 + i * 22, n, 11.5, 400, INK)
+        group(s, 150, 260, "Sort & Filter")
+        for i, n in enumerate(("New", "Save", "Delete ▾")):
+            s.text(270, 108 + i * 22, n, 11.5, 400, INK)
+        group(s, 260, 340, "Records")
+    elif tab == "Create":
+        for i, n in enumerate(("Table", "Table Design")):
+            big_btn(s, 24 + i * 70, 64, n.split()[0], ic_table, n.split()[1] if " " in n else None)
+        group(s, 20, 160, "Tables")
+        big_btn(s, 170, 70, "Query", ic_page, "Wizard")
+        p["qdesign"] = (244, 88, 70, 80)
+        big_btn(s, 244, 70, "Query", lambda s_, x, y: [s_.rect(x - 14, y - 12, 12, 16, fill="#ffffff", stroke=AC, sw=1.3), s_.rect(x + 2, y - 4, 12, 16, fill="#ffffff", stroke=AC, sw=1.3)], "Design")
+        group(s, 166, 320, "Queries")
+        big_btn(s, 330, 56, "Form", ic_page)
+        group(s, 326, 450, "Forms")
+        big_btn(s, 460, 60, "Report", ic_page)
+        group(s, 456, 580, "Reports")
+    elif tab == "Table Design":
+        p["key"] = (24, 88, 60, 80)
+        big_btn(s, 24, 60, "Primary", lambda s_, x, y: s_.circle(x - 4, y, 6, stroke="#d29b00", sw=2.5), "Key")
+        big_btn(s, 88, 60, "Builder", ic_page)
+        group(s, 20, 220, "Tools")
+    elif tab == "Query Design":
+        p["run"] = (24, 88, 50, 80)
+        s.rect(24, 88, 50, 80, fill=BTN, rx=4)
+        s.text(49, 128, "!", 34, 800, AC, "middle")
+        s.text(49, 156, "Run", 11.5, 400, INK, "middle")
+        big_btn(s, 78, 50, "View", ic_table)
+        group(s, 20, 134, "Results")
+        for i, n in enumerate(("Select", "Make Table", "Append")):
+            s.text(146, 108 + i * 22, n, 11.5, 400, INK)
+        group(s, 134, 260, "Query Type")
+    return p
+
+
+def ac_window(s, h, tab, extra_tab=None, objs=("Customers",), queries=()):
+    frame(s, h)
+    title_bar(s, "shop-Huda : Database - Access")
+    tabs = ac_tabs(s, tab, extra_tab)
+    rb = ac_ribbon(s, tab)
+    s.rect(15, 184, 170, h - 224, fill="#ffffff")
+    s.line(185, 184, 185, h - 40, "#d6d6d6", 1)
+    s.text(26, 204, "All Access Objects", 11.5, 700, INK)
+    s.text(26, 228, "Tables", 11, 400, GREY)
+    nav = {}
+    for i, o in enumerate(objs):
+        y = 236 + i * 24
+        s.rect(22, y, 156, 22, fill=AC_SOFT if i == 0 else "#ffffff", rx=3)
+        s.rect(30, y + 6, 12, 10, stroke=AC, sw=1.2)
+        s.text(50, y + 16, o, 12, 400, INK)
+        nav[o] = (22, y, 156, 22)
+    if queries:
+        y = 236 + len(objs) * 24 + 10
+        s.text(26, y + 8, "Queries", 11, 400, GREY)
+        for i, q in enumerate(queries):
+            s.text(50, y + 30 + i * 22, q, 12, 400, INK)
+    s.rect(186, 184, W - 201, h - 224, fill="#ffffff")
+    s.rect(15, h - 40, W - 30, 25, fill=TITLE_BG)
+    s.rect(15, h - 25, W - 30, 10, fill=TITLE_BG, rx=9)
+    return tabs, rb, nav
+
+
+def ac_table(s, x, y, head, rows, widths, new=False):
+    boxes = {}
+    xx = x
+    for c, (hd, wd) in enumerate(zip(head, widths)):
+        s.rect(xx, y, wd, 24, fill="#f3f3f3", stroke="#d6d6d6", sw=1)
+        s.text(xx + 6, y + 16, hd, 12, 700, INK)
+        xx += wd
+    for r, row in enumerate(list(rows) + ([("(New)",) + ("",) * (len(head) - 1)] if new else [])):
+        xx = x
+        for c, (v, wd) in enumerate(zip(row, widths)):
+            s.rect(xx, y + 24 + r * 22, wd, 22, fill="#ffffff", stroke="#e0e0e0", sw=1)
+            s.text(xx + 6, y + 40 + r * 22, v, 12, 400, INK)
+            boxes[(r, c)] = (xx, y + 24 + r * 22, wd, 22)
+            xx += wd
+    return boxes
+
+
+def lab_ac_open(s, top):
+    open_search(s, top, "Access", AC)
+
+
+def lab_ac_new(s, top):
+    """Access starts: Blank database, the file name, Create."""
+    open_start(s, top, "Access", AC, "Blank database")
+    s.rect(380, 100, 300, 170, fill="#ffffff", stroke="#a6a6a6", sw=1.2, rx=6)
+    s.text(396, 128, "Blank database", 16, 400, INK)
+    s.text(396, 160, "File Name", 11.5, 400, GREY)
+    s.rect(396, 168, 240, 26, fill="#ffffff", stroke=AC, sw=1.6, rx=2)
+    s.text(404, 186, "shop-Huda", 13, 400, INK)
+    s.rect(396, 222, 80, 30, fill=AC, rx=4)
+    s.text(436, 242, "Create", 13, 700, "#ffffff", "middle")
+    mark_box(top, (196, 92, 140, 180), 1, "top")
+    mark_box(top, (396, 168, 240, 26), 2, "right", 3, 2)
+    mark_box(top, (396, 222, 80, 30), 3, "right", 4, 2)
+
+
+def lab_ac_design(s, top):
+    """Home › View ▾ › Design View; Save As: Customers, OK."""
+    h = 430
+    tabs, rb, nav = ac_window(s, h, "Home", objs=("Table1",))
+    vx, vy = 24, 168
+    s.rect(vx, vy, 170, 60, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
+    s.text(vx + 14, vy + 22, "Datasheet View", 12, 400, INK)
+    s.rect(vx + 2, vy + 32, 166, 24, fill=AC_SOFT)
+    s.text(vx + 14, vy + 49, "Design View", 12, 700, INK)
+    dx, dy = 360, 240
+    s.rect(dx, dy, 300, 130, fill="#ffffff", stroke="#a6a6a6", sw=1.2, rx=4)
+    s.text(dx + 14, dy + 24, "Save As", 13, 700, INK)
+    s.text(dx + 14, dy + 50, "Table Name:", 11.5, 400, INK)
+    s.rect(dx + 14, dy + 58, 270, 24, fill="#ffffff", stroke=AC, sw=1.6, rx=2)
+    s.text(dx + 22, dy + 75, "Customers", 12.5, 400, INK)
+    s.rect(dx + 200, dy + 92, 84, 26, fill=AC, rx=3)
+    s.text(dx + 242, dy + 110, "OK", 12.5, 700, "#ffffff", "middle")
+    mark_box(top, rb["view"], 1, "right", 4, 1)
+    mark_box(top, (vx + 2, vy + 32, 166, 24), 2, "right", 3, 1)
+    mark_box(top, (dx + 14, dy + 58, 270, 24), 3, "left", 3, 2)
+    mark_box(top, (dx + 200, dy + 92, 84, 26), 4, "right", 3, 2)
+
+
+def lab_ac_fields(s, top):
+    """Design View: ID (AutoNumber, the key), Name and City (Short Text)."""
+    h = 400
+    tabs, rb, nav = ac_window(s, h, "Table Design", extra_tab="Table Design")
+    x, y = 210, 200
+    rows = [("ID", "AutoNumber"), ("Name", "Short Text"), ("City", "Short Text")]
+    s.rect(x, y, 26, 24, fill="#f3f3f3", stroke="#d6d6d6", sw=1)
+    s.rect(x + 26, y, 220, 24, fill="#f3f3f3", stroke="#d6d6d6", sw=1)
+    s.text(x + 34, y + 16, "Field Name", 12, 700, INK)
+    s.rect(x + 246, y, 200, 24, fill="#f3f3f3", stroke="#d6d6d6", sw=1)
+    s.text(x + 254, y + 16, "Data Type", 12, 700, INK)
+    for i, (n, ty) in enumerate(rows):
+        yy = y + 24 + i * 24
+        s.rect(x, yy, 26, 24, fill="#ffffff", stroke="#e0e0e0", sw=1)
+        if i == 0:
+            s.circle(x + 10, yy + 12, 4, stroke="#d29b00", sw=2)
+            s.line(x + 14, yy + 12, x + 22, yy + 12, "#d29b00", 2)
+        s.rect(x + 26, yy, 220, 24, fill="#ffffff", stroke="#e0e0e0", sw=1)
+        s.text(x + 34, yy + 16, n, 12.5, 400, INK)
+        s.rect(x + 246, yy, 200, 24, fill="#ffffff", stroke="#e0e0e0", sw=1)
+        s.text(x + 254, yy + 16, ty, 12.5, 400, INK)
+        s.poly([(x + 430, yy + 10), (x + 438, yy + 10), (x + 434, yy + 15)], fill=INK)
+    mark_box(top, (x + 26, y + 48, 220, 48), 1, "left", 2, 2)
+    mark_box(top, (x + 246, y + 48, 200, 48), 2, "right", 2, 2)
+    mark_box(top, (x, y + 24, 26, 24), 3, "left", 2, 2)
+
+
+def lab_ac_records(s, top):
+    """Home › View › Datasheet View; three customers typed (ID counts by itself)."""
+    h = 400
+    tabs, rb, nav = ac_window(s, h, "Home")
+    boxes = ac_table(s, 210, 200, ("ID", "Name", "City"), CUSTOMERS, (70, 160, 160), new=True)
+    mark_box(top, rb["view"], 1, "right", 4, 1)
+    mark_box(top, (boxes[(0, 1)][0], boxes[(0, 1)][1], 320, 66), 2, "right", 3, 2)
+
+
+def lab_ac_query1(s, top):
+    """Create › Query Design; the table Customers: double-click Name and City."""
+    h = 430
+    tabs, rb, nav = ac_window(s, h, "Create")
+    x, y = 260, 200
+    s.rect(x, y, 150, 120, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
+    s.rect(x, y, 150, 22, fill=AC_SOFT)
+    s.text(x + 8, y + 16, "Customers", 12, 700, INK)
+    for i, f in enumerate(("*", "ID", "Name", "City")):
+        s.text(x + 12, y + 40 + i * 20, f, 12, 400, INK)
+    s.rect(x + 4, y + 66, 142, 40, fill="#ffe8a3")
+    s.text(x + 12, y + 80, "Name", 12, 400, INK)
+    s.text(x + 12, y + 100, "City", 12, 400, INK)
+    mark_box(top, tabs["Create"], 1, "top", 6, 1)
+    mark_box(top, rb["qdesign"], 2, "right", 4, 1)
+    mark_box(top, (x + 4, y + 66, 142, 40), 3, "right", 3, 2)
+    top.label(x + 190, y + 76, 170, "double-click each one")
+
+
+def lab_ac_query2(s, top):
+    """The grid: Sort under Name: Ascending; Criteria under City: Amman; Run."""
+    h = 430
+    tabs, rb, nav = ac_window(s, h, "Query Design", extra_tab="Query Design")
+    x, y = 210, 214
+    labels = ("Field:", "Table:", "Sort:", "Show:", "Criteria:")
+    cols = (("Name", "Customers", "Ascending", "✓", ""), ("City", "Customers", "", "✓", "\"Amman\""))
+    for i, lab in enumerate(labels):
+        yy = y + i * 26
+        s.rect(x, yy, 80, 26, fill="#f3f3f3", stroke="#d6d6d6", sw=1)
+        s.text(x + 8, yy + 17, lab, 12, 700, INK)
+        for c, col in enumerate(cols):
+            s.rect(x + 80 + c * 170, yy, 170, 26, fill="#ffffff", stroke="#e0e0e0", sw=1)
+            s.text(x + 88 + c * 170, yy + 17, col[i], 12.5, 400, INK)
+    mark_box(top, (x + 80, y + 52, 170, 26), 1, "bottom", 2, 2)
+    mark_box(top, (x + 250, y + 104, 170, 26), 2, "right", 2, 2)
+    mark_box(top, rb["run"], 3, "right", 4, 1)
+
+
+def lab_ac_export(s, top):
+    """Right-click Customers › Export › Excel; then OK."""
+    h = 430
+    tabs, rb, nav = ac_window(s, h, "Home", queries=("Amman customers",))
+    nx, ny, nw, nh = nav["Customers"]
+    mx, my = nx + 60, ny + 20
+    s.rect(mx, my, 150, 130, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
+    for i, it in enumerate(("Open", "Design View", "Export", "Rename", "Delete")):
+        if it == "Export":
+            s.rect(mx + 2, my + 6 + i * 24, 146, 22, fill=AC_SOFT)
+        s.text(mx + 12, my + 22 + i * 24, it + (" ›" if it == "Export" else ""), 12, 700 if it == "Export" else 400, INK)
+    sx = mx + 150
+    s.rect(sx, my + 50, 150, 60, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
+    s.rect(sx + 2, my + 54, 146, 22, fill=AC_SOFT)
+    s.text(sx + 12, my + 70, "Excel", 12, 700, INK)
+    s.text(sx + 12, my + 96, "Text File", 12, 400, INK)
+    mark_box(top, (nx, ny, nw, nh), 1, "top", 3, 1)
+    mark_box(top, (mx + 2, my + 54, 146, 22), 2, "left", 3, 1)
+    mark_box(top, (sx + 2, my + 54, 146, 22), 3, "right", 3, 1)
+    top.label(560, 330, 270, "then: OK, and Close")
+
+
+def lab_ac_result(s, top):
+    """The query Amman customers: Huda and Rana."""
+    h = 340
+    ac_window(s, h, "Home", queries=("Amman customers",))
+    ac_table(s, 210, 200, ("Name", "City"), [("Huda", "Amman"), ("Rana", "Amman")], (160, 160))
+
+
+def lab_ac_tutu_ai(s, top):
+    data = [["ID", "Name", "City"]] + [list(r) for r in CUSTOMERS] + [["4", "Sami", "Zarqa"], ["5", "Lina", "Aqaba"], ["6", "Yousef", "Amman"]]
+    tutu_ai(s, top, "Customers", "sheet", "Add 3 customers with a name and a city in Jordan.",
+            "Done: rows 5 to 7 are three new customers.", lambda s_, b: _xl_ai_page(s_, b, data, {(r, c) for r in (4, 5, 6) for c in range(3)}))
+
+
+def lab_ac_tutu_dl(s, top):
+    tutu_download(s, top, "Customers", "sheet")
+
+
 # name: (the drawing, the part of it that the worksheet shows: x, y, width, height).
 # A crop zooms in on the buttons of the step, so that they are big on paper.
 SCREENS = {
@@ -1696,6 +1968,19 @@ SCREENS = {
     "week-09/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
     "week-09/images/lab-tutu-2": (lab_xl7_tutu_ai, (15, 86, 870, 370)),
     "week-09/images/lab-tutu-3": (lab_xl7_tutu_dl, (0, 86, 470, 366)),
+    # Lecture 8, Access (week-10)
+    "week-10/images/lab-open-1": (lab_ac_open, None),
+    "week-10/images/lab-new-1": (lab_ac_new, (176, 28, 540, 300)),
+    "week-10/images/lab-design-1": (lab_ac_design, (15, 26, 660, 360)),
+    "week-10/images/lab-fields-1": (lab_ac_fields, (15, 26, 700, 290)),
+    "week-10/images/lab-records-1": (lab_ac_records, (15, 80, 640, 240)),
+    "week-10/images/lab-query-1": (lab_ac_query1, (15, 26, 640, 340)),
+    "week-10/images/lab-query-2": (lab_ac_query2, (15, 26, 660, 350)),
+    "week-10/images/lab-export-1": (lab_ac_export, (15, 180, 840, 240)),
+    "week-10/images/lab-result-1": (lab_ac_result, (15, 180, 560, 120)),
+    "week-10/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "week-10/images/lab-tutu-2": (lab_ac_tutu_ai, (15, 86, 870, 370)),
+    "week-10/images/lab-tutu-3": (lab_ac_tutu_dl, (0, 86, 470, 366)),
 }
 
 def draw(fn, crop=None):

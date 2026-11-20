@@ -1,329 +1,117 @@
 ---
 title: "Databases: Tables, Fields, Keys, Relationships and Queries"
-description: "Worksheet · Three experiments: a table with fields and data types, the primary key and a relationship, and a query with a criterion and a sort. Part A in Access, Part B on the simulators."
+description: "Worksheet · Make a small database in Access, step by step. Nothing to download."
 lesson: 8
 ilos: [C3]
+# The lab model (NOTES.md, "The lab model"): a guide that each student
+# follows alone in Access, with a drawn screen for every step
+# (tools/lab_screens.py). No questions, no results, no start files.
+lab: true
 format: lesson-typst
 ---
 
+```{=typst}
+#let mk(n) = box(baseline: 22%, circle(radius: 5.8pt, fill: rgb("#d9480f"), stroke: none, inset: 0pt)[#set align(center + horizon); #text(fill: white, weight: "bold", size: 8pt)[#n]])
+#let tick = box(baseline: 12%, width: 10pt, height: 10pt, stroke: 0.9pt + luma(70), radius: 2pt)
+#let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
+#let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f6fd"), stroke: 0.8pt + rgb("#185abd"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
+#let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
+// One step: the box to tick, its number and what to do on the left; its screen on the right.
+#let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
+  #set par(justify: false, leading: 0.62em)
+  #let words = grid(columns: (auto, 1fr), column-gutter: 6pt, [#tick #h(1pt) *#n.*], body)
+  #if img == none { words } else {
+    grid(columns: (left, 1fr), column-gutter: 12pt, align: (top, top), words, align(center, shot(img, w: w)))
+  }
+  #if after != none { v(4pt); after }
+]
+```
+
 ::: {.lead}
-Today you build the small database of the Sunrise shop. Each experiment
-has two parts. **Part A** is in Microsoft Access on the lab computer.
-**Part B** is on a simulator of the interactive lesson: on paper, scan its
-QR code; on the screen, click its link. After each step, write your result
-in its box. At the end, copy your key results into the table.
+Today you make a small database in **Access** on the lab computer: a table of customers and a query. Do the tasks in order. The **orange
+numbers** in each picture show where to click. Tick the box `#tick`{=typst} after each step. Stuck? Raise your hand.
 :::
 
-## Before you start
-
-- **You need:** a lab computer with Microsoft Access (Windows). There is
-  no start file: you type three short records.
-- **No Access?** Do Part B of each experiment on your phone. Access is
-  only on Windows computers.
-- **Check:** the results are at the end of this worksheet. Look only after
-  you try. On the interactive lesson, every step has a check that answers
-  at once.
-
-## Experiment 1 · A table: fields and data types
-
-**The idea:** a **database** keeps data in **tables**. A table has
-**fields** (the columns, such as Name) and **records** (the rows: one
-customer). Each field has a **data type**: Short Text (names, phone
-numbers), Number (to count), Currency (money), Date/Time, Yes/No.
-
-**Aim:** make a table with the right data types, and type its records.
-
-::: {.part}
-**Part A · In the app (Access)**
-:::
-
-1. Open Access. Click **Blank database**, name it `shop` and click
-   **Create**. Click **View › Design View**, and save the table as
-   `Customers`. Type the fields: `CustomerID` (AutoNumber), `Name` (Short
-   Text), `City` (Short Text).
-
-   {{< record "Data type of Name: … ; of CustomerID: …" >}}
-
-   ::: {.check}
-   **Name: Short Text** (a name is text). **CustomerID: AutoNumber**:
-   Access gives every new record the next number by itself.
-   :::
-
-   ::: {.choice}
-   Which data type is right for the field Name?
-
-   - [x] Short Text
-
-     Why: A name is text.
-
-   - [ ] Number
-
-     Why: You never add or count names.
-
-   - [ ] Yes/No
-
-     Why: A name is not yes or no.
-   :::
-
-2. Click **View › Datasheet View**. Type three records: Huda, Amman · Omar,
-   Zarqa · Lina, Amman. (Access writes the CustomerID.)
-
-   {{< record "The table has … records and … fields" >}}
-
-   ::: {.check}
-   **3 records** (Huda, Omar, Lina) and **3 fields** (CustomerID, Name,
-   City). A record is a row; a field is a column.
-   :::
-
-   ::: {.fill answer="3" unit="records" hint="One row for each customer."}
-   Huda, Omar and Lina are in the Customers table. How many records does it
-   have?
-
-   Why: One record (row) for each customer: 3 records.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/field-lab.html" poster="sims/field-lab.png" title="Field Lab: the right data type" >}}
-
-3. In **Field Lab**, choose the data type of the six fields. Which type is
-   right for Price, and which for InStock?
-
-   {{< record "Price: … ; InStock: …" >}}
-
-   ::: {.check}
-   **Price: Currency** (money). **InStock: Yes/No** (only two answers).
-   :::
-
-   ::: {.sort}
-   Which data type? Sort the fields.
-
-   Currency
-   :   Price (2.00 JD)
-
-       Why: Money is Currency.
-
-   Yes/No
-   :   InStock (Yes or No)
-
-       Why: Only two answers.
-
-   Short Text
-   :   Phone (079 000 0001)
-
-       Why: You never add phone numbers, and the 0 at the start must stay.
-
-   Date/Time
-   :   OrderDate (03/11/2026)
-
-       Why: A date.
-   :::
-
-## Experiment 2 · The primary key and a relationship
-
-**The idea:** the **primary key** is the field with a different value in
-every record (CustomerID); a name or a city can repeat. A second table,
-**Orders**, has the field CustomerID too. A **relationship** joins the two
-tables with this field: **one** customer has **many** orders
-(one-to-many).
-
-**Aim:** find the primary key, and join two tables.
-
-::: {.part}
-**Part A · In the app (Access)**
-:::
-
-1. Open the Customers table in **Design View**. Look for the small key
-   next to a field.
-
-   {{< record "The primary key of Customers is" >}}
-
-   ::: {.check}
-   **CustomerID**: it has a different value in every record. Two customers
-   can have the same name or city.
-   :::
-
-   ::: {.choice}
-   Why is Name not a good primary key?
-
-   - [x] Two customers can have the same name.
-
-     Why: A primary key must be different in every record.
-
-   - [ ] A name is too long.
-
-     Why: Length does not matter; a key must not repeat.
-
-   - [ ] Names are text.
-
-     Why: Text keys are possible, but names repeat.
-   :::
-
-2. Make a table `Orders`: `OrderID` (AutoNumber), `CustomerID` (Number),
-   `Item` (Short Text), `Total` (Currency). Click **Database Tools ›
-   Relationships**, add both tables, and drag **CustomerID** from Customers
-   onto CustomerID in Orders. Tick **Enforce Referential Integrity** and
-   click **Create**.
-
-   {{< record "The line shows … next to Customers and … next to Orders" >}}
-
-   ::: {.check}
-   **1** next to Customers and **∞** (many) next to Orders: one customer
-   has many orders.
-   :::
-
-   ::: {.choice}
-   What does the line 1 — ∞ between Customers and Orders mean?
-
-   - [x] One customer can have many orders.
-
-     Why: 1 is next to Customers, ∞ (many) next to Orders.
-
-   - [ ] One order can have many customers.
-
-     Why: Each order belongs to one customer.
-
-   - [ ] The tables have the same records.
-
-     Why: They share only the field CustomerID.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/key-lab.html" poster="sims/key-lab.png" title="Key Lab: the primary key and the relationship" >}}
-
-3. In **Key Lab**, do Tasks 1 to 4. In Task 3, which field joins Orders to
-   Customers?
-
-   {{< record "Task 3: the field" >}}
-
-   ::: {.check}
-   **CustomerID**: the same field is in both tables.
-   :::
-
-   ::: {.choice}
-   In Task 3, which field joins Orders to Customers?
-
-   - [x] CustomerID
-
-     Why: The same field is in both tables.
-
-   - [ ] OrderID
-
-     Why: OrderID is only in the Orders table.
-
-   - [ ] Item
-
-     Why: Item is only in the Orders table.
-   :::
-
-## Experiment 3 · A query: a criterion and a sort
-
-**The idea:** a **query** asks a table a question. It shows only the
-fields and the records that you ask for. A **criterion** chooses the
-records (City = Amman, Price > 5); a **sort** puts them in order
-(ascending: A to Z, small to big). **Create › Query Design**, then **Run**.
-
-**Aim:** show only the records that you need, in order.
-
-::: {.part}
-**Part A · In the app (Access)**
-:::
-
-1. Click **Create › Query Design** and add the Customers table. Double-click
-   **Name** and **City**. In the **Criteria** row under City, type `Amman`.
-   Click **Run** (the red !).
-
-   {{< record "The query shows … records: …" >}}
-
-   ::: {.check}
-   **2 records: Huda and Lina** (both in Amman). Omar (Zarqa) is not
-   shown, but he is still in the table.
-   :::
-
-   ::: {.fill answer="2" unit="records" hint="Count the customers in Amman."}
-   Huda (Amman), Omar (Zarqa), Lina (Amman). How many records does the
-   query City = Amman show?
-
-   Why: Only Huda and Lina live in Amman.
-   :::
-
-2. Go back to **Design View**. In the **Sort** row under Name, choose
-   **Ascending**, and Run again. Save the query as `AmmanCustomers`.
-
-   {{< record "The first name now is" >}}
-
-   ::: {.check}
-   **Huda**: ascending sorts the names from A to Z (H comes before L).
-   :::
-
-   ::: {.choice}
-   The query shows Lina and Huda. After the sort Name, Ascending, which
-   name is first?
-
-   - [x] Huda
-
-     Why: Ascending is A to Z, and H comes before L.
-
-   - [ ] Lina
-
-     Why: Lina is first only with Descending.
-
-   - [ ] Omar
-
-     Why: Omar is not in the query: he lives in Zarqa.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/query-lab.html" poster="sims/query-lab.png" title="Query Lab: ask the table a question" >}}
-
-3. In **Query Lab**, do Tasks 1 to 3. Task 2: how many products cost more
-   than 5 JD?
-
-   {{< record "Task 2: … records" >}}
-
-   ::: {.check}
-   **2 records**: the Bag (12 JD) and the Lunch box (6 JD).
-   :::
-
-   ::: {.fill answer="2" unit="records" hint="Look at the Price column: which prices are above 5?"}
-   The Products table: Notebook 2, Pen 0.50, Bag 12, Water 0.50, Juice 1,
-   Folder 1.50, Lunch box 6, Coffee 1 (JD). How many records does the
-   criterion Price > 5 show?
-
-   Why: Only the Bag (12) and the Lunch box (6) cost more than 5 JD.
-   :::
-
-## Table of results
-
-Copy your key results here: the rows of the parts that you did. Your
-teacher checks this table before the end of the lecture.
-
-::: {.record-table}
-| Experiment | What you record                                 | Your result |
-|:-------:|----------------------------------------------|-------------------------|
-| 1 A        | The data types of Name and CustomerID           |             |
-| 1 A        | The records and fields of Customers             |             |
-| 1 B        | The data types of Price and InStock             |             |
-| 2 A        | The primary key of Customers                    |             |
-| 2 A        | The line between Customers and Orders           |             |
-| 2 B        | The field that joins the two tables             |             |
-| 3 A        | The records of the query City = Amman           |             |
-| 3 A        | The first name after the sort                   |             |
-| 3 B        | The records with Price > 5                      |             |
-:::
-
-## Game challenge · The Data Desk
-
-Finished early? Play **Data Desk at Sunrise Company**: the colleagues ask
-Huda about the shop database. Read each message and choose the best
-answer.
-
-{{< sim file="sims/data-desk.html" poster="sims/data-desk.png" title="Data Desk at Sunrise Company" kind="game" >}}
+- **You need:** a lab computer with Access. **Nothing to download:**
+  you type the text yourself.
+- **Time:** about 35 minutes. Your Access may look a little different:
+  the names of the buttons are the same.
+
+## Task 1 · Open Access and make a database
+
+```{=typst}
+#step(1, [Click *Search* on the taskbar #mk(1). Type *access*. Click *Access* #mk(2).], img: "images/lab-open-1.png", w: 80%, left: 32%)
+#step(2, [Click *Blank database* #mk(1). \ In *File Name*, type *shop-* and your first name #mk(2). \ Click *Create* #mk(3). A table, *Table1*, opens.], img: "images/lab-new-1.png", w: 92%, left: 36%)
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 2 · The fields of the table
+
+```{=typst}
+#step(1, [On the *Home* tab, click *View ▾* #mk(1), then *Design View* #mk(2). \ Type the table name: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Customers] #mk(3). Click *OK* #mk(4).], img: "images/lab-design-1.png", w: 100%, left: 36%)
+#step(2, [Under *ID*, type the field name *Name* #mk(1); its data type: *Short Text* #mk(2). \ Then the field *City*, *Short Text*. \ The small key #mk(3): *ID* is the primary key.], img: "images/lab-fields-1.png", w: 100%, left: 36%)
+```
+
+## Task 3 · Three customers
+
+```{=typst}
+#step(1, [Click *View* #mk(1) (Datasheet View). Click *Yes* to save. \ Type three customers #mk(2): Name, *Tab*, City, *Tab*: \ #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 5pt)[Huda · Amman \ Omar · Irbid \ Rana · Amman] \ ID counts by itself.], img: "images/lab-records-1.png", w: 100%, left: 40%)
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 4 · A query: the customers in Amman
+
+```{=typst}
+#step(1, [Click the *Create* tab #mk(1). Click *Query Design* #mk(2). \ Add *Customers* (double-click it, then close the list). \ Double-click *Name*, then *City* #mk(3).], img: "images/lab-query-1.png", w: 100%, left: 36%)
+#step(2, [Under *Name*, *Sort*: *Ascending* #mk(1). \ Under *City*, *Criteria*: type *Amman* #mk(2). \ Click *Run* #mk(3): Huda and Rana. \ Press *Ctrl + S*, type #h(2pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Amman customers], *OK*.], img: "images/lab-query-2.png", w: 100%, left: 36%)
+```
+
+## Task 5 · Export the table to Excel
+
+Access saves your database by itself. For the Extra, you save the table as an Excel file too.
+
+```{=typst}
+#step(1, [On the left, right-click *Customers* #mk(1). \ Click *Export* #mk(2), then *Excel* #mk(3). \ Click *OK*, then *Close*. The file *Customers.xlsx* is in *Documents*.], img: "images/lab-export-1.png", w: 100%, left: 34%)
+```
+
+## Show your teacher
+
+```{=typst}
+#block(breakable: false, grid(columns: (1.1fr, 1fr), column-gutter: 14pt, align: top,
+  shot("images/lab-result-1.png"),
+  [
+    #set par(spacing: 0.9em, justify: false)
+    Your table now looks like the picture. Check it:
+    #v(4pt)
+    #tick #h(4pt) The table *Customers*: ID (the key), Name and City. \
+    #tick #h(4pt) Three customers: Huda, Omar, Rana. \
+    #tick #h(4pt) The query *Amman customers*: Huda and Rana. \
+    #tick #h(4pt) *Customers.xlsx* is in Documents.
+    #v(8pt)
+    #tip[Raise your hand: your teacher looks at your screen. \ Then do the *Extra*: AI adds customers to your table.]
+  ],
+))
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Extra · AI adds customers to your table
+
+```{=typst}
+#block(width: 100%, fill: rgb("#e3f4f1"), stroke: 0.8pt + rgb("#8fd1c4"), radius: 6pt, inset: (x: 12pt, y: 9pt))[
+  Only when you finish Tasks 1–5. On *tutudocs.com* an *AI assistant* changes your table (Customers.xlsx) for you. *No sign-in.*
+]
+#step(1, [Open the browser. Go to *tutudocs.com*.])
+#step(2, [Click the box *Drop a file anywhere on this page, or click to choose* #mk(1). \ Click *Documents*, click your file *Customers.xlsx*, click *Open*. \ Your table opens in the online editor.], img: "images/lab-tutu-1.png", w: 84%, left: 36%)
+#step(3, [Click *AI Assistant* at the top #mk(1). \ Click in *Ask AI anything…* #mk(2) and type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Add 3 customers with a name and a city in Jordan.] \ Press *Enter* #mk(3). Wait about 15 seconds: three new customers come.], after: align(center, shot("images/lab-tutu-2.png", w: 84%)))
+#step(4, [One more request. Type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Sort the customers by City, A to Z.] \ Press *Enter*. Wait for the answer before you type again.])
+#step(5, [Click *File* #mk(1), then *Download* #mk(2), then the choice that ends in *.xlsx* #mk(3). \ Open the new file from *Downloads*: it opens in Excel, with the changes of the AI.], img: "images/lab-tutu-3.png", w: 74%, left: 44%)
+```

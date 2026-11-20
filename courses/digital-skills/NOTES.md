@@ -117,12 +117,15 @@ management, medical sterilization, facility assessment). So this course is
   and builds its form), 11 (its website), 12 (its post, marketing plan,
   three slides and the final submission with an AI-use statement).
 
-## The lab model (since 2026-11-20; Unit 4 first)
+## The lab model (since 2026-11-20; every lecture)
 
 The college now has a **computer lab** for this course: Windows computers
 with Microsoft Office. On 2026-11-20 the teacher asked to rewrite Unit 4 for
-the lab, as a trial; if it works, Units 5 and later follow (not before the
-teacher asks: one unit at a time). A lecture in the lab model
+the lab, as a trial; the same day, after the preview, the teacher asked for
+**every lecture from Unit 4 to the end** (Lectures 4–11) in the same way,
+and for the online activities in the same style (below, "The online
+activity in the lab style"). **Every new or rewritten lecture of this
+course follows the lab model.** A lecture in the lab model
 (`lab: true` in the front matter of the page and the worksheet) has two parts:
 
 1. **About 15 minutes on the interactive page** (`lesson-NN.qmd`), on the
@@ -147,11 +150,9 @@ even the weakest, does the steps alone, fast and right:
   (Windows, Word of Microsoft 365 and 2021, the classic ribbon), zoomed in on
   the buttons, with the orange numbered circles of the step
   (`tools/lab_screens.py`, the `#step(...)` helper of the worksheet).
-- **No questions, no results to record, no table of results**: where the
-  student must judge (a text from AI), the sheet says what to do with each
-  line ("Wrong time: type it with 15:00").
+- **No questions, no results to record, no table of results.**
 - **No files to download:** the student types a short text (five lines, a
-  small table). Nothing depends on the Internet: the AI text is printed.
+  small table). Only the Extra needs the Internet (tutudocs.com).
 - **Clarity first, then length:** the teacher prefers one sheet, but two or
   three are fine when one would make the steps less clear. Every task stays
   on one page (`#pagebreak(weak: true)` before a task that would split).
@@ -171,6 +172,34 @@ on it opens the list of all the pages, to jump back three pages at once; ⇄
 moves the bar to the other corner. The arrow keys and a presenter's clicker
 work too, and `#page-N` in the address opens the same page after a reload
 (`lesson-script.html`, "paged").
+
+### The online activity in the lab style (since 2026-11-20)
+
+The teacher's request of 2026-11-20: the online activity is the lab lecture
+without the lab. The student does every step **on simulators that look
+like the real app**, on the page, at home; the real app is an optional box.
+Online activities 4–12 were rewritten this way:
+
+- Every Step: the idea in 3–4 short points, then `### On the simulator`
+  (a simulator with the steps of the Step, on the data of a **model**, never
+  the data of a task) and `### On your own computer (optional)`: a
+  `:::: {.word-part .home-part}` box (green, labelled "Optional, at home")
+  with the drawn screens of the same steps in the real app (the `lab-*`
+  pictures of the lecture of the unit can be reused, `../week-WW/images/…`).
+  At most one Try it per Step; no question about AI output.
+- The simulators are the lab simulators with their own data and steps:
+  Excel Lab (`window.EXCEL_LAB`, also `Insert › PivotTable`), PowerPoint
+  Lab, Tutu Lab (`window.TUTU`), Forms Lab (`window.FORMS_LAB`), Sites Lab
+  (`window.SITES_CFG`: pages, Insert › Button, Publish) and Access Shop
+  (`week-10/sims/access-shop.js`: a form, a query, a report). A page sets
+  `window.SIM_DONE` for its last message; an online copy of a lab
+  simulator (`*-online.html`) has a hint without "worksheet".
+- The AI step is **direct use on tutudocs.com** (Tutu Lab on the page; in
+  the tasks the student's own file), or an optional Extra when the task
+  has no file (Online activity 11).
+- Access is only on Windows, so the tasks of Online activity 9 use the
+  simulators of the page ("Click **Start again** first"); every other task
+  is done in the real app, as before.
 
 ## A face-to-face version (prepared, not published)
 
@@ -236,9 +265,10 @@ true is theory, and it bores them. So:
 - **No questions about AI output:** no "keep, fix or delete", no "what is
   wrong in this answer", no prompt to evaluate. The student sees the change
   in the new file; that is all the check there is.
-- The same holds for the online activities: their AI steps become direct
-  use on the student's own file when each activity is next rewritten
-  (Online activity 4 was not changed yet).
+- The same holds for the online activities (all rewritten on 2026-11-20):
+  the AI step is direct use on tutudocs.com with the student's own file
+  (Online 4: the letter; 5: a slide; 8: a total row; 11: the welcome
+  text, optional; 12: the last slide and the AI-use statement).
 - **The AI tool of every Digital Skills lesson: tutudocs.com** (the
   teacher's choice of 2026-11-20, tried in class conditions by the
   teacher). It works **with no sign-in**: the home page has the box "Drop a
@@ -261,14 +291,10 @@ true is theory, and it bores them. So:
   account has it"; the tasks also work by copying from an AI chat.
 - Never ask students to type real personal data (ID numbers, phone numbers,
   addresses, grades) into an AI tool: use made-up details.
-- Every task done with AI ends with checking the output; the final project
-  (Online activity 12) has the AI-use statement where AI helped. Since
-  syllabus v4 (B2: evaluate AI output), every unit from Unit 3 has one AI
-  step with its check: privacy in AI tools (Online 3), a Word draft and a
-  CV with an AI-use statement (Unit 4), an outline and AI pictures
-  (Online 5), a formula and a summary checked against a PivotTable
-  (Online 8), the Home text of the website (Online 11), the post's picture
-  (Online 12). AI stays a tool, never the topic of a session.
+- The final project (Online activity 12) has the AI-use statement where
+  AI helped. (Before 2026-11-20 every unit had an AI step with a check of
+  the output, for B2 of syllabus v4; the rule above replaced the checks
+  with direct use.) AI stays a tool, never the topic of a session.
 - AI is a tool for documents, data and presentations here; how AI works is
   the subject of *AI Applications* (01101153). Keep to what a user needs.
 - **Practical, never AI alone** (the teacher's request of 2026-11-08: the
@@ -331,6 +357,18 @@ every calendar week, by hand, with the university's template.
   (`moodle/digital-skills-weeks.md`).
 
 ## Lessons learned
+
+- 2026-11-20 (the teacher's request, after the preview of Unit 4): Lectures
+  5–11 follow the lab model, and Online activities 4–12 the lab style
+  (above): each Step on simulators that look like the app (new: Excel Lab
+  with a PivotTable, Access Shop with a form, a query and a report, Forms
+  Lab and Sites Lab with their own data, Insert › Button and Publish), an
+  optional box with the screens of the real app, and the AI as direct use
+  on tutudocs.com. Their letter questions became `{.pick}` questions (no
+  more in `BEFORE_PICKS`). New titles: Unit 4 "Word Documents, and Changes
+  with AI"; Online activity 11 "The Service Website: Pages, a Button to the
+  Form, and Publishing" (no AI text to check). The post of Online activity
+  12 is made in PowerPoint (no Canva account).
 
 - 2026-11-20 (the teacher's review of Unit 4): the paged page and the
   worksheet were liked; the AI part was not (AI sentences to judge, in

@@ -676,7 +676,8 @@ Part A "a lab computer, or the teacher's laptop on the screen", Part B
 ### The lab model (Digital Skills, since 2026-11-20)
 
 A lecture in a computer lab (`lab: true` in the front matter of the page and
-the worksheet; now Digital Skills Unit 4, as a trial): about 15 minutes of
+the worksheet; every Digital Skills lecture from Unit 4, Lectures 4–11,
+and every new one): about 15 minutes of
 ideas on the page, on simulators that look like the real app, then each
 student follows the printed worksheet alone in the real app. The worksheet
 is a **guide, not a test**: tasks with numbered steps, a box to tick and the
@@ -686,6 +687,15 @@ sizes and the page shown like slides (`paged: true`) are in
 `courses/digital-skills/NOTES.md`, "The lab model"; `check_size.py` checks
 them (`LAB_*`). The sections "Lecture worksheets" and "The page is taught
 in class" apply to the other lectures.
+
+**The online activity in the lab style** (Digital Skills, since
+2026-11-20): every Step has `### On the simulator` (a simulator that looks
+like the real app, with the data of a model) and `### On your own computer
+(optional)`, a `:::: {.word-part .home-part}` box with the drawn screens
+of the same steps in the real app; at most one Try it per Step; the AI
+step is direct use on tutudocs.com. The details are in
+`courses/digital-skills/NOTES.md`, "The online activity in the lab
+style"; the template is `shared/templates/online-template.qmd`.
 
 ### Blended courses: the online activity
 

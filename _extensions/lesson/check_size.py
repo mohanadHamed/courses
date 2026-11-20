@@ -258,13 +258,6 @@ BEFORE_PICKS = {
     "courses/digital-media/week-10/homework-09.qmd",
     "courses/digital-media/week-11/homework-10.qmd",
     "courses/digital-media/week-13/homework-12.qmd",
-    "courses/digital-skills/week-04/online-04.qmd",
-    "courses/digital-skills/week-06/online-05.qmd",
-    "courses/digital-skills/week-08/online-07.qmd",
-    "courses/digital-skills/week-09/online-08.qmd",
-    "courses/digital-skills/week-10/online-09.qmd",
-    "courses/digital-skills/week-11/online-10.qmd",
-    "courses/digital-skills/week-14/online-12.qmd",
     "courses/game-math/week-07/homework-07.qmd",
     "courses/game-math/week-12/homework-11.qmd",
 }

@@ -1087,6 +1087,18 @@ def ppt_ribbon(s, tab, theme=None, trans=None, anim=None):
         group(s, 664, 790, "Customize")
         big_btn(s, 800, 70, "Designer", ic_page)
         s.text(835, 177, "Designer", 10.5, 400, GREY, "middle")
+    elif tab == "Insert":
+        big_btn(s, 24, 64, "New", ic_page, "Slide ▾")
+        group(s, 20, 96, "Slides")
+        big_btn(s, 104, 54, "Table", ic_table)
+        group(s, 100, 166, "Tables")
+        big_btn(s, 176, 64, "Pictures", ic_picture)
+        p["icons"] = (244, 88, 54, 80)
+        big_btn(s, 244, 54, "Icons", lambda s_, x, y: s_.poly([(x, y - 13), (x + 4, y - 4), (x + 13, y - 4), (x + 6, y + 2), (x + 9, y + 12), (x, y + 6), (x - 9, y + 12), (x - 6, y + 2), (x - 13, y - 4), (x - 4, y - 4)], fill=PPT))
+        big_btn(s, 302, 58, "Shapes", ic_shapes)
+        group(s, 172, 370, "Images & Illustrations")
+        big_btn(s, 380, 60, "Text", ic_page, "Box")
+        group(s, 376, 450, "Text")
     elif tab == "Transitions":
         big_btn(s, 24, 60, "Preview", ic_page)
         group(s, 20, 92, "Preview")
@@ -1271,6 +1283,10 @@ def lab_ppt_animation(s, top):
 
 def lab_ppt_save(s, top):
     save_as(s, top, "talk-Huda", "PowerPoint Presentation (*.pptx)", PPT)
+
+
+def lab_post_save(s, top):
+    save_as(s, top, "post-Huda", "PowerPoint Presentation (*.pptx)", PPT)
 
 
 def lab_ppt_result(s, top):
@@ -2279,6 +2295,81 @@ def lab_gs_tutu_dl(s, top):
     tutu_download(s, top, "page-Huda", "doc", pick=2)
 
 
+
+# =====================================================================
+# Lecture 11: a post for social media made in PowerPoint (one slide), saved
+# as a picture (PNG).
+# =====================================================================
+
+POST = {"title": "Fresh cakes for your party!", "sub": "Order today on our website"}
+
+
+def lab_post_title(s, top):
+    _, _, boxes, _ = ppt_window(s, 470, "Home", [None], 0, empty=True)
+    mark_box(top, boxes["title"], 1, "left", 4, 2)
+    mark_box(top, boxes["body"], 2, "left", 4, 2)
+
+
+def lab_post_design(s, top):
+    tabs, rb, _, _ = ppt_window(s, 470, "Design", [POST], 0, theme="Ion", theme_sel="Ion")
+    mark_box(top, tabs["Design"], 1, "top", 6, 1)
+    mark_box(top, rb["theme:Ion"], 2, "bottom", 4, 2)
+
+
+def lab_post_icons(s, top):
+    """Insert › Icons; search cake; a cake icon; Insert."""
+    h = 500
+    tabs, rb, boxes, _ = ppt_window(s, h, "Insert", [POST], 0, theme="Ion")
+    x0, y0 = 250, 168
+    s.rect(x0, y0, 330, 220, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=4)
+    s.rect(x0 + 14, y0 + 14, 300, 26, fill="#ffffff", stroke=PPT, sw=1.4, rx=13)
+    icon_search(s, x0 + 30, y0 + 27, GREY)
+    s.text(x0 + 44, y0 + 32, "cake", 12.5, 400, INK)
+    for i in range(4):
+        x = x0 + 20 + i * 76
+        s.rect(x, y0 + 56, 64, 64, fill="#ffffff" if i else PPT_SOFT, stroke=PPT if i == 0 else "#e0e0e0", sw=2 if i == 0 else 1, rx=4)
+        cx, cy = x + 32, y0 + 92
+        s.rect(cx - 18, cy - 4, 36, 18, fill="#5c5c5c", rx=2)
+        s.rect(cx - 14, cy - 14, 28, 12, fill="#5c5c5c", rx=2)
+        s.rect(cx - 1, cy - 24, 2, 9, fill="#5c5c5c")
+    s.rect(x0 + 230, y0 + 176, 84, 28, fill=PPT, rx=4)
+    s.text(x0 + 272, y0 + 195, "Insert", 12.5, 700, "#ffffff", "middle")
+    mark_box(top, tabs["Insert"], 1, "top", 6, 1)
+    mark_box(top, rb["icons"], 2, "right", 4, 1)
+    mark_box(top, (x0 + 14, y0 + 14, 300, 26), 3, "right", 13, 2)
+    mark_box(top, (x0 + 20, y0 + 56, 64, 64), 4, "left", 4, 2)
+    mark_box(top, (x0 + 230, y0 + 176, 84, 28), 5, "right", 4, 2)
+
+
+def lab_post_png(s, top):
+    save_as(s, top, "post-Huda", "PNG Portable Network Graphics Format (*.png)", PPT)
+
+
+def lab_post_result(s, top):
+    h = 400
+    frame(s, h)
+    ppt_slide(s, 210, 40, 480, POST, "Ion")
+    cx, cy = 640, 260
+    s.rect(cx - 22, cy - 6, 44, 22, fill="#ffffff", rx=3)
+    s.rect(cx - 17, cy - 18, 34, 14, fill="#ffffff", rx=3)
+    s.rect(cx - 1.5, cy - 30, 3, 11, fill="#ffffff")
+    top.label(330, 330, 240, "post-Huda.png: ready to share")
+
+
+def lab_post_tutu_ai(s, top):
+    def draw_page(s_, box):
+        x, y, w_, hh = box
+        ppt_slide(s_, x + 30, y + 14, 230, POST, "Ion")
+        ppt_slide(s_, x + 280, y + 14, 230, {"title": "Our cakes", "points": ["Chocolate · 8 JD", "Strawberry · 9 JD", "Vanilla · 7 JD"]}, "Ion")
+        s_.rect(x + 278, y + 12, 234, 133, stroke="#f2c94c", sw=3, rx=3)
+    tutu_ai(s, top, "post-Huda", "slides", "Add a second slide with our three cakes and their prices.",
+            "Done: slide 2 shows the three cakes and their prices.", draw_page)
+
+
+def lab_post_tutu_dl(s, top):
+    tutu_download(s, top, "post-Huda", "slides")
+
+
 # name: (the drawing, the part of it that the worksheet shows: x, y, width, height).
 # A crop zooms in on the buttons of the step, so that they are big on paper.
 SCREENS = {
@@ -2373,6 +2464,18 @@ SCREENS = {
     "week-12/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
     "week-12/images/lab-tutu-2": (lab_gs_tutu_ai, (15, 86, 870, 370)),
     "week-12/images/lab-tutu-3": (lab_gs_tutu_dl, (0, 86, 495, 366)),
+    # Lecture 11, a post in PowerPoint (week-14)
+    "week-14/images/lab-open-1": (lab_ppt_open, None),
+    "week-14/images/lab-open-2": (lab_ppt_start, (176, 28, 370, 300)),
+    "week-14/images/lab-post-1": (lab_post_title, (15, 180, 870, 255)),
+    "week-14/images/lab-post-2": (lab_post_design, (15, 26, 870, 330)),
+    "week-14/images/lab-post-3": (lab_post_icons, (15, 26, 870, 400)),
+    "week-14/images/lab-save-1": (lab_post_save, None),
+    "week-14/images/lab-save-2": (lab_post_png, None),
+    "week-14/images/lab-result-1": (lab_post_result, (180, 26, 540, 330)),
+    "week-14/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "week-14/images/lab-tutu-2": (lab_post_tutu_ai, (15, 86, 870, 370)),
+    "week-14/images/lab-tutu-3": (lab_post_tutu_dl, (0, 86, 470, 366)),
 }
 
 def draw(fn, crop=None):

@@ -24,11 +24,11 @@
 
   let st;
   function reset() {
-    const slides = PART === "slides" ? [{ layout: "Title Slide", title: "", sub: "" }]
+    const slides = PART === "slides" || PART === "post" ? [{ layout: "Title Slide", title: "", sub: "" }]
       : PART === "notes" ? [{ ...TITLE }, { layout: "Title and Content", title: "When and where", points: [], notes: "" }]
       : [{ ...TITLE }, { ...WHEN, notes: "Entry is free for everyone." }];
     st = { slides, cur: PART === "notes" ? 1 : 0, theme: PART === "motion" ? "Facet" : "Office Theme", variant: null, trans: {}, anim: {}, tab: "Home",
-      menu: null, edit: null, sel: null, show: null, shown: false };
+      menu: null, edit: null, sel: null, show: null, shown: false, saved: {} };
   }
 
   // ---------- The missions (the steps of the worksheet) ----------
@@ -42,6 +42,12 @@
     notes: [
       ["Slide 2: click <b>Click to add text</b>, type three short points: <b>Sunday to Tuesday</b>, <b>10:00 to 15:00</b>, <b>The college library</b>", () => s1().points.length === 3 && s1().points.every((p) => p.trim().split(/\s+/).length <= 8)],
       ["The notes pane: click <b>Click to add notes</b>, type <b>Entry is free for everyone.</b>", () => /entry is free/.test(norm(s1().notes))],
+    ],
+    post: [
+      ["Click <b>Click to add title</b>, type <b>Fresh cakes for your party!</b>", () => /cake/i.test(st.slides[0].title)],
+      ["The subtitle, the call to action: <b>Order today on our website</b>", () => /order/i.test(st.slides[0].sub)],
+      ["<b>Design</b>: a theme; <b>Insert › Icons</b>: a cake", () => st.theme !== "Office Theme" && !!st.slides[0].icon],
+      ["<b>File › Save As</b>: <b>post-Huda</b> as a PowerPoint file, then again as <b>PNG</b>", () => st.saved.pptx && st.saved.png],
     ],
     motion: [
       ["<b>Transitions › Fade › Apply To All</b>", () => st.slides.every((x, i) => st.trans[i] === "Fade")],
@@ -59,12 +65,13 @@
     <div class="w-body"><div class="p-thumbs"></div><div class="p-main"><div class="p-stage"></div><div class="p-notes"></div></div></div>
     <div class="w-status"><span class="p-count"></span><span>English (United States)</span><span>Notes</span></div>`;
   const TABS = ["File", "Home", "Insert", "Draw", "Design", "Transitions", "Animations", "Slide Show", "Review", "View", "Help"];
-  const OPEN = { slides: ["Home", "Design"], notes: ["Home", "View"], motion: ["Home", "Transitions", "Animations", "Slide Show"] }[PART];
+  const OPEN = { slides: ["Home", "Design"], notes: ["Home", "View"], motion: ["Home", "Transitions", "Animations", "Slide Show"], post: ["File", "Home", "Insert", "Design"] }[PART];
 
   function tabs() {
     const bar = $(".w-tabs", root); bar.innerHTML = "";
     TABS.forEach((t) => bar.appendChild(btn(t, t, () => {
-      if (t === "Slide Show") { startShow(); return; }
+      if (t === "Slide Show" && PART === "motion") { startShow(); return; }
+      if (t === "File" && PART === "post") { st.menu = "save"; draw(); return; }
       if (OPEN.includes(t)) { st.tab = t; st.menu = null; draw(); }
       else say(`<b>${t}</b>: not needed in this part. Use ${OPEN.map((x) => "<b>" + x + "</b>").join(", ")}.`, true);
     }, "w-tab" + (t === st.tab ? " on" : ""))));
@@ -101,6 +108,12 @@
       r.appendChild(group("Timing", h("span", "w-item", "Duration: 01.00"), btn("Apply To All", "Apply To All", () => {
         const t = st.trans[st.cur]; if (!t || t === "None") { say("First click a transition (Fade), then <b>Apply To All</b>.", true); return; }
         st.slides.forEach((_, i) => { st.trans[i] = t; }); say(`<b>Apply To All</b>: every slide now has <b>${t}</b>.`); draw(); })));
+    } else if (st.tab === "Insert") {
+      const ic = btn("<span class='w-big'>&#9733;</span>Icons", "Icons", () => { st.menu = st.menu === "icons" ? null : "icons"; draw(); }, "w-tall");
+      r.appendChild(group("Illustrations", btn("<span class='w-big'>&#9638;</span>Pictures", "Pictures", () => say("Pictures need a file. Today: <b>Icons</b>.", true), "w-tall"), ic));
+      if (st.menu === "icons") { const m = h("div", "w-menu p-icons"); m.appendChild(h("b", "", "Icons: cake"));
+        ["🎂", "🍰", "🧁", "🎁"].forEach((x) => m.appendChild(btn(`<span class='p-ico'>${x}</span>`, "Icon " + x, () => { st.slides[st.cur].icon = x; st.menu = null; say("The icon is on the slide. A picture makes a post easy to see."); draw(); }, "p-icb")));
+        m.appendChild(btn("Insert", "Insert", () => {}, "x-ok")); ic.parentElement.parentElement.appendChild(m); }
     } else if (st.tab === "Animations") {
       r.appendChild(group("Animation", gallery(ANIMS, st.anim[st.cur], (n) => {
         if (st.sel !== "body") { say("First click the list of points on slide 2: an animation is for one thing on the slide.", true); return; }
@@ -143,6 +156,7 @@
         st.edit = { field }; draw(); });
       return el;
     };
+    if (sl.icon) d.appendChild(h("span", "p-slide-ico", sl.icon));
     if (sl.layout === "Title Slide") { d.classList.add("tslide"); d.appendChild(ph("title", sl.title, "Click to add title", "t")); d.appendChild(ph("sub", sl.sub, "Click to add subtitle", "s")); }
     else { d.appendChild(ph("title", sl.title, "Click to add title", "h")); d.appendChild(ph("body", "", "Click to add text", "b")); }
     return d;
@@ -193,14 +207,25 @@
     $("#progress").textContent = `${done} of ${MISSIONS.length}`;
     if (done === MISSIONS.length && !status.done) { status.done = true; say("&#10003; All steps done. The same steps are in your worksheet: now do them in PowerPoint."); }
   }
+  function saveBox() {
+    let box = root.querySelector(".p-save"); if (box) box.remove(); if (st.menu !== "save") return;
+    box = h("div", "w-menu p-save"); box.innerHTML = "<b>Save As</b><div class='t-path'>This PC › <b>Desktop</b></div>";
+    const name = h("input", "x-in"); name.value = "post-Huda"; name.setAttribute("aria-label", "File name");
+    const type = h("select", "x-in"); ["PowerPoint Presentation (*.pptx)", "PNG Portable Network Graphics Format (*.png)"].forEach((x) => type.appendChild(h("option", "", x)));
+    box.appendChild(h("small", "", "File name:")); box.appendChild(name); box.appendChild(h("small", "", "Save as type:")); box.appendChild(type);
+    box.appendChild(btn("Save", "Save", () => { const png = type.selectedIndex === 1; st.saved[png ? "png" : "pptx"] = true; st.menu = null;
+      say(png ? "<b>Just This One</b>: the slide is now a picture, <b>post-Huda.png</b>, ready for social media." : "<b>post-Huda.pptx</b> is saved: you can change it later. Now save it again as <b>PNG</b>."); draw(); }, "x-ok"));
+    box.addEventListener("click", (e) => e.stopPropagation());
+    root.appendChild(box);
+  }
   function draw() {
-    tabs(); ribbon(); stage(); show(); status();
+    tabs(); ribbon(); stage(); show(); saveBox(); status();
     const f = root.querySelector(".p-in"); if (f && document.activeElement !== f) f.focus();
   }
   document.addEventListener("click", (e) => { if (st.menu && !e.target.closest(".w-menu")) { st.menu = null; draw(); } });
   $("#reset").addEventListener("click", () => { reset(); status.done = false; say(HELLO); draw(); });
   const HELLO = { slides: "Click <b>Click to add title</b> on the slide and type <b>Our Book Fair</b>.",
     notes: "Slide 2 needs its points: click <b>Click to add text</b> (one point on each line).",
-    motion: "Click the <b>Transitions</b> tab." }[PART];
+    motion: "Click the <b>Transitions</b> tab.", post: "A post for Mona's Cakes. Click <b>Click to add title</b> and type <b>Fresh cakes for your party!</b>" }[PART];
   reset(); say(HELLO); draw();
 })();

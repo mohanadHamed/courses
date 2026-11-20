@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: copy a formula</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: copy a formula</h1>
+  <p class="hint">The same steps as your worksheet (Task 3). Click <b>D2</b>, then double-click the small green square at its corner: the <b>fill handle</b>.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'shop-Huda', tabs: ['Home'], data: [["Item", "Price", "Qty", "Total"], ["Pens", 2, 10, "=B2*C2"], ["Notebooks", 3, 5], ["Bags", 7, 2]],
+  hello: 'Click <b>D2</b>. Then double-click the fill handle: the small green square at the bottom right of D2.',
+  missions: [
+    ['Copy D2 down with the <b>fill handle</b>: D3 and D4 have their totals', (x) => x.v('D3') === 15 && x.v('D4') === 14],
+    ['Click <b>D3</b>: its formula is <b>=B3*C3</b> (the references moved one row)', (x) => /^=B3\*C3$/i.test(x.f('D3'))],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

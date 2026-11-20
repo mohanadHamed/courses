@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: a colour rule</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: a colour rule</h1>
+  <p class="hint">The same steps as your worksheet (Task 4). Select the sales (drag from B2 to B7), then <b>Home › Conditional Formatting › Highlight Cells Rules › Greater Than</b>.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'sales-Huda', tabs: ['Home'], data: [["Item", "Sales (JD)", "Type"], ["Water", 12, "Drinks"], ["Cake", 25, "Food"], ["Juice", 18, "Drinks"], ["Sandwich", 30, "Food"], ["Tea", 9, "Drinks"], ["Chips", 15, "Food"]],
+  hello: 'Drag from <b>B2</b> to <b>B7</b> to select the sales.',
+  missions: [
+    ['Select <b>B2:B7</b>; <b>Conditional Formatting › Greater Than › 20</b> › OK', (x) => x.cf.some((r) => r.c1 === 1 && r.c2 === 1 && r.r1 === 1 && r.r2 === 6 && r.gt === 20)],
+    ['Change Juice (B4) to <b>22</b>: it turns red by itself', (x) => x.v('B4') === 22 && x.cf.length > 0],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

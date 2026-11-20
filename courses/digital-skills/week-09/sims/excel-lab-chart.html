@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: a chart</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: a chart</h1>
+  <p class="hint">The same steps as your worksheet (Task 5). Select <b>A1:B7</b> (drag), then <b>Insert › Column › Clustered Column</b>. Click <b>Chart Title</b> and type.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'sales-Huda', tabs: ['Home', 'Insert'], data: [["Item", "Sales (JD)", "Type"], ["Water", 12, "Drinks"], ["Cake", 25, "Food"], ["Juice", 18, "Drinks"], ["Sandwich", 30, "Food"], ["Tea", 9, "Drinks"], ["Chips", 15, "Food"]],
+  hello: 'Drag from <b>A1</b> to <b>B7</b>: the items and their sales, with the headings.',
+  missions: [
+    ['Select <b>A1:B7</b>, then <b>Insert › Column ▾ › Clustered Column</b>', (x) => x.chart && x.chart.type === 'column' && x.chart.r1 === 0 && x.chart.r2 === 6 && x.chart.c1 === 0 && x.chart.c2 === 1],
+    ['Click <b>Chart Title</b> and type <b>Sales of the week</b>', (x) => x.chart && /sales/i.test(x.chart.title)],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

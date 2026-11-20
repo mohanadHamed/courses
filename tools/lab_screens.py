@@ -1295,6 +1295,351 @@ def lab_ppt_tutu_dl(s, top):
     tutu_download(s, top, "talk-Huda", "slides")
 
 
+
+# =====================================================================
+# Excel for Windows (Lectures 6 and 7): the window, the formula bar, the
+# grid, the Home, Insert and Data tabs.
+# =====================================================================
+
+XL = "#107c41"
+XL_SOFT = "#d3e8d9"
+XL_TABS = ("File", "Home", "Insert", "Page Layout", "Formulas", "Data", "Review", "View", "Help")
+SHOP = [["Item", "Price", "Qty", "Total"], ["Pens", "2", "10", ""], ["Notebooks", "3", "5", ""], ["Bags", "7", "2", ""]]
+SALES = [["Item", "Sales (JD)", "Type"], ["Water", "12", "Drinks"], ["Cake", "25", "Food"], ["Juice", "18", "Drinks"],
+         ["Sandwich", "30", "Food"], ["Tea", "9", "Drinks"], ["Chips", "15", "Food"]]
+
+
+def xl_tabs(s, active):
+    s.rect(15, 49, W - 30, 30, fill=TITLE_BG)
+    x, pos = 30, {}
+    for tname in XL_TABS:
+        w_ = width(tname, 13) + 4
+        on = tname == active
+        s.text(x, 69, tname, 13, 700 if on else 400, XL if on else INK)
+        if on:
+            s.rect(x - 2, 74, w_, 3, fill=XL, rx=1.5)
+        pos[tname] = (x - 6, 52, w_ + 12, 26)
+        x += w_ + 14
+    return pos
+
+
+def xl_ribbon(s, tab):
+    ribbon_box(s)
+    p = {}
+    if tab == "Home":
+        s.rect(34, 92, 30, 36, fill="#ffffff", stroke="#7a7a7a", sw=1.3, rx=3)
+        s.text(46, 156, "Paste", 11.5, 400, INK)
+        group(s, 20, 96, "Clipboard")
+        dropdown(s, 104, 92, 120, "Aptos Narrow")
+        dropdown(s, 228, 92, 44, "11")
+        for i, c in enumerate(("B", "I", "U")):
+            small_btn(s, 104 + i * 26, 124, 24, 24, c, 13, 800 if c == "B" else 400)
+        group(s, 96, 282, "Font")
+        for i, k in enumerate(("left", "center", "right")):
+            s.rect(292 + i * 28 - 4, 124, 24, 24, fill=BTN, rx=3)
+            align_icon(s, 292 + i * 28, 130, k)
+        group(s, 282, 380, "Alignment")
+        dropdown(s, 390, 92, 96, "General")
+        s.text(392, 140, "$  %  ,", 13, 400, INK)
+        group(s, 380, 496, "Number")
+        p["cf"] = (504, 88, 84, 80)
+        big_btn(s, 504, 84, "Conditional", lambda s_, x, y: s_.rect(x - 12, y - 12, 24, 24, fill="#ffffff", stroke=XL, sw=1.4), "Formatting ▾")
+        big_btn(s, 592, 70, "Format as", lambda s_, x, y: s_.rect(x - 12, y - 12, 24, 24, fill=XL_SOFT, stroke=XL, sw=1.2), "Table ▾")
+        group(s, 496, 668, "Styles")
+        p["autosum"] = (680, 92, 96, 22)
+        s.text(684, 108, "Σ AutoSum ▾", 12, 700, INK)
+        s.text(684, 130, "Fill ▾", 11.5, 400, INK)
+        s.text(684, 152, "Clear ▾", 11.5, 400, INK)
+        p["sortfilter"] = (780, 92, 80, 70)
+        s.text(790, 112, "Sort &", 11.5, 400, INK)
+        s.text(790, 128, "Filter ▾", 11.5, 400, INK)
+        group(s, 672, 870, "Editing")
+    elif tab == "Data":
+        big_btn(s, 24, 64, "Get", ic_page, "Data ▾")
+        group(s, 20, 96, "Get & Transform Data")
+        p["az"] = (106, 92, 46, 30)
+        p["za"] = (106, 128, 46, 30)
+        s.rect(106, 92, 46, 30, fill=BTN, rx=3)
+        s.text(129, 112, "A→Z", 12, 700, INK, "middle")
+        s.rect(106, 128, 46, 30, fill=BTN, rx=3)
+        s.text(129, 148, "Z→A", 12, 700, INK, "middle")
+        big_btn(s, 158, 54, "Sort", ic_page)
+        p["filter"] = (216, 88, 58, 80)
+        big_btn(s, 216, 58, "Filter", lambda s_, x, y: s_.poly([(x - 12, y - 10), (x + 12, y - 10), (x + 3, y + 2), (x + 3, y + 12), (x - 3, y + 12), (x - 3, y + 2)], fill="#ffffff", stroke=XL, sw=1.4))
+        p["clear"] = (280, 92, 70, 22)
+        s.text(284, 108, "Clear", 11.5, 400, INK)
+        s.text(284, 130, "Reapply", 11.5, 400, LIGHT)
+        s.text(284, 152, "Advanced", 11.5, 400, INK)
+        group(s, 100, 360, "Sort & Filter")
+        for i, n in enumerate(("Text to Columns", "Flash Fill", "Remove Duplicates")):
+            s.text(372, 108 + i * 22, n, 11.5, 400, INK)
+        group(s, 360, 520, "Data Tools")
+    elif tab == "Insert":
+        big_btn(s, 24, 64, "PivotTable", ic_table)
+        big_btn(s, 92, 52, "Table", ic_table)
+        group(s, 20, 150, "Tables")
+        big_btn(s, 160, 64, "Pictures", ic_picture)
+        group(s, 156, 232, "Illustrations")
+        big_btn(s, 242, 80, "Recommended", lambda s_, x, y: [s_.rect(x - 14 + i * 10, y + 8 - (6, 14, 10)[i], 7, (6, 14, 10)[i], fill=XL) for i in range(3)], "Charts")
+        p["column"] = (330, 92, 40, 30)
+        s.rect(330, 92, 40, 30, fill=BTN, rx=3)
+        for i, hh in enumerate((8, 16, 12)):
+            s.rect(337 + i * 9, 116 - hh, 6, hh, fill="#4472c4")
+        s.text(356, 140, "▾", 10, 400, INK, "middle")
+        s.text(380, 112, "Line ▾", 11.5, 400, INK)
+        s.text(380, 136, "Pie ▾", 11.5, 400, INK)
+        s.text(440, 112, "Bar ▾", 11.5, 400, INK)
+        group(s, 236, 500, "Charts")
+    return p
+
+
+def xl_grid(s, x0, y0, data, widths=(110, 90, 90, 90, 80), rows=8, sel=None, rng=None, red=(), arrows=False, vals=None):
+    """The grid; data[r][c] text; sel = (r, c) the active cell; rng = (r1, c1, r2, c2); returns the box of each cell."""
+    boxes = {}
+    xs = [x0 + 34]
+    for wd in widths:
+        xs.append(xs[-1] + wd)
+    s.rect(x0, y0, 34, 22, fill="#f3f3f3", stroke="#dadada", sw=1)
+    for c, wd in enumerate(widths):
+        on = sel is not None and sel[1] == c
+        s.rect(xs[c], y0, wd, 22, fill=XL_SOFT if on else "#f3f3f3", stroke="#dadada", sw=1)
+        s.text(xs[c] + wd / 2, y0 + 16, "ABCDEFG"[c], 12, 700 if on else 400, XL if on else GREY, "middle")
+    for r in range(rows):
+        y = y0 + 22 + r * 24
+        on = sel is not None and sel[0] == r
+        s.rect(x0, y, 34, 24, fill=XL_SOFT if on else "#f3f3f3", stroke="#dadada", sw=1)
+        s.text(x0 + 17, y + 17, str(r + 1), 12, 700 if on else 400, XL if on else GREY, "middle")
+        for c, wd in enumerate(widths):
+            inr = rng and rng[0] <= r <= rng[2] and rng[1] <= c <= rng[3]
+            fill = "#ffc7ce" if (r, c) in red else ("#e8f3ec" if inr else "#ffffff")
+            s.rect(xs[c], y, wd, 24, fill=fill, stroke="#e3e3e3", sw=1)
+            txt = data[r][c] if r < len(data) and c < len(data[r]) else ""
+            if txt:
+                num = txt.replace(".", "").isdigit()
+                col = "#9c0006" if (r, c) in red else INK
+                s.text(xs[c] + wd - 6 if num else xs[c] + 6, y + 17, txt, 12.5, 400, col, "end" if num else "start")
+            if arrows and r == 0 and txt:
+                s.rect(xs[c] + wd - 18, y + 4, 15, 15, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=2)
+                s.poly([(xs[c] + wd - 14, y + 10), (xs[c] + wd - 7, y + 10), (xs[c] + wd - 10.5, y + 14)], fill=INK)
+            boxes[(r, c)] = (xs[c], y, wd, 24)
+    if rng:
+        bx = boxes[(rng[0], rng[1])]
+        ex = boxes[(rng[2], rng[3])]
+        s.rect(bx[0], bx[1], ex[0] + ex[2] - bx[0], ex[1] + ex[3] - bx[1], stroke=XL, sw=2)
+    if sel is not None:
+        b = boxes[sel]
+        s.rect(b[0], b[1], b[2], b[3], stroke=XL, sw=2.5)
+        s.rect(b[0] + b[2] - 4, b[1] + b[3] - 4, 8, 8, fill=XL, stroke="#ffffff", sw=1)
+    return boxes
+
+
+def xl_window(s, h, tab, data, name="Book1 - Excel", sel=None, formula="", ref_name="A1", **kw):
+    frame(s, h)
+    title_bar(s, name)
+    tabs = xl_tabs(s, tab)
+    rb = xl_ribbon(s, tab)
+    s.rect(15, 184, W - 30, 28, fill="#ffffff")
+    s.rect(24, 189, 70, 20, fill="#ffffff", stroke="#c9c9c9", sw=1)
+    s.text(30, 203.5, ref_name, 12, 400, INK)
+    s.text(106, 204, "fx", 12, 400, GREY)
+    s.line(124, 188, 124, 210, "#d6d6d6", 1)
+    s.text(132, 204, formula, 12.5, 400, INK)
+    fb = (128, 188, 300, 22)
+    s.line(15, 212, W - 15, 212, "#d6d6d6", 1)
+    s.rect(15, 213, W - 30, h - 253, fill="#ffffff")
+    boxes = xl_grid(s, 15, 213, data, kw.get("widths", (110, 90, 90, 90, 80)), kw.get("rows", min(10, int((h - 253 - 22) / 24))),
+                    sel=sel, rng=kw.get("rng"), red=kw.get("red", ()), arrows=kw.get("arrows", False))
+    s.rect(15, h - 40, W - 30, 25, fill=TITLE_BG)
+    s.rect(15, h - 25, W - 30, 10, fill=TITLE_BG, rx=9)
+    s.text(30, h - 23, "Ready", 11, 400, GREY)
+    s.rect(30, h - 62, 64, 20, fill="#ffffff", stroke="#c9c9c9", sw=1)
+    s.text(62, h - 47, "Sheet1", 11.5, 700, XL, "middle")
+    return tabs, rb, boxes, fb
+
+
+def filled(data, col, vals):
+    out = [list(r) + [""] * (5 - len(r)) for r in data]
+    for i, v in enumerate(vals):
+        out[i + 1][col] = v
+    return out
+
+
+def lab_xl_open(s, top):
+    open_search(s, top, "Excel", XL)
+
+
+def lab_xl_start(s, top):
+    open_start(s, top, "Excel", XL, "Blank workbook")
+
+
+def lab_xl_type(s, top):
+    """The shop list typed: Tab goes to the next cell, Enter to the next row."""
+    _, _, boxes, _ = xl_window(s, 470, "Home", SHOP, sel=(3, 2), formula="2", ref_name="C4")
+    top.label(560, 290, 230, "Tab: the next cell", arrow_to=(470, 300))
+    top.label(560, 330, 230, "Enter: the next row", arrow_to=(470, 330))
+
+
+def lab_xl_formula(s, top):
+    """D2: =B2*C2, in the cell and the formula bar."""
+    data = filled(SHOP, 3, ["20"])
+    _, _, boxes, fb = xl_window(s, 430, "Home", data, sel=(1, 3), formula="=B2*C2", ref_name="D2")
+    mark_box(top, boxes[(1, 3)], 1, "right", 2, 2)
+    mark_box(top, (fb[0], fb[1], 90, fb[3]), 2, "bottom", 4, 1)
+
+
+def lab_xl_fill(s, top):
+    """D2 selected: double-click its fill handle; D3 and D4 get their totals."""
+    data = filled(SHOP, 3, ["20", "15", "14"])
+    _, _, boxes, _ = xl_window(s, 430, "Home", data, sel=(1, 3), formula="=B2*C2", ref_name="D2", rng=(1, 3, 3, 3))
+    b = boxes[(1, 3)]
+    top.ring_circle(b[0] + b[2], b[1] + b[3], 9)
+    top.mark(1, b[0] + b[2] + 22, b[1] + b[3])
+    top.label(b[0] + b[2] + 40, b[1] + b[3] + 12, 210, "double-click the small square")
+    mark_box(top, (b[0], boxes[(2, 3)][1], b[2], 48), 2, "left", 2, 2)
+
+
+def lab_xl_sum(s, top):
+    """D5: Home › AutoSum, then Enter; D6: =MAX(D2:D4)."""
+    data = filled(SHOP, 3, ["20", "15", "14"]) + [["Total", "", "", "49", ""], ["Biggest", "", "", "", ""]]
+    _, rb, boxes, _ = xl_window(s, 470, "Home", data, sel=(4, 3), formula="=SUM(D2:D4)", ref_name="D5")
+    mark_box(top, boxes[(4, 3)], 1, "right", 2, 2)
+    mark_box(top, rb["autosum"], 2, "bottom", 4, 2)
+
+
+def lab_xl_save(s, top):
+    save_as(s, top, "shop-Huda", "Excel Workbook (*.xlsx)", XL)
+
+
+def lab_xl_result(s, top):
+    data = filled(SHOP, 3, ["20", "15", "14"]) + [["Total", "", "", "49", ""], ["Biggest", "", "", "20", ""]]
+    xl_window(s, 430, "Home", data, name="shop-Huda - Excel", sel=(5, 3), formula="=MAX(D2:D4)", ref_name="D6")
+
+
+def _xl_ai_page(s, box, data, fresh=(), head_fill=None):
+    x, y, w_, hh = box
+    s.rect(x + 20, y + 12, w_ - 40, hh - 24, fill="#ffffff", stroke="#e0e0e0", sw=1)
+    cw = (w_ - 80) / max(len(r) for r in data)
+    for r, row in enumerate(data):
+        for c, v in enumerate(row):
+            cx, cy = x + 40 + c * cw, y + 30 + r * 26
+            fill = "#fff3bf" if (r, c) in fresh else (head_fill if (r == 0 and head_fill) else "#ffffff")
+            s.rect(cx, cy, cw, 26, fill=fill, stroke="#e3e3e3", sw=1)
+            s.text(cx + 6, cy + 18, v, 12, 700 if r == 0 else 400, INK)
+
+
+def lab_xl_tutu_ai(s, top):
+    data = [r[:] for r in filled(SHOP, 3, ["20", "15", "14"])] + [["Rulers", "1", "6", "6", ""]]
+    tutu_ai(s, top, "shop-Huda", "sheet", "Add a row: Rulers, price 1, quantity 6, and its total.",
+            "Done: row 5 is Rulers, 1, 6, and the total 6.", lambda s_, b: _xl_ai_page(s_, b, [r[:4] for r in data], {(4, 0), (4, 1), (4, 2), (4, 3)}))
+
+
+def lab_xl_tutu_dl(s, top):
+    tutu_download(s, top, "shop-Huda", "sheet")
+
+
+# Lecture 7: sort, filter, a colour rule and a chart (the sales of a week).
+
+def lab_xl7_type(s, top):
+    _, _, boxes, _ = xl_window(s, 470, "Home", SALES, sel=(6, 2), formula="Food", ref_name="C7", widths=(110, 100, 90, 90, 80))
+    top.label(560, 300, 230, "Tab: the next cell", arrow_to=(420, 300))
+    top.label(560, 340, 230, "Enter: the next row", arrow_to=(420, 340))
+
+
+def lab_xl7_sort(s, top):
+    """Click a cell of Sales; Data › Z→A (Sort Largest to Smallest)."""
+    data = [SALES[0]] + sorted(SALES[1:], key=lambda r: -int(r[1]))
+    tabs, rb, boxes, _ = xl_window(s, 470, "Data", data, sel=(1, 1), formula="30", ref_name="B2", widths=(110, 100, 90, 90, 80))
+    mark_box(top, boxes[(1, 1)], 1, "right", 2, 2)
+    mark_box(top, tabs["Data"], 2, "top", 6, 1)
+    mark_box(top, rb["za"], 3, "right", 4, 2)
+
+
+def lab_xl7_filter(s, top):
+    """Data › Filter; the arrow of Type; only Drinks; OK."""
+    tabs, rb, boxes, _ = xl_window(s, 500, "Data", SALES, sel=(0, 2), formula="Type", ref_name="C1", widths=(110, 100, 90, 90, 80), arrows=True)
+    b = boxes[(0, 2)]
+    mx, my = b[0] - 40, b[1] + 26
+    s.rect(mx, my, 190, 170, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
+    s.text(mx + 12, my + 22, "Sort A to Z", 11.5, 400, INK)
+    s.line(mx, my + 32, mx + 190, my + 32, LINE, 1)
+    for i, (v, on) in enumerate((("(Select All)", False), ("Drinks", True), ("Food", False))):
+        yy = my + 48 + i * 24
+        checkbox(s, mx + 12, yy - 10, on, v)
+    s.rect(mx + 100, my + 132, 74, 26, fill=XL, rx=3)
+    s.text(mx + 137, my + 150, "OK", 12, 700, "#ffffff", "middle")
+    mark_box(top, rb["filter"], 1, "right", 4, 1)
+    mark_box(top, (b[0] + b[2] - 18, b[1] + 4, 15, 15), 2, "top", 3, 2)
+    mark_box(top, (mx + 8, my + 60, 120, 22), 3, "left", 4, 1)
+    mark_box(top, (mx + 100, my + 132, 74, 26), 4, "right", 4, 2)
+
+
+def lab_xl7_cf(s, top):
+    """Select B2:B7; Home › Conditional Formatting › Highlight Cells Rules › Greater Than › 20 › OK."""
+    tabs, rb, boxes, _ = xl_window(s, 500, "Home", SALES, sel=None, formula="12", ref_name="B2", widths=(110, 100, 90, 90, 80), rng=(1, 1, 6, 1),
+                                   red={(2, 1), (4, 1)})
+    x0, y0 = 504, 168
+    s.rect(x0, y0, 220, 58, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
+    s.rect(x0 + 2, y0 + 4, 216, 24, fill=XL_SOFT)
+    s.text(x0 + 12, y0 + 21, "Highlight Cells Rules ›", 12, 700, INK)
+    s.text(x0 + 12, y0 + 47, "Top/Bottom Rules ›", 12, 400, INK)
+    s.rect(x0 + 222, y0 + 4, 150, 50, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
+    s.rect(x0 + 224, y0 + 6, 146, 22, fill=XL_SOFT)
+    s.text(x0 + 234, y0 + 22, "Greater Than...", 12, 700, INK)
+    s.text(x0 + 234, y0 + 46, "Less Than...", 12, 400, INK)
+    dx, dy = 470, 300
+    s.rect(dx, dy, 300, 120, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=4)
+    s.text(dx + 12, dy + 22, "Greater Than", 13, 700, INK)
+    s.text(dx + 12, dy + 46, "Format cells that are GREATER THAN:", 11.5, 400, INK)
+    s.rect(dx + 12, dy + 56, 80, 24, fill="#ffffff", stroke=XL, sw=1.6)
+    s.text(dx + 20, dy + 73, "20", 12.5, 400, INK)
+    s.text(dx + 104, dy + 73, "Light Red Fill with Dark Red Text", 10.5, 400, GREY)
+    s.rect(dx + 206, dy + 88, 80, 24, fill=XL, rx=3)
+    s.text(dx + 246, dy + 105, "OK", 12, 700, "#ffffff", "middle")
+    mark_box(top, (boxes[(1, 1)][0], boxes[(1, 1)][1], 100, 144), 1, "left", 2, 2)
+    mark_box(top, rb["cf"], 2, "top", 4, 1)
+    mark_box(top, (x0 + 224, y0 + 6, 146, 22), 3, "bottom", 4, 1)
+    mark_box(top, (dx + 12, dy + 56, 80, 24), 4, "left", 3, 2)
+    mark_box(top, (dx + 206, dy + 88, 80, 24), 5, "right", 3, 2)
+
+
+def lab_xl7_chart(s, top):
+    """Select A1:B7; Insert › Column › Clustered Column; click Chart Title and type."""
+    tabs, rb, boxes, _ = xl_window(s, 500, "Insert", SALES, ref_name="A1", formula="Item", widths=(110, 100, 90, 90, 80), rng=(0, 0, 6, 1))
+    cx, cy = 470, 220
+    s.rect(cx, cy, 380, 230, fill="#ffffff", stroke="#a6a6a6", sw=1)
+    s.text(cx + 190, cy + 26, "Sales of the week", 15, 400, INK, "middle")
+    vals = [int(r[1]) for r in SALES[1:]]
+    for i, v in enumerate(vals):
+        bh = v / 30 * 140
+        s.rect(cx + 40 + i * 54, cy + 190 - bh, 30, bh, fill="#4472c4")
+        s.text(cx + 55 + i * 54, cy + 208, SALES[i + 1][0], 10, 400, GREY, "middle")
+    s.line(cx + 30, cy + 190, cx + 360, cy + 190, "#9a9a9a", 1)
+    mark_box(top, (boxes[(0, 0)][0], boxes[(0, 0)][1], 210, 168), 1, "left", 2, 2)
+    mark_box(top, tabs["Insert"], 2, "top", 6, 1)
+    mark_box(top, rb["column"], 3, "bottom", 4, 2)
+    mark_box(top, (cx + 110, cy + 8, 160, 26), 4, "right", 4, 2)
+
+
+def lab_xl7_save(s, top):
+    save_as(s, top, "sales-Huda", "Excel Workbook (*.xlsx)", XL)
+
+
+def lab_xl7_result(s, top):
+    data = [SALES[0]] + sorted(SALES[1:], key=lambda r: -int(r[1]))
+    xl_window(s, 430, "Home", data, name="sales-Huda - Excel", ref_name="A1", formula="Item", widths=(110, 100, 90, 90, 80),
+              red={(1, 1), (2, 1)}, arrows=True)
+
+
+def lab_xl7_tutu_ai(s, top):
+    data = [r[:] for r in SALES] + [["Total", "109", ""]]
+    tutu_ai(s, top, "sales-Huda", "sheet", "Add a row at the end: Total, with the sum of the sales.",
+            "Done: row 8 is Total, 109 (the sum of the sales).", lambda s_, b: _xl_ai_page(s_, b, data, {(7, 0), (7, 1)}))
+
+
+def lab_xl7_tutu_dl(s, top):
+    tutu_download(s, top, "sales-Huda", "sheet")
+
+
 # name: (the drawing, the part of it that the worksheet shows: x, y, width, height).
 # A crop zooms in on the buttons of the step, so that they are big on paper.
 SCREENS = {
@@ -1326,6 +1671,31 @@ SCREENS = {
     "week-06/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
     "week-06/images/lab-tutu-2": (lab_ppt_tutu_ai, (15, 86, 870, 370)),
     "week-06/images/lab-tutu-3": (lab_ppt_tutu_dl, (0, 86, 470, 366)),
+    # Lecture 6, Excel (1) (week-07)
+    "week-07/images/lab-open-1": (lab_xl_open, None),
+    "week-07/images/lab-open-2": (lab_xl_start, (176, 28, 370, 300)),
+    "week-07/images/lab-type-1": (lab_xl_type, (15, 180, 870, 250)),
+    "week-07/images/lab-formula-1": (lab_xl_formula, (15, 180, 620, 170)),
+    "week-07/images/lab-fill-1": (lab_xl_fill, (15, 180, 760, 170)),
+    "week-07/images/lab-sum-1": (lab_xl_sum, (15, 80, 870, 300)),
+    "week-07/images/lab-save-1": (lab_xl_save, None),
+    "week-07/images/lab-result-1": (lab_xl_result, (15, 180, 560, 210)),
+    "week-07/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "week-07/images/lab-tutu-2": (lab_xl_tutu_ai, (15, 86, 870, 370)),
+    "week-07/images/lab-tutu-3": (lab_xl_tutu_dl, (0, 86, 470, 366)),
+    # Lecture 7, Excel (2) (week-09)
+    "week-09/images/lab-open-1": (lab_xl_open, None),
+    "week-09/images/lab-open-2": (lab_xl_start, (176, 28, 370, 300)),
+    "week-09/images/lab-type-1": (lab_xl7_type, (15, 180, 870, 260)),
+    "week-09/images/lab-sort-1": (lab_xl7_sort, (15, 26, 600, 360)),
+    "week-09/images/lab-filter-1": (lab_xl7_filter, (15, 26, 600, 400)),
+    "week-09/images/lab-cf-1": (lab_xl7_cf, (15, 26, 870, 410)),
+    "week-09/images/lab-chart-1": (lab_xl7_chart, (15, 26, 870, 440)),
+    "week-09/images/lab-save-1": (lab_xl7_save, None),
+    "week-09/images/lab-result-1": (lab_xl7_result, (15, 180, 560, 210)),
+    "week-09/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "week-09/images/lab-tutu-2": (lab_xl7_tutu_ai, (15, 86, 870, 370)),
+    "week-09/images/lab-tutu-3": (lab_xl7_tutu_dl, (0, 86, 470, 366)),
 }
 
 def draw(fn, crop=None):

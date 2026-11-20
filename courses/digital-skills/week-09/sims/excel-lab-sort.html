@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: sort</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: sort</h1>
+  <p class="hint">The same steps as your worksheet (Task 2). Click one cell of the column, then <b>Data › Z→A</b>: whole rows move together.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'sales-Huda', tabs: ['Home', 'Data'], data: [["Item", "Sales (JD)", "Type"], ["Water", 12, "Drinks"], ["Cake", 25, "Food"], ["Juice", 18, "Drinks"], ["Sandwich", 30, "Food"], ["Tea", 9, "Drinks"], ["Chips", 15, "Food"]],
+  hello: 'Click one cell of <b>Sales (JD)</b>, for example B2. Then the <b>Data</b> tab.',
+  missions: [
+    ['Sort by <b>Sales (JD)</b>, largest first: <b>Data › Z→A</b>', (x) => { const c = x.col(1); return c.every((v, i) => i === 0 || c[i - 1] >= v) && c[0] === 30; }],
+    ['The rows moved together: row 2 is <b>Sandwich, 30, Food</b>', (x) => x.v('A2') === 'Sandwich' && x.v('C2') === 'Food'],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

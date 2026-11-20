@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Sites Lab: the pages of the gym site</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Sites Lab: the pages of the gym site</h1>
+  <p class="hint">The site of the model: the site name, the Home title, the pages <b>Booking</b> and <b>Contact</b>, and a theme.</p>
+  <div id="sites"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.SITES_CFG = { texts: { Home: "Welcome to the College Gym! Book your time online.", Booking: "Sunday to Thursday · 10:00, 12:00 or 14:00 · one hour.", Contact: "Sports hall, ground floor · Sunday to Thursday, 9:00 to 16:00." },
+  hello: "A blank site. Click <b>Untitled site</b> at the top left and type <b>College Gym</b>.",
+  missions: [
+    ["The site name and the Home title: <b>College Gym</b>", (S) => /gym/i.test(S.site) && /gym/i.test(S.title)],
+    ["<b>Pages › + New page</b>: <b>Booking</b>, then <b>Contact</b>", (S) => S.pages.some((p) => /book/i.test(p)) && S.pages.some((p) => /contact/i.test(p))],
+    ["<b>Themes</b>: click a theme", (S) => S.theme !== "Simple"],
+  ] };
+</script>
+<script src="sites-lab.js"></script>
+</body>
+</html>

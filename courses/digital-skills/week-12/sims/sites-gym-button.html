@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Sites Lab: a button to the form</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Sites Lab: a button to the form</h1>
+  <p class="hint">The link of the gym form: <b>https://forms.office.com/r/aB3dE7</b> (type it, or copy it from here).</p>
+  <div id="sites"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.SITES_CFG = { start: { site: "College Gym", title: "College Gym", pages: ["Home", "Booking", "Contact"], theme: "Diplomat" }, texts: { Home: "Welcome to the College Gym! Book your time online.", Booking: "Sunday to Thursday · 10:00, 12:00 or 14:00 · one hour.", Contact: "Sports hall, ground floor · Sunday to Thursday, 9:00 to 16:00." },
+  hello: "Click the page <b>Booking</b> (on the right, in Pages), then <b>Insert</b>.",
+  missions: [
+    ["<b>Pages</b>: click <b>Booking</b>", (S) => S.cur === 1 || Object.keys(S.buttons).length > 0],
+    ["<b>Insert › Button</b>: the name <b>Book now</b> and the link of the form, then <b>Insert</b>", (S) => S.buttons.Booking && /book/i.test(S.buttons.Booking.name) && /forms/i.test(S.buttons.Booking.link)],
+    ["<b>Preview</b>, then click <b>Book now</b>: the form opens", (S) => S.pressed],
+  ] };
+</script>
+<script src="sites-lab.js"></script>
+</body>
+</html>

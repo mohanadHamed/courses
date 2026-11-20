@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tutu Lab: AI writes the welcome text</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tutu Lab: AI writes the welcome text</h1>
+  <p class="hint">As on <b>tutudocs.com</b> (no sign-in): <b>open</b> the Word file with the facts of the Home page, ask the <b>AI Assistant</b>, then <b>download</b> it for Word. (Practice with fixed answers: no real AI here.)</p>
+  <div id="tutu"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.SIM_DONE = "&#10003; All steps done. Copy the new text into the Home page of your site.";
+window.TUTU = {
+  kind: "doc", file: "home-gym.docx",
+  model: [{ style: "Heading 1", text: "College Gym: Home page" }, { style: "Normal", text: "Book the college gym online. One hour. Sunday to Thursday." }],
+  asks: [
+    { text: "Make the text two short, friendly sentences for the Home page of a website. Add no other facts.", keys: /friendly|home page|website/i, done: "Done: the text is two friendly sentences.",
+      apply: (m) => { m[1] = { style: "Normal", text: "Welcome to the College Gym! Book your hour online, from Sunday to Thursday." }; return [1]; } },
+    { text: "Make the first sentence bold.", keys: /bold/i, done: "Done: the first sentence is bold.",
+      apply: (m) => { m[1] = { ...m[1], bold: true }; return [1]; } },
+  ],
+};
+</script>
+<script src="../../../../shared/sims/tutu-lab.js"></script>
+</body>
+</html>

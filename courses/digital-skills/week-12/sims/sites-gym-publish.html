@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Sites Lab: publish the site</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Sites Lab: publish the site</h1>
+  <p class="hint">The gym site is ready. Check it on a phone, then <b>Publish</b> it with the web address <b>college-gym</b>.</p>
+  <div id="sites"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.SITES_CFG = { start: { site: "College Gym", title: "College Gym", pages: ["Home", "Booking", "Contact"], theme: "Diplomat" }, texts: { Home: "Welcome to the College Gym! Book your time online.", Booking: "Sunday to Thursday · 10:00, 12:00 or 14:00 · one hour.", Contact: "Sports hall, ground floor · Sunday to Thursday, 9:00 to 16:00." },
+  hello: "Click <b>Preview</b> (the eye) at the top.",
+  missions: [
+    ["<b>Preview</b>, then <b>Phone</b>: the menu becomes ☰", (S) => S.previewed.has("phone")],
+    ["<b>Exit preview</b>, then <b>Publish</b>: the web address <b>college-gym</b> (no spaces)", (S) => !!S.published],
+  ] };
+</script>
+<script src="sites-lab.js"></script>
+</body>
+</html>

@@ -1431,7 +1431,7 @@ def xl_grid(s, x0, y0, data, widths=(110, 90, 90, 90, 80), rows=8, sel=None, rng
             s.rect(xs[c], y, wd, 24, fill=fill, stroke="#e3e3e3", sw=1)
             txt = data[r][c] if r < len(data) and c < len(data[r]) else ""
             if txt:
-                num = txt.replace(".", "").isdigit()
+                num = txt.replace(".", "").rstrip("%").isdigit()
                 col = "#9c0006" if (r, c) in red else INK
                 s.text(xs[c] + wd - 6 if num else xs[c] + 6, y + 17, txt, 12.5, 400, col, "end" if num else "start")
             if arrows and r == 0 and txt:
@@ -1529,6 +1529,25 @@ def lab_xl_save(s, top):
 def lab_xl_result(s, top):
     data = filled(SHOP, 3, ["20", "15", "14"]) + [["Total", "", "", "49", ""], ["Biggest", "", "", "20", ""]]
     xl_window(s, 430, "Home", data, name="shop-Huda - Excel", sel=(5, 3), formula="=MAX(D2:D4)", ref_name="D6")
+
+
+BUDGET = [["Expenses", "Amount (JD)", "Part"], ["Transport", "40", "16%"], ["Phone", "15", "6%"], ["Food", "90", "36%"],
+          ["Books", "20", "8%"], ["Fun", "30", "12%"], ["Total expenses", "195", ""]]
+
+
+def lab_xl_budget_format(s, top):
+    """Online activity 6: select C2:C6, Home › Number Format › Percentage."""
+    tabs, rb, boxes, _ = xl_window(s, 470, "Home", BUDGET, name="budget-Huda - Excel", formula="0.16", ref_name="C2",
+                                   widths=(130, 100, 90, 90, 80), rng=(1, 2, 5, 2))
+    x0, y0 = 390, 116
+    s.rect(x0, y0, 150, 128, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=3)
+    for i, n in enumerate(("General", "Number", "Currency", "Percentage", "Text")):
+        if n == "Percentage":
+            s.rect(x0 + 2, y0 + 4 + i * 24, 146, 22, fill=XL_SOFT)
+        s.text(x0 + 12, y0 + 20 + i * 24, n, 12, 700 if n == "Percentage" else 400, INK)
+    mark_box(top, (boxes[(1, 2)][0], boxes[(1, 2)][1], 90, 120), 1, "right", 2, 2)
+    mark_box(top, (390, 92, 96, 22), 2, "left", 3, 2)
+    mark_box(top, (x0 + 2, y0 + 76, 146, 22), 3, "right", 3, 1)
 
 
 def _xl_ai_page(s, box, data, fresh=(), head_fill=None):
@@ -2411,6 +2430,7 @@ SCREENS = {
     "week-07/images/lab-save-1": (lab_xl_save, None),
     "week-07/images/lab-result-1": (lab_xl_result, (15, 180, 560, 210)),
     "week-07/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "week-07/images/lab-format-1": (lab_xl_budget_format, (15, 80, 560, 330)),
     "week-07/images/lab-tutu-2": (lab_xl_tutu_ai, (15, 86, 870, 370)),
     "week-07/images/lab-tutu-3": (lab_xl_tutu_dl, (0, 86, 470, 366)),
     # Lecture 7, Excel (2) (week-09)

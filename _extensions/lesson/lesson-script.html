@@ -548,7 +548,7 @@
     }
     const pre = [...sec.children].filter((el) => el !== h2 && !subs.includes(el));
     // The text before the first ### part, if any, is a page of its own.
-    if (pre.some((el) => text(el))) pages.push({ title: head, show: [sec], hide: subs.slice() });
+    if (pre.some((el) => text(el))) pages.push({ title: head, show: [sec, ...pre], hide: subs.slice() });
     subs.forEach((sub) => {
       const others = subs.filter((s) => s !== sub).concat(pre);
       pages.push({ title: head + " · " + text(sub.querySelector(":scope > h3")), show: [sec], hide: others, sub: sub });

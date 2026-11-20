@@ -247,7 +247,7 @@
     let done = 0;
     MISSIONS.forEach(([t, f], i) => { const ok = !!f(); done += ok; const li = h("li", ok ? "ok" : ""); li.innerHTML = t; list.appendChild(li); });
     $("#progress").textContent = `${done} of ${MISSIONS.length}`;
-    if (done === MISSIONS.length && !status.done) { status.done = true; say(PART === "ai" ? "&#10003; All steps done. Now do it on tutudocs.com with your own notice: the Extra of your worksheet." : "&#10003; All steps done. The same steps are in your worksheet: now do them in Word."); }
+    if (done === MISSIONS.length && !status.done) { status.done = true; say(window.SIM_DONE || (PART === "ai" ? "&#10003; All steps done. Now do it on tutudocs.com with your own file." : "&#10003; All steps done. Now do the same steps in Word.")); }
   }
   // ---------- The online editor and its AI Assistant ("ai" part) ----------
   function webTop() {

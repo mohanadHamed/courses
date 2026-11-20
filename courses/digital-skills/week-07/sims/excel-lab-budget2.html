@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: the formulas of a budget</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: the formulas of a budget</h1>
+  <p class="hint">Sami's month. <b>AutoSum</b> (or type <b>=SUM(…)</b>) for the totals, <b>=B4-B12</b> for what is left, then <b>=B7/$B$4</b> copied down with the fill handle.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'budget-Sami', tabs: ['Home'], cols: 3, rows: 14,
+  data: [["Income", "Amount (JD)"], ["Allowance", 150], ["Part-time job", 100], ["Total income"], [], ["Expenses", "Amount (JD)", "Part"], ["Transport", 40], ["Phone", 15], ["Food", 90], ["Books", 20], ["Fun", 30], ["Total expenses"], [], ["Left (saving)"]],
+  hello: 'Click <b>B4</b>, then <b>Home › AutoSum</b> and Enter: the total income.',
+  missions: [
+    ['B4: the total income, <b>=SUM(B2:B3)</b> = 250', (x) => x.v('B4') === 250],
+    ['B12: the total expenses, <b>=SUM(B7:B11)</b> = 195', (x) => x.v('B12') === 195],
+    ['B14: what is left, <b>=B4-B12</b> = 55', (x) => x.v('B14') === 55],
+    ['C7: <b>=B7/$B$4</b>, then double-click the fill handle: down to C11', (x) => x.v('C7') === 0.16 && x.v('C11') === 0.12 && /\$B\$4/.test(x.f('C11'))],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

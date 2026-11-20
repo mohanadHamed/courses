@@ -149,7 +149,7 @@
     const list = $("#jobs"); list.innerHTML = ""; let done = 0;
     MISSIONS.forEach(([t, f]) => { const ok = !!f(); done += ok; const li = h("li", ok ? "ok" : ""); li.innerHTML = t; list.appendChild(li); });
     $("#progress").textContent = `${done} of ${MISSIONS.length}`;
-    if (done === MISSIONS.length && !status.done) { status.done = true; say("&#10003; All steps done. The same steps are in your worksheet: now do them in Access."); }
+    if (done === MISSIONS.length && !status.done) { status.done = true; say(window.SIM_DONE || "&#10003; All steps done. Now do the same steps in Access."); }
   }
   function draw() { tabs(); ribbon(); nav(); main(); status(); }
   document.addEventListener("click", (e) => { if (S.menu && !e.target.closest(".w-menu")) { S.menu = false; draw(); } });

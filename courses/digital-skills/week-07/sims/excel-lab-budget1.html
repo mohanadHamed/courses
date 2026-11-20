@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: the layout of a budget</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: the layout of a budget</h1>
+  <p class="hint">Type Sami's income: click a cell and type; <b>Tab</b> goes to the next cell, <b>Enter</b> to the next row.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'budget-Sami', tabs: ['Home'], cols: 3, rows: 8, data: [["Income", "Amount (JD)"]],
+  hello: 'Click <b>A2</b> and type <b>Allowance</b>, then <b>Tab</b> and <b>150</b>.',
+  missions: [
+    ['A2: <b>Allowance</b>, B2: <b>150</b>', (x) => /allowance/i.test(x.v('A2')) && x.v('B2') === 150],
+    ['A3: <b>Part-time job</b>, B3: <b>100</b>', (x) => /part/i.test(x.v('A3')) && x.v('B3') === 100],
+    ['A4: <b>Total income</b> (the formula comes in Step 2)', (x) => /total/i.test(x.v('A4'))],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

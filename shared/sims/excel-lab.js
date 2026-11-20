@@ -6,7 +6,8 @@
 //   cols:     how many columns to show (default 6), rows: how many rows (default 10)
 //   tabs:     the tabs that work, e.g. ["Home", "Insert", "Data"]
 //   missions: [[html, (x) => true when done]]; x gives v(ref) (the value), f(ref)
-//             (what is typed), fill(ref), cf, chart, filter, sel
+//             (what is typed), cf, chart, filter, sorted, pivot ({rows, values}:
+//             the names of the fields ticked in Insert › PivotTable)
 //   hello:    the first message
 // Typing: click a cell and type (Enter: down, Tab: right); a formula starts
 // with =. The fill handle (the small square of the selected cell): double-click
@@ -27,7 +28,7 @@
   function reset() {
     const cells = {};
     (C.data || []).forEach((row, r) => row.forEach((v, c) => { if (v !== "" && v !== null && v !== undefined) cells[ref(r, c)] = { raw: String(v) }; }));
-    S = { cells, sel: [0, 0], end: null, edit: null, tab: "Home", menu: null, filter: null, cf: [], chart: null, sorted: null, order: null };
+    S = { cells, sel: [0, 0], end: null, edit: null, tab: "Home", menu: null, filter: null, cf: [], chart: null, sorted: null, order: null, pivot: null };
   }
 
   // ---------- Formulas ----------
@@ -108,6 +109,14 @@
         btn("Clear", "Clear", () => { if (S.filter) { S.filter.hide = []; say("<b>Clear</b>: all the rows are back."); draw(); } })));
     } else if (S.tab === "Insert") {
       const col = btn("<span class='w-big'>&#9601;&#9603;&#9605;</span>Column ▾", "Insert Column or Bar Chart", () => { S.menu = S.menu === "chart" ? null : "chart"; draw(); }, "w-tall");
+      const pv = btn("<span class='w-big'>&#9638;</span>PivotTable", "PivotTable", () => { S.menu = S.menu === "pivot" ? null : "pivot"; draw(); }, "w-tall");
+      r.appendChild(group("Tables", pv));
+      if (S.menu === "pivot") {
+        const m = h("div", "w-menu x-dialog"); m.innerHTML = "<b>PivotTable from table or range</b><div>Table/Range: <b>Sheet1!$A$1:$" + L(NC - 1) + "$" + (lastRow() + 1) + "</b></div><div>&#9673; New Worksheet</div>";
+        m.appendChild(btn("OK", "OK", () => { if (lastRow() < 1) { say("First type the data, then click in it.", true); return; }
+          S.menu = null; S.pivot = { rows: null, vals: null }; say("An empty PivotTable. In <b>PivotTable Fields</b> on the right, tick the group, then the number."); draw(); }, "x-ok"));
+        pv.parentElement.parentElement.appendChild(m);
+      }
       r.appendChild(group("Charts", btn("<span class='w-big'>&#9638;</span>Recommended<br>Charts", "Recommended Charts", () => makeChart("column"), "w-tall"), col,
         btn("<span class='w-big'>&#9684;</span>Pie ▾", "Pie", () => makeChart("pie"), "w-tall")));
       if (S.menu === "chart") { const m = h("div", "w-menu x-menu"); m.appendChild(h("b", "", "2-D Column"));
@@ -212,8 +221,35 @@
       say(`Only the rows of <b>${[...keep].join(", ")}</b> are shown. The other rows are hidden, not deleted.`); draw(); }, "x-ok"));
     return m;
   }
+  const numeric = (c) => dataRows().some((r) => S.cells[ref(r, c)]) && dataRows().every((r) => !S.cells[ref(r, c)] || typeof val(ref(r, c)) === "number");
+  function pivotTotals() {
+    const p = S.pivot; if (!p || p.rows === null || p.vals === null) return null;
+    const out = {}; dataRows().forEach((r) => { const k = show(ref(r, p.rows)); if (!k) return; const v = val(ref(r, p.vals)); out[k] = (out[k] || 0) + (typeof v === "number" ? v : 0); });
+    return out;
+  }
+  function pivot(w) {
+    const p = S.pivot; const box = h("div", "x-pivot");
+    const tb = h("table", "x-ptable");
+    const tr0 = h("tr"); tr0.appendChild(h("th", "", p.rows === null ? "" : "Row Labels")); tr0.appendChild(h("th", "", p.vals === null ? "" : "Sum of " + show(ref(0, p.vals)))); tb.appendChild(tr0);
+    const tot = pivotTotals();
+    if (p.rows !== null && p.vals === null) [...new Set(dataRows().map((r) => show(ref(r, p.rows))).filter(Boolean))].sort().forEach((k) => { const tr = h("tr"); tr.appendChild(h("td", "", k)); tr.appendChild(h("td", "", "")); tb.appendChild(tr); });
+    if (tot) { let g = 0; Object.keys(tot).sort().forEach((k) => { g += tot[k]; const tr = h("tr"); tr.appendChild(h("td", "", k)); tr.appendChild(h("td", "num", String(Math.round(tot[k] * 100) / 100))); tb.appendChild(tr); });
+      const tr = h("tr", "x-grand"); tr.appendChild(h("td", "", "Grand Total")); tr.appendChild(h("td", "num", String(Math.round(g * 100) / 100))); tb.appendChild(tr); }
+    if (p.rows === null && p.vals === null) { const tr = h("tr"); const td = h("td", "x-pempty", "PivotTable1: choose fields from the list."); td.colSpan = 2; tr.appendChild(td); tb.appendChild(tr); }
+    box.appendChild(tb);
+    const f = h("div", "x-fields"); f.appendChild(h("b", "", "PivotTable Fields"));
+    for (let c = 0; c < NC; c++) { const name = show(ref(0, c)); if (!name) continue;
+      const l = h("label", "x-cb"); const cb = h("input"); cb.type = "checkbox"; cb.checked = p.rows === c || p.vals === c; cb.setAttribute("aria-label", name);
+      cb.addEventListener("change", () => { if (numeric(c)) { p.vals = cb.checked ? c : null; if (cb.checked) say("<b>" + name + "</b> is a number: it goes to <b>Values</b> (Sum of " + name + ")."); }
+        else { p.rows = cb.checked ? c : null; if (cb.checked) say("<b>" + name + "</b> is text: it goes to <b>Rows</b>, one line for each " + name.toLowerCase() + "."); }
+        if (pivotTotals()) say("One total for each " + show(ref(0, p.rows)).toLowerCase() + ". The <b>Grand Total</b> is the total of the whole list."); draw(); });
+      l.appendChild(cb); l.appendChild(document.createTextNode(" " + name)); f.appendChild(l); }
+    f.appendChild(h("small", "", "Rows: " + (p.rows === null ? "–" : show(ref(0, p.rows)))));
+    f.appendChild(h("small", "", "Values: " + (p.vals === null ? "–" : "Sum of " + show(ref(0, p.vals)))));
+    box.appendChild(f); w.appendChild(box);
+  }
   function chart() {
-    const w = $(".x-chartwrap", root); w.innerHTML = ""; if (!S.chart) return;
+    const w = $(".x-chartwrap", root); w.innerHTML = ""; if (S.pivot) pivot(w); if (!S.chart) return;
     const ch = S.chart; const labels = [], vals = [];
     for (let r = ch.r1 + 1; r <= ch.r2; r++) { labels.push(show(ref(r, ch.c1))); const v = val(ref(r, ch.c2)); vals.push(typeof v === "number" ? v : 0); }
     const box = h("div", "x-chart");
@@ -243,12 +279,13 @@
 
   // ---------- The steps ----------
   const X = { v: (rf) => val(rf), f: (rf) => (S.cells[rf] ? S.cells[rf].raw : ""), get cf() { return S.cf; }, get chart() { return S.chart; }, get filter() { return S.filter; },
-    get sorted() { return S.sorted; }, rows: () => dataRows(), col: (c) => dataRows().map((r) => val(ref(r, c))) };
+    get sorted() { return S.sorted; }, rows: () => dataRows(),
+    get pivot() { return S.pivot && { rows: S.pivot.rows === null ? null : show(ref(0, S.pivot.rows)), values: S.pivot.vals === null ? null : show(ref(0, S.pivot.vals)), totals: pivotTotals() }; }, col: (c) => dataRows().map((r) => val(ref(r, c))) };
   function status() {
     const list = $("#jobs"); list.innerHTML = ""; let done = 0;
     C.missions.forEach(([t, f]) => { let ok = false; try { ok = !!f(X); } catch (e) { ok = false; } done += ok; const li = h("li", ok ? "ok" : ""); li.innerHTML = t; list.appendChild(li); });
     $("#progress").textContent = `${done} of ${C.missions.length}`;
-    if (done === C.missions.length && !status.done) { status.done = true; say(C.done || "&#10003; All steps done. The same steps are in your worksheet: now do them in Excel."); }
+    if (done === C.missions.length && !status.done) { status.done = true; say(C.done || "&#10003; All steps done. Now do the same steps in Excel."); }
   }
   function draw() {
     tabs(); ribbon(); grid(); chart(); status();

@@ -14,16 +14,17 @@ format: lesson-html   # online activity: the tasks PDF is made by printing this 
 - **What you need:** Excel (on a computer, or on the web at `office.com`)
   and your notes of Lectures 1–6.
 - **Time:** about 45 minutes. Work alone, at your own speed.
-- **How it works:** Steps 1 and 2 are simulators: the quiz shows what you
-  know, and the lab repeats a main Excel skill. Then do the **Tasks to
-  submit**.
+- **How it works:** Step 1 is a quiz: it shows what you know. Step 2
+  repeats a main Excel skill on a simulator that works like Excel; the box
+  **On your own computer** shows the same steps in Excel. Then do the
+  **Tasks to submit**.
 - **What you submit:** one Excel file and two letters, on the university
   e-learning platform, before lecture 7.
 - **Tip:** after each wrong answer, read that part of the notes again.
 
 ## Key terms {.study}
 
-{{< glossary email-cc phishing absolute-reference function check-ai-output >}}
+{{< glossary email-cc phishing absolute-reference function fill-handle >}}
 
 ## Step 1 · The review quiz {.study}
 
@@ -55,13 +56,27 @@ Which formula gives the biggest number in B2:B9?
 :::
 :::
 
-## Step 2 · Excel practice: formulas and references {.study}
+## Step 2 · Excel practice: SUM, AVERAGE, MAX and $ {.study}
 
-**In Reference Lab:** copy a formula down, with and without `$`. The cell
-with `$` (for example `$F$1`) stays the same in every row; the other cells
-move.
+- **SUM** adds, **AVERAGE** gives the average (the total ÷ how many),
+  **MAX** the biggest:
+  `=SUM(B2:B6)`, `=AVERAGE(B2:B6)`, `=MAX(B2:B6)`.
+- Copy a formula down with the **fill handle**: B2 moves to B3, B4 …
+- A cell with `$` (for example `$E$1`) stays the same in every row.
 
-{{< sim file="../week-07/sims/reference-lab.html" poster="../week-07/sims/reference-lab.png" title="Reference Lab: copy a formula with $" height="520" >}}
+### On the simulator
+
+{{< sim file="sims/excel-lab-review.html" poster="sims/excel-lab-review.png" title="Excel Lab: a week of the book stand" height="640" >}}
+
+### On your own computer (optional)
+
+:::: {.word-part .home-part}
+::: {.screens}
+![[1]{.step-n} Click the empty cell under the numbers. [2]{.step-n} **Home › AutoSum**, then Enter. For AVERAGE or MAX, type the formula.](../week-07/images/lab-sum-1.png)
+
+![[1]{.step-n} Double-click the small square of the cell: the **fill handle** copies the formula down.](../week-07/images/lab-fill-1.png)
+:::
+::::
 
 ::: {.callout-tip title="Try it 2 · References"}
 Choose the right answer.
@@ -71,11 +86,6 @@ C2 has =B2\*\$F\$1. You copy it to C3. Which formula is in C3?
 :   =B3\*\$F\$1
 
     Why: B2 moves one row down, and \$F\$1 stays.
-
-C2 has =B2\*\$F\$1. You copy it to C6. Which formula is in C6?
-:   =B6\*\$F\$1
-
-    Why: B2 moves four rows down, and \$F\$1 stays.
 :::
 :::
 

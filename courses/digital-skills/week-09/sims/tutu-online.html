@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tutu Lab: AI adds a total to your sheet</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tutu Lab: AI adds a total to your sheet</h1>
+  <p class="hint">As on <b>tutudocs.com</b> (no sign-in): <b>open</b> Rana's sheet, ask the <b>AI Assistant</b> for a change, then <b>download</b> it for Excel. (Practice with fixed answers: no real AI here.)</p>
+  <div id="tutu"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.SIM_DONE = "&#10003; All steps done. Now do it on tutudocs.com with your own file (Task 3).";
+window.TUTU = {
+  kind: "sheet", file: "march-Rana.xlsx",
+  model: { cols: ["A", "B", "C"], rows: [[{ v: "Item", b: 1 }, { v: "Type", b: 1 }, { v: "Total", b: 1 }], ["Notebook", "Paper", 48], ["Pens", "Paper", 35], ["Juice", "Drinks", 24], ["Bag", "Bags", 45], ["Folder", "Paper", 60], ["Water", "Drinks", 20], ["Coffee", "Drinks", 27], ["Lunch box", "Bags", 33], ["Paper pack", "Paper", 63]] },
+  asks: [
+    { text: "Add a row at the end: Total, with the sum of the Total column.", keys: /total|sum/i, done: "Done: row 11 is Total, 355.",
+      apply: (m) => { m.rows.push([{ v: "Total", b: 1 }, "", { v: 355, b: 1 }]); return ["10:0", "10:2"]; } },
+    { text: "Make the words of the heading row blue.", keys: /blue|heading/i, done: "Done: the headings are blue.",
+      apply: (m) => { m.rows[0] = m.rows[0].map((c) => ({ v: c.v, b: 1, color: "#185abd" })); return ["0:0", "0:1", "0:2"]; } },
+  ],
+};
+</script>
+<script src="../../../../shared/sims/tutu-lab.js"></script>
+</body>
+</html>

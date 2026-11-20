@@ -81,7 +81,7 @@
     const list = $("#jobs"); list.innerHTML = ""; let done = 0;
     MISSIONS.forEach(([t, f]) => { const ok = !!f(); done += ok; const li = h("li", ok ? "ok" : ""); li.innerHTML = t; list.appendChild(li); });
     $("#progress").textContent = `${done} of ${MISSIONS.length}`;
-    if (done === MISSIONS.length && !status.done) { status.done = true; say("&#10003; All steps done. The same steps are in your worksheet: now do them in Google Sites."); }
+    if (done === MISSIONS.length && !status.done) { status.done = true; say(window.SIM_DONE || "&#10003; All steps done. Now do the same steps in Google Sites."); }
   }
   function draw() { top(); body(); panel(); status(); const f = root.querySelector(".g-dialog input"); if (f) f.focus(); }
   $("#reset").addEventListener("click", () => { reset(); status.done = false; say(HELLO); draw(); });

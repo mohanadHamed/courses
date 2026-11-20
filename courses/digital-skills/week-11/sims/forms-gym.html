@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Forms Lab: the gym booking form</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Forms Lab: the gym booking form</h1>
+  <p class="hint">Make the form of the model: the title, a <b>Date</b> question and a <b>Choice</b> question, then <b>Collect responses › Copy</b>: the link.</p>
+  <div id="forms"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.FORMS_LAB = {
+  hello: "A new form. Click <b>Untitled form</b> and type the title <b>Gym booking</b>.",
+  missions: [
+    ["The title: <b>Gym booking</b>", (S) => /gym/i.test(S.title)],
+    ["<b>+ Add new › Date</b>: <b>Day</b>", (S) => S.qs.some((q) => q.kind === "Date" && /day|date/i.test(q.text))],
+    ["<b>+ Add new › Choice</b>: <b>Which time?</b> with 10:00, 12:00, 14:00", (S) => S.qs.some((q) => q.kind === "Choice" && /time/i.test(q.text) && q.opts.filter(Boolean).length >= 3)],
+    ["<b>Collect responses</b>, then <b>Copy</b>: the link of the form", (S) => S.copied],
+  ],
+};
+</script>
+<script src="forms-lab.js"></script>
+</body>
+</html>

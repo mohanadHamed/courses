@@ -1,7 +1,12 @@
 // Forms Lab: a simulator that looks like Microsoft Forms in the browser, with
 // the order form of the Lecture 9 worksheet (Mona's Cakes): the title, three
 // questions (Text, Choice, Date), Preview with a test order, and Responses.
+// Another page can set window.FORMS_LAB = { start: { title, qs }, hello,
+// missions: [[html, (S) => true when done]] } (Online activity 10: the gym
+// booking form). S has title, qs [{ kind, text, opts, req }], responses,
+// copied (Collect responses › Copy) and excel (Open results in Excel).
 (() => {
+  const CFG = window.FORMS_LAB || null;
   const $ = (s, el = document) => el.querySelector(s);
   const h = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
   const btn = (html, title, fn, cls = "") => { const b = h("button", "w-btn " + cls); b.type = "button"; b.innerHTML = html; b.title = title; b.setAttribute("aria-label", title);
@@ -9,7 +14,8 @@
   const say = (text, bad) => { const m = $("#msg"); m.innerHTML = text; m.className = "message" + (bad ? " bad" : ""); };
   const KINDS = [["Choice", "◉"], ["Text", "≡"], ["Rating", "★"], ["Date", "▦"]];
   let S;
-  const reset = () => { S = { title: "Untitled form", qs: [], adding: false, tab: "Questions", preview: false, answers: {}, responses: [] }; };
+  const reset = () => { const st = (CFG && CFG.start) || {};
+    S = { title: st.title || "Untitled form", qs: (st.qs || []).map((q) => ({ opts: [], req: false, ...q, opts: [...(q.opts || [])] })), adding: false, tab: "Questions", preview: false, answers: {}, responses: [], copied: false, collect: false, excel: false }; };
   const root = $("#forms"); root.className = "word web forms";
   root.innerHTML = `<div class="t-address"><span>&#8592; &#8594;</span><b>forms.office.com</b></div><div class="f-top"></div><div class="f-body"></div>`;
 
@@ -20,9 +26,19 @@
     ["Questions", "Responses"].forEach((n) => tabs.appendChild(btn(n + (n === "Responses" ? ` <span class='f-n'>${S.responses.length}</span>` : ""), n, () => { S.tab = n; S.preview = false; draw(); }, "f-tab" + (S.tab === n && !S.preview ? " on" : ""))));
     t.appendChild(tabs);
     t.appendChild(btn("&#9655; Preview", "Preview", () => { if (!S.qs.length) { say("First add the questions.", true); return; } S.preview = true; S.answers = {}; say("<b>Preview</b>: the form as the customer sees it. Fill in a test order and click <b>Submit</b>."); draw(); }, "f-act"));
-    t.appendChild(btn("Collect responses", "Collect responses", () => say("<b>Collect responses</b> gives the link of the form to send to the customers. Not needed today.", true), "f-act f-blue"));
+    t.appendChild(btn("Collect responses", "Collect responses", () => { if (!S.qs.length) { say("First add the questions.", true); return; } S.collect = !S.collect; S.preview = false; S.tab = "Questions";
+      say(S.collect ? "<b>Collect responses</b>: the link of the form. Click <b>Copy</b>, then send it to the customers (or show the QR code)." : ""); draw(); }, "f-act f-blue"));
+  }
+  function collect(b) {
+    const c = h("div", "f-card f-collect"); c.appendChild(h("b", "", "Collect responses"));
+    c.appendChild(h("small", "", "Anyone can respond"));
+    const row = h("div", "f-linkrow"); row.appendChild(h("span", "f-link-url", "https://forms.office.com/r/aB3dE7"));
+    row.appendChild(btn(S.copied ? "Copied" : "Copy", "Copy", () => { S.copied = true; say("&#10003; The link is copied. Paste it in a message, or in the task."); draw(); }, "f-act f-blue"));
+    row.appendChild(btn("▦ QR code", "QR code", () => say("The <b>QR code</b> opens the same form with the camera of a phone."), "f-act"));
+    c.appendChild(row); b.appendChild(c);
   }
   function editor(b) {
+    if (S.collect) collect(b);
     const card = h("div", "f-card f-head");
     const ti = h("input", "f-title"); ti.value = S.title === "Untitled form" ? "" : S.title; ti.placeholder = "Untitled form";
     ti.addEventListener("change", () => { S.title = ti.value.trim() || "Untitled form"; say(`The title: <b>${S.title}</b>. The customers see it at the top of the form.`); draw(); });
@@ -70,7 +86,7 @@
     b.appendChild(c);
   }
   const has = (k, re) => S.qs.some((q) => q.kind === k && re.test(q.text));
-  const MISSIONS = [
+  const MISSIONS = CFG && CFG.missions ? CFG.missions.map(([text, f]) => [text, () => f(S)]) : [
     ["The title: <b>Mona's Cakes: order</b>", () => /mona/i.test(S.title)],
     ["<b>+ Add new › Text</b>: <b>Your name</b>, Required", () => S.qs.some((q) => q.kind === "Text" && /name/i.test(q.text) && q.req)],
     ["<b>Choice</b>: <b>Which cake?</b> with Chocolate, Strawberry, Vanilla", () => S.qs.some((q) => q.kind === "Choice" && /cake/i.test(q.text) && q.opts.filter(Boolean).length >= 3)],
@@ -90,6 +106,6 @@
   }
   document.addEventListener("click", (e) => { if (S.adding && !e.target.closest(".f-kinds,.f-add")) { S.adding = false; draw(); } });
   $("#reset").addEventListener("click", () => { reset(); status.done = false; say(HELLO); draw(); });
-  const HELLO = "A new form. Click <b>Untitled form</b> and type the title <b>Mona's Cakes: order</b>.";
+  const HELLO = (CFG && CFG.hello) || "A new form. Click <b>Untitled form</b> and type the title <b>Mona's Cakes: order</b>.";
   reset(); say(HELLO); draw();
 })();

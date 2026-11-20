@@ -1018,7 +1018,9 @@ def check_online(path, rel):
         if "{.study}" not in title:
             out.append('%s: "%s" is not marked {.study} (it would be printed)' % (rel, title))
         k = len(TRY_IT_RE.findall(p))
-        if k != 1:
+        # The lab model (Digital Skills, 2026-11-20): a step done on a simulator
+        # that checks each of its steps needs no Try it box (at most one).
+        if k > 1 or (k == 0 and not re.search(r"\{\{< *sim ", p)):
             out.append('%s: "%s" has %d Try it boxes; give each step one self-check' % (rel, title, k))
         if (APP_STEP_RE.search(p) and not re.search(r"^:::+ *\{\.screens", p, re.M)
                 and rel.replace(os.sep, "/") not in BEFORE_SCREENS):

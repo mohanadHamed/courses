@@ -890,3 +890,8 @@ html.paged main.content { font-size: 1.12rem; }
 /* The screens of the worksheet, big enough to read on the smart screen. */
 .word-part .screens { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
 main .word-part .screens figure img { max-width: 540px; border: 1px solid #c9d6ea; border-radius: 8px; }
+/* An online activity: the same steps in the real app, at home (optional). */
+.word-part.home-part { border-color: #2b8a3e; background: #f3faf4; }
+.word-part.home-part::before { content: "Optional, at home: on your own computer, the same steps in the real app"; color: #2b8a3e; }
+section[id^="on-your-own-computer"] > h3::before { content: "💻 "; }
+section[id^="on-your-own-computer"] > h3 { color: #2b8a3e; }

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tutu Lab: AI changes your post</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tutu Lab: AI changes your post</h1>
+  <p class="hint">The Extra of your worksheet, as on <b>tutudocs.com</b> (no sign-in): <b>open</b> your post, ask the <b>AI Assistant</b> for a change, then <b>download</b> it for PowerPoint. (Practice with fixed answers: no real AI here.)</p>
+  <div id="tutu"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.TUTU = {
+  kind: "slides", file: "post-Huda.pptx",
+  model: [ { title: "Fresh cakes for your party!", sub: "Order today on our website", bg: "#e7f4e4", color: "#1f3d28" } ],
+  asks: [
+    { text: "Add a second slide with our three cakes and their prices.", keys: /second|prices|three/i,
+      done: "Done: slide 2 shows the three cakes and their prices.",
+      apply: (m) => { m.push({ title: "Our cakes", points: ["Chocolate · 8 JD", "Strawberry · 9 JD", "Vanilla · 7 JD"], bg: "#e7f4e4", color: "#1f3d28" }); return [m.length - 1]; } },
+    { text: "Make the title red.", keys: /red|colou?r/i, done: "Done: the title is red.", apply: (m) => { m[0].color = "#c92a2a"; return [0]; } },
+  ],
+};
+</script>
+<script src="../../../../shared/sims/tutu-lab.js"></script>
+</body>
+</html>

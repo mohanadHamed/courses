@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tutu Lab: AI changes your sheet</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tutu Lab: AI changes your sheet</h1>
+  <p class="hint">The Extra of your worksheet, as on <b>tutudocs.com</b> (no sign-in): <b>open</b> your sheet, ask the <b>AI Assistant</b> for a change, then <b>download</b> it for Excel. (Practice with fixed answers: no real AI here.)</p>
+  <div id="tutu"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.TUTU = {
+  kind: "sheet", file: "shop-Huda.xlsx",
+  model: { cols: ["A", "B", "C", "D"], rows: [[{ v: "Item", b: 1 }, { v: "Price", b: 1 }, { v: "Qty", b: 1 }, { v: "Total", b: 1 }], ["Pens", 2, 10, 20], ["Notebooks", 3, 5, 15], ["Bags", 7, 2, 14], ["Total", "", "", 49]] },
+  asks: [
+    { text: "Add a row: Rulers, price 1, quantity 6, and its total.", keys: /ruler/i, done: "Done: row 5 is Rulers, 1, 6, and the total 6. The Total is now 55.",
+      apply: (m) => { m.rows.splice(4, 0, ["Rulers", 1, 6, 6]); m.rows[5][3] = 55; return ["4:0", "4:1", "4:2", "4:3", "5:3"]; } },
+    { text: "Make the first row bold with a light blue fill.", keys: /bold|blue|fill/i, done: "Done: the first row is bold, with a light blue fill.",
+      apply: (m) => { m.rows[0] = m.rows[0].map((c) => ({ v: c.v, b: 1, fill: "#dbe7f8" })); return []; } },
+  ],
+};
+</script>
+<script src="../../../../shared/sims/tutu-lab.js"></script>
+</body>
+</html>

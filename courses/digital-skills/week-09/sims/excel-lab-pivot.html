@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: a PivotTable of Rana's sales</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: a PivotTable of Rana's sales</h1>
+  <p class="hint">Rana's sales (made up). Click in the list, then <b>Insert › PivotTable › OK</b>. In <b>PivotTable Fields</b>, tick <b>Type</b>, then <b>Total</b>.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'march-Rana', tabs: ['Home', 'Insert'], cols: 3, rows: 10,
+  data: [["Item", "Type", "Total"], ["Notebook", "Paper", 48], ["Pens", "Paper", 35], ["Juice", "Drinks", 24], ["Bag", "Bags", 45], ["Folder", "Paper", 60], ["Water", "Drinks", 20], ["Coffee", "Drinks", 27], ["Lunch box", "Bags", 33], ["Paper pack", "Paper", 63]],
+  hello: 'Click a cell in the list, then the <b>Insert</b> tab.',
+  done: '&#10003; All steps done: Paper 206, Drinks 71, Bags 78 JD. Now do the same steps in Excel.',
+  missions: [
+    ['<b>Insert › PivotTable</b>, then <b>OK</b>', (x) => !!x.pivot],
+    ['Tick <b>Type</b>: it goes to <b>Rows</b>', (x) => x.pivot && x.pivot.rows === 'Type'],
+    ['Tick <b>Total</b>: it goes to <b>Values</b> (Sum of Total)', (x) => x.pivot && x.pivot.values === 'Total' && x.pivot.totals && x.pivot.totals.Paper === 206],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

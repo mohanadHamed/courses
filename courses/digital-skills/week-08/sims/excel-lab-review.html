@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: a week of the book stand</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: a week of the book stand</h1>
+  <p class="hint">The sales of a book stand (made up). A formula with <b>$</b> copied down with the fill handle, then three functions.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'book-stand', tabs: ['Home'], cols: 5, rows: 9,
+  data: [["Day", "Sales (JD)", "With tax", "", "Tax"], ["Sun", 20, "", "", 1.16], ["Mon", 35], ["Tue", 15], ["Wed", 40], ["Thu", 30], ["Total"], ["Average"], ["Best day"]],
+  hello: 'Click <b>C2</b> and type <b>=B2*$E$2</b>, Enter. Click C2 again and double-click the small square (the fill handle).',
+  missions: [
+    ['C2: <b>=B2*$E$2</b>, then double-click the fill handle: down to C6', (x) => Math.abs(x.v('C6') - 34.8) < 0.01 && /\$E\$2/.test(x.f('C6'))],
+    ['B7: <b>=SUM(B2:B6)</b> = 140', (x) => x.v('B7') === 140],
+    ['B8: <b>=AVERAGE(B2:B6)</b> = 28', (x) => x.v('B8') === 28 && /AVERAGE/i.test(x.f('B8'))],
+    ['B9: <b>=MAX(B2:B6)</b> = 40', (x) => x.v('B9') === 40 && /MAX/i.test(x.f('B9'))],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

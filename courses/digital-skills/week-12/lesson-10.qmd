@@ -1,160 +1,161 @@
 ---
 title: "Website Design: Plan, Build and Design a Website"
-description: "The plan of a website (purpose, audience, pages), building pages with a website builder (Google Sites), a clear design that works on a phone, and a look at HTML and CSS."
+description: "A small website in Google Sites (its name, its pages, a theme and the phone view) and a first web page typed in Notepad (HTML and CSS): 15 minutes on the simulators, then the worksheet in the computer lab."
 lesson: 10
 ilos: [C4]
+# The lab model (NOTES.md, "The lab model"): about 15 minutes on this page,
+# then each student follows the printed worksheet in Google Sites.
+lab: true
 format: lesson-html
 ---
 
-This page is the lecture, in class and at home. Each section explains one
-idea, then shows its experiment. The page checks every step at once.
+## Today in the lab
 
-**In class, the teacher chooses the way for each experiment,** by the topic
-and the time:
+::: {.lab-plan}
+1. **15 minutes, here:** the teacher shows each idea on a simulator, then
+   in Google Sites.
+2. **35 minutes, in Google Sites:** you follow the **worksheet**, step by
+   step, on the lab computer. Nothing to download: you type the text
+   yourself.
+3. **At the end:** show your web page to your teacher. Then the **Extra**: an
+   AI assistant adds a paragraph to your web page.
+:::
 
-- **On the simulator** of the section, here on the page: nothing to
-  install, and it works at home too.
-- **In the real app** on the teacher's laptop, connected to the smart
-  screen (HDMI): Google Sites and Notepad, with the steps of **Part A**.
-- **In the computer lab:** each student follows the **worksheet (PDF)**,
-  Part A in the apps and Part B on the simulator, and checks each result
-  here.
-- **You need:** a browser with a Google account (Google Sites at
-  `sites.google.com`) and the start file, or only the simulators of this
-  page.
+![The web page that you type today in Notepad.](images/lab-result-1.png){width=60%}
 
 ## Key terms
 
 {{< glossary website website-builder site-navigation mobile-view html css >}}
 
-## Before you start
-
-{{< start-files >}}
-
 ## 10.1 The plan and the pages
 
-- Plan first: the **purpose**, the **audience** and the **pages**.
-- A small service: **Home**, **Service** (with the order button),
-  **Contact**.
-- A **website builder** (Google Sites) makes pages without code.
-- The **menu** joins the pages.
+### On the simulator
 
-![Three pages and the menu.](images/site-pages.png){width=100%}
+- **Google Sites** (sites.google.com, with a Google account) builds a website with no code: **Blank site**.
+- The **site name** (top left) and the **page title** (the big banner).
+- **Pages › + New page**: every page gets a link in the **menu** at the top.
 
-{{< sim file="sims/site-planner.html" poster="sims/site-planner.png" title="Site Planner: what goes on which page?" height="520" >}}
+::: {.sim-part}
+{{< sim file="sims/sites-lab-pages.html" poster="sims/sites-lab-pages.png" title="Sites Lab: a site and its pages" height="640" >}}
+:::
 
-{{< experiment 1 >}}
+### In Google Sites: worksheet Tasks 1 and 2
+
+:::: {.word-part}
+::: {.screens}
+![[1]{.step-n} **Blank site** (after you sign in).](images/lab-sites-1.png)
+
+![[1]{.step-n} The site name. [2]{.step-n} The page title.](images/lab-sites-2.png)
+
+![[1]{.step-n} **Pages**. [2]{.step-n} **+ New page**. [3]{.step-n} The name. [4]{.step-n} **Done**. [5]{.step-n} The menu.](images/lab-sites-3.png)
+:::
+::::
 
 ::: {.callout-tip title="Try it 1 · Pages"}
-Choose the right page.
+Choose the right answer.
 
-::: {.match extra="a new site|the menu"}
-Fix It: the phone number and the address of the shop.
-:   Contact
+::: {.match extra="the theme|Publish"}
+You add the page Order. Where does its link come?
+:   in the menu at the top
 
-    Why: Contact says how to reach you.
-
-Fix It: the button Book a repair.
-:   Service
-
-    Why: The customer books on the service page.
+    Why: Every new page gets a link in the menu of the site.
 :::
 :::
 
 ## 10.2 The design and the phone view
 
-- One **theme**: the same colours and fonts on every page.
-- **Strong contrast**: dark text on a light background.
-- Pictures of a good size, and a clear menu.
-- Check the **mobile view**: Preview › the phone.
+### On the simulator
 
-![Hard to read, and easy to read.](images/site-design.png){width=100%}
+- **Themes**: one click changes the colours and the fonts of **every page**.
+- **Preview** (the eye) shows the site on a **phone**, a tablet and a large screen.
+- On a phone the menu becomes **☰** and the text is one column.
 
-{{< sim file="sims/design-check.html" poster="sims/design-check.png" title="Design Check: fix the page" height="640" >}}
-
-{{< experiment 2 >}}
-
-::: {.callout-tip title="Try it 2 · Design"}
-Choose the right answer.
-
-::: {.match extra="five fonts|a bigger picture"}
-Light grey text on a white page. What is the problem?
-:   weak contrast
-
-    Why: Dark text on a light background is easy to read.
-
-How do you check the site on a phone before you publish?
-:   Preview, then the phone
-
-    Why: The preview shows the narrow screen of a phone.
+::: {.sim-part}
+{{< sim file="sims/sites-lab-design.html" poster="sims/sites-lab-design.png" title="Sites Lab: a theme and the phone view" height="640" >}}
 :::
+
+### In Google Sites: worksheet Task 3
+
+:::: {.word-part}
+::: {.screens}
+![[1]{.step-n} **Themes**. [2]{.step-n} A theme. [3]{.step-n} **Preview**.](images/lab-sites-4.png)
+
+![[1]{.step-n} **Phone**. [2]{.step-n} The menu ☰.](images/lab-sites-5.png)
 :::
+::::
 
 ## 10.3 A look at HTML and CSS
 
-- **HTML** is the content: `<h1>` a heading, `<p>` a paragraph, `<a>` a
-  link, `<img>` a picture.
-- **CSS** is the look: `h1 { color: brown; }`.
-- Google Sites writes them for you.
+### On the simulator
 
-![HTML and CSS of a tiny page.](images/html-css.png){width=100%}
+- Every web page is **HTML**: **tags** such as **<h1>** (a big heading) and **<p>** (a paragraph).
+- **CSS** says how it looks: **color: brown** makes the heading brown.
+- Type it in **Notepad**, save it as **page.html**, and open it in the browser.
 
-{{< sim file="sims/html-lab.html" poster="sims/html-lab.png" title="HTML Lab: a look at HTML and CSS" height="760" >}}
+::: {.sim-part}
+{{< sim file="sims/html-lab.html" poster="sims/html-lab.png" title="HTML Lab: a look at HTML and CSS" height="640" >}}
+:::
 
-{{< experiment 3 >}}
+### In Notepad: worksheet Task 4
 
-::: {.callout-tip title="Try it 3 · HTML and CSS"}
+:::: {.word-part}
+::: {.screens}
+![Type the six lines in **Notepad**.](images/lab-notepad-1.png)
+
+![**File › Save as**. [1]{.step-n} **Desktop**. [2]{.step-n} **page-** and your name **.html**. [3]{.step-n} **Save**.](images/lab-save-1.png)
+
+![Double-click the file: the page in the browser.](images/lab-browser-1.png)
+:::
+::::
+
+::: {.callout-tip title="Try it 2 · HTML"}
 Choose the right answer.
 
-::: {.match extra="Excel|a PDF"}
-`<a href="order.html">Order now</a>` is written in …
-:   HTML
+::: {.match extra="<p>|<body>"}
+Which tag makes the big heading?
+:   <h1>
 
-    Why: HTML says what is on the page: here a link.
-
-`h1 { font-size: 36px; }` is written in …
-:   CSS
-
-    Why: CSS sets the look: here the size of the heading.
+    Why: h1 is heading 1, the biggest heading; p is a paragraph.
 :::
 :::
 
-## Table of results
+## Extra: AI changes your web page
 
-{{< experiment results >}}
+### On the simulator
 
-## Game challenge: the Web Desk at Sunrise Company {.challenge}
+- On **tutudocs.com** you open your own web page, with **no sign-in**.
+- **AI Assistant**: ask for one change, for example: a short paragraph about the cakes.
+- **File › Download › HTML**: open it in the browser.
 
-Huda's colleagues build websites for their services: pages, design, HTML.
-
-{{< sim file="sims/web-desk.html" poster="sims/web-desk.png" title="Web Desk at Sunrise Company" kind="game" height="560" >}}
-
-::: {.callout-tip title="Try it 4 · Websites"}
-Omar's shop site needs pages; Sami's text is light grey on white; Lina
-wants a green heading. Choose the right answer.
-
-::: {.match extra="twenty pages|HTML"}
-Which pages does Omar's site need?
-:   Home, Service and Contact
-
-    Why: Who we are, what we offer, how to reach us.
-
-What does Sami change?
-:   dark text on the light background
-
-    Why: Strong contrast is easy to read.
-
-(Harder) Lina wants a green heading. Which language does it?
-:   CSS
-
-    Why: CSS sets colours; HTML says what is on the page.
+::: {.sim-part}
+{{< sim file="sims/tutu-lab.html" poster="sims/tutu-lab.png" title="Tutu Lab: AI changes your web page" height="700" >}}
 :::
+
+### On tutudocs.com: the Extra of the worksheet
+
+:::: {.word-part}
+::: {.screens}
+![**tutudocs.com**: [1]{.step-n} click the box, then choose your web page.](images/lab-tutu-1.png)
+
+![[1]{.step-n} **AI Assistant**. [2]{.step-n} Your request. [3]{.step-n} The AI adds the paragraph.](images/lab-tutu-2.png)
+
+![[1]{.step-n} **File**, [2]{.step-n} **Download**, [3]{.step-n} **HTML**.](images/lab-tutu-3.png)
+:::
+::::
+
+## Now: your worksheet
+
+::: {.lab-go}
+Take your **worksheet** and do Tasks 1–4 in Google Sites on the lab
+computer, in order. Tick each step. Raise your hand when you are stuck,
+and at the end. Finished? Do the **Extra**: on tutudocs.com an AI
+assistant adds a paragraph to your web page.
 :::
 
 ## Summary {.summary}
 
-- Plan the purpose, the audience and the pages: Home, Service, Contact.
-- A website builder such as Google Sites makes the pages; the menu joins them.
-- One theme, strong contrast, pictures of a good size.
-- Check the site on a phone before you publish it.
-- HTML is the content of a page; CSS is its look.
+- Google Sites: Blank site, the site name, the page title.
+- Pages › + New page: every page gets a link in the menu.
+- Themes change every page; Preview shows the phone view (the menu becomes ☰).
+- HTML is the content (<h1>, <p>); CSS is the look (color: brown).
+- On tutudocs.com (no sign-in) the AI Assistant changes your web page; File › Download › HTML.

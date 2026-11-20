@@ -488,6 +488,25 @@ the notes or on the Game challenge slide.
 | Simulators / mini-games | 0–4 | 1–3 |
 | Slides (title slide not counted) | 10–16 | 20–28 |
 
+### Every interactive page is shown like slides (since 2026-11-20)
+
+The teacher asked for it after Digital Skills Unit 4: scrolling a long page
+on the smart screen tires the hand. Every interactive page of every course
+(lectures, seminars, practice sessions, online activities; not the
+homework, which is a form to print) shows **one part at a time**: the
+start (the title and the goals), then every `##` section, and one page for
+each `###` part of a section (with a page of its own for the text before
+the first `###`). Previous and Next stand side by side in one bottom
+corner, with the number and the title of the page between them; a tap on it
+opens the list of all the pages, to jump to any of them; ⇄ moves the bar
+to the other corner. The arrow keys and a presenter's clicker work too, the
+links of the page jump to their page, and `#page-N` opens the same page
+after a reload. On paper everything is printed. `banner.lua` turns it on
+(`paged: false` in the front matter turns it off), `lesson-script.html`
+("paged") and `lesson.css` do the rest. So: keep each `##` section (and
+each `###` part) about one screen long, and give it a short, clear title,
+because the titles are the list of the pages.
+
 ### The page is taught in class (since 2026-11-08)
 
 The classrooms of the college now have **smart screens**: a whiteboard and
@@ -654,6 +673,30 @@ Part A "a lab computer, or the teacher's laptop on the screen", Part B
   and in the notes, the "Your worksheet" and "Results of the worksheet"
   slides, and at most 1 600 words (without the results).
 
+### The lab model (Digital Skills, since 2026-11-20)
+
+A lecture in a computer lab (`lab: true` in the front matter of the page and
+the worksheet; every Digital Skills lecture from Unit 4, Lectures 4–11,
+and every new one): about 15 minutes of
+ideas on the page, on simulators that look like the real app, then each
+student follows the printed worksheet alone in the real app. The worksheet
+is a **guide, not a test**: tasks with numbered steps, a box to tick and the
+drawn screen of every step beside it (`tools/lab_screens.py`), no
+questions, no results to record and no files to download. The rules, the
+sizes and the page shown like slides (`paged: true`) are in
+`courses/digital-skills/NOTES.md`, "The lab model"; `check_size.py` checks
+them (`LAB_*`). The sections "Lecture worksheets" and "The page is taught
+in class" apply to the other lectures.
+
+**The online activity in the lab style** (Digital Skills, since
+2026-11-20): every Step has `### On the simulator` (a simulator that looks
+like the real app, with the data of a model) and `### On your own computer
+(optional)`, a `:::: {.word-part .home-part}` box with the drawn screens
+of the same steps in the real app; at most one Try it per Step; the AI
+step is direct use on tutudocs.com. The details are in
+`courses/digital-skills/NOTES.md`, "The online activity in the lab
+style"; the template is `shared/templates/online-template.qmd`.
+
 ### Blended courses: the online activity
 
 A blended course (`course.blended: true`; now `digital-skills`) is fully
@@ -785,6 +828,20 @@ Course-specific notes: `courses/<slug>/NOTES.md`. Unit map:
 `courses/<slug>/plan.md`.
 
 ## Tasks with AI
+
+**The AI pipeline of every new lesson (the teacher's rule of 2026-11-20).**
+AI comes **after** the student finishes the required work of the session,
+as an optional extra that is fun to try, and it is **direct use**: never a
+question that asks the student to judge, check or correct an AI answer.
+
+- Game Math, Computing Systems, Digital Media (no ILO asks for AI): the
+  extra gives a **ready prompt to try** (the "Task with AI" box below).
+- Digital Skills: the extra asks an AI assistant for **one change to the
+  file that the student made in the same lecture**, always on
+  **tutudocs.com** (no sign-in: open the file, AI Assistant, File ›
+  Download). Details: `courses/digital-skills/NOTES.md`, "AI tools".
+- Where the rest of this section asks for checks of AI output, this rule
+  wins for every lesson written or rewritten from now on.
 
 Students have AI assistants, and many of them have never used one to learn.
 In Game Math, Computing Systems and Digital Media no ILO or PLO asks for AI:

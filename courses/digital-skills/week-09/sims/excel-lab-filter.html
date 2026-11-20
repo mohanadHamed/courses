@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: filter</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: filter</h1>
+  <p class="hint">The same steps as your worksheet (Task 3). <b>Data › Filter</b>, then the arrow of <b>Type</b>: tick only <b>Drinks</b>, OK. Then <b>Clear</b>.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'sales-Huda', tabs: ['Home', 'Data'], data: [["Item", "Sales (JD)", "Type"], ["Water", 12, "Drinks"], ["Cake", 25, "Food"], ["Juice", 18, "Drinks"], ["Sandwich", 30, "Food"], ["Tea", 9, "Drinks"], ["Chips", 15, "Food"]],
+  hello: 'Click one cell of the table. Then <b>Data › Filter</b>.',
+  missions: [
+    ['<b>Data › Filter</b>: an arrow in each heading', (x) => !!x.filter],
+    ['The arrow of <b>Type</b>: only <b>Drinks</b> (3 rows)', (x) => x.filter && (x.filter.last || []).join() === 'Drinks'],
+    ['Select the 3 sales of Drinks: the status bar says <b>Sum: 39</b>; then <b>Clear</b>', (x) => x.filter && !!x.filter.last && x.filter.hide.length === 0],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

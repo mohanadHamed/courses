@@ -207,26 +207,8 @@ FILES = {
         "3. The training day in December",
         "4. Other points",
     ]),
-    # Lecture 4, Word (1): a notice with no formatting, to format, give styles,
-    # make a list and a table, and add a picture (files/books.png, drawn in
-    # images/books.svg). Not the Family Day notice: that is the Game challenge.
-    DS + "/week-04/files/book-fair-start.docx": ("docx", [
-        "Book Fair at the College Library",
-        "The college library holds a book fair for all students and staff. You can buy new books, "
-        "swap your old books and meet two writers from Jordan. Come with your friends and your family.",
-        "When and where",
-        "The fair is in the library hall from Sunday to Tuesday, from 10:00 to 15:00.",
-        "What you can bring",
-        "Old books in good condition",
-        "Your student card",
-        "A bag for your new books",
-        "How to swap a book",
-        "Take one old book to the swap desk.",
-        "Get a swap ticket.",
-        "Choose a new book from the swap table.",
-        "Prices",
-        "Entry to the fair is free for everyone.",
-    ]),
+    # Lecture 4, Word (1): no start file since 2026-11-20 (the lab model:
+    # the students type the notice of the worksheet themselves).
     # Lecture 5, Word with AI: a short report to check in Word (Experiment 2:
     # two spelling mistakes, secnd and custmers, and the time 9:00 twice for
     # Find and Replace; Check Lab has the same text) and to translate

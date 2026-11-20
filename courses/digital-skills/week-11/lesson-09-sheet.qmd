@@ -1,347 +1,119 @@
 ---
 title: "Creating a Digital Service: Types, Planning and an Online Form"
-description: "Worksheet · Three experiments: the kinds of digital services, a plan with the customer, the need and the steps, and an order form linked to a spreadsheet. Part A in Microsoft Forms and Word, Part B on the simulators."
+description: "Worksheet · Plan a small service in Word and make its order form in Microsoft Forms, step by step. Nothing to download."
 lesson: 9
 ilos: [A4, C4]
-start-files:
-  - name: service-plan-start.docx
-    about: "the empty plan of Mona's order service (for Experiment 2)"
+# The lab model (NOTES.md, "The lab model"): a guide that each student
+# follows alone in Microsoft Forms, with a drawn screen for every step
+# (tools/lab_screens.py). No questions, no results, no start files.
+lab: true
 format: lesson-typst
 ---
 
+```{=typst}
+#let mk(n) = box(baseline: 22%, circle(radius: 5.8pt, fill: rgb("#d9480f"), stroke: none, inset: 0pt)[#set align(center + horizon); #text(fill: white, weight: "bold", size: 8pt)[#n]])
+#let tick = box(baseline: 12%, width: 10pt, height: 10pt, stroke: 0.9pt + luma(70), radius: 2pt)
+#let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
+#let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f6fd"), stroke: 0.8pt + rgb("#185abd"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
+#let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
+// One step: the box to tick, its number and what to do on the left; its screen on the right.
+#let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
+  #set par(justify: false, leading: 0.62em)
+  #let words = grid(columns: (auto, 1fr), column-gutter: 6pt, [#tick #h(1pt) *#n.*], body)
+  #if img == none { words } else {
+    grid(columns: (left, 1fr), column-gutter: 12pt, align: (top, top), words, align(center, shot(img, w: w)))
+  }
+  #if after != none { v(4pt); after }
+]
+```
+
 ::: {.lead}
-Today you plan a small digital service and build its order form. Each
-experiment has two parts. **Part A** is in Microsoft Forms and Word (your
-university account). **Part B** is on a simulator of the interactive
-lesson: on paper, scan its QR code; on the screen, click its link. After
-each step, write your result in its box. At the end, copy your key results
-into the table.
+Today you make a small digital service: Mona sells home-made cakes. You type its **plan** in Word, then you make its **order form** in Microsoft Forms. Do the tasks in order. The **orange
+numbers** in each picture show where to click. Tick the box `#tick`{=typst} after each step. Stuck? Raise your hand.
 :::
 
-## Before you start
-
-- **You need:** a lab computer with a browser (Microsoft Forms at
-  `forms.office.com`, with your university account) and Word. Google Forms
-  works in the same way.
-- **No lab computer today?** Do Part B of each experiment on your phone.
-  Microsoft Forms also works in the browser of a phone.
-- **Check:** the results are at the end of this worksheet. Look only after
-  you try. On the interactive lesson, every step has a check that answers
-  at once.
-
-{{< start-files >}}
-
-## Experiment 1 · Kinds of digital services
-
-**The idea:** a **digital service** is a service that customers use on the
-Internet. Four common kinds: an **online store** (choose products and pay),
-a **booking** (choose a day and a time), an **online form** (answer
-questions, such as an order or a survey) and a **digital product** (a file
-that you download, such as an e-book).
-
-**Aim:** tell the kinds of digital services apart.
-
-::: {.part}
-**Part A · In the app (a browser)**
-:::
-
-1. Open `forms.office.com` and sign in. Look at the ready-made forms
-   (templates) at the top: for example a registration, a feedback or an
-   order form.
-
-   {{< record "The name of one template" >}}
-
-   ::: {.check}
-   For example **Event registration** or **Customer feedback**. A template
-   is a ready-made form: you change only the questions.
-   :::
-
-   ::: {.choice}
-   An event registration form: people choose a day and a place. Which kind
-   of service is it close to?
-
-   - [x] a booking
-
-     Why: People reserve a place on a day.
-
-   - [ ] a digital product
-
-     Why: Nobody downloads a file.
-
-   - [ ] an online store
-
-     Why: Nobody chooses products to pay for.
-   :::
-
-2. On your phone or the computer, think of the university e-learning
-   platform: you open a page, do the tasks and upload a file.
-
-   {{< record "Is the e-learning platform a digital service: yes or no?" >}}
-
-   ::: {.check}
-   **Yes**: students use it on the Internet, from any phone or computer.
-   :::
-
-   ::: {.choice}
-   Is the e-learning platform of the university a digital service?
-
-   - [x] yes
-
-     Why: Students use it on the Internet, from any device.
-
-   - [ ] no, it is only a website
-
-     Why: A site where people do things (tasks, uploads) is a service.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/service-sorter.html" poster="sims/service-sorter.png" title="Service Sorter: which kind of digital service?" >}}
-
-3. In **Service Sorter**, sort the eight services. Which kind is "Fix It:
-   choose a day and a time to repair your phone"?
-
-   {{< record "Fix It is" >}}
-
-   ::: {.check}
-   **A booking**: the customer chooses a day and a time.
-   :::
-
-   ::: {.sort}
-   Which kind of digital service? Sort them.
-
-   online store
-   :   Choose notebooks, pay, get them at home.
-
-       Why: Products and an online payment.
-
-   booking
-   :   Book the library study room for one hour.
-
-       Why: A room for a time.
-
-   online form
-   :   The canteen survey of ten questions.
-
-       Why: Questions that people answer.
-
-   digital product
-   :   An e-book that you download.
-
-       Why: The product is a file.
-   :::
-
-## Experiment 2 · A plan: the customer, the need, the steps
-
-**The idea:** before you build a service, write a short **plan**: **who**
-the customer is, **what** the customer needs, and the **steps** that the
-customer takes, in order. Then you know what to build.
-
-**Aim:** plan a small service in three parts.
-
-::: {.part}
-**Part A · In the app (Word)**
-:::
-
-1. Open `service-plan-start.docx`. Mona makes cakes at home and wants to
-   take orders online. After each line, type the right words from this
-   list: *an online form* · *families who want a cake for a party* · *to
-   order a cake without a phone call*.
-
-   {{< record "The customer: … ; the need: …" lines=2 >}}
-
-   ::: {.check}
-   Kind: **an online form**. Customer: **families who want a cake for a
-   party**. Need: **to order a cake without a phone call**.
-   :::
-
-   ::: {.choice}
-   Who is the customer of Mona's order service?
-
-   - [x] families who want a cake for a party
-
-     Why: The customer is the person who uses the service.
-
-   - [ ] Mona
-
-     Why: Mona gives the service; she is not its customer.
-
-   - [ ] the bank
-
-     Why: The bank does not order cakes.
-   :::
-
-2. Under *The steps of the customer*, type the four steps in order: *See
-   the cakes and their prices* · *Fill in the order form* · *Get a
-   confirmation* · *Collect the cake and pay*. Save the file.
-
-   {{< record "Step 2 is" >}}
-
-   ::: {.check}
-   **Fill in the order form**: first the customer sees the cakes, then
-   orders, then gets a confirmation, then collects and pays.
-   :::
-
-   ::: {.order}
-   Put the steps of the customer in order.
-
-   1. See the cakes and their prices
-   2. Fill in the order form
-   3. Get a confirmation
-   4. Collect the cake and pay
-
-   Why: The customer chooses first, then orders, gets a confirmation, and collects.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/service-planner.html" poster="sims/service-planner.png" title="Service Planner: the customer, the need, the steps" >}}
-
-3. In **Service Planner**, plan Mona's service: the customer, the need and
-   the order of the steps.
-
-   {{< record "Which part of the service do you build next?" >}}
-
-   ::: {.check}
-   **The order form**: step 2 of the customer.
-   :::
-
-   ::: {.choice}
-   The plan is ready. Which part do you build next?
-
-   - [x] the order form
-
-     Why: The customer orders with the form: step 2 of the plan.
-
-   - [ ] a new oven
-
-     Why: The plan is about the online service.
-
-   - [ ] a printed menu
-
-     Why: The customers see the cakes online.
-   :::
-
-## Experiment 3 · An order form linked to a spreadsheet
-
-**The idea:** an **online form** (Microsoft Forms, Google Forms) is a page
-of questions. Each question has a **type**: **Choice** (tap an option),
-**Text**, **Number** or **Date**. Every **response** (one filled-in form)
-becomes **one row** of a spreadsheet: Responses › **Open results in
-Excel**.
-
-**Aim:** build a short order form, send one test order, and find it in the
-sheet.
-
-::: {.part}
-**Part A · In the app (Microsoft Forms)**
-:::
-
-1. In Microsoft Forms, click **New Form**. Title: `Mona's Cakes: order`.
-   Add three questions: **Choice** *Which cake?* (Chocolate, Lemon, Fruit),
-   **Text** *How many cakes?* (Restrictions: Number), **Date** *Pick-up
-   day*.
-
-   {{< record "The type of Which cake?" >}}
-
-   ::: {.check}
-   **Choice**: the customer taps one of the three cakes, so every answer is
-   written the same way.
-   :::
-
-   ::: {.sort}
-   Which question type? Sort the questions.
-
-   Choice
-   :   Which cake? (Chocolate, Lemon, Fruit)
-
-       Why: The customer taps one of the options.
-
-   Number
-   :   How many cakes?
-
-       Why: A number that Mona can add up.
-
-   Date
-   :   Pick-up day
-
-       Why: A day in the calendar.
-   :::
-
-2. Click **Preview**, fill in one test order and **Submit**. Then click
-   **Responses › Open results in Excel**.
-
-   {{< record "My test order is in row" >}}
-
-   ::: {.check}
-   **Row 2**: row 1 has the questions, and every response is one new row.
-   :::
-
-   ::: {.fill answer="2|row 2" hint="Row 1 has the names of the questions."}
-   The sheet of the responses has the questions in row 1. In which row is
-   the first order?
-
-   Why: Every response is one new row under the questions: the first one is in row 2.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/form-builder.html" poster="sims/form-builder.png" title="Form Builder: an order form and its sheet" >}}
-
-3. In **Form Builder**, give the four questions their types, then send a
-   test order. What happens in the sheet?
-
-   {{< record "The sheet gets" >}}
-
-   ::: {.check}
-   **One new row** with the answers of the test order.
-   :::
-
-   ::: {.choice}
-   Ten customers send the order form. What does the sheet show?
-
-   - [x] ten rows, one for each response
-
-     Why: Each response is one row of the sheet.
-
-   - [ ] one row with all the orders
-
-     Why: Every response gets its own row.
-
-   - [ ] nothing: Mona must type the orders
-
-     Why: The form fills the sheet by itself.
-   :::
-
-## Table of results
-
-Copy your key results here: the rows of the parts that you did. Your
-teacher checks this table before the end of the lecture.
-
-::: {.record-table}
-| Experiment | What you record                                 | Your result |
-|:-------:|----------------------------------------------|-------------------------|
-| 1 A        | One template of Microsoft Forms                 |             |
-| 1 A        | Is the e-learning platform a digital service?   |             |
-| 1 B        | The kind of service of Fix It                   |             |
-| 2 A        | The customer and the need of Mona's service     |             |
-| 2 A        | Step 2 of the customer                          |             |
-| 2 B        | The part to build next                          |             |
-| 3 A        | The type of the question Which cake?            |             |
-| 3 A        | The row of my test order                        |             |
-| 3 B        | What the sheet gets                             |             |
-:::
-
-## Game challenge · The Service Desk
-
-Finished early? Play **Service Desk at Sunrise Company**: the colleagues ask
-Huda about their digital services. Read each message and choose the best
-answer.
-
-{{< sim file="sims/service-desk.html" poster="sims/service-desk.png" title="Service Desk at Sunrise Company" kind="game" >}}
+- **You need:** a lab computer with Microsoft Forms. **Nothing to download:**
+  you type the text yourself.
+- **Time:** about 35 minutes. Your Microsoft Forms may look a little different:
+  the names of the buttons are the same.
+
+## Task 1 · The plan of the service in Word
+
+```{=typst}
+#step(1, [Open *Word* (Search › word), then *Blank document*. Type these four lines (*Enter* after each):], after: [#v(2pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 6pt)[Mona's Cakes: the plan \ The customer: students and families in Amman. \ The need: a fresh cake on the right day. \ The steps: see the cakes, choose, order, collect.]])
+#step(2, [Click in the first line #mk(1). In *Home › Styles*, click *Title* #mk(2).], img: "images/lab-plan-1.png", w: 100%, left: 36%)
+#step(3, [Press *F12*. Click *Desktop*, type *plan-* and your first name, click *Save*.])
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 2 · A new form
+
+```{=typst}
+#step(1, [Open the browser. Go to *forms.office.com*. Click *Sign in* and use your *university account*.])
+#step(2, [Click *New Form* #mk(1).], img: "images/lab-forms-1.png", w: 84%, left: 30%)
+#step(3, [Click *Untitled form* #mk(1) and type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Mona's Cakes: order]], img: "images/lab-forms-2.png", w: 100%, left: 36%)
+```
+
+## Task 3 · Three questions
+
+```{=typst}
+#step(1, [Click *+ Add new* (#mk(2) in the picture above), then *Text*. Type: #h(2pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Your name] \ Turn on *Required* #mk(1).], img: "images/lab-forms-3.png", w: 92%, left: 36%)
+#step(2, [*+ Add new › Choice*. Type: #h(2pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Which cake?] \ The options #mk(2): *Chocolate*, *Strawberry*, then *+ Add option*: *Vanilla*.])
+#step(3, [*+ Add new › Date*. Type: #h(2pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[When do you want it?] #mk(3)])
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 4 · A test order
+
+```{=typst}
+#step(1, [Click *Preview* #mk(1). Fill in a test order #mk(2): your name, a cake, a date. \ Click *Submit* #mk(3). Then *Back*.], img: "images/lab-forms-4.png", w: 92%, left: 36%)
+```
+
+## Task 5 · The responses
+
+```{=typst}
+#step(1, [Click *Responses* #mk(1): 1 response, your test order. \ Click *Open results in Excel* #mk(2): one row for each order.], img: "images/lab-result-1.png", w: 100%, left: 36%)
+```
+
+## Show your teacher
+
+```{=typst}
+#block(breakable: false, grid(columns: (1.1fr, 1fr), column-gutter: 14pt, align: top,
+  shot("images/lab-result-1.png"),
+  [
+    #set par(spacing: 0.9em, justify: false)
+    Your form now has its first response, like the picture. Check it:
+    #v(4pt)
+    #tick #h(4pt) The plan in Word: four lines, the first one with *Title*. \
+    #tick #h(4pt) The form *Mona's Cakes: order*: three questions. \
+    #tick #h(4pt) *Your name* is Required; *Which cake?* has three options. \
+    #tick #h(4pt) Responses: 1 (your test order). \
+    #tick #h(4pt) *plan-…* is on the Desktop.
+    #v(8pt)
+    #tip[Raise your hand: your teacher looks at your screen. \ Then do the *Extra*: AI adds a welcome to your plan.]
+  ],
+))
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Extra · AI adds a welcome to your plan
+
+```{=typst}
+#block(width: 100%, fill: rgb("#e3f4f1"), stroke: 0.8pt + rgb("#8fd1c4"), radius: 6pt, inset: (x: 12pt, y: 9pt))[
+  Only when you finish Tasks 1–5. On *tutudocs.com* an *AI assistant* changes your Word file for you. *No sign-in.*
+]
+#step(1, [Open the browser. Go to *tutudocs.com*.])
+#step(2, [Click the box *Drop a file anywhere on this page, or click to choose* #mk(1). \ Click *Desktop*, click your file *plan-…*, click *Open*. \ Your plan opens in the online editor.], img: "images/lab-tutu-1.png", w: 84%, left: 36%)
+#step(3, [Click *AI Assistant* at the top #mk(1). \ Click in *Ask AI anything…* #mk(2) and type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Add a short welcome sentence for the customers under the title.] \ Press *Enter* #mk(3). Wait about 15 seconds: a welcome sentence comes.], after: align(center, shot("images/lab-tutu-2.png", w: 84%)))
+#step(4, [One more request. Type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Make the title green.] \ Press *Enter*. Wait for the answer before you type again.])
+#step(5, [Click *File* #mk(1), then *Download* #mk(2), then the choice that ends in *.docx* #mk(3). \ Open the new file from *Downloads*: it opens in Word, with the changes of the AI.], img: "images/lab-tutu-3.png", w: 74%, left: 44%)
+```

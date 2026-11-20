@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tutu Lab: AI changes your slides</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tutu Lab: AI changes your slides</h1>
+  <p class="hint">As on <b>tutudocs.com</b> (no sign-in): <b>open</b> your presentation, ask the <b>AI Assistant</b> for a change, then <b>download</b> it for PowerPoint. (Practice with fixed answers: no real AI here.)</p>
+  <div id="tutu"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>window.SIM_DONE = "&#10003; All steps done. Now do it on tutudocs.com with your own file (Task 1).";</script>
+<script>
+window.TUTU = {
+  kind: "slides", file: "talk-Huda.pptx",
+  model: [
+    { title: "Our Book Fair", sub: "Sunrise College · Sunday to Tuesday", bg: "#e7f4e4", color: "#1f3d28" },
+    { title: "When and where", points: ["Sunday to Tuesday", "10:00 to 15:00", "The college library"], bg: "#e7f4e4", color: "#1f3d28" },
+  ],
+  asks: [
+    { text: "Add a slide with 3 short points: what students can bring to the book fair.", keys: /bring|points/i,
+      done: "Done: slide 3, What you can bring, has three short points.",
+      apply: (m) => { m.push({ title: "What you can bring", points: ["Old books in good shape", "Your student card", "A bag for new books"], bg: "#e7f4e4", color: "#1f3d28" }); return [m.length - 1]; } },
+    { text: "Make the title of slide 1 dark blue.", keys: /blue|colou?r/i,
+      done: "Done: the title of slide 1 is now dark blue.",
+      apply: (m) => { m[0].color = "#1f3a93"; return [0]; } },
+  ],
+};
+</script>
+<script src="../../../../shared/sims/tutu-lab.js"></script>
+</body>
+</html>

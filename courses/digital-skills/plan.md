@@ -40,7 +40,7 @@ its AI-use statement, in Unit 11. Two pairs of rows are merged (4–5 and
 | Unit 1 (1) | **Lecture 1** Digital Skills and the Apps That Make Us Productive | **1** Your University Account, Cloud Storage and Files | A1 C1 |
 | Unit 2 (2) | **Lecture 2** Everyday Digital Skills: Search, Screenshots and an AI Assistant | **2** Your Phone for Study: Reminders, Scans and a Clear Prompt | A1 A2 B2 C1 |
 | Unit 3 (3) | **Lecture 3** Microsoft Office and Digital Communication | **3** Safe Devices, Accounts and AI Tools | A2 C1 |
-| Unit 4 (4–5) | **Lecture 4** Word Documents, and a Draft from AI Checked | **4** A CV and a Cover Letter with AI Help | A3 B2 C2 |
+| Unit 4 (4–5) | **Lecture 4** Word Documents, and Changes with AI | **4** A CV and a Cover Letter with AI Help | A3 B2 C2 |
 | Unit 5 (6) | **Lecture 5** PowerPoint: Layouts, Themes, Pictures and Transitions | **5** A Presentation with AI Help, and a Graphic in Canva | A3 B2 C2 |
 | Unit 6 (7) | **Lecture 6** Excel (1) | **6** A Monthly Budget Sheet | A3 B1 |
 | Practice week (8) | **Practice 1** Review of Lectures 1–6 | **7** Review Activity | all of 1–6 |

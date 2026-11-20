@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tutu Lab: AI changes your exported table</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tutu Lab: AI changes your exported table</h1>
+  <p class="hint">The Extra of your worksheet, as on <b>tutudocs.com</b> (no sign-in): <b>open</b> your table (exported to Excel), ask the <b>AI Assistant</b> for a change, then <b>download</b> it for Excel. (Practice with fixed answers: no real AI here.)</p>
+  <div id="tutu"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.TUTU = {
+  kind: "sheet", file: "Customers.xlsx",
+  model: { cols: ["A", "B", "C"], rows: [[{ v: "ID", b: 1 }, { v: "Name", b: 1 }, { v: "City", b: 1 }], [1, "Huda", "Amman"], [2, "Omar", "Irbid"], [3, "Rana", "Amman"]] },
+  asks: [
+    { text: "Add 3 customers with a name and a city in Jordan.", keys: /add/i, done: "Done: rows 5 to 7 are three new customers.",
+      apply: (m) => { m.rows.push([4, "Sami", "Zarqa"], [5, "Lina", "Aqaba"], [6, "Yousef", "Amman"]); return ["4:0", "4:1", "4:2", "5:0", "5:1", "5:2", "6:0", "6:1", "6:2"]; } },
+    { text: "Sort the customers by City, A to Z.", keys: /sort/i, done: "Done: the customers are sorted by City.",
+      apply: (m) => { const head = m.rows[0]; const rest = m.rows.slice(1).sort((a, b) => String(a[2]).localeCompare(String(b[2]))); m.rows = [head, ...rest]; return []; } },
+  ],
+};
+</script>
+<script src="../../../../shared/sims/tutu-lab.js"></script>
+</body>
+</html>

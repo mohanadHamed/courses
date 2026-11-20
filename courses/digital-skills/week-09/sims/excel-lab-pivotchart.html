@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: a chart of the totals</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: a chart of the totals</h1>
+  <p class="hint">The totals of Rana's PivotTable. Select them with the headings, then <b>Insert › Column ▾ › Clustered Column</b>, then a title.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'march-Rana', tabs: ['Home', 'Insert'], cols: 3, rows: 6,
+  data: [["Type", "Sum of Total"], ["Bags", 78], ["Drinks", 71], ["Paper", 206], ["Grand Total", 355]],
+  hello: 'Drag from <b>A1</b> to <b>B4</b>: the three types and their totals (not the Grand Total).',
+  missions: [
+    ['Select <b>A1:B4</b>, then <b>Insert › Column ▾ › Clustered Column</b>', (x) => x.chart && x.chart.type === 'column' && x.chart.r1 === 0 && x.chart.r2 === 3 && x.chart.c1 === 0 && x.chart.c2 === 1],
+    ['Click <b>Chart Title</b> and type <b>Sales of March</b>', (x) => x.chart && /march|sales/i.test(x.chart.title)],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

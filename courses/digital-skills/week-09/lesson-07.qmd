@@ -1,179 +1,176 @@
 ---
 title: "Data Analysis (2): Sorting, Filtering, Conditional Formatting and Charts"
-description: "Putting rows in order with Sort, showing only some rows with Filter, colouring cells by a rule with conditional formatting, and choosing and making the right chart with a good title."
+description: "The sales of a week in Excel: sort the rows, show only some rows with a filter, colour the big sales with a rule, and a column chart with a title: 15 minutes on the simulators, then the worksheet in Excel in the computer lab."
 lesson: 7
 ilos: [B1]
+# The lab model (NOTES.md, "The lab model"): about 15 minutes on this page,
+# then each student follows the printed worksheet in Excel.
+lab: true
 format: lesson-html
 ---
 
-This page is the lecture, in class and at home. Each section explains one
-idea, then shows its experiment. The page checks every step at once.
+## Today in the lab
 
-**In class, the teacher chooses the way for each experiment,** by the topic
-and the time:
+::: {.lab-plan}
+1. **15 minutes, here:** the teacher shows each idea on a simulator, then
+   in Excel.
+2. **35 minutes, in Excel:** you follow the **worksheet**, step by
+   step, on the lab computer. Nothing to download: you type the text
+   yourself.
+3. **At the end:** show your sheet to your teacher. Then the **Extra**: an
+   AI assistant adds a total to your sheet.
+:::
 
-- **On the simulator** of the section, here on the page: nothing to
-  install, and it works at home too.
-- **In the real app** on the teacher's laptop, connected to the smart
-  screen (HDMI): open the start file and follow the steps of **Part A**.
-- **In the computer lab:** each student follows the **worksheet (PDF)**,
-  Part A in the app and Part B on the simulator, and checks each result
-  here.
-- **You need:** Excel (the desktop app, or Excel on the web at `office.com`) and the start file, or only the simulators of this page.
+![The sheet that you make today in Excel.](images/lab-result-1.png){width=55%}
 
 ## Key terms
 
-{{< glossary sort-data filter-data conditional-formatting chart column-chart line-chart pie-chart chart-title >}}
-
-## Before you start
-
-{{< start-files >}}
+{{< glossary sort-data filter-data conditional-formatting column-chart chart-title >}}
 
 ## 7.1 Put the rows in order: Sort
 
-- **Sort** puts the rows in order by one column. Each row moves as a whole.
-- Click **one cell** in the table › **Data › Sort** › choose the column and
-  the order.
-- Quick buttons: **A→Z** (smallest first) and **Z→A** (largest first).
-- **Table Lab** below holds the sales of the Sunrise shop in one week.
+### On the simulator
 
-![Sort by Total.](images/sort.png){width=100%}
+- Click **one cell** of the column, then **Data › Z→A** (largest first) or **A→Z**.
+- **Whole rows** move together: an item keeps its sales and its type.
 
-{{< sim file="sims/table-lab.html" poster="sims/table-lab.png" title="Table Lab: sort, filter and colour the Sunrise sales" height="680" >}}
-
-::: {.callout-warning title="Watch out!"}
-Never sort one column alone: the rows break apart.
+::: {.sim-part}
+{{< sim file="sims/excel-lab-sort.html" poster="sims/excel-lab-sort.png" title="Excel Lab: sort" height="640" >}}
 :::
 
-{{< experiment 1 >}}
+### In Excel: worksheet Tasks 1 and 2
+
+:::: {.word-part}
+Open Excel, then **Blank workbook**, and type the sales of the week. Then the same steps as on the simulator:
+
+::: {.screens}
+![Type the table: **Tab** goes to the next cell, **Enter** to the next row.](images/lab-type-1.png)
+
+![[1]{.step-n} A cell of Sales. [2]{.step-n} **Data**. [3]{.step-n} **Z→A**.](images/lab-sort-1.png)
+:::
+::::
 
 ::: {.callout-tip title="Try it 1 · Sort"}
 Choose the right answer.
 
-::: {.match extra="Data › Filter|the colour"}
-Which sale is on top after the sort, largest first?
-:   the bag of Tuesday, 36 JD
+::: {.match extra="A→Z|Filter"}
+The biggest sales must come first. Which button?
+:   Z→A
 
-    Why: 36 JD is the biggest total in the table.
+    Why: Z→A sorts from the largest to the smallest.
 :::
 :::
 
 ## 7.2 Show only some rows: Filter
 
-- A **filter** shows only the rows you choose. The others are **hidden, not
-  deleted**.
-- Click one cell › **Data › Filter**. Arrows appear in the headings.
-- Click the arrow of a heading and tick the values to show.
-- **Clear Filter** shows all rows again.
+### On the simulator
 
-![Filter the drinks.](images/filter.png){width=100%}
+- **Data › Filter**: an arrow in each heading.
+- The arrow of a column: tick only what you want to see, **OK**. The other rows are **hidden**, not deleted.
+- **Data › Clear** shows all the rows again.
 
-::: {.callout-warning title="Watch out!"}
-Never delete rows to "hide" them. Use a filter.
+::: {.sim-part}
+{{< sim file="sims/excel-lab-filter.html" poster="sims/excel-lab-filter.png" title="Excel Lab: filter" height="660" >}}
 :::
 
-Part B: **Table Lab** (Task 2), in section 7.1.
+### In Excel: worksheet Task 3
 
-{{< experiment 2 >}}
-
-::: {.callout-tip title="Try it 2 · Filter"}
-Use the sales table of section 7.1. Choose the right answer.
-
-::: {.match extra="they are deleted|10"}
-What is the sum of the Drinks totals?
-:   50 JD
-
-    Why: 10 + 15 + 12 + 13 = 50 JD.
+:::: {.word-part}
+::: {.screens}
+![[1]{.step-n} **Filter**. [2]{.step-n} The arrow of Type. [3]{.step-n} Only **Drinks**. [4]{.step-n} **OK**.](images/lab-filter-1.png)
 :::
-:::
+::::
 
 ## 7.3 Colour by a rule: conditional formatting
 
-- **Conditional formatting** colours cells by a rule, by itself.
-- Select the totals › **Home › Conditional Formatting › Highlight Cells
-  Rules › Greater Than** › 20 › a colour.
-- When a number changes, the colour changes too. Remove with **Clear
-  Rules**.
+### On the simulator
 
-![A rule colours the cells.](images/cond-format.png){width=100%}
+- Select the numbers, then **Home › Conditional Formatting › Highlight Cells Rules › Greater Than**.
+- Type the number (**20**), **OK**: every bigger number turns red.
+- Change a number: its colour follows the **rule** by itself.
 
-::: {.callout-warning title="Watch out!"}
-Colours you add by hand do not change when the numbers change.
+::: {.sim-part}
+{{< sim file="sims/excel-lab-cf.html" poster="sims/excel-lab-cf.png" title="Excel Lab: a colour rule" height="660" >}}
 :::
 
-Part B: **Table Lab** (Task 3), in section 7.1.
+### In Excel: worksheet Task 4
 
-{{< experiment 3 >}}
+:::: {.word-part}
+::: {.screens}
+![[1]{.step-n} B2:B7. [2]{.step-n} **Conditional Formatting**. [3]{.step-n} **Greater Than**. [4]{.step-n} **20**. [5]{.step-n} **OK**.](images/lab-cf-1.png)
+:::
+::::
 
-::: {.callout-tip title="Try it 3 · Rules"}
-Use the sales table of section 7.1. Choose the right answer.
+::: {.callout-tip title="Try it 3 · A colour rule"}
+Choose the right answer.
 
-::: {.match extra="Data › Sort|2"}
-Juice changes from 12 to 22. What happens?
-:   it turns green by itself
+::: {.match extra="it stays white|you must colour it again"}
+Water changes from 12 to 26. The rule is Greater Than 20. What happens?
+:   it turns red by itself
 
-    Why: The rule checks the cells again when a number changes.
+    Why: The colour follows the rule, not the old number.
 :::
 :::
 
 ## 7.4 Show it as a picture: charts
 
-- **Column chart:** compare amounts. **Line chart:** a change over time.
-  **Pie chart:** the parts of one whole.
-- Select a small table › **Insert › Recommended Charts** (or Column, Line,
-  Pie).
-- Click **Chart Title** and write what the chart shows.
-- The **+** next to the chart adds data labels.
+### On the simulator
 
-![The right chart for the question.](images/chart-types.png){width=100%}
+- Select the data **with its headings** (A1:B7), then **Insert › Column › Clustered Column**.
+- A **column chart** compares items; a **pie** shows the parts of a whole.
+- Click **Chart Title** and type a real title.
 
-{{< sim file="sims/chart-lab.html" poster="sims/chart-lab.png" title="Chart Lab: the right chart for the question" height="640" >}}
-
-::: {.callout-warning title="Watch out!"}
-"Chart Title" is not a title. Write what the chart shows.
+::: {.sim-part}
+{{< sim file="sims/excel-lab-chart.html" poster="sims/excel-lab-chart.png" title="Excel Lab: a chart" height="700" >}}
 :::
 
-{{< experiment 4 >}}
+### In Excel: worksheet Tasks 5 and 6
 
-::: {.callout-tip title="Try it 4 · Charts"}
-Choose the right chart.
+:::: {.word-part}
+::: {.screens}
+![[1]{.step-n} A1:B7. [2]{.step-n} **Insert**. [3]{.step-n} **Column**. [4]{.step-n} The title.](images/lab-chart-1.png)
 
-::: {.match extra="a table|a picture"}
-The part of each type in the 185 JD?
-:   a pie chart
-
-    Why: A pie shows the parts of one whole.
+![Press **F12**. [1]{.step-n} **Desktop**. [2]{.step-n} **sales-** and your name. [3]{.step-n} **Save**.](images/lab-save-1.png)
 :::
+::::
+
+## Extra: AI changes your sheet
+
+### On the simulator
+
+- On **tutudocs.com** you open your own sheet, with **no sign-in**.
+- **AI Assistant**: ask for one change, for example: a Total row at the end.
+- **File › Download**, the Excel file (**.xlsx**).
+
+::: {.sim-part}
+{{< sim file="sims/tutu-lab.html" poster="sims/tutu-lab.png" title="Tutu Lab: AI changes your sheet" height="700" >}}
 :::
 
-## Table of results
+### On tutudocs.com: the Extra of the worksheet
 
-{{< experiment results >}}
+:::: {.word-part}
+::: {.screens}
+![**tutudocs.com**: [1]{.step-n} click the box, then choose your sheet.](images/lab-tutu-1.png)
 
-## Game challenge: Rana's Questions {.challenge}
+![[1]{.step-n} **AI Assistant**. [2]{.step-n} Your request. [3]{.step-n} The AI adds the total.](images/lab-tutu-2.png)
 
-Huda asks Rana six questions about the sales of the week: the biggest sale,
-only the drinks, big totals in green, the change over the days, the three
-types compared, and the part of each type in **185 JD**.
-
-{{< sim file="sims/ranas-questions.html" poster="sims/ranas-questions.png" title="Rana's Questions: the right Excel tool" kind="game" height="520" >}}
-
-::: {.callout-tip title="Try it 5 · Rana's answers (harder)"}
-The sales of the week are in the table of section 7.1: Paper, Drinks and
-Bags, 185 JD in all. Choose the right answer.
-
-::: {.match extra="type the numbers again|delete the other rows|45 JD"}
-Which sale was the biggest? Which tool shows it fast?
-:   Sort by Total, largest first
-
-    Why: Sort puts the biggest total on top.
+![[1]{.step-n} **File**, [2]{.step-n} **Download**, [3]{.step-n} the **.xlsx** file.](images/lab-tutu-3.png)
 :::
+::::
+
+## Now: your worksheet
+
+::: {.lab-go}
+Take your **worksheet** and do Tasks 1–6 in Excel on the lab
+computer, in order. Tick each step. Raise your hand when you are stuck,
+and at the end. Finished? Do the **Extra**: on tutudocs.com an AI
+assistant adds a total to your sheet.
 :::
 
 ## Summary {.summary}
 
-- Sort puts the rows in order; click one cell first.
-- A filter shows only some rows; it never deletes them.
-- Conditional formatting colours cells by a rule, also when numbers change.
-- Column: compare. Line: change over time. Pie: parts of a whole. Always a
-  real title.
+- Data › Z→A sorts largest first; whole rows move together.
+- Data › Filter hides the rows that you do not tick; Clear shows them again.
+- Conditional Formatting › Greater Than colours the cells by a rule that follows the numbers.
+- Select the data with headings, Insert › Column, then type a real chart title.
+- On tutudocs.com (no sign-in) the AI Assistant changes your sheet; File › Download gives the .xlsx.

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Excel Lab: SUM and MAX</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Excel Lab: SUM and MAX</h1>
+  <p class="hint">The same steps as your worksheet (Task 4). Click the empty cell under the totals, then <b>Home › AutoSum</b>. Then type a formula with <b>MAX</b>.</p>
+  <div id="excel"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.EXCEL_LAB = { name: 'shop-Huda', tabs: ['Home'], data: [["Item", "Price", "Qty", "Total"], ["Pens", 2, 10, "=B2*C2"], ["Notebooks", 3, 5, "=B3*C3"], ["Bags", 7, 2, "=B4*C4"], ["Total"], ["Biggest"]],
+  hello: 'Click <b>D5</b> (next to Total). Then click <b>AutoSum</b> on the Home tab.',
+  missions: [
+    ['<b>D5</b>: <b>Home › AutoSum</b> gives <b>=SUM(D2:D4)</b> = 49', (x) => x.v('D5') === 49 && /SUM\(D2:D4\)/i.test(x.f('D5'))],
+    ['<b>D6</b>: type <b>=MAX(D2:D4)</b>: the biggest total, 20', (x) => x.v('D6') === 20 && /MAX\(D2:D4\)/i.test(x.f('D6'))],
+  ] };
+</script>
+<script src="../../../../shared/sims/excel-lab.js"></script>
+</body>
+</html>

@@ -1,310 +1,114 @@
 ---
 title: "Data Analysis (1): Excel: Cells, Formulas, References and Basic Functions"
-description: "Worksheet · Three experiments in Excel: cells and a formula that changes by itself, copying a formula with $, and the functions SUM, AVERAGE, MAX and MIN. Part A in Excel, Part B on the simulators."
+description: "Worksheet · Make a shop list in Excel, step by step. Nothing to download."
 lesson: 6
 ilos: [A3, B1]
-start-files:
-  - name: shop-start.xlsx
-    about: "two sheets: Shop (three items, their prices and quantities) and Week (the sales of five days)"
+# The lab model (NOTES.md, "The lab model"): a guide that each student
+# follows alone in Excel, with a drawn screen for every step
+# (tools/lab_screens.py). No questions, no results, no start files.
+lab: true
 format: lesson-typst
 ---
 
+```{=typst}
+#let mk(n) = box(baseline: 22%, circle(radius: 5.8pt, fill: rgb("#d9480f"), stroke: none, inset: 0pt)[#set align(center + horizon); #text(fill: white, weight: "bold", size: 8pt)[#n]])
+#let tick = box(baseline: 12%, width: 10pt, height: 10pt, stroke: 0.9pt + luma(70), radius: 2pt)
+#let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
+#let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f6fd"), stroke: 0.8pt + rgb("#185abd"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
+#let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
+// One step: the box to tick, its number and what to do on the left; its screen on the right.
+#let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
+  #set par(justify: false, leading: 0.62em)
+  #let words = grid(columns: (auto, 1fr), column-gutter: 6pt, [#tick #h(1pt) *#n.*], body)
+  #if img == none { words } else {
+    grid(columns: (left, 1fr), column-gutter: 12pt, align: (top, top), words, align(center, shot(img, w: w)))
+  }
+  #if after != none { v(4pt); after }
+]
+```
+
 ::: {.lead}
-Today you let Excel calculate, like in a lab. Each experiment has two
-parts. **Part A** is in Excel on the lab computer. **Part B** is on a
-simulator of the interactive lesson: on paper, scan its QR code; on the
-screen, click its link. After each step, write your result in its box. At
-the end, copy your key results into the table.
+Today you make a shop list in **Excel** on the lab computer: three items, their prices, quantities and totals. Do the tasks in order. The **orange
+numbers** in each picture show where to click. Tick the box `#tick`{=typst} after each step. Stuck? Raise your hand.
 :::
 
-## Before you start
-
-- **You need:** a computer with Excel (the desktop app, or Excel on the web
-  at `office.com`) and the start file.
-- **No lab computer today?** Your teacher does Part A on the screen, on the
-  simulators of the interactive lesson. Do Part B on your phone.
-- **Check:** the results are at the end of this worksheet. Look only after
-  you try. On the interactive lesson, every step has a check that answers
-  at once.
-
-{{< start-files >}}
-
-## Experiment 1 · Cells and a formula
-
-**The idea:** columns have letters and rows have numbers: the **cell
-address** **B3** is column B, row 3. A **range** is a block of cells:
-**B2:B4**. A **formula** starts with **=** and uses addresses: **=B2\*C2**.
-The cell shows the result; the **formula bar** shows the formula. Change a
-number, and the result changes by itself. Excel multiplies and divides
-before it adds and subtracts.
-
-**Aim:** find a cell by its address, and let a formula calculate.
-
-::: {.part}
-**Part A · In the app (Excel)**
-:::
-
-1. Open `shop-start.xlsx`, sheet **Shop**. Click the cell with the price of
-   the pen and read the Name Box (left of the formula bar). Then type
-   **Total (JD)** in D1, and **=B2\*C2** in D2.
-
-   {{< record "The Name Box shows … ; D2 shows …" >}}
-
-   ::: {.check}
-   The price of the pen is in **B3** (it holds 0.5). D2 shows **20**: the
-   price 2 × the quantity 10.
-   :::
-
-   ::: {.fill answer="20" hint="The price in B2 times the quantity in C2."}
-   B2 holds 2 and C2 holds 10. What does D2 show with `=B2*C2`?
-
-   Why: 2 × 10 = 20: the price × the quantity.
-   :::
-
-2. Change the price in B2 from 2 to **3** and press Enter. Look at D2. Then
-   press **Ctrl + Z** (undo): B2 is 2 again.
-
-   {{< record "D2 shows when B2 is 3" >}}
-
-   ::: {.check}
-   **30** (3 × 10). D2 changed by itself, because the formula uses the
-   address B2, not the number 2. After Ctrl + Z, D2 shows 20 again.
-   :::
-
-   ::: {.choice}
-   Why did D2 change by itself when you typed 3 in B2?
-
-   - [x] The formula uses the address B2, not the number 2.
-
-     Why: A formula with addresses calculates again when a cell changes.
-
-   - [ ] Excel guessed the new total.
-
-     Why: Excel calculates the formula; it does not guess.
-
-   - [ ] Ctrl + Z changed it.
-
-     Why: Ctrl + Z only undoes your last change.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" >}}
-
-3. In **Formula Lab**, do the first two tasks: write the formula of the
-   total of the notebooks in D2, then copy D2 down to D4. Which formula is
-   in D4?
-
-   {{< record "D4 holds the formula …" >}}
-
-   ::: {.check}
-   **=B4\*C4**: the formula moved with its row. D2 = B2\*C2 = 20, D3 =
-   B3\*C3, D4 = B4\*C4.
-   :::
-
-   ::: {.choice}
-   You copy `=B2*C2` from D2 down to D4. What is the formula in D4?
-
-   - [x] `=B4*C4`
-
-     Why: Copying moves the addresses with the row: two rows down, 2 becomes 4.
-
-   - [ ] `=B2*C2`
-
-     Why: These addresses move when you copy.
-
-   - [ ] `=B4*C2`
-
-     Why: Both addresses move, not only one.
-   :::
-
-## Experiment 2 · Copy a formula
-
-**The idea:** the **fill handle** (the small square at the bottom right of a
-cell) copies a formula down. A **relative** reference (B2) changes when you
-copy: in the next row it is B3. An **absolute** reference (**\$F\$1**) stays
-the same: use it for a cell that every row needs, like a rate. Press **F4**
-after you type F1, and Excel adds the \$ signs.
-
-**Aim:** copy a formula down, and see which address moves and which stays.
-
-::: {.part}
-**Part A · In the app (Excel)**
-:::
-
-1. Click D2 and double-click its **fill handle**. Type **10%** in F1 and
-   **Discount (JD)** in E1. In E2 type **=D2\*F1**, and copy it down to E4
-   with the fill handle. Look at E3.
-
-   {{< record "E3 shows" >}}
-
-   ::: {.check}
-   D3 and D4 now have their totals (20 and 36). E2 shows 2, but E3 and E4
-   show **0**: the copy moved F1 to F2 and F3, which are empty, and an
-   empty cell counts as 0.
-   :::
-
-   ::: {.choice}
-   E3 shows 0. Why?
-
-   - [x] The copy moved F1 to F2, an empty cell, and an empty cell counts as 0.
-
-     Why: Relative addresses move: the discount in F1 was left behind.
-
-   - [ ] The discount in F1 is 0 %.
-
-     Why: F1 holds 10 %; E2 shows 2.
-
-   - [ ] Excel cannot copy a percentage.
-
-     Why: It can: the problem is the address that moved.
-   :::
-
-2. Click E2. Change the formula to **=D2\*\$F\$1** (type F1, then press
-   **F4**). Copy it down to E4 again. Click E4.
-
-   {{< record "E4 shows … ; its formula is …" >}}
-
-   ::: {.check}
-   E4 shows **3.6** with **=D4\*\$F\$1**. D4 moved, and \$F\$1 stayed: an
-   absolute reference does not change when you copy.
-   :::
-
-   ::: {.fill answer="3.6" hint="D4 is 36, and F1 is 10 %."}
-   What does E4 show with `=D4*$F$1`?
-
-   Why: 36 × 10 % = 3.6. D4 moved, and $F$1 stayed: an absolute reference does not change when you copy.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" >}}
-
-3. In **Reference Lab**, do the three tasks: copy =B2\*F1 down, fix it with
-   \$F\$1, then change the rate in F1 to 0.2. What discount does the desk
-   get after the change?
-
-   {{< record "The desk gets … JD" >}}
-
-   ::: {.check}
-   **18 JD**. One change in F1, and every row uses the new rate, because
-   every formula has \$F\$1. With 0.1, the desk got 9 JD.
-   :::
-
-   ::: {.fill answer="18" unit="JD" hint="With the rate 0.1 the desk got 9 JD; the rate doubles."}
-   In Reference Lab, the desk gets 9 JD with the rate 0.1 in F1. You change
-   F1 to 0.2. What does the desk get now?
-
-   Why: 0.2 is twice 0.1, so the discount doubles: 18 JD. Every row uses $F$1.
-   :::
-
-## Experiment 3 · SUM, AVERAGE, MAX and MIN
-
-**The idea:** a **function** is a ready formula with a name and a range:
-**=SUM(B2:B6)** adds, **=AVERAGE(B2:B6)** finds the average, **=MAX(B2:B6)**
-the largest value and **=MIN(B2:B6)** the smallest. **AutoSum** (Σ) writes
-=SUM for you. A wrong name shows **#NAME?**.
-
-**Aim:** use four ready formulas on the sales of a week.
-
-::: {.part}
-**Part A · In the app (Excel)**
-:::
-
-1. Open the sheet **Week**. Click B7. On the Home tab, click **AutoSum**
-   (Σ), then press Enter.
-
-   {{< record "B7 shows … ; its formula is …" >}}
-
-   ::: {.check}
-   **100** with **=SUM(B2:B6)** (12 + 18 + 25 + 15 + 30). AutoSum chose the
-   numbers above the cell.
-   :::
-
-   ::: {.fill answer="100" hint="12 + 18 + 25 + 15 + 30."}
-   What does B7 show with AutoSum?
-
-   Why: =SUM(B2:B6) adds the five days: 12 + 18 + 25 + 15 + 30 = 100.
-   :::
-
-2. In B8, B9 and B10, type **=AVERAGE(B2:B6)**, **=MAX(B2:B6)** and
-   **=MIN(B2:B6)**. Save the file as **shop.xlsx**.
-
-   {{< record "AVERAGE … ; MAX … ; MIN …" >}}
-
-   ::: {.check}
-   AVERAGE **20** (100 ÷ 5), MAX **30** (Thursday), MIN **12** (Sunday).
-   :::
-
-   ::: {.sort}
-   Which function gives each result of the week? Sort them.
-
-   AVERAGE
-   :   20
-
-       Why: 100 ÷ 5 days = 20.
-
-   MAX
-   :   30
-
-       Why: The biggest day: Thursday.
-
-   MIN
-   :   12
-
-       Why: The smallest day: Sunday.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/shop-week.html" poster="sims/shop-week.png" title="The Shop's Week: what will the cell show?" kind="game" >}}
-
-3. Play **The Shop's Week**: before Rana presses Enter, choose what each
-   cell will show. What does **=SUMM(B2:B6)** show?
-
-   {{< record "=SUMM(B2:B6) shows …" >}}
-
-   ::: {.check}
-   **#NAME?**: Excel does not know the name SUMM. Correct it to =SUM, and
-   the cell shows the total.
-   :::
-
-   ::: {.choice}
-   What does `=SUMM(B2:B6)` show?
-
-   - [x] `#NAME?`
-
-     Why: Excel does not know the name SUMM.
-
-   - [ ] the total of B2:B6
-
-     Why: Only after you correct SUMM to SUM.
-
-   - [ ] `0`
-
-     Why: A wrong name gives an error, not a number.
-   :::
-
-## Table of results
-
-Copy your key results here: the rows of the parts that you did. Your
-teacher checks this table before the end of the lecture.
-
-::: {.record-table}
-| Experiment | What you record                                | Your result |
-|:-------:|---------------------------------------------|-------------------------|
-| 1 A        | The address of the pen's price, and D2         |             |
-| 1 A        | D2 when the price is 3                         |             |
-| 1 B        | The formula in D4 of Formula Lab               |             |
-| 2 A        | E3 with =D2\*F1 copied down                    |             |
-| 2 A        | E4 and its formula with \$F\$1                 |             |
-| 2 B        | The desk's discount with the rate 0.2          |             |
-| 3 A        | SUM, AVERAGE, MAX and MIN of the week          |             |
-| 3 B        | What =SUMM(B2:B6) shows                        |             |
-:::
+- **You need:** a lab computer with Excel. **Nothing to download:**
+  you type the text yourself.
+- **Time:** about 35 minutes. Your Excel may look a little different:
+  the names of the buttons are the same.
+
+## Task 1 · Open Excel and type the list
+
+```{=typst}
+#step(1, [Click *Search* on the taskbar #mk(1). Type *excel*. Click *Excel* #mk(2).], img: "images/lab-open-1.png", w: 80%, left: 32%)
+#step(2, [Click *Blank workbook* #mk(1).], img: "images/lab-open-2.png", w: 36%, left: 32%)
+#step(3, [Click *A1*. Type the list. Press *Tab* to go to the next cell, and *Enter* at the end of a row:], after: [#v(2pt) #align(center, table(columns: (2.6cm, 1.8cm, 1.8cm, 1.8cm), inset: 5pt, stroke: 0.6pt + luma(90), fill: none, [*Item*], [*Price*], [*Qty*], [*Total*], [Pens], [2], [10], [], [Notebooks], [3], [5], [], [Bags], [7], [2], []))])
+```
+
+## Task 2 · A formula
+
+```{=typst}
+#step(1, [Click *D2* #mk(1). Type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[=B2*C2] and press *Enter*. \ D2 shows *20*. The formula bar shows the formula #mk(2).], img: "images/lab-formula-1.png", w: 100%, left: 40%)
+#step(2, [Click *B2*. Type *3* and press *Enter*. \ Look at D2: it changes by itself to *30*. Then type *2* again in B2.])
+```
+
+## Task 3 · Copy the formula down
+
+```{=typst}
+#step(1, [Click *D2*. Double-click the small square at its corner #mk(1): the *fill handle*. \ D3 and D4 get their totals #mk(2). \ Click *D3*: the formula is *=B3\*C3*.], img: "images/lab-fill-1.png", w: 100%, left: 36%)
+```
+
+## Task 4 · The total and the biggest
+
+```{=typst}
+#step(1, [Click *A5* and type *Total*. Click *A6* and type *Biggest*.])
+#step(2, [Click *D5* #mk(1). On the *Home* tab, click *AutoSum* #mk(2). Press *Enter*. \ D5 shows *49*: *=SUM(D2:D4)*.], after: align(center, shot("images/lab-sum-1.png", w: 90%)))
+#step(3, [Click *D6*. Type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[=MAX(D2:D4)] and press *Enter*: the biggest total, *20*.])
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 5 · Save your sheet
+
+```{=typst}
+#step(1, [Press *F12* (on a laptop: *Fn + F12*). The *Save As* window opens. \ _Or:_ click *File*, *Save As*, *Browse*.])
+#step(2, [Click *Desktop* #mk(1). \ In *File name*, type *shop-* and your first name #mk(2). \ Click *Save* #mk(3).], img: "images/lab-save-1.png", w: 94%, left: 32%)
+```
+
+## Show your teacher
+
+```{=typst}
+#block(breakable: false, grid(columns: (1.1fr, 1fr), column-gutter: 14pt, align: top,
+  shot("images/lab-result-1.png"),
+  [
+    #set par(spacing: 0.9em, justify: false)
+    Your sheet now looks like the picture. Check it:
+    #v(4pt)
+    #tick #h(4pt) D2, D3 and D4 have their totals: 20, 15, 14. \
+    #tick #h(4pt) D3 shows the formula *=B3\*C3*. \
+    #tick #h(4pt) D5 is *49* (AutoSum), D6 is *20* (MAX). \
+    #tick #h(4pt) The file is on the Desktop.
+    #v(8pt)
+    #tip[Raise your hand: your teacher looks at your screen. \ Then do the *Extra*: AI adds a row to your sheet.]
+  ],
+))
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Extra · AI adds a row to your sheet
+
+```{=typst}
+#block(width: 100%, fill: rgb("#e3f4f1"), stroke: 0.8pt + rgb("#8fd1c4"), radius: 6pt, inset: (x: 12pt, y: 9pt))[
+  Only when you finish Tasks 1–5. On *tutudocs.com* an *AI assistant* changes your Excel file for you. *No sign-in.*
+]
+#step(1, [Open the browser. Go to *tutudocs.com*.])
+#step(2, [Click the box *Drop a file anywhere on this page, or click to choose* #mk(1). \ Click *Desktop*, click your file *shop-…*, click *Open*. \ Your sheet opens in the online editor.], img: "images/lab-tutu-1.png", w: 84%, left: 36%)
+#step(3, [Click *AI Assistant* at the top #mk(1). \ Click in *Ask AI anything…* #mk(2) and type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Add a row: Rulers, price 1, quantity 6, and its total.] \ Press *Enter* #mk(3). Wait about 15 seconds: a new row comes.], after: align(center, shot("images/lab-tutu-2.png", w: 84%)))
+#step(4, [One more request. Type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Make the first row bold with a light blue fill.] \ Press *Enter*. Wait for the answer before you type again.])
+#step(5, [Click *File* #mk(1), then *Download* #mk(2), then the choice that ends in *.xlsx* #mk(3). \ Open the new file from *Downloads*: it opens in Excel, with the changes of the AI.], img: "images/lab-tutu-3.png", w: 74%, left: 44%)
+```

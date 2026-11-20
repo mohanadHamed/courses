@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Forms Lab: the responses in a sheet</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Forms Lab: the responses in a sheet</h1>
+  <p class="hint">The gym booking form is ready. <b>Preview</b> it and send a test booking, then <b>Responses</b> and <b>Open results in Excel</b>.</p>
+  <div id="forms"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.FORMS_LAB = {
+  start: { title: "Gym booking", qs: [{ kind: "Text", text: "Your name", req: true }, { kind: "Date", text: "Day" }, { kind: "Choice", text: "Which time?", opts: ["10:00", "12:00", "14:00"] }] },
+  hello: "Click <b>Preview</b> at the top: the form as a student sees it.",
+  missions: [
+    ["<b>Preview</b>: a test booking (name <b>Test 1</b>), then <b>Submit</b>", (S) => S.responses.length >= 1],
+    ["A second test booking (<b>Test 2</b>)", (S) => S.responses.length >= 2],
+    ["<b>Responses</b>: 2; then <b>Open results in Excel</b>: one row for each response", (S) => S.excel && S.responses.length >= 2],
+  ],
+};
+</script>
+<script src="forms-lab.js"></script>
+</body>
+</html>

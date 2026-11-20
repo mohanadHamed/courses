@@ -1,6 +1,6 @@
 ---
 title: "Data Analysis (3) with AI: Formulas, a PivotTable and What the Data Shows"
-description: "Online activity · A PivotTable gives the total of each group in a few clicks; you read what the data shows, choose a chart, and check a formula and a summary from an AI assistant. About 45 minutes."
+description: "Online activity · A PivotTable gives the total of each group in a few clicks; you read what the data shows, make a chart, and an AI assistant on tutudocs.com adds a total row to your sheet. About 45 minutes."
 online: 8
 due: "before lecture 8"
 content: mix
@@ -15,14 +15,14 @@ format: lesson-html   # online activity: the tasks PDF is made by printing this 
 ## Before you start {.study}
 
 - **What you need:** Excel on a computer, or Excel on the web
-  (`office.com`, with your university account), an AI assistant that the
-  university allows, and the start file below.
+  (`office.com`, with your university account), the start file below, and
+  **tutudocs.com** (free, no sign-in).
 - **Time:** about 45 minutes. Work alone, at your own speed.
-- **How it works:** each Step starts with a short video of Microsoft
-  Support (free, with English captions; it opens in a new tab). Then the
-  main points, the screens, a simulator and a quick check. Then do the
-  **Tasks to submit**.
-- **What you submit:** one Excel file and three letters, on the university
+- **How it works:** each Step has a short video of Microsoft Support (free,
+  with English captions; it opens in a new tab), the main points, and a
+  simulator that works like Excel. The box **On your own computer** shows
+  the same steps in Excel. Then do the **Tasks to submit**.
+- **What you submit:** two Excel files and two answers (tap them), on the university
   e-learning platform, before lecture 8.
 
 {{< start-files >}}
@@ -37,44 +37,39 @@ format: lesson-html   # online activity: the tasks PDF is made by printing this 
 
 - A long list has many rows. You want **one total for each group** (each
   type, each department).
-- A **PivotTable** does it in a few clicks: **Insert › PivotTable**.
-- Put the group in **Rows** and the number in **Values** (Sum).
-- Check: the **Grand Total** is the total of the whole list.
+- A **PivotTable** does it in a few clicks: **Insert › PivotTable › OK**.
+- Tick the group (text): it goes to **Rows**. Tick the number: it goes to
+  **Values** (Sum).
+- The **Grand Total** is the total of the whole list.
 
-::: {.callout-note title="Model · Rana's month"}
-Rana has 24 sales of March in a list. She wants the total of each type.
-She makes a PivotTable: Rows **Type**, Values **Sum of Total**. Paper 206
+::: {.callout-note title="Model · Rana's sales"}
+Rana has her sales of one week in a list (made up). She wants the total of
+each type. PivotTable: Rows **Type**, Values **Sum of Total**. Paper 206
 JD, Drinks 71 JD, Bags 78 JD; Grand Total 355 JD.
 :::
 
-**On a computer or on the web.** The orange numbers show where to click.
+### On the simulator
 
+{{< sim file="sims/excel-lab-pivot.html" poster="sims/excel-lab-pivot.png" title="Excel Lab: a PivotTable of Rana's sales" height="640" >}}
+
+### On your own computer (optional)
+
+:::: {.word-part .home-part}
 ::: {.screens}
 ![[1]{.step-n} Click in the list, then **Insert**. [2]{.step-n} Click **PivotTable**. [3]{.step-n} Click **OK**.](images/pivot-win-1.png)
 
 ![In **PivotTable Fields**: [4]{.step-n} tick the group (Type): it goes to **Rows**. [5]{.step-n} Tick the number (Total): it goes to **Values**. [6]{.step-n} Read the totals and the **Grand Total**.](images/pivot-win-2.png)
 :::
-
-{{< sim file="sims/pivot-lab.html" poster="sims/pivot-lab.png" title="Pivot Lab: summarize Rana's month" height="600" >}}
+::::
 
 ::: {.callout-tip title="Try it 1 · PivotTables"}
-Use Rana's month. Choose the right answer.
+Choose the right answer.
 
-::: {.match extra="Values: Type|355 rows"}
-Where does the group (Type) go?
+::: {.match extra="Values|Grand Total"}
+You tick **Type** (text). Where does it go?
 :   Rows
 
-    Why: Rows give one line for each type.
-
-Where does the number (Total) go?
-:   Values
-
-    Why: Values add the numbers of each group.
-
-What is the Grand Total of Rana's month?
-:   355 JD
-
-    Why: 206 + 71 + 78 = 355: the total of the whole list.
+    Why: Rows give one line for each type; the numbers go to Values.
 :::
 :::
 
@@ -83,117 +78,112 @@ What is the Grand Total of Rana's month?
 {{< watch title="Create charts" source="Microsoft Support" url="https://support.microsoft.com/en-us/excel/get-started/create-a-chart-from-start-to-finish" length="0:52" checked="2026-10-31" captions="English" >}}
 
 - Read the PivotTable: **which group is the biggest**? Which is the
-  smallest? Is one group **half** of the total?
+  smallest? Is one group **more than half** of the total?
 - A true sentence about the data, with a number, helps a manager decide.
-- A **column chart** compares the groups: click the PivotTable, then
-  **Insert › Column chart**.
+- A **column chart** compares the groups: select the totals with the
+  headings (not the Grand Total), then **Insert › Column › Clustered
+  Column**, and click **Chart Title** to type a title.
 
-::: {.callout-note title="Model · What Rana's month shows"}
+::: {.callout-note title="Model · What Rana's sales show"}
 Paper 206 of 355 JD: more than half of the money. So Rana orders more
-paper for April. The column of Paper in the chart is the tallest.
+paper. The column of Paper in the chart is the tallest.
 :::
 
-**On a computer or on the web.** The orange numbers show where to click.
+### On the simulator
 
+{{< sim file="sims/excel-lab-pivotchart.html" poster="sims/excel-lab-pivotchart.png" title="Excel Lab: a chart of the totals" height="640" >}}
+
+### On your own computer (optional)
+
+:::: {.word-part .home-part}
 ::: {.screens}
 ![Click in the PivotTable. [1]{.step-n} Click **Insert**. [2]{.step-n} Click the **Column chart** button and the first chart.](images/pivot-chart-1.png)
-:::
 
-{{< sim file="sims/chart-lab.html" poster="sims/chart-lab.png" title="Chart Lab: the right chart for the question" height="640" >}}
+![Or from cells: [1]{.step-n} select them with the headings, [2]{.step-n} **Insert**, [3]{.step-n} **Column**, [4]{.step-n} click the title and type.](images/lab-chart-1.png)
+:::
+::::
 
 ::: {.callout-tip title="Try it 2 · What the data shows"}
-Rana's month: Paper 206, Drinks 71, Bags 78 JD (355 in all). Choose the
+Rana's sales: Paper 206, Drinks 71, Bags 78 JD (355 in all). Choose the
 right answer.
 
-::: {.match extra="Drinks|a pie of every sale"}
+::: {.match extra="Drinks|Bags"}
 Which type brought the most money?
 :   Paper
 
-    Why: 206 is the biggest total.
-
-Is Paper more than half of the money: yes or no?
-:   yes
-
-    Why: Half of 355 is about 178, and 206 is more.
-
-Which chart compares the three types?
-:   a column chart
-
-    Why: Columns side by side compare amounts.
+    Why: 206 is the biggest total, more than half of 355.
 :::
 :::
 
-## Step 3 · A formula and a summary from AI, checked {.study}
+## Step 3 · AI adds a total to your sheet {.study}
 
-- An AI assistant can give you a **formula** or a **summary** of your
-  data. Copy a ready prompt with the numbers.
-- **Check** the answer: a formula in Excel (does it give the same total?),
-  each number of the summary in the PivotTable.
-- An AI summary can change a number or a name: keep only what is true.
+- On **tutudocs.com** (free, **no sign-in**) you open your Excel file in
+  the browser.
+- Click **AI Assistant** and ask for **one change**, for example: *Add a
+  row at the end: Total, with the sum of the Total column.*
+- **File › Download**, the choice that ends in **.xlsx**: the new file
+  opens in Excel.
 
-::: {.callout-note title="Model · Rana asks the AI"}
-Rana copies this prompt into an AI assistant:
+### On the simulator
 
-::: {.prompt}
-My Excel sheet has the totals of a month in C2:C4: Paper 206, Drinks 71,
-Bags 78. Give the formula for the total, and one short sentence about
-what the data shows.
+{{< sim file="sims/tutu-online.html" poster="sims/tutu-online.png" title="Tutu Lab: AI adds a total to your sheet" height="700" >}}
+
+### On your own computer (optional)
+
+:::: {.word-part .home-part}
+::: {.screens}
+![**tutudocs.com**: [1]{.step-n} click the box, then choose your file.](images/lab-tutu-1.png)
+
+![[1]{.step-n} **AI Assistant**. [2]{.step-n} Your request. [3]{.step-n} The AI changes the sheet.](images/lab-tutu-2.png)
+
+![[1]{.step-n} **File**, [2]{.step-n} **Download**, [3]{.step-n} the **.xlsx** file.](images/lab-tutu-3.png)
 :::
-
-The AI answers `=SUM(C2:C4)` (355: right) and "Drinks brought the most
-money" (wrong: Paper, 206). Rana keeps the formula and writes the sentence
-again from her PivotTable.
-:::
-
-{{< sim file="sims/summary-check.html" poster="sims/summary-check.png" title="Summary Check: is the AI right?" height="600" >}}
-
-::: {.callout-tip title="Try it 3 · Check the AI"}
-Choose the right answer.
-
-::: {.match extra="=AVERAGE(C2:C4)|keep it"}
-Which formula adds Paper, Drinks and Bags in C2:C4?
-:   =SUM(C2:C4)
-
-    Why: SUM adds the cells of the range.
-
-The AI says "Drinks brought the most money". The PivotTable says Paper 206. What do you do?
-:   correct it from the PivotTable
-
-    Why: The numbers in your data are right; the AI sentence is not.
-:::
-:::
+::::
 
 ## Tasks to submit {.tasks}
 
 Open the start file `training.xlsx`: the training hours of the Sunrise
-staff (12 rows). (Step 1 shows how.)
+staff (12 rows).
 
-### Task 1 · A PivotTable
+### Task 1 · A PivotTable and a chart
 
 1. Make a PivotTable: Rows **Department**, Values **Sum of Hours**.
-2. Click the PivotTable and insert a **column chart**.
+   (Step 1 shows how.)
+2. Insert a **column chart** of the totals, with the title *Training
+   hours*. (Step 2 shows how.)
 3. Save the file as `training.xlsx`.
 
-*Submit:* the file `training.xlsx`.
+### Task 2 · Two answers
 
-### Task 2 · What the data shows
+::: {.pick}
+**a)** Which department has the most hours?
 
-a) Which department has the most hours? **A** Sales · **B** Office · **C**
-Shop.
+- Sales
+- Office
+- Shop
+:::
 
-{{< answer-space lines=1 >}}
+::: {.pick}
+**b)** Make a second PivotTable with Rows **Course**. Which sentence is true?
 
-b) Make a second PivotTable with Rows **Course**. Which sentence is true?
-**A** Safety has more hours than Word. · **B** Half of all the hours are
-Excel. · **C** Word has the most hours. (Step 2)
+- Safety has more hours than Word
+- Half of all the hours are Excel
+- Word has the most hours
+:::
 
-{{< answer-space lines=1 >}}
+### Task 3 · AI adds a total
 
-c) An AI assistant says: "Office has the most training hours." Is it
-true? **A** yes · **B** no (Step 3)
+1. On **tutudocs.com**, open the **start file** `training.xlsx` (the one
+   you downloaded, without the PivotTable).
+2. Ask the AI Assistant: *Add a row at the end: Total, with the sum of the
+   Hours column.* Download it (the choice that ends in .xlsx). (Step 3
+   shows how.)
+3. Open the new file in Excel and save it as `training-ai.xlsx`.
 
-{{< answer-space lines=1 >}}
+*Submit:* `training.xlsx` and `training-ai.xlsx`.
 
 ## How to submit
 
-Upload `training.xlsx` and your three letters, **before lecture 8**.
+Tap your answers in the **Tasks PDF to fill in** and save it (or tap them
+on this page, then **Print tasks** › Save as PDF). Upload the PDF and
+the two files, **before lecture 8**.

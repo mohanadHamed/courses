@@ -22,9 +22,9 @@ format: lesson-pptx
 :::
 ::::
 
-## Live demo · Formula Lab
+## Live demo · A formula
 
-{{< sim file="sims/formula-lab.html" poster="sims/formula-lab.png" title="Formula Lab: the Sunrise shop sheet" task="**Show:** type =B2\*C2 in D2, then change the price in B2. **Ask:** why did D2 change by itself?" answer="The formula uses the address B2, not the number: when B2 changes, Excel calculates D2 again." >}}
+{{< sim file="sims/excel-lab-formula.html" poster="sims/excel-lab-formula.png" title="Excel Lab: a formula" task="**Show:** type =B2*C2 in D2, then change B2. **Ask:** why does D2 change by itself?" answer="The formula uses B2: when B2 changes, Excel computes again." >}}
 
 ## Try it 1 · Cells and formulas
 
@@ -52,9 +52,9 @@ c) 20
 :::
 ::::
 
-## Live demo · Reference Lab
+## Live demo · Copy a formula
 
-{{< sim file="sims/reference-lab.html" poster="sims/reference-lab.png" title="Reference Lab: copy a formula with $" task="**Show:** copy =B2\*F1 down and look at the zeros, then copy =B2\*\$F\$1 down. **Ask:** which part of the formula stayed the same?" answer="$F$1: the $ signs make it absolute, so it stays; B2 moves one row down for each row." >}}
+{{< sim file="sims/excel-lab-copy.html" poster="sims/excel-lab-copy.png" title="Excel Lab: copy a formula" task="**Show:** double-click the fill handle of D2. **Ask:** what is the formula in D3?" answer="=B3*C3: relative references move one row." >}}
 
 ## Try it 2 · References
 
@@ -106,10 +106,11 @@ c) 30
 
 :::: {.columns}
 ::: {.column width="50%"}
-- In the computer lab, do the three experiments of the worksheet alone.
-- Part A is in Excel, with the start file shop-start.xlsx.
-- Part B is on a simulator or the game The Shop's Week: scan its QR code or click its link.
-- Write your result after each step, and fill in the table at the end.
+- In the computer lab, follow the worksheet alone, step by step, in Excel.
+- Five short tasks: type the shop list, a formula, copy it down, AutoSum and MAX, save.
+- Nothing to download: you type the text yourself.
+- Each step has a picture of the screen; tick each step when it is done.
+- Then the Extra: on tutudocs.com an AI assistant adds a row to your sheet.
 :::
 ::: {.column width="50%"}
 {{< page-qr >}}
@@ -118,12 +119,12 @@ c) 30
 
 ## Results of the worksheet
 
-Which results do you have in your table?
+What does your file show at the end?
 
 ::: {.reveal}
-- Experiment 1: The pen's price is in B3, D2 shows 20, and 30 when the price is 3.
-- Experiment 2: E3 shows 0 with =D2\*F1, and E4 shows 3.6 with =D4\*\$F\$1.
-- Experiment 3: SUM 100, AVERAGE 20, MAX 30 and MIN 12, and =SUMM shows #NAME?.
+- Tasks 1–2: D2 is =B2*C2 = 20, and it changes by itself.
+- Task 3: D3 and D4 have their totals; D3 is =B3*C3.
+- Task 4: D5 = 49 (AutoSum), D6 = 20 (MAX); the file is on the Desktop.
 :::
 
 ## Game challenge · The Shop's Week

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tutu Lab: AI changes your web page</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tutu Lab: AI changes your web page</h1>
+  <p class="hint">The Extra of your worksheet, as on <b>tutudocs.com</b> (no sign-in): <b>open</b> your web page (page-Huda.html), ask the <b>AI Assistant</b> for a change, then <b>download</b> it as HTML. (Practice with fixed answers: no real AI here.)</p>
+  <div id="tutu"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.TUTU = {
+  kind: "doc", file: "page-Huda.html", dl: "HTML",
+  model: [
+    { style: "Title", text: "Mona's Cakes", color: "#8b4513" },
+    { style: "Normal", text: "Fresh cakes, made at home." },
+  ],
+  asks: [
+    { text: "Add a short paragraph: our three cakes are chocolate, strawberry and vanilla.", keys: /paragraph|three|cakes are/i, done: "Done: a short paragraph about the three cakes is at the end.",
+      apply: (m) => { m.push({ style: "Normal", text: "Our three cakes are chocolate, strawberry and vanilla." }); return [m.length - 1]; } },
+    { text: "Make the heading green.", keys: /green|colou?r/i, done: "Done: the heading is green.",
+      apply: (m) => { m[0].color = "#2b8a3e"; return [0]; } },
+  ],
+};
+</script>
+<script src="../../../../shared/sims/tutu-lab.js"></script>
+</body>
+</html>

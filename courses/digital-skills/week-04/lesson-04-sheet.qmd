@@ -1,343 +1,135 @@
 ---
-title: "Digital Content (1): Word Documents, and a Draft from AI Checked"
-description: "Worksheet · Three experiments: formatting and styles, a table and a picture, and a draft from an AI assistant checked and proofread in Word. Part A in Word and an AI assistant, Part B on the simulators."
+title: "Digital Content (1): Word Documents, and Changes with AI"
+description: "Worksheet · Make a notice in Word, step by step. Nothing to download."
 lesson: 4
 ilos: [A3, B2, C2]
-start-files:
-  - name: book-fair-start.docx
-    about: "a notice of the college book fair, with no formatting yet (14 lines)"
-  - name: books.png
-    about: "a drawing of books on a shelf, for Experiment 3"
+# The lab model (since 2026-11-20, NOTES.md, "The lab model"): a guide that
+# each student follows alone in Word on the lab computer, as fast as
+# possible. Every step says exactly what to do and shows its screen, drawn
+# by tools/lab_screens.py (the orange numbers). No questions, no results to
+# record, no start files: the students type the short text themselves.
+lab: true
 format: lesson-typst
 ---
 
+```{=typst}
+#let mk(n) = box(baseline: 22%, circle(radius: 5.8pt, fill: rgb("#d9480f"), stroke: none, inset: 0pt)[#set align(center + horizon); #text(fill: white, weight: "bold", size: 8pt)[#n]])
+#let tick = box(baseline: 12%, width: 10pt, height: 10pt, stroke: 0.9pt + luma(70), radius: 2pt)
+#let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
+#let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f6fd"), stroke: 0.8pt + rgb("#185abd"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
+#let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
+// One step: the box to tick, its number and what to do on the left; its screen on the right.
+#let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
+  #set par(justify: false, leading: 0.62em)
+  #let words = grid(columns: (auto, 1fr), column-gutter: 6pt, [#tick #h(1pt) *#n.*], body)
+  #if img == none { words } else {
+    grid(columns: (left, 1fr), column-gutter: 12pt, align: (top, top), words, align(center, shot(img, w: w)))
+  }
+  #if after != none { v(4pt); after }
+]
+```
+
 ::: {.lead}
-Today you format a real notice in Word, like in a lab. Each experiment has
-two parts. **Part A** is in Word on the lab computer. **Part B** is on a
-simulator of the interactive lesson: on paper, scan its QR code; on the
-screen, click its link. After each step, write your result in its box. At
-the end, copy your key results into the table.
+Today you make a short notice in **Word** on the lab computer. Do the tasks
+in order. The **orange numbers** in each picture show where to click. Tick
+the box `#tick`{=typst} after each step. Stuck? Raise your hand.
 :::
 
-## Before you start
-
-- **You need:** a lab computer with Word (the desktop app, or Word on the
-  web at `office.com`) and the two start files.
-- **No lab computer today?** Your teacher does Part A on the screen, on the
-  simulators of the interactive lesson. Do Part B on your phone.
-- **Check:** the results are at the end of this worksheet. Look only after
-  you try. On the interactive lesson, every step has a check that answers
-  at once.
-
-{{< start-files >}}
-
-## Experiment 1 · Formatting and styles
-
-**The idea:** **text formatting** (font, size, bold, colour: **Home ›
-Font**) changes only the text that you select. **Paragraph formatting**
-(alignment, line spacing: **Home › Paragraph**) changes the whole
-paragraph: a click inside it is enough. A **style** is saved formatting
-with a name: **Title**, **Heading 1**, **Normal** (Home › Styles); change a
-style once, and all the text with it changes. **View › Navigation Pane**
-shows the headings as a map.
-
-**Aim:** format one line, and give the headings of a notice their style.
-
-::: {.part}
-**Part A · In the app (Word)**
-:::
-
-1. Open `book-fair-start.docx`. In the last line, select only the word
-   **free** and click **Bold**. Then click in the same line and click
-   **Center**.
-
-   {{< record "Bold changed … ; Center moved …" >}}
-
-   ::: {.check}
-   **Bold** changed only the word **free**: text formatting changes only
-   the selection. **Center** moved **the whole line**: paragraph formatting
-   changes the whole paragraph, and a click inside it is enough.
-   :::
-
-   ::: {.sort}
-   Only the selected text, or the whole paragraph? Sort the commands.
-
-   Only the selected text (Home › Font)
-   :   Bold
-
-       Why: It changes only the letters that you select.
-
-   :   Font size
-
-       Why: A text command: select first.
-
-   :   Font colour
-
-       Why: A text command too.
-
-   The whole paragraph (Home › Paragraph)
-   :   Center
-
-       Why: A click inside the line is enough: the whole line moves.
-
-   :   Line spacing
-
-       Why: It changes the space between all the lines of the paragraph.
-   :::
-
-2. Give the first line the style **Title** (Home › Styles), and the four
-   headings (*When and where*, *What you can bring*, *How to swap a book*,
-   *Prices*) the style **Heading 1**.
-
-   {{< record "How do the four headings look now?" >}}
-
-   ::: {.check}
-   Bigger and in a colour (often blue). All four look the same, because
-   they have the same style.
-   :::
-
-   ::: {.choice}
-   How do the four headings look now?
-
-   - [x] all the same: bigger and in a colour
-
-     Why: They have the same style, Heading 1.
-
-   - [ ] each one a little different
-
-     Why: One style gives the same look to all of them.
-
-   - [ ] like the normal text
-
-     Why: Heading 1 makes them bigger and coloured.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/style-lab.html" poster="sims/style-lab.png" title="Style Lab: styles and the Navigation Pane" >}}
-
-3. In **Style Lab**, give each line its style. How many headings does the
-   Navigation Pane show?
-
-   {{< record "The Navigation Pane shows … headings" >}}
-
-   ::: {.check}
-   **4 headings**: *The plan* and *What to bring* (Heading 1), *Morning*
-   and *Afternoon* (Heading 2). The title and the normal text are not in
-   the pane.
-   :::
-
-   ::: {.fill answer="4" unit="headings" hint="Count the lines with Heading 1 or Heading 2."}
-   The plan has two lines with Heading 1 and two with Heading 2. How many
-   headings does the Navigation Pane show?
-
-   Why: The pane shows the headings only: 2 + 2 = 4. The title and the normal text are not in it.
-   :::
-
-## Experiment 2 · A table and a picture
-
-**The idea:** a **table** (Insert › Table) puts information in rows and
-columns; its first row, the **header row**, names the columns. **Insert ›
-Pictures** adds a picture: drag a **corner** to change its size, and choose
-**Square** (Layout Options) so that the text flows around it. **Alt text**
-says in a few words what the picture shows.
-
-**Aim:** put information in a table, and add a picture.
-
-::: {.part}
-**Part A · In the app (Word)**
-:::
-
-1. Under the line *Prices*, insert a table (Insert › Table) of 2 columns
-   with a header row: *Book* and *Price (JD)*, then novel 3, dictionary 5
-   and notebook 1.
-
-   {{< record "My table has … columns and … rows" >}}
-
-   ::: {.check}
-   **2 columns and 4 rows**: 1 header row (*Book*, *Price (JD)*) and 3 rows
-   for the three items.
-   :::
-
-   ::: {.fill answer="4" unit="rows" hint="One row for the headings, and one row for each item."}
-   How many rows does the price table need, with its header row?
-
-   Why: 1 header row + 3 items = 4 rows, in 2 columns: Book and Price (JD).
-   :::
-
-2. Click at the start of the text *The college library holds …*. Choose
-   **Insert › Pictures › This Device** and open `books.png`. Make it
-   smaller with a **corner** handle. Then click **Layout Options** (the
-   small button next to the picture) and choose **Square**.
-
-   {{< record "First the picture sits … ; with Square, the text …" lines=2 >}}
-
-   ::: {.check}
-   First the picture sits **in the line**, like a very big letter (*In
-   Line with Text*). With **Square**, the text **flows around the
-   picture**.
-   :::
-
-   ::: {.choice}
-   With **Square**, what does the text do?
-
-   - [x] It flows around the picture.
-
-     Why: With Square, the picture and the text share the lines.
-
-   - [ ] It moves under the picture.
-
-     Why: That is how a picture in line with the text looks.
-
-   - [ ] It goes behind the picture.
-
-     Why: Square puts the text next to the picture, not behind it.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/list-table-lab.html" poster="sims/list-table-lab.png" title="List and Table Lab: bullets, numbers and a table" >}}
-
-3. In **List and Table Lab**, choose bullets or numbers for each list, then
-   build the table of the bus plan. How many columns and rows does the
-   table need?
-
-   {{< record "The bus plan: … columns and … rows" >}}
-
-   ::: {.check}
-   **2 columns and 5 rows**: the header row (*Time*, *Activity*) and one
-   row for each of the 4 times (9:00, 10:00, 13:00, 16:00).
-   :::
-
-   ::: {.fill answer="5" unit="rows" hint="One header row, and one row for each time."}
-   The bus plan has 4 times, each with an activity. How many rows does its
-   table need, with the header row?
-
-   Why: 1 header row + 4 times = 5 rows, in 2 columns: Time and Activity.
-   :::
-
-## Experiment 3 · A draft from AI, checked and proofread
-
-**The idea:** an AI assistant (for example Copilot) writes a **first
-draft** fast. You give the facts in the prompt; then you **check** every
-line: the AI can add a fact that nobody gave or change a number, and you
-delete or fix it. Paste into Word with **Keep Text Only**, then
-**proofread**: Review › Spelling & Grammar (F7).
-
-**Aim:** a first draft from AI with only your facts, checked in Word.
-
-::: {.part}
-**Part A · In the apps (an AI assistant and Word)**
-:::
-
-1. Copy the prompt into an AI assistant. Find every fact that you did
-   **not** give.
-
-   ::: {.prompt}
-   Write three short lines for students: the book fair of the college
-   library is from Sunday to Tuesday, from 10:00 to 15:00, and entry is
-   free.
-   :::
-
-   {{< record "Facts that I did not give (or: none)" >}}
-
-   ::: {.check}
-   Your facts: Sunday to Tuesday, 10:00 to 15:00, entry is free. The AI
-   often adds something, for example "Every book is 1 JD" or "Writers come
-   on Monday": nobody said it, so you delete it.
-   :::
-
-   ::: {.sort}
-   The draft has five lines. Keep or delete? Sort them.
-
-   Your fact: keep it
-   :   The book fair is from Sunday to Tuesday.
-
-       Why: You gave this fact.
-
-   :   It is open from 10:00 to 15:00.
-
-       Why: You gave the time.
-
-   :   Entry is free.
-
-       Why: You gave this fact.
-
-   Not given: delete it
-   :   Every book costs 1 JD.
-
-       Why: Nobody said it: the AI invented it.
-
-   :   Two famous writers come on Monday.
-
-       Why: Not in your prompt: delete it.
-   :::
-
-2. Paste the draft at the end of the notice with **Keep Text Only**. Delete
-   the facts that you did not give. Then click **Review › Spelling &
-   Grammar** (F7).
-
-   {{< record "Spelling & Grammar found … mistakes" >}}
-
-   ::: {.check}
-   Often **0** or 1. The check finds spelling mistakes, but not a wrong fact
-   or a wrong number: only you can check them.
-   :::
-
-   ::: {.choice}
-   The AI wrote "from 10:00 to 17:00". Does Spelling & Grammar find this
-   mistake?
-
-   - [x] no: only you can check the facts and the numbers
-
-     Why: 17:00 is spelled right; it is just not your fact.
-
-   - [ ] yes, it underlines it in red
-
-     Why: Red is for spelling; a wrong number is not a spelling mistake.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/word-ai-lab.html" poster="sims/word-ai-lab.png" title="Word AI Lab: draft, sum up, rewrite, translate" >}}
-
-3. In **Word AI Lab**, choose **Sum up** and tap the wrong part.
-
-   {{< record "The wrong part, and the right fact" >}}
-
-   ::: {.check}
-   "Shop staff pick up the price list at **3 pm**": the memo says **5 pm**.
-   A summary can change a number, so you find it in the original.
-   :::
-
-   ::: {.fill answer="5 pm|5|5pm|5 p.m.|17:00|5:00 pm" hint="Find the price list in the memo, not in the summary."}
-   The summary says: "Shop staff pick up the price list at 3 pm." What time
-   does the memo say?
-
-   Why: The memo says 5 pm. A summary can change a number, so you check each one in the original.
-   :::
-
-## Table of results
-
-Copy your key results here: the rows of the parts that you did. Your
-teacher checks this table before the end of the lecture.
-
-::: {.record-table}
-| Experiment | What you record                                 | Your result |
-|:-------:|----------------------------------------------|-------------------------|
-| 1 A        | What Bold changed, and what Center moved        |             |
-| 1 A        | How the four headings look with Heading 1       |             |
-| 1 B        | The headings in the Navigation Pane             |             |
-| 2 A        | The columns and rows of the price table         |             |
-| 2 A        | What the text does with Square                  |             |
-| 2 B        | The columns and rows of the bus plan            |             |
-| 3 A        | The facts that I did not give                   |             |
-| 3 A        | The mistakes of Spelling & Grammar              |             |
-| 3 B        | The wrong part, and the right fact              |             |
-:::
+- **You need:** a lab computer with Word. **Nothing to download:** you type
+  the text yourself.
+- **Time:** about 35 minutes. Your Word may look a little different: the
+  names of the buttons are the same.
+
+## Task 1 · Open Word and type the notice
+
+```{=typst}
+#step(1, [Click *Search* on the taskbar #mk(1). Type *word*. Click *Word* #mk(2).], img: "images/lab-open-1.png", w: 88%, left: 32%)
+#step(2, [Click *Blank document* #mk(1).], img: "images/lab-open-2.png", w: 42%, left: 32%)
+#step(3, [Type these five lines. Press *Enter* at the end of each line.], after: typebox[
+  #set text(size: 12pt)
+  #set par(justify: false, spacing: 0.75em)
+  Book Fair \
+  When and where \
+  Sunday to Tuesday, 10:00 to 15:00, in the college library. \
+  Entry is free. \
+  Prices
+])
+```
+
+## Task 2 · A title and headings (styles)
+
+A **style** gives a line a ready look with one click: **Title** for the name
+of the document, **Heading 1** for a heading.
+
+```{=typst}
+#step(1, [Click in the line *Book Fair* #mk(1). On the *Home* tab, in *Styles*, click *Title* #mk(2).], img: "images/lab-styles-1.png", w: 88%)
+#step(2, [Click in *When and where* #mk(1). Click *Heading 1* #mk(2). \ Then click in *Prices* #mk(3) and click *Heading 1* again.], img: "images/lab-styles-2.png", w: 88%)
+#step(3, [Click the *View* tab #mk(1). Tick *Navigation Pane* #mk(2). \ Your headings are now on the left #mk(3). \ Then click the *Home* tab again.], img: "images/lab-nav-1.png", left: 32%)
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 3 · Center, bold and a colour
+
+```{=typst}
+#step(1, [Click in the title *Book Fair* #mk(1). Click *Center* #mk(2). \ The whole line moves to the middle.], img: "images/lab-format-1.png")
+#step(2, [Double-click the word *free* #mk(1): it is now selected (blue). \ Click *B* (Bold) #mk(2). \ Click the small arrow next to *A* #mk(3), then click *red*. \ Only the word _free_ changes.], img: "images/lab-format-2.png", w: 92%)
+```
+
+## Task 4 · A table of prices
+
+```{=typst}
+#step(1, [Click at the end of the line *Prices*. Press *Enter*.])
+#step(2, [Click the *Insert* tab #mk(1). Click *Table* #mk(2). \ Move the mouse over the squares: *2* across and *4* down. The list says *2x4 Table* #mk(3). Click.], img: "images/lab-table-1.png", w: 80%)
+#step(3, [Type the table. Press *Tab* to go to the next cell.], after: typebox[
+  #table(columns: (4cm, 3cm), inset: 6pt, stroke: 0.6pt + luma(90), fill: none,
+    [*Book*], [*Price (JD)*], [Novel], [3], [Dictionary], [5], [Notebook], [1])
+])
+```
+
+## Task 5 · Fix the spelling and save
+
+```{=typst}
+#step(1, [A *red wavy line* under a word? It is a spelling mistake. \ Right-click the word #mk(1). Click the right word #mk(2). \ No red line? Good: go to step 2.], img: "images/lab-spell-1.png", w: 92%, left: 32%)
+#step(2, [Press *F12* (on a laptop: *Fn + F12*). The *Save As* window opens. \ _Or:_ click *File*, *Save As*, *Browse*.])
+#step(3, [Click *Desktop* #mk(1). \ In *File name*, type *book-fair-* and your first name #mk(2). \ Click *Save* #mk(3).], img: "images/lab-save-2.png", w: 94%, left: 32%)
+```
+
+## Show your teacher
+
+```{=typst}
+#block(breakable: false, grid(columns: (0.9fr, 1.1fr), column-gutter: 14pt, align: top,
+  shot("images/lab-result-1.png"),
+  [
+    #set par(spacing: 0.9em, justify: false)
+    Your notice now looks like the picture. Check it:
+    #v(4pt)
+    #tick #h(4pt) *Book Fair* is big and in the middle. \
+    #tick #h(4pt) The pane on the left shows 3 headings. \
+    #tick #h(4pt) Only the word *free* is bold and red. \
+    #tick #h(4pt) The table has 2 columns and 4 rows. \
+    #tick #h(4pt) The file is on the Desktop.
+    #v(8pt)
+    #tip[Raise your hand: your teacher looks at your screen. \ Then do the *Extra*: AI changes your notice.]
+  ],
+))
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Extra · AI changes your notice
+
+```{=typst}
+#block(width: 100%, fill: rgb("#e3f4f1"), stroke: 0.8pt + rgb("#8fd1c4"), radius: 6pt, inset: (x: 12pt, y: 9pt))[
+  Only when you finish Tasks 1–5. On *tutudocs.com* an *AI assistant* changes your Word file for you. *No sign-in.*
+]
+#step(1, [Open the browser. Go to *tutudocs.com*.])
+#step(2, [Click the box *Drop a file anywhere on this page, or click to choose* #mk(1). \ Click *Desktop*, click your file *book-fair-…*, click *Open*. \ Your notice opens in the online editor.], img: "images/lab-tutu-1.png", w: 84%, left: 36%)
+#step(3, [Click *AI Assistant* at the top #mk(1). \ Click in *Ask AI anything…* #mk(2) and type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Make the title Book Fair blue.] \ Press *Enter* #mk(3). Wait about 15 seconds: the title in the page turns blue.], after: align(center, shot("images/lab-tutu-2.png", w: 84%)))
+#step(4, [One more request. Type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Add a short paragraph at the end that invites students to the book fair.] \ Press *Enter*. Wait for the answer before you type again.])
+#step(5, [Click *File* #mk(1), then *Download* #mk(2), then *Microsoft Word (.docx)* #mk(3). \ Open the new file from *Downloads* (at the top of the browser): it opens in Word, with the changes of the AI.], img: "images/lab-tutu-3.png", w: 74%, left: 44%)
+```

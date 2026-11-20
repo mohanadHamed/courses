@@ -18,7 +18,7 @@
     b.addEventListener("click", (e) => { e.stopPropagation(); fn(e); }); return b; };
   const say = (text, bad) => { const m = $("#msg"); m.innerHTML = text; m.className = "message" + (bad ? " bad" : ""); };
   const EXT = { doc: ".docx", sheet: ".xlsx", slides: ".pptx" }[T.kind];
-  const DL = { doc: "Microsoft Word (.docx)", sheet: "Microsoft Excel (.xlsx)", slides: "Microsoft PowerPoint (.pptx)" }[T.kind];
+  const DL = T.dl || { doc: "Microsoft Word (.docx)", sheet: "Microsoft Excel (.xlsx)", slides: "Microsoft PowerPoint (.pptx)" }[T.kind];
   const APP = { doc: "Word", sheet: "Excel", slides: "PowerPoint" }[T.kind];
   const MENUS = { doc: ["File", "Edit", "View", "Insert", "Format", "Tools", "Help"], sheet: ["File", "Edit", "View", "Insert", "Format", "Data", "Help"],
     slides: ["File", "Edit", "View", "Insert", "Format", "Slide", "Arrange", "Tools", "Help"] }[T.kind];
@@ -89,9 +89,9 @@
       });
       if (s.menu === "download") {
         const sub = h("div", "w-menu t-sub");
-        [DL, "PDF", "HTML", "Plain text"].forEach((it) => sub.appendChild(btn(it, it, () => {
+        [...new Set([DL, "Microsoft Word (.docx)", "PDF", "HTML", "Plain text"])].slice(0, 5).forEach((it) => sub.appendChild(btn(it, it, () => {
           s.menu = null;
-          if (it === DL) { s.downloaded = true; say(`&#10003; <b>${T.file}</b> is in your <b>Downloads</b> folder. Open it: ${APP} shows the changes of the AI.`); }
+          if (it === DL) { s.downloaded = true; say(`&#10003; <b>${T.file}</b> is in your <b>Downloads</b> folder. Open it: ${T.dl === "HTML" ? "the browser" : APP} shows the changes of the AI.`); }
           else say(`${it}: a different kind of file. Choose the ${APP} file (<b>${EXT}</b>).`, true);
           draw();
         }, "t-item")));

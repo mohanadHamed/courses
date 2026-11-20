@@ -959,7 +959,7 @@ def tutu_ai(s, top, name, kind, ask, answer, draw_page, note=None, note_to=None)
         top.label(330, 200, 170, note, arrow_to=note_to)
 
 
-def tutu_download(s, top, name, kind):
+def tutu_download(s, top, name, kind, pick=0):
     """File › Download › the file of the app."""
     h = 470
     _, menus, box = tutu_shell(s, h, name, kind, panel=False)
@@ -978,12 +978,12 @@ def tutu_download(s, top, name, kind):
     s.rect(sx, dy, 220, 30 * len(subs) + 8, fill="#ffffff", stroke="#d0d0d0", sw=1, rx=8)
     for i, it in enumerate(subs):
         y = dy + 4 + i * 30
-        if i == 0:
+        if i == pick:
             s.rect(sx + 4, y, 212, 28, fill=TEAL_SOFT, rx=5)
-        s.text(sx + 16, y + 19, it, 12.5, 600 if i == 0 else 400, INK)
+        s.text(sx + 16, y + 19, it, 12.5, 600 if i == pick else 400, INK)
     mark_box(top, menus["File"], 1, "top", 4, 1)
     mark_box(top, (mx + 4, dy, 212, 28), 2, "left", 5, 1)
-    mark_box(top, (sx + 4, dy + 4, 212, 28), 3, "right", 5, 1)
+    mark_box(top, (sx + 4, dy + 4 + 30 * pick, 212, 28), 3, "right", 5, 1)
 
 
 def wrap_text(text, size, maxw):
@@ -2092,6 +2092,193 @@ def lab_w9_tutu_dl(s, top):
     tutu_download(s, top, "plan-Huda", "doc")
 
 
+
+# =====================================================================
+# Lecture 10: a site in Google Sites, and a web page in Notepad.
+# =====================================================================
+
+GS = "#1a73e8"
+GS_SOFT = "#e8f0fe"
+HTML_LINES = ["<html>", '<body style="font-family: Arial">', '<h1 style="color: brown">Mona\'s Cakes</h1>',
+              "<p>Fresh cakes, made at home.</p>", "</body>", "</html>"]
+
+
+def sites_shell(s, h, panel="Pages", name="Mona's Cakes", title="Mona's Cakes", pages=("Home",), theme=("#ffffff", INK, GS)):
+    browser(s, h, "sites.google.com", "Google Sites")
+    s.rect(15, 85, W - 30, 40, fill="#ffffff")
+    s.text(30, 111, name or "Untitled site", 14, 400, INK if name else GREY)
+    p = {"name": (24, 94, 220, 26)}
+    p["preview"] = (650, 96, 36, 22)
+    s.circle(668, 107, 9, stroke=INK, sw=1.6)
+    s.circle(668, 107, 3, fill=INK)
+    s.rect(720, 94, 80, 28, fill=GS, rx=4)
+    s.text(760, 113, "Publish", 12.5, 700, "#ffffff", "middle")
+    s.rect(15, 125, W - 30, h - 140, fill="#f1f3f4")
+    bg, fg, acc = theme
+    s.rect(40, 140, 560, h - 170, fill=bg, stroke="#dadce0", sw=1)
+    s.text(56, 166, name or "Untitled site", 12, 700, fg)
+    x = 400
+    links = {}
+    for pg in pages:
+        s.text(x, 166, pg, 12, 700 if pg == "Home" else 400, acc if pg == "Home" else fg)
+        links[pg] = (x - 4, 154, width(pg, 12) + 8, 18)
+        x += width(pg, 12) + 18
+    s.rect(40, 176, 560, 3, fill=acc)
+    s.rect(40, 180, 560, 90, fill=acc)
+    s.raw('<rect x="56" y="206" width="420" height="40" fill="none" stroke="#ffffff" stroke-dasharray="4 3"/>')
+    s.text(64, 234, title or "Your page title", 22, 700, "#ffffff")
+    p["title"] = (56, 206, 420, 40)
+    s.text(56, 296, "Fresh cakes, made at home. Order two days before.", 12, 400, fg)
+    px = 620
+    s.rect(px, 125, W - 15 - px, h - 140, fill="#ffffff")
+    for i, n in enumerate(("Insert", "Pages", "Themes")):
+        xx = px + 16 + i * 84
+        s.text(xx, 148, n, 12.5, 700 if n == panel else 400, GS if n == panel else INK)
+        if n == panel:
+            s.rect(xx - 2, 154, width(n, 12.5) + 4, 3, fill=GS)
+        p["tab:" + n] = (xx - 6, 134, width(n, 12.5) + 12, 26)
+    return p, links
+
+
+def lab_gs_new(s, top):
+    """sites.google.com, signed in with Google: Blank site."""
+    h = 360
+    browser(s, h, "sites.google.com", "Google Sites")
+    s.rect(15, 85, W - 30, h - 100, fill="#f1f3f4")
+    s.text(40, 120, "Start a new site", 14, 600, INK)
+    s.rect(40, 136, 150, 110, fill="#ffffff", stroke=GS, sw=2, rx=6)
+    s.circle(115, 182, 18, fill="#ffffff", stroke="#ea4335", sw=3)
+    s.line(105, 182, 125, 182, "#4285f4", 3)
+    s.text(115, 268, "Blank site", 12.5, 600, INK, "middle")
+    for i, n in enumerate(("Event", "Portfolio", "Small business")):
+        s.rect(206 + i * 166, 136, 150, 110, fill="#ffffff", stroke="#dadce0", sw=1, rx=6)
+        s.text(281 + i * 166, 268, n, 12.5, 400, INK, "middle")
+    mark_box(top, (40, 136, 150, 110), 1, "right", 6, 3)
+    top.label(420, 300, 300, "first: Sign in with Google")
+
+
+def lab_gs_name(s, top):
+    p, _ = sites_shell(s, 360, "Insert")
+    mark_box(top, p["name"], 1, "bottom", 4, 2)
+    mark_box(top, p["title"], 2, "right", 4, 2)
+
+
+def lab_gs_pages(s, top):
+    """Pages › + New page › Name › Done; the menu gets the new links."""
+    h = 400
+    p, links = sites_shell(s, h, "Pages", pages=("Home", "Cakes", "Order"))
+    px = 620
+    for i, n in enumerate(("Home", "Cakes", "Order")):
+        s.text(px + 20, 186 + i * 26, ("⌂ " if i == 0 else "▢ ") + n, 12.5, 400, INK)
+    s.rect(px + 18, 268, 110, 28, fill=GS, rx=14)
+    s.text(px + 73, 287, "+ New page", 12, 700, "#ffffff", "middle")
+    s.rect(px + 14, 304, 220, 80, fill="#ffffff", stroke="#a6a6a6", sw=1, rx=6)
+    s.text(px + 26, 324, "New page", 12.5, 700, INK)
+    s.rect(px + 26, 332, 130, 24, fill="#ffffff", stroke=GS, sw=1.6)
+    s.text(px + 32, 349, "Order", 12, 400, INK)
+    s.rect(px + 164, 332, 60, 24, fill=GS, rx=3)
+    s.text(px + 194, 349, "Done", 12, 700, "#ffffff", "middle")
+    mark_box(top, p["tab:Pages"], 1, "top", 4, 1)
+    mark_box(top, (px + 18, 268, 110, 28), 2, "left", 14, 2)
+    mark_box(top, (px + 26, 332, 130, 24), 3, "left", 3, 2)
+    mark_box(top, (px + 164, 332, 60, 24), 4, "bottom", 3, 2)
+    mark_box(top, (links["Cakes"][0], links["Cakes"][1], links["Order"][0] + links["Order"][2] - links["Cakes"][0], 18), 5, "bottom", 3, 2)
+
+
+def lab_gs_themes(s, top):
+    h = 400
+    theme = ("#f6efe6", "#3e2723", "#8d6e63")
+    p, _ = sites_shell(s, h, "Themes", pages=("Home", "Cakes", "Order"), theme=theme)
+    px = 620
+    for i, (n, c) in enumerate((("Simple", GS), ("Aristotle", "#8d6e63"), ("Diplomat", "#0b57d0"), ("Vision", "#f6b26b"))):
+        y = 176 + i * 46
+        s.rect(px + 16, y, 234, 38, fill=GS_SOFT if i == 1 else "#ffffff", stroke=GS if i == 1 else "#dadce0", sw=1.4 if i == 1 else 1, rx=4)
+        s.rect(px + 26, y + 8, 30, 22, fill="#ffffff", stroke=c, sw=3)
+        s.text(px + 66, y + 24, n, 12.5, 600 if i == 1 else 400, INK)
+    mark_box(top, p["tab:Themes"], 1, "top", 4, 1)
+    mark_box(top, (px + 16, 222, 234, 38), 2, "left", 4, 2)
+    mark_box(top, p["preview"], 3, "bottom", 10, 3)
+
+
+def lab_gs_phone(s, top):
+    """Preview: Phone; the menu becomes three lines."""
+    h = 430
+    browser(s, h, "sites.google.com", "Google Sites")
+    s.rect(15, 85, W - 30, h - 100, fill="#f1f3f4")
+    for i, n in enumerate(("Phone", "Tablet", "Large screen")):
+        s.rect(300 + i * 100, 96, 92, 26, fill=GS_SOFT if i == 0 else "#ffffff", stroke=GS if i == 0 else "#dadce0", sw=1, rx=4)
+        s.text(346 + i * 100, 114, n, 12, 600 if i == 0 else 400, INK, "middle")
+    s.rect(380, 134, 160, 270, fill="#202124", rx=18)
+    s.rect(388, 142, 144, 254, fill="#f6efe6", rx=10)
+    s.text(398, 166, "Mona's Cakes", 10.5, 700, "#3e2723")
+    for k in range(3):
+        s.line(508, 158 + k * 5, 522, 158 + k * 5, "#3e2723", 1.6)
+    s.rect(388, 178, 144, 70, fill="#8d6e63")
+    s.text(398, 222, "Mona's Cakes", 15, 700, "#ffffff")
+    for k, ln in enumerate(("Fresh cakes, made at", "home. Order two", "days before.")):
+        s.text(398, 270 + k * 16, ln, 10.5, 400, "#3e2723")
+    mark_box(top, (300, 96, 92, 26), 1, "left", 4, 2)
+    mark_box(top, (504, 152, 22, 16), 2, "right", 3, 2)
+
+
+def notepad(s, h, lines, name="Untitled - Notepad", caret=True):
+    frame(s, h)
+    s.rect(15, 15, W - 30, 34, fill=TITLE_BG, rx=9)
+    s.rect(15, 35, W - 30, 14, fill=TITLE_BG)
+    s.text(30, 37, name, 12.5, 400, INK)
+    s.rect(15, 49, W - 30, 26, fill="#ffffff")
+    menus = {}
+    x = 30
+    for m in ("File", "Edit", "View"):
+        s.text(x, 67, m, 12.5, 400, INK)
+        menus[m] = (x - 6, 52, width(m, 12.5) + 12, 22)
+        x += width(m, 12.5) + 22
+    s.line(15, 75, W - 15, 75, "#e0e0e0", 1)
+    s.rect(15, 76, W - 30, h - 91, fill="#ffffff")
+    for i, ln in enumerate(lines):
+        s.raw('<text x="30" y="%g" font-size="14" font-family="Consolas, DejaVu Sans Mono, monospace" fill="%s">%s</text>' % (100 + i * 22, INK, ln.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")))
+    return menus
+
+
+def lab_np_type(s, top):
+    notepad(s, 260, HTML_LINES)
+    top.label(560, 150, 260, "type it exactly, line by line", arrow_to=(520, 145))
+
+
+def lab_np_save(s, top):
+    """File › Save as: Desktop, page-Huda.html, Save as type: All files."""
+    save_as(s, top, "page-Huda.html", "All files (*.*)", "#0067c0")
+
+
+def lab_np_browser(s, top):
+    """The page in the browser (double-click page-Huda.html on the Desktop)."""
+    h = 260
+    browser(s, h, "C:/Users/Huda/Desktop/page-Huda.html", "Mona's Cakes")
+    s.rect(15, 85, W - 30, h - 100, fill="#ffffff")
+    s.text(40, 130, "Mona's Cakes", 28, 700, "#8b4513")
+    s.text(40, 166, "Fresh cakes, made at home.", 14, 400, INK)
+    top.label(420, 112, 300, "the colour comes from the CSS: brown", arrow_to=(250, 120))
+
+
+def lab_np_result(s, top):
+    h = 260
+    browser(s, h, "C:/Users/Huda/Desktop/page-Huda.html", "Mona's Cakes")
+    s.rect(15, 85, W - 30, h - 100, fill="#ffffff")
+    s.text(40, 130, "Mona's Cakes", 28, 700, "#2b8a3e")
+    s.text(40, 166, "Fresh cakes, made at home.", 14, 400, INK)
+
+
+def lab_gs_tutu_ai(s, top):
+    paras = [("Title", "Mona's Cakes", "#8b4513"), ("Normal", "Fresh cakes, made at home.", None),
+             ("Normal", "Our three cakes are chocolate, strawberry and vanilla.", None)]
+    tutu_ai(s, top, "page-Huda", "doc", "Add a short paragraph: our three cakes are chocolate, strawberry and vanilla.",
+            "Done: a short paragraph about the three cakes is at the end.", lambda s_, b: _doc_ai_page(s_, b, paras, {2}))
+
+
+def lab_gs_tutu_dl(s, top):
+    tutu_download(s, top, "page-Huda", "doc", pick=2)
+
+
 # name: (the drawing, the part of it that the worksheet shows: x, y, width, height).
 # A crop zooms in on the buttons of the step, so that they are big on paper.
 SCREENS = {
@@ -2173,6 +2360,19 @@ SCREENS = {
     "week-11/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
     "week-11/images/lab-tutu-2": (lab_w9_tutu_ai, (15, 86, 870, 370)),
     "week-11/images/lab-tutu-3": (lab_w9_tutu_dl, (0, 86, 470, 366)),
+    # Lecture 10, a website: Google Sites and Notepad (week-12)
+    "week-12/images/lab-sites-1": (lab_gs_new, (15, 15, 870, 330)),
+    "week-12/images/lab-sites-2": (lab_gs_name, (15, 85, 870, 260)),
+    "week-12/images/lab-sites-3": (lab_gs_pages, (15, 85, 870, 300)),
+    "week-12/images/lab-sites-4": (lab_gs_themes, (15, 85, 870, 300)),
+    "week-12/images/lab-sites-5": (lab_gs_phone, (250, 85, 400, 330)),
+    "week-12/images/lab-notepad-1": (lab_np_type, (15, 15, 870, 230)),
+    "week-12/images/lab-save-1": (lab_np_save, None),
+    "week-12/images/lab-browser-1": (lab_np_browser, (15, 15, 870, 230)),
+    "week-12/images/lab-result-1": (lab_np_result, (15, 15, 600, 230)),
+    "week-12/images/lab-tutu-1": (lab_tutu_1, (150, 86, 610, 374)),
+    "week-12/images/lab-tutu-2": (lab_gs_tutu_ai, (15, 86, 870, 370)),
+    "week-12/images/lab-tutu-3": (lab_gs_tutu_dl, (0, 86, 495, 366)),
 }
 
 def draw(fn, crop=None):

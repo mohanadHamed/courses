@@ -1,345 +1,110 @@
 ---
 title: "Website Design: Plan, Build and Design a Website"
-description: "Worksheet · Three experiments: the plan and the pages of a website, its design and its view on a phone, and a look at HTML and CSS. Part A in Google Sites and Notepad, Part B on the simulators."
+description: "Worksheet · Make a small website in Google Sites and a web page in Notepad, step by step. Nothing to download."
 lesson: 10
 ilos: [C4]
-start-files:
-  - name: page-start.html
-    about: "a very small web page of Mona's Cakes (for Experiment 3)"
+# The lab model (NOTES.md, "The lab model"): a guide that each student
+# follows alone in Google Sites, with a drawn screen for every step
+# (tools/lab_screens.py). No questions, no results, no start files.
+lab: true
 format: lesson-typst
 ---
 
+```{=typst}
+#let mk(n) = box(baseline: 22%, circle(radius: 5.8pt, fill: rgb("#d9480f"), stroke: none, inset: 0pt)[#set align(center + horizon); #text(fill: white, weight: "bold", size: 8pt)[#n]])
+#let tick = box(baseline: 12%, width: 10pt, height: 10pt, stroke: 0.9pt + luma(70), radius: 2pt)
+#let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
+#let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f6fd"), stroke: 0.8pt + rgb("#185abd"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
+#let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
+// One step: the box to tick, its number and what to do on the left; its screen on the right.
+#let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
+  #set par(justify: false, leading: 0.62em)
+  #let words = grid(columns: (auto, 1fr), column-gutter: 6pt, [#tick #h(1pt) *#n.*], body)
+  #if img == none { words } else {
+    grid(columns: (left, 1fr), column-gutter: 12pt, align: (top, top), words, align(center, shot(img, w: w)))
+  }
+  #if after != none { v(4pt); after }
+]
+```
+
 ::: {.lead}
-Today you make the website of Mona's Cakes, the service of Lecture 9. Each
-experiment has two parts. **Part A** is in Google Sites (a free website
-builder) or in Notepad. **Part B** is on a simulator of the interactive
-lesson: on paper, scan its QR code; on the screen, click its link. After
-each step, write your result in its box. At the end, copy your key results
-into the table.
+Today you make a small website for Mona's Cakes in **Google Sites**, and a first web page in **Notepad**. Do the tasks in order. The **orange
+numbers** in each picture show where to click. Tick the box `#tick`{=typst} after each step. Stuck? Raise your hand.
 :::
 
-## Before you start
-
-- **You need:** a lab computer with a browser and a Google account (Google
-  Sites at `sites.google.com`), and Notepad for Experiment 3.
-- **No lab computer today?** Do Part B of each experiment on your phone.
-- **Check:** the results are at the end of this worksheet. Look only after
-  you try. On the interactive lesson, every step has a check that answers
-  at once.
-
-{{< start-files >}}
-
-## Experiment 1 · The plan and the pages
-
-**The idea:** plan a website first: its **purpose** (to take orders), its
-**audience** (families) and its **pages**. A small service needs three
-pages: **Home** (who you are), **Service** (what you offer, with the order
-button) and **Contact** (how to reach you). A **website builder** such as
-Google Sites makes the pages without code; the **menu** (navigation)
-joins them.
-
-**Aim:** plan the pages, and build them in Google Sites.
-
-::: {.part}
-**Part A · In the app (Google Sites)**
-:::
-
-1. Open `sites.google.com` and click **Blank site** (+). Type the site
-   name `Mona's Cakes` and the page title `Cakes made at home`.
-
-   {{< record "The first page of the site is called" >}}
-
-   ::: {.check}
-   **Home**: every new site starts with its home page.
-   :::
-
-   ::: {.choice}
-   Which page says who you are and what you offer?
-
-   - [x] Home
-
-     Why: The home page is the first page that visitors see.
-
-   - [ ] Contact
-
-     Why: Contact says how to reach you.
-
-   - [ ] Service
-
-     Why: Service gives the details of what you offer.
-   :::
-
-2. Open **Pages** (on the right) and click **+**: add the pages `Service`
-   and `Contact`.
-
-   {{< record "The menu at the top shows … pages" >}}
-
-   ::: {.check}
-   **3 pages**: Home, Service and Contact. The menu (navigation) shows
-   them at the top of every page.
-   :::
-
-   ::: {.fill answer="3|three" unit="pages" hint="Home, then the two new pages."}
-   Mona's site has Home, Service and Contact. How many pages does its menu
-   show?
-
-   Why: Three pages, one link for each in the menu.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/site-planner.html" poster="sims/site-planner.png" title="Site Planner: what goes on which page?" >}}
-
-3. In **Site Planner**, put the six parts of the content on the right
-   pages. On which page is the button *Order now*?
-
-   {{< record "Order now is on" >}}
-
-   ::: {.check}
-   The **Service** page: the customer sees the cakes and orders there.
-   :::
-
-   ::: {.sort}
-   Which page? Sort the content.
-
-   Home
-   :   Welcome to Mona's Cakes! Cakes made at home.
-
-       Why: The home page says who you are.
-
-   Service
-   :   The cakes and their prices.
-
-       Why: What the customer can get.
-
-   :   The button Order now.
-
-       Why: The customer orders on the service page.
-
-   Contact
-   :   The phone number and the address.
-
-       Why: How to reach you.
-   :::
-
-## Experiment 2 · The design and the phone view
-
-**The idea:** a good design is easy to read: one **theme** (the same
-colours and fonts on every page), **strong contrast** (dark text on light),
-pictures of a good size, and a clear **menu**. Most visitors use a phone:
-check the **mobile view** before you publish (Preview › the phone).
-
-**Aim:** give the site one look, and check it on a phone.
-
-::: {.part}
-**Part A · In the app (Google Sites)**
-:::
-
-1. Open **Themes** (on the right) and choose a theme. On the Home page,
-   **Insert › Images** and add a picture (Search or Upload).
-
-   {{< record "The name of my theme" >}}
-
-   ::: {.check}
-   For example **Simple**, **Aristotle** or **Diplomat**. The theme gives
-   all pages the same colours and fonts.
-   :::
-
-   ::: {.choice}
-   Why use one theme for the whole site?
-
-   - [x] Every page gets the same colours and fonts.
-
-     Why: The site looks clear and the same on every page.
-
-   - [ ] It adds more pages.
-
-     Why: A theme changes the look, not the pages.
-
-   - [ ] It publishes the site.
-
-     Why: Publish is a separate button.
-   :::
-
-2. Click **Preview** (the eye) and choose the **phone**. Look at the menu.
-
-   {{< record "On the phone, the menu is" >}}
-
-   ::: {.check}
-   A small button with three lines (**≡**): the menu opens when you tap it.
-   The page is narrow, so short text and big buttons help.
-   :::
-
-   ::: {.choice}
-   On a phone, how does the menu of the site look?
-
-   - [x] a button with three lines (≡)
-
-     Why: A narrow screen has no room for all the links.
-
-   - [ ] it is not there
-
-     Why: It is still there, behind the ≡ button.
-
-   - [ ] very small links in one long line
-
-     Why: The site makes a ≡ button instead.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/design-check.html" poster="sims/design-check.png" title="Design Check: fix the page" >}}
-
-3. In **Design Check**, fix the four problems of the page, then press
-   **Preview: phone**. Which problem made the text hard to read?
-
-   {{< record "The problem of the text (one word)" >}}
-
-   ::: {.check}
-   **The contrast**: light grey text on white. Dark text on a light
-   background is easy to read.
-   :::
-
-   ::: {.choice}
-   Light grey text on a white page. What is the problem?
-
-   - [x] weak contrast
-
-     Why: Use dark text on a light background.
-
-   - [ ] too many pages
-
-     Why: The number of pages does not change how the text looks.
-
-   - [ ] no picture
-
-     Why: A picture does not make the text easier to read.
-   :::
-
-## Experiment 3 · A look at HTML and CSS
-
-**The idea:** behind every web page is **HTML**, the content, written with
-**tags**: `<h1>` a big heading, `<p>` a paragraph, `<a href="…">` a link,
-`<img>` a picture. **CSS** sets the look: `h1 { color: brown; }`. Google
-Sites writes them for you; here you only look and change one word.
-
-**Aim:** read a tiny web page, and change its look with CSS.
-
-::: {.part}
-**Part A · In the app (Notepad and a browser)**
-:::
-
-1. Open `page-start.html` in a browser. Then open it in **Notepad**
-   (right-click › Open with › Notepad). Find the line with `<h1>`.
-
-   {{< record "The text of the heading h1" >}}
-
-   ::: {.check}
-   **Mona's Cakes**: the big heading of the page.
-   :::
-
-   ::: {.sort}
-   What does each tag make? Sort them.
-
-   a heading
-   :   `<h1>`
-
-       Why: h1 is the biggest heading.
-
-   a paragraph
-   :   `<p>`
-
-       Why: p is a paragraph of text.
-
-   a link
-   :   `<a href="…">`
-
-       Why: a goes to another page.
-   :::
-
-2. In Notepad, change `color: brown` to `color: green`. Save (Ctrl + S),
-   then refresh the browser (F5).
-
-   {{< record "The heading is now" >}}
-
-   ::: {.check}
-   **Green**. You changed the CSS: the look changed, the text stayed the
-   same.
-   :::
-
-   ::: {.choice}
-   You changed `color: brown` to `color: green`. What changed on the page?
-
-   - [x] only the colour of the heading
-
-     Why: CSS changes the look, not the text.
-
-   - [ ] the text of the heading
-
-     Why: The text is in the HTML, and it did not change.
-
-   - [ ] the link
-
-     Why: The CSS line is for h1, the heading.
-   :::
-
-::: {.part}
-**Part B · On the simulator** (no computer? do it on your phone)
-:::
-
-{{< sim file="sims/html-lab.html" poster="sims/html-lab.png" title="HTML Lab: a look at HTML and CSS" >}}
-
-3. In **HTML Lab**, change the colour and the size of the heading, and
-   answer the three questions. Which tag makes a link?
-
-   {{< record "A link is the tag" >}}
-
-   ::: {.check}
-   **`<a>`** with `href`: the address of the page that it opens.
-   :::
-
-   ::: {.choice}
-   Which language sets the colour of the heading?
-
-   - [x] CSS
-
-     Why: CSS sets colours, fonts and sizes.
-
-   - [ ] HTML
-
-     Why: HTML says what is on the page.
-
-   - [ ] Excel
-
-     Why: Excel is for sheets of data.
-   :::
-
-## Table of results
-
-Copy your key results here: the rows of the parts that you did. Your
-teacher checks this table before the end of the lecture.
-
-::: {.record-table}
-| Experiment | What you record                                 | Your result |
-|:-------:|----------------------------------------------|-------------------------|
-| 1 A        | The first page of the site                      |             |
-| 1 A        | The pages in the menu                           |             |
-| 1 B        | The page of Order now                           |             |
-| 2 A        | My theme                                        |             |
-| 2 A        | The menu on a phone                             |             |
-| 2 B        | The problem of the text                         |             |
-| 3 A        | The text of h1                                  |             |
-| 3 A        | The colour of the heading now                   |             |
-| 3 B        | The tag of a link                               |             |
-:::
-
-## Game challenge · The Web Desk
-
-Finished early? Play **Web Desk at Sunrise Company**: the colleagues ask
-Huda about their websites. Read each message and choose the best answer.
-
-{{< sim file="sims/web-desk.html" poster="sims/web-desk.png" title="Web Desk at Sunrise Company" kind="game" >}}
+- **You need:** a lab computer with Google Sites. **Nothing to download:**
+  you type the text yourself.
+- **Time:** about 35 minutes. Your Google Sites may look a little different:
+  the names of the buttons are the same.
+
+## Task 1 · A new site
+
+```{=typst}
+#step(1, [Open the browser. Go to *sites.google.com*. Sign in with your *Google account*. \ Click *Blank site* #mk(1).], img: "images/lab-sites-1.png", w: 92%, left: 34%)
+#step(2, [Click *Untitled site* (top left) #mk(1) and type: #h(2pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Mona's Cakes] \ Click *Your page title* #mk(2) and type: #h(2pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 4pt)[Mona's Cakes]], img: "images/lab-sites-2.png", w: 100%, left: 38%)
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 2 · Two more pages
+
+```{=typst}
+#step(1, [On the right, click *Pages* #mk(1). Click *+ New page* #mk(2). \ Type the name *Cakes* #mk(3). Click *Done* #mk(4). \ Then one more page: *Order*. \ The menu at the top has the links #mk(5).], after: align(center, shot("images/lab-sites-3.png", w: 92%)))
+```
+
+## Task 3 · A theme and the phone view
+
+```{=typst}
+#step(1, [Click *Themes* #mk(1). Click a theme that you like #mk(2). \ Click *Preview*, the eye #mk(3).], img: "images/lab-sites-4.png", w: 100%, left: 34%)
+#step(2, [Click *Phone* #mk(1): the menu becomes ☰ #mk(2). \ Click *Large screen*, then close the preview (X at the top).], img: "images/lab-sites-5.png", w: 60%, left: 40%)
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 4 · A web page in Notepad
+
+```{=typst}
+#step(1, [Click *Search*, type *notepad*, open *Notepad*. Type these six lines exactly:], after: [#v(2pt) #box(fill: white, stroke: 0.6pt + rgb("#185abd"), radius: 4pt, inset: 7pt, raw(block: true, "<html>\n<body style=\"font-family: Arial\">\n<h1 style=\"color: brown\">Mona's Cakes</h1>\n<p>Fresh cakes, made at home.</p>\n</body>\n</html>"))])
+#step(2, [*File › Save as*. Click *Desktop* #mk(1). \ *File name*: *page-* and your first name *.html*, for example *page-Huda.html* #mk(2). \ *Save as type*: *All files*. Click *Save* #mk(3).], img: "images/lab-save-1.png", w: 94%, left: 34%)
+#step(3, [On the Desktop, double-click *page-….html*: the page opens in the browser, with a brown heading. \ In Notepad, change *brown* to *green*. Press *Ctrl + S*. In the browser, press *F5*: the heading is green.])
+```
+
+## Show your teacher
+
+```{=typst}
+#block(breakable: false, grid(columns: (1.1fr, 1fr), column-gutter: 14pt, align: top,
+  shot("images/lab-result-1.png"),
+  [
+    #set par(spacing: 0.9em, justify: false)
+    Your web page now looks like the picture. Check it:
+    #v(4pt)
+    #tick #h(4pt) The site *Mona's Cakes* with three pages: Home, Cakes, Order. \
+    #tick #h(4pt) A theme; on a phone the menu is ☰. \
+    #tick #h(4pt) *page-….html* is on the Desktop. \
+    #tick #h(4pt) In the browser the heading is green.
+    #v(8pt)
+    #tip[Raise your hand: your teacher looks at your screen. \ Then do the *Extra*: AI adds a paragraph to your web page.]
+  ],
+))
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Extra · AI adds a paragraph to your web page
+
+```{=typst}
+#block(width: 100%, fill: rgb("#e3f4f1"), stroke: 0.8pt + rgb("#8fd1c4"), radius: 6pt, inset: (x: 12pt, y: 9pt))[
+  Only when you finish Tasks 1–4. On *tutudocs.com* an *AI assistant* changes your web page for you. *No sign-in.*
+]
+#step(1, [Open the browser. Go to *tutudocs.com*.])
+#step(2, [Click the box *Drop a file anywhere on this page, or click to choose* #mk(1). \ Click *Desktop*, click your file *page-….html*, click *Open*. \ Your web page opens in the online editor.], img: "images/lab-tutu-1.png", w: 84%, left: 36%)
+#step(3, [Click *AI Assistant* at the top #mk(1). \ Click in *Ask AI anything…* #mk(2) and type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Add a short paragraph: our three cakes are chocolate, strawberry and vanilla.] \ Press *Enter* #mk(3). Wait about 15 seconds: a new paragraph comes.], after: align(center, shot("images/lab-tutu-2.png", w: 84%)))
+#step(4, [One more request. Type: #h(3pt) #box(fill: white, stroke: 0.6pt + rgb("#8fd1c4"), radius: 4pt, inset: 5pt)[Make the heading green.] \ Press *Enter*. Wait for the answer before you type again.])
+#step(5, [Click *File* #mk(1), then *Download* #mk(2), then *HTML* #mk(3). \ Open the new file from *Downloads*: it opens in the browser, with the changes of the AI.], img: "images/lab-tutu-3.png", w: 74%, left: 44%)
+```

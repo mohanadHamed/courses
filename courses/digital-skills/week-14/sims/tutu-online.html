@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Tutu Lab: AI adds the last slide</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+</head>
+<body class="theme-workshop">
+<main class="sim">
+  <h1>Tutu Lab: AI adds the last slide</h1>
+  <p class="hint">As on <b>tutudocs.com</b> (no sign-in): <b>open</b> the project of Green Bites, ask the <b>AI Assistant</b> for a last slide, then <b>download</b> it for PowerPoint. (Practice with fixed answers: no real AI here.)</p>
+  <div id="tutu"></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+window.SIM_DONE = "&#10003; All steps done. Now do it on tutudocs.com with your own project.pptx (Task 3).";
+window.TUTU = {
+  kind: "slides", file: "project-GreenBites.pptx",
+  model: [
+    { title: "Green Bites", points: ["Healthy lunch boxes for the college", "For staff and students", "Order online, eat well"], bg: "#eef7ea", color: "#1f3d28" },
+    { title: "The website and the form", points: ["sites.google.com/view/green-bites", "Order now: the form"], bg: "#eef7ea", color: "#1f3d28" },
+    { title: "The post and the goal", points: ["Healthy lunch for 2 JD · Order now", "Goal: 20 orders this month"], bg: "#eef7ea", color: "#1f3d28" },
+  ],
+  asks: [
+    { text: "Add a last slide: Thank you, with the web address of the site.", keys: /thank|last slide/i,
+      done: "Done: slide 4, Thank you, with the web address.",
+      apply: (m) => { m.push({ title: "Thank you!", sub: "sites.google.com/view/green-bites", bg: "#eef7ea", color: "#1f3d28" }); return [m.length - 1]; } },
+    { text: "Make the titles of all the slides dark green.", keys: /green|colou?r/i,
+      done: "Done: every title is dark green.",
+      apply: (m) => { m.forEach((s) => { s.color = "#14532d"; }); return m.map((_, i) => i); } },
+  ],
+};
+</script>
+<script src="../../../../shared/sims/tutu-lab.js"></script>
+</body>
+</html>

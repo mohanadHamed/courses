@@ -891,6 +891,10 @@ section[id^="in-word"] > h3 { color: #185abd; }
 .word-part[data-app]::before { content: "In " attr(data-app) " on a computer: the teacher's laptop now, then yours with the worksheet"; }
 section[id^="in-bigquery"] > h3::before, section[id^="in-rstudio"] > h3::before { content: "💻 "; }
 section[id^="in-bigquery"] > h3, section[id^="in-rstudio"] > h3 { color: #185abd; }
+/* Code is explained line by line (Big Data): the code on the left, its meaning on the right. */
+.code-explain table { font-size: .95rem; }
+.code-explain td:first-child code { white-space: pre-wrap; word-break: break-word; font-size: .85rem; }
+.code-explain td:first-child { width: 48%; }
 .sim-part { margin: 6px 0 14px; }
 .lab-plan ol { font-size: 1.1rem; }
 .lab-plan li { margin: 6px 0; }

@@ -18,6 +18,11 @@ format: lesson-typst
 #let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
 #let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f3f4"), stroke: 0.8pt + rgb("#1a73e8"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
 #let sql(body) = typebox[#set text(font: "DejaVu Sans Mono", size: 9.5pt); #set par(justify: false, leading: 0.55em); #body]
+// What each line of the code does: (code, meaning) pairs, under the code box.
+#let explain(..pairs) = block(width: 100%, breakable: false, above: 6pt, table(columns: (auto, 1fr), inset: (x: 7pt, y: 4.5pt), stroke: 0.5pt + luma(190),
+  fill: (x, y) => if y == 0 { luma(240) },
+  [*Line*], [*What it does*],
+  ..pairs.pos().map(((c, m)) => (text(font: "DejaVu Sans Mono", size: 8.5pt, c), text(size: 9.5pt, m))).flatten()))
 #let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
 // One step: the box to tick, its number and what to do on the left; its screen on the right.
 #let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
@@ -84,7 +89,13 @@ A **query** asks the table a question in **SQL**.
   FROM \`bigquery-public-data.chicago_taxi_trips.taxi_trips\` \
   GROUP BY year \
   ORDER BY year;
-])
+] + explain(
+  ([SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year,], [Take only the *year* from the date and time of each trip. Call this column *year*.]),
+  ([COUNT(\*) AS trips], [Count the rows (*\** = all the rows). Call this column *trips*.]),
+  ([FROM \`…taxi_trips\`], [From this table: project*.*dataset*.*table. The signs *\`* hold the long name together.]),
+  ([GROUP BY year], [Put the trips of the same year together: one group for each year.]),
+  ([ORDER BY year;], [Sort the answer by year, smallest first. The sign *;* ends the query.]),
+))
 #step(3, [On the right: *This query will process … GB when run* #mk(2). A green tick: the query is correct; a red sign: check what you typed. \ Click *Run* #mk(3).], img: "images/bq-query-1.png", w: 100%, left: 34%)
 #step(4, [Click *Results* #mk(1): one row for each year. \ 200 million rows became 11 rows.], img: "images/bq-results-1.png", w: 74%, left: 40%)
 #step(5, [Click *Job information* #mk(1). \ *Duration* and *Bytes processed* #mk(2): about 1.5 GB in a few seconds, read by many computers at the same time.], img: "images/bq-job-1.png", w: 86%, left: 38%)
@@ -107,7 +118,7 @@ A **query** asks the table a question in **SQL**.
   shot("images/bq-signout-1.png"),
 ))
 #v(8pt)
-#tip[*Finished early?* Before you sign out, change the query: how do people pay? Then try *company* in place of *payment_type*.
+#tip[*Finished early?* Before you sign out, change the query: how do people pay? The same idea: one group for each *payment_type*; *DESC* sorts from the biggest number to the smallest. Then try *company* in place of *payment_type*.
 #v(3pt)
 #set text(font: "DejaVu Sans Mono", size: 9pt)
 SELECT payment_type, COUNT(\*) AS trips \

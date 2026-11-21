@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" font-family="Helvetica, Arial, sans-serif">
+<rect x="0" y="0" width="900" height="400" rx="18" fill="#fff5f5"/>
+<text x="40" y="50" font-size="26" font-weight="700" fill="#a51d1d" text-anchor="start">Query Steps: what each line does</text>
+<rect x="40" y="74" width="470" height="150" rx="8" fill="#f8f9fa" stroke="#dadce0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="58" y="100" font-size="13" font-weight="400" fill="#a3a8ad" text-anchor="start">1</text>
+<text x="80" y="100" font-size="13" font-weight="400" fill="#3c4043" text-anchor="start">SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS …</text>
+<text x="58" y="126" font-size="13" font-weight="400" fill="#a3a8ad" text-anchor="start">2</text>
+<text x="80" y="126" font-size="13" font-weight="400" fill="#3c4043" text-anchor="start">  COUNT(*) AS trips</text>
+<text x="58" y="152" font-size="13" font-weight="400" fill="#a3a8ad" text-anchor="start">3</text>
+<text x="80" y="152" font-size="13" font-weight="400" fill="#3c4043" text-anchor="start">FROM `bigquery-public-data.chicago_taxi_trips.taxi…</text>
+<rect x="41" y="160" width="468" height="26" fill="#ffe8cc"/>
+<rect x="41" y="160" width="4" height="26" fill="#d9480f"/>
+<text x="58" y="178" font-size="13" font-weight="400" fill="#a3a8ad" text-anchor="start">4</text>
+<text x="80" y="178" font-size="13" font-weight="700" fill="#3c4043" text-anchor="start">GROUP BY year</text>
+<text x="58" y="204" font-size="13" font-weight="400" fill="#a3a8ad" text-anchor="start">5</text>
+<text x="80" y="204" font-size="13" font-weight="400" fill="#3c4043" text-anchor="start">ORDER BY year;</text>
+<text x="40" y="262" font-size="17" font-weight="700" fill="#1f2328" text-anchor="start">GROUP BY year: one group for each year.</text>
+<text x="40" y="290" font-size="15" font-weight="400" fill="#5f656b" text-anchor="start">Each colour is one group. Then COUNT(*) counts each group.</text>
+<rect x="560" y="74" width="300" height="26" fill="#f1f3f5"/>
+<text x="572" y="92" font-size="12.5" font-weight="700" fill="#1f2328" text-anchor="start">trip_start_timestamp</text>
+<text x="780" y="92" font-size="12.5" font-weight="700" fill="#1f2328" text-anchor="start">year</text>
+<rect x="560" y="100" width="300" height="26" fill="#fff3bf" stroke="#dadce0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="572" y="118" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start">2016-02-11</text>
+<text x="780" y="118" font-size="12.5" font-weight="700" fill="#1f2328" text-anchor="start">2016</text>
+<rect x="560" y="126" width="300" height="26" fill="#fff3bf" stroke="#dadce0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="572" y="144" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start">2016-07-19</text>
+<text x="780" y="144" font-size="12.5" font-weight="700" fill="#1f2328" text-anchor="start">2016</text>
+<rect x="560" y="152" width="300" height="26" fill="#d3f9d8" stroke="#dadce0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="572" y="170" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start">2013-05-02</text>
+<text x="780" y="170" font-size="12.5" font-weight="700" fill="#1f2328" text-anchor="start">2013</text>
+<rect x="560" y="178" width="300" height="26" fill="#d3f9d8" stroke="#dadce0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="572" y="196" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start">2013-11-30</text>
+<text x="780" y="196" font-size="12.5" font-weight="700" fill="#1f2328" text-anchor="start">2013</text>
+<rect x="560" y="204" width="300" height="26" fill="#d0ebff" stroke="#dadce0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="572" y="222" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start">2014-01-08</text>
+<text x="780" y="222" font-size="12.5" font-weight="700" fill="#1f2328" text-anchor="start">2014</text>
+<rect x="560" y="230" width="300" height="26" fill="#d0ebff" stroke="#dadce0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="572" y="248" font-size="12.5" font-weight="400" fill="#1f2328" text-anchor="start">2014-09-14</text>
+<text x="780" y="248" font-size="12.5" font-weight="700" fill="#1f2328" text-anchor="start">2014</text>
+</svg>

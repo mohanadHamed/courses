@@ -43,6 +43,23 @@ package and no platform texts.
   finishes in less than 30 minutes, a strong student in about 20, so that
   every student finishes something in the hour. More practice goes into a
   "Finished early?" box at the end, never into a fourth required task.
+- **Code is explained** (the teacher's request of 2026-11-21, after Lab 1:
+  the query was given without saying what `EXTRACT` or `GROUP BY` do).
+  Every line of code that a student types (SQL in Labs 1–3, R in Labs 4–8)
+  is explained, and every word that is not plain English (`SELECT`,
+  `EXTRACT`, `AS`, `*`, `GROUP BY`, `DESC`, backticks, `;`, `<-`, `%>%`, …):
+  - on the page, a part `### The <code>, line by line` before the app box:
+    the code, then a `::: {.code-explain}` table (Line | What it does, one
+    row for every line), then a **Code Steps** simulator
+    (`shared/sims/code-steps.js`, `window.CODE_STEPS`) that runs the code
+    step by step on a small example table, in the order the computer runs
+    it (SQL: `FROM` first, `ORDER BY` last);
+  - in the worksheet, an `#explain(...)` table under the code box (the
+    meaning of each line in one short sentence);
+  - a code of the "Finished early?" box says in one sentence what changed.
+  `check_size.py` warns about a SQL or R block on a lab page without its
+  `{.code-explain}` table (or with fewer rows than lines), and about a
+  worksheet with code to type and no `explain(...)` table.
 - **Language:** the worksheets and the pages are in clear English (B1:
   third-year business students; short sentences, every term explained). The
   preparation videos are in Arabic: the teacher records the screen while

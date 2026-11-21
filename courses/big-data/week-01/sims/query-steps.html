@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Query Steps: what each line of the query does</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+  <style>
+    .cs-wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+    .cs-wrap > div { min-width: 0; }
+    @media (max-width: 700px) { .cs-wrap { grid-template-columns: 1fr; } }
+    .cs-code { background: #f8f9fa; border: 1px solid #dadce0; border-radius: 8px; padding: 6px 0; font-size: 0.86rem; overflow-x: auto; }
+    .cs-line { display: flex; gap: 10px; padding: 3px 10px; cursor: pointer; white-space: pre; }
+    .cs-line:hover { background: #eef2f6; }
+    .cs-line.on { background: #ffe8cc; box-shadow: inset 4px 0 0 #d9480f; font-weight: 700; }
+    .cs-n { color: #9aa0a6; min-width: 1.2em; text-align: right; }
+    .cs-line code { font-family: Consolas, Menlo, monospace; background: none; color: #3c4043; padding: 0; }
+    .cs-title { font-weight: 800; color: var(--sim-accent); margin: 10px 0 4px; font-size: 1.02rem; }
+    .cs-text { font-size: 0.95rem; line-height: 1.5; }
+    .cs-text code { background: #fff3e6; color: #a3360b; padding: 0 4px; border-radius: 4px; }
+    .cs-table { border-collapse: collapse; font-size: 0.84rem; margin-top: 4px; }
+    .cs-table th, .cs-table td { border: 1px solid #dee2e6; padding: 3px 9px; text-align: left; white-space: nowrap; }
+    .cs-table th { background: #f1f3f5; }
+    .cs-table .mk { outline: 2px solid #d9480f; outline-offset: -2px; font-weight: 700; }
+    .cs-rows { font-size: 0.8rem; color: #666; margin-top: 3px; }
+    .cs-nav { display: flex; gap: 8px; margin: 10px 0 0; }
+  </style>
+</head>
+<body class="theme-ledger">
+<main class="sim">
+  <h1>Query Steps: what each line of the query does</h1>
+  <p class="hint">The query of the worksheet, on <b>8 trips</b> of the table. BigQuery does the lines in this order: first <b>FROM</b>, last <b>ORDER BY</b>.</p>
+  <div class="cs-wrap">
+    <div>
+      <div class="cs-code" id="code"></div>
+      <div class="cs-title" id="title"></div>
+      <div class="cs-text" id="text"></div>
+      <div class="cs-nav"><button id="back" type="button" class="ghost">◀ Back</button><button id="next" type="button">Next step ▶</button></div>
+    </div>
+    <div>
+      <b>The table after this step</b>
+      <table class="cs-table" id="table"></table>
+      <div class="cs-rows" id="rows"></div>
+    </div>
+  </div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const T = [["2016-02-11 08:15", "9.25", "Cash"], ["2013-05-02 14:20", "12.50", "Credit Card"], ["2016-07-19 22:05", "7.75", "Cash"],
+    ["2014-01-08 07:40", "21.00", "Credit Card"], ["2013-11-30 18:10", "6.50", "Cash"], ["2016-03-03 12:00", "15.25", "Mobile"],
+    ["2014-09-14 09:30", "8.00", "Cash"], ["2016-12-24 20:45", "11.75", "Credit Card"]];
+  const Y = T.map((r) => [r[0], r[0].slice(0, 4), r[2]]);
+  const order = ["2016", "2013", "2014"];
+  const grouped = order.flatMap((y) => Y.filter((r) => r[1] === y));
+  window.CODE_STEPS = {
+    lines: ["SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year,", "  COUNT(*) AS trips", "FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`", "GROUP BY year", "ORDER BY year;"],
+    steps: [
+      { lines: [2], title: "FROM: which table",
+        text: "<code>FROM</code> names the table: <b>project.dataset.table</b>, with a dot between the three names. The signs <code>`</code> (backticks) hold the long name together. Here: 8 trips of the table; the real table has 200 million.",
+        head: ["trip_start_timestamp", "fare", "payment_type"], rows: T },
+      { lines: [0], title: "EXTRACT … AS year: a new column",
+        text: "<code>SELECT</code> chooses what the answer shows. <code>EXTRACT(YEAR FROM trip_start_timestamp)</code> takes <b>only the year</b> out of the date and time of each trip: 2016-02-11 08:15 → <b>2016</b>. <code>AS year</code> gives the new column a short name: <b>year</b>.",
+        head: ["trip_start_timestamp", "year", "payment_type"], rows: Y, mark: 1 },
+      { lines: [3], title: "GROUP BY year: one group for each year",
+        text: "<code>GROUP BY year</code> puts the trips of the <b>same year together</b>: one group for 2016, one for 2013, one for 2014. Each colour is one group.",
+        head: ["trip_start_timestamp", "year", "payment_type"], rows: grouped, mark: 1, groups: grouped.map((r) => order.indexOf(r[1])) },
+      { lines: [1], title: "COUNT(*) AS trips: count each group",
+        text: "<code>COUNT(*)</code> counts the rows of each group. <code>*</code> means <b>all the rows</b>. <code>AS trips</code> names the answer column <b>trips</b>. Now each group is <b>one row</b>: the year and its number of trips. The comma <code>,</code> at the end of line 1 separates the two columns.",
+        head: ["year", "trips"], rows: [["2016", "4"], ["2013", "2"], ["2014", "2"]], mark: 1, groups: [0, 1, 2] },
+      { lines: [4], title: "ORDER BY year: sort the answer",
+        text: "<code>ORDER BY year</code> sorts the rows from the <b>smallest</b> year to the largest. (<code>ORDER BY trips DESC</code> would put the biggest number of trips first: DESC = from large to small.) The sign <code>;</code> ends the query.",
+        head: ["year", "trips"], rows: [["2013", "2"], ["2014", "2"], ["2016", "4"]], mark: 0 },
+    ],
+    done: "All the lines are explained. BigQuery does the same steps on 200 million trips: the answer has one row for each year.",
+  };
+})();
+</script>
+<script src="../../../../shared/sims/code-steps.js"></script>
+</body>
+</html>

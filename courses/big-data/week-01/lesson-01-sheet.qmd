@@ -1,0 +1,116 @@
+---
+title: "A Big Data Platform: A First Look at Google BigQuery"
+description: "Worksheet · Open BigQuery, find a table of 200 million taxi trips and run your first query, step by step."
+lesson: 1
+ilos: [C1]
+# The lab model (courses/big-data/NOTES.md): a guide that each student
+# follows alone in Chrome on the lab computer. Every step says exactly what
+# to do and shows its screen, drawn by tools/bq_screens.py (the orange
+# numbers). No questions, no results to record, no files to download.
+lab: true
+lab-app: "Google BigQuery"
+format: lesson-typst
+---
+
+```{=typst}
+#let mk(n) = box(baseline: 22%, circle(radius: 5.8pt, fill: rgb("#d9480f"), stroke: none, inset: 0pt)[#set align(center + horizon); #text(fill: white, weight: "bold", size: 8pt)[#n]])
+#let tick = box(baseline: 12%, width: 10pt, height: 10pt, stroke: 0.9pt + luma(70), radius: 2pt)
+#let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
+#let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f3f4"), stroke: 0.8pt + rgb("#1a73e8"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
+#let sql(body) = typebox[#set text(font: "DejaVu Sans Mono", size: 9.5pt); #set par(justify: false, leading: 0.55em); #body]
+#let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
+// One step: the box to tick, its number and what to do on the left; its screen on the right.
+#let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
+  #set par(justify: false, leading: 0.62em)
+  #let words = grid(columns: (auto, 1fr), column-gutter: 6pt, [#tick #h(1pt) *#n.*], body)
+  #if img == none { words } else {
+    grid(columns: (left, 1fr), column-gutter: 12pt, align: (top, top), words, align(center, shot(img, w: w)))
+  }
+  #if after != none { v(4pt); after }
+]
+```
+
+::: {.lead}
+**Today's activity:** ask a real **big data platform**, **Google BigQuery**,
+how many taxi trips there were in each year, in a table of more than
+**200 million** trips. Do the three tasks in order. The **orange numbers**
+in each picture show where to click. Tick the box `#tick`{=typst} after
+each step. Stuck? Raise your hand.
+:::
+
+- **You need:** Chrome and your personal **Google account** (Gmail).
+  BigQuery is free here (the **sandbox**): no card.
+- **Time:** less than 30 minutes. Your screen may look a little different,
+  and your numbers too: the names of the buttons are the same.
+- **At the end:** show your result, then **sign out** of Google.
+
+## Task 1 · Open BigQuery and create your project
+
+A **project** is your own space in Google Cloud. BigQuery works inside a
+project.
+
+```{=typst}
+#step(1, [Open *Chrome*. Type in the address bar: *console.cloud.google.com/bigquery* \ Press *Enter*. Sign in: your Gmail #mk(1), *Next* #mk(2), your password, *Next*. \ _Already signed in? Go to step 2._], img: "images/bq-signin-1.png", w: 92%, left: 36%)
+#step(2, [Only the first time: *Country*: *Jordan* #mk(1). \ Tick the *Terms of Service* #mk(2). \ Click *Agree and continue* #mk(3). \ _No such page? Go to step 3._], img: "images/bq-welcome-1.png", w: 92%, left: 36%)
+#step(3, [Click *Create project*. \ *Project name:* *big-data-lab* #mk(1). *Organization:* *No organization* #mk(2). \ Click *Create* #mk(3). Wait a few seconds: BigQuery opens, with the *Sandbox* notice at the top.], img: "images/bq-project-1.png", w: 86%, left: 36%)
+```
+
+## Task 2 · Find the big table
+
+A **public dataset** is data that everyone may read: every taxi trip in
+the city of Chicago since 2013.
+
+```{=typst}
+#step(1, [In the *Explorer*, click *+ Add data* #mk(1). \ Click *Public datasets* #mk(2).], img: "images/bq-add-1.png", w: 100%, left: 30%)
+#step(2, [Type *chicago taxi* #mk(1). Press *Enter*. \ Click *Chicago Taxi Trips* #mk(2). \ Click *View dataset* #mk(3).], img: "images/bq-market-1.png", w: 100%, left: 30%)
+#step(3, [In the *Explorer*, click the arrow of *chicago_taxi_trips* #mk(1). \ Click *taxi_trips* #mk(2): the table opens.], img: "images/bq-tree-1.png", w: 86%, left: 36%)
+#step(4, [Click *Details* #mk(1). \ *Number of rows* #mk(2): more than 200 million trips, about 75 GB. It costs nothing: no query runs.], img: "images/bq-details-1.png", w: 100%, left: 30%)
+#tip[*Not found?* Open the course page of Lab 1 and click *Open the taxi table in BigQuery*.]
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 3 · Ask your question: trips in each year
+
+A **query** asks the table a question in **SQL**.
+
+```{=typst}
+#step(1, [On the table, click *Query* (at the top). A tab *Untitled query* opens with a short query. Select it all (*Ctrl + A*) and press *Delete*.])
+#step(2, [Type this query #mk(1), or copy it from the course page of Lab 1. The two signs *\`* are on the key under *Esc*.], after: sql[
+  SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, \
+  #h(1.2em) COUNT(\*) AS trips \
+  FROM \`bigquery-public-data.chicago_taxi_trips.taxi_trips\` \
+  GROUP BY year \
+  ORDER BY year;
+])
+#step(3, [On the right: *This query will process … GB when run* #mk(2). A green tick: the query is correct; a red sign: check what you typed. \ Click *Run* #mk(3).], img: "images/bq-query-1.png", w: 100%, left: 34%)
+#step(4, [Click *Results* #mk(1): one row for each year. \ 200 million rows became 11 rows.], img: "images/bq-results-1.png", w: 74%, left: 40%)
+#step(5, [Click *Job information* #mk(1). \ *Duration* and *Bytes processed* #mk(2): about 1.5 GB in a few seconds, read by many computers at the same time.], img: "images/bq-job-1.png", w: 86%, left: 38%)
+```
+
+## Show your teacher, then sign out
+
+```{=typst}
+#block(breakable: false, grid(columns: (1fr, 1fr), column-gutter: 14pt, align: top,
+  [
+    #set par(spacing: 0.9em, justify: false)
+    #tick #h(4pt) Your project *big-data-lab* is at the top. \
+    #tick #h(4pt) The *Explorer* shows *taxi_trips*. \
+    #tick #h(4pt) Your query shows one row for each year. \
+    #v(6pt)
+    *Raise your hand:* your teacher looks at your screen.
+    #v(6pt)
+    #tick #h(4pt) *Sign out:* click your picture at the top right #mk(1), then *Sign out* #mk(2). Your project stays for the next lab.
+  ],
+  shot("images/bq-signout-1.png"),
+))
+#v(8pt)
+#tip[*Finished early?* Before you sign out, change the query: how do people pay? Then try *company* in place of *payment_type*.
+#v(3pt)
+#set text(font: "DejaVu Sans Mono", size: 9pt)
+SELECT payment_type, COUNT(\*) AS trips \
+FROM \`bigquery-public-data.chicago_taxi_trips.taxi_trips\` \
+GROUP BY payment_type ORDER BY trips DESC;]
+```

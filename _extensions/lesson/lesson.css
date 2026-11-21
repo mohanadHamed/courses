@@ -46,11 +46,12 @@ body:has(.lesson-hero) #title-block-header { display: none; }
 .hero-shapes i:nth-child(2) { width: 90px; height: 90px; right: 110px; bottom: -35px; }
 .hero-shapes i:nth-child(3) { width: 40px; height: 40px; right: 40px; bottom: 30px; background: color-mix(in srgb, var(--accent) 10%, transparent); }
 /* Arcade theme: a pixel grid. Circuit theme: thin lines.
-   Studio theme: film-strip holes. Workshop theme: dots. */
+   Studio theme: film-strip holes. Workshop theme: dots. Ledger theme: bars of a chart. */
 .theme-arcade.lesson-hero::before,
 .theme-circuit.lesson-hero::before,
 .theme-studio.lesson-hero::before,
-.theme-workshop.lesson-hero::before {
+.theme-workshop.lesson-hero::before,
+.theme-ledger.lesson-hero::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -83,6 +84,17 @@ body:has(.lesson-hero) #title-block-header { display: none; }
   background-image: radial-gradient(color-mix(in srgb, var(--accent) 60%, transparent) 1.5px, transparent 1.6px);
   background-size: 18px 18px;
   mask-image: linear-gradient(90deg, transparent 35%, #000 100%);
+}
+.theme-ledger.lesson-hero::before {
+  background-image:
+    linear-gradient(0deg, color-mix(in srgb, var(--accent) 55%, transparent) 0 40%, transparent 40%),
+    linear-gradient(0deg, color-mix(in srgb, var(--accent) 55%, transparent) 0 70%, transparent 70%),
+    linear-gradient(0deg, color-mix(in srgb, var(--accent) 55%, transparent) 0 55%, transparent 55%),
+    linear-gradient(0deg, color-mix(in srgb, var(--accent) 55%, transparent) 0 85%, transparent 85%);
+  background-size: 14px 100%;
+  background-repeat: no-repeat;
+  background-position: calc(100% - 118px) 100%, calc(100% - 90px) 100%, calc(100% - 62px) 100%, calc(100% - 34px) 100%;
+  opacity: 0.12;
 }
 .hero-course {
   position: relative;
@@ -875,6 +887,10 @@ section[id^="in-word"] > h3 { color: #185abd; }
 .word-part { border: 2px solid #185abd; background: #f4f8fe; border-radius: 14px; padding: 12px 16px 4px; margin: 10px 0 16px; }
 .word-part::before { content: "In Word on a computer: the teacher's laptop now, then yours with the worksheet"; display: block;
   font-size: .8rem; font-weight: 800; color: #185abd; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .03em; }
+/* Another app than Word: :::: {.word-part data-app="BigQuery (Chrome)"} (Big Data). */
+.word-part[data-app]::before { content: "In " attr(data-app) " on a computer: the teacher's laptop now, then yours with the worksheet"; }
+section[id^="in-bigquery"] > h3::before, section[id^="in-rstudio"] > h3::before { content: "💻 "; }
+section[id^="in-bigquery"] > h3, section[id^="in-rstudio"] > h3 { color: #185abd; }
 .sim-part { margin: 6px 0 14px; }
 .lab-plan ol { font-size: 1.1rem; }
 .lab-plan li { margin: 6px 0; }

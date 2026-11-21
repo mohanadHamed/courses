@@ -372,7 +372,7 @@ def page_minutes(path, page_body):
                       body, flags=re.M)
     # The lab model: "In Word" (:::: {.word-part}) is shown in the real app when
     # time allows; the worksheet repeats it in the lab. Not counted.
-    body = re.sub(r"^::::+ *\{\.word-part\}.*?^::::+ *$", " ", body, flags=re.M | re.S)
+    body = re.sub(r"^::::+ *\{\.word-part\b[^}]*\}.*?^::::+ *$", " ", body, flags=re.M | re.S)
     # The lab model: the Extra (AI on tutudocs.com) is shown when time is left.
     body = re.sub(r"^## Extra\b.*?(?=^## |\Z)", " ", body, flags=re.M | re.S)
     # A Task with AI box is an extra, shown only when time is left.
@@ -404,6 +404,17 @@ def course_minutes(project_dir, slug):
             return int(m.group(1)) if m else None
     except OSError:
         return None
+
+
+def course_pages_only(project_dir, slug):
+    """A course whose labs have only a page and a worksheet (`pages-only: true`
+    in its _metadata.yml, Big Data): no lesson notes and no slides."""
+    path = os.path.join(project_dir, "courses", slug, "_metadata.yml")
+    try:
+        with open(path, encoding="utf-8") as f:
+            return re.search(r"^\s+pages-only:\s*true\b", f.read(), re.M) is not None
+    except OSError:
+        return False
 
 
 def strip_front_matter(text):
@@ -1243,7 +1254,7 @@ def check(project_dir):
             missing = [s for s in book["sections"] if s not in page["sections"]]
             if missing:
                 warnings.append("%s: sections %s of the notes are not on the page" % (rel, ", ".join(missing)))
-        else:
+        elif not course_pages_only(project_dir, slug):
             warnings.append("%s: no lesson notes (%s)" % (rel, os.path.basename(book_path)))
 
         for sec, k in page["do_its"].items():
@@ -1284,7 +1295,7 @@ def check(project_dir):
                 warnings.append("%s: the game %s is not on the Game challenge slide" % (rel, f))
             for w in check_slides(read(slides_path)):
                 warnings.append("%s: %s" % (os.path.relpath(slides_path, project_dir), w))
-        else:
+        elif not course_pages_only(project_dir, slug):
             warnings.append("%s: no slides file (%s)" % (rel, os.path.basename(slides_path)))
 
         sizes = dict(SIZES[minutes])

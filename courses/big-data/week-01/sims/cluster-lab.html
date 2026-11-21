@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Cluster Lab: one computer or many?</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+  <style>
+    .cl-facts { display: flex; flex-wrap: wrap; gap: 8px 18px; background: #fff5f5; border: 1px solid #ffc9c9; border-radius: 10px; padding: 8px 12px; font-size: 0.92rem; margin-bottom: 10px; }
+    .cl-pick { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0 10px; }
+    .cl-pick button.on { background: var(--sim-accent); color: #fff; }
+    .cl-pick button:not(.on) { background: #fff; color: var(--sim-accent); border: 2px solid var(--sim-accent); }
+    .cl-farm { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; min-height: 90px; }
+    .cl-pc { position: relative; border: 2px solid #ced4da; border-radius: 8px; background: #f8f9fa; padding: 4px 4px 6px; font-size: 0.68rem; text-align: center; cursor: pointer; user-select: none; }
+    .cl-pc .scr { height: 26px; border-radius: 4px; background: #e9ecef; overflow: hidden; position: relative; margin-bottom: 3px; }
+    .cl-pc .bar { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: linear-gradient(90deg, var(--sim-accent), var(--sim-accent2)); }
+    .cl-pc .blk { display: flex; flex-wrap: wrap; gap: 2px; justify-content: center; min-height: 10px; }
+    .cl-pc .blk i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+    .cl-pc.off { opacity: 0.35; border-style: dashed; }
+    .cl-pc.off::after { content: "OFF"; position: absolute; inset: 0; display: grid; place-items: center; font-weight: 800; font-size: 0.9rem; color: #c92a2a; }
+    .cl-pc.lost { border-color: #c92a2a; }
+    .cl-more { grid-column: 1 / -1; font-size: 0.85rem; color: #555; }
+    .cl-clock { font-size: 1.5rem; font-weight: 800; color: var(--sim-accent); margin: 8px 0 2px; }
+    .cl-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 4px; }
+    .cl-table { border-collapse: collapse; font-size: 0.85rem; margin-top: 6px; }
+    .cl-table td, .cl-table th { border: 1px solid #dee2e6; padding: 3px 10px; text-align: right; }
+    .cl-table th { background: #f1f3f5; }
+  </style>
+</head>
+<body class="theme-ledger">
+<main class="sim">
+  <h1>Cluster Lab: one computer or many?</h1>
+  <p class="hint">A platform cuts a big table into <b>blocks</b> and puts them on many computers. Each computer reads <b>its own</b> blocks, all at the same time.</p>
+  <div class="cl-facts">
+    <span><b>The table:</b> 200 million taxi trips, 75 GB</span>
+    <span><b>One block:</b> 128 MB (600 blocks)</span>
+    <span><b>One computer reads:</b> 100 MB a second</span>
+  </div>
+  <div class="cl-pick" id="pick"><b>Computers:</b></div>
+  <div class="cl-farm" id="farm"></div>
+  <div class="cl-clock" id="clock">Time to read the table: —</div>
+  <div class="cl-row">
+    <button id="run" type="button">▶ Count the rows</button>
+    <button id="off" type="button" class="ghost">Switch off computer 2</button>
+    <button id="reset" type="button" class="ghost">Start again</button>
+  </div>
+  <table class="cl-table" id="log"><tr><th>Computers</th><th>Time to read 75 GB</th></tr></table>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const SIZES = [1, 10, 100, 1000];
+  const MB = 75 * 1024, SPEED = 100;            // 75 GB, 100 MB a second
+  const COLORS = ["#c92a2a", "#e8590c", "#f08c00", "#2f9e44", "#1971c2", "#7048e8", "#c2255c", "#0c8599"];
+  let n = 1, running = false, off = false, done = new Set(), timer = null, logged = new Set();
+
+  const secs = (k) => MB / (k * SPEED);
+  const fmt = (s) => s >= 60 ? Math.floor(s / 60) + " min " + Math.round(s % 60) + " s" : (s >= 10 ? Math.round(s) + " s" : s.toFixed(1) + " s");
+  let allDone = false;
+  const say = (t, bad) => { const m = $("#msg");
+    m.innerHTML = t + (!bad && allDone ? "<br><b>" + (window.SIM_DONE || "All done. A platform splits the work over many computers, and keeps every block on 3 computers.") + "</b>" : "");
+    m.className = "message" + (bad ? " bad" : allDone ? " good" : ""); };
+
+  const STEPS = [
+    ["<b>1 computer</b>: count the rows. How long?", () => done.has("run1")],
+    ["<b>100 computers</b>: count again. How long now?", () => done.has("run100")],
+    ["<b>Switch off computer 2</b>: is any block lost?", () => done.has("off")],
+  ];
+  function steps() {
+    const ol = $("#jobs"); ol.innerHTML = "";
+    let k = 0;
+    STEPS.forEach(([t, ok]) => { const li = document.createElement("li"); li.innerHTML = t; if (ok()) { li.className = "ok"; k++; } ol.appendChild(li); });
+    $("#progress").textContent = k + " of " + STEPS.length + " done";
+    allDone = k === STEPS.length;
+  }
+
+  // Which blocks a computer holds: a few coloured squares (each block is on 3 computers).
+  function blocksOf(i, shown) {
+    const out = [];
+    for (let c = 0; c < 3; c++) out.push(COLORS[(i + c * 3) % COLORS.length]);
+    return shown > 1 ? out : [];
+  }
+  function draw() {
+    const pick = $("#pick"); pick.querySelectorAll("button").forEach((b) => b.remove());
+    SIZES.forEach((k) => { const b = document.createElement("button"); b.type = "button"; b.textContent = k; if (k === n) b.className = "on";
+      b.onclick = () => { if (running) return say("Wait: the count is running.", true); n = k; off = false; draw(); say("Now press <b>Count the rows</b>."); }; pick.appendChild(b); });
+    const farm = $("#farm"); farm.innerHTML = "";
+    const shown = Math.min(n, 40);
+    for (let i = 0; i < shown; i++) {
+      const pc = document.createElement("div"); pc.className = "cl-pc" + (off && i === 1 ? " off" : "");
+      pc.innerHTML = '<div class="scr"><div class="bar"></div></div><div class="blk"></div>Computer ' + (i + 1);
+      blocksOf(i, n).forEach((c) => { const sq = document.createElement("i"); sq.style.background = c; pc.querySelector(".blk").appendChild(sq); });
+      if (n === 1) pc.querySelector(".blk").innerHTML = "<i style='background:#c92a2a'></i><i style='background:#e8590c'></i><i style='background:#f08c00'></i><i style='background:#2f9e44'></i><span>… all 600 blocks</span>";
+      farm.appendChild(pc);
+    }
+    if (n > shown) { const m = document.createElement("div"); m.className = "cl-more"; m.textContent = "… and " + (n - shown) + " more computers, each with its own blocks."; farm.appendChild(m); }
+    $("#off").disabled = n < 10;
+    $("#off").title = n < 10 ? "Choose 10 or more computers first" : "";
+    steps();
+  }
+
+  function run() {
+    if (running) return say("Wait: the count is running.", true);
+    running = true;
+    const real = secs(n), show = Math.min(6000, Math.max(900, real * 8));   // the animation, in ms
+    const bars = document.querySelectorAll("#farm .cl-pc:not(.off) .bar");
+    const t0 = performance.now();
+    say("Reading… every computer reads its own blocks at the same time.");
+    clearInterval(timer);
+    timer = setInterval(() => {
+      const f = Math.min(1, Math.max(0, performance.now() - t0) / show);
+      bars.forEach((b) => { b.style.width = (f * 100) + "%"; });
+      $("#clock").textContent = "Time to read the table: " + fmt(real * f);
+      if (f >= 1) {
+        clearInterval(timer); running = false;
+        $("#clock").textContent = "Time to read the table: " + fmt(real);
+        if (!logged.has(n)) { logged.add(n); const tr = document.createElement("tr"); tr.innerHTML = "<td>" + n + "</td><td>" + fmt(real) + "</td>"; $("#log").appendChild(tr); }
+        if (n === 1) done.add("run1");
+        if (n === 100) done.add("run100");
+        steps();
+        say(n === 1 ? "One computer needs <b>" + fmt(real) + "</b> only to read the table. Now try <b>100</b> computers."
+          : n + " computers read it in <b>" + fmt(real) + "</b>: each one read only " + Math.max(1, Math.round(600 / n)) + " block(s).");
+      }
+    }, 40);
+  }
+
+  $("#run").onclick = run;
+  $("#off").onclick = () => {
+    if (n < 10) return say("Choose 10 or more computers first: with 1 computer, every block is on it.", true);
+    if (running) return say("Wait: the count is running.", true);
+    off = true; done.add("off"); draw();
+    say("Computer 2 is off. <b>No block is lost:</b> each block is kept on <b>3 computers</b>, so the others still have it. The platform reads those copies.");
+  };
+  $("#reset").onclick = () => { clearInterval(timer); running = false; n = 1; off = false; done = new Set(); logged = new Set();
+    document.querySelectorAll("#log tr:not(:first-child)").forEach((r) => r.remove()); $("#clock").textContent = "Time to read the table: —"; draw(); say("Choose the number of computers, then press <b>Count the rows</b>."); };
+  draw();
+  say("Choose the number of computers, then press <b>Count the rows</b>.");
+})();
+</script>
+</body>
+</html>

@@ -108,7 +108,11 @@ local function session_of(meta)
   elseif is_online(meta) then kind, n = "online", number(meta.lesson)   -- older pages
   elseif meta.lesson then kind, n = "lecture", number(meta.lesson)
   else return nil end
-  local label = LABELS[kind] .. (n and (" " .. n) or "")
+  local word = LABELS[kind]
+  -- A course whose every session is a lab (Big Data: course.lecture-label "Lab").
+  local course = meta.course or {}
+  if kind == "lecture" and course["lecture-label"] then word = str(course["lecture-label"]) end
+  local label = word .. (n and (" " .. n) or "")
   if kind == "online" and not number(meta.online) then label = "Lecture " .. (n or "") end
   return { kind = kind, n = n, label = label }
 end
@@ -274,8 +278,9 @@ local function hero_note(meta, slides, online, sheet)
       .. "Part A in the real app on the computer, Part B on the simulators of this page (they work on a phone too). "
       .. "On this page, every step has a check that answers at once.")
   elseif sheet and is_lab(meta) then
+    -- `lab-app:` names the real app of the worksheet (default: Word).
     table.insert(lines, "In class, about 15 minutes on this page: the ideas on the simulators. Then each student follows "
-      .. "the worksheet (PDF) in Word on the lab computer, step by step. At home, the simulators of this page work on a phone.")
+      .. "the worksheet (PDF) in " .. str(meta["lab-app"] or "Word") .. " on the lab computer, step by step. At home, the simulators of this page work on a phone.")
   elseif sheet then
     table.insert(lines, "In class, follow the worksheet (PDF): do each experiment on the computer and record your results. "
       .. "On this page every step has its result. The lesson notes (PDF) are a short reference.")
@@ -406,7 +411,9 @@ local function html_course(doc, course)
   local meta = doc.meta
   local chips = { "Course " .. esc(str(course.code)) }
   local units = (read_schedule() or {}).units ~= nil
-  if is_f2f(meta) then
+  if course["course-chip"] then
+    table.insert(chips, esc(str(course["course-chip"])))
+  elseif is_f2f(meta) then
     table.insert(chips, "Face-to-face: two sessions in the computer lab each week")
   elseif course.blended then
     table.insert(chips, units and "Blended: a lecture or practice session + an online activity in each unit"
@@ -414,7 +421,7 @@ local function html_course(doc, course)
   else
     table.insert(chips, units and "Lectures, seminars and one homework in each unit" or "Homework after every 2 lectures")
   end
-  if course.minutes then
+  if course.minutes and not course["course-chip"] then
     table.insert(chips, "⏱ " .. esc(str(course.minutes)) .. (course.blended and " min lab lecture" or " min each"))
   end
   local chip_html = {}

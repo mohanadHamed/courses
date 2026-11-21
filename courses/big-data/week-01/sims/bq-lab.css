@@ -1,0 +1,65 @@
+/* BigQuery Lab: the look of BigQuery Studio in Chrome (Google Cloud console), for the simulators of Big Data Labs 1-3. */
+.sim { max-width: 1000px; }
+.bq { border: 1px solid #b9bdc2; border-radius: 10px; overflow: hidden; font-family: "Google Sans", Roboto, "Segoe UI", Arial, sans-serif; color: #202124; background: #fff; font-size: 0.88rem; }
+.bq button { font: inherit; box-shadow: none; }
+.bq .b-addr { display: flex; align-items: center; gap: 10px; background: #f1f3f4; padding: 6px 10px; }
+.bq .b-addr b { flex: 1; background: #fff; border-radius: 14px; padding: 3px 12px; font-weight: 400; font-size: 0.82rem; }
+.bq .b-top { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-bottom: 1px solid #dadce0; }
+.bq .b-top .gc { font-weight: 600; color: #5f6368; white-space: nowrap; }
+.bq .b-top .proj { border: 1px solid #dadce0; border-radius: 4px; padding: 3px 10px; font-weight: 600; white-space: nowrap; }
+.bq .b-top .srch { flex: 1; background: #f8f9fa; border: 1px solid #dadce0; border-radius: 4px; padding: 3px 10px; color: #9aa0a6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bq .b-top .me { width: 26px; height: 26px; border-radius: 50%; background: #7048e8; color: #fff; display: grid; place-items: center; font-weight: 700; flex: none; }
+.bq .b-sand { background: #fef7e0; padding: 5px 12px; display: flex; justify-content: space-between; font-size: 0.82rem; }
+.bq .b-sand a { color: #1a73e8; font-weight: 700; }
+.bq .b-body { display: grid; grid-template-columns: 240px 1fr; min-height: 380px; position: relative; }
+@media (max-width: 640px) { .bq .b-body { grid-template-columns: 1fr; } .bq .b-exp { border-right: 0; border-bottom: 1px solid #dadce0; } }
+.bq .b-exp { border-right: 1px solid #dadce0; padding: 10px; }
+.bq .b-exp-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.bq .b-exp-head b { font-size: 1rem; }
+.bq .b-btn { background: #fff; color: #1a73e8; border: 1px solid #dadce0; border-radius: 4px; padding: 4px 10px; font-weight: 600; cursor: pointer; }
+.bq .b-btn:hover { background: #e8f0fe; }
+.bq .b-primary { background: #1a73e8; color: #fff; border: 0; border-radius: 4px; padding: 6px 14px; font-weight: 700; cursor: pointer; }
+.bq .b-primary:hover { background: #1765cc; }
+.bq .b-tree { list-style: none; padding: 0; margin: 6px 0 0; }
+.bq .b-tree li { padding: 4px 6px; border-radius: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bq .b-tree li:hover { background: #f1f3f4; }
+.bq .b-tree li.sel { background: #e8f0fe; font-weight: 700; }
+.bq .b-tree li .ar { display: inline-block; width: 14px; color: #5f6368; }
+.bq .b-main { padding: 0; min-width: 0; }
+.bq .b-tabs { display: flex; gap: 4px; background: #f8f9fa; border-bottom: 1px solid #dadce0; padding: 4px 6px 0; overflow-x: auto; }
+.bq .b-tab { padding: 6px 12px; border: 1px solid transparent; border-bottom: 0; border-radius: 4px 4px 0 0; white-space: nowrap; cursor: pointer; color: #5f6368; background: none; }
+.bq .b-tab.on { background: #fff; border-color: #dadce0; color: #202124; font-weight: 600; margin-bottom: -1px; }
+.bq .b-pad { padding: 10px 14px; }
+.bq .b-tool { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.bq .b-tool h3 { margin: 0 10px 0 0; font-size: 1.2rem; font-weight: 600; }
+.bq .b-sub { display: flex; gap: 2px; border-bottom: 1px solid #dadce0; margin: 10px 0 8px; overflow-x: auto; }
+.bq .b-sub button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 6px 10px; color: #5f6368; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; cursor: pointer; white-space: nowrap; border-radius: 0; }
+.bq .b-sub button.on { color: #1a73e8; border-bottom-color: #1a73e8; }
+.bq table.b-grid { border-collapse: collapse; font-size: 0.82rem; width: auto; }
+.bq table.b-grid th { background: #f8f9fa; text-align: left; padding: 4px 10px; font-weight: 700; }
+.bq table.b-grid td { border-top: 1px solid #e8eaed; padding: 4px 10px; white-space: nowrap; }
+.bq .b-kv { display: grid; grid-template-columns: 170px 1fr; gap: 4px 10px; font-size: 0.85rem; }
+.bq .b-kv span { color: #5f6368; }
+.bq .b-kv b.big { font-size: 0.95rem; }
+.bq .b-h { font-weight: 700; margin: 10px 0 6px; font-size: 0.95rem; }
+.bq .b-dim { position: absolute; inset: 0; background: rgba(32, 33, 36, 0.35); display: grid; place-items: center; z-index: 3; padding: 10px; }
+.bq .b-dialog { background: #fff; border-radius: 8px; padding: 16px 18px; width: min(460px, 100%); box-shadow: 0 8px 28px rgba(0,0,0,.25); }
+.bq .b-dialog h4 { margin: 0 0 4px; font-size: 1.15rem; font-weight: 400; }
+.bq .b-opt { display: block; width: 100%; text-align: left; background: #fff; border: 1px solid #dadce0; border-radius: 6px; padding: 8px 12px; margin: 8px 0; cursor: pointer; color: #202124; }
+.bq .b-opt:hover { background: #e8f0fe; }
+.bq .b-opt small { display: block; color: #5f6368; }
+.bq .b-input { width: 100%; border: 2px solid #1a73e8; border-radius: 4px; padding: 6px 10px; font: inherit; }
+.bq .b-card { border: 1px solid #dadce0; border-radius: 8px; padding: 10px 12px; margin-top: 10px; cursor: pointer; }
+.bq .b-card:hover { background: #f8f9fa; }
+.bq .b-card small { color: #5f6368; display: block; }
+.bq .b-run { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 8px; }
+.bq .b-valid { font-size: 0.82rem; }
+.bq .b-valid.ok::before { content: "✔"; display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #188038; color: #fff; font-size: 0.7rem; margin-right: 6px; }
+.bq .b-valid.err { color: #c5221f; font-weight: 600; }
+.bq .b-valid.warn { color: #b06000; font-weight: 700; }
+.bq textarea.b-sql { width: 100%; min-height: 118px; font-family: Consolas, Menlo, monospace; font-size: 0.82rem; border: 1px solid #dadce0; border-radius: 4px; padding: 8px; resize: vertical; color: #3c4043; }
+.bq .b-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; font-size: 0.8rem; }
+.bq .b-chips button { background: #fff; border: 1px dashed #1a73e8; color: #1a73e8; border-radius: 14px; padding: 3px 10px; cursor: pointer; }
+.bq .b-busy { color: #5f6368; font-style: italic; }
+.bq .b-note { font-size: 0.78rem; color: #5f6368; margin-top: 8px; }
+.bq .pulse { outline: 3px solid #d9480f; outline-offset: 2px; border-radius: 6px; }

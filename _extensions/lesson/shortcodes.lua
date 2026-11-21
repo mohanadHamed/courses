@@ -532,10 +532,16 @@ local function is_flexible(kind, x)
   return false
 end
 
+local LECTURE_LABEL = nil
+
 local function session_row(dir, wdir, prefix, slides_public, x, in_filling)
   local kind = str(x.kind or "lecture")
   local s = SESSION[kind]
   if not s then error("schedule.yml: unknown kind '" .. kind .. "' (lecture, seminar, practice, online)") end
+  -- A course whose every session is a lab (course.lecture-label: "Lab").
+  if kind == "lecture" and LECTURE_LABEL then
+    s = { stem = s.stem, go = "Open " .. LECTURE_LABEL:lower() .. " →", label = LECTURE_LABEL, file = s.file, pdf = s.pdf }
+  end
   local n = tonumber(str(x.n))
   local stem = string.format("%s-%02d", s.stem, n)
   local base = pandoc.path.join({ dir, wdir, stem })
@@ -604,6 +610,9 @@ local function schedule_units(dir, prefix, slides_public, units)
     local head
     if filling then
       head = '<span class="sw-week">Practice week</span><span class="sl-tag sl-flex">Flexible</span>'
+    elseif u.heading then
+      -- A heading of its own (Big Data: "Outcome C1 · a big data platform").
+      head = string.format('<span class="sw-week">%s</span>', html_attr(str(u.heading)))
     else
       head = string.format('<span class="sw-week">Unit %d</span>', unit or 0)
     end
@@ -622,6 +631,8 @@ local function schedule(meta)
   local data = read_yaml(pandoc.path.join({ dir, "schedule.yml" }))
   local config = read_yaml(pandoc.path.join({ project_dir(), "_quarto.yml" }))
   local slides_public = config["slides-public"] == true
+  local course = meta.course or {}
+  LECTURE_LABEL = course["lecture-label"] and pandoc.utils.stringify(course["lecture-label"]) or nil
   if data.units then return schedule_units(dir, prefix, slides_public, data.units) end
   local lectures = data.lectures or {}
   local out = { '<div class="schedule">' }

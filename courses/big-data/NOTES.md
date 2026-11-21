@@ -126,8 +126,9 @@ absent students study with it.
   simulators before the lab".
 - **The teacher's voice, in one file or more.** The teacher reads the
   whole script in one recording (QuickTime or Voice Memos), silent about
-  **3 seconds between scenes** and never that long inside a scene: the
-  scenes are found at those pauses. After a mistake, stop and start a new
+  **3 seconds between scenes**: the scene breaks are the pauses that fit
+  best (each scene about as long as its text, the longer pauses first), so
+  a shorter pause between scenes or a longer one inside a scene is fine. After a mistake, stop and start a new
   file at the beginning of the same scene. The first number of a file's
   name is the scene where it starts (`scene-01.m4a`, then `scene-07.m4a`);
   what the earlier file holds after the end of scene 6 is left out. One

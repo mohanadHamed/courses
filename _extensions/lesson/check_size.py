@@ -1054,6 +1054,9 @@ def lab_marks_warnings(sheet_path, rel):
         out.append("%s: the marks of the tasks and Finished early? add up to %d, not 10" % (srel, total))
     if "Your mark" not in body:
         out.append('%s: no "Your mark" box at the end (a tick for each task and the total, for the teacher)' % srel)
+    return out
+
+
 PREP_VIDEO_WORDS = (450, 1000)   # about 4 to 9 minutes of reading (courses/big-data/NOTES.md)
 
 

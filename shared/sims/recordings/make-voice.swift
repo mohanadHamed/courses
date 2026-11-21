@@ -15,8 +15,9 @@
 // seconds between scenes), and after a mistake the teacher starts a new file
 // at the beginning of the same scene (scene-07.m4a): what the first file
 // holds after the end of scene 6 is left out. The silence before and after
-// each scene is cut, and the times of the lines are found from the pauses of
-// the speaker (a scene without a recording is still spoken by `say`). A short pause follows each line and a longer one each
+// each scene is cut; the scene breaks are the pauses that fit the length of
+// each scene's text best, and the times of the lines are found from the pauses
+// of the speaker (a scene without a recording is still spoken by `say`). A short pause follows each line and a longer one each
 // scene. The times of the lines go into the captions and into timing.json,
 // which the pictures of the video read, so every scene starts with its first
 // line. Only the tools of macOS (say, AVFoundation) are used.
@@ -56,7 +57,7 @@ func speak(_ line: String, to url: URL) {
 var recordings: [Int: URL] = [:]
 if args.count == 6 {
   let dir = URL(fileURLWithPath: args[5])
-  let kinds = ["m4a", "mp3", "wav", "aif", "aiff", "caf", "mp4", "m4b"]
+  let kinds = ["m4a", "mp3", "wav", "aif", "aiff", "aifc", "caf", "mp4", "m4b"]
   for name in (try? FileManager.default.contentsOfDirectory(atPath: dir.path)) ?? [] {
     let url = dir.appendingPathComponent(name)
     guard kinds.contains(url.pathExtension.lowercased()),
@@ -141,10 +142,14 @@ func cutsAt(_ start: Double, _ end: Double, _ weights: [Double], _ gaps: [(Doubl
   let all = weights.reduce(0, +)
   var cuts: [(Double, Double)] = []
   var acc = 0.0, lastCut = start
+  let per = (end - start) / all
   for w in weights.dropLast() {
     acc += w
     let want = start + (end - start) * acc / all
-    let near = gaps.filter { $0.0 > lastCut + 0.3 && abs(($0.0 + $0.1) / 2 - want) < reach }
+    // A pause is a cut only when the line before it and the lines after it
+    // keep at least half of the time their text needs.
+    let near = gaps.filter { let mid = ($0.0 + $0.1) / 2
+        return $0.0 > lastCut + 0.3 && abs(mid - want) < reach && mid - lastCut >= 0.5 * w * per && end - mid >= 0.5 * (all - acc) * per }
       .min { abs(($0.0 + $0.1) / 2 - want) < abs(($1.0 + $1.1) / 2 - want) }
     let cut = near ?? (want, want)
     cuts.append(cut)
@@ -157,46 +162,75 @@ func cutsAt(_ start: Double, _ end: Double, _ weights: [Double], _ gaps: [(Doubl
 struct Part { let url: URL; let start: Double; let end: Double; let cuts: [(Double, Double)] }
 
 // A recording holds one scene or several in order (the teacher stays silent
-// about 3 seconds between scenes). The scenes are split at the long pauses
-// (1.5 s or more); what comes after the pause that ends the last scene is
-// left out (a scene stopped by a mistake and read again in the next file).
-// With too few long pauses, the scenes are split by the length of their text.
-func splitScenes(_ url: URL, _ sc: [[String]]) throws -> [Part] {
+// about 3 seconds between scenes). The scene breaks are the pauses (0.8 s or
+// more) that fit best: each scene about as long as its text (the speed of
+// the whole recording), and longer pauses first. When a later file starts at
+// a later scene (the teacher stopped after a mistake), the end of this one
+// may be left out: the scene that was stopped and read again.
+func splitScenes(_ url: URL, _ sc: [[String]], mayDropTail: Bool) throws -> [Part] {
   let loud = try speech(url)
   guard let first = loud.firstIndex(of: true), let last = loud.lastIndex(of: true) else {
     print("make-voice: no speech in \(url.lastPathComponent)")
     exit(1)
   }
-  var bounds: [(Int, Int)] = []          // each scene: from, to (10 ms steps)
-  let long = pauses(loud, first, last + 1, 1.5)
-  let sceneWeights = sc.map { $0.map(weight).reduce(0, +) }
-  if sc.count == 1 {
-    bounds = [(first, last + 1)]
-  } else if long.count >= sc.count - 1 {
-    var from = first
-    for j in 0..<sc.count {
-      let to = j < long.count ? Int(long[j].0 * 100) : last + 1
-      bounds.append((from, to))
-      if j < long.count { from = Int(long[j].1 * 100) }
+  let t0 = Double(first) / 100, t1 = Double(last + 1) / 100
+  let gaps = pauses(loud, first, last + 1, 0.8)
+  let w = sc.map { $0.map(weight).reduce(0, +) }
+  let rate = (t1 - t0) / w.reduce(0, +)
+  let m = sc.count, g = gaps.count
+  func cost(_ a: Double, _ b: Double, _ j: Int) -> Double { let e = rate * w[j]; return (b - a - e) * (b - a - e) / e }
+  func bonus(_ k: Int) -> Double { 4 * (gaps[k].1 - gaps[k].0) }
+  // ends[j]: the scene j ends at this gap (nil: at the end of the speech).
+  var ends: [Int?] = []
+  if m == 1 {
+    var best = cost(t0, t1, 0), at: Int? = nil
+    if mayDropTail { for k in 0..<g where cost(t0, gaps[k].0, 0) - bonus(k) < best { best = cost(t0, gaps[k].0, 0) - bonus(k); at = k } }
+    ends = [at]
+  } else if g >= m - 1 {
+    let inf = Double.infinity
+    var dp = Array(repeating: Array(repeating: inf, count: g), count: m), from = Array(repeating: Array(repeating: -1, count: g), count: m)
+    for k in 0..<g { dp[0][k] = cost(t0, gaps[k].0, 0) - bonus(k) }
+    for j in 1..<(m - 1) {
+      for k in 0..<g { for h in 0..<k where dp[j - 1][h] < inf {
+        let v = dp[j - 1][h] + cost(gaps[h].1, gaps[k].0, j) - bonus(k)
+        if v < dp[j][k] { dp[j][k] = v; from[j][k] = h }
+      } }
     }
-    // A long pause inside a scene moves every scene after it: then the
-    // length of a scene no longer fits its text, and the text decides.
-    let rates = zip(bounds, sceneWeights).map { Double($0.1 - $0.0) / $1 }
-    let mid = rates.sorted()[rates.count / 2]
-    if rates.contains(where: { $0 < mid * 0.5 || $0 > mid * 2 }) { bounds = [] }
+    var best = inf, prev = -1, at: Int? = nil
+    for h in 0..<g where dp[m - 2][h] < inf {
+      let v = dp[m - 2][h] + cost(gaps[h].1, t1, m - 1)
+      if v < best { best = v; prev = h; at = nil }
+      if mayDropTail { for k in (h + 1)..<max(h + 1, g) {
+        let d = dp[m - 2][h] + cost(gaps[h].1, gaps[k].0, m - 1) - bonus(k)
+        if d < best { best = d; prev = h; at = k }
+      } }
+    }
+    var chain = [prev]
+    for j in stride(from: m - 2, to: 0, by: -1) { chain.append(from[j][chain.last!]) }
+    ends = chain.reversed().map { Optional($0) } + [at]
+  } else {
+    print("make-voice: \(url.lastPathComponent): \(g) pauses for \(m) scenes; the scenes are split by their text")
+    let cuts = cutsAt(t0, t1, w, [], 0)
+    ends = []
+    var parts: [Part] = []
+    var from = t0
+    for (j, lines) in sc.enumerated() {
+      let to = j < cuts.count ? cuts[j].0 : t1
+      parts.append(Part(url: url, start: from, end: to, cuts: cutsAt(from, to, lines.map(weight), pauses(loud, Int(from * 100), Int(to * 100), 0.18), 1.6)))
+      from = to
+    }
+    return parts
   }
-  if bounds.isEmpty {
-    print("make-voice: \(url.lastPathComponent): the long pauses do not match the \(sc.count) scenes; the scenes are split by their text")
-    let cuts = cutsAt(Double(first) / 100, Double(last + 1) / 100, sceneWeights, pauses(loud, first, last + 1, 1.0), 8)
-    var from = first
-    for c in cuts { bounds.append((from, Int(c.0 * 100))); from = Int(c.1 * 100) }
-    bounds.append((from, last + 1))
-  }
-  return zip(sc, bounds).map { lines, b in
-    let a = loud[b.0..<b.1].firstIndex(of: true) ?? b.0, z = (loud[b.0..<b.1].lastIndex(of: true) ?? b.1 - 1) + 1
+  var parts: [Part] = []
+  var from = first
+  for (j, lines) in sc.enumerated() {
+    let to = ends[j].map { Int(gaps[$0].0 * 100) } ?? last + 1
+    let a = loud[from..<to].firstIndex(of: true) ?? from, z = (loud[from..<to].lastIndex(of: true) ?? to - 1) + 1
     let s0 = Double(a) / 100, s1 = Double(z) / 100
-    return Part(url: url, start: s0, end: s1, cuts: cutsAt(s0, s1, lines.map(weight), pauses(loud, a, z, 0.18), 1.6))
+    parts.append(Part(url: url, start: s0, end: s1, cuts: cutsAt(s0, s1, lines.map(weight), pauses(loud, a, z, 0.18), 1.6)))
+    if let k = ends[j] { from = Int(gaps[k].1 * 100) }
   }
+  return parts
 }
 
 // Seconds: before the first line, after each line, and the extra pause of a scene.
@@ -218,7 +252,7 @@ var parts: [Int: Part] = [:]
 let starts = recordings.keys.sorted()
 for (j, s) in starts.enumerated() where s >= 1 && s <= scenes.count {
   let upto = j + 1 < starts.count ? min(starts[j + 1] - 1, scenes.count) : scenes.count
-  for (o, part) in try splitScenes(recordings[s]!, Array(scenes[(s - 1)..<upto])).enumerated() { parts[s + o] = part }
+  for (o, part) in try splitScenes(recordings[s]!, Array(scenes[(s - 1)..<upto]), mayDropTail: upto < scenes.count).enumerated() { parts[s + o] = part }
 }
 
 var recorded = 0

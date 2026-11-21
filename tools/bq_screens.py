@@ -326,71 +326,6 @@ def bq_home(s, top):
     mark_box(top, (160, 95, 150, 26), 2, "bottom", 6, 3)
 
 
-def bq_add_data(s, top):
-    """Explorer: + Add data, then Public datasets."""
-    h = 470
-    y = console(s, h)
-    rail(s, y, h)
-    add, _ = explorer(s, y, h, [(0, "big-data-lab", "project")])
-    s.rect(308, y, W - 323, h - y - 15, fill="#5f6368", opacity=0.35)
-    dx, dy = 360, y + 30
-    s.rect(dx, dy, 480, 250, fill="#ffffff", rx=8)
-    s.text(dx + 24, dy + 38, "Add data", 20, 400, INK)
-    s.text(dx + 24, dy + 64, "Choose where your data comes from.", 13, 400, GREY)
-    items = [("Local file", "Upload a CSV or JSON file"), ("Google Cloud Storage", "Load files from a bucket"),
-             ("Public datasets", "Free data that Google and others share")]
-    pub = None
-    for i, (a, b) in enumerate(items):
-        iy = dy + 84 + i * 52
-        s.rect(dx + 20, iy, 440, 44, fill=BLUE_SOFT if i == 2 else "#ffffff", stroke=EDGE, sw=1, rx=6)
-        s.text(dx + 36, iy + 19, a, 13.5, 700, INK)
-        s.text(dx + 36, iy + 35, b, 11.5, 400, GREY)
-        if i == 2:
-            pub = (dx + 20, iy, 440, 44)
-    mark_box(top, add, 1, "bottom", 6, 3)
-    mark_box(top, pub, 2, "right", 6, 3)
-
-
-def bq_market(s, top):
-    """Marketplace: search Chicago Taxi Trips, open it, View dataset."""
-    h = 430
-    browser(s, h, "console.cloud.google.com/marketplace", "Marketplace – Google Cloud")
-    s.rect(15, 85, W - 30, h - 100, fill="#ffffff")
-    s.text(40, 125, "Marketplace", 20, 400, INK)
-    search = (40, 140, 420, 34)
-    s.rect(*search, fill="#ffffff", stroke=BLUE, sw=2, rx=4)
-    s.text(56, 162, "chicago taxi", 14, 400, INK)
-    card = (40, 192, 420, 92)
-    s.rect(*card, fill="#ffffff", stroke=EDGE, sw=1, rx=8)
-    s.rect(56, 208, 44, 44, fill="#fff3bf", rx=6)
-    s.text(116, 222, "Chicago Taxi Trips", 15, 700, INK)
-    s.text(116, 242, "City of Chicago", 12.5, 400, GREY)
-    s.text(116, 264, "Taxi trips in Chicago, from 2013. Public dataset.", 12, 400, GREY)
-    s.line(490, 100, 490, h - 30, EDGE, 1)
-    s.text(520, 130, "Chicago Taxi Trips", 18, 400, INK)
-    s.text(520, 152, "City of Chicago · Datasets", 12.5, 400, GREY)
-    view = btn(s, 520, 170, 130, "VIEW DATASET", h=34)
-    s.text(520, 240, "Overview", 14, 700, INK)
-    for i, t in enumerate(("Every taxi trip reported to the City", "of Chicago: the time, the fare, the",
-                           "tip, the payment type and the company.")):
-        s.text(520, 264 + i * 19, t, 12.5, 400, GREY)
-    mark_box(top, search, 1, "left", 6, 3)
-    mark_box(top, card, 2, "left", 8, 3)
-    mark_box(top, view, 3, "right", 6, 3)
-
-
-def bq_tree(s, top):
-    """The Explorer shows bigquery-public-data: open chicago_taxi_trips, click taxi_trips."""
-    h = 390
-    y = console(s, h)
-    rail(s, y, h)
-    _, boxes = explorer(s, y, h, PUBLIC_TREE, sel="taxi_trips")
-    s.rect(308, y, W - 323, h - y - 15, fill="#ffffff")
-    s.text(340, y + 60, "Click a table to open it here.", 14, 400, GREY)
-    mark_box(top, boxes["chicago_taxi_trips"], 1, "right", 5, 2)
-    mark_box(top, boxes["taxi_trips"], 2, "right", 5, 2)
-
-
 def table_view(s, h, active):
     y = console(s, h)
     rail(s, y, h)
@@ -584,9 +519,6 @@ SCREENS = {
     "week-01/images/bq-signin-1": (bq_signin, (100, 86, 700, 324)),
     "week-01/images/bq-welcome-1": (bq_welcome, (120, 86, 660, 330)),
     "week-01/images/bq-project-1": (bq_new_project, (15, 86, 600, 360)),
-    "week-01/images/bq-add-1": (bq_add_data, (0, 86, W, 384)),
-    "week-01/images/bq-market-1": (bq_market, (0, 0, W, 330)),
-    "week-01/images/bq-tree-1": (bq_tree, (0, 86, 620, 290)),
     "week-01/images/bq-details-1": (bq_details, (0, 86, W, 444)),
     "week-01/images/bq-query-1": (bq_query, (290, 86, 610, 294)),
     "week-01/images/bq-results-1": (bq_results, (290, 362, 610, 328)),

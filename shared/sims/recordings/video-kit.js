@@ -13,6 +13,12 @@
 // window.TIMING (make-voice.swift): the scene whose first line has started,
 // and the words of the line in the caption band, the same words as the voice.
 // It returns a key that changes only when the picture changes.
+//
+// Options of VIDEO: colors (the course colours, for example { accent: "#C92A2A" }),
+// captions: false (no words in the picture: a video in the teacher's voice,
+// courses/big-data/NOTES.md, "The prep video"; the words stay in the CC
+// track and the transcript). image() shows a picture of the lesson (a drawn
+// screen, a simulator poster); window.videoReady() waits until they are drawn.
 (() => {
   const W = 1280, H = 720, NS = "http://www.w3.org/2000/svg";
   const C = {
@@ -164,11 +170,63 @@
   function fade(p, d = 0.45) { return Math.max(0, Math.min(1, p / d)); }
   function show(k, n, p) { return k > n ? 1 : k === n ? fade(p) : 0; }
 
-  window.VK = { W, H, C, el, group, text, spans, rect, win, folder, file, pill, arrow, mark, grid, formulaBar, titleCard, fade, show };
+  // A picture of the lesson (a drawn screen, a poster), fitted into the box
+  // x, y, w, h, with a thin frame and a shadow unless o.bare.
+  let pending = 0;
+  function image(parent, href, x, y, w, h, o = {}) {
+    const g = group(parent, o);
+    if (!o.bare) {
+      rect(g, x + 5, y + 7, w, h, { fill: "rgba(60,30,20,0.10)", r: 12 });
+      rect(g, x, y, w, h, { fill: "#fff", stroke: C.line, r: 12 });
+    }
+    const pad = o.bare ? 0 : 8;
+    const im = el("image", { href, x: x + pad, y: y + pad, width: w - 2 * pad, height: h - 2 * pad,
+      preserveAspectRatio: o.fit || "xMidYMid meet" }, g);
+    pending++;
+    const doneOne = () => { pending = Math.max(0, pending - 1); };
+    im.addEventListener("load", doneOne, { once: true });
+    im.addEventListener("error", doneOne, { once: true });
+    return g;
+  }
+  window.videoReady = () => new Promise((resolve) => {
+    const t0 = performance.now();
+    (function wait() {
+      if (pending === 0 || performance.now() - t0 > 3000) requestAnimationFrame(() => requestAnimationFrame(() => resolve(true)));
+      else setTimeout(wait, 10);
+    })();
+  });
+  // Code in a box with line numbers; o.hl: the lines to light (0, 1, …);
+  // o.dim: the other lines grey; o.tags: a short label after a line, { 2: "1" }.
+  function code(parent, x, y, lines, o = {}) {
+    const g = group(parent, o), size = o.size || 24, lh = size * 1.55, w = o.w || 900;
+    rect(g, x, y, w, lines.length * lh + 24, { fill: "#F8F9FA", stroke: "#DADCE0", r: 12 });
+    lines.forEach((ln, i) => {
+      const ly = y + 12 + i * lh, on = (o.hl || []).includes(i);
+      if (on) { rect(g, x + 2, ly, w - 4, lh, { fill: "#FFE8CC", r: 0 }); rect(g, x + 2, ly, 6, lh, { fill: C.accent, r: 0 }); }
+      text(g, x + 40, ly + lh * 0.72, String(i + 1), { size: size * 0.8, anchor: "end", fill: "#9AA0A6", mono: true, weight: 400 });
+      text(g, x + 58, ly + lh * 0.72, ln, { size, mono: true, weight: on ? 800 : 600,
+        fill: o.dim && !on ? "#9AA0A6" : "#3C4043" });
+      if (o.tags && o.tags[i] !== undefined) pill(g, x + w + 14, ly + lh / 2 - (size * 0.8 + 22) / 2, String(o.tags[i]),
+        { size: size * 0.8, fill: on ? C.accent : C.soft, ink: on ? "#fff" : C.ink });
+    });
+    return g;
+  }
+  // A small computer (a screen on a stand); o.off: switched off (grey).
+  function computer(parent, x, y, o = {}) {
+    const g = group(parent, o), s = o.s || 1, c = o.off ? "#ADB5BD" : (o.color || C.accent);
+    rect(g, x, y, 60 * s, 40 * s, { fill: o.off ? "#E9ECEF" : "#fff", stroke: c, sw: 3, r: 5 * s });
+    rect(g, x + 24 * s, y + 40 * s, 12 * s, 8 * s, { fill: c, r: 1 });
+    rect(g, x + 14 * s, y + 48 * s, 32 * s, 5 * s, { fill: c, r: 2 });
+    return g;
+  }
+
+  window.VK = { W, H, C, el, group, text, spans, rect, win, folder, file, pill, arrow, mark, grid, formulaBar, titleCard, fade, show,
+    image, code, computer };
 
   // ---- the stage and drawAt(t) ----
   let svg, cap, last = "";
   function setup() {
+    if (window.VIDEO && window.VIDEO.colors) Object.assign(C, window.VIDEO.colors);
     svg = el("svg", { id: "stage", width: W, height: H, viewBox: `0 0 ${W} ${H}` });
     document.body.appendChild(svg);
     cap = document.createElement("div");
@@ -185,7 +243,7 @@
     let k = 0;
     scene.lines.forEach((l, j) => { if (t >= l.start) k = j; });
     const line = scene.lines[k], p = Math.max(0, t - line.start);
-    const words = !poster && t >= line.start && t <= line.end + 0.3 ? line.text : "";
+    const words = !poster && V.captions !== false && t >= line.start && t <= line.end + 0.3 ? line.text : "";
     const key = `${si}|${k}|${p < 0.5 ? Math.floor(p * 30) : "s"}|${words ? 1 : 0}|${poster ? 1 : 0}`;
     if (key === last) return key;
     last = key;

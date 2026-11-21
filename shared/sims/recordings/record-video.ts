@@ -8,6 +8,9 @@
 // draws the picture at time t (from the times of the voice in timing.json)
 // and returns a key. While the key stays the same, the picture is the same,
 // so the frame is linked to the last one instead of taken again.
+// After each new picture it waits for window.videoReady() (the pictures of
+// the lesson that image() shows). SCENE_SHOTS=<dir> also saves the end of
+// every scene as scene-01.png … (the reading sheet of the teacher's voice).
 // Deno comes with Quarto (quarto/bin/tools/<arch>/deno); Chrome must be installed.
 
 const [page, timingPath, outDir, fpsArg, posterPath, posterArg] = Deno.args;
@@ -68,7 +71,7 @@ let last = "", taken = 0;
 for (let i = 0; i < total; i++) {
   const key = await evaluate(`drawAt(${i / fps})`);
   const file = `${outDir}/${String(i).padStart(5, "0")}.png`;
-  if (key !== last || i === 0) { await shot(file); taken++; }
+  if (key !== last || i === 0) { await evaluate("window.videoReady ? window.videoReady() : true"); await shot(file); taken++; }
   else await Deno.link(`${outDir}/${String(i - 1).padStart(5, "0")}.png`, file);
   last = key;
 }
@@ -77,7 +80,19 @@ if (posterPath) {
   const scenes = JSON.parse(timing).scenes;
   const at = posterArg ? Number(posterArg) : scenes.length > 1 ? scenes[1].start - 0.05 : JSON.parse(timing).total / 2;
   await evaluate(`drawAt(${at}, true)`);
+  await evaluate("window.videoReady ? window.videoReady() : true");
   await shot(posterPath);
+}
+const shots = Deno.env.get("SCENE_SHOTS");
+if (shots) {
+  await Deno.mkdir(shots, { recursive: true });
+  const T = JSON.parse(timing);
+  for (let i = 0; i < T.scenes.length; i++) {
+    const at = i + 1 < T.scenes.length ? T.scenes[i + 1].start - 0.05 : T.total - 0.05;
+    await evaluate(`drawAt(${at}, true)`);
+    await evaluate("window.videoReady ? window.videoReady() : true");
+    await shot(`${shots}/scene-${String(i + 1).padStart(2, "0")}.png`);
+  }
 }
 console.log(`record-video: ${total} frames (${taken} pictures) at ${fps} fps, ${W}x${H}`);
 ws.close(); chrome.kill(); await chrome.status;

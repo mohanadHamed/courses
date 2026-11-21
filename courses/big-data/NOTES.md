@@ -52,6 +52,16 @@ package and no platform texts.
   finishes in less than 30 minutes, a strong student in about 20, so that
   every student finishes something in the hour. More practice goes into a
   "Finished early?" box at the end, never into a fourth required task.
+- **Only screens that match the real app** (the teacher's request of
+  2026-11-21: Task 2 of Lab 1 sent the students to **+ Add data** and the
+  Marketplace, which did not match BigQuery). A step gets a drawn screen
+  only when its screen is checked against the real app (by the teacher, or
+  from the official help page of the current version). Where the screens
+  change often or were not checked, the step is **general**: the name of
+  the box or button and what to type or click, with the names the student
+  will see (the search box of BigQuery Studio, *chicago taxi*, the dataset
+  *chicago_taxi_trips*, the table *taxi_trips*), and no picture. The
+  simulator of the page follows the same general steps.
 - **Code is explained** (the teacher's request of 2026-11-21, after Lab 1:
   the query was given without saying what `EXTRACT` or `GROUP BY` do).
   Every line of code that a student types (SQL in Labs 1–3, R in Labs 4–8)

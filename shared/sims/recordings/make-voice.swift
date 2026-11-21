@@ -17,8 +17,10 @@
 // holds after the end of scene 6 is left out. The silence before and after
 // each scene is cut; the scene breaks are the pauses that fit the length of
 // each scene's text best, and the times of the lines are found from the pauses
-// of the speaker (a scene without a recording is still spoken by `say`). A short pause follows each line and a longer one each
-// scene. The times of the lines go into the captions and into timing.json,
+// of the speaker (a scene without a recording is still spoken by `say`). A
+// pause inside a scene longer than MAX_PAUSE (0.8 s) is shortened to it; a
+// sentence read twice is cut first with tools/clean_voice.py. A short pause
+// follows each line and a longer one each scene. The times of the lines go into the captions and into timing.json,
 // which the pictures of the video read, so every scene starts with its first
 // line. Only the tools of macOS (say, AVFoundation) are used.
 import AVFoundation
@@ -159,7 +161,11 @@ func cutsAt(_ start: Double, _ end: Double, _ weights: [Double], _ gaps: [(Doubl
 }
 
 // One scene of a recording: where its speech starts and ends, and the times of its lines.
-struct Part { let url: URL; let start: Double; let end: Double; let cuts: [(Double, Double)] }
+struct Part { let url: URL; let start: Double; let end: Double; let cuts: [(Double, Double)]; var long: [(Double, Double)] = [] }
+
+// The longest pause inside a scene of a recording (seconds): a longer one is
+// shortened to it (MAX_PAUSE, 0.8 by default; 0 keeps every pause).
+let maxPause = Double(ProcessInfo.processInfo.environment["MAX_PAUSE"] ?? "") ?? 0.8
 
 // A recording holds one scene or several in order (the teacher stays silent
 // about 3 seconds between scenes). The scene breaks are the pauses (0.8 s or
@@ -227,7 +233,8 @@ func splitScenes(_ url: URL, _ sc: [[String]], mayDropTail: Bool) throws -> [Par
     let to = ends[j].map { Int(gaps[$0].0 * 100) } ?? last + 1
     let a = loud[from..<to].firstIndex(of: true) ?? from, z = (loud[from..<to].lastIndex(of: true) ?? to - 1) + 1
     let s0 = Double(a) / 100, s1 = Double(z) / 100
-    parts.append(Part(url: url, start: s0, end: s1, cuts: cutsAt(s0, s1, lines.map(weight), pauses(loud, a, z, 0.18), 1.6)))
+    parts.append(Part(url: url, start: s0, end: s1, cuts: cutsAt(s0, s1, lines.map(weight), pauses(loud, a, z, 0.18), 1.6),
+                      long: maxPause > 0 ? pauses(loud, a, z, maxPause + 0.01) : []))
     if let k = ends[j] { from = Int(gaps[k].1 * 100) }
   }
   return parts
@@ -271,16 +278,38 @@ for (i, scene) in scenes.enumerated() {
       track.insertEmptyTimeRange(CMTimeRange(start: CMTime(seconds: end, preferredTimescale: scale),
                                              end: CMTime(seconds: t, preferredTimescale: scale)))
     }
-    try track.insertTimeRange(CMTimeRange(start: CMTime(seconds: a, preferredTimescale: scale), end: CMTime(seconds: b, preferredTimescale: scale)),
-                              of: asset.tracks(withMediaType: .audio)[0], at: CMTime(seconds: t, preferredTimescale: scale))
+    // The pieces of the scene that are kept: every long pause is shortened to
+    // maxPause (half of it on each side), and a time of the recording is moved
+    // to its place in the voice-over.
+    var pieces: [(Double, Double)] = []
+    var from = a
+    for q in part.long where q.0 > a && q.1 < b {
+      pieces.append((from, q.0 + maxPause / 2))
+      from = q.1 - maxPause / 2
+    }
+    pieces.append((from, b))
+    var at = t
+    var starts: [Double] = []
+    for pc in pieces {
+      starts.append(at)
+      try track.insertTimeRange(CMTimeRange(start: CMTime(seconds: pc.0, preferredTimescale: scale), end: CMTime(seconds: pc.1, preferredTimescale: scale)),
+                                of: asset.tracks(withMediaType: .audio)[0], at: CMTime(seconds: at, preferredTimescale: scale))
+      at += pc.1 - pc.0
+    }
+    func place(_ x: Double) -> Double {
+      for (k, pc) in pieces.enumerated() {
+        if x <= pc.1 { return starts[k] + max(0, x - pc.0) }
+      }
+      return at
+    }
     let bounds = [(s0, s0)] + cuts + [(s1, s1)]
     for (j, line) in scene.enumerated() {
       n += 1
-      let ls = t + bounds[j].1 - a, le = t + bounds[j + 1].0 - a
+      let ls = place(bounds[j].1), le = place(bounds[j + 1].0)
       lines.append(["text": line, "start": ls, "end": le])
       vtt += "\n\(n)\n\(stamp(ls)) --> \(stamp(le))\n\(line)\n"
     }
-    end = t + (b - a)
+    end = at
     t = end + pause
   } else {
     for line in scene {

@@ -135,6 +135,18 @@ absent students study with it.
   file for each scene works too. The recordings stay private
   (`lab-materials/LabN_voice/`). The reading sheet (`LabN_Video_Script.pdf`,
   private) shows each scene's number, its words and its last picture.
+- **Clean the recording first** (the teacher's request of 2026-11-21: the
+  generated voices made mistakes no person makes, so the teacher's voice
+  stays, without its slips). `python3 tools/clean_voice.py find <recording>`
+  hears the recording on the Mac (macOS speech recognition, on-device;
+  macOS asks once to allow it) and prints its words with their times and
+  the words said twice in a row. Check each place against the script (some
+  words are twice on purpose: "FROM. FROM"), then
+  `python3 tools/clean_voice.py cut <recording> LabN_voice/scene-01.wav a-b …`
+  removes each first, wrong reading (from its start to the start of the
+  right one). Run `find` on the result to see that the places read right.
+  The long pauses are shortened when the video is made: a pause inside a
+  scene longer than 0.8 seconds becomes 0.8 (`MAX_PAUSE`).
 - **Make it:**
   `sh shared/sims/recordings/make-course-video.sh courses/big-data/week-WW/videos labN-intro <recordings-dir>`.
   Without a recordings dir (or for a scene without its file), macOS `say`

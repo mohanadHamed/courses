@@ -68,11 +68,10 @@ A **public dataset** is data that everyone may read: every taxi trip in
 the city of Chicago since 2013.
 
 ```{=typst}
-#step(1, [In the *Explorer*, click *+ Add data* #mk(1). \ Click *Public datasets* #mk(2).], img: "images/bq-add-1.png", w: 100%, left: 30%)
-#step(2, [Type *chicago taxi* #mk(1). Press *Enter*. \ Click *Chicago Taxi Trips* #mk(2). \ Click *View dataset* #mk(3).], img: "images/bq-market-1.png", w: 100%, left: 30%)
-#step(3, [In the *Explorer*, click the arrow of *chicago_taxi_trips* #mk(1). \ Click *taxi_trips* #mk(2): the table opens.], img: "images/bq-tree-1.png", w: 86%, left: 36%)
-#step(4, [Click *Details* #mk(1). \ *Number of rows* #mk(2): more than 200 million trips, about 75 GB. It costs nothing: no query runs.], img: "images/bq-details-1.png", w: 100%, left: 30%)
-#tip[*Not found?* Open the course page of Lab 1 and click *Open the taxi table in BigQuery*.]
+#step(1, [On the start page of *BigQuery Studio*, find the *search box*. \ Type *chicago taxi*. Press *Enter*.])
+#step(2, [The results show the dataset *chicago_taxi_trips* and its table *taxi_trips*. \ Click the dataset *chicago_taxi_trips*, then its table *taxi_trips*: the table opens. \ _Only the table in the results? Click it._])
+#step(3, [Click *Details* #mk(1). \ *Number of rows* #mk(2): more than 200 million trips, about 75 GB. It costs nothing: no query runs.], img: "images/bq-details-1.png", w: 100%, left: 30%)
+#tip[*Not found?* On the page of Lab 1 (the course site), click *Open the taxi table in BigQuery*.]
 ```
 
 ```{=typst}
@@ -85,7 +84,7 @@ A **query** asks the table a question in **SQL**.
 
 ```{=typst}
 #step(1, [On the table, click *Query* (at the top). A tab *Untitled query* opens with a short query. Select it all (*Ctrl + A*) and press *Delete*.])
-#step(2, [Type this query #mk(1), or copy it from the course page of Lab 1. The two signs *\`* are on the key under *Esc*.], after: sql[
+#step(2, [Type this query #mk(1), or copy it from the page of Lab 1 (the course site). The two signs *\`* are on the key under *Esc*.], after: sql[
   SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, \
   #h(1.2em) COUNT(\*) AS trips \
   FROM \`bigquery-public-data.chicago_taxi_trips.taxi_trips\` \

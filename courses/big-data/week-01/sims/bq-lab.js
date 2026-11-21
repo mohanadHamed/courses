@@ -1,8 +1,9 @@
 // BigQuery Lab: a simulator that looks like BigQuery Studio in Chrome, with the
 // public table of Chicago taxi trips of the Lab 1 worksheet. One engine, two
 // parts, chosen by the page that loads it (window.BQ_LAB = "find" | "query"):
-//   find:  + Add data › Public datasets › search › View dataset, then open the
-//          table taxi_trips and its Details, Schema and Preview tabs;
+//   find:  the search box of BigQuery Studio: chicago taxi › the dataset
+//          chicago_taxi_trips › its table taxi_trips, and its Details, Schema
+//          and Preview tabs (general steps: the real screens change often);
 //   query: Query on the table, the SQL of the worksheet, the estimate before
 //          the run, Run, the Results and the Job information.
 // The numbers are examples close to the real table (it may differ a little).
@@ -27,8 +28,8 @@
   let st;
   function reset() {
     st = PART === "find"
-      ? { dialog: null, market: null, search: "", tree: ["big-data-lab"], open: false, tabs: [], tab: null, sub: "Schema", done: new Set() }
-      : { dialog: null, market: null, tree: ["big-data-lab", "bigquery-public-data", "chicago_taxi_trips", "taxi_trips"], open: true,
+      ? { search: "", searched: false, tree: ["big-data-lab"], tabs: [], tab: null, sub: "Schema", done: new Set() }
+      : { tree: ["big-data-lab", "bigquery-public-data", "chicago_taxi_trips", "taxi_trips"], open: true,
           tabs: ["taxi_trips"], tab: "taxi_trips", sub: "Details", sql: "", busy: false, result: null, rsub: "Results", done: new Set() };
   }
   const doneText = () => window.SIM_DONE || (PART === "find" ? "All done: the same steps as Task 2 of your worksheet." : "All done: the same steps as Task 3 of your worksheet.");
@@ -42,11 +43,9 @@
 
   const MISSIONS = {
     find: [
-      ["In the Explorer, click <b>+ Add data</b>", () => st.done.has("add")],
-      ["Click <b>Public datasets</b>", () => st.done.has("public")],
-      ["Search <b>chicago taxi</b>, click <b>Chicago Taxi Trips</b>", () => st.done.has("card")],
-      ["Click <b>View dataset</b>", () => st.done.has("view")],
-      ["Open <b>chicago_taxi_trips</b>, then click the table <b>taxi_trips</b>", () => st.done.has("table")],
+      ["In the search box, type <b>chicago taxi</b> and press Enter", () => st.done.has("search")],
+      ["In the results, click the dataset <b>chicago_taxi_trips</b>", () => st.done.has("ds")],
+      ["Click its table <b>taxi_trips</b>", () => st.done.has("table")],
       ["Click <b>Details</b>: how many rows?", () => st.done.has("Details")],
     ],
     query: [
@@ -130,38 +129,40 @@
       '<div class="b-chips">Type for me: <button data-type="year">the query of Task 3 (years)</button><button data-type="pay">finished early? (payment types)</button></div>' +
       '<textarea class="b-sql" spellcheck="false" aria-label="SQL query">' + esc(st.sql) + "</textarea>" + res + "</div>";
   }
-  function marketHtml() {
-    if (st.market === "search") return '<div class="b-pad"><div class="b-h" style="font-size:1.2rem;font-weight:400">Marketplace</div>' +
-      '<input class="b-input" id="mk" placeholder="Search Marketplace" value="' + esc(st.search) + '"> ' +
+  // The start page of BigQuery Studio: a search box and its results.
+  function homeHtml() {
+    const hit = st.searched && /chicago|taxi/i.test(st.search);
+    return '<div class="b-pad"><div class="b-h" style="font-size:1.3rem;font-weight:400">BigQuery Studio</div>' +
+      '<input class="b-input" id="q" placeholder="Search BigQuery resources (for example: chicago taxi)" value="' + esc(st.search) + '"> ' +
       '<button class="b-btn" data-act="search" style="margin-top:6px">Search</button>' +
-      (/chicago|taxi/i.test(st.search) && st.searched ? '<div class="b-card" data-act="card"><b>Chicago Taxi Trips</b><small>City of Chicago · Datasets</small><small>Taxi trips in Chicago, from 2013. Public dataset.</small></div>' : "") +
-      (st.searched && !/chicago|taxi/i.test(st.search) ? '<div class="b-note">No result. Type <b>chicago taxi</b>.</div>' : "") + "</div>";
-    return '<div class="b-pad"><div class="b-h" style="font-size:1.2rem;font-weight:400">Chicago Taxi Trips</div><small style="color:#5f6368">City of Chicago · Datasets</small><br><br>' +
-      '<button class="b-primary" data-act="view">VIEW DATASET</button><div class="b-h">Overview</div><div>Every taxi trip reported to the City of Chicago: the time, the fare, the tip, the payment type and the company.</div></div>';
+      (hit ? '<div class="b-h">Results</div>' +
+        '<div class="b-card" data-act="res-ds"><b>chicago_taxi_trips</b><small>Dataset · bigquery-public-data</small></div>' +
+        '<div class="b-card" data-act="res-tbl"><b>taxi_trips</b><small>Table · bigquery-public-data.chicago_taxi_trips</small></div>' : "") +
+      (st.searched && !hit ? '<div class="b-note">No result. Type <b>chicago taxi</b>.</div>' : "") + "</div>";
+  }
+  // The page of the dataset: its tables.
+  function datasetHtml() {
+    return '<div class="b-pad"><div class="b-tool"><h3>chicago_taxi_trips</h3><span style="color:#5f6368">Dataset · bigquery-public-data</span></div>' +
+      '<div class="b-h">Tables</div><div class="b-card" data-act="opentbl"><b>▦ taxi_trips</b><small>Every taxi trip in Chicago since 2013</small></div></div>';
   }
   function draw() {
-    const tabs = st.market ? ["Marketplace"] : st.tabs;
-    const active = st.market ? "Marketplace" : st.tab;
+    const tabs = ["Home", ...st.tabs];
+    const active = st.tab || "Home";
     let main = "";
-    if (st.market) main = marketHtml();
-    else if (st.tab === "taxi_trips") main = tableHtml();
+    if (st.tab === "taxi_trips") main = tableHtml();
+    else if (st.tab === "chicago_taxi_trips") main = datasetHtml();
     else if (st.tab === "Untitled query") main = queryHtml();
-    else main = '<div class="b-pad"><div class="b-h" style="font-size:1.3rem;font-weight:400">BigQuery Studio</div><div style="color:#5f6368">Your project <b>big-data-lab</b> is empty. Click <b>+ Add data</b> in the Explorer.</div></div>';
-    root.innerHTML = '<div class="b-addr"><span>&#8592; &#8594;</span><b>' + (st.market ? "console.cloud.google.com/marketplace" : "console.cloud.google.com/bigquery") + "</b></div>" +
+    else main = homeHtml();
+    root.innerHTML = '<div class="b-addr"><span>&#8592; &#8594;</span><b>console.cloud.google.com/bigquery</b></div>' +
       '<div class="b-top"><span class="gc">Google Cloud</span><span class="proj">big-data-lab ⌄</span><span class="srch">Search (/) for resources, docs, products, and more</span><span class="me">S</span></div>' +
       '<div class="b-sand"><span>Sandbox: you are using BigQuery for free, with limits.</span><a>Upgrade</a></div>' +
       '<div class="b-body"><div class="b-exp"><div class="b-exp-head"><b>Explorer</b><button class="b-btn" data-act="add">+ Add data</button></div>' +
       '<ul class="b-tree">' + treeHtml() + '</ul></div><div class="b-main"><div class="b-tabs">' +
-      tabs.map((t) => '<button class="b-tab ' + (t === active ? "on" : "") + '" data-tab="' + t + '">' + t + "</button>").join("") + "</div>" + main + "</div>" +
-      (st.dialog ? '<div class="b-dim"><div class="b-dialog"><h4>Add data</h4><div style="color:#5f6368">Choose where your data comes from.</div>' +
-        '<button class="b-opt" data-act="local"><b>Local file</b><small>Upload a CSV or JSON file</small></button>' +
-        '<button class="b-opt" data-act="gcs"><b>Google Cloud Storage</b><small>Load files from a bucket</small></button>' +
-        '<button class="b-opt" data-act="public"><b>Public datasets</b><small>Free data that Google and others share</small></button>' +
-        '<button class="b-btn" data-act="close">Cancel</button></div></div>' : "") + "</div>";
+      tabs.map((t) => '<button class="b-tab ' + (t === active ? "on" : "") + '" data-tab="' + t + '">' + t + "</button>").join("") + "</div>" + main + "</div></div>";
     const ta = $(".b-sql", root);
     if (ta) ta.addEventListener("input", () => { st.sql = ta.value; check(); const [k, t] = estimate(st.sql); const v = $(".b-valid", root); v.className = "b-valid " + k; v.textContent = t; steps(); });
-    const mk = $("#mk", root);
-    if (mk) { mk.addEventListener("input", () => { st.search = mk.value; st.searched = false; }); mk.addEventListener("keydown", (e) => { if (e.key === "Enter") act("search"); }); }
+    const q = $("#q", root);
+    if (q) { q.addEventListener("input", () => { st.search = q.value; }); q.addEventListener("keydown", (e) => { if (e.key === "Enter") act("search"); }); }
     steps();
   }
   function check() {
@@ -171,17 +172,23 @@
 
   // ---------- Clicks ----------
   function act(a, el) {
-    if (a === "add") {
-      if (PART === "query") return say("In this part the table is already open: click <b>Query</b> on the table.", true);
-      st.dialog = true; st.done.add("add"); draw(); return say("Where does the data come from? Click <b>Public datasets</b>.");
+    if (a === "add") return say(PART === "query" ? "In this part the table is already open: click <b>Query</b> on the table."
+      : "<b>+ Add data</b> loads your own files (Lab 2). Today: use the <b>search box</b> of BigQuery Studio.", true);
+    if (a === "search") {
+      if (PART === "query") return;
+      const ok = /chicago|taxi/i.test(st.search);
+      st.searched = true; if (ok) st.done.add("search"); st.tab = null; draw();
+      return ok ? say("Two results: the <b>dataset</b> chicago_taxi_trips and its <b>table</b> taxi_trips. Click the dataset.") : say("Type <b>chicago taxi</b>.", true);
     }
-    if (a === "close") { st.dialog = null; draw(); return; }
-    if (a === "local" || a === "gcs") return say("Not today: that loads <b>your own</b> files (Lab 2). Click <b>Public datasets</b>.", true);
-    if (a === "public") { st.dialog = null; st.market = "search"; st.searched = false; st.done.add("public"); draw(); setTimeout(() => $("#mk")?.focus(), 30); return say("Type <b>chicago taxi</b> in the search box and press Enter."); }
-    if (a === "search") { st.searched = true; draw(); return /chicago|taxi/i.test(st.search) ? say("Click the card <b>Chicago Taxi Trips</b>.") : say("Type <b>chicago taxi</b>.", true); }
-    if (a === "card") { st.market = "product"; st.done.add("card"); draw(); return say("Click <b>VIEW DATASET</b>."); }
-    if (a === "view") { st.market = null; st.tree = ["big-data-lab", "bigquery-public-data"]; st.done.add("view"); draw();
-      return say("BigQuery again: <b>bigquery-public-data</b> is in the Explorer. Click <b>chicago_taxi_trips</b> to open it."); }
+    if (a === "res-ds") { if (!st.tabs.includes("chicago_taxi_trips")) st.tabs.push("chicago_taxi_trips"); st.tab = "chicago_taxi_trips";
+      st.tree = ["big-data-lab", "bigquery-public-data", "chicago_taxi_trips"]; st.done.add("ds"); draw();
+      return say("The dataset is open: it holds the table <b>taxi_trips</b>. Click it."); }
+    if (a === "res-tbl" || a === "opentbl") {
+      if (a === "res-tbl") st.done.add("ds");
+      if (!st.tabs.includes("taxi_trips")) st.tabs.push("taxi_trips"); st.tab = "taxi_trips"; st.sub = "Schema";
+      st.tree = ["big-data-lab", "bigquery-public-data", "chicago_taxi_trips", "taxi_trips"]; st.done.add("table"); draw();
+      return say("The table is open on <b>Schema</b>: its columns. Click <b>Details</b>.");
+    }
     if (a === "query") {
       if (!st.tabs.includes("Untitled query")) st.tabs.push("Untitled query");
       st.tab = "Untitled query"; st.sql = Q_START; st.result = null; st.done.add("tab"); draw();
@@ -220,11 +227,11 @@
     }
     if (t.dataset.sub) { st.sub = t.dataset.sub; st.done.add(st.sub); draw();
       return say(st.sub === "Details" ? "More than <b>200 million rows</b>, about <b>75 GB</b>. <b>Schema</b> and <b>Preview</b> are free too." : st.sub === "Preview" ? "The first rows: each row is one trip. Preview is free." : st.sub === "Lineage" ? "Not in this lab." : "The columns of the table and their types."); }
-    if (t.dataset.tab) { if (t.dataset.tab === "Marketplace") return; st.tab = t.dataset.tab; draw(); return; }
+    if (t.dataset.tab) { st.tab = t.dataset.tab === "Home" ? null : t.dataset.tab; draw(); return; }
     if (t.dataset.rsub) { st.rsub = t.dataset.rsub; if (st.rsub === "Job information") st.done.add("job"); draw();
       if (st.rsub === "Job information" && st.result) say("<b>" + st.result.gb + "</b> read in about <b>" + st.result.secs + " seconds</b>. One computer would need minutes." + (st.done.has("run-pay") ? "" : " Now the second question: payment types.")); }
   });
-  $("#reset").addEventListener("click", () => { reset(); draw(); say(PART === "find" ? "Start: click <b>+ Add data</b> in the Explorer." : "Start: click <b>Query</b> on the table."); });
+  $("#reset").addEventListener("click", () => { reset(); draw(); say(PART === "find" ? "Start: in the search box of BigQuery Studio, type <b>chicago taxi</b> and press Enter." : "Start: click <b>Query</b> on the table."); });
   reset(); draw();
-  say(PART === "find" ? "Start: click <b>+ Add data</b> in the Explorer." : "Start: click <b>Query</b> on the table.");
+  say(PART === "find" ? "Start: in the search box of BigQuery Studio, type <b>chicago taxi</b> and press Enter." : "Start: click <b>Query</b> on the table.");
 })();

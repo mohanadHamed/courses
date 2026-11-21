@@ -547,7 +547,35 @@ def cluster_poster(s, top):
     s.text(560, 362, "each block kept on 3 computers", 14, 400, GREY, "middle")
 
 
+def query_steps_poster(s, top):
+    """The poster of Query Steps: the query with one line lit, and the small table after it."""
+    h = 400
+    s.rect(0, 0, W, h, fill="#fff5f5", rx=18)
+    s.text(40, 50, "Query Steps: what each line does", 26, 700, "#a51d1d")
+    s.rect(40, 74, 470, 150, fill="#f8f9fa", stroke=EDGE, sw=1, rx=8)
+    for i, ln in enumerate(QUERY_YEAR):
+        y = 100 + i * 26
+        if i == 3:
+            s.rect(41, y - 18, 468, 26, fill="#ffe8cc")
+            s.rect(41, y - 18, 4, 26, fill="#d9480f")
+        s.text(58, y, str(i + 1), 13, 400, LIGHT)
+        s.text(80, y, ln if len(ln) < 52 else ln[:50] + "…", 13, 700 if i == 3 else 400, CODE)
+    s.text(40, 262, "GROUP BY year: one group for each year.", 17, 700, INK)
+    s.text(40, 290, "Each colour is one group. Then COUNT(*) counts each group.", 15, 400, GREY)
+    rows = [("2016-02-11", "2016", "#fff3bf"), ("2016-07-19", "2016", "#fff3bf"), ("2013-05-02", "2013", "#d3f9d8"),
+            ("2013-11-30", "2013", "#d3f9d8"), ("2014-01-08", "2014", "#d0ebff"), ("2014-09-14", "2014", "#d0ebff")]
+    s.rect(560, 74, 300, 26, fill="#f1f3f5")
+    s.text(572, 92, "trip_start_timestamp", 12.5, 700, INK)
+    s.text(780, 92, "year", 12.5, 700, INK)
+    for i, (a, b, col) in enumerate(rows):
+        y = 100 + i * 26
+        s.rect(560, y, 300, 26, fill=col, stroke=EDGE, sw=1)
+        s.text(572, y + 18, a, 12.5, 400, INK)
+        s.text(780, y + 18, b, 12.5, 700, INK)
+
+
 SCREENS = {
+    "week-01/sims/query-steps": (query_steps_poster, (0, 0, W, 330)),
     # The posters of the Lab 1 simulators (week-01/sims)
     "week-01/sims/cluster-lab": (cluster_poster, (0, 0, W, 400)),
     "week-01/sims/bq-lab-find": (bq_details, (0, 86, W, 444)),

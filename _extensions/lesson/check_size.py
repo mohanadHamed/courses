@@ -390,6 +390,9 @@ def page_minutes(path, page_body):
     explained = IC_BLOCK_RE.sub(" ", explained)
     # The words of a prompt are in its "prompt" minutes (copied, not explained).
     explained = drop_divs(explained, ["prompt"])
+    # A block of code is shown, and its {.code-explain} table explains it
+    # line by line: its words are counted once, in the table.
+    explained = re.sub(r"^```.*?^```[ \t]*$", " ", explained, flags=re.M | re.S)
     words = max(0, count_words(explained) - count_words(try_it_text(explained)))
     minutes = (c["start"] + c["term"] * terms + words / c["wpm"] + c["check"] * checks
                + c["question"] * questions + c["sim"] * sims + c["prompt"] * prompts)
@@ -997,6 +1000,37 @@ def check_lab_sheet(sheet_path, rel):
     return out, len(tasks)
 
 
+CODE_FENCE_RE = re.compile(r"^```\{?(sql|r|R)\b[^\n]*\n(.*?)^```[ \t]*$", re.M | re.S)
+
+
+def code_explain_warnings(page_body, sheet_body, rel):
+    """Code is explained (courses/big-data/NOTES.md, "Code is explained"): a
+    lab page that shows SQL or R code explains it line by line in a
+    {.code-explain} table, outside the app box, with one row for every line
+    of the code; a worksheet that has the student type code puts an
+    explain(...) table under it."""
+    out = []
+    body = re.sub(r"^::::+ *\{\.word-part\b[^}]*\}.*?^::::+ *$", " ", page_body, flags=re.M | re.S)
+    has_code = bool(CODE_FENCE_RE.search(page_body))
+    for part in re.split(r"^(?=## )", body, flags=re.M):
+        for m in CODE_FENCE_RE.finditer(part):
+            lines = [ln for ln in m.group(2).split("\n") if ln.strip()]
+            after = part[m.end():]
+            t = re.search(r"^::: *\{\.code-explain\}\s*\n(.*?)^:::[ \t]*$", after, re.M | re.S)
+            if not t:
+                out.append("%s: a %s block without a {.code-explain} table after it (what each line does)" % (rel, m.group(1).upper()))
+                continue
+            rows = [r for r in t.group(1).split("\n") if r.startswith("|") and not re.match(r"^\|[-\s|:]+\|$", r)][1:]
+            if len(rows) < len(lines):
+                out.append("%s: the {.code-explain} table has %d rows for %d lines of code; explain every line"
+                           % (rel, len(rows), len(lines)))
+    if has_code and not re.search(r"^::: *\{\.code-explain\}", page_body, re.M):
+        out.append("%s: the page shows code but explains none of it ({.code-explain} outside the app box)" % rel)
+    if sheet_body is not None and re.search(r"\b(sql|rcode)\[", sheet_body) and "explain(" not in sheet_body:
+        out.append("%s: the worksheet has code to type without an explain(...) table under it" % (rel[:-4] + "-sheet.qmd"))
+    return out
+
+
 def is_online(path):
     return re.search(r"^online:\s*true\b", front_matter(path), re.M) is not None
 
@@ -1277,6 +1311,8 @@ def check(project_dir):
         if has_sheet and lab:
             w, n["experiments"] = check_lab_sheet(sheet_path, rel)
             warnings.extend(w)
+        if lab:
+            warnings.extend(code_explain_warnings(page_body, read(sheet_path) if has_sheet else None, rel))
         elif has_sheet:
             notes_secs = sections_text(read(book_path)) if os.path.exists(book_path) else {}
             slides_body = read(slides_path) if os.path.exists(slides_path) else None

@@ -16,9 +16,8 @@ format: lesson-html
 ## Today in the lab
 
 ::: {.lab-plan}
-1. **15 minutes, here:** each idea on a simulator.
-2. **35 minutes, in BigQuery:** the **worksheet**, step by step, with your
-   own Google account.
+1. **Here:** each idea on a simulator.
+2. **Then:** your **worksheet** in BigQuery.
 3. **At the end:** show your result, then **sign out**.
 :::
 
@@ -26,17 +25,15 @@ format: lesson-html
 
 ## Key terms
 
-{{< glossary big-data big-data-platform data-cluster bq-project bq-dataset public-dataset db-table db-field sql-query bytes-processed >}}
+{{< glossary big-data big-data-platform data-cluster bq-project bq-dataset sql-query bytes-processed >}}
 
 ## 1.1 Why one computer is not enough
 
 ### On the simulator
 
 - **Big data:** too big or too fast for one computer.
-- A **platform** cuts a table into **blocks** on many computers: a
-  **cluster**.
-- Each computer reads its own blocks, **at the same time**.
-- Each block is on **3 computers**: no data is lost.
+- A **platform** cuts a table into **blocks** on many computers: a **cluster**.
+- They read their blocks **at the same time**; each block is on **3 computers**.
 
 ::: {.sim-part}
 {{< sim file="sims/cluster-lab.html" poster="sims/cluster-lab.png" title="Cluster Lab: one computer or many?" height="700" >}}
@@ -72,11 +69,9 @@ One computer reads a 75 GB table in about 13 minutes. A platform uses 100 comput
 
 ### On the simulator
 
-- A **project** (your space) holds **datasets**; a dataset holds
-  **tables**.
-- A **public dataset** is free to read: every Chicago taxi trip since 2013.
-- **Schema** (columns), **Details** (size) and **Preview** (first rows) are
-  **free**: no query.
+- A **project** holds **datasets**; a dataset holds **tables**.
+- A **public dataset** is free to read: Chicago taxi trips since 2013.
+- **Schema**, **Details** (size) and **Preview** are free: no query.
 
 ::: {.sim-part}
 {{< sim file="sims/bq-lab-find.html" poster="sims/bq-lab-find.png" title="BigQuery Lab: find a big public table" height="760" >}}
@@ -112,13 +107,36 @@ You want to see the first rows of taxi_trips, and pay nothing. Which tab?
 
 ## 1.3 A query: the platform does the work
 
+### The query, line by line
+
+A **query** asks a table a question in **SQL**: how many trips in each
+year?
+
+```sql
+SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year,
+  COUNT(*) AS trips
+FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+GROUP BY year
+ORDER BY year;
+```
+
+::: {.code-explain}
+| Line | What it does |
+|------|-------------------------------|
+| `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year,` | The **year** of each trip, in a column called **year**. |
+| `COUNT(*) AS trips` | Count the rows (`*` = all): column **trips**. |
+| ``FROM `…taxi_trips` `` | From this table (project.dataset.table). |
+| `GROUP BY year` | One group for each year. |
+| `ORDER BY year;` | Sort by year. `;` ends the query. |
+:::
+
+::: {.sim-part}
+{{< sim file="sims/query-steps.html" poster="sims/query-steps.png" title="Query Steps: what each line of the query does" height="820" >}}
+:::
+
 ### On the simulator
 
-- A **query** asks the table a question in **SQL**.
-- Before **Run**, BigQuery shows how much it will read.
-- **Job information:** **Bytes processed** and **Duration**.
-- `SELECT *` reads the whole table (75 GB): ask only for the columns you
-  need.
+- Before **Run**: how much it will read. After: **Job information**.
 
 ::: {.sim-part}
 {{< sim file="sims/bq-lab-query.html" poster="sims/bq-lab-query.png" title="BigQuery Lab: your first query" height="900" >}}
@@ -138,7 +156,8 @@ GROUP BY year
 ORDER BY year;
 ```
 
-Finished early? How do people pay?
+Finished early? How do people pay? The same idea: one group for each
+**payment_type**; `DESC` sorts from the biggest number to the smallest.
 
 ```sql
 SELECT payment_type, COUNT(*) AS trips
@@ -158,28 +177,22 @@ ORDER BY trips DESC;
 :::
 ::::
 
-::: {.callout-tip title="Try it 3 · Read the result"}
-Choose the right answer. You can use an answer more than once.
+::: {.callout-tip title="Try it 3 · Read the query"}
+Choose the right answer.
 
-::: {.match extra="Number of rows|Schema"}
-After Run, where do you see how much data the query read?
-:   Job information
+::: {.match extra="ORDER BY year|COUNT(*) AS trips"}
+Which line puts the trips of the same year together?
+:   GROUP BY year
 
-    Why: Job information shows Bytes processed and Duration of the query that ran.
-
-The query by year gives one row for each year, from 2013 to 2023. How many rows does the result have?
-:   11
-
-    Why: 2013 to 2023 is 11 years, so 11 rows: the platform turned 200 million rows into 11.
+    Why: GROUP BY makes one group for each year; COUNT(*) then counts the trips of each group.
 :::
 :::
 
 ## Now: your worksheet
 
 ::: {.lab-go}
-Do the three tasks of your **worksheet** in BigQuery, in order (less than
-30 minutes). Tick each step.
-Stuck? Raise your hand. At the end: **sign out** of Google.
+Do the three tasks of your **worksheet**, in order. Tick each step. At the
+end: **sign out** of Google.
 :::
 
 ![Your result at the end: one row for each year.](images/bq-results-1.png){width=48%}

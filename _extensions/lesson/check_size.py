@@ -1031,6 +1031,30 @@ def code_explain_warnings(page_body, sheet_body, rel):
     return out
 
 
+def lab_marks_warnings(sheet_path, rel):
+    """The marks of a Big Data worksheet (courses/big-data/NOTES.md, "Marks"):
+    every "## Task N · … · M marks" heading has its marks, Task 1 gives 6, the
+    Finished early? box gives 1, the total is 10, and a "Your mark" box ends
+    the worksheet."""
+    out, srel = [], rel[:-4] + "-sheet.qmd"
+    body = read(sheet_path)
+    tasks = re.findall(r"^## Task (\d+) ·.*?(?:· (\d+) marks?)?[ \t]*$", body, re.M)
+    if any(not m for _, m in tasks):
+        out.append('%s: a task heading without its marks ("## Task N · title · M marks")' % srel)
+    marks = {int(n): int(m) for n, m in tasks if m}
+    early = re.search(r"Finished early\?\*? *\*?\((\d+) marks?\)", body)
+    if marks.get(1) != 6:
+        out.append("%s: Task 1 gives 6 of the 10 marks (more than half for one task)" % srel)
+    if not early:
+        out.append('%s: the Finished early? box has no mark ("*Finished early? (1 mark)*")' % srel)
+    total = sum(marks.values()) + (int(early.group(1)) if early else 0)
+    if total != 10:
+        out.append("%s: the marks of the tasks and Finished early? add up to %d, not 10" % (srel, total))
+    if "Your mark" not in body:
+        out.append('%s: no "Your mark" box at the end (a tick for each task and the total, for the teacher)' % srel)
+    return out
+
+
 def is_online(path):
     return re.search(r"^online:\s*true\b", front_matter(path), re.M) is not None
 
@@ -1313,6 +1337,8 @@ def check(project_dir):
             warnings.extend(w)
         if lab:
             warnings.extend(code_explain_warnings(page_body, read(sheet_path) if has_sheet else None, rel))
+            if has_sheet and course_pages_only(project_dir, slug):
+                warnings.extend(lab_marks_warnings(sheet_path, rel))
         elif has_sheet:
             notes_secs = sections_text(read(book_path)) if os.path.exists(book_path) else {}
             slides_body = read(slides_path) if os.path.exists(slides_path) else None

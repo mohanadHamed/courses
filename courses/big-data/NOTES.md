@@ -81,8 +81,7 @@ package and no platform texts.
   worksheet with code to type and no `explain(...)` table.
 - **Language:** the worksheets and the pages are in clear English (B1:
   third-year business students; short sentences, every term explained). The
-  preparation videos are in Arabic: the teacher records the screen while
-  doing the worksheet (a one-page recording card per lab, private).
+  prep video is read in Arabic (below, "The prep video").
 - **Examples:** business and everyday data (taxi trips, an online shop,
   sales, customers), never games.
 - **Labels:** every session is labelled "Lab N" (`course.lecture-label`).
@@ -90,10 +89,64 @@ package and no platform texts.
 - **Google accounts:** the students use their personal Google accounts
   (the university accounts are Microsoft). Every worksheet of Labs 1–3 ends
   with **Sign out**.
-- **Recording on a Mac, labs on Windows:** BigQuery and Looker Studio are
-  the same in the browser. In RStudio the videos click **Run** instead of a
-  shortcut, the worksheets read files by name inside an RStudio Project (no
-  paths), and the installation of R has its own Windows video.
+- **Labs on Windows:** BigQuery and Looker Studio are the same in the
+  browser on every computer. In RStudio the worksheets read files by name
+  inside an RStudio Project (no paths), and the installation of R has its
+  own Windows guide.
 - **Numbers on the simulators** are examples close to the real tables
   (the page says so); the worksheet never asks the student to write a
   result.
+
+## The prep video (since 2026-11-21)
+
+The course is blended: the coordinator's lectures, this lab, and offline
+activities on the e-learning platform. The **prep video** of each lab is
+one of those activities, so it teaches: it explains the ideas of the lab
+in order (the teacher's request of 2026-11-21: a screen recording of the
+worksheet only repeats the lab), and it is the **introduction of the
+interactive page** of the same lab. Students watch it before the lab, and
+absent students study with it.
+
+- **The script comes first:** `week-WW/videos/labN-intro-script.txt`, in
+  **Arabic** (the teacher reads it), with the English terms of the lab
+  inside the sentences (BigQuery, query, GROUP BY). One line for each
+  sentence and a blank line between scenes: **10–14 scenes of 3–6 short
+  lines**. **450–1 000 words** (about 7–10 minutes): short enough to read
+  without many repeats. Symbols are said in words ("COUNT مع النجمة").
+- **The pictures are in English**, the words of the page and the
+  worksheet: `videos/labN-intro.html` with `video-kit.js`, one scene for
+  each scene of the script (`VIDEO.captions: false`: no words burned into
+  the picture). Each line of the script shows its part of the picture. The
+  scenes reuse the drawn screens (`../images/…`) and the simulator posters
+  (`../sims/…`) with `image()`, and show code with `code()` (the line that
+  the voice explains is lit, in the order the computer runs it).
+- **Its order:** the question of the lab → the ideas of the page, one
+  scene or two for each section, with the code line by line → what the
+  student does in the lab (the tasks of the worksheet, sign out) → "try the
+  simulators before the lab".
+- **The teacher's voice, in one file or more.** The teacher reads the
+  whole script in one recording (QuickTime or Voice Memos), silent about
+  **3 seconds between scenes** and never that long inside a scene: the
+  scenes are found at those pauses. After a mistake, stop and start a new
+  file at the beginning of the same scene. The first number of a file's
+  name is the scene where it starts (`scene-01.m4a`, then `scene-07.m4a`);
+  what the earlier file holds after the end of scene 6 is left out. One
+  file for each scene works too. The recordings stay private
+  (`lab-materials/LabN_voice/`). The reading sheet (`LabN_Video_Script.pdf`,
+  private) shows each scene's number, its words and its last picture.
+- **Make it:**
+  `sh shared/sims/recordings/make-course-video.sh courses/big-data/week-WW/videos labN-intro <recordings-dir>`.
+  Without a recordings dir (or for a scene without its file), macOS `say`
+  (Majed) reads the scene: a draft to check the pictures and the timing
+  before the teacher records. The silence before and after each recording
+  is cut, and the time of every line is found from the pauses of the
+  speaker. `SCENE_SHOTS=<dir>` saves the last picture of every scene for
+  the reading sheet.
+- **On the page:** the first section, `## Before the lab: the video`, a
+  `::: {.prep-video}` box with `{{< watch file=… captions=… poster=…
+  script=… length=… lang="ar" >}}` (Arabic captions in CC, the script as a
+  right-to-left transcript). It is not counted in the 15 minutes of class.
+- `check_size.py` warns about a lab page without its prep video, a missing
+  file, a script outside 450–1 000 words, and captions that are not the
+  lines of the script.
+

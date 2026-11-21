@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Prep video: Lab 1, a big data platform</title>
+<!-- The pictures of the prep video of Big Data Lab 1 (courses/big-data/NOTES.md,
+     "The prep video"). One scene for each scene of lab1-intro-script.txt
+     (Arabic, read by the teacher); the words on screen are in English, the
+     words of the lab. make-course-video.sh makes the video. -->
+</head>
+<body>
+<script>
+window.VIDEO = { label: "Big Data · Lab 1", title: "A big data platform: Google BigQuery", captions: false,
+  colors: { accent: "#C92A2A", accent2: "#FFA8A8", soft: "#FFF0F0", page: "#FFFAFA", line: "#F1D3D3", ink: "#2B1E1E", grey: "#6F6262" },
+  scenes: [] };
+</script>
+<script src="../../../../shared/sims/recordings/video-kit.js"></script>
+<script>
+const { C, text, spans, rect, pill, arrow, mark, show, group, el, image, code, computer } = VK;
+const IMG = (n) => "../images/" + n;
+const SIM = (n) => "../sims/" + n;
+const QUERY = ["SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year,", "  COUNT(*) AS trips",
+  "FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`", "GROUP BY year", "ORDER BY year;"];
+const GROUPS = ["#FFF3BF", "#D3F9D8", "#D0EBFF", "#FFE3E3", "#E5DBFF", "#FFE8CC"];
+
+function head(g, s, o = {}) { return text(g, 60, o.y || 128, s, { size: o.size || 44, weight: 800, fill: C.accent, o: o.o }); }
+// A note: one line of text in a soft box.
+function note(g, x, y, s, o = {}) {
+  const size = o.size || 28, w = o.w || s.length * size * 0.52 + 44;
+  const gg = group(g, o);
+  rect(gg, x, y, w, size + 30, { fill: o.fill || C.soft, stroke: o.stroke || "none", r: 14 });
+  if (o.bar !== false) rect(gg, x, y, 8, size + 30, { fill: o.barColor || C.accent, r: 4 });
+  text(gg, x + 26, y + size + 7, s, { size, weight: o.weight || 700, mono: o.mono, fill: o.ink || C.ink });
+  return gg;
+}
+// A small table: head, rows, column widths; o.groups: a colour group per row; o.mark: a column to light.
+function tbl(g, x, y, headRow, rows, widths, o = {}) {
+  const gg = group(g, o), rh = o.rh || 40, size = o.size || 21;
+  let cx = x;
+  headRow.forEach((h, c) => { rect(gg, cx, y, widths[c], rh, { fill: "#F1F3F5", stroke: "#DEE2E6", sw: 1, r: 0 });
+    text(gg, cx + 12, y + rh * 0.68, h, { size: size * 0.9, weight: 800, mono: true }); cx += widths[c]; });
+  rows.forEach((r, i) => {
+    cx = x;
+    r.forEach((v, c) => {
+      rect(gg, cx, y + rh * (i + 1), widths[c], rh, { fill: o.groups ? GROUPS[o.groups[i]] : "#fff", stroke: "#DEE2E6", sw: 1, r: 0 });
+      text(gg, cx + 12, y + rh * (i + 1) + rh * 0.68, v, { size, weight: c === o.mark ? 800 : 600, mono: true,
+        fill: c === o.mark ? C.accent : C.ink });
+      cx += widths[c];
+    });
+  });
+  if (o.mark !== undefined) {
+    const mx = x + widths.slice(0, o.mark).reduce((a, b) => a + b, 0);
+    rect(gg, mx, y, widths[o.mark], rh * (rows.length + 1), { fill: "none", stroke: C.accent, sw: 3, r: 2 });
+  }
+  return gg;
+}
+// A cloud shape.
+function cloud(g, x, y, w, h, o = {}) {
+  const gg = group(g, o);
+  el("path", { d: `M${x + w * 0.2} ${y + h} a${h * 0.3} ${h * 0.3} 0 0 1 0 ${-h * 0.6} a${h * 0.36} ${h * 0.36} 0 0 1 ${w * 0.3} ${-h * 0.3}
+    a${h * 0.4} ${h * 0.4} 0 0 1 ${w * 0.42} ${h * 0.12} a${h * 0.3} ${h * 0.3} 0 0 1 ${w * 0.08} ${h * 0.78} z`,
+    fill: "#fff", stroke: C.accent, "stroke-width": 4 }, gg);
+  return gg;
+}
+const BLOCK = ["#E03131", "#F08C00", "#2F9E44", "#1971C2", "#7048E8", "#C2255C"];
+// Each block b is on computers b, b+1, b+2 (of 5): 3 copies.
+const holds = (c) => [0, 1, 2, 3, 4, 5].filter((b) => [b % 5, (b + 1) % 5, (b + 2) % 5].includes(c));
+
+VIDEO.scenes = [
+  // 1. Title: today's question.
+  (g, k, p) => {
+    rect(g, 60, 100, 1160, 230, { fill: C.paper, stroke: C.line, r: 26, o: show(k, 0, p) });
+    rect(g, 60, 100, 16, 230, { fill: C.accent, r: 8, o: show(k, 0, p) });
+    text(g, 120, 190, "Lab 1 · A Big Data Platform", { size: 54, weight: 800, fill: C.accent, o: show(k, 0, p) });
+    text(g, 120, 260, "A first look at Google BigQuery", { size: 34, o: show(k, 1, p) });
+    text(g, 120, 302, "Google's big data platform, in the browser", { size: 24, weight: 600, fill: C.grey, o: show(k, 1, p) });
+    const t = group(g, { o: show(k, 2, p) });
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) rect(t, 90 + c * 40, 380 + r * 26, 38, 24, { fill: r === 0 ? C.accent2 : "#fff", stroke: C.line, sw: 1, r: 2 });
+    text(t, 280, 418, "taxi_trips: more than 200 million taxi trips", { size: 30 });
+    text(t, 280, 458, "Chicago, from 2013", { size: 24, weight: 600, fill: C.grey });
+    note(g, 90, 520, "How many trips in each year?", { size: 34, o: show(k, 3, p) });
+    note(g, 90, 610, "The answer: in a few seconds.", { size: 30, fill: "#EBFBEE", barColor: C.green, o: show(k, 4, p) });
+  },
+  // 2. Big data.
+  (g, k, p) => {
+    head(g, "Big data", { o: show(k, 0, p) });
+    note(g, 60, 170, "Data too big, or too fast, for one computer.", { size: 32, o: show(k, 1, p) });
+    const cards = [["An online shop", "every sale"], ["The taxis of a city", "every trip"], ["A chat app", "every message"]];
+    cards.forEach(([a, b], i) => {
+      const x = 60 + i * 390, o = show(k, 2, p), gg = group(g, { o });
+      rect(gg, x, 280, 360, 220, { fill: C.paper, stroke: C.line, r: 18 });
+      if (i === 0) { rect(gg, x + 140, 318, 80, 70, { fill: C.accent2, r: 8 }); el("path", { d: `M${x + 158} 318 v-14 a22 22 0 0 1 44 0 v14`, fill: "none", stroke: C.accent, "stroke-width": 5 }, gg); }
+      if (i === 1) { rect(gg, x + 120, 322, 120, 46, { fill: "#FAB005", r: 12 }); rect(gg, x + 145, 304, 70, 26, { fill: "#FAB005", r: 8 });
+        el("circle", { cx: x + 150, cy: 372, r: 13, fill: "#343A40" }, gg); el("circle", { cx: x + 210, cy: 372, r: 13, fill: "#343A40" }, gg); }
+      if (i === 2) { rect(gg, x + 125, 304, 110, 66, { fill: "#D0EBFF", r: 16 }); el("path", { d: `M${x + 150} 368 l-8 22 l28 -22z`, fill: "#D0EBFF" }, gg);
+        for (let d = 0; d < 3; d++) el("circle", { cx: x + 158 + d * 22, cy: 337, r: 6, fill: "#1971C2" }, gg); }
+      text(gg, x + 180, 440, a, { size: 28, anchor: "middle" });
+      text(gg, x + 180, 476, b, { size: 24, anchor: "middle", weight: 600, fill: C.grey });
+    });
+    note(g, 60, 560, "Our table, taxi_trips: about 75 GB.", { size: 32, o: show(k, 3, p) });
+  },
+  // 3. One computer or many.
+  (g, k, p) => {
+    head(g, "Why not one computer?", { o: show(k, 0, p) });
+    const a = group(g, { o: show(k, 1, p) });
+    computer(a, 110, 200, { s: 2.6 });
+    text(a, 188, 380, "1 computer", { size: 28, anchor: "middle" });
+    text(a, 188, 418, "reads 100 MB a second", { size: 22, anchor: "middle", weight: 600, fill: C.grey });
+    note(g, 60, 470, "75 GB → about 13 minutes", { size: 30, o: show(k, 2, p) });
+    text(g, 60, 560, "for one question", { size: 24, weight: 600, fill: C.grey, o: show(k, 2, p) });
+    const b = group(g, { o: show(k, 3, p) });
+    for (let r = 0; r < 10; r++) for (let c = 0; c < 10; c++) computer(b, 560 + c * 62, 160 + r * 38, { s: 0.55 });
+    text(b, 870, 570, "A cluster: 100 computers that work together", { size: 26, anchor: "middle" });
+    note(g, 560, 600, "All at the same time → about 8 seconds", { size: 30, fill: "#EBFBEE", barColor: C.green, o: show(k, 4, p) });
+  },
+  // 4. Blocks, and 3 copies of each.
+  (g, k, p) => {
+    head(g, "Blocks on a cluster", { o: show(k, 0, p) });
+    const t = group(g, { o: show(k, 1, p) });
+    text(t, 60, 200, "taxi_trips", { size: 26, mono: true });
+    BLOCK.forEach((c, i) => rect(t, 220 + i * 70, 172, 64, 40, { fill: c, r: 6 }));
+    text(t, 650, 200, "6 blocks", { size: 24, weight: 600, fill: C.grey });
+    for (let c = 0; c < 5; c++) {
+      const x = 70 + c * 128, off = c === 1 && k >= 4, gg = group(g, { o: show(k, 2, p) });
+      arrow(gg, 400, 222, x + 40, 300, { color: C.line, sw: 3 });
+      computer(gg, x + 2, 310, { s: 1.3, off });
+      text(gg, x + 40, 400, "Computer " + (c + 1), { size: 18, anchor: "middle", weight: 700, fill: off ? "#ADB5BD" : C.ink });
+      holds(c).forEach((b, j) => rect(gg, x + 6 + j * 26, 420, 22, 22, { fill: off ? "#DEE2E6" : BLOCK[b], r: 4, o: show(k, 3, p) }));
+      if (off) text(gg, x + 40, 470, "off", { size: 22, anchor: "middle", weight: 800, fill: C.red });
+    }
+    note(g, 60, 500, "Each block is on 3 computers.", { size: 28, o: show(k, 3, p) });
+    const n = group(g, { o: show(k, 4, p) });
+    mark(n, 82, 618, true);
+    text(n, 112, 628, "Computer 2 is off: no block is lost.", { size: 28 });
+    image(g, SIM("cluster-lab.png"), 775, 160, 455, 220, { o: show(k, 5, p) });
+    text(g, 1002, 420, "Simulator: Cluster Lab", { size: 24, anchor: "middle", fill: C.accent, o: show(k, 5, p) });
+  },
+  // 5. The platform: BigQuery, in the cloud.
+  (g, k, p) => {
+    head(g, "A big data platform", { o: show(k, 0, p) });
+    text(g, 60, 178, "The software that runs the cluster for you.", { size: 28, weight: 600, o: show(k, 0, p) });
+    const c = group(g, { o: show(k, 1, p) });
+    cloud(c, 60, 262, 470, 190);
+    for (let r = 0; r < 2; r++) for (let i = 0; i < 5; i++) computer(c, 150 + i * 60, 335 + r * 46, { s: 0.6 });
+    text(c, 295, 490, "Google's computers do the work", { size: 24, anchor: "middle" });
+    rect(c, 600, 300, 160, 110, { fill: "#fff", stroke: C.ink, sw: 3, r: 10 });
+    rect(c, 602, 302, 156, 24, { fill: C.soft, r: 0 });
+    text(c, 680, 450, "You: a browser", { size: 24, anchor: "middle" });
+    arrow(c, 590, 355, 520, 355, { color: C.accent });
+    note(g, 60, 540, "The sandbox: free, no bank card.", { size: 30, fill: "#EBFBEE", barColor: C.green, o: show(k, 2, p) });
+    image(g, IMG("bq-project-1.png"), 820, 190, 400, 260, { o: show(k, 3, p) });
+    text(g, 1020, 490, "Your project: big-data-lab", { size: 24, anchor: "middle", mono: true, o: show(k, 3, p) });
+  },
+  // 6. Project › dataset › table.
+  (g, k, p) => {
+    head(g, "Project › dataset › table", { o: show(k, 0, p) });
+    const a = group(g, { o: show(k, 1, p) });
+    rect(a, 60, 170, 640, 330, { fill: "#FFF5F5", stroke: C.accent, sw: 3, r: 18 });
+    text(a, 84, 210, "project: the place where you work", { size: 24 });
+    const b = group(g, { o: show(k, 2, p) });
+    rect(b, 100, 240, 560, 230, { fill: "#F3F0FF", stroke: C.purple, sw: 3, r: 16 });
+    text(b, 124, 280, "dataset: a group of tables", { size: 24 });
+    ["table", "table", "table"].forEach((s, i) => { rect(b, 130 + i * 170, 320, 150, 110, { fill: "#fff", stroke: C.blue, sw: 3, r: 10 });
+      for (let r = 0; r < 3; r++) rect(b, 145 + i * 170, 340 + r * 22, 120, 14, { fill: r ? "#E7F5FF" : "#A5D8FF", r: 2 });
+      text(b, 205 + i * 170, 424, s, { size: 18, anchor: "middle", weight: 800, fill: C.blue }); });
+    const c = group(g, { o: show(k, 3, p) });
+    spans(c, 60, 572, [["project", C.accent], [" . ", C.ink], ["dataset", C.purple], [" . ", C.ink], ["table", C.blue]], { size: 34, mono: true, weight: 800 });
+    text(c, 760, 572, "the full name: 3 parts, with dots", { size: 24, weight: 600, fill: C.grey });
+    const d = group(g, { o: show(k, 4, p) });
+    spans(d, 60, 650, [["bigquery-public-data", C.accent], [".", C.ink], ["chicago_taxi_trips", C.purple], [".", C.ink], ["taxi_trips", C.blue]], { size: 30, mono: true, weight: 800 });
+  },
+  // 7. A public table: Schema, Details, Preview.
+  (g, k, p) => {
+    head(g, "A public dataset: free to read", { o: show(k, 0, p) });
+    image(g, IMG("bq-details-1.png"), 640, 160, 590, 300, { o: show(k, 1, p) });
+    const tabs = [["Schema", "the columns and their types"], ["Details", "≈ 200 million rows, 75 GB"], ["Preview", "the first rows"]];
+    tabs.forEach(([a, b], i) => {
+      const o = show(k, 2 + i, p);
+      pill(g, 60, 190 + i * 100, a, { size: 26, fill: C.accent, ink: "#fff", w: 150, o });
+      text(g, 230, 222 + i * 100, b, { size: 26, o });
+    });
+    note(g, 60, 520, "Free: no query runs.", { size: 30, fill: "#EBFBEE", barColor: C.green, o: show(k, 5, p) });
+  },
+  // 8. A query in SQL; the order of the lines.
+  (g, k, p) => {
+    head(g, "Ask the table: a query in SQL", { o: show(k, 0, p) });
+    const a = group(g, { o: show(k, 1, p) });
+    text(a, 60, 190, "SQL: the language of questions to tables.", { size: 26 });
+    text(a, 60, 228, "A query: one question, written in SQL.", { size: 26 });
+    code(g, 60, 262, QUERY, { size: 24, w: 960, o: show(k, 2, p), tags: k >= 4 ? { 2: "1", 0: "2", 3: "3", 1: "4", 4: "5" } : undefined });
+    note(g, 60, 500, "Each line does one simple job.", { size: 28, o: show(k, 3, p) });
+    note(g, 60, 590, "BigQuery runs the lines in this order: 1, 2, 3, 4, 5.", { size: 28, o: show(k, 4, p) });
+  },
+  // 9. FROM, then SELECT EXTRACT … AS year.
+  (g, k, p) => {
+    const hl = k <= 1 ? [2] : [0];
+    code(g, 60, 90, QUERY, { size: 22, w: 940, hl, dim: true, tags: { 2: "1", 0: "2", 3: "3", 1: "4", 4: "5" } });
+    if (k <= 1) {
+      note(g, 60, 320, "FROM: the table that we ask.", { size: 28, o: show(k, 0, p) });
+      spans(g, 60, 430, [["`", C.accent], ["project.dataset.table", C.ink], ["`", C.accent]], { size: 30, mono: true, weight: 800, o: show(k, 1, p) });
+      text(g, 60, 476, "The ` signs (backticks) hold the long name together.", { size: 24, weight: 600, fill: C.grey, o: show(k, 1, p) });
+    } else {
+      note(g, 60, 320, "SELECT: what the answer shows.", { size: 28 });
+      note(g, 60, 400, "EXTRACT(YEAR FROM …): only the year of the date.", { size: 26, o: show(k, 3, p) });
+      const e = group(g, { o: show(k, 4, p) });
+      pill(e, 60, 500, "2016-02-11 08:15", { size: 26, mono: true, fill: "#fff", stroke: C.line });
+      arrow(e, 360, 524, 440, 524);
+      pill(e, 460, 500, "2016", { size: 26, mono: true, fill: C.accent2 });
+      note(g, 60, 600, "AS year: the new column is called year.", { size: 26, o: show(k, 5, p) });
+      tbl(g, 820, 470, ["trip_start", "year"], [["2016-02-11 08:15", "2016"], ["2013-05-02 14:20", "2013"]], [250, 110],
+        { size: 18, rh: 34, mark: 1, o: show(k, 5, p) });
+    }
+  },
+  // 10. GROUP BY, COUNT(*), ORDER BY, the semicolon; the simulator.
+  (g, k, p) => {
+    const hl = k === 0 ? [3] : k <= 2 ? [1] : [4];
+    if (k < 5) code(g, 60, 90, QUERY, { size: 22, w: 940, hl, dim: true, tags: { 2: "1", 0: "2", 3: "3", 1: "4", 4: "5" } });
+    if (k === 0) {
+      note(g, 60, 320, "GROUP BY year: one group for each year.", { size: 28 });
+      tbl(g, 60, 400, ["trip_start", "year"], [["2016-02-11", "2016"], ["2016-07-19", "2016"], ["2013-05-02", "2013"], ["2014-01-08", "2014"]],
+        [200, 110], { size: 19, rh: 34, groups: [0, 0, 1, 2], mark: 1 });
+    } else if (k <= 2) {
+      note(g, 60, 320, "COUNT(*): count the rows of each group. * = all the rows.", { size: 26 });
+      note(g, 60, 400, "AS trips: the column of the count is called trips.", { size: 26, o: show(k, 2, p) });
+      tbl(g, 820, 400, ["year", "trips"], [["2016", "4"], ["2013", "2"], ["2014", "2"]], [110, 110], { size: 20, rh: 36, groups: [0, 1, 2], mark: 1 });
+    } else if (k <= 4) {
+      note(g, 60, 320, "ORDER BY year: from the smallest year to the largest.", { size: 26 });
+      tbl(g, 60, 400, ["year", "trips"], [["2013", "2"], ["2014", "2"], ["2016", "4"]], [110, 110], { size: 20, rh: 36, mark: 0 });
+      note(g, 400, 450, "; ends the query.", { size: 28, mono: false, o: show(k, 4, p) });
+    } else {
+      head(g, "Every step, on a simulator", { y: 128 });
+      image(g, SIM("query-steps.png"), 140, 170, 1000, 400, { o: show(k, 5, p) });
+      text(g, 640, 620, "Simulator: Query Steps", { size: 28, anchor: "middle", fill: C.accent, o: show(k, 5, p) });
+    }
+  },
+  // 11. How much the query reads.
+  (g, k, p) => {
+    image(g, IMG("bq-query-1.png"), 60, 90, 560, 290, { o: show(k, 0, p) });
+    text(g, 340, 420, "Before Run: look at the estimate.", { size: 24, anchor: "middle", o: show(k, 0, p) });
+    note(g, 660, 110, "This query will process 1.55 GB", { size: 26, o: show(k, 1, p) });
+    const b = group(g, { o: show(k, 2, p) });
+    text(b, 660, 250, "The query reads only its columns:", { size: 24 });
+    rect(b, 660, 270, 560 * 1.55 / 75.12 + 6, 40, { fill: C.green, r: 6 });
+    text(b, 690, 300, "1.55 GB", { size: 24, weight: 800, fill: C.green });
+    const c = group(g, { o: show(k, 3, p) });
+    text(c, 660, 370, "SELECT * reads every column:", { size: 24 });
+    rect(c, 660, 390, 560, 40, { fill: C.red, r: 6 });
+    text(c, 1200, 420, "75.12 GB", { size: 24, weight: 800, fill: "#fff", anchor: "end" });
+    note(g, 60, 520, "The sandbox: 1 TB of queries a month, free.", { size: 30, o: show(k, 4, p) });
+  },
+  // 12. The answer, and Job information.
+  (g, k, p) => {
+    image(g, IMG("bq-results-1.png"), 60, 90, 560, 300, { o: show(k, 0, p) });
+    text(g, 340, 425, "Results: in about 2 seconds", { size: 24, anchor: "middle", o: show(k, 0, p) });
+    note(g, 660, 120, "200 million rows → 11 rows", { size: 32, o: show(k, 1, p) });
+    text(g, 660, 215, "one row for each year, 2013 to 2023", { size: 24, weight: 600, fill: C.grey, o: show(k, 1, p) });
+    image(g, IMG("bq-job-1.png"), 660, 250, 560, 210, { o: show(k, 2, p) });
+    text(g, 940, 495, "Job information: duration, bytes processed", { size: 22, anchor: "middle", o: show(k, 2, p) });
+    note(g, 60, 560, "A huge table, a simple question, a fast answer.", { size: 32, fill: "#EBFBEE", barColor: C.green, o: show(k, 3, p) });
+  },
+  // 13. In the lab.
+  (g, k, p) => {
+    head(g, "In the lab: your worksheet, alone", { o: show(k, 0, p) });
+    const tasks = [["Task 1", "Open BigQuery,", "create your project"], ["Task 2", "Find the", "big table"], ["Task 3", "Ask your question:", "write and run the query"]];
+    tasks.forEach(([a, b, c], i) => {
+      const o = show(k, 1, p), x = 60 + i * 300;
+      rect(g, x, 170, 280, 170, { fill: C.paper, stroke: C.line, r: 16, o });
+      pill(g, x + 20, 188, a, { size: 22, fill: C.accent, ink: "#fff", o });
+      text(g, x + 24, 280, b, { size: 23, o });
+      text(g, x + 24, 314, c, { size: 23, o });
+    });
+    const s = group(g, { o: show(k, 2, p) });
+    text(s, 60, 410, "At the end:", { size: 26, weight: 800 });
+    pill(s, 60, 430, "Show your teacher", { size: 24, fill: C.soft });
+    arrow(s, 330, 455, 380, 455);
+    pill(s, 395, 430, "Sign out of Google", { size: 24, fill: C.soft });
+    image(g, IMG("bq-signout-1.png"), 980, 150, 250, 220, { o: show(k, 2, p) });
+    note(g, 60, 530, "Before the lab: try the simulators of the interactive lesson.", { size: 28, o: show(k, 3, p) });
+    text(g, 640, 660, "See you in the lab.", { size: 36, weight: 800, fill: C.accent, anchor: "middle", o: show(k, 4, p) });
+  },
+];
+</script>
+</body>
+</html>

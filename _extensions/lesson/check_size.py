@@ -373,6 +373,8 @@ def page_minutes(path, page_body):
     # The lab model: "In Word" (:::: {.word-part}) is shown in the real app when
     # time allows; the worksheet repeats it in the lab. Not counted.
     body = re.sub(r"^::::+ *\{\.word-part\b[^}]*\}.*?^::::+ *$", " ", body, flags=re.M | re.S)
+    # The prep video of a Big Data lab is watched before the lab, not in it.
+    body = re.sub(r"^::: *\{\.prep-video\}.*?^:::[ \t]*$", " ", body, flags=re.M | re.S)
     # The lab model: the Extra (AI on tutudocs.com) is shown when time is left.
     body = re.sub(r"^## Extra\b.*?(?=^## |\Z)", " ", body, flags=re.M | re.S)
     # A Task with AI box is an extra, shown only when time is left.
@@ -1052,6 +1054,50 @@ def lab_marks_warnings(sheet_path, rel):
         out.append("%s: the marks of the tasks and Finished early? add up to %d, not 10" % (srel, total))
     if "Your mark" not in body:
         out.append('%s: no "Your mark" box at the end (a tick for each task and the total, for the teacher)' % srel)
+PREP_VIDEO_WORDS = (450, 1000)   # about 4 to 9 minutes of reading (courses/big-data/NOTES.md)
+
+
+def prep_video_warnings(path, page_body, rel):
+    """The prep video of a Big Data lab (courses/big-data/NOTES.md, "The prep
+    video"): at the start of the page, in a {.prep-video} box, a
+    {{< watch file=… lang="ar" >}} with its captions, poster and script; the
+    captions are the lines of the script, and the script is short enough
+    for the teacher to read (one recording for each scene)."""
+    out = []
+    first = re.split(r"^(?=## )", page_body, flags=re.M)
+    first = first[1] if len(first) > 1 else ""
+    box = re.search(r"^::: *\{\.prep-video\}(.*?)^:::[ \t]*$", first, re.M | re.S)
+    if not box:
+        return ['%s: no prep video in the first section ("## Before the lab: the video", a {.prep-video} box)' % rel]
+    w = WATCH_RE.search(box.group(1))
+    if not w:
+        return ["%s: the {.prep-video} box has no {{< watch file=… >}}" % rel]
+    w = dict(re.findall(r'(\w+)="([^"]*)"', w.group(1)))
+    here = os.path.dirname(path)
+    if w.get("lang") != "ar":
+        out.append('%s: the prep video is read in Arabic: lang="ar"' % rel)
+    if not re.match(r"^\d+:\d\d$", w.get("length", "")):
+        out.append("%s: the prep video has no length= (m:ss)" % rel)
+    for key in ("file", "captions", "poster", "script"):
+        if not w.get(key):
+            out.append("%s: the prep video has no %s=" % (rel, key))
+        elif not os.path.exists(os.path.join(here, w[key])):
+            out.append("%s: the %s %s of the prep video is missing (make-course-video.sh)" % (rel, key, w[key]))
+    script = os.path.join(here, w.get("script", ""))
+    if w.get("script") and os.path.exists(script):
+        text = read(script)
+        words = len(text.split())
+        if not (PREP_VIDEO_WORDS[0] <= words <= PREP_VIDEO_WORDS[1]):
+            out.append("%s: the script of the prep video has %d words; it has %d–%d (7–10 minutes to read)"
+                       % ((rel, words) + PREP_VIDEO_WORDS))
+        vtt = os.path.join(here, w.get("captions", ""))
+        if w.get("captions") and os.path.exists(vtt):
+            cues = [l.strip() for l in read(vtt).splitlines()
+                    if l.strip() and l.strip() != "WEBVTT" and "-->" not in l and not l.strip().isdigit()]
+            lines = [l.strip() for l in text.splitlines() if l.strip()]
+            if cues != lines:
+                out.append("%s: the captions of the prep video are not the lines of its script: make the video again"
+                           % rel)
     return out
 
 
@@ -1339,6 +1385,8 @@ def check(project_dir):
             warnings.extend(code_explain_warnings(page_body, read(sheet_path) if has_sheet else None, rel))
             if has_sheet and course_pages_only(project_dir, slug):
                 warnings.extend(lab_marks_warnings(sheet_path, rel))
+            if course_pages_only(project_dir, slug):
+                warnings.extend(prep_video_warnings(path, page_body, rel))
         elif has_sheet:
             notes_secs = sections_text(read(book_path)) if os.path.exists(book_path) else {}
             slides_body = read(slides_path) if os.path.exists(slides_path) else None

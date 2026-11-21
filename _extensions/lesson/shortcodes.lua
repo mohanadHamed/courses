@@ -64,6 +64,8 @@
 --       script="videos/x-script.txt" title="…" length="2:05" >}}
 --     A video made for the course: the player with its English captions and
 --     poster, and its script under it as a transcript (closed until opened).
+--     lang="ar": a video in Arabic (the prep video of a Big Data lab, read by
+--     the teacher): Arabic captions in CC only, and a right-to-left transcript.
 
 local str = pandoc.utils.stringify
 
@@ -970,6 +972,7 @@ local function watch(kwargs)
   if file ~= "" then
     -- A video made for the course: player, captions, poster, transcript.
     local captions, poster, script = str(kwargs.captions), str(kwargs.poster), str(kwargs.script)
+    local in_arabic = str(kwargs.lang) == "ar"
     if not quarto.doc.is_format("html") then
       return pandoc.Para({ pandoc.Strong({ pandoc.Str("Video: ") }), pandoc.Str(title .. " (" .. length .. ")") })
     end
@@ -982,8 +985,10 @@ local function watch(kwargs)
         scene = scene:gsub("^%s+", ""):gsub("%s+$", ""):gsub("\n", " ")
         if scene ~= "" then table.insert(paras, "<p>" .. html_attr(scene) .. "</p>") end
       end
-      transcript = '<details class="transcript"><summary>Read the words of the video</summary>'
-        .. '<div class="transcript-body">' .. table.concat(paras, "") .. "</div></details>"
+      transcript = '<details class="transcript"><summary>Read the words of the video'
+        .. (in_arabic and " (in Arabic)" or "") .. "</summary>"
+        .. '<div class="transcript-body"' .. (in_arabic and ' dir="rtl" lang="ar"' or "") .. ">"
+        .. table.concat(paras, "") .. "</div></details>"
     end
     return pandoc.RawBlock("html", string.format([[
 <figure class="watch watch-video">
@@ -993,8 +998,10 @@ local function watch(kwargs)
   <figcaption><span class="watch-title">🎬 %s</span><span class="watch-meta">%s · made for this course%s</span></figcaption>
   %s
 </figure>]], poster ~= "" and (' poster="' .. html_attr(poster) .. '"') or "", html_attr(file),
-      captions ~= "" and ('\n    <track kind="captions" srclang="en" label="English" src="' .. html_attr(captions) .. '">') or "",
-      html_attr(title), html_attr(length), captions ~= "" and " · captions in the picture and in CC" or "", transcript))
+      captions ~= "" and ('\n    <track kind="captions" srclang="' .. (in_arabic and "ar" or "en") .. '" label="'
+        .. (in_arabic and "Arabic" or "English") .. '" src="' .. html_attr(captions) .. '">') or "",
+      html_attr(title), html_attr(length), in_arabic and " · in Arabic, the words in CC" or (captions ~= "" and " · captions in the picture and in CC" or ""),
+      transcript))
   end
   -- A free official video: a card with the link, never a copy.
   local source, checked, captions = str(kwargs.source), str(kwargs.checked), str(kwargs.captions)

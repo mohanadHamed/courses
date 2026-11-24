@@ -40,21 +40,30 @@ its AI-use statement, in Unit 11. Two pairs of rows are merged (4–5 and
 | Unit 1 (1) | **Lecture 1** Digital Skills and the Apps That Make Us Productive | **1** Your University Account, Cloud Storage and Files | A1 C1 |
 | Unit 2 (2) | **Lecture 2** Everyday Digital Skills: Search, Screenshots and an AI Assistant | **2** Your Phone for Study: Reminders, Scans and a Clear Prompt | A1 A2 B2 C1 |
 | Unit 3 (3) | **Lecture 3** Microsoft Office and Digital Communication | **3** Safe Devices, Accounts and AI Tools | A2 C1 |
-| Unit 4 (4–5) | **Lecture 4** Word Documents, and Changes with AI | **4** A CV and a Cover Letter with AI Help | A3 B2 C2 |
+| Unit 4 (4–5) | **Lecture 4** Word Documents, and Changes with AI | **4** A Word Report: a Table of Contents, a Header, Page Numbers and a PDF | A3 B2 C2 |
 | Unit 5 (6) | **Lecture 5** PowerPoint: Layouts, Themes, Pictures and Transitions | **5** A Presentation with AI Help, and a Graphic in Canva | A3 B2 C2 |
 | Unit 6 (7) | **Lecture 6** Excel (1) | **6** A Monthly Budget Sheet | A3 B1 |
 | Practice week (8) | **Practice 1** Review of Lectures 1–6 | **7** Review Activity | all of 1–6 |
 | Unit 7 (9) | **Lecture 7** Excel (2): Sorting, Filtering, Conditional Formatting and Charts | **8** Data Analysis with AI: Formulas, a PivotTable and What the Data Shows | B1 B2 |
 | Unit 8 (10) | **Lecture 8** Databases | **9** The Shop Database: a Form, Queries and a Report | C3 |
 | Unit 9 (11) | **Lecture 9** Creating a Digital Service | **10** A Booking Service (the project form) | A4 C4 D1 |
-| Unit 10 (12–13) | **Lecture 10** Website Design | **11** The Service Website: AI-drafted text, publishing, the form | B2 C4 D1 |
-| Unit 11 (14–15) | **Lecture 11** Marketing Digital Services | **12** The Course Project: post, plan, three slides, final submission | A4 B2 C2 C5 D1 |
+| Unit 10 (12–13) | **Lecture 10** Website Design | **11** The Service Website: pages, a button to the form, publishing | C4 D1 |
+| Unit 11 (14–15) | **Lecture 11** Marketing Digital Services | **12** The Course Project: a post, a marketing plan and the project slides | A4 B2 C2 C5 D1 |
 
 Calendar of fall 2026-2027: Unit 3 in platform week 6 (15/11/2026) and one
 unit a week to Unit 11 in week 14 (10–14/1/2027). Practice 1 and Online
 activity 7 are for self-study before the midterm.
 
-AI (syllabus v4, B2): every unit from 4 on uses an AI assistant for one
-step, always with a prompt ready to copy and a check of the result; the
-AI-use statement starts in Online activity 4 and ends in the project.
+AI (syllabus v4, B2): the face-to-face lectures from Unit 4 end with an
+Extra in which the AI of tutudocs.com changes the student's file. The online
+activities (light since 2026-11-24, NOTES.md) only show AI on a simulator;
+no task needs it. The AI-use statement is in the project slides (Online
+activity 12).
+
+Online activities 4–12 are light (2026-11-24): Steps on simulators, and
+tasks that are only questions in the tasks PDF. Online activity 4 follows
+the online column of row 4 (a structured report with a table of contents,
+headers and footers, page numbers, a PDF); the CV and the cover letter of
+row 5 were dropped (no plan asks for them in the first semester). The
+course project ends with one file, `project.pptx` (Online activity 12).
 Simplicity rule: NOTES.md, "As easy as possible".

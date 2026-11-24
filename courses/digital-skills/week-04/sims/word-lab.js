@@ -7,14 +7,32 @@
 //           the notice, ask the AI Assistant for a change (it edits the page),
 //           then File › Download › Microsoft Word (.docx). Fixed answers, no AI.
 // The steps are the steps of the worksheet, so the teacher shows them here first.
+// Online activity 4 adds three parts on a short class report of three pages:
+//   toc:    Heading 1 for the three headings, then References › Table of
+//           Contents › Automatic Table 1 in the empty line under the title;
+//   header: Insert › Header › Blank (type the header), Insert › Page Number ›
+//           Bottom of Page › Plain Number 2: on all three pages at once;
+//   pdf:    File › Save As, Save as type PDF (*.pdf), Save.
 (() => {
   const PART = window.WORD_LAB || "format";
+  const REPORT = ["toc", "header", "pdf"].includes(PART);
   const $ = (s, el = document) => el.querySelector(s);
   const h = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
 
   // ---------- The document ----------
   const P = (text, style = "Normal", extra = {}) => ({ style, align: "left", words: text ? text.split(" ").map((t) => ({ t, b: false, c: null })) : [], ...extra });
+  // The class report of Online activity 4 (three pages; pg = its page).
+  function report() {
+    const H = PART === "toc" ? "Normal" : "Heading 1";
+    const d = [P("Our Phones", "Title", { pg: 1 })];
+    if (PART === "toc") d.push(P("", "Normal", { pg: 1 })); else d.push({ toc: true, pg: 1 });
+    d.push(P("Introduction", H, { pg: 1 }), P("We asked 20 students about their phones.", "Normal", { pg: 1 }),
+      P("The answers", H, { pg: 2 }), P("15 of the 20 students use their phone for study every day.", "Normal", { pg: 2 }),
+      P("Conclusion", H, { pg: 3 }), P("A phone is a good tool for study.", "Normal", { pg: 3 }));
+    return d;
+  }
   function start() {
+    if (REPORT) return report();
     if (PART === "format") return [P("Book Fair", "Plain"), P("When and where", "Plain"), P("Sunday to Tuesday, 10:00 to 15:00, in the college library.", "Plain"), P("Entry is free.", "Plain"), P("Prices", "Plain")];
     const done = [P("Book Fair", "Title", { align: "center" }), P("When and where", "Heading 1"), P("Sunday to Tuesday, 10:00 to 15:00, in the college library."), P("Entry is free."), P("Prices", "Heading 1")];
     done[3].words[2].b = true; done[3].words[2].c = "#e03131";
@@ -30,13 +48,17 @@
       done: "Done: a short paragraph is now at the end of the notice.",
       apply: () => { doc.push(P("Come to the book fair and find a new book to read! Bring your friends: entry is free.", "Normal", { fresh: true })); } },
   ];
-  let doc, caret, sel, typing, nav, tab, menu;
-  function reset() { doc = start(); caret = PART === "table" ? 5 : null; sel = null; typing = false; nav = false; tab = "Home"; menu = null;
+  let doc, caret, sel, typing, nav, tab, menu, contents, hf, ps;
+  function reset() { doc = start(); caret = PART === "table" ? 5 : null; sel = null; typing = false; nav = false; tab = { header: "Insert", pdf: "Home" }[PART] || "Home"; menu = null;
+    // contents: the table of contents as Word made it (it changes only with Update Table).
+    contents = PART === "toc" ? null : heads();
+    hf = { head: PART === "pdf" ? "Class report" : "", on: PART === "pdf", num: PART === "pdf" ? "center" : null, typing: false };
+    ps = { back: false, dialog: false, opened: false, type: "Word Document (*.docx)", saved: null };
     chat = { uploaded: false, chooser: false, panel: false, text: "", log: [], asked: new Set(), busy: false, file: null, downloaded: false }; }
 
   // ---------- The missions (the steps of the worksheet) ----------
   const wordsOf = (p) => p.words.map((w) => w.t).join(" ");
-  const find = (text) => doc.find((p) => !p.table && wordsOf(p).replace(/[.!]$/, "") === text);
+  const find = (text) => doc.find((p) => !p.table && !p.toc && wordsOf(p).replace(/[.!]$/, "") === text);
   const table = () => doc.find((p) => p.table);
   const cell = (r, c) => { const t = table(); return t && t.table[r] && t.table[r][c] !== undefined ? t.table[r][c].trim().toLowerCase() : ""; };
   const MISSIONS = {
@@ -51,6 +73,19 @@
       ["<b>Insert › Table</b>: 2 across, 4 down (<b>2x4 Table</b>)", () => { const t = table(); return t && t.table.length === 4 && t.table[0].length === 2; }],
       ["The first row: <b>Book</b> | <b>Price (JD)</b>", () => cell(0, 0) === "book" && cell(0, 1).replace(/\s/g, "") === "price(jd)"],
       ["Novel 3 · Dictionary 5 · Notebook 1 (<b>Tab</b>: the next cell)", () => cell(1, 0) === "novel" && cell(1, 1) === "3" && cell(2, 0) === "dictionary" && cell(2, 1) === "5" && cell(3, 0) === "notebook" && cell(3, 1) === "1"],
+    ],
+    toc: [
+      ["<b>Introduction</b>, <b>The answers</b> and <b>Conclusion</b>: <b>Home › Heading 1</b>", () => ["Introduction", "The answers", "Conclusion"].every((t) => find(t)?.style === "Heading 1")],
+      ["Click in the <b>empty line</b> under the title, then <b>References › Table of Contents › Automatic Table 1</b>", () => contents && contents.length === 3],
+    ],
+    header: [
+      ["<b>Insert › Header › Blank</b>, then type <b>Class report</b>", () => /^class report$/i.test(hf.head.trim())],
+      ["<b>Insert › Page Number › Bottom of Page › Plain Number 2</b>", () => hf.num === "center"],
+    ],
+    pdf: [
+      ["<b>File › Save As</b>", () => ps.opened],
+      ["<b>Save as type: PDF (*.pdf)</b>", () => ps.type.startsWith("PDF") || ps.saved === "pdf"],
+      ["<b>Save</b>", () => ps.saved === "pdf"],
     ],
     ai: [
       ["On <b>tutudocs.com</b>: click the box <b>Drop a file…</b> and open your notice", () => chat.uploaded],
@@ -72,8 +107,9 @@
     <div class="w-tabs"></div>
     <div class="w-ribbon"></div>
     <div class="w-body"><div class="w-nav"></div><div class="w-canvas"><div class="w-page"></div></div></div>
-    <div class="w-status"><span>Page 1 of 1</span><span class="w-count"></span><span>English (United States)</span></div>`;
+    <div class="w-status"><span>Page 1 of ${REPORT ? 3 : 1}</span><span class="w-count"></span><span>English (United States)</span></div>`;
   const TABS = ["File", "Home", "Insert", "Draw", "Design", "Layout", "References", "Mailings", "Review", "View", "Help"];
+  const TABS_OK = { toc: ["Home", "References", "View"], header: ["Home", "Insert"], pdf: ["File", "Home"] }[PART] || ["Home", "Insert", "View"];
   const say = (text, bad) => { const m = $("#msg"); m.innerHTML = text; m.className = "message" + (bad ? " bad" : ""); };
 
   function tabs() {
@@ -81,8 +117,9 @@
     TABS.forEach((t) => {
       const b = h("button", "w-tab" + (t === tab ? " on" : ""), t); b.type = "button";
       b.addEventListener("click", () => {
-        if (["Home", "Insert", "View"].includes(t)) { tab = t; menu = null; draw(); }
-        else say(`<b>${t}</b>: not needed today. Use <b>Home</b>, <b>Insert</b> or <b>View</b>.`, true);
+        if (t === "File" && PART === "pdf") { ps.back = true; menu = null; say("This is the <b>File</b> menu (Backstage). Click <b>Save As</b>."); draw(); return; }
+        if (TABS_OK.includes(t)) { tab = t; menu = null; draw(); }
+        else say(`<b>${t}</b>: not needed here. Use ${TABS_OK.map((x) => `<b>${x}</b>`).join(" or ")}.`, true);
       });
       bar.appendChild(b);
     });
@@ -121,8 +158,35 @@
       r.appendChild(group("Pages", h("span", "w-item", "Cover Page"), h("span", "w-item", "Blank Page"), h("span", "w-item", "Page Break")));
       const t = btn("<span class='w-big'>&#9638;</span>Table ▾", "Table", () => { menu = menu === "table" ? null : "table"; draw(); }, "w-tall");
       r.appendChild(group("Tables", t));
+      if (PART === "header") {
+        const hd = btn("<span class='w-big'>&#9636;</span>Header ▾", "Header", () => { menu = menu === "header" ? null : "header"; draw(); }, "w-tall");
+        const ft = btn("<span class='w-big'>&#9637;</span>Footer ▾", "Footer", () => say("<b>Footer</b>: not in these steps. The page number goes into the footer by itself.", true), "w-tall");
+        const pn = btn("<span class='w-big'>#</span>Page Number ▾", "Page Number", () => { menu = menu === "pn" || menu === "pn-bottom" ? null : "pn"; draw(); }, "w-tall");
+        r.appendChild(group("Header & Footer", hd, ft, pn));
+        if (menu === "header") hd.parentElement.parentElement.appendChild(gallery("Built-in", [["Blank", () => { hf.on = true; hf.typing = true; menu = null; say("The header is open at the top of page 1. Type <b>Class report</b> in it."); draw(); const i = $(".w-hd input", root); if (i) i.focus(); }],
+          ["Blank (Three Columns)", () => say("Three columns: not today. Choose <b>Blank</b>.", true)], ["Austin", () => say("Austin: a designed header. Choose <b>Blank</b>.", true)]]));
+        if (menu === "pn" || menu === "pn-bottom") {
+          const m = gallery("", [["Top of Page ›", () => say("At the top of the page the number is next to the header. Today: <b>Bottom of Page</b>.", true)],
+            ["Bottom of Page ›", () => { menu = "pn-bottom"; draw(); }], ["Page Margins ›", () => say("Page Margins: not today. Choose <b>Bottom of Page</b>.", true)],
+            ["Current Position ›", () => say("Current Position: not today. Choose <b>Bottom of Page</b>.", true)]]);
+          pn.parentElement.parentElement.appendChild(m);
+          if (menu === "pn-bottom") {
+            const sub = gallery("Simple", [["Plain Number 1", () => setNum("left")], ["Plain Number 2", () => setNum("center")], ["Plain Number 3", () => setNum("right")]]);
+            sub.classList.add("w-sub"); m.appendChild(sub);
+          }
+        }
+      }
       r.appendChild(group("Illustrations", btn("<span class='w-big'>&#128444;</span>Pictures", "Pictures", () => say("Pictures: not in today's steps.", true), "w-tall"), btn("<span class='w-big'>&#9711;</span>Shapes", "Shapes", () => say("Shapes: not in today's steps.", true), "w-tall")));
       if (menu === "table") t.parentElement.parentElement.appendChild(tableGrid());
+    } else if (tab === "References") {
+      const t = btn("<span class='w-big'>&#9776;</span>Table of Contents ▾", "Table of Contents", () => { menu = menu === "toc" ? null : "toc"; draw(); }, "w-tall");
+      const u = btn("&#8635; Update Table", "Update Table", () => {
+        if (!contents) { say("There is no table of contents yet. First insert one.", true); return; }
+        contents = heads(); say(contents.length === 3 ? "Updated: the table of contents shows every heading with its page." : `Updated: ${contents.length} of 3 headings. Give every heading <b>Heading 1</b>.`, contents.length !== 3); draw(); });
+      r.appendChild(group("Table of Contents", t, u));
+      r.appendChild(group("Footnotes", h("span", "w-item", "Insert Footnote")));
+      if (menu === "toc") t.parentElement.parentElement.appendChild(gallery("Built-in", [["Automatic Table 1", () => insertToc()], ["Automatic Table 2", () => insertToc()],
+        ["Manual Table", () => say("A <b>Manual Table</b> does not read your headings: you type everything. Choose <b>Automatic Table 1</b>.", true)]]));
     } else {
       const box = h("label", "w-check"); const c = h("input"); c.type = "checkbox"; c.checked = nav;
       c.addEventListener("change", () => { nav = c.checked; say(nav ? "The <b>Navigation Pane</b> shows the lines with a <b>heading style</b>. The title and the normal text are not in it." : "The Navigation Pane is closed."); draw(); });
@@ -146,6 +210,29 @@
     m.appendChild(g); return m;
   }
 
+  // A drop-down gallery of a ribbon button: [[label, fn], …].
+  function gallery(title, items) {
+    const m = h("div", "w-menu w-gal"); if (title) m.appendChild(h("b", "", title));
+    items.forEach(([label, fn]) => m.appendChild(btn(label, label.replace(" ›", ""), fn, "w-galitem")));
+    return m;
+  }
+  // The table of contents: the lines with a heading style, and their pages.
+  const heads = () => doc.filter((p) => !p.table && !p.toc && p.style.startsWith("Heading")).map((p) => ({ t: wordsOf(p), pg: p.pg, lv: p.style }));
+  function insertToc() {
+    menu = null;
+    if (caret === null || !doc[caret] || doc[caret].toc || doc[caret].words.length) { say("First <b>click in the empty line</b> under the title <b>Our Phones</b>: the contents go there.", true); draw(); return; }
+    doc[caret] = { toc: true, pg: 1 }; caret = null; contents = heads();
+    say(contents.length === 3 ? "&#10003; Word made the table of contents from the <b>Heading 1</b> lines, with their page numbers." :
+      contents.length ? `The contents show only ${contents.length} of the 3 headings: Word reads only the lines with a <b>heading style</b>. Give them <b>Heading 1</b>, then <b>Update Table</b>.` :
+      "<b>No table of contents entries found.</b> Word reads only the lines with a <b>heading style</b>. Give the headings <b>Heading 1</b>, then <b>Update Table</b>.", contents.length !== 3);
+    draw();
+  }
+  function setNum(where) {
+    hf.num = where; menu = null;
+    say(where === "center" ? "&#10003; A page number at the bottom of every page: <b>1</b>, <b>2</b>, <b>3</b>. Word counts the pages by itself." : "A page number on every page. These steps ask for the middle: <b>Plain Number 2</b>.", where !== "center");
+    draw();
+  }
+
   // ---------- Commands ----------
   function need(what) {
     if (what === "caret" && caret === null) { say("First <b>click in a line</b> of the page.", true); return false; }
@@ -154,13 +241,14 @@
   }
   function style(n) {
     if (!need("caret")) return;
-    const p = doc[caret]; if (p.table) return;
+    const p = doc[caret]; if (p.table || p.toc) return;
     p.style = n === "No Spacing" ? "Normal" : n;
     say(`<b>${n}</b>: the whole line <b>${wordsOf(p) || "(empty)"}</b> changed with one click. ${n.startsWith("Heading") ? "A heading also goes into the <b>Navigation Pane</b>." : ""}`);
     draw();
   }
   function align(k) {
     if (!need("caret")) return;
+    if (doc[caret].toc) return;
     doc[caret].align = k;
     say(`<b>${k === "center" ? "Center" : k}</b> moved <b>the whole line</b>: a click in the line was enough (paragraph formatting).`);
     draw();
@@ -201,7 +289,76 @@
 
   // ---------- The page ----------
   const SPELL = { studnets: ["students", "student's", "students'"] };
+  // The three pages of the report, each with its header and its footer.
+  function pages() {
+    const cv = $(".w-canvas", root); cv.innerHTML = ""; cv.classList.add("w-multi");
+    for (let n = 1; n <= 3; n++) {
+      const pg = h("div", "w-page w-sheet");
+      const hd = h("div", "w-hf w-hd" + (hf.on ? " on" : ""));
+      if (hf.on && hf.typing && n === 1) {
+        const i = h("input"); i.value = hf.head; i.placeholder = "[Type here]"; i.setAttribute("aria-label", "Header text");
+        i.addEventListener("input", () => { hf.head = i.value; cv.querySelectorAll(".w-hd-copy").forEach((x) => { x.textContent = hf.head; }); status(); });
+        i.addEventListener("keydown", (e) => { if (e.key === "Enter") { hf.typing = false; draw(); } });
+        hd.appendChild(i); hd.appendChild(h("small", "w-hf-tag", "Header"));
+      } else hd.appendChild(h("span", "w-hd-copy", hf.head));
+      pg.appendChild(hd);
+      doc.forEach((p, i) => {
+        if (p.pg !== n) return;
+        if (p.toc) {
+          const box = h("div", "w-toc"); box.appendChild(h("div", "w-toc-h", "Contents"));
+          (contents || []).forEach((e) => { const d = h("div", "w-toc-l"); d.appendChild(h("span", "", e.t)); d.appendChild(h("i")); d.appendChild(h("span", "", String(e.pg))); box.appendChild(d); });
+          if (contents && !contents.length) box.appendChild(h("div", "", "No table of contents entries found."));
+          pg.appendChild(box); return;
+        }
+        const el = h("p", "w-p s-" + p.style.replace(" ", "") + (caret === i ? " caret" : ""));
+        el.innerHTML = p.words.length ? p.words.map((w) => w.t).join(" ") : "&nbsp;";
+        el.addEventListener("click", () => { caret = i; menu = null; say(`The cursor is in <b>${wordsOf(p) || "the empty line"}</b>.`); draw(); });
+        pg.appendChild(el);
+      });
+      const ft = h("div", "w-hf w-ft" + (hf.num ? " on" : ""));
+      if (hf.num) { ft.textContent = String(n); ft.style.textAlign = hf.num; }
+      pg.appendChild(ft);
+      cv.appendChild(pg);
+    }
+    if (ps.back) backstage();
+  }
+  // File (Backstage) and the Save As window ("pdf" part).
+  function backstage() {
+    const cv = $(".w-canvas", root);
+    const b = h("div", "w-back");
+    const side = h("div", "w-back-side");
+    side.appendChild(btn("&#8592;", "Back", () => { ps.back = false; ps.dialog = false; draw(); }, "w-back-x"));
+    ["Home", "New", "Open", "Info", "Save", "Save As", "Print", "Share", "Export", "Close"].forEach((it) => side.appendChild(btn(it, it, () => {
+      if (it === "Save As") { ps.dialog = true; ps.opened = true; say("The <b>Save As</b> window. Open the list <b>Save as type</b> and choose <b>PDF (*.pdf)</b>."); draw(); }
+      else if (it === "Export") say("<b>Export › Create PDF</b> also makes a PDF. In these steps: <b>Save As</b>.", true);
+      else if (it === "Save") say("<b>Save</b> keeps the Word file (.docx). For a PDF: <b>Save As</b>.", true);
+      else say(`<b>${it}</b>: not in these steps. Click <b>Save As</b>.`, true);
+    }, "w-back-item" + (it === "Save As" && ps.dialog ? " on" : ""))));
+    b.appendChild(side);
+    const main = h("div", "w-back-main");
+    if (!ps.dialog) main.appendChild(h("h3", "", "Good afternoon"));
+    else {
+      const d = h("div", "w-save");
+      d.innerHTML = "<b class='w-save-t'>Save As</b><div class='w-path'>This PC › <b>Desktop</b></div>";
+      const row1 = h("label", "w-save-row"); row1.appendChild(h("span", "", "File name:")); const n = h("input"); n.value = "Our Phones"; n.readOnly = true; row1.appendChild(n); d.appendChild(row1);
+      const row2 = h("label", "w-save-row"); row2.appendChild(h("span", "", "Save as type:")); const sel2 = h("select");
+      ["Word Document (*.docx)", "Word 97-2003 Document (*.doc)", "PDF (*.pdf)", "Plain Text (*.txt)", "Web Page (*.htm; *.html)"].forEach((o) => { const op = h("option", "", o); op.selected = o === ps.type; sel2.appendChild(op); });
+      sel2.addEventListener("change", () => { ps.type = sel2.value; say(ps.type.startsWith("PDF") ? "<b>PDF (*.pdf)</b> is chosen. Now click <b>Save</b>." : `${ps.type}: not a PDF. Choose <b>PDF (*.pdf)</b>.`, !ps.type.startsWith("PDF")); status(); });
+      row2.appendChild(sel2); d.appendChild(row2);
+      const go = h("div", "w-save-go");
+      go.appendChild(btn("Save", "Save", () => {
+        if (ps.type.startsWith("PDF")) { ps.saved = "pdf"; ps.back = false; ps.dialog = false; say("&#10003; <b>Our Phones.pdf</b> is on the Desktop. A PDF looks the same on every phone and computer, and nobody changes it by mistake."); }
+        else { ps.saved = "other"; say(`Saved as <b>${ps.type}</b>: that is not a PDF. Choose <b>PDF (*.pdf)</b> in <b>Save as type</b>, then <b>Save</b> again.`, true); }
+        draw();
+      }, "w-save-btn"));
+      go.appendChild(btn("Cancel", "Cancel", () => { ps.dialog = false; draw(); }));
+      d.appendChild(go); main.appendChild(d);
+    }
+    b.appendChild(main); cv.appendChild(b);
+  }
+
   function page() {
+    if (REPORT) { pages(); return; }
     const pg = $(".w-page", root); pg.innerHTML = "";
     doc.forEach((p, i) => {
       if (p.table) {
@@ -238,10 +395,10 @@
   function navPane() {
     const n = $(".w-nav", root); n.hidden = !nav; if (!nav) return;
     n.innerHTML = "<b>Navigation</b><div class='w-navtabs'><u>Headings</u> Pages Results</div>";
-    doc.filter((p) => !p.table && p.style.startsWith("Heading")).forEach((p) => n.appendChild(h("div", "w-navh" + (p.style === "Heading 2" ? " h2" : ""), wordsOf(p))));
+    doc.filter((p) => !p.table && !p.toc && p.style.startsWith("Heading")).forEach((p) => n.appendChild(h("div", "w-navh" + (p.style === "Heading 2" ? " h2" : ""), wordsOf(p))));
   }
   function status() {
-    const n = doc.reduce((a, p) => a + (p.table ? p.table.flat().filter((v) => v.trim()).length : p.words.length), 0);
+    const n = doc.reduce((a, p) => a + (p.table ? p.table.flat().filter((v) => v.trim()).length : p.toc ? 0 : p.words.length), 0);
     $(".w-count", root).textContent = n + " words";
     const list = $("#jobs"); list.innerHTML = "";
     let done = 0;
@@ -341,6 +498,9 @@
   $("#reset").addEventListener("click", () => { reset(); status.done = false; say(HELLO); draw(); });
   const HELLO = { format: "Click in the line <b>Book Fair</b>. Then click <b>Title</b> in <b>Home › Styles</b>.",
     table: "The cursor is in the empty line under <b>Prices</b>. Click the <b>Insert</b> tab.",
+    toc: "Click in the line <b>Introduction</b>. Then click <b>Heading 1</b> in <b>Home › Styles</b>.",
+    header: "The report has 3 pages. Click <b>Header</b> on the <b>Insert</b> tab.",
+    pdf: "The report is ready. Click the <b>File</b> tab.",
     ai: "This is <b>tutudocs.com</b>: no sign-in. Click the box <b>Drop a file…</b> and choose your notice on the Desktop." }[PART];
   reset(); say(HELLO); draw();
 })();

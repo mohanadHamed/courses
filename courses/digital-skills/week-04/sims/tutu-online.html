@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Simulator: Tutu Lab: AI changes your letter</title>
+  <title>Simulator: Tutu Lab: AI corrects and adds to the report</title>
   <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
   <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
 </head>
 <body class="theme-workshop">
 <main class="sim">
-  <h1>Tutu Lab: AI changes your letter</h1>
-  <p class="hint">As on <b>tutudocs.com</b> (no sign-in): <b>open</b> your letter, ask the <b>AI Assistant</b> for a change, then <b>download</b> it for Word. (Practice with fixed answers: no real AI here.)</p>
+  <h1>Tutu Lab: AI corrects and adds to the report</h1>
+  <p class="hint">As on <b>tutudocs.com</b> (no sign-in): <b>open</b> the report, ask the <b>AI Assistant</b> for a change, then <b>download</b> it for Word. (Practice with fixed answers: no real AI here.)</p>
   <div id="tutu"></div>
   <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
   <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
@@ -19,18 +19,19 @@
 <script src="../../../../shared/sims/sim-base.js"></script>
 <script>
 window.TUTU = {
-  kind: "doc", file: "letter-Huda.docx",
+  kind: "doc", file: "our-phones.docx",
   model: [
-    { style: "Normal", text: "Subject: Request for a training place" },
-    { style: "Normal", text: "Dear Ms Saleh," },
-    { style: "Normal", text: "I am a first-year diploma student. I ask for a summer training place in July." },
-    { style: "Normal", text: "Yours sincerely," },
-    { style: "Normal", text: "Huda Ali" },
+    { style: "Title", text: "Our Phones" },
+    { style: "Heading 1", text: "Introduction" },
+    { style: "Normal", text: "We askd 20 students about there phones." },
+    { style: "Heading 1", text: "The answers" },
+    { style: "Normal", text: "15 of the 20 students use their phone for study every day." },
   ],
   asks: [
-    { text: "Add a short paragraph about my skills: Word, Excel and teamwork.", keys: /skills|paragraph/i, done: "Done: a short paragraph about your skills is before Yours sincerely.",
-      apply: (m) => { m.splice(3, 0, { style: "Normal", text: "I can use Word and Excel, and I like to work in a team." }); return [3]; } },
-    { text: "Make the subject line bold.", keys: /bold|subject/i, done: "Done: the subject line is bold.", apply: (m) => { m[0].bold = true; return [0]; } },
+    { text: "Fix the spelling mistakes.", keys: /spell|mistake|fix/i, done: "Done: askd is now asked, and there is now their.",
+      apply: (m) => { m[2].text = "We asked 20 students about their phones."; return [2]; } },
+    { text: "Add a one-sentence summary at the end.", keys: /summar|end|sentence/i, done: "Done: a one-sentence summary is at the end of the report.",
+      apply: (m) => { m.push({ style: "Heading 1", text: "Summary" }, { style: "Normal", text: "Most students use their phone for study every day." }); return [m.length - 2, m.length - 1]; } },
   ],
 };
 </script>

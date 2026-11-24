@@ -3,43 +3,46 @@
 # Copy to courses/<slug>/week-WW/online-NN.qmd: Online activity NN, in the
 # folder of its unit (WW = the syllabus week). It practises its unit and never
 # repeats the face-to-face lecture.
-# On paper only the tasks are printed: sections marked {.study} stay on the
-# screen. homework_pdf.py prints the page as <prefix>_onlineN_tasks.pdf.
-# The Steps teach: every Try it question has a "Why:", every step that asks
-# for a result ends with an interactive check (::: {.choice}, {.order},
-# {.sort} or {.fill}: the page checks it at once), never a closed
-# ::: {.check}. The Tasks to submit stay unanswered.
-# The student works alone: each Step teaches a task with a model (another
-# situation, never the data of the task) and SHOWS THE SCREENS OF EVERY APP
-# STEP (AUTHORING.md): one drawn picture per step (tools/phone_screens.py),
-# the number of its orange circle at the start of its caption, in a tab for
-# each device when the steps differ (Android and iPhone).
-# Digital Skills (since 2026-11-20, courses/digital-skills/NOTES.md, "The
-# online activity in the lab style"): every Step has "### On the simulator" (a
-# simulator that looks like the real app: Excel Lab, PowerPoint Lab, Tutu Lab,
-# Forms Lab, Sites Lab, with the data of the model) and "### On your own
-# computer (optional)" (a .word-part .home-part box with the drawn screens of
-# the same steps); at most one Try it per Step; the AI step is direct use on
-# tutudocs.com, never a check of AI output.
-# Model answers and marking notes: courses-private, week-WW/online-NN-solutions.md.
+#
+# THE LIGHT ONLINE ACTIVITY (Digital Skills from Online activity 4, the
+# teacher's request of 2026-11-24; courses/digital-skills/NOTES.md, "The
+# light online activity"). The teacher records a screen video in Arabic that
+# goes through this page and solves it, so the page is short and practical:
+# - 2-4 Steps marked {.study}: 2-4 short points (the words of the lecture),
+#   then ONE simulator that looks like the real app (Word Lab, Excel Lab,
+#   PowerPoint Lab, Access Lab, Forms Lab, Sites Lab) with the data of a
+#   model, and at most one Try it (a .match with a "Why:"). No "On your own
+#   computer" box, no ### parts, no long text: one Step is one page.
+# - AI never in the tasks: a Step may show it on Tutu Lab (tutudocs.com,
+#   "Only look and try here: the tasks do not need AI.").
+# - Tasks to submit: ONLY QUESTIONS, answered in the tasks PDF (a form):
+#   "Task 1 · Tap the answer" ({.pick}, 2-5 options, no [x]) and "Task 2 ·
+#   Type the answer" (one word, one number, a name or a formula, with
+#   {{< answer-space lines=1 >}}), 5-8 questions, at least 2 of each kind.
+#   Every answer is on the page: a student who watches the video once can
+#   answer them all. No file, no screenshot, no real app (the course project
+#   may keep one file task: `project: true`).
+# - The tasks PDF fits on one A4 page.
+# check_size.py checks it (light_warnings). Model answers: courses-private,
+# week-WW/online-NN-solutions.md.
 title: "Short title from schedule.yml"
-description: "Online activity · One short line. About 60 minutes."
-online: 1          # the number of the online activity
-due: "before lecture 3"   # the next face-to-face lecture, never a week or a date
-content: lesson    # lesson | sims | mix | video | course-video (AUTHORING.md, "Blended courses")
-ilos: [A1]
+description: "Online activity · On simulators that look like the app: … Then short questions in the tasks PDF. About 30 minutes."
+online: 4          # the number of the online activity
+due: "before lecture 5"   # the next face-to-face lecture, never a week or a date
+content: sims      # every Step has its simulator
+tasks: questions   # the light online activity
+ilos: [A3]
 toc-title: "In this activity"
 format: lesson-html
 ---
 
 ## Before you start {.study}
 
-- **What you need:** your university account, and a computer or a phone with
-  a browser.
-- **Time:** about 60 minutes. Work alone, at your own speed.
-- **How it works:** do Steps 1–3 on this page, then the **Tasks to submit**.
-- **What you submit:** what, on the university e-learning platform, before
-  lecture 3.
+- **You need:** a phone or a computer with a browser. Nothing to install.
+- **How it works:** watch the video of your teacher on the e-learning
+  platform. Then do each Step on its simulator.
+- **You submit:** the **tasks PDF** with your answers, before lecture 5.
+  About 30 minutes.
 
 ## Key terms {.study}
 
@@ -47,101 +50,60 @@ format: lesson-html
 
 ## Step 1 · Short title {.study}
 
-- One idea per bullet, A2 English, the words of the face-to-face lesson.
+- One idea per bullet, A2 English, the words of the face-to-face lecture.
+- The buttons in **bold**: **Insert › Table**.
 
-![Caption.](images/figure.png){width=86%}
-
-::: {.callout-note title="Model · Short title"}
-Another person does the task in another situation, with every fact: what
-they make, and the product. The simulator below has the same steps. Task 1
-asks for the same, with your own data.
-:::
-
-### On the simulator
-
-{{< sim file="sims/x.html" poster="sims/x.png" title="Simulator title" height="600" >}}
-
-### On your own computer (optional)
-
-:::: {.word-part .home-part}
-**Choose your phone.** The orange numbers show where to tap.
-
-::: {.panel-tabset group="phone"}
-### Android
-
-::: {.screens}
-![[1]{.step-n} Open **the app**. Tap **+** at the bottom right. [2]{.step-n} Tap **…**.](images/x-android-1.png)
-
-![[3]{.step-n} Type the name. [4]{.step-n} Tap **Save**.](images/x-android-2.png)
-:::
-
-### iPhone
-
-::: {.screens}
-![[1]{.step-n} Open **the app**. Tap **+** at the top right.](images/x-iphone-1.png)
-
-![[2]{.step-n} Type the name. [3]{.step-n} Tap **Add**.](images/x-iphone-2.png)
-:::
-:::
-::::
+{{< sim file="sims/x.html" poster="sims/x.png" title="Simulator title" height="700" >}}
 
 ::: {.callout-tip title="Try it 1 · Short title"}
 Choose the right answer.
 
-::: {.match extra="wrong answer"}
-A question?
+::: {.match extra="wrong answer|another wrong answer"}
+A question about the model, with its facts?
 :   its answer
 
     Why: one sentence, in the words of the step.
 :::
 :::
 
-## Step 2 · Short title {.study}
+## Step 2 · AI can … {.study}
 
-A simulator and its optional box, like Step 1 (a Try it only where it
-helps). A `video` activity starts a
-Step with the official video that it practises (a link, never a copy):
+Only look and try here: the tasks do not need AI.
 
-{{< watch title="Change margins" source="Microsoft Support" url="https://support.microsoft.com/en-us/word/training/change-margins" length="0:31" checked="2026-10-31" captions="English" >}}
+- On **tutudocs.com** (no sign-in) open the file, then **AI Assistant**.
+- Ask for one change, for example …
 
-A `course-video` activity shows its own video, whose voice reads the script
-word for word (`videos/<name>-script.txt`; the captions are the same words):
-
-    {{< watch file="videos/x.mp4" captions="videos/x.vtt" poster="videos/x.png" script="videos/x-script.txt" title="…" length="2:00" >}}
+{{< sim file="sims/tutu-online.html" poster="sims/tutu-online.png" title="Tutu Lab: …" height="700" >}}
 
 ## Tasks to submit {.tasks}
 
-**Tap one answer in each question.** Do the tasks alone.
-
-### Task 1 · A practical task
-
-1. Numbered steps on the student's own computer or phone.
-2. A concrete product: a file with a given name, a screenshot.
-
-*Submit:* the file or the screenshot.
-
-### Task 2 · Short answers (Step 2)
-
-<!-- A question with options is a multiple choice ({.pick}; AUTHORING.md,
-"Multiple choice in graded work"): the student taps one circle on the page
-and in the tasks PDF, and writes nothing. Never "Write its letter" or the
-options in the text (**A** … · **B** …). No [x]: graded work shows no
-answer (the solution goes to courses-private). -->
+### Task 1 · Tap the answer
 
 ::: {.pick}
-**a)** A question with fixed facts. Which one is right?
+**a)** A short question with the key words in **bold**?
 
 - the first option
 - the second option
 - the third option
 :::
 
-**b)** A question answered with a number or a name (a word or two).
+::: {.pick}
+**b)** Another question, about another Step?
+
+- one option
+- another option
+:::
+
+### Task 2 · Type the answer
+
+**a)** Which **tab** has the button …? Type its name.
+
+{{< answer-space lines=1 >}}
+
+**b)** A small sum with the numbers of the model. What is the total in JD?
 
 {{< answer-space lines=1 >}}
 
 ## How to submit
 
-Tap your answers in the **Tasks PDF to fill in** and save it (or tap them
-on this page, then **Print tasks** › Save as PDF). Upload the PDF and your
-files, **before lecture 3**.
+Answer in the **Tasks PDF to fill in**, save it, and upload it **before lecture 5**.

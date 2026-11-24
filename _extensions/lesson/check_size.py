@@ -85,6 +85,11 @@ need: sims, a simulator in every Step; mix, at least one simulator; video, a
 {{< watch >}} of an official video with its source, length and the date the
 link was checked; course-video, the video made for the course with its
 captions, poster and script, the captions the same words as the script.
+A light online activity (`tasks: questions`; Digital Skills from Online
+activity 4, LIGHT_FROM) has 2-4 short Steps, each with its simulator and no
+### parts, at most LIGHT_PAGES pages, and tasks that are only questions in
+the tasks PDF ({.pick} and one-line typed answers; light_warnings). Its
+Steps are done on the simulators, so they need no screens of the real app.
 
 Answers without written English (AUTHORING.md): homework, tasks to submit
 and worksheet records never ask for English text (ESSAY_RE: "explain",
@@ -207,6 +212,24 @@ LAB_PAGE_REQUIRED = ["key terms", "summary"]
 ONLINE_CONTENT = ("lesson", "sims", "mix", "video", "course-video")
 WATCH_RE = re.compile(r"\{\{<\s*watch\s+(.*?)>\}\}", re.S)
 ONLINE_TASKS = (2, 4)
+# The light online activity (Digital Skills from Online activity 4, the
+# teacher's request of 2026-11-24; NOTES.md, "The light online activity"):
+# `tasks: questions` in the front matter. The teacher explains the page in a
+# screen video, so it is short and practical: 2-4 Steps, each a few points and
+# one simulator (no "On your own computer" box, no ### parts), and at most
+# ONLINE_PAGES pages when it is shown like slides. The tasks are only
+# questions answered in the tasks PDF: {.pick} (tap one answer) and short
+# typed answers ({{< answer-space lines=1 >}}), at least two of each kind and
+# LIGHT_QUESTIONS in all; no file and no screenshot to make (a question may
+# name tutudocs.com or the AI Assistant, but no task needs AI). `project: true` (the
+# course project, Online activity 12) allows one task with a file.
+# The courses whose online activities are light, from this number on (the
+# earlier ones were sent to the students before the rule).
+LIGHT_FROM = {"digital-skills": 4}
+LIGHT_STEPS = (2, 4)
+LIGHT_QUESTIONS = (5, 8)
+LIGHT_PAGES = 12
+LIGHT_PRODUCT_RE = re.compile(r"screenshot|\.(?:docx|xlsx|pptx|png|jpg)\b|\*Submit:\*|\bsave (?:it|the file) as\b", re.I)
 # Screens of every app step (AUTHORING.md, "Blended courses", the teacher's
 # request of 2026-11-10): a Step that has the student tap, click or press in
 # an app shows the screens of that app (::: {.screens}, tools/phone_screens.py).
@@ -214,9 +237,7 @@ APP_STEP_RE = re.compile(r"\b(tap|taps|click|clicks|press|presses|open the \w+ a
 # Online activities written before that rule. They get their screens when
 # they are next written or rewritten (AUTHORING.md, "Way of working"): take
 # each one out of this set then, and empty it at the start of next semester.
-BEFORE_SCREENS = {
-    "courses/digital-skills/week-07/online-06.qmd",
-}
+BEFORE_SCREENS = set()
 # The picture is in the activity that asks about it (AUTHORING.md, "Try it",
 # the teacher's request of 2026-11-10): the points that the questions name
 # with their coordinates ("A (4, 5)", "S = (1, 1)") are drawn, with the same
@@ -1122,6 +1143,14 @@ def check_online(path, rel):
         if not any(h.startswith(part) for h in heads):
             out.append("%s: online activity without a \"%s\" section" % (rel, part.capitalize()))
     steps = [p for p in re.split(r"^(?=## )", body, flags=re.M) if re.match(r"## Step \d", p)]
+    light = re.search(r"^tasks:\s*questions\b", fm, re.M) is not None
+    m = re.search(r"courses/([\w-]+)/", rel.replace(os.sep, "/"))
+    n = re.search(r"^online:\s*(\d+)", fm, re.M)
+    if m and n and m.group(1) in LIGHT_FROM and int(n.group(1)) >= LIGHT_FROM[m.group(1)] and not light:
+        out.append("%s: an online activity of %s from Online activity %d is light (`tasks: questions`: Steps on "
+                   "simulators, questions in the tasks PDF; NOTES.md)" % (rel, m.group(1), LIGHT_FROM[m.group(1)]))
+    if light:
+        out.extend(light_warnings(body, steps, fm, rel))
     if not steps:
         out.append("%s: online activity without Steps (## Step 1 · … {.study})" % rel)
     for p in steps:
@@ -1133,7 +1162,7 @@ def check_online(path, rel):
         # that checks each of its steps needs no Try it box (at most one).
         if k > 1 or (k == 0 and not re.search(r"\{\{< *sim ", p)):
             out.append('%s: "%s" has %d Try it boxes; give each step one self-check' % (rel, title, k))
-        if (APP_STEP_RE.search(p) and not re.search(r"^:::+ *\{\.screens", p, re.M)
+        if (APP_STEP_RE.search(p) and not re.search(r"^:::+ *\{\.screens", p, re.M) and not light
                 and rel.replace(os.sep, "/") not in BEFORE_SCREENS):
             out.append('%s: "%s" has the student work in an app but shows no screens of it (::: {.screens}, '
                        'one picture per step; AUTHORING.md, "Screens of every app step")' % (rel, title))
@@ -1191,6 +1220,46 @@ def check_online(path, rel):
                 if cues != lines:
                     out.append("%s: the captions %s are not the words of the script %s (the voice reads the script)"
                                % (rel, w["captions"], w["script"]))
+    return out
+
+
+def light_warnings(body, steps, fm, rel):
+    """The light online activity (`tasks: questions`): short Steps on simulators,
+    and tasks that are only questions answered in the tasks PDF."""
+    out = []
+    if not (LIGHT_STEPS[0] <= len(steps) <= LIGHT_STEPS[1]):
+        out.append("%s: %d Steps; a light online activity has %d–%d" % ((rel, len(steps)) + LIGHT_STEPS))
+    for p in steps:
+        title = p.splitlines()[0][3:]
+        if not re.search(r"\{\{< *sim ", p):
+            out.append('%s: "%s" has no simulator; every Step of a light online activity has one' % (rel, title))
+        if re.search(r"^### ", p, re.M) or "home-part" in p:
+            out.append('%s: "%s" has ### parts or an "On your own computer" box; a light Step is one page: '
+                       'a few points and its simulator' % (rel, title))
+    # Pages when the page is shown like slides: the start, every ## section,
+    # and every ### part (with a page for the text before the first ###).
+    pages = 1
+    for sec in re.split(r"^(?=## )", body, flags=re.M):
+        if not sec.startswith("## "):
+            continue
+        parts = re.split(r"^(?=### )", sec, flags=re.M)
+        pages += len(parts) - 1 + (1 if len(parts) == 1 or parts[0].strip().count("\n") > 0 else 0)
+    if pages > LIGHT_PAGES:
+        out.append("%s: about %d pages when shown like slides; a light online activity has at most %d" % (rel, pages, LIGHT_PAGES))
+    tasks = section(body, "Tasks to submit")
+    picks = len(PICK_BLOCK_RE.findall(tasks))
+    typed = len(re.findall(r"\{\{< *answer-space +lines=[12] *>\}\}", tasks))
+    if re.search(r"answer-space +(?:box=|lines=[3-9])", tasks):
+        out.append("%s: Tasks to submit: a long answer space; a light task is typed in one line (a word or a number)" % rel)
+    if picks < 2 or typed < 2 or not (LIGHT_QUESTIONS[0] <= picks + typed <= LIGHT_QUESTIONS[1]):
+        out.append("%s: Tasks to submit: %d questions to tap and %d to type; a light online activity has %d–%d, "
+                   "at least 2 of each kind" % ((rel, picks, typed) + LIGHT_QUESTIONS))
+    with_product = [t for t in re.split(r"^(?=### )", tasks, flags=re.M) if LIGHT_PRODUCT_RE.search(t)]
+    allowed = 1 if re.search(r"^project:\s*true\b", fm, re.M) else 0
+    if len(with_product) > allowed:
+        found = sorted(set(m for t in with_product for m in LIGHT_PRODUCT_RE.findall(t)))
+        out.append("%s: Tasks to submit name a product (%s); the tasks of a light online activity are only questions%s"
+                   % (rel, ", ".join(found), " (the project: one task with a file)" if allowed else ""))
     return out
 
 

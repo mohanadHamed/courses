@@ -904,13 +904,17 @@ section[id^="in-bigquery"] > h3, section[id^="in-rstudio"] > h3 { color: #185abd
 .lab-plan li { margin: 6px 0; }
 .lab-go { border: 2px solid var(--accent, #d9480f); border-radius: 14px; padding: 12px 16px; font-size: 1.15rem; background: #fff7f0; }
 
-/* The paged lesson fills the smart screen: the list of the pages replaces "In this lesson". */
-html.paged #quarto-margin-sidebar { display: none; }
-html.paged main.content { grid-column: screen-start-inset / screen-end-inset; width: 100%; max-width: 1180px; justify-self: center; }
-html.paged main.content > section.level2 { min-height: 50vh; }
-html.paged main.content h2 { font-size: 1.9rem; }
-html.paged main.content h3 { font-size: 1.45rem; }
-html.paged main.content { font-size: 1.12rem; }
+/* The paged lesson fills the smart screen: the list of the pages replaces "In this lesson".
+   On the screen only: on paper (the tasks PDF) a section of half a screen
+   pushed a short page onto a second, empty sheet. */
+@media screen {
+  html.paged #quarto-margin-sidebar { display: none; }
+  html.paged main.content { grid-column: screen-start-inset / screen-end-inset; width: 100%; max-width: 1180px; justify-self: center; }
+  html.paged main.content > section.level2 { min-height: 50vh; }
+  html.paged main.content h2 { font-size: 1.9rem; }
+  html.paged main.content h3 { font-size: 1.45rem; }
+  html.paged main.content { font-size: 1.12rem; }
+}
 /* The screens of the worksheet, big enough to read on the smart screen. */
 .word-part .screens { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
 main .word-part .screens figure img { max-width: 540px; border: 1px solid #c9d6ea; border-radius: 8px; }

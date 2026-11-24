@@ -498,21 +498,58 @@
 // Graded multiple choice ({.pick}, interact.lua): the student taps one
 // option; nothing is marked right or wrong. The choices are kept in this
 // browser only (a convenience: the page works the same without storage), so
-// "Print tasks" (or Save as PDF) prints them.
+// "Print tasks" (or Save as PDF) prints them. A choice can be taken back
+// (the teacher's request of 2026-11-24): tap the chosen option again, or the
+// small "Clear" button of the question; the stored choice is removed too.
 (function () {
   const picks = document.querySelectorAll(".pick input[type=radio]");
   if (!picks.length) return;
   const key = "pick:" + location.pathname;
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(key) || "{}") || {}; } catch (_) {}
+  const store = () => { try { localStorage.setItem(key, JSON.stringify(saved)); } catch (_) {} };
+  const clearButtons = {};
+  const refresh = (name) => {
+    const b = clearButtons[name];
+    if (b) b.hidden = !document.querySelector('.pick input[name="' + name + '"]:checked');
+  };
+  const clear = (name) => {
+    document.querySelectorAll('.pick input[name="' + name + '"]').forEach((i) => { i.checked = false; });
+    delete saved[name];
+    store();
+    refresh(name);
+  };
+  document.querySelectorAll(".pick").forEach((pick) => {
+    const first = pick.querySelector("input[type=radio]");
+    const opts = pick.querySelector(".pick-opts");
+    if (!first || !opts) return;
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "pick-clear";
+    b.textContent = "✕ Clear";
+    b.title = "Clear the answer of this question";
+    b.addEventListener("click", () => clear(first.name));
+    opts.appendChild(b);
+    clearButtons[first.name] = b;
+  });
   picks.forEach((input) => {
     if (saved[input.name] === input.value) input.checked = true;
+    // Was this option already chosen before the tap? Then the tap clears it.
+    let was = false;
+    const before = () => { was = input.checked; };
+    input.closest("label")?.addEventListener("pointerdown", before);
+    input.addEventListener("keydown", (e) => { if (e.key === " ") before(); });
+    input.addEventListener("click", () => {
+      if (was) { was = false; clear(input.name); }
+    });
     input.addEventListener("change", () => {
       if (!input.checked) return;
       saved[input.name] = input.value;
-      try { localStorage.setItem(key, JSON.stringify(saved)); } catch (_) {}
+      store();
+      refresh(input.name);
     });
   });
+  Object.keys(clearButtons).forEach(refresh);
 })();
 
 // A page shown like slides (paged: true in the front matter; banner.lua puts

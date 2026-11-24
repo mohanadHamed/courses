@@ -742,6 +742,11 @@ button.hero-btn { font: inherit; font-weight: 800; cursor: pointer; }
 .pick-opt:has(input:checked) { border-color: var(--accent, #333); background: color-mix(in srgb, var(--accent, #888) 10%, #fff); }
 .pick-opt input:focus-visible + .pick-dot { outline: 2px solid var(--accent, #333); outline-offset: 2px; }
 .pick-letter { font-weight: 800; }
+.pick-clear { font: inherit; font-size: 0.85rem; cursor: pointer; padding: 0.3rem 0.7rem; border-radius: 999px;
+  border: 1px dashed #b8b8b4; background: #fff; color: #666; }
+.pick-clear:hover { border-color: var(--accent, #888); color: #333; }
+.pick-clear[hidden] { display: none; }
+@media print { .pick-clear { display: none !important; } }
 .pick .answer-field { display: none; }
 .hero-fill .fill-picks { display: none; }
 body:has(.pick) .hero-fill .fill-boxes { display: none; }

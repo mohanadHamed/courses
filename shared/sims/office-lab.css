@@ -351,3 +351,31 @@
 .sim .word button.p-icb { min-width: 44px; } .sim .p-ico { font-size: 1.6rem; }
 .sim .p-save { position: absolute; top: 120px; left: 30%; width: 300px; display: flex; flex-direction: column; gap: 6px; z-index: 6; }
 .sim .word.ppt { position: relative; }
+/* Word Lab, the report of Online activity 4: three pages, a header and a footer, a table of contents, File › Save As. */
+.sim .word .w-canvas.w-multi { flex-direction: column; align-items: center; gap: 12px; position: relative; }
+.sim .word .w-page.w-sheet { min-height: 200px; padding: 0 40px; display: flex; flex-direction: column; }
+.sim .word .w-sheet .w-p:last-of-type { margin-bottom: 14px; }
+.sim .word .w-hf { min-height: 26px; padding: 4px 0; font-size: 12px; color: #6b6b6b; border: 1px dashed transparent; }
+.sim .word .w-hd { margin-bottom: 8px; } .sim .word .w-ft { margin-top: auto; }
+.sim .word .w-hf.on { border-color: #9cc0ee; background: #f6f9fe; }
+.sim .word .w-hd input { font: inherit; font-size: 13px; border: 1px solid #9cc0ee; padding: 2px 6px; width: 60%; }
+.sim .word .w-hf-tag { margin-left: 8px; background: #dbe7f8; color: #185abd; padding: 0 6px; border-radius: 3px; }
+.sim .word .w-toc { margin: 2px 0 10px; font-size: 14px; }
+.sim .word .w-toc-h { color: #185abd; font-size: 17px; margin-bottom: 4px; }
+.sim .word .w-toc-l { display: flex; gap: 4px; } .sim .word .w-toc-l i { flex: 1; border-bottom: 1px dotted #6b6b6b; margin-bottom: 5px; }
+.sim .word .w-gal { top: 100%; left: 0; width: 210px; display: flex; flex-direction: column; gap: 2px; font-size: 0.82rem; }
+.sim .word .w-gal.w-sub { top: 0; left: 100%; width: 170px; }
+.sim .word .w-galitem { text-align: left; background: #fff; border: 1px solid transparent; box-shadow: none; color: #323130; padding: 6px 8px; font-weight: 400; }
+.sim .word .w-galitem:hover, .sim .word .w-galitem:focus { background: #dbe7f8; }
+.sim .word .w-back { position: absolute; inset: 0; display: flex; background: #fff; z-index: 6; min-height: 300px; }
+.sim .word .w-back-side { width: 150px; flex: none; background: #185abd; display: flex; flex-direction: column; padding: 6px 0; }
+.sim .word .w-back-side .w-btn { background: none; border: 0; box-shadow: none; color: #fff; text-align: left; padding: 6px 16px; font-weight: 400; border-radius: 0; }
+.sim .word .w-back-side .w-btn.on, .sim .word .w-back-side .w-btn:hover { background: #2b6fd6; }
+.sim .word .w-back-main { flex: 1; padding: 16px; min-width: 0; }
+.sim .word .w-save { border: 1px solid #a6a6a6; border-radius: 6px; padding: 12px; max-width: 460px; box-shadow: 0 4px 14px rgba(0,0,0,.15); font-size: 0.86rem; }
+.sim .word .w-save-t { display: block; margin-bottom: 6px; } .sim .word .w-path { color: #6b6b6b; margin-bottom: 8px; }
+.sim .word .w-save-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; } .sim .word .w-save-row span { width: 96px; flex: none; }
+.sim .word .w-save-row input, .sim .word .w-save-row select { flex: 1; min-width: 0; font: inherit; padding: 4px 6px; }
+.sim .word .w-save-go { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+.sim .word .w-save-btn { background: #185abd; color: #fff; border-color: #185abd; }
+@media (max-width: 640px) { .sim .word .w-page.w-sheet { padding: 0 14px; } .sim .word .w-back-side { width: 96px; } .sim .word .w-save-row { flex-wrap: wrap; } }

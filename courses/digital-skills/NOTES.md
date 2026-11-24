@@ -85,24 +85,16 @@ management, medical sterilization, facility assessment). So this course is
   hands-on work on earlier lectures in Word, Excel, PowerPoint or an AI
   tool, in the seminar format (AUTHORING.md, "What a seminar looks like");
   no new ideas; every answer on its page.
-- **Online activity:** `online-NN.qmd` with `online: N`, `due:` ("before
-  lecture N", the next face-to-face lecture) and `marks:`; no notes and no
-  slides. It **practises its unit** and never repeats the face-to-face
-  lecture; in a unit it may add a skill of the unit's syllabus row (Online
-  activity 12: the final submission, row 15 of a merged unit); in a practice week it
-  adds nothing new. Start from `shared/templates/online-template.qmd`. It has:
-  1. "Before you start": what you need, about how long, what you submit;
-  2. two or three short **Steps** (`{.study}`): plain explanation, a figure,
-     a simulator to try at once, one "Try it" check with `Why:`
-     reasons, and an interactive check (`.choice`, `.order`, `.sort` or
-     `.fill`) where a step asks for a result: it answers at once;
-     where the teacher has a video, the e-learning platform links it;
-  3. **Tasks to submit** (`{.tasks}`): 2–4 tasks with marks, each with a
-     concrete product (a file with a given name, a screenshot, a short
-     answer) and answer space for the printed copy;
-  4. **How to submit**: one short line (the e-learning platform, file names).
-  The Steps are hidden on paper: "Print tasks" and "Tasks PDF to fill in"
-  give only the tasks (`homework_pdf.py` prints the page).
+- **Online activity:** `online-NN.qmd` with `online: N` and `due:`
+  ("before lecture N", the next face-to-face lecture); no marks, no notes
+  and no slides. It **practises its unit** and never repeats the
+  face-to-face lecture; in a unit it may add a skill of the unit's syllabus
+  row; in a practice week it adds nothing new. From Online activity 4 it is
+  a **light online activity** (below): Steps on simulators, and tasks that
+  are only questions in the tasks PDF. Start from
+  `shared/templates/online-template.qmd`. The Steps are hidden on paper:
+  "Tasks PDF to fill in" gives only the tasks (`homework_pdf.py` prints the
+  page as a form).
 - The online activity **replaces the homework**: no `homework-UU.qmd` in
   this course. Model answers and marking notes go to `courses-private`
   (`courses/digital-skills/week-WW/online-NN-solutions.md`).
@@ -112,10 +104,12 @@ management, medical sterilization, facility assessment). So this course is
   Ellis-Chadwick, *Digital Marketing*, 8th ed., 2022; Duckett, *HTML and
   CSS*, 2011; *DigComp 2.2*, 2022; Microsoft 365 Training
   (support.microsoft.com/training).
-- **The course project (D1)** is built in the core, with no project week:
-  Online activity 10 (the student chooses one of four given services, A–D,
-  and builds its form), 11 (its website), 12 (its post, marketing plan,
-  three slides and the final submission with an AI-use statement).
+- **The course project (D1)** runs through the core, with no project week
+  (light since 2026-11-24): Online activity 10 (the student chooses one of
+  four given services, A–D, and learns the form on a simulator), 11 (the
+  website, on a simulator), 12 (the post and the marketing plan on
+  simulators, and the only file of the project: `project.pptx`, three
+  slides of the service with the AI-use statement).
 
 ## The lab model (since 2026-11-20; every lecture)
 
@@ -173,33 +167,40 @@ moves the bar to the other corner. The arrow keys and a presenter's clicker
 work too, and `#page-N` in the address opens the same page after a reload
 (`lesson-script.html`, "paged").
 
-### The online activity in the lab style (since 2026-11-20)
+### The light online activity (since 2026-11-24)
 
-The teacher's request of 2026-11-20: the online activity is the lab lecture
-without the lab. The student does every step **on simulators that look
-like the real app**, on the page, at home; the real app is an optional box.
-Online activities 4–12 were rewritten this way:
+The teacher's request of 2026-11-24, after preparing Online activity 4: the
+teacher records a **screen video in Arabic** that goes through the
+interactive page and solves it, so the page must be short and practical,
+and the tasks so easy that a student who watched the video once can answer
+them all. Online activities 4–12 were rewritten this way (`tasks:
+questions`, `content: sims`); it replaced "the online activity in the lab
+style" of 2026-11-20.
 
-- Every Step: the idea in 3–4 short points, then `### On the simulator`
-  (a simulator with the steps of the Step, on the data of a **model**, never
-  the data of a task) and `### On your own computer (optional)`: a
-  `:::: {.word-part .home-part}` box (green, labelled "Optional, at home")
-  with the drawn screens of the same steps in the real app (the `lab-*`
-  pictures of the lecture of the unit can be reused, `../week-WW/images/…`).
-  At most one Try it per Step; no question about AI output.
-- The simulators are the lab simulators with their own data and steps:
-  Excel Lab (`window.EXCEL_LAB`, also `Insert › PivotTable`), PowerPoint
-  Lab, Tutu Lab (`window.TUTU`), Forms Lab (`window.FORMS_LAB`), Sites Lab
-  (`window.SITES_CFG`: pages, Insert › Button, Publish) and Access Shop
-  (`week-10/sims/access-shop.js`: a form, a query, a report). A page sets
-  `window.SIM_DONE` for its last message; an online copy of a lab
-  simulator (`*-online.html`) has a hint without "worksheet".
-- The AI step is **direct use on tutudocs.com** (Tutu Lab on the page; in
-  the tasks the student's own file), or an optional Extra when the task
-  has no file (Online activity 11).
-- Access is only on Windows, so the tasks of Online activity 9 use the
-  simulators of the page ("Click **Start again** first"); every other task
-  is done in the real app, as before.
+- **Only what the syllabus and the course plan ask for.** Nothing optional
+  (the CV and the cover letter of row 5 went: neither the course plan nor
+  the programme plan asks for them, and the students are in their first
+  semester).
+- **2–4 Steps, one page each:** 2–4 short points (the words of the
+  lecture, the buttons in bold), then **one simulator that looks like the
+  real app**, with the data of a model, and at most one Try it. No "On your
+  own computer" box, no figures that the simulator already shows, no
+  `###` parts; at most 12 pages when the page is shown like slides.
+- **AI is shown, never required:** a Step may show it on Tutu Lab
+  ("Only look and try here: the tasks do not need AI."). No task asks the
+  student to use an AI tool.
+- **Tasks to submit: only questions,** answered in the tasks PDF (a form):
+  "Task 1 · Tap the answer" (`{.pick}`) and "Task 2 · Type the answer" (one
+  word, one number, a name or a formula, `{{< answer-space lines=1 >}}`),
+  5–8 questions, at least two of each kind, with the facts in the question
+  (the numbers of the model). No file, no screenshot, no real app. The
+  course project keeps one file (`project: true`, Online activity 12).
+  "How to submit" is one line: answer in the PDF, save it, upload it.
+- The tasks PDF fits on one A4 page.
+- The simulators: Word Lab (`week-04/sims/word-lab.js`: also `toc`,
+  `header` and `pdf` on a short report), Excel Lab, PowerPoint Lab, Access
+  Shop, Forms Lab, Sites Lab and Tutu Lab, each with its own data
+  (`window.SIM_DONE` for its last message).
 
 ## A face-to-face version (prepared, not published)
 
@@ -240,7 +241,8 @@ real tool.
 - Everything works on a phone: many students do the online activity at home
   on a phone.
 - **The screens of the real apps** (AUTHORING.md, "Screens of every app
-  step"): an online activity is done alone, so every Step that has the
+  step"; not in the light online activities, whose Steps are done on
+  simulators): an online activity is done alone, so every Step that has the
   student work in an app shows its screens, one drawn picture per step,
   with Android and iPhone in two tabs for a phone app (Online activity 2:
   Google Calendar and Calendar, Google Drive and Files). A simulator lets
@@ -265,10 +267,10 @@ true is theory, and it bores them. So:
 - **No questions about AI output:** no "keep, fix or delete", no "what is
   wrong in this answer", no prompt to evaluate. The student sees the change
   in the new file; that is all the check there is.
-- The same holds for the online activities (all rewritten on 2026-11-20):
-  the AI step is direct use on tutudocs.com with the student's own file
-  (Online 4: the letter; 5: a slide; 8: a total row; 11: the welcome
-  text, optional; 12: the last slide and the AI-use statement).
+- In the online activities (light since 2026-11-24) AI is only shown on
+  Tutu Lab (Online 4: the spelling of a report; 5: a slide; 8: a total
+  row; 11: the welcome text; 12: a last slide); no task needs AI. The
+  AI-use statement stays in the project slides (Online activity 12).
 - **The AI tool of every Digital Skills lesson: tutudocs.com** (the
   teacher's choice of 2026-11-20, tried in class conditions by the
   teacher). It works **with no sign-in**: the home page has the box "Drop a
@@ -357,6 +359,19 @@ every calendar week, by hand, with the university's template.
   (`moodle/digital-skills-weeks.md`).
 
 ## Lessons learned
+
+- 2026-11-24 (the teacher's request, while preparing the video of Online
+  activity 4): the online activity had 17 pages, a CV and a cover letter
+  that no plan asks for, and tasks with much text, files to make and AI to
+  use on tutudocs.com. Online activities 4–12 are now light (above): Online
+  activity 4 is "A Word Report: a Table of Contents, a Header, Page
+  Numbers and a PDF" (row 4 of the syllabus), on three new parts of Word
+  Lab; every task is a question tapped or typed in the tasks PDF; the
+  project ends with `project.pptx` (Online activity 12). The face-to-face
+  lectures, liked in class, did not change. Removed from the pages: the
+  boxes "On your own computer", the official videos of Online activity 8
+  and its start file, and the course video of Online activity 6 (its files
+  stay in `week-07/videos/`).
 
 - 2026-11-20 (the teacher's request, after the preview of Unit 4): Lectures
   5–11 follow the lab model, and Online activities 4–12 the lab style

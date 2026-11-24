@@ -688,14 +688,16 @@ sizes and the page shown like slides (`paged: true`) are in
 them (`LAB_*`). The sections "Lecture worksheets" and "The page is taught
 in class" apply to the other lectures.
 
-**The online activity in the lab style** (Digital Skills, since
-2026-11-20): every Step has `### On the simulator` (a simulator that looks
-like the real app, with the data of a model) and `### On your own computer
-(optional)`, a `:::: {.word-part .home-part}` box with the drawn screens
-of the same steps in the real app; at most one Try it per Step; the AI
-step is direct use on tutudocs.com. The details are in
-`courses/digital-skills/NOTES.md`, "The online activity in the lab
-style"; the template is `shared/templates/online-template.qmd`.
+**The light online activity** (Digital Skills from Online activity 4,
+the teacher's request of 2026-11-24; it replaced "the online activity in
+the lab style" of 2026-11-20): the teacher records a screen video in Arabic
+that goes through the page and solves it, so the page is short and
+practical: 2–4 Steps, each a few points and **one simulator** that looks
+like the real app (no "On your own computer" box, no `###` parts), AI only
+shown on a simulator, and **tasks that are only questions** answered in the
+tasks PDF: multiple choice (`{.pick}`) and short typed answers. The details
+are in `courses/digital-skills/NOTES.md`, "The light online activity"; the
+template is `shared/templates/online-template.qmd` (`tasks: questions`).
 
 ### Blended courses: the online activity
 
@@ -720,6 +722,17 @@ adds nothing new:
   `{{< answer-space >}}` for the printed copy; then "How to submit". A
   written answer is a word, a name, a number, yes or no, or a letter of a
   choice (see "Answers without written English").
+- **The light online activity** (`tasks: questions`; Digital Skills from
+  Online activity 4, since 2026-11-24) changes the last two parts: 2–4
+  Steps, each with its simulator and no `###` parts, at most 12 pages when
+  the page is shown like slides; and the tasks are **only questions** in
+  the tasks PDF: "Tap the answer" (`{.pick}`) and "Type the answer" (one
+  word, one number, a name or a formula in `{{< answer-space lines=1 >}}`),
+  5–8 questions, at least two of each kind, all answered on the page. No
+  file, no screenshot, no AI in a task (the course project keeps one file
+  task: `project: true`). Its Steps are done on the simulators, so they
+  need no screens of the real app (below). `check_size.py` checks it
+  (`LIGHT_*`, `light_warnings`).
 
 **The student works alone, so the Steps teach every task first** (the
 teacher's request of 2026-11-08). Each task to submit has a Step that
@@ -741,7 +754,8 @@ to rename it (a scan saved from Drive or Files, a Word file). The same
 holds for homework. `check_size.py` warns about a task on a phone that
 names a screenshot or a photo.
 
-**Screens of every app step** (the teacher's request of 2026-11-10). The
+**Screens of every app step** (the teacher's request of 2026-11-10; not in
+a light online activity, whose Steps are all done on simulators). The
 student works alone and may never have seen the app, so every Step that is
 done in an app, on a phone or a computer (the calendar, a scanner, Files,
 Word, Excel, PowerPoint, an AI assistant, the e-learning platform), shows
@@ -1698,6 +1712,22 @@ taken off. Rewrite them with short answers next semester.
 - Quarto version is pinned in the workflow; keep local Quarto the same.
 
 ## Lessons learned
+
+- 2026-11-24 (teacher's request, Digital Skills Online activity 4): the
+  teacher prepares every online activity as a screen video in Arabic that
+  goes through the page and solves it. Online activity 4 had 17 pages, a
+  CV and a cover letter that neither the course plan nor the programme
+  plan asks for (students in their first semester), AI that every student
+  had to use, and tasks with much text and files to make on tutudocs.com.
+  Online activities 4–12 are now **light**: a few points and one simulator
+  per Step (Word Lab got a table of contents, a header and page numbers,
+  and Save as PDF), AI only shown on a simulator, and tasks that are only
+  questions in the tasks PDF, tapped or typed in one word or number; the
+  course project ends with one file (the project slides, Online activity
+  12). The face-to-face lectures did not change. The same day a print bug
+  of the pages shown like slides was found: a section of half a screen
+  pushed every tasks PDF onto a second, empty sheet; the sizes of the
+  paged view are now for the screen only.
 
 - 2026-11-17 (teacher's request, Digital Skills Online activity 3): most
   students did not understand the tasks to submit because of the English:

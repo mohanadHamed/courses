@@ -60,9 +60,9 @@
   fill: (_, y) => if y == 0 { soft } else { none }, ..cells)
 
 // The key words of a unit (EN | AR | meaning), from the glossary.
-#let words(..keys) = {
-  part[Key words · الكلمات المهمة]
-  table(columns: (24%, 26%, 50%), inset: 4pt, stroke: 0.4pt + luma(220),
+#let words(..keys) = block(breakable: false, width: 100%)[
+  #part[Key words · الكلمات المهمة]
+  #table(columns: (24%, 26%, 50%), inset: 4pt, stroke: 0.4pt + luma(220),
     fill: (_, y) => if y == 0 { soft } else { none },
     table.header([*English*], align(right)[*العربية*], [*Meaning*]),
     ..keys.pos().map(k => {
@@ -71,7 +71,7 @@
        align(right, text(font: arabic, lang: "ar", size: 9.5pt, t.ar)),
        text(size: 8.5pt, t.at("def", default: "")))
     }).flatten())
-}
+]
 
 // ----------------------------------------------------------------- page 1
 #block(width: 100%, fill: soft, radius: 12pt, inset: 16pt, stroke: 0.6pt + accent2)[
@@ -88,6 +88,8 @@
     - *Units 1–4:* Lectures 1–4 and Online activities 1–4.
     - *Multiple choice:* each question has 4 answers; one is right.
     - *1 mark* for each question.
+    - *Simple English.* Each question says *where you are* (_In Microsoft Word_, _In Excel_, _In an e-mail_, _On an Android phone_) and gives a *real situation*: you choose what to do.
+    - *AI* is always asked together with *Word or Excel*: an AI draft edited in Word, an AI number checked in Excel.
 
     #part[How to study]
     + Read this PDF: one unit at a time, in English and Arabic.
@@ -105,6 +107,8 @@
 #ar[
   - الامتحان النصفي يشمل #strong[الوحدات من 1 إلى 4]: المحاضرات من 1 إلى 4 والأنشطة الإلكترونية من 1 إلى 4.
   - الأسئلة #strong[اختيار من متعدد]: لكل سؤال 4 خيارات، واحد منها فقط صحيح، ولكل سؤال علامة واحدة.
+  - الأسئلة #strong[بالإنجليزية البسيطة]، وكل سؤال يحدد #strong[أين أنت] (في وورد، في إكسل، في رسالة بريد، على هاتف أندرويد) ويعطي #strong[موقفاً حقيقياً] تختار فيه ما تفعل.
+  - أسئلة #strong[الذكاء الاصطناعي] دائماً مع #strong[وورد أو إكسل]: مسودة من الذكاء الاصطناعي تعدّلها في وورد، أو رقم منه تتحقق منه في إكسل.
   - #strong[طريقة الدراسة:] اقرأ هذا الملف وحدة وحدة، ثم حلّ #strong[الامتحان التجريبي] على موقع المادة (رمز QR أعلاه):
     30 سؤالاً عشوائياً خلال ساعة، تظهر لك صحة كل إجابة مع السبب بالعربية والإنجليزية. كرّره أكثر من مرة، ففي كل مرة أسئلة جديدة.
 ]
@@ -113,7 +117,8 @@
 #tbl((1fr, 1fr),
   [*In English*], align(right)[*بالعربي*],
   [Read the whole question and *all four* answers.], align(right, text(lang: "ar", dir: rtl)[اقرأ السؤال كاملاً والخيارات الأربعة كلها.]),
-  [Look for the key word: *To / Cc*, *Save / Save As*, *Font / Paragraph*.], align(right, text(lang: "ar", dir: rtl)[ابحث عن الكلمة المفتاحية في السؤال.]),
+  [First find *where you are*: _In Microsoft Word_, _In an e-mail_, _On your phone_.], align(right, text(lang: "ar", dir: rtl)[حدّد أولاً أين أنت: في وورد، في رسالة بريد، على هاتفك.]),
+  [Then ask: *what would I do* on the computer or the phone?], align(right, text(lang: "ar", dir: rtl)[ثم اسأل نفسك: ماذا سأفعل على الحاسوب أو الهاتف؟]),
   [Not sure? Cross out the answers that are surely wrong.], align(right, text(lang: "ar", dir: rtl)[غير متأكد؟ استبعد الخيارات الخاطئة بالتأكيد أولاً.]),
   [Answer every question: there is no minus mark.], align(right, text(lang: "ar", dir: rtl)[أجب عن كل الأسئلة، فلا توجد علامة سالبة.]),
 )
@@ -140,11 +145,10 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
 )
 #tip[A table of numbers goes to *Excel*, not Word: Excel calculates with no mistakes.]
 
-#part[3. AI assistants]
-- An *AI assistant* (Copilot, ChatGPT, Gemini) answers your request in normal words. Your request is a *prompt*.
-- *Generative AI* makes new text or pictures. Good jobs: a *first draft*, a *summary*, *ideas*, a *translation*.
-- AI makes mistakes (wrong facts, wrong numbers) and *sounds sure*. *Check every answer*; you are responsible.
-- *Never* type personal data into an AI tool: an ID number, a card number, a phone number.
+#part[3. AI with Word and Excel]
+- An *AI assistant* (Copilot, ChatGPT) can write a *first draft* of a Word letter or report. Your request to it is a *prompt*.
+- AI can be wrong and still sound sure: *check and edit* the draft in Word before you send it.
+- You ask AI for help with an *Excel* list: *never paste real personal data* (phone numbers, ID numbers, passwords). Use made-up rows: _Customer 1 ordered 2 cakes._
 
 #part[4. Your account (Online activity 1)]
 - *Authentication:* you prove the account is yours (a password, often a code on your phone).
@@ -164,7 +168,7 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
 #ar[
   - #strong[المهارات الرقمية:] ما تستطيع فعله بالحاسوب والهاتف والتطبيقات. #strong[الإنتاجية:] عمل مفيد أكثر في وقت أقل.
   - #strong[Word] للرسائل والتقارير، #strong[Excel] للأرقام والمجاميع، #strong[PowerPoint] للشرائح، #strong[Outlook] للبريد والتقويم، #strong[OneDrive] للتخزين السحابي، #strong[Teams] للمحادثة والاجتماعات.
-  - #strong[المساعد الذكي] يكتب مسودات وملخصات وأفكاراً، لكنه يخطئ ويبدو واثقاً: تحقق من كل معلومة، ولا تكتب له بيانات شخصية أبداً.
+  - #strong[المساعد الذكي] يكتب مسودة أولى لرسالة أو تقرير في وورد، لكنه قد يخطئ ويبدو واثقاً: راجع المسودة وعدّلها في وورد قبل الإرسال. وعند طلب المساعدة في قائمة إكسل لا تلصق بيانات شخصية حقيقية، واستخدم أمثلة مختلقة.
   - #strong[المصادقة:] إثبات أن الحساب لك. #strong[الدخول الموحد:] تسجيل دخول واحد يفتح كل الخدمات (وخطره: كلمة مرور مسروقة تفتح كل شيء).
   - على حاسوب مشترك (في الجامعة): اضغط #strong[Sign out] في النهاية، و#strong[Windows + L] لقفل الشاشة.
   - #strong[المسار] هو العنوان الكامل للملف. #strong[الامتداد] يحدد نوع الملف، والامتداد الأخير هو الحقيقي (‎.exe برنامج).
@@ -172,7 +176,7 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
   - #strong[المزامنة] تنسخ كل تغيير إلى كل الأجهزة حتى الحذف، أما #strong[النسخة الاحتياطية] فهي نسخة منفصلة لا يصلها الخطأ.
 ]
 
-#words("digital-skills", "productivity", "office-suite", "cloud-storage", "ai-assistant", "generative-ai", "prompt",
+#words("digital-skills", "productivity", "office-suite", "cloud-storage", "ai-assistant", "prompt",
   "authentication", "single-sign-on", "file-path", "file-extension", "synchronization", "backup")
 
 // ----------------------------------------------------------------- Unit 2
@@ -194,32 +198,32 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
 )
 - *Crop* it (keep only the part that matters) · *cover personal data* of other people · give it a *good name*: `exam-dates.png`.
 
-#part[3. AI: check its facts and numbers]
-- AI writes *likely* words: good for a *draft, summary, ideas, rewrite, translation*.
-- Weak spots: *invented facts* (a *hallucination*: sounds sure but is wrong), *old information* (it learned up to a date), *wrong numbers*.
-- The right tool: facts and dates → *search engine* and the official website · exact sums → *spreadsheet* · drafts → *AI assistant*.
-- Five steps with AI: *ask → read → check → edit → use*.
-- Example: AI says 12 pens × 0.25 JD = 3.50 JD. In Excel, `=12*0.25` gives *3.00 JD*: the AI was wrong.
+#part[3. AI drafts for Word, numbers checked in Excel]
+- You must make an invitation or a notice in Word fast: an *AI assistant* gives a *first draft*, and you edit it in Word.
+- AI can invent a fact (a date, a name) and still sound sure. Before you type it in your notice, *check it on the official website*.
+- AI can be wrong with numbers: *check them in Excel*. Example: AI says 10 pens at 1 JD cost 12 JD. In Excel, `=10*1` shows *10*: the AI was wrong.
+- The right tool: first drafts → *AI assistant* · exact totals → *Excel* · facts and dates → the *official website*.
 
-#part[4. A clear prompt: task, context, format]
+#part[4. A clear prompt for a Word notice: task, context, format]
 #tbl((22%, 33%, 45%),
   [*Part*], [*It says …*], [*Example*],
-  [*Task*], [what the AI must do], [_Write a short message to my club leader._],
-  [*Context*], [the facts of your situation], [_I cannot come on Monday; I have an exam._],
-  [*Format*], [how the answer must look], [_3 polite sentences._],
+  [*Task*], [what the AI must do], [_Write a notice for the library._],
+  [*Context*], [the facts that the notice needs], [_It closes at 2 pm on Sunday._],
+  [*Format*], [how the notice looks], [_Use 3 short lines._],
 )
-- Not right? Send a *follow-up prompt* in the same chat: _Make it shorter._ · _Write it in Arabic._
+- The best prompt has all three: _Write a 3-line notice: the library closes at 2 pm on Sunday._ Not _Write._
+- Not right? Ask again *in the same chat*: _Make it shorter._ (too long for one page) · _Write it in Arabic._ Then paste the new draft in Word.
 
 #ar[
   - للبحث: اكتب #strong[2–4 كلمات مفتاحية]، واقرأ عنوان الموقع، وافتح #strong[الموقع الرسمي] لصاحب المعلومة. ‎.edu.jo جامعة أردنية، ‎.gov.jo حكومة الأردن. تجاهل الإعلانات (Ad) والمنتديات والصفحات القديمة.
   - #strong[لقطة الشاشة:] في ويندوز #strong[Windows + Shift + S] (تذهب للحافظة)، في أندرويد #strong[Power + خفض الصوت]، في الآيفون #strong[الزر الجانبي + رفع الصوت]. ثم #strong[اقتصّها]، وغطِّ بيانات الآخرين، وأعطها اسماً جيداً.
-  - الذكاء الاصطناعي قد #strong[يهلوس] (يخترع معلومات بثقة)، ومعلوماته قد تكون قديمة، ويخطئ في الأرقام. المواعيد من الموقع الرسمي، والمجاميع من إكسل، والمسودات من الذكاء الاصطناعي.
-  - الخطوات الخمس: #strong[اسأل ← اقرأ ← تحقق ← عدّل ← استخدم].
-  - الموجّه الواضح فيه: #strong[المهمة] (ماذا يفعل)، #strong[السياق] (معلومات موقفك)، #strong[الشكل] (كيف يبدو الجواب). وللتعديل أرسل #strong[موجّهاً متابعاً] في المحادثة نفسها.
+  - #strong[المساعد الذكي] يعطي مسودة سريعة لإعلان أو دعوة تعدّلها في وورد. قد يخترع معلومة بثقة، فتحقق من التاريخ في #strong[الموقع الرسمي] قبل كتابته، وتحقق من أرقامه في #strong[إكسل] (مثال: 10 أقلام بدينار واحد: إكسل يعطي 10 وليس 12).
+  - المسودات من الذكاء الاصطناعي، والمجاميع الدقيقة من إكسل، والمواعيد من الموقع الرسمي.
+  - الموجّه الواضح لإعلان وورد فيه: #strong[المهمة] (اكتب إعلاناً للمكتبة)، #strong[السياق] (تُغلق الساعة 2 يوم الأحد)، #strong[الشكل] (3 أسطر قصيرة). وللتعديل اطلب في #strong[المحادثة نفسها]: Make it shorter أو Write it in Arabic، ثم الصق المسودة في وورد.
 ]
 
-#words("search-engine", "official-website", "screenshot", "snipping-tool", "crop", "hallucination",
-  "prompt-task", "prompt-context", "prompt-format", "follow-up-prompt")
+#words("search-engine", "official-website", "screenshot", "snipping-tool", "crop",
+  "prompt-task", "prompt-context", "prompt-format")
 
 // ----------------------------------------------------------------- Unit 3
 #unit(3, "Office, E-mail, Meetings and Safety", "Lecture 3 · Online activity 3")
@@ -263,7 +267,7 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
 - *Two-step verification:* after the password, a code or number on your phone. A sign-in that is not you → tap *No, it's not me*, then change the password.
 - *Phishing:* a fake message that wants your password, a code or money. Signs: a strange sender, it *hurries* you ("in 24 hours"), a strange link, it asks for a password/PIN/code or offers a prize. → Do not tap; *touch and hold* a link to see its real address; *report it and delete it*.
 - *App permissions:* give only what the app needs. A map: *Allow only while using the app*. A calculator or flashlight: *Don't allow*.
-- *AI tools:* never a password, ID number, phone number, address or grades. Use made-up names: _Customer 1_.
+- *AI and Excel:* you ask an AI assistant to help with an Excel sheet of orders. Never type a password, an ID number or a real phone number. Safe: _Customer 1 ordered 2 cakes._
 
 #ar[
   - وورد يصنع #strong[مستنداً]، وإكسل #strong[مصنفاً] (الخلية B3 = العمود B والصف 3)، وباوربوينت #strong[عرضاً تقديمياً].
@@ -273,7 +277,7 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
   - البريد: #strong[To] لمن سيقوم بالعمل، #strong[Cc] لمن يحتاج أن يعرف فقط، #strong[Reply all] للجميع، #strong[Forward] لإرسال الرسالة وملفها لشخص جديد، والملف الكبير يُرسل كرابط OneDrive.
   - دعوة الاجتماع: قبول (Accept) أو ربما (Tentative) أو رفض (Decline)، وفي الموعد اضغط #strong[Join].
   - كلمة مرور #strong[قوية وطويلة]، وكلمة مرور لكل حساب، و#strong[التحقق بخطوتين]. #strong[التصيّد:] رسالة مزيفة تستعجلك وتطلب كلمة المرور أو رمزاً أو مالاً: لا تضغط الرابط، أبلغ عنها واحذفها.
-  - أذونات التطبيقات: أعطِ التطبيق ما يحتاجه فقط. ولا تكتب بيانات شخصية حقيقية في أدوات الذكاء الاصطناعي.
+  - أذونات التطبيقات: أعطِ التطبيق ما يحتاجه فقط. وعند طلب مساعدة الذكاء الاصطناعي في جدول إكسل لا تكتب بيانات شخصية حقيقية، بل أمثلة مختلقة مثل Customer 1.
 ]
 
 #words("workbook", "template", "ribbon", "save-as", "autosave", "co-editing", "doc-comment", "email-cc", "attachment",

@@ -94,7 +94,7 @@
     #part[How to study]
     + Read this PDF: one unit at a time, in English and Arabic.
     + Do the *practice exam* on the course website (the QR code): 30 random
-      questions in one hour. It marks each answer at once and says why.
+      questions in 50 minutes. It marks each answer at once and says why.
       Do it again and again: every exam has new questions.
     + Missed a question? Read its unit here again.
   ],
@@ -110,7 +110,7 @@
   - الأسئلة #strong[بالإنجليزية البسيطة]، وكل سؤال يحدد #strong[أين أنت] (في وورد، في إكسل، في رسالة بريد، على هاتف أندرويد) ويعطي #strong[موقفاً حقيقياً] تختار فيه ما تفعل.
   - أسئلة #strong[الذكاء الاصطناعي] دائماً مع #strong[وورد أو إكسل]: مسودة من الذكاء الاصطناعي تعدّلها في وورد، أو رقم منه تتحقق منه في إكسل.
   - #strong[طريقة الدراسة:] اقرأ هذا الملف وحدة وحدة، ثم حلّ #strong[الامتحان التجريبي] على موقع المادة (رمز QR أعلاه):
-    30 سؤالاً عشوائياً خلال ساعة، تظهر لك صحة كل إجابة مع السبب بالعربية والإنجليزية. كرّره أكثر من مرة، ففي كل مرة أسئلة جديدة.
+    30 سؤالاً عشوائياً خلال 50 دقيقة، تظهر لك صحة كل إجابة مع السبب بالعربية والإنجليزية. كرّره أكثر من مرة، ففي كل مرة أسئلة جديدة.
 ]
 
 #part[Exam tips · نصائح للامتحان]
@@ -332,8 +332,8 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
   #block(fill: soft, radius: 10pt, inset: 12pt, stroke: 0.6pt + accent2)[
     #grid(columns: (auto, 2.6cm), column-gutter: 14pt, align: horizon,
       [#text(weight: "bold", fill: accent)[Now practise!] \
-       30 random questions, one hour, each answer with its reason. \
-       #text(font: arabic, lang: "ar", dir: rtl)[تدرّب الآن: امتحان تجريبي من 30 سؤالاً خلال ساعة.] \
+       30 random questions, 50 minutes, each answer with its reason. \
+       #text(font: arabic, lang: "ar", dir: rtl)[تدرّب الآن: امتحان تجريبي من 30 سؤالاً خلال 50 دقيقة.] \
        #text(size: 8pt, fill: luma(90))[#link(prep-url)]],
       qrcode(prep-url, width: 2.6cm))
   ]

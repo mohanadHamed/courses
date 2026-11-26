@@ -1,5 +1,5 @@
 // The practice exam of midterm-prep.qmd: 30 random questions from
-// midterm-bank.js (7 + 7 + 8 + 8 from Units 1–4), one hour, one try per
+// midterm-bank.js (7 + 7 + 8 + 8 from Units 1–4), 50 minutes, one try per
 // question. Each answer is marked at once, with its reason in English and
 // Arabic; the mark comes at the end. The attempt is kept in this browser
 // (localStorage, inside try/catch), so a reload does not lose it.
@@ -8,7 +8,7 @@
   const UNITS = window.MIDTERM_UNITS || {};
   const PICK = { 1: 7, 2: 7, 3: 8, 4: 8 };
   const N = Object.values(PICK).reduce((a, b) => a + b, 0);
-  const MINUTES = 60;
+  const MINUTES = 50;
   const KEY = "ds-midterm-prep-v1";
   const SIG = BANK.length + ":" + BANK.map((b) => b.q.length).join(".").slice(0, 400);
   const LETTERS = ["A", "B", "C", "D"];
@@ -33,7 +33,7 @@
         <h2>Before you start · قبل أن تبدأ</h2>
         <ul class="mq-facts">
           <li><b>${N} questions</b>, chosen at random from a bank of <b>${BANK.length}</b> questions on Units 1–4.</li>
-          <li><b>${MINUTES} minutes</b>, like the real exam. The clock starts when you tap Start.</li>
+          <li><b>${MINUTES} minutes</b>. The clock starts when you tap Start, and the exam ends by itself when the time is up.</li>
           <li>Every question is in <b>simple English</b>. The reason of every answer is in English and Arabic.</li>
           <li><b>One try</b> for each question: tap one answer. The page tells you at once if it is right, and why, in English and Arabic.</li>
           <li>Each question is <b>1 mark</b>. Your mark (out of ${N}) shows at the end.</li>
@@ -41,7 +41,7 @@
         </ul>
         <ul class="mq-facts" dir="rtl" lang="ar">
           <li><b>${N} سؤالاً</b> تُختار عشوائياً من بنك فيه <b>${BANK.length}</b> سؤالاً عن الوحدات من 1 إلى 4.</li>
-          <li><b>${MINUTES} دقيقة</b> مثل الامتحان الحقيقي، ويبدأ الوقت عند الضغط على Start.</li>
+          <li><b>${MINUTES} دقيقة</b>، ويبدأ الوقت عند الضغط على Start، وينتهي الامتحان تلقائياً عند انتهاء الوقت.</li>
           <li>الأسئلة <b>بالإنجليزية البسيطة</b>، وسبب كل إجابة بالعربية والإنجليزية.</li>
           <li><b>محاولة واحدة</b> لكل سؤال: تظهر فوراً صحة الإجابة مع السبب بالعربية والإنجليزية، ثم الإجابة الصحيحة.</li>
           <li>لكل سؤال <b>علامة واحدة</b>، وتظهر علامتك من ${N} في النهاية.</li>

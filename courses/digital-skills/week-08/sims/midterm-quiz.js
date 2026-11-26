@@ -34,7 +34,7 @@
         <ul class="mq-facts">
           <li><b>${N} questions</b>, chosen at random from a bank of <b>${BANK.length}</b> questions on Units 1–4.</li>
           <li><b>${MINUTES} minutes</b>, like the real exam. The clock starts when you tap Start.</li>
-          <li>Every question is in simple English, with its <b>Arabic translation</b> under it.</li>
+          <li>Every question is in <b>simple English</b>. The reason of every answer is in English and Arabic.</li>
           <li><b>One try</b> for each question: tap one answer. The page tells you at once if it is right, and why, in English and Arabic.</li>
           <li>Each question is <b>1 mark</b>. Your mark (out of ${N}) shows at the end.</li>
           <li>Every new exam has new questions. Nothing is sent: the mark is only for you.</li>
@@ -42,7 +42,7 @@
         <ul class="mq-facts" dir="rtl" lang="ar">
           <li><b>${N} سؤالاً</b> تُختار عشوائياً من بنك فيه <b>${BANK.length}</b> سؤالاً عن الوحدات من 1 إلى 4.</li>
           <li><b>${MINUTES} دقيقة</b> مثل الامتحان الحقيقي، ويبدأ الوقت عند الضغط على Start.</li>
-          <li>كل سؤال بالإنجليزية البسيطة، وتحته <b>ترجمته بالعربية</b>.</li>
+          <li>الأسئلة <b>بالإنجليزية البسيطة</b>، وسبب كل إجابة بالعربية والإنجليزية.</li>
           <li><b>محاولة واحدة</b> لكل سؤال: تظهر فوراً صحة الإجابة مع السبب بالعربية والإنجليزية، ثم الإجابة الصحيحة.</li>
           <li>لكل سؤال <b>علامة واحدة</b>، وتظهر علامتك من ${N} في النهاية.</li>
           <li>كل امتحان جديد فيه أسئلة جديدة، ولا يُرسل شيء: العلامة لك فقط.</li>
@@ -111,7 +111,6 @@
       <div class="mq-card">
         <p class="mq-meta">Question ${k + 1} of ${N} · ${esc(UNITS[b.u] || "Unit " + b.u)}</p>
         <p class="mq-q">${esc(b.q)}</p>
-        ${b.qa ? `<p class="mq-qa" dir="rtl" lang="ar">${esc(b.qa)}</p>` : ""}
         <div class="mq-opts">${opts}</div>
         <div id="mq-fb">${a !== null ? feedback(k) : `<p class="mq-hint">Tap one answer. You have one try. · اختر إجابة واحدة، لديك محاولة واحدة.</p>`}</div>
         <div class="mq-move">
@@ -181,7 +180,6 @@
       const mine = a === null ? "no answer · بلا إجابة" : esc(b.o[a]);
       const cls = a === null ? "mq-skip" : (isRight(k) ? "mq-ok" : "mq-no");
       return `<li class="${cls}"><p class="mq-q">${k + 1}. ${esc(b.q)}</p>
-        ${b.qa ? `<p class="mq-qa" dir="rtl" lang="ar">${esc(b.qa)}</p>` : ""}
         <p>Your answer: <b>${mine}</b>${isRight(k) ? " ✓" : ""}</p>
         ${isRight(k) ? "" : `<p>Right answer: <b>${esc(b.o[0])}</b></p>`}
         <p class="mq-why"><b>Why:</b> ${esc(b.en)}</p>

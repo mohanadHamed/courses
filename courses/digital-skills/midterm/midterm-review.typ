@@ -176,7 +176,7 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
   "authentication", "single-sign-on", "file-path", "file-extension", "synchronization", "backup")
 
 // ----------------------------------------------------------------- Unit 2
-#unit(2, "Search, Screenshots, AI and Your Phone", "Lecture 2 · Online activity 2")
+#unit(2, "Search, Screenshots and AI", "Lecture 2 · Online activity 2")
 
 #part[1. Search for a fact: the official source]
 + Type *2–4 keywords*, not a long sentence: _Israa University calendar_.
@@ -201,11 +201,7 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
 - Five steps with AI: *ask → read → check → edit → use*.
 - Example: AI says 12 pens × 0.25 JD = 3.50 JD. In Excel, `=12*0.25` gives *3.00 JD*: the AI was wrong.
 
-#part[4. Your phone for study (Online activity 2)]
-- *Calendar:* add the lecture with its date and time, and a *reminder* (Alert / Notification), for example 1 hour before; then *Save* (iPhone: ✓).
-- *Scan* a paper homework into *one PDF*: Android → *Google Drive* (the camera button); iPhone → *Files* (••• › Scan Documents) or Notes. Name it well: `math-homework3.pdf`.
-
-#part[5. A clear prompt: task, context, format]
+#part[4. A clear prompt: task, context, format]
 #tbl((22%, 33%, 45%),
   [*Part*], [*It says …*], [*Example*],
   [*Task*], [what the AI must do], [_Write a short message to my club leader._],
@@ -216,15 +212,14 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
 
 #ar[
   - للبحث: اكتب #strong[2–4 كلمات مفتاحية]، واقرأ عنوان الموقع، وافتح #strong[الموقع الرسمي] لصاحب المعلومة. ‎.edu.jo جامعة أردنية، ‎.gov.jo حكومة الأردن. تجاهل الإعلانات (Ad) والمنتديات والصفحات القديمة.
-  - #strong[لقطة الشاشة:] في ويندوز #strong[Windows + Shift + S] (تذهب للحافظة)، في أندرويد #strong[Power + خفض الصوت#strong[، في الآيفون ]الزر الجانبي + رفع الصوت#strong[. ثم ]اقتصّها]، وغطِّ بيانات الآخرين، وأعطها اسماً جيداً.
+  - #strong[لقطة الشاشة:] في ويندوز #strong[Windows + Shift + S] (تذهب للحافظة)، في أندرويد #strong[Power + خفض الصوت]، في الآيفون #strong[الزر الجانبي + رفع الصوت]. ثم #strong[اقتصّها]، وغطِّ بيانات الآخرين، وأعطها اسماً جيداً.
   - الذكاء الاصطناعي قد #strong[يهلوس] (يخترع معلومات بثقة)، ومعلوماته قد تكون قديمة، ويخطئ في الأرقام. المواعيد من الموقع الرسمي، والمجاميع من إكسل، والمسودات من الذكاء الاصطناعي.
   - الخطوات الخمس: #strong[اسأل ← اقرأ ← تحقق ← عدّل ← استخدم].
-  - على الهاتف: أضف المحاضرة إلى #strong[التقويم] مع #strong[تذكير]، وامسح الواجب الورقي إلى #strong[ملف PDF واحد] (Google Drive في أندرويد، Files في الآيفون).
   - الموجّه الواضح فيه: #strong[المهمة] (ماذا يفعل)، #strong[السياق] (معلومات موقفك)، #strong[الشكل] (كيف يبدو الجواب). وللتعديل أرسل #strong[موجّهاً متابعاً] في المحادثة نفسها.
 ]
 
 #words("search-engine", "official-website", "screenshot", "snipping-tool", "crop", "hallucination",
-  "reminder", "scan", "prompt-task", "prompt-context", "prompt-format", "follow-up-prompt")
+  "prompt-task", "prompt-context", "prompt-format", "follow-up-prompt")
 
 // ----------------------------------------------------------------- Unit 3
 #unit(3, "Office, E-mail, Meetings and Safety", "Lecture 3 · Online activity 3")

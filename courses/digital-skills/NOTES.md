@@ -576,9 +576,9 @@ every calendar week, by hand, with the university's template.
   page): a review PDF of Units 1–4 in English and Arabic
   (`midterm/midterm-review.typ` → `week-08/files/digital_skills_midterm_review.pdf`,
   built with `quarto typst compile --root .`) and a practice exam: 30
-  random questions (7, 7, 8, 8 by unit) from a bank of 145
+  random questions (7, 7, 8, 8 by unit) from a bank of 134 short, easy questions
   (`week-08/sims/midterm-bank.js`), one hour, one try per question, the
   reason in English and Arabic, the mark at the end. An exception to "Exams
   are not on the site", asked by the teacher. Only the compulsory topics of
-  the course plan: nothing on the optional Extra (the AI of tutudocs.com), and no lists, Table Design or Tab in a table (neither syllabus row 4 nor the worksheet of Lecture 4 has them).
+  the course plan: nothing on the optional Extra (the AI of tutudocs.com), no lists, Table Design or Tab in a table (neither syllabus row 4 nor the worksheet of Lecture 4 has them), and no phone calendar or scans (the teacher's decision).
   The exam bank (62 questions) is private (`courses-private`, `midterm/`).

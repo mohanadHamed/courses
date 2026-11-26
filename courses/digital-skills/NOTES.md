@@ -570,3 +570,15 @@ every calendar week, by hand, with the university's template.
   for the screenshot only, with no file name: an iPhone cannot rename a
   screenshot in Photos (AUTHORING.md, "A task asks only for what the device
   can do").
+
+- 2026-11-26 (the teacher's request, three days before the midterm): a
+  midterm preparation page (`midterm-prep.qmd`, linked from the course
+  page): a review PDF of Units 1–4 in English and Arabic
+  (`midterm/midterm-review.typ` → `week-08/files/digital_skills_midterm_review.pdf`,
+  built with `quarto typst compile --root .`) and a practice exam: 30
+  random questions (7, 7, 8, 8 by unit) from a bank of 149
+  (`week-08/sims/midterm-bank.js`), one hour, one try per question, the
+  reason in English and Arabic, the mark at the end. An exception to "Exams
+  are not on the site", asked by the teacher. Only the compulsory topics of
+  the course plan: nothing on the optional Extra (the AI of tutudocs.com).
+  The exam bank (62 questions) is private (`courses-private`, `midterm/`).

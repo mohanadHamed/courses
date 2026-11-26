@@ -570,3 +570,15 @@ every calendar week, by hand, with the university's template.
   for the screenshot only, with no file name: an iPhone cannot rename a
   screenshot in Photos (AUTHORING.md, "A task asks only for what the device
   can do").
+
+- 2026-11-26 (the teacher's request, three days before the midterm): a
+  midterm preparation page (`midterm-prep.qmd`, linked from the course
+  page): a review PDF of Units 1–4 in English and Arabic
+  (`midterm/midterm-review.typ` → `week-08/files/digital_skills_midterm_review.pdf`,
+  built with `quarto typst compile --root .`) and a practice exam: 30
+  random questions (7, 7, 8, 8 by unit) from a bank of 98 questions
+  (`week-08/sims/midterm-bank.js`), 50 minutes, one try per question, the
+  reason in English and Arabic, the mark at the end. An exception to "Exams
+  are not on the site", asked by the teacher. Only the compulsory topics of
+  the course plan: nothing on the optional Extra (the AI of tutudocs.com), no lists, Table Design or Tab in a table (neither syllabus row 4 nor the worksheet of Lecture 4 has them), and no phone calendar or scans (the teacher's decision). Every question (practice and exam) says where it happens ("In Microsoft Word, …"), is a real situation that tests the idea or the basic skill, never where a button is, uses very simple English in short sentences ("In Word: …", about 13 words a question; the questions in English only; the practice reasons also in Arabic), so that a student with very basic English and the digital skills passes. No AI-only question: AI is always joined to an Office skill (a draft edited in Word, a total checked in Excel, no personal data from an Excel list).
+  The exam bank (60 questions, 10 medium; Word and an Aiken file for the Moodle import) is private (`courses-private`, `midterm/`). No exam question repeats a practice question (the same situation and answer): the exam asks the same ideas in new situations, or from the other side (the teacher's request of 2026-11-27).

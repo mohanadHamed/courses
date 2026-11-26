@@ -587,8 +587,30 @@ local function session_row(dir, wdir, prefix, slides_public, x, in_filling)
     kind, ok and "is-ready" or "is-soon", s.label, n, html_attr(str(x.title)), tags, links), ok
 end
 
-local function schedule_units(dir, prefix, slides_public, units)
+-- A card between the units of the course page (schedule.yml `extras:`, for
+-- example the midterm preparation after unit 4): not a session and not a
+-- week, so the banner, the course package and the checks never see it.
+local function schedule_extra(e)
+  local links = {}
+  for k, l in ipairs(e.links or {}) do
+    table.insert(links, string.format('<a class="%s" href="%s">%s</a>',
+      k == 1 and "sl-go" or "sl-file", html_attr(str(l.href)), html_attr(str(l.text))))
+  end
+  return string.format(
+    '<section class="sw sw-unit sw-extra has-ready"><header class="sw-head"><span class="sw-week">%s</span></header>'
+      .. '<div class="sl is-ready"><span class="sl-title">%s</span><span class="sl-links">%s</span></div></section>',
+    html_attr(str(e.heading)), html_attr(str(e.title)), table.concat(links, ""))
+end
+
+local function schedule_units(dir, prefix, slides_public, units, extras)
   local out = { '<div class="schedule">' }
+  local after = {}
+  for _, e in ipairs(extras or {}) do
+    local k = tonumber(str(e["after-unit"] or ""))
+    if not k then error("schedule.yml: an extra needs after-unit") end
+    after[k] = after[k] or {}
+    table.insert(after[k], schedule_extra(e))
+  end
   for _, u in ipairs(units) do
     local filling = u.filling == true or str(u.filling or "") == "true"
     local unit = tonumber(str(u.unit or ""))
@@ -621,6 +643,7 @@ local function schedule_units(dir, prefix, slides_public, units)
     table.insert(out, string.format(
       '<section class="sw sw-unit%s %s"><header class="sw-head">%s%s</header>%s</section>',
       filling and " sw-filling" or "", any_ready and "has-ready" or "", head, hw_html, table.concat(rows, "")))
+    for _, card in ipairs((unit and not filling) and after[unit] or {}) do table.insert(out, card) end
   end
   table.insert(out, "</div>")
   return pandoc.RawBlock("html", table.concat(out, "\n"))
@@ -635,7 +658,7 @@ local function schedule(meta)
   local slides_public = config["slides-public"] == true
   local course = meta.course or {}
   LECTURE_LABEL = course["lecture-label"] and pandoc.utils.stringify(course["lecture-label"]) or nil
-  if data.units then return schedule_units(dir, prefix, slides_public, data.units) end
+  if data.units then return schedule_units(dir, prefix, slides_public, data.units, data.extras) end
   local lectures = data.lectures or {}
   local out = { '<div class="schedule">' }
   -- Two lectures, then their homework: one section per pair.

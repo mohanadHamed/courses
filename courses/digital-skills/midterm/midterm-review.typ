@@ -299,9 +299,8 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
 - *View › Navigation Pane* shows a map of the headings; click one to jump to it.
 #tip[A heading made "by hand" (bold and big) is normal text for Word: it is not in the Navigation Pane or the table of contents.]
 
-#part[3. Lists, tables and pictures]
-- *Bullets* for a list of things (water, a hat …); *Numbering* for steps in order.
-- *Table* (*Insert › Table*) for information in rows and columns. The *header row* (the first row) names the columns. Rows = *1 header row + 1 row for each item*: a price list of 6 items → *7 rows, 2 columns*. *Tab* in the last cell adds a row; *Table Design* gives it a style.
+#part[3. Tables and pictures]
+- *Table* (*Insert › Table*) for information in rows and columns. The *header row* (the first row) names the columns. Rows = *1 header row + 1 row for each item*: a price list of 6 items → *7 rows, 2 columns*.
 - *Picture* (*Insert › Pictures*: This Device, Stock Images, Online Pictures). Resize from a *corner* (the shape stays right).
 - *Text wrapping:* *In Line with Text* (a line of its own) · *Square* (the text flows around it).
 - *Alt text* (right-click › View Alt Text): a short description that a screen reader reads aloud.
@@ -320,13 +319,13 @@ An *office suite* is a set of apps that work together: *Microsoft 365* (or Googl
   - #strong[تنسيق النص] (Home › Font): الخط والحجم والعريض والمائل واللون. #strong[تنسيق الفقرة] (Home › Paragraph): المحاذاة وتباعد الأسطر. حدّد النص أولاً ثم اضغط الأمر.
   - #strong[النمط] تنسيق محفوظ باسم: #strong[Title] لاسم المستند، #strong[Heading 1] للعناوين الرئيسية، #strong[Heading 2] للفرعية، #strong[Normal] للنص. غيّر النمط مرة فيتغير كل نص يحمله.
   - #strong[جزء التنقل] (View › Navigation Pane) خريطة العناوين. العنوان المصنوع يدوياً بالعريض والحجم لا يظهر فيه ولا في الفهرس.
-  - #strong[القائمة النقطية] للأشياء، و#strong[المرقّمة] للخطوات. #strong[الجدول] للمعلومات في صفوف وأعمدة، و#strong[صف العناوين] هو الصف الأول؛ عدد الصفوف = صف العناوين + صف لكل عنصر. Tab في آخر خلية يضيف صفاً.
+  - #strong[الجدول] للمعلومات في صفوف وأعمدة، و#strong[صف العناوين] هو الصف الأول؛ عدد الصفوف = صف العناوين + صف لكل عنصر.
   - #strong[الصورة] من Insert › Pictures، وتصغيرها من #strong[الزاوية]. #strong[Square] يجعل النص يلتف حولها، و#strong[النص البديل] وصف يقرؤه قارئ الشاشة. استخدم صورك أو Stock Images.
   - #strong[الفهرس] من تبويب #strong[References] ويعتمد على أنماط العناوين. #strong[الترويسة] و#strong[رقم الصفحة] من تبويب #strong[Insert] وتظهر في كل صفحة. #strong[PDF] من File › Save As.
 ]
 
 #words("text-formatting", "paragraph-formatting", "alignment", "line-spacing", "style", "heading-style", "navigation-pane",
-  "bulleted-list", "numbered-list", "word-table", "header-row", "text-wrapping", "alt-text", "table-of-contents",
+  "word-table", "header-row", "text-wrapping", "alt-text", "table-of-contents",
   "header-footer", "page-number", "pdf")
 
 #v(10pt)

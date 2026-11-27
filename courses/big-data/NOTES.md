@@ -24,18 +24,13 @@ where this file differs, it wins for this course.
     installed on the lab computers before Lab 4). One problem through all
     five labs: the transactions of a real online shop (Online Retail II,
     UCI, CC BY 4.0).
-- **Marks: 10 for each lab, easy to get** (the teacher's request of
-  2026-11-21). The worksheet gives them, never the interactive page: **Task
-  1 alone gives 6** (more than half for any student who does one task),
-  the other tasks share 3 (the earlier, easier task more), and the
-  *Finished early?* box gives 1. Each `## Task N · title · M marks`
-  heading says its marks, the first lines of the worksheet repeat the
-  split, and the last box, "Your mark", has a tick for each task and the
-  total, filled in by the teacher in the lab. The teacher copies the total
-  into the checklist (private, not in this repo: for each lab a ✓/A column
-  and a /10 column; C1 /30, C3 /50, total /80) and agrees the final marks
-  with the coordinator. `check_size.py` checks the marks of every Big
-  Data worksheet.
+- **No marks on the worksheets** (the teacher's decision of 2026-11-27:
+  the labs do not focus on marks now). A task heading is `## Task N ·
+  title`, with no marks; no marks in the first lines, no "(1 mark)" on
+  *Finished early?*, and no "Your mark" box. The worksheet ends with *Show
+  your teacher* and the *Finished early?* box. `check_size.py` warns about
+  marks in a Big Data worksheet (it replaced the rule of 2026-11-21: 10
+  marks for each lab).
 
 ## The model: the lab model of Digital Skills, and nothing else
 

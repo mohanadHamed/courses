@@ -48,10 +48,8 @@ each step. Stuck? Raise your hand.
 - **Time:** less than 30 minutes. Your screen may look a little different,
   and your numbers too: the names of the buttons are the same.
 - **At the end:** show your result, then **sign out** of Google.
-- **Marks:** 10. Task 1 alone gives **6**; Task 2 gives 2, Task 3 gives 1,
-  and *Finished early?* gives 1.
 
-## Task 1 · Your BigQuery project · 6 marks
+## Task 1 · Your BigQuery project
 
 A **project** is your own space in Google Cloud. BigQuery works inside a
 project.
@@ -62,7 +60,7 @@ project.
 #step(3, [Click *Create project*. \ *Project name:* *big-data-lab* #mk(1). *Organization:* *No organization* #mk(2). \ Click *Create* #mk(3). Wait a few seconds: BigQuery opens, with the *Sandbox* notice at the top.], img: "images/bq-project-1.png", w: 86%, left: 36%)
 ```
 
-## Task 2 · Find the big table · 2 marks
+## Task 2 · Find the big table
 
 A **public dataset** is data that everyone may read: every taxi trip in
 the city of Chicago since 2013.
@@ -78,7 +76,7 @@ the city of Chicago since 2013.
 #pagebreak(weak: true)
 ```
 
-## Task 3 · Trips in each year · 1 mark
+## Task 3 · Trips in each year
 
 A **query** asks the table a question in **SQL**.
 
@@ -119,17 +117,10 @@ A **query** asks the table a question in **SQL**.
   shot("images/bq-signout-1.png"),
 ))
 #v(8pt)
-#tip[*Finished early? (1 mark)* Before you sign out, change the query: how do people pay? The same idea: one group for each *payment_type*; *DESC* sorts from the biggest number to the smallest. Then try *company* in place of *payment_type*.
+#tip[*Finished early?* Before you sign out, change the query: how do people pay? The same idea: one group for each *payment_type*; *DESC* sorts from the biggest number to the smallest. Then try *company* in place of *payment_type*.
 #v(3pt)
 #set text(font: "DejaVu Sans Mono", size: 9pt)
 SELECT payment_type, COUNT(\*) AS trips \
 FROM \`bigquery-public-data.chicago_taxi_trips.taxi_trips\` \
 GROUP BY payment_type ORDER BY trips DESC;]
-#v(8pt)
-#block(breakable: false, width: 100%, stroke: 0.8pt + luma(150), radius: 5pt, inset: (x: 12pt, y: 9pt),
-  grid(columns: (1fr, auto), align: (left + horizon, right + horizon),
-    [*Your mark* #text(size: 9pt, fill: luma(90))[(your teacher ticks and adds)] \
-     #v(2pt)
-     #tick Task 1: *6* #h(12pt) #tick Task 2: *2* #h(12pt) #tick Task 3: *1* #h(12pt) #tick Finished early: *1*],
-    box(stroke: 1pt + rgb("#c92a2a"), radius: 4pt, inset: (x: 10pt, y: 8pt))[*Total:* #box(width: 30pt, height: 10pt, stroke: (bottom: 0.8pt)) #strong("/ 10")]))
 ```

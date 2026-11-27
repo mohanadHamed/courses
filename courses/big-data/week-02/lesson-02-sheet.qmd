@@ -51,10 +51,8 @@ numbers** in each picture show where to click. Tick the box
 - **Time:** less than 30 minutes. Keep the tab open: your work stays in
   this browser. *Start again* (under the simulator) empties it.
 - **At the end:** show your teacher the table **sales_clean**.
-- **Marks:** 10. Task 1 alone gives **6**; Task 2 gives 2, Task 3 gives 1,
-  and *Finished early?* gives 1.
 
-## Task 1 · Your dataset and your table · 6 marks
+## Task 1 · Your dataset and your table
 
 A **dataset** is your folder of tables. A **load job** writes the rows of
 a file into a table.
@@ -71,7 +69,7 @@ a file into a table.
 #pagebreak(weak: true)
 ```
 
-## Task 2 · Check the table · 2 marks
+## Task 2 · Check the table
 
 The **schema** is the list of the columns and their types. **Details**
 shows the number of rows.
@@ -92,13 +90,13 @@ shows the number of rows.
 #pagebreak(weak: true)
 ```
 
-## Task 3 · A clean table (ELT) · 1 mark
+## Task 3 · A clean table (ELT)
 
 **ELT:** the raw data is loaded first, then a query cleans it inside the
 platform and saves the answer as a new table.
 
 ```{=typst}
-#step(1, [Delete the query. Type this one #mk(1), or click *Type for me: Task 3*. \ Click *Run* #mk(2). The message #mk(3): a new table, *sales\_clean*.], img: "images/bq2-clean.png", w: 100%, left: 34%, after: sql[
+#step(1, [Delete the query. Type this one #mk(1), or click *Type for me: Task 3*. \ Click *Run* #mk(2). The message #mk(3): a new table, *sales\_clean*.], img: "images/bq2-clean.png", w: 100%, left: 44%, after: sql[
   CREATE TABLE shop.sales\_clean AS \
   SELECT \*, Quantity \* Price AS revenue \
   FROM \`big-data-lab.shop.sales\` \
@@ -111,7 +109,7 @@ platform and saves the answer as a new table.
   ([WHERE Quantity > 0], [Keep only the sales: a negative quantity is a *return*.]),
   ([AND Customer\_ID IS NOT NULL;], [And only the known customers: *null* means no value. *;* ends it.]),
 ))
-#step(2, [In the Explorer, click *sales\_clean* #mk(1), then *Details*. \ *Number of rows* #mk(2): *16,253*. The returns and the unknown customers are out.], img: "images/bq2-clean-details.png", w: 100%, left: 34%)
+#step(2, [In the Explorer, click *sales\_clean* #mk(1), then *Details*. \ *Number of rows* #mk(2): *16,253*. The returns and the unknown customers are out.], img: "images/bq2-clean-details.png", w: 100%, left: 44%)
 ```
 
 ## Show your teacher
@@ -125,17 +123,11 @@ platform and saves the answer as a new table.
   *Raise your hand:* your teacher looks at your screen.
 ]
 #v(8pt)
-#tip[*Finished early? (1 mark)* Make a table of the sales in the *United Kingdom* only, from the clean table, then look at its *Details*. A text value goes in quotes *'…'*. Then open *Try a change* (under the editor) and run two changes: what happens?
+#tip[#set smartquote(enabled: false)
+*Finished early?* Make a table of the sales in the *United Kingdom* only, from the clean table, then look at its *Details*. A text value goes in quotes *'…'*. Then open *Try a change* (under the editor) and run two changes: what happens?
 #v(3pt)
 #set text(font: "DejaVu Sans Mono", size: 9pt)
 CREATE TABLE shop.sales\_uk AS SELECT \* \
 FROM \`big-data-lab.shop.sales\_clean\` \
 WHERE Country = 'United Kingdom';]
-#v(8pt)
-#block(breakable: false, width: 100%, stroke: 0.8pt + luma(150), radius: 5pt, inset: (x: 12pt, y: 9pt),
-  grid(columns: (1fr, auto), align: (left + horizon, right + horizon),
-    [*Your mark* #text(size: 9pt, fill: luma(90))[(your teacher ticks and adds)] \
-     #v(2pt)
-     #tick Task 1: *6* #h(12pt) #tick Task 2: *2* #h(12pt) #tick Task 3: *1* #h(12pt) #tick Finished early: *1*],
-    box(stroke: 1pt + rgb("#c92a2a"), radius: 4pt, inset: (x: 10pt, y: 8pt))[*Total:* #box(width: 30pt, height: 10pt, stroke: (bottom: 0.8pt)) #strong("/ 10")]))
 ```

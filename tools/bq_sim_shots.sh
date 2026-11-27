@@ -4,15 +4,15 @@
 # with its orange numbers, taken with headless Chrome. The worksheet is done
 # on this simulator (no Google account), so its pictures match it exactly.
 #
-#   python3 -m http.server 8765 --bind 127.0.0.1 &     # from the project root
+#   python3 -m http.server 8765 --bind 127.0.0.1 &     # from the project root (or BASE=<url of _site>)
 #   sh tools/bq_sim_shots.sh                           # every screen
 #   sh tools/bq_sim_shots.sh count                     # one screen
 set -e
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-BASE="http://127.0.0.1:8765/courses/big-data/week-02/sims/bq-lab2.html"
+BASE="${BASE:-http://127.0.0.1:8765}/courses/big-data/week-02/sims/bq-lab2.html"
 OUT="courses/big-data/week-02/images"
 # name:height (the width is 1000)
-SHOTS="menu-ds:330 dataset:600 menu-tbl:330 upload:600 picker:600 table:600 schema:600 details:600 count:620 clean:640 clean-details:600"
+SHOTS="menu-ds:330 dataset:600 menu-tbl:330 upload:600 picker:600 table:600 schema:470 details:430 count:560 clean:560 clean-details:430"
 PROFILE=$(mktemp -d)
 for s in $SHOTS; do
   name=${s%%:*}; h=${s##*:}

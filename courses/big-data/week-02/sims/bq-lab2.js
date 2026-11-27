@@ -62,24 +62,43 @@
 
   // ---------- The steps of each part ----------
   const hasTable = (ds, t) => !!(eng && eng.findTable(ds, t));
-  const MISSIONS = {
-    load: [
-      ["Next to <b>big-data-lab</b>, click <b>⋮</b>, then <b>Create dataset</b>", () => done("menu-ds")],
-      ["Dataset ID: <b>shop</b>. Click <b>Create dataset</b>", () => !!(eng && eng.findSet("shop"))],
-      ["Next to <b>shop</b>, click <b>⋮</b>, then <b>Create table</b>", () => done("menu-tbl")],
-      ["<b>Upload</b>, <b>Browse</b>: the file <b>" + FILE + "</b>", () => done("file")],
-      ["Table: <b>sales</b>. Tick <b>Auto detect</b>. Click <b>Create table</b>", () => hasTable("shop", "sales")],
-      ["Open <b>sales</b>: <b>Schema</b>, then <b>Details</b>", () => done("Schema") && done("Details")],
-    ],
-  };
+  // The steps of the worksheet: a short title, then (the details): where to
+  // click and what to type, so that a student can do the step alone
+  // (the teacher's request of 2026-11-27; courses/big-data/NOTES.md).
+  const step = (task, title, detail) => '<span class="b-task">' + task + "</span> <b>" + title + '</b><span class="b-detail">(' + detail + ")</span>";
+  const MISSIONS = {};
   MISSIONS.all = [
-    ["Task 1 · Create the dataset <b>shop</b>", () => !!(eng && eng.findSet("shop"))],
-    ["Task 1 · Load <b>" + FILE + "</b> into the table <b>sales</b>", () => hasTable("shop", "sales")],
-    ["Task 2 · <b>Schema</b>, <b>Details</b> and <b>Preview</b> of <b>sales</b>", () => done("Schema") && done("Details") && done("Preview")],
-    ["Task 3 · Ask: which sales are returns? (<b>Run</b>)", () => done("run-returns")],
-    ["Task 3 · <b>Try a change</b>: run 2 changes", () => st.tries.length >= 2],
-    ["Finished early? · the empty table <b>customers</b>", () => hasTable("shop", "customers")],
+    [step("Task 1", "Create the dataset shop",
+      "In the <b>Explorer</b> on the left, click <b>⋮</b> next to <b>big-data-lab</b>, then <b>Create dataset</b>. Type <b>shop</b> in <b>Dataset ID</b>, then click <b>Create dataset</b>."),
+      () => !!(eng && eng.findSet("shop"))],
+    [step("Task 1", "Open Create table",
+      "Click <b>⋮</b> next to <b>shop</b>, then <b>Create table</b>. A panel opens on the right."),
+      () => done("menu-tbl") || hasTable("shop", "sales")],
+    [step("Task 1", "Upload the file as the table sales",
+      "<b>Create table from</b>: choose <b>Upload</b>. Click <b>Browse</b> and choose <b>" + FILE + "</b>; <b>File format</b>: <b>CSV</b>. " +
+      "<b>Table</b>: type <b>sales</b>. Tick <b>Auto detect</b>, then click <b>Create table</b>."),
+      () => hasTable("shop", "sales")],
+    [step("Task 2", "See the columns: Schema",
+      "In the Explorer, under <b>shop</b>, click the table <b>sales</b>, then the tab <b>Schema</b>: the 8 columns and the type of each one."),
+      () => done("Schema")],
+    [step("Task 2", "Count the rows: Details",
+      "Click the tab <b>Details</b> (next to Schema). Look at <b>Number of rows</b>: 21,019."),
+      () => done("Details")],
+    [step("Task 2", "See the first rows: Preview",
+      "Click the tab <b>Preview</b>. A negative <b>Quantity</b> is a return; an empty <b>Customer_ID</b> (null) is an unknown customer."),
+      () => done("Preview")],
+    [step("Task 3", "Ask: which sales are returns?",
+      "On the table <b>sales</b>, click <b>Query</b>. Select the short query (<b>Ctrl + A</b>) and press <b>Delete</b>. Type the query of Task 3, or click <b>Type for me: Task 3: the returns</b>. " +
+      "Click <b>▶ Run</b>: the returns are in <b>Results</b>, 514 rows."),
+      () => done("run-returns")],
+    [step("Task 3", "Try two changes",
+      "Under the editor, click <b>Try a change: what happens if…?</b>. Click one change, then <b>▶ Run</b>, and read the message. Do it again with another change."),
+      () => st.tries.length >= 2],
+    [step("Finished early?", "An empty table: customers",
+      "Click <b>Type for me: Finished early?</b>, then <b>▶ Run</b>. In the Explorer, click the new table <b>customers</b>: its <b>Schema</b> shows your 3 columns, and it has 0 rows."),
+      () => hasTable("shop", "customers")],
   ];
+  MISSIONS.load = MISSIONS.all.slice(0, 5);
   const missions = () => MISSIONS[PART];
   const allDone = () => missions().every(([, ok]) => ok());
   function steps() {

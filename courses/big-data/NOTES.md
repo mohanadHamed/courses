@@ -149,6 +149,14 @@ screens. The R labs (C3) stay on the real RStudio of the lab computers.
   lab page), and it remembers the student's work in the browser
   (`localStorage`, replayed on load; *Start again* empties it). The page
   embeds the same app in parts (`bq-labN-<part>.html`).
+- **Steps a student can do alone** (the teacher's request of 2026-11-27):
+  the list of steps under the simulator gives each step a short title
+  (*Task 1 · Create the dataset shop*) and, in brackets, the details:
+  where to click and what to type, with the names on the screen (*In the
+  Explorer on the left, click ⋮ next to big-data-lab, then Create dataset.
+  Type shop in Dataset ID, then click Create dataset.*). A student who did
+  not follow the teacher can do the step from the list alone. One step for
+  each screen or panel (open Create table, then fill it in).
 - **Try a change** (the teacher's request of 2026-11-27: "what if I remove
   ORDER BY?"): under the editor, 6–10 changes of the queries of the lab
   that a student often wants to try (another value in WHERE, no quotes,

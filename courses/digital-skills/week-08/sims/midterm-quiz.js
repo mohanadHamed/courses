@@ -30,12 +30,11 @@
   // ---------------------------------------------------------------- start
   function intro() {
     stopTimer();
-    const counts = Object.keys(PICK).map((u) => BANK.filter((b) => b.u == u).length);
     app.innerHTML = `
       <div class="mq-card mq-intro">
         <h2>Before you start · قبل أن تبدأ</h2>
         <ul class="mq-facts">
-          <li><b>${N} questions</b>, chosen at random from a bank of <b>${BANK.length}</b> questions on Units 1–4.</li>
+          <li><b>${N} questions</b>, chosen at random, on Units 1–4.</li>
           <li><b>${MINUTES} minutes</b>. The clock starts when you tap Start, and the exam ends by itself when the time is up.</li>
           <li>Every question is in <b>simple English</b>. The reason of every answer is in English and Arabic.</li>
           <li><b>One try</b> for each question: tap one answer. The page tells you at once if it is right, and why, in English and Arabic.</li>
@@ -43,14 +42,14 @@
           <li>Every new exam has new questions. Nothing is sent: the mark is only for you.</li>
         </ul>
         <ul class="mq-facts" dir="rtl" lang="ar">
-          <li><b>${N} سؤالاً</b> تُختار عشوائياً من بنك فيه <b>${BANK.length}</b> سؤالاً عن الوحدات من 1 إلى 4.</li>
+          <li><b>${N} سؤالاً</b> تُختار عشوائياً عن الوحدات من 1 إلى 4.</li>
           <li><b>${MINUTES} دقيقة</b>، ويبدأ الوقت عند الضغط على Start، وينتهي الامتحان تلقائياً عند انتهاء الوقت.</li>
           <li>الأسئلة <b>بالإنجليزية البسيطة</b>، وسبب كل إجابة بالعربية والإنجليزية.</li>
           <li><b>محاولة واحدة</b> لكل سؤال: تظهر فوراً صحة الإجابة مع السبب بالعربية والإنجليزية، ثم الإجابة الصحيحة.</li>
           <li>لكل سؤال <b>علامة واحدة</b>، وتظهر علامتك من ${N} في النهاية.</li>
           <li>كل امتحان جديد فيه أسئلة جديدة، ولا يُرسل شيء: العلامة لك فقط.</li>
         </ul>
-        <p class="mq-units">${Object.keys(PICK).map((u, i) => `<span>${esc(UNITS[u] || "Unit " + u)}: ${PICK[u]} questions (bank ${counts[i]})</span>`).join("")}</p>
+        <p class="mq-units">${Object.keys(PICK).map((u) => `<span>${esc(UNITS[u] || "Unit " + u)}: ${PICK[u]} questions</span>`).join("")}</p>
         <button type="button" class="mq-btn mq-primary" id="mq-start">Start the exam · ابدأ الامتحان ▶</button>
       </div>`;
     document.getElementById("mq-start").addEventListener("click", begin);

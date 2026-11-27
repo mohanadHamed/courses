@@ -15,25 +15,81 @@ where this file differs, it wins for this course.
   computer lab (Windows, Internet), from 22/11/2026 to 10/1/2027 (8 labs),
   for two outcomes, **one after the other**:
   - **C1** (Labs 1–3): use big data platforms to collect, store, process and
-    analyse big data. Platform: **Google BigQuery** (the free sandbox, a
-    personal Google account; no card) and **Looker Studio**. Hadoop and
-    Spark are shown only as ideas on simulators (too heavy for one hour).
+    analyse big data. Platform: **Google BigQuery** and **Looker Studio**.
+    Lab 1 used the real BigQuery sandbox with a personal Google account;
+    **from Lab 2 there is no Google account** (below, "The BigQuery Lab").
+    Hadoop and Spark are shown only as ideas on simulators (too heavy for
+    one hour).
   - **C3** (Labs 4–8): solve a real big data problem in **R** (RStudio,
     installed on the lab computers before Lab 4). One problem through all
     five labs: the transactions of a real online shop (Online Retail II,
     UCI, CC BY 4.0).
-- **Marks: 10 for each lab, easy to get** (the teacher's request of
-  2026-11-21). The worksheet gives them, never the interactive page: **Task
-  1 alone gives 6** (more than half for any student who does one task),
-  the other tasks share 3 (the earlier, easier task more), and the
-  *Finished early?* box gives 1. Each `## Task N · title · M marks`
-  heading says its marks, the first lines of the worksheet repeat the
-  split, and the last box, "Your mark", has a tick for each task and the
-  total, filled in by the teacher in the lab. The teacher copies the total
-  into the checklist (private, not in this repo: for each lab a ✓/A column
-  and a /10 column; C1 /30, C3 /50, total /80) and agrees the final marks
-  with the coordinator. `check_size.py` checks the marks of every Big
-  Data worksheet.
+- **No marks on the worksheets** (the teacher's decision of 2026-11-27:
+  the labs do not focus on marks now). A task heading is `## Task N ·
+  title`, with no marks; no marks in the first lines, no "(1 mark)" on
+  *Finished early?*, and no "Your mark" box. The worksheet ends with *Show
+  your teacher* and the *Finished early?* box. `check_size.py` warns about
+  marks in a Big Data worksheet (it replaced the rule of 2026-11-21: 10
+  marks for each lab).
+
+## Business students: simple, and only what the outcome needs (2026-11-27)
+
+The teacher's request after Lab 2 was first written: the students study
+**accounting, MIS and business administration**, not IT, and most are weak
+with computers. The course is a **service course**: the students use data
+platforms and R to help their work, not to learn programming.
+
+- **Assume no IT course before.** Every idea in everyday words, with a
+  business example (a return, a country, a big order), never a technical
+  one for its own sake.
+- **SQL is only `SELECT … FROM … WHERE`** (columns, a table, a filter with
+  `=`, `<`, `>`, `>=`, `AND`, `IS NULL`, text in quotes) **and `CREATE TABLE`
+  with its column names and types**. Nothing more: no `CREATE TABLE … AS
+  SELECT`, no `GROUP BY` or `COUNT` for the student to type, no joins, no
+  backticks when `dataset.table` is enough. A bigger idea (totals per
+  country, a dashboard) is shown **ready, with one click**, on the big
+  picture simulator, not typed.
+- **The lab in one hour, at the pace of the slowest student** (the size of
+  Lab 1: about 20 minutes of the page by `check_size.py`, 3 tasks):
+  1. **The big picture** (the teacher, 5–10 minutes): a simulator that does
+     the whole lab in a few clicks, with the data and the queries ready
+     (`week-WW/sims/big-picture.html`), so the class sees what the lab is
+     for before any detail.
+  2. **Step by step, together** (about 30 minutes): the teacher goes
+     through the page and the class does each step on the simulator of the
+     page at the same time. The worksheet holds the same steps (for the lab
+     and for home).
+- The prep video is sent before the lab on the e-learning platform; it is
+  not shown in class.
+
+## The score of the lab (2026-11-27)
+
+The teacher's request: the simulators of the page can take the place of
+the worksheet, so the page shows the score at the end.
+
+- **A `::: {.lab-score}` box at the end of the Summary** of every lab page
+  (Labs 1 and 2 have it). `lesson-script.html` fills it: for every
+  simulator of the page the steps finished (`sim-base.js` sends the
+  "k of N done" of `#progress` to the page), and the Try it boxes done; the
+  total, a percentage and a bar. The teacher walks by and reads one number.
+- **Only a step done counts.** A simulator ticks a step only when the
+  student did it right, so moving on without doing it gives 0. The best
+  result of each simulator is kept in the browser (`localStorage`), and
+  every simulator of the page opens a few seconds after the page does, so
+  the total is complete.
+- **An extra step** (*Finished early?*) is outside the score: the list says
+  "k of N done (+ the extra step)", so it can raise nothing and lower
+  nothing.
+- Every simulator with a list of steps writes "k of N done" (or "seen") in
+  `#progress`; a new simulator does the same, or it is not in the score.
+
+## Steps, then the screens, then do it (2026-11-27)
+
+The screens of the steps come **before** the students do them: in each
+section, *The idea*, then *The steps, screen by screen* (the worksheet
+screens), and at the end of the page one section, *Do it*, with the app
+simulator. In the list of steps under the simulator, each step has its
+details and a **Show me** button that opens its screens.
 
 ## The model: the lab model of Digital Skills, and nothing else
 
@@ -86,9 +142,9 @@ package and no platform texts.
   sales, customers), never games.
 - **Labels:** every session is labelled "Lab N" (`course.lecture-label`).
   The folders `week-WW` count the labs (WW = N), not syllabus rows.
-- **Google accounts:** the students use their personal Google accounts
-  (the university accounts are Microsoft). Every worksheet of Labs 1–3 ends
-  with **Sign out**.
+- **Google accounts:** only in Lab 1 (taught as it is, with **Sign out** at
+  the end). Labs 2–3 need no account: their worksheets are done on the
+  BigQuery Lab (below).
 - **Labs on Windows:** BigQuery and Looker Studio are the same in the
   browser on every computer. In RStudio the worksheets read files by name
   inside an RStudio Project (no paths), and the installation of R has its
@@ -96,6 +152,57 @@ package and no platform texts.
 - **Numbers on the simulators** are examples close to the real tables
   (the page says so); the worksheet never asks the student to write a
   result.
+
+## The BigQuery Lab: no sign-in (since Lab 2, 2026-11-27)
+
+In Lab 1 most students could not sign in to their personal Gmail on the
+lab computers, and the coordinator asked for the easiest way, with no
+sign-in. So from Lab 2 **the worksheet of every C1 lab is done on a
+simulator of the page**, and the page and the worksheet show the same
+screens. The R labs (C3) stay on the real RStudio of the lab computers.
+
+- **A real SQL engine.** `shared/sims/bq-engine.js` runs SQL on SQLite
+  (sql.js, `shared/sims/vendor/sql-wasm.*`, MIT) with the rules of
+  BigQuery: `project.dataset.table` names in backticks (a dataset is an
+  attached database), EXTRACT, COUNTIF, FORMAT_DATE, DATE_TRUNC,
+  SAFE_DIVIDE, `"text"` as a string, `/` as FLOAT; the errors of BigQuery
+  (Unrecognized name … Did you mean …?, Not found: Table …, Syntax error
+  at [line:col], a column neither grouped nor aggregated, Already Exists,
+  no DML in the sandbox); **rows in any order without ORDER BY** (shuffled
+  on every run); and the bytes before the run (the columns that the query
+  reads; 0 B for COUNT(*) alone). Any query a student types runs.
+- **The app of the lab:** `week-WW/sims/bq-labN.js` draws BigQuery Studio
+  (the Explorer and its ⋮ menus, Create dataset, Create table › Upload,
+  Schema/Details/Preview, the editor, Results, Job information). One page
+  holds the whole worksheet (`bq-labN.html`, opened on a full page from the
+  lab page), and it remembers the student's work in the browser
+  (`localStorage`, replayed on load; *Start again* empties it). The page
+  embeds the same app in parts (`bq-labN-<part>.html`).
+- **Steps a student can do alone** (the teacher's request of 2026-11-27):
+  the list of steps under the simulator gives each step a short title
+  (*Task 1 · Create the dataset shop*) and, in brackets, the details:
+  where to click and what to type, with the names on the screen (*In the
+  Explorer on the left, click ⋮ next to big-data-lab, then Create dataset.
+  Type shop in Dataset ID, then click Create dataset.*). A student who did
+  not follow the teacher can do the step from the list alone. One step for
+  each screen or panel (open Create table, then fill it in).
+- **Try a change** (the teacher's request of 2026-11-27: "what if I remove
+  ORDER BY?"): under the editor, 6–10 changes of the queries of the lab
+  that a student often wants to try (another value in WHERE, no quotes,
+  remove the WHERE line, AND, a name spelled wrong …), each with one
+  sentence on what it shows. The engine gives the real answer; the sentence
+  explains it.
+- **The data:** the same file in Labs 2–8, Online Retail II (UCI, CC BY
+  4.0), the sheet of 2009–2010 (525,461 rows). The simulator uses
+  `week-02/sims/online_retail_2010.csv`, **1 row in every 25** (21,019
+  rows, 1.9 MB); the pages and the worksheets say so. The numbers of the
+  worksheet are the real answers on that file (sales 21,019 rows; the
+  returns, Quantity < 0, 514 rows).
+- **The screens of the worksheet** are the simulator itself, with its
+  orange numbers: `bq-labN.html?shot=<name>` (the list `SHOTS` in the app),
+  taken by `tools/bq_sim_shots.sh` (headless Chrome, a local server).
+  `?shot=<name>&poster=1` gives a poster without numbers.
+- **The prep video** shows the simulator and its screens; no sign-in.
 
 ## The prep video (since 2026-11-21)
 

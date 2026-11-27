@@ -1,0 +1,75 @@
+/* BigQuery Lab 2: the parts that Lab 1 does not have (bq-lab.css of week 1 is loaded first):
+   the ⋮ menus of the Explorer, the panels Create dataset and Create table, the file
+   picker, the errors of a query, the pager, Try a change, and the orange numbers of
+   the worksheet screens (?shot=…). */
+.bq .b-exp { position: relative; }
+.bq .b-node { display: flex; align-items: center; }
+.bq .b-node .b-dots { margin-left: auto; background: none; border: 0; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; color: #5f6368; font-weight: 700; flex: none; }
+.bq .b-node .b-dots:hover { background: #e8eaed; }
+.bq .b-empty { color: #9aa0a6; font-style: italic; cursor: default; }
+.bq .b-menu { position: absolute; left: 205px; z-index: 5; background: #fff; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,.25); padding: 6px 0; min-width: 170px; }
+.bq .b-menu button { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 7px 16px; cursor: pointer; color: #202124; }
+.bq .b-menu button:hover { background: #f1f3f4; }
+.bq .b-panel { position: absolute; top: 0; right: 0; bottom: 0; width: min(420px, 100%); background: #fff; box-shadow: -4px 0 18px rgba(0,0,0,.2); z-index: 4; display: flex; flex-direction: column; }
+.bq .b-ph { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #dadce0; }
+.bq .b-ph b { font-size: 1.15rem; font-weight: 500; }
+.bq .b-x { background: none; border: 0; font-size: 1.1rem; cursor: pointer; color: #5f6368; }
+.bq .b-pb { padding: 8px 16px; overflow-y: auto; flex: 1; }
+.bq .b-pf { display: flex; gap: 8px; padding: 10px 16px; border-top: 1px solid #dadce0; }
+.bq .b-sec { font-weight: 700; margin: 12px 0 4px; color: #202124; }
+.bq .b-field { display: block; margin: 8px 0; position: relative; }
+.bq .b-field > span { display: block; font-size: 0.76rem; color: #5f6368; margin-bottom: 2px; }
+.bq .b-field input, .bq .b-field select { width: 100%; font: inherit; padding: 7px 9px; border: 1px solid #9aa0a6; border-radius: 4px; background: #fff; }
+.bq .b-field input:disabled { background: #f1f3f4; color: #5f6368; border-color: #dadce0; }
+.bq .b-file { display: flex; gap: 6px; }
+.bq .b-file input { flex: 1; }
+.bq .b-radio { display: flex; gap: 14px; font-size: 0.85rem; }
+.bq .b-check { display: flex; align-items: center; gap: 8px; margin: 6px 0; position: relative; }
+.bq .b-check input { width: 18px; height: 18px; }
+.bq .b-err { color: #c5221f; background: #fce8e6; border-radius: 4px; padding: 6px 10px; margin-top: 8px; font-size: 0.84rem; }
+.bq .b-open { width: min(520px, 100%); }
+.bq table.b-files { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 0.85rem; }
+.bq table.b-files th { text-align: left; color: #5f6368; font-weight: 600; border-bottom: 1px solid #dadce0; padding: 4px 8px; }
+.bq table.b-files td { padding: 6px 8px; cursor: pointer; }
+.bq table.b-files tr[data-file]:hover td { background: #e8f0fe; }
+.bq .b-dim { z-index: 8; }
+.bq .b-body { min-height: 470px; }
+.bq { position: relative; }
+.bq .b-links { color: #1a73e8; font-weight: 600; font-size: 0.84rem; }
+.bq .b-scroll { overflow-x: auto; max-width: 100%; }
+.bq table.b-grid td.nul { color: #9aa0a6; font-style: italic; }
+.bq table.b-grid td.ty { font-family: Consolas, Menlo, monospace; }
+.bq .b-errbox { border: 1px solid #f28b82; background: #fce8e6; border-radius: 6px; padding: 10px 12px; margin-top: 8px; color: #a50e0e; font-size: 0.86rem; }
+.bq .b-hint { color: #3c4043; margin-top: 6px; font-weight: 500; }
+.bq .b-done { background: #e6f4ea; border-radius: 6px; padding: 10px 12px; color: #137333; font-weight: 600; position: relative; }
+.bq .b-pager { display: flex; align-items: center; justify-content: flex-end; gap: 6px; font-size: 0.8rem; color: #5f6368; margin-top: 6px; }
+.bq .b-pager .b-btn { padding: 1px 8px; }
+.bq .b-pager .b-btn:disabled { opacity: .4; cursor: default; }
+.bq .b-warnnote { color: #b06000; font-weight: 600; }
+.bq .b-valid.err { max-width: 100%; }
+.bq .b-try { margin: 6px 0 4px; border: 1px dashed #d9480f; border-radius: 6px; padding: 4px 10px; background: #fff8f3; }
+.bq .b-try summary { cursor: pointer; font-weight: 700; color: #a3360b; padding: 3px 0; }
+.bq .b-try .b-chips button { border-color: #d9480f; color: #a3360b; }
+.bq .b-try .b-chips button.tried { background: #ffe8cc; }
+.bq .b-chips > span { color: #5f6368; align-self: center; }
+.bq .b-card small b { color: #202124; }
+@media (max-width: 640px) { .bq .b-panel { position: fixed; } .bq .b-menu { left: 40px; } }
+/* The orange numbers of the worksheet screens. */
+.bq .b-mkhost { position: relative; outline: 3px solid #d9480f; outline-offset: 2px; border-radius: 4px; }
+.bq .b-mk { position: absolute; top: -13px; right: -13px; width: 24px; height: 24px; border-radius: 50%; background: #d9480f; color: #fff; font: 700 14px/24px Arial, sans-serif; text-align: center; z-index: 9; box-shadow: 0 0 0 2px #fff; }
+body.shot .sim > h1, body.shot .sim > .hint, body.shot .jobs, body.shot .row, body.shot .message { display: none; }
+body.shot { background: #fff; }
+.bq .b-sqlwrap { position: relative; }
+.bq .b-sqlwrap textarea { display: block; }
+body.shot .bq .b-pb, body.shot .bq .b-sub, body.shot .bq .b-scroll, body.shot .bq .b-tabs { overflow: visible; }
+.bq [data-mk="rows"] { justify-self: start; padding-right: 28px; }
+.bq .b-panel .b-mk { right: 2px; }
+body.shot .bq .b-sub button.b-mkhost { margin-right: 10px; }
+/* The steps under the simulator: a short title, then its details. */
+.jobs .b-task { display: inline-block; font-size: 0.72rem; font-weight: 800; color: #fff; background: #c92a2a; border-radius: 10px; padding: 0 7px; margin-right: 3px; vertical-align: 1px; }
+.jobs .b-detail { display: block; color: #495057; font-size: 0.86rem; line-height: 1.45; margin: 2px 0 6px; }
+.jobs li.ok .b-detail { color: #868e96; }
+.jobs .b-show { margin: 0 0 8px; }
+.jobs .b-show summary { cursor: pointer; color: #1a73e8; font-weight: 700; font-size: 0.85rem; display: inline-block; }
+.jobs .b-show summary::before { content: "📷 "; }
+.jobs .b-show img { display: block; max-width: 100%; border: 1px solid #ced4da; border-radius: 6px; margin: 6px 0; }

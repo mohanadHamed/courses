@@ -1,0 +1,121 @@
+---
+title: "Collect and Store: Loading Data into BigQuery"
+description: "Worksheet · Load the sales file of an online shop into your own table, look at it, and ask it a question with SELECT, FROM and WHERE, step by step on the BigQuery Lab."
+lesson: 2
+ilos: [C1]
+# The lab model for business students (courses/big-data/NOTES.md): the
+# same steps that the class does together on the BigQuery Lab of the page
+# of Lab 2 (sims/bq-lab2.html, a simulator with a real SQL engine, no
+# Google account). Every picture is that simulator (tools/bq_sim_shots.sh,
+# the orange numbers). No questions, no results to record, no marks.
+lab: true
+lab-app: "the BigQuery Lab (a simulator, on the page of Lab 2)"
+format: lesson-typst
+---
+
+```{=typst}
+#let mk(n) = box(baseline: 22%, circle(radius: 5.8pt, fill: rgb("#d9480f"), stroke: none, inset: 0pt)[#set align(center + horizon); #text(fill: white, weight: "bold", size: 8pt)[#n]])
+#let tick = box(baseline: 12%, width: 10pt, height: 10pt, stroke: 0.9pt + luma(70), radius: 2pt)
+#let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
+#let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f3f4"), stroke: 0.8pt + rgb("#1a73e8"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
+#let sql(body) = typebox[#set text(font: "DejaVu Sans Mono", size: 9.5pt); #set par(justify: false, leading: 0.55em); #body]
+// What each line of the code does: (code, meaning) pairs, under the code box.
+#let explain(..pairs) = block(width: 100%, breakable: false, above: 6pt, table(columns: (auto, 1fr), inset: (x: 7pt, y: 4.5pt), stroke: 0.5pt + luma(190),
+  fill: (x, y) => if y == 0 { luma(240) },
+  [*Line*], [*What it does*],
+  ..pairs.pos().map(((c, m)) => (text(font: "DejaVu Sans Mono", size: 8.5pt, c), text(size: 9.5pt, m))).flatten()))
+#let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
+// One step: the box to tick, its number and what to do on the left; its screen on the right.
+#let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
+  #set par(justify: false, leading: 0.62em)
+  #let words = grid(columns: (auto, 1fr), column-gutter: 6pt, [#tick #h(1pt) *#n.*], body)
+  #if img == none { words } else {
+    grid(columns: (left, 1fr), column-gutter: 12pt, align: (top, top), words, align(center, shot(img, w: w)))
+  }
+  #if after != none { v(4pt); after }
+]
+```
+
+::: {.lead}
+**Today's activity:** load the sales file of a real **online shop** into
+your own table, look at it, then ask it a question. You work on the
+**BigQuery Lab**: a simulator of BigQuery on the page of Lab 2. Do the
+three tasks in order, with your teacher. The **orange numbers** in each
+picture show where to click. Tick the box `#tick`{=typst} after each step.
+Stuck? Raise your hand.
+:::
+
+- **You need:** Chrome and the course site. **No Google account**, nothing
+  to sign in. On the page of **Lab 2**, the **BigQuery Lab** (or its link
+  *full page*).
+- **Your work stays in this browser.** *Start again* (under the simulator)
+  empties it.
+
+## Task 1 · From a file to a table
+
+A **dataset** is a folder of tables. **Upload** puts the rows of a file
+into a table.
+
+```{=typst}
+#step(1, [In the *Explorer* (on the left), next to *big-data-lab*, click *⋮* #mk(1). \ Click *Create dataset* #mk(2).], img: "images/bq2-menu-ds.png", w: 100%, left: 34%)
+#step(2, [*Dataset ID:* type *shop* #mk(1). \ Click *Create dataset* #mk(2). The dataset *shop* is in the Explorer.], img: "images/bq2-dataset.png", w: 100%, left: 34%)
+#step(3, [Next to *shop*, click *⋮* #mk(1). \ Click *Create table* #mk(2).], img: "images/bq2-menu-tbl.png", w: 100%, left: 34%)
+#step(4, [*Create table from:* *Upload* #mk(1). \ Click *Browse* #mk(2), then the file *online\_retail\_2010.csv*. \ *File format:* *CSV* #mk(3).], img: "images/bq2-upload.png", w: 100%, left: 34%)
+#step(5, [*Table:* type *sales* #mk(1). \ Tick *Auto detect* #mk(2). \ Click *Create table* #mk(3). Wait a second: *sales* is under *shop*.], img: "images/bq2-table.png", w: 100%, left: 34%)
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 2 · Look at your table
+
+Each column has a **type**: STRING (text), INTEGER (a whole number),
+FLOAT (a number with a point), TIMESTAMP (a date and a time).
+
+```{=typst}
+#step(1, [Click the table *sales* #mk(1). *Schema* #mk(2): 8 columns and their types. *Price* is FLOAT. The header *Customer ID* became *Customer\_ID* (no spaces in a column name).], img: "images/bq2-schema.png", w: 100%, left: 34%)
+#step(2, [Click *Details* #mk(1). \ *Number of rows* #mk(2): *21,019*, one row for each sale in the file.], img: "images/bq2-details.png", w: 100%, left: 34%)
+#step(3, [Click *Preview* #mk(1): the first rows. A *negative* Quantity is a return; an empty Customer\_ID (*null*) is an unknown customer.], img: "images/bq2-preview.png", w: 100%, left: 34%)
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 3 · Ask a question
+
+Which sales are **returns**? A return has a negative quantity.
+
+```{=typst}
+#step(1, [Click *Query* (on the table). Select the short query (*Ctrl + A*) and press *Delete*. Type this query #mk(1), or click *Type for me: Task 3*. \ Click *Run* #mk(2). *Results* #mk(3): the returns, *514* rows.], img: "images/bq2-where.png", w: 100%, left: 36%, after: sql[
+  SELECT Description, Quantity, Country \
+  FROM shop.sales \
+  WHERE Quantity < 0;
+] + explain(
+  ([SELECT Description, Quantity, Country], [Show these three *columns* (a comma between them).]),
+  ([FROM shop.sales], [From the table *sales* in the dataset *shop* (a dot between them).]),
+  ([WHERE Quantity < 0;], [Only the *rows* with a quantity less than 0. The sign *;* ends the query.]),
+))
+#step(2, [Under the editor, open *Try a change*. Click a change, then *Run*: read what happens. Try two changes, for example *Only one country: France* and *Forget the quotes*.])
+```
+
+## Show your teacher
+
+```{=typst}
+#block(breakable: false)[
+  #set par(spacing: 0.9em, justify: false)
+  #tick #h(4pt) The Explorer shows the dataset *shop* with the table *sales*. \
+  #tick #h(4pt) Your query shows the returns. \
+  #v(4pt)
+  *Raise your hand:* your teacher looks at your screen.
+]
+#v(8pt)
+#tip[*Finished early?* Make an *empty table* of your own: *CREATE TABLE*, its name, then between brackets each column with its *type*, a comma between them. Run it, then click *customers* in the Explorer: its *Schema* shows your three columns, and it has 0 rows.
+#v(3pt)
+#block(text(font: "DejaVu Sans Mono", size: 9pt)[CREATE TABLE shop.customers ( \
+#h(1.2em) customer\_id INTEGER, \
+#h(1.2em) name STRING, \
+#h(1.2em) city STRING \
+);])]
+```

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Prep video: Lab 2, collect and store</title>
+<!-- The pictures of the prep video of Big Data Lab 2 (courses/big-data/NOTES.md,
+     "The prep video"). One scene for each scene of lab2-intro-script.txt
+     (Arabic, read by the teacher); the words on screen are in English, the
+     words of the lab. The pictures of the lab are the BigQuery Lab simulator
+     itself (no Google account since Lab 2). make-course-video.sh makes the video. -->
+</head>
+<body>
+<script>
+window.VIDEO = { label: "Big Data · Lab 2", title: "Collect, store, ask: the sales of an online shop", captions: false,
+  colors: { accent: "#C92A2A", accent2: "#FFA8A8", soft: "#FFF0F0", page: "#FFFAFA", line: "#F1D3D3", ink: "#2B1E1E", grey: "#6F6262" },
+  scenes: [] };
+</script>
+<script src="../../../../shared/sims/recordings/video-kit.js"></script>
+<script>
+const { C, text, spans, rect, pill, arrow, show, group, el, image, code } = VK;
+const IMG = (n) => "../images/" + n;
+const SIM = (n) => "../sims/" + n;
+const Q = ["SELECT Description, Quantity, Country", "FROM shop.sales", "WHERE Quantity < 0;"];
+const ORDER = { 1: "1", 2: "2", 0: "3" };
+const GREEN = "#2F9E44";
+
+function head(g, s, o = {}) { return text(g, 60, o.y || 110, s, { size: o.size || 44, weight: 800, fill: C.accent, o: o.o }); }
+// A note: one line of text in a soft box.
+function note(g, x, y, s, o = {}) {
+  const size = o.size || 28, w = o.w || s.length * size * 0.52 + 44;
+  const gg = group(g, o);
+  rect(gg, x, y, w, size + 30, { fill: o.fill || C.soft, stroke: "none", r: 14 });
+  rect(gg, x, y, 8, size + 30, { fill: o.barColor || C.accent, r: 4 });
+  text(gg, x + 26, y + size + 7, s, { size, weight: o.weight || 700, mono: o.mono, fill: C.ink });
+  return gg;
+}
+const good = (g, x, y, s, o = {}) => note(g, x, y, s, Object.assign({ fill: "#EBFBEE", barColor: GREEN }, o));
+// A small table: head, rows, widths; o.mark: a column to light; o.bad: rows to cross out.
+function tbl(g, x, y, headRow, rows, widths, o = {}) {
+  const gg = group(g, o), rh = o.rh || 38, size = o.size || 20;
+  let cx = x;
+  headRow.forEach((h, c) => { rect(gg, cx, y, widths[c], rh, { fill: "#F1F3F5", stroke: "#DEE2E6", sw: 1, r: 0 });
+    text(gg, cx + 10, y + rh * 0.68, h, { size: size * 0.9, weight: 800, mono: true }); cx += widths[c]; });
+  rows.forEach((r, i) => {
+    cx = x;
+    const bad = (o.bad || []).includes(i);
+    r.forEach((v, c) => {
+      rect(gg, cx, y + rh * (i + 1), widths[c], rh, { fill: bad ? "#FFF5F5" : "#fff", stroke: "#DEE2E6", sw: 1, r: 0 });
+      text(gg, cx + 10, y + rh * (i + 1) + rh * 0.68, v, { size, weight: c === o.mark ? 800 : 600, mono: true,
+        fill: v === "null" ? "#ADB5BD" : c === o.mark ? C.accent : bad ? "#C92A2A" : C.ink });
+      cx += widths[c];
+    });
+    if (bad) rect(gg, x, y + rh * (i + 1) + rh / 2 - 1.5, widths.reduce((a, b) => a + b, 0), 3, { fill: "#C92A2A", r: 1 });
+  });
+  return gg;
+}
+function card(g, x, y, w, h, title, lines, o = {}) {
+  const gg = group(g, o);
+  rect(gg, x, y, w, h, { fill: C.paper, stroke: C.line, r: 16 });
+  pill(gg, x + 18, y + 18, title, { size: 22, fill: o.fill || C.accent, ink: "#fff" });
+  lines.forEach((s, i) => text(gg, x + 22, y + 100 + i * 34, s, { size: 23 }));
+  return gg;
+}
+
+// The link of the page of Lab 2: the student opens it to do the steps alone.
+const LINK = "mohanadhamed.github.io/courses/courses/big-data/week-02/lesson-02.html";
+function linkBar(g, x, y, w, o = {}) {
+  const gg = group(g, o), h = o.h || 52;
+  rect(gg, x, y, w, h, { fill: C.accent, r: 14 });
+  text(gg, x + 22, y + h * 0.66, o.label || "Do it yourself:", { size: o.size || 24, weight: 800, fill: "#fff" });
+  text(gg, x + (o.pad || 230), y + h * 0.66, LINK, { size: o.size || 24, weight: 700, mono: true, fill: "#fff" });
+  return gg;
+}
+VIDEO.scenes = [
+  // 1. Title: today, three steps.
+  (g, k, p) => {
+    rect(g, 60, 100, 1160, 230, { fill: C.paper, stroke: C.line, r: 26, o: show(k, 0, p) });
+    rect(g, 60, 100, 16, 230, { fill: C.accent, r: 8, o: show(k, 0, p) });
+    text(g, 120, 190, "Lab 2 · Collect and Store", { size: 54, weight: 800, fill: C.accent, o: show(k, 0, p) });
+    text(g, 120, 260, "Loading data into BigQuery", { size: 34, o: show(k, 0, p) });
+    note(g, 90, 390, "Lab 1: a public table of 200 million taxi trips", { size: 28, o: show(k, 1, p) });
+    note(g, 90, 470, "Today: the sales of an online shop, one year", { size: 28, o: show(k, 2, p) });
+    const s = group(g, { o: show(k, 3, p) });
+    ["Collect", "Store", "Ask"].forEach((t, i) => {
+      pill(s, 90 + i * 330, 570, (i + 1) + " · " + t, { size: 30, fill: i === 2 ? "#EBFBEE" : C.soft });
+      if (i < 2) arrow(s, 90 + i * 330 + 200, 598, 90 + i * 330 + 300, 598);
+    });
+    linkBar(g, 60, 650, 1160, { o: show(k, 0, p), size: 22, pad: 215 });
+  },
+  // 2. The BigQuery Lab: no account.
+  (g, k, p) => {
+    head(g, "Today: the BigQuery Lab", { o: show(k, 0, p) });
+    image(g, SIM("bq-lab2.png"), 60, 150, 700, 330, { o: show(k, 0, p) });
+    text(g, 60, 515, "On the page of Lab 2, on the course site:", { size: 24, weight: 700, fill: C.grey, o: show(k, 0, p) });
+    linkBar(g, 60, 640, 1160, { o: show(k, 0, p), size: 22, pad: 215, label: "The link:" });
+    note(g, 800, 170, "Looks like BigQuery", { size: 28, o: show(k, 1, p) });
+    note(g, 800, 250, "Real answers, real data", { size: 28, o: show(k, 2, p) });
+    good(g, 800, 330, "No Google account", { size: 28, o: show(k, 3, p) });
+    good(g, 800, 410, "No sign in", { size: 28, o: show(k, 3, p) });
+    note(g, 60, 540, "Your work stays in this browser.", { size: 28, o: show(k, 4, p) });
+  },
+  // 3. Collect: a CSV file.
+  (g, k, p) => {
+    head(g, "1 · Collect: the shop saves every sale", { o: show(k, 0, p) });
+    const L = ["Invoice,StockCode,Description,Quantity,…", "489434,85048,CHRISTMAS GLASS BALL,12,…", "489436,21181,METAL SIGN,12,…", "489437,22274,FELTCRAFT DOLL EMILY,6,…"];
+    text(g, 60, 190, "online_retail_2010.csv", { size: 26, mono: true, o: show(k, 1, p) });
+    code(g, 60, 210, L, { size: 24, w: 1000, hl: k === 3 ? [0] : k === 2 ? [1] : [], o: show(k, 1, p) });
+    note(g, 60, 410, "One line = one sale. A comma between the values.", { size: 28, o: show(k, 2, p) });
+    note(g, 60, 490, "Line 1, the header: the names of the columns", { size: 28, o: show(k, 3, p) });
+    good(g, 60, 580, "Our file: 21,019 sales", { size: 30, o: show(k, 4, p) });
+  },
+  // 4. Store: a dataset.
+  (g, k, p) => {
+    head(g, "2 · Store: a dataset, a folder of tables", { o: show(k, 0, p) });
+    const lv = [["project", "big-data-lab"], ["dataset", "shop"], ["table", "sales"]];
+    lv.forEach(([a, b], i) => {
+      const o = show(k, i === 2 ? 3 : i === 0 ? 0 : 1, p);
+      rect(g, 60 + i * 40, 150 + i * 80, 420, 64, { fill: i === 1 ? C.soft : C.paper, stroke: C.line, r: 12, o });
+      text(g, 84 + i * 40, 192 + i * 80, a + ": " + b, { size: 26, mono: true, o });
+    });
+    image(g, IMG("bq2-menu-ds.png"), 600, 140, 620, 210, { o: show(k, 2, p) });
+    image(g, IMG("bq2-dataset.png"), 600, 390, 620, 300, { o: show(k, 2, p) });
+  },
+  // 5. Upload the file into a table.
+  (g, k, p) => {
+    head(g, "Upload the file into a table", { o: show(k, 0, p) });
+    image(g, IMG("bq2-menu-tbl.png"), 60, 140, 520, 175, { o: show(k, 1, p) });
+    image(g, IMG("bq2-upload.png"), 60, 340, 520, 300, { o: show(k, 1, p) });
+    image(g, IMG("bq2-table.png"), 620, 140, 600, 360, { o: show(k, 2, p) });
+    note(g, 620, 560, "Auto detect: the names and the types", { size: 26, o: show(k, 3, p) });
+  },
+  // 6. Look at the table: Schema, Details, Preview.
+  (g, k, p) => {
+    head(g, "Look at your table", { o: show(k, 0, p) });
+    image(g, IMG("bq2-schema.png"), 60, 140, 560, 265, { o: show(k, 1, p) });
+    const T = [["STRING", "text"], ["INTEGER", "a whole number"], ["FLOAT", "a number with a point"], ["TIMESTAMP", "a date and a time"]];
+    T.forEach(([a, b], i) => { pill(g, 60, 430 + i * 58, a, { size: 22, mono: true, fill: C.soft, o: show(k, 2, p) }); text(g, 260, 456 + i * 58, b, { size: 22, o: show(k, 2, p) }); });
+    image(g, IMG("bq2-details.png"), 660, 140, 560, 240, { o: show(k, 3, p) });
+    image(g, IMG("bq2-preview.png"), 660, 400, 560, 265, { o: show(k, 4, p) });
+    note(g, 600, 640, "-3 = a return · null = no value", { size: 26, o: show(k, 5, p) });
+  },
+  // 7. Ask: the query, line by line.
+  (g, k, p) => {
+    head(g, "3 · Ask: a question in SQL", { o: show(k, 0, p) });
+    const hl = k === 3 ? [1] : k === 4 ? [2] : k === 5 ? [0] : [];
+    code(g, 60, 170, Q, { size: 28, w: 820, hl, dim: k >= 3, tags: k >= 3 ? ORDER : undefined, o: show(k, 1, p) });
+    note(g, 60, 340, "Which sales are returns? Three lines.", { size: 28, o: show(k, 2, p) });
+    const box = (s, kk) => note(g, 60, 430, s, { size: 30, o: k === kk ? 1 : 0 });
+    box("FROM: from which table", 3);
+    box("WHERE: which rows (Quantity < 0: the returns)", 4);
+    box("SELECT: which columns the answer shows", 5);
+    if (k >= 4) tbl(g, 60, 520, ["Description", "Quantity", "Country"], [["BLUE SWEETHEART BRACELET", "-3", "United Kingdom"], ["EIGHT PIECE DINOSAUR SET", "-4", "France"]],
+      [430, 170, 250], { size: 22, rh: 42, o: show(k, 4, p) });
+  },
+  // 8. Run: the answer.
+  (g, k, p) => {
+    head(g, "Run: the answer", { o: show(k, 0, p) });
+    image(g, IMG("bq2-where.png"), 60, 140, 700, 420, { o: show(k, 0, p) });
+    good(g, 800, 180, "514 returns", { size: 34, o: show(k, 0, p) });
+    note(g, 800, 280, "out of 21,019 sales", { size: 28, o: show(k, 1, p) });
+    note(g, 800, 360, "No program: a short question", { size: 26, o: show(k, 2, p) });
+    note(g, 60, 600, "The accountant, the manager: a short question, a fast answer.", { size: 28, o: show(k, 3, p) });
+  },
+  // 9. Try a change.
+  (g, k, p) => {
+    head(g, "Try a change: what happens if…?", { o: show(k, 0, p) });
+    note(g, 60, 170, "WHERE Country = 'France' → only France", { size: 28, mono: true, w: 1000, o: show(k, 1, p) });
+    note(g, 60, 270, "WHERE Country = France → an error: text needs quotes", { size: 28, mono: true, w: 1000, o: show(k, 2, p) });
+    note(g, 60, 370, "Descripton → Did you mean Description?", { size: 28, mono: true, w: 1000, o: show(k, 3, p) });
+  },
+  // 10. In the lab.
+  (g, k, p) => {
+    head(g, "In the lab, together with your teacher", { o: show(k, 0, p) });
+    ["Collect", "Store", "Ask"].forEach((t, i) => pill(g, 60 + i * 240, 160, (i + 1) + " · " + t, { size: 26, fill: C.soft, o: show(k, 0, p) }));
+    card(g, 60, 240, 360, 170, "Task 1", ["From a file", "to a table"], { o: show(k, 1, p) });
+    card(g, 460, 240, 360, 170, "Task 2", ["Look at", "your table"], { o: show(k, 1, p) });
+    card(g, 860, 240, 360, 170, "Task 3", ["Ask a question:", "the returns"], { o: show(k, 1, p), fill: GREEN });
+    code(g, 60, 440, ["CREATE TABLE shop.customers (", "  customer_id INTEGER, name STRING, city STRING);"], { size: 22, w: 900, o: show(k, 2, p) });
+    text(g, 980, 488, "Finished early?", { size: 24, weight: 800, fill: C.accent, o: show(k, 2, p) });
+    note(g, 60, 560, "At the end: your score and % → show your teacher.", { size: 26, o: show(k, 3, p) });
+    linkBar(g, 60, 630, 1160, { o: show(k, 4, p), size: 20, pad: 245, label: "Before the lab, try it:" });
+  },
+];
+</script>
+</body>
+</html>

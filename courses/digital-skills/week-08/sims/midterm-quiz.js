@@ -1,12 +1,15 @@
 // The practice exam of midterm-prep.qmd: 30 random questions from
-// midterm-bank.js (7 + 7 + 8 + 8 from Units 1–4), 50 minutes, one try per
+// midterm-bank.js (9 + 7 + 9 + 5 from Units 1–4, the shares of the exam bank;
+// two thirds of them from the questions marked `core`, one for each skill of
+// the exam), 50 minutes, one try per
 // question. Each answer is marked at once, with its reason in English and
 // Arabic; the mark comes at the end. The attempt is kept in this browser
 // (localStorage, inside try/catch), so a reload does not lose it.
 (() => {
   const BANK = window.MIDTERM_BANK || [];
   const UNITS = window.MIDTERM_UNITS || {};
-  const PICK = { 1: 7, 2: 7, 3: 8, 4: 8 };
+  const PICK = { 1: 9, 2: 7, 3: 9, 4: 5 };
+  const CORE = { 1: 6, 2: 5, 3: 6, 4: 3 }; // of PICK: the skills of the exam
   const N = Object.values(PICK).reduce((a, b) => a + b, 0);
   const MINUTES = 50;
   const KEY = "ds-midterm-prep-v1";
@@ -56,8 +59,12 @@
   function begin() {
     const ids = [];
     Object.keys(PICK).forEach((u) => {
-      const pool = BANK.map((b, i) => (b.u == u ? i : -1)).filter((i) => i >= 0);
-      ids.push(...shuffle(pool).slice(0, PICK[u]));
+      const of = (core) => shuffle(BANK.map((b, i) => (b.u == u && !!b.core === core ? i : -1)).filter((i) => i >= 0));
+      const core = of(true), rest = of(false);
+      const take = core.slice(0, CORE[u]);
+      take.push(...rest.slice(0, PICK[u] - take.length));
+      take.push(...core.slice(CORE[u], CORE[u] + PICK[u] - take.length)); // a unit with few other questions
+      ids.push(...take);
     });
     const order = shuffle(ids);
     st = {

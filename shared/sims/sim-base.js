@@ -28,6 +28,25 @@
     if (!own && GAME_KEYS.includes(e.code)) e.preventDefault();
   });
 
+  // The steps the student finished, for the score of the lesson page
+  // (lesson-script.html, ".lab-score"): every simulator with a list of steps
+  // shows "k of N done" (or "seen") in #progress; each change is sent to the
+  // page, which adds the simulators up in its Summary.
+  const report = () => {
+    const el = document.getElementById("progress");
+    const m = el && /(\d+)\s+of\s+(\d+)/.exec(el.textContent);
+    if (m) window.parent.postMessage({ simProgress: { done: Number(m[1]), total: Number(m[2]),
+      title: document.title.replace(/^Simulator:\s*/, "") } }, "*");
+  };
+  const watch = () => {
+    const el = document.getElementById("progress");
+    if (!el) return;
+    new MutationObserver(report).observe(el, { childList: true, characterData: true, subtree: true });
+    report();
+  };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watch); else watch();
+  window.addEventListener("load", report);
+
   // A field that gets the focus must not scroll the lesson page to the simulator.
   const focus = HTMLElement.prototype.focus;
   HTMLElement.prototype.focus = function (opts) { focus.call(this, Object.assign({ preventScroll: true }, opts)); };

@@ -62,6 +62,35 @@ platforms and R to help their work, not to learn programming.
 - The prep video is sent before the lab on the e-learning platform; it is
   not shown in class.
 
+## The score of the lab (2026-11-27)
+
+The teacher's request: the simulators of the page can take the place of
+the worksheet, so the page shows the score at the end.
+
+- **A `::: {.lab-score}` box at the end of the Summary** of every lab page
+  (Labs 1 and 2 have it). `lesson-script.html` fills it: for every
+  simulator of the page the steps finished (`sim-base.js` sends the
+  "k of N done" of `#progress` to the page), and the Try it boxes done; the
+  total, a percentage and a bar. The teacher walks by and reads one number.
+- **Only a step done counts.** A simulator ticks a step only when the
+  student did it right, so moving on without doing it gives 0. The best
+  result of each simulator is kept in the browser (`localStorage`), and
+  every simulator of the page opens a few seconds after the page does, so
+  the total is complete.
+- **An extra step** (*Finished early?*) is outside the score: the list says
+  "k of N done (+ the extra step)", so it can raise nothing and lower
+  nothing.
+- Every simulator with a list of steps writes "k of N done" (or "seen") in
+  `#progress`; a new simulator does the same, or it is not in the score.
+
+## Steps, then the screens, then do it (2026-11-27)
+
+The screens of the steps come **before** the students do them: in each
+section, *The idea*, then *The steps, screen by screen* (the worksheet
+screens), and at the end of the page one section, *Do it*, with the app
+simulator. In the list of steps under the simulator, each step has its
+details and a **Show me** button that opens its screens.
+
 ## The model: the lab model of Digital Skills, and nothing else
 
 Every lab is a lecture in the **lab model** (`lab: true`;

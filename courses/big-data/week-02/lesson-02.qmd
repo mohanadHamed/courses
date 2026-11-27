@@ -19,7 +19,7 @@ format: lesson-html
 Watch it **before the lab**: the ideas of today, then what you do in the
 lab. In Arabic, with the words of the lab in English.
 
-{{< watch file="videos/lab2-intro.mp4" captions="videos/lab2-intro.vtt" poster="videos/lab2-intro.png" script="videos/lab2-intro-script.txt" title="Lab 2 before the lab: from a file of sales to an answer" length="6:00" lang="ar" >}}
+{{< watch file="videos/lab2-intro.mp4" captions="videos/lab2-intro.vtt" poster="videos/lab2-intro.png" script="videos/lab2-intro-script.txt" title="Lab 2 before the lab: from a file of sales to an answer" length="6:03" lang="ar" >}}
 :::
 
 ## Today in the lab
@@ -64,7 +64,7 @@ You load the sales file of the shop into a table of BigQuery. Which step is it?
 
 ## 2.2 From a file to a table
 
-### On the simulator
+### The idea
 
 - A **dataset** is a folder of tables: **shop**.
 - **Create table** › **Upload** the file; **Auto detect** finds the
@@ -72,15 +72,11 @@ You load the sales file of the shop into a table of BigQuery. Which step is it?
 - **Schema** (the columns), **Details** (the number of rows), **Preview**
   (the first rows).
 
-::: {.sim-part}
-{{< sim file="sims/bq-lab2.html" poster="sims/bq-lab2.png" title="BigQuery Lab 2: load a file, look at it, ask it" height="900" >}}
-:::
-
-### In the BigQuery Lab: worksheet Tasks 1 and 2
+### The steps, screen by screen: Tasks 1 and 2
 
 :::: {.word-part data-app="BigQuery Lab (this page)"}
-The BigQuery Lab on a [full page](sims/bq-lab2.html){target="_blank" rel="noopener"}:
-your work stays in this browser.
+Where to click, before you do it in 2.4. The **orange numbers** show the
+order.
 
 ::: {.screens}
 ![[1]{.step-n} **⋮** next to **big-data-lab**. [2]{.step-n} **Create dataset**.](images/bq2-menu-ds.png)
@@ -93,7 +89,11 @@ your work stays in this browser.
 
 ![[1]{.step-n} **Table:** **sales**. [2]{.step-n} **Auto detect**. [3]{.step-n} **Create table**.](images/bq2-table.png)
 
+![[1]{.step-n} The table **sales**. [2]{.step-n} **Schema**: the columns and their types.](images/bq2-schema.png)
+
 ![[1]{.step-n} **Details**. [2]{.step-n} **Number of rows**.](images/bq2-details.png)
+
+![[1]{.step-n} **Preview**: the first rows.](images/bq2-preview.png)
 :::
 ::::
 
@@ -132,18 +132,16 @@ WHERE Quantity < 0;
 {{< sim file="sims/where-steps.html" poster="sims/where-steps.png" title="Code Steps: SELECT, FROM, WHERE" height="640" >}}
 :::
 
-### In the BigQuery Lab: worksheet Task 3
+### The steps, screen by screen: Task 3
 
 :::: {.word-part data-app="BigQuery Lab (this page)"}
-In the BigQuery Lab above: **Query**, then the query (or **Type for me**),
-then **Run**. Then open **Try a change** under the editor: another
-country, no quotes, a name spelled wrong …
+On the table **sales**: **Query**, then the query (or **Type for me**), then
+**Run**. Then open **Try a change** under the editor: another country, no
+quotes, a name spelled wrong …
 
-```sql
-SELECT Description, Quantity, Country
-FROM shop.sales
-WHERE Quantity < 0;
-```
+::: {.screens}
+![[1]{.step-n} The query. [2]{.step-n} **Run**. [3]{.step-n} **Results**: the returns.](images/bq2-where.png)
+:::
 
 Finished early? Make an **empty table** of your own: its name, then its
 columns and their types.
@@ -155,10 +153,6 @@ CREATE TABLE shop.customers (
   city STRING
 );
 ```
-
-::: {.screens}
-![[1]{.step-n} The query. [2]{.step-n} **Run**. [3]{.step-n} **Results**: the returns.](images/bq2-where.png)
-:::
 ::::
 
 ::: {.callout-tip title="Try it 3 · WHERE"}
@@ -172,11 +166,16 @@ A query has WHERE Country = 'France'. What does the answer show?
 :::
 :::
 
-## Now: your worksheet
+## 2.4 Do it: the BigQuery Lab
 
-::: {.lab-go}
-The same steps are on your **worksheet**, for the lab and for home. Tick
-each step. At the end: show your teacher the answer of Task 3.
+Now each student does Tasks 1 to 3, together with the teacher. Under the
+simulator, every step has its details, and **Show me** opens its screen. A
+[full page](sims/bq-lab2.html){target="_blank" rel="noopener"} is bigger;
+your work stays in this browser. The same steps are on your
+**worksheet**.
+
+::: {.sim-part}
+{{< sim file="sims/bq-lab2.html" poster="sims/bq-lab2.png" title="BigQuery Lab 2: load a file, look at it, ask it" height="1100" >}}
 :::
 
 ## Summary {.summary}
@@ -185,3 +184,7 @@ each step. At the end: show your teacher the answer of Task 3.
 - A dataset is a folder of tables; Upload with Auto detect makes a table from a CSV file.
 - Schema shows the columns and their types (STRING, INTEGER, FLOAT, TIMESTAMP); Details shows the number of rows.
 - SELECT chooses the columns, FROM the table, and WHERE the rows; text goes in quotes.
+
+::: {.lab-score}
+Your score in this lab appears here: open the page in a browser.
+:::

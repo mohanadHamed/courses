@@ -495,6 +495,64 @@
 })();
 </script>
 <script>
+// The score of a lab page (courses/big-data/NOTES.md, "The score of the
+// lab"): a {.lab-score} box, in the Summary, adds up what the student did
+// right on the page: the steps finished on every simulator (sim-base.js
+// sends "k of N done") and the Try it boxes done, with a percentage, so the
+// teacher reads one number instead of a worksheet. A step counts only when
+// the simulator marks it done, so moving on without doing it gives nothing.
+// The best result of each simulator is kept in this browser.
+(function () {
+  const box = document.querySelector(".lab-score");
+  if (!box) return;
+  const frames = [...document.querySelectorAll("figure.sim iframe")];
+  const key = "score:" + location.pathname;
+  let best = {};
+  try { best = JSON.parse(localStorage.getItem(key) || "{}") || {}; } catch (_) {}
+  const id = (f) => (f.getAttribute("src") || "").split("?")[0];
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  window.addEventListener("message", (e) => {
+    const p = e.data && e.data.simProgress;
+    if (!p || typeof p.done !== "number" || typeof p.total !== "number") return;
+    const f = frames.find((x) => x.contentWindow === e.source);
+    if (!f) return;
+    const k = id(f), old = best[k] || {};
+    best[k] = { done: Math.max(old.total === p.total ? old.done || 0 : 0, p.done), total: p.total };
+    try { localStorage.setItem(key, JSON.stringify(best)); } catch (_) {}
+    draw();
+  });
+  function draw() {
+    let done = 0, total = 0, open = true;
+    const rows = frames.map((f) => {
+      const b = best[id(f)];
+      if (!b) { open = false; return [f.title || "Simulator", null]; }
+      done += b.done; total += b.total;
+      return [f.title || "Simulator", b];
+    });
+    const tries = [...document.querySelectorAll(".try-done")];
+    const triesDone = tries.filter((t) => t.classList.contains("is-done")).length;
+    if (tries.length) { rows.push(["Try it questions", { done: triesDone, total: tries.length }]); done += triesDone; total += tries.length; }
+    const pct = total ? Math.round((100 * done) / total) : 0;
+    box.innerHTML = '<div class="ls-head"><b>Your score in this lab</b><span class="ls-pct">' + (open ? pct + "%" : "…") + "</span></div>" +
+      '<div class="ls-bar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="ls-total">' + done + " / " + total + " steps done right" + (open ? "" : " (still opening the simulators…)") + "</div>" +
+      '<ul class="ls-rows">' + rows.map(([t, b]) => "<li><span>" + esc(t) + "</span><b>" + (b ? b.done + " / " + b.total + (b.done === b.total ? " ✔" : "") : "not opened") + "</b></li>").join("") + "</ul>" +
+      '<p class="ls-note">Show this box to your teacher. Only the steps that you did count; a step that you skipped counts 0.</p>';
+  }
+  // Open every simulator once the score is in view, so each one sends its steps.
+  const wake = () => frames.forEach((f) => { if (f.getAttribute("loading") === "lazy") f.setAttribute("loading", "eager"); });
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { wake(); draw(); } }).observe(box);
+  }
+  // Also a few seconds after the page opens (a hidden tab never "sees" the box).
+  window.addEventListener("load", () => setTimeout(wake, 3000));
+  document.addEventListener("click", (e) => { if (e.target.closest(".try-done")) setTimeout(draw, 0); });
+  document.addEventListener("match:done", () => setTimeout(draw, 0));
+  document.addEventListener("ic:done", () => setTimeout(draw, 0));
+  draw();
+})();
+</script>
+<script>
 // Graded multiple choice ({.pick}, interact.lua): the student taps one
 // option; nothing is marked right or wrong. The choices are kept in this
 // browser only (a convenience: the page works the same without storage), so

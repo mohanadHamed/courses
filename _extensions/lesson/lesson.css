@@ -930,3 +930,16 @@ main .word-part .screens figure img { max-width: 540px; border: 1px solid #c9d6e
 .word-part.home-part::before { content: "Optional, at home: on your own computer, the same steps in the real app"; color: #2b8a3e; }
 section[id^="on-your-own-computer"] > h3::before { content: "💻 "; }
 section[id^="on-your-own-computer"] > h3 { color: #2b8a3e; }
+
+/* The score of a lab page (lesson-script.html, ".lab-score"). */
+.lab-score { border: 2px solid var(--accent, #c92a2a); border-radius: 14px; padding: 12px 16px; margin: 14px 0; background: #fff; }
+.lab-score .ls-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.lab-score .ls-head b { font-size: 1.1rem; }
+.lab-score .ls-pct { font-size: 2.2rem; font-weight: 800; color: var(--accent, #c92a2a); line-height: 1; }
+.lab-score .ls-bar { height: 12px; border-radius: 6px; background: #f1f3f5; overflow: hidden; margin: 8px 0 4px; }
+.lab-score .ls-bar i { display: block; height: 100%; background: #2f9e44; border-radius: 6px; transition: width 0.4s; }
+.lab-score .ls-total { font-weight: 700; }
+.lab-score .ls-rows { list-style: none; padding: 0; margin: 8px 0 4px; }
+.lab-score .ls-rows li { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed #dee2e6; padding: 3px 0; font-size: 0.92rem; }
+.lab-score .ls-note { font-size: 0.86rem; color: #6c757d; margin: 6px 0 0; }
+@media print { .lab-score { display: none; } }

@@ -65,47 +65,59 @@
   // The steps of the worksheet: a short title, then (the details): where to
   // click and what to type, so that a student can do the step alone
   // (the teacher's request of 2026-11-27; courses/big-data/NOTES.md).
-  const step = (task, title, detail) => '<span class="b-task">' + task + "</span> <b>" + title + '</b><span class="b-detail">(' + detail + ")</span>";
+  // A step may show its screens (the pictures of the worksheet): "Show me".
+  const step = (task, title, detail, shots) => '<span class="b-task">' + task + "</span> <b>" + title + '</b><span class="b-detail">(' + detail + ")</span>" +
+    (shots ? '<details class="b-show"><summary>Show me</summary>' + shots.map((f) => '<img src="../images/' + f + '" alt="The screen of this step" loading="lazy">').join("") + "</details>" : "");
   const MISSIONS = {};
   MISSIONS.all = [
     [step("Task 1", "Create the dataset shop",
-      "In the <b>Explorer</b> on the left, click <b>⋮</b> next to <b>big-data-lab</b>, then <b>Create dataset</b>. Type <b>shop</b> in <b>Dataset ID</b>, then click <b>Create dataset</b>."),
+      "In the <b>Explorer</b> on the left, click <b>⋮</b> next to <b>big-data-lab</b>, then <b>Create dataset</b>. Type <b>shop</b> in <b>Dataset ID</b>, then click <b>Create dataset</b>.", ["bq2-menu-ds.png", "bq2-dataset.png"]),
       () => !!(eng && eng.findSet("shop"))],
     [step("Task 1", "Open Create table",
-      "Click <b>⋮</b> next to <b>shop</b>, then <b>Create table</b>. A panel opens on the right."),
+      "Click <b>⋮</b> next to <b>shop</b>, then <b>Create table</b>. A panel opens on the right.", ["bq2-menu-tbl.png"]),
       () => done("menu-tbl") || hasTable("shop", "sales")],
     [step("Task 1", "Upload the file as the table sales",
       "<b>Create table from</b>: choose <b>Upload</b>. Click <b>Browse</b> and choose <b>" + FILE + "</b>; <b>File format</b>: <b>CSV</b>. " +
-      "<b>Table</b>: type <b>sales</b>. Tick <b>Auto detect</b>, then click <b>Create table</b>."),
+      "<b>Table</b>: type <b>sales</b>. Tick <b>Auto detect</b>, then click <b>Create table</b>.", ["bq2-upload.png", "bq2-table.png"]),
       () => hasTable("shop", "sales")],
     [step("Task 2", "See the columns: Schema",
-      "In the Explorer, under <b>shop</b>, click the table <b>sales</b>, then the tab <b>Schema</b>: the 8 columns and the type of each one."),
+      "In the Explorer, under <b>shop</b>, click the table <b>sales</b>, then the tab <b>Schema</b>: the 8 columns and the type of each one.", ["bq2-schema.png"]),
       () => done("Schema")],
     [step("Task 2", "Count the rows: Details",
-      "Click the tab <b>Details</b> (next to Schema). Look at <b>Number of rows</b>: 21,019."),
+      "Click the tab <b>Details</b> (next to Schema). Look at <b>Number of rows</b>: 21,019.", ["bq2-details.png"]),
       () => done("Details")],
     [step("Task 2", "See the first rows: Preview",
-      "Click the tab <b>Preview</b>. A negative <b>Quantity</b> is a return; an empty <b>Customer_ID</b> (null) is an unknown customer."),
+      "Click the tab <b>Preview</b>. A negative <b>Quantity</b> is a return; an empty <b>Customer_ID</b> (null) is an unknown customer.", ["bq2-preview.png"]),
       () => done("Preview")],
     [step("Task 3", "Ask: which sales are returns?",
       "On the table <b>sales</b>, click <b>Query</b>. Select the short query (<b>Ctrl + A</b>) and press <b>Delete</b>. Type the query of Task 3, or click <b>Type for me: Task 3: the returns</b>. " +
-      "Click <b>▶ Run</b>: the returns are in <b>Results</b>, 514 rows."),
+      "Click <b>▶ Run</b>: the returns are in <b>Results</b>, 514 rows.", ["bq2-where.png"]),
       () => done("run-returns")],
     [step("Task 3", "Try two changes",
       "Under the editor, click <b>Try a change: what happens if…?</b>. Click one change, then <b>▶ Run</b>, and read the message. Do it again with another change."),
       () => st.tries.length >= 2],
     [step("Finished early?", "An empty table: customers",
       "Click <b>Type for me: Finished early?</b>, then <b>▶ Run</b>. In the Explorer, click the new table <b>customers</b>: its <b>Schema</b> shows your 3 columns, and it has 0 rows."),
-      () => hasTable("shop", "customers")],
+      () => hasTable("shop", "customers"), "extra"],
   ];
   MISSIONS.load = MISSIONS.all.slice(0, 5);
   const missions = () => MISSIONS[PART];
-  const allDone = () => missions().every(([, ok]) => ok());
+  const allDone = () => missions().every(([, ok, kind]) => kind === "extra" || ok());
+  const showOpen = new Set();   // the steps whose "Show me" is open
   function steps() {
     const ol = $("#jobs"); if (!ol) return;
-    ol.innerHTML = ""; let k = 0;
-    missions().forEach(([t, ok]) => { const li = document.createElement("li"); li.innerHTML = t; if (ok()) { li.className = "ok"; k++; } ol.appendChild(li); });
-    $("#progress").textContent = k + " of " + missions().length + " done";
+    ol.innerHTML = ""; let k = 0, n = 0, extra = 0;
+    missions().forEach(([t, ok, kind], i) => {
+      const li = document.createElement("li"); li.innerHTML = t;
+      const d = li.querySelector("details");
+      if (d) { d.open = showOpen.has(i); d.addEventListener("toggle", () => { if (d.open) showOpen.add(i); else showOpen.delete(i); }); }
+      const yes = ok();
+      if (yes) li.className = "ok";
+      // An extra step (Finished early?) is not in the score: it cannot lower it.
+      if (kind === "extra") { if (yes) extra++; } else { n++; if (yes) k++; }
+      ol.appendChild(li);
+    });
+    $("#progress").textContent = k + " of " + n + " done" + (extra ? " (+ the extra step)" : "");
   }
   function say(t, bad) {
     const m = $("#msg"); if (!m) return;

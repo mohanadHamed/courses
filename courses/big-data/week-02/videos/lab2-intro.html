@@ -62,6 +62,15 @@ function card(g, x, y, w, h, title, lines, o = {}) {
   return gg;
 }
 
+// The link of the page of Lab 2: the student opens it to do the steps alone.
+const LINK = "mohanadhamed.github.io/courses/courses/big-data/week-02/lesson-02.html";
+function linkBar(g, x, y, w, o = {}) {
+  const gg = group(g, o), h = o.h || 52;
+  rect(gg, x, y, w, h, { fill: C.accent, r: 14 });
+  text(gg, x + 22, y + h * 0.66, o.label || "Do it yourself:", { size: o.size || 24, weight: 800, fill: "#fff" });
+  text(gg, x + (o.pad || 230), y + h * 0.66, LINK, { size: o.size || 24, weight: 700, mono: true, fill: "#fff" });
+  return gg;
+}
 VIDEO.scenes = [
   // 1. Title: today, three steps.
   (g, k, p) => {
@@ -76,17 +85,19 @@ VIDEO.scenes = [
       pill(s, 90 + i * 330, 570, (i + 1) + " · " + t, { size: 30, fill: i === 2 ? "#EBFBEE" : C.soft });
       if (i < 2) arrow(s, 90 + i * 330 + 200, 598, 90 + i * 330 + 300, 598);
     });
+    linkBar(g, 60, 650, 1160, { o: show(k, 0, p), size: 22, pad: 215 });
   },
   // 2. The BigQuery Lab: no account.
   (g, k, p) => {
     head(g, "Today: the BigQuery Lab", { o: show(k, 0, p) });
     image(g, SIM("bq-lab2.png"), 60, 150, 700, 330, { o: show(k, 0, p) });
-    text(g, 410, 520, "On the page of Lab 2, on the course site", { size: 24, anchor: "middle", weight: 600, fill: C.grey, o: show(k, 0, p) });
+    text(g, 60, 515, "On the page of Lab 2, on the course site:", { size: 24, weight: 700, fill: C.grey, o: show(k, 0, p) });
+    linkBar(g, 60, 640, 1160, { o: show(k, 0, p), size: 22, pad: 215, label: "The link:" });
     note(g, 800, 170, "Looks like BigQuery", { size: 28, o: show(k, 1, p) });
     note(g, 800, 250, "Real answers, real data", { size: 28, o: show(k, 2, p) });
     good(g, 800, 330, "No Google account", { size: 28, o: show(k, 3, p) });
     good(g, 800, 410, "No sign in", { size: 28, o: show(k, 3, p) });
-    note(g, 60, 580, "Your work stays in this browser.", { size: 28, o: show(k, 4, p) });
+    note(g, 60, 540, "Your work stays in this browser.", { size: 28, o: show(k, 4, p) });
   },
   // 3. Collect: a CSV file.
   (g, k, p) => {
@@ -167,7 +178,7 @@ VIDEO.scenes = [
     code(g, 60, 440, ["CREATE TABLE shop.customers (", "  customer_id INTEGER, name STRING, city STRING);"], { size: 22, w: 900, o: show(k, 2, p) });
     text(g, 980, 488, "Finished early?", { size: 24, weight: 800, fill: C.accent, o: show(k, 2, p) });
     note(g, 60, 560, "At the end: your score and % → show your teacher.", { size: 26, o: show(k, 3, p) });
-    text(g, 640, 680, "Before the lab: try the simulators of the page. See you in the lab.", { size: 28, weight: 800, fill: C.accent, anchor: "middle", o: show(k, 4, p) });
+    linkBar(g, 60, 630, 1160, { o: show(k, 4, p), size: 20, pad: 245, label: "Before the lab, try it:" });
   },
 ];
 </script>

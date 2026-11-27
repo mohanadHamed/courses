@@ -1,14 +1,13 @@
 ---
 title: "Collect and Store: Loading Data into BigQuery"
-description: "A CSV file of a real online shop, its columns and their types, your own dataset and table, and a clean table made by a query (ELT): 15 minutes on the simulators, then the worksheet on the BigQuery Lab of this page."
+description: "The sales file of a real online shop: load it into your own table, look at its columns, and ask it a question with SELECT, FROM and WHERE. The big picture first, then step by step together on the BigQuery Lab of this page."
 lesson: 2
 ilos: [C1]
-# The lab model (courses/big-data/NOTES.md), with no Google account (since
-# Lab 2): about 15 minutes on this page, then each student follows the
-# printed worksheet on the BigQuery Lab simulator of this page, which runs
-# real SQL (shared/sims/bq-engine.js). Each section has "On the simulator"
-# (the idea) and "In the BigQuery Lab" (Tasks N of the worksheet, the same
-# screens).
+# The lab model for business students (courses/big-data/NOTES.md, "Business
+# students" and "The BigQuery Lab"): no Google account; first the big
+# picture (the teacher, 5–10 minutes, a one-click simulator), then the
+# students do the steps together with the teacher on the BigQuery Lab of
+# this page (about 30 minutes); the printed worksheet holds the same steps.
 lab: true
 lab-app: "the BigQuery Lab (a simulator, on this page)"
 format: lesson-html
@@ -20,68 +19,68 @@ format: lesson-html
 Watch it **before the lab**: the ideas of today, then what you do in the
 lab. In Arabic, with the words of the lab in English.
 
-{{< watch file="videos/lab2-intro.mp4" captions="videos/lab2-intro.vtt" poster="videos/lab2-intro.png" script="videos/lab2-intro-script.txt" title="Lab 2 before the lab: a CSV file, your own table and a clean table" length="9:42" lang="ar" >}}
+{{< watch file="videos/lab2-intro.mp4" captions="videos/lab2-intro.vtt" poster="videos/lab2-intro.png" script="videos/lab2-intro-script.txt" title="Lab 2 before the lab: from a file of sales to an answer" length="6:00" lang="ar" >}}
 :::
 
 ## Today in the lab
 
 ::: {.lab-plan}
-1. **Here:** each idea on a simulator.
-2. **Then:** your **worksheet** on the **BigQuery Lab** of this page: no
-   Google account, nothing to sign in.
-3. **At the end:** show your result to your teacher.
+1. **The big picture** (your teacher, 5–10 minutes): the whole lab in
+   three clicks.
+2. **Step by step, together** (about 30 minutes): the same steps on the
+   **BigQuery Lab** of this page. No Google account, nothing to sign in.
+3. **At the end:** show your teacher your answer.
 :::
 
-![Today you load the file of a real online shop into your own table, then save a clean copy of it.](images/bq2-clean-details.png){width=60%}
+![Today: the sales of a real online shop, from a file to a table, then a question and its answer.](images/bq2-where.png){width=60%}
 
 ## Key terms
 
-{{< glossary csv-file table-schema column-type load-job null-value etl elt >}}
+{{< glossary csv-file bq-dataset table-schema column-type null-value sql-query >}}
 
-## 2.1 Data comes as files
+## 2.1 The big picture: collect, store, ask
 
 ### On the simulator
 
-- Shops, card machines and apps **collect** data in **files**.
-- **CSV**: one **line** for each row, a **comma** between the values; line
-  1, the **header**, holds the column names.
-- Each column has a **type**: STRING, INTEGER, FLOAT, TIMESTAMP. An empty
-  value is **null**.
+- **Collect:** a shop saves every sale in a **file** (CSV: one line for
+  each sale).
+- **Store:** the platform loads the file into a **table**.
+- **Ask:** a short question in **SQL** gives the answer at once.
 
 ::: {.sim-part}
-{{< sim file="sims/csv-lab.html" poster="sims/csv-lab.png" title="CSV Lab: from a text file to a table" height="760" >}}
+{{< sim file="sims/big-picture.html" poster="sims/big-picture.png" title="Lab 2 in three clicks: collect, store, ask" height="820" >}}
 :::
 
-::: {.callout-tip title="Try it 1 · The type of a column"}
+::: {.callout-tip title="Try it 1 · Collect, store or ask?"}
 Choose the right answer.
 
-::: {.match extra="INTEGER|FLOAT"}
-The column Invoice holds 489434, 489436 … and C489459 (a return). Which type does Auto detect give it?
-:   STRING
+::: {.match extra="Collect|Ask"}
+You load the sales file of the shop into a table of BigQuery. Which step is it?
+:   Store
 
-    Why: one value has a letter (C), so the column cannot be a number: the whole column is text, STRING.
+    Why: the data is already collected in a file; loading it into a table keeps it on the platform, ready for questions.
 :::
 :::
 
-## 2.2 Your dataset and your table
+## 2.2 From a file to a table
 
 ### On the simulator
 
-- A **dataset** is your folder of tables: **shop**.
-- **Create table** › **Upload**: a **load job** writes the file into a
-  table; **Auto detect** finds the columns and types.
-- Check it: **Schema** and **Details** (the rows).
+- A **dataset** is a folder of tables: **shop**.
+- **Create table** › **Upload** the file; **Auto detect** finds the
+  columns and their **types**.
+- **Schema** (the columns), **Details** (the number of rows), **Preview**
+  (the first rows).
 
 ::: {.sim-part}
-{{< sim file="sims/bq-lab2.html" poster="sims/bq-lab2.png" title="BigQuery Lab 2: your dataset, your table, a clean table" height="900" >}}
+{{< sim file="sims/bq-lab2.html" poster="sims/bq-lab2.png" title="BigQuery Lab 2: load a file, look at it, ask it" height="900" >}}
 :::
 
 ### In the BigQuery Lab: worksheet Tasks 1 and 2
 
 :::: {.word-part data-app="BigQuery Lab (this page)"}
-The worksheet is done on the **BigQuery Lab**: [open it on a full
-page](sims/bq-lab2.html){target="_blank" rel="noopener"}. It looks like
-BigQuery and runs real SQL; your work stays in this browser.
+The BigQuery Lab on a [full page](sims/bq-lab2.html){target="_blank" rel="noopener"}:
+your work stays in this browser.
 
 ::: {.screens}
 ![[1]{.step-n} **⋮** next to **big-data-lab**. [2]{.step-n} **Create dataset**.](images/bq2-menu-ds.png)
@@ -98,106 +97,91 @@ BigQuery and runs real SQL; your work stays in this browser.
 :::
 ::::
 
-::: {.callout-tip title="Try it 2 · Is the load complete?"}
+::: {.callout-tip title="Try it 2 · The type of a column"}
 Choose the right answer.
 
-::: {.match extra="Preview|Schema"}
-The file has 21,019 rows of sales. Where do you see that the table has all of them, without a query?
-:   Details
+::: {.match extra="STRING|INTEGER"}
+The column Price holds 6.95, 2.10, 0.65 … Which type does Auto detect give it?
+:   FLOAT
 
-    Why: Details shows the Number of rows of the table; it must be the same as the rows of the file.
+    Why: the prices are numbers with a decimal point: FLOAT. A whole number is INTEGER; text is STRING.
 :::
 :::
 
-## 2.3 ELT: a clean table from a query
+## 2.3 Ask a question: SELECT, FROM, WHERE
 
 ### The query, line by line
 
-**ETL** cleans data **before** the load. **ELT** loads the raw data first,
-then cleans it **inside** the platform with a query:
+Which sales are **returns**? A return has a negative quantity.
 
 ```sql
-CREATE TABLE shop.sales_clean AS
-SELECT *, Quantity * Price AS revenue
-FROM `big-data-lab.shop.sales`
-WHERE Quantity > 0
-  AND Customer_ID IS NOT NULL;
+SELECT Description, Quantity, Country
+FROM shop.sales
+WHERE Quantity < 0;
 ```
 
 ::: {.code-explain}
 | Line | What it does |
 |------|-------------------------------|
-| `CREATE TABLE shop.sales_clean AS` | Save the answer as a **new table**, sales_clean, in shop. |
-| `SELECT *, Quantity * Price AS revenue` | All the columns (`*`), and a new one: quantity × price = **revenue**. |
-| ``FROM `big-data-lab.shop.sales` `` | From the table you loaded. |
-| `WHERE Quantity > 0` | Keep only sales: a negative quantity is a **return**. |
-| `AND Customer_ID IS NOT NULL;` | And only known customers (**null** = no value). `;` ends it. |
+| `SELECT Description, Quantity, Country` | Show these three **columns** (a comma between them). |
+| `FROM shop.sales` | From the table **sales** in the dataset **shop**. |
+| `WHERE Quantity < 0;` | Only the **rows** with a quantity less than 0. `;` ends it. |
 :::
 
 ::: {.sim-part}
-{{< sim file="sims/clean-steps.html" poster="sims/clean-steps.png" title="Code Steps: how the clean table is made" height="760" >}}
+{{< sim file="sims/where-steps.html" poster="sims/where-steps.png" title="Code Steps: SELECT, FROM, WHERE" height="640" >}}
 :::
-
-### On the simulator
-
-- The BigQuery Lab of 2.2: **Run**, then **Try a change** (any query runs).
 
 ### In the BigQuery Lab: worksheet Task 3
 
 :::: {.word-part data-app="BigQuery Lab (this page)"}
-The query of the worksheet, to copy (the button at the top right of the
-box), or click **Type for me** in the BigQuery Lab:
+In the BigQuery Lab above: **Query**, then the query (or **Type for me**),
+then **Run**. Then open **Try a change** under the editor: another
+country, no quotes, a name spelled wrong …
 
 ```sql
-CREATE TABLE shop.sales_clean AS
-SELECT *, Quantity * Price AS revenue
-FROM `big-data-lab.shop.sales`
-WHERE Quantity > 0
-  AND Customer_ID IS NOT NULL;
+SELECT Description, Quantity, Country
+FROM shop.sales
+WHERE Quantity < 0;
 ```
 
-Finished early? A table of the sales in the United Kingdom only: the
-same idea, from the clean table, with a text value in quotes.
+Finished early? Make an **empty table** of your own: its name, then its
+columns and their types.
 
 ```sql
-CREATE TABLE shop.sales_uk AS
-SELECT *
-FROM `big-data-lab.shop.sales_clean`
-WHERE Country = 'United Kingdom';
+CREATE TABLE shop.customers (
+  customer_id INTEGER,
+  name STRING,
+  city STRING
+);
 ```
 
 ::: {.screens}
-![[1]{.step-n} The query. [2]{.step-n} **Run**. [3]{.step-n} A new table.](images/bq2-clean.png)
-
-![[1]{.step-n} **sales_clean** in the Explorer. [2]{.step-n} Its **Number of rows**.](images/bq2-clean-details.png)
+![[1]{.step-n} The query. [2]{.step-n} **Run**. [3]{.step-n} **Results**: the returns.](images/bq2-where.png)
 :::
 ::::
 
-::: {.callout-tip title="Try it 3 · ELT"}
+::: {.callout-tip title="Try it 3 · WHERE"}
 Choose the right answer.
 
-::: {.match extra="The table sales loses its returns|Nothing: a query only shows an answer"}
-You run CREATE TABLE shop.sales_clean AS SELECT … WHERE Quantity > 0. What happens?
-:   A new table holds the rows with Quantity > 0
+::: {.match extra="The column Country only|All the rows, sorted by country"}
+A query has WHERE Country = 'France'. What does the answer show?
+:   Only the rows of France
 
-    Why: CREATE TABLE … AS saves the answer of the query as a new table; the raw table sales stays as it was (ELT).
+    Why: WHERE is a filter of rows: it keeps only the rows where the condition is true.
 :::
 :::
 
 ## Now: your worksheet
 
 ::: {.lab-go}
-Do the three tasks of your **worksheet**, in order, on the
-[**BigQuery Lab**](sims/bq-lab2.html){target="_blank" rel="noopener"}.
-Tick each step. At the end: show your teacher the table **sales_clean**.
+The same steps are on your **worksheet**, for the lab and for home. Tick
+each step. At the end: show your teacher the answer of Task 3.
 :::
-
-![Your result at the end: the table sales_clean, with fewer rows than sales.](images/bq2-clean-details.png){width=60%}
 
 ## Summary {.summary}
 
-- Data is collected in files; a CSV file has one line for each row and a comma between the values.
-- A table has a schema: the name and the type of each column (STRING, INTEGER, FLOAT, TIMESTAMP); a missing value is null.
-- A load job writes the rows of a file into a table of your dataset; Details shows the number of rows.
-- ETL cleans data before the load; ELT loads it first and cleans it in the platform with a query.
-- CREATE TABLE … AS SELECT saves the answer of a query as a new table; the raw table stays as it was.
+- Collect, store, ask: a shop collects its sales in a file, the platform stores them in a table, and SQL asks the table.
+- A dataset is a folder of tables; Upload with Auto detect makes a table from a CSV file.
+- Schema shows the columns and their types (STRING, INTEGER, FLOAT, TIMESTAMP); Details shows the number of rows.
+- SELECT chooses the columns, FROM the table, and WHERE the rows; text goes in quotes.

@@ -1,13 +1,12 @@
 // BigQuery Lab 2: a simulator that looks like BigQuery Studio in Chrome, with a
 // real SQL engine (shared/sims/bq-engine.js on sql.js): the student makes a
-// dataset, loads the CSV file of an online shop into a table, checks it, and
-// saves a clean copy with CREATE TABLE … AS SELECT (ELT). Any query works:
-// a change of the worksheet query gives what BigQuery would give (its errors,
-// rows in any order without ORDER BY, the bytes before the run).
+// dataset, loads the CSV file of an online shop into a table, looks at it
+// (Schema, Details, Preview) and asks it a question with SELECT … FROM …
+// WHERE. Any query works: a change gives what BigQuery would give (its
+// errors, rows in any order without ORDER BY, the bytes before the run).
 //
 // The page chooses the part (window.BQ_LAB2):
 //   "load":  an empty project: Create dataset, Create table (Upload), Schema, Details;
-//   "query": the table shop.sales is there: Query, a count, CREATE TABLE sales_clean;
 //   "all":   the whole worksheet (Tasks 1-3 and Finished early?); it remembers
 //            the work of the student in this browser (localStorage).
 // ?shot=<name> draws one screen of the worksheet with its orange numbers.
@@ -27,33 +26,31 @@
   const fmt = (b) => window.BQEngine.fmtBytes(b);
   const norm = (q) => q.replace(/--[^\n]*/g, "").replace(/\s+/g, " ").replace(/\s*([(),;*=<>])\s*/g, "$1").trim().toLowerCase().replace(/;$/, "");
 
-  const Q_COUNT = "SELECT COUNT(*) AS all_rows\nFROM `big-data-lab.shop.sales`;";
-  const Q_CLEAN = "CREATE TABLE shop.sales_clean AS\nSELECT *, Quantity * Price AS revenue\nFROM `big-data-lab.shop.sales`\nWHERE Quantity > 0\n  AND Customer_ID IS NOT NULL;";
-  const Q_UK = "CREATE TABLE shop.sales_uk AS\nSELECT *\nFROM `big-data-lab.shop.sales_clean`\nWHERE Country = 'United Kingdom';";
+  // The queries of the worksheet: SELECT … FROM … WHERE, and CREATE TABLE with its columns
+  // (business students: no CREATE … AS SELECT, no GROUP BY; courses/big-data/NOTES.md).
+  const Q_RETURNS = "SELECT Description, Quantity, Country\nFROM shop.sales\nWHERE Quantity < 0;";
+  const Q_CUSTOMERS = "CREATE TABLE shop.customers (\n  customer_id INTEGER,\n  name STRING,\n  city STRING\n);";
   const Q_START = (t) => "SELECT * FROM `big-data-lab." + t + "` LIMIT 1000";
-  const T = "`big-data-lab.shop.sales`";
   // Try a change: the changes a student often wants to try, and what they show.
   const CHANGES = [
-    { id: "count-clean", label: "Count the clean rows", sql: "SELECT COUNT(*) AS clean_rows\nFROM " + T + "\nWHERE Quantity > 0\n  AND Customer_ID IS NOT NULL;",
-      say: "The rows that CREATE TABLE keeps: the same number as the Details of <b>sales_clean</b>. A query shows the answer; CREATE TABLE <b>saves</b> it." },
-    { id: "returns", label: "Only the returns (Quantity < 0)", sql: "SELECT *\nFROM " + T + "\nWHERE Quantity < 0;",
-      say: "A <b>negative quantity</b> is a return: the customer sent the item back. These rows are not sales, so the clean table leaves them out." },
-    { id: "unknown", label: "Unknown customers (IS NULL)", sql: "SELECT *\nFROM " + T + "\nWHERE Customer_ID IS NULL;",
-      say: "<b>null</b> = no value: the shop does not know the customer. <b>IS NULL</b> finds these rows; <b>= NULL</b> finds nothing." },
-    { id: "or", label: "OR in place of AND", sql: "SELECT COUNT(*) AS kept_rows\nFROM " + T + "\nWHERE Quantity > 0\n   OR Customer_ID IS NOT NULL;",
-      say: "<b>OR</b> keeps a row when <b>one</b> condition is true, so it keeps more rows: the returns of known customers and the sales of unknown customers stay in. <b>AND</b> needs both." },
-    { id: "no-where", label: "Remove the WHERE lines", sql: "SELECT COUNT(*) AS kept_rows\nFROM " + T + ";",
-      say: "Without <b>WHERE</b> every row stays: nothing is cleaned." },
-    { id: "country-noorder", label: "Rows per country, no ORDER BY", sql: "SELECT Country, COUNT(*) AS items\nFROM " + T + "\nGROUP BY Country;",
-      say: "No <b>ORDER BY</b>: the rows come <b>in any order</b>, because many computers finish their parts at different times. Click <b>Run</b> again: the order changes." },
-    { id: "country-order", label: "… and with ORDER BY", sql: "SELECT Country, COUNT(*) AS items\nFROM " + T + "\nGROUP BY Country\nORDER BY items DESC;",
-      say: "With <b>ORDER BY items DESC</b> the order is always the same: the most rows first. Without ORDER BY, never trust the order." },
-    { id: "no-group", label: "Remove GROUP BY", sql: "SELECT Country, COUNT(*) AS items\nFROM " + T + ";",
-      say: "An error: COUNT gives <b>one</b> number for all the rows, so <b>Country</b> has no single value. GROUP BY makes one row for each country." },
-    { id: "typo", label: "A wrong table name", sql: "SELECT COUNT(*) AS all_rows\nFROM `big-data-lab.shop.salse`;",
-      say: "<b>Not found</b>: BigQuery says which name it did not find. Check the name letter by letter, or copy it from the Explorer." },
-    { id: "again", label: "CREATE TABLE twice", sql: Q_CLEAN,
-      say: "<b>Already Exists</b>: a table name is used once in a dataset. Use a new name, or <b>CREATE OR REPLACE TABLE</b> to make it again." },
+    { id: "france", label: "Only one country: France", sql: "SELECT Description, Quantity, Country\nFROM shop.sales\nWHERE Country = 'France';",
+      say: "<b>WHERE Country = 'France'</b>: only the rows of France. A text value goes between quotes <b>'…'</b>." },
+    { id: "noquote", label: "Forget the quotes", sql: "SELECT Description, Quantity, Country\nFROM shop.sales\nWHERE Country = France;",
+      say: "Without quotes, BigQuery thinks <b>France</b> is the name of a column, and there is no such column. Text needs quotes: <b>'France'</b>." },
+    { id: "big", label: "Big orders: 100 or more", sql: "SELECT Description, Quantity, Price\nFROM shop.sales\nWHERE Quantity >= 100;",
+      say: "<b>&gt;=</b> means <i>more than or equal to</i>. These are the big orders: a wholesale customer, maybe." },
+    { id: "star", label: "All the columns (*)", sql: "SELECT *\nFROM shop.sales\nWHERE Quantity < 0;",
+      say: "<b>*</b> = all the columns. The same rows, more columns. Look at the bytes: * reads more data than three columns." },
+    { id: "nowhere", label: "Remove the WHERE line", sql: "SELECT Description, Quantity, Country\nFROM shop.sales;",
+      say: "Without <b>WHERE</b>, every row comes back: no filter." },
+    { id: "and", label: "Two conditions (AND)", sql: "SELECT Description, Quantity, Country\nFROM shop.sales\nWHERE Country = 'France' AND Quantity < 0;",
+      say: "<b>AND</b>: both must be true. The returns of France only." },
+    { id: "unknown", label: "Unknown customers", sql: "SELECT Description, Quantity, Customer_ID\nFROM shop.sales\nWHERE Customer_ID IS NULL;",
+      say: "<b>null</b> = no value: the shop does not know the customer. <b>IS NULL</b> finds these rows." },
+    { id: "badcol", label: "A column name spelled wrong", sql: "SELECT Descripton, Quantity, Country\nFROM shop.sales\nWHERE Quantity < 0;",
+      say: "<b>Unrecognized name</b>: there is no such column. BigQuery even says <b>Did you mean Description?</b>" },
+    { id: "badtable", label: "A table name spelled wrong", sql: "SELECT Description, Quantity, Country\nFROM shop.sale\nWHERE Quantity < 0;",
+      say: "<b>Not found</b>: the table <b>sale</b> is not there. Copy the name from the Explorer: <b>sales</b>." },
   ];
   const IS_CHANGE = (sql) => CHANGES.find((c) => norm(c.sql) === norm(sql));
 
@@ -68,28 +65,20 @@
   const MISSIONS = {
     load: [
       ["Next to <b>big-data-lab</b>, click <b>⋮</b>, then <b>Create dataset</b>", () => done("menu-ds")],
-      ["Dataset ID: <b>shop</b>. Click <b>Create dataset</b>", () => hasTable("shop", "") || !!(eng && eng.findSet("shop"))],
+      ["Dataset ID: <b>shop</b>. Click <b>Create dataset</b>", () => !!(eng && eng.findSet("shop"))],
       ["Next to <b>shop</b>, click <b>⋮</b>, then <b>Create table</b>", () => done("menu-tbl")],
       ["<b>Upload</b>, <b>Browse</b>: the file <b>" + FILE + "</b>", () => done("file")],
       ["Table: <b>sales</b>. Tick <b>Auto detect</b>. Click <b>Create table</b>", () => hasTable("shop", "sales")],
       ["Open <b>sales</b>: <b>Schema</b>, then <b>Details</b>", () => done("Schema") && done("Details")],
     ],
-    query: [
-      ["On the table <b>sales</b>, click <b>Query</b>", () => done("tab")],
-      ["Count the rows: the query of Task 2. Click <b>Run</b>", () => done("run-count")],
-      ["Make the clean table: <b>CREATE TABLE</b> … (Task 3). <b>Run</b>", () => hasTable("shop", "sales_clean")],
-      ["Open <b>sales_clean</b>: <b>Details</b>", () => done("Details-sales_clean")],
-      ["<b>Try a change</b>: run 3 of the changes", () => st.tries.length >= 3],
-    ],
   };
   MISSIONS.all = [
     ["Task 1 · Create the dataset <b>shop</b>", () => !!(eng && eng.findSet("shop"))],
     ["Task 1 · Load <b>" + FILE + "</b> into the table <b>sales</b>", () => hasTable("shop", "sales")],
-    ["Task 2 · <b>Schema</b> and <b>Details</b> of <b>sales</b>", () => done("Schema") && done("Details")],
-    ["Task 2 · Count the rows with a query", () => done("run-count")],
-    ["Task 3 · Make the table <b>sales_clean</b> (CREATE TABLE)", () => hasTable("shop", "sales_clean")],
-    ["Task 3 · <b>Details</b> of <b>sales_clean</b>", () => done("Details-sales_clean")],
-    ["Finished early? · the table <b>sales_uk</b>", () => hasTable("shop", "sales_uk")],
+    ["Task 2 · <b>Schema</b>, <b>Details</b> and <b>Preview</b> of <b>sales</b>", () => done("Schema") && done("Details") && done("Preview")],
+    ["Task 3 · Ask: which sales are returns? (<b>Run</b>)", () => done("run-returns")],
+    ["Task 3 · <b>Try a change</b>: run 2 changes", () => st.tries.length >= 2],
+    ["Finished early? · the empty table <b>customers</b>", () => hasTable("shop", "customers")],
   ];
   const missions = () => MISSIONS[PART];
   const allDone = () => missions().every(([, ok]) => ok());
@@ -102,7 +91,7 @@
   function say(t, bad) {
     const m = $("#msg"); if (!m) return;
     const end = !bad && allDone();
-    m.innerHTML = t + (end ? "<br><b>" + (PART === "all" ? "All done: show your teacher." : PART === "load" ? "All done: the same steps as Tasks 1 and 2 of your worksheet." : "All done: the same steps as Tasks 2 and 3, and three changes of your own.") + "</b>" : "");
+    m.innerHTML = t + (end ? "<br><b>" + (PART === "all" ? "All done: show your teacher." : "All done: the same steps as Tasks 1 and 2 of your worksheet.") + "</b>" : "");
     m.className = "message" + (bad ? " bad" : end ? " good" : "");
   }
 
@@ -207,7 +196,7 @@
     const e = st.estimate;
     if (!e || e.empty) return '<span class="b-valid"></span>';
     if (!e.ok) return '<span class="b-valid err" data-mk="est">⊘ ' + esc(e.error.msg) + "</span>";
-    return '<span class="b-valid ok" data-mk="est">' + (e.kind === "create" ? "This statement will process " : e.kind === "drop" ? "This statement will remove a table: " : "This query will process ") +
+    return '<span class="b-valid ok" data-mk="est">' + (e.kind === "create" || e.kind === "define" ? "This statement will process " : e.kind === "drop" ? "This statement will remove a table: " : "This query will process ") +
       (e.kind === "drop" ? "" : fmt(e.bytes) + " when run.") + "</span>";
   }
   function resultHtml() {
@@ -240,8 +229,7 @@
   function queryHtml() {
     return '<div class="b-pad"><div class="b-run"><button class="b-primary" data-act="run" data-mk="run">▶ Run</button><span class="b-links">Save &nbsp; Share &nbsp; Schedule</span>' +
       estimateHtml() + "</div>" +
-      '<div class="b-chips"><span>Type for me:</span><button data-type="count">Task 2: count the rows</button><button data-type="clean">Task 3: the clean table</button>' +
-      (PART !== "load" ? '<button data-type="uk">Finished early?</button>' : "") + "</div>" +
+      '<div class="b-chips"><span>Type for me:</span><button data-type="returns">Task 3: the returns</button><button data-type="customers">Finished early?</button></div>' +
       '<div class="b-sqlwrap" data-mk="sql"><textarea class="b-sql" spellcheck="false" aria-label="SQL query">' + esc(st.sql) + "</textarea></div>" +
       (PART !== "load" ? '<details class="b-try"' + (st.tryOpen ? " open" : "") + '><summary data-mk="try">Try a change: what happens if…?</summary><div class="b-chips">' +
         CHANGES.map((c) => '<button data-change="' + c.id + '" class="' + (st.tries.includes(c.id) ? "tried" : "") + '">' + esc(c.label) + "</button>").join("") + "</div></details>" : "") +
@@ -336,7 +324,7 @@
       if (!st.tabs.includes("Untitled query")) st.tabs.push("Untitled query");
       const t = st.tab && st.tab !== "Untitled query" ? st.tab : "shop.sales";
       st.tab = "Untitled query"; st.sql = Q_START(t); st.result = null; mark("tab"); draw(); recheck();
-      return say("A short query is ready. It reads <b>every column</b> (*). Select it all and delete it, then type the query of your worksheet.");
+      return say("A short query is ready. Select it all (<b>Ctrl + A</b>) and delete it, then type the query of your worksheet, or click <b>Type for me</b>.");
     }
     if (a === "goto") { openTable(el.dataset.t, "Details"); markSub(); draw(); return say("The new table: <b>Details</b> shows its number of rows."); }
     if (a === "prev" || a === "next") { st.page += a === "next" ? 1 : -1; draw(); return; }
@@ -359,16 +347,16 @@
       if (ch && !st.tries.includes(ch.id) && !(ch.id === "again" && !r.error)) st.tries.push(ch.id);
       if (!r.error) {
         if (r.kind === "create" || r.kind === "drop") { st.log.push({ a: "sql", sql: text }); if (r.created) st.open[r.created.split(".")[0]] = true; }
-        if (r.kind === "select" && r.total === 1 && r.head.length === 1 && /shop\.sales`?\s*;?\s*$/i.test(text) && r.rows[0][0] === String(eng.findTable("shop", "sales") ? eng.findTable("shop", "sales").info.rows : -1)) mark("run-count");
+        if (r.kind === "select" && norm(text) === norm(Q_RETURNS)) mark("run-returns");
       }
       save(); st.estimate = eng.check(st.sql); draw();
       if (r.error) return say((ch ? ch.say + "<br>" : "") + "A red message: read it. " + (r.error.hint ? esc(r.error.hint) : ""), !ch);
-      if (ch && !(ch.id === "again")) return say(ch.say);
-      if (r.kind === "create") return say(r.skipped ? "IF NOT EXISTS: the table is already there, so nothing changed." :
-        "The query ran and BigQuery <b>saved its answer as a table</b>: <b>" + esc(r.created) + "</b>, " + num(r.rows) + " rows. This is <b>ELT</b>: the data was loaded first, then cleaned inside the platform. Open it in the Explorer: <b>Details</b>.");
+      if (ch) return say(ch.say + " (" + num(r.total) + " rows.)");
+      if (r.kind === "create") return say(r.skipped ? "The table is already there: nothing changed." :
+        "A new, <b>empty</b> table: <b>" + esc(r.created) + "</b>. Open it in the Explorer: its <b>Schema</b> shows your columns and their types. It has 0 rows: a file or an app fills it later.");
       if (r.kind === "drop") return say("The table is removed. (In a real project, think twice: there is no undo.)");
-      if (done("run-count") && r.total === 1 && norm(text) === norm(Q_COUNT)) return say("<b>" + num(r.rows[0][0]) + "</b> rows: the same number as <b>Details</b> and as the rows of the file. The load is complete. <b>0 B</b> processed: BigQuery knows the number of rows without reading the columns.");
-      return say(num(r.total) + " row" + (r.total === 1 ? "" : "s") + " in the answer; " + fmt(r.bytes) + " processed." + (r.shuffled ? " No ORDER BY: the order of the rows can change on every run." : ""));
+      if (norm(text) === norm(Q_RETURNS)) return say("<b>" + num(r.total) + " returns</b>: every row has a negative Quantity. Now open <b>Try a change</b> and try two changes.");
+      return say(num(r.total) + " row" + (r.total === 1 ? "" : "s") + " in the answer; " + fmt(r.bytes) + " processed.");
     }, 700);
   }
   root.addEventListener("click", (e) => {
@@ -388,7 +376,7 @@
     }
     if (t.dataset.act) return act(t.dataset.act, t);
     if (t.dataset.type) {
-      st.sql = t.dataset.type === "count" ? Q_COUNT : t.dataset.type === "clean" ? Q_CLEAN : Q_UK;
+      st.sql = t.dataset.type === "returns" ? Q_RETURNS : Q_CUSTOMERS;
       if (st.tab !== "Untitled query") { if (!st.tabs.includes("Untitled query")) st.tabs.push("Untitled query"); st.tab = "Untitled query"; mark("tab"); }
       st.result = null; draw(); recheck();
       return say("Typed. Look at the message on the right of <b>Run</b>: a green tick and the bytes it will read. Then click <b>Run</b>.");
@@ -415,7 +403,7 @@
     if (!f) return "";
     if (st.sub === "Schema") return "<b>Schema</b>: the columns and their <b>types</b>. STRING = text, INTEGER = a whole number, FLOAT = a number with a point, TIMESTAMP = a date and a time.";
     if (st.sub === "Details") return "<b>Details</b>: <b>" + num(f.info.rows) + " rows</b>, " + fmt(f.info.bytes) + "." + (name === "sales" ? " The real file has 525,461 rows; this lab uses 1 row in every 25 of it." : "");
-    if (st.sub === "Preview") return "<b>Preview</b>: the first rows, free. Look for a <b>negative Quantity</b> (a return) and an empty <b>Customer_ID</b> (null).";
+    if (st.sub === "Preview") return "<b>Preview</b>: the first rows, free. Each row is one item sold. A <b>negative Quantity</b> is a return; an empty <b>Customer_ID</b> (null) is an unknown customer.";
     return "Not in this lab.";
   }
   const reset = $("#reset");
@@ -430,10 +418,6 @@
     eng = await window.BQEngine.create({ vendor: VENDOR, project: PROJECT });
     if (!csvText) csvText = await (await fetch(FILE)).text();
     st = fresh();
-    if (PART === "query") {
-      eng.createDataset("shop"); eng.loadCsv("shop", "sales", csvText, { autodetect: true });
-      st.open.shop = true; openTable("shop.sales", "Schema");
-    }
     if (PART === "all" && !clean && !SHOT) {
       try {
         const saved = JSON.parse(localStorage.getItem(KEY) || "null");
@@ -442,8 +426,7 @@
     }
     draw();
     if (SHOT) return shot(SHOT);
-    say(PART === "query" ? "Start: the table <b>sales</b> is open. Click <b>Query</b>."
-      : st.log.length ? "Welcome back: your dataset and your tables are still here (in this browser). <b>Start again</b> empties the project."
+    say(st.log.length ? "Welcome back: your dataset and your tables are still here (in this browser). <b>Start again</b> empties the project."
       : "Start: in the <b>Explorer</b>, click <b>⋮</b> next to <b>" + PROJECT + "</b>, then <b>Create dataset</b>.");
   }
 
@@ -460,12 +443,9 @@
       marks: ["#f-tbl", "#f-auto", '[data-act="do-tbl"]'], after: () => { const b = $(".b-pb", root); if (b) b.scrollTop = b.scrollHeight; } },
     "schema": { go: () => { loadAll(); openTable("shop.sales", "Schema"); }, marks: ['[data-node="tbl:shop.sales"]', '[data-mk="sub-Schema"]'] },
     "details": { go: () => { loadAll(); openTable("shop.sales", "Details"); }, marks: ['[data-mk="sub-Details"]', '[data-mk="rows"]'] },
-    "count": { go: () => { loadAll(); st.tabs = ["shop.sales", "Untitled query"]; st.tab = "Untitled query"; st.sql = Q_COUNT; st.estimate = eng.check(Q_COUNT); st.result = runNow(Q_COUNT); },
-      marks: ['[data-mk="sql"]', '[data-mk="est"]', '[data-mk="run"]'] },
-    "clean": { go: () => { loadAll(); st.tabs = ["shop.sales", "Untitled query"]; st.tab = "Untitled query"; st.sql = Q_CLEAN; st.estimate = eng.check(Q_CLEAN); st.result = runNow(Q_CLEAN); st.open.shop = true; },
-      marks: ['[data-mk="sql"]', '[data-mk="run"]', '[data-mk="created"]'] },
-    "clean-details": { go: () => { loadAll(); eng.run(Q_CLEAN); openTable("shop.sales_clean", "Details"); st.tabs = ["shop.sales", "Untitled query", "shop.sales_clean"]; },
-      marks: ['[data-node="tbl:shop.sales_clean"]', '[data-mk="rows"]'] },
+    "preview": { go: () => { loadAll(); openTable("shop.sales", "Preview"); }, marks: ['[data-mk="sub-Preview"]'] },
+    "where": { go: () => { loadAll(); st.tabs = ["shop.sales", "Untitled query"]; st.tab = "Untitled query"; st.sql = Q_RETURNS; st.estimate = eng.check(Q_RETURNS); st.result = runNow(Q_RETURNS);
+      st.result.rows = st.result.rows.slice(0, 6); st.result.total = 514; st.result.shuffled = false; }, marks: ['[data-mk="sql"]', '[data-mk="run"]', '[data-mk="r-Results"]'] },
   };
   function loadAll() { if (!eng.findSet("shop")) eng.createDataset("shop"); if (!eng.findTable("shop", "sales")) eng.loadCsv("shop", "sales", csvText, { autodetect: true }); st.open.shop = true; }
   function runNow(q) { const r = eng.run(q); r.job = "a1b2c3d4"; return r; }

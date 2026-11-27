@@ -3,6 +3,7 @@
 // SQLite (sql.js, vendor/sql-wasm.*, MIT); this file gives it the look and the
 // rules of BigQuery, so a student who changes the query of the worksheet gets
 // what BigQuery would give:
+//   - CREATE TABLE shop.t (name STRING, …): an empty table with its columns;
 //   - names: `big-data-lab.shop.sales`, shop.sales; a dataset is an attached
 //     database; a table without its dataset is an error, as in BigQuery;
 //   - BigQuery functions: EXTRACT, COUNTIF, FORMAT_DATE/FORMAT_TIMESTAMP,
@@ -256,23 +257,44 @@
       const k0 = up(tk[0]);
       if (["INSERT", "UPDATE", "DELETE", "MERGE", "TRUNCATE"].includes(k0))
         return err("Billing has not been enabled for this project. Enable billing at https://console.cloud.google.com/billing. DML queries are not allowed in the free tier. Set up a billing account to remove this restriction.", undefined,
-          "The free sandbox cannot change the rows of a table (" + k0 + "). Make a new table with CREATE TABLE … AS SELECT instead.");
+          "The free sandbox cannot change the rows of a table (" + k0 + "). Load a file into a table instead.");
       // CREATE [OR REPLACE] TABLE name AS SELECT …
       if (k0 === "CREATE") {
         i = 1;
         if (up(tk[1]) === "OR" && up(tk[2]) === "REPLACE") { replace = true; i = 3; }
         if (up(tk[i]) !== "TABLE") return err("Syntax error: Expected keyword TABLE but got " + (tk[i] ? '"' + tk[i].v + '"' : "end of statement"), tk[i] || tk[0],
-          "This lab makes tables only: CREATE TABLE shop.new_name AS SELECT …");
+          "This lab makes tables only: CREATE TABLE shop.new_name (column TYPE, …)");
         i++;
         if (up(tk[i]) === "IF" && up(tk[i + 1]) === "NOT" && up(tk[i + 2]) === "EXISTS") { ifExists = true; i += 3; }
         const nm = this.readName(tk, i); if (nm.error) return err(nm.error, tk[i], nm.hint);
         target = nm; i = nm.next;
-        if (up(tk[i]) !== "AS") return err(tk[i] && tk[i].v === "(" ? "This simulator makes a table from a query: CREATE TABLE … AS SELECT …"
-          : "Syntax error: Expected keyword AS but got " + (tk[i] ? '"' + tk[i].v + '"' : "end of statement"), tk[i] || tk[tk.length - 1],
-          "After the name of the new table: AS, then the SELECT query that gives its rows.");
-        i++; kind = "create";
         if (!this.findSet(target.ds)) return err("Not found: Dataset " + this.project + ":" + target.ds + " was not found in location US", tk[nm.at],
           "Create the dataset first, or check its name in the Explorer.");
+        // CREATE TABLE name (column TYPE, …): an empty table with its columns.
+        if (tk[i] && tk[i].v === "(") {
+          const e = closing(tk, i);
+          if (e < 0) return err("Syntax error: Unexpected end of script", tk[tk.length - 1], "The list of columns needs its closing bracket ).");
+          if (e + 1 < tk.length) return err("Syntax error: Unexpected " + this.what(tk[e + 1]), tk[e + 1]);
+          const cols = [];
+          for (const [a, b] of splitArgs(tk, i + 1, e)) {
+            if (a >= b) return err("Syntax error: Unexpected \",\"", tk[a - 1] || tk[i], "One column between two commas: its name, then its type.");
+            const n = tk[a];
+            if (n.t !== "w" && n.t !== "bt") return err("Syntax error: Unexpected " + this.what(n), n, "Each column: its name, then its type (STRING, INTEGER, FLOAT, DATE, TIMESTAMP).");
+            const ty = tk[a + 1];
+            if (!ty || ty.t !== "w") return err("Syntax error: Expected a type after the column " + n.v, ty || n, "Write the type after the name: " + n.v + " STRING.");
+            const T = { STRING: "STRING", INT64: "INTEGER", INTEGER: "INTEGER", INT: "INTEGER", FLOAT64: "FLOAT", FLOAT: "FLOAT", NUMERIC: "NUMERIC",
+              BIGNUMERIC: "BIGNUMERIC", BOOL: "BOOLEAN", BOOLEAN: "BOOLEAN", DATE: "DATE", TIMESTAMP: "TIMESTAMP", DATETIME: "DATETIME", TIME: "TIME" }[ty.v.toUpperCase()];
+            if (!T) return err("Type not found: " + ty.v, ty, "BigQuery has its own types: STRING (text), INTEGER, FLOAT, DATE, TIMESTAMP.");
+            if (cols.some((c) => c.name.toLowerCase() === n.v.toLowerCase())) return err("Duplicate column name: " + n.v, n, "Each column of a table has its own name.");
+            if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(n.v)) return err("Invalid field name \"" + n.v + "\"", n, "A column name has letters, numbers and _ only: no spaces.");
+            cols.push({ name: n.v, type: T });
+          }
+          if (!cols.length) return err("Syntax error: Unexpected \")\"", tk[e], "Write at least one column: its name, then its type.");
+          return { kind: "define", target, cols, replace, ifExists, reads: [] };
+        }
+        if (up(tk[i]) !== "AS") return err("Syntax error: Expected \"(\" or keyword AS but got " + (tk[i] ? '"' + tk[i].v + '"' : "end of statement"), tk[i] || tk[tk.length - 1],
+          "After the name of the new table: its columns in brackets, for example (name STRING, city STRING).");
+        i++; kind = "create";
       } else if (k0 === "DROP") {
         if (up(tk[1]) !== "TABLE") return err("This simulator drops tables only: DROP TABLE shop.name", tk[1] || tk[0]);
         i = 2; if (up(tk[2]) === "IF" && up(tk[3]) === "EXISTS") { ifExists = true; i = 4; }
@@ -281,7 +303,7 @@
         if (!this.findTable(nm.ds, nm.table) && !ifExists) return err("Not found: Table " + this.project + ":" + nm.ds + "." + nm.table + " was not found in location US", tk[i]);
         return { kind: "drop", target: nm, ifExists, reads: [] };
       } else if (k0 !== "SELECT" && k0 !== "WITH" && !(tk[0].v === "(")) {
-        return err("Syntax error: Unexpected " + this.what(tk[0]), tk[0], "A query starts with SELECT (or CREATE TABLE … AS SELECT).");
+        return err("Syntax error: Unexpected " + this.what(tk[0]), tk[0], "A query starts with SELECT (or CREATE TABLE).");
       }
       const body = tk.slice(i);
       if (!body.length) return err("Syntax error: Unexpected end of statement", tk[tk.length - 1]);
@@ -484,7 +506,7 @@
         const p = this.prepare(s.sql, s.at, text);
         if (p.error) return { ok: false, error: p.error };
         kind = p.kind;
-        if (p.kind === "drop") continue;
+        if (p.kind === "drop" || p.kind === "define") continue;
         try { this.db.prepare(p.sql).free(); } catch (e) { return { ok: false, error: this.sqliteError(e, s, text, p) }; }
         bytes += this.bytesOf(p);
       }
@@ -503,6 +525,19 @@
           const f = this.findTable(p.target.ds, p.target.table);
           if (f) { this.db.run("DROP TABLE " + qid(f.ds) + "." + qid(f.name)); delete this.sets[f.ds].tables[f.name]; }
           res = { kind: "drop", target: (f ? f.ds + "." + f.name : p.target.ds + "." + p.target.table) };
+          continue;
+        }
+        if (p.kind === "define") {
+          const ds = this.findSet(p.target.ds), old = this.findTable(ds, p.target.table);
+          if (old && p.ifExists && !p.replace) { res = { kind: "create", created: ds + "." + old.name, skipped: true }; continue; }
+          if (old && !p.replace) return { error: { msg: "Already Exists: Table " + this.project + ":" + ds + "." + old.name, hint: "This table is already there. Choose a new name." } };
+          if (!/^[A-Za-z0-9_]{1,1024}$/.test(p.target.table)) return { error: { msg: "Invalid table name: " + p.target.table, hint: "Use letters, numbers and _ only." } };
+          const name = old ? old.name : p.target.table;
+          if (old) { this.db.run("DROP TABLE " + qid(ds) + "." + qid(old.name)); delete this.sets[ds].tables[old.name]; }
+          const SQ = { INTEGER: "INTEGER", FLOAT: "REAL", NUMERIC: "REAL", BIGNUMERIC: "REAL", BOOLEAN: "INTEGER" };
+          this.db.run("CREATE TABLE " + qid(ds) + "." + qid(name) + " (" + p.cols.map((c) => qid(c.name) + " " + (SQ[c.type] || "TEXT")).join(", ") + ")");
+          const info = this.describe(ds, name, p.cols);
+          res = { kind: "create", created: ds + "." + name, replaced: !!old, rows: info.rows };
           continue;
         }
         bytes += this.bytesOf(p);

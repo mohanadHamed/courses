@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Lab 2 in three clicks: collect, store, ask</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+  <style>
+    /* The big picture of Lab 2, for the teacher on the smart screen: big
+       words, one click for each idea, the data and the questions ready. */
+    .bp-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 6px 0 12px; }
+    .sim button.bp-step { box-shadow: none; transform: none; } .sim button.bp-step:hover { background: #fff8f8; }
+    .sim button.bp-step { border: 2px solid #f1d3d3; border-radius: 14px; padding: 10px 12px; background: #fff; text-align: left; cursor: pointer; font: inherit; color: #2b1e1e; }
+    .bp-step b { display: block; font-size: 1.15rem; color: #c92a2a; }
+    .bp-step span { font-size: 0.88rem; color: #6f6262; }
+    .sim button.bp-step.on { border-color: #c92a2a; background: #fff0f0; box-shadow: 0 0 0 3px #ffa8a8; }
+    .bp-step.done b::after { content: " ✓"; color: #2f9e44; }
+    .sim button.bp-step:disabled { opacity: 0.45; cursor: default; }
+    @media (max-width: 640px) { .bp-flow { grid-template-columns: 1fr; } }
+    .bp-stage { border: 1px solid #dee2e6; border-radius: 12px; padding: 14px; background: #fffafa; min-height: 300px; }
+    .bp-say { font-size: 1.15rem; font-weight: 700; margin: 0 0 10px; }
+    .bp-say small { display: block; font-weight: 500; color: #6f6262; font-size: 0.92rem; margin-top: 3px; }
+    .bp-file { font-family: Consolas, Menlo, monospace; font-size: 0.86rem; background: #fff; border: 1px solid #ced4da; border-radius: 8px; padding: 8px 10px; overflow-x: auto; white-space: pre; line-height: 1.6; }
+    .bp-file .h { color: #c92a2a; font-weight: 800; }
+    .bp-file .c { color: #d9480f; font-weight: 800; }
+    .bp-scroll { overflow-x: auto; }
+    table.bp-t { border-collapse: collapse; font-size: 0.86rem; background: #fff; }
+    table.bp-t th, table.bp-t td { border: 1px solid #dee2e6; padding: 4px 8px; text-align: left; white-space: nowrap; }
+    table.bp-t th { background: #f1f3f5; }
+    table.bp-t th small { display: block; color: #1971c2; font-family: Consolas, Menlo, monospace; font-weight: 700; }
+    table.bp-t td.nul { color: #adb5bd; font-style: italic; }
+    .bp-count { font-size: 1.6rem; font-weight: 800; color: #2f9e44; margin: 8px 0 0; }
+    .bp-qs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .bp-qs button.on { background: #c92a2a; color: #fff; }
+    .bp-sql { display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; align-items: baseline; background: #f8f9fa; border: 1px solid #dadce0; border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; }
+    .bp-sql code { font-family: Consolas, Menlo, monospace; font-size: 0.95rem; font-weight: 700; color: #3c4043; background: none; padding: 0; white-space: pre; }
+    .bp-sql span { color: #6f6262; font-size: 0.92rem; }
+    .bp-wait { color: #6f6262; font-style: italic; }
+  </style>
+</head>
+<body class="theme-ledger">
+<main class="sim">
+  <h1>Lab 2 in three clicks: collect, store, ask</h1>
+  <p class="hint">The whole lab in one picture. Click the three steps in order. The data is the real file of an online shop (1 row in every 25).</p>
+  <div class="bp-flow">
+    <button class="bp-step" data-s="0" type="button"><b>1 · Collect</b><span>The shop saves every sale in a file</span></button>
+    <button class="bp-step" data-s="1" type="button" disabled><b>2 · Store</b><span>The file becomes a table on the platform</span></button>
+    <button class="bp-step" data-s="2" type="button" disabled><b>3 · Ask</b><span>A short question in SQL, an answer at once</span></button>
+  </div>
+  <div class="bp-stage" id="stage"><p class="bp-say">Click <b>1 · Collect</b>.<small>Every click shows one idea of today's lab.</small></p></div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script src="../../../../shared/sims/vendor/sql-wasm.js"></script>
+<script src="../../../../shared/sims/bq-engine.js"></script>
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const num = (n) => Number(n).toLocaleString("en-US");
+  // The questions, ready: each line of SQL with its meaning in plain words.
+  const QS = [
+    { id: "returns", label: "Which sales are returns?", lines: [["SELECT Description, Quantity, Country", "show these 3 columns"], ["FROM shop.sales", "from the table of the sales"], ["WHERE Quantity < 0;", "only the rows with a negative quantity"]],
+      say: "A negative quantity is a <b>return</b>: the customer sent the item back. The accountant can see them all at once." },
+    { id: "france", label: "What did customers in France buy?", lines: [["SELECT Description, Quantity, Country", "show these 3 columns"], ["FROM shop.sales", "from the table of the sales"], ["WHERE Country = 'France';", "only the rows of France (text in quotes)"]],
+      say: "<b>WHERE</b> is a filter: from all the rows, only the ones you need." },
+    { id: "big", label: "Which orders are big (100 items or more)?", lines: [["SELECT Description, Quantity, Price", "show these 3 columns"], ["FROM shop.sales", "from the table of the sales"], ["WHERE Quantity >= 100;", "only 100 items or more"]],
+      say: "Big orders often come from <b>wholesale</b> customers: a question that a manager asks." },
+  ];
+  let eng, csv, st;
+  const reset = () => { st = { s: -1, seen: new Set(), q: null }; };
+  const MISSIONS = [["<b>Collect</b>: see the file of the shop", () => st.seen.has(0)], ["<b>Store</b>: load it into a table", () => st.seen.has(1)],
+    ["<b>Ask</b>: run the three questions", () => ["returns", "france", "big"].every((q) => st.seen.has(q))]];
+  function steps() {
+    const ol = $("#jobs"); ol.innerHTML = ""; let k = 0;
+    MISSIONS.forEach(([t, ok]) => { const li = document.createElement("li"); li.innerHTML = t; if (ok()) { li.className = "ok"; k++; } ol.appendChild(li); });
+    $("#progress").textContent = k + " of " + MISSIONS.length + " done";
+    document.querySelectorAll(".bp-step").forEach((b, i) => {
+      b.classList.toggle("on", i === st.s); b.classList.toggle("done", st.seen.has(i));
+      b.disabled = i > 0 && !st.seen.has(i - 1);
+    });
+    const end = MISSIONS.every(([, ok]) => ok());
+    if (end) { $("#msg").className = "message good"; $("#msg").innerHTML = "<b>That is the whole lab: collect, store, ask.</b> Now we do the same steps, one by one, on the BigQuery Lab."; }
+  }
+  function grid(head, rows, types) {
+    return '<div class="bp-scroll"><table class="bp-t"><tr>' + head.map((h, i) => "<th>" + esc(h) + (types ? "<small>" + types[i] + "</small>" : "") + "</th>").join("") + "</tr>" +
+      rows.map((r) => "<tr>" + r.map((v) => '<td class="' + (v === "null" || v === "" ? "nul" : "") + '">' + esc(v === "" ? "null" : v) + "</td>").join("") + "</tr>").join("") + "</table></div>";
+  }
+  function show(s) {
+    st.s = s; st.seen.add(s);
+    const stage = $("#stage");
+    if (s === 0) {
+      const lines = csv.split("\n").slice(0, 7);
+      stage.innerHTML = '<p class="bp-say">The shop saves every sale in a <b>CSV file</b>: plain text, one line for each sale.' +
+        "<small>Line 1 (the header) holds the names of the columns; a comma separates the values. The file has " + num(csv.trim().split("\n").length - 1) + " lines of sales.</small></p>" +
+        '<div class="bp-file">' + lines.map((l, i) => i === 0 ? '<span class="h">' + esc(l) + "</span>" : esc(l).replace(/,/g, '<span class="c">,</span>')).join("\n") + "\n…</div>";
+      say("<b>Collect:</b> shops, card machines and apps collect data and save it in files. Next: <b>2 · Store</b>.");
+    }
+    if (s === 1) {
+      stage.innerHTML = '<p class="bp-say">The platform <b>loads</b> the file into a <b>table</b>: it reads the names of the columns and finds the <b>type</b> of each one.' +
+        "<small>STRING = text · INTEGER = a whole number · FLOAT = a number with a point · TIMESTAMP = a date and a time · null = no value</small></p>" +
+        '<div class="bp-wait">Loading…</div>';
+      setTimeout(() => {
+        if (st.s !== 1) return;   // another step was clicked meanwhile
+        const t = eng.findTable("shop", "sales"), p = eng.preview("shop", "sales", 6);
+        stage.innerHTML = stage.innerHTML.replace('<div class="bp-wait">Loading…</div>', "") + grid(p.head, p.rows, t.info.schema.map((c) => c.type)) +
+          '<div class="bp-count" id="count">0 rows</div>';
+        let n = 0; const total = t.info.rows, t0 = performance.now();
+        (function tick() { n = Math.min(total, Math.round(total * (performance.now() - t0) / 900)); const c = $("#count"); if (c) c.textContent = num(n) + " rows in the table sales"; if (n < total) requestAnimationFrame(tick); })();
+        setTimeout(() => { const c = $("#count"); if (c) c.textContent = num(total) + " rows in the table sales"; }, 1000);
+      }, 500);
+      say("<b>Store:</b> the file is now a table on the platform, ready for questions. Next: <b>3 · Ask</b>.");
+    }
+    if (s === 2) ask(st.q || "returns");
+    steps();
+  }
+  function ask(id) {
+    st.q = id; st.seen.add(id);
+    const q = QS.find((x) => x.id === id), sql = q.lines.map((l) => l[0]).join("\n");
+    const r = eng.run(sql);
+    $("#stage").innerHTML = '<p class="bp-say">Ask the table a question in <b>SQL</b>: three short lines.<small>Click a question. The query is ready; read each line with its meaning.</small></p>' +
+      '<div class="bp-qs">' + QS.map((x) => '<button type="button" class="ghost' + (x.id === id ? " on" : "") + '" data-q="' + x.id + '">' + esc(x.label) + "</button>").join("") + "</div>" +
+      '<div class="bp-sql">' + q.lines.map(([c, m]) => "<code>" + esc(c) + "</code><span>" + esc(m) + "</span>").join("") + "</div>" +
+      grid(r.head, r.rows.slice(0, 6)) + '<div class="bp-count">' + num(r.total) + " rows in the answer</div>";
+    say(q.say);
+    steps();
+  }
+  function say(t) { const m = $("#msg"); m.className = "message"; m.innerHTML = t; }
+  document.querySelector(".bp-flow").addEventListener("click", (e) => { const b = e.target.closest(".bp-step"); if (b && !b.disabled && eng) show(Number(b.dataset.s)); });
+  $("#stage").addEventListener("click", (e) => { const b = e.target.closest("[data-q]"); if (b) ask(b.dataset.q); });
+  $("#reset").addEventListener("click", () => { reset(); $("#stage").innerHTML = '<p class="bp-say">Click <b>1 · Collect</b>.</p>'; say("Start: click <b>1 · Collect</b>."); steps(); });
+  reset(); steps(); say("Opening the data…");
+  (async () => {
+    eng = await window.BQEngine.create({ vendor: "../../../../shared/sims/vendor/" });
+    csv = await (await fetch("online_retail_2010.csv")).text();
+    eng.createDataset("shop"); eng.loadCsv("shop", "sales", csv, { autodetect: true });
+    say("Start: click <b>1 · Collect</b>.");
+    // ?demo: the poster (the third step, the first question).
+    if (/demo/.test(location.search)) { show(0); show(1); setTimeout(() => show(2), 1700); }
+  })().catch((e) => say("The simulator could not start: " + esc(e.message) + ". Reload the page."));
+})();
+</script>
+</body>
+</html>

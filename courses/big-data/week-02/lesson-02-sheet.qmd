@@ -1,13 +1,13 @@
 ---
 title: "Collect and Store: Loading Data into BigQuery"
-description: "Worksheet · Make your dataset, load the CSV file of an online shop into a table, check it, and save a clean table with a query, step by step on the BigQuery Lab."
+description: "Worksheet · Load the sales file of an online shop into your own table, look at it, and ask it a question with SELECT, FROM and WHERE, step by step on the BigQuery Lab."
 lesson: 2
 ilos: [C1]
-# The lab model (courses/big-data/NOTES.md), with no Google account (since
-# Lab 2): a guide that each student follows alone on the BigQuery Lab, the
-# simulator of the page of Lab 2 (sims/bq-lab2.html), which runs real SQL.
-# Every picture is that simulator (tools/bq_sim_shots.sh, the orange
-# numbers). No questions, no results to record, no files to download.
+# The lab model for business students (courses/big-data/NOTES.md): the
+# same steps that the class does together on the BigQuery Lab of the page
+# of Lab 2 (sims/bq-lab2.html, a simulator with a real SQL engine, no
+# Google account). Every picture is that simulator (tools/bq_sim_shots.sh,
+# the orange numbers). No questions, no results to record, no marks.
 lab: true
 lab-app: "the BigQuery Lab (a simulator, on the page of Lab 2)"
 format: lesson-typst
@@ -38,24 +38,23 @@ format: lesson-typst
 
 ::: {.lead}
 **Today's activity:** load the sales file of a real **online shop** into
-your own table, check it, then save a **clean** copy of it with a query.
-You work on the **BigQuery Lab**: a simulator of BigQuery on the page of
-Lab 2, with a real SQL engine. Do the three tasks in order. The **orange
-numbers** in each picture show where to click. Tick the box
-`#tick`{=typst} after each step. Stuck? Raise your hand.
+your own table, look at it, then ask it a question. You work on the
+**BigQuery Lab**: a simulator of BigQuery on the page of Lab 2. Do the
+three tasks in order, with your teacher. The **orange numbers** in each
+picture show where to click. Tick the box `#tick`{=typst} after each step.
+Stuck? Raise your hand.
 :::
 
 - **You need:** Chrome and the course site. **No Google account**, nothing
-  to sign in. Open the page of **Lab 2**, then click **Open the BigQuery
-  Lab** (the link under *Now: your worksheet*).
-- **Time:** less than 30 minutes. Keep the tab open: your work stays in
-  this browser. *Start again* (under the simulator) empties it.
-- **At the end:** show your teacher the table **sales_clean**.
+  to sign in. On the page of **Lab 2**, the **BigQuery Lab** (or its link
+  *full page*).
+- **Your work stays in this browser.** *Start again* (under the simulator)
+  empties it.
 
-## Task 1 · Your dataset and your table
+## Task 1 · From a file to a table
 
-A **dataset** is your folder of tables. A **load job** writes the rows of
-a file into a table.
+A **dataset** is a folder of tables. **Upload** puts the rows of a file
+into a table.
 
 ```{=typst}
 #step(1, [In the *Explorer* (on the left), next to *big-data-lab*, click *⋮* #mk(1). \ Click *Create dataset* #mk(2).], img: "images/bq2-menu-ds.png", w: 100%, left: 34%)
@@ -69,47 +68,36 @@ a file into a table.
 #pagebreak(weak: true)
 ```
 
-## Task 2 · Check the table
+## Task 2 · Look at your table
 
-The **schema** is the list of the columns and their types. **Details**
-shows the number of rows.
+Each column has a **type**: STRING (text), INTEGER (a whole number),
+FLOAT (a number with a point), TIMESTAMP (a date and a time).
 
 ```{=typst}
-#step(1, [Click the table *sales* #mk(1). *Schema* #mk(2): 8 columns. *Quantity* is INTEGER, *InvoiceDate* TIMESTAMP, *Price* FLOAT. The header *Customer ID* became *Customer\_ID*.], img: "images/bq2-schema.png", w: 100%, left: 34%)
-#step(2, [Click *Details* #mk(1). \ *Number of rows* #mk(2): *21,019*, the same as the rows of the file. The load is complete.], img: "images/bq2-details.png", w: 100%, left: 34%)
-#step(3, [Click *Query* (on the table). Select the short query (*Ctrl + A*) and press *Delete*. Type this query #mk(1), or click *Type for me: Task 2*. The message #mk(2): a green tick. Click *Run* #mk(3): *21019*, as in Details.], img: "images/bq2-count.png", w: 100%, left: 34%, after: sql[
-  SELECT COUNT(\*) AS all\_rows \
-  FROM \`big-data-lab.shop.sales\`;
-] + explain(
-  ([SELECT COUNT(\*) AS all\_rows], [Count the rows (*\** = all the rows). Call this column *all\_rows*.]),
-  ([FROM \`big-data-lab.shop.sales\`;], [From your table: project*.*dataset*.*table. The signs *\`* (under *Esc*) hold the name together. *;* ends the query.]),
-))
+#step(1, [Click the table *sales* #mk(1). *Schema* #mk(2): 8 columns and their types. *Price* is FLOAT. The header *Customer ID* became *Customer\_ID* (no spaces in a column name).], img: "images/bq2-schema.png", w: 100%, left: 34%)
+#step(2, [Click *Details* #mk(1). \ *Number of rows* #mk(2): *21,019*, one row for each sale in the file.], img: "images/bq2-details.png", w: 100%, left: 34%)
+#step(3, [Click *Preview* #mk(1): the first rows. A *negative* Quantity is a return; an empty Customer\_ID (*null*) is an unknown customer.], img: "images/bq2-preview.png", w: 100%, left: 34%)
 ```
 
 ```{=typst}
 #pagebreak(weak: true)
 ```
 
-## Task 3 · A clean table (ELT)
+## Task 3 · Ask a question
 
-**ELT:** the raw data is loaded first, then a query cleans it inside the
-platform and saves the answer as a new table.
+Which sales are **returns**? A return has a negative quantity.
 
 ```{=typst}
-#step(1, [Delete the query. Type this one #mk(1), or click *Type for me: Task 3*. \ Click *Run* #mk(2). The message #mk(3): a new table, *sales\_clean*.], img: "images/bq2-clean.png", w: 100%, left: 44%, after: sql[
-  CREATE TABLE shop.sales\_clean AS \
-  SELECT \*, Quantity \* Price AS revenue \
-  FROM \`big-data-lab.shop.sales\` \
-  WHERE Quantity > 0 \
-  #h(1.2em) AND Customer\_ID IS NOT NULL;
+#step(1, [Click *Query* (on the table). Select the short query (*Ctrl + A*) and press *Delete*. Type this query #mk(1), or click *Type for me: Task 3*. \ Click *Run* #mk(2). *Results* #mk(3): the returns, *514* rows.], img: "images/bq2-where.png", w: 100%, left: 36%, after: sql[
+  SELECT Description, Quantity, Country \
+  FROM shop.sales \
+  WHERE Quantity < 0;
 ] + explain(
-  ([CREATE TABLE shop.sales\_clean AS], [Save the answer of the query as a *new table*, *sales\_clean*, in *shop*.]),
-  ([SELECT \*, Quantity \* Price AS revenue], [All the columns (*\**), and a new column: quantity *×* price, called *revenue*.]),
-  ([FROM \`big-data-lab.shop.sales\`], [From the table you loaded in Task 1. It does not change.]),
-  ([WHERE Quantity > 0], [Keep only the sales: a negative quantity is a *return*.]),
-  ([AND Customer\_ID IS NOT NULL;], [And only the known customers: *null* means no value. *;* ends it.]),
+  ([SELECT Description, Quantity, Country], [Show these three *columns* (a comma between them).]),
+  ([FROM shop.sales], [From the table *sales* in the dataset *shop* (a dot between them).]),
+  ([WHERE Quantity < 0;], [Only the *rows* with a quantity less than 0. The sign *;* ends the query.]),
 ))
-#step(2, [In the Explorer, click *sales\_clean* #mk(1), then *Details*. \ *Number of rows* #mk(2): *16,253*. The returns and the unknown customers are out.], img: "images/bq2-clean-details.png", w: 100%, left: 44%)
+#step(2, [Under the editor, open *Try a change*. Click a change, then *Run*: read what happens. Try two changes, for example *Only one country: France* and *Forget the quotes*.])
 ```
 
 ## Show your teacher
@@ -117,17 +105,17 @@ platform and saves the answer as a new table.
 ```{=typst}
 #block(breakable: false)[
   #set par(spacing: 0.9em, justify: false)
-  #tick #h(4pt) The Explorer shows *shop* with the tables *sales* and *sales\_clean*. \
-  #tick #h(4pt) *Details* of *sales\_clean*: fewer rows than *sales*. \
+  #tick #h(4pt) The Explorer shows the dataset *shop* with the table *sales*. \
+  #tick #h(4pt) Your query shows the returns. \
   #v(4pt)
   *Raise your hand:* your teacher looks at your screen.
 ]
 #v(8pt)
-#tip[#set smartquote(enabled: false)
-*Finished early?* Make a table of the sales in the *United Kingdom* only, from the clean table, then look at its *Details*. A text value goes in quotes *'…'*. Then open *Try a change* (under the editor) and run two changes: what happens?
+#tip[*Finished early?* Make an *empty table* of your own: *CREATE TABLE*, its name, then between brackets each column with its *type*, a comma between them. Run it, then click *customers* in the Explorer: its *Schema* shows your three columns, and it has 0 rows.
 #v(3pt)
-#set text(font: "DejaVu Sans Mono", size: 9pt)
-CREATE TABLE shop.sales\_uk AS SELECT \* \
-FROM \`big-data-lab.shop.sales\_clean\` \
-WHERE Country = 'United Kingdom';]
+#block(text(font: "DejaVu Sans Mono", size: 9pt)[CREATE TABLE shop.customers ( \
+#h(1.2em) customer\_id INTEGER, \
+#h(1.2em) name STRING, \
+#h(1.2em) city STRING \
+);])]
 ```

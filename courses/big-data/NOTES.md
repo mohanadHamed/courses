@@ -32,6 +32,36 @@ where this file differs, it wins for this course.
   marks in a Big Data worksheet (it replaced the rule of 2026-11-21: 10
   marks for each lab).
 
+## Business students: simple, and only what the outcome needs (2026-11-27)
+
+The teacher's request after Lab 2 was first written: the students study
+**accounting, MIS and business administration**, not IT, and most are weak
+with computers. The course is a **service course**: the students use data
+platforms and R to help their work, not to learn programming.
+
+- **Assume no IT course before.** Every idea in everyday words, with a
+  business example (a return, a country, a big order), never a technical
+  one for its own sake.
+- **SQL is only `SELECT … FROM … WHERE`** (columns, a table, a filter with
+  `=`, `<`, `>`, `>=`, `AND`, `IS NULL`, text in quotes) **and `CREATE TABLE`
+  with its column names and types**. Nothing more: no `CREATE TABLE … AS
+  SELECT`, no `GROUP BY` or `COUNT` for the student to type, no joins, no
+  backticks when `dataset.table` is enough. A bigger idea (totals per
+  country, a dashboard) is shown **ready, with one click**, on the big
+  picture simulator, not typed.
+- **The lab in one hour, at the pace of the slowest student** (the size of
+  Lab 1: about 20 minutes of the page by `check_size.py`, 3 tasks):
+  1. **The big picture** (the teacher, 5–10 minutes): a simulator that does
+     the whole lab in a few clicks, with the data and the queries ready
+     (`week-WW/sims/big-picture.html`), so the class sees what the lab is
+     for before any detail.
+  2. **Step by step, together** (about 30 minutes): the teacher goes
+     through the page and the class does each step on the simulator of the
+     page at the same time. The worksheet holds the same steps (for the lab
+     and for home).
+- The prep video is sent before the lab on the e-learning platform; it is
+  not shown in class.
+
 ## The model: the lab model of Digital Skills, and nothing else
 
 Every lab is a lecture in the **lab model** (`lab: true`;
@@ -121,15 +151,16 @@ screens. The R labs (C3) stay on the real RStudio of the lab computers.
   embeds the same app in parts (`bq-labN-<part>.html`).
 - **Try a change** (the teacher's request of 2026-11-27: "what if I remove
   ORDER BY?"): under the editor, 6–10 changes of the queries of the lab
-  that a student often wants to try (remove a line, AND ↔ OR, no ORDER BY,
-  no GROUP BY, a wrong name, run CREATE twice …), each with one sentence on
-  what it shows. The engine gives the real answer; the sentence explains it.
+  that a student often wants to try (another value in WHERE, no quotes,
+  remove the WHERE line, AND, a name spelled wrong …), each with one
+  sentence on what it shows. The engine gives the real answer; the sentence
+  explains it.
 - **The data:** the same file in Labs 2–8, Online Retail II (UCI, CC BY
   4.0), the sheet of 2009–2010 (525,461 rows). The simulator uses
   `week-02/sims/online_retail_2010.csv`, **1 row in every 25** (21,019
   rows, 1.9 MB); the pages and the worksheets say so. The numbers of the
-  worksheet are the real answers on that file (sales 21,019 rows,
-  sales_clean 16,253, sales_uk 14,787).
+  worksheet are the real answers on that file (sales 21,019 rows; the
+  returns, Quantity < 0, 514 rows).
 - **The screens of the worksheet** are the simulator itself, with its
   orange numbers: `bq-labN.html?shot=<name>` (the list `SHOTS` in the app),
   taken by `tools/bq_sim_shots.sh` (headless Chrome, a local server).

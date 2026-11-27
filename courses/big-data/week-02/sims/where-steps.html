@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Code Steps: SELECT, FROM, WHERE</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+  <style>
+    .cs-wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+    .cs-wrap > div { min-width: 0; }
+    .cs-wrap > div:last-child { overflow-x: auto; }
+    @media (max-width: 700px) { .cs-wrap { grid-template-columns: 1fr; } }
+    .cs-code { background: #f8f9fa; border: 1px solid #dadce0; border-radius: 8px; padding: 6px 0; font-size: 0.86rem; overflow-x: auto; }
+    .cs-line { display: flex; gap: 10px; padding: 3px 10px; cursor: pointer; white-space: pre; }
+    .cs-line:hover { background: #eef2f6; }
+    .cs-line.on { background: #ffe8cc; box-shadow: inset 4px 0 0 #d9480f; font-weight: 700; }
+    .cs-n { color: #9aa0a6; min-width: 1.2em; text-align: right; }
+    .cs-line code { font-family: Consolas, Menlo, monospace; background: none; color: #3c4043; padding: 0; }
+    .cs-title { font-weight: 800; color: var(--sim-accent); margin: 10px 0 4px; font-size: 1.02rem; }
+    .cs-text { font-size: 0.95rem; line-height: 1.5; }
+    .cs-text code { background: #fff3e6; color: #a3360b; padding: 0 4px; border-radius: 4px; }
+    .cs-table { border-collapse: collapse; font-size: 0.84rem; margin-top: 4px; }
+    .cs-table th, .cs-table td { border: 1px solid #dee2e6; padding: 3px 9px; text-align: left; white-space: nowrap; }
+    .cs-table th { background: #f1f3f5; }
+    .cs-table .mk { outline: 2px solid #d9480f; outline-offset: -2px; font-weight: 700; }
+    .cs-rows { font-size: 0.8rem; color: #666; margin-top: 3px; }
+    .cs-nav { display: flex; gap: 8px; margin: 10px 0 0; }
+  </style>
+</head>
+<body class="theme-ledger">
+<main class="sim">
+  <h1>Code Steps: SELECT, FROM, WHERE</h1>
+  <p class="hint">The query of Task 3, on <b>7 rows</b> of the shop file. BigQuery reads the lines in this order: first <b>FROM</b>, then <b>WHERE</b>, last <b>SELECT</b>.</p>
+  <div class="cs-wrap">
+    <div>
+      <div class="cs-code" id="code"></div>
+      <div class="cs-title" id="title"></div>
+      <div class="cs-text" id="text"></div>
+      <div class="cs-nav"><button id="back" type="button" class="ghost">◀ Back</button><button id="next" type="button">Next step ▶</button></div>
+    </div>
+    <div>
+      <b>The table after this step</b>
+      <table class="cs-table" id="table"></table>
+      <div class="cs-rows" id="rows"></div>
+    </div>
+  </div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // 7 real rows of online_retail_2010.csv.
+  const H = ["Invoice", "Description", "Quantity", "Price", "Country"];
+  const R = [["489434", "CHRISTMAS GLASS BALL", "12", "6.95", "United Kingdom"], ["C489459", "BLUE SWEETHEART BRACELET", "-3", "4.25", "United Kingdom"],
+    ["489548", "RED SPOTTY PAPER CUPS", "25", "0.65", "United Kingdom"], ["C489518", "CHRISTMAS GLASS BALL", "-1", "7.95", "United Kingdom"],
+    ["489437", "FELTCRAFT DOLL EMILY", "6", "2.95", "United Kingdom"], ["C491166", "EIGHT PIECE DINOSAUR SET", "-4", "1.25", "France"],
+    ["489436", "METAL SIGN", "12", "2.1", "United Kingdom"]];
+  const neg = R.filter((r) => Number(r[2]) < 0);
+  window.CODE_STEPS = {
+    lines: ["SELECT Description, Quantity, Country", "FROM shop.sales", "WHERE Quantity < 0;"],
+    steps: [
+      { lines: [1], title: "FROM: which table",
+        text: "<code>FROM shop.sales</code>: the table <b>sales</b> in the dataset <b>shop</b> (a dot between them). Here: 7 rows of the table; the table has 21,019.",
+        head: H, rows: R },
+      { lines: [2], title: "WHERE: which rows",
+        text: "<code>WHERE</code> is a <b>filter</b>: it keeps only the rows where the condition is true. <code>Quantity &lt; 0</code>: the quantity is less than zero, a <b>return</b>. 3 rows stay. The sign <code>;</code> ends the query.",
+        head: H, rows: neg, mark: 2 },
+      { lines: [0], title: "SELECT: which columns",
+        text: "<code>SELECT</code> chooses the <b>columns</b> of the answer, with a comma between them: Description, Quantity and Country. The other columns are left out.",
+        head: ["Description", "Quantity", "Country"], rows: neg.map((r) => [r[1], r[2], r[4]]) },
+    ],
+    done: "All the lines are explained: FROM (which table), WHERE (which rows), SELECT (which columns). In the lab the same query finds 514 returns in 21,019 rows.",
+  };
+})();
+</script>
+<script src="../../../../shared/sims/code-steps.js"></script>
+</body>
+</html>

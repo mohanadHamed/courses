@@ -12,7 +12,7 @@ CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 BASE="${BASE:-http://127.0.0.1:8765}/courses/big-data/week-02/sims/bq-lab2.html"
 OUT="courses/big-data/week-02/images"
 # name:height (the width is 1000)
-SHOTS="menu-ds:330 dataset:600 menu-tbl:330 upload:600 picker:600 table:600 schema:470 details:430 count:560 clean:560 clean-details:430"
+SHOTS="menu-ds:330 dataset:600 menu-tbl:330 upload:600 picker:600 table:600 schema:470 details:430 preview:470 where:600"
 PROFILE=$(mktemp -d)
 for s in $SHOTS; do
   name=${s%%:*}; h=${s##*:}

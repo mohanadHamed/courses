@@ -1,0 +1,141 @@
+---
+title: "Collect and Store: Loading Data into BigQuery"
+description: "Worksheet · Make your dataset, load the CSV file of an online shop into a table, check it, and save a clean table with a query, step by step on the BigQuery Lab."
+lesson: 2
+ilos: [C1]
+# The lab model (courses/big-data/NOTES.md), with no Google account (since
+# Lab 2): a guide that each student follows alone on the BigQuery Lab, the
+# simulator of the page of Lab 2 (sims/bq-lab2.html), which runs real SQL.
+# Every picture is that simulator (tools/bq_sim_shots.sh, the orange
+# numbers). No questions, no results to record, no files to download.
+lab: true
+lab-app: "the BigQuery Lab (a simulator, on the page of Lab 2)"
+format: lesson-typst
+---
+
+```{=typst}
+#let mk(n) = box(baseline: 22%, circle(radius: 5.8pt, fill: rgb("#d9480f"), stroke: none, inset: 0pt)[#set align(center + horizon); #text(fill: white, weight: "bold", size: 8pt)[#n]])
+#let tick = box(baseline: 12%, width: 10pt, height: 10pt, stroke: 0.9pt + luma(70), radius: 2pt)
+#let shot(path, w: 100%) = block(breakable: false, stroke: 0.8pt + luma(150), radius: 6pt, clip: true, image(path, width: w))
+#let typebox(body) = block(width: 100%, breakable: false, fill: rgb("#f1f3f4"), stroke: 0.8pt + rgb("#1a73e8"), radius: 5pt, inset: (x: 12pt, y: 9pt), body)
+#let sql(body) = typebox[#set text(font: "DejaVu Sans Mono", size: 9.5pt); #set par(justify: false, leading: 0.55em); #body]
+// What each line of the code does: (code, meaning) pairs, under the code box.
+#let explain(..pairs) = block(width: 100%, breakable: false, above: 6pt, table(columns: (auto, 1fr), inset: (x: 7pt, y: 4.5pt), stroke: 0.5pt + luma(190),
+  fill: (x, y) => if y == 0 { luma(240) },
+  [*Line*], [*What it does*],
+  ..pairs.pos().map(((c, m)) => (text(font: "DejaVu Sans Mono", size: 8.5pt, c), text(size: 9.5pt, m))).flatten()))
+#let tip(body) = block(width: 100%, breakable: false, fill: rgb("#fff4e6"), stroke: (left: 3pt + rgb("#d9480f")), inset: (x: 10pt, y: 7pt), radius: 3pt, body)
+// One step: the box to tick, its number and what to do on the left; its screen on the right.
+#let step(n, body, img: none, w: 100%, left: 40%, after: none) = block(breakable: false, above: 9pt, below: 9pt, width: 100%)[
+  #set par(justify: false, leading: 0.62em)
+  #let words = grid(columns: (auto, 1fr), column-gutter: 6pt, [#tick #h(1pt) *#n.*], body)
+  #if img == none { words } else {
+    grid(columns: (left, 1fr), column-gutter: 12pt, align: (top, top), words, align(center, shot(img, w: w)))
+  }
+  #if after != none { v(4pt); after }
+]
+```
+
+::: {.lead}
+**Today's activity:** load the sales file of a real **online shop** into
+your own table, check it, then save a **clean** copy of it with a query.
+You work on the **BigQuery Lab**: a simulator of BigQuery on the page of
+Lab 2, with a real SQL engine. Do the three tasks in order. The **orange
+numbers** in each picture show where to click. Tick the box
+`#tick`{=typst} after each step. Stuck? Raise your hand.
+:::
+
+- **You need:** Chrome and the course site. **No Google account**, nothing
+  to sign in. Open the page of **Lab 2**, then click **Open the BigQuery
+  Lab** (the link under *Now: your worksheet*).
+- **Time:** less than 30 minutes. Keep the tab open: your work stays in
+  this browser. *Start again* (under the simulator) empties it.
+- **At the end:** show your teacher the table **sales_clean**.
+- **Marks:** 10. Task 1 alone gives **6**; Task 2 gives 2, Task 3 gives 1,
+  and *Finished early?* gives 1.
+
+## Task 1 · Your dataset and your table · 6 marks
+
+A **dataset** is your folder of tables. A **load job** writes the rows of
+a file into a table.
+
+```{=typst}
+#step(1, [In the *Explorer* (on the left), next to *big-data-lab*, click *⋮* #mk(1). \ Click *Create dataset* #mk(2).], img: "images/bq2-menu-ds.png", w: 100%, left: 34%)
+#step(2, [*Dataset ID:* type *shop* #mk(1). \ Click *Create dataset* #mk(2). The dataset *shop* is in the Explorer.], img: "images/bq2-dataset.png", w: 100%, left: 34%)
+#step(3, [Next to *shop*, click *⋮* #mk(1). \ Click *Create table* #mk(2).], img: "images/bq2-menu-tbl.png", w: 100%, left: 34%)
+#step(4, [*Create table from:* *Upload* #mk(1). \ Click *Browse* #mk(2), then the file *online\_retail\_2010.csv*. \ *File format:* *CSV* #mk(3).], img: "images/bq2-upload.png", w: 100%, left: 34%)
+#step(5, [*Table:* type *sales* #mk(1). \ Tick *Auto detect* #mk(2). \ Click *Create table* #mk(3). Wait a second: *sales* is under *shop*.], img: "images/bq2-table.png", w: 100%, left: 34%)
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 2 · Check the table · 2 marks
+
+The **schema** is the list of the columns and their types. **Details**
+shows the number of rows.
+
+```{=typst}
+#step(1, [Click the table *sales* #mk(1). *Schema* #mk(2): 8 columns. *Quantity* is INTEGER, *InvoiceDate* TIMESTAMP, *Price* FLOAT. The header *Customer ID* became *Customer\_ID*.], img: "images/bq2-schema.png", w: 100%, left: 34%)
+#step(2, [Click *Details* #mk(1). \ *Number of rows* #mk(2): *21,019*, the same as the rows of the file. The load is complete.], img: "images/bq2-details.png", w: 100%, left: 34%)
+#step(3, [Click *Query* (on the table). Select the short query (*Ctrl + A*) and press *Delete*. Type this query #mk(1), or click *Type for me: Task 2*. The message #mk(2): a green tick. Click *Run* #mk(3): *21019*, as in Details.], img: "images/bq2-count.png", w: 100%, left: 34%, after: sql[
+  SELECT COUNT(\*) AS all\_rows \
+  FROM \`big-data-lab.shop.sales\`;
+] + explain(
+  ([SELECT COUNT(\*) AS all\_rows], [Count the rows (*\** = all the rows). Call this column *all\_rows*.]),
+  ([FROM \`big-data-lab.shop.sales\`;], [From your table: project*.*dataset*.*table. The signs *\`* (under *Esc*) hold the name together. *;* ends the query.]),
+))
+```
+
+```{=typst}
+#pagebreak(weak: true)
+```
+
+## Task 3 · A clean table (ELT) · 1 mark
+
+**ELT:** the raw data is loaded first, then a query cleans it inside the
+platform and saves the answer as a new table.
+
+```{=typst}
+#step(1, [Delete the query. Type this one #mk(1), or click *Type for me: Task 3*. \ Click *Run* #mk(2). The message #mk(3): a new table, *sales\_clean*.], img: "images/bq2-clean.png", w: 100%, left: 34%, after: sql[
+  CREATE TABLE shop.sales\_clean AS \
+  SELECT \*, Quantity \* Price AS revenue \
+  FROM \`big-data-lab.shop.sales\` \
+  WHERE Quantity > 0 \
+  #h(1.2em) AND Customer\_ID IS NOT NULL;
+] + explain(
+  ([CREATE TABLE shop.sales\_clean AS], [Save the answer of the query as a *new table*, *sales\_clean*, in *shop*.]),
+  ([SELECT \*, Quantity \* Price AS revenue], [All the columns (*\**), and a new column: quantity *×* price, called *revenue*.]),
+  ([FROM \`big-data-lab.shop.sales\`], [From the table you loaded in Task 1. It does not change.]),
+  ([WHERE Quantity > 0], [Keep only the sales: a negative quantity is a *return*.]),
+  ([AND Customer\_ID IS NOT NULL;], [And only the known customers: *null* means no value. *;* ends it.]),
+))
+#step(2, [In the Explorer, click *sales\_clean* #mk(1), then *Details*. \ *Number of rows* #mk(2): *16,253*. The returns and the unknown customers are out.], img: "images/bq2-clean-details.png", w: 100%, left: 34%)
+```
+
+## Show your teacher
+
+```{=typst}
+#block(breakable: false)[
+  #set par(spacing: 0.9em, justify: false)
+  #tick #h(4pt) The Explorer shows *shop* with the tables *sales* and *sales\_clean*. \
+  #tick #h(4pt) *Details* of *sales\_clean*: fewer rows than *sales*. \
+  #v(4pt)
+  *Raise your hand:* your teacher looks at your screen.
+]
+#v(8pt)
+#tip[*Finished early? (1 mark)* Make a table of the sales in the *United Kingdom* only, from the clean table, then look at its *Details*. A text value goes in quotes *'…'*. Then open *Try a change* (under the editor) and run two changes: what happens?
+#v(3pt)
+#set text(font: "DejaVu Sans Mono", size: 9pt)
+CREATE TABLE shop.sales\_uk AS SELECT \* \
+FROM \`big-data-lab.shop.sales\_clean\` \
+WHERE Country = 'United Kingdom';]
+#v(8pt)
+#block(breakable: false, width: 100%, stroke: 0.8pt + luma(150), radius: 5pt, inset: (x: 12pt, y: 9pt),
+  grid(columns: (1fr, auto), align: (left + horizon, right + horizon),
+    [*Your mark* #text(size: 9pt, fill: luma(90))[(your teacher ticks and adds)] \
+     #v(2pt)
+     #tick Task 1: *6* #h(12pt) #tick Task 2: *2* #h(12pt) #tick Task 3: *1* #h(12pt) #tick Finished early: *1*],
+    box(stroke: 1pt + rgb("#c92a2a"), radius: 4pt, inset: (x: 10pt, y: 8pt))[*Total:* #box(width: 30pt, height: 10pt, stroke: (bottom: 0.8pt)) #strong("/ 10")]))
+```

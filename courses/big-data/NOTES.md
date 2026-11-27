@@ -15,9 +15,11 @@ where this file differs, it wins for this course.
   computer lab (Windows, Internet), from 22/11/2026 to 10/1/2027 (8 labs),
   for two outcomes, **one after the other**:
   - **C1** (Labs 1–3): use big data platforms to collect, store, process and
-    analyse big data. Platform: **Google BigQuery** (the free sandbox, a
-    personal Google account; no card) and **Looker Studio**. Hadoop and
-    Spark are shown only as ideas on simulators (too heavy for one hour).
+    analyse big data. Platform: **Google BigQuery** and **Looker Studio**.
+    Lab 1 used the real BigQuery sandbox with a personal Google account;
+    **from Lab 2 there is no Google account** (below, "The BigQuery Lab").
+    Hadoop and Spark are shown only as ideas on simulators (too heavy for
+    one hour).
   - **C3** (Labs 4–8): solve a real big data problem in **R** (RStudio,
     installed on the lab computers before Lab 4). One problem through all
     five labs: the transactions of a real online shop (Online Retail II,
@@ -86,9 +88,9 @@ package and no platform texts.
   sales, customers), never games.
 - **Labels:** every session is labelled "Lab N" (`course.lecture-label`).
   The folders `week-WW` count the labs (WW = N), not syllabus rows.
-- **Google accounts:** the students use their personal Google accounts
-  (the university accounts are Microsoft). Every worksheet of Labs 1–3 ends
-  with **Sign out**.
+- **Google accounts:** only in Lab 1 (taught as it is, with **Sign out** at
+  the end). Labs 2–3 need no account: their worksheets are done on the
+  BigQuery Lab (below).
 - **Labs on Windows:** BigQuery and Looker Studio are the same in the
   browser on every computer. In RStudio the worksheets read files by name
   inside an RStudio Project (no paths), and the installation of R has its
@@ -96,6 +98,48 @@ package and no platform texts.
 - **Numbers on the simulators** are examples close to the real tables
   (the page says so); the worksheet never asks the student to write a
   result.
+
+## The BigQuery Lab: no sign-in (since Lab 2, 2026-11-27)
+
+In Lab 1 most students could not sign in to their personal Gmail on the
+lab computers, and the coordinator asked for the easiest way, with no
+sign-in. So from Lab 2 **the worksheet of every C1 lab is done on a
+simulator of the page**, and the page and the worksheet show the same
+screens. The R labs (C3) stay on the real RStudio of the lab computers.
+
+- **A real SQL engine.** `shared/sims/bq-engine.js` runs SQL on SQLite
+  (sql.js, `shared/sims/vendor/sql-wasm.*`, MIT) with the rules of
+  BigQuery: `project.dataset.table` names in backticks (a dataset is an
+  attached database), EXTRACT, COUNTIF, FORMAT_DATE, DATE_TRUNC,
+  SAFE_DIVIDE, `"text"` as a string, `/` as FLOAT; the errors of BigQuery
+  (Unrecognized name … Did you mean …?, Not found: Table …, Syntax error
+  at [line:col], a column neither grouped nor aggregated, Already Exists,
+  no DML in the sandbox); **rows in any order without ORDER BY** (shuffled
+  on every run); and the bytes before the run (the columns that the query
+  reads; 0 B for COUNT(*) alone). Any query a student types runs.
+- **The app of the lab:** `week-WW/sims/bq-labN.js` draws BigQuery Studio
+  (the Explorer and its ⋮ menus, Create dataset, Create table › Upload,
+  Schema/Details/Preview, the editor, Results, Job information). One page
+  holds the whole worksheet (`bq-labN.html`, opened on a full page from the
+  lab page), and it remembers the student's work in the browser
+  (`localStorage`, replayed on load; *Start again* empties it). The page
+  embeds the same app in parts (`bq-labN-<part>.html`).
+- **Try a change** (the teacher's request of 2026-11-27: "what if I remove
+  ORDER BY?"): under the editor, 6–10 changes of the queries of the lab
+  that a student often wants to try (remove a line, AND ↔ OR, no ORDER BY,
+  no GROUP BY, a wrong name, run CREATE twice …), each with one sentence on
+  what it shows. The engine gives the real answer; the sentence explains it.
+- **The data:** the same file in Labs 2–8, Online Retail II (UCI, CC BY
+  4.0), the sheet of 2009–2010 (525,461 rows). The simulator uses
+  `week-02/sims/online_retail_2010.csv`, **1 row in every 25** (21,019
+  rows, 1.9 MB); the pages and the worksheets say so. The numbers of the
+  worksheet are the real answers on that file (sales 21,019 rows,
+  sales_clean 16,253, sales_uk 14,787).
+- **The screens of the worksheet** are the simulator itself, with its
+  orange numbers: `bq-labN.html?shot=<name>` (the list `SHOTS` in the app),
+  taken by `tools/bq_sim_shots.sh` (headless Chrome, a local server).
+  `?shot=<name>&poster=1` gives a poster without numbers.
+- **The prep video** shows the simulator and its screens; no sign-in.
 
 ## The prep video (since 2026-11-21)
 

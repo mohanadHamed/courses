@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: CSV Lab: from a text file to a table</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+  <style>
+    .cv-wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; }
+    .cv-wrap > div { min-width: 0; }
+    @media (max-width: 760px) { .cv-wrap { grid-template-columns: 1fr; } }
+    .cv-pad { border: 1px solid #b9bdc2; border-radius: 8px; overflow: hidden; background: #fff; }
+    .cv-bar { background: #f3f3f3; border-bottom: 1px solid #ddd; padding: 5px 10px; font-size: 0.82rem; color: #333; }
+    .cv-bar b { font-weight: 600; }
+    .cv-text { font-family: Consolas, Menlo, monospace; font-size: 0.78rem; padding: 4px 0; overflow-x: auto; }
+    .cv-line { display: flex; gap: 8px; padding: 4px 8px; cursor: pointer; white-space: pre; border-left: 4px solid transparent; }
+    .cv-line:hover { background: #fff4e6; }
+    .cv-line.done { color: #2b8a3e; border-left-color: #2b8a3e; background: #f4fbf5; }
+    .cv-n { color: #9aa0a6; min-width: 1.2em; text-align: right; }
+    .cv-line .comma { color: #d9480f; font-weight: 800; }
+    .cv-line .q { color: #1971c2; font-weight: 800; }
+    .cv-table { border-collapse: collapse; font-size: 0.8rem; width: 100%; }
+    .cv-table th, .cv-table td { border: 1px solid #dee2e6; padding: 3px 6px; text-align: left; white-space: nowrap; }
+    .cv-table th { background: #f1f3f5; }
+    .cv-table td.nul { color: #9aa0a6; font-style: italic; }
+    .cv-table tr.new td { animation: cvnew 0.9s; }
+    @keyframes cvnew { from { background: #ffe8cc; } to { background: transparent; } }
+    .cv-table select { font: inherit; font-size: 0.74rem; padding: 1px 2px; margin-top: 3px; border-radius: 4px; border: 1px solid #adb5bd; }
+    .cv-table select.ok { border-color: #2b8a3e; background: #ebfbee; }
+    .cv-table select.no { border-color: #c92a2a; background: #fff5f5; }
+    .cv-scroll { overflow-x: auto; }
+    .cv-empty { color: #868e96; font-style: italic; padding: 8px 0; }
+    .cv-types { margin-top: 10px; }
+  </style>
+</head>
+<body class="theme-ledger">
+<main class="sim">
+  <h1>CSV Lab: from a text file to a table</h1>
+  <p class="hint">A <b>CSV</b> file is plain text: one line for each row, a <b>comma</b> between the values. Click the lines of the file, one by one: watch the table grow. Then choose the <b>type</b> of four columns.</p>
+  <div class="cv-wrap">
+    <div class="cv-pad">
+      <div class="cv-bar"><b>online_retail_2010.csv</b> · Notepad · the first 6 lines</div>
+      <div class="cv-text" id="file"></div>
+    </div>
+    <div>
+      <b>The table</b>
+      <div class="cv-scroll"><table class="cv-table" id="table"></table></div>
+      <div class="cv-empty" id="empty">Click line 1 of the file: the header.</div>
+      <div class="cv-types row" id="types" hidden><button id="check" type="button">Check the types</button></div>
+    </div>
+  </div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <div class="row"><button id="reset" type="button" class="ghost">Start again</button></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // The first lines of the real file (Online Retail II, UCI), with a quoted text, a return and an unknown customer.
+  const LINES = [
+    "Invoice,StockCode,Description,Quantity,InvoiceDate,Price,Customer ID,Country",
+    "489434,85048,15CM CHRISTMAS GLASS BALL 20 LIGHTS,12,2009-12-01 07:45:00,6.95,13085,United Kingdom",
+    "C489459,90200C,BLUE SWEETHEART BRACELET,-3,2009-12-01 10:44:00,4.25,17592,United Kingdom",
+    '489522,22197,"POPCORN HOLDER , SMALL",10,2009-12-01 11:45:00,0.85,15998,United Kingdom',
+    "489548,21086,SET/6 RED SPOTTY PAPER CUPS,25,2009-12-01 12:32:00,0.65,,United Kingdom",
+    "489597,21255,FRENCH BOTTLE LAVENDER,1,2009-12-01 14:28:00,3.43,,United Kingdom",
+  ];
+  const TYPES = ["STRING", "INTEGER", "FLOAT", "TIMESTAMP"];
+  const ASK = { 0: "STRING", 3: "INTEGER", 4: "TIMESTAMP", 5: "FLOAT" };
+  const WHY = {
+    0: "Invoice is <b>STRING</b>: most invoices are numbers, but <b>C489459</b> has a letter (C = a return). One value with a letter makes the whole column text.",
+    3: "Quantity is <b>INTEGER</b>: whole numbers, and some are negative (-3 = a return).",
+    4: "InvoiceDate is <b>TIMESTAMP</b>: a date and a time, 2009-12-01 07:45:00.",
+    5: "Price is <b>FLOAT</b>: numbers with a decimal point, 6.95.",
+  };
+  function split(line) {
+    const out = []; let f = "", q = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { q = !q; continue; }
+      if (c === "," && !q) { out.push(f); f = ""; } else f += c;
+    }
+    out.push(f); return out;
+  }
+  function paint(line) {
+    let q = false, h = "";
+    for (const c of line) {
+      if (c === '"') { q = !q; h += '<span class="q">"</span>'; }
+      else if (c === "," && !q) h += '<span class="comma">,</span>';
+      else h += esc(c);
+    }
+    return h;
+  }
+  let st;
+  const reset = () => { st = { header: false, rows: [], choice: {}, checked: false, last: -1 }; };
+  const MISSIONS = [
+    ["Click line 1: the <b>header</b> gives the names of the columns", () => st.header],
+    ["Click lines 2–6: each line becomes <b>one row</b>", () => st.rows.length === 5],
+    ["Choose the <b>type</b> of Invoice, Quantity, InvoiceDate and Price", () => Object.keys(st.choice).length === 4],
+    ["Click <b>Check the types</b>: all four right", () => st.checked],
+  ];
+  function say(t, bad) {
+    const m = $("#msg"), end = !bad && MISSIONS.every(([, ok]) => ok());
+    m.innerHTML = t + (end ? "<br><b>All done. BigQuery's Auto detect does the same: it reads the header and the first rows of the file.</b>" : "");
+    m.className = "message" + (bad ? " bad" : end ? " good" : "");
+  }
+  function draw() {
+    $("#file").innerHTML = LINES.map((l, i) => '<div class="cv-line' + ((i === 0 && st.header) || st.rows.includes(i) ? " done" : "") + '" data-i="' + i + '"><span class="cv-n">' + (i + 1) + "</span><span>" + paint(l) + "</span></div>").join("");
+    const names = split(LINES[0]).map((h) => h.replace(/ /g, "_"));
+    $("#empty").hidden = st.header;
+    $("#types").hidden = st.rows.length < 5;
+    if (!st.header) { $("#table").innerHTML = ""; }
+    else {
+      const sel = (c) => ASK[c] === undefined || st.rows.length < 5 ? "" : "<br><select data-c=\"" + c + "\" class=\"" + (st.checked || st.mark ? (st.choice[c] === ASK[c] ? "ok" : st.choice[c] ? "no" : "") : "") + "\"><option value=\"\">type?</option>" +
+        TYPES.map((t) => "<option" + (st.choice[c] === t ? " selected" : "") + ">" + t + "</option>").join("") + "</select>";
+      $("#table").innerHTML = "<tr>" + names.map((n, c) => "<th>" + esc(n) + sel(c) + "</th>").join("") + "</tr>" +
+        st.rows.slice().sort((a, b) => a - b).map((i) => '<tr class="' + (i === st.last ? "new" : "") + '">' + split(LINES[i]).map((v) => '<td class="' + (v === "" ? "nul" : "") + '">' + (v === "" ? "null" : esc(v)) + "</td>").join("") + "</tr>").join("");
+    }
+    const ol = $("#jobs"); ol.innerHTML = ""; let k = 0;
+    MISSIONS.forEach(([t, ok]) => { const li = document.createElement("li"); li.innerHTML = t; if (ok()) { li.className = "ok"; k++; } ol.appendChild(li); });
+    $("#progress").textContent = k + " of " + MISSIONS.length + " done";
+  }
+  $("#file").addEventListener("click", (e) => {
+    const el = e.target.closest(".cv-line"); if (!el) return;
+    const i = Number(el.dataset.i);
+    if (i === 0) {
+      if (st.header) return say("The header is already the first row of names.");
+      st.header = true; draw();
+      return say("Line 1 is the <b>header</b>: 8 names, one for each column. <b>Customer ID</b> has a space, so it becomes <b>Customer_ID</b>: a column name has no spaces. Now click line 2.");
+    }
+    if (!st.header) return say("First the header: click <b>line 1</b>. Without it, the table has no column names.", true);
+    if (st.rows.includes(i)) return say("This line is already a row of the table.");
+    st.rows.push(i); st.last = i; draw();
+    const t = {
+      1: "One line → <b>one row</b>. Each comma <b class='comma'>,</b> ends a value: 8 values, 8 cells.",
+      2: "Invoice <b>C489459</b> and Quantity <b>-3</b>: a <b>return</b>. The data has it; the cleaning (Task 3) takes it out.",
+      3: "This line has <b>9 commas</b>, but 8 values: the comma inside the quotes <b class='q'>\"</b>…<b class='q'>\"</b> belongs to the text <b>POPCORN HOLDER , SMALL</b>.",
+      4: "<b>,,</b>: two commas with nothing between them. The Customer ID is <b>empty</b>: in the table it is <b>null</b> (no value).",
+      5: "Another unknown customer: <b>null</b> again.",
+    }[i];
+    say(t + (st.rows.length === 5 ? " <b>All the lines are rows.</b> Now choose the type of the 4 columns, under their names." : ""));
+  });
+  $("#table").addEventListener("change", (e) => {
+    const s = e.target.closest("select"); if (!s) return;
+    const c = Number(s.dataset.c);
+    if (s.value) st.choice[c] = s.value; else delete st.choice[c];
+    st.checked = false; st.mark = false; draw();
+    say(Object.keys(st.choice).length === 4 ? "Four types chosen. Click <b>Check the types</b>." : "Choose a type for each column with a list under its name.");
+  });
+  $("#check").addEventListener("click", () => {
+    if (Object.keys(st.choice).length < 4) return say("Choose a type for all four columns first.", true);
+    const wrong = Object.keys(ASK).filter((c) => st.choice[c] !== ASK[c]);
+    st.mark = true;
+    if (!wrong.length) { st.checked = true; draw(); return say("All right. " + Object.keys(ASK).map((c) => WHY[c]).join(" ")); }
+    draw();
+    say("Not yet: " + wrong.length + " wrong (red). " + WHY[wrong[0]].replace(/<b>(STRING|INTEGER|FLOAT|TIMESTAMP)<\/b>/, "<b>?</b>") + " Change it and check again.", true);
+  });
+  $("#reset").addEventListener("click", () => { reset(); draw(); say("Start: click <b>line 1</b> of the file."); });
+  reset(); draw(); say("Start: click <b>line 1</b> of the file.");
+  // ?demo: the poster (all the lines read, the types checked).
+  if (/demo/.test(location.search)) {
+    [0, 1, 2, 3, 4, 5].forEach((i) => document.querySelectorAll(".cv-line")[i].click());
+    Object.assign(st.choice, { 0: "STRING", 3: "INTEGER", 4: "TIMESTAMP", 5: "FLOAT" }); $("#check").click();
+  }
+})();
+</script>
+</body>
+</html>

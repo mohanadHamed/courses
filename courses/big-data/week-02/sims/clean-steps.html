@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator: Code Steps: how the clean table is made</title>
+  <link rel="stylesheet" href="../../../../shared/sims/sim-base.css">
+  <link rel="stylesheet" href="../../../../shared/sims/office-lab.css">
+  <style>
+    .cs-wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+    .cs-wrap > div { min-width: 0; }
+    .cs-wrap > div:last-child { overflow-x: auto; }
+    @media (max-width: 700px) { .cs-wrap { grid-template-columns: 1fr; } }
+    .cs-code { background: #f8f9fa; border: 1px solid #dadce0; border-radius: 8px; padding: 6px 0; font-size: 0.86rem; overflow-x: auto; }
+    .cs-line { display: flex; gap: 10px; padding: 3px 10px; cursor: pointer; white-space: pre; }
+    .cs-line:hover { background: #eef2f6; }
+    .cs-line.on { background: #ffe8cc; box-shadow: inset 4px 0 0 #d9480f; font-weight: 700; }
+    .cs-n { color: #9aa0a6; min-width: 1.2em; text-align: right; }
+    .cs-line code { font-family: Consolas, Menlo, monospace; background: none; color: #3c4043; padding: 0; }
+    .cs-title { font-weight: 800; color: var(--sim-accent); margin: 10px 0 4px; font-size: 1.02rem; }
+    .cs-text { font-size: 0.95rem; line-height: 1.5; }
+    .cs-text code { background: #fff3e6; color: #a3360b; padding: 0 4px; border-radius: 4px; }
+    .cs-table { border-collapse: collapse; font-size: 0.84rem; margin-top: 4px; }
+    .cs-table th, .cs-table td { border: 1px solid #dee2e6; padding: 3px 9px; text-align: left; white-space: nowrap; }
+    .cs-table th { background: #f1f3f5; }
+    .cs-table .mk { outline: 2px solid #d9480f; outline-offset: -2px; font-weight: 700; }
+    .cs-rows { font-size: 0.8rem; color: #666; margin-top: 3px; }
+    .cs-nav { display: flex; gap: 8px; margin: 10px 0 0; }
+  </style>
+</head>
+<body class="theme-ledger">
+<main class="sim">
+  <h1>Code Steps: how the clean table is made</h1>
+  <p class="hint">The query of Task 3, on <b>7 rows</b> of the shop file. BigQuery does the lines in this order: first <b>FROM</b>, then <b>WHERE</b>, then <b>SELECT</b>, last <b>CREATE TABLE</b>.</p>
+  <div class="cs-wrap">
+    <div>
+      <div class="cs-code" id="code"></div>
+      <div class="cs-title" id="title"></div>
+      <div class="cs-text" id="text"></div>
+      <div class="cs-nav"><button id="back" type="button" class="ghost">◀ Back</button><button id="next" type="button">Next step ▶</button></div>
+    </div>
+    <div>
+      <b>The table after this step</b>
+      <table class="cs-table" id="table"></table>
+      <div class="cs-rows" id="rows"></div>
+    </div>
+  </div>
+  <div class="jobs"><b class="t">Steps</b> · <span id="progress"></span><ol id="jobs"></ol></div>
+  <p id="msg" class="message"></p>
+</main>
+<script src="../../../../shared/sims/sim-base.js"></script>
+<script>
+(() => {
+  // 7 real rows of online_retail_2010.csv: Invoice, Description, Quantity, Price, Customer_ID.
+  const R = [["489434", "CHRISTMAS GLASS BALL", "12", "6.95", "13085"], ["C489459", "BLUE SWEETHEART BRACELET", "-3", "4.25", "17592"],
+    ["489548", "RED SPOTTY PAPER CUPS", "25", "0.65", "null"], ["489437", "FELTCRAFT DOLL EMILY", "6", "2.95", "15362"],
+    ["C489518", "CHRISTMAS GLASS BALL", "-1", "7.95", "15461"], ["489597", "WASHING UP GLOVES", "1", "4.3", "null"],
+    ["489436", "METAL SIGN", "12", "2.1", "13078"]];
+  const H = ["Invoice", "Description", "Quantity", "Price", "Customer_ID"];
+  const pos = R.filter((r) => Number(r[2]) > 0);
+  const clean = pos.filter((r) => r[4] !== "null");
+  const rev = clean.map((r) => [...r, String(Number((Number(r[2]) * Number(r[3])).toFixed(2)))]);
+  window.CODE_STEPS = {
+    lines: ["CREATE TABLE shop.sales_clean AS", "SELECT *, Quantity * Price AS revenue", "FROM `big-data-lab.shop.sales`", "WHERE Quantity > 0", "  AND Customer_ID IS NOT NULL;"],
+    steps: [
+      { lines: [2], title: "FROM: the table you loaded",
+        text: "<code>FROM</code> names the table: <b>project.dataset.table</b>. The backticks <code>`</code> hold the long name together (it has <code>-</code> in it). Here: 7 rows of <b>sales</b>; the table has 21,019.",
+        head: H, rows: R },
+      { lines: [3], title: "WHERE Quantity > 0: no returns",
+        text: "<code>WHERE</code> keeps only the rows where the condition is true. <code>Quantity &gt; 0</code>: a sale. A <b>negative</b> quantity is a <b>return</b> (its invoice starts with C): 2 rows go out.",
+        head: H, rows: pos, mark: 2 },
+      { lines: [4], title: "AND Customer_ID IS NOT NULL: known customers",
+        text: "<code>AND</code>: both conditions must be true. <code>IS NOT NULL</code>: the row has a value. <b>null</b> = no value: the shop does not know the customer. 2 more rows go out.",
+        head: H, rows: clean, mark: 4 },
+      { lines: [1], title: "SELECT *, … AS revenue: a new column",
+        text: "<code>*</code> = <b>all the columns</b>. After the comma, <code>Quantity * Price</code> multiplies (<code>*</code> = ×) the two numbers of each row: the money of the sale. <code>AS revenue</code> names the new column.",
+        head: [...H, "revenue"], rows: rev, mark: 5 },
+      { lines: [0], title: "CREATE TABLE … AS: save the answer",
+        text: "<code>CREATE TABLE shop.sales_clean AS</code> saves the answer of the query as a <b>new table</b> in the dataset <b>shop</b>. The table <b>sales</b> does not change. The sign <code>;</code> ends the statement.",
+        head: [...H, "revenue"], rows: rev },
+    ],
+    done: "All the lines are explained. In the lab, BigQuery does the same on 21,019 rows: the new table sales_clean has 16,253.",
+  };
+})();
+</script>
+<script src="../../../../shared/sims/code-steps.js"></script>
+</body>
+</html>

@@ -576,7 +576,7 @@ every calendar week, by hand, with the university's template.
   page): a review PDF of Units 1–4 in English and Arabic
   (`midterm/midterm-review.typ` → `week-08/files/digital_skills_midterm_review.pdf`,
   built with `quarto typst compile --root .`) and a practice exam: 30
-  random questions (7, 7, 8, 8 by unit) from a bank of 98 questions
+  random questions (9, 7, 9, 5 by unit, the shares of the exam bank) from a bank of 133 questions; two thirds of each practice exam come from the 45 `core` questions, one for each skill of the exam bank (the same skill from the other side or in a close situation, never the exam question; the teacher's request of 2026-11-27, so that a high practice mark means a high exam mark)
   (`week-08/sims/midterm-bank.js`), 50 minutes, one try per question, the
   reason in English and Arabic, the mark at the end. An exception to "Exams
   are not on the site", asked by the teacher. Only the compulsory topics of
